@@ -8,13 +8,14 @@
 # Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007.
 # Mohamed Magdy <mohamed.m.k@gmail.com>, 2007.
 # Youssef Chahibi <chahibi@gmail.com>, 2007.
+# Anas Husseini <linux.anas@gmail.com>, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD.ar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-26 14:19-0700\n"
+"POT-Creation-Date: 2007-08-21 22:19+0100\n"
 "PO-Revision-Date: 2007-02-28 16:14+0100\n"
-"Last-Translator: Djihed Afifi <djihed@gmail.com>\n"
+"Last-Translator: Anas Husseini <linux.anas@gmail.com>\n"
 "Language-Team:  <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,7 +34,7 @@ msgstr "يضبط سطوع لوحة الحاسوب المحمول."
 
 #: ../applets/brightness/brightness-applet.c:353
 #: ../applets/inhibit/inhibit-applet.c:338
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot connect to gnome-power-manager"
 msgstr "غير قادر على الاتصال بمدير طاقة جنوم"
 
@@ -97,24 +98,20 @@ msgid "Copyright © 2006 Benjamin Canou"
 msgstr "حقوق النسخ © 2006 Benjamin Canou"
 
 #: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:1
-#, fuzzy
 msgid "Adjusts Laptop panel brightness"
 msgstr "يضبط سطوع لوحة الحاسوب المحمول."
 
 #: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:2
-#, fuzzy
 msgid "Brightness Applet"
-msgstr "سطوع"
+msgstr "بريمج السطوع"
 
 #: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:3
-#, fuzzy
 msgid "Brightness Applet Factory"
-msgstr "بريمج سطوع مدير الطاقة"
+msgstr "مصنع بريمج السطوع"
 
 #: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:4
-#, fuzzy
 msgid "Factory for Brightness Applet"
-msgstr "بريمج سطوع مدير الطاقة"
+msgstr "مصنع لبريمج السطوع"
 
 #: ../applets/inhibit/inhibit-applet.c:89
 msgid "Power Manager Inhibit Applet"
@@ -140,27 +137,23 @@ msgstr "تثبيط يدوي"
 
 #: ../applets/inhibit/inhibit-applet.c:429
 msgid "Copyright © 2006-2007 Richard Hughes"
-msgstr "حقوق النسخ © 2006 Richard Hughes"
+msgstr "حقوق النسخ © 2006-2007 Richard Hughes"
 
 #: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:1
-#, fuzzy
 msgid "Allows user to inhibit automatic power saving"
 msgstr "يسمح للمستخدم بتثبيط حفظ الطاقة الآلي."
 
 #: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:2
-#, fuzzy
 msgid "Factory for Inhibit Applet"
-msgstr "بريمج تثبيط مدير الطاقة"
+msgstr "مصنع لبريمج التثبيط"
 
 #: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:3
-#, fuzzy
 msgid "Inhibit Applet"
-msgstr "ثبط تلقائياً"
+msgstr "بريمج التثبيط"
 
 #: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:4
-#, fuzzy
 msgid "Inhibit Applet Factory"
-msgstr "ثبّط الفاحص"
+msgstr "مصنع بريمج التثبيط"
 
 #. common descriptions of this program
 #: ../data/gnome-power-manager.desktop.in.h:1 ../src/gpm-common.h:43
@@ -177,26 +170,25 @@ msgid ""
 "of seconds to allow messages to settle and HAL to refresh. Commonly five "
 "seconds is enough while not being so long that the user gets confused."
 msgstr ""
-"بعد الإستكمال، سيثبّط مدير طاقة جنوم إجرائات السياسة لعدد من الثواني ليسمح "
-"للرسائل بالتمكن ول HAL بالإنتعاش. عادة خمس ثوان تكفي بينما ليست طويلة "
+"بعد الإستكمال، سيثبّط مدير طاقة جنوم إجراءات السياسة لعدد من الثواني ليسمح "
+"للرسائل بالتمكن ول HAL بالإنتعاش. عادة خمس ثوان تكفي وهي ليست طويلة "
 "بالدرجة التي تربك المستخدم."
 
 #: ../data/gnome-power-manager.schemas.in.h:2
 msgid "Allow Suspend and Hibernate in the menu"
-msgstr "اسمح بالتعليق و الإسبات في القائمة"
+msgstr "اسمح بالتعليق والإسبات في القائمة"
 
 #: ../data/gnome-power-manager.schemas.in.h:3
 msgid "Allow backlight brightness adjustment"
-msgstr ""
+msgstr "اسمح بضبط سطوع الضوء الخلفي"
 
 #: ../data/gnome-power-manager.schemas.in.h:4
 msgid "Battery critical low action"
 msgstr "إجراء انخفاض البطارية الحرِج"
 
 #: ../data/gnome-power-manager.schemas.in.h:5
-#, fuzzy
 msgid "Change the brightness automatically using the ambient light sensors"
-msgstr "غيّر السطوع آليا باستخدام أجهزة استشعار أمبيانت"
+msgstr "غيّر السطوع آلياً باستخدام أجهزة استشعار الضوء المحيطة"
 
 #: ../data/gnome-power-manager.schemas.in.h:6
 msgid "Check CPU load before sleeping"
@@ -231,47 +223,44 @@ msgstr "السبات مفعّل"
 
 #: ../data/gnome-power-manager.schemas.in.h:12
 msgid "If DBUS inhibit requests should be ignored from other programs."
-msgstr "إذا يفترض تجاهل طلبات تثبيط DBUS من البرامج الأخرى."
+msgstr "إن كان يفترض تجاهل طلبات تثبيط DBUS من البرامج الأخرى."
 
 #: ../data/gnome-power-manager.schemas.in.h:13
 msgid "If DBUS inhibit requests should be ignored."
-msgstr "إذا يفترض تجاهل طلبات تثبيط DBUS."
+msgstr "إن كان يفترض تجاهل طلبات تثبيط DBUS."
 
 #: ../data/gnome-power-manager.schemas.in.h:14
-#, fuzzy
 msgid ""
 "If a notification message should be displayed after suspend or hibernate "
 "failed."
-msgstr "إذا يفترض إظهار رسالة تنبيهية في حال فشل تعليق أو سبات الحاسوب"
+msgstr "إن كان يفترض إظهار رسالة تنبيهية في حال فشل تعليق أو إسبات الحاسوب"
 
 #: ../data/gnome-power-manager.schemas.in.h:15
 msgid ""
 "If a notification message should be displayed when the battery is fully "
 "charged."
-msgstr "إذا يفترض إظهار رسالة تنبيهية في حال اكتمال شحن البطارية"
+msgstr "إن كان يفترض إظهار رسالة تنبيهية في حال اكتمال شحن البطارية"
 
 #: ../data/gnome-power-manager.schemas.in.h:16
 msgid ""
 "If a notification message should be displayed when the battery is getting "
 "low."
-msgstr "أنبهني إذا كانت البطارية ضعيفة الشحن."
+msgstr "نبّهني إذا كانت البطارية ضعيفة الشحن."
 
 #: ../data/gnome-power-manager.schemas.in.h:17
-#, fuzzy
 msgid ""
 "If a notification message should be displayed when the profile data is "
 "guessed."
-msgstr "إذا يفترض إظهار رسالة تنبيهية في حال اكتمال شحن البطارية"
+msgstr "إن كان يفترض إظهار رسالة تنبيهية في حال تخمين بيانات ملف التعريف."
 
 #: ../data/gnome-power-manager.schemas.in.h:18
-#, fuzzy
 msgid "If extra debugging messages should be used"
-msgstr "استعمل الأصوات"
+msgstr "إن كانت رسائل التنقيح ستـُستخدم"
 
 #: ../data/gnome-power-manager.schemas.in.h:19
 msgid ""
 "If extra debugging messages should be used. Only turn this on for debugging."
-msgstr ""
+msgstr "إن كانت رسائل التنقيح ستـُستخدم. شغّل هذا فقط في حالة التنقيح."
 
 #: ../data/gnome-power-manager.schemas.in.h:20
 msgid ""
@@ -284,7 +273,7 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:21
 msgid "If sounds should be used"
-msgstr "استعمل الأصوات"
+msgstr "إن كانت الأصوات ستـُستخدم"
 
 #: ../data/gnome-power-manager.schemas.in.h:22
 msgid ""
@@ -304,7 +293,7 @@ msgid ""
 "area drop down menu."
 msgstr ""
 "إن كان لابد من السماح لخيارات التعليق و السبات في منطقة التنبيه من القائمة "
-"المنسدلة"
+"المنسدلة."
 
 #: ../data/gnome-power-manager.schemas.in.h:25
 msgid ""
@@ -318,19 +307,21 @@ msgid ""
 "closed on battery') when the lid is previously shut and the AC power "
 "disconnected at a later time."
 msgstr ""
-"إذا يفترض حدوث حدث إغلاق غطاء البطارية (على سبيل المثال تعليق الجهاز حين "
+"إن كان يفترض حدوث حدث إغلاق غطاء البطارية (على سبيل المثال تعليق الجهاز حين "
 "إغلاق الجهاز على البطارية) في حالة كان الغطاء مغلق مسبقا و من ثم تم فصل طاقة "
 "التيار المتردد لاحقا"
 
 #: ../data/gnome-power-manager.schemas.in.h:27
 msgid "If the learnt profile should be used to calculate the time remaining"
-msgstr ""
+msgstr "إن كان يُفترض أن يُستخدم ملف تعريف التعلم لحساب الوقت المتبقي"
 
 #: ../data/gnome-power-manager.schemas.in.h:28
 msgid ""
 "If the learnt profile should be used to calculate the time remaining. Only "
 "turn this off for debugging."
 msgstr ""
+"إن كان يُفترض أن يُستخدم ملف تعريف التعلم لحساب الوقت المتبقي. "
+"أطفئ هذا فقط في حالة التنقيح."
 
 #: ../data/gnome-power-manager.schemas.in.h:29
 msgid "If the low-power mode should be enabled when on AC"
@@ -347,11 +338,10 @@ msgid "If the low-power mode should be enabled when on battery"
 msgstr "إذا يفترض تفعيل نمط الطاقة-المنخفضة أثناء العمل على البطارية"
 
 #: ../data/gnome-power-manager.schemas.in.h:32
-#, fuzzy
 msgid ""
 "If the screen brightness can be changed when switching between AC and "
 "battery power and by ambient light sensors."
-msgstr "غيّر سطوع الشاشة عند التحويل بين الطاقة المتناوبة إلى وطاقة البطارية."
+msgstr "إن كان يمكن تغيير سطوع الشاشة عند التحويل بين الطاقة المتناوبة وطاقة البطارية ومن خلال أجهزة استشعار ضوئية محيطة."
 
 #: ../data/gnome-power-manager.schemas.in.h:33
 msgid ""
@@ -360,18 +350,19 @@ msgid ""
 msgstr "غيّر سطوع الشاشة آليا باستعمال مستشعرات الإضاءة."
 
 #: ../data/gnome-power-manager.schemas.in.h:34
-#, fuzzy
 msgid ""
 "If the screen brightness should be changed automatically using the ambient "
 "light sensors. Valid is 'none', 'light' and 'dark'"
-msgstr "غيّر سطوع الشاشة آليا باستعمال مستشعرات الإضاءة."
+msgstr ""
+"إن كان سطوع الشاشة سيُغيّر آلياً باستعمال مستشعرات الضوء المحيطة. "
+"القيم الصالحة هي 'لا شيء' و'ضوء' و'ظلام'"
 
 #: ../data/gnome-power-manager.schemas.in.h:35
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on AC power."
 msgstr ""
-"إذا يفترض خفض إضاءة الشاشة لحفظ الطاقة إذا كان الحاسوب في حالة خامدة أثناء "
+"إن كان يفترض خفض إضاءة الشاشة لحفظ الطاقة إذا كان الحاسوب في حالة خامدة أثناء "
 "استعمال الطاقة الاعتيادية"
 
 #: ../data/gnome-power-manager.schemas.in.h:36
@@ -379,26 +370,26 @@ msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on battery power."
 msgstr ""
-"إذا يفترض خفض إضاءة الشاشة لحفظ الطاقة إذا كان الحاسوب في حالة خامدة أثناء "
+"إن كان يفترض خفض إضاءة الشاشة لحفظ الطاقة إذا كان الحاسوب في حالة خامدة أثناء "
 "استعمال طاقة البطارية."
 
 #: ../data/gnome-power-manager.schemas.in.h:37
 msgid "If the system low-power mode should be enabled when on AC power."
 msgstr ""
-"إذا يفترض تفعيل وضع الطاقة المنخفضة للنظام في حال كون الجهاز يعمل على التيار "
+"إن كان يفترض تفعيل وضع الطاقة المنخفضة للنظام في حال كون الجهاز يعمل على التيار "
 "المتردد"
 
 #: ../data/gnome-power-manager.schemas.in.h:38
 msgid "If the system low-power mode should be enabled when on UPS power."
 msgstr ""
-"إذا يفترض تفعيل وضع الطاقة المنخفضة للنظام في حال كون الجهاز يعمل على مزود "
+"إن كان يفترض تفعيل وضع الطاقة المنخفضة للنظام في حال كون الجهاز يعمل على مزود "
 "الطاقة غير المنقطع UPS"
 
 #: ../data/gnome-power-manager.schemas.in.h:39
 msgid ""
 "If the system low-power mode should be enabled when on laptop battery power."
 msgstr ""
-"إذا يفترض تفعيل وضع الطاقة المنخفضة للنظام في حال كون الجهاز يعمل على "
+"إن كان يفترض تفعيل وضع الطاقة المنخفضة للنظام في حال كون الجهاز يعمل على "
 "البطارية"
 
 #: ../data/gnome-power-manager.schemas.in.h:40
@@ -418,7 +409,7 @@ msgid ""
 "If time based notifications should be used. If set to false, then the "
 "percentage change is used instead, which may fix a broken ACPI BIOS."
 msgstr ""
-"إذا يفترض استعمال تنبيهات وقتية. إذا لم يتم تفعيل هذا الخيار, سيتم استعمال "
+"إن كان يفترض استعمال تنبيهات وقتية. إذا لم يتم تفعيل هذا الخيار, سيتم استعمال "
 "تغير النسبة المئوية."
 
 #: ../data/gnome-power-manager.schemas.in.h:44
@@ -432,18 +423,16 @@ msgid ""
 msgstr "أظهر تردد المعالج في الواجهة. يحتاج البعض إلى أعداد هذا لأنظمة معينة."
 
 #: ../data/gnome-power-manager.schemas.in.h:46
-#, fuzzy
 msgid "If we should show the low capacity warning for a broken battery"
-msgstr "أظهر تنبيه إفراغ البطارية إذا كانت البطارية فاسدة"
+msgstr "إن كان سيُظهر تنبيه إفراغ البطارية إذا كانت البطارية فاسدة"
 
 #: ../data/gnome-power-manager.schemas.in.h:47
-#, fuzzy
 msgid "If we should show the low capacity warning for a broken battery."
-msgstr "أظهر تنبيه إفراغ البطارية إذا كانت البطارية فاسدة"
+msgstr "إن كان سيُظهر تنبيه إفراغ البطارية إذا كانت البطارية فاسدة."
 
 #: ../data/gnome-power-manager.schemas.in.h:48
 msgid "If we should show the recalled battery warning for a broken battery"
-msgstr "أظهر تنبيه إفراغ البطارية إذا كانت البطارية فاسدة"
+msgstr "إن كان سيُظهر تنبيه البطارية المعاد إذا كانت البطارية فاسدة"
 
 #: ../data/gnome-power-manager.schemas.in.h:49
 msgid ""
@@ -458,12 +447,14 @@ msgid ""
 "If we should show the warning when we have a valid inhibit and configured to "
 "sleep on lid close"
 msgstr ""
+"إن كان يُفترض إظهار تنبيه إذا كان لدينا تثبيط صالح معدّ على النوم عند إغلاق الغطاء"
 
 #: ../data/gnome-power-manager.schemas.in.h:51
 msgid ""
 "If we should show the warning when we have a valid inhibit and configured to "
 "sleep on lid close."
 msgstr ""
+"إن كان يُفترض إظهار تنبيه إذا كان لدينا تثبيط صالح معدّ على النوم عند إغلاق الغطاء."
 
 #: ../data/gnome-power-manager.schemas.in.h:52
 msgid "Keyboard brightness when on AC"
@@ -492,19 +483,19 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:58
 msgid "Lock GNOME keyring on sleep"
-msgstr ""
+msgstr "أغلق حلقة مفاتيح جنوم عند النوم"
 
 #: ../data/gnome-power-manager.schemas.in.h:59
 msgid "Lock screen on hibernate"
-msgstr "قفل الشاشة في حالة السبات"
+msgstr "أقفل الشاشة في حالة السبات"
 
 #: ../data/gnome-power-manager.schemas.in.h:60
 msgid "Lock screen on suspend"
-msgstr "قفل الشاشة في حالة التعليق"
+msgstr "أقفل الشاشة في حالة التعليق"
 
 #: ../data/gnome-power-manager.schemas.in.h:61
 msgid "Lock screen when blanked"
-msgstr "قفل الشاشة حينما تمسح"
+msgstr "أقفل الشاشة عند الإفراغ"
 
 #: ../data/gnome-power-manager.schemas.in.h:62
 msgid "Method used to blank screen on AC"
@@ -519,9 +510,8 @@ msgid "Notify on a low power"
 msgstr "التبليغ في حالة الطاقة المنخفضة"
 
 #: ../data/gnome-power-manager.schemas.in.h:65
-#, fuzzy
 msgid "Notify on a sleep failure"
-msgstr "التبليغ في حالة الطاقة المنخفضة"
+msgstr "التبليغ في حال فشل النوم"
 
 #: ../data/gnome-power-manager.schemas.in.h:66
 msgid "Notify when AC adapter is disconnected"
@@ -532,9 +522,8 @@ msgid "Notify when fully charged"
 msgstr "التنبيه حين اكتمال الشحن"
 
 #: ../data/gnome-power-manager.schemas.in.h:68
-#, fuzzy
 msgid "Notify when the profile data is guessed"
-msgstr "عندما يضغط زر_ الطاقة:"
+msgstr "التبليغ عند تخمين بيانات ملف التعريف"
 
 #: ../data/gnome-power-manager.schemas.in.h:69
 msgid "Number of seconds to suppress policy after resume"
@@ -586,7 +575,7 @@ msgid ""
 "are \"default\", \"standby\", \"suspend\" and \"off\"."
 msgstr ""
 "طريقة DPMS المستعملة لإطفاء الشاشة عند العمل على التيار. الخيارات الممكنة "
-"هي: \"إفتراضي\", \"ساكن\", \"توقيف\" و \"منطفئ\"."
+"هي: \"افتراضي\", \"ساكن\", \"موقف\" و \"مُطفأ\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:81
 msgid ""
@@ -594,7 +583,7 @@ msgid ""
 "values are \"default\", \"standby\", \"suspend\" and \"off\"."
 msgstr ""
 "طريقة DPMS المستعملة لإطفاء الشاشة عند العمل على البطارية. الخيارات الممكنة "
-"هي: \"إفتراضي\", \"ساكن\", \"توقيف\" و \"منطفئ\"."
+"هي: \"افتراضي\", \"ساكن\", \"موقف\" و \"مُطفأ\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:82
 msgid ""
@@ -602,7 +591,7 @@ msgid ""
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
 "الاجراء الواجب اتخاذه عندما تكون بطارية UPS في مستوى متدن جدا. القيم الممكنة "
-"هي \"سبات\", \"توقيف\", \"اطفاء\" و \"لا شيء\"."
+"هي \"سبات\", \"توقيف\", \"إطفاء\" و \"لا شيء\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:83
 msgid ""
@@ -610,7 +599,7 @@ msgid ""
 "\"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
 "التصرف الذي ينفذ عندما طاقة ال يو بي إس منخفضة. القيم الممكنة هى \"سبت\", "
-"\"علق\", \"اطفيء\" و \"لا شيء\"."
+"\"علـّق\", \"أطفئ\" و \"لا شيء\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:84
 msgid ""
@@ -618,7 +607,7 @@ msgid ""
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
 "الاجراء الواجب اتخاذه عندما تكون البطارية في مستوى متدن جدا. القيم الممكنة "
-"هي \"سبات\", \"توقيف\", \"اطفاء\" و \"لا شيء\"."
+"هي \"سبات\", \"توقيف\", \"إطفاء\" و \"لا شيء\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:85
 msgid ""
@@ -645,7 +634,7 @@ msgid ""
 "\"nothing\"."
 msgstr ""
 "االاجراء الواجب اتخاذه عند ضغط زر السبات للجهاز. القيم الممكنة هي \"توقيف\", "
-"\"سبات\", \"السؤال\", \"غلق\" و \"لا شيء\"."
+"\"سبات\", \"السؤال\", \"إطفاء\" و \"لا شيء\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:88
 msgid ""
@@ -654,7 +643,7 @@ msgid ""
 "\"."
 msgstr ""
 "االاجراء الواجب اتخاذه عند ضغط زر الغلق للجهاز. القيم الممكنة هي \"توقيف\", "
-"\"سبات\", \"السؤال\", \"غلق\" و \"لا شيء\"."
+"\"سبات\", \"السؤال\", \"إطفاء\" و \"لا شيء\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:89
 msgid ""
@@ -663,13 +652,13 @@ msgid ""
 "\"nothing\"."
 msgstr ""
 "االاجراء الواجب اتخاذه عند ضغط زر التوقيف للجهاز. القيم الممكنة هي \"توقيف"
-"\", \"سبات\", \"السؤال\", \"غلق\" و \"لا شيء\"."
+"\", \"سبات\", \"السؤال\", \"إطفاء\" و \"لا شيء\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:90
 msgid ""
 "The amount of time in seconds before the display goes to sleep when the "
 "computer is on AC power."
-msgstr "مقدار الوقت بالثانية قبل نوم الشاشة عندما يكون الحاسوب موصولا بالتيار."
+msgstr "مقدار الوقت بالثانية قبل نوم الشاشة عندما يكون الحاسوب موصولاً بالتيار."
 
 #: ../data/gnome-power-manager.schemas.in.h:91
 msgid ""
@@ -697,11 +686,11 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:94
 msgid "The amount the light sensors should contribute to the brightness"
-msgstr ""
+msgstr "المقدار الذي تساهم به المستشعرات الضوئية في السطوع"
 
 #: ../data/gnome-power-manager.schemas.in.h:95
 msgid "The amount the light sensors should contribute to the brightness."
-msgstr ""
+msgstr "المقدار الذي تساهم به المستشعرات الضوئية في السطوع."
 
 #: ../data/gnome-power-manager.schemas.in.h:96
 msgid ""
@@ -721,15 +710,15 @@ msgid ""
 "0 and 100."
 msgstr ""
 " سطوع لوحة المفاتيح أثناء استعمال الطاقة الاعتيادية. القيم الممكنة تتراوح "
-"مابين الصفر إلى 100."
+"ما بين 0 و 100."
 
 #: ../data/gnome-power-manager.schemas.in.h:99
 msgid ""
 "The brightness of the keyboard when on battery power. Possible values are "
 "between 0 and 100."
 msgstr ""
-"سطوع لوحة المفاتيح أثناء استعمال طاقة البطارية. القيم الممكنة تتراوح مابين "
-"الصفر إلى 100."
+"سطوع لوحة المفاتيح أثناء استعمال طاقة البطارية. القيم الممكنة تتراوح ما بين "
+"0 و 100."
 
 #: ../data/gnome-power-manager.schemas.in.h:100
 msgid "The brightness of the screen when idle"
@@ -739,33 +728,33 @@ msgstr "سطوع الشاشة عندما تكون في حالة خمول"
 msgid ""
 "The calibration of the light sensors so that the screen is bright enough"
 msgstr ""
+"ضبط المستشعرات الضوئية لتصبح الشاشة ساطعة كفاية"
 
 #: ../data/gnome-power-manager.schemas.in.h:102
 msgid ""
 "The calibration of the light sensors so that the screen is bright enough, in "
 "percent."
 msgstr ""
+"ضبط المستشعرات الضوئية لتصبح الشاشة ساطعة كفاية، بالنسبة المئوية."
 
 #: ../data/gnome-power-manager.schemas.in.h:103
 msgid "The cpufreq performance value to use when on AC power"
-msgstr "قيمة اداء تردد المعالج التي تستخدم أثناء استعمال الطاقة الاعتيادية"
+msgstr "قيمة أداء تردد المعالج التي تستخدم أثناء استعمال الطاقة الاعتيادية"
 
 #: ../data/gnome-power-manager.schemas.in.h:104
 msgid "The cpufreq performance value to use when on battery power"
 msgstr "قيمة اداء تردد المعالج التي تستخدم أثناء استعمال طاقة البطارية"
 
 #: ../data/gnome-power-manager.schemas.in.h:105
-#, fuzzy
 msgid ""
 "The cpufreq performance value used to scale the processor when on AC power."
-msgstr "استعمال أداء cpufreq لتسوية المعالج عند استعمال الطاقة المتناوبة."
+msgstr "قيمة أداء cpufreq المستعملة لتسوية المعالج عند استعمال الطاقة المتناوبة."
 
 #: ../data/gnome-power-manager.schemas.in.h:106
-#, fuzzy
 msgid ""
 "The cpufreq performance value used to scale the processor when on battery "
 "power."
-msgstr "استعمال أداء cpufreq لتسوية المعالج عند استعمال طاقة البطارية."
+msgstr "قيمة أداء cpufreq المستعملة لتسوية المعالج عند استعمال طاقة البطارية."
 
 #: ../data/gnome-power-manager.schemas.in.h:107
 msgid "The cpufreq policy to use when on AC power"
@@ -776,40 +765,38 @@ msgid "The cpufreq policy to use when on battery power"
 msgstr "سياسة تردد المعالج التي تستخدم أثناء استعمال طاقة البطارية"
 
 #: ../data/gnome-power-manager.schemas.in.h:109
-#, fuzzy
 msgid ""
 "The cpufreq policy used to scale the processor when on AC power. Possible "
 "values are ondemand, conservative, powersave, userspace, performance, "
 "nothing."
 msgstr ""
-"استعمال أداء cpufreq لتسوية المعالج عند استعمال الطاقة المتناوبة. الخيارات "
+"سياسة cpufreq المستخدمة لتسوية المعالج عند استعمال الطاقة المتناوبة. الخيارات "
 "المتقدمة: ondemand، conservative، powersave، userspace، performance، nothing."
 
 #: ../data/gnome-power-manager.schemas.in.h:110
-#, fuzzy
 msgid ""
 "The cpufreq policy used to scale the processor when on battery power. "
 "Possible values are ondemand, conservative, powersave, userspace, "
 "performance, nothing."
 msgstr ""
-"استعمال أداء cpufreq لتسوية المعالج عند استعمال طاقة البطارية. الخيارات "
+"سياسة cpufreq المستخدمة لتسوية المعالج عند استعمال طاقة البطارية. الخيارات "
 "المتقدمة: ondemand، conservative، powersave، userspace، performance، nothing."
 
 #: ../data/gnome-power-manager.schemas.in.h:111
 msgid "The default amount of time to dim the screen after idle"
-msgstr ""
+msgstr "وقت الخمول الافتراضي الذي ستُعتّم الشاشة بعده"
 
 #: ../data/gnome-power-manager.schemas.in.h:112
 msgid "The default amount of time to dim the screen after idle."
-msgstr ""
+msgstr "وقت الخمول الافتراضي الذي ستُعتّم الشاشة بعده."
 
 #: ../data/gnome-power-manager.schemas.in.h:113
 msgid "The default configuration version."
-msgstr ""
+msgstr "نسخة الإعدادات الافتراضية."
 
 #: ../data/gnome-power-manager.schemas.in.h:114
 msgid "The default graph type to show in the statistics window"
-msgstr "نوع الرسم البياني الأفتراضي لأظهاره في نافذة الاحصاءات"
+msgstr "نوع الرسم البياني الافتراضي لإظهاره في نافذة الإحصاءات"
 
 #: ../data/gnome-power-manager.schemas.in.h:115
 msgid "The default graph type to show in the statistics window."
@@ -817,7 +804,7 @@ msgstr "نوع الرسم البياني الأفتراضي لأظهاره في 
 
 #: ../data/gnome-power-manager.schemas.in.h:116
 msgid "The device name for the v4l device used as a brightness sensor backup"
-msgstr ""
+msgstr "اسم جهاز ال v4l المستخدم كمستشعر ضوئي احتياطي"
 
 #: ../data/gnome-power-manager.schemas.in.h:117
 msgid ""
@@ -825,18 +812,21 @@ msgid ""
 "value of 'default' uses the first discovered sensor, or devices can be "
 "specified, e.g. '/dev/video0'"
 msgstr ""
+"اسم جهاز ال v4l المستخدم كمستشعر ضوئي احتياطي. "
+"قيمة 'default' تستخدم أول مستشعر يُكتشف، أو يمكن تحديد "
+"الأجهزة، مثل '/dev/video0'"
 
 #: ../data/gnome-power-manager.schemas.in.h:118
 msgid "The interval the ambient light sensors should be polled"
-msgstr ""
+msgstr "الوقت الذي ستُستطلع المستشعرات الضوئية المحيطة بعده"
 
 #: ../data/gnome-power-manager.schemas.in.h:119
 msgid "The interval the ambient light sensors should be polled in seconds."
-msgstr ""
+msgstr "الوقت الذي ستُستطلع المستشعرات الضوئية المحيطة بعده بالثواني."
 
 #: ../data/gnome-power-manager.schemas.in.h:120
 msgid "The invalid timeout for power actions"
-msgstr "المهلة الغير صالحة لتصرفات الطاقة"
+msgstr "المهلة غير الصالحة لتصرفات الطاقة"
 
 #: ../data/gnome-power-manager.schemas.in.h:121
 msgid ""
@@ -927,6 +917,8 @@ msgid ""
 "The version of the installed version of the schema. Do not edit this value, "
 "it is used so that configure changes between versions can be detected."
 msgstr ""
+"رقم النسخة المثبتة من المخطط. لا تحرّر هذه القيمة، "
+"إنها تُتسخدم لكي يتمكن الإعداد من التفريق بين النُسخ."
 
 #: ../data/gnome-power-manager.schemas.in.h:135
 msgid ""
@@ -973,52 +965,52 @@ msgid ""
 "Whether the GNOME keyring is locked before the computer enters hibernate. "
 "This means the keyring will have to be unlocked on resume."
 msgstr ""
+"إن كانت حلقة مفاتيح جنوم مقفلة قبل دخول الحاسوب لحالة الإسبات. "
+"هذا يعني أن حلقة المفاتيح ستُفتح عند المتابعة."
 
 #: ../data/gnome-power-manager.schemas.in.h:144
 msgid ""
 "Whether the GNOME keyring is locked before the computer enters suspend. This "
 "means the keyring will have to be unlocked on resume."
 msgstr ""
+"إن كانت حلقة مفاتيح جنوم مقفلة قبل دخول الحاسوب لحالة التعليق. "
+"هذا يعني أن حلقة المفاتيح ستُفتح عند المتابعة."
 
 #: ../data/gnome-power-manager.schemas.in.h:145
-#, fuzzy
 msgid ""
 "Whether the screen is locked when the computer wakes up from a hibernate. "
 "Only used if lock_use_screensaver_settings is false."
 msgstr ""
-"إذا يفترض قفل الشاشة عند إيقاظ الحاسوب من السبات. يتم استعمالها فقط إذا كان  "
+"إن كان يفترض قفل الشاشة عند إيقاظ الحاسوب من السبات. يتم استعمالها فقط إذا كان  "
 "lock_use_screensaver_settings محددا ب false."
 
 #: ../data/gnome-power-manager.schemas.in.h:146
-#, fuzzy
 msgid ""
 "Whether the screen is locked when the computer wakes up from a suspend. Only "
 "used if lock_use_screensaver_settings is false."
 msgstr ""
-"إذا يفترض قفل الشاشة عند إيقاظ الحاسوب من التوقيف. يتم استعمالها فقط إذا "
-"كان  lock_use_screensaver_settings محددا ب false."
+"إن كان يفترض قفل الشاشة عند إيقاظ الحاسوب من التوقيف. يتم استعمالها فقط إذا "
+"كان  lock_use_screensaver_settings محدداً ب false."
 
 #: ../data/gnome-power-manager.schemas.in.h:147
-#, fuzzy
 msgid ""
 "Whether the screen is locked when the screen is turned off. Only used if "
 "lock_use_screensaver_settings is false."
 msgstr ""
 "إن كانت الشاشة مقفلة أثناء إغلاق الشاشة. تستخدم فقط إن كان "
-"lock_use_screensaver_settings خاطيء"
+"lock_use_screensaver_settings محدداً ب false."
 
 #: ../data/gnome-power-manager.schemas.in.h:148
 msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr "ما إذا يتم سبات, توقيف أو فعل لا شيء عند عدم النشاط"
 
 #: ../data/gnome-power-manager.schemas.in.h:149
-#, fuzzy
 msgid ""
 "Whether to use the screen lock setting of gnome-screensaver to decide if the "
 "screen is locked after a hibernate, suspend or blank screen."
 msgstr ""
-"إذا يتم استخدام خيارات القفل ل gnome-screensaver لتحديد إذا يتم قفل الشاشة "
-"بعد السبات, التوقيف أو فراغ الشاشة."
+"إن كانت ستـُستخدم خيارات القفل ل gnome-screensaver لتحديد هل يتم قفل الشاشة "
+"بعد السبات أو التوقيف أو فراغ الشاشة."
 
 #: ../data/gnome-power-manager.schemas.in.h:150
 msgid "Whether to use time-based notifications"
@@ -1026,29 +1018,28 @@ msgstr "ما إذا يتم استخدام تنبيهات مبنية على ال�
 
 #: ../data/gnome-power-manager.schemas.in.h:151
 msgid "Whether we should show the axis labels in the statistics window"
-msgstr "في حال ماتوجب علينا اظهار رقع المحور في نافذة الاحصاءات"
+msgstr "في حال ما توجب علينا اظهار رقع المحور في نافذة الإحصاءات"
 
 #: ../data/gnome-power-manager.schemas.in.h:152
 msgid "Whether we should show the axis labels in the statistics window."
-msgstr "في حال ماتوجب علينا اظهار رقع المحور في نافذة الاحصاءات."
+msgstr "في حال ما توجب علينا اظهار رقع المحور في نافذة الإحصاءات."
 
 #: ../data/gnome-power-manager.schemas.in.h:153
 msgid "Whether we should show the events in the statistics window"
-msgstr "في حال ماتوجب علينا اظهار الأحداث في نافذة الاحصاءات"
+msgstr "في حال ما توجب علينا اظهار الأحداث في نافذة الإحصاءات"
 
 #: ../data/gnome-power-manager.schemas.in.h:154
 msgid "Whether we should show the events in the statistics window."
-msgstr "في حال ماتوجب علينا اظهار الأحداث في نافذة الاحصاءات"
+msgstr "في حال ما توجب علينا اظهار الأحداث في نافذة الإحصاءات"
 
 #: ../data/gnome-power-manager.schemas.in.h:155
-#, fuzzy
 msgid "Whether we should smooth the data in the graph"
-msgstr "في حال ماتوجب علينا اظهار الأحداث في نافذة الاحصاءات"
+msgstr "في حال ما توجب علينا صقل البيانات في الرسم البياني"
 
 #: ../data/gnome-power-manager.schemas.in.h:156
-#, fuzzy
 msgid "Whether we should smooth the data in the graph."
-msgstr "في حال ماتوجب علينا اظهار الأحداث في نافذة الاحصاءات"
+msgstr "في حال ما توجب علينا صقل البيانات في الرسم البياني."
+
 
 #: ../data/gnome-power-preferences.desktop.in.h:1
 msgid "Configure power management"
@@ -1100,9 +1091,8 @@ msgid "Burning DVD, titled \"My Photos\""
 msgstr "حرق DVD, بعنوان  \"My Photos\""
 
 #: ../data/gpm-inhibit-test.glade.h:3
-#, fuzzy
 msgid "Inhibit"
-msgstr "الغي التثبيط"
+msgstr "تثبيط"
 
 #: ../data/gpm-inhibit-test.glade.h:4
 msgid "Inhibit Tester"
@@ -1114,20 +1104,19 @@ msgstr "السبب: "
 
 #: ../data/gpm-inhibit-test.glade.h:6
 msgid "UnInhibit"
-msgstr "الغي التثبيط"
+msgstr "ألغ التثبيط"
 
 #: ../data/gpm-inhibit-test.glade.h:7
 msgid "Vendor Acme Foo"
 msgstr "البائع الفلاني"
 
 #: ../data/gpm-prefs.glade.h:1
-#, fuzzy
 msgid "<b>Actions</b>"
-msgstr "<b>الأزرار</b>"
+msgstr "<b>الحركات</b>"
 
 #: ../data/gpm-prefs.glade.h:2
 msgid "<b>Display</b>"
-msgstr ""
+msgstr "<b>العرض</b>"
 
 #: ../data/gpm-prefs.glade.h:3
 msgid "<b>Extras</b>"
@@ -1139,25 +1128,23 @@ msgstr "<b>مساحة التبليغ</b>"
 
 #: ../data/gpm-prefs.glade.h:5
 msgid "Always sleep when the lid is _closed"
-msgstr "دائما _نم عندما يكون الغطاء مغلقا"
+msgstr "دائماً _نم عندما يكون الغطاء مغلقاً"
 
 #: ../data/gpm-prefs.glade.h:6
 msgid "Computer sp_eed policy:"
 msgstr "سياسة سر_عة الحاسوب:"
 
 #: ../data/gpm-prefs.glade.h:7
-#, fuzzy
 msgid "Dim display _brightness by:"
-msgstr "خدّد سطوع ال_شّاشة بـ:"
+msgstr "عتـّم سطوع ال_شّاشة بـ:"
 
 #: ../data/gpm-prefs.glade.h:8
-#, fuzzy
 msgid "Dim display when idle"
-msgstr "جعل الشاشة تنام بعد فترة الإستراحة عندما يكون على التيار"
+msgstr "عتـّم الشاشة عند الخمول"
 
 #: ../data/gpm-prefs.glade.h:9
 msgid "Enable UPS discharge _alarm"
-msgstr "تفعيل منبه تفريغ اليو بي إس"
+msgstr "تفعيل منب_ه تفريغ اليو بي إس"
 
 #: ../data/gpm-prefs.glade.h:10
 msgid "General"
@@ -1205,15 +1192,15 @@ msgstr "خدّد سطوع ال_شّاشة بـ:"
 
 #: ../data/gpm-prefs.glade.h:21
 msgid "Turn on keyboard light when light level is low"
-msgstr ""
+msgstr "أضئ ضوء لوحة المفاتيح عندما يكون مستوى الضوء منخفضاً"
 
 #: ../data/gpm-prefs.glade.h:22
 msgid "Use _ambient light to adjust LCD brightness"
-msgstr "استعمل الاضاءة المحيطة لضبط سطوع ال إل سي دي"
+msgstr "استعمل الإضاءة المحيطة لضبط سطوع ال إل سي دي"
 
 #: ../data/gpm-prefs.glade.h:23
 msgid "Use _sound to notify in event of an error"
-msgstr "استعمل _الصوت للتبليغ في حالة وجود خطأ"
+msgstr "استعمل ال_صوت للتبليغ في حالة وجود خطأ"
 
 #: ../data/gpm-prefs.glade.h:24
 msgid "When UPS power is _critically low:"
@@ -1253,12 +1240,12 @@ msgstr "_اعرض الأيقونة فقط عندما تكون طاقة البط�
 
 #: ../src/gpm-control.c:279
 msgid "The message was not sent due to DBUS security rules"
-msgstr ""
+msgstr "لم تـُرسل الرسالة وفقاً لقوانين أمن DBUS"
 
 #: ../src/gpm-control.c:282
-#, fuzzy, c-format
+#, c-format
 msgid "General failure: %s"
-msgstr "فشل الإسبات"
+msgstr "فشل عام: %s"
 
 #: ../src/gpm-common.c:242
 msgid "Unknown time"
@@ -1277,33 +1264,33 @@ msgstr[3] "%i دّقيقة"
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
-msgstr[0] "%i ساعة"
-msgstr[1] "%i ساعة"
+msgstr[0] "ساعة واحدة"
+msgstr[1] "ساعتان"
 msgstr[2] "%i ساعات"
-msgstr[3] "%i ساعات"
+msgstr[3] "%i ساعة"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
 #: ../src/gpm-common.c:264
-#, fuzzy, c-format
+#, c-format
 msgid "%i %s %i %s"
-msgstr "%i %s، %i %s"
+msgstr "%i %s %i %s"
 
 #: ../src/gpm-common.c:265
 msgid "hour"
 msgid_plural "hours"
-msgstr[0] "ساعة"
-msgstr[1] "ساعات"
+msgstr[0] "ساعة واحدة"
+msgstr[1] "ساعتان"
 msgstr[2] "ساعات"
-msgstr[3] "ساعات"
+msgstr[3] "ساعة"
 
 #: ../src/gpm-common.c:266
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] "دقيقة"
-msgstr[1] "دقائق"
+msgstr[0] "دقيقة واحدة"
+msgstr[1] "دقيقتان"
 msgstr[2] "دقائق"
-msgstr[3] "دقائق"
+msgstr[3] "دقيقة"
 
 #: ../src/gpm-common.h:44
 msgid "Power Manager for the GNOME desktop"
@@ -1324,30 +1311,30 @@ msgstr "النظام يعمل على طاقة البطارية\n"
 
 #: ../src/gpm-engine.c:307
 msgid "Battery discharge time is currently unknown\n"
-msgstr ""
+msgstr "وقت تفريغ البطارية غير معروف\n"
 
 #: ../src/gpm-engine.c:309
 msgid "Battery charge time is currently unknown\n"
-msgstr ""
+msgstr "وقت شحن البطارية غير معروف\n"
 
 #: ../src/gpm-engine.c:313
 msgid "Battery discharge time is estimated\n"
-msgstr ""
+msgstr "وقت تفريغ البطارية مُقدّر\n"
 
 #: ../src/gpm-engine.c:315
 msgid "Battery charge time is estimated\n"
-msgstr ""
+msgstr "وقت شحن البطارية مُقدّر\n"
 
 #. show a AC icon
 #: ../src/gpm-engine.c:598
 msgid "Unable to get data..."
-msgstr ""
+msgstr "تعذر الحصول على البيانات..."
 
 #. Translators: This is %i hours
 #: ../src/gpm-graph-widget.c:484
 #, c-format
 msgid "%ih"
-msgstr "%ih ساعة"
+msgstr "%ih"
 
 #. Translators: This is %i hours %02i minutes
 #: ../src/gpm-graph-widget.c:487
@@ -1383,13 +1370,13 @@ msgstr "%i%%"
 #: ../src/gpm-graph-widget.c:506
 #, c-format
 msgid "%.1fW"
-msgstr ""
+msgstr "%.1f وات"
 
 #. Translators: This is %.1f Volts
 #: ../src/gpm-graph-widget.c:509
 #, c-format
 msgid "%.1fV"
-msgstr ""
+msgstr "%.1f فولت"
 
 #: ../src/gpm-info.c:121
 #, c-format
@@ -1405,9 +1392,8 @@ msgid "On battery"
 msgstr "على البطارية"
 
 #: ../src/gpm-info.c:207
-#, fuzzy
 msgid "Session powersave"
-msgstr "الجلسة نشطة"
+msgstr "حفظ طاقة الجلسة"
 
 #: ../src/gpm-info.c:211
 msgid "Session idle"
@@ -1420,17 +1406,17 @@ msgstr "الجلسة نشطة"
 #. Translators: translate ONLY the string part after the |
 #: ../src/gpm-info.c:220
 msgid "label shown on graph|Suspend"
-msgstr ""
+msgstr "تعليق"
 
 #. Translators: translate ONLY the string part after the |
 #: ../src/gpm-info.c:225
 msgid "label shown on graph|Resume"
-msgstr ""
+msgstr "متابعة"
 
 #. Translators: translate ONLY the string part after the |
 #: ../src/gpm-info.c:230
 msgid "label shown on graph|Hibernate"
-msgstr ""
+msgstr "إسبات"
 
 #: ../src/gpm-info.c:234
 msgid "Lid closed"
@@ -1442,7 +1428,7 @@ msgstr "غطاء مفتوح"
 
 #: ../src/gpm-info.c:242
 msgid "Notification"
-msgstr "اشعار "
+msgstr "إشعار"
 
 #: ../src/gpm-info.c:247
 msgid "DPMS On"
@@ -1450,24 +1436,23 @@ msgstr "DPMS مشغلة"
 
 #: ../src/gpm-info.c:251
 msgid "DPMS Standby"
-msgstr "DPMS Standby"
+msgstr "DPMS مرتاحة"
 
 #: ../src/gpm-info.c:255
 msgid "DPMS Suspend"
-msgstr "DPMS علق"
+msgstr "DPMS معلقة"
 
 #: ../src/gpm-info.c:259
 msgid "DPMS Off"
-msgstr "DPMS مطفئة"
+msgstr "DPMS مطفأة"
 
 #: ../src/gpm-info.c:294 ../src/gpm-info.c:295
 msgid "Power"
 msgstr "الطاقة"
 
 #: ../src/gpm-info.c:303
-#, fuzzy
 msgid "Estimated time"
-msgstr "تاريخ الزمن المقدر"
+msgstr "الزمن المقدر"
 
 #: ../src/gpm-info.c:304
 msgid "Time"
@@ -1475,56 +1460,52 @@ msgstr "الوقت"
 
 #: ../src/gpm-info.c:312 ../src/gpm-info.c:329 ../src/gpm-info.c:346
 #: ../src/gpm-info.c:364 ../src/gpm-info.c:381
-#, fuzzy
 msgid "Battery percentage"
 msgstr "نسبة الشحن"
 
 #: ../src/gpm-info.c:313
-#, fuzzy
 msgid "Percentage"
-msgstr "نسبة الشحن"
+msgstr "النسبة المئوية"
 
 #: ../src/gpm-info.c:321
-#, fuzzy
 msgid "Battery Voltage"
-msgstr "تم شحن البطارية"
+msgstr "شحن البطارية"
 
 #: ../src/gpm-info.c:322
-#, fuzzy
 msgid "Voltage"
-msgstr "فلطية البطارية"
+msgstr "الشحن"
 
 #: ../src/gpm-info.c:330 ../src/gpm-info.c:365
 msgid "Accuracy of reading"
-msgstr ""
+msgstr "دقة القراءة"
 
 #: ../src/gpm-info.c:331 ../src/gpm-info.c:348 ../src/gpm-info.c:366
 #: ../src/gpm-info.c:383
 msgid "Valid data"
-msgstr ""
+msgstr "بيانات صالحة"
 
 #: ../src/gpm-info.c:332 ../src/gpm-info.c:349 ../src/gpm-info.c:367
 #: ../src/gpm-info.c:384
 msgid "No data"
-msgstr ""
+msgstr "لا بيانات"
 
 #: ../src/gpm-info.c:336 ../src/gpm-info.c:354 ../src/gpm-info.c:371
 #: ../src/gpm-info.c:389
 msgid "Start point"
-msgstr ""
+msgstr "نقطة البدء"
 
 #: ../src/gpm-info.c:340 ../src/gpm-info.c:358 ../src/gpm-info.c:375
 #: ../src/gpm-info.c:393
 msgid "Stop point"
-msgstr ""
+msgstr "نقطة التوقف"
 
 #: ../src/gpm-info.c:347 ../src/gpm-info.c:382
 msgid "Average time elapsed"
-msgstr ""
+msgstr "متوسط الوقت الماضي"
 
 #: ../src/gpm-info.c:350 ../src/gpm-info.c:385
 msgid "Extrapolated data"
-msgstr ""
+msgstr "البيانات المستنبطة"
 
 #: ../src/gpm-info.c:677
 msgid "AC adapter inserted"
@@ -1544,16 +1525,15 @@ msgstr "أُعيد فتح غطاء الحاسوب المحمول"
 
 #: ../src/gpm-info.c:728
 msgid "idle mode ended"
-msgstr "بدأ وضع الثبات"
+msgstr "انتهى وضع الخمول"
 
 #: ../src/gpm-info.c:730
 msgid "idle mode started"
-msgstr "بدأ وضع الثبات"
+msgstr "بدأ وضع الخمول"
 
 #: ../src/gpm-info.c:732
-#, fuzzy
 msgid "powersave mode started"
-msgstr "بدأ وضع الثبات"
+msgstr "بدأ وضع حفظ الطاقة"
 
 #: ../src/gpm-info.c:751
 msgid "dpms on"
@@ -1603,16 +1583,15 @@ msgstr "اعرض معلومات تنقيح أكثر"
 
 #: ../src/gpm-main.c:157
 msgid "Show version of installed program and exit"
-msgstr ""
+msgstr "أظهر رقم نسخة البرنامج ثم اخرج"
 
 #: ../src/gpm-main.c:159
 msgid "Exit after a small delay (for debugging)"
 msgstr "اخرج بعد تأخير قليل (للتنقيح)"
 
 #: ../src/gpm-main.c:161
-#, fuzzy
 msgid "Exit after the manager has loaded (for debugging)"
-msgstr "اخرج بعد تأخير قليل (للتنقيح)"
+msgstr "اخرج بعد تحميل المدير (للتنقيح)"
 
 #: ../src/gpm-main.c:163
 msgid "Debug specific files, e.g. power"
@@ -1630,30 +1609,31 @@ msgstr "طلب ل %s"
 #. I want this translated
 #: ../src/gpm-manager.c:192
 msgid "Perform action anyway"
-msgstr "أد التصرف على أية حال"
+msgstr "أدّ التصرف على أية حال"
 
 #: ../src/gpm-manager.c:311 ../src/gpm-manager.c:337 ../src/gpm-manager.c:362
 #: ../src/gpm-manager.c:388 ../src/gpm-manager.c:420
 msgid "Action forbidden"
-msgstr ""
+msgstr "التصرف محرّم"
 
 #: ../src/gpm-manager.c:312 ../src/gpm-manager.c:363 ../src/gpm-manager.c:421
 msgid "Policy timeout is not valid. Please wait a few seconds and try again."
-msgstr ""
+msgstr "وقت انتهاء السياسة غير صالح. انتظر بضع ثوان رجاءً ثمّ حاول ثانية."
 
 #: ../src/gpm-manager.c:324 ../src/gpm-manager.c:375
 msgid "Action disallowed"
-msgstr ""
+msgstr "التصرف غير مسموح"
 
 #: ../src/gpm-manager.c:325
 msgid ""
 "Suspend support has been disabled. Contact your administrator for more "
 "details."
 msgstr ""
+"دعم التوقيف قد عُطّل. تواصل مع مديرك لمزيد من التفاصيل."
 
 #: ../src/gpm-manager.c:338
 msgid "Suspend is not available on this computer."
-msgstr ""
+msgstr "التوقيف غير متاح على هذا الحاسوب"
 
 #: ../src/gpm-manager.c:346 ../src/gpm-manager.c:725
 msgid "Suspending computer"
@@ -1664,10 +1644,11 @@ msgid ""
 "Hibernate support has been disabled. Contact your administrator for more "
 "details."
 msgstr ""
+"دعم الإسبات قد عُطّل. تواصل مع مديرك لمزيد من التفاصيل."
 
 #: ../src/gpm-manager.c:389
 msgid "Hibernate is not available on this computer."
-msgstr ""
+msgstr "الإسبات غير متاح على هذا الحاسوب."
 
 #: ../src/gpm-manager.c:397 ../src/gpm-manager.c:737
 msgid "Hibernating computer"
@@ -1683,7 +1664,7 @@ msgstr "إطفاء الحاسوب"
 
 #: ../src/gpm-manager.c:455
 msgid "GNOME interactive logout"
-msgstr "خروج متفاعل لجنوم"
+msgstr "تسجيل خروج متفاعل لجنوم"
 
 #: ../src/gpm-manager.c:725 ../src/gpm-manager.c:737
 msgid "System idle"
@@ -1707,7 +1688,7 @@ msgstr "ضُغِط زر الإسبات"
 
 #: ../src/gpm-manager.c:883
 msgid "the lid has been closed on ac power"
-msgstr "تم اغلاق الغطاء و الجهاز على التيار"
+msgstr "أغلِق الغطاء والجهاز موصول على التيار المتناوب"
 
 #: ../src/gpm-manager.c:913
 msgid "the lid has been closed on battery power"
@@ -1719,161 +1700,147 @@ msgstr "تم اغلاق الغطاء, و نزع التيار (gconf عادي)"
 
 #: ../src/gpm-manager.c:1025
 msgid "battery is critically low"
-msgstr "قاربت بطاريتك على النّفاذ"
+msgstr "قاربت بطاريتك على النفاد"
 
 #: ../src/gpm-manager.c:1340
-#, fuzzy
 msgid "Laptop battery low"
-msgstr "بطارية حاسوب محمول"
+msgstr "بطارية الحاسوب المحمول منخفضة"
 
 #: ../src/gpm-manager.c:1342
-#, fuzzy, c-format
+#, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%d%%)"
 msgstr ""
-"لديك تقريبا  <b>%s</b> متبقية من شحنة البطارية (%d%%). ارجع التيار للحاسوب "
-"لتجنب ضياع البيانات."
+"لديك تقريباً <b>%s</b> متبقية من شحنة البطارية (%d%%)"
 
 #: ../src/gpm-manager.c:1345
-#, fuzzy
 msgid "UPS low"
-msgstr "على طاقة ال يو بي إس"
+msgstr "طاقة ال يو بي إس منخفضة"
 
 #: ../src/gpm-manager.c:1347
-#, fuzzy, c-format
+#, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS backup power (%d%%)"
 msgstr ""
-"لديك تقريبا  <b>%s</b> متبقية من شحنة ال UPS (%d%%). ارجع التيار للحاسوب "
-"لتجنب ضياع البيانات."
+"لديك تقريباً <b>%s</b> متبقية من شحنة طاقة ال UPS (%d%%)"
 
 #: ../src/gpm-manager.c:1350 ../src/gpm-manager.c:1450
-#, fuzzy
 msgid "Mouse battery low"
-msgstr "على طاقة البطارية"
+msgstr "بطارية الفأرة منخفضة"
 
 #: ../src/gpm-manager.c:1351
-#, fuzzy, c-format
+#, c-format
 msgid "The wireless mouse attached to this computer is low in power (%d%%)"
 msgstr ""
-"الجهاز %s الموصول بهذا الكمبيوتر طاقته ضعيفة (%d%%). سيتوقف هذا الجهاز بعد "
-"قليل إن لم يتم شحنه."
+"الفأرة اللاسلكية الموصولة بهذا الحاسوب طاقتها منخفضة (%d%%)"
 
 #: ../src/gpm-manager.c:1353 ../src/gpm-manager.c:1455
-#, fuzzy
 msgid "Keyboard battery low"
-msgstr "على طاقة البطارية"
+msgstr "بطارية لوحة المفاتيح منخفضة"
 
 #: ../src/gpm-manager.c:1354
 #, c-format
 msgid "The wireless keyboard attached to this computer is low in power (%d%%)"
-msgstr ""
+msgstr "لوحة المفاتيح اللاسلكية الموصولة بهذا الحاسوب طاقتها منخفضة (%d%%)"
 
 #: ../src/gpm-manager.c:1356 ../src/gpm-manager.c:1460
-#, fuzzy
 msgid "PDA battery low"
 msgstr "على طاقة البطارية"
 
 #: ../src/gpm-manager.c:1357
-#, fuzzy, c-format
+#, c-format
 msgid "The PDA attached to this computer is low in power (%d%%)"
 msgstr ""
-"الجهاز %s الموصول بهذا الكمبيوتر طاقته ضعيفة (%d%%). سيتوقف هذا الجهاز بعد "
-"قليل إن لم يتم شحنه."
+"جهاز ال PDA الموصول بهذا الكمبيوتر طاقته ضعيفة (%d%%)"
 
 #: ../src/gpm-manager.c:1359 ../src/gpm-manager.c:1465
-#, fuzzy
 msgid "Cell phone battery low"
-msgstr "على طاقة البطارية"
+msgstr "طاقة الهاتف الخلوي ضعيفة"
 
 #: ../src/gpm-manager.c:1360
-#, fuzzy, c-format
+#, c-format
 msgid "The cell phone attached to this computer is low in power (%d%%)"
 msgstr ""
-"الجهاز %s الموصول بهذا الكمبيوتر طاقته ضعيفة (%d%%). سيتوقف هذا الجهاز بعد "
-"قليل إن لم يتم شحنه."
+"الهاتف الخلوي الموصول بهذا الكمبيوتر طاقته ضعيفة (%d%%)"
 
 #: ../src/gpm-manager.c:1387
 msgid "a short time"
-msgstr ""
+msgstr "وقت قصير"
 
 #: ../src/gpm-manager.c:1410 ../src/gpm-manager.c:1496
-#, fuzzy
 msgid "Laptop battery critically low"
-msgstr "قاربت بطاريتك على النّفاذ"
+msgstr "بطارية الحاسوب المحمول منخفضة جداً"
 
 #: ../src/gpm-manager.c:1423
 msgid "Plug in your AC adapter to avoid losing data."
-msgstr ""
+msgstr "أوصل محوّل الطاقة المتناوبة لتجنب فقدان البيانات."
 
 #: ../src/gpm-manager.c:1426
 #, c-format
 msgid "This computer will suspend in %s if the AC is not connected."
-msgstr ""
+msgstr "هذا الحاسوب سوف يتوقف بعد %s إن لم يوصل بالتيار المتناوب."
 
 #: ../src/gpm-manager.c:1429
 #, c-format
 msgid "This computer will hibernate in %s if the AC is not connected."
-msgstr ""
+msgstr "هذا الحاسوب سوف ينقل إلى الإسبات بعد %s إن لم يوصل بالتيار المتناوب."
 
 #: ../src/gpm-manager.c:1432
 #, c-format
 msgid "This computer will shutdown in %s if the AC is not connected."
-msgstr ""
+msgstr "هذا الحاسوب سوف يُطفأ بعد %s إن لم يوصل بالتيار المتناوب."
 
 #: ../src/gpm-manager.c:1435
-#, fuzzy, c-format
+#, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%d%%). %s"
 msgstr ""
-"لديك تقريبا  <b>%s</b> متبقية من شحنة البطارية (%d%%). ارجع التيار للحاسوب "
-"لتجنب ضياع البيانات."
+"لديك تقريباً <b>%s</b> متبقية من شحنة البطارية (%d%%) %s"
 
 #: ../src/gpm-manager.c:1443 ../src/gpm-manager.c:1528
-#, fuzzy
 msgid "UPS critically low"
-msgstr "UPS منخفض جدا"
+msgstr "طاقة ال UPS منخفض جداً"
 
 #: ../src/gpm-manager.c:1445
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore AC "
 "power to your computer to avoid losing data."
 msgstr ""
-"لديك تقريبا  <b>%s</b> متبقية من شحنة ال UPS (%d%%). ارجع التيار للحاسوب "
+"لديك تقريباً <b>%s</b> متبقية من شحنة ال UPS (%d%%). أرجع التيار للحاسوب "
 "لتجنب ضياع البيانات."
 
 #: ../src/gpm-manager.c:1451
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The wireless mouse attached to this computer is very low in power (%d%%). "
 "This device will soon stop functioning if not charged."
 msgstr ""
-"الجهاز %s الموصول بهذا الكمبيوتر طاقته ضعيفة (%d%%). سيتوقف هذا الجهاز بعد "
+"الفأرة اللاسلكية الموصولة بهذا الكمبيوتر طاقتها ضعيفة (%d%%). سيتوقف هذا الجهاز بعد "
 "قليل إن لم يتم شحنه."
 
 #: ../src/gpm-manager.c:1456
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The wireless keyboard attached to this computer is very low in power (%d%%). "
 "This device will soon stop functioning if not charged."
 msgstr ""
-"الجهاز %s الموصول بهذا الكمبيوتر طاقته ضعيفة (%d%%). سيتوقف هذا الجهاز بعد "
+"لوحة المفاتيح اللاسلكية الموصولة بهذا الكمبيوتر طاقتها ضعيفة (%d%%). سيتوقف هذا الجهاز بعد "
 "قليل إن لم يتم شحنه."
 
 #: ../src/gpm-manager.c:1461
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The PDA attached to this computer is very low in power (%d%%). This device "
 "will soon stop functioning if not charged."
 msgstr ""
-"الجهاز %s الموصول بهذا الكمبيوتر طاقته ضعيفة (%d%%). سيتوقف هذا الجهاز بعد "
+"جهاز ال PDA الموصول بهذا الكمبيوتر طاقته ضعيفة (%d%%). سيتوقف هذا الجهاز بعد "
 "قليل إن لم يتم شحنه."
 
 #: ../src/gpm-manager.c:1466
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your cell phone is very low in power (%d%%). This device will soon stop "
 "functioning if not charged."
 msgstr ""
-"الجهاز %s الموصول بهذا الكمبيوتر طاقته ضعيفة (%d%%). سيتوقف هذا الجهاز بعد "
+"الهاتف الخلوي الموصول بهذا الكمبيوتر طاقته ضعيفة (%d%%). سيتوقف هذا الجهاز بعد "
 "قليل إن لم يتم شحنه."
 
 #: ../src/gpm-manager.c:1503
@@ -1881,7 +1848,7 @@ msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
 msgstr ""
-"طاقة البطاريه تحت المستوى الحرج، <b>سيتوقف</b> هذا الحاسوب عندما تصبح "
+"طاقة البطارية تحت المستوى الحرج، <b>سيتوقف</b> هذا الحاسوب عندما تصبح "
 "البطاريه خالية تماما. "
 
 #: ../src/gpm-manager.c:1508
@@ -1923,7 +1890,7 @@ msgstr "ال UPS دون المستوى الحرج وهذا الحاسوب على
 
 #: ../src/gpm-manager.c:1650
 msgid "Install problem!"
-msgstr ""
+msgstr "مشكلة في التنصيب!"
 
 #: ../src/gpm-manager.c:1651
 msgid ""
@@ -1931,6 +1898,8 @@ msgid ""
 "correctly.\n"
 "Please contact your computer administrator."
 msgstr ""
+"الإعدادات الافتراضية لمدير طاقة جنوم لم تـُنصّب بشكل صحيح.\n"
+"رجاءً راجع مدير حاسوبك."
 
 #. save in state
 #: ../src/gpm-notify.c:364
@@ -1945,24 +1914,23 @@ msgid ""
 "\n"
 "For more information visit the %s battery recall website."
 msgstr ""
-"ربما طلب  %s بطاريتك وقد تكون في خطر.\n"
+"ربما أعاد %s طلب بطارية حاسوبك وقد تكون في خطر.\n"
 "\n"
-"لمعلومات أكثرـ زر الموقع %s."
+"لمعلومات أكثرـ زُر موقع إعادة البطارية %s."
 
 #: ../src/gpm-notify.c:380
 msgid "Visit recall website"
-msgstr "زر موقع الإعادة"
+msgstr "زُر موقع الإعادة"
 
 #: ../src/gpm-notify.c:386 ../src/gpm-notify.c:420 ../src/gpm-notify.c:454
 #: ../src/gpm-notify.c:485 ../src/gpm-notify.c:515 ../src/gpm-notify.c:545
 #: ../src/gpm-notify.c:581
 msgid "Do not show me this again"
-msgstr "لاتظهر هذا لي مجدداً"
+msgstr "لا تـُظهر هذا لي مجدداً"
 
 #: ../src/gpm-notify.c:406
-#, fuzzy
 msgid "Battery may be broken"
-msgstr "قد تُعاد البطاريّة"
+msgstr "قد تتضرر البطاريّة"
 
 #: ../src/gpm-notify.c:407
 #, c-format
@@ -1970,11 +1938,11 @@ msgid ""
 "Your battery has a very low capacity (%i%%), which means that it may be old "
 "or broken."
 msgstr ""
+"بطاريتك لديها سعة قليلة جداً (%i%%)، مما يعني أنها قد تكون قديمة أو متضررة."
 
 #: ../src/gpm-notify.c:439
-#, fuzzy
 msgid "Inhibit warning!"
-msgstr "ثبط يدوياً"
+msgstr "تحذير التثبيط!"
 
 #: ../src/gpm-notify.c:440
 msgid ""
@@ -1982,70 +1950,65 @@ msgid ""
 "inhibited.\n"
 "Some laptops can overheat if they do not sleep when the lid is closed."
 msgstr ""
+"حاسوبك المحمول لن ينام إن أغلقت غطاءه لأنه مثبّط حالياً.\n"
+"بعض الحواسيب المحمولة قد ترتفع حرارتها إن لم تنم بينما الغطاء مغلق."
 
 #: ../src/gpm-notify.c:473
 msgid "Battery Charged"
 msgstr "تم شحن البطارية"
 
 #: ../src/gpm-notify.c:474
-#, fuzzy
 msgid "Your laptop battery is now fully charged"
-msgstr "لقد تم شحن البطارية تماماً"
+msgstr "لقد شُحنت بطارية حاسوبك المحمول تماماً"
 
 #: ../src/gpm-notify.c:503
-#, fuzzy
 msgid "Battery Discharging"
-msgstr "يجري التفريغ"
+msgstr "جارٍ تفريغ البطارية"
 
 #: ../src/gpm-notify.c:504
-#, fuzzy
 msgid "The AC power has been unplugged. The system is now using battery power."
-msgstr "تم نزع التيار. يعمل النظام الآن على البطارية."
+msgstr "تم نزع التيار المتناوب. يعمل النظام الآن على البطارية."
 
 #: ../src/gpm-notify.c:533
-#, fuzzy
 msgid "UPS Discharging"
-msgstr "يجري التفريغ"
+msgstr "جارٍ تفريغ ال UPS"
 
 #: ../src/gpm-notify.c:534
-#, fuzzy
 msgid "The AC power has been unplugged. The system is now using backup power."
-msgstr "تم نزع التيار. يعمل النظام الآن على البطارية."
+msgstr "تم نزع التيار المتناوب. يعمل النظام الآن على الطاقة الاحتياطية."
 
 #: ../src/gpm-notify.c:564
-#, fuzzy
 msgid "Sleep Problem"
-msgstr "مشكل تعليق"
+msgstr "مشكلة نوم"
 
 #: ../src/gpm-notify.c:566
-#, fuzzy
 msgid ""
 "Your computer failed to hibernate.\n"
 "Check the help file for common problems."
 msgstr ""
-"لقد فشل حاسوبك في %s.\n"
+"لقد فشل حاسوبك في الإسبات.\n"
 "تحقق من ملف المساعدة للمشاكل الشائعة."
 
 #: ../src/gpm-notify.c:569
-#, fuzzy
 msgid ""
 "Your computer failed to suspend.\n"
 "Check the help file for common problems."
 msgstr ""
-"لقد فشل حاسوبك في %s.\n"
+"لقد فشل حاسوبك في التعليق.\n"
 "تحقق من ملف المساعدة للمشاكل الشائعة."
 
 #: ../src/gpm-notify.c:594
-#, fuzzy
 msgid "Visit quirk website"
-msgstr "زر موقع الإعادة"
+msgstr "زُر موقع quirk"
 
 #: ../src/gpm-cell-array.c:976
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s fully charged (%i%%)\n"
 "Provides %s battery runtime\n"
-msgstr "%s مشحونة بالكامل (%i%%)\n"
+msgstr ""
+"%s مشحونة بالكامل (%i%%)\n"
+"يزود %s وقت تشغيل البطارية\n"
 
 #: ../src/gpm-cell-array.c:980
 #, c-format
@@ -2064,11 +2027,13 @@ msgid "%s discharging (%i%%)\n"
 msgstr "%s يجري التفريغ (%i%%)\n"
 
 #: ../src/gpm-cell-array.c:1005
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s until charged (%i%%)\n"
 "Provides %s battery runtime\n"
-msgstr "%s %s حتى تشحن (%i%%)\n"
+msgstr ""
+"%s %s حتى تشحن (%i%%)\n"
+"يزود %s وقت تشغيل البطارية\n"
 
 #: ../src/gpm-cell-array.c:1012
 #, c-format
@@ -2083,7 +2048,7 @@ msgstr "%s يجري الشحن (%i%%)\n"
 
 #: ../src/gpm-cell-array.c:1024
 msgid "Battery state could not be read at this time\n"
-msgstr ""
+msgstr "لم يمكن قراءة حالة البطارية في هذا الوقت\n"
 
 #: ../src/gpm-cell.c:488
 #, c-format
@@ -2141,17 +2106,15 @@ msgstr "الرقم المسلسل:"
 
 #: ../src/gpm-cell.c:531
 msgid "Model:"
-msgstr "الموديل:"
+msgstr "الطراز:"
 
 #: ../src/gpm-cell.c:537
-#, fuzzy
 msgid "Charge time:"
-msgstr "معدل الشحن (خام):"
+msgstr "وقت الشحن:"
 
 #: ../src/gpm-cell.c:544
-#, fuzzy
 msgid "Discharge time:"
-msgstr "يجري التفريغ"
+msgstr "وقت التفريغ"
 
 #: ../src/gpm-cell.c:550
 msgid "Excellent"
@@ -2186,39 +2149,32 @@ msgid "Design charge:"
 msgstr "شحنة التصميم:"
 
 #: ../src/gpm-cell.c:581
-#, fuzzy
 msgid "Charge rate:"
-msgstr "معدل الشحن (خام):"
+msgstr "معدل الشحن:"
 
 #: ../src/gpm-cell-unit.c:247
-#, fuzzy
 msgid "Laptop batteries"
-msgstr "بطارية حاسوب محمول"
+msgstr "بطاريات الحاسوب المحمول"
 
 #: ../src/gpm-cell-unit.c:249
-#, fuzzy
 msgid "UPSs"
 msgstr "UPS"
 
 #: ../src/gpm-cell-unit.c:251
-#, fuzzy
 msgid "Wireless mice"
 msgstr "فأرة لاسلكية"
 
 #: ../src/gpm-cell-unit.c:253
-#, fuzzy
 msgid "Wireless keyboards"
-msgstr "لوحة مفاتيح لاسلكية"
+msgstr "لوحات مفاتيح لاسلكية"
 
 #: ../src/gpm-cell-unit.c:255
-#, fuzzy
 msgid "PDAs"
 msgstr "PDA"
 
 #: ../src/gpm-cell-unit.c:257
-#, fuzzy
 msgid "Cell phones"
-msgstr "فلطية البطارية"
+msgstr "هواتف خلوية"
 
 #: ../src/gpm-cell-unit.c:259 ../src/gpm-cell-unit.c:275
 #: ../src/gpm-statistics-core.c:739
@@ -2246,9 +2202,8 @@ msgid "PDA"
 msgstr "PDA"
 
 #: ../src/gpm-cell-unit.c:273
-#, fuzzy
 msgid "Cell phone"
-msgstr "فلطية البطارية"
+msgstr "هاتف خلوي"
 
 #: ../src/gpm-prefs.c:111 ../test/gpm-inhibit-test.c:186
 msgid "GNOME Power Preferences"
@@ -2306,43 +2261,36 @@ msgid "GNOME Power Statistics"
 msgstr "احصاءات طاقة جنوم"
 
 #: ../src/gpm-statistics-core.c:60
-#, fuzzy
 msgid "Charge history"
 msgstr "تاريخ الشّحن"
 
 #: ../src/gpm-statistics-core.c:61
-#, fuzzy
 msgid "Power history"
 msgstr "تاريخ الطاقة"
 
 #: ../src/gpm-statistics-core.c:62
-#, fuzzy
 msgid "Voltage history"
 msgstr "تاريخ الفلطية"
 
 #: ../src/gpm-statistics-core.c:63
-#, fuzzy
 msgid "Estimated time history"
 msgstr "تاريخ الزمن المقدر"
 
 #: ../src/gpm-statistics-core.c:64
-#, fuzzy
 msgid "Charge time profile"
-msgstr "معدل الشحن (خام):"
+msgstr "ملف تعريف وقت الشحن:"
 
 #: ../src/gpm-statistics-core.c:65
-#, fuzzy
 msgid "Discharge time profile"
-msgstr "يجري التفريغ"
+msgstr "ملف تعريف وقت التفريغ:"
 
 #: ../src/gpm-statistics-core.c:66
 msgid "Charge time accuracy profile"
-msgstr ""
+msgstr "ملف تعريف دقة وقت الشحن"
 
 #: ../src/gpm-statistics-core.c:67
-#, fuzzy
 msgid "Discharge time accuracy profile"
-msgstr "يجري التفريغ"
+msgstr "ملف تعريف دقة وقت التفريغ"
 
 #: ../src/gpm-statistics-core.c:810
 msgid "Could not connect to GNOME Power Manager."
@@ -2361,9 +2309,8 @@ msgid "Laptop lid is closed"
 msgstr "غطاء الحاسوب المحمول مغلق"
 
 #: ../src/gpm-tray-icon.c:206
-#, fuzzy
 msgid "Device information"
-msgstr "معلومات الطاقة"
+msgstr "معلومات الجهاز"
 
 #: ../src/gpm-tray-icon.c:315
 msgid "translator-credits"
@@ -2374,9 +2321,8 @@ msgstr ""
 "خالد حسني\t<khaledhosny@eglug.org>"
 
 #: ../src/gpm-tray-icon.c:331
-#, fuzzy
 msgid "GNOME Power Manager Website"
-msgstr "مدير طاقة جنوم"
+msgstr "موقع مدير طاقة جنوم"
 
 #. Preferences
 #: ../src/gpm-tray-icon.c:433
@@ -2457,9 +2403,11 @@ msgstr "س_بات"
 #~ msgid "%iV"
 #~ msgstr "%iV"
 
-#, fuzzy
-#~ msgid "Power (mWh)"
-#~ msgstr "الطاقة"
+#~ msgid "user clicked hibernate from tray menu"
+#~ msgstr "نقر المستخدم سبات من قائمة الطبق"
+
+#~ msgid "user clicked suspend from tray menu"
+#~ msgstr "نقر المستخدم توقيف من قائمة الطبق"
 
 #, fuzzy
 #~ msgid "Battery may be invalid"
@@ -2468,23 +2416,17 @@ msgstr "س_بات"
 #~ msgid "Power Preferences"
 #~ msgstr "خيارات الطاقة"
 
-#~ msgid "Resume"
-#~ msgstr "إستأناف"
-
-#~ msgid "Power Inhibit Test"
-#~ msgstr "اختبار تثبيط الطاقة"
-
-#~ msgid "user clicked hibernate from tray menu"
-#~ msgstr "نقر المستخدم سبات من قائمة الطبق"
-
-#~ msgid "user clicked suspend from tray menu"
-#~ msgstr "نقر المستخدم توقيف من قائمة الطبق"
-
 #~ msgid "Unknown caption"
 #~ msgstr "عنوان غير معروف"
 
 #~ msgid "Time remaining"
 #~ msgstr "الوقت المتبقي"
+
+#~ msgid "Resume"
+#~ msgstr "إستأناف"
+
+#~ msgid "Power Inhibit Test"
+#~ msgstr "اختبار تثبيط الطاقة"
 
 #~ msgid "Notify on a HAL error"
 #~ msgstr "نبّه في حال وجود خطأ في HAL"
