@@ -1,3 +1,11 @@
+2007-10-05  Richard Hughes  <richard@hughsie.com>
+
+	* libhal-glib/libhal-gpower.c: (hal_gpower_suspend),
+	(hal_gpower_pm_method_void), (hal_gpower_enable_power_save):
+	* src/gpm-brightness-lcd.c: (gpm_brightness_lcd_get_hw),
+	(gpm_brightness_lcd_set_hw):
+	Use the correct DBUS return types now HAL enforces the return type.
+
 2007-09-17  Richard Hughes  <richard@hughsie.com>
 
 	==== Version 2.20.0 ====

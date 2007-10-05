@@ -232,7 +232,7 @@ hal_gpower_filter_error (GError **error)
 gboolean
 hal_gpower_suspend (HalGPower *power, guint wakeup, GError **error)
 {
-	guint retval = 0;
+	gint retval = 0;
 	gboolean ret;
 	DBusGProxy *proxy;
 
@@ -247,7 +247,7 @@ hal_gpower_suspend (HalGPower *power, guint wakeup, GError **error)
 	ret = dbus_g_proxy_call (proxy, "Suspend", error,
 				 G_TYPE_INT, wakeup,
 				 G_TYPE_INVALID,
-				 G_TYPE_UINT, &retval,
+				 G_TYPE_INT, &retval,
 				 G_TYPE_INVALID);
 	/* we might have to ignore the error */
 	if (error != NULL && hal_gpower_filter_error (error) == TRUE) {
@@ -291,7 +291,7 @@ hal_gpower_pm_method_void (HalGPower *power, const gchar *method, GError **error
 
 	ret = dbus_g_proxy_call (proxy, method, error,
 				 G_TYPE_INVALID,
-				 G_TYPE_UINT, &retval,
+				 G_TYPE_INT, &retval,
 				 G_TYPE_INVALID);
 	/* we might have to ignore the error */
 	if (error != NULL && hal_gpower_filter_error (error) == TRUE) {
@@ -382,7 +382,7 @@ hal_gpower_enable_power_save (HalGPower *power, gboolean enable)
 	ret = dbus_g_proxy_call (proxy, "SetPowerSave", &error,
 				 G_TYPE_BOOLEAN, enable,
 				 G_TYPE_INVALID,
-				 G_TYPE_UINT, &retval,
+				 G_TYPE_INT, &retval,
 				 G_TYPE_INVALID);
 	if (retval != 0) {
 		g_warning ("SetPowerSave failed in a horrible way!");
