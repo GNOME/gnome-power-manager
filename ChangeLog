@@ -1,10 +1,21 @@
 2007-10-05  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c: (gpm_manager_action_suspend),
+	(gpm_manager_action_hibernate), (idle_do_sleep):
+	Apply a patch from David Zeuthen:
+	OK, so it turns out we're getting a D-Bus timeout. Actually g-p-m got
+	codepaths to handle this but the call site passes NULL for the
+	GError so we never get to examine this and properly handle timeouts.
+	This patch takes care of that. I've tested and it works. Fixes rh:312761
+
+2007-10-05  Richard Hughes  <richard@hughsie.com>
+
 	* libhal-glib/libhal-gpower.c: (hal_gpower_suspend),
 	(hal_gpower_pm_method_void), (hal_gpower_enable_power_save):
 	* src/gpm-brightness-lcd.c: (gpm_brightness_lcd_get_hw),
 	(gpm_brightness_lcd_set_hw):
 	Use the correct DBUS return types now HAL enforces the return type.
+	Based on a patch from David Zeuthen. Many thanks.
 
 2007-09-17  Richard Hughes  <richard@hughsie.com>
 

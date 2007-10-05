@@ -304,6 +304,7 @@ static gboolean
 gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 {
 	gboolean allowed;
+	GError *error = NULL;
 
 	if (gpm_control_is_policy_timout_valid (manager->priv->control) == FALSE) {
 		/* error msg timeout not valid */
@@ -344,7 +345,10 @@ gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 
 	gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
 				_("Suspending computer"), reason);
-	gpm_control_suspend (manager->priv->control, NULL);
+	gpm_control_suspend (manager->priv->control, &error);
+	if (error != NULL) {
+		g_error_free (error);
+	}
 	return TRUE;
 }
 
@@ -355,6 +359,7 @@ static gboolean
 gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 {
 	gboolean allowed;
+	GError *error = NULL;
 
 	if (gpm_control_is_policy_timout_valid (manager->priv->control) == FALSE) {
 		/* error msg timeout not valid */
@@ -395,7 +400,10 @@ gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 
 	gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
 				_("Hibernating computer"), reason);
-	gpm_control_hibernate (manager->priv->control, NULL);
+	gpm_control_hibernate (manager->priv->control, &error);
+	if (error != NULL) {
+		g_error_free (error);
+	}
 	return TRUE;
 }
 
