@@ -8,40 +8,46 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-03 16:55+0900\n"
-"PO-Revision-Date: 2007-03-03 16:55+0900\n"
+"POT-Creation-Date: 2007-10-07 15:26+0900\n"
+"PO-Revision-Date: 2007-10-07 15:26+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
-"Language-Team: Korean <gnome-kr-hackers@lists.kldp.net>\n"
+"Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: ../applets/brightness/brightness-applet.c:63
+#: ../applets/brightness/brightness-applet.c:106
 msgid "Power Manager Brightness Applet"
 msgstr "전원 관리자 밝기 애플릿"
 
-#: ../applets/brightness/brightness-applet.c:64
+#: ../applets/brightness/brightness-applet.c:107
 msgid "Adjusts laptop panel brightness."
 msgstr "노트북 패널 밝기를 조정합니다."
 
-#: ../applets/brightness/brightness-applet.c:232
+#: ../applets/brightness/brightness-applet.c:353
+#: ../applets/inhibit/inhibit-applet.c:338
 #, c-format
-msgid "LCD brightness : %d%%"
-msgstr "LCD 밝기 : %d%%"
+msgid "Cannot connect to gnome-power-manager"
+msgstr "그놈 전원 관리자에 연결할 수 없습니다"
 
-#: ../applets/brightness/brightness-applet.c:234
+#: ../applets/brightness/brightness-applet.c:355
 #, c-format
 msgid "Cannot get laptop panel brightness"
 msgstr "노트북 패널 밝기를 알 수 없습니다"
 
-#: ../applets/brightness/brightness-applet.c:597
-#: ../applets/inhibit/inhibit-applet.c:259 ../src/gpm-tray-icon.c:305
+#: ../applets/brightness/brightness-applet.c:357
+#, c-format
+msgid "LCD brightness : %d%%"
+msgstr "LCD 밝기 : %d%%"
+
+#: ../applets/brightness/brightness-applet.c:744
+#: ../applets/inhibit/inhibit-applet.c:406 ../src/gpm-tray-icon.c:301
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Licensed under the GNU General Public License Version 2"
 
-#: ../applets/brightness/brightness-applet.c:598
-#: ../applets/inhibit/inhibit-applet.c:260 ../src/gpm-tray-icon.c:306
+#: ../applets/brightness/brightness-applet.c:745
+#: ../applets/inhibit/inhibit-applet.c:407 ../src/gpm-tray-icon.c:302
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -53,8 +59,8 @@ msgstr ""
 "as published by the Free Software Foundation; either version 2\n"
 "of the License, or (at your option) any later version."
 
-#: ../applets/brightness/brightness-applet.c:602
-#: ../applets/inhibit/inhibit-applet.c:264 ../src/gpm-tray-icon.c:310
+#: ../applets/brightness/brightness-applet.c:749
+#: ../applets/inhibit/inhibit-applet.c:411 ../src/gpm-tray-icon.c:306
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -66,8 +72,8 @@ msgstr ""
 "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
 "GNU General Public License for more details."
 
-#: ../applets/brightness/brightness-applet.c:606
-#: ../applets/inhibit/inhibit-applet.c:268 ../src/gpm-tray-icon.c:314
+#: ../applets/brightness/brightness-applet.c:753
+#: ../applets/inhibit/inhibit-applet.c:415 ../src/gpm-tray-icon.c:310
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -79,38 +85,70 @@ msgstr ""
 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
 "02110-1301, USA."
 
-#: ../applets/brightness/brightness-applet.c:620
+#: ../applets/brightness/brightness-applet.c:767
 msgid "Copyright © 2006 Benjamin Canou"
 msgstr "Copyright © 2006 Benjamin Canou"
 
-#: ../applets/inhibit/inhibit-applet.c:56
+#: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:1
+msgid "Adjusts Laptop panel brightness"
+msgstr "노트북 화면 밝기를 조정합니다"
+
+#: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:2
+msgid "Brightness Applet"
+msgstr "밝기 애플릿"
+
+#: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:3
+msgid "Brightness Applet Factory"
+msgstr "밝기 애플릿 팩토리"
+
+#: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:4
+msgid "Factory for Brightness Applet"
+msgstr "밝기 애플릿에 대한 팩토리"
+
+#: ../applets/inhibit/inhibit-applet.c:89
 msgid "Power Manager Inhibit Applet"
 msgstr "전원 관리 금지 애플릿"
 
-#: ../applets/inhibit/inhibit-applet.c:57
+#: ../applets/inhibit/inhibit-applet.c:90
 msgid "Allows user to inhibit automatic power saving."
 msgstr "사용자가 전원 절약이 자동으로 실행되는 걸 금지할 수 있습니다."
 
-#: ../applets/inhibit/inhibit-applet.c:195
+#: ../applets/inhibit/inhibit-applet.c:341
 #, c-format
 msgid "Automatic sleep inhibited"
 msgstr "자동 절전을 금지했습니다"
 
-#: ../applets/inhibit/inhibit-applet.c:197
+#: ../applets/inhibit/inhibit-applet.c:343
 #, c-format
 msgid "Automatic sleep enabled"
 msgstr "자동 절전을 사용합니다"
 
-#: ../applets/inhibit/inhibit-applet.c:224
+#: ../applets/inhibit/inhibit-applet.c:371
 msgid "Manual inhibit"
 msgstr "수동 금지"
 
-#: ../applets/inhibit/inhibit-applet.c:282
+#: ../applets/inhibit/inhibit-applet.c:429
 msgid "Copyright © 2006-2007 Richard Hughes"
 msgstr "Copyright © 2006-2007 Richard Hughes"
 
+#: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:1
+msgid "Allows user to inhibit automatic power saving"
+msgstr "사용자가 자동 절전 기능을 금지하도록 허용"
+
+#: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:2
+msgid "Factory for Inhibit Applet"
+msgstr "금지 애플릿에 대한 팩토리"
+
+#: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:3
+msgid "Inhibit Applet"
+msgstr "금지 애플릿"
+
+#: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:4
+msgid "Inhibit Applet Factory"
+msgstr "금지 애플릿 팩토리"
+
 #. common descriptions of this program
-#: ../data/gnome-power-manager.desktop.in.h:1 ../src/gpm-common.h:30
+#: ../data/gnome-power-manager.desktop.in.h:1 ../src/gpm-common.h:43
 msgid "Power Manager"
 msgstr "전원 관리자"
 
@@ -133,16 +171,16 @@ msgid "Allow Suspend and Hibernate in the menu"
 msgstr "메뉴에서 절전모드 및 최대절전 모드 허용"
 
 #: ../data/gnome-power-manager.schemas.in.h:3
+msgid "Allow backlight brightness adjustment"
+msgstr "백라이트 밝기 조정 허용"
+
+#: ../data/gnome-power-manager.schemas.in.h:4
 msgid "Battery critical low action"
 msgstr "배터리 위험 저전력 동작"
 
-#: ../data/gnome-power-manager.schemas.in.h:4
-msgid "Change the brightness to a preset level on AC state change"
-msgstr "AC 상태 변화에 따라 밝기를 현재 단계로 바꿉니다"
-
 #: ../data/gnome-power-manager.schemas.in.h:5
-msgid "Change the brightness to automatically using the ambient light sensors"
-msgstr "조도 센서를 이용해 자동으로 밝기를 바꿉니다"
+msgid "Change the brightness automatically using the ambient light sensors"
+msgstr "조도 센서를 이용해 자동으로 밝기를 바꾸기"
 
 #: ../data/gnome-power-manager.schemas.in.h:6
 msgid "Check CPU load before sleeping"
@@ -183,15 +221,15 @@ msgstr "DBUS를 통해 보내는 전원관리 금지 요청을 무시할 지 여
 
 #: ../data/gnome-power-manager.schemas.in.h:14
 msgid ""
-"If a notification message should be displayed after the suspend or hibernate "
+"If a notification message should be displayed after suspend or hibernate "
 "failed."
-msgstr "절전 또는 최대절전 실패했을 때 알림 메세지를 표시할 지 여부."
+msgstr "절전 또는 최대절전이 실패했을 때 알림 메세지를 표시할 지 여부."
 
 #: ../data/gnome-power-manager.schemas.in.h:15
 msgid ""
 "If a notification message should be displayed when the battery is fully "
 "charged."
-msgstr "배터리가 완전히 충전되었을 때 알림 메세지를 표시할 지 여부."
+msgstr "배터리를 완전히 충전했을 때 알림 메세지를 표시할 지 여부."
 
 #: ../data/gnome-power-manager.schemas.in.h:16
 msgid ""
@@ -201,6 +239,21 @@ msgstr "배터리 전원이 떨어졌을 때 알림 메세지를 표시할 지 �
 
 #: ../data/gnome-power-manager.schemas.in.h:17
 msgid ""
+"If a notification message should be displayed when the profile data is "
+"guessed."
+msgstr "프로파일 데이터를 추정했을 때 알림 메세지를 표시할 지 여부."
+
+#: ../data/gnome-power-manager.schemas.in.h:18
+msgid "If extra debugging messages should be used"
+msgstr "추가 디버깅 메세지를 사용할 지 여부"
+
+#: ../data/gnome-power-manager.schemas.in.h:19
+msgid ""
+"If extra debugging messages should be used. Only turn this on for debugging."
+msgstr "추가 디버깅 메세지를 사용할 지 여부. 디버깅 용도로만 사용하십시오."
+
+#: ../data/gnome-power-manager.schemas.in.h:20
+msgid ""
 "If niced processes are considered, they can cause a frequency increment even "
 "though their absolute load percentage wouldn't trigger the scaling mechanism "
 "to switch up the frequency."
@@ -209,11 +262,11 @@ msgstr ""
 "클럭 변경 방식에 영향을 미치지 않긴 하지만 이것때문에 클럭수가 늘어날 수도 있"
 "습니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:18
+#: ../data/gnome-power-manager.schemas.in.h:21
 msgid "If sounds should be used"
 msgstr "소리를 사용할 지 여부"
 
-#: ../data/gnome-power-manager.schemas.in.h:19
+#: ../data/gnome-power-manager.schemas.in.h:22
 msgid ""
 "If sounds should be used when the power is critically low, or inhibit "
 "requests have stopped the policy action."
@@ -221,24 +274,24 @@ msgstr ""
 "전원이 위험하게 적을 경우 혹은 전원관리 금지 요청이 전원관리 정책 동작을 금지"
 "하는 경우, 소리를 사용할 지 여부."
 
-#: ../data/gnome-power-manager.schemas.in.h:20
+#: ../data/gnome-power-manager.schemas.in.h:23
 msgid "If the CPU load should be checked before doing the idle action."
 msgstr "입력 없음 동작을 하기 전에 CPU 사용량을 검사할 지 여부."
 
-#: ../data/gnome-power-manager.schemas.in.h:21
+#: ../data/gnome-power-manager.schemas.in.h:24
 msgid ""
 "If the Suspend and Hibernate options should be allowed in the notification "
 "area drop down menu."
 msgstr "알림 영역의 메뉴에서 절전 및 최대절전 옵션을 사용할 수 있는 지 여부."
 
-#: ../data/gnome-power-manager.schemas.in.h:22
+#: ../data/gnome-power-manager.schemas.in.h:25
 msgid ""
 "If the battery event should occur when the lid is shut and the power "
 "disconnected"
 msgstr ""
 "노트북 덮개가 닫히고 전원이 빠진 경우에 배터리 이벤트를 발생할 지 여부."
 
-#: ../data/gnome-power-manager.schemas.in.h:23
+#: ../data/gnome-power-manager.schemas.in.h:26
 msgid ""
 "If the battery lid close event should occur (for example 'Suspend when lid "
 "closed on battery') when the lid is previously shut and the AC power "
@@ -247,55 +300,53 @@ msgstr ""
 "노트북 덮개가 이전에 닫히고 AC 전원이 나중에 빠졌을 경우에, 배터리 덮개 닫힘 "
 "이벤트를 (예를 들어 '배터리 전원 사용중에 노트북 덮개 닫힘') 발생할 지 여부."
 
-#: ../data/gnome-power-manager.schemas.in.h:24
-msgid ""
-"If the laptop should be configured as if it is using a permanent external "
-"monitor"
-msgstr "외부 모니터를 계속해서 사용하는 것처럼 노트북을 설정할 지 여부"
+#: ../data/gnome-power-manager.schemas.in.h:27
+msgid "If the learnt profile should be used to calculate the time remaining"
+msgstr "학습한 프로파일을 이용해 남은 시간을 계산할 지 여부"
 
-#: ../data/gnome-power-manager.schemas.in.h:25
+#: ../data/gnome-power-manager.schemas.in.h:28
 msgid ""
-"If the laptop should be configured to not do dimming actions and DPMS off if "
-"it is using a dock or external monitor. Most laptop and desktop users should "
-"select FALSE here."
+"If the learnt profile should be used to calculate the time remaining. Only "
+"turn this off for debugging."
 msgstr ""
-"도크나 외부 모니터를 사용하는 경우 노트북의 어둡게 하기 동작과 DPMS 끄기 동작"
-"을 하지 않도록 설정할 지 여부. 대부분의 노트북과 데스크탑 사용자는 여기에서 "
-"거짓이라고 설정해야 합니다."
+"학습한 프로파일을 이용해 남은 시간을 계산할 지 여부. 디버깅 용도로만 이 기능"
+"을 끄십시오."
 
-#: ../data/gnome-power-manager.schemas.in.h:26
+#: ../data/gnome-power-manager.schemas.in.h:29
 msgid "If the low-power mode should be enabled when on AC"
 msgstr "AC 전원을 사용할 때 저전력 모드를 사용할 지 여부"
 
-#: ../data/gnome-power-manager.schemas.in.h:27
+#: ../data/gnome-power-manager.schemas.in.h:30
 msgid "If the low-power mode should be enabled when on UPS"
 msgstr "UPS를 사용할 때 저전력 모드를 사용할 지 여부"
 
-#: ../data/gnome-power-manager.schemas.in.h:28
+#: ../data/gnome-power-manager.schemas.in.h:31
 msgid "If the low-power mode should be enabled when on battery"
 msgstr "배터리를 사용할 때 저전력 모드를 사용할 지 여부"
 
-#: ../data/gnome-power-manager.schemas.in.h:29
+#: ../data/gnome-power-manager.schemas.in.h:32
+msgid ""
+"If the screen brightness can be changed when switching between AC and "
+"battery power and by ambient light sensors."
+msgstr ""
+"AC 전원과 배터리 전원을 바꾸거나, 조도 센서 값에 따라 화면 밝기를 바꿀 지 여"
+"부."
+
+#: ../data/gnome-power-manager.schemas.in.h:33
 msgid ""
 "If the screen brightness should be changed automatically using the ambient "
 "light sensors."
 msgstr "조도 센서를 이용해 화면 밝기를 자동으로 바꿀 지 여부."
 
-#: ../data/gnome-power-manager.schemas.in.h:30
+#: ../data/gnome-power-manager.schemas.in.h:34
 msgid ""
-"If the screen brightness should be changed when switching between AC and "
-"battery power."
-msgstr "AC 전원과 배터리 전원 사이에서 바뀔 때 화면 밝기를 바꿀 지 여부."
-
-#: ../data/gnome-power-manager.schemas.in.h:31
-msgid ""
-"If the screen is locked when the screen is turned off. Only used if "
-"lock_use_screensaver_settings is false."
+"If the screen brightness should be changed automatically using the ambient "
+"light sensors. Valid is 'none', 'light' and 'dark'"
 msgstr ""
-"화면이 꺼졌을 때 화면을 잠글 지 여부. lock_use_screensaver_settings 값이 거짓"
-"일 경우에 사용합니다."
+"조도 센서를 이용해 화면 밝기를 자동으로 바꿀 지 여부. 사용할 수 있는 값은 "
+"'none', 'light', 'dark'입니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:32
+#: ../data/gnome-power-manager.schemas.in.h:35
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on AC power."
@@ -303,7 +354,7 @@ msgstr ""
 "AC 전원을 사용할 때 컴퓨터에 입력이 없으면 전원절약을 위해 화면을 어둡게 할 "
 "지 여부."
 
-#: ../data/gnome-power-manager.schemas.in.h:33
+#: ../data/gnome-power-manager.schemas.in.h:36
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on battery power."
@@ -311,62 +362,38 @@ msgstr ""
 "배터리 전원을 사용할 때 컴퓨터에 입력이 없을 때 전원 절약을 위해 화면을 어둡"
 "게 할 지 여부."
 
-#: ../data/gnome-power-manager.schemas.in.h:34
+#: ../data/gnome-power-manager.schemas.in.h:37
 msgid "If the system low-power mode should be enabled when on AC power."
 msgstr "AC 전원 상태일 때 시스템 절전 모드를 사용할 지 여부."
 
-#: ../data/gnome-power-manager.schemas.in.h:35
+#: ../data/gnome-power-manager.schemas.in.h:38
 msgid "If the system low-power mode should be enabled when on UPS power."
 msgstr "UPS 전원을 사용할 때 시스템 절전 모드를 사용할 지 여부."
 
-#: ../data/gnome-power-manager.schemas.in.h:36
+#: ../data/gnome-power-manager.schemas.in.h:39
 msgid ""
 "If the system low-power mode should be enabled when on laptop battery power."
 msgstr "노트북 배터리 전원을 사용할 때 시스템 절전 모드를 사용할 지 여부."
 
-#: ../data/gnome-power-manager.schemas.in.h:37
+#: ../data/gnome-power-manager.schemas.in.h:40
 msgid "If the user is authorized to hibernate the computer."
 msgstr "사용자가 컴퓨터를 최대절전 모드로 바꿀 권한이 있는 지 여부."
 
-#: ../data/gnome-power-manager.schemas.in.h:38
+#: ../data/gnome-power-manager.schemas.in.h:41
 msgid "If the user is authorized to suspend the computer."
 msgstr "사용자가 컴퓨터를 절전 모드로 바꿀 권한이 있는 지 여부."
 
-#: ../data/gnome-power-manager.schemas.in.h:39
+#: ../data/gnome-power-manager.schemas.in.h:42
 msgid "If the user should be notified when the AC adapter is disconnected."
 msgstr "AC 어탭터가 빠졌을 때 사용자에게 알릴 지 여부."
 
-#: ../data/gnome-power-manager.schemas.in.h:40
+#: ../data/gnome-power-manager.schemas.in.h:43
 msgid ""
 "If time based notifications should be used. If set to false, then the "
 "percentage change is used instead, which may fix a broken ACPI BIOS."
 msgstr ""
 "시간 값에 따라 알림을 사용할 지 여부. 거짓일 경우, 퍼센트 값에 따라 사용합니"
 "다. 퍼센트 값에 따라 사용하면 잘못된 ACPI BIOS에서도 제대로 동작합니다."
-
-#: ../data/gnome-power-manager.schemas.in.h:41
-msgid ""
-"If to lock the screen when the computer wakes up from a hibernate. Only used "
-"if lock_use_screensaver_settings is false."
-msgstr ""
-"최대절전에서 컴퓨터가 깨어났을 때 화면을 잠글 지 여부. "
-"lock_use_screensaver_settings이 거짓일 경우에만 사용합니다."
-
-#: ../data/gnome-power-manager.schemas.in.h:42
-msgid ""
-"If to lock the screen when the computer wakes up from a suspend. Only used "
-"if lock_use_screensaver_settings is false."
-msgstr ""
-"절전에서 컴퓨터가 깨어났을 때 화면을 잠글 지 여부. "
-"lock_use_screensaver_settings이 거짓일 경우에만 사용합니다."
-
-#: ../data/gnome-power-manager.schemas.in.h:43
-msgid ""
-"If to use the screen lock setting of gnome-screensaver to decide to lock the "
-"screen after a hibernate, suspend or blank screen."
-msgstr ""
-"최대절전, 절전 또는 화면 꺼짐 후에 화면을 잠글 지 여부를 결정할 때, 그놈 화"
-"면 보호기의 화면 잠그기 설정을 사용할 지 여부."
 
 #: ../data/gnome-power-manager.schemas.in.h:44
 msgid "If we should show the CPU frequency scaling in the UI"
@@ -381,126 +408,154 @@ msgstr ""
 "야 할 경우도 있습니다."
 
 #: ../data/gnome-power-manager.schemas.in.h:46
-msgid "If we should show the recalled battery warning for a broken battery"
-msgstr "잘못된 배터리에 대해서 리콜 배터리 경고를 표시할 지 여부"
+msgid "If we should show the low capacity warning for a broken battery"
+msgstr "손상된 배터리에 대해서 용량 낮음 경고를 표시할 지 여부"
 
 #: ../data/gnome-power-manager.schemas.in.h:47
+msgid "If we should show the low capacity warning for a broken battery."
+msgstr "손상된 배터리에 대해서 용량 낮음 경고를 표시할 지 여부."
+
+#: ../data/gnome-power-manager.schemas.in.h:48
+msgid "If we should show the recalled battery warning for a broken battery"
+msgstr "손상된 배터리에 대해서 리콜 배터리 경고를 표시할 지 여부"
+
+#: ../data/gnome-power-manager.schemas.in.h:49
 msgid ""
 "If we should show the recalled battery warning for a broken battery. Set "
 "this to false only if you know your battery is okay."
 msgstr ""
-"잘못된 배터리에 대해서 리콜 배터리 경고를 표시할 지 여부. 배터리가 올바르다"
+"손상된 배터리에 대해서 리콜 배터리 경고를 표시할 지 여부. 배터리가 올바르다"
 "고 확신하는 경우에만 이 값을 거짓으로 하십시오."
 
-#: ../data/gnome-power-manager.schemas.in.h:48
+#: ../data/gnome-power-manager.schemas.in.h:50
+msgid ""
+"If we should show the warning when we have a valid inhibit and configured to "
+"sleep on lid close"
+msgstr ""
+"절전 금지를 지정했으면서 노트북 덮개를 닫을 때 절전하도록 설정된 경우, 경고"
+"를 표시할 지 여부"
+
+#: ../data/gnome-power-manager.schemas.in.h:51
+msgid ""
+"If we should show the warning when we have a valid inhibit and configured to "
+"sleep on lid close."
+msgstr ""
+"절전 금지를 지정했으면서 노트북 덮개를 닫을 때 절전하도록 설정된 경우, 경고"
+"를 표시할 지 여부."
+
+#: ../data/gnome-power-manager.schemas.in.h:52
 msgid "Keyboard brightness when on AC"
 msgstr "AC 전원일 때 키보드 밝기"
 
-#: ../data/gnome-power-manager.schemas.in.h:49
+#: ../data/gnome-power-manager.schemas.in.h:53
 msgid "Keyboard brightness when on battery"
 msgstr "배터리 일 때 키보드 밝기"
 
-#: ../data/gnome-power-manager.schemas.in.h:50
+#: ../data/gnome-power-manager.schemas.in.h:54
 msgid "LCD brightness when on AC"
 msgstr "AC 전원일 때 LCD 밝기"
 
-#: ../data/gnome-power-manager.schemas.in.h:51
+#: ../data/gnome-power-manager.schemas.in.h:55
 msgid "LCD brightness when on battery"
 msgstr "배터리 일 때 LCD 밝기"
 
-#: ../data/gnome-power-manager.schemas.in.h:52
+#: ../data/gnome-power-manager.schemas.in.h:56
 msgid "Laptop lid close action on battery"
 msgstr "배터리 일 때 노트북 덮개 닫기 동작"
 
-#: ../data/gnome-power-manager.schemas.in.h:53
+#: ../data/gnome-power-manager.schemas.in.h:57
 msgid "Laptop lid close action when on AC"
 msgstr "AC 전원일 때 노트북 덮개 닫기 동작"
 
-#: ../data/gnome-power-manager.schemas.in.h:54
+#: ../data/gnome-power-manager.schemas.in.h:58
+msgid "Lock GNOME keyring on sleep"
+msgstr "절전할 때 그놈 키 모음 잠그기"
+
+#: ../data/gnome-power-manager.schemas.in.h:59
 msgid "Lock screen on hibernate"
 msgstr "최대절전일 때 화면 잠그기"
 
-#: ../data/gnome-power-manager.schemas.in.h:55
+#: ../data/gnome-power-manager.schemas.in.h:60
 msgid "Lock screen on suspend"
 msgstr "대기할 때 화면 잠그기"
 
-#: ../data/gnome-power-manager.schemas.in.h:56
+#: ../data/gnome-power-manager.schemas.in.h:61
 msgid "Lock screen when blanked"
 msgstr "화면 끌 때 화면 잠그기"
 
-#: ../data/gnome-power-manager.schemas.in.h:57
+#: ../data/gnome-power-manager.schemas.in.h:62
 msgid "Method used to blank screen on AC"
 msgstr "AC 전원에서 화면을 끌 때 사용할 방법"
 
-#: ../data/gnome-power-manager.schemas.in.h:58
+#: ../data/gnome-power-manager.schemas.in.h:63
 msgid "Method used to blank screen on battery"
 msgstr "배터리 전원에서 화면을 끌 때 사용할 방법"
 
-#: ../data/gnome-power-manager.schemas.in.h:59
-msgid "Notify on a HAL error"
-msgstr "HAL 오류가 발생했을 때 알리기"
-
-#: ../data/gnome-power-manager.schemas.in.h:60
+#: ../data/gnome-power-manager.schemas.in.h:64
 msgid "Notify on a low power"
 msgstr "전원이 낮을 때 알리기"
 
-#: ../data/gnome-power-manager.schemas.in.h:61
+#: ../data/gnome-power-manager.schemas.in.h:65
+msgid "Notify on a sleep failure"
+msgstr "절전 기능이 실패할 때 알리기"
+
+#: ../data/gnome-power-manager.schemas.in.h:66
 msgid "Notify when AC adapter is disconnected"
 msgstr "AC 어댑터가 빠졌을 때 알리기"
 
-#: ../data/gnome-power-manager.schemas.in.h:62
+#: ../data/gnome-power-manager.schemas.in.h:67
 msgid "Notify when fully charged"
 msgstr "완전히 충전되었을 때 알리기"
 
-#: ../data/gnome-power-manager.schemas.in.h:63
+#: ../data/gnome-power-manager.schemas.in.h:68
+msgid "Notify when the profile data is guessed"
+msgstr "프로파일 데이터를 추정할 때 알리기"
+
+#: ../data/gnome-power-manager.schemas.in.h:69
 msgid "Number of seconds to suppress policy after resume"
 msgstr "원상복귀한 후에 전원관리 정책을 막는 시간 (초 단위)"
 
-#: ../data/gnome-power-manager.schemas.in.h:64
+#: ../data/gnome-power-manager.schemas.in.h:70
 msgid "Percentage action is taken"
 msgstr "퍼센트 값에 따라 동작"
 
-#: ../data/gnome-power-manager.schemas.in.h:65
+#: ../data/gnome-power-manager.schemas.in.h:71
 msgid "Percentage considered critical"
 msgstr "위험하다고 할 퍼센트 값"
 
-#: ../data/gnome-power-manager.schemas.in.h:66
+#: ../data/gnome-power-manager.schemas.in.h:72
 msgid "Percentage considered low"
 msgstr "낮다고 할 퍼센트 값"
 
-#: ../data/gnome-power-manager.schemas.in.h:67
-msgid "Percentage considered very low"
-msgstr "매우 낮다고 할 퍼센트 값"
-
-#: ../data/gnome-power-manager.schemas.in.h:68
+#: ../data/gnome-power-manager.schemas.in.h:73
 msgid "Power button action"
 msgstr "전원 단추 동작"
 
-#: ../data/gnome-power-manager.schemas.in.h:69
+#: ../data/gnome-power-manager.schemas.in.h:74
 msgid "Sleep timeout computer when on AC"
 msgstr "AC 전원을 사용할 때 컴퓨터 절전 제한 시간"
 
-#: ../data/gnome-power-manager.schemas.in.h:70
+#: ../data/gnome-power-manager.schemas.in.h:75
 msgid "Sleep timeout computer when on battery"
 msgstr "배터리를 사용할 때 컴퓨터 절전 제한 시간"
 
-#: ../data/gnome-power-manager.schemas.in.h:71
+#: ../data/gnome-power-manager.schemas.in.h:76
 msgid "Sleep timeout display when on AC"
 msgstr "AC전원을 사용할 때 디스플레이 절전 제한 시간"
 
-#: ../data/gnome-power-manager.schemas.in.h:72
+#: ../data/gnome-power-manager.schemas.in.h:77
 msgid "Sleep timeout display when on battery"
 msgstr "배터리를 사용할 때 디스플레이 절전 제한 시간"
 
-#: ../data/gnome-power-manager.schemas.in.h:73
+#: ../data/gnome-power-manager.schemas.in.h:78
 msgid "Suspend button action"
 msgstr "절전 단추 동작"
 
-#: ../data/gnome-power-manager.schemas.in.h:74
+#: ../data/gnome-power-manager.schemas.in.h:79
 msgid "Suspend enabled"
 msgstr "절전 활성화됨"
 
-#: ../data/gnome-power-manager.schemas.in.h:75
+#: ../data/gnome-power-manager.schemas.in.h:80
 msgid ""
 "The DPMS method used to blank the screen when on AC power. Possible values "
 "are \"default\", \"standby\", \"suspend\" and \"off\"."
@@ -508,7 +563,7 @@ msgstr ""
 "AC 전원이 들어왔을 때 화면을 끌 때 사용할 DPMS 기능. 사용할 수 있는 값은 "
 "\"default\", \"standby\", \"suspend\", \"off\" 입니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:76
+#: ../data/gnome-power-manager.schemas.in.h:81
 msgid ""
 "The DPMS method used to blank the screen when on battery power. Possible "
 "values are \"default\", \"standby\", \"suspend\" and \"off\"."
@@ -516,7 +571,7 @@ msgstr ""
 "배터리 전원이 들어왔을 때 화면을 끌 때 사용할 DPMS 기능. 사용할 수 있는 값은 "
 "\"default\", \"standby\", \"suspend\", \"off\" 입니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:77
+#: ../data/gnome-power-manager.schemas.in.h:82
 msgid ""
 "The action to take when the UPS is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
@@ -524,7 +579,7 @@ msgstr ""
 "UPS 전원이 위험하게 적을 때 동작. 사용할 수 있는 값은 \"hibernate\", "
 "\"suspend\", \"shutdown\" 그리고 \"nothing\" 입니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:78
+#: ../data/gnome-power-manager.schemas.in.h:83
 msgid ""
 "The action to take when the UPS is low. Possible values are \"hibernate\", "
 "\"suspend\", \"shutdown\" and \"nothing\"."
@@ -532,7 +587,7 @@ msgstr ""
 "UPS 전원이 적을 때 동작. 사용할 수 있는 값은 \"hibernate\", \"suspend\", "
 "\"shutdown\" 그리고 \"nothing\" 입니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:79
+#: ../data/gnome-power-manager.schemas.in.h:84
 msgid ""
 "The action to take when the battery is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
@@ -540,7 +595,7 @@ msgstr ""
 "배터리가 위험하게 적을 때 동작. 사용할 수 있는 값은 \"hibernate\", \"suspend"
 "\", \"shutdown\" 그리고 \"nothing\" 입니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:80
+#: ../data/gnome-power-manager.schemas.in.h:85
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on AC "
 "power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
@@ -549,7 +604,7 @@ msgstr ""
 "노트북 덮개를 닫았을 때 AC 전원이 연결되었을 경우 동작. 사용할 수 있는 값은 "
 "\"suspend\", \"hibernate\", \"blank\" 그리고 \"nothing\" 입니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:81
+#: ../data/gnome-power-manager.schemas.in.h:86
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on "
 "battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
@@ -558,7 +613,7 @@ msgstr ""
 "노트북 덮개를 닫았을 때 배터리 전원을 사용하고 있을 경우 동작. 사용할 수 있"
 "는 값은 \"suspend\", \"hibernate\", \"blank\" 그리고 \"nothing\" 입니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:82
+#: ../data/gnome-power-manager.schemas.in.h:87
 msgid ""
 "The action to take when the system hibernate button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
@@ -567,7 +622,7 @@ msgstr ""
 "시스템 최대절전 단추를 눌렀을 때 동작. 사용할 수 있는 값은 \"suspend\", "
 "\"hibernate\", \"interactive\", \"shutdown\" 그리고 \"nothing\" 입니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:83
+#: ../data/gnome-power-manager.schemas.in.h:88
 msgid ""
 "The action to take when the system power button is pressed. Possible values "
 "are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
@@ -576,7 +631,7 @@ msgstr ""
 "시스템 전원 단추를 눌렀을 때 동작. 사용할 수 있는 값은 \"suspend\", "
 "\"hibernate\", \"interactive\", \"shutdown\" 그리고 \"nothing\" 입니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:84
+#: ../data/gnome-power-manager.schemas.in.h:89
 msgid ""
 "The action to take when the system suspend button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
@@ -585,14 +640,14 @@ msgstr ""
 "시스템 절전 단추를 눌렀을 때 동작. 사용할 수 있는 값은 \"suspend\", "
 "\"hibernate\", \"interactive\", \"shutdown\" 그리고 \"nothing\" 입니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:85
+#: ../data/gnome-power-manager.schemas.in.h:90
 msgid ""
 "The amount of time in seconds before the display goes to sleep when the "
 "computer is on AC power."
 msgstr ""
 "컴퓨터가 AC 전원을 사용할 때 디스플레이를 절전 모드로 바꿀 시간 (초 단위)."
 
-#: ../data/gnome-power-manager.schemas.in.h:86
+#: ../data/gnome-power-manager.schemas.in.h:91
 msgid ""
 "The amount of time in seconds the computer on AC power needs to be inactive "
 "before it goes to sleep."
@@ -600,7 +655,7 @@ msgstr ""
 "컴퓨터가 AC 전원을 사용할 때 (절전 모드로 바꾸기 전에) 비활성화로 할 시간 "
 "(초 단위)."
 
-#: ../data/gnome-power-manager.schemas.in.h:87
+#: ../data/gnome-power-manager.schemas.in.h:92
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before it goes to sleep."
@@ -608,7 +663,7 @@ msgstr ""
 "컴퓨터가 배터리 전원을 사용할 때 (절전 모드로 바꾸기 전에) 비활성화로 할 시"
 "간 (초 단위)."
 
-#: ../data/gnome-power-manager.schemas.in.h:88
+#: ../data/gnome-power-manager.schemas.in.h:93
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before the display goes to sleep."
@@ -616,70 +671,88 @@ msgstr ""
 "컴퓨터가 배터리 전원을 사용할 때 (디스플레이를 절전 모드로 바꾸기 전에) 비활"
 "성화로 할 시간 (초 단위)."
 
-#: ../data/gnome-power-manager.schemas.in.h:89
+#: ../data/gnome-power-manager.schemas.in.h:94
+msgid "The amount the light sensors should contribute to the brightness"
+msgstr "빛 센서가 나타내는 밝기 정도"
+
+#: ../data/gnome-power-manager.schemas.in.h:95
+msgid "The amount the light sensors should contribute to the brightness."
+msgstr "빛 센서가 나타내는 밝기 정도."
+
+#: ../data/gnome-power-manager.schemas.in.h:96
 msgid ""
 "The brightness of the display when on AC power. Possible values are between "
 "0 and 100."
 msgstr "AC 전원을 사용할 때 화면 밝기. 사용 가능한 값은 0에서 100 사이 입니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:90
+#: ../data/gnome-power-manager.schemas.in.h:97
 msgid ""
 "The brightness of the display when on battery power. Possible values are "
 "between 0 and 100."
 msgstr ""
 "배터리 전원을 사용할 때 화면 밝기. 사용 가능한 값은 0에서 100 사이 입니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:91
+#: ../data/gnome-power-manager.schemas.in.h:98
 msgid ""
 "The brightness of the keyboard when on AC power. Possible values are between "
 "0 and 100."
 msgstr ""
 "AC 전원을 사용할 때 키보드 밝기. 사용 가능한 값은 0에서 100 사이 입니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:92
+#: ../data/gnome-power-manager.schemas.in.h:99
 msgid ""
 "The brightness of the keyboard when on battery power. Possible values are "
 "between 0 and 100."
 msgstr ""
 "배터리 전원을 사용할 때 키보드 밝기. 사용 가능한 값은 0에서 100 사이 입니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:93
+#: ../data/gnome-power-manager.schemas.in.h:100
 msgid "The brightness of the screen when idle"
 msgstr "입력이 없을 때 화면 밝기"
 
-#: ../data/gnome-power-manager.schemas.in.h:94
+#: ../data/gnome-power-manager.schemas.in.h:101
+msgid ""
+"The calibration of the light sensors so that the screen is bright enough"
+msgstr "화면이 충분히 밝다고 판단하는 밝기 센서 조절값."
+
+#: ../data/gnome-power-manager.schemas.in.h:102
+msgid ""
+"The calibration of the light sensors so that the screen is bright enough, in "
+"percent."
+msgstr "화면이 충분히 밝다고 판단하는 밝기 센서 조절값, 퍼센트 단위."
+
+#: ../data/gnome-power-manager.schemas.in.h:103
 msgid "The cpufreq performance value to use when on AC power"
 msgstr "AC 전원을 사용할 때 cpufreq 퍼포먼스 값"
 
-#: ../data/gnome-power-manager.schemas.in.h:95
+#: ../data/gnome-power-manager.schemas.in.h:104
 msgid "The cpufreq performance value to use when on battery power"
 msgstr "배터리 전원을 사용할 때 cpufreq 퍼포먼스 값"
 
-#: ../data/gnome-power-manager.schemas.in.h:96
+#: ../data/gnome-power-manager.schemas.in.h:105
 msgid ""
-"The cpufreq performance value to used to scale the processor when on AC "
-"power."
+"The cpufreq performance value used to scale the processor when on AC power."
 msgstr ""
 "AC 전원을 사용할 때 프로세서 클럭을 바꿀 때 사용할 cpufreq 퍼포먼스 값."
 
-#: ../data/gnome-power-manager.schemas.in.h:97
+#: ../data/gnome-power-manager.schemas.in.h:106
 msgid ""
-"The cpufreq performance value to used to scale the processor when on battery "
+"The cpufreq performance value used to scale the processor when on battery "
 "power."
 msgstr ""
 "배터리 전원을 사용할 때 프로세서 클럭을 바꿀 때 사용할 cpufreq 퍼포먼스 값."
 
-#: ../data/gnome-power-manager.schemas.in.h:98
+#: ../data/gnome-power-manager.schemas.in.h:107
 msgid "The cpufreq policy to use when on AC power"
 msgstr "AC 전원을 사용할 때 cpufreq 정책"
 
-#: ../data/gnome-power-manager.schemas.in.h:99
+#: ../data/gnome-power-manager.schemas.in.h:108
 msgid "The cpufreq policy to use when on battery power"
 msgstr "배터리 전원을 사용할 때 cpufreq 정책"
 
-#: ../data/gnome-power-manager.schemas.in.h:100
+#: ../data/gnome-power-manager.schemas.in.h:109
 msgid ""
-"The cpufreq policy to used to scale the processor when on AC power. Possible "
+"The cpufreq policy used to scale the processor when on AC power. Possible "
 "values are ondemand, conservative, powersave, userspace, performance, "
 "nothing."
 msgstr ""
@@ -687,9 +760,9 @@ msgstr ""
 "있는 값은 \"ondemand\", \"conservative\", \"powersave\", \"userspace\", "
 "\"performance\", \"nothing\"입니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:101
+#: ../data/gnome-power-manager.schemas.in.h:110
 msgid ""
-"The cpufreq policy to used to scale the processor when on battery power. "
+"The cpufreq policy used to scale the processor when on battery power. "
 "Possible values are ondemand, conservative, powersave, userspace, "
 "performance, nothing."
 msgstr ""
@@ -697,23 +770,53 @@ msgstr ""
 "할 수 있는 값은 \"ondemand\", \"conservative\", \"powersave\", \"userspace"
 "\", \"performance\", \"nothing\"입니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:102
-msgid "The damping factor for the rate"
-msgstr "속도 계산할 때 감쇠치"
+#: ../data/gnome-power-manager.schemas.in.h:111
+msgid "The default amount of time to dim the screen after idle"
+msgstr "스크린을 어둡게 할 때까지 입력이 없는 시간"
 
-#: ../data/gnome-power-manager.schemas.in.h:103
+#: ../data/gnome-power-manager.schemas.in.h:112
+msgid "The default amount of time to dim the screen after idle."
+msgstr "스크린을 어둡게 할 때까지 입력이 없는 시간."
+
+#: ../data/gnome-power-manager.schemas.in.h:113
+msgid "The default configuration version."
+msgstr "설정 버전 기본값."
+
+#: ../data/gnome-power-manager.schemas.in.h:114
 msgid "The default graph type to show in the statistics window"
 msgstr "통계 창에서 표시할 그래프의 종류 기본값"
 
-#: ../data/gnome-power-manager.schemas.in.h:104
+#: ../data/gnome-power-manager.schemas.in.h:115
 msgid "The default graph type to show in the statistics window."
 msgstr "통계 창에서 표시할 그래프의 종류 기본값."
 
-#: ../data/gnome-power-manager.schemas.in.h:105
+#: ../data/gnome-power-manager.schemas.in.h:116
+msgid "The device name for the v4l device used as a brightness sensor backup"
+msgstr "밝기 센서 대체품으로 사용할 V4L 장치의 이름"
+
+#: ../data/gnome-power-manager.schemas.in.h:117
+msgid ""
+"The device name for the v4l device used as a brightness sensor backup. A "
+"value of 'default' uses the first discovered sensor, or devices can be "
+"specified, e.g. '/dev/video0'"
+msgstr ""
+"밝기 센서 대체품으로 사용할 V4L 장치의 장치 이름. 값을 'default'로 하면 첫번"
+"째로 발견한 센서를 사용하고, 그렇지 않은 경우 장치 이름을 지정합니다. 예를 들"
+"어 '/dev/video0'처럼 합니다."
+
+#: ../data/gnome-power-manager.schemas.in.h:118
+msgid "The interval the ambient light sensors should be polled"
+msgstr "조도 센서 값을 읽어들이는 주기"
+
+#: ../data/gnome-power-manager.schemas.in.h:119
+msgid "The interval the ambient light sensors should be polled in seconds."
+msgstr "조도 센서 값을 읽어들이는 주기, 초 단위."
+
+#: ../data/gnome-power-manager.schemas.in.h:120
 msgid "The invalid timeout for power actions"
 msgstr "전원 동작에 있어서 잘못되었다고 판단할 시간 제한"
 
-#: ../data/gnome-power-manager.schemas.in.h:106
+#: ../data/gnome-power-manager.schemas.in.h:121
 msgid ""
 "The invalid timeout in ms for power actions. Set this longer if you get "
 "'battery critical' messages when you unplug."
@@ -721,15 +824,15 @@ msgstr ""
 "전원 동작에 있어서 잘못되었다고 판단할 시간 제한 (천분의 일초 단위). 전원 플"
 "러그를 뺄 때 '배터리 위험' 메세지가 나오면 이 갑을 늘리십시오."
 
-#: ../data/gnome-power-manager.schemas.in.h:107
+#: ../data/gnome-power-manager.schemas.in.h:122
 msgid "The maximum duration of time displayed on the x-axis of the graph."
 msgstr "그래프의 가로축에 표시할 최대 시간."
 
-#: ../data/gnome-power-manager.schemas.in.h:108
+#: ../data/gnome-power-manager.schemas.in.h:123
 msgid "The maximum time displayed on the graph"
 msgstr "그래프에 표시할 최대 시간."
 
-#: ../data/gnome-power-manager.schemas.in.h:109
+#: ../data/gnome-power-manager.schemas.in.h:124
 msgid ""
 "The percentage of the battery when it is considered critical. Only valid "
 "when use_time_for_policy is false."
@@ -737,7 +840,7 @@ msgstr ""
 "배터리가 위험하다고 할 퍼센트 값. use_time_for_policy가 거짓일 경우에만 사용"
 "합니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:110
+#: ../data/gnome-power-manager.schemas.in.h:125
 msgid ""
 "The percentage of the battery when it is considered low. Only valid when "
 "use_time_for_policy is false."
@@ -745,15 +848,7 @@ msgstr ""
 "배터리가 낮다고 할 퍼센트 값. use_time_for_policy가 거짓일 경우에만 사용합니"
 "다."
 
-#: ../data/gnome-power-manager.schemas.in.h:111
-msgid ""
-"The percentage of the battery when it is considered very low. Only valid "
-"when use_time_for_policy is false."
-msgstr ""
-"배터리가 매우 낮다고 할 퍼센트 값. use_time_for_policy가 거짓일 경우에만 사용"
-"합니다."
-
-#: ../data/gnome-power-manager.schemas.in.h:112
+#: ../data/gnome-power-manager.schemas.in.h:126
 msgid ""
 "The percentage of the battery when the critical action is performed. Only "
 "valid when use_time_for_policy is false."
@@ -761,7 +856,7 @@ msgstr ""
 "위험 동작을 실행할 퍼센트 값. use_time_for_policy가 거짓일 경우에만 사용합니"
 "다."
 
-#: ../data/gnome-power-manager.schemas.in.h:113
+#: ../data/gnome-power-manager.schemas.in.h:127
 msgid ""
 "The time remaining in seconds of the battery when critical action is taken. "
 "Only valid when use_time_for_policy is true."
@@ -769,7 +864,7 @@ msgstr ""
 "위험 동작을 실행할 배터리 남은 시간. use_time_for_policy가 참일 경우에만 사용"
 "합니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:114
+#: ../data/gnome-power-manager.schemas.in.h:128
 msgid ""
 "The time remaining in seconds of the battery when it is considered critical. "
 "Only valid when use_time_for_policy is true."
@@ -777,38 +872,26 @@ msgstr ""
 "위험하다고 할 배터리 남은 시간. use_time_for_policy가 참일 경우에만 사용합니"
 "다."
 
-#: ../data/gnome-power-manager.schemas.in.h:115
+#: ../data/gnome-power-manager.schemas.in.h:129
 msgid ""
 "The time remaining in seconds of the battery when it is considered low. Only "
 "valid when use_time_for_policy is true."
 msgstr ""
 "낮다고 할 배터리 남은 시간. use_time_for_policy가 참일 경우에만 사용합니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:116
-msgid ""
-"The time remaining in seconds of the battery when it is considered very low. "
-"Only valid when use_time_for_policy is true."
-msgstr ""
-"매우 낮다고 할 배터리 남은 시간. use_time_for_policy가 참일 경우에만 사용합니"
-"다."
-
-#: ../data/gnome-power-manager.schemas.in.h:117
+#: ../data/gnome-power-manager.schemas.in.h:130
 msgid "The time remaining when action is taken"
 msgstr "동작을 실행할 때 남은 시간"
 
-#: ../data/gnome-power-manager.schemas.in.h:118
+#: ../data/gnome-power-manager.schemas.in.h:131
 msgid "The time remaining when critical"
 msgstr "위험할 때 남은 시간"
 
-#: ../data/gnome-power-manager.schemas.in.h:119
+#: ../data/gnome-power-manager.schemas.in.h:132
 msgid "The time remaining when low"
 msgstr "낮을 때 남은 시간"
 
-#: ../data/gnome-power-manager.schemas.in.h:120
-msgid "The time remaining when very low"
-msgstr "매우 낮을 때 남은 시간"
-
-#: ../data/gnome-power-manager.schemas.in.h:121
+#: ../data/gnome-power-manager.schemas.in.h:133
 msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
 "Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
@@ -816,18 +899,15 @@ msgstr ""
 "컴퓨터에 입력이 없을 때 실행할 절전 동작. 사용할 수 있는 값은 \"hibernate\", "
 "\"suspend\" 그리고 \"nothing\" 입니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:122
+#: ../data/gnome-power-manager.schemas.in.h:134
 msgid ""
-"The value of the damping factor used when calculating the exponentially "
-"weighted average of the rate. Increasing this value will increase the "
-"damping effect of the rate calculations, which makes the time remaining more "
-"accurate, but the graphs less responsive."
+"The version of the installed version of the schema. Do not edit this value, "
+"it is used so that configure changes between versions can be detected."
 msgstr ""
-"지수함수 가중치를 둬서 속도의 평균을 계산할 때 사용할 감쇠치. 이 값을 키우면 "
-"속도를 계산할 때 감쇠 효과가 커지고, 그러면 남은 시간을 좀 더 정확하게 계산하"
-"지만 그래프의 업데이트를 자주 못하게 됩니다."
+"설치한 스키마의 버전. 이 값을 편집하지 마십시오. 이 설정은 버전에 따라 달라지"
+"는 설정을 알아내는 데 사용합니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:123
+#: ../data/gnome-power-manager.schemas.in.h:135
 msgid ""
 "This is the laptop panel screen brightness used when the session is idle. "
 "Only valid when use_time_for_policy is true."
@@ -835,27 +915,27 @@ msgstr ""
 "세션에 입력이 없을 때 노트북 패널 화면 밝기. use_time_for_policy가 참일 경우"
 "에만 사용합니다."
 
-#: ../data/gnome-power-manager.schemas.in.h:124
+#: ../data/gnome-power-manager.schemas.in.h:136
 msgid "UPS critical low action"
 msgstr "UPS 위험 저전력 동작"
 
-#: ../data/gnome-power-manager.schemas.in.h:125
+#: ../data/gnome-power-manager.schemas.in.h:137
 msgid "UPS low power action"
 msgstr "UPS 전력 낮음 동작"
 
-#: ../data/gnome-power-manager.schemas.in.h:126
+#: ../data/gnome-power-manager.schemas.in.h:138
 msgid "Use gnome-screensaver lock setting"
 msgstr "그놈 화면 보호기 잠그기 설정 사용"
 
-#: ../data/gnome-power-manager.schemas.in.h:127
+#: ../data/gnome-power-manager.schemas.in.h:139
 msgid "When to show the notification icon"
 msgstr "알림 아이콘 보일 때"
 
-#: ../data/gnome-power-manager.schemas.in.h:128
+#: ../data/gnome-power-manager.schemas.in.h:140
 msgid "Whether NetworkManager should be connected and disconnected on sleep."
 msgstr "절전 상태에서 네트워크 관리자에 연결하고 있을 지 여부."
 
-#: ../data/gnome-power-manager.schemas.in.h:129
+#: ../data/gnome-power-manager.schemas.in.h:141
 msgid ""
 "Whether NetworkManager should disconnect before suspending or hibernating "
 "and connect on resume."
@@ -863,43 +943,91 @@ msgstr ""
 "절전 혹은 최대 절전 상태에 들어갈 때 네트워크 관리자에 연결을 끊고 돌아왔을 "
 "때 다시 연결할 지 여부."
 
-#: ../data/gnome-power-manager.schemas.in.h:130
+#: ../data/gnome-power-manager.schemas.in.h:142
 msgid ""
 "Whether or not niced processes should be considered on processor load "
 "calculation"
 msgstr "우선순위가 조정된 프로세스를 프로세서 사용량으로 취급할 지 여부"
 
-#: ../data/gnome-power-manager.schemas.in.h:131
+#: ../data/gnome-power-manager.schemas.in.h:143
+msgid ""
+"Whether the GNOME keyring is locked before the computer enters hibernate. "
+"This means the keyring will have to be unlocked on resume."
+msgstr ""
+"컴퓨터가 최대 절전 상태에 들어갈 때 그놈 키 모음을 잠글 지 여부. 원상복귀할 "
+"때 키 모음을 다시 풉니다."
+
+#: ../data/gnome-power-manager.schemas.in.h:144
+msgid ""
+"Whether the GNOME keyring is locked before the computer enters suspend. This "
+"means the keyring will have to be unlocked on resume."
+msgstr ""
+"컴퓨터가 절전 상태에 들어갈 때 그놈 키 모음을 잠글 지 여부. 원상복귀할 때 키 "
+"모음을 다시 풉니다."
+
+#: ../data/gnome-power-manager.schemas.in.h:145
+msgid ""
+"Whether the screen is locked when the computer wakes up from a hibernate. "
+"Only used if lock_use_screensaver_settings is false."
+msgstr ""
+"최대 절전에서 컴퓨터가 깨어났을 때 화면을 잠글 지 여부. "
+"lock_use_screensaver_settings이 거짓일 경우에만 사용합니다."
+
+#: ../data/gnome-power-manager.schemas.in.h:146
+msgid ""
+"Whether the screen is locked when the computer wakes up from a suspend. Only "
+"used if lock_use_screensaver_settings is false."
+msgstr ""
+"절전에서 컴퓨터가 깨어났을 때 화면을 잠글 지 여부. "
+"lock_use_screensaver_settings이 거짓일 경우에만 사용합니다."
+
+#: ../data/gnome-power-manager.schemas.in.h:147
+msgid ""
+"Whether the screen is locked when the screen is turned off. Only used if "
+"lock_use_screensaver_settings is false."
+msgstr ""
+"화면이 꺼졌을 때 화면을 잠글 지 여부. lock_use_screensaver_settings 값이 거짓"
+"일 경우에 사용합니다."
+
+#: ../data/gnome-power-manager.schemas.in.h:148
 msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr "비활성화 때 최대절전, 절전 또는 아무 것도 안함의 여부"
 
-#: ../data/gnome-power-manager.schemas.in.h:132
+#: ../data/gnome-power-manager.schemas.in.h:149
+msgid ""
+"Whether to use the screen lock setting of gnome-screensaver to decide if the "
+"screen is locked after a hibernate, suspend or blank screen."
+msgstr ""
+"최대절전, 절전 또는 화면이 꺼졌을 때 화면을 잠글 지 여부를 결정할 때, 그놈 화"
+"면 보호기의 화면 잠그기 설정을 사용할 지 여부."
+
+#: ../data/gnome-power-manager.schemas.in.h:150
 msgid "Whether to use time-based notifications"
 msgstr "시간에 따른 알림 사용의 여부"
 
-#: ../data/gnome-power-manager.schemas.in.h:133
+#: ../data/gnome-power-manager.schemas.in.h:151
 msgid "Whether we should show the axis labels in the statistics window"
 msgstr "통계 창에서 축을 표시할 지 여부"
 
-#: ../data/gnome-power-manager.schemas.in.h:134
+#: ../data/gnome-power-manager.schemas.in.h:152
 msgid "Whether we should show the axis labels in the statistics window."
 msgstr "통계 창에서 축을 표시할 지 여부."
 
-#: ../data/gnome-power-manager.schemas.in.h:135
+#: ../data/gnome-power-manager.schemas.in.h:153
 msgid "Whether we should show the events in the statistics window"
 msgstr "통계 창에서 이벤트를 표시할 지 여부"
 
-#: ../data/gnome-power-manager.schemas.in.h:136
+#: ../data/gnome-power-manager.schemas.in.h:154
 msgid "Whether we should show the events in the statistics window."
 msgstr "통계 창에서 이벤트를 표시할 지 여부."
 
-#: ../data/gnome-power-manager.schemas.in.h:137
-msgid "Whether we should show the legend in the statistics window"
-msgstr "통계 창에서 범례를 표시할 지 여부."
+#: ../data/gnome-power-manager.schemas.in.h:155
+msgid "Whether we should smooth the data in the graph"
+msgstr "그래프에서 데이터를 곡선으로 만들 지 여부"
 
-#: ../data/gnome-power-manager.schemas.in.h:138
-msgid "Whether we should show the legend in the statistics window."
-msgstr "통계 창에서 범례를 표시할 지 여부."
+#: ../data/gnome-power-manager.schemas.in.h:156
+msgid "Whether we should smooth the data in the graph."
+msgstr "그래프에서 데이터를 곡선으로 만들 지 여부."
 
 #: ../data/gnome-power-preferences.desktop.in.h:1
 msgid "Configure power management"
@@ -913,7 +1041,7 @@ msgstr "전원 관리"
 msgid "Observe power management"
 msgstr "전원 관리 관찰"
 
-#: ../data/gnome-power-statistics.desktop.in.h:2 ../src/gpm-statistics.c:139
+#: ../data/gnome-power-statistics.desktop.in.h:2
 msgid "Power Statistics"
 msgstr "전원 통계"
 
@@ -922,28 +1050,25 @@ msgid "Brightness"
 msgstr "밝기"
 
 #: ../data/gpm-graph.glade.h:1
-msgid "Add _axis labels"
-msgstr "축 레이블 더하기(_A)"
-
-#: ../data/gpm-graph.glade.h:2
-msgid "Add lege_nd"
-msgstr "범례 더하기(_N)"
-
-#: ../data/gpm-graph.glade.h:3
 msgid "Add related _events"
 msgstr "관련 이벤트 더하기(_E)"
 
-#: ../data/gpm-graph.glade.h:4
-msgid "Device:"
-msgstr "장치:"
+#: ../data/gpm-graph.glade.h:2
+msgid "Cell Voltage"
+msgstr "전지 전압"
 
-#: ../data/gpm-graph.glade.h:5
+#: ../data/gpm-graph.glade.h:3
 msgid "Graph type:"
 msgstr "그래프 종류:"
 
-#: ../data/gpm-graph.glade.h:6 ../src/gpm-statistics-core.c:55
+#: ../data/gpm-graph.glade.h:4
 msgid "Power History"
 msgstr "전원 내역"
+
+#: ../data/gpm-graph.glade.h:5 ../src/gpm-info.c:293 ../src/gpm-info.c:302
+#: ../src/gpm-info.c:311 ../src/gpm-info.c:320
+msgid "Time since startup"
+msgstr "시작한 이후 시간"
 
 #: ../data/gpm-inhibit-test.glade.h:1
 msgid "Application:"
@@ -954,152 +1079,175 @@ msgid "Burning DVD, titled \"My Photos\""
 msgstr "DVD 굽는 중, 제목 \"내 사진\""
 
 #: ../data/gpm-inhibit-test.glade.h:3
+msgid "Inhibit"
+msgstr "금지"
+
+#: ../data/gpm-inhibit-test.glade.h:4
 msgid "Inhibit Tester"
 msgstr "금지 테스트"
 
-#: ../data/gpm-inhibit-test.glade.h:4
-msgid "InhibitAuto"
-msgstr "자동 금지"
-
 #: ../data/gpm-inhibit-test.glade.h:5
-msgid "InhibitManual"
-msgstr "수동 금지"
-
-#: ../data/gpm-inhibit-test.glade.h:6
 msgid "Reason:"
 msgstr "이유:"
 
-#: ../data/gpm-inhibit-test.glade.h:7
+#: ../data/gpm-inhibit-test.glade.h:6
 msgid "UnInhibit"
 msgstr "금지 해제"
 
-#: ../data/gpm-inhibit-test.glade.h:8
+#: ../data/gpm-inhibit-test.glade.h:7
 msgid "Vendor Acme Foo"
 msgstr "제조사 ACME foo"
 
 #: ../data/gpm-prefs.glade.h:1
-msgid "<b>Buttons</b>"
-msgstr "<b>단추</b>"
+msgid "<b>Actions</b>"
+msgstr "<b>동작</b>"
 
 #: ../data/gpm-prefs.glade.h:2
+msgid "<b>Display</b>"
+msgstr "<b>표시</b>"
+
+#: ../data/gpm-prefs.glade.h:3
 msgid "<b>Extras</b>"
 msgstr "<b>기타</b>"
 
-#: ../data/gpm-prefs.glade.h:3
+#: ../data/gpm-prefs.glade.h:4
 msgid "<b>Notification Area</b>"
 msgstr "<b>알림 영역</b>"
 
-#: ../data/gpm-prefs.glade.h:4
+#: ../data/gpm-prefs.glade.h:5
 msgid "Always sleep when the lid is _closed"
 msgstr "노트북 덮개를 닫으면 항상 절전모드(_C)"
 
-#: ../data/gpm-prefs.glade.h:5
+#: ../data/gpm-prefs.glade.h:6
 msgid "Computer sp_eed policy:"
 msgstr "컴퓨터 속도 정책(_E):"
 
-#: ../data/gpm-prefs.glade.h:6
+#: ../data/gpm-prefs.glade.h:7
+msgid "Dim display _brightness by:"
+msgstr "화면을 어둡게 하는 정도(_B):"
+
+#: ../data/gpm-prefs.glade.h:8
+msgid "Dim display when idle"
+msgstr "입력이 없을 때 화면 어둡게"
+
+#: ../data/gpm-prefs.glade.h:9
 msgid "Enable UPS discharge _alarm"
 msgstr "UPS 방전 알림 사용(_A)"
 
-#: ../data/gpm-prefs.glade.h:7
+#: ../data/gpm-prefs.glade.h:10
 msgid "General"
 msgstr "일반"
 
-#: ../data/gpm-prefs.glade.h:8
+#: ../data/gpm-prefs.glade.h:11
 msgid "Make _default"
 msgstr "기본값으로 하기(_D)"
 
-#: ../data/gpm-prefs.glade.h:9
+#: ../data/gpm-prefs.glade.h:12
 msgid "On AC Power"
 msgstr "AC 전원 사용"
 
-#: ../data/gpm-prefs.glade.h:10
+#: ../data/gpm-prefs.glade.h:13
 msgid "On Battery Power"
 msgstr "배터리 전원 사용"
 
-#: ../data/gpm-prefs.glade.h:11
+#: ../data/gpm-prefs.glade.h:14
 msgid "On UPS Power"
 msgstr "UPS 전원 사용"
 
-#: ../data/gpm-prefs.glade.h:12
+#: ../data/gpm-prefs.glade.h:15
 msgid "Only display an icon when a battery is p_resent"
 msgstr "배터리가 있을 때에만 아이콘 표시(_R)"
 
-#: ../data/gpm-prefs.glade.h:13
+#: ../data/gpm-prefs.glade.h:16
 msgid "Only display an icon when charging or _discharging"
 msgstr "충전 또는 방전 중일 때만 아이콘 표시(_D)"
 
-#: ../data/gpm-prefs.glade.h:14
+#: ../data/gpm-prefs.glade.h:17
 msgid "Power Management Preferences"
 msgstr "전원 관리 기본 설정"
 
-#: ../data/gpm-prefs.glade.h:15
+#: ../data/gpm-prefs.glade.h:18
 msgid "Put _display to sleep when inactive for:"
 msgstr "다음 시간동안 입력이 없을 때 화면을 절전(_D):"
 
-#: ../data/gpm-prefs.glade.h:16
+#: ../data/gpm-prefs.glade.h:19
 msgid "Put computer to _sleep when inactive for:"
 msgstr "다음 시간동안 입력이 없을 때 컴퓨터를 절전(_S):"
 
-#: ../data/gpm-prefs.glade.h:17
+#: ../data/gpm-prefs.glade.h:20
 msgid "Set display _brightness to:"
 msgstr "화면 밝기 값(_B):"
 
-#: ../data/gpm-prefs.glade.h:18
+#: ../data/gpm-prefs.glade.h:21
+msgid "Turn on keyboard light when light level is low"
+msgstr "조도가 낮을 때 키보드 조명 켜기"
+
+#: ../data/gpm-prefs.glade.h:22
 msgid "Use _ambient light to adjust LCD brightness"
 msgstr "LCD 밝기를 조정할 때 조도 센서 이용(_A)"
 
-#: ../data/gpm-prefs.glade.h:19
+#: ../data/gpm-prefs.glade.h:23
 msgid "Use _sound to notify in event of an error"
 msgstr "오류 이벤트가 발생하면 소리로 알리기(_S)"
 
-#: ../data/gpm-prefs.glade.h:20
+#: ../data/gpm-prefs.glade.h:24
 msgid "When UPS power is _critically low:"
 msgstr "UPS 전원이 위험하게 적을 때(_C):"
 
-#: ../data/gpm-prefs.glade.h:21
+#: ../data/gpm-prefs.glade.h:25
 msgid "When UPS power is l_ow:"
 msgstr "UPS 전원이 적을 때(_O):"
 
-#: ../data/gpm-prefs.glade.h:22
+#: ../data/gpm-prefs.glade.h:26
 msgid "When battery po_wer is critically low:"
 msgstr "배터리 전원이 위험하게 적을 때(_W):"
 
-#: ../data/gpm-prefs.glade.h:23
+#: ../data/gpm-prefs.glade.h:27
 msgid "When laptop lid is cl_osed:"
 msgstr "노트북 덮개가 닫혔을 때(_O):"
 
-#: ../data/gpm-prefs.glade.h:24
+#: ../data/gpm-prefs.glade.h:28
 msgid "When the _suspend button is pressed:"
 msgstr "절전 모드 단추를 눌렀을 때(_S):"
 
-#: ../data/gpm-prefs.glade.h:25
+#: ../data/gpm-prefs.glade.h:29
 msgid "When the power _button is pressed:"
 msgstr "전원 단추를 눌렀을 때(_B):"
 
-#: ../data/gpm-prefs.glade.h:26
+#: ../data/gpm-prefs.glade.h:30
 msgid "_Always display an icon"
 msgstr "항상 아이콘 표시(_A)"
 
-#: ../data/gpm-prefs.glade.h:27
+#: ../data/gpm-prefs.glade.h:31
 msgid "_Never display an icon"
 msgstr "아이콘 표시하지 않기(_N)"
 
-#: ../data/gpm-prefs.glade.h:28
+#: ../data/gpm-prefs.glade.h:32
 msgid "_Only display an icon when battery power is critically low"
 msgstr "남은 배터리가 위험하게 적을 경우에만 아이콘 표시(_O)"
 
-#: ../src/gpm-common.c:129
+#: ../src/gpm-control.c:279
+#, c-format
+msgid "The message was not sent due to DBUS security rules"
+msgstr "DBUS 보안 규칙때문에 메세지를 보내지 않았습니다"
+
+#: ../src/gpm-control.c:282
+#, c-format
+msgid "General failure: %s"
+msgstr "일반적 실패: %s"
+
+#: ../src/gpm-common.c:242
+#, c-format
 msgid "Unknown time"
 msgstr "알 수 없는 시간"
 
-#: ../src/gpm-common.c:134
+#: ../src/gpm-common.c:247
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i 분"
 
-#: ../src/gpm-common.c:145
+#: ../src/gpm-common.c:258
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -1107,305 +1255,569 @@ msgstr[0] "%i 시"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:151
+#: ../src/gpm-common.c:264
 #, c-format
-msgid "%i %s, %i %s"
-msgstr "%i %s, %i %s"
+msgid "%i %s %i %s"
+msgstr "%i%s %i%s"
 
-#: ../src/gpm-common.c:152
+#: ../src/gpm-common.c:265
 msgid "hour"
 msgid_plural "hours"
-msgstr[0] "시"
+msgstr[0] "시간"
 
-#: ../src/gpm-common.c:153
+#: ../src/gpm-common.c:266
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "분"
 
-#: ../src/gpm-common.h:31
+#: ../src/gpm-common.h:44
 msgid "Power Manager for the GNOME desktop"
 msgstr "그놈 데스크탑을 위한 전원 관리자"
 
-#: ../src/gpm-graph-widget.c:78
-msgid "Charged"
-msgstr "충전됨"
+#. only enable this if discharging on UPS
+#: ../src/gpm-engine.c:283
+msgid "Computer is running on backup power\n"
+msgstr "컴퓨터는 보조 전원으로 실행 중입니다\n"
 
-#: ../src/gpm-graph-widget.c:79
-msgid "Charging"
-msgstr "충전 중"
+#: ../src/gpm-engine.c:286
+msgid "Computer is running on AC power\n"
+msgstr "컴퓨터는 AC 전원으로 실행 중입니다\n"
 
-#: ../src/gpm-graph-widget.c:80
-msgid "Discharging"
-msgstr "방전 중"
+#: ../src/gpm-engine.c:289
+msgid "Computer is running on battery power\n"
+msgstr "컴퓨터는 배터리 전원으로 실행 중입니다\n"
 
-#: ../src/gpm-graph-widget.c:182
-msgid "Charge percentage"
-msgstr "충전 퍼센트"
+#: ../src/gpm-engine.c:307
+msgid "Battery discharge time is currently unknown\n"
+msgstr "배터리 방전 시간은 현재 알 수 없습니다\n"
 
-#: ../src/gpm-graph-widget.c:185
-msgid "Time remaining"
-msgstr "남은 시간"
+#: ../src/gpm-engine.c:309
+msgid "Battery charge time is currently unknown\n"
+msgstr "배터리 충전 시간은 현재 알 수 없습니다\n"
 
-#: ../src/gpm-graph-widget.c:188
-msgid "Power"
-msgstr "전력"
+#: ../src/gpm-engine.c:313
+msgid "Battery discharge time is estimated\n"
+msgstr "배터리 방전 시간은 예측 값입니다\n"
 
-#: ../src/gpm-graph-widget.c:191
-msgid "Cell Voltage"
-msgstr "전지 전압"
+#: ../src/gpm-engine.c:315
+msgid "Battery charge time is estimated\n"
+msgstr "배터리 충전 시간은 예측 값입니다\n"
 
-#: ../src/gpm-graph-widget.c:193 ../src/gpm-graph-widget.c:213
-msgid "Unknown caption"
-msgstr "알 수 없는 제목"
-
-#: ../src/gpm-graph-widget.c:210
-msgid "Time"
-msgstr "시간"
-
-#: ../src/gpm-graph-widget.c:211
-msgid "Time since startup"
-msgstr "시작한 이후 시간"
+#. show a AC icon
+#: ../src/gpm-engine.c:598
+msgid "Unable to get data..."
+msgstr "데이터를 가져올 수 없습니다..."
 
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:478
+#: ../src/gpm-graph-widget.c:484
 #, c-format
 msgid "%ih"
 msgstr "%i시간"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:481
+#: ../src/gpm-graph-widget.c:487
 #, c-format
 msgid "%ih%02i"
-msgstr "%ih시간%02i분"
+msgstr "%i시간%02i"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:486
+#: ../src/gpm-graph-widget.c:492
 #, c-format
 msgid "%2im"
 msgstr "%2i분"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:489
+#: ../src/gpm-graph-widget.c:495
 #, c-format
 msgid "%2im%02i"
-msgstr "%2i분%02i초"
+msgstr "%2i분%02i"
 
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:493
+#: ../src/gpm-graph-widget.c:499
 #, c-format
 msgid "%2is"
 msgstr "%2i초"
 
 #. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:497
+#: ../src/gpm-graph-widget.c:503
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
-#. Translators: This is %i Watts
-#: ../src/gpm-graph-widget.c:500
+#. Translators: This is %.1f Watts
+#: ../src/gpm-graph-widget.c:506
 #, c-format
-msgid "%iW"
-msgstr "%iW"
+msgid "%.1fW"
+msgstr "%.1fW"
 
-#. Translators: This is %i Volts
-#: ../src/gpm-graph-widget.c:503
+#. Translators: This is %.1f Volts
+#: ../src/gpm-graph-widget.c:509
 #, c-format
-msgid "%iV"
-msgstr "%iV"
+msgid "%.1fV"
+msgstr "%.1fV"
 
-#: ../src/gpm-info.c:112
+#: ../src/gpm-info.c:121
 #, c-format
 msgid "%s because %s"
 msgstr "%s, 원인: %s"
 
-#: ../src/gpm-info.c:440
+#: ../src/gpm-info.c:199
+msgid "On AC"
+msgstr "AC 전원 사용"
+
+#: ../src/gpm-info.c:203
+msgid "On battery"
+msgstr "배터리 사용"
+
+#: ../src/gpm-info.c:207
+msgid "Session powersave"
+msgstr "세션 절전"
+
+#: ../src/gpm-info.c:211
+msgid "Session idle"
+msgstr "세션 입력 없음"
+
+#: ../src/gpm-info.c:215
+msgid "Session active"
+msgstr "세션 사용중"
+
+#. Translators: translate ONLY the string part after the |
+#: ../src/gpm-info.c:220
+msgid "label shown on graph|Suspend"
+msgstr "절전"
+
+#. Translators: translate ONLY the string part after the |
+#: ../src/gpm-info.c:225
+msgid "label shown on graph|Resume"
+msgstr "원상복귀"
+
+#. Translators: translate ONLY the string part after the |
+#: ../src/gpm-info.c:230
+msgid "label shown on graph|Hibernate"
+msgstr "최대 절전"
+
+#: ../src/gpm-info.c:234
+msgid "Lid closed"
+msgstr "덮개 닫음"
+
+#: ../src/gpm-info.c:238
+msgid "Lid opened"
+msgstr "덮개 엶"
+
+#: ../src/gpm-info.c:242
+msgid "Notification"
+msgstr "알림"
+
+#: ../src/gpm-info.c:247
+msgid "DPMS On"
+msgstr "DPMS 켬"
+
+#: ../src/gpm-info.c:251
+msgid "DPMS Standby"
+msgstr "DPMS 대기"
+
+#: ../src/gpm-info.c:255
+msgid "DPMS Suspend"
+msgstr "DPMS 일시 정지"
+
+#: ../src/gpm-info.c:259
+msgid "DPMS Off"
+msgstr "DPMS 끔"
+
+#: ../src/gpm-info.c:294 ../src/gpm-info.c:295
+msgid "Power"
+msgstr "전력"
+
+#: ../src/gpm-info.c:303
+msgid "Estimated time"
+msgstr "예상 시간"
+
+#: ../src/gpm-info.c:304
+msgid "Time"
+msgstr "시간"
+
+#: ../src/gpm-info.c:312 ../src/gpm-info.c:329 ../src/gpm-info.c:346
+#: ../src/gpm-info.c:364 ../src/gpm-info.c:381
+msgid "Battery percentage"
+msgstr "배터리 퍼센트"
+
+#: ../src/gpm-info.c:313
+msgid "Percentage"
+msgstr "퍼센트"
+
+#: ../src/gpm-info.c:321
+msgid "Battery Voltage"
+msgstr "배터리 전압"
+
+#: ../src/gpm-info.c:322
+msgid "Voltage"
+msgstr "전압"
+
+#: ../src/gpm-info.c:330 ../src/gpm-info.c:365
+msgid "Accuracy of reading"
+msgstr "읽기 정확도"
+
+#: ../src/gpm-info.c:331 ../src/gpm-info.c:348 ../src/gpm-info.c:366
+#: ../src/gpm-info.c:383
+msgid "Valid data"
+msgstr "올바른 데이터"
+
+#: ../src/gpm-info.c:332 ../src/gpm-info.c:349 ../src/gpm-info.c:367
+#: ../src/gpm-info.c:384
+msgid "No data"
+msgstr "데이터 없음"
+
+#: ../src/gpm-info.c:336 ../src/gpm-info.c:354 ../src/gpm-info.c:371
+#: ../src/gpm-info.c:389
+msgid "Start point"
+msgstr "시작점"
+
+#: ../src/gpm-info.c:340 ../src/gpm-info.c:358 ../src/gpm-info.c:375
+#: ../src/gpm-info.c:393
+msgid "Stop point"
+msgstr "끝점"
+
+#: ../src/gpm-info.c:347 ../src/gpm-info.c:382
+msgid "Average time elapsed"
+msgstr "경과한 평균 시간"
+
+#: ../src/gpm-info.c:350 ../src/gpm-info.c:385
+msgid "Extrapolated data"
+msgstr "추정 데이터"
+
+#: ../src/gpm-info.c:677
 msgid "AC adapter inserted"
 msgstr "AC 어댑터 연결"
 
-#: ../src/gpm-info.c:443
+#: ../src/gpm-info.c:680
 msgid "AC adapter removed"
 msgstr "AC 어댑터 빠짐"
 
-#: ../src/gpm-info.c:464
+#: ../src/gpm-info.c:700
 msgid "The laptop lid has been closed"
 msgstr "노트북 덮개를 닫았습니다"
 
-#: ../src/gpm-info.c:470
+#: ../src/gpm-info.c:706
 msgid "The laptop lid has been re-opened"
 msgstr "노트북 덮개를 다시 열었습니다"
 
-#: ../src/gpm-info.c:492
+#: ../src/gpm-info.c:728
 msgid "idle mode ended"
 msgstr "입력 없음 모드 끝"
 
-#: ../src/gpm-info.c:495
+#: ../src/gpm-info.c:730
 msgid "idle mode started"
 msgstr "입력 없음 모드 시작"
 
-#: ../src/gpm-info.c:514
+#: ../src/gpm-info.c:732
+msgid "powersave mode started"
+msgstr "절전 모드 시작"
+
+#: ../src/gpm-info.c:751
 msgid "dpms on"
 msgstr "DPMS 켬"
 
-#: ../src/gpm-info.c:516
+#: ../src/gpm-info.c:753
 msgid "dpms standby"
 msgstr "DPMS 대기"
 
-#: ../src/gpm-info.c:518
+#: ../src/gpm-info.c:755
 msgid "dpms suspend"
 msgstr "DPMS 일시 정지"
 
-#: ../src/gpm-info.c:520
+#: ../src/gpm-info.c:757
 msgid "dpms off"
 msgstr "DPMS 끔"
 
-#: ../src/gpm-info.c:537
+#: ../src/gpm-info.c:774
 msgid "Resuming computer"
 msgstr "컴퓨터 원상복귀"
 
-#: ../src/gpm-info.c:553 ../src/gpm-tray-icon.c:920
+#: ../src/gpm-info.c:790
 msgid "Hibernate Problem"
 msgstr "최대절전 문제"
 
-#: ../src/gpm-info.c:555 ../src/gpm-tray-icon.c:929
+#: ../src/gpm-info.c:792
 msgid "Suspend Problem"
 msgstr "절전 문제"
 
-#: ../src/gpm-inhibit.c:420
+#: ../src/gpm-inhibit.c:370
 #, c-format
 msgid "has stopped the %s from taking place : "
 msgstr "때문에 %s 동작이 중지되었습니다 : "
 
-#: ../src/gpm-inhibit.c:426
+#: ../src/gpm-inhibit.c:376
 #, c-format
 msgid "Multiple applications have stopped the %s from taking place."
 msgstr "여러 프로그램때문에 %s 동작을 실행하지 않았습니다."
 
-#: ../src/gpm-inhibit-test.c:261 ../src/gpm-prefs.c:119
-msgid "GNOME Power Preferences"
-msgstr "그놈 전원 기본 설정"
-
-#: ../src/gpm-inhibit-test.c:267
-msgid "Power Inhibit Test"
-msgstr "전원 관리 금지 테스트"
-
-#: ../src/gpm-main.c:151
+#: ../src/gpm-main.c:153
 msgid "Do not daemonize"
 msgstr "데몬으로 실행하지 않음"
 
-#: ../src/gpm-main.c:153 ../src/gpm-prefs.c:115 ../src/gpm-statistics.c:113
+#: ../src/gpm-main.c:155 ../src/gpm-prefs.c:107 ../src/gpm-statistics.c:105
 msgid "Show extra debugging information"
 msgstr "추가 디버깅 정보 보기"
 
-#: ../src/gpm-main.c:155
+#: ../src/gpm-main.c:157
+msgid "Show version of installed program and exit"
+msgstr "설치한 프로그램의 버전을 표시하고 끝냅니다"
+
+#: ../src/gpm-main.c:159
 msgid "Exit after a small delay (for debugging)"
 msgstr "약간 시간을 끈 뒤에 끝냅니다 (디버깅용)"
 
-#: ../src/gpm-main.c:157
+#: ../src/gpm-main.c:161
+msgid "Exit after the manager has loaded (for debugging)"
+msgstr "전원 관리자가 시작한 다음 끝냅니다 (디버깅용)"
+
+#: ../src/gpm-main.c:163
 msgid "Debug specific files, e.g. power"
 msgstr "디버깅 전용 파일, 예를 들어 power"
 
-#: ../src/gpm-main.c:161
+#: ../src/gpm-main.c:167
 msgid "GNOME Power Manager"
 msgstr "그놈 전원 관리자"
 
-#: ../src/gpm-manager.c:166
+#: ../src/gpm-manager.c:183
 #, c-format
 msgid "Request to %s"
 msgstr "%s에 요청"
 
 #. I want this translated
-#: ../src/gpm-manager.c:175
+#: ../src/gpm-manager.c:192
 msgid "Perform action anyway"
 msgstr "그래도 동작 실행"
 
-#: ../src/gpm-manager.c:362
-msgid "Doing nothing"
-msgstr "아무 것도 안함"
+#: ../src/gpm-manager.c:312 ../src/gpm-manager.c:338 ../src/gpm-manager.c:367
+#: ../src/gpm-manager.c:393 ../src/gpm-manager.c:428
+msgid "Action forbidden"
+msgstr "동작 금지"
 
-#: ../src/gpm-manager.c:366 ../src/gpm-manager.c:494 ../src/gpm-manager.c:580
-#: ../src/gpm-manager.c:1378
+#: ../src/gpm-manager.c:313 ../src/gpm-manager.c:368 ../src/gpm-manager.c:429
+msgid "Policy timeout is not valid. Please wait a few seconds and try again."
+msgstr "정책 제한 시간이 올바르지 않습니다. 몇 초 뒤에 다시 시도하십시오."
+
+#: ../src/gpm-manager.c:325 ../src/gpm-manager.c:380
+msgid "Action disallowed"
+msgstr "동작 허용하지 않음"
+
+#: ../src/gpm-manager.c:326
+msgid ""
+"Suspend support has been disabled. Contact your administrator for more "
+"details."
+msgstr ""
+"절전 기능을 사용하지 않습니다. 자세히 알고 싶으시면 관리자에게 문의하십시오."
+
+#: ../src/gpm-manager.c:339
+msgid "Suspend is not available on this computer."
+msgstr "이 컴퓨터에서 절전 기능을 사용할 수 없습니다."
+
+#: ../src/gpm-manager.c:347 ../src/gpm-manager.c:733
 msgid "Suspending computer"
 msgstr "컴퓨터 절전"
 
-#: ../src/gpm-manager.c:371 ../src/gpm-manager.c:510 ../src/gpm-manager.c:592
-#: ../src/gpm-manager.c:1353
+#: ../src/gpm-manager.c:381
+msgid ""
+"Hibernate support has been disabled. Contact your administrator for more "
+"details."
+msgstr ""
+"최대 절전 기능을 사용하지 않습니다. 자세히 알고 싶으시면 관리자에게 문의하십"
+"시오."
+
+#: ../src/gpm-manager.c:394
+msgid "Hibernate is not available on this computer."
+msgstr "이 컴퓨터에서 최대 절전 기능을 사용할 수 없습니다."
+
+#: ../src/gpm-manager.c:402 ../src/gpm-manager.c:745
 msgid "Hibernating computer"
 msgstr "컴퓨터 최대절전"
 
-#: ../src/gpm-manager.c:379 ../src/gpm-manager.c:526
+#: ../src/gpm-manager.c:445
+msgid "Doing nothing"
+msgstr "아무 것도 안함"
+
+#: ../src/gpm-manager.c:458
 msgid "Shutting down computer"
 msgstr "컴퓨터 끄기"
 
-#: ../src/gpm-manager.c:384
+#: ../src/gpm-manager.c:463
 msgid "GNOME interactive logout"
 msgstr "그놈 로그아웃 대화상자"
 
-#: ../src/gpm-manager.c:495
-msgid "the DBUS method Suspend() was invoked"
-msgstr "DBUS 메소드 Suspend() 실행"
-
-#: ../src/gpm-manager.c:511
-msgid "the DBUS method Hibernate() was invoked"
-msgstr "DBUS 메소드 Hibernate() 실행"
-
-#: ../src/gpm-manager.c:527
-msgid "the DBUS method Shutdown() was invoked"
-msgstr "DBUS 메소드 Shutdown() 실행"
-
-#: ../src/gpm-manager.c:542
-msgid "Rebooting computer"
-msgstr "컴퓨터 다시 시작"
-
-#: ../src/gpm-manager.c:543
-msgid "the DBUS method Reboot() was invoked"
-msgstr "DBUS 메소드 Reboot() 실행"
-
-#: ../src/gpm-manager.c:580 ../src/gpm-manager.c:592
+#: ../src/gpm-manager.c:733 ../src/gpm-manager.c:745
 msgid "System idle"
 msgstr "시스템 동작하지 않음"
 
-#: ../src/gpm-manager.c:678 ../src/gpm-warning.c:159
+#: ../src/gpm-manager.c:819
 msgid "Power Information"
 msgstr "전원 정보"
 
-#: ../src/gpm-manager.c:702
+#: ../src/gpm-manager.c:836
 msgid "the power button has been pressed"
 msgstr "전원 단추를 눌렀습니다"
 
-#: ../src/gpm-manager.c:721
+#: ../src/gpm-manager.c:848
 msgid "the suspend button has been pressed"
 msgstr "절전 단추를 눌렀습니다"
 
-#: ../src/gpm-manager.c:741
+#: ../src/gpm-manager.c:860
 msgid "the hibernate button has been pressed"
 msgstr "최대절전 단추를 눌렀습니다"
 
-#: ../src/gpm-manager.c:765
+#: ../src/gpm-manager.c:891
 msgid "the lid has been closed on ac power"
 msgstr "AC 전원이 들어올 때 노트북 덮개를 닫았습니다"
 
-#: ../src/gpm-manager.c:770
+#: ../src/gpm-manager.c:921
 msgid "the lid has been closed on battery power"
 msgstr "배터리 전원을 사용할 때 노트북 덮개를 닫았습니다"
 
-#: ../src/gpm-manager.c:859
+#: ../src/gpm-manager.c:1010
 msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
 msgstr "노트북 덮개를 닫았고, AC 어댑터가 빠졌습니다 (그리고 gconf 정상)"
 
-#: ../src/gpm-manager.c:882
+#: ../src/gpm-manager.c:1033
 msgid "battery is critically low"
-msgstr "배터리가 위험한 저전력 상태입니다"
+msgstr "배터리 전력이 위험하게 낮습니다"
 
-#: ../src/gpm-manager.c:932
-msgid "Your battery is now fully charged"
-msgstr "배터리가 이제 완전하게 충전되었습니다"
+#: ../src/gpm-manager.c:1348
+msgid "Laptop battery low"
+msgstr "노트북 배터리 전력 낮음"
 
-#: ../src/gpm-manager.c:933
-msgid "Battery Charged"
-msgstr "배터리 충전됨"
+#: ../src/gpm-manager.c:1350
+#, c-format
+msgid "You have approximately <b>%s</b> of remaining battery life (%d%%)"
+msgstr "남은 배터리 수명이 약 <b>%s</b>만큼 남았습니다 (%d%%)"
 
-#: ../src/gpm-manager.c:998
+#: ../src/gpm-manager.c:1353
+msgid "UPS low"
+msgstr "UPS 전력 낮음"
+
+#: ../src/gpm-manager.c:1355
+#, c-format
+msgid "You have approximately <b>%s</b> of remaining UPS backup power (%d%%)"
+msgstr "UPS 보조 전원이 약 <b>%s</b>만큼 남았습니다 (%d%%)"
+
+#: ../src/gpm-manager.c:1358 ../src/gpm-manager.c:1458
+msgid "Mouse battery low"
+msgstr "마우스 배터리 전력 낮음"
+
+#: ../src/gpm-manager.c:1359
+#, c-format
+msgid "The wireless mouse attached to this computer is low in power (%d%%)"
+msgstr "이 컴퓨터에 연결한 무선 마우스의 전원이 낮습니다 (%d%%)"
+
+#: ../src/gpm-manager.c:1361 ../src/gpm-manager.c:1463
+msgid "Keyboard battery low"
+msgstr "키보드 배터리 전력 낮음"
+
+#: ../src/gpm-manager.c:1362
+#, c-format
+msgid "The wireless keyboard attached to this computer is low in power (%d%%)"
+msgstr "이 컴퓨터에 연결한 무선 키보드의 전원이 낮습니다 (%d%%)"
+
+#: ../src/gpm-manager.c:1364 ../src/gpm-manager.c:1468
+msgid "PDA battery low"
+msgstr "PDA 배터리 전력 낮음"
+
+#: ../src/gpm-manager.c:1365
+#, c-format
+msgid "The PDA attached to this computer is low in power (%d%%)"
+msgstr "이 컴퓨터에 연결한 PDA의 전원이 낮습니다 (%d%%)"
+
+#: ../src/gpm-manager.c:1367 ../src/gpm-manager.c:1473
+msgid "Cell phone battery low"
+msgstr "휴대전화 배터리 전력 낮음"
+
+#: ../src/gpm-manager.c:1368
+#, c-format
+msgid "The cell phone attached to this computer is low in power (%d%%)"
+msgstr "이 컴퓨터에 연결한 휴대전화의 전원이 낮습니다 (%d%%)"
+
+#: ../src/gpm-manager.c:1395
+msgid "a short time"
+msgstr "짧은 시간"
+
+#: ../src/gpm-manager.c:1418 ../src/gpm-manager.c:1504
+msgid "Laptop battery critically low"
+msgstr "노트북 배터리 위험하게 전력 낮음"
+
+#: ../src/gpm-manager.c:1431
+#, c-format
+msgid "Plug in your AC adapter to avoid losing data."
+msgstr "데이터를 잃어버리지 않으려면 AC 어댑터를 연결하십시오."
+
+#: ../src/gpm-manager.c:1434
+#, c-format
+msgid "This computer will suspend in %s if the AC is not connected."
+msgstr "AC 전원을 연결하지 않으면 %s 안에 절전 상태가 됩니다."
+
+#: ../src/gpm-manager.c:1437
+#, c-format
+msgid "This computer will hibernate in %s if the AC is not connected."
+msgstr "AC 전원을 연결하지 않으면 %s 안에 최대 절전 상태가 됩니다."
+
+#: ../src/gpm-manager.c:1440
+#, c-format
+msgid "This computer will shutdown in %s if the AC is not connected."
+msgstr "AC 전원을 연결하지 않으면 %s 안에 컴퓨터를 끕니다."
+
+#: ../src/gpm-manager.c:1443
+#, c-format
+msgid "You have approximately <b>%s</b> of remaining battery life (%d%%). %s"
+msgstr "배터리 수명이 약 <b>%s</b>만큼 남았습니다 (%d%%). %s"
+
+#: ../src/gpm-manager.c:1451 ../src/gpm-manager.c:1536
+msgid "UPS critically low"
+msgstr "UPS 위험하게 전력 낮음"
+
+#: ../src/gpm-manager.c:1453
+#, c-format
+msgid ""
+"You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore AC "
+"power to your computer to avoid losing data."
+msgstr ""
+"UPS 전원이 약 <b>%s</b>만큼 남았습니다 (%d%%). 데이터를 잃지 않으려면 AC 전원"
+"을 다시 연결하십시오."
+
+#: ../src/gpm-manager.c:1459
+#, c-format
+msgid ""
+"The wireless mouse attached to this computer is very low in power (%d%%). "
+"This device will soon stop functioning if not charged."
+msgstr ""
+"무선 마우스를 전력이 매우 낮은 상태에서 (%d%%) 연결했습니다. 충전하지 않으면 "
+"이 장치는 곧 기능을 멈춥니다."
+
+#: ../src/gpm-manager.c:1464
+#, c-format
+msgid ""
+"The wireless keyboard attached to this computer is very low in power (%d%%). "
+"This device will soon stop functioning if not charged."
+msgstr ""
+"무선 키보드를 전력이 매우 낮은 상태에서 (%d%%) 연결했습니다. 충전하지 않으면 "
+"이 장치는 곧 기능을 멈춥니다."
+
+#: ../src/gpm-manager.c:1469
+#, c-format
+msgid ""
+"The PDA attached to this computer is very low in power (%d%%). This device "
+"will soon stop functioning if not charged."
+msgstr ""
+"PDA를 전력이 매우 낮은 상태에서 (%d%%) 연결했습니다. 충전하지 않으면 이 장치"
+"는 곧 기능을 멈춥니다."
+
+#: ../src/gpm-manager.c:1474
+#, c-format
+msgid ""
+"Your cell phone is very low in power (%d%%). This device will soon stop "
+"functioning if not charged."
+msgstr ""
+"휴대전화를 전력이 매우 낮은 상태에서 (%d%%) 연결했습니다. 충전하지 않으면 이 "
+"장치는 곧 기능을 멈춥니다."
+
+#: ../src/gpm-manager.c:1511
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
@@ -1413,7 +1825,7 @@ msgstr ""
 "배터리가 위험한 수준보다 낮고 배터리가 완전히 방전되면 이 컴퓨터의 <b>전원이 "
 "꺼집니다</b>."
 
-#: ../src/gpm-manager.c:1003
+#: ../src/gpm-manager.c:1516
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1422,32 +1834,19 @@ msgstr ""
 "배터리가 위험한 수준보다 낮고 이 컴퓨터는 절전 상태입니다. <br><b>주의:</b> "
 "컴퓨터를 절전 상태로 유지하려면 약간의 전원이 필요합니다."
 
-#: ../src/gpm-manager.c:1009
+#: ../src/gpm-manager.c:1522
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr "배터리가 위험 수준보다 낮고 이 컴퓨터는 최대절전가 됩니다."
 
-#: ../src/gpm-manager.c:1013
+#: ../src/gpm-manager.c:1526
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr "배터리가 위험 수준보다 낮고 이 컴퓨터를 끕니다."
 
-#: ../src/gpm-manager.c:1025
-msgid "The AC Power has been unplugged. The system is now using battery power."
-msgstr "AC 전원 플러그가 빠졌습니다. 시스템에서 이제 배터리 전원을 사용합니다."
-
-#: ../src/gpm-manager.c:1035
-#, c-format
-msgid ""
-"You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
-"your AC Adapter to avoid losing data."
-msgstr ""
-"남은 배터리 시간이 대략 %s 정도 남았습니다 (%d%%). 데이터를 잃지 않으려면 AC "
-"어댑터를 연결하십시오."
-
-#: ../src/gpm-manager.c:1120
+#: ../src/gpm-manager.c:1543
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
@@ -1455,79 +1854,35 @@ msgstr ""
 "UPS가 위험 수준보다 낮고 UPS가 완전히 방전되면 이 컴퓨터의 <b>전원이 꺼집니다"
 "</b>."
 
-#: ../src/gpm-manager.c:1125
+#: ../src/gpm-manager.c:1548
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr "배터리가 위험 수준보다 낮고 이 컴퓨터는 최대절전 상태가 됩니다."
 
-#: ../src/gpm-manager.c:1129
+#: ../src/gpm-manager.c:1552
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr "배터리가 위험 수준보다 낮고 이 컴퓨터를 끕니다."
 
-#: ../src/gpm-manager.c:1136
-msgid "UPS is critically low"
-msgstr "UPS가 위험하게 낮음"
+#: ../src/gpm-manager.c:1658
+msgid "Install problem!"
+msgstr "설치 문제!"
 
-#: ../src/gpm-manager.c:1140
-msgid "Your system is running on backup power!"
-msgstr "백업 전원으로 시스템이 실행 중입니다!"
-
-#: ../src/gpm-manager.c:1144
-#, c-format
+#: ../src/gpm-manager.c:1659
 msgid ""
-"You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
-"power to your computer to avoid losing data."
+"The configuration defaults for GNOME Power Manager have not been installed "
+"correctly.\n"
+"Please contact your computer administrator."
 msgstr ""
-"남은 UPS 전원이 약 <b>%s</b>만큼 남았습니다 (%d%%). 데이터를 잃지 않으려면 컴"
-"퓨터의 전원을 다시 연결하십시오."
+"그놈 전원 관리자의 설정 기본값을 설치하지 않았습니다.\n"
+"컴퓨터의 관리자에게 문의하십시오."
 
-#: ../src/gpm-manager.c:1233
-#, c-format
-msgid ""
-"The %s device attached to this computer is low in power (%d%%). This device "
-"will soon stop functioning if not charged."
-msgstr ""
-"%s 장치가 컴퓨터 전원이 낮은 상태에서 (%d%%) 연결되었습니다. 충전하지 않으면 "
-"이 장치는 곧 기능을 멈추게 됩니다."
-
-#: ../src/gpm-manager.c:1354
-msgid "user clicked hibernate from tray menu"
-msgstr "사용자가 메뉴에서 최대절전 상태를 눌렀습니다"
-
-#: ../src/gpm-manager.c:1379
-msgid "user clicked suspend from tray menu"
-msgstr "사용자가 메뉴에서 절전 상태를 눌렀습니다"
-
-#: ../src/gpm-manager.c:1402
-msgid "Suspend failure"
-msgstr "절전 실패"
-
-#: ../src/gpm-manager.c:1403
-msgid "Your computer did not appear to resume correctly from suspend."
-msgstr "컴퓨터가 절전 상태에서 올바르게 돌아오지 못한 것 같습니다."
-
-#: ../src/gpm-manager.c:1406
-msgid "Hibernate failure"
-msgstr "최대절전 실패"
-
-#: ../src/gpm-manager.c:1407
-msgid "Your computer did not appear to resume correctly from hibernate."
-msgstr "컴퓨터가 최대 절전 상태에서 올바르게 돌아오지 못한 것 같습니다."
-
-#: ../src/gpm-manager.c:1412
-msgid "This may be a driver or hardware problem."
-msgstr "드라이버나 하드웨어 문제일 것입니다."
-
-#: ../src/gpm-manager.c:1413
-msgid "Check the GNOME Power Manager manual for common problems."
-msgstr "그놈 전원 관리자 안내서에서 흔히 발생하는 문제를 확인해 보십시오."
-
-#: ../src/gpm-notify.c:328
+#. save in state
+#: ../src/gpm-notify.c:364
 msgid "Battery may be recalled"
 msgstr "배터리를 리콜할 수 있습니다"
 
-#: ../src/gpm-notify.c:329
+#: ../src/gpm-notify.c:365
 #, c-format
 msgid ""
 "The battery in your computer may have been recalled by %s and you may be at "
@@ -1540,309 +1895,385 @@ msgstr ""
 "\n"
 "자세한 정보는 %s 배터리 리콜 웹사이트를 보십시오."
 
-#: ../src/gpm-notify.c:342
+#: ../src/gpm-notify.c:380
 msgid "Visit recall website"
 msgstr "리콜 웹사이트 보기"
 
-#: ../src/gpm-notify.c:347
+#: ../src/gpm-notify.c:386 ../src/gpm-notify.c:420 ../src/gpm-notify.c:454
+#: ../src/gpm-notify.c:485 ../src/gpm-notify.c:515 ../src/gpm-notify.c:545
+#: ../src/gpm-notify.c:581
 msgid "Do not show me this again"
 msgstr "다시 보지 않기"
 
-#: ../src/gpm-power.c:518
-msgid "Laptop battery"
-msgstr "노트북 배터리"
+#: ../src/gpm-notify.c:406
+msgid "Battery may be broken"
+msgstr "배터리가 손상된 것 같습니다"
 
-#: ../src/gpm-power.c:520
-msgid "UPS"
-msgstr "UPS"
-
-#: ../src/gpm-power.c:522
-msgid "Wireless mouse"
-msgstr "무선 마우스"
-
-#: ../src/gpm-power.c:524
-msgid "Wireless keyboard"
-msgstr "무선 키보드"
-
-#: ../src/gpm-power.c:526
-msgid "PDA"
-msgstr "PDA"
-
-#: ../src/gpm-power.c:528 ../src/gpm-statistics-core.c:638
-msgid "Unknown"
-msgstr "알 수 없음"
-
-#: ../src/gpm-power.c:742
+#: ../src/gpm-notify.c:407
 #, c-format
-msgid "<b>Product:</b> %s\n"
-msgstr "<b>제품:</b> %s\n"
+msgid ""
+"Your battery has a very low capacity (%i%%), which means that it may be old "
+"or broken."
+msgstr ""
+"배터리 용량이 매우 낮습니다 (%i%%). 배터리를 너무 오래 사용했거나 손상된 것 "
+"같습니다."
 
-#: ../src/gpm-power.c:745
-msgid "<b>Status:</b> Missing\n"
-msgstr "<b>상태:</b> 없음\n"
+#: ../src/gpm-notify.c:439
+msgid "Inhibit warning!"
+msgstr "절전 금지 경고!"
 
-#: ../src/gpm-power.c:747
-msgid "<b>Status:</b> Charged\n"
-msgstr "<b>상태:</b> 충전상태\n"
-
-#: ../src/gpm-power.c:749
-msgid "<b>Status:</b> Charging\n"
-msgstr "<b>상태:</b> 충전중\n"
-
-#: ../src/gpm-power.c:751
-msgid "<b>Status:</b> Discharging\n"
-msgstr "<b>상태:</b> 방전중\n"
-
-#: ../src/gpm-power.c:754
+#: ../src/gpm-notify.c:440
 #, c-format
-msgid "<b>Percentage charge:</b> %i%%\n"
-msgstr "<b>충전량 퍼센트:</b> %i%%\n"
+msgid ""
+"Your laptop will not sleep if you shut the lid as it is currently "
+"inhibited.\n"
+"Some laptops can overheat if they do not sleep when the lid is closed."
+msgstr ""
+"금지했으므로 노트북 덮개를 닫았을 때 절전하지 않습니다.\n"
+"노트북 기종에 따라서는 덮개를 닫았을 때 절전하지 않으면 과열될 수 있습니다."
 
-#: ../src/gpm-power.c:783
-msgid "Vendor:"
-msgstr "제조사:"
+#: ../src/gpm-notify.c:473
+msgid "Battery Charged"
+msgstr "배터리 충전됨"
 
-#: ../src/gpm-power.c:791 ../src/gpm-power.c:796
-msgid "Lithium ion"
-msgstr "리튬 이온"
+#: ../src/gpm-notify.c:474
+msgid "Your laptop battery is now fully charged"
+msgstr "배터리를 완전하게 충전했습니다"
 
-#: ../src/gpm-power.c:793 ../src/gpm-power.c:798
-msgid "Lead acid"
-msgstr "납 산"
+#: ../src/gpm-notify.c:503
+msgid "Battery Discharging"
+msgstr "배터리 방전 중"
 
-#: ../src/gpm-power.c:800
-msgid "Lithium polymer"
-msgstr "리튬 폴리머"
+#: ../src/gpm-notify.c:504
+msgid "The AC power has been unplugged. The system is now using battery power."
+msgstr "AC 전원이 빠졌습니다. 시스템에서 이제 배터리 전원을 사용합니다."
 
-#: ../src/gpm-power.c:802
-msgid "Nickel metal hydride"
-msgstr "니켈 메탈 하이드리드"
+#: ../src/gpm-notify.c:533
+msgid "UPS Discharging"
+msgstr "UPS 방전 중"
 
-#: ../src/gpm-power.c:809
-msgid "Technology:"
-msgstr "기술:"
+#: ../src/gpm-notify.c:534
+msgid "The AC power has been unplugged. The system is now using backup power."
+msgstr "AC 전원이 빠졌습니다. 시스템에서 이제 보조 전원을 사용합니다."
 
-#: ../src/gpm-power.c:813
-msgid "Serial number:"
-msgstr "일련 번호:"
+#: ../src/gpm-notify.c:564
+msgid "Sleep Problem"
+msgstr "절전 문제"
 
-#: ../src/gpm-power.c:817
-msgid "Model:"
-msgstr "모델:"
+#: ../src/gpm-notify.c:566
+msgid ""
+"Your computer failed to hibernate.\n"
+"Check the help file for common problems."
+msgstr ""
+"컴퓨터가 최대 절전에 실패했습니다.\n"
+"도움말 파일에서 흔히 발생하는 문제를 확인하십시오."
 
-#: ../src/gpm-power.c:823
-msgid "Remaining time:"
-msgstr "남은 시간:"
+#: ../src/gpm-notify.c:569
+msgid ""
+"Your computer failed to suspend.\n"
+"Check the help file for common problems."
+msgstr ""
+"컴퓨터가 절전에 실패했습니다.\n"
+"도움말 파일에서 흔히 발생하는 문제를 확인하십시오."
 
-#: ../src/gpm-power.c:829
-msgid "Excellent"
-msgstr "매우 좋음"
+#: ../src/gpm-notify.c:594
+msgid "Visit quirk website"
+msgstr "하드웨어 문제 웹사이트 보기"
 
-#: ../src/gpm-power.c:831
-msgid "Good"
-msgstr "좋음"
+#: ../src/gpm-cell-array.c:976
+#, c-format
+msgid ""
+"%s fully charged (%i%%)\n"
+"Provides %s battery runtime\n"
+msgstr ""
+"%s 완전히 충전 (%i%%)\n"
+"배터리 지속 시간 %s\n"
 
-#: ../src/gpm-power.c:833
-msgid "Fair"
-msgstr "괜찮음"
-
-#: ../src/gpm-power.c:835
-msgid "Poor"
-msgstr "부족함"
-
-#: ../src/gpm-power.c:838
-msgid "Capacity:"
-msgstr "용량:"
-
-#: ../src/gpm-power.c:844 ../src/gpm-power.c:872
-msgid "Current charge:"
-msgstr "현재 충전:"
-
-#: ../src/gpm-power.c:850
-msgid "Last full charge:"
-msgstr "최근의 완전 충전:"
-
-#: ../src/gpm-power.c:855 ../src/gpm-power.c:877
-msgid "Design charge:"
-msgstr "설계 충전:"
-
-#: ../src/gpm-power.c:860
-msgid "Charge rate (raw):"
-msgstr "충전 속도 (순간):"
-
-#: ../src/gpm-power.c:865
-msgid "Charge rate (smoothed):"
-msgstr "충전 속도 (평균):"
-
-#: ../src/gpm-power.c:1363
+#: ../src/gpm-cell-array.c:980
 #, c-format
 msgid "%s fully charged (%i%%)\n"
 msgstr "%s 완전히 충전 (%i%%)\n"
 
-#: ../src/gpm-power.c:1369
+#: ../src/gpm-cell-array.c:988
 #, c-format
 msgid "%s %s remaining (%i%%)\n"
 msgstr "%s %s 남음 (%i%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1373
+#: ../src/gpm-cell-array.c:993
 #, c-format
 msgid "%s discharging (%i%%)\n"
 msgstr "%s 방전 중 (%i%%)\n"
 
-#: ../src/gpm-power.c:1380
+#: ../src/gpm-cell-array.c:1005
+#, c-format
+msgid ""
+"%s %s until charged (%i%%)\n"
+"Provides %s battery runtime\n"
+msgstr ""
+"%s 충전까지 %s (%i%%)\n"
+"배터리 지속 시간 %s\n"
+
+#: ../src/gpm-cell-array.c:1012
 #, c-format
 msgid "%s %s until charged (%i%%)\n"
 msgstr "%s 충전까지 %s (%i%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1384
+#: ../src/gpm-cell-array.c:1017
 #, c-format
 msgid "%s charging (%i%%)\n"
 msgstr "%s 방전 중 (%i%%)\n"
 
-#: ../src/gpm-power.c:1421
-msgid "Recalculating information..."
-msgstr "정보를 다시 계산하는 중..."
+#: ../src/gpm-cell-array.c:1024
+msgid "Battery state could not be read at this time\n"
+msgstr "현재 배터리 상태를 읽을 수 없습니다\n"
 
-#. only enable this if discharging on UPS, for details see:
-#. http://bugzilla.gnome.org/show_bug.cgi?id=329027
-#: ../src/gpm-power.c:1432
-msgid "Computer is running on backup power\n"
-msgstr "컴퓨터는 백업 전원으로 실행 중입니다\n"
+#: ../src/gpm-cell.c:488
+#, c-format
+msgid "<b>Product:</b> %s\n"
+msgstr "<b>제품:</b> %s\n"
 
-#: ../src/gpm-power.c:1435
-msgid "Computer is running on AC power\n"
-msgstr "컴퓨터는 AC 전원으로 실행 중입니다\n"
+#: ../src/gpm-cell.c:491
+msgid "<b>Status:</b> Missing\n"
+msgstr "<b>상태:</b> 없음\n"
 
-#: ../src/gpm-power.c:1438
-msgid "Computer is running on battery power\n"
-msgstr "컴퓨터는 배터리 전원으로 실행 중입니다\n"
+#: ../src/gpm-cell.c:493
+msgid "<b>Status:</b> Charged\n"
+msgstr "<b>상태:</b> 충전상태\n"
 
-#: ../src/gpm-prefs.c:141
-msgid "Power Preferences"
-msgstr "전원 기본설정"
+#: ../src/gpm-cell.c:495
+msgid "<b>Status:</b> Charging\n"
+msgstr "<b>상태:</b> 충전중\n"
+
+#: ../src/gpm-cell.c:497
+msgid "<b>Status:</b> Discharging\n"
+msgstr "<b>상태:</b> 방전중\n"
+
+#: ../src/gpm-cell.c:500
+#, c-format
+msgid "<b>Percentage charge:</b> %i%%\n"
+msgstr "<b>충전량 퍼센트:</b> %i%%\n"
+
+#: ../src/gpm-cell.c:505
+msgid "Vendor:"
+msgstr "제조사:"
+
+#: ../src/gpm-cell.c:510
+msgid "Lithium ion"
+msgstr "리튬 이온"
+
+#: ../src/gpm-cell.c:512
+msgid "Lead acid"
+msgstr "납 산"
+
+#: ../src/gpm-cell.c:514
+msgid "Lithium polymer"
+msgstr "리튬 폴리머"
+
+#: ../src/gpm-cell.c:516
+msgid "Nickel metal hydride"
+msgstr "니켈 메탈 하이드리드"
+
+#: ../src/gpm-cell.c:523
+msgid "Technology:"
+msgstr "기술:"
+
+#: ../src/gpm-cell.c:527
+msgid "Serial number:"
+msgstr "일련 번호:"
+
+#: ../src/gpm-cell.c:531
+msgid "Model:"
+msgstr "모델:"
+
+#: ../src/gpm-cell.c:537
+msgid "Charge time:"
+msgstr "충전 시간:"
+
+#: ../src/gpm-cell.c:544
+msgid "Discharge time:"
+msgstr "방전 시간:"
+
+#: ../src/gpm-cell.c:550
+msgid "Excellent"
+msgstr "매우 좋음"
+
+#: ../src/gpm-cell.c:552
+msgid "Good"
+msgstr "좋음"
+
+#: ../src/gpm-cell.c:554
+msgid "Fair"
+msgstr "괜찮음"
+
+#: ../src/gpm-cell.c:556
+msgid "Poor"
+msgstr "부족함"
+
+#: ../src/gpm-cell.c:559
+msgid "Capacity:"
+msgstr "용량:"
+
+#: ../src/gpm-cell.c:565 ../src/gpm-cell.c:588
+msgid "Current charge:"
+msgstr "현재 충전:"
+
+#: ../src/gpm-cell.c:571
+msgid "Last full charge:"
+msgstr "최근의 완전 충전:"
+
+#: ../src/gpm-cell.c:576 ../src/gpm-cell.c:593
+msgid "Design charge:"
+msgstr "설계 충전:"
+
+#: ../src/gpm-cell.c:581
+msgid "Charge rate:"
+msgstr "충전 속도:"
+
+#: ../src/gpm-cell-unit.c:247
+msgid "Laptop batteries"
+msgstr "노트북 배터리"
+
+#: ../src/gpm-cell-unit.c:249
+msgid "UPSs"
+msgstr "UPS"
+
+#: ../src/gpm-cell-unit.c:251
+msgid "Wireless mice"
+msgstr "무선 마우스"
+
+#: ../src/gpm-cell-unit.c:253
+msgid "Wireless keyboards"
+msgstr "무선 키보드"
+
+#: ../src/gpm-cell-unit.c:255
+msgid "PDAs"
+msgstr "PDA"
+
+#: ../src/gpm-cell-unit.c:257
+msgid "Cell phones"
+msgstr "휴대전화"
+
+#: ../src/gpm-cell-unit.c:259 ../src/gpm-cell-unit.c:275
+#: ../src/gpm-statistics-core.c:739
+msgid "Unknown"
+msgstr "알 수 없음"
+
+#: ../src/gpm-cell-unit.c:263
+msgid "Laptop battery"
+msgstr "노트북 배터리"
+
+#: ../src/gpm-cell-unit.c:265
+msgid "UPS"
+msgstr "UPS"
+
+#: ../src/gpm-cell-unit.c:267
+msgid "Wireless mouse"
+msgstr "무선 마우스"
+
+#: ../src/gpm-cell-unit.c:269
+msgid "Wireless keyboard"
+msgstr "무선 키보드"
+
+#: ../src/gpm-cell-unit.c:271
+msgid "PDA"
+msgstr "PDA"
+
+#: ../src/gpm-cell-unit.c:273
+msgid "Cell phone"
+msgstr "휴대전화"
+
+#: ../src/gpm-prefs.c:111 ../test/gpm-inhibit-test.c:186
+msgid "GNOME Power Preferences"
+msgstr "그놈 전원 기본 설정"
 
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs-core.c:81 ../src/gpm-statistics-core.c:83
+#: ../src/gpm-prefs-core.c:82 ../src/gpm-statistics-core.c:95
 msgid "Ask me"
 msgstr "확인 질문"
 
-#: ../src/gpm-prefs-core.c:82 ../src/gpm-statistics-core.c:84
-#: ../src/gpm-statistics-core.c:765
+#: ../src/gpm-prefs-core.c:83 ../src/gpm-statistics-core.c:96
 msgid "Suspend"
 msgstr "절전"
 
-#: ../src/gpm-prefs-core.c:83 ../src/gpm-statistics-core.c:85
+#: ../src/gpm-prefs-core.c:84 ../src/gpm-statistics-core.c:97
 msgid "Shutdown"
 msgstr "컴퓨터 끔"
 
-#: ../src/gpm-prefs-core.c:84 ../src/gpm-statistics-core.c:86
-#: ../src/gpm-statistics-core.c:775
+#: ../src/gpm-prefs-core.c:85 ../src/gpm-statistics-core.c:98
 msgid "Hibernate"
 msgstr "최대절전"
 
-#: ../src/gpm-prefs-core.c:85 ../src/gpm-statistics-core.c:87
+#: ../src/gpm-prefs-core.c:86 ../src/gpm-statistics-core.c:99
 msgid "Blank screen"
 msgstr "화면 꺼짐"
 
 #. The text that should appear in the processor combo box
-#: ../src/gpm-prefs-core.c:86 ../src/gpm-prefs-core.c:89
-#: ../src/gpm-statistics-core.c:88
+#: ../src/gpm-prefs-core.c:87 ../src/gpm-prefs-core.c:90
+#: ../src/gpm-statistics-core.c:100
 msgid "Do nothing"
 msgstr "아무것도 안함"
 
-#: ../src/gpm-prefs-core.c:90
+#: ../src/gpm-prefs-core.c:91
 msgid "Based on processor load"
 msgstr "프로세서 사용량에 따라"
 
-#: ../src/gpm-prefs-core.c:91
+#: ../src/gpm-prefs-core.c:92
 msgid "Automatic power saving"
 msgstr "자동 절전"
 
-#: ../src/gpm-prefs-core.c:92
+#: ../src/gpm-prefs-core.c:93
 msgid "Maximum power saving"
 msgstr "최대 절전"
 
-#: ../src/gpm-prefs-core.c:93
+#: ../src/gpm-prefs-core.c:94
 msgid "Always maximum speed"
 msgstr "항상 최고 속도"
 
-#: ../src/gpm-prefs-core.c:242
+#: ../src/gpm-prefs-core.c:287
 msgid "Never"
 msgstr "절대 안함"
 
-#: ../src/gpm-statistics.c:117
+#: ../src/gpm-statistics.c:109
 msgid "GNOME Power Statistics"
 msgstr "그놈 전원 통계"
 
-#: ../src/gpm-statistics-core.c:54
-msgid "Charge History"
-msgstr "충전 이력"
+#: ../src/gpm-statistics-core.c:60
+msgid "Charge history"
+msgstr "충전 기록"
 
-#: ../src/gpm-statistics-core.c:56
-msgid "Voltage History"
-msgstr "전압 이력"
+#: ../src/gpm-statistics-core.c:61
+msgid "Power history"
+msgstr "전원 기록"
 
-#: ../src/gpm-statistics-core.c:57
-msgid "Estimated Time History"
-msgstr "추측된 시간 이력"
+#: ../src/gpm-statistics-core.c:62
+msgid "Voltage history"
+msgstr "전압 기록"
 
-#: ../src/gpm-statistics-core.c:708
-msgid "Could not connect to GNOME Power Manager."
-msgstr "그놈 전원 관리자에 연결할 수 없습니다."
+#: ../src/gpm-statistics-core.c:63
+msgid "Estimated time history"
+msgstr "예상 시간 기록"
 
-#: ../src/gpm-statistics-core.c:709
-msgid "Perhaps the program is not running or you are using an old version?"
-msgstr "프로그램을 실행하지 않았거나 오래 전 버전을 사용하고 있을 것입니다."
+#: ../src/gpm-statistics-core.c:64
+msgid "Charge time profile"
+msgstr "충전 시간 프로파일"
 
-#: ../src/gpm-statistics-core.c:745
-msgid "On AC"
-msgstr "AC 전원 사용"
+#: ../src/gpm-statistics-core.c:65
+msgid "Discharge time profile"
+msgstr "방전 시간 프로파일"
 
-#: ../src/gpm-statistics-core.c:750
-msgid "On battery"
-msgstr "배터리 사용"
+#: ../src/gpm-statistics-core.c:66
+msgid "Charge time accuracy profile"
+msgstr "충전 시간 정확도 프로파일"
 
-#: ../src/gpm-statistics-core.c:755
-msgid "Session idle"
-msgstr "세션 입력 없음"
-
-#: ../src/gpm-statistics-core.c:760
-msgid "Session active"
-msgstr "세션 사용중"
-
-#: ../src/gpm-statistics-core.c:770
-msgid "Resume"
-msgstr "원상복귀"
-
-#: ../src/gpm-statistics-core.c:780
-msgid "Lid closed"
-msgstr "덮개 닫음"
-
-#: ../src/gpm-statistics-core.c:785
-msgid "Lid opened"
-msgstr "덮개 엶"
-
-#: ../src/gpm-statistics-core.c:790
-msgid "Notification"
-msgstr "알림"
-
-#: ../src/gpm-statistics-core.c:795
-msgid "DPMS On"
-msgstr "DPMS 켬"
-
-#: ../src/gpm-statistics-core.c:800
-msgid "DPMS Standby"
-msgstr "DPMS 대기"
-
-#: ../src/gpm-statistics-core.c:805
-msgid "DPMS Suspend"
-msgstr "DPMS 일시 정지"
+#: ../src/gpm-statistics-core.c:67
+msgid "Discharge time accuracy profile"
+msgstr "방전 시간 정확도 프로파일"
 
 #: ../src/gpm-statistics-core.c:810
-msgid "DPMS Off"
-msgstr "DPMS 끔"
+msgid "Could not connect to GNOME Power Manager."
+msgstr "그놈 전원 관리자에 연결할 수 없습니다."
 
 #: ../src/gpm-srv-screensaver.c:111
 msgid "Display DPMS activated"
@@ -1852,79 +2283,218 @@ msgstr "활성화환 DPMS 표시"
 msgid "On battery power"
 msgstr "배터리 전원 사용"
 
-#: ../src/gpm-srv-screensaver.c:157
+#: ../src/gpm-srv-screensaver.c:151
 msgid "Laptop lid is closed"
 msgstr "노트북 덮개를 닫았습니다"
 
-#: ../src/gpm-tray-icon.c:319
+#: ../src/gpm-tray-icon.c:206
+msgid "Device information"
+msgstr "장치 정보"
+
+#: ../src/gpm-tray-icon.c:315
 msgid "translator-credits"
 msgstr ""
 "류창우 <cwryu@debian.org>\n"
 "우분투 한국어 번역팀 <ubuntu-ko@lists.ubuntu.com>"
 
+#: ../src/gpm-tray-icon.c:331
+msgid "GNOME Power Manager Website"
+msgstr "그놈 전원 관리자 웹사이트"
+
 #. Preferences
-#: ../src/gpm-tray-icon.c:472
+#: ../src/gpm-tray-icon.c:433
 msgid "_Preferences"
 msgstr "기본 설정(_P)"
 
 #. Statistics
-#: ../src/gpm-tray-icon.c:480
+#: ../src/gpm-tray-icon.c:441
 msgid "Power _History"
-msgstr "전원 내역(_H)"
+msgstr "전원 기록(_H)"
 
 #. Help
-#: ../src/gpm-tray-icon.c:492
+#: ../src/gpm-tray-icon.c:453
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:2
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:2
 msgid "_Help"
 msgstr "도움말(_H)"
 
 #. About
-#: ../src/gpm-tray-icon.c:500
+#: ../src/gpm-tray-icon.c:461
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:1
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:1
 msgid "_About"
 msgstr "정보(_A)"
 
-#: ../src/gpm-tray-icon.c:606
+#: ../src/gpm-tray-icon.c:575
 msgid "_Suspend"
 msgstr "절전(_S)"
 
-#: ../src/gpm-tray-icon.c:616
+#: ../src/gpm-tray-icon.c:585
 msgid "Hi_bernate"
 msgstr "최대절전(_B)"
 
-#: ../src/gpm-tray-icon.c:921
-#, c-format
-msgid "HAL failed to %s. Check the help file for common problems."
-msgstr ""
-"HAL이 %s에 실패했습니다. 도움말 파일에서 흔히 발생하는 문제를 확인하십시오."
+#~ msgid "Change the brightness to a preset level on AC state change"
+#~ msgstr "AC 상태 변화에 따라 밝기를 현재 단계로 바꿉니다"
 
-#: ../src/gpm-tray-icon.c:923
-msgid "hibernate"
-msgstr "최대절전"
+#~ msgid ""
+#~ "If the laptop should be configured as if it is using a permanent external "
+#~ "monitor"
+#~ msgstr "외부 모니터를 계속해서 사용하는 것처럼 노트북을 설정할 지 여부"
 
-#: ../src/gpm-tray-icon.c:926
-#, c-format
-msgid ""
-"Your computer failed to %s.\n"
-"Check the help file for common problems."
-msgstr ""
-"컴퓨터가 %s에 실패했습니다.\n"
-"도움말 파일에서 흔히 발생하는 문제를 확인하십시오."
+#~ msgid ""
+#~ "If the laptop should be configured to not do dimming actions and DPMS off "
+#~ "if it is using a dock or external monitor. Most laptop and desktop users "
+#~ "should select FALSE here."
+#~ msgstr ""
+#~ "도크나 외부 모니터를 사용하는 경우 노트북의 어둡게 하기 동작과 DPMS 끄기 "
+#~ "동작을 하지 않도록 설정할 지 여부. 대부분의 노트북과 데스크탑 사용자는 여"
+#~ "기에서 거짓이라고 설정해야 합니다."
 
-#: ../src/gpm-tray-icon.c:928
-msgid "suspend"
-msgstr "절전"
+#~ msgid "Notify on a HAL error"
+#~ msgstr "HAL 오류가 발생했을 때 알리기"
 
-#: ../src/gpm-warning.c:153
-msgid "Power Critically Low"
-msgstr "전원 치명적으로 낮음"
+#~ msgid "Percentage considered very low"
+#~ msgstr "매우 낮다고 할 퍼센트 값"
 
-#: ../src/gpm-warning.c:155
-msgid "Power Very Low"
-msgstr "전원 매우 낮음"
+#~ msgid "The damping factor for the rate"
+#~ msgstr "속도 계산할 때 감쇠치"
 
-#: ../src/gpm-warning.c:157
-msgid "Power Low"
-msgstr "전원 낮음"
+#~ msgid ""
+#~ "The percentage of the battery when it is considered very low. Only valid "
+#~ "when use_time_for_policy is false."
+#~ msgstr ""
+#~ "배터리가 매우 낮다고 할 퍼센트 값. use_time_for_policy가 거짓일 경우에만 "
+#~ "사용합니다."
+
+#~ msgid ""
+#~ "The time remaining in seconds of the battery when it is considered very "
+#~ "low. Only valid when use_time_for_policy is true."
+#~ msgstr ""
+#~ "매우 낮다고 할 배터리 남은 시간. use_time_for_policy가 참일 경우에만 사용"
+#~ "합니다."
+
+#~ msgid "The time remaining when very low"
+#~ msgstr "매우 낮을 때 남은 시간"
+
+#~ msgid ""
+#~ "The value of the damping factor used when calculating the exponentially "
+#~ "weighted average of the rate. Increasing this value will increase the "
+#~ "damping effect of the rate calculations, which makes the time remaining "
+#~ "more accurate, but the graphs less responsive."
+#~ msgstr ""
+#~ "지수함수 가중치를 둬서 속도의 평균을 계산할 때 사용할 감쇠치. 이 값을 키우"
+#~ "면 속도를 계산할 때 감쇠 효과가 커지고, 그러면 남은 시간을 좀 더 정확하게 "
+#~ "계산하지만 그래프의 업데이트를 자주 못하게 됩니다."
+
+#~ msgid "Whether we should show the legend in the statistics window"
+#~ msgstr "통계 창에서 범례를 표시할 지 여부."
+
+#~ msgid "Whether we should show the legend in the statistics window."
+#~ msgstr "통계 창에서 범례를 표시할 지 여부."
+
+#~ msgid "Add _axis labels"
+#~ msgstr "축 레이블 더하기(_A)"
+
+#~ msgid "Add lege_nd"
+#~ msgstr "범례 더하기(_N)"
+
+#~ msgid "Device:"
+#~ msgstr "장치:"
+
+#~ msgid "Charged"
+#~ msgstr "충전됨"
+
+#~ msgid "Charging"
+#~ msgstr "충전 중"
+
+#~ msgid "Time remaining"
+#~ msgstr "남은 시간"
+
+#~ msgid "Unknown caption"
+#~ msgstr "알 수 없는 제목"
+
+#~ msgid "%iW"
+#~ msgstr "%iW"
+
+#~ msgid "%iV"
+#~ msgstr "%iV"
+
+#~ msgid "Power Inhibit Test"
+#~ msgstr "전원 관리 금지 테스트"
+
+#~ msgid "the DBUS method Suspend() was invoked"
+#~ msgstr "DBUS 메소드 Suspend() 실행"
+
+#~ msgid "the DBUS method Hibernate() was invoked"
+#~ msgstr "DBUS 메소드 Hibernate() 실행"
+
+#~ msgid "the DBUS method Shutdown() was invoked"
+#~ msgstr "DBUS 메소드 Shutdown() 실행"
+
+#~ msgid "Rebooting computer"
+#~ msgstr "컴퓨터 다시 시작"
+
+#~ msgid "the DBUS method Reboot() was invoked"
+#~ msgstr "DBUS 메소드 Reboot() 실행"
+
+#~ msgid "Your system is running on backup power!"
+#~ msgstr "백업 전원으로 시스템이 실행 중입니다!"
+
+#~ msgid "user clicked hibernate from tray menu"
+#~ msgstr "사용자가 메뉴에서 최대절전 상태를 눌렀습니다"
+
+#~ msgid "user clicked suspend from tray menu"
+#~ msgstr "사용자가 메뉴에서 절전 상태를 눌렀습니다"
+
+#~ msgid "Suspend failure"
+#~ msgstr "절전 실패"
+
+#~ msgid "Your computer did not appear to resume correctly from suspend."
+#~ msgstr "컴퓨터가 절전 상태에서 올바르게 돌아오지 못한 것 같습니다."
+
+#~ msgid "Your computer did not appear to resume correctly from hibernate."
+#~ msgstr "컴퓨터가 최대 절전 상태에서 올바르게 돌아오지 못한 것 같습니다."
+
+#~ msgid "This may be a driver or hardware problem."
+#~ msgstr "드라이버나 하드웨어 문제일 것입니다."
+
+#~ msgid "Check the GNOME Power Manager manual for common problems."
+#~ msgstr "그놈 전원 관리자 안내서에서 흔히 발생하는 문제를 확인해 보십시오."
+
+#~ msgid "Remaining time:"
+#~ msgstr "남은 시간:"
+
+#~ msgid "Charge rate (smoothed):"
+#~ msgstr "충전 속도 (평균):"
+
+#~ msgid "Recalculating information..."
+#~ msgstr "정보를 다시 계산하는 중..."
+
+#~ msgid "Power Preferences"
+#~ msgstr "전원 기본설정"
+
+#~ msgid "Perhaps the program is not running or you are using an old version?"
+#~ msgstr "프로그램을 실행하지 않았거나 오래 전 버전을 사용하고 있을 것입니다."
+
+#~ msgid "Resume"
+#~ msgstr "원상복귀"
+
+#~ msgid "HAL failed to %s. Check the help file for common problems."
+#~ msgstr ""
+#~ "HAL이 %s에 실패했습니다. 도움말 파일에서 흔히 발생하는 문제를 확인하십시"
+#~ "오."
+
+#~ msgid "hibernate"
+#~ msgstr "최대절전"
+
+#~ msgid "suspend"
+#~ msgstr "절전"
+
+#~ msgid "Power Critically Low"
+#~ msgstr "전원 치명적으로 낮음"
+
+#~ msgid "Power Very Low"
+#~ msgstr "전원 매우 낮음"
+
+#~ msgid "Power Low"
+#~ msgstr "전원 낮음"
