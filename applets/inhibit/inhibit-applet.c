@@ -48,6 +48,7 @@ typedef struct{
 	PanelApplet parent;
 	/* applet state */
 	guint cookie;
+	GtkWidget *image;
 	/* the icon and a cache for size*/
 	GdkPixbuf *icon;
 	gint icon_width, icon_height;
@@ -72,7 +73,7 @@ static void      gpm_inhibit_applet_init       (GpmInhibitApplet *applet);
 
 G_DEFINE_TYPE (GpmInhibitApplet, gpm_inhibit_applet, PANEL_TYPE_APPLET)
 
-static void	gpm_applet_get_icon		(GpmInhibitApplet *applet);
+static void	gpm_applet_set_icon		(GpmInhibitApplet *applet);
 static void	gpm_applet_check_size		(GpmInhibitApplet *applet);
 static gboolean	gpm_applet_draw_cb		(GpmInhibitApplet *applet);
 static void	gpm_applet_update_tooltip	(GpmInhibitApplet *applet);
@@ -188,13 +189,13 @@ gpm_applet_has_inhibit (GpmInhibitApplet *applet,
 #endif
 
 /**
- * gpm_applet_get_icon:
+ * gpm_applet_set_icon:
  * @applet: Inhibit applet instance
  *
  * retrieve an icon from stock with a size adapted to panel
  **/
 static void
-gpm_applet_get_icon (GpmInhibitApplet *applet)
+gpm_applet_set_icon (GpmInhibitApplet *applet)
 {
 	const gchar *icon;
 
@@ -225,6 +226,8 @@ gpm_applet_get_icon (GpmInhibitApplet *applet)
 	/* update size cache */
 	applet->icon_height = gdk_pixbuf_get_height (applet->icon);
 	applet->icon_width = gdk_pixbuf_get_width (applet->icon);
+
+	gtk_image_set_from_pixbuf (GTK_IMAGE (applet->image), applet->icon);
 }
 
 /**
@@ -241,13 +244,13 @@ gpm_applet_check_size (GpmInhibitApplet *applet)
 	if (PANEL_APPLET_VERTICAL(panel_applet_get_orient (PANEL_APPLET (applet)))) {
 		if (applet->size != GTK_WIDGET(applet)->allocation.width) {
 			applet->size = GTK_WIDGET(applet)->allocation.width;
-			gpm_applet_get_icon (applet);
+			gpm_applet_set_icon (applet);
 			gtk_widget_set_size_request (GTK_WIDGET(applet), applet->size, applet->icon_height + 2);
 		}
 	} else {
 		if (applet->size != GTK_WIDGET(applet)->allocation.height) {
 			applet->size = GTK_WIDGET(applet)->allocation.height;
-			gpm_applet_get_icon (applet);
+			gpm_applet_set_icon (applet);
 			gtk_widget_set_size_request (GTK_WIDGET(applet), applet->icon_width + 2, applet->size);
 		}
 	}
@@ -272,43 +275,13 @@ gpm_applet_draw_cb (GpmInhibitApplet *applet)
 	}
 
 	/* retrieve applet size */
-	gpm_applet_get_icon (applet);
+	gpm_applet_set_icon (applet);
 	gpm_applet_check_size (applet);
 	if (applet->size <= 2) {
 		return FALSE;
 	}
 
-	/* if no icon, then don't try to display */
-	if (applet->icon == NULL) {
-		return FALSE;
-	}
-
-	w = GTK_WIDGET(applet)->allocation.width;
-	h = GTK_WIDGET(applet)->allocation.height;
-
-	gc = gdk_gc_new (GTK_WIDGET(applet)->window);
-
-	/* draw pixmap background */
-	bg_type = panel_applet_get_background (PANEL_APPLET (applet), &color, &background);
-	if (bg_type == PANEL_PIXMAP_BACKGROUND) {
-		/* fill with given background pixmap */
-		gdk_draw_drawable (GTK_WIDGET(applet)->window, gc, background, 0, 0, 0, 0, w, h);
-	}
-	
-	/* draw color background */
-	if (bg_type == PANEL_COLOR_BACKGROUND) {
-		gdk_gc_set_rgb_fg_color (gc,&color);
-		gdk_gc_set_fill (gc,GDK_SOLID);
-		gdk_draw_rectangle (GTK_WIDGET(applet)->window, gc, TRUE, 0, 0, w, h);
-	}
-
-	/* draw icon at center */
-	gdk_draw_pixbuf (GTK_WIDGET(applet)->window, gc, applet->icon,
-			 0, 0, (w - applet->icon_width)/2, (h - applet->icon_height)/2,
-			 applet->icon_width, applet->icon_height,
-			 GDK_RGB_DITHER_NONE, 0, 0);
-
-	return TRUE;
+	return FALSE;
 }
 
 /**
@@ -318,10 +291,34 @@ gpm_applet_draw_cb (GpmInhibitApplet *applet)
  **/
 static void
 gpm_applet_change_background_cb (GpmInhibitApplet *applet,
-				 PanelAppletBackgroundType arg1,
-				 GdkColor *arg2, GdkPixmap *arg3, gpointer data)
+				 PanelAppletBackgroundType type,
+				 GdkColor *colour, GdkPixmap *pixmap, gpointer data)
 {
-	gtk_widget_queue_draw (GTK_WIDGET (applet));
+	GtkRcStyle *rc_style;
+	GtkStyle *style;
+
+	/* reset style */
+	gtk_widget_set_style (GTK_WIDGET (applet), NULL);
+	rc_style = gtk_rc_style_new ();
+	gtk_widget_modify_style (GTK_WIDGET (applet), rc_style);
+	gtk_rc_style_unref (rc_style);
+
+	switch (type) {
+	case PANEL_NO_BACKGROUND:
+		break;
+	case PANEL_COLOR_BACKGROUND:
+		gtk_widget_modify_bg (GTK_WIDGET (applet), GTK_STATE_NORMAL, colour);
+		break;
+	case PANEL_PIXMAP_BACKGROUND:
+		style = gtk_style_copy (GTK_WIDGET (applet)->style);
+		if (style->bg_pixmap[GTK_STATE_NORMAL]) {
+			g_object_unref (style->bg_pixmap[GTK_STATE_NORMAL]);
+		}
+		style->bg_pixmap[GTK_STATE_NORMAL] = g_object_ref (pixmap);
+		gtk_widget_set_style (GTK_WIDGET (applet), style);
+		g_object_unref (style);
+		break;
+	}
 }
 
 /**
@@ -366,13 +363,11 @@ gpm_applet_click_cb (GpmInhibitApplet *applet, GdkEventButton *event)
 		applet->cookie = 0;
 	} else {
 		g_debug ("inhibiting");
-		gpm_applet_inhibit (applet,
-					  GPM_INHIBIT_APPLET_NAME,
-					  _("Manual inhibit"),
-					  &(applet->cookie));
+		gpm_applet_inhibit (applet, GPM_INHIBIT_APPLET_NAME,
+				    _("Manual inhibit"), &(applet->cookie));
 	}
 	/* update icon */
-	gpm_applet_get_icon (applet);
+	gpm_applet_set_icon (applet);
 	gpm_applet_update_tooltip (applet);
 	gpm_applet_draw_cb (applet);
 
@@ -560,19 +555,19 @@ gpm_inhibit_applet_dbus_disconnect (GpmInhibitApplet *applet)
  * @screensaver: This class instance
  **/
 static void
-watch_connection_cb (DbusWatch           *watch,
-		     gboolean	          status,
+watch_connection_cb (DbusWatch	      *watch,
+		     gboolean	       status,
 		     GpmInhibitApplet *applet)
 {
 	if (status) {
 		gpm_inhibit_applet_dbus_connect (applet);
 		gpm_applet_update_tooltip (applet);
-		gpm_applet_get_icon (applet);
+		gpm_applet_set_icon (applet);
 		gpm_applet_draw_cb (applet);
 	} else {
 		gpm_inhibit_applet_dbus_disconnect (applet);
 		gpm_applet_update_tooltip (applet);
-		gpm_applet_get_icon (applet);
+		gpm_applet_set_icon (applet);
 		gpm_applet_draw_cb (applet);
 	}
 }
@@ -591,9 +586,12 @@ gpm_inhibit_applet_init (GpmInhibitApplet *applet)
 	applet->connection = NULL;
 	applet->proxy = NULL;
 
+	applet->image = gtk_image_new ();
+	gtk_container_add (GTK_CONTAINER (applet), applet->image);
+
 	/* Add application specific icons to search path */
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
-                                           GPM_DATA G_DIR_SEPARATOR_S "icons");
+					   GPM_DATA G_DIR_SEPARATOR_S "icons");
 
 	applet->watch = dbus_watch_new ();
 	g_signal_connect (applet->watch, "connection-changed",
@@ -617,17 +615,8 @@ gpm_inhibit_applet_init (GpmInhibitApplet *applet)
 	g_signal_connect (G_OBJECT(applet), "expose-event",
 			  G_CALLBACK(gpm_applet_draw_cb), NULL);
 
-	/* We use g_signal_connect_after because letting the panel draw
-	 * the background is the only way to have the correct
-	 * background when a theme defines a background picture. */
-	g_signal_connect_after (G_OBJECT(applet), "expose-event",
-				G_CALLBACK(gpm_applet_draw_cb), NULL);
-
 	g_signal_connect (G_OBJECT(applet), "change-background",
 			  G_CALLBACK(gpm_applet_change_background_cb), NULL);
-
-	g_signal_connect (G_OBJECT(applet), "change-orient",
-			  G_CALLBACK(gpm_applet_draw_cb), NULL);
 
 	g_signal_connect (G_OBJECT(applet), "destroy",
 			  G_CALLBACK(gpm_applet_destroy_cb), NULL);

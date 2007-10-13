@@ -343,6 +343,11 @@ gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 		return FALSE;
 	}
 
+	/* check to see if we are inhibited */
+	if (gpm_manager_is_inhibit_valid (manager, FALSE, "suspend") == FALSE) {
+		return FALSE;
+	}
+
 	gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
 				_("Suspending computer"), reason);
 	gpm_control_suspend (manager->priv->control, &error);
@@ -398,6 +403,11 @@ gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 		return FALSE;
 	}
 
+	/* check to see if we are inhibited */
+	if (gpm_manager_is_inhibit_valid (manager, FALSE, "hibernate") == FALSE) {
+		return FALSE;
+	}
+
 	gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
 				_("Hibernating computer"), reason);
 	gpm_control_hibernate (manager->priv->control, &error);
@@ -430,6 +440,11 @@ manager_policy_do (GpmManager  *manager,
 				    GPM_NOTIFY_TIMEOUT_SHORT,
 				    GPM_STOCK_APP_ICON,
 				    GPM_NOTIFY_URGENCY_NORMAL);
+		return FALSE;
+	}
+
+	/* are we inhibited? */
+	if (gpm_manager_is_inhibit_valid (manager, FALSE, "policy action") == FALSE) {
 		return FALSE;
 	}
 
@@ -500,6 +515,11 @@ gpm_manager_suspend (GpmManager *manager,
 		return FALSE;
 	}
 
+	/* check to see if we are inhibited */
+	if (gpm_manager_is_inhibit_valid (manager, FALSE, "hibernate") == FALSE) {
+		return FALSE;
+	}
+
 	return gpm_control_suspend (manager->priv->control, error);
 }
 
@@ -531,6 +551,11 @@ gpm_manager_hibernate (GpmManager *manager,
 		return FALSE;
 	}
 
+	/* check to see if we are inhibited */
+	if (gpm_manager_is_inhibit_valid (manager, FALSE, "hibernate") == FALSE) {
+		return FALSE;
+	}
+
 	return gpm_control_hibernate (manager->priv->control, error);
 }
 
@@ -545,6 +570,12 @@ gpm_manager_reboot (GpmManager *manager,
 {
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
+
+	/* check to see if we are inhibited */
+	if (gpm_manager_is_inhibit_valid (manager, FALSE, "reboot") == FALSE) {
+		return FALSE;
+	}
+
 	return gpm_control_reboot (manager->priv->control, error);
 }
 
@@ -559,6 +590,12 @@ gpm_manager_shutdown (GpmManager *manager,
 {
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
+
+	/* check to see if we are inhibited */
+	if (gpm_manager_is_inhibit_valid (manager, FALSE, "shutdown") == FALSE) {
+		return FALSE;
+	}
+
 	return gpm_control_shutdown (manager->priv->control, error);
 }
 
@@ -795,7 +832,7 @@ idle_changed_cb (GpmIdle    *idle,
 		if (gpm_control_is_policy_timout_valid (manager->priv->control) == FALSE) {
 			return;
 		}
-		if (! gpm_manager_is_inhibit_valid (manager, FALSE, "timeout action")) {
+		if (gpm_manager_is_inhibit_valid (manager, FALSE, "timeout action") == FALSE) {
 			return;
 		}
 		idle_do_sleep (manager);

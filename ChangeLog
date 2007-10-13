@@ -1,3 +1,22 @@
+2007-10-13  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c: (gpm_manager_action_suspend),
+	(gpm_manager_action_hibernate), (manager_policy_do),
+	(gpm_manager_suspend), (gpm_manager_hibernate),
+	(gpm_manager_reboot), (gpm_manager_shutdown), (idle_do_sleep),
+	(idle_changed_cb):
+	Check for inhibit in more places. Needed for gnome-packagekit work.
+
+2007-10-05  Richard Hughes  <richard@hughsie.com>
+
+	* applets/inhibit/inhibit-applet.c: (gpm_applet_uninhibit),
+	(gpm_applet_set_icon), (gpm_applet_check_size),
+	(gpm_applet_draw_cb), (gpm_applet_change_background_cb),
+	(gpm_applet_click_cb), (watch_connection_cb),
+	(gpm_inhibit_applet_init):
+	Apply a patch from Matthias Clasen to improve the icon drawing.
+	Slightly modified by me. Fixes #483826.
+
 2007-10-05  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c: (gpm_manager_action_suspend),
