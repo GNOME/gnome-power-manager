@@ -747,6 +747,7 @@ idle_do_sleep (GpmManager *manager)
 	gboolean on_ac;
 	gchar *action = NULL;
 	gboolean ret;
+	GError *error = NULL;
 
 	/* find if we are on AC power */
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
@@ -768,24 +769,30 @@ idle_do_sleep (GpmManager *manager)
 	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
 		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
 					_("Suspending computer"), _("System idle"));
-		ret = gpm_control_suspend (manager->priv->control, NULL);
+		ret = gpm_control_suspend (manager->priv->control, &error);
 		if (ret == FALSE) {
-			gpm_warning ("cannot suspend, so trying hibernate");
-			ret = gpm_control_hibernate (manager->priv->control, NULL);
+			gpm_warning ("cannot suspend (error: %s), so trying hibernate", error->message);
+			g_error_free (error);
+			error = NULL;
+			ret = gpm_control_hibernate (manager->priv->control, &error);
 			if (ret == FALSE) {
-				gpm_warning ("cannot suspend or hibernate!");
+				gpm_warning ("cannot suspend or hibernate: %s", error->message);
+				g_error_free (error);
 			}
 		}
 
 	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
 		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_HIBERNATE,
 					_("Hibernating computer"), _("System idle"));
-		ret = gpm_control_hibernate (manager->priv->control, NULL);
+		ret = gpm_control_hibernate (manager->priv->control, &error);
 		if (ret == FALSE) {
-			gpm_warning ("cannot hibernate, so trying suspend");
-			ret = gpm_control_suspend (manager->priv->control, NULL);
+			gpm_warning ("cannot hibernate (error: %s), so trying suspend", error->message);
+			g_error_free (error);
+			error = NULL;
+			ret = gpm_control_suspend (manager->priv->control, &error);
 			if (ret == FALSE) {
-				gpm_warning ("cannot suspend or hibernate!");
+				gpm_warning ("cannot suspend or hibernate: %s", error->message);
+				g_error_free (error);
 			}
 		}
 	}

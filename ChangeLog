@@ -1,3 +1,10 @@
+2007-10-16  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c: (idle_do_sleep):
+	Always pass an error into gpm_control_ functions, else we can't detect
+	if the method failed or if it just timed out.
+	Patch from David Zeuthen, many thanks.
+
 2007-10-13  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c: (gpm_manager_action_suspend),
