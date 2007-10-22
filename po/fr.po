@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-10 23:11+0200\n"
-"PO-Revision-Date: 2007-09-15 14:08+0200\n"
+"POT-Creation-Date: 2007-10-22 16:07+0200\n"
+"PO-Revision-Date: 2007-10-22 15:34+0200\n"
 "Last-Translator: Stéphane Raimbault <stephane.raimbault@gmail.com>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -1363,6 +1363,7 @@ msgstr ""
 "Afficher une icône uniquement si le niveau de la _batterie est critique"
 
 #: ../src/gpm-control.c:279
+#, c-format
 msgid "The message was not sent due to DBUS security rules"
 msgstr "Le message n'a pas été envoyé en raison des règles de sécurité DBUS"
 
@@ -1372,6 +1373,7 @@ msgid "General failure: %s"
 msgstr "Échec général : %s"
 
 #: ../src/gpm-common.c:242
+#, c-format
 msgid "Unknown time"
 msgstr "Durée inconnue"
 
@@ -1415,31 +1417,31 @@ msgstr "Gestionnaire d'énergie pour le bureau GNOME"
 #. only enable this if discharging on UPS
 #: ../src/gpm-engine.c:283
 msgid "Computer is running on backup power\n"
-msgstr "L'ordinateur est branché sur l'alimentation de secours\n"
+msgstr "L'ordinateur est branché sur l'alimentation de secours.\n"
 
 #: ../src/gpm-engine.c:286
 msgid "Computer is running on AC power\n"
-msgstr "L'ordinateur est branché sur le secteur\n"
+msgstr "L'ordinateur est branché sur le secteur.\n"
 
 #: ../src/gpm-engine.c:289
 msgid "Computer is running on battery power\n"
-msgstr "L'ordinateur est branché sur la batterie\n"
+msgstr "L'ordinateur est branché sur la batterie.\n"
 
 #: ../src/gpm-engine.c:307
 msgid "Battery discharge time is currently unknown\n"
-msgstr "Le temps de décharge de la batterie est actuellement inconnu\n"
+msgstr "Le temps de décharge de la batterie est actuellement inconnu.\n"
 
 #: ../src/gpm-engine.c:309
 msgid "Battery charge time is currently unknown\n"
-msgstr "La temps de charge de la batterie est actuellement inconnu\n"
+msgstr "La temps de charge de la batterie est actuellement inconnu.\n"
 
 #: ../src/gpm-engine.c:313
 msgid "Battery discharge time is estimated\n"
-msgstr "Le temps de décharge de la batterie est estimé\n"
+msgstr "Le temps de décharge de la batterie est une estimation.\n"
 
 #: ../src/gpm-engine.c:315
 msgid "Battery charge time is estimated\n"
-msgstr "La temps de charge de la batterie est estimé\n"
+msgstr "La temps de charge de la batterie est une estimation.\n"
 
 #. show a AC icon
 #: ../src/gpm-engine.c:598
@@ -1895,6 +1897,7 @@ msgid "Laptop battery critically low"
 msgstr "le niveau de la batterie du portable est faible"
 
 #: ../src/gpm-manager.c:1423
+#, c-format
 msgid "Plug in your AC adapter to avoid losing data."
 msgstr "Branchez votre adaptateur secteur pour éviter de perdre des données."
 
@@ -2087,6 +2090,7 @@ msgid "Inhibit warning!"
 msgstr "Avertissement d'inhibition !"
 
 #: ../src/gpm-notify.c:440
+#, c-format
 msgid ""
 "Your laptop will not sleep if you shut the lid as it is currently "
 "inhibited.\n"
@@ -2508,15 +2512,3 @@ msgstr "_Mettre en veille"
 #: ../src/gpm-tray-icon.c:585
 msgid "Hi_bernate"
 msgstr "Hi_berner"
-
-#~ msgid "Profiled Charge Time"
-#~ msgstr "Courbe du temps de charge"
-
-#~ msgid "Profiled Charge Accuracy"
-#~ msgstr "Courbe de l'exactitude de la charge"
-
-#~ msgid "Profiled Discharge Time"
-#~ msgstr "Courbe du temps de décharge"
-
-#~ msgid "Profiled Discharge Accuracy"
-#~ msgstr "Courbe de l'exactitude de la décharge"
