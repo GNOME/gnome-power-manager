@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 2.20.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-13 16:41+0200\n"
-"PO-Revision-Date: 2007-10-13 16:44+0200\n"
+"POT-Creation-Date: 2007-10-28 11:48+0100\n"
+"PO-Revision-Date: 2007-10-28 11:50+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -27,7 +27,7 @@ msgid "Adjusts laptop panel brightness."
 msgstr "Justerer lysstyrke for skjerm på bærbare datamaskiner"
 
 #: ../applets/brightness/brightness-applet.c:353
-#: ../applets/inhibit/inhibit-applet.c:338
+#: ../applets/inhibit/inhibit-applet.c:335
 #, c-format
 msgid "Cannot connect to gnome-power-manager"
 msgstr "Kunne ikke koble til gnome-power-manager"
@@ -43,12 +43,12 @@ msgid "LCD brightness : %d%%"
 msgstr "LCD lysstyrke: %d%%"
 
 #: ../applets/brightness/brightness-applet.c:744
-#: ../applets/inhibit/inhibit-applet.c:406 ../src/gpm-tray-icon.c:301
+#: ../applets/inhibit/inhibit-applet.c:401 ../src/gpm-tray-icon.c:301
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Lisensiert under GNU General Public License versjon 2"
 
 #: ../applets/brightness/brightness-applet.c:745
-#: ../applets/inhibit/inhibit-applet.c:407 ../src/gpm-tray-icon.c:302
+#: ../applets/inhibit/inhibit-applet.c:402 ../src/gpm-tray-icon.c:302
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -61,7 +61,7 @@ msgstr ""
 "av lisensen eller valgfri senere versjon."
 
 #: ../applets/brightness/brightness-applet.c:749
-#: ../applets/inhibit/inhibit-applet.c:411 ../src/gpm-tray-icon.c:306
+#: ../applets/inhibit/inhibit-applet.c:406 ../src/gpm-tray-icon.c:306
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -69,17 +69,21 @@ msgid ""
 "GNU General Public License for more details."
 msgstr ""
 "Strømstyring distribueres i håp om at programmet er nyttig, men uten NOEN\n"
-"GARANTI, ikke engang implisitt garanti om at det er SALGBART eller PASSER ET\n"
+"GARANTI, ikke engang implisitt garanti om at det er SALGBART eller PASSER "
+"ET\n"
 "BESTEMT FORMÅL. Se GNU General Public License for detaljer."
 
 #: ../applets/brightness/brightness-applet.c:753
-#: ../applets/inhibit/inhibit-applet.c:415 ../src/gpm-tray-icon.c:310
+#: ../applets/inhibit/inhibit-applet.c:410 ../src/gpm-tray-icon.c:310
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
 "02110-1301, USA."
-msgstr "Du skal ha mottatt en kopi av GNU General Public License sammen med Strømstyring. Hvis dette ikke er tilfelle, kan du skrive til Free Software Foundation, Inc. 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA"
+msgstr ""
+"Du skal ha mottatt en kopi av GNU General Public License sammen med "
+"Strømstyring. Hvis dette ikke er tilfelle, kan du skrive til Free Software "
+"Foundation, Inc. 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA"
 
 #: ../applets/brightness/brightness-applet.c:767
 msgid "Copyright © 2006 Benjamin Canou"
@@ -101,29 +105,29 @@ msgstr "Fabrikk for panelprogram for lysstyrke"
 msgid "Factory for Brightness Applet"
 msgstr "Fabrikk for panelprogram for styring av lysstyrke"
 
-#: ../applets/inhibit/inhibit-applet.c:89
+#: ../applets/inhibit/inhibit-applet.c:90
 msgid "Power Manager Inhibit Applet"
 msgstr "Panelprogram for hindring av strømstyring"
 
-#: ../applets/inhibit/inhibit-applet.c:90
+#: ../applets/inhibit/inhibit-applet.c:91
 msgid "Allows user to inhibit automatic power saving."
 msgstr "Lar brukeren hindre automatisk strømstyring."
 
-#: ../applets/inhibit/inhibit-applet.c:341
+#: ../applets/inhibit/inhibit-applet.c:338
 #, c-format
 msgid "Automatic sleep inhibited"
 msgstr "Automatisk hvilemodus hindret"
 
-#: ../applets/inhibit/inhibit-applet.c:343
+#: ../applets/inhibit/inhibit-applet.c:340
 #, c-format
 msgid "Automatic sleep enabled"
 msgstr "Automatisk hvilemodus aktivert"
 
-#: ../applets/inhibit/inhibit-applet.c:371
+#: ../applets/inhibit/inhibit-applet.c:367
 msgid "Manual inhibit"
 msgstr "Manuell hindring"
 
-#: ../applets/inhibit/inhibit-applet.c:429
+#: ../applets/inhibit/inhibit-applet.c:424
 msgid "Copyright © 2006-2007 Richard Hughes"
 msgstr "Opphavsrett © 2006-2007 Richard Hughes"
 
@@ -423,12 +427,10 @@ msgid ""
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:52
-#, fuzzy
 msgid "Keyboard brightness when on AC"
 msgstr "Skjermens lysstyrke ved tilkoblet nettstrøm"
 
 #: ../data/gnome-power-manager.schemas.in.h:53
-#, fuzzy
 msgid "Keyboard brightness when on battery"
 msgstr "Skjermens lysstyrke ved bruk av batteri"
 
@@ -1534,18 +1536,18 @@ msgstr "Forespørsel om %s"
 msgid "Perform action anyway"
 msgstr "Utfør handling likevel"
 
-#: ../src/gpm-manager.c:312 ../src/gpm-manager.c:338 ../src/gpm-manager.c:367
-#: ../src/gpm-manager.c:393 ../src/gpm-manager.c:428
+#: ../src/gpm-manager.c:312 ../src/gpm-manager.c:338 ../src/gpm-manager.c:372
+#: ../src/gpm-manager.c:398 ../src/gpm-manager.c:438
 msgid "Action forbidden"
 msgstr "Handling forbudt"
 
-#: ../src/gpm-manager.c:313 ../src/gpm-manager.c:368 ../src/gpm-manager.c:429
+#: ../src/gpm-manager.c:313 ../src/gpm-manager.c:373 ../src/gpm-manager.c:439
 msgid "Policy timeout is not valid. Please wait a few seconds and try again."
 msgstr ""
 "Tidsavbrudd for regel er ikke gyldig. Vennligst vent et par sekunder og prøv "
 "igjen."
 
-#: ../src/gpm-manager.c:325 ../src/gpm-manager.c:380
+#: ../src/gpm-manager.c:325 ../src/gpm-manager.c:385
 msgid "Action disallowed"
 msgstr "Handling ikke tillatt"
 
@@ -1561,11 +1563,11 @@ msgstr ""
 msgid "Suspend is not available on this computer."
 msgstr "Hvilemodus er ikke tilgjengelig på denne datamaskinen."
 
-#: ../src/gpm-manager.c:347 ../src/gpm-manager.c:733
+#: ../src/gpm-manager.c:352 ../src/gpm-manager.c:771
 msgid "Suspending computer"
 msgstr "Setter datamaskinen i hvilemodus"
 
-#: ../src/gpm-manager.c:381
+#: ../src/gpm-manager.c:386
 msgid ""
 "Hibernate support has been disabled. Contact your administrator for more "
 "details."
@@ -1573,164 +1575,164 @@ msgstr ""
 "Støtte for dvalemodus er deaktivert. Kontakt systemadministrator for flere "
 "detaljer."
 
-#: ../src/gpm-manager.c:394
+#: ../src/gpm-manager.c:399
 msgid "Hibernate is not available on this computer."
 msgstr "Dvalemodus er ikke tilgjengelig på denne datamaskinen."
 
-#: ../src/gpm-manager.c:402 ../src/gpm-manager.c:745
+#: ../src/gpm-manager.c:412 ../src/gpm-manager.c:786
 msgid "Hibernating computer"
 msgstr "Setter datamaskinen i dvalemodus"
 
-#: ../src/gpm-manager.c:445
+#: ../src/gpm-manager.c:460
 msgid "Doing nothing"
 msgstr "Ikke gjør noe"
 
-#: ../src/gpm-manager.c:458
+#: ../src/gpm-manager.c:473
 msgid "Shutting down computer"
 msgstr "Skrur av datamaskinen"
 
-#: ../src/gpm-manager.c:463
+#: ../src/gpm-manager.c:478
 msgid "GNOME interactive logout"
 msgstr "Interaktiv utlogging for GNOME"
 
-#: ../src/gpm-manager.c:733 ../src/gpm-manager.c:745
+#: ../src/gpm-manager.c:771 ../src/gpm-manager.c:786
 msgid "System idle"
 msgstr "Systemet ledig"
 
-#: ../src/gpm-manager.c:819
+#: ../src/gpm-manager.c:863
 msgid "Power Information"
 msgstr "Informasjon om strøm"
 
-#: ../src/gpm-manager.c:836
+#: ../src/gpm-manager.c:880
 msgid "the power button has been pressed"
 msgstr "av/på-knappen ble trykket på"
 
-#: ../src/gpm-manager.c:848
+#: ../src/gpm-manager.c:892
 msgid "the suspend button has been pressed"
 msgstr "hvilemodus-knappen ble trykket på"
 
-#: ../src/gpm-manager.c:860
+#: ../src/gpm-manager.c:904
 msgid "the hibernate button has been pressed"
 msgstr "dvalemodus-knappen ble trykket på"
 
-#: ../src/gpm-manager.c:891
+#: ../src/gpm-manager.c:935
 msgid "the lid has been closed on ac power"
 msgstr "lokket ble lukket - tilkoblet nettstrøm"
 
-#: ../src/gpm-manager.c:921
+#: ../src/gpm-manager.c:965
 msgid "the lid has been closed on battery power"
 msgstr "lokket ble lukket ved bruk av batteristrøm"
 
 # gconf is okay??
-#: ../src/gpm-manager.c:1010
+#: ../src/gpm-manager.c:1054
 msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
 msgstr "lokket har blit tlukket, strømkabelen fjernet (og gconf har det bra)"
 
-#: ../src/gpm-manager.c:1033
+#: ../src/gpm-manager.c:1077
 msgid "battery is critically low"
 msgstr "batterikapasitet er kritisk lav"
 
-#: ../src/gpm-manager.c:1348
+#: ../src/gpm-manager.c:1392
 msgid "Laptop battery low"
 msgstr "Batteri på bærbar datamaskin har lav strømstyrke"
 
-#: ../src/gpm-manager.c:1350
+#: ../src/gpm-manager.c:1394
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%d%%)"
 msgstr "Du har omtrent <b>%s</b> batteritid igjen (%d%%)"
 
-#: ../src/gpm-manager.c:1353
+#: ../src/gpm-manager.c:1397
 msgid "UPS low"
 msgstr "UPS har lav strømstyrke"
 
-#: ../src/gpm-manager.c:1355
+#: ../src/gpm-manager.c:1399
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS backup power (%d%%)"
 msgstr "Du har omtrent <b>%s</b> batteritid igjen på UPS-strøm (%d%%)"
 
-#: ../src/gpm-manager.c:1358 ../src/gpm-manager.c:1458
+#: ../src/gpm-manager.c:1402 ../src/gpm-manager.c:1502
 msgid "Mouse battery low"
 msgstr "Batteri i mus har lav strømstyrke"
 
-#: ../src/gpm-manager.c:1359
+#: ../src/gpm-manager.c:1403
 #, c-format
 msgid "The wireless mouse attached to this computer is low in power (%d%%)"
 msgstr ""
 "Den trådløse musen som er koblet til denne datamaskinen har lite strøm (%d%%)"
 
-#: ../src/gpm-manager.c:1361 ../src/gpm-manager.c:1463
+#: ../src/gpm-manager.c:1405 ../src/gpm-manager.c:1507
 msgid "Keyboard battery low"
 msgstr "Batteriet i tastaturet har lav strømstyrke"
 
-#: ../src/gpm-manager.c:1362
+#: ../src/gpm-manager.c:1406
 #, c-format
 msgid "The wireless keyboard attached to this computer is low in power (%d%%)"
 msgstr ""
 "Det trådløse tastaturet som er koblet til denne datamaskinen har lav "
 "strømstyrke (%d%%)"
 
-#: ../src/gpm-manager.c:1364 ../src/gpm-manager.c:1468
+#: ../src/gpm-manager.c:1408 ../src/gpm-manager.c:1512
 msgid "PDA battery low"
 msgstr "Batteriet på PDAen har lav strømstyrke"
 
-#: ../src/gpm-manager.c:1365
+#: ../src/gpm-manager.c:1409
 #, c-format
 msgid "The PDA attached to this computer is low in power (%d%%)"
 msgstr "PDAen som er koblet til denne datamaskinen har lite strøm (%d%%)"
 
-#: ../src/gpm-manager.c:1367 ../src/gpm-manager.c:1473
+#: ../src/gpm-manager.c:1411 ../src/gpm-manager.c:1517
 msgid "Cell phone battery low"
 msgstr "Batteri på mobiltelefon har lav strømstyrke"
 
-#: ../src/gpm-manager.c:1368
+#: ../src/gpm-manager.c:1412
 #, c-format
 msgid "The cell phone attached to this computer is low in power (%d%%)"
 msgstr ""
 "Mobiltelefonen som er koblet til denne datamaskinen har lite strøm (%d%%)"
 
-#: ../src/gpm-manager.c:1395
+#: ../src/gpm-manager.c:1439
 msgid "a short time"
 msgstr "en kort stund"
 
-#: ../src/gpm-manager.c:1418 ../src/gpm-manager.c:1504
+#: ../src/gpm-manager.c:1462 ../src/gpm-manager.c:1548
 msgid "Laptop battery critically low"
 msgstr "Batterikapasiteten er kritisk lav"
 
-#: ../src/gpm-manager.c:1431
+#: ../src/gpm-manager.c:1475
 #, c-format
 msgid "Plug in your AC adapter to avoid losing data."
 msgstr "Sett inn strømkabelen for å unngå å tape data."
 
-#: ../src/gpm-manager.c:1434
+#: ../src/gpm-manager.c:1478
 #, c-format
 msgid "This computer will suspend in %s if the AC is not connected."
 msgstr ""
 "Denne datamaskinen vil gå i hvilemodus om %s hvis ikke strømkabelen kobles "
 "til."
 
-#: ../src/gpm-manager.c:1437
+#: ../src/gpm-manager.c:1481
 #, c-format
 msgid "This computer will hibernate in %s if the AC is not connected."
 msgstr ""
 "Denne datamaskinen vil gå i dvalemodus om %s hvis ikke strømkabelen kobles "
 "til."
 
-#: ../src/gpm-manager.c:1440
+#: ../src/gpm-manager.c:1484
 #, c-format
 msgid "This computer will shutdown in %s if the AC is not connected."
 msgstr ""
 "Denne datamaskinen vil slås av om %s hvis ikke strømkabelen kobles til."
 
-#: ../src/gpm-manager.c:1443
+#: ../src/gpm-manager.c:1487
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%d%%). %s"
 msgstr "Du har omtrent <b>%s</b> batteritid igjen (%d%%). %s"
 
-#: ../src/gpm-manager.c:1451 ../src/gpm-manager.c:1536
+#: ../src/gpm-manager.c:1495 ../src/gpm-manager.c:1580
 msgid "UPS critically low"
 msgstr "UPS-kapasitet kritisk lav"
 
-#: ../src/gpm-manager.c:1453
+#: ../src/gpm-manager.c:1497
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore AC "
@@ -1739,7 +1741,7 @@ msgstr ""
 "Du har omtrent <b>%s</b> batteritid igjen på UPS-strøm (%d%%). Gjenopprett "
 "strømtilførsel for datamaskinen for å unngå å tape data."
 
-#: ../src/gpm-manager.c:1459
+#: ../src/gpm-manager.c:1503
 #, c-format
 msgid ""
 "The wireless mouse attached to this computer is very low in power (%d%%). "
@@ -1748,7 +1750,7 @@ msgstr ""
 "Den trådløse musen som er koblet til denne datamaskinen har lite strøm (%d%"
 "%). Denne enheten vil snart slutte å fungere hvis den ikke blir ladet."
 
-#: ../src/gpm-manager.c:1464
+#: ../src/gpm-manager.c:1508
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is very low in power (%d%%). "
@@ -1757,7 +1759,7 @@ msgstr ""
 "Det trådløse tastaturet som er koblet til denne datamaskinen har lite strøm "
 "(%d%%). Denne enheten vil snart slutte å fungere hvis den ikke blir ladet."
 
-#: ../src/gpm-manager.c:1469
+#: ../src/gpm-manager.c:1513
 #, c-format
 msgid ""
 "The PDA attached to this computer is very low in power (%d%%). This device "
@@ -1766,7 +1768,7 @@ msgstr ""
 "PDAen som er koblet til denne datamaskinen har lite strøm (%d%%). Denne "
 "enheten vil snart slutte å fungere hvis den ikke blir ladet."
 
-#: ../src/gpm-manager.c:1474
+#: ../src/gpm-manager.c:1518
 #, c-format
 msgid ""
 "Your cell phone is very low in power (%d%%). This device will soon stop "
@@ -1775,7 +1777,7 @@ msgstr ""
 "Mobiltelefonen som er koblet til denne datamaskinen har lite strøm (%d%%). "
 "Denne enheten vil snart slutte å fungere hvis den ikke blir ladet."
 
-#: ../src/gpm-manager.c:1511
+#: ../src/gpm-manager.c:1555
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
@@ -1783,7 +1785,7 @@ msgstr ""
 "Batterinivået er kritisk, og datamaskinen vil <b>slå seg av</b> når "
 "batteriet er tomt."
 
-#: ../src/gpm-manager.c:1516
+#: ../src/gpm-manager.c:1560
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1793,19 +1795,19 @@ msgstr ""
 "<br><b>MERK:</b> Du trenger noe strøm selv når datamaskinen kjører i "
 "hvilemodus."
 
-#: ../src/gpm-manager.c:1522
+#: ../src/gpm-manager.c:1566
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr "Batterinivået er kritisk, og datamaskinen er i ferd med å gå i dvale."
 
-#: ../src/gpm-manager.c:1526
+#: ../src/gpm-manager.c:1570
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr "Batterinivået er kritisk, og datamaskinen er i ferd med å skru seg av."
 
-#: ../src/gpm-manager.c:1543
+#: ../src/gpm-manager.c:1587
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
@@ -1813,23 +1815,23 @@ msgstr ""
 "UPSen er under kritisk nivå og datamaskinen vil <b>slå seg av</b> når UPSen "
 "er tom."
 
-#: ../src/gpm-manager.c:1548
+#: ../src/gpm-manager.c:1592
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr ""
 "UPSen er under kritisk nivå og datamaskinen er i ferd med å gå i dvalemodus."
 
-#: ../src/gpm-manager.c:1552
+#: ../src/gpm-manager.c:1596
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr ""
 "UPSen er under kritisk nivå og datamaskinen er i ferd med å slå seg av."
 
-#: ../src/gpm-manager.c:1658
+#: ../src/gpm-manager.c:1702
 msgid "Install problem!"
 msgstr "Problem med installasjonen!"
 
-#: ../src/gpm-manager.c:1659
+#: ../src/gpm-manager.c:1703
 msgid ""
 "The configuration defaults for GNOME Power Manager have not been installed "
 "correctly.\n"
@@ -1890,8 +1892,10 @@ msgid ""
 "inhibited.\n"
 "Some laptops can overheat if they do not sleep when the lid is closed."
 msgstr ""
-"Din bærbare datamaskin vil ikke gå i hvilemodus når du lukke lokket da dette hindres av systemet.\n"
-"Noen bærbare datamaskiner kan bli overopphetet hvis de ikke går i hvilemodus når lokket lukkes."
+"Din bærbare datamaskin vil ikke gå i hvilemodus når du lukke lokket da dette "
+"hindres av systemet.\n"
+"Noen bærbare datamaskiner kan bli overopphetet hvis de ikke går i hvilemodus "
+"når lokket lukkes."
 
 #: ../src/gpm-notify.c:473
 msgid "Battery Charged"
