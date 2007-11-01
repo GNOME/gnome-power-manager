@@ -231,8 +231,6 @@ gnome_power_self_test_SOURCES =				\
 	gpm-control.c					\
 	gpm-self-test.c					\
 	gpm-self-test.h					\
-	gpm-webcam.h					\
-	gpm-webcam.c					\
 	gpm-networkmanager.h				\
 	gpm-networkmanager.c				\
 	gpm-dpms.h					\
