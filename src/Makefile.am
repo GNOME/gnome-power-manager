@@ -123,8 +123,6 @@ gnome_power_preferences_LDADD +=			\
 endif
 
 gnome_power_manager_SOURCES =				\
-	gpm-webcam.h					\
-	gpm-webcam.c					\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
 	gpm-debug.h					\

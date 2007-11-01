@@ -1,3 +1,17 @@
+2007-11-01  Richard Hughes  <richard@hughsie.com>
+
+	* docs/dbus-interface.html:
+	* src/Makefile.am:
+	* src/gpm-light-sensor.c: (gpm_light_sensor_get_absolute),
+	(gpm_light_sensor_calibrate), (gpm_light_sensor_get_relative),
+	(gpm_light_sensor_finalize), (gpm_light_sensor_has_hw),
+	(gpm_light_sensor_poll_cb), (gpm_light_sensor_init):
+	* src/gpm-self-test.c: (main):
+	* src/gpm-webcam.c:
+	* src/gpm-webcam.h:
+	Rip out GpmWebcam - it's pretty crack, and I'm getting some odd
+	bugreports about flashing webcam lights and brightness levels changing.
+
 2007-10-16  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c: (idle_do_sleep):

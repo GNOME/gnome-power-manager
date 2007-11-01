@@ -202,7 +202,6 @@ main (int argc, char **argv)
 
 	/* manual */
 	gpm_st_run_test (test, gpm_st_graph_widget);
-//	gpm_st_run_test (test, gpm_st_webcam);
 
 #if 0
 	gpm_st_run_test (test, gpm_st_proxy);

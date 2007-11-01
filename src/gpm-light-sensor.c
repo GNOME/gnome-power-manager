@@ -47,7 +47,6 @@
 #include "gpm-light-sensor.h"
 #include "gpm-conf.h"
 #include "gpm-marshal.h"
-#include "gpm-webcam.h"
 
 #define GPM_LIGHT_SENSOR_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_LIGHT_SENSOR, GpmLightSensorPrivate))
 
@@ -59,9 +58,7 @@ struct GpmLightSensorPrivate
 	gfloat			 calibration_abs;
 	gchar			*udi;
 	gboolean		 has_sensor;
-	gboolean		 has_webcam;
 	DbusProxy		*gproxy;
-	GpmWebcam		*webcam;
 };
 
 enum {
@@ -145,7 +142,7 @@ gpm_light_sensor_get_absolute (GpmLightSensor *sensor,
 	g_return_val_if_fail (sensor != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_LIGHT_SENSOR (sensor), FALSE);
 
-	if (sensor->priv->has_sensor == FALSE && sensor->priv->has_webcam == FALSE) {
+	if (sensor->priv->has_sensor == FALSE) {
 		gpm_warning ("no hardware!");
 		return FALSE;
 	}
@@ -169,7 +166,7 @@ gpm_light_sensor_calibrate (GpmLightSensor *sensor)
 	g_return_val_if_fail (sensor != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_LIGHT_SENSOR (sensor), FALSE);
 
-	if (sensor->priv->has_sensor == FALSE && sensor->priv->has_webcam == FALSE) {
+	if (sensor->priv->has_sensor == FALSE) {
 		gpm_warning ("no hardware!");
 		return FALSE;
 	}
@@ -195,7 +192,7 @@ gpm_light_sensor_get_relative (GpmLightSensor *sensor,
 	g_return_val_if_fail (sensor != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_LIGHT_SENSOR (sensor), FALSE);
 
-	if (sensor->priv->has_sensor == FALSE && sensor->priv->has_webcam == FALSE) {
+	if (sensor->priv->has_sensor == FALSE) {
 		gpm_warning ("no hardware!");
 		return FALSE;
 	}
@@ -241,9 +238,6 @@ gpm_light_sensor_finalize (GObject *object)
 	if (sensor->priv->gproxy != NULL) {
 		g_object_unref (sensor->priv->gproxy);
 	}
-	if (sensor->priv->webcam != NULL) {
-		g_object_unref (sensor->priv->webcam);
-	}
 
 	g_return_if_fail (sensor->priv != NULL);
 	G_OBJECT_CLASS (gpm_light_sensor_parent_class)->finalize (object);
@@ -284,9 +278,6 @@ gpm_light_sensor_has_hw (GpmLightSensor *sensor)
 	if (sensor->priv->has_sensor) {
 		return TRUE;
 	}
-	if (sensor->priv->has_webcam) {
-		return TRUE;
-	}
 	return FALSE;
 }
 
@@ -323,18 +314,6 @@ gpm_light_sensor_poll_cb (gpointer userdata)
 			gpm_light_sensor_get_absolute (sensor, &new);
 			gpm_debug ("brightness = %i, %i", sensor->priv->current_hw, new);
 			g_signal_emit (sensor, signals [SENSOR_CHANGED], 0, new);
-		}
-	}
-	if (sensor->priv->has_webcam == TRUE) {
-		/* open device, and get new reading SLOW */
-		ret = gpm_webcam_get_brightness (sensor->priv->webcam, &bright);
-
-		/* this could fail if the user is going ekiga or something */
-		if (ret == TRUE) {
-			sensor->priv->current_hw = bright * 100;
-			//need to do uwme
-			gpm_debug ("brightness = %f, %i", bright, sensor->priv->current_hw);
-			g_signal_emit (sensor, signals [SENSOR_CHANGED], 0, sensor->priv->current_hw);
 		}
 	}
 
@@ -375,7 +354,6 @@ gpm_light_sensor_init (GpmLightSensor *sensor)
 	sensor->priv->udi = NULL;
 	sensor->priv->gproxy = NULL;
 	sensor->priv->udi = NULL;
-	sensor->priv->webcam = NULL;
 	sensor->priv->calibration_abs = 0.0f;
 
 	sensor->priv->conf = gpm_conf_new ();
@@ -394,12 +372,6 @@ gpm_light_sensor_init (GpmLightSensor *sensor)
 		sensor->priv->has_sensor = TRUE;
 	}
 	hal_gmanager_free_capability (names);
-
-	/* look for v4l integrated webcam if no sensor */
-	if (sensor->priv->has_sensor == FALSE /* && usewebcam == TRUE */) {
-		sensor->priv->webcam = gpm_webcam_new ();
-		sensor->priv->has_webcam = gpm_webcam_get_brightness (sensor->priv->webcam, &bright);
-	}
 
 	/* connect to the devices */
 	if (sensor->priv->has_sensor == TRUE) {
@@ -422,13 +394,9 @@ gpm_light_sensor_init (GpmLightSensor *sensor)
 		/* this changes under our feet */
 		gpm_light_sensor_get_hw (sensor);
 	}
-	if (sensor->priv->has_webcam == TRUE) {
-		gpm_debug ("Using v4l backup device");
-		sensor->priv->current_hw = bright * 100;
-	}
 
 	/* do we have a info source? */
-	if (sensor->priv->has_sensor == TRUE || sensor->priv->has_webcam == TRUE) {
+	if (sensor->priv->has_sensor == TRUE) {
 		gpm_debug ("current brightness is %i%%", sensor->priv->current_hw);
 
 		/* get poll timeout */
