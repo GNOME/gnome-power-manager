@@ -1001,8 +1001,10 @@ prefs_setup_battery (GpmPrefs *prefs)
 				      GPM_CONF_TIMEOUT_SLEEP_COMPUTER_BATT);
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_battery_display",
 				      GPM_CONF_TIMEOUT_SLEEP_DISPLAY_BATT);
-	gpm_prefs_setup_brightness_slider (prefs, "hscale_battery_brightness",
-					   GPM_CONF_BACKLIGHT_BRIGHTNESS_BATT);
+
+	/* set up the battery reduce checkbox */
+	gpm_prefs_setup_checkbox (prefs, "checkbutton_battery_display_dim",
+	  			  GPM_CONF_BACKLIGHT_BATTERY_REDUCE);
 
 	gpm_prefs_setup_checkbox (prefs, "checkbutton_battery_display_dim",
 				  GPM_CONF_BACKLIGHT_IDLE_DIM_BATT);

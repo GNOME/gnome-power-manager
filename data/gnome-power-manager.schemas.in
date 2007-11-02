@@ -153,6 +153,18 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/backlight/battery_reduce</key>
+      <applyto>/apps/gnome-power-manager/backlight/battery_reduce</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Reduce the backlight brightness when on battery power</short>
+        <long>If the screen should be reduced in brightness when the computer is on battery power.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/backlight/idle_brightness</key>
       <applyto>/apps/gnome-power-manager/backlight/idle_brightness</applyto>
       <owner>gnome-power-manager</owner>

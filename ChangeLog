@@ -1,5 +1,16 @@
 2007-11-02  Richard Hughes  <richard@hughsie.com>
 
+	* data/gnome-power-manager.schemas.in:
+	* data/gpm-prefs.glade:
+	* src/gpm-backlight.c: (gpm_backlight_brightness_evaluate_and_set):
+	* src/gpm-conf.h:
+	* src/gpm-prefs-core.c: (prefs_setup_battery):
+	Don't have a slider for brightness reduction on battery - it confuses
+	too many people. Switch to a checkbox and leave gconf for power users
+	to tweak this if they want. Fixes #489176
+
+2007-11-02  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-cell-array.c: (phone_device_removed_cb):
 	Check to see if we have a gnome-phone-manager device before we unref
 	it - I've a sneaking suspicion gnome-phone-manager is telling us

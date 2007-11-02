@@ -354,6 +354,7 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	gboolean on_ac;
 	gboolean do_laptop_lcd;
 	gboolean enable_action;
+	gboolean battery_reduce;
 	guint value;
 	guint old_value;
 
@@ -376,8 +377,9 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	/* get AC status */
 	on_ac = gpm_ac_adapter_is_present (backlight->priv->ac_adapter);
 
-	/* reduce if on battery power */
-	if (on_ac == FALSE) {
+	/* reduce if on battery power if we should */
+	gpm_conf_get_bool (backlight->priv->conf, GPM_CONF_BACKLIGHT_BATTERY_REDUCE, &battery_reduce);
+	if (on_ac == FALSE && battery_reduce == TRUE) {
 		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BACKLIGHT_BRIGHTNESS_BATT, &value);
 		scale = (100 - value) / 100.0f;
 		brightness *= scale;

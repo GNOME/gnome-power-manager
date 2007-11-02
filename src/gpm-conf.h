@@ -56,6 +56,7 @@ G_BEGIN_DECLS
 
 /* backlight stuff */
 #define GPM_CONF_BACKLIGHT_ENABLE		GPM_CONF_DIR "/backlight/enable"
+#define GPM_CONF_BACKLIGHT_BATTERY_REDUCE	GPM_CONF_DIR "/backlight/battery_reduce"
 #define GPM_CONF_BACKLIGHT_DPMS_METHOD_AC	GPM_CONF_DIR "/backlight/dpms_method_ac"
 #define GPM_CONF_BACKLIGHT_DPMS_METHOD_BATT	GPM_CONF_DIR "/backlight/dpms_method_battery"
 #define GPM_CONF_BACKLIGHT_IDLE_BRIGHTNESS	GPM_CONF_DIR "/backlight/idle_brightness"
