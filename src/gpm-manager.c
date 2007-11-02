@@ -304,6 +304,7 @@ static gboolean
 gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 {
 	gboolean allowed;
+	GError *error = NULL;
 
 	if (gpm_control_is_policy_timout_valid (manager->priv->control) == FALSE) {
 		/* error msg timeout not valid */
@@ -342,9 +343,17 @@ gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 		return FALSE;
 	}
 
+	/* check to see if we are inhibited */
+	if (gpm_manager_is_inhibit_valid (manager, FALSE, "suspend") == FALSE) {
+		return FALSE;
+	}
+
 	gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
 				_("Suspending computer"), reason);
-	gpm_control_suspend (manager->priv->control, NULL);
+	gpm_control_suspend (manager->priv->control, &error);
+	if (error != NULL) {
+		g_error_free (error);
+	}
 	return TRUE;
 }
 
@@ -355,6 +364,7 @@ static gboolean
 gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 {
 	gboolean allowed;
+	GError *error = NULL;
 
 	if (gpm_control_is_policy_timout_valid (manager->priv->control) == FALSE) {
 		/* error msg timeout not valid */
@@ -393,9 +403,17 @@ gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 		return FALSE;
 	}
 
+	/* check to see if we are inhibited */
+	if (gpm_manager_is_inhibit_valid (manager, FALSE, "hibernate") == FALSE) {
+		return FALSE;
+	}
+
 	gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
 				_("Hibernating computer"), reason);
-	gpm_control_hibernate (manager->priv->control, NULL);
+	gpm_control_hibernate (manager->priv->control, &error);
+	if (error != NULL) {
+		g_error_free (error);
+	}
 	return TRUE;
 }
 
@@ -422,6 +440,11 @@ manager_policy_do (GpmManager  *manager,
 				    GPM_NOTIFY_TIMEOUT_SHORT,
 				    GPM_STOCK_APP_ICON,
 				    GPM_NOTIFY_URGENCY_NORMAL);
+		return FALSE;
+	}
+
+	/* are we inhibited? */
+	if (gpm_manager_is_inhibit_valid (manager, FALSE, "policy action") == FALSE) {
 		return FALSE;
 	}
 
@@ -492,6 +515,11 @@ gpm_manager_suspend (GpmManager *manager,
 		return FALSE;
 	}
 
+	/* check to see if we are inhibited */
+	if (gpm_manager_is_inhibit_valid (manager, FALSE, "hibernate") == FALSE) {
+		return FALSE;
+	}
+
 	return gpm_control_suspend (manager->priv->control, error);
 }
 
@@ -523,6 +551,11 @@ gpm_manager_hibernate (GpmManager *manager,
 		return FALSE;
 	}
 
+	/* check to see if we are inhibited */
+	if (gpm_manager_is_inhibit_valid (manager, FALSE, "hibernate") == FALSE) {
+		return FALSE;
+	}
+
 	return gpm_control_hibernate (manager->priv->control, error);
 }
 
@@ -537,6 +570,12 @@ gpm_manager_reboot (GpmManager *manager,
 {
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
+
+	/* check to see if we are inhibited */
+	if (gpm_manager_is_inhibit_valid (manager, FALSE, "reboot") == FALSE) {
+		return FALSE;
+	}
+
 	return gpm_control_reboot (manager->priv->control, error);
 }
 
@@ -551,6 +590,12 @@ gpm_manager_shutdown (GpmManager *manager,
 {
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
+
+	/* check to see if we are inhibited */
+	if (gpm_manager_is_inhibit_valid (manager, FALSE, "shutdown") == FALSE) {
+		return FALSE;
+	}
+
 	return gpm_control_shutdown (manager->priv->control, error);
 }
 
@@ -702,6 +747,7 @@ idle_do_sleep (GpmManager *manager)
 	gboolean on_ac;
 	gchar *action = NULL;
 	gboolean ret;
+	GError *error = NULL;
 
 	/* find if we are on AC power */
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
@@ -723,24 +769,30 @@ idle_do_sleep (GpmManager *manager)
 	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
 		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
 					_("Suspending computer"), _("System idle"));
-		ret = gpm_control_suspend (manager->priv->control, NULL);
+		ret = gpm_control_suspend (manager->priv->control, &error);
 		if (ret == FALSE) {
-			gpm_warning ("cannot suspend, so trying hibernate");
-			ret = gpm_control_hibernate (manager->priv->control, NULL);
+			gpm_warning ("cannot suspend (error: %s), so trying hibernate", error->message);
+			g_error_free (error);
+			error = NULL;
+			ret = gpm_control_hibernate (manager->priv->control, &error);
 			if (ret == FALSE) {
-				gpm_warning ("cannot suspend or hibernate!");
+				gpm_warning ("cannot suspend or hibernate: %s", error->message);
+				g_error_free (error);
 			}
 		}
 
 	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
 		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_HIBERNATE,
 					_("Hibernating computer"), _("System idle"));
-		ret = gpm_control_hibernate (manager->priv->control, NULL);
+		ret = gpm_control_hibernate (manager->priv->control, &error);
 		if (ret == FALSE) {
-			gpm_warning ("cannot hibernate, so trying suspend");
-			ret = gpm_control_suspend (manager->priv->control, NULL);
+			gpm_warning ("cannot hibernate (error: %s), so trying suspend", error->message);
+			g_error_free (error);
+			error = NULL;
+			ret = gpm_control_suspend (manager->priv->control, &error);
 			if (ret == FALSE) {
-				gpm_warning ("cannot suspend or hibernate!");
+				gpm_warning ("cannot suspend or hibernate: %s", error->message);
+				g_error_free (error);
 			}
 		}
 	}
@@ -787,7 +839,7 @@ idle_changed_cb (GpmIdle    *idle,
 		if (gpm_control_is_policy_timout_valid (manager->priv->control) == FALSE) {
 			return;
 		}
-		if (! gpm_manager_is_inhibit_valid (manager, FALSE, "timeout action")) {
+		if (gpm_manager_is_inhibit_valid (manager, FALSE, "timeout action") == FALSE) {
 			return;
 		}
 		idle_do_sleep (manager);
