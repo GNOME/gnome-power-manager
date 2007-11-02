@@ -1187,6 +1187,10 @@ phone_device_removed_cb (GpmPhone     *phone,
 	GpmCellUnit *unit;
 
 	unit = &(cell_array->priv->unit);
+	if (unit == NULL) {
+		gpm_warning ("unit was NULL!");
+		return;
+	}
 
 	/* ignore non-phones */
 	if (unit->kind != GPM_CELL_UNIT_KIND_PHONE) {
@@ -1195,6 +1199,10 @@ phone_device_removed_cb (GpmPhone     *phone,
 
 	/* we unref as the device has gone away (only support one phone) */
 	cell = (GpmCell *) g_ptr_array_index (cell_array->priv->array, 0);
+	if (cell == NULL) {
+		gpm_warning ("cell was NULL - gnome-phone-manager is playing with us!");
+		return;
+	}
 	g_object_unref (cell);
 
 	/* remove from the devicestore */

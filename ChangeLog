@@ -1,3 +1,11 @@
+2007-11-02  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-cell-array.c: (phone_device_removed_cb):
+	Check to see if we have a gnome-phone-manager device before we unref
+	it - I've a sneaking suspicion gnome-phone-manager is telling us
+	Remove before Added at session start, although we certainly shouldn't
+	crash out in this case. Hopefully fixes #484516
+
 2007-10-16  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c: (idle_do_sleep):
