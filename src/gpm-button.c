@@ -77,26 +77,29 @@ gpm_button_filter_x_events (GdkXEvent *xevent,
 	gchar *hashkey;
 	gchar *key;
 
+	if (xev->type != KeyPress) {
+		return GDK_FILTER_CONTINUE;
+	}
+
 	keycode = xev->xkey.keycode;
 	state = xev->xkey.state;
 
-	if (xev->type != KeyPress) {
-		hashkey = g_strdup_printf ("key_%x_%x", state, keycode);
+	hashkey = g_strdup_printf ("key_%x_%x", state, keycode);
 
-		/* is the key string already in our DB? */
-		key = g_hash_table_lookup (button->priv->hash_to_hal, hashkey);
-		if (key == NULL) {
-			gpm_warning ("Key '%s' not found in hash!", hashkey);
-		} else {
-			gpm_debug ("Key '%s' mapped to HAL key %s", hashkey, key);
-			g_signal_emit (button, signals [BUTTON_PRESSED], 0, key);
-		}
-
+	/* is the key string already in our DB? */
+	key = g_hash_table_lookup (button->priv->hash_to_hal, hashkey);
+	if (key == NULL) {
+		gpm_debug ("Key '%s' not found in hash", hashkey);
+		/* pass normal keypresses on, which might help with accessibility access */
 		g_free (hashkey);
-		return GDK_FILTER_REMOVE;
+		return GDK_FILTER_CONTINUE;
 	}
 
-	return GDK_FILTER_CONTINUE;
+	gpm_debug ("Key '%s' mapped to HAL key %s", hashkey, key);
+	g_signal_emit (button, signals [BUTTON_PRESSED], 0, key);
+
+	g_free (hashkey);
+	return GDK_FILTER_REMOVE;
 }
 
 /**
