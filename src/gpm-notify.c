@@ -436,9 +436,9 @@ gpm_notify_inhibit_lid (GpmNotify *notify)
 	gchar *msg;
 	const gchar *title;
 
-	title = _("Inhibit warning!");
+	title = _("Sleep warning");
 	msg = g_strdup_printf (_("Your laptop will not sleep if you shut the "
-				 "lid as it is currently inhibited.\n"
+				 "lid as a running program has prevented this.\n"
 				 "Some laptops can overheat if they do not sleep "
 				 "when the lid is closed."));
 
