@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD.es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-02 18:55+0000\n"
-"PO-Revision-Date: 2007-11-03 13:14+0100\n"
+"POT-Creation-Date: 2007-11-09 09:30+0000\n"
+"PO-Revision-Date: 2007-11-12 15:12+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -195,7 +195,9 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:8
 msgid "Dim the screen after a period of inactivity when on battery power"
-msgstr "Atenuar la pantalla tras un período de inactividad cuando se esté usando la batería"
+msgstr ""
+"Atenuar la pantalla tras un período de inactividad cuando se esté usando la "
+"batería"
 
 #: ../data/gnome-power-manager.schemas.in.h:9
 msgid ""
@@ -780,8 +782,8 @@ msgid ""
 "The brightness of the keyboard when on battery power. Possible values are "
 "between 0 and 100."
 msgstr ""
-"El brillo del teclado cuando se esté usando la batería. Los valores "
-"válidos están entre 0 y 100."
+"El brillo del teclado cuando se esté usando la batería. Los valores válidos "
+"están entre 0 y 100."
 
 #: ../data/gnome-power-manager.schemas.in.h:102
 msgid "The brightness of the screen when idle"
@@ -809,9 +811,7 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:106
 msgid "The cpufreq performance value to use when on battery power"
-msgstr ""
-"El valor de rendimiento de cpufrec que usar cuando se esté usando la "
-"batería"
+msgstr "El valor de rendimiento de cpufrec que usar cuando se esté usando la batería"
 
 #: ../data/gnome-power-manager.schemas.in.h:107
 msgid "The cpufreq performance value used to scale the processor when on AC power."
@@ -824,8 +824,8 @@ msgid ""
 "The cpufreq performance value used to scale the processor when on battery "
 "power."
 msgstr ""
-"El valor de rendimiento de cpufrec usado para escalar el procesador cuando se esté usando la "
-"batería."
+"El valor de rendimiento de cpufrec usado para escalar el procesador cuando "
+"se esté usando la batería."
 
 #: ../data/gnome-power-manager.schemas.in.h:109
 msgid "The cpufreq policy to use when on AC power"
@@ -853,10 +853,11 @@ msgid ""
 "Possible values are ondemand, conservative, powersave, userspace, "
 "performance, nothing."
 msgstr ""
-"La política de cpufreq usada para escalar el procesador cuando se esté usando la "
-"batería. Los valores posibles son \"ondemand\" (por demanda), \"conservative"
-"\" (conservativo), \"powersave\" (ahorro de energía), \"userspace\" (espacio "
-"de usuario), \"performance\" (rendimiento) y \"nothing\" (ninguna)."
+"La política de cpufreq usada para escalar el procesador cuando se esté "
+"usando la batería. Los valores posibles son \"ondemand\" (por demanda), "
+"\"conservative\" (conservativo), \"powersave\" (ahorro de energía), "
+"\"userspace\" (espacio de usuario), \"performance\" (rendimiento) y \"nothing"
+"\" (ninguna)."
 
 #: ../data/gnome-power-manager.schemas.in.h:113
 msgid "The default amount of time to dim the screen after idle"
@@ -2047,19 +2048,18 @@ msgstr ""
 "ser vieja o estar defectuosa."
 
 #: ../src/gpm-notify.c:439
-msgid "Inhibit warning!"
-msgstr "Advertencia de inhibición"
+msgid "Sleep warning"
+msgstr "Aviso de paso a reposo"
 
 #: ../src/gpm-notify.c:440
 msgid ""
-"Your laptop will not sleep if you shut the lid as it is currently "
-"inhibited.\n"
+"Your laptop will not sleep if you shut the lid as a running program has "
+"prevented this.\n"
 "Some laptops can overheat if they do not sleep when the lid is closed."
 msgstr ""
-"Su portátil no pasará a reposo si cierra la tapa ya que actualmente está "
-"inhibida.\n"
-"Algunos portátiles pueden recalentarse si no pasan a reposo cuando se cierra "
-"la tapa."
+"Su portátil no pasará a reposo si cierra la tapa ya que un programa en ejecución "
+"no lo permitirá.\n"
+"Algunos portátiles pueden recalentarse si no pasan a reposo cuando se cierra la tapa."
 
 #: ../src/gpm-notify.c:473
 msgid "Battery Charged"
