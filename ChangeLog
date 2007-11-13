@@ -1,3 +1,17 @@
+2007-11-09  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-button.c: (gpm_button_filter_x_events),
+	(gpm_button_grab_keystring), (gpm_button_button_key):
+	Properly process the GdkXEvent so we don't hide the GtkStatusIcon
+	when we compile with --enable-xevents.
+	The bug of icon not appearing happened because addition of
+	notification-area-applet generates an X Event for notification-manager
+	ownership change, and the bug in gpm_button_filter_x_events didn't allow
+	gtktrayicon-x11.c to see the event due to the propagation stopping from
+	GDK_FILTER_REMOVE being returned on all non-keypresses.
+	This is a slightly modied patch from Mart Raudsepp, many thanks.
+	Fixes #413360
+
 2007-11-02  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-cell-array.c: (phone_device_removed_cb):
