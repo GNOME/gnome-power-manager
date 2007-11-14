@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Gnome Power Manager HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-08-21 22:19+0100\n"
-"PO-Revision-Date: 2007-11-01 07:14+0200\n"
+"PO-Revision-Date: 2007-11-14 21:50+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -307,15 +307,15 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:29
 msgid "If the low-power mode should be enabled when on AC"
-msgstr ""
+msgstr "Kas madala täituvuse režiim peab võrgutoite korral olema lubatud"
 
 #: ../data/gnome-power-manager.schemas.in.h:30
 msgid "If the low-power mode should be enabled when on UPS"
-msgstr ""
+msgstr "Kas madala täituvuse režiim peab UPS-itoite korral olema lubatud"
 
 #: ../data/gnome-power-manager.schemas.in.h:31
 msgid "If the low-power mode should be enabled when on battery"
-msgstr ""
+msgstr "Kas madala täituvuse režiim peab akutoite korral olema lubatud"
 
 #: ../data/gnome-power-manager.schemas.in.h:32
 msgid ""
@@ -352,15 +352,18 @@ msgstr ""
 #: ../data/gnome-power-manager.schemas.in.h:37
 msgid "If the system low-power mode should be enabled when on AC power."
 msgstr ""
+"Kas süsteemne madala täituvuse režiim peab võrgutoite korral olema lubatud"
 
 #: ../data/gnome-power-manager.schemas.in.h:38
 msgid "If the system low-power mode should be enabled when on UPS power."
 msgstr ""
+"Kas süsteemne madala täituvuse režiim peab UPS-itoite korral olema lubatud"
 
 #: ../data/gnome-power-manager.schemas.in.h:39
 msgid ""
 "If the system low-power mode should be enabled when on laptop battery power."
 msgstr ""
+"Kas süsteemne madala täituvuse režiim peab akutoite korral olema lubatud"
 
 #: ../data/gnome-power-manager.schemas.in.h:40
 msgid "If the user is authorized to hibernate the computer."
@@ -392,21 +395,26 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:46
 msgid "If we should show the low capacity warning for a broken battery"
-msgstr ""
+msgstr "Kas vigase aku korral tuleb anda madala täituvuse hoiatust"
 
 #: ../data/gnome-power-manager.schemas.in.h:47
 msgid "If we should show the low capacity warning for a broken battery."
-msgstr ""
+msgstr "Kas vigase aku korral tuleb anda madala täituvuse hoiatust."
 
 #: ../data/gnome-power-manager.schemas.in.h:48
 msgid "If we should show the recalled battery warning for a broken battery"
 msgstr ""
+"Kas ümbervahetamiseks tagasi kutsutud aku korral tuleb anda madala täituvuse "
+"hoiatust."
 
 #: ../data/gnome-power-manager.schemas.in.h:49
 msgid ""
 "If we should show the recalled battery warning for a broken battery. Set "
 "this to false only if you know your battery is okay."
 msgstr ""
+"Kas ümbervahetamiseks tagasi kutsutud aku korral tuleb anda madala täituvuse "
+"hoiatust. Kui sa tead, et akul pole midagi viga, siis nulli selle võtme "
+"väärtus."
 
 #: ../data/gnome-power-manager.schemas.in.h:50
 msgid ""
@@ -1832,6 +1840,8 @@ msgid ""
 "Your battery has a very low capacity (%i%%), which means that it may be old "
 "or broken."
 msgstr ""
+"Sinu arvuti aku mahtuvus on väga väike (%i%%), mis tähendab, se see võib "
+"olla vana või vigane."
 
 #: ../src/gpm-notify.c:439
 msgid "Inhibit warning!"
