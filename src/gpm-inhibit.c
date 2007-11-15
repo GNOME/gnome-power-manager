@@ -365,16 +365,62 @@ gpm_inhibit_get_message (GpmInhibit  *inhibit,
 
 	if (g_slist_length (inhibit->priv->list) == 1) {
 		data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list, 0);
-		g_string_append_printf (message, "<b>%s</b> ",
-					data->application);
-		g_string_append_printf (message, _("has stopped the %s from "
-						   "taking place : "),
-					action);
-		g_string_append_printf (message, "<i>%s</i>.",
-					data->reason);
-	} else {
-		g_string_append_printf (message, _("Multiple applications have stopped the "
-					"%s from taking place."), action);
+		gchar *boldstr = g_strdup_printf ("<b>%s</b>", data->application);
+		gchar *italicstr = g_strdup_printf ("<b>%s</b>", data->reason);
+		
+		if (strcmp (action, "suspend") == 0) {
+			/*Translators: first %s is an application name, second %s is the reason*/
+			g_string_append_printf (message, _("%s has stopped the suspend from taking place: %s."),
+				boldstr, italicstr);
+
+		} else if (strcmp (action, "hibernate") == 0) {
+			/*Translators: first %s is an application name, second %s is the reason*/
+			g_string_append_printf (message, _("%s has stopped the hibernate from taking place: %s."),
+					boldstr, italicstr); 
+
+		} else if (strcmp (action, "policy action") == 0) {
+			/*Translators: first %s is an application name, second %s is the reason*/
+			g_string_append_printf (message, _("%s has stopped the policy action from taking place: %s."),
+					boldstr, italicstr); 
+
+		} else if (strcmp (action, "reboot") == 0) {
+			/*Translators: first %s is an application name, second %s is the reason*/
+			g_string_append_printf (message, _("%s has stopped the reboot from taking place: %s."),
+					boldstr, italicstr); 
+
+		} else if (strcmp (action, "shutdown") == 0) {
+			/*Translators: first %s is an application name, second %s is the reason*/
+			g_string_append_printf (message, _("%s has stopped the shutdown from taking place: %s."),
+				boldstr, italicstr); 
+
+		} else if (strcmp (action, "timeout action") == 0) {
+			/*Translators: first %s is an application name, second %s is the reason*/
+			g_string_append_printf (message, _("%s has stopped the timeout action from taking place: %s."),
+				boldstr, italicstr); 
+		}
+
+		g_free (boldstr);
+		g_free (italicstr);
+
+	} else { if (strcmp (action, "suspend") == 0) {
+			g_string_append_printf (message, _("Multiple applications have stopped the suspend from taking place."), action);
+
+		} else if (strcmp (action, "hibernate") == 0) {
+			g_string_append_printf (message, _("Multiple applications have stopped the hibernate from taking place."), action);
+
+		} else if (strcmp (action, "policy action") == 0) {
+			g_string_append_printf (message, _("Multiple applications have stopped the policy action from taking place."), action);
+
+		} else if (strcmp (action, "reboot") == 0) {
+			g_string_append_printf (message, _("Multiple applications have stopped the reboot from taking place."), action); 
+
+		} else if (strcmp (action, "shutdown") == 0) {
+			g_string_append_printf (message, _("Multiple applications have stopped the shutdown from taking place."), action);
+
+		} else if (strcmp (action, "timeout action") == 0) {
+			g_string_append_printf (message, _("Multiple applications have stopped the suspend from taking place."), action);
+		}
+		
 		for (a=0; a<g_slist_length (inhibit->priv->list); a++) {
 			data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list, a);
 			g_string_append_printf (message,

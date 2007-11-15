@@ -118,7 +118,10 @@ gpm_info_explain_reason (GpmInfo      *info,
 {
 	gchar *message;
 	if (post) {
-		message = g_strdup_printf (_("%s because %s"), pre, post);
+		gchar *reason;
+		reason = g_strdup_printf (_("Reason: %s"), post);
+		message = g_strconcat (pre, " ", reason, NULL);
+		g_free (reason);
 	} else {
 		message = g_strdup (pre);
 	}

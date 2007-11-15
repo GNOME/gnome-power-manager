@@ -180,7 +180,26 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 		GString *message = g_string_new ("");
 		const char *msg;
 
-		title = g_strdup_printf (_("Request to %s"), action);
+		/*Compose message for each possile action*/
+		if (strcmp (action, "suspend") == 0) {
+				title = g_strdup_printf (_("Request to suspend")); 
+
+		} else if (strcmp (action, "hibernate") == 0) {
+				title = g_strdup_printf (_("Request to hibernate")); 
+
+		} else if (strcmp (action, "policy action") == 0) {
+				title = g_strdup_printf (_("Request to do policy action")); 
+
+		} else if (strcmp (action, "reboot") == 0) {
+				title = g_strdup_printf (_("Request to reboot")); 
+
+		} else if (strcmp (action, "shutdown") == 0) {
+				title = g_strdup_printf (_("Request to shutdown")); 
+
+		} else if (strcmp (action, "timeout action") == 0) {
+				title = g_strdup_printf (_("Request to do timeout action"));
+		}
+		
 		gpm_inhibit_get_message (manager->priv->inhibit, message, action);
 		gpm_notify_display (manager->priv->notify,
 				      title,
@@ -349,7 +368,7 @@ gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 	}
 
 	gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
-				_("Suspending computer"), reason);
+				_("Suspending computer."), reason);
 	gpm_control_suspend (manager->priv->control, &error);
 	if (error != NULL) {
 		g_error_free (error);
@@ -409,7 +428,7 @@ gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 	}
 
 	gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
-				_("Hibernating computer"), reason);
+				_("Hibernating computer."), reason);
 	gpm_control_hibernate (manager->priv->control, &error);
 	if (error != NULL) {
 		g_error_free (error);
@@ -457,7 +476,7 @@ manager_policy_do (GpmManager  *manager,
 
 	if (strcmp (action, ACTION_NOTHING) == 0) {
 		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_NOTIFICATION,
-					_("Doing nothing"), reason);
+					_("Doing nothing."), reason);
 
 	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
 		gpm_manager_action_suspend (manager, reason);
@@ -470,12 +489,12 @@ manager_policy_do (GpmManager  *manager,
 
 	} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
 		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_NOTIFICATION,
-					_("Shutting down computer"), reason);
+					_("Shutting down computer."), reason);
 		gpm_control_shutdown (manager->priv->control, NULL);
 
 	} else if (strcmp (action, ACTION_INTERACTIVE) == 0) {
 		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_NOTIFICATION,
-					_("GNOME interactive logout"), reason);
+					_("GNOME interactive logout."), reason);
 		gnome_client_request_save (gnome_master_client (),
 					   GNOME_SAVE_GLOBAL,
 					   TRUE, GNOME_INTERACT_ANY, FALSE, TRUE);
@@ -768,7 +787,7 @@ idle_do_sleep (GpmManager *manager)
 
 	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
 		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
-					_("Suspending computer"), _("System idle"));
+					_("Suspending computer."), _("System idle."));
 		ret = gpm_control_suspend (manager->priv->control, &error);
 		if (ret == FALSE) {
 			gpm_warning ("cannot suspend (error: %s), so trying hibernate", error->message);
@@ -783,7 +802,7 @@ idle_do_sleep (GpmManager *manager)
 
 	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
 		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_HIBERNATE,
-					_("Hibernating computer"), _("System idle"));
+					_("Hibernating computer."), _("System idle."));
 		ret = gpm_control_hibernate (manager->priv->control, &error);
 		if (ret == FALSE) {
 			gpm_warning ("cannot hibernate (error: %s), so trying suspend", error->message);
@@ -877,7 +896,7 @@ battery_button_pressed (GpmManager *manager)
 static void
 power_button_pressed (GpmManager *manager)
 {
-	manager_policy_do (manager, GPM_CONF_BUTTON_POWER, _("the power button has been pressed"));
+	manager_policy_do (manager, GPM_CONF_BUTTON_POWER, _("The power button has been pressed."));
 }
 
 /**
@@ -889,7 +908,7 @@ power_button_pressed (GpmManager *manager)
 static void
 suspend_button_pressed (GpmManager *manager)
 {
-	manager_policy_do (manager, GPM_CONF_BUTTON_SUSPEND, _("the suspend button has been pressed"));
+	manager_policy_do (manager, GPM_CONF_BUTTON_SUSPEND, _("The suspend button has been pressed."));
 }
 
 /**
@@ -901,7 +920,7 @@ suspend_button_pressed (GpmManager *manager)
 static void
 hibernate_button_pressed (GpmManager *manager)
 {
-	manager_policy_do (manager, GPM_CONF_BUTTON_HIBERNATE, _("the hibernate button has been pressed"));
+	manager_policy_do (manager, GPM_CONF_BUTTON_HIBERNATE, _("The hibernate button has been pressed."));
 }
 
 /**
@@ -932,7 +951,7 @@ lid_button_pressed (GpmManager *manager,
 	if (on_ac == TRUE) {
 		gpm_debug ("Performing AC policy");
 		manager_policy_do (manager, GPM_CONF_BUTTON_LID_AC,
-				   _("the lid has been closed on ac power"));
+				   _("The lid has been closed on ac power."));
 		return;
 	}
 
@@ -962,7 +981,7 @@ lid_button_pressed (GpmManager *manager,
 
 	gpm_debug ("Performing battery policy");
 	manager_policy_do (manager, GPM_CONF_BUTTON_LID_BATT,
-			   _("the lid has been closed on battery power"));
+			   _("The lid has been closed on battery power."));
 }
 
 /**
@@ -1051,8 +1070,8 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 	    on_ac == FALSE &&
 	    gpm_button_is_lid_closed (manager->priv->button)) {
 		manager_policy_do (manager, GPM_CONF_BUTTON_LID_BATT,
-				   _("the lid has been closed, and the ac adapter "
-				     "removed (and gconf is okay)"));
+				   _("The lid has been closed, and the ac adapter "
+				     "removed (and gconf is okay)."));
 	}
 
 	/* Don't do any events for a few seconds after we remove the
@@ -1074,7 +1093,7 @@ manager_critical_action_do (GpmManager *manager)
 {
 	manager_policy_do (manager,
 			   GPM_CONF_ACTIONS_CRITICAL_BATT,
-			   _("battery is critically low"));
+			   _("Battery is critically low."));
 	return FALSE;
 }
 
@@ -1164,7 +1183,7 @@ static void
 gpm_manager_tray_icon_hibernate (GpmManager  *manager,
 				 GpmTrayIcon *tray)
 {
-	gpm_manager_action_hibernate (manager, "clicked tray");
+	gpm_manager_action_hibernate (manager, _("User clicked on tray"));
 }
 
 /**
@@ -1179,7 +1198,7 @@ static void
 gpm_manager_tray_icon_suspend (GpmManager   *manager,
 			       GpmTrayIcon  *tray)
 {
-	gpm_manager_action_suspend (manager, "clicked tray");
+	gpm_manager_action_suspend (manager, _("User clicked on tray"));
 }
 
 /**
