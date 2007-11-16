@@ -1,3 +1,8 @@
+2007-11-16  simon.zheng  <simon.zheng@sun.com>
+
+	* src/gpm-backlight.c: (gpm_backlight_brightness_evaluate_and_set):
+	Avoid float computation error, fixes #497298.
+
 2007-11-15  Gabor Kelemen  <kelemeng@gnome.hu>
 
 	* src/gpm-manager.c:

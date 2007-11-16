@@ -32,6 +32,7 @@
 #include <string.h>
 #include <sys/time.h>
 #include <sys/types.h>
+#include <math.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif /* HAVE_UNISTD_H */
@@ -424,7 +425,7 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	gpm_debug ("4. ambient scale %f, brightness %f", scale, brightness);
 
 	/* convert to percentage */
-	value = brightness * 100.0f;
+	value = roundf (brightness * 100.0f);
 
 	/* only do stuff if the brightness is different */
 	gpm_brightness_lcd_get (backlight->priv->brightness, &old_value);
