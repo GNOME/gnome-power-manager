@@ -161,9 +161,9 @@ fi
 #AC_MSG_RESULT(yes)
 
 dnl ---------------------------------------------------------------------------
-dnl - Use check-foreground-console (Debian specific) support?
+dnl - Use check-foreground-console (Ubuntu specific) support?
 dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(checkfg, [  --enable-checkfg        Use check-foreground-console (Debian systems)],enable_checkfg=$enableval,enable_checkfg=no)
+AC_ARG_ENABLE(checkfg, [  --enable-checkfg        Use check-foreground-console (Ubuntu systems)],enable_checkfg=$enableval,enable_checkfg=no)
 AC_MSG_CHECKING([whether to use check-foreground-console])
 have_checkfg=no
 if test x$enable_checkfg = xyes ; then
