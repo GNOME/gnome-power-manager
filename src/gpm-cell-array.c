@@ -1488,17 +1488,21 @@ gpm_st_cell_array (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we got a single recall notice");
+	if (recall_count == 0) {
+		gpm_st_warning (test, "did not get recall - install fdi!");
+		goto out;
+	}
 	if (recall_count2 == 1) {
 		gpm_st_success (test, "got recall");
 	} else {
-		gpm_st_failed (test, "did not get recall (install fdi?)");
+		gpm_st_failed (test, "got duplicate recall");
 	}
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we got at least 1 cell");
 	count = gpm_cell_array_get_num_cells (cell_array);
 	if (count >= 1) {
-	gpm_st_success (test, "got %d cell(s)", count);
+		gpm_st_success (test, "got %d cell(s)", count);
 	} else {
 		gpm_st_failed (test, "got %i cells", count);
 	}
@@ -1521,7 +1525,7 @@ gpm_st_cell_array (GpmSelfTest *test)
 	} else {
 		gpm_st_failed (test, "could not get correct cell");
 	}
-
+out:
 	g_object_unref (cell_array);
 
 	gpm_st_end (test);
