@@ -1,0 +1,1937 @@
+# translation of gnome-power-manager.
+# Copyright (C) 2007 THE gnome-power-manager'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-power-manager package.
+# ahmad riza h nst <rizahnst@gnome.org>, 2007.
+# 
+# 
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-power-manager gnome-2-18\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-11-13 20:10+0000\n"
+"PO-Revision-Date: 2007-11-23 15:20+0700\n"
+"Last-Translator: ahmad riza h nst <rizahnst@gnome.org>\n"
+"Language-Team: Indonesian <kontak@id.gnome.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit"
+
+#: ../applets/brightness/brightness-applet.c:63
+msgid "Power Manager Brightness Applet"
+msgstr "Applet Cahaya Pengelola Daya"
+
+#: ../applets/brightness/brightness-applet.c:64
+msgid "Adjusts laptop panel brightness."
+msgstr "Sesuaikan cahaya panel laptop."
+
+#: ../applets/brightness/brightness-applet.c:232
+#, c-format
+msgid "LCD brightness : %d%%"
+msgstr "Cahaya LCD : %d%%"
+
+#: ../applets/brightness/brightness-applet.c:234
+#, c-format
+msgid "Cannot get laptop panel brightness"
+msgstr "Tidak mendapatkan cahaya panel laptop"
+
+#: ../applets/brightness/brightness-applet.c:597
+#: ../applets/inhibit/inhibit-applet.c:259 ../src/gpm-tray-icon.c:305
+msgid "Licensed under the GNU General Public License Version 2"
+msgstr "Berlisensi GNU GPL Versi 2"
+
+#: ../applets/brightness/brightness-applet.c:598
+#: ../applets/inhibit/inhibit-applet.c:260 ../src/gpm-tray-icon.c:306
+msgid ""
+"Power Manager is free software; you can redistribute it and/or\n"
+"modify it under the terms of the GNU General Public License\n"
+"as published by the Free Software Foundation; either version 2\n"
+"of the License, or (at your option) any later version."
+msgstr ""
+"Pengelola Daya adalah software bebas, anda dapat menyebarkan dan/atau\n"
+"mengubahnya dibawah syarat Lisensi GNU GPL sebagaimana diterbitkan\n"
+"oleh Free Software Foundation, baik versi 2 maupun versi selanjutnya\n"
+"(sesuai pilihan anda)."
+
+#: ../applets/brightness/brightness-applet.c:602
+#: ../applets/inhibit/inhibit-applet.c:264 ../src/gpm-tray-icon.c:310
+msgid ""
+"Power Manager is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+"GNU General Public License for more details."
+msgstr ""
+
+#: ../applets/brightness/brightness-applet.c:606
+#: ../applets/inhibit/inhibit-applet.c:268 ../src/gpm-tray-icon.c:314
+msgid ""
+"You should have received a copy of the GNU General Public License\n"
+"along with this program; if not, write to the Free Software\n"
+"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
+"02110-1301, USA."
+msgstr ""
+"Anda selayaknya menerima salinan Lisensi GNU GPL bersamaan\n"
+"dengan program ini, jika tidak, kirim surat ke Free Software\n"
+"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
+"02110-1301, USA."
+
+#: ../applets/inhibit/inhibit-applet.c:56
+msgid "Power Manager Inhibit Applet"
+msgstr ""
+
+#: ../applets/inhibit/inhibit-applet.c:57
+msgid "Allows user to inhibit automatic power saving."
+msgstr ""
+
+#: ../applets/inhibit/inhibit-applet.c:195
+#, c-format
+msgid "Automatic sleep inhibited"
+msgstr ""
+
+#: ../applets/inhibit/inhibit-applet.c:197
+#, c-format
+msgid "Automatic sleep enabled"
+msgstr "Tidur otomatis aktif"
+
+#: ../applets/inhibit/inhibit-applet.c:224
+msgid "Manual inhibit"
+msgstr ""
+
+#. common descriptions of this program
+#: ../data/gnome-power-manager.desktop.in.h:1 ../src/gpm-common.h:30
+msgid "Power Manager"
+msgstr "Pengelola Daya"
+
+#: ../data/gnome-power-manager.desktop.in.h:2
+msgid "Power management daemon"
+msgstr "Server pengelola daya"
+
+#: ../data/gnome-power-manager.schemas.in.h:1
+msgid ""
+"After resume, gnome-power-manager will suppress policy actions for a number "
+"of seconds to allow messages to settle and HAL to refresh. Commonly five "
+"seconds is enough while not being so long that the user gets confused."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:2
+msgid "Allow Suspend and Hibernate in the menu"
+msgstr "Bolehkan suspend dan hibernasi dalam menu"
+
+#: ../data/gnome-power-manager.schemas.in.h:3
+msgid "Battery critical low action"
+msgstr "Aksi baterai lemah kritis"
+
+#: ../data/gnome-power-manager.schemas.in.h:4
+msgid "Change the brightness to a preset level on AC state change"
+msgstr "Ganti cahaya ke tingkat tertentu ketika terjadi perubahan pada AC"
+
+#: ../data/gnome-power-manager.schemas.in.h:5
+msgid "Change the brightness to automatically using the ambient light sensors"
+msgstr "Ganti cahaya ke automatis menggunakan sensor cahaya lingkungan"
+
+#: ../data/gnome-power-manager.schemas.in.h:6
+msgid "Check CPU load before sleeping"
+msgstr "Periksa beban CPU sebelum tidur"
+
+#: ../data/gnome-power-manager.schemas.in.h:7
+msgid "Dim the screen after a period of inactivity when on AC power"
+msgstr "Terang-gelap layar setelah tidak aktif ketika pada daya AC"
+
+#: ../data/gnome-power-manager.schemas.in.h:8
+msgid "Dim the screen after a period of inactivity when on battery power"
+msgstr "Terang-gelap layar setelah tidak aktif ketika pada daya baterai"
+
+#: ../data/gnome-power-manager.schemas.in.h:9
+msgid ""
+"Display options for the notification icon. Valid options are \"never\", "
+"\"critical\", \"charge\", \"present\" and \"always\"."
+msgstr ""
+"Tampilkan pilihan untuk icon pemberitahuan. Pilihan yang benar adalah "
+"\"tidak pernah\", \"penting\", \"Isi\", \"sekarang\" dan \"selalu\"."
+
+#: ../data/gnome-power-manager.schemas.in.h:10
+msgid "Hibernate button action"
+msgstr "Tombol aksi hibernasi"
+
+#: ../data/gnome-power-manager.schemas.in.h:11
+msgid "Hibernate enabled"
+msgstr "Hibernasi aktif"
+
+#: ../data/gnome-power-manager.schemas.in.h:12
+msgid "If DBUS inhibit requests should be ignored from other programs."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:13
+msgid "If DBUS inhibit requests should be ignored."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:14
+msgid ""
+"If a notification message should be displayed after the suspend or hibernate "
+"failed."
+msgstr ""
+"Jika pesan pemberitahuan harus ditampilkan setelah suspend atau hibernasi "
+"gagal."
+
+#: ../data/gnome-power-manager.schemas.in.h:15
+msgid ""
+"If a notification message should be displayed when the battery is fully "
+"charged."
+msgstr ""
+"Jika pesan pemberitahuan harus ditampilkan ketika baterai terisi "
+"penuh."
+
+#: ../data/gnome-power-manager.schemas.in.h:16
+msgid ""
+"If a notification message should be displayed when the battery is getting "
+"low."
+msgstr ""
+"Jika pesan pemberitahuan harus ditampilkan ketika baterai mulai "
+"lemah."
+
+#: ../data/gnome-power-manager.schemas.in.h:17
+msgid ""
+"If niced processes are considered, they can cause a frequency increment even "
+"though their absolute load percentage wouldn't trigger the scaling mechanism "
+"to switch up the frequency."
+msgstr ""
+"Jika proses nice dianggap, maka dapat menyebabkan peningkatan frekuensi "
+"meskipun persentasi beban mereka sesungguhnya tidak memicu mekanisme "
+"skala untuk menaikkan frekuensi."
+
+#: ../data/gnome-power-manager.schemas.in.h:18
+msgid "If sounds should be used"
+msgstr "Jika suara harus digunakan"
+
+#: ../data/gnome-power-manager.schemas.in.h:19
+msgid ""
+"If sounds should be used when the power is critically low, or inhibit "
+"requests have stopped the policy action."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:20
+msgid "If the CPU load should be checked before doing the idle action."
+msgstr "Jika beban CPU harus diperiksa sebelum melakukan aksi menganggur."
+
+#: ../data/gnome-power-manager.schemas.in.h:21
+msgid ""
+"If the Suspend and Hibernate options should be allowed in the notification "
+"area drop down menu."
+msgstr ""
+"Jika pilihan Suspend dan Hibernasi harus dibolehkan pada daerah pemberitahuan "
+"menu pilih."
+
+#: ../data/gnome-power-manager.schemas.in.h:22
+msgid ""
+"If the battery event should occur when the lid is shut and the power "
+"disconnected"
+msgstr ""
+"Jika baterai harus muncul ketika laptop di tutup dan daya diputus."
+
+#: ../data/gnome-power-manager.schemas.in.h:23
+msgid ""
+"If the battery lid close event should occur (for example 'Suspend when lid "
+"closed on battery') when the lid is previously shut and the AC power "
+"disconnected at a later time."
+msgstr ""
+"Jika kejadian baterai laptop ditutup mesti muncul (misalnya 'Suspend ketika "
+"laptop ditutup saat baterai') ketika laptop sebelumnya ditutup dan daya AC "
+"terputus pada saat selanjutnya."
+
+#: ../data/gnome-power-manager.schemas.in.h:24
+msgid ""
+"If the laptop should be configured as if it is using a permanent external "
+"monitor"
+msgstr ""
+"Jika laptop harus dikonfigurasikan sebagaimana jika menggunakan monitor eksternal."
+
+#: ../data/gnome-power-manager.schemas.in.h:25
+msgid ""
+"If the laptop should be configured to not do dimming actions and DPMS off if "
+"it is using a dock or external monitor. Most laptop and desktop users should "
+"select FALSE here."
+msgstr ""
+"Jika laptop harus dikonfigurasikan untuk tidak berkedip dan DPMS mati jika "
+"sedang menggunakan dock atau monitor luar. Kebanyakan pengguna laptop dan "
+"desktop harus memilih SALAH di sini."
+
+#: ../data/gnome-power-manager.schemas.in.h:26
+msgid "If the low-power mode should be enabled when on AC"
+msgstr "Jika mode daya-lemah harus diaktifkan ketika pada AC."
+
+#: ../data/gnome-power-manager.schemas.in.h:27
+msgid "If the low-power mode should be enabled when on UPS"
+msgstr "Jika mode daya-lemah harus diaktifkan ketika pada UPS."
+
+#: ../data/gnome-power-manager.schemas.in.h:28
+msgid "If the low-power mode should be enabled when on battery"
+msgstr "Jika mode daya-lemah harus diaktifkan ketika pada baterai."
+
+#: ../data/gnome-power-manager.schemas.in.h:29
+msgid ""
+"If the screen brightness should be changed automatically using the ambient "
+"light sensors."
+msgstr ""
+"Jika cahaya layar harus diganti secara otomatis menggunakan sensor cahaya sekitar."
+
+#: ../data/gnome-power-manager.schemas.in.h:30
+msgid ""
+"If the screen brightness should be changed when switching between AC and "
+"battery power."
+msgstr ""
+"Jika cahaya layar harus diganti ketika berpindah antara AC dan daya baterai."
+
+#: ../data/gnome-power-manager.schemas.in.h:31
+msgid ""
+"If the screen is locked when the screen is turned off. Only used if "
+"lock_use_screensaver_settings is false."
+msgstr ""
+"Jika layar terkunci ketika laar dimatikan. Hanya digunakan jika "
+"lock_use_screensaver_settings salah."
+
+#: ../data/gnome-power-manager.schemas.in.h:32
+msgid ""
+"If the screen should be dimmed to save power when the computer is idle when "
+"on AC power."
+msgstr ""
+"Jika layar harus terang-gelap untuk menghemat daya ketika komputer lagi "
+"menganggur ketika dalam daya AC."
+
+#: ../data/gnome-power-manager.schemas.in.h:33
+msgid ""
+"If the screen should be dimmed to save power when the computer is idle when "
+"on battery power."
+msgstr ""
+"Jika layar harus terang-gelap untuk menghemat daya ketika komputer lagi menganggur "
+"ketika dalam daya baterai."
+
+#: ../data/gnome-power-manager.schemas.in.h:34
+msgid "If the system low-power mode should be enabled when on AC power."
+msgstr "Jika mode system daya-lemah harus aktif ketika pada daya AC."
+
+#: ../data/gnome-power-manager.schemas.in.h:35
+msgid "If the system low-power mode should be enabled when on UPS power."
+msgstr "Jika mode system daya-lemah harus aktif ketika pada daya UPS."
+
+#: ../data/gnome-power-manager.schemas.in.h:36
+msgid ""
+"If the system low-power mode should be enabled when on laptop battery power."
+msgstr ""
+""
+"Jika system mode daya-lemah harus aktif ketika pada daya baterai laptop."
+
+#: ../data/gnome-power-manager.schemas.in.h:37
+msgid "If the user is authorized to hibernate the computer."
+msgstr "Jika pengguna diperbolehkan untuk menghibernasi komputer."
+
+#: ../data/gnome-power-manager.schemas.in.h:38
+msgid "If the user is authorized to suspend the computer."
+msgstr "Jika pengguna diizinkan men-suspend komputer."
+
+#: ../data/gnome-power-manager.schemas.in.h:39
+msgid "If the user should be notified when the AC adapter is disconnected."
+msgstr "Jika pengguna harus diberitahu ketika daya AC diputus."
+
+#: ../data/gnome-power-manager.schemas.in.h:40
+msgid ""
+"If time based notifications should be used. If set to false, then the "
+"percentage change is used instead, which may fix a broken ACPI BIOS."
+msgstr ""
+"Jika pemberitahuan berdasarkan waktu digunakan. Jika salah, maka "
+"perubahan persentasi digunakan, mungkin memperbaiki BIOS ACPI yang rusak."
+
+#: ../data/gnome-power-manager.schemas.in.h:41
+msgid ""
+"If to lock the screen when the computer wakes up from a hibernate. Only used "
+"if lock_use_screensaver_settings is false."
+msgstr ""
+"Jika mengunci layar saat komputer bangun dari hibernasi. Hanya digunakan "
+"jika lock_use_screensaver_settings salah."
+
+#: ../data/gnome-power-manager.schemas.in.h:42
+msgid ""
+"If to lock the screen when the computer wakes up from a suspend. Only used "
+"if lock_use_screensaver_settings is false."
+msgstr ""
+"Jika mengunci layar saat komputer bangun dari suspend. Hanya digunakan "
+"jika lock_use_screensaver_settings salah."
+
+#: ../data/gnome-power-manager.schemas.in.h:43
+msgid ""
+"If to use the screen lock setting of gnome-screensaver to decide to lock the "
+"screen after a hibernate, suspend or blank screen."
+msgstr ""
+"Jika menggunakan ketentuan kunci layar gnome-screensaver untuk memilih mengunci "
+"layar setelah hibernasi, suspend ataupun layar kosong."
+
+#: ../data/gnome-power-manager.schemas.in.h:44
+msgid "If we should show the CPU frequency scaling in the UI"
+msgstr "Jika kita mesti menggunakan skale frekuensi CPU dalam UI"
+
+#: ../data/gnome-power-manager.schemas.in.h:45
+msgid ""
+"If we should show the CPU frequency scaling in the UI. Some people need to "
+"configure this for specific systems."
+msgstr ""
+"Jika kita mesti menggunakan skale frekuensi CPU dalam UI. Beberapa orang "
+"perlu mengkonfigurasi untuk system tertentu."
+
+#: ../data/gnome-power-manager.schemas.in.h:46
+msgid "If we should show the recalled battery warning for a broken battery"
+msgstr "Jika kita harus menampilkan peringatan baterai untuk baterai rusak"
+
+#: ../data/gnome-power-manager.schemas.in.h:47
+msgid ""
+"If we should show the recalled battery warning for a broken battery. Set "
+"this to false only if you know your battery is okay."
+msgstr ""
+"Jika kita harus menampilkan peringatan baterai untuk baterai rusak. Tentukan "
+"ini menjadi salah jika anda tau baterai anda baik."
+
+#: ../data/gnome-power-manager.schemas.in.h:48
+msgid "Keyboard brightness when on AC"
+msgstr "Pencahayaan keyboard ketika pada AC"
+
+#: ../data/gnome-power-manager.schemas.in.h:49
+msgid "Keyboard brightness when on battery"
+msgstr "Pencahayaan keyboard ketika pada baterai"
+
+#: ../data/gnome-power-manager.schemas.in.h:50
+msgid "LCD brightness when on AC"
+msgstr "Pencahayaan LCD ketika pada AC"
+
+#: ../data/gnome-power-manager.schemas.in.h:51
+msgid "LCD brightness when on battery"
+msgstr "Pencahayaan LCD ketika pada baterai"
+
+#: ../data/gnome-power-manager.schemas.in.h:52
+msgid "Laptop lid close action on battery"
+msgstr "Aksi tutup laptop pada baterai"
+
+#: ../data/gnome-power-manager.schemas.in.h:53
+msgid "Laptop lid close action when on AC"
+msgstr "Aksi tutup laptop ketika pada AC"
+
+#: ../data/gnome-power-manager.schemas.in.h:54
+msgid "Lock screen on hibernate"
+msgstr "Kunci layar pada hibernasi"
+
+#: ../data/gnome-power-manager.schemas.in.h:55
+msgid "Lock screen on suspend"
+msgstr "Kunci layar pada suspend"
+
+#: ../data/gnome-power-manager.schemas.in.h:56
+msgid "Lock screen when blanked"
+msgstr "Kunci layar ketika dikosongkan"
+
+#: ../data/gnome-power-manager.schemas.in.h:57
+msgid "Method used to blank screen on AC"
+msgstr "Metode digunakan untuk mengosongkan layar pada AC"
+
+#: ../data/gnome-power-manager.schemas.in.h:58
+msgid "Method used to blank screen on battery"
+msgstr "Metode digunakan untuk mengosongkan layar pada baterai"
+
+#: ../data/gnome-power-manager.schemas.in.h:59
+msgid "Notify on a HAL error"
+msgstr "Beritau pada kesalahan HAL"
+
+#: ../data/gnome-power-manager.schemas.in.h:60
+msgid "Notify on a low power"
+msgstr "Beritau pada daya lemah"
+
+#: ../data/gnome-power-manager.schemas.in.h:61
+msgid "Notify when AC adapter is disconnected"
+msgstr "Beritau ketika AC terputus"
+
+#: ../data/gnome-power-manager.schemas.in.h:62
+msgid "Notify when fully charged"
+msgstr "Beritahu ketika penuh terisi"
+
+#: ../data/gnome-power-manager.schemas.in.h:63
+msgid "Number of seconds to suppress policy after resume"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:64
+msgid "Percentage action is taken"
+msgstr "Persentasi aksi diambil"
+
+#: ../data/gnome-power-manager.schemas.in.h:65
+msgid "Percentage considered critical"
+msgstr "Persentasi dianggap penting"
+
+#: ../data/gnome-power-manager.schemas.in.h:66
+msgid "Percentage considered low"
+msgstr "Persentasi dianggap lemah"
+
+#: ../data/gnome-power-manager.schemas.in.h:67
+msgid "Percentage considered very low"
+msgstr "Persentasi dianggap sangat lemah"
+
+#: ../data/gnome-power-manager.schemas.in.h:68
+msgid "Power button action"
+msgstr "Aksi tombol daya"
+
+#: ../data/gnome-power-manager.schemas.in.h:69
+msgid "Sleep timeout computer when on AC"
+msgstr "Waktu tidur komputer ketika pada AC"
+
+#: ../data/gnome-power-manager.schemas.in.h:70
+msgid "Sleep timeout computer when on battery"
+msgstr "Waktu tidur komputer ketika pada baterai"
+
+#: ../data/gnome-power-manager.schemas.in.h:71
+msgid "Sleep timeout display when on AC"
+msgstr "Waktu tidur layar ketika pada AC"
+
+#: ../data/gnome-power-manager.schemas.in.h:72
+msgid "Sleep timeout display when on battery"
+msgstr "Waktu tidur layar ketika pada baterai"
+
+#: ../data/gnome-power-manager.schemas.in.h:73
+msgid "Suspend button action"
+msgstr "Aksi tombol suspend"
+
+#: ../data/gnome-power-manager.schemas.in.h:74
+msgid "Suspend enabled"
+msgstr "Suspend aktif"
+
+#: ../data/gnome-power-manager.schemas.in.h:75
+msgid ""
+"The DPMS method used to blank the screen when on AC power. Possible values "
+"are \"default\", \"standby\", \"suspend\" and \"off\"."
+msgstr ""
+"Metode DPMS digunakan mengosongkan layar ketika pada daya AC. Nilainya adalah "
+"\"default\", \"siaga\", \"suspend\" dan \"mati\"."
+
+#: ../data/gnome-power-manager.schemas.in.h:76
+msgid ""
+"The DPMS method used to blank the screen when on battery power. Possible "
+"values are \"default\", \"standby\", \"suspend\" and \"off\"."
+msgstr ""
+"Metode DPMS dipergunakan untuk mengosongkan layar ketika pada daya baterai. "
+"Nilainya adalah \"default\", \"siaga\", \"suspend\" dan \"off\"."
+
+#: ../data/gnome-power-manager.schemas.in.h:77
+msgid ""
+"The action to take when the UPS is critically low. Possible values are "
+"\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
+msgstr ""
+"Aksi yang dilakukan ketika UPS sudah mau habis daya. "
+"Nilainya adalah \"hibernasi\", \"suspend\", \"matikan\" dan \"gak-ada\"."
+
+#: ../data/gnome-power-manager.schemas.in.h:78
+msgid ""
+"The action to take when the UPS is low. Possible values are \"hibernate\", "
+"\"suspend\", \"shutdown\" and \"nothing\"."
+msgstr ""
+"Aksi yang dilakukan ketika UPS lemah. Nilai yang memungkinkan adalah "
+"\"hibernasi\", \"suspend\", \"matikan\" dan \"gak-ada\"."
+
+#: ../data/gnome-power-manager.schemas.in.h:79
+msgid ""
+"The action to take when the battery is critically low. Possible values are "
+"\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
+msgstr ""
+"Aksi yang dilakukan ketika baterai sangat lemah. Nilai yang memungkinkan adalah "
+"\"hibernasi\", \"suspend\", \"matikan\" dan \"gak-ada\"."
+
+#: ../data/gnome-power-manager.schemas.in.h:80
+msgid ""
+"The action to take when the laptop lid is closed and the laptop is on AC "
+"power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
+"\"nothing\"."
+msgstr ""
+"Aksi yang dilakukan ketika laptop ditutup dan laptop pada daya AC. Nilai "
+"yang memungkinkan adalah \"suspend\", \"hibernasi\", \"kosong\" dan \"gak-ada\"."
+
+#: ../data/gnome-power-manager.schemas.in.h:81
+msgid ""
+"The action to take when the laptop lid is closed and the laptop is on "
+"battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
+"and \"nothing\"."
+msgstr ""
+"Aksi yang dilakukan ketika laptop ditutup dan laptop pada daya baterai. Nilai "
+"yang memungkinkan adalah \"suspend\", \"hibernasi\", \"kosong\" dan \"gak-ada\"."
+
+#: ../data/gnome-power-manager.schemas.in.h:82
+msgid ""
+"The action to take when the system hibernate button is pressed. Possible "
+"values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
+"\"nothing\"."
+msgstr ""
+"Aksi yang dilakukan ketika tombol hibernasi sistem ditekan. Nilai yang "
+"memungkinkan adalah \"suspend\", \"hibernasi\", \"interaktif\", \"matikan\" dan "
+"\"gak-ada\"."
+
+#: ../data/gnome-power-manager.schemas.in.h:83
+msgid ""
+"The action to take when the system power button is pressed. Possible values "
+"are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
+"\"."
+msgstr ""
+"Aksi yang dilakukan ketika tombol daya sistem ditekan. Nilai yang "
+"memungkinkan adalah \"suspend\", \"hibernasi\", \"interaktif\", \"matikan\" dan "
+"\"gak-ada\"."
+
+#: ../data/gnome-power-manager.schemas.in.h:84
+msgid ""
+"The action to take when the system suspend button is pressed. Possible "
+"values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
+"\"nothing\"."
+msgstr ""
+"Aksi yang dilakukan ketika tombol suspend sistem ditekan. Nilai yang "
+"memungkinkan adalah \"suspend\", \"hibernasi\", \"interaktif\", \"matikan\" dan "
+"\"gak-ada\"."
+
+#: ../data/gnome-power-manager.schemas.in.h:85
+msgid ""
+"The amount of time in seconds before the display goes to sleep when the "
+"computer is on AC power."
+msgstr ""
+"Jumlah waktu dalam detik sebelum tampilan pergi tidur ketika komputer "
+"dalam daya AC."
+
+#: ../data/gnome-power-manager.schemas.in.h:86
+msgid ""
+"The amount of time in seconds the computer on AC power needs to be inactive "
+"before it goes to sleep."
+msgstr ""
+"Jumlah waktu dalam detik diperlukan komputer dalam daya AC untuk tidak aktif "
+"sebelum pergi tidur."
+
+#: ../data/gnome-power-manager.schemas.in.h:87
+msgid ""
+"The amount of time in seconds the computer on battery power needs to be "
+"inactive before it goes to sleep."
+msgstr ""
+"Jumlah waktu dalam detik diperlukan komputer dalam daya Baterai untuk tidak aktif "
+"sebelum pergi tidur."
+
+#: ../data/gnome-power-manager.schemas.in.h:88
+msgid ""
+"The amount of time in seconds the computer on battery power needs to be "
+"inactive before the display goes to sleep."
+msgstr ""
+"Jumlah waktu dalam detik diperlukan komputer dalam daya Baterai untuk tidak aktif "
+"sebelum tampilan pergi tidur."
+
+#: ../data/gnome-power-manager.schemas.in.h:89
+msgid ""
+"The brightness of the display when on AC power. Possible values are between "
+"0 and 100."
+msgstr ""
+"Cahaya tampilan ketika pada daya AC. Nilai yang mungkin adalah antara "
+"0 dan 100."
+
+#: ../data/gnome-power-manager.schemas.in.h:90
+msgid ""
+"The brightness of the display when on battery power. Possible values are "
+"between 0 and 100."
+msgstr ""
+"Cahaya tampilan ketika pada daya baterai. Nilai yang mungkin adalah antara "
+"0 dan 100."
+
+#: ../data/gnome-power-manager.schemas.in.h:91
+msgid ""
+"The brightness of the keyboard when on AC power. Possible values are between "
+"0 and 100."
+msgstr ""
+"Cahaya papan ketik ketika pada daya AC. Nilai yang mungkin adalah antara "
+"0 dan 100."
+
+#: ../data/gnome-power-manager.schemas.in.h:92
+msgid ""
+"The brightness of the keyboard when on battery power. Possible values are "
+"between 0 and 100."
+msgstr ""
+"Cahaya papan ketik ketika pada daya baterai. Nilai yang mungkin adalah antara "
+"0 dan 100."
+
+#: ../data/gnome-power-manager.schemas.in.h:93
+msgid "The brightness of the screen when idle"
+msgstr "Cahaya layar ketika nganggur"
+
+#: ../data/gnome-power-manager.schemas.in.h:94
+msgid "The cpufreq performance value to use when on AC power"
+msgstr "Nilai performa cpufreq digunakan ketika pada daya AC"
+
+#: ../data/gnome-power-manager.schemas.in.h:95
+msgid "The cpufreq performance value to use when on battery power"
+msgstr "Nilai performa cpufreq digunakan ketika pada daya baterai"
+
+#: ../data/gnome-power-manager.schemas.in.h:96
+msgid ""
+"The cpufreq performance value to used to scale the processor when on AC "
+"power."
+msgstr ""
+"Nilai performa cpufreq digunakan untuk mengatur prosessor ketika pada "
+"daya AC."
+
+#: ../data/gnome-power-manager.schemas.in.h:97
+msgid ""
+"The cpufreq performance value to used to scale the processor when on battery "
+"power."
+msgstr ""
+"Nilai performa cpufreq digunakan untuk mengatur prosessor ketika pada "
+"daya baterai."
+
+#: ../data/gnome-power-manager.schemas.in.h:98
+msgid "The cpufreq policy to use when on AC power"
+msgstr "Peraturan cpufreq untuk digunakan pada daya AC"
+
+#: ../data/gnome-power-manager.schemas.in.h:99
+msgid "The cpufreq policy to use when on battery power"
+msgstr "Peraturan cpufreq untuk digunakan pada daya baterai"
+
+#: ../data/gnome-power-manager.schemas.in.h:100
+msgid ""
+"The cpufreq policy to used to scale the processor when on AC power. Possible "
+"values are ondemand, conservative, powersave, userspace, performance, "
+"nothing."
+msgstr ""
+"Peraturan cpufreq yang digunakan untuk mengatur prosessor ketika pada daya AC. "
+"Nilai yang mungkin adalah sesuai kebutuhan, konservatif, hemat-daya, performa, "
+"gak-ada."
+
+#: ../data/gnome-power-manager.schemas.in.h:101
+msgid ""
+"The cpufreq policy to used to scale the processor when on battery power. "
+"Possible values are ondemand, conservative, powersave, userspace, "
+"performance, nothing."
+msgstr ""
+"Peraturan cpufreq yang digunakan untuk mengatur prosessor ketika pada daya baterai. "
+"Nilai yang mungkin adalah sesuai kebutuhan, konservatif, hemat-daya, performa, "
+"gak-ada."
+
+#: ../data/gnome-power-manager.schemas.in.h:102
+msgid "The damping factor for the rate"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:103
+msgid "The default graph type to show in the statistics window"
+msgstr "Tipe grafis default untuk ditampilkan pada jendela statistik"
+
+#: ../data/gnome-power-manager.schemas.in.h:104
+msgid "The default graph type to show in the statistics window."
+msgstr "Tipe grafis default untuk ditampilkan pada jendela statistik."
+
+#: ../data/gnome-power-manager.schemas.in.h:105
+msgid "The invalid timeout for power actions"
+msgstr "Jeda waktu salah untuk aksi daya"
+
+#: ../data/gnome-power-manager.schemas.in.h:106
+msgid ""
+"The invalid timeout in ms for power actions. Set this longer if you get "
+"'battery critical' messages when you unplug."
+msgstr ""
+"Jeda waktu salah dalam ms untuk aksi daya. Tetapkan lebih lama jika "
+"anda dapat pesan 'baterai gawat' ketika anda putus daya."
+
+#: ../data/gnome-power-manager.schemas.in.h:107
+msgid "The maximum duration of time displayed on the x-axis of the graph."
+msgstr "Durasi maksimal waktu ditampilkan pada poros-x pada grafis."
+
+#: ../data/gnome-power-manager.schemas.in.h:108
+msgid "The maximum time displayed on the graph"
+msgstr "Waktu maksimal ditampilkan pada grafis"
+
+#: ../data/gnome-power-manager.schemas.in.h:109
+msgid ""
+"The percentage of the battery when it is considered critical. Only valid "
+"when use_time_for_policy is false."
+msgstr ""
+"Persentasi baterai ketika dianggap gawat. Hanya benar jika "
+"use_time_for_policy adalah salah."
+
+#: ../data/gnome-power-manager.schemas.in.h:110
+msgid ""
+"The percentage of the battery when it is considered low. Only valid when "
+"use_time_for_policy is false."
+msgstr ""
+"Persentasi baterai ketika dianggap lemah. Hanya berlaku ketika "
+"use_time_for_policy adalah salah."
+
+#: ../data/gnome-power-manager.schemas.in.h:111
+msgid ""
+"The percentage of the battery when it is considered very low. Only valid "
+"when use_time_for_policy is false."
+msgstr ""
+"Persentasi baterai ketika dianggap sangat lemah. Hanya berlaku ketika "
+"use_time_for_policy adalah salah."
+
+#: ../data/gnome-power-manager.schemas.in.h:112
+msgid ""
+"The percentage of the battery when the critical action is performed. Only "
+"valid when use_time_for_policy is false."
+msgstr ""
+"Persentasi baterai ketika aksi krisis dilaksanakan. Hanya berlaku ketika "
+"use_time_for_policy adalah salah."
+
+#: ../data/gnome-power-manager.schemas.in.h:113
+msgid ""
+"The time remaining in seconds of the battery when critical action is taken. "
+"Only valid when use_time_for_policy is true."
+msgstr ""
+"Waktu baterai tersisa dalam detik ketika aksi krisis diambil. "
+"Hanya berlaku ketika use_time_for_policy adalah benar."
+
+#: ../data/gnome-power-manager.schemas.in.h:114
+msgid ""
+"The time remaining in seconds of the battery when it is considered critical. "
+"Only valid when use_time_for_policy is true."
+msgstr ""
+"Waktu baterai tersisa dalam detik ketika dianggap krisis. "
+"Hanya berlaku ketika use_time_for_policy adalah benar."
+
+#: ../data/gnome-power-manager.schemas.in.h:115
+msgid ""
+"The time remaining in seconds of the battery when it is considered low. Only "
+"valid when use_time_for_policy is true."
+msgstr ""
+"Waktu baterai tersisa dalam detik ketika dianggap lemah. "
+"Hanya berlaku ketika use_time_for_policy adalah benar."
+
+#: ../data/gnome-power-manager.schemas.in.h:116
+msgid ""
+"The time remaining in seconds of the battery when it is considered very low. "
+"Only valid when use_time_for_policy is true."
+msgstr ""
+"Waktu baterai tersisa dalam detik ketika dianggap sangat lemah. "
+"Hanya berlaku ketika use_time_for_policy adalah benar."
+
+#: ../data/gnome-power-manager.schemas.in.h:117
+msgid "The time remaining when action is taken"
+msgstr "Waktu tersisa ketika aksi diambil"
+
+#: ../data/gnome-power-manager.schemas.in.h:118
+msgid "The time remaining when critical"
+msgstr "Waktu tersisa ketika krisis"
+
+#: ../data/gnome-power-manager.schemas.in.h:119
+msgid "The time remaining when low"
+msgstr "Waktu tersisa ketika lemah"
+
+#: ../data/gnome-power-manager.schemas.in.h:120
+msgid "The time remaining when very low"
+msgstr "Waktu tersisa ketika sangat lemah"
+
+#: ../data/gnome-power-manager.schemas.in.h:121
+msgid ""
+"The type of sleeping that should be performed when the computer is inactive. "
+"Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
+msgstr ""
+"Jenis tidur yang mesti dilaksanakan ketika komputer tidak aktif. "
+"Nilai yang memungkinkan adalah \"hibernasi\", \"suspend\" dan \"gak-ada\"."
+
+#: ../data/gnome-power-manager.schemas.in.h:122
+msgid ""
+"The value of the damping factor used when calculating the exponentially "
+"weighted average of the rate. Increasing this value will increase the "
+"damping effect of the rate calculations, which makes the time remaining more "
+"accurate, but the graphs less responsive."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:123
+msgid ""
+"This is the laptop panel screen brightness used when the session is idle. "
+"Only valid when use_time_for_policy is true."
+msgstr ""
+"Ini adalah pencahayaan layar panel laptop yang digunakan ketika sesi lagi "
+"menganggur. Hanya berlaku ketika use_time_for_policy adalah benar."
+
+#: ../data/gnome-power-manager.schemas.in.h:124
+msgid "UPS critical low action"
+msgstr "Aksi UPS krisis lemah"
+
+#: ../data/gnome-power-manager.schemas.in.h:125
+msgid "UPS low power action"
+msgstr "Aksi UPS daya lemah"
+
+#: ../data/gnome-power-manager.schemas.in.h:126
+msgid "Use gnome-screensaver lock setting"
+msgstr "Gunakan tetapan kunci gnome-screensaver"
+
+#: ../data/gnome-power-manager.schemas.in.h:127
+msgid "When to show the notification icon"
+msgstr "Kapan menampilkan icon pemberitahuan"
+
+#: ../data/gnome-power-manager.schemas.in.h:128
+msgid "Whether NetworkManager should be connected and disconnected on sleep."
+msgstr "Apakah PengelolaJaringan harus terhubung dan terputus pada saat tidur."
+
+#: ../data/gnome-power-manager.schemas.in.h:129
+msgid ""
+"Whether NetworkManager should disconnect before suspending or hibernating "
+"and connect on resume."
+msgstr ""
+"Apakah PengelolaJaringan harus terputus sebelum men-suspend atau hibernasi "
+"dan menyambung pada saat dilanjutkan."
+
+#: ../data/gnome-power-manager.schemas.in.h:130
+msgid ""
+"Whether or not niced processes should be considered on processor load "
+"calculation"
+msgstr "Apakah proses nice mesti dianggap pada penghitungan beban prosessor"
+
+#: ../data/gnome-power-manager.schemas.in.h:131
+msgid "Whether to hibernate, suspend or do nothing when inactive"
+msgstr "Apakah berhibernasi, suspend atau tidak melakukan apapun "
+"ketika tidak aktif"
+
+#: ../data/gnome-power-manager.schemas.in.h:132
+msgid "Whether to use time-based notifications"
+msgstr "Apakah menggunakan pemberitahuan berbasis waktu"
+
+#: ../data/gnome-power-manager.schemas.in.h:133
+msgid "Whether we should show the axis labels in the statistics window"
+msgstr "Apakah kita mesti menampilkan nama sumbu pada jendela statistik"
+
+#: ../data/gnome-power-manager.schemas.in.h:134
+msgid "Whether we should show the axis labels in the statistics window."
+msgstr "Apakah kita mesti menampilkan nama sumbu pada jendela statistik."
+
+#: ../data/gnome-power-manager.schemas.in.h:135
+msgid "Whether we should show the events in the statistics window"
+msgstr "Apakah kita mesti menampilkan kejadian pada jendela statistik"
+
+#: ../data/gnome-power-manager.schemas.in.h:136
+msgid "Whether we should show the events in the statistics window."
+msgstr "Apakah kita mesti menampilkan kejadian pada jendela statistik."
+
+#: ../data/gnome-power-manager.schemas.in.h:137
+msgid "Whether we should show the legend in the statistics window"
+msgstr "Apakah kita mesti menampilkan lambang pada jendela statistik"
+
+#: ../data/gnome-power-manager.schemas.in.h:138
+msgid "Whether we should show the legend in the statistics window."
+msgstr "Apakah kita mesti menampilkan lambang pada jendela statistik."
+
+#: ../data/gnome-power-preferences.desktop.in.h:1
+msgid "Configure power management"
+msgstr "Konfigurasi kelola daya"
+
+#: ../data/gnome-power-preferences.desktop.in.h:2
+msgid "Power Management"
+msgstr "Kelola Daya"
+
+#: ../data/gnome-power-statistics.desktop.in.h:1
+msgid "Observe power management"
+msgstr "Pantau kelola daya"
+
+#: ../data/gnome-power-statistics.desktop.in.h:2 ../src/gpm-statistics.c:139
+msgid "Power Statistics"
+msgstr "Statistik Daya"
+
+#: ../data/gpm-feedback-widget.glade.h:1
+msgid "Brightness"
+msgstr "Pencahayaan"
+
+#: ../data/gpm-graph.glade.h:1
+msgid "Add _axis labels"
+msgstr "Tambahkan n_ama sumbu"
+
+#: ../data/gpm-graph.glade.h:2
+msgid "Add lege_nd"
+msgstr "Tambahkan lamba_ng"
+
+#: ../data/gpm-graph.glade.h:3
+msgid "Add related _events"
+msgstr "Tambah k_ejadian berhubungan"
+
+#: ../data/gpm-graph.glade.h:4
+msgid "Device:"
+msgstr "Perangkat:"
+
+#: ../data/gpm-graph.glade.h:5
+msgid "Graph type:"
+msgstr "Tipe grafis:"
+
+#: ../data/gpm-graph.glade.h:6 ../src/gpm-statistics-core.c:55
+msgid "Power History"
+msgstr "Riwayat Daya"
+
+#: ../data/gpm-inhibit-test.glade.h:1
+msgid "Application:"
+msgstr "Aplikasi:"
+
+#: ../data/gpm-inhibit-test.glade.h:2
+msgid "Burning DVD, titled \"My Photos\""
+msgstr "Bakar DVD, berjudul \"Foto Saya\""
+
+#: ../data/gpm-inhibit-test.glade.h:3
+msgid "Inhibit Tester"
+msgstr ""
+
+#: ../data/gpm-inhibit-test.glade.h:4
+msgid "InhibitAuto"
+msgstr ""
+
+#: ../data/gpm-inhibit-test.glade.h:5
+msgid "InhibitManual"
+msgstr ""
+
+#: ../data/gpm-inhibit-test.glade.h:6
+msgid "Reason:"
+msgstr "Alasan:"
+
+#: ../data/gpm-inhibit-test.glade.h:7
+msgid "UnInhibit"
+msgstr ""
+
+#: ../data/gpm-inhibit-test.glade.h:8
+msgid "Vendor Acme Foo"
+msgstr ""
+
+#: ../data/gpm-prefs.glade.h:1
+msgid "<b>Buttons</b>"
+msgstr "<b>Tombol</b>"
+
+#: ../data/gpm-prefs.glade.h:2
+msgid "<b>Extras</b>"
+msgstr "<b>Ekstra</b>"
+
+#: ../data/gpm-prefs.glade.h:3
+msgid "<b>Notification Area</b>"
+msgstr "<b>Daerah Pemberitahuan</b>"
+
+#: ../data/gpm-prefs.glade.h:4
+msgid "Always sleep when the lid is _closed"
+msgstr "Selalu tidur ketika laptop _tertutup"
+
+#: ../data/gpm-prefs.glade.h:5
+msgid "Computer sp_eed policy:"
+msgstr "Peraturan k_ecepatan komputer:"
+
+#: ../data/gpm-prefs.glade.h:6
+msgid "Enable UPS discharge _alarm"
+msgstr "Izinkan pemberitahuan UPS tidak isi"
+
+#: ../data/gpm-prefs.glade.h:7
+msgid "General"
+msgstr "Umum"
+
+#: ../data/gpm-prefs.glade.h:8
+msgid "Make _default"
+msgstr "Buat _default"
+
+#: ../data/gpm-prefs.glade.h:9
+msgid "On AC Power"
+msgstr "Pada daya AC"
+
+#: ../data/gpm-prefs.glade.h:10
+msgid "On Battery Power"
+msgstr "Pada Daya Baterai"
+
+#: ../data/gpm-prefs.glade.h:11
+msgid "On UPS Power"
+msgstr "Pada Daya UPS"
+
+#: ../data/gpm-prefs.glade.h:12
+msgid "Only display an icon when a battery is p_resent"
+msgstr "Hanya tampilkan sebuah icon ketika baterai muncul"
+
+#: ../data/gpm-prefs.glade.h:13
+msgid "Only display an icon when charging or _discharging"
+msgstr "Hanya menampilkan icon ketika mengisi atau ti_dak mengisi"
+
+#: ../data/gpm-prefs.glade.h:14
+msgid "Power Management Preferences"
+msgstr "Ketetapan Kelola Daya"
+
+#: ../data/gpm-prefs.glade.h:15
+msgid "Put _display to sleep when inactive for:"
+msgstr "Ti_durkan tampilan ketika tidak aktif untuk:"
+
+#: ../data/gpm-prefs.glade.h:16
+msgid "Put computer to _sleep when inactive for:"
+msgstr "Tidurkan komputer ketika tidak aktif untuk:"
+
+#: ../data/gpm-prefs.glade.h:17
+msgid "Set display _brightness to:"
+msgstr "Tetapkan _cahaya tampilan ke:"
+
+#: ../data/gpm-prefs.glade.h:18
+msgid "Use _ambient light to adjust LCD brightness"
+msgstr "Gunakan cahaya lingkung_an untuk menyesuaikan cahaya LCD"
+
+#: ../data/gpm-prefs.glade.h:19
+msgid "Use _sound to notify in event of an error"
+msgstr "Gunakan _suara untuk mengingatkan kejadian kesalahan"
+
+#: ../data/gpm-prefs.glade.h:20
+msgid "When UPS power is _critically low:"
+msgstr "Ketika daya UPS _lemah sekali:"
+
+#: ../data/gpm-prefs.glade.h:21
+msgid "When UPS power is l_ow:"
+msgstr "Ketika daya UPS l_emah:"
+
+#: ../data/gpm-prefs.glade.h:22
+msgid "When battery po_wer is critically low:"
+msgstr "Ketika da_ya baterai lemah:"
+
+#: ../data/gpm-prefs.glade.h:23
+msgid "When laptop lid is cl_osed:"
+msgstr "Ketika lapt_op di tutup:"
+
+#: ../data/gpm-prefs.glade.h:24
+msgid "When the _suspend button is pressed:"
+msgstr "Ketika tombol _suspend ditekan:"
+
+#: ../data/gpm-prefs.glade.h:25
+msgid "When the power _button is pressed:"
+msgstr "Ketika tom_bol daya ditekan:"
+
+#: ../data/gpm-prefs.glade.h:26
+msgid "_Always display an icon"
+msgstr "Sel_alu tampilkan sebuah icon"
+
+#: ../data/gpm-prefs.glade.h:27
+msgid "_Never display an icon"
+msgstr "Janga_n tampilkan icon"
+
+#: ../data/gpm-prefs.glade.h:28
+msgid "_Only display an icon when battery power is critically low"
+msgstr "Tampilkan ic_on hanya jika daya baterai lemah sekali"
+
+#: ../src/gpm-common.c:129
+msgid "Unknown time"
+msgstr "Waktu tidak diketahui"
+
+#: ../src/gpm-common.c:134
+#, c-format
+msgid "%i minute"
+msgstr "%i menit"
+
+#: ../src/gpm-common.c:145
+#, c-format
+msgid "%i hour"
+msgstr "%i jam"
+
+#. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
+#. * Swap order with "%2$s %2$i %1$s %1$i if needed
+#: ../src/gpm-common.c:151
+#, c-format
+msgid "%i %s, %i %s"
+msgstr "%i %s, %i %s"
+
+#: ../src/gpm-common.c:152
+msgid "hour"
+msgstr "jam"
+
+#: ../src/gpm-common.c:153
+msgid "minute"
+msgstr "menit"
+
+#: ../src/gpm-common.h:31
+msgid "Power Manager for the GNOME desktop"
+msgstr "Pengelola Daya untuk desktop GNOME"
+
+#: ../src/gpm-graph-widget.c:78
+msgid "Charged"
+msgstr "Terisi"
+
+#: ../src/gpm-graph-widget.c:79
+msgid "Charging"
+msgstr "Mengisi"
+
+#: ../src/gpm-graph-widget.c:80
+msgid "Discharging"
+msgstr "Tidak mengisi"
+
+#: ../src/gpm-graph-widget.c:182
+msgid "Charge percentage"
+msgstr "Persentasi isian"
+
+#: ../src/gpm-graph-widget.c:185
+msgid "Time remaining"
+msgstr "Waktu tersisa"
+
+#: ../src/gpm-graph-widget.c:188
+msgid "Power"
+msgstr "Daya"
+
+#: ../src/gpm-graph-widget.c:191
+msgid "Cell Voltage"
+msgstr "Voltasi Baterai"
+
+#: ../src/gpm-graph-widget.c:193 ../src/gpm-graph-widget.c:213
+msgid "Unknown caption"
+msgstr ""
+
+#: ../src/gpm-graph-widget.c:210
+msgid "Time"
+msgstr "Waktu"
+
+#: ../src/gpm-graph-widget.c:211
+msgid "Time since startup"
+msgstr "Waktu semenjak mulai"
+
+#. Translators: This is %i hours
+#: ../src/gpm-graph-widget.c:478
+#, c-format
+msgid "%ih"
+msgstr "%ih"
+
+#. Translators: This is %i hours %02i minutes
+#: ../src/gpm-graph-widget.c:481
+#, c-format
+msgid "%ih%02i"
+msgstr "%ih%02i"
+
+#. Translators: This is %2i minutes
+#: ../src/gpm-graph-widget.c:486
+#, c-format
+msgid "%2im"
+msgstr "%2im"
+
+#. Translators: This is %2i minutes %02i seconds
+#: ../src/gpm-graph-widget.c:489
+#, c-format
+msgid "%2im%02i"
+msgstr "%2im%02i"
+
+#. Translators: This is %2i seconds
+#: ../src/gpm-graph-widget.c:493
+#, c-format
+msgid "%2is"
+msgstr "%2is"
+
+#. Translators: This is %i Percentage
+#: ../src/gpm-graph-widget.c:497
+#, c-format
+msgid "%i%%"
+msgstr "%i%%"
+
+#. Translators: This is %i Watts
+#: ../src/gpm-graph-widget.c:500
+#, c-format
+msgid "%iW"
+msgstr "%iW"
+
+#. Translators: This is %i Volts
+#: ../src/gpm-graph-widget.c:503
+#, c-format
+msgid "%iV"
+msgstr "%iV"
+
+#: ../src/gpm-info.c:112
+#, c-format
+msgid "%s because %s"
+msgstr "%s karena %s"
+
+#: ../src/gpm-info.c:440
+msgid "AC adapter inserted"
+msgstr "Adapter AC dimasukkan"
+
+#: ../src/gpm-info.c:443
+msgid "AC adapter removed"
+msgstr "Adapter AC dilepas"
+
+#: ../src/gpm-info.c:464
+msgid "The laptop lid has been closed"
+msgstr "Laptop ditutup"
+
+#: ../src/gpm-info.c:470
+msgid "The laptop lid has been re-opened"
+msgstr "Laptop dibuka ulang"
+
+#: ../src/gpm-info.c:492
+msgid "idle mode ended"
+msgstr "mode menganggur diakhiri"
+
+#: ../src/gpm-info.c:495
+msgid "idle mode started"
+msgstr "mode menganggur dimulai"
+
+#: ../src/gpm-info.c:514
+msgid "dpms on"
+msgstr "dpms hidup"
+
+#: ../src/gpm-info.c:516
+msgid "dpms standby"
+msgstr "dpms siaga"
+
+#: ../src/gpm-info.c:518
+msgid "dpms suspend"
+msgstr "dpms suspend"
+
+#: ../src/gpm-info.c:520
+msgid "dpms off"
+msgstr "dpms mati"
+
+#: ../src/gpm-info.c:537
+msgid "Resuming computer"
+msgstr "Mengembalikan komputer"
+
+#: ../src/gpm-info.c:553 ../src/gpm-tray-icon.c:927
+msgid "Hibernate Problem"
+msgstr "Masalah Hibernasi"
+
+#: ../src/gpm-info.c:555 ../src/gpm-tray-icon.c:936
+msgid "Suspend Problem"
+msgstr "Masalah Suspend"
+
+#: ../src/gpm-inhibit.c:420
+#, c-format
+msgid "has stopped the %s from taking place : "
+msgstr "menghentikan %s dari mengambil tempat : "
+
+#: ../src/gpm-inhibit.c:426
+#, c-format
+msgid "Multiple applications have stopped the %s from taking place."
+msgstr "Beberapa aplikasi telah menghentikan %s dari mengambil tempat."
+
+#: ../src/gpm-inhibit-test.c:261 ../src/gpm-prefs.c:119
+msgid "GNOME Power Preferences"
+msgstr "Ketetapan Daya GNOME"
+
+#: ../src/gpm-inhibit-test.c:267
+msgid "Power Inhibit Test"
+msgstr ""
+
+#: ../src/gpm-main.c:151
+msgid "Do not daemonize"
+msgstr "Jangan daemon-kan"
+
+#: ../src/gpm-main.c:153 ../src/gpm-prefs.c:115 ../src/gpm-statistics.c:113
+msgid "Show extra debugging information"
+msgstr "Tampilkan informasi debug ekstra"
+
+#: ../src/gpm-main.c:155
+msgid "Exit after a small delay (for debugging)"
+msgstr "Keluar setelah penundaan kecil (untuk debug)"
+
+#: ../src/gpm-main.c:157
+msgid "Debug specific files, e.g. power"
+msgstr "Berkas khusus debug, mis: daya"
+
+#: ../src/gpm-main.c:161
+msgid "GNOME Power Manager"
+msgstr "Pengelola Daya GNOME"
+
+#: ../src/gpm-manager.c:166
+#, c-format
+msgid "Request to %s"
+msgstr "Minta ke %s"
+
+#. I want this translated
+#: ../src/gpm-manager.c:175
+msgid "Perform action anyway"
+msgstr "Laksanakan saja aksi"
+
+#: ../src/gpm-manager.c:362
+msgid "Doing nothing"
+msgstr "Tidak melakukan apapun"
+
+#: ../src/gpm-manager.c:366 ../src/gpm-manager.c:494 ../src/gpm-manager.c:580
+#: ../src/gpm-manager.c:1378
+msgid "Suspending computer"
+msgstr "Men-suspend komputer"
+
+#: ../src/gpm-manager.c:371 ../src/gpm-manager.c:510 ../src/gpm-manager.c:592
+#: ../src/gpm-manager.c:1353
+msgid "Hibernating computer"
+msgstr "Meng-hibernasi komputer"
+
+#: ../src/gpm-manager.c:379 ../src/gpm-manager.c:526
+msgid "Shutting down computer"
+msgstr "Mematikan komputer"
+
+#: ../src/gpm-manager.c:384
+msgid "GNOME interactive logout"
+msgstr "Keluar interaktif GNOME"
+
+#: ../src/gpm-manager.c:495
+msgid "the DBUS method Suspend() was invoked"
+msgstr "metode DBUS Suspend() telah diambil"
+
+#: ../src/gpm-manager.c:511
+msgid "the DBUS method Hibernate() was invoked"
+msgstr "metode DBUS Hibernate() telah diambil"
+
+#: ../src/gpm-manager.c:527
+msgid "the DBUS method Shutdown() was invoked"
+msgstr "metode DBUS Shutdown() telah diambil"
+
+#: ../src/gpm-manager.c:542
+msgid "Rebooting computer"
+msgstr "Mengulang komputer"
+
+#: ../src/gpm-manager.c:543
+msgid "the DBUS method Reboot() was invoked"
+msgstr "metode DBUS Reboot() telah diambil"
+
+#: ../src/gpm-manager.c:580 ../src/gpm-manager.c:592
+msgid "System idle"
+msgstr "System nganggur"
+
+#. Not a new string, from src/gpm-manager.c:678
+#. * I had to move the markup as a bug got fixed in
+#. * notification daemon to not allow markup in the title
+#. * see https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=240258
+#: ../src/gpm-manager.c:678 ../src/gpm-power.c:743 ../src/gpm-warning.c:159
+msgid "Power Information"
+msgstr "Informasi Daya"
+
+#: ../src/gpm-manager.c:702
+msgid "the power button has been pressed"
+msgstr "tombol daya telah ditekan"
+
+#: ../src/gpm-manager.c:721
+msgid "the suspend button has been pressed"
+msgstr "tombol suspend telah ditekan"
+
+#: ../src/gpm-manager.c:741
+msgid "the hibernate button has been pressed"
+msgstr "tombol hibernasi telah ditekan"
+
+#: ../src/gpm-manager.c:765
+msgid "the lid has been closed on ac power"
+msgstr "laptop ditutup pada daya AC"
+
+#: ../src/gpm-manager.c:770
+msgid "the lid has been closed on battery power"
+msgstr "laptop ditutup pada daya baterai"
+
+#: ../src/gpm-manager.c:859
+msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
+msgstr "laptop telah ditutup, dan adapter AC dilepas (dan gconf ok)"
+
+#: ../src/gpm-manager.c:882
+msgid "battery is critically low"
+msgstr "baterai lemah sekali"
+
+#: ../src/gpm-manager.c:932
+msgid "Your battery is now fully charged"
+msgstr "Baterai anda telah penuh terisi"
+
+#: ../src/gpm-manager.c:933
+msgid "Battery Charged"
+msgstr "Baterai Terisi"
+
+#: ../src/gpm-manager.c:998
+msgid ""
+"The battery is below the critical level and this computer will <b>power-off</"
+"b> when the battery becomes completely empty."
+msgstr ""
+"Baterai di bawah tingkat kritis dan komputer ini akan <b>Dimatikan</b> "
+"ketika baterai akan sepenuhnya kosong."
+
+#: ../src/gpm-manager.c:1003
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
+"computer in a suspended state."
+msgstr ""
+"Baterai di bawah tingkat kritis dan komputer ini akan disuspend. <br><b>CATAT:</b> "
+"Sedikit daya diperlukan agar komputer anda tetap berada pada keadaan suspend."
+
+#: ../src/gpm-manager.c:1009
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"hibernate."
+msgstr ""
+"Baterai di bawah tingkat kritis dan komputer ini akan berhibernasi."
+
+#: ../src/gpm-manager.c:1013
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"shutdown."
+msgstr ""
+"Baterai di bawah tingkat kritis dan komputer ini akan dimatikan."
+
+#: ../src/gpm-manager.c:1025
+msgid "The AC Power has been unplugged. The system is now using battery power."
+msgstr "Daya AC dicabut. System sekarang menggunakan daya baterai."
+
+#: ../src/gpm-manager.c:1035
+#, c-format
+msgid ""
+"You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
+"your AC Adapter to avoid losing data."
+msgstr ""
+"Anda memiliki kira-kira <b>%s</b> masa baterai tersisa (%d%%). Masukkan "
+"adapter AC anda untuk menghindari hilang data."
+
+#: ../src/gpm-manager.c:1120
+msgid ""
+"The UPS is below the critical level and this computer will <b>power-off</b> "
+"when the UPS becomes completely empty."
+msgstr ""
+"UPS berada pada tingkat kritis dan komputer ini akan <b>mati</b> "
+"ketika UPS sepenuhnya kosong."
+
+#: ../src/gpm-manager.c:1125
+msgid ""
+"The UPS is below the critical level and this computer is about to hibernate."
+msgstr ""
+"UPS di bawah tingkat kritis dan komputer ini akan berhibernasi."
+
+#: ../src/gpm-manager.c:1129
+msgid ""
+"The UPS is below the critical level and this computer is about to shutdown."
+msgstr ""
+"UPS di bawah tingkat kritis dan komputer ini akan dimatikan."
+
+#: ../src/gpm-manager.c:1136
+msgid "UPS is critically low"
+msgstr "UPS sangat lemah"
+
+#: ../src/gpm-manager.c:1140
+msgid "Your system is running on backup power!"
+msgstr "System anda berjalan pada daya cadangan!"
+
+#: ../src/gpm-manager.c:1144
+#, c-format
+msgid ""
+"You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
+"power to your computer to avoid losing data."
+msgstr ""
+"Anda punya sekitar <b>%s</b> daya UPS tersisa (%d%%). Kembalikan daya "
+"ke komputer anda untuk menghindari kehilangan data."
+
+#: ../src/gpm-manager.c:1233
+#, c-format
+msgid ""
+"The %s device attached to this computer is low in power (%d%%). This device "
+"will soon stop functioning if not charged."
+msgstr ""
+"Perangkat %s tersambung ke komputer ini lemah daya (%d%%). Perangkat ini "
+"akan segera berhenti berfungsi jika tidak diisi."
+
+#: ../src/gpm-manager.c:1354
+msgid "user clicked hibernate from tray menu"
+msgstr ""
+
+#: ../src/gpm-manager.c:1379
+msgid "user clicked suspend from tray menu"
+msgstr ""
+
+#: ../src/gpm-manager.c:1402
+msgid "Suspend failure"
+msgstr "Suspend gagal"
+
+#: ../src/gpm-manager.c:1403
+msgid "Your computer did not appear to resume correctly from suspend."
+msgstr "Komputer anda tidak kelihatan kembali secara benar dari suspend."
+
+#: ../src/gpm-manager.c:1406
+msgid "Hibernate failure"
+msgstr "Hibernasi gagal"
+
+#: ../src/gpm-manager.c:1407
+msgid "Your computer did not appear to resume correctly from hibernate."
+msgstr "Komputer anda tidak kelihatan kembali secara benar dari hibernasi."
+
+#: ../src/gpm-manager.c:1412
+msgid "This may be a driver or hardware problem."
+msgstr "Ini bisa jadi masalah perangkat keras ataupun program."
+
+#: ../src/gpm-manager.c:1413
+msgid "Check the GNOME Power Manager manual for common problems."
+msgstr "Periksa petunjuk Pengelola Daya GNOME untuk masalah umum."
+
+#: ../src/gpm-notify.c:329
+msgid "Battery may be recalled"
+msgstr "Baterai mungkin diganti"
+
+#: ../src/gpm-notify.c:330
+#, c-format
+msgid ""
+"The battery in your computer may have been recalled by %s and you may be at "
+"risk.\n"
+"\n"
+"For more information visit the %s battery recall website."
+msgstr ""
+"Baterai pada komputer anda mungkin ditarik oleh %s dan anda mungkin berisiko.\n"
+"\n"
+"Untuk informasi lebih lanjut kunjungi website penarikan baterai %s."
+
+#: ../src/gpm-notify.c:343
+msgid "Visit recall website"
+msgstr "Kunjungi website penarikan"
+
+#: ../src/gpm-notify.c:348
+msgid "Do not show me this again"
+msgstr "Jangan tampilkan pesan ini lagi"
+
+#: ../src/gpm-power.c:518
+msgid "Laptop battery"
+msgstr "Baterai Laptop"
+
+#: ../src/gpm-power.c:520
+msgid "UPS"
+msgstr "UPS"
+
+#: ../src/gpm-power.c:522
+msgid "Wireless mouse"
+msgstr "Mouse nirkabel"
+
+#: ../src/gpm-power.c:524
+msgid "Wireless keyboard"
+msgstr "Papan ketik nirkabel"
+
+#: ../src/gpm-power.c:526
+msgid "PDA"
+msgstr "PDA"
+
+#: ../src/gpm-power.c:528 ../src/gpm-statistics-core.c:639
+msgid "Unknown"
+msgstr "Tidak diketahui"
+
+#: ../src/gpm-power.c:768
+#, c-format
+msgid "<b>Product:</b> %s\n"
+msgstr "<b>Produk: </b> %s\n"
+
+#: ../src/gpm-power.c:771
+msgid "<b>Status:</b> Missing\n"
+msgstr "<b>Status:</b> Hilang\n"
+
+#: ../src/gpm-power.c:773
+msgid "<b>Status:</b> Charged\n"
+msgstr "<b>Status:</b> Terisi\n"
+
+#: ../src/gpm-power.c:775
+msgid "<b>Status:</b> Charging\n"
+msgstr "<b>Status:</b> Mengisi\n"
+
+#: ../src/gpm-power.c:777
+msgid "<b>Status:</b> Discharging\n"
+msgstr "<b>Status:</b> Tidak mengisi\n"
+
+#: ../src/gpm-power.c:780
+#, c-format
+msgid "<b>Percentage charge:</b> %i%%\n"
+msgstr "<b>Persentasi terisi:</b> %i%%\n"
+
+#: ../src/gpm-power.c:785
+msgid "Vendor:"
+msgstr "Pembuat:"
+
+#: ../src/gpm-power.c:793 ../src/gpm-power.c:798
+msgid "Lithium ion"
+msgstr ""
+
+#: ../src/gpm-power.c:795 ../src/gpm-power.c:800
+msgid "Lead acid"
+msgstr ""
+
+#: ../src/gpm-power.c:802
+msgid "Lithium polymer"
+msgstr ""
+
+#: ../src/gpm-power.c:804
+msgid "Nickel metal hydride"
+msgstr ""
+
+#: ../src/gpm-power.c:811
+msgid "Technology:"
+msgstr "Teknologi:"
+
+#: ../src/gpm-power.c:815
+msgid "Serial number:"
+msgstr "Nomor seri:"
+
+#: ../src/gpm-power.c:819
+msgid "Model:"
+msgstr "Model:"
+
+#: ../src/gpm-power.c:825
+msgid "Remaining time:"
+msgstr "Waktu tersisa:"
+
+#: ../src/gpm-power.c:831
+msgid "Excellent"
+msgstr "Bagus sekali"
+
+#: ../src/gpm-power.c:833
+msgid "Good"
+msgstr "Bagus"
+
+#: ../src/gpm-power.c:835
+msgid "Fair"
+msgstr "Lumayan"
+
+#: ../src/gpm-power.c:837
+msgid "Poor"
+msgstr "Buruk"
+
+#: ../src/gpm-power.c:840
+msgid "Capacity:"
+msgstr "Kapasitas:"
+
+#: ../src/gpm-power.c:846 ../src/gpm-power.c:874
+msgid "Current charge:"
+msgstr "Isi sekarang:"
+
+#: ../src/gpm-power.c:852
+msgid "Last full charge:"
+msgstr "Isi penuh terakhir:"
+
+#: ../src/gpm-power.c:857 ../src/gpm-power.c:879
+msgid "Design charge:"
+msgstr "Isi desain:"
+
+#: ../src/gpm-power.c:862
+msgid "Charge rate (raw):"
+msgstr "Rata isi (mentah):"
+
+#: ../src/gpm-power.c:867
+msgid "Charge rate (smoothed):"
+msgstr ""
+
+#: ../src/gpm-power.c:1365
+#, c-format
+msgid "%s fully charged (%i%%)\n"
+msgstr "%s penuh terisi (%i%%)\n"
+
+#: ../src/gpm-power.c:1371
+#, c-format
+msgid "%s %s remaining (%i%%)\n"
+msgstr "%s %s tersisa (%i%%)\n"
+
+#. don't display "Unknown remaining"
+#: ../src/gpm-power.c:1375
+#, c-format
+msgid "%s discharging (%i%%)\n"
+msgstr "%s tidak terisi (%i%%)\n"
+
+#: ../src/gpm-power.c:1382
+#, c-format
+msgid "%s %s until charged (%i%%)\n"
+msgstr "%s %s sampai terisi (%i%%)\n"
+
+#. don't display "Unknown remaining"
+#: ../src/gpm-power.c:1386
+#, c-format
+msgid "%s charging (%i%%)\n"
+msgstr "%s terisi (%i%%)\n"
+
+#: ../src/gpm-power.c:1423
+msgid "Recalculating information..."
+msgstr "Menghitung ulang informasi..."
+
+#. only enable this if discharging on UPS, for details see:
+#. http://bugzilla.gnome.org/show_bug.cgi?id=329027
+#: ../src/gpm-power.c:1434
+msgid "Computer is running on backup power\n"
+msgstr "Komputer berjalan pada daya cadangan\n"
+
+#: ../src/gpm-power.c:1437
+msgid "Computer is running on AC power\n"
+msgstr "Komputer berjalan pada daya AC\n"
+
+#: ../src/gpm-power.c:1440
+msgid "Computer is running on battery power\n"
+msgstr "Komputer berjalan pada daya baterai\n"
+
+#: ../src/gpm-prefs.c:141
+msgid "Power Preferences"
+msgstr "Ketetapan Daya"
+
+#. The text that should appear in the action combo boxes
+#: ../src/gpm-prefs-core.c:81 ../src/gpm-statistics-core.c:83
+msgid "Ask me"
+msgstr "Tanya saya"
+
+#: ../src/gpm-prefs-core.c:82 ../src/gpm-statistics-core.c:84
+#: ../src/gpm-statistics-core.c:772
+msgid "Suspend"
+msgstr "Suspend"
+
+#: ../src/gpm-prefs-core.c:83 ../src/gpm-statistics-core.c:85
+msgid "Shutdown"
+msgstr "Matikan"
+
+#: ../src/gpm-prefs-core.c:84 ../src/gpm-statistics-core.c:86
+#: ../src/gpm-statistics-core.c:782
+msgid "Hibernate"
+msgstr "Hibernasi"
+
+#: ../src/gpm-prefs-core.c:85 ../src/gpm-statistics-core.c:87
+msgid "Blank screen"
+msgstr "Layar kosong"
+
+#. The text that should appear in the processor combo box
+#: ../src/gpm-prefs-core.c:86 ../src/gpm-prefs-core.c:89
+#: ../src/gpm-statistics-core.c:88
+msgid "Do nothing"
+msgstr "Tidak berbuat apapun"
+
+#: ../src/gpm-prefs-core.c:90
+msgid "Based on processor load"
+msgstr "Berdasarkan beban prosessor"
+
+#: ../src/gpm-prefs-core.c:91
+msgid "Automatic power saving"
+msgstr "Hemat daya otomatis"
+
+#: ../src/gpm-prefs-core.c:92
+msgid "Maximum power saving"
+msgstr "Hemat daya maksimal"
+
+#: ../src/gpm-prefs-core.c:93
+msgid "Always maximum speed"
+msgstr "Selalu kecepatan maksimal"
+
+#: ../src/gpm-prefs-core.c:242
+msgid "Never"
+msgstr "Tak pernah"
+
+#: ../src/gpm-statistics.c:117
+msgid "GNOME Power Statistics"
+msgstr "Statistik Daya GNOME"
+
+#: ../src/gpm-statistics-core.c:54
+msgid "Charge History"
+msgstr "Riwayat Isi"
+
+#: ../src/gpm-statistics-core.c:56
+msgid "Voltage History"
+msgstr "Riwayar Voltase"
+
+#: ../src/gpm-statistics-core.c:57
+msgid "Estimated Time History"
+msgstr "Perkiraan Waktu Riwayat"
+
+#: ../src/gpm-statistics-core.c:715
+msgid "Could not connect to GNOME Power Manager."
+msgstr "Tidak bisa tersambung ke Pengelola Daya GNOME."
+
+#: ../src/gpm-statistics-core.c:716
+msgid "Perhaps the program is not running or you are using an old version?"
+msgstr "Mungkin program tidak berjalan atau anda menggunakan versi lama?"
+
+#: ../src/gpm-statistics-core.c:752
+msgid "On AC"
+msgstr "Pada AC"
+
+#: ../src/gpm-statistics-core.c:757
+msgid "On battery"
+msgstr "Pada baterai"
+
+#: ../src/gpm-statistics-core.c:762
+msgid "Session idle"
+msgstr "Sesi menganggur"
+
+#: ../src/gpm-statistics-core.c:767
+msgid "Session active"
+msgstr "Sesi aktif"
+
+#: ../src/gpm-statistics-core.c:777
+msgid "Resume"
+msgstr "Kembalikan"
+
+#: ../src/gpm-statistics-core.c:787
+msgid "Lid closed"
+msgstr "Laptop tutup"
+
+#: ../src/gpm-statistics-core.c:792
+msgid "Lid opened"
+msgstr "Laptop buka"
+
+#: ../src/gpm-statistics-core.c:797
+msgid "Notification"
+msgstr "Notifikasi"
+
+#: ../src/gpm-statistics-core.c:802
+msgid "DPMS On"
+msgstr "DPMS Hidup"
+
+#: ../src/gpm-statistics-core.c:807
+msgid "DPMS Standby"
+msgstr "DPMS Siaga"
+
+#: ../src/gpm-statistics-core.c:812
+msgid "DPMS Suspend"
+msgstr "DPMS Suspend"
+
+#: ../src/gpm-statistics-core.c:817
+msgid "DPMS Off"
+msgstr "DPMS Mati"
+
+#: ../src/gpm-srv-screensaver.c:111
+msgid "Display DPMS activated"
+msgstr "Tampilan DPMS aktif"
+
+#: ../src/gpm-srv-screensaver.c:131
+msgid "On battery power"
+msgstr "Pada daya baterai"
+
+#: ../src/gpm-srv-screensaver.c:157
+msgid "Laptop lid is closed"
+msgstr "Laptop ditutup"
+
+#: ../src/gpm-tray-icon.c:319
+msgid "translator-credits"
+msgstr "ahmad riza h nst  <rizahnst@gnome.org>"
+
+#. Preferences
+#: ../src/gpm-tray-icon.c:472
+msgid "_Preferences"
+msgstr "Keteta_pan"
+
+#. Statistics
+#: ../src/gpm-tray-icon.c:480
+msgid "Power _History"
+msgstr "Riwayat _Daya"
+
+#. Help
+#: ../src/gpm-tray-icon.c:492
+#: ../applets/brightness/GNOME_BrightnessApplet.xml.h:2
+#: ../applets/inhibit/GNOME_InhibitApplet.xml.h:2
+msgid "_Help"
+msgstr "_Bantuan"
+
+#. About
+#: ../src/gpm-tray-icon.c:500
+#: ../applets/brightness/GNOME_BrightnessApplet.xml.h:1
+#: ../applets/inhibit/GNOME_InhibitApplet.xml.h:1
+msgid "_About"
+msgstr "Tent_ang"
+
+#: ../src/gpm-tray-icon.c:613
+msgid "_Suspend"
+msgstr "_Suspend"
+
+#: ../src/gpm-tray-icon.c:623
+msgid "Hi_bernate"
+msgstr "Hi_bernasi"
+
+#: ../src/gpm-tray-icon.c:928
+#, c-format
+msgid "HAL failed to %s. Check the help file for common problems."
+msgstr "HAL gagal untuk %s. Periksa berkas bantuan untuk masalah umum."
+
+#: ../src/gpm-tray-icon.c:930
+msgid "hibernate"
+msgstr "hibernasi"
+
+#: ../src/gpm-tray-icon.c:933
+#, c-format
+msgid ""
+"Your computer failed to %s.\n"
+"Check the help file for common problems."
+msgstr ""
+"Komputer anda gagal untuk %s.\n"
+"Periksa berkas bantuan untuk masalah umum."
+
+#: ../src/gpm-tray-icon.c:935
+msgid "suspend"
+msgstr "suspend"
+
+#: ../src/gpm-warning.c:153
+msgid "Power Critically Low"
+msgstr "Daya Sangat Lemah Sekali"
+
+#: ../src/gpm-warning.c:155
+msgid "Power Very Low"
+msgstr "Daya Sangat Lemah"
+
+#: ../src/gpm-warning.c:157
+msgid "Power Low"
+msgstr "Daya Lemah"
+
