@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-25 19:57+0900\n"
-"PO-Revision-Date: 2007-08-25 19:57+0900\n"
+"POT-Creation-Date: 2007-11-23 17:24+0900\n"
+"PO-Revision-Date: 2007-11-23 17:24+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -1326,19 +1326,19 @@ msgstr "システムはバッテリーで動作中です\n"
 
 #: ../src/gpm-engine.c:307
 msgid "Battery discharge time is currently unknown\n"
-msgstr "現在のところバッテリーの放電時間は不明です\n"
+msgstr "現在のところ放電に要する時間は不明です\n"
 
 #: ../src/gpm-engine.c:309
 msgid "Battery charge time is currently unknown\n"
-msgstr "現在のところバッテリーの充電時間は不明です\n"
+msgstr "現在のところ充電に要する時間は不明です\n"
 
 #: ../src/gpm-engine.c:313
 msgid "Battery discharge time is estimated\n"
-msgstr "バッテリーの放電時間を見積もりました\n"
+msgstr "放電に要する時間の見積もりが完了しました\n"
 
 #: ../src/gpm-engine.c:315
 msgid "Battery charge time is estimated\n"
-msgstr "バッテリーの充電時間を見積もりました\n"
+msgstr "充電に要する時間の見積もりが完了しました\n"
 
 #. show a AC icon
 #: ../src/gpm-engine.c:598
@@ -1400,23 +1400,23 @@ msgstr "%s (理由: %s)"
 
 #: ../src/gpm-info.c:199
 msgid "On AC"
-msgstr "AC 電源使用時"
+msgstr "AC 電源を使用している"
 
 #: ../src/gpm-info.c:203
 msgid "On battery"
-msgstr "バッテリー使用時"
+msgstr "バッテリーを使用している"
 
 #: ../src/gpm-info.c:207
 msgid "Session powersave"
-msgstr "セッションは省電力モードです"
+msgstr "セッションが省電力モード"
 
 #: ../src/gpm-info.c:211
 msgid "Session idle"
-msgstr "セッションはアイドル中です"
+msgstr "セッションがアイドル中"
 
 #: ../src/gpm-info.c:215
 msgid "Session active"
-msgstr "セッションが実行中です"
+msgstr "セッションが動作中"
 
 #. Translators: translate ONLY the string part after the |
 #: ../src/gpm-info.c:220
@@ -1435,11 +1435,11 @@ msgstr "ハイバーネート"
 
 #: ../src/gpm-info.c:234
 msgid "Lid closed"
-msgstr "ノート PC を閉じました"
+msgstr "ノート PC を閉じた"
 
 #: ../src/gpm-info.c:238
 msgid "Lid opened"
-msgstr "ノート PC を開きました"
+msgstr "ノート PC を開いた"
 
 #: ../src/gpm-info.c:242
 msgid "Notification"
@@ -1447,19 +1447,19 @@ msgstr "通知"
 
 #: ../src/gpm-info.c:247
 msgid "DPMS On"
-msgstr "DPMS が ON です"
+msgstr "DPMS が ON"
 
 #: ../src/gpm-info.c:251
 msgid "DPMS Standby"
-msgstr "DPMS はスタンバイです"
+msgstr "DPMS がスタンバイ"
 
 #: ../src/gpm-info.c:255
 msgid "DPMS Suspend"
-msgstr "DPMS はサスペンドです"
+msgstr "DPMS がサスペンド"
 
 #: ../src/gpm-info.c:259
 msgid "DPMS Off"
-msgstr "DPMS が OFF です"
+msgstr "DPMS が OFF"
 
 #: ../src/gpm-info.c:294 ../src/gpm-info.c:295
 msgid "Power"
@@ -1480,7 +1480,7 @@ msgstr "バッテリーの充電/放電率"
 
 #: ../src/gpm-info.c:313
 msgid "Percentage"
-msgstr "充/放電率"
+msgstr "充電/放電率"
 
 #: ../src/gpm-info.c:321
 msgid "Battery Voltage"
@@ -1626,21 +1626,21 @@ msgstr "%s への要求"
 msgid "Perform action anyway"
 msgstr "とにかく実行する"
 
-#: ../src/gpm-manager.c:311 ../src/gpm-manager.c:337 ../src/gpm-manager.c:362
-#: ../src/gpm-manager.c:388 ../src/gpm-manager.c:420
+#: ../src/gpm-manager.c:312 ../src/gpm-manager.c:338 ../src/gpm-manager.c:372
+#: ../src/gpm-manager.c:398 ../src/gpm-manager.c:438
 msgid "Action forbidden"
 msgstr "実行できないアクションです"
 
-#: ../src/gpm-manager.c:312 ../src/gpm-manager.c:363 ../src/gpm-manager.c:421
+#: ../src/gpm-manager.c:313 ../src/gpm-manager.c:373 ../src/gpm-manager.c:439
 msgid "Policy timeout is not valid. Please wait a few seconds and try again."
 msgstr ""
 "ポリシーのタイムアウトが正しくありません (数分後にもう一度試してみて下さい)。"
 
-#: ../src/gpm-manager.c:324 ../src/gpm-manager.c:375
+#: ../src/gpm-manager.c:325 ../src/gpm-manager.c:385
 msgid "Action disallowed"
 msgstr "アクションが拒否されました"
 
-#: ../src/gpm-manager.c:325
+#: ../src/gpm-manager.c:326
 msgid ""
 "Suspend support has been disabled. Contact your administrator for more "
 "details."
@@ -1648,15 +1648,15 @@ msgstr ""
 "サスペンドのサポートが無効になっています (詳細はシステム管理者に問い合わせて"
 "下さい)。"
 
-#: ../src/gpm-manager.c:338
+#: ../src/gpm-manager.c:339
 msgid "Suspend is not available on this computer."
 msgstr "このシステムではサスペンドを利用できません。"
 
-#: ../src/gpm-manager.c:346 ../src/gpm-manager.c:725
+#: ../src/gpm-manager.c:352 ../src/gpm-manager.c:771
 msgid "Suspending computer"
 msgstr "サスペンドする"
 
-#: ../src/gpm-manager.c:376
+#: ../src/gpm-manager.c:386
 msgid ""
 "Hibernate support has been disabled. Contact your administrator for more "
 "details."
@@ -1664,161 +1664,161 @@ msgstr ""
 "ハイバーネートのサポートが無効になっています (詳細はシステム管理者に問い合わ"
 "せて下さい)。"
 
-#: ../src/gpm-manager.c:389
+#: ../src/gpm-manager.c:399
 msgid "Hibernate is not available on this computer."
 msgstr "このシステムではハイバーネートを利用できません。"
 
-#: ../src/gpm-manager.c:397 ../src/gpm-manager.c:737
+#: ../src/gpm-manager.c:412 ../src/gpm-manager.c:786
 msgid "Hibernating computer"
 msgstr "ハイバーネートにする"
 
-#: ../src/gpm-manager.c:437
+#: ../src/gpm-manager.c:460
 msgid "Doing nothing"
 msgstr "何もしない"
 
-#: ../src/gpm-manager.c:450
+#: ../src/gpm-manager.c:473
 msgid "Shutting down computer"
 msgstr "シャットダウンする"
 
-#: ../src/gpm-manager.c:455
+#: ../src/gpm-manager.c:478
 msgid "GNOME interactive logout"
 msgstr "GNOME の対話的なログアウト"
 
-#: ../src/gpm-manager.c:725 ../src/gpm-manager.c:737
+#: ../src/gpm-manager.c:771 ../src/gpm-manager.c:786
 msgid "System idle"
 msgstr "システムはアイドル状態です"
 
-#: ../src/gpm-manager.c:811
+#: ../src/gpm-manager.c:863
 msgid "Power Information"
 msgstr "電源の情報"
 
-#: ../src/gpm-manager.c:828
+#: ../src/gpm-manager.c:880
 msgid "the power button has been pressed"
 msgstr "電源ボタンが押されました"
 
-#: ../src/gpm-manager.c:840
+#: ../src/gpm-manager.c:892
 msgid "the suspend button has been pressed"
 msgstr "サスペンド・ボタンが押されました"
 
-#: ../src/gpm-manager.c:852
+#: ../src/gpm-manager.c:904
 msgid "the hibernate button has been pressed"
 msgstr "ハイバーネート・ボタンが押されました"
 
-#: ../src/gpm-manager.c:883
+#: ../src/gpm-manager.c:935
 msgid "the lid has been closed on ac power"
 msgstr "AC 電源を使用したノート PC を閉じました"
 
-#: ../src/gpm-manager.c:913
+#: ../src/gpm-manager.c:965
 msgid "the lid has been closed on battery power"
 msgstr "バッテリーを使用したノート PC を閉じました"
 
-#: ../src/gpm-manager.c:1002
+#: ../src/gpm-manager.c:1054
 msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
 msgstr "ノート PC を閉じました (電源プラグを抜きました)"
 
-#: ../src/gpm-manager.c:1025
+#: ../src/gpm-manager.c:1077
 msgid "battery is critically low"
 msgstr "バッテリーの残量が深刻です"
 
-#: ../src/gpm-manager.c:1340
+#: ../src/gpm-manager.c:1392
 msgid "Laptop battery low"
 msgstr "バッテリーの残量が少なくなっています"
 
-#: ../src/gpm-manager.c:1342
+#: ../src/gpm-manager.c:1394
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%d%%)"
 msgstr "バッテリーの残量はおよそ <b>%s</b> (%d%%) です"
 
-#: ../src/gpm-manager.c:1345
+#: ../src/gpm-manager.c:1397
 msgid "UPS low"
 msgstr "UPS の残量が少なくなっています"
 
-#: ../src/gpm-manager.c:1347
+#: ../src/gpm-manager.c:1399
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS backup power (%d%%)"
 msgstr "UPS のバックアップ電力の残量はおよそ <b>%s</b> (%d%%) です"
 
-#: ../src/gpm-manager.c:1350 ../src/gpm-manager.c:1450
+#: ../src/gpm-manager.c:1402 ../src/gpm-manager.c:1502
 msgid "Mouse battery low"
 msgstr "マウスのバッテリー残量が少なくなっています"
 
-#: ../src/gpm-manager.c:1351
+#: ../src/gpm-manager.c:1403
 #, c-format
 msgid "The wireless mouse attached to this computer is low in power (%d%%)"
 msgstr ""
 "このシステムに接続されている無線式マウスのバッテリー残量が少なくなっています "
 "(%d%%)"
 
-#: ../src/gpm-manager.c:1353 ../src/gpm-manager.c:1455
+#: ../src/gpm-manager.c:1405 ../src/gpm-manager.c:1507
 msgid "Keyboard battery low"
 msgstr "キーボードのバッテリー残量が少なくなっています"
 
-#: ../src/gpm-manager.c:1354
+#: ../src/gpm-manager.c:1406
 #, c-format
 msgid "The wireless keyboard attached to this computer is low in power (%d%%)"
 msgstr ""
 "このシステムに接続されている無線式キーボードのバッテリー残量が少なくなってい"
 "ます (%d%%)"
 
-#: ../src/gpm-manager.c:1356 ../src/gpm-manager.c:1460
+#: ../src/gpm-manager.c:1408 ../src/gpm-manager.c:1512
 msgid "PDA battery low"
 msgstr "PDA のバッテリー残量が少なくなっています"
 
-#: ../src/gpm-manager.c:1357
+#: ../src/gpm-manager.c:1409
 #, c-format
 msgid "The PDA attached to this computer is low in power (%d%%)"
 msgstr ""
 "このシステムに接続されている PDA のバッテリー残量が少なくなっています (%d%%)"
 
-#: ../src/gpm-manager.c:1359 ../src/gpm-manager.c:1465
+#: ../src/gpm-manager.c:1411 ../src/gpm-manager.c:1517
 msgid "Cell phone battery low"
 msgstr "携帯電話機のバッテリー残量が少なくなっています"
 
-#: ../src/gpm-manager.c:1360
+#: ../src/gpm-manager.c:1412
 #, c-format
 msgid "The cell phone attached to this computer is low in power (%d%%)"
 msgstr ""
 "このシステムに接続されている携帯電話機のバッテリー残量が少なくなっています (%"
 "d%%)"
 
-#: ../src/gpm-manager.c:1387
+#: ../src/gpm-manager.c:1439
 msgid "a short time"
 msgstr "今すぐ"
 
-#: ../src/gpm-manager.c:1410 ../src/gpm-manager.c:1496
+#: ../src/gpm-manager.c:1462 ../src/gpm-manager.c:1548
 msgid "Laptop battery critically low"
 msgstr "バッテリーの残量が深刻です"
 
-#: ../src/gpm-manager.c:1423
+#: ../src/gpm-manager.c:1475
 #, c-format
 msgid "Plug in your AC adapter to avoid losing data."
 msgstr "Plug in your AC adapter to avoid losing data."
 
-#: ../src/gpm-manager.c:1426
+#: ../src/gpm-manager.c:1478
 #, c-format
 msgid "This computer will suspend in %s if the AC is not connected."
 msgstr "このシステムは AC 電源を接続しないと %s 内にサスペンドになります。"
 
-#: ../src/gpm-manager.c:1429
+#: ../src/gpm-manager.c:1481
 #, c-format
 msgid "This computer will hibernate in %s if the AC is not connected."
 msgstr "このシステムは AC 電源を接続しないと %s 内にハイバーネートになります。"
 
-#: ../src/gpm-manager.c:1432
+#: ../src/gpm-manager.c:1484
 #, c-format
 msgid "This computer will shutdown in %s if the AC is not connected."
 msgstr "このシステムは AC 電源を接続しないと %s 内にシャットダウンします。"
 
-#: ../src/gpm-manager.c:1435
+#: ../src/gpm-manager.c:1487
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%d%%). %s"
 msgstr "バッテリーの残量はおよそ <b>%s</b> (%d%%) です。%s"
 
-#: ../src/gpm-manager.c:1443 ../src/gpm-manager.c:1528
+#: ../src/gpm-manager.c:1495 ../src/gpm-manager.c:1580
 msgid "UPS critically low"
 msgstr "UPS の残量が深刻な状態になりました"
 
-#: ../src/gpm-manager.c:1445
+#: ../src/gpm-manager.c:1497
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore AC "
@@ -1827,7 +1827,7 @@ msgstr ""
 "UPS の残量はおよそ <b>%s</b> (%d%%) です (データを失う前に AC 電源に差して下"
 "さい)"
 
-#: ../src/gpm-manager.c:1451
+#: ../src/gpm-manager.c:1503
 #, c-format
 msgid ""
 "The wireless mouse attached to this computer is very low in power (%d%%). "
@@ -1836,7 +1836,7 @@ msgstr ""
 "このシステムに接続されている無線式マウスのバッテリー残量が非常に少なくなって"
 "います (%d%%) (充電しないと、このデバイスはまもなく停止します)"
 
-#: ../src/gpm-manager.c:1456
+#: ../src/gpm-manager.c:1508
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is very low in power (%d%%). "
@@ -1845,7 +1845,7 @@ msgstr ""
 "このシステムに接続されている無線式キーボードのバッテリー残量が非常に少なく"
 "なっています (%d%%) (充電しないと、このデバイスはまもなく停止します)"
 
-#: ../src/gpm-manager.c:1461
+#: ../src/gpm-manager.c:1513
 #, c-format
 msgid ""
 "The PDA attached to this computer is very low in power (%d%%). This device "
@@ -1854,7 +1854,7 @@ msgstr ""
 "このシステムに接続されている PDA のバッテリー残量が非常に少なくなっています "
 "(%d%%) (充電しないと、このデバイスはまもなく停止します)"
 
-#: ../src/gpm-manager.c:1466
+#: ../src/gpm-manager.c:1518
 #, c-format
 msgid ""
 "Your cell phone is very low in power (%d%%). This device will soon stop "
@@ -1863,7 +1863,7 @@ msgstr ""
 "このシステムに接続されている携帯電話機のバッテリー残量が非常に少なくなってい"
 "ます (%d%%) (充電しないと、このデバイスはまもなく停止します)"
 
-#: ../src/gpm-manager.c:1503
+#: ../src/gpm-manager.c:1555
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
@@ -1871,7 +1871,7 @@ msgstr ""
 "次に示すように、バッテリーの残量が深刻な状態です。このままバッテリーが空にな"
 "ると<b>システムの電源が落ちます</b>。"
 
-#: ../src/gpm-manager.c:1508
+#: ../src/gpm-manager.c:1560
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1881,7 +1881,7 @@ msgstr ""
 "す。<br><b>注意:</b> サスペンドの状態を維持するには、微量ながらも電力が必要で"
 "す。"
 
-#: ../src/gpm-manager.c:1514
+#: ../src/gpm-manager.c:1566
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
@@ -1889,7 +1889,7 @@ msgstr ""
 "次に示すように、バッテリーの残量が深刻な状態でハイバーネートに入ろうとしてい"
 "ます。"
 
-#: ../src/gpm-manager.c:1518
+#: ../src/gpm-manager.c:1570
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
@@ -1897,7 +1897,7 @@ msgstr ""
 "次に示すように、バッテリーの残量が深刻な状態でシャットダウンしようとしていま"
 "す。"
 
-#: ../src/gpm-manager.c:1535
+#: ../src/gpm-manager.c:1587
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
@@ -1905,23 +1905,23 @@ msgstr ""
 "次に示すように、UPS の残量が深刻な状態です。このままバッテリが空になると<b>シ"
 "ステムの電源が落ちます</b>。"
 
-#: ../src/gpm-manager.c:1540
+#: ../src/gpm-manager.c:1592
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr ""
 "次に示すように、UPS の残量が深刻な状態でハイバーネートに入ろうとしています。"
 
-#: ../src/gpm-manager.c:1544
+#: ../src/gpm-manager.c:1596
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr ""
 "次に示すように、UPS の残量が深刻な状態でシャットダウンしようとしています。"
 
-#: ../src/gpm-manager.c:1650
+#: ../src/gpm-manager.c:1702
 msgid "Install problem!"
 msgstr "インストールに問題があります！"
 
-#: ../src/gpm-manager.c:1651
+#: ../src/gpm-manager.c:1703
 msgid ""
 "The configuration defaults for GNOME Power Manager have not been installed "
 "correctly.\n"
@@ -2043,13 +2043,13 @@ msgid ""
 "%s fully charged (%i%%)\n"
 "Provides %s battery runtime\n"
 msgstr ""
-"%s の充電が完了しました (%i%%) \n"
-"バッテリーで %s 動作します\n"
+"%sの充電が完了しました (現在 %i%%)\n"
+"バッテリによる動作時間は %s です\n"
 
 #: ../src/gpm-cell-array.c:980
 #, c-format
 msgid "%s fully charged (%i%%)\n"
-msgstr "%s の充電が完了 (%i%%) しました \n"
+msgstr "%sの充電が %i%% 完了しました\n"
 
 #: ../src/gpm-cell-array.c:988
 #, c-format
@@ -2060,7 +2060,7 @@ msgstr "%s の残量は %s (%i%%) です\n"
 #: ../src/gpm-cell-array.c:993
 #, c-format
 msgid "%s discharging (%i%%)\n"
-msgstr "%s を放電中 (%i%%) です\n"
+msgstr "%sは放電中で残り %i%% です\n"
 
 #: ../src/gpm-cell-array.c:1005
 #, c-format
@@ -2068,19 +2068,19 @@ msgid ""
 "%s %s until charged (%i%%)\n"
 "Provides %s battery runtime\n"
 msgstr ""
-"%s は充電完了まで %s (%i%%) です\n"
-"バッテリーで %s 動作します\n"
+"%sは充電完了まで %s あります (現在 %i%% 完了)\n"
+"バッテリによる動作時間は %s です\n"
 
 #: ../src/gpm-cell-array.c:1012
 #, c-format
 msgid "%s %s until charged (%i%%)\n"
-msgstr "%s は充電完了まで %s (%i%%) です\n"
+msgstr "%sは充電完了まで %s あります (現在 %i%% 完了)\n"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-cell-array.c:1017
 #, c-format
 msgid "%s charging (%i%%)\n"
-msgstr "%s を充電中 (%i%%) です\n"
+msgstr "%sの充電が %i%% 完了しました\n"
 
 #: ../src/gpm-cell-array.c:1024
 msgid "Battery state could not be read at this time\n"
@@ -2186,15 +2186,15 @@ msgstr "工場出荷時の充電量:"
 
 #: ../src/gpm-cell.c:581
 msgid "Charge rate:"
-msgstr "充電率:"
+msgstr "充電レート:"
 
 #: ../src/gpm-cell-unit.c:247
 msgid "Laptop batteries"
-msgstr "ノート PC のバッテリー"
+msgstr "ノート PC のバッテリー (複数個)"
 
 #: ../src/gpm-cell-unit.c:249
 msgid "UPSs"
-msgstr "UPS"
+msgstr "UPS (複数個)"
 
 #: ../src/gpm-cell-unit.c:251
 msgid "Wireless mice"
