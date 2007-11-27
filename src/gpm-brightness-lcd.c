@@ -84,7 +84,7 @@ gpm_brightness_lcd_get_hw (GpmBrightnessLcd *brightness,
 	GError *error = NULL;
 	gboolean ret;
 	DBusGProxy *proxy;
-	int level = 0;
+	gint level = 0;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_LCD (brightness), FALSE);
@@ -97,7 +97,7 @@ gpm_brightness_lcd_get_hw (GpmBrightnessLcd *brightness,
 
 	ret = dbus_g_proxy_call (proxy, "GetBrightness", &error,
 				 G_TYPE_INVALID,
-				 G_TYPE_UINT, &level,
+				 G_TYPE_INT, &level,
 				 G_TYPE_INVALID);
 
 	if (brightness_level_hw != NULL) {
@@ -155,9 +155,9 @@ gpm_brightness_lcd_set_hw (GpmBrightnessLcd *brightness,
 	gpm_debug ("Setting %i of %i", brightness_level_hw, brightness->priv->levels - 1);
 
 	ret = dbus_g_proxy_call (proxy, "SetBrightness", &error,
-				 G_TYPE_INT, (int)brightness_level_hw,
+				 G_TYPE_INT, (gint)brightness_level_hw,
 				 G_TYPE_INVALID,
-				 G_TYPE_UINT, &retval,
+				 G_TYPE_INT, &retval,
 				 G_TYPE_INVALID);
 	/* retval is ignored, the HAL API is broken... */
 
