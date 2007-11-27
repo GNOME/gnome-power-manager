@@ -116,6 +116,25 @@ failed:
 	exit (1);
 }
 
+void
+gpm_st_warning (GpmSelfTest *test, const gchar *format, ...)
+{
+	va_list args;
+	gchar va_args_buffer [1025];
+	if (test->level == LEVEL_ALL || test->level == LEVEL_NORMAL) {
+		if (format == NULL) {
+			g_print ("UNKNOWN WARNING\n");
+			goto out;
+		}
+		va_start (args, format);
+		g_vsnprintf (va_args_buffer, 1024, format, args);
+		va_end (args);
+		g_print ("WARNING [%s]\n", va_args_buffer);
+	}
+out:
+	;
+}
+
 static void
 gpm_st_run_test (GpmSelfTest *test, GpmSelfTestFunc func)
 {

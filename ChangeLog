@@ -1,5 +1,13 @@
 2007-11-27  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-cell-array.c: (gpm_st_cell_array):
+	* src/gpm-cell.c: (gpm_st_cell):
+	* src/gpm-self-test.c: (gpm_st_warning):
+	* src/gpm-self-test.h:
+	Try to pass make distcheck on a desktop machine.
+
+2007-11-27  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-srv-brightness-kbd.c: (button_pressed_cb):
 	Use the correct enumerated type for the button press.
 	From the ubuntu patch archive.

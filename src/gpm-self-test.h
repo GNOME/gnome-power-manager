@@ -54,6 +54,7 @@ void gpm_st_end (GpmSelfTest *test);
 void gpm_st_title (GpmSelfTest *test, const gchar *format, ...);
 void gpm_st_success (GpmSelfTest *test, const gchar *format, ...);
 void gpm_st_failed (GpmSelfTest *test, const gchar *format, ...);
+void gpm_st_warning (GpmSelfTest *test, const gchar *format, ...);
 
 void gpm_st_common (GpmSelfTest *test);
 void gpm_st_profile (GpmSelfTest *test);

@@ -812,6 +812,7 @@ gpm_st_cell (GpmSelfTest *test)
 	udi = gpm_cell_get_battery ();
 	if (udi == NULL) {
 		gpm_st_failed (test, "did not find battery device");
+		gpm_st_end (test);
 	}
 
 	/************************************************************/
