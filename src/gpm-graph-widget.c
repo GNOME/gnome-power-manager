@@ -629,6 +629,39 @@ gpm_graph_widget_draw_labels (GpmGraphWidget *graph, cairo_t *cr)
 }
 
 /**
+ * gpm_graph_widget_get_y_label_max_width:
+ * @graph: This class instance
+ * @cr: Cairo drawing context
+ *
+ * Draw the X and the Y labels onto the graph.
+ **/
+static guint
+gpm_graph_widget_get_y_label_max_width (GpmGraphWidget *graph, cairo_t *cr)
+{
+	gfloat a, b;
+	gchar *text;
+	gint value;
+	gfloat divheight = (gfloat)graph->priv->box_height / 10.0f;
+	gint length_y = graph->priv->stop_y - graph->priv->start_y;
+	PangoRectangle ink_rect, logical_rect;
+	guint biggest = 0;
+
+	/* do y text */
+	for (a=0; a<11; a++) {
+		b = graph->priv->box_y + (a * divheight);
+		value = (length_y / 10) * (10 - a) + graph->priv->start_y;
+		text = gpm_get_axis_label (graph->priv->axis_type_y, value);
+		pango_layout_set_text (graph->priv->layout, text, -1);
+		pango_layout_get_pixel_extents (graph->priv->layout, &ink_rect, &logical_rect);
+		if (ink_rect.width > biggest) {
+			biggest = ink_rect.width;
+		}
+		g_free (text);
+	}
+	return biggest;
+}
+
+/**
  * gpm_graph_widget_auto_range:
  * @graph: This class instance
  *
@@ -1184,7 +1217,10 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 
 	cairo_save (cr);
 
-	graph->priv->box_x = 45;
+	/* we need this so we know the y text */
+	gpm_graph_widget_auto_range (graph);
+
+	graph->priv->box_x = gpm_graph_widget_get_y_label_max_width (graph, cr) + 10;
 	graph->priv->box_y = 5;
 
 	graph->priv->box_height = graph_widget->allocation.height - (20 + graph->priv->box_y);
@@ -1207,8 +1243,6 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	if (graph->priv->use_grid) {
 		gpm_graph_widget_draw_grid (graph, cr);
 	}
-
-	gpm_graph_widget_auto_range (graph);
 
 	/* -3 is so we can keep the lines inside the box at both extremes */
 	data_x = graph->priv->stop_x - graph->priv->start_x;

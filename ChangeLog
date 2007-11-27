@@ -1,5 +1,12 @@
 2007-11-27  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-graph-widget.c: (gpm_graph_widget_get_y_label_max_width),
+	(gpm_graph_widget_draw_graph):
+	Work out the size of the label text to avoid truncating numbers in
+	other locales. Fixes #496367
+
+2007-11-27  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-cell-array.c: (gpm_st_cell_array):
 	* src/gpm-cell.c: (gpm_st_cell):
 	* src/gpm-self-test.c: (gpm_st_warning):
