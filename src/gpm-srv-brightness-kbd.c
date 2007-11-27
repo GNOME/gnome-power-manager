@@ -141,7 +141,7 @@ button_pressed_cb (GpmButton        *button,
 	if ((strcmp (type, GPM_BUTTON_KBD_BRIGHT_UP) == 0)) {
 		gpm_brightness_kbd_up (srv_brightness->priv->brightness);
 
-	} else if ((strcmp (type, GPM_BUTTON_KBD_BRIGHT_UP) == 0)) {
+	} else if ((strcmp (type, GPM_BUTTON_KBD_BRIGHT_DOWN) == 0)) {
 		gpm_brightness_kbd_down (srv_brightness->priv->brightness);
 
 	} else if (strcmp (type, GPM_BUTTON_KBD_BRIGHT_TOGGLE) == 0) {
