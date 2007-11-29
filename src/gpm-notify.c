@@ -570,7 +570,7 @@ gpm_notify_sleep_failed (GpmNotify *notify, gboolean hibernate)
 		icon = GPM_STOCK_SUSPEND;
 	}
 
-	gpm_notify_create (notify, title, msg, GPM_NOTIFY_TIMEOUT_LONG, icon,
+	gpm_notify_create (notify, title, msg, GPM_NOTIFY_TIMEOUT_NEVER, icon,
 			   GPM_NOTIFY_URGENCY_CRITICAL);
 
 	/* add extra stuff */
