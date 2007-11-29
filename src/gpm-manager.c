@@ -180,7 +180,7 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 		GString *message = g_string_new ("");
 		const char *msg;
 
-		/*Compose message for each possile action*/
+		/*Compose message for each possible action*/
 		if (strcmp (action, "suspend") == 0) {
 				title = g_strdup_printf (_("Request to suspend")); 
 

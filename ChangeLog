@@ -1,3 +1,8 @@
+2007-11-28  Rodrigo Moya <rodrigo@gnome-db.org>
+
+	* src/gpm-notify.c (gpm_notify_sleep_failed): use _NEVER for sleep
+	problems notification, so that the user can always see it.
+
 2007-11-18  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-cell-array.c: (gpm_st_cell_array):
@@ -11,7 +16,7 @@
 	reviewed by: Richard Hugues
 
 	* configure.in: document that --enable-checkfg is for Ubuntu 
-          systems, not Debian. Fixes #497328.
+	systems, not Debian. Fixes #497328.
 
 2007-11-16  simon.zheng  <simon.zheng@sun.com>
 
