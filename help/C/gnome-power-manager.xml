@@ -167,7 +167,7 @@
     <note>
       <para>
         You can disable this notification by changing the GConf key
-        <command>/apps/gnome-power-manager/notify_ac_adapter</command>.
+        <command>/apps/gnome-power-manager/notify/discharging</command>.
       </para>
     </note>
   </section>
@@ -187,7 +187,7 @@
     <note>
       <para>
         You can disable this notification by changing the GConf key
-        <command>/apps/gnome-power-manager/notify_fully_charged</command>.
+        <command>/apps/gnome-power-manager/notify/fully_charged</command>.
       </para>
     </note>
     <note>
@@ -216,6 +216,12 @@
         </mediaobject>
       </screenshot>
     </figure>
+    <note>
+      <para>
+        You can disable this notification by changing the GConf key
+        <command>/apps/gnome-power-manager/notify/low_power</command>.
+      </para>
+    </note>
   </section>
 
   <section id="notify-critical">
@@ -254,6 +260,12 @@
         </mediaobject>
       </screenshot>
     </figure>
+    <note>
+      <para>
+        You can disable this notification by changing the GConf key
+        <command>/apps/gnome-power-manager/notify/sleep_failed</command>.
+      </para>
+    </note>
   </section>
 </section>
 
@@ -499,7 +511,7 @@
         services.
         To rectify this, use another policy (e.g. Maximum Performance)
         or set the following GConf key:
-        <command>/apps/gnome-power-manager/cpufreq_consider_nice</command>.
+        <command>/apps/gnome-power-manager/cpufreq/consider_nice</command>.
       </para>
     </note>
   </section>
@@ -569,7 +581,7 @@
     <note>
       <para>
         You can change the idle laptop panel brightness by changing the GConf key
-        <command>/apps/gnome-power-manager/laptop_panel_dim_brightness</command>.
+        <command>/apps/gnome-power-manager/backlight/idle_brightness</command>.
       </para>
     </note>
   </section>
@@ -591,7 +603,7 @@
     <itemizedlist>
       <listitem>
         <para>
-          <command>/apps/gnome-power-manager/lock_use_screensaver_settings</command>
+          <command>/apps/gnome-power-manager/lock/use_screensaver_settings</command>
         </para>
       </listitem>
     </itemizedlist>
@@ -603,17 +615,17 @@
     <itemizedlist>
       <listitem>
         <para>
-          <command>/apps/gnome-power-manager/lock_on_blank_screen</command>
+          <command>/apps/gnome-power-manager/lock/blank_screen</command>
         </para>
       </listitem>
       <listitem>
         <para>
-          <command>/apps/gnome-power-manager/lock_on_suspend</command>
+          <command>/apps/gnome-power-manager/lock/suspend</command>
         </para>
       </listitem>
       <listitem>
         <para>
-          <command>/apps/gnome-power-manager/lock_on_hibernate</command>
+          <command>/apps/gnome-power-manager/lock/hibernate</command>
         </para>
       </listitem>
     </itemizedlist>
@@ -753,8 +765,8 @@
     <para>
       You have to change the DPMS suspend mode &application; uses.
       Open <command>gconf-editor</command>, and then change the keys 
-      <literal>/apps/gnome-power-manager/ac_dpms_sleep_method</literal> and
-      <literal>/apps/gnome-power-manager/battery_dpms_sleep_method</literal>
+      <literal>/apps/gnome-power-manager/backlight/dpms_method_ac</literal> and
+      <literal>/apps/gnome-power-manager/backlight/dpms_method_battery</literal>
       to one of the modes that work, e.g. standby, suspend or off.
     </para>
   </section>
@@ -810,11 +822,11 @@
       You might be able to use the percentage charge for g-p-m to use as the
       policy data.
       Open <command>gconf-editor</command>, and then change the key 
-      <command>/apps/gnome-power-manager/use_time_for_policy</command> to false.
+      <command>/apps/gnome-power-manager/general/use_time_for_policy</command> to false.
       You can do this easily by doing:
       <command>
         gconftool-2 --set --type bool
-        /apps/gnome-power-manager/use_time_for_policy false
+        /apps/gnome-power-manager/general/use_time_for_policy false
       </command>
     </para>
     <para>
