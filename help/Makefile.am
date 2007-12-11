@@ -5,20 +5,18 @@ DOC_MODULE = gnome-power-manager
 DOC_ENTITIES = legal.xml
 DOC_INCLUDES = 
 DOC_FIGURES = \
-	figures/gs-prefs.png \
-	figures/gpm-mouse-left.png \
-	figures/gpm-mouse-right.png \
-	figures/gpm-prefs-actions.png \
-	figures/gpm-prefs-display.png \
-	figures/gpm-prefs-notification.png \
-	figures/gpm-prefs-processor.png \
-	figures/gpm-prefs-sleep.png \
-	figures/gpm-stats-graph.png \
+	figures/applet-brightness.png \
+	figures/applet-inhibit.png \
+	figures/gpm-cell-capacity.png \
 	figures/gpm-charged.png \
 	figures/gpm-critical.png \
 	figures/gpm-low.png \
+	figures/gpm-prefs-ac.png \
+	figures/gpm-prefs-battery.png \
+	figures/gpm-prefs-general.png \
+	figures/gpm-stats-graph.png \
+	figures/gpm-suspend-problem.png \
 	figures/gpm-unplugged.png \
-	figures/gpm-cell-capacity.png \
-	figures/gpm-suspend-problem.png
+	figures/gs-prefs.png
 
 DOC_LINGUAS = ca es fr hu it oc pa ru sv
