@@ -1525,6 +1525,7 @@ gpm_st_cell_array (GpmSelfTest *test)
 	} else {
 		gpm_st_failed (test, "could not get correct cell");
 	}
+
 out:
 	g_object_unref (cell_array);
 
