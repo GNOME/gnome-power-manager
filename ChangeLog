@@ -1,3 +1,9 @@
+2007-12-12  simon.zheng  <simon.zheng@sun.com>
+
+	* libdbus-glib/libdbus-proxy.c: (dbus_proxy_disconnect):
+	Avoid printing NULL point when daemon runs in debug pattern
+	without HAL.
+
 2007-12-11  Richard Hughes  <richard@hughsie.com>
 
 	* help/C/gnome-power-manager.xml:

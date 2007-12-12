@@ -115,7 +115,10 @@ dbus_proxy_disconnect (DbusProxy *dbus_proxy)
 
 	/* are already disconnected? */
 	if (dbus_proxy->priv->proxy == NULL) {
-		g_debug ("already disconnected from %s", dbus_proxy->priv->service);
+		if (dbus_proxy->priv->service)
+			g_debug ("already disconnected from %s", dbus_proxy->priv->service);
+		else 
+			g_debug ("already disconnected.");
 		return FALSE;
 	}
 
