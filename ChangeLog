@@ -1,3 +1,12 @@
+2007-12-14  Richard Hughes  <richard@hughsie.com>
+
+	* applets/inhibit/inhibit-applet.c: (gpm_applet_get_icon),
+	(gpm_applet_check_size), (gpm_applet_draw_cb),
+	(gpm_applet_change_background_cb), (gpm_applet_click_cb),
+	(watch_connection_cb), (gpm_inhibit_applet_init):
+	Revert to the old version of the applet for now as mclasens patch
+	causes a 100% hang on startup.
+
 2007-12-13  simon.zheng  <simon.zheng@sun.com>
 
 	* man/Makefile.am:
