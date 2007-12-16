@@ -1488,7 +1488,7 @@ gpm_st_cell_array (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we got a single recall notice");
-	if (recall_count == 0) {
+	if (recall_count2 == 0) {
 		gpm_st_warning (test, "did not get recall - install fdi!");
 		goto out;
 	}
