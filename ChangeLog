@@ -1,3 +1,8 @@
+2007-12-21  simon.zheng  <simon.zheng@sun.com>
+
+	* src/gpm-engine.c: (gpm_engine_recalculate_state_icon):
+        Avoid printing NULL string in the case of "icon == NULL".
+
 2007-12-14  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in:
