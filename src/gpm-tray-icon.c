@@ -68,6 +68,7 @@ struct GpmTrayIconPrivate
 	gboolean		 is_visible;
 	gboolean		 show_suspend;
 	gboolean		 show_hibernate;
+	gboolean		 show_context_menu;
 };
 
 enum {
@@ -122,6 +123,14 @@ gpm_tray_icon_enable_hibernate (GpmTrayIcon *icon,
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
 	icon->priv->show_hibernate = enabled;
+}
+
+static void
+gpm_tray_icon_enable_context_menu (GpmTrayIcon *icon,
+				   gboolean     enabled)
+{
+	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
+	icon->priv->show_context_menu = enabled;
 }
 
 /**
@@ -429,6 +438,9 @@ gpm_tray_icon_popup_menu_cb (GtkStatusIcon *status_icon,
 
 	gpm_debug ("icon right clicked");
 
+	if (!icon->priv->show_context_menu)
+		return;
+
 	/* Preferences */
 	item = gtk_image_menu_item_new_with_mnemonic (_("_Preferences"));
 	image = gtk_image_new_from_icon_name (GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU);
@@ -629,6 +641,9 @@ conf_key_changed_cb (GpmConf     *conf,
 		gpm_tray_icon_enable_suspend (icon, allowed_in_menu && enabled);
 		gpm_control_allowed_hibernate (icon->priv->control, &enabled, NULL);
 		gpm_tray_icon_enable_hibernate (icon, allowed_in_menu && enabled);
+	} else if (strcmp (key, GPM_CONF_UI_SHOW_CONTEXT_MENU) == 0) {
+		gpm_conf_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_CONTEXT_MENU, &allowed_in_menu);
+		gpm_tray_icon_enable_context_menu (icon, allowed_in_menu);
 	}
 }
 
@@ -676,6 +691,9 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 	gpm_tray_icon_enable_suspend (icon, enabled && allowed_in_menu);
 	gpm_control_allowed_hibernate (icon->priv->control, &enabled, NULL);
 	gpm_tray_icon_enable_hibernate (icon, enabled && allowed_in_menu);
+
+	gpm_conf_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_CONTEXT_MENU, &allowed_in_menu);
+	gpm_tray_icon_enable_context_menu (icon, allowed_in_menu);
 
 	gpm_tray_icon_show (GPM_TRAY_ICON (icon), FALSE);
 }

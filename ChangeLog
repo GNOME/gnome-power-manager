@@ -1,5 +1,19 @@
 2007-12-21  Richard Hughes  <richard@hughsie.com>
 
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-conf.h:
+	* src/gpm-tray-icon.c: (gpm_tray_icon_enable_context_menu),
+	(gpm_tray_icon_popup_menu_cb), (conf_key_changed_cb),
+	(gpm_tray_icon_init):
+	Here is a gnome-power-manager patch that adds a show_context_menu gconf key.
+	If we turn that off in the gdm session, we not only get rid of the
+	preferences ui, but also the possibly unwanted help (brings up yelp,
+	and may offer ways to bring up a browser) and about (has a link).
+
+	Patch from Matthias Clasen <matthias.clasen@gmail.com>, many thanks.
+
+2007-12-21  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-main.c: (main):
 	Drop unused gnome client from main.c
 
