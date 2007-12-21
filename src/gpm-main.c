@@ -31,7 +31,7 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
-#include <libgnomeui/libgnomeui.h>
+#include <gtk/gtk.h>
 #include <glade/glade.h>
 #include <gst/gst.h>
 
@@ -41,8 +41,6 @@
 
 #include "gpm-manager.h"
 #include "dbus/xdg-power-management-core.h"
-
-static void gpm_exit (GpmManager *manager);
 
 /**
  * gpm_object_register:
@@ -100,17 +98,6 @@ gpm_object_register (DBusGConnection *connection,
 }
 
 /**
- * gpm_exit:
- * @manager: This manager class instance
- **/
-static void
-gpm_exit (GpmManager *manager)
-{
-	gpm_debug_shutdown ();
-	exit (0);
-}
-
-/**
  * timed_exit_cb:
  * @loop: The main loop
  *
@@ -132,8 +119,6 @@ int
 main (int argc, char *argv[])
 {
 	GMainLoop *loop;
-	GnomeClient *master;
-	GnomeClientFlags flags;
 	DBusGConnection *system_connection;
 	DBusGConnection *session_connection;
 	gboolean verbose = FALSE;
@@ -144,7 +129,6 @@ main (int argc, char *argv[])
 	GpmManager *manager = NULL;
 	GError *error = NULL;
 	GOptionContext *context;
- 	GnomeProgram *program;
 	char **debugoptions = NULL;
 	int i;
 
@@ -172,30 +156,15 @@ main (int argc, char *argv[])
 
 	g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
 	g_option_context_set_translation_domain(context, GETTEXT_PACKAGE);
+	g_option_context_add_group (context, gtk_get_option_group (FALSE));
+	g_option_context_parse (context, &argc, &argv, NULL);
 
-	program = gnome_program_init (argv[0], VERSION,
-			   	      LIBGNOMEUI_MODULE, argc, argv,
-			    	      GNOME_PROGRAM_STANDARD_PROPERTIES,
-			    	      GNOME_PARAM_GOPTION_CONTEXT, context,
-			    	      GNOME_PARAM_HUMAN_READABLE_NAME, GPM_NAME,
-			    	      NULL);
 	g_set_application_name (GPM_NAME);
-
-	master = gnome_master_client ();
-	flags = gnome_client_get_flags (master);
 
 	if (version == TRUE) {
 		g_print ("Version %s\n", VERSION);
-		goto unref_program;
+		return 0;
 	}
-
-	if (flags & GNOME_CLIENT_IS_CONNECTED) {
-		/* We'll disable this as users are getting constant crashes */
-		/* gnome_client_set_restart_style (master, GNOME_RESTART_IMMEDIATELY);*/
-		gnome_client_flush (master);
-	}
-
-	g_signal_connect (GTK_OBJECT (master), "die", G_CALLBACK (gpm_exit), manager);
 
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
@@ -273,11 +242,6 @@ if (0) {
 	/* rip down gstreamer */
 	gst_deinit ();
 	g_object_unref (manager);
-unref_program:
-	g_object_unref (program);
-/*
-	g_option_context_free (context);
-*/
 
 	return 0;
 }

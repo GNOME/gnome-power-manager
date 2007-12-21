@@ -1,3 +1,14 @@
+2007-12-21  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-main.c: (main):
+	Drop unused gnome client from main.c
+
+	The GnomeClient usage in main.c is a noop currently (commented out
+	code, and a "die" callback that does not seem useful)
+
+	Patch from Jani Monoses <jani@ubuntu.com>, many thanks.
+
+also do GOption parsing via gtk and drop gnome_program_init()
 2007-12-21  simon.zheng  <simon.zheng@sun.com>
 
 	* src/gpm-engine.c: (gpm_engine_recalculate_state_icon):
