@@ -427,7 +427,7 @@ gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 		return FALSE;
 	}
 
-	gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
+	gpm_info_explain_reason (manager->priv->info, GPM_EVENT_HIBERNATE,
 				_("Hibernating computer."), reason);
 	gpm_control_hibernate (manager->priv->control, &error);
 	if (error != NULL) {
