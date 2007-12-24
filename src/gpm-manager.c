@@ -348,7 +348,7 @@ gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 		return FALSE;
 	}
 
-	gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
+	gpm_info_explain_reason (manager->priv->info,GPM_EVENT_HIBERNATE,
 				_("Suspending computer"), reason);
 	gpm_control_suspend (manager->priv->control, &error);
 	if (error != NULL) {

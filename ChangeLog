@@ -1,3 +1,10 @@
+2007-12-24  simon.zheng  <simon.zheng@sun.com>
+
+	* src/gpm-manager.c: (gpm_manager_action_suspend):
+	Fix #505353.
+	When doing hibernation, event should be GPM_EVENT_HIBERNATE instead of
+        GPM_EVENT_SUSPEND.
+
 2007-12-21  simon.zheng  <simon.zheng@sun.com>
 
 	* src/gpm-engine.c: (gpm_engine_recalculate_state_icon):
