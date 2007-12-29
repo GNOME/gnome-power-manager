@@ -1,3 +1,12 @@
+2007-12-29  simon.zheng  <simon.zheng@sun.com>
+
+	* applets/brightness/GNOME_BrightnessApplet.server.in.in:
+	* applets/brightness/Makefile.am:
+	* applets/inhibit/GNOME_InhibitApplet.server.in.in:
+	* applets/inhibit/Makefile.am:
+	Since applet binary can't be run by users directly, move them
+	from "bindir" to "libexecdir" referring to gnome-panel source.
+
 2007-12-24  simon.zheng  <simon.zheng@sun.com>
 
 	* src/gpm-manager.c: (gpm_manager_action_hibernate):

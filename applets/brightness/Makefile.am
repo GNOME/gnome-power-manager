@@ -22,7 +22,7 @@ LOCAL_LIBDBUS_LIBS =						\
 	$(top_builddir)/libdbus-glib/libdbus-monitor-system.la	\
 	$(top_builddir)/libdbus-glib/libdbus-watch.la
 
-bin_PROGRAMS=gnome-brightness-applet
+libexec_PROGRAMS=gnome-brightness-applet
 
 gnome_brightness_applet_SOURCES = brightness-applet.c
 gnome_brightness_applet_LDADD =					\
@@ -35,7 +35,7 @@ server_in_files = GNOME_BrightnessApplet.server.in
 server_DATA     = $(server_in_files:.server.in=.server)
 
 $(server_in_files): $(server_in_files:.server.in=.server.in.in)
-	sed -e "s|\@BINDIR\@|$(bindir)|" -e "s|\@VERSION\@|$(VERSION)|" $< > $@
+	sed -e "s|\@LIBEXECDIR\@|$(libexecdir)|" -e "s|\@VERSION\@|$(VERSION)|" $< > $@
 
 @INTLTOOL_SERVER_RULE@
 
