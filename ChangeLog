@@ -1,3 +1,10 @@
+2008-01-02  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-cell.c: (gpm_cell_refresh_hal_all):
+	HAL isn't being helpful here and setting battery.rechargeable.is_discharging
+	and battery.rechargeable.is_charging without setting battery.is_rechargeable.
+	Work around the brokenness here for now.
+
 2007-12-24  simon.zheng  <simon.zheng@sun.com>
 
 	* src/gpm-manager.c: (gpm_manager_action_suspend):

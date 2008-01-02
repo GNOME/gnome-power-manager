@@ -121,6 +121,10 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 						&unit->is_charging, NULL);
 			hal_gdevice_get_bool (device, "battery.rechargeable.is_discharging",
 						&unit->is_discharging, NULL);
+		} else {
+			/* HAL isn't being helpful here... */
+			unit->is_discharging = TRUE;
+			unit->is_charging = FALSE;
 		}
 	} else {
 		/* devices cannot charge, well, at least not while being used */
