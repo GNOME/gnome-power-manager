@@ -1,3 +1,17 @@
+2008-01-02  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-cell.c: (gpm_cell_refresh_hal_all):
+	HAL isn't being helpful here and setting battery.rechargeable.is_discharging
+	and battery.rechargeable.is_charging without setting battery.is_rechargeable.
+	Work around the brokenness here for now.
+
+2007-12-30  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-main.c: (main):
+	Manually poke gtk, it seems gtk_get_option_group isn't good enough any
+	more. This fixes the warning:
+	gtk_icon_theme_get_for_screen: assertion 'GDK_IS_SCREEN (screen)' failed
+
 2007-12-29  simon.zheng  <simon.zheng@sun.com>
 
 	* applets/brightness/GNOME_BrightnessApplet.server.in.in:
