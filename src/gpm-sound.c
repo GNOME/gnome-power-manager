@@ -74,7 +74,7 @@ gpm_sound_play (GpmSound   *sound,
 	fname = g_build_filename (GPM_DATA, filename, NULL);
 	if (fname == NULL)
 		return FALSE;
-	uri = g_filename_to_uri (filename, NULL, NULL);
+	uri = g_filename_to_uri (fname, NULL, NULL);
 	g_free (fname);
 	if (uri == NULL)
 		return FALSE;
