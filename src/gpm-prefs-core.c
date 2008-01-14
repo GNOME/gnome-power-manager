@@ -916,6 +916,7 @@ prefs_setup_ac (GpmPrefs *prefs)
 				 ACTION_BLANK,
 				 ACTION_SUSPEND,
 				 ACTION_HIBERNATE,
+				 ACTION_SHUTDOWN,
 				 NULL};
 
 	gpm_prefs_setup_action_combo (prefs, "combobox_ac_lid",
@@ -973,6 +974,7 @@ prefs_setup_battery (GpmPrefs *prefs)
 				 ACTION_BLANK,
 				 ACTION_SUSPEND,
 				 ACTION_HIBERNATE,
+				 ACTION_SHUTDOWN,
 				 NULL};
 	const gchar  *battery_critical_actions[] =
 				{ACTION_NOTHING,

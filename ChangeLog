@@ -1,3 +1,9 @@
+2008-01-14  simon.zheng  <simon.zheng@sun.com>
+
+	* src/gpm-prefs-core.c: (prefs_setup_ac), (prefs_setup_battery):
+	Add shutdown to lid actions. When suspend and hibernate aren't
+	supported on some systems, shutdown may be the third choice.
+
 2008-01-07  simon.zheng  <simon.zheng@sun.com>
 
 	* src/gpm-sound.c: (gpm_sound_play):
