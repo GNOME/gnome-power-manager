@@ -1005,7 +1005,7 @@ prefs_setup_battery (GpmPrefs *prefs)
 				      GPM_CONF_TIMEOUT_SLEEP_DISPLAY_BATT);
 
 	/* set up the battery reduce checkbox */
-	gpm_prefs_setup_checkbox (prefs, "checkbutton_battery_display_dim",
+	gpm_prefs_setup_checkbox (prefs, "checkbutton_battery_display_reduce",
 	  			  GPM_CONF_BACKLIGHT_BATTERY_REDUCE);
 
 	gpm_prefs_setup_checkbox (prefs, "checkbutton_battery_display_dim",
