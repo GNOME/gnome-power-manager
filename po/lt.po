@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-16 15:59+0300\n"
+"POT-Creation-Date: 2008-01-18 01:15+0200\n"
 "PO-Revision-Date: 2007-09-16 15:59+0300\n"
 "Last-Translator: Gintautas Miliauskas <gintas@akl.lt>\n"
 "Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
@@ -47,12 +47,12 @@ msgid "LCD brightness : %d%%"
 msgstr "LCD ryškumas: %d%%"
 
 #: ../applets/brightness/brightness-applet.c:744
-#: ../applets/inhibit/inhibit-applet.c:406 ../src/gpm-tray-icon.c:301
+#: ../applets/inhibit/inhibit-applet.c:406 ../src/gpm-tray-icon.c:310
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Licencijuota GNU Genereal Public Licence Version 2 sąlygomis"
 
 #: ../applets/brightness/brightness-applet.c:745
-#: ../applets/inhibit/inhibit-applet.c:407 ../src/gpm-tray-icon.c:302
+#: ../applets/inhibit/inhibit-applet.c:407 ../src/gpm-tray-icon.c:311
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -65,7 +65,7 @@ msgstr ""
 "arba (Jūsų pasirinkimu) bet kurios vėlesnės licencijos versijos sąlygomis."
 
 #: ../applets/brightness/brightness-applet.c:749
-#: ../applets/inhibit/inhibit-applet.c:411 ../src/gpm-tray-icon.c:306
+#: ../applets/inhibit/inhibit-applet.c:411 ../src/gpm-tray-icon.c:315
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -78,7 +78,7 @@ msgstr ""
 "bendrąją viešąją licenciją."
 
 #: ../applets/brightness/brightness-applet.c:753
-#: ../applets/inhibit/inhibit-applet.c:415 ../src/gpm-tray-icon.c:310
+#: ../applets/inhibit/inhibit-applet.c:415 ../src/gpm-tray-icon.c:319
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -270,10 +270,15 @@ msgstr ""
 "mechanizmo."
 
 #: ../data/gnome-power-manager.schemas.in.h:21
-msgid "If sounds should be used"
+#, fuzzy
+msgid "If preferences should be shown"
 msgstr "Ar naudoti garsus"
 
 #: ../data/gnome-power-manager.schemas.in.h:22
+msgid "If sounds should be used"
+msgstr "Ar naudoti garsus"
+
+#: ../data/gnome-power-manager.schemas.in.h:23
 msgid ""
 "If sounds should be used when the power is critically low, or inhibit "
 "requests have stopped the policy action."
@@ -281,11 +286,11 @@ msgstr ""
 "Ar naudoti garsus, kai energijos lygis kritiškai mažas arba slopinimo "
 "užklausos sustabdė veiksmą."
 
-#: ../data/gnome-power-manager.schemas.in.h:23
+#: ../data/gnome-power-manager.schemas.in.h:24
 msgid "If the CPU load should be checked before doing the idle action."
 msgstr "Ar patikrinti CPU naudojimą prieš atliekant neveiklumo veiksmą."
 
-#: ../data/gnome-power-manager.schemas.in.h:24
+#: ../data/gnome-power-manager.schemas.in.h:25
 msgid ""
 "If the Suspend and Hibernate options should be allowed in the notification "
 "area drop down menu."
@@ -293,7 +298,7 @@ msgstr ""
 "Ar rodyti užmigdymo ir hibernavimo parinktis pranešimų vietos "
 "išskleidžiamame meniu."
 
-#: ../data/gnome-power-manager.schemas.in.h:25
+#: ../data/gnome-power-manager.schemas.in.h:26
 msgid ""
 "If the battery event should occur when the lid is shut and the power "
 "disconnected"
@@ -301,7 +306,7 @@ msgstr ""
 "Ar baterijos įvykis turėtų būti aktyvuojamas, kai kompiuteris užvertas ir "
 "atjungtas nuo elektros tinklo"
 
-#: ../data/gnome-power-manager.schemas.in.h:26
+#: ../data/gnome-power-manager.schemas.in.h:27
 msgid ""
 "If the battery lid close event should occur (for example 'Suspend when lid "
 "closed on battery') when the lid is previously shut and the AC power "
@@ -311,12 +316,12 @@ msgstr ""
 "maitinamasi iš baterijos“) turėtų būti aktyvuojamas, kai kompiuteris buvo "
 "anksčiau užvertas ir tik po to atjungtas nuo elektros tinklo."
 
-#: ../data/gnome-power-manager.schemas.in.h:27
+#: ../data/gnome-power-manager.schemas.in.h:28
 msgid "If the learnt profile should be used to calculate the time remaining"
 msgstr ""
 "Ar išmoktas profilis turėtų būti naudojamas likusiam laikui apskaičiuoti"
 
-#: ../data/gnome-power-manager.schemas.in.h:28
+#: ../data/gnome-power-manager.schemas.in.h:29
 msgid ""
 "If the learnt profile should be used to calculate the time remaining. Only "
 "turn this off for debugging."
@@ -324,21 +329,21 @@ msgstr ""
 "Ar išmoktas profilis turėtų būti naudojamas likusiam laikui apskaičiuoti. "
 "Išjunkite tik ieškodami klaidų."
 
-#: ../data/gnome-power-manager.schemas.in.h:29
+#: ../data/gnome-power-manager.schemas.in.h:30
 msgid "If the low-power mode should be enabled when on AC"
 msgstr "Ar ekonominė veiksena turėtų būti įjungta, kai maitinamasi iš tinklo"
 
-#: ../data/gnome-power-manager.schemas.in.h:30
+#: ../data/gnome-power-manager.schemas.in.h:31
 msgid "If the low-power mode should be enabled when on UPS"
 msgstr ""
 "Ar ekonominė veiksena turėtų būti įjungta, kai kompiuteris prijungtas prie "
 "nepertraukiamos srovės šaltinio"
 
-#: ../data/gnome-power-manager.schemas.in.h:31
+#: ../data/gnome-power-manager.schemas.in.h:32
 msgid "If the low-power mode should be enabled when on battery"
 msgstr "Ar ekonominė veiksena turėtų būti įjungta, kai naudojama baterija"
 
-#: ../data/gnome-power-manager.schemas.in.h:32
+#: ../data/gnome-power-manager.schemas.in.h:33
 msgid ""
 "If the screen brightness can be changed when switching between AC and "
 "battery power and by ambient light sensors."
@@ -346,7 +351,7 @@ msgstr ""
 "Ar keisti ekrano ryškumą persijungiant tarp kintamosios srovės ir baterijos "
 "energijos bei atsižvelgiant į aplinkos šviesos sensorius."
 
-#: ../data/gnome-power-manager.schemas.in.h:33
+#: ../data/gnome-power-manager.schemas.in.h:34
 msgid ""
 "If the screen brightness should be changed automatically using the ambient "
 "light sensors."
@@ -354,7 +359,7 @@ msgstr ""
 "Ar ekrano šviesumas turėtų būti automatiškai keičiamas remiantis šviesos "
 "sensoriais."
 
-#: ../data/gnome-power-manager.schemas.in.h:34
+#: ../data/gnome-power-manager.schemas.in.h:35
 msgid ""
 "If the screen brightness should be changed automatically using the ambient "
 "light sensors. Valid is 'none', 'light' and 'dark'"
@@ -362,7 +367,7 @@ msgstr ""
 "Ar ekrano šviesumas turėtų būti automatiškai keičiamas pagal aplinkos "
 "šviesos sensorius. Galimi variantai: „none“, „light“, „dark“"
 
-#: ../data/gnome-power-manager.schemas.in.h:35
+#: ../data/gnome-power-manager.schemas.in.h:36
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on AC power."
@@ -370,7 +375,7 @@ msgstr ""
 "Ar užtemdyti ekraną taupant energiją, kai kompiuteris neveiklus ir "
 "prijungtas prie elektros tinklo."
 
-#: ../data/gnome-power-manager.schemas.in.h:36
+#: ../data/gnome-power-manager.schemas.in.h:37
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on battery power."
@@ -378,38 +383,47 @@ msgstr ""
 "Ar užtemdyti ekraną taupant energiją, kai kompiuteris neveiklus ir naudoja "
 "baterijos energiją."
 
-#: ../data/gnome-power-manager.schemas.in.h:37
+#: ../data/gnome-power-manager.schemas.in.h:38
+#, fuzzy
+msgid ""
+"If the screen should be reduced in brightness when the computer is on "
+"battery power."
+msgstr ""
+"Ar užtemdyti ekraną taupant energiją, kai kompiuteris neveiklus ir naudoja "
+"baterijos energiją."
+
+#: ../data/gnome-power-manager.schemas.in.h:39
 msgid "If the system low-power mode should be enabled when on AC power."
 msgstr ""
 "Ar sistemos ekonominė veiksena turėtų būti įjungta, kai kompiuteris "
 "prijungtas prie elektros tinklo."
 
-#: ../data/gnome-power-manager.schemas.in.h:38
+#: ../data/gnome-power-manager.schemas.in.h:40
 msgid "If the system low-power mode should be enabled when on UPS power."
 msgstr ""
 "Ar sistemos ekonominė veiksena turėtų būti įjungta, kai kompiuteris "
 "prijungtas prie nepertraukiamos srovės šaltinio."
 
-#: ../data/gnome-power-manager.schemas.in.h:39
+#: ../data/gnome-power-manager.schemas.in.h:41
 msgid ""
 "If the system low-power mode should be enabled when on laptop battery power."
 msgstr ""
 "Ar sistemos ekonominė veiksena turėtų būti įjungta, kai naudojama baterija."
 
-#: ../data/gnome-power-manager.schemas.in.h:40
+#: ../data/gnome-power-manager.schemas.in.h:42
 msgid "If the user is authorized to hibernate the computer."
 msgstr "Ar naudotojui leidžiama hibernuoti kompiuterį."
 
-#: ../data/gnome-power-manager.schemas.in.h:41
+#: ../data/gnome-power-manager.schemas.in.h:43
 msgid "If the user is authorized to suspend the computer."
 msgstr "Ar naudotojui leidžiama užmigdyti kompiuterį."
 
-#: ../data/gnome-power-manager.schemas.in.h:42
+#: ../data/gnome-power-manager.schemas.in.h:44
 msgid "If the user should be notified when the AC adapter is disconnected."
 msgstr ""
 "Ar pranešti naudotojui, kad kompiuteris buvo atjungtas nuo elektros tinklo."
 
-#: ../data/gnome-power-manager.schemas.in.h:43
+#: ../data/gnome-power-manager.schemas.in.h:45
 msgid ""
 "If time based notifications should be used. If set to false, then the "
 "percentage change is used instead, which may fix a broken ACPI BIOS."
@@ -417,11 +431,11 @@ msgstr ""
 "Ar naudoti laiku paremtus pranešimus. Jei reikšmė neigiama, tada naudojamas "
 "procentinis pokytis. Tai gali padėi apeiti kai kuriuos klaidingus ACPI BIOS."
 
-#: ../data/gnome-power-manager.schemas.in.h:44
+#: ../data/gnome-power-manager.schemas.in.h:46
 msgid "If we should show the CPU frequency scaling in the UI"
 msgstr "Ar grafinėje sąsajoje turėtų būti rodomas CPU dažnio keitimas"
 
-#: ../data/gnome-power-manager.schemas.in.h:45
+#: ../data/gnome-power-manager.schemas.in.h:47
 msgid ""
 "If we should show the CPU frequency scaling in the UI. Some people need to "
 "configure this for specific systems."
@@ -429,22 +443,22 @@ msgstr ""
 "Ar grafinėje sąsajoje turėtų būti rodomas CPU dažnio keitimas. Kai kuriems "
 "žmonėms to gali reikėti specifinėse sistemose."
 
-#: ../data/gnome-power-manager.schemas.in.h:46
+#: ../data/gnome-power-manager.schemas.in.h:48
 msgid "If we should show the low capacity warning for a broken battery"
 msgstr ""
 "Ar turėtų būti rodomas pranešimas apie mažą talpą, kai baterija sugedusi"
 
-#: ../data/gnome-power-manager.schemas.in.h:47
+#: ../data/gnome-power-manager.schemas.in.h:49
 msgid "If we should show the low capacity warning for a broken battery."
 msgstr ""
 "Ar turėtų būti rodomas pranešimas apie mažą talpą, kai baterija sugedusi."
 
-#: ../data/gnome-power-manager.schemas.in.h:48
+#: ../data/gnome-power-manager.schemas.in.h:50
 msgid "If we should show the recalled battery warning for a broken battery"
 msgstr ""
 "Ar turėtų būti rodomas pranešimas apie atšauktą bateriją sugedusiai baterijai"
 
-#: ../data/gnome-power-manager.schemas.in.h:49
+#: ../data/gnome-power-manager.schemas.in.h:51
 msgid ""
 "If we should show the recalled battery warning for a broken battery. Set "
 "this to false only if you know your battery is okay."
@@ -453,7 +467,7 @@ msgstr ""
 "baterijai.Neigiamą reikšmę nustatykite nebent jeigu žinote, kad jūsų "
 "baterija gera."
 
-#: ../data/gnome-power-manager.schemas.in.h:50
+#: ../data/gnome-power-manager.schemas.in.h:52
 msgid ""
 "If we should show the warning when we have a valid inhibit and configured to "
 "sleep on lid close"
@@ -461,7 +475,7 @@ msgstr ""
 "Ar rodyti įspėjimą, kai energijos valdymas išjungtas ir užvėrus kompiuterį "
 "užmiegama"
 
-#: ../data/gnome-power-manager.schemas.in.h:51
+#: ../data/gnome-power-manager.schemas.in.h:53
 msgid ""
 "If we should show the warning when we have a valid inhibit and configured to "
 "sleep on lid close."
@@ -469,126 +483,131 @@ msgstr ""
 "Ar rodyti įspėjimą, kai energijos valdymas išjungtas ir užvėrus kompiuterį "
 "užmiegama"
 
-#: ../data/gnome-power-manager.schemas.in.h:52
+#: ../data/gnome-power-manager.schemas.in.h:54
 msgid "Keyboard brightness when on AC"
 msgstr "Klaviatūros ryškumas naudojant kintančiosios srovės energiją"
 
-#: ../data/gnome-power-manager.schemas.in.h:53
+#: ../data/gnome-power-manager.schemas.in.h:55
 msgid "Keyboard brightness when on battery"
 msgstr "Klaviatūros ryškumas naudojant baterijos energiją"
 
-#: ../data/gnome-power-manager.schemas.in.h:54
+#: ../data/gnome-power-manager.schemas.in.h:56
 msgid "LCD brightness when on AC"
 msgstr "LCD ryškumas naudojant kintančiosios srovės energiją"
 
-#: ../data/gnome-power-manager.schemas.in.h:55
+#: ../data/gnome-power-manager.schemas.in.h:57
 msgid "LCD brightness when on battery"
 msgstr "LCD ryškumas naudojant baterijos energiją"
 
-#: ../data/gnome-power-manager.schemas.in.h:56
+#: ../data/gnome-power-manager.schemas.in.h:58
 msgid "Laptop lid close action on battery"
 msgstr ""
 "Veiksmas, uždarius nešiojamojo kompiuterio dangtį naudojant baterijos "
 "energiją"
 
-#: ../data/gnome-power-manager.schemas.in.h:57
+#: ../data/gnome-power-manager.schemas.in.h:59
 msgid "Laptop lid close action when on AC"
 msgstr ""
 "Veiksmas, uždarius nešiojamojo kompiuterio dangtį naudojant kintamos srovės "
 "energiją"
 
-#: ../data/gnome-power-manager.schemas.in.h:58
+#: ../data/gnome-power-manager.schemas.in.h:60
 msgid "Lock GNOME keyring on sleep"
 msgstr "Prieš užmingant užrakinti GNOME raktų žiedą"
 
-#: ../data/gnome-power-manager.schemas.in.h:59
+#: ../data/gnome-power-manager.schemas.in.h:61
 msgid "Lock screen on hibernate"
 msgstr "Hibernuojant užrakinti ekraną"
 
-#: ../data/gnome-power-manager.schemas.in.h:60
+#: ../data/gnome-power-manager.schemas.in.h:62
 msgid "Lock screen on suspend"
 msgstr "Užmigdant užrakinti ekraną"
 
-#: ../data/gnome-power-manager.schemas.in.h:61
+#: ../data/gnome-power-manager.schemas.in.h:63
 msgid "Lock screen when blanked"
 msgstr "Užrakinti ekraną, kai jis užtemdytas"
 
-#: ../data/gnome-power-manager.schemas.in.h:62
+#: ../data/gnome-power-manager.schemas.in.h:64
 msgid "Method used to blank screen on AC"
 msgstr ""
 "Ekrano užtemdymo metodas, kai kompiuteris prijungtas prie elektros tinklo"
 
-#: ../data/gnome-power-manager.schemas.in.h:63
+#: ../data/gnome-power-manager.schemas.in.h:65
 msgid "Method used to blank screen on battery"
 msgstr "Ekrano užtemdymo metodas, kai naudojama baterija"
 
-#: ../data/gnome-power-manager.schemas.in.h:64
+#: ../data/gnome-power-manager.schemas.in.h:66
 msgid "Notify on a low power"
 msgstr "Pranešti apie mažą energijos lygį"
 
-#: ../data/gnome-power-manager.schemas.in.h:65
+#: ../data/gnome-power-manager.schemas.in.h:67
 msgid "Notify on a sleep failure"
 msgstr "Pranešti apie nepavykusį užmigimą"
 
-#: ../data/gnome-power-manager.schemas.in.h:66
+#: ../data/gnome-power-manager.schemas.in.h:68
 msgid "Notify when AC adapter is disconnected"
 msgstr "Pranešti, kai atjungiama nuo kintamos srovės šaltinio"
 
-#: ../data/gnome-power-manager.schemas.in.h:67
+#: ../data/gnome-power-manager.schemas.in.h:69
 msgid "Notify when fully charged"
 msgstr "Pranešti, kai baterija yra pilnai įkrauta"
 
-#: ../data/gnome-power-manager.schemas.in.h:68
+#: ../data/gnome-power-manager.schemas.in.h:70
 msgid "Notify when the profile data is guessed"
 msgstr "Pranešti, kai spėjami profilio duomenys"
 
-#: ../data/gnome-power-manager.schemas.in.h:69
+#: ../data/gnome-power-manager.schemas.in.h:71
 msgid "Number of seconds to suppress policy after resume"
 msgstr ""
 "Laikas tarpas sekundėmis, kuriam sustabdyti elgseną po grąžinimo iš užmigdymo"
 
-#: ../data/gnome-power-manager.schemas.in.h:70
+#: ../data/gnome-power-manager.schemas.in.h:72
 msgid "Percentage action is taken"
 msgstr "Procentai, kada vykdomas veiksmas"
 
-#: ../data/gnome-power-manager.schemas.in.h:71
+#: ../data/gnome-power-manager.schemas.in.h:73
 msgid "Percentage considered critical"
 msgstr "Procentai, kai laikoma kritiška"
 
-#: ../data/gnome-power-manager.schemas.in.h:72
+#: ../data/gnome-power-manager.schemas.in.h:74
 msgid "Percentage considered low"
 msgstr "Procentai, kai laikoma maža"
 
-#: ../data/gnome-power-manager.schemas.in.h:73
+#: ../data/gnome-power-manager.schemas.in.h:75
 msgid "Power button action"
 msgstr "Išjungimo mygtuko veiksmas"
 
-#: ../data/gnome-power-manager.schemas.in.h:74
+#: ../data/gnome-power-manager.schemas.in.h:76
+#, fuzzy
+msgid "Reduce the backlight brightness when on battery power"
+msgstr "Klaviatūros ryškumas naudojant baterijos energiją"
+
+#: ../data/gnome-power-manager.schemas.in.h:77
 msgid "Sleep timeout computer when on AC"
 msgstr ""
 "Laikotarpis iki kompiuterio užmigdymo naudojant kintamos srovės šaltinį"
 
-#: ../data/gnome-power-manager.schemas.in.h:75
+#: ../data/gnome-power-manager.schemas.in.h:78
 msgid "Sleep timeout computer when on battery"
 msgstr "Laikotarpis iki kompiuterio užmigdymo naudojant bateriją"
 
-#: ../data/gnome-power-manager.schemas.in.h:76
+#: ../data/gnome-power-manager.schemas.in.h:79
 msgid "Sleep timeout display when on AC"
 msgstr "Laikotarpis iki ekrano užmigdymo naudojant kintamos srovės šaltinį"
 
-#: ../data/gnome-power-manager.schemas.in.h:77
+#: ../data/gnome-power-manager.schemas.in.h:80
 msgid "Sleep timeout display when on battery"
 msgstr "Laikotarpis iki ekrano užmigdymo naudojant bateriją"
 
-#: ../data/gnome-power-manager.schemas.in.h:78
+#: ../data/gnome-power-manager.schemas.in.h:81
 msgid "Suspend button action"
 msgstr "Užmigdymo mygtuko veiksmas"
 
-#: ../data/gnome-power-manager.schemas.in.h:79
+#: ../data/gnome-power-manager.schemas.in.h:82
 msgid "Suspend enabled"
 msgstr "Užmigdymas įjungtas"
 
-#: ../data/gnome-power-manager.schemas.in.h:80
+#: ../data/gnome-power-manager.schemas.in.h:83
 msgid ""
 "The DPMS method used to blank the screen when on AC power. Possible values "
 "are \"default\", \"standby\", \"suspend\" and \"off\"."
@@ -596,7 +615,7 @@ msgstr ""
 "DPMS ekrano užtemdymo metodas, kai kompiuteris prijungtas prie elektros "
 "tinklo. Galimos reikšmės: „default“, „standby“, „suspend“ ir „off“."
 
-#: ../data/gnome-power-manager.schemas.in.h:81
+#: ../data/gnome-power-manager.schemas.in.h:84
 msgid ""
 "The DPMS method used to blank the screen when on battery power. Possible "
 "values are \"default\", \"standby\", \"suspend\" and \"off\"."
@@ -604,7 +623,7 @@ msgstr ""
 "DPMS ekrano užtemdymo metodas, kai naudojamos baterijos. Galimos reikšmės: "
 "„default“, „standby“, „suspend“ ir „off“."
 
-#: ../data/gnome-power-manager.schemas.in.h:82
+#: ../data/gnome-power-manager.schemas.in.h:85
 msgid ""
 "The action to take when the UPS is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
@@ -612,7 +631,7 @@ msgstr ""
 "Veiksmas vykdomas esant kritiškai mažam UPS įkrovos lygiui. Tinkamos "
 "reikšmės yra „hibernate“, „suspend“, „shutdown“ ir „nothing“."
 
-#: ../data/gnome-power-manager.schemas.in.h:83
+#: ../data/gnome-power-manager.schemas.in.h:86
 msgid ""
 "The action to take when the UPS is low. Possible values are \"hibernate\", "
 "\"suspend\", \"shutdown\" and \"nothing\"."
@@ -620,7 +639,7 @@ msgstr ""
 "Veiksmas vykdomas esant kritiškai mažam NSŠ įkrovos lygiui. Galimos reikšmės "
 "yra „hibernate“, „suspend“, „shutdown“ ir „nothing“."
 
-#: ../data/gnome-power-manager.schemas.in.h:84
+#: ../data/gnome-power-manager.schemas.in.h:87
 msgid ""
 "The action to take when the battery is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
@@ -628,7 +647,7 @@ msgstr ""
 "Veiksmas vykdomas esant kritiškai mažam baterijos įkrovimo lygiui. Tinkamos "
 "reikšmės yra „hibernate“, „suspend“, „shutdown“ ir „nothing“."
 
-#: ../data/gnome-power-manager.schemas.in.h:85
+#: ../data/gnome-power-manager.schemas.in.h:88
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on AC "
 "power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
@@ -638,7 +657,7 @@ msgstr ""
 "kintamos srovės energijos šalitnis. Tinkamos reikšmės yra „suspend“, "
 "„hibernate“ ir „nothing“."
 
-#: ../data/gnome-power-manager.schemas.in.h:86
+#: ../data/gnome-power-manager.schemas.in.h:89
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on "
 "battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
@@ -648,7 +667,7 @@ msgstr ""
 "naudoja baterijos energiją. Tinkamos reikšmės yra „suspend“, „hibernate“ ir "
 "„nothing“."
 
-#: ../data/gnome-power-manager.schemas.in.h:87
+#: ../data/gnome-power-manager.schemas.in.h:90
 msgid ""
 "The action to take when the system hibernate button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
@@ -657,7 +676,7 @@ msgstr ""
 "Veiksmas vykdomas paspaudus sistemos hibernavimo mygtuką. Galimos reikšmės "
 "yra „suspend“, „hibernate“, „interactive“, „shutdown“ ir „nothing“."
 
-#: ../data/gnome-power-manager.schemas.in.h:88
+#: ../data/gnome-power-manager.schemas.in.h:91
 msgid ""
 "The action to take when the system power button is pressed. Possible values "
 "are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
@@ -666,7 +685,7 @@ msgstr ""
 "Veiksmas vykdomas paspaudus sistemos išjungimo mygtuką. Galimos reikšmės yra "
 "„suspend“, „hibernate“, „interactive“, „shutdown“ ir „nothing“."
 
-#: ../data/gnome-power-manager.schemas.in.h:89
+#: ../data/gnome-power-manager.schemas.in.h:92
 msgid ""
 "The action to take when the system suspend button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
@@ -675,7 +694,7 @@ msgstr ""
 "Veiksmas vykdomas paspaudus sistemos užmigdymo mygtuką. Tinkamos reikšmės "
 "yra „suspend“, „hibernate“, „interactive“, „shutdown“ ir „nothing“."
 
-#: ../data/gnome-power-manager.schemas.in.h:90
+#: ../data/gnome-power-manager.schemas.in.h:93
 msgid ""
 "The amount of time in seconds before the display goes to sleep when the "
 "computer is on AC power."
@@ -683,7 +702,7 @@ msgstr ""
 "Laikotarpis sekundėmis iki ekrano užmigdymo, kai naudojama kintamos srovės "
 "energija."
 
-#: ../data/gnome-power-manager.schemas.in.h:91
+#: ../data/gnome-power-manager.schemas.in.h:94
 msgid ""
 "The amount of time in seconds the computer on AC power needs to be inactive "
 "before it goes to sleep."
@@ -691,7 +710,7 @@ msgstr ""
 "Neaktyvumo laikotarpis sekundėmis iki kompiuterio užmigdymo, kai naudojama "
 "kintamos srovės energija."
 
-#: ../data/gnome-power-manager.schemas.in.h:92
+#: ../data/gnome-power-manager.schemas.in.h:95
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before it goes to sleep."
@@ -699,7 +718,7 @@ msgstr ""
 "Neaktyvumo laikotarpis sekundėmis iki kompiuterio užmigdymo, kai naudojama "
 "baterijos energija."
 
-#: ../data/gnome-power-manager.schemas.in.h:93
+#: ../data/gnome-power-manager.schemas.in.h:96
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before the display goes to sleep."
@@ -707,15 +726,15 @@ msgstr ""
 "Laikotarpis sekundėmis iki ekrano užmigdymo, kai naudojama baterijos "
 "energija."
 
-#: ../data/gnome-power-manager.schemas.in.h:94
+#: ../data/gnome-power-manager.schemas.in.h:97
 msgid "The amount the light sensors should contribute to the brightness"
 msgstr "Kiek šviesos sensoriai turėtų daryti įtakos šviesumui"
 
-#: ../data/gnome-power-manager.schemas.in.h:95
+#: ../data/gnome-power-manager.schemas.in.h:98
 msgid "The amount the light sensors should contribute to the brightness."
 msgstr "Kiek šviesos sensoriai turėtų daryti įtakos šviesumui."
 
-#: ../data/gnome-power-manager.schemas.in.h:96
+#: ../data/gnome-power-manager.schemas.in.h:99
 msgid ""
 "The brightness of the display when on AC power. Possible values are between "
 "0 and 100."
@@ -723,7 +742,7 @@ msgstr ""
 "Ekrano ryškumas, naudojant kintamos srovės šaltinį. Tinkamos reikšmės yra "
 "tarp 0 ir 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:97
+#: ../data/gnome-power-manager.schemas.in.h:100
 msgid ""
 "The brightness of the display when on battery power. Possible values are "
 "between 0 and 100."
@@ -731,7 +750,7 @@ msgstr ""
 "Ekrano ryškumas, naudojant baterijos energiją. Tinkamos reikšmės yra tarp 0 "
 "ir 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:98
+#: ../data/gnome-power-manager.schemas.in.h:101
 msgid ""
 "The brightness of the keyboard when on AC power. Possible values are between "
 "0 and 100."
@@ -739,7 +758,7 @@ msgstr ""
 "Klaviatūros ryškumas, naudojant kintamos srovės šaltinį. Galimos reikšmės "
 "yra tarp 0 ir 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:99
+#: ../data/gnome-power-manager.schemas.in.h:102
 msgid ""
 "The brightness of the keyboard when on battery power. Possible values are "
 "between 0 and 100."
@@ -747,40 +766,40 @@ msgstr ""
 "Klaviatūros ryškumas, naudojant baterijos energiją. Galimos reikšmės yra "
 "tarp 0 ir 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:100
+#: ../data/gnome-power-manager.schemas.in.h:103
 msgid "The brightness of the screen when idle"
 msgstr "Ekrano ryškumas, kai kompiuteris neveiklus"
 
-#: ../data/gnome-power-manager.schemas.in.h:101
+#: ../data/gnome-power-manager.schemas.in.h:104
 msgid ""
 "The calibration of the light sensors so that the screen is bright enough"
 msgstr "Šviesos sensorių kalibracija, kad ekranas būtų pakankamai ryškus"
 
-#: ../data/gnome-power-manager.schemas.in.h:102
+#: ../data/gnome-power-manager.schemas.in.h:105
 msgid ""
 "The calibration of the light sensors so that the screen is bright enough, in "
 "percent."
 msgstr ""
 "Šviesos sensorių kalibracija, kad ekranas būtų pakankamai ryškus, procentais."
 
-#: ../data/gnome-power-manager.schemas.in.h:103
+#: ../data/gnome-power-manager.schemas.in.h:106
 msgid "The cpufreq performance value to use when on AC power"
 msgstr ""
 "„cpufreq“ našumo reikšmė naudotina, kai kompiuteris naudoja kintamosios "
 "srovės energiją"
 
-#: ../data/gnome-power-manager.schemas.in.h:104
+#: ../data/gnome-power-manager.schemas.in.h:107
 msgid "The cpufreq performance value to use when on battery power"
 msgstr "Cpufreq našumo reikšmė naudojant baterijos energiją"
 
-#: ../data/gnome-power-manager.schemas.in.h:105
+#: ../data/gnome-power-manager.schemas.in.h:108
 msgid ""
 "The cpufreq performance value used to scale the processor when on AC power."
 msgstr ""
 "Cpufreq našumo reikšmė, naudojama keisti procesoriaus dažnį, kai naudojama "
 "kintamos srovės energija."
 
-#: ../data/gnome-power-manager.schemas.in.h:106
+#: ../data/gnome-power-manager.schemas.in.h:109
 msgid ""
 "The cpufreq performance value used to scale the processor when on battery "
 "power."
@@ -788,15 +807,15 @@ msgstr ""
 "Cpufreq našumo reikšmė, naudojama keisti procesoriaus dažnį, kai naudojama "
 "baterijos energija."
 
-#: ../data/gnome-power-manager.schemas.in.h:107
+#: ../data/gnome-power-manager.schemas.in.h:110
 msgid "The cpufreq policy to use when on AC power"
 msgstr "Cpufreq politika, kai kompiuteris prijungtas prie elektros tinklo"
 
-#: ../data/gnome-power-manager.schemas.in.h:108
+#: ../data/gnome-power-manager.schemas.in.h:111
 msgid "The cpufreq policy to use when on battery power"
 msgstr "Cpufreq politika, kai naudojama baterija"
 
-#: ../data/gnome-power-manager.schemas.in.h:109
+#: ../data/gnome-power-manager.schemas.in.h:112
 msgid ""
 "The cpufreq policy used to scale the processor when on AC power. Possible "
 "values are ondemand, conservative, powersave, userspace, performance, "
@@ -806,7 +825,7 @@ msgstr ""
 "prie elektros tinklo. Galimos reikšmės: „ondemand“, „conservative“, "
 "„powersave“, „userspace“, „performance“, „nothing“."
 
-#: ../data/gnome-power-manager.schemas.in.h:110
+#: ../data/gnome-power-manager.schemas.in.h:113
 msgid ""
 "The cpufreq policy used to scale the processor when on battery power. "
 "Possible values are ondemand, conservative, powersave, userspace, "
@@ -816,33 +835,33 @@ msgstr ""
 "Galimos reikšmės: „ondemand“, „conservative“, „powersave“, „userspace“, "
 "„performance“, „nothing“."
 
-#: ../data/gnome-power-manager.schemas.in.h:111
+#: ../data/gnome-power-manager.schemas.in.h:114
 msgid "The default amount of time to dim the screen after idle"
 msgstr "Neaktyvumo laikas, po kurio patamsinamas ekranas"
 
-#: ../data/gnome-power-manager.schemas.in.h:112
+#: ../data/gnome-power-manager.schemas.in.h:115
 msgid "The default amount of time to dim the screen after idle."
 msgstr "Neaktyvumo laikas, po kurio patamsinamas ekranas."
 
-#: ../data/gnome-power-manager.schemas.in.h:113
+#: ../data/gnome-power-manager.schemas.in.h:116
 msgid "The default configuration version."
 msgstr "Standartinė nustatymų versija."
 
-#: ../data/gnome-power-manager.schemas.in.h:114
+#: ../data/gnome-power-manager.schemas.in.h:117
 msgid "The default graph type to show in the statistics window"
 msgstr "Numatytasis grafiko rodomo statistiko lange tipas"
 
-#: ../data/gnome-power-manager.schemas.in.h:115
+#: ../data/gnome-power-manager.schemas.in.h:118
 msgid "The default graph type to show in the statistics window."
 msgstr "Numatytasis grafiko rodomo statistiko lange tipas."
 
-#: ../data/gnome-power-manager.schemas.in.h:116
+#: ../data/gnome-power-manager.schemas.in.h:119
 msgid "The device name for the v4l device used as a brightness sensor backup"
 msgstr ""
 "v4l įrenginio, naudojamo kaip šviesumo sensoriaus atsarginio varianto, "
 "pavadinimas"
 
-#: ../data/gnome-power-manager.schemas.in.h:117
+#: ../data/gnome-power-manager.schemas.in.h:120
 msgid ""
 "The device name for the v4l device used as a brightness sensor backup. A "
 "value of 'default' uses the first discovered sensor, or devices can be "
@@ -852,19 +871,19 @@ msgstr ""
 "pavadinimas. „default“ naudos pirmą rastą sensorių. Galite nurodyti konkretų "
 "įrenginį, pvz., „/dev/video0“."
 
-#: ../data/gnome-power-manager.schemas.in.h:118
+#: ../data/gnome-power-manager.schemas.in.h:121
 msgid "The interval the ambient light sensors should be polled"
 msgstr "Aplinkos šviesos sensorių užklausimo intervalas"
 
-#: ../data/gnome-power-manager.schemas.in.h:119
+#: ../data/gnome-power-manager.schemas.in.h:122
 msgid "The interval the ambient light sensors should be polled in seconds."
 msgstr "Aplinkos šviesos sensorių užklausimo intervalas sekundėmis."
 
-#: ../data/gnome-power-manager.schemas.in.h:120
+#: ../data/gnome-power-manager.schemas.in.h:123
 msgid "The invalid timeout for power actions"
 msgstr "Ignoravimo laikas energijos pranešimams"
 
-#: ../data/gnome-power-manager.schemas.in.h:121
+#: ../data/gnome-power-manager.schemas.in.h:124
 msgid ""
 "The invalid timeout in ms for power actions. Set this longer if you get "
 "'battery critical' messages when you unplug."
@@ -873,15 +892,15 @@ msgstr ""
 "gaunate pranešimus apie kritinį baterijos lygį, kai atjungiate kompiuterį "
 "nuo tinklo."
 
-#: ../data/gnome-power-manager.schemas.in.h:122
+#: ../data/gnome-power-manager.schemas.in.h:125
 msgid "The maximum duration of time displayed on the x-axis of the graph."
 msgstr "Maksimalus laiko intervalas, rodomas x ašyje."
 
-#: ../data/gnome-power-manager.schemas.in.h:123
+#: ../data/gnome-power-manager.schemas.in.h:126
 msgid "The maximum time displayed on the graph"
 msgstr "Maksimalus laikas, rodomas grafike"
 
-#: ../data/gnome-power-manager.schemas.in.h:124
+#: ../data/gnome-power-manager.schemas.in.h:127
 msgid ""
 "The percentage of the battery when it is considered critical. Only valid "
 "when use_time_for_policy is false."
@@ -889,7 +908,7 @@ msgstr ""
 "Baterijos įkrova procentais, kai ši laikoma kritiška. Naudojama tik, kai "
 "use_time_for_policy reikšmė neigiama."
 
-#: ../data/gnome-power-manager.schemas.in.h:125
+#: ../data/gnome-power-manager.schemas.in.h:128
 msgid ""
 "The percentage of the battery when it is considered low. Only valid when "
 "use_time_for_policy is false."
@@ -897,7 +916,7 @@ msgstr ""
 "Baterijos įkrova procentais, kai ši laikoma maža. Naudojama tik, kai "
 "use_time_for_policy reikšmė neigiama."
 
-#: ../data/gnome-power-manager.schemas.in.h:126
+#: ../data/gnome-power-manager.schemas.in.h:129
 msgid ""
 "The percentage of the battery when the critical action is performed. Only "
 "valid when use_time_for_policy is false."
@@ -905,7 +924,7 @@ msgstr ""
 "Baterijos įkrova procentais, kai vykdomas kritinis veiksmas. Naudojama tik, "
 "kai use_time_for_policy reikšmė neigiama."
 
-#: ../data/gnome-power-manager.schemas.in.h:127
+#: ../data/gnome-power-manager.schemas.in.h:130
 msgid ""
 "The time remaining in seconds of the battery when critical action is taken. "
 "Only valid when use_time_for_policy is true."
@@ -913,7 +932,7 @@ msgstr ""
 "Likęs laikas sekundėmis, iki kritiško veiksmo vykdymo. Naudojama tik, kai "
 "use_time_for_policy reikšmė teigiama."
 
-#: ../data/gnome-power-manager.schemas.in.h:128
+#: ../data/gnome-power-manager.schemas.in.h:131
 msgid ""
 "The time remaining in seconds of the battery when it is considered critical. "
 "Only valid when use_time_for_policy is true."
@@ -921,7 +940,7 @@ msgstr ""
 "Likęs laikas sekundėmis, iki įkrovos lygio laikymo kritišku. Naudojama tik, "
 "kai use_time_for_policy reikšmė teigiama."
 
-#: ../data/gnome-power-manager.schemas.in.h:129
+#: ../data/gnome-power-manager.schemas.in.h:132
 msgid ""
 "The time remaining in seconds of the battery when it is considered low. Only "
 "valid when use_time_for_policy is true."
@@ -929,19 +948,19 @@ msgstr ""
 "Likęs laikas sekundėmis, iki įkrovos lygio laikymo mažu. Naudojama tik, kai "
 "use_time_for_policy reikšmė teigiama."
 
-#: ../data/gnome-power-manager.schemas.in.h:130
+#: ../data/gnome-power-manager.schemas.in.h:133
 msgid "The time remaining when action is taken"
 msgstr "Likęs laikas, kai vykdomas veiksmas"
 
-#: ../data/gnome-power-manager.schemas.in.h:131
+#: ../data/gnome-power-manager.schemas.in.h:134
 msgid "The time remaining when critical"
 msgstr "Likęs laikas, kai kritiškai maža įkrova"
 
-#: ../data/gnome-power-manager.schemas.in.h:132
+#: ../data/gnome-power-manager.schemas.in.h:135
 msgid "The time remaining when low"
 msgstr "Likęs laikas, kai maža įkrova"
 
-#: ../data/gnome-power-manager.schemas.in.h:133
+#: ../data/gnome-power-manager.schemas.in.h:136
 msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
 "Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
@@ -949,7 +968,7 @@ msgstr ""
 "Kompiuteriui esant neveikliam, jo užmigdymo tipas. Tinkamos reikšmės yra "
 "„hibernate“, „suspend“ ir „nothing“."
 
-#: ../data/gnome-power-manager.schemas.in.h:134
+#: ../data/gnome-power-manager.schemas.in.h:137
 msgid ""
 "The version of the installed version of the schema. Do not edit this value, "
 "it is used so that configure changes between versions can be detected."
@@ -957,7 +976,7 @@ msgstr ""
 "Įdiegtos schemos versijos versija. Nekeiskite šios reikšmės, ji naudojama "
 "pakeitimams tarp versijų aptikti."
 
-#: ../data/gnome-power-manager.schemas.in.h:135
+#: ../data/gnome-power-manager.schemas.in.h:138
 msgid ""
 "This is the laptop panel screen brightness used when the session is idle. "
 "Only valid when use_time_for_policy is true."
@@ -965,27 +984,27 @@ msgstr ""
 "Tai nešiojamojo kompiuterio ekrano ryškumas naudojamas, kai sesija neveikli. "
 "Naudojama tik, kai use_time_for_policy reikšmė teigiama."
 
-#: ../data/gnome-power-manager.schemas.in.h:136
+#: ../data/gnome-power-manager.schemas.in.h:139
 msgid "UPS critical low action"
 msgstr "Veiksmas vykdomas esant kritiškai mažai NSŠ įkrovai"
 
-#: ../data/gnome-power-manager.schemas.in.h:137
+#: ../data/gnome-power-manager.schemas.in.h:140
 msgid "UPS low power action"
 msgstr "Veiksmas vykdomas esant mažai NSŠ įkrovai"
 
-#: ../data/gnome-power-manager.schemas.in.h:138
+#: ../data/gnome-power-manager.schemas.in.h:141
 msgid "Use gnome-screensaver lock setting"
 msgstr "Naudoti gnome-screensaver užrakinimo nustatymus"
 
-#: ../data/gnome-power-manager.schemas.in.h:139
+#: ../data/gnome-power-manager.schemas.in.h:142
 msgid "When to show the notification icon"
 msgstr "Kada pranešimų vietoje rodyti piktogramą"
 
-#: ../data/gnome-power-manager.schemas.in.h:140
+#: ../data/gnome-power-manager.schemas.in.h:143
 msgid "Whether NetworkManager should be connected and disconnected on sleep."
 msgstr "Ar NetworkManager turėtų prisijungti ir atsijungti užmiegant."
 
-#: ../data/gnome-power-manager.schemas.in.h:141
+#: ../data/gnome-power-manager.schemas.in.h:144
 msgid ""
 "Whether NetworkManager should disconnect before suspending or hibernating "
 "and connect on resume."
@@ -993,7 +1012,7 @@ msgstr ""
 "Ar NetworkManager turėtų atsijungti prieš užmiegant ar hibernuojant, bei "
 "prisijungti tęsiant."
 
-#: ../data/gnome-power-manager.schemas.in.h:142
+#: ../data/gnome-power-manager.schemas.in.h:145
 msgid ""
 "Whether or not niced processes should be considered on processor load "
 "calculation"
@@ -1001,7 +1020,7 @@ msgstr ""
 "Ar žemo prioriteto (nice) procesai turėtų būti įtraukti į procesoriaus "
 "apkrovos skaičiavimus"
 
-#: ../data/gnome-power-manager.schemas.in.h:143
+#: ../data/gnome-power-manager.schemas.in.h:146
 msgid ""
 "Whether the GNOME keyring is locked before the computer enters hibernate. "
 "This means the keyring will have to be unlocked on resume."
@@ -1009,7 +1028,7 @@ msgstr ""
 "Ar GNOME raktų žiedas užrakinamas prieš hibernaciją. Tai reiškia, kad "
 "nubudus reikės vėl atrakinti raktų žiedą."
 
-#: ../data/gnome-power-manager.schemas.in.h:144
+#: ../data/gnome-power-manager.schemas.in.h:147
 msgid ""
 "Whether the GNOME keyring is locked before the computer enters suspend. This "
 "means the keyring will have to be unlocked on resume."
@@ -1017,7 +1036,7 @@ msgstr ""
 "Ar GNOME raktų žiedas užrakinamas prieš užmigimą. Tai reiškia, kad nubudus "
 "reikės vėl atrakinti raktų žiedą."
 
-#: ../data/gnome-power-manager.schemas.in.h:145
+#: ../data/gnome-power-manager.schemas.in.h:148
 msgid ""
 "Whether the screen is locked when the computer wakes up from a hibernate. "
 "Only used if lock_use_screensaver_settings is false."
@@ -1025,7 +1044,7 @@ msgstr ""
 "Ar užrakinti ekraną, kai kompiuteris sugrąžinamas iš hibernavimo. Parinktis "
 "naudojama tik tada, kai rakto lock_use_screensaver_settings reikšmė neigiama."
 
-#: ../data/gnome-power-manager.schemas.in.h:146
+#: ../data/gnome-power-manager.schemas.in.h:149
 msgid ""
 "Whether the screen is locked when the computer wakes up from a suspend. Only "
 "used if lock_use_screensaver_settings is false."
@@ -1033,7 +1052,7 @@ msgstr ""
 "Ar užrakinti ekraną, kai kompiuteris sugrąžinamas iš užmigdymo. Naudojama "
 "tik tada, kai rakto lock_use_screensaver_settings reikšmė neigiama."
 
-#: ../data/gnome-power-manager.schemas.in.h:147
+#: ../data/gnome-power-manager.schemas.in.h:150
 msgid ""
 "Whether the screen is locked when the screen is turned off. Only used if "
 "lock_use_screensaver_settings is false."
@@ -1041,11 +1060,11 @@ msgstr ""
 "Ar ekranas užrakinamas jį išjungus. Ši parinktis naudojama tik jei "
 "lock_use_screensaver_settings rakto reikšmė neigiama."
 
-#: ../data/gnome-power-manager.schemas.in.h:148
+#: ../data/gnome-power-manager.schemas.in.h:151
 msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr "Ar hibernuoti, užmigdyti ar nedaryti nieko, neveiklumo metu"
 
-#: ../data/gnome-power-manager.schemas.in.h:149
+#: ../data/gnome-power-manager.schemas.in.h:152
 msgid ""
 "Whether to use the screen lock setting of gnome-screensaver to decide if the "
 "screen is locked after a hibernate, suspend or blank screen."
@@ -1053,31 +1072,31 @@ msgstr ""
 "Ar naudoti gnome-screensaver ekrano užrakinimo nustatymus sprendžiant, ar "
 "užrakinti ekraną po hibernavimo, užmigdymo ar ekrano užtemdymo."
 
-#: ../data/gnome-power-manager.schemas.in.h:150
+#: ../data/gnome-power-manager.schemas.in.h:153
 msgid "Whether to use time-based notifications"
 msgstr "Ar naudoti laiku paremtus pranešimus"
 
-#: ../data/gnome-power-manager.schemas.in.h:151
+#: ../data/gnome-power-manager.schemas.in.h:154
 msgid "Whether we should show the axis labels in the statistics window"
 msgstr "Ar statistikos lange reikėtų rodyti ašių pavadinimus"
 
-#: ../data/gnome-power-manager.schemas.in.h:152
+#: ../data/gnome-power-manager.schemas.in.h:155
 msgid "Whether we should show the axis labels in the statistics window."
 msgstr "Ar statistikos lange reikėtų rodyti ašių pavadinimus."
 
-#: ../data/gnome-power-manager.schemas.in.h:153
+#: ../data/gnome-power-manager.schemas.in.h:156
 msgid "Whether we should show the events in the statistics window"
 msgstr "Ar statistikos lange reikėtų rodyti įvykius"
 
-#: ../data/gnome-power-manager.schemas.in.h:154
+#: ../data/gnome-power-manager.schemas.in.h:157
 msgid "Whether we should show the events in the statistics window."
 msgstr "Ar statistikos lange reikėtų rodyti įvykius."
 
-#: ../data/gnome-power-manager.schemas.in.h:155
+#: ../data/gnome-power-manager.schemas.in.h:158
 msgid "Whether we should smooth the data in the graph"
 msgstr "Ar glotninti grafiką"
 
-#: ../data/gnome-power-manager.schemas.in.h:156
+#: ../data/gnome-power-manager.schemas.in.h:159
 msgid "Whether we should smooth the data in the graph."
 msgstr "Ar glotninti grafiką."
 
@@ -1117,8 +1136,8 @@ msgstr "Grafiko tipas:"
 msgid "Power History"
 msgstr "Energijos istorija"
 
-#: ../data/gpm-graph.glade.h:5 ../src/gpm-info.c:293 ../src/gpm-info.c:302
-#: ../src/gpm-info.c:311 ../src/gpm-info.c:320
+#: ../data/gpm-graph.glade.h:5 ../src/gpm-info.c:296 ../src/gpm-info.c:305
+#: ../src/gpm-info.c:314 ../src/gpm-info.c:323
 msgid "Time since startup"
 msgstr "Laikas nuo paleidimo"
 
@@ -1175,110 +1194,113 @@ msgid "Computer sp_eed policy:"
 msgstr "Kompiuterio _spartos politika:"
 
 #: ../data/gpm-prefs.glade.h:7
-msgid "Dim display _brightness by:"
-msgstr "_Mažinti ekrano r_yškumą tiek:"
-
-#: ../data/gpm-prefs.glade.h:8
-msgid "Dim display when idle"
+#, fuzzy
+msgid "Di_m display when idle"
 msgstr "Pritemdyti ekraną, kai nenaudojamas"
 
-#: ../data/gpm-prefs.glade.h:9
+#: ../data/gpm-prefs.glade.h:8
 msgid "Enable UPS discharge _alarm"
 msgstr "Įjungti perspėjimą _apie NSŠ išsikrovimą"
 
-#: ../data/gpm-prefs.glade.h:10
+#: ../data/gpm-prefs.glade.h:9
 msgid "General"
 msgstr "Bendri"
 
-#: ../data/gpm-prefs.glade.h:11
+#: ../data/gpm-prefs.glade.h:10
 msgid "Make _default"
 msgstr "Padaryti _numatytaja"
 
-#: ../data/gpm-prefs.glade.h:12
+#: ../data/gpm-prefs.glade.h:11
 msgid "On AC Power"
 msgstr "Naudojant kintamą srovę"
 
-#: ../data/gpm-prefs.glade.h:13
+#: ../data/gpm-prefs.glade.h:12
 msgid "On Battery Power"
 msgstr "Naudojant baterijos energiją"
 
-#: ../data/gpm-prefs.glade.h:14
+#: ../data/gpm-prefs.glade.h:13
 msgid "On UPS Power"
 msgstr "Naudojant NSŠ energiją"
 
-#: ../data/gpm-prefs.glade.h:15
+#: ../data/gpm-prefs.glade.h:14
 msgid "Only display an icon when a battery is p_resent"
 msgstr "Rodyti piktogramą tik kai kompiuteryje _yra baterija"
 
-#: ../data/gpm-prefs.glade.h:16
+#: ../data/gpm-prefs.glade.h:15
 msgid "Only display an icon when charging or _discharging"
 msgstr "Rodyti piktogramą tik įkrovimo ar _išsikrovimo metu"
 
-#: ../data/gpm-prefs.glade.h:17
+#: ../data/gpm-prefs.glade.h:16
 msgid "Power Management Preferences"
 msgstr "Energijos valdymo nustatymai"
 
-#: ../data/gpm-prefs.glade.h:18
+#: ../data/gpm-prefs.glade.h:17
 msgid "Put _display to sleep when inactive for:"
 msgstr "Užmigdyti _ekraną, kai kompiuteris neaktyvus:"
 
-#: ../data/gpm-prefs.glade.h:19
+#: ../data/gpm-prefs.glade.h:18
 msgid "Put computer to _sleep when inactive for:"
 msgstr "Užmigdyti _kompiuterį, kai jis neaktyvus:"
 
-#: ../data/gpm-prefs.glade.h:20
+#: ../data/gpm-prefs.glade.h:19
 msgid "Set display _brightness to:"
 msgstr "Nustatyti ekrano r_yškumą į:"
 
-#: ../data/gpm-prefs.glade.h:21
+#: ../data/gpm-prefs.glade.h:20
 msgid "Turn on keyboard light when light level is low"
 msgstr "Įjungti klaviatūros apšvietimą, kai aplinka tamsi"
 
-#: ../data/gpm-prefs.glade.h:22
+#: ../data/gpm-prefs.glade.h:21
 msgid "Use _ambient light to adjust LCD brightness"
 msgstr "Naudoti _aplinkos šviesą LCD ryškumo nustatymui"
 
-#: ../data/gpm-prefs.glade.h:23
+#: ../data/gpm-prefs.glade.h:22
 msgid "Use _sound to notify in event of an error"
 msgstr "Įspėti apie klaidas _garsiniu signalu"
 
-#: ../data/gpm-prefs.glade.h:24
+#: ../data/gpm-prefs.glade.h:23
 msgid "When UPS power is _critically low:"
 msgstr "Kai _NSŠ energijos lygis kritiškai mažas:"
 
-#: ../data/gpm-prefs.glade.h:25
+#: ../data/gpm-prefs.glade.h:24
 msgid "When UPS power is l_ow:"
 msgstr "Kai _NSŠ energijos lygis mažas:"
 
-#: ../data/gpm-prefs.glade.h:26
+#: ../data/gpm-prefs.glade.h:25
 msgid "When battery po_wer is critically low:"
 msgstr "Kai _baterijos energijos lygis kritiškai mažas:"
 
-#: ../data/gpm-prefs.glade.h:27
+#: ../data/gpm-prefs.glade.h:26
 msgid "When laptop lid is cl_osed:"
 msgstr "Kai užveriamas _neš. kompiuterio dangtis:"
 
-#: ../data/gpm-prefs.glade.h:28
+#: ../data/gpm-prefs.glade.h:27
 msgid "When the _suspend button is pressed:"
 msgstr "Kai paspaudžiamas _užmigdymo mygtukas:"
 
-#: ../data/gpm-prefs.glade.h:29
+#: ../data/gpm-prefs.glade.h:28
 msgid "When the power _button is pressed:"
 msgstr "Kai paspaudžiamas _išjungimo mygtukas:"
 
-#: ../data/gpm-prefs.glade.h:30
+#: ../data/gpm-prefs.glade.h:29
 msgid "_Always display an icon"
 msgstr "_Visada rodyti piktogramą"
 
-#: ../data/gpm-prefs.glade.h:31
+#: ../data/gpm-prefs.glade.h:30
 msgid "_Never display an icon"
 msgstr "_Niekada nerodyti piktogramos"
 
-#: ../data/gpm-prefs.glade.h:32
+#: ../data/gpm-prefs.glade.h:31
 msgid "_Only display an icon when battery power is critically low"
 msgstr "Rodyti piktogramą tik kai baterijos energijos lygis _kritiškai mažas"
 
+#: ../data/gpm-prefs.glade.h:32
+#, fuzzy
+msgid "_Reduce backlight brightness"
+msgstr "Leisti keisti monitoriaus lempos ryškumą"
+
 #: ../src/gpm-control.c:279
+#, c-format
 msgid "The message was not sent due to DBUS security rules"
 msgstr "Pranešimas nebuvo išsiųstas dėl DBUS apsaugos taisyklių"
 
@@ -1288,6 +1310,7 @@ msgid "General failure: %s"
 msgstr "Bendras trikis: %s"
 
 #: ../src/gpm-common.c:242
+#, c-format
 msgid "Unknown time"
 msgstr "Nežinomas laikas"
 
@@ -1414,255 +1437,331 @@ msgstr "%.1fW"
 msgid "%.1fV"
 msgstr "%.1fV"
 
-#: ../src/gpm-info.c:121
-#, c-format
-msgid "%s because %s"
-msgstr "%s nes %s"
+#: ../src/gpm-info.c:122
+#, fuzzy, c-format
+msgid "Reason: %s"
+msgstr "Priežastis:"
 
-#: ../src/gpm-info.c:199
+#: ../src/gpm-info.c:202
 msgid "On AC"
 msgstr "Kintamoji srovė"
 
-#: ../src/gpm-info.c:203
+#: ../src/gpm-info.c:206
 msgid "On battery"
 msgstr "Baterija"
 
-#: ../src/gpm-info.c:207
+#: ../src/gpm-info.c:210
 msgid "Session powersave"
 msgstr "Sesija, taupoma energija"
 
-#: ../src/gpm-info.c:211
+#: ../src/gpm-info.c:214
 msgid "Session idle"
 msgstr "Sesija neveikli"
 
-#: ../src/gpm-info.c:215
+#: ../src/gpm-info.c:218
 msgid "Session active"
 msgstr "Sesija aktyvi"
 
 #. Translators: translate ONLY the string part after the |
-#: ../src/gpm-info.c:220
+#: ../src/gpm-info.c:223
 msgid "label shown on graph|Suspend"
 msgstr "Užmigimas"
 
 #. Translators: translate ONLY the string part after the |
-#: ../src/gpm-info.c:225
+#: ../src/gpm-info.c:228
 msgid "label shown on graph|Resume"
 msgstr "Pabudimas"
 
 #. Translators: translate ONLY the string part after the |
-#: ../src/gpm-info.c:230
+#: ../src/gpm-info.c:233
 msgid "label shown on graph|Hibernate"
 msgstr "Hibernacija"
 
-#: ../src/gpm-info.c:234
+#: ../src/gpm-info.c:237
 msgid "Lid closed"
 msgstr "Dangtis užvožtas"
 
-#: ../src/gpm-info.c:238
+#: ../src/gpm-info.c:241
 msgid "Lid opened"
 msgstr "Dangtis atvožtas"
 
-#: ../src/gpm-info.c:242
+#: ../src/gpm-info.c:245
 msgid "Notification"
 msgstr "Pranešimas"
 
-#: ../src/gpm-info.c:247
+#: ../src/gpm-info.c:250
 msgid "DPMS On"
 msgstr "DPMS įjungta"
 
-#: ../src/gpm-info.c:251
+#: ../src/gpm-info.c:254
 msgid "DPMS Standby"
 msgstr "DPMS taupymas"
 
-#: ../src/gpm-info.c:255
+#: ../src/gpm-info.c:258
 msgid "DPMS Suspend"
 msgstr "DPMS užmigdyti"
 
-#: ../src/gpm-info.c:259
+#: ../src/gpm-info.c:262
 msgid "DPMS Off"
 msgstr "DPMS išjungta"
 
-#: ../src/gpm-info.c:294 ../src/gpm-info.c:295
+#: ../src/gpm-info.c:297 ../src/gpm-info.c:298
 msgid "Power"
 msgstr "Energija"
 
-#: ../src/gpm-info.c:303
+#: ../src/gpm-info.c:306
 msgid "Estimated time"
 msgstr "Prognozuojamas laikas"
 
-#: ../src/gpm-info.c:304
+#: ../src/gpm-info.c:307
 msgid "Time"
 msgstr "Laikas"
 
-#: ../src/gpm-info.c:312 ../src/gpm-info.c:329 ../src/gpm-info.c:346
-#: ../src/gpm-info.c:364 ../src/gpm-info.c:381
+#: ../src/gpm-info.c:315 ../src/gpm-info.c:332 ../src/gpm-info.c:349
+#: ../src/gpm-info.c:367 ../src/gpm-info.c:384
 msgid "Battery percentage"
 msgstr "Įkrova"
 
-#: ../src/gpm-info.c:313
+#: ../src/gpm-info.c:316
 msgid "Percentage"
 msgstr "Įkrova procentais"
 
-#: ../src/gpm-info.c:321
+#: ../src/gpm-info.c:324
 msgid "Battery Voltage"
 msgstr "Baterijos įtampa"
 
-#: ../src/gpm-info.c:322
+#: ../src/gpm-info.c:325
 msgid "Voltage"
 msgstr "Įtampa"
 
-#: ../src/gpm-info.c:330 ../src/gpm-info.c:365
+#: ../src/gpm-info.c:333 ../src/gpm-info.c:368
 msgid "Accuracy of reading"
 msgstr "Duomenų tikslumas"
 
-#: ../src/gpm-info.c:331 ../src/gpm-info.c:348 ../src/gpm-info.c:366
-#: ../src/gpm-info.c:383
+#: ../src/gpm-info.c:334 ../src/gpm-info.c:351 ../src/gpm-info.c:369
+#: ../src/gpm-info.c:386
 msgid "Valid data"
 msgstr "Taisyklingi duomenys"
 
-#: ../src/gpm-info.c:332 ../src/gpm-info.c:349 ../src/gpm-info.c:367
-#: ../src/gpm-info.c:384
+#: ../src/gpm-info.c:335 ../src/gpm-info.c:352 ../src/gpm-info.c:370
+#: ../src/gpm-info.c:387
 msgid "No data"
 msgstr "Nėra duomenų"
 
-#: ../src/gpm-info.c:336 ../src/gpm-info.c:354 ../src/gpm-info.c:371
-#: ../src/gpm-info.c:389
+#: ../src/gpm-info.c:339 ../src/gpm-info.c:357 ../src/gpm-info.c:374
+#: ../src/gpm-info.c:392
 msgid "Start point"
 msgstr "Pradinis taškas"
 
-#: ../src/gpm-info.c:340 ../src/gpm-info.c:358 ../src/gpm-info.c:375
-#: ../src/gpm-info.c:393
+#: ../src/gpm-info.c:343 ../src/gpm-info.c:361 ../src/gpm-info.c:378
+#: ../src/gpm-info.c:396
 msgid "Stop point"
 msgstr "Paskutinis taškas"
 
-#: ../src/gpm-info.c:347 ../src/gpm-info.c:382
+#: ../src/gpm-info.c:350 ../src/gpm-info.c:385
 msgid "Average time elapsed"
 msgstr "Vidutiniškai praėjo laiko"
 
-#: ../src/gpm-info.c:350 ../src/gpm-info.c:385
+#: ../src/gpm-info.c:353 ../src/gpm-info.c:388
 msgid "Extrapolated data"
 msgstr "Ekstrapoliuoti duomenys"
 
-#: ../src/gpm-info.c:677
+#: ../src/gpm-info.c:680
 msgid "AC adapter inserted"
 msgstr "Įdėtas AC adapteris"
 
-#: ../src/gpm-info.c:680
+#: ../src/gpm-info.c:683
 msgid "AC adapter removed"
 msgstr "Išimtas AC adapteris"
 
-#: ../src/gpm-info.c:700
+#: ../src/gpm-info.c:703
 msgid "The laptop lid has been closed"
 msgstr "Užvertas neš. kompiuterio dangtis"
 
-#: ../src/gpm-info.c:706
+#: ../src/gpm-info.c:709
 msgid "The laptop lid has been re-opened"
 msgstr "Atvožtas neš. kompiuterio dangtis"
 
-#: ../src/gpm-info.c:728
+#: ../src/gpm-info.c:731
 msgid "idle mode ended"
 msgstr "neveiklumo veiksena pasibaigė"
 
-#: ../src/gpm-info.c:730
+#: ../src/gpm-info.c:733
 msgid "idle mode started"
 msgstr "prasidėjo neveiklumo veiksena"
 
-#: ../src/gpm-info.c:732
+#: ../src/gpm-info.c:735
 msgid "powersave mode started"
 msgstr "prasidėjo energijos taupymo veiksena"
 
-#: ../src/gpm-info.c:751
+#: ../src/gpm-info.c:754
 msgid "dpms on"
 msgstr "dpms įjungtas"
 
-#: ../src/gpm-info.c:753
+#: ../src/gpm-info.c:756
 msgid "dpms standby"
 msgstr "dpms neveiklumas"
 
-#: ../src/gpm-info.c:755
+#: ../src/gpm-info.c:758
 msgid "dpms suspend"
 msgstr "dpms užmigdymas"
 
-#: ../src/gpm-info.c:757
+#: ../src/gpm-info.c:760
 msgid "dpms off"
 msgstr "dpms išjungtas"
 
-#: ../src/gpm-info.c:774
+#: ../src/gpm-info.c:777
 msgid "Resuming computer"
 msgstr "Kompiuteris budinamas"
 
-#: ../src/gpm-info.c:790
+#: ../src/gpm-info.c:793
 msgid "Hibernate Problem"
 msgstr "Hibernavimo problema"
 
-#: ../src/gpm-info.c:792
+#: ../src/gpm-info.c:795
 msgid "Suspend Problem"
 msgstr "Užmigdymo problema"
 
-#: ../src/gpm-inhibit.c:370
-#, c-format
-msgid "has stopped the %s from taking place : "
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:373
+#, fuzzy, c-format
+msgid "%s has stopped the suspend from taking place: %s."
 msgstr "sustabdė %s nuo: "
 
-#: ../src/gpm-inhibit.c:376
-#, c-format
-msgid "Multiple applications have stopped the %s from taking place."
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:378
+#, fuzzy, c-format
+msgid "%s has stopped the hibernate from taking place: %s."
+msgstr "sustabdė %s nuo: "
+
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:383
+#, fuzzy, c-format
+msgid "%s has stopped the policy action from taking place: %s."
+msgstr "sustabdė %s nuo: "
+
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:388
+#, fuzzy, c-format
+msgid "%s has stopped the reboot from taking place: %s."
+msgstr "sustabdė %s nuo: "
+
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:393
+#, fuzzy, c-format
+msgid "%s has stopped the shutdown from taking place: %s."
+msgstr "sustabdė %s nuo: "
+
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:398
+#, fuzzy, c-format
+msgid "%s has stopped the timeout action from taking place: %s."
+msgstr "sustabdė %s nuo: "
+
+#: ../src/gpm-inhibit.c:406 ../src/gpm-inhibit.c:421
+#, fuzzy, c-format
+msgid "Multiple applications have stopped the suspend from taking place."
 msgstr "Kelios programos sustabdė %s."
 
-#: ../src/gpm-main.c:153
+#: ../src/gpm-inhibit.c:409
+#, fuzzy, c-format
+msgid "Multiple applications have stopped the hibernate from taking place."
+msgstr "Kelios programos sustabdė %s."
+
+#: ../src/gpm-inhibit.c:412
+#, fuzzy, c-format
+msgid "Multiple applications have stopped the policy action from taking place."
+msgstr "Kelios programos sustabdė %s."
+
+#: ../src/gpm-inhibit.c:415
+#, fuzzy, c-format
+msgid "Multiple applications have stopped the reboot from taking place."
+msgstr "Kelios programos sustabdė %s."
+
+#: ../src/gpm-inhibit.c:418
+#, fuzzy, c-format
+msgid "Multiple applications have stopped the shutdown from taking place."
+msgstr "Kelios programos sustabdė %s."
+
+#: ../src/gpm-main.c:137
 msgid "Do not daemonize"
 msgstr "Neleisti fone"
 
-#: ../src/gpm-main.c:155 ../src/gpm-prefs.c:107 ../src/gpm-statistics.c:105
+#: ../src/gpm-main.c:139 ../src/gpm-prefs.c:107 ../src/gpm-statistics.c:105
 msgid "Show extra debugging information"
 msgstr "Rodyti papildomą derinimo informaciją"
 
-#: ../src/gpm-main.c:157
+#: ../src/gpm-main.c:141
 msgid "Show version of installed program and exit"
 msgstr "Parodyti įdiegtos programos versiją ir išeiti"
 
-#: ../src/gpm-main.c:159
+#: ../src/gpm-main.c:143
 msgid "Exit after a small delay (for debugging)"
 msgstr "Išeiti po trumpos pauzės (klaidoms ieškoti)"
 
-#: ../src/gpm-main.c:161
+#: ../src/gpm-main.c:145
 msgid "Exit after the manager has loaded (for debugging)"
 msgstr "Išeiti įkrovus valdyklę (klaidoms ieškoti)"
 
-#: ../src/gpm-main.c:163
+#: ../src/gpm-main.c:147
 msgid "Debug specific files, e.g. power"
 msgstr "Derinti specifinius failus, pvz., power"
 
-#: ../src/gpm-main.c:167
+#: ../src/gpm-main.c:151
 msgid "GNOME Power Manager"
 msgstr "GNOME energijos valdymo programa"
 
-#: ../src/gpm-manager.c:183
-#, c-format
-msgid "Request to %s"
+#: ../src/gpm-manager.c:185
+#, fuzzy, c-format
+msgid "Request to suspend"
 msgstr "Prašymas %s"
 
+#: ../src/gpm-manager.c:188
+#, fuzzy, c-format
+msgid "Request to hibernate"
+msgstr "Prašymas %s"
+
+#: ../src/gpm-manager.c:191
+#, c-format
+msgid "Request to do policy action"
+msgstr ""
+
+#: ../src/gpm-manager.c:194
+#, fuzzy, c-format
+msgid "Request to reboot"
+msgstr "Prašymas %s"
+
+#: ../src/gpm-manager.c:197
+#, fuzzy, c-format
+msgid "Request to shutdown"
+msgstr "Prašymas %s"
+
+#: ../src/gpm-manager.c:200
+#, c-format
+msgid "Request to do timeout action"
+msgstr ""
+
 #. I want this translated
-#: ../src/gpm-manager.c:192
+#: ../src/gpm-manager.c:211
 msgid "Perform action anyway"
 msgstr "Vistiek atlikti veiksmą"
 
-#: ../src/gpm-manager.c:311 ../src/gpm-manager.c:337 ../src/gpm-manager.c:362
-#: ../src/gpm-manager.c:388 ../src/gpm-manager.c:420
+#: ../src/gpm-manager.c:331 ../src/gpm-manager.c:357 ../src/gpm-manager.c:391
+#: ../src/gpm-manager.c:417 ../src/gpm-manager.c:457
 msgid "Action forbidden"
 msgstr "Veiksmas uždraustas"
 
-#: ../src/gpm-manager.c:312 ../src/gpm-manager.c:363 ../src/gpm-manager.c:421
+#: ../src/gpm-manager.c:332 ../src/gpm-manager.c:392 ../src/gpm-manager.c:458
 msgid "Policy timeout is not valid. Please wait a few seconds and try again."
 msgstr ""
 "Laiko limitas netaisyklingas. Palaukite kelias sekundes ir bandykite dar "
 "kartą."
 
-#: ../src/gpm-manager.c:324 ../src/gpm-manager.c:375
+#: ../src/gpm-manager.c:344 ../src/gpm-manager.c:404
 msgid "Action disallowed"
 msgstr "Veiksmas neleidžiamas"
 
-#: ../src/gpm-manager.c:325
+#: ../src/gpm-manager.c:345
 msgid ""
 "Suspend support has been disabled. Contact your administrator for more "
 "details."
@@ -1670,15 +1769,16 @@ msgstr ""
 "Užmigimo palaikymas išjungtas. Susisiekite su savo administratoriumi dėl "
 "priežasčių."
 
-#: ../src/gpm-manager.c:338
+#: ../src/gpm-manager.c:358
 msgid "Suspend is not available on this computer."
 msgstr "Užmigimas nepalaikomas šiame kompiuteryje."
 
-#: ../src/gpm-manager.c:346 ../src/gpm-manager.c:725
-msgid "Suspending computer"
+#: ../src/gpm-manager.c:371 ../src/gpm-manager.c:790
+#, fuzzy
+msgid "Suspending computer."
 msgstr "Užmigdomas kompiuterį"
 
-#: ../src/gpm-manager.c:376
+#: ../src/gpm-manager.c:405
 msgid ""
 "Hibernate support has been disabled. Contact your administrator for more "
 "details."
@@ -1686,160 +1786,178 @@ msgstr ""
 "Hibernacijos palaikymas išjungtas. Susisiekite su administratoriumi dėl "
 "priežasčių."
 
-#: ../src/gpm-manager.c:389
+#: ../src/gpm-manager.c:418
 msgid "Hibernate is not available on this computer."
 msgstr "Hibernacija nepalaikoma šiame kompiuteryje."
 
-#: ../src/gpm-manager.c:397 ../src/gpm-manager.c:737
-msgid "Hibernating computer"
+#: ../src/gpm-manager.c:431 ../src/gpm-manager.c:805
+#, fuzzy
+msgid "Hibernating computer."
 msgstr "Hibernuojamas kompiuteris"
 
-#: ../src/gpm-manager.c:437
-msgid "Doing nothing"
+#: ../src/gpm-manager.c:479
+#, fuzzy
+msgid "Doing nothing."
 msgstr "Nieko nedaroma"
 
-#: ../src/gpm-manager.c:450
-msgid "Shutting down computer"
+#: ../src/gpm-manager.c:492
+#, fuzzy
+msgid "Shutting down computer."
 msgstr "Išjungiamas kompiuteris"
 
-#: ../src/gpm-manager.c:455
-msgid "GNOME interactive logout"
+#: ../src/gpm-manager.c:497
+#, fuzzy
+msgid "GNOME interactive logout."
 msgstr "GNOME interaktyvus atsijungimas"
 
-#: ../src/gpm-manager.c:725 ../src/gpm-manager.c:737
-msgid "System idle"
+#: ../src/gpm-manager.c:790 ../src/gpm-manager.c:805
+#, fuzzy
+msgid "System idle."
 msgstr "Sistema neveikli"
 
-#: ../src/gpm-manager.c:811
+#: ../src/gpm-manager.c:882
 msgid "Power Information"
 msgstr "Energijos informacija"
 
-#: ../src/gpm-manager.c:828
-msgid "the power button has been pressed"
+#: ../src/gpm-manager.c:899
+#, fuzzy
+msgid "The power button has been pressed."
 msgstr "paspaustas įjungimo mygtukas"
 
-#: ../src/gpm-manager.c:840
-msgid "the suspend button has been pressed"
+#: ../src/gpm-manager.c:911
+#, fuzzy
+msgid "The suspend button has been pressed."
 msgstr "paspaustas užmigdymo mygtukas"
 
-#: ../src/gpm-manager.c:852
-msgid "the hibernate button has been pressed"
+#: ../src/gpm-manager.c:923
+#, fuzzy
+msgid "The hibernate button has been pressed."
 msgstr "paspaustas hibernavimo mygtukas"
 
-#: ../src/gpm-manager.c:883
-msgid "the lid has been closed on ac power"
+#: ../src/gpm-manager.c:954
+#, fuzzy
+msgid "The lid has been closed on ac power."
 msgstr "užvertas dangtis, prijungta prie elektros tinklo"
 
-#: ../src/gpm-manager.c:913
-msgid "the lid has been closed on battery power"
+#: ../src/gpm-manager.c:984
+#, fuzzy
+msgid "The lid has been closed on battery power."
 msgstr "užvertas dangtis, naudojama baterija"
 
-#: ../src/gpm-manager.c:1002
-msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
+#: ../src/gpm-manager.c:1073
+#, fuzzy
+msgid ""
+"The lid has been closed, and the ac adapter removed (and gconf is okay)."
 msgstr "užvertas dangtis, elektro tinklo adapteris ištrauktas"
 
-#: ../src/gpm-manager.c:1025
-msgid "battery is critically low"
+#: ../src/gpm-manager.c:1096
+#, fuzzy
+msgid "Battery is critically low."
 msgstr "baterijos energijos lygis kritiškai mažas"
 
-#: ../src/gpm-manager.c:1340
+#: ../src/gpm-manager.c:1186 ../src/gpm-manager.c:1201
+msgid "User clicked on tray"
+msgstr ""
+
+#: ../src/gpm-manager.c:1411
 msgid "Laptop battery low"
 msgstr "Baigiasi nešiojamojo kompiuterio baterija"
 
-#: ../src/gpm-manager.c:1342
+#: ../src/gpm-manager.c:1413
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%d%%)"
 msgstr "Jums liko maždaug <b>%s</b> iki baterijos išsikrovimo (%d%%)"
 
-#: ../src/gpm-manager.c:1345
+#: ../src/gpm-manager.c:1416
 msgid "UPS low"
 msgstr "Baigiasi NSŠ baterija"
 
-#: ../src/gpm-manager.c:1347
+#: ../src/gpm-manager.c:1418
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS backup power (%d%%)"
 msgstr "Jums liko maždaug <b>%s</b> iki NSŠ baterijos išsikrovimo (%d%%)"
 
-#: ../src/gpm-manager.c:1350 ../src/gpm-manager.c:1450
+#: ../src/gpm-manager.c:1421 ../src/gpm-manager.c:1521
 msgid "Mouse battery low"
 msgstr "Baigiasi pelės baterija"
 
-#: ../src/gpm-manager.c:1351
+#: ../src/gpm-manager.c:1422
 #, c-format
 msgid "The wireless mouse attached to this computer is low in power (%d%%)"
 msgstr ""
 "Mažas prie kompiuterio prijungtos belaidės pelės energijos lygis (%d%%)"
 
-#: ../src/gpm-manager.c:1353 ../src/gpm-manager.c:1455
+#: ../src/gpm-manager.c:1424 ../src/gpm-manager.c:1526
 msgid "Keyboard battery low"
 msgstr "Baigiasi klaviatūros baterija"
 
-#: ../src/gpm-manager.c:1354
+#: ../src/gpm-manager.c:1425
 #, c-format
 msgid "The wireless keyboard attached to this computer is low in power (%d%%)"
 msgstr ""
 "Mažas prie kompiuterio prijungtos belaidės klaviatūros energijos lygis (%d%%)"
 
-#: ../src/gpm-manager.c:1356 ../src/gpm-manager.c:1460
+#: ../src/gpm-manager.c:1427 ../src/gpm-manager.c:1531
 msgid "PDA battery low"
 msgstr "Baigiasi PDA baterija"
 
-#: ../src/gpm-manager.c:1357
+#: ../src/gpm-manager.c:1428
 #, c-format
 msgid "The PDA attached to this computer is low in power (%d%%)"
 msgstr "Prie kompiuterio prijungto PDA energijos lygis mažas (%d%%)"
 
-#: ../src/gpm-manager.c:1359 ../src/gpm-manager.c:1465
+#: ../src/gpm-manager.c:1430 ../src/gpm-manager.c:1536
 msgid "Cell phone battery low"
 msgstr "Baigiasi mobilaus telefono baterija"
 
-#: ../src/gpm-manager.c:1360
+#: ../src/gpm-manager.c:1431
 #, c-format
 msgid "The cell phone attached to this computer is low in power (%d%%)"
 msgstr ""
 "Mažas prie kompiuterio prijungto mobilaus telefono energijos lygis (%d%%)"
 
-#: ../src/gpm-manager.c:1387
+#: ../src/gpm-manager.c:1458
 msgid "a short time"
-msgstr "trumpas laikotarpis"
+msgstr "trumpo laikotarpio"
 
-#: ../src/gpm-manager.c:1410 ../src/gpm-manager.c:1496
+#: ../src/gpm-manager.c:1481 ../src/gpm-manager.c:1567
 msgid "Laptop battery critically low"
 msgstr "Kritinis nešiojamojo kompiuterio baterijos energijos lygis"
 
-#: ../src/gpm-manager.c:1423
+#: ../src/gpm-manager.c:1494
+#, c-format
 msgid "Plug in your AC adapter to avoid losing data."
 msgstr ""
 "Prijunkite kompiuterį prie elektros tinklo, kad išvengtumėte duomenų "
 "praradimo."
 
-#: ../src/gpm-manager.c:1426
+#: ../src/gpm-manager.c:1497
 #, c-format
 msgid "This computer will suspend in %s if the AC is not connected."
 msgstr "Kompiuteris užmigs po %s, jei neprijungsite jo prie elektros tinklo."
 
-#: ../src/gpm-manager.c:1429
+#: ../src/gpm-manager.c:1500
 #, c-format
 msgid "This computer will hibernate in %s if the AC is not connected."
 msgstr ""
 "Kompiuteris hibernuos po %s, jei neprijungsite jo prie elektros tinklo."
 
-#: ../src/gpm-manager.c:1432
+#: ../src/gpm-manager.c:1503
 #, c-format
 msgid "This computer will shutdown in %s if the AC is not connected."
 msgstr ""
 "Kompiuteris išsijungs po %s, jei neprijungsite jo prie elektros tinklo."
 
-#: ../src/gpm-manager.c:1435
+#: ../src/gpm-manager.c:1506
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%d%%). %s"
 msgstr "Jums liko maždaug <b>%s</b> iki baterijos išsikrovimo (%d%%). %s"
 
-#: ../src/gpm-manager.c:1443 ../src/gpm-manager.c:1528
+#: ../src/gpm-manager.c:1514 ../src/gpm-manager.c:1599
 msgid "UPS critically low"
 msgstr "Kritiškai mažas NSŠ energijos lygis"
 
-#: ../src/gpm-manager.c:1445
+#: ../src/gpm-manager.c:1516
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore AC "
@@ -1849,7 +1967,7 @@ msgstr ""
 "baterijos išsikrovimo (%d%%). Norėdami išvengti duomenų praradimo "
 "atnaujinkite kompiuteriui energijos tiekimą."
 
-#: ../src/gpm-manager.c:1451
+#: ../src/gpm-manager.c:1522
 #, c-format
 msgid ""
 "The wireless mouse attached to this computer is very low in power (%d%%). "
@@ -1858,7 +1976,7 @@ msgstr ""
 "Prie kompiuterio prijungtos belaidės pelės energijos lygis kritiškai mažas (%"
 "d%%). Šis įrenginys netrukus nustos funkcionuoti, jei jo neįkrausite."
 
-#: ../src/gpm-manager.c:1456
+#: ../src/gpm-manager.c:1527
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is very low in power (%d%%). "
@@ -1867,7 +1985,7 @@ msgstr ""
 "Prie kompiuterio prijungtos belaidės klaviatūros energijos lygis kritiškai "
 "mažas (%d%%). Šis įrenginys netrukus nustos funkcionuoti, jei jo neįkrausite."
 
-#: ../src/gpm-manager.c:1461
+#: ../src/gpm-manager.c:1532
 #, c-format
 msgid ""
 "The PDA attached to this computer is very low in power (%d%%). This device "
@@ -1876,7 +1994,7 @@ msgstr ""
 "Prie kompiuterio prijungto PDA energijos lygis kritiškai mažas (%d%%). Šis "
 "įrenginys netrukus nustos funkcionuoti, jei jo neįkrausite."
 
-#: ../src/gpm-manager.c:1466
+#: ../src/gpm-manager.c:1537
 #, c-format
 msgid ""
 "Your cell phone is very low in power (%d%%). This device will soon stop "
@@ -1885,7 +2003,7 @@ msgstr ""
 "Prie kompiuterio prijungto mobilaus telefono energijos lygis kritiškai mažas "
 "(%d%%). Šis įrenginys netrukus nustos funkcionuoti, jei jo neįkrausite."
 
-#: ../src/gpm-manager.c:1503
+#: ../src/gpm-manager.c:1574
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
@@ -1893,7 +2011,7 @@ msgstr ""
 "Baterijos energijos lygis yra žemiau kritinio lygio ir kompiuteris "
 "<b>išsijungs</b>, kai baterija visiškai išsikraus."
 
-#: ../src/gpm-manager.c:1508
+#: ../src/gpm-manager.c:1579
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1903,7 +2021,7 @@ msgstr ""
 "užmigdytas.<br><b>PASTABA:</b> norint kompiuterį laikyti užmigdymo būsenoje, "
 "reikia nedidelio kiekio energijos."
 
-#: ../src/gpm-manager.c:1514
+#: ../src/gpm-manager.c:1585
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
@@ -1911,7 +2029,7 @@ msgstr ""
 "Baterijos energijos lygis yra žemiau kritinio lygio ir šis kompiuteris bus "
 "hibernuotas."
 
-#: ../src/gpm-manager.c:1518
+#: ../src/gpm-manager.c:1589
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
@@ -1919,7 +2037,7 @@ msgstr ""
 "Baterijos energijos lygis yra žemiau kritinio lygio ir šis kompiuteris bus "
 "išjungtas."
 
-#: ../src/gpm-manager.c:1535
+#: ../src/gpm-manager.c:1606
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
@@ -1927,25 +2045,25 @@ msgstr ""
 "NSŠ energijos lygis yra žemiau kritinio lygio ir kompiuteris <b>išsijungs</"
 "b>, kai baterija visiškai išsikraus."
 
-#: ../src/gpm-manager.c:1540
+#: ../src/gpm-manager.c:1611
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr ""
 "NSŠ energijos lygis yra žemiau kritinio lygio ir šis kompiuteris bus "
 "hibernuotas."
 
-#: ../src/gpm-manager.c:1544
+#: ../src/gpm-manager.c:1615
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr ""
 "NSŠ energijos lygis yra žemiau kritinio lygio ir šis kompiuteris bus "
 "išjungtas."
 
-#: ../src/gpm-manager.c:1650
+#: ../src/gpm-manager.c:1721
 msgid "Install problem!"
 msgstr "Įdiegimo problema!"
 
-#: ../src/gpm-manager.c:1651
+#: ../src/gpm-manager.c:1722
 msgid ""
 "The configuration defaults for GNOME Power Manager have not been installed "
 "correctly.\n"
@@ -1996,13 +2114,14 @@ msgstr ""
 "arba sugedo."
 
 #: ../src/gpm-notify.c:439
-msgid "Inhibit warning!"
-msgstr "Uždrausti įspėjimą!"
+msgid "Sleep warning"
+msgstr ""
 
 #: ../src/gpm-notify.c:440
+#, fuzzy, c-format
 msgid ""
-"Your laptop will not sleep if you shut the lid as it is currently "
-"inhibited.\n"
+"Your laptop will not sleep if you shut the lid as a running program has "
+"prevented this.\n"
 "Some laptops can overheat if they do not sleep when the lid is closed."
 msgstr ""
 "Nešiojamasis kompiuteris neužmigs, jei užversite dangtį, nes užmigimas "
@@ -2110,105 +2229,105 @@ msgstr "%s įkraunama (%i%%)\n"
 msgid "Battery state could not be read at this time\n"
 msgstr "Nepavyko perskaityti baterijos būsenos\n"
 
-#: ../src/gpm-cell.c:488
+#: ../src/gpm-cell.c:492
 #, c-format
 msgid "<b>Product:</b> %s\n"
 msgstr "<b>Produktas:</b> %s\n"
 
-#: ../src/gpm-cell.c:491
+#: ../src/gpm-cell.c:495
 msgid "<b>Status:</b> Missing\n"
 msgstr "<b>Būsena:</b> Nėra\n"
 
-#: ../src/gpm-cell.c:493
+#: ../src/gpm-cell.c:497
 msgid "<b>Status:</b> Charged\n"
 msgstr "<b>Būsena:</b> Įkrauta\n"
 
-#: ../src/gpm-cell.c:495
+#: ../src/gpm-cell.c:499
 msgid "<b>Status:</b> Charging\n"
 msgstr "<b>Būsena:</b> Įkraunama\n"
 
-#: ../src/gpm-cell.c:497
+#: ../src/gpm-cell.c:501
 msgid "<b>Status:</b> Discharging\n"
 msgstr "<b>Būsena:</b> Iškraunama\n"
 
-#: ../src/gpm-cell.c:500
+#: ../src/gpm-cell.c:504
 #, c-format
 msgid "<b>Percentage charge:</b> %i%%\n"
 msgstr "<b>Percentų įkrauta:</b> %i%%\n"
 
-#: ../src/gpm-cell.c:505
+#: ../src/gpm-cell.c:509
 msgid "Vendor:"
 msgstr "Gamintojas:"
 
-#: ../src/gpm-cell.c:510
+#: ../src/gpm-cell.c:514
 msgid "Lithium ion"
 msgstr "Ličio jonų"
 
-#: ../src/gpm-cell.c:512
+#: ../src/gpm-cell.c:516
 msgid "Lead acid"
 msgstr "Švino rūgšties"
 
-#: ../src/gpm-cell.c:514
+#: ../src/gpm-cell.c:518
 msgid "Lithium polymer"
 msgstr "Ličio polimerų"
 
-#: ../src/gpm-cell.c:516
+#: ../src/gpm-cell.c:520
 msgid "Nickel metal hydride"
 msgstr "Nikelio metalo hidrido"
 
-#: ../src/gpm-cell.c:523
+#: ../src/gpm-cell.c:527
 msgid "Technology:"
 msgstr "Technologija:"
 
-#: ../src/gpm-cell.c:527
+#: ../src/gpm-cell.c:531
 msgid "Serial number:"
 msgstr "Serijos numeris:"
 
-#: ../src/gpm-cell.c:531
+#: ../src/gpm-cell.c:535
 msgid "Model:"
 msgstr "Modelis:"
 
-#: ../src/gpm-cell.c:537
+#: ../src/gpm-cell.c:541
 msgid "Charge time:"
 msgstr "Įkrovimo laikas:"
 
-#: ../src/gpm-cell.c:544
+#: ../src/gpm-cell.c:548
 msgid "Discharge time:"
 msgstr "Iškrovimo laikas:"
 
-#: ../src/gpm-cell.c:550
+#: ../src/gpm-cell.c:554
 msgid "Excellent"
 msgstr "Puiki"
 
-#: ../src/gpm-cell.c:552
+#: ../src/gpm-cell.c:556
 msgid "Good"
 msgstr "Gera"
 
-#: ../src/gpm-cell.c:554
+#: ../src/gpm-cell.c:558
 msgid "Fair"
 msgstr "Normali"
 
-#: ../src/gpm-cell.c:556
+#: ../src/gpm-cell.c:560
 msgid "Poor"
 msgstr "Prasta"
 
-#: ../src/gpm-cell.c:559
+#: ../src/gpm-cell.c:563
 msgid "Capacity:"
 msgstr "Talpa:"
 
-#: ../src/gpm-cell.c:565 ../src/gpm-cell.c:588
+#: ../src/gpm-cell.c:569 ../src/gpm-cell.c:592
 msgid "Current charge:"
 msgstr "Esama įkrova:"
 
-#: ../src/gpm-cell.c:571
+#: ../src/gpm-cell.c:575
 msgid "Last full charge:"
 msgstr "Paskutinioji pilna įkrova:"
 
-#: ../src/gpm-cell.c:576 ../src/gpm-cell.c:593
+#: ../src/gpm-cell.c:580 ../src/gpm-cell.c:597
 msgid "Design charge:"
 msgstr "Suprojektuota įkrova:"
 
-#: ../src/gpm-cell.c:581
+#: ../src/gpm-cell.c:585
 msgid "Charge rate:"
 msgstr "Įkrovos greitis:"
 
@@ -2368,46 +2487,55 @@ msgstr "Naudoja baterijos energiją"
 msgid "Laptop lid is closed"
 msgstr "Užvertas nešiojamojo kompiuterio dangis"
 
-#: ../src/gpm-tray-icon.c:206
+#: ../src/gpm-tray-icon.c:215
 msgid "Device information"
 msgstr "Informacija apie įrenginį"
 
-#: ../src/gpm-tray-icon.c:315
+#: ../src/gpm-tray-icon.c:324
 msgid "translator-credits"
 msgstr "Žygimantas Beručka <zygis@gnome.org>"
 
-#: ../src/gpm-tray-icon.c:331
+#: ../src/gpm-tray-icon.c:340
 msgid "GNOME Power Manager Website"
 msgstr "GNOME energijos valdyklės tinklalapis"
 
 #. Preferences
-#: ../src/gpm-tray-icon.c:433
+#: ../src/gpm-tray-icon.c:445
 msgid "_Preferences"
 msgstr "_Nustatymai"
 
 #. Statistics
-#: ../src/gpm-tray-icon.c:441
+#: ../src/gpm-tray-icon.c:453
 msgid "Power _History"
 msgstr "Energijos _istorija"
 
 #. Help
-#: ../src/gpm-tray-icon.c:453
+#: ../src/gpm-tray-icon.c:465
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:2
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:2
 msgid "_Help"
 msgstr "_Žinynas"
 
 #. About
-#: ../src/gpm-tray-icon.c:461
+#: ../src/gpm-tray-icon.c:473
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:1
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:1
 msgid "_About"
 msgstr "_Apie"
 
-#: ../src/gpm-tray-icon.c:575
+#: ../src/gpm-tray-icon.c:587
 msgid "_Suspend"
 msgstr "_Užmigdyti"
 
-#: ../src/gpm-tray-icon.c:585
+#: ../src/gpm-tray-icon.c:597
 msgid "Hi_bernate"
 msgstr "Hi_bernuoti"
+
+#~ msgid "Dim display _brightness by:"
+#~ msgstr "_Mažinti ekrano r_yškumą tiek:"
+
+#~ msgid "%s because %s"
+#~ msgstr "%s nes %s"
+
+#~ msgid "Inhibit warning!"
+#~ msgstr "Uždrausti įspėjimą!"
