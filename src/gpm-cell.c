@@ -170,7 +170,12 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 						   "%i to 100", unit->capacity);
 					unit->capacity = 100;
 				}
-				if (unit->capacity > 0 && unit->capacity < 50) {
+				if (unit->capacity < 0) {
+					gpm_debug ("rounding up capactity from "
+						   "%i to 0", unit->capacity);
+					unit->capacity = 0;
+				}
+				if (unit->capacity < 50) {
 					gpm_warning ("battery has a low capacity");
 					gpm_debug ("** EMIT: low-capacity");
 					g_signal_emit (cell, signals [LOW_CAPACITY], 0, unit->capacity);
