@@ -1,3 +1,24 @@
+2008-01-24  Richard Hughes  <richard@hughsie.com>
+
+	* data/icons/clean_svg_icons.sh:
+	Add a script inspired from Nicu Buculei that saves the svg files as
+	plain svg and vacuumed. The size difference is pretty huge.
+
+	* data/icons/scalable/apps/gnome-brightness-applet.svg:
+	* data/icons/scalable/apps/gnome-inhibit-applet.svg:
+	* data/icons/scalable/apps/gnome-power-manager.svg:
+	* data/icons/scalable/status/gpm-brightness-kbd-disabled.svg:
+	* data/icons/scalable/status/gpm-brightness-kbd-invalid.svg:
+	* data/icons/scalable/status/gpm-brightness-lcd-disabled.svg:
+	* data/icons/scalable/status/gpm-brightness-lcd-invalid.svg:
+	* data/icons/scalable/status/gpm-inhibit-invalid.svg:
+	* data/icons/scalable/status/gpm-phone-000.svg:
+	* data/icons/scalable/status/gpm-phone-030.svg:
+	* data/icons/scalable/status/gpm-phone-060.svg:
+	* data/icons/scalable/status/gpm-phone-100.svg:
+	Resave as plain vacuumed svg to save over 2Mb from the tarball and
+	installed size.
+
 2008-01-21  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-cell.c: (gpm_cell_refresh_hal_all):
