@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 2.20.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-14 10:52+0100\n"
-"PO-Revision-Date: 2008-01-14 11:15+0100\n"
+"POT-Creation-Date: 2008-01-27 15:22+0100\n"
+"PO-Revision-Date: 2008-01-27 15:26+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -148,11 +148,11 @@ msgid "Inhibit Applet Factory"
 msgstr "Fabrikk for panelprogram for hindring"
 
 #. common descriptions of this program
-#: ../data/gnome-power-manager.desktop.in.h:1 ../src/gpm-common.h:43
+#: ../data/gnome-power-manager.desktop.in.in.h:1 ../src/gpm-common.h:43
 msgid "Power Manager"
 msgstr "Strømstyring"
 
-#: ../data/gnome-power-manager.desktop.in.h:2
+#: ../data/gnome-power-manager.desktop.in.in.h:2
 msgid "Power management daemon"
 msgstr "Strømstyring"
 
@@ -529,9 +529,8 @@ msgid "Power button action"
 msgstr "Handling for strømknapp"
 
 #: ../data/gnome-power-manager.schemas.in.h:76
-#, fuzzy
 msgid "Reduce the backlight brightness when on battery power"
-msgstr "Skjermens lysstyrke ved bruk av batteri"
+msgstr "Reduser skjermens lysstyrke ved bruk av batteri"
 
 #: ../data/gnome-power-manager.schemas.in.h:77
 msgid "Sleep timeout computer when on AC"
@@ -990,19 +989,19 @@ msgstr ""
 msgid "Whether we should smooth the data in the graph."
 msgstr ""
 
-#: ../data/gnome-power-preferences.desktop.in.h:1
+#: ../data/gnome-power-preferences.desktop.in.in.h:1
 msgid "Configure power management"
 msgstr "Konfigurer strømstyring"
 
-#: ../data/gnome-power-preferences.desktop.in.h:2
+#: ../data/gnome-power-preferences.desktop.in.in.h:2
 msgid "Power Management"
 msgstr "Strømstyring"
 
-#: ../data/gnome-power-statistics.desktop.in.h:1
+#: ../data/gnome-power-statistics.desktop.in.in.h:1
 msgid "Observe power management"
 msgstr "Overvåk strømstyring"
 
-#: ../data/gnome-power-statistics.desktop.in.h:2
+#: ../data/gnome-power-statistics.desktop.in.in.h:2
 msgid "Power Statistics"
 msgstr "Strømstatistikk"
 
@@ -1991,8 +1990,10 @@ msgid ""
 "prevented this.\n"
 "Some laptops can overheat if they do not sleep when the lid is closed."
 msgstr ""
-"Din bærbare datamaskin vil ikke gå i hvilemodus når du lukke lokket da dette hindres av et kjørende program.\n"
-"Noen bærbare datamaskiner kan bli overopphetet hvis de ikke går i hvilemodus når lokket lukkes."
+"Din bærbare datamaskin vil ikke gå i hvilemodus når du lukke lokket da dette "
+"hindres av et kjørende program.\n"
+"Noen bærbare datamaskiner kan bli overopphetet hvis de ikke går i hvilemodus "
+"når lokket lukkes."
 
 #: ../src/gpm-notify.c:473
 msgid "Battery Charged"
@@ -2091,105 +2092,105 @@ msgstr "%s lader (%i%%)\n"
 msgid "Battery state could not be read at this time\n"
 msgstr "Batteriets tilstand kunne ikke leses nå\n"
 
-#: ../src/gpm-cell.c:492
+#: ../src/gpm-cell.c:497
 #, c-format
 msgid "<b>Product:</b> %s\n"
 msgstr "<b>Produkt:</b> %s\n"
 
-#: ../src/gpm-cell.c:495
+#: ../src/gpm-cell.c:500
 msgid "<b>Status:</b> Missing\n"
 msgstr "<b>Status:</b> Mangler\n"
 
-#: ../src/gpm-cell.c:497
+#: ../src/gpm-cell.c:502
 msgid "<b>Status:</b> Charged\n"
 msgstr "<b>Status:</b> Ladet\n"
 
-#: ../src/gpm-cell.c:499
+#: ../src/gpm-cell.c:504
 msgid "<b>Status:</b> Charging\n"
 msgstr "<b>Status:</b> Lader\n"
 
-#: ../src/gpm-cell.c:501
+#: ../src/gpm-cell.c:506
 msgid "<b>Status:</b> Discharging\n"
 msgstr "<b>Status:</b> Lader ut\n"
 
-#: ../src/gpm-cell.c:504
+#: ../src/gpm-cell.c:509
 #, c-format
 msgid "<b>Percentage charge:</b> %i%%\n"
 msgstr "<b>Ladeprosent:</b> %i%%\n"
 
-#: ../src/gpm-cell.c:509
+#: ../src/gpm-cell.c:514
 msgid "Vendor:"
 msgstr "Leverandør:"
 
-#: ../src/gpm-cell.c:514
+#: ../src/gpm-cell.c:519
 msgid "Lithium ion"
 msgstr "Lithium ion"
 
-#: ../src/gpm-cell.c:516
+#: ../src/gpm-cell.c:521
 msgid "Lead acid"
 msgstr "Lead acid"
 
-#: ../src/gpm-cell.c:518
+#: ../src/gpm-cell.c:523
 msgid "Lithium polymer"
 msgstr "Lithium polymer"
 
-#: ../src/gpm-cell.c:520
+#: ../src/gpm-cell.c:525
 msgid "Nickel metal hydride"
 msgstr "Nikkel/metall hybrid"
 
-#: ../src/gpm-cell.c:527
+#: ../src/gpm-cell.c:532
 msgid "Technology:"
 msgstr "Teknologi:"
 
-#: ../src/gpm-cell.c:531
+#: ../src/gpm-cell.c:536
 msgid "Serial number:"
 msgstr "Serienummer:"
 
-#: ../src/gpm-cell.c:535
+#: ../src/gpm-cell.c:540
 msgid "Model:"
 msgstr "Modell:"
 
-#: ../src/gpm-cell.c:541
+#: ../src/gpm-cell.c:546
 msgid "Charge time:"
 msgstr "Ladetid:"
 
-#: ../src/gpm-cell.c:548
+#: ../src/gpm-cell.c:553
 msgid "Discharge time:"
 msgstr "Utladingstid:"
 
-#: ../src/gpm-cell.c:554
+#: ../src/gpm-cell.c:559
 msgid "Excellent"
 msgstr "Utmerket"
 
-#: ../src/gpm-cell.c:556
+#: ../src/gpm-cell.c:561
 msgid "Good"
 msgstr "God"
 
-#: ../src/gpm-cell.c:558
+#: ../src/gpm-cell.c:563
 msgid "Fair"
 msgstr "Akseptabel"
 
-#: ../src/gpm-cell.c:560
+#: ../src/gpm-cell.c:565
 msgid "Poor"
 msgstr "Dårlig"
 
-#: ../src/gpm-cell.c:563
+#: ../src/gpm-cell.c:568
 msgid "Capacity:"
 msgstr "Kapasitet"
 
-#: ../src/gpm-cell.c:569 ../src/gpm-cell.c:592
+#: ../src/gpm-cell.c:574 ../src/gpm-cell.c:597
 msgid "Current charge:"
 msgstr "Nåværende nivå:"
 
-#: ../src/gpm-cell.c:575
+#: ../src/gpm-cell.c:580
 msgid "Last full charge:"
 msgstr "Sist gang fullt ladet:"
 
-#: ../src/gpm-cell.c:580 ../src/gpm-cell.c:597
+#: ../src/gpm-cell.c:585 ../src/gpm-cell.c:602
 msgid "Design charge:"
 msgstr "Ladekapasitet fra fabrikk:"
 
-#: ../src/gpm-cell.c:585
+#: ../src/gpm-cell.c:590
 msgid "Charge rate:"
 msgstr "Laderate:"
 
