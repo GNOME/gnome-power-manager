@@ -448,18 +448,27 @@ gpm_cell_get_icon (GpmCell *cell)
 gchar *
 gpm_cell_get_id (GpmCell *cell)
 {
+	gchar *id = NULL;
+
 	g_return_val_if_fail (cell != NULL, NULL);
 	g_return_val_if_fail (GPM_IS_CELL (cell), NULL);
 
 	/* try to use these in order of uniqueness */
 	if (cell->priv->serial != NULL && strlen (cell->priv->serial) > 2) {
-		return g_strdup (cell->priv->serial);
+		/* serial number */
+		id = g_strdup (cell->priv->serial);
+	} else if (cell->priv->model != NULL && strlen (cell->priv->model) > 2) {
+		/* model number */
+		id = g_strdup (cell->priv->model);
+	} else {
+		/* just return something generic */
+		id = g_strdup ("generic_id");
 	}
-	if (cell->priv->model != NULL && strlen (cell->priv->model) > 2) {
-		return g_strdup (cell->priv->model);
-	}
-	/* if we have no info, just return something generic */
-	return g_strdup ("generic_id");
+
+	/* the id may have invalid chars that need to be replaced */
+	g_strdelimit (id, "\\\t\"' ", '_');
+
+	return id;
 }
 
 /**
