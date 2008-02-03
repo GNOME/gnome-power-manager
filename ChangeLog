@@ -1,6 +1,11 @@
 2008-02-03  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-cell.c: (gpm_cell_get_id):
+	Add the forward slash, which is the thing that caused #514077.
+
+2008-02-03  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-cell.c: (gpm_cell_get_id):
 	Filter out invalid characters in the model and serial numbers else
 	we may get an invalid id and fail to do the time profiling.
 	Fixes #514077.

@@ -466,7 +466,7 @@ gpm_cell_get_id (GpmCell *cell)
 	}
 
 	/* the id may have invalid chars that need to be replaced */
-	g_strdelimit (id, "\\\t\"' ", '_');
+	g_strdelimit (id, "\\\t\"' /", '_');
 
 	return id;
 }
