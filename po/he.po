@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-01-15 18:03+0000\n"
-"PO-Revision-Date: 2008-01-13 06:35+0200\n"
-"Last-Translator: Mark Krapivner (Revan) <mark125@gmail.com>\n"
+"PO-Revision-Date: 2008-02-09 12:10+0000\n"
+"Last-Translator: Yaniv Abir <yanivabir at gmail dot com>\n"
 "Language-Team: he <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2008-01-13 04:20+0000\n"
+"X-Launchpad-Export-Date: 2008-02-09 12:16+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../applets/brightness/brightness-applet.c:106
@@ -108,11 +108,11 @@ msgstr "Factory for Brightness Applet"
 
 #: ../applets/inhibit/inhibit-applet.c:89
 msgid "Power Manager Inhibit Applet"
-msgstr "יישומון ניהול צריכת החשמל"
+msgstr "יישומון ניהול מניעת חיסכון בחשמל"
 
 #: ../applets/inhibit/inhibit-applet.c:90
 msgid "Allows user to inhibit automatic power saving."
-msgstr "מאפשר למשתמש למנוע חסכון אוטומטי בחשמל."
+msgstr "מאפשר למשתמש למנוע חיסכון אוטומטי בחשמל."
 
 #: ../applets/inhibit/inhibit-applet.c:341
 #, c-format
@@ -134,7 +134,7 @@ msgstr "Copyright © 2006-2007 Richard Hughes"
 
 #: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:1
 msgid "Allows user to inhibit automatic power saving"
-msgstr ""
+msgstr "מאפשר למשתמש למנוע חסכון אוטומטי בחשמל."
 
 #: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:2
 msgid "Factory for Inhibit Applet"
@@ -1106,7 +1106,7 @@ msgstr "הוסף _אירועים קשורים"
 
 #: ../data/gpm-graph.glade.h:2
 msgid "Cell Voltage"
-msgstr ""
+msgstr "מתח תא"
 
 #: ../data/gpm-graph.glade.h:3
 msgid "Graph type:"
@@ -1163,7 +1163,7 @@ msgstr "<b>תוספות</b>"
 
 #: ../data/gpm-prefs.glade.h:4
 msgid "<b>Notification Area</b>"
-msgstr "<b>איזור התרעות</b>"
+msgstr "<b>אזור ההתראות</b>"
 
 #: ../data/gpm-prefs.glade.h:5
 msgid "Always sleep when the lid is _closed"
@@ -1199,7 +1199,7 @@ msgstr "פועל על סוללה"
 
 #: ../data/gpm-prefs.glade.h:13
 msgid "On UPS Power"
-msgstr "מחובר לשקע אל-פסק"
+msgstr "מופעל באמצעות אל-פסק"
 
 #: ../data/gpm-prefs.glade.h:14
 msgid "Only display an icon when a battery is p_resent"
@@ -1231,11 +1231,11 @@ msgstr "הפעל את תאורת המקלדת כאשר רמת התאורה הי�
 
 #: ../data/gpm-prefs.glade.h:21
 msgid "Use _ambient light to adjust LCD brightness"
-msgstr ""
+msgstr "השתמש בתאורה היקפית על מנת להתאים את בהירות ה-LCD"
 
 #: ../data/gpm-prefs.glade.h:22
 msgid "Use _sound to notify in event of an error"
-msgstr ""
+msgstr "התרא באמצעות _צליל על שגיאה"
 
 #: ../data/gpm-prefs.glade.h:23
 msgid "When UPS power is _critically low:"
@@ -1243,7 +1243,7 @@ msgstr "כשסוללת האל-פסק _כמעט מרוקנת:"
 
 #: ../data/gpm-prefs.glade.h:24
 msgid "When UPS power is l_ow:"
-msgstr "כשסוללת האל-פסק _עומדת להתרוקן:"
+msgstr "כשעוצמת סוללת האל-פסק נמוכה:"
 
 #: ../data/gpm-prefs.glade.h:25
 msgid "When battery po_wer is critically low:"
@@ -1439,17 +1439,17 @@ msgstr ""
 #. Translators: translate ONLY the string part after the |
 #: ../src/gpm-info.c:223
 msgid "label shown on graph|Suspend"
-msgstr ""
+msgstr "השהה"
 
 #. Translators: translate ONLY the string part after the |
 #: ../src/gpm-info.c:228
 msgid "label shown on graph|Resume"
-msgstr ""
+msgstr "המשך"
 
 #. Translators: translate ONLY the string part after the |
 #: ../src/gpm-info.c:233
 msgid "label shown on graph|Hibernate"
-msgstr ""
+msgstr "שנת חורף"
 
 #: ../src/gpm-info.c:237
 msgid "Lid closed"
@@ -1465,19 +1465,23 @@ msgstr "התראה"
 
 #: ../src/gpm-info.c:250
 msgid "DPMS On"
-msgstr "DPMS מופעל"
+msgstr ""
+"‏‏DPMS מופעל"
 
 #: ../src/gpm-info.c:254
 msgid "DPMS Standby"
-msgstr "DPMS מושהה"
+msgstr ""
+"‏DPMS בהמתנה"
 
 #: ../src/gpm-info.c:258
 msgid "DPMS Suspend"
-msgstr "DPMS מושהה"
+msgstr ""
+"‏DPMS מושהה"
 
 #: ../src/gpm-info.c:262
 msgid "DPMS Off"
-msgstr "DPMS מכובה"
+msgstr ""
+"‏DPMS כבוי"
 
 #: ../src/gpm-info.c:297 ../src/gpm-info.c:298
 msgid "Power"
@@ -1498,7 +1502,7 @@ msgstr "אחוזי הסוללה"
 
 #: ../src/gpm-info.c:316
 msgid "Percentage"
-msgstr "אחוז"
+msgstr "אחוזים"
 
 #: ../src/gpm-info.c:324
 msgid "Battery Voltage"
@@ -1542,11 +1546,11 @@ msgstr ""
 
 #: ../src/gpm-info.c:680
 msgid "AC adapter inserted"
-msgstr ""
+msgstr "מתאם למתח חלופי הוכנס"
 
 #: ../src/gpm-info.c:683
 msgid "AC adapter removed"
-msgstr ""
+msgstr "מתאם למתח חלופי הוסר"
 
 #: ../src/gpm-info.c:703
 msgid "The laptop lid has been closed"
@@ -1570,19 +1574,23 @@ msgstr ""
 
 #: ../src/gpm-info.c:754
 msgid "dpms on"
-msgstr "DPMS מופעל"
+msgstr ""
+"‏DPMS פעיל"
 
 #: ../src/gpm-info.c:756
 msgid "dpms standby"
 msgstr ""
+"‏DPMS בהמתנה"
 
 #: ../src/gpm-info.c:758
 msgid "dpms suspend"
-msgstr "DPMS מושהה"
+msgstr ""
+"‏DPMS מושהה"
 
 #: ../src/gpm-info.c:760
 msgid "dpms off"
-msgstr "DPNS מכובה"
+msgstr ""
+"‏DPMS כבוי"
 
 #: ../src/gpm-info.c:777
 msgid "Resuming computer"
@@ -1590,7 +1598,7 @@ msgstr ""
 
 #: ../src/gpm-info.c:793
 msgid "Hibernate Problem"
-msgstr "שגיאה במצב השינה"
+msgstr "תקלה במצב שנת החורף"
 
 #: ../src/gpm-info.c:795
 msgid "Suspend Problem"
@@ -1600,57 +1608,63 @@ msgstr "שגיאת השהיה"
 #: ../src/gpm-inhibit.c:373
 #, c-format
 msgid "%s has stopped the suspend from taking place: %s."
-msgstr "%s מנע את התחלת מצב ההשהיה: %s."
+msgstr ""
+"‏%s מנע את התחלת מצב ההשהיה: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
 #: ../src/gpm-inhibit.c:378
 #, c-format
 msgid "%s has stopped the hibernate from taking place: %s."
-msgstr "%s מנע את התחלת מצב שנת החורף: %s."
+msgstr ""
+"‏%s מנע את התחלת מצב שנת החורף: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
 #: ../src/gpm-inhibit.c:383
 #, c-format
 msgid "%s has stopped the policy action from taking place: %s."
 msgstr ""
+"‏%s מנע מפעולת המדיניות להתבצע: %s"
 
 #. Translators: first %s is an application name, second %s is the reason
 #: ../src/gpm-inhibit.c:388
 #, c-format
 msgid "%s has stopped the reboot from taking place: %s."
 msgstr ""
+"‏%s מנע את איתחול המחשב: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
 #: ../src/gpm-inhibit.c:393
 #, c-format
 msgid "%s has stopped the shutdown from taking place: %s."
-msgstr "%s מנע את כיבוי המחשב: %s."
+msgstr ""
+"‏%s מנע את כיבוי המחשב: %s"
 
 #. Translators: first %s is an application name, second %s is the reason
 #: ../src/gpm-inhibit.c:398
 #, c-format
 msgid "%s has stopped the timeout action from taking place: %s."
 msgstr ""
+"‏%s מנע מפעולת התפוגה להתבצע: %s"
 
 #: ../src/gpm-inhibit.c:406 ../src/gpm-inhibit.c:421
 msgid "Multiple applications have stopped the suspend from taking place."
-msgstr ""
+msgstr "מגוון תוכניות מנעו מתהליך ההשהיה להתחיל."
 
 #: ../src/gpm-inhibit.c:409
 msgid "Multiple applications have stopped the hibernate from taking place."
-msgstr ""
+msgstr "מגוון תוכניות מנעו מפעולת שנת החורף מלהתבצע."
 
 #: ../src/gpm-inhibit.c:412
 msgid "Multiple applications have stopped the policy action from taking place."
-msgstr ""
+msgstr "מגוון תוכניות מנעו מפעולת המדיניות מלהתבצע."
 
 #: ../src/gpm-inhibit.c:415
 msgid "Multiple applications have stopped the reboot from taking place."
-msgstr ""
+msgstr "מגוון תוכניות מנעו מהמחשב להתחיל מחדש."
 
 #: ../src/gpm-inhibit.c:418
 msgid "Multiple applications have stopped the shutdown from taking place."
-msgstr ""
+msgstr "מגוון תוכניות מנעו מהמחשב לכבות."
 
 #: ../src/gpm-main.c:137
 msgid "Do not daemonize"
@@ -1750,11 +1764,11 @@ msgstr "שנת חורף אינה זמינה עבור מחשב זה."
 
 #: ../src/gpm-manager.c:431 ../src/gpm-manager.c:805
 msgid "Hibernating computer."
-msgstr "מעביר את המחשב למצב שינה."
+msgstr "נכנס לשנת חורף."
 
 #: ../src/gpm-manager.c:479
 msgid "Doing nothing."
-msgstr "לא עושה כלום."
+msgstr "אינו עושה דבר."
 
 #: ../src/gpm-manager.c:492
 msgid "Shutting down computer."
@@ -1762,7 +1776,7 @@ msgstr "מכבה את המחשב."
 
 #: ../src/gpm-manager.c:497
 msgid "GNOME interactive logout."
-msgstr ""
+msgstr "יציאה אינטרקטיבית של GNOME."
 
 #: ../src/gpm-manager.c:790 ../src/gpm-manager.c:805
 msgid "System idle."
@@ -1782,7 +1796,7 @@ msgstr "כפתור ההשהיה נלחץ."
 
 #: ../src/gpm-manager.c:923
 msgid "The hibernate button has been pressed."
-msgstr "כפתור השינה נלחץ."
+msgstr "כפתור שנת החורף נלחץ."
 
 #: ../src/gpm-manager.c:954
 #, fuzzy
@@ -1800,7 +1814,6 @@ msgid ""
 msgstr ""
 
 #: ../src/gpm-manager.c:1096
-#, fuzzy
 msgid "Battery is critically low."
 msgstr "הסוללה כמעט מרוקנת"
 
@@ -1816,7 +1829,7 @@ msgstr "סוללת מחשב נייד"
 #: ../src/gpm-manager.c:1413
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%d%%)"
-msgstr ""
+msgstr "חיי הסוללה הנותרים המשוערים הם <b>%s</b> (%d%%)"
 
 #: ../src/gpm-manager.c:1416
 msgid "UPS low"
@@ -1825,7 +1838,7 @@ msgstr "סוללת UPS חלשה"
 #: ../src/gpm-manager.c:1418
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS backup power (%d%%)"
-msgstr ""
+msgstr "חיי ה-UPS הנותרים המוערכים הם <b>%s</b> (%d%%)"
 
 #: ../src/gpm-manager.c:1421 ../src/gpm-manager.c:1521
 msgid "Mouse battery low"
@@ -1834,7 +1847,7 @@ msgstr "סוללת העכבר חלשה"
 #: ../src/gpm-manager.c:1422
 #, c-format
 msgid "The wireless mouse attached to this computer is low in power (%d%%)"
-msgstr ""
+msgstr "העכבר האלחוטי המחובר למחשב זה הינו בעל סוללה חלשה (%d%%)"
 
 #: ../src/gpm-manager.c:1424 ../src/gpm-manager.c:1526
 msgid "Keyboard battery low"
@@ -1843,7 +1856,7 @@ msgstr "סוללת המקלדת חלשה"
 #: ../src/gpm-manager.c:1425
 #, c-format
 msgid "The wireless keyboard attached to this computer is low in power (%d%%)"
-msgstr ""
+msgstr "המקלדת האלחוטית המחוברת למחשב זה הינה בעלת עוצמת סוללת נמוכה (%d%%)"
 
 #: ../src/gpm-manager.c:1427 ../src/gpm-manager.c:1531
 msgid "PDA battery low"
@@ -1852,16 +1865,16 @@ msgstr "סוללת מחשב כף היד חלשה"
 #: ../src/gpm-manager.c:1428
 #, c-format
 msgid "The PDA attached to this computer is low in power (%d%%)"
-msgstr ""
+msgstr "מחשב כף היד המחובר למחשב זה הינו בעל סוללה חלשה (%d%%)"
 
 #: ../src/gpm-manager.c:1430 ../src/gpm-manager.c:1536
 msgid "Cell phone battery low"
-msgstr "סוללת הסלולרי חלשה"
+msgstr "סוללת הטלפון הסלולרי חלשה"
 
 #: ../src/gpm-manager.c:1431
 #, c-format
 msgid "The cell phone attached to this computer is low in power (%d%%)"
-msgstr ""
+msgstr "הטלפון הסלולרי המחובר למחשב זה הינו בעל סוללה חלשה (%d%%)"
 
 #: ../src/gpm-manager.c:1458
 msgid "a short time"
@@ -1870,11 +1883,11 @@ msgstr "זמן קצר"
 #: ../src/gpm-manager.c:1481 ../src/gpm-manager.c:1567
 #, fuzzy
 msgid "Laptop battery critically low"
-msgstr "הסוללה כמעט מרוקנת"
+msgstr "סוללת המחשב הנייד חלשה באופן משמעותי"
 
 #: ../src/gpm-manager.c:1494
 msgid "Plug in your AC adapter to avoid losing data."
-msgstr ""
+msgstr "חבר את מתאם החשמל כדי למנוע אובדן נתונים."
 
 #: ../src/gpm-manager.c:1497
 #, c-format
@@ -1894,7 +1907,7 @@ msgstr ""
 #: ../src/gpm-manager.c:1506
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%d%%). %s"
-msgstr ""
+msgstr "חיי הסוללה הנותרים המוערכים הם <b>%s</b> (%d%%). %s"
 
 #: ../src/gpm-manager.c:1514 ../src/gpm-manager.c:1599
 #, fuzzy
@@ -1914,6 +1927,8 @@ msgid ""
 "The wireless mouse attached to this computer is very low in power (%d%%). "
 "This device will soon stop functioning if not charged."
 msgstr ""
+"העכבר האלחוטי המחובר למחשב הינו בעל סוללה חלשה. (%d%%). התקן זה יפסיק לתפקד "
+"בקרוב במידה ולא יוטען."
 
 #: ../src/gpm-manager.c:1527
 #, c-format
@@ -1921,6 +1936,8 @@ msgid ""
 "The wireless keyboard attached to this computer is very low in power (%d%%). "
 "This device will soon stop functioning if not charged."
 msgstr ""
+"סוללת המקלדת האלחוטית המחוברת למחשב זה חלשה (%d%%). התקן זה יפסיק לפעול "
+"בקרוב במידה ולא יוטען."
 
 #: ../src/gpm-manager.c:1532
 #, c-format
@@ -1928,6 +1945,8 @@ msgid ""
 "The PDA attached to this computer is very low in power (%d%%). This device "
 "will soon stop functioning if not charged."
 msgstr ""
+"סוללת מחשב כף היד המחובר למחשב זה הינה חלשה (%d%%). התקן זה יפסיק לפעול אם "
+"לא יוטען."
 
 #: ../src/gpm-manager.c:1537
 #, c-format
@@ -2042,9 +2061,8 @@ msgid "Battery Charged"
 msgstr "הסוללה טעונה"
 
 #: ../src/gpm-notify.c:474
-#, fuzzy
 msgid "Your laptop battery is now fully charged"
-msgstr "הסוללה טעונה במלואה"
+msgstr "סוללת המחשב הנייד שלך כעת טעונה במלואה"
 
 #: ../src/gpm-notify.c:503
 msgid "Battery Discharging"
@@ -2094,18 +2112,21 @@ msgstr "טעונה במלואה"
 #: ../src/gpm-cell-array.c:980
 #, c-format
 msgid "%s fully charged (%i%%)\n"
-msgstr "%s טעונה במלואה (%i%%)\n"
+msgstr ""
+"‏%s טעונה במלואה (%i%%)\n"
 
 #: ../src/gpm-cell-array.c:988
 #, c-format
 msgid "%s %s remaining (%i%%)\n"
-msgstr "%s %s נותרו (%i%%)\n"
+msgstr ""
+"‏%s %s נותרו (%i%%)\n"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-cell-array.c:993
 #, c-format
 msgid "%s discharging (%i%%)\n"
-msgstr "%s נפרקת (%i%%)\n"
+msgstr ""
+"‏%s נפרקת (%i%%)\n"
 
 #: ../src/gpm-cell-array.c:1005
 #, c-format
@@ -2118,16 +2139,18 @@ msgstr ""
 #, c-format
 msgid "%s %s until charged (%i%%)\n"
 msgstr ""
+"‏%s %s עד טעינה מלאה (%i%%)\n"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-cell-array.c:1017
 #, c-format
 msgid "%s charging (%i%%)\n"
-msgstr "%s נטענת (%i%%)\n"
+msgstr ""
+"‏%s נטענת (%i%%)\n"
 
 #: ../src/gpm-cell-array.c:1024
 msgid "Battery state could not be read at this time\n"
-msgstr ""
+msgstr "לא ניתן לקרוא את מצב הסוללה כעת\n"
 
 #: ../src/gpm-cell.c:492
 #, c-format
@@ -2253,7 +2276,7 @@ msgstr "מחשבי כף-יד"
 
 #: ../src/gpm-cell-unit.c:257
 msgid "Cell phones"
-msgstr "סלולריים"
+msgstr "טלפונים סלולריים"
 
 #: ../src/gpm-cell-unit.c:259 ../src/gpm-cell-unit.c:275
 #: ../src/gpm-statistics-core.c:739
@@ -2282,7 +2305,7 @@ msgstr "מחשב כף-יד"
 
 #: ../src/gpm-cell-unit.c:273
 msgid "Cell phone"
-msgstr "סלולרי"
+msgstr "טלפון סלולרי"
 
 #: ../src/gpm-prefs.c:111 ../test/gpm-inhibit-test.c:186
 msgid "GNOME Power Preferences"
@@ -2377,7 +2400,7 @@ msgstr "Could not connect to GNOME Power Manager."
 
 #: ../src/gpm-srv-screensaver.c:111
 msgid "Display DPMS activated"
-msgstr ""
+msgstr "תצוגת DPMS הופעלה"
 
 #: ../src/gpm-srv-screensaver.c:131
 msgid "On battery power"
@@ -2389,7 +2412,7 @@ msgstr "מכסה המחשב הנייד סגור"
 
 #: ../src/gpm-tray-icon.c:215
 msgid "Device information"
-msgstr "מידע התקן"
+msgstr "מידע אודות ההתקן"
 
 #: ../src/gpm-tray-icon.c:324
 msgid "translator-credits"
@@ -2400,7 +2423,9 @@ msgstr ""
 "‏Or Dvory https://launchpad.net/~gnudles\n"
 "‏Shlomil https://launchpad.net/~shlomister\n"
 "‏Yaniv Abir https://launchpad.net/~yanivabir\n"
-"‏lielf https://launchpad.net/~lielft\n"
+"‏Mark Krapivner https://launchpad.net/~mark125\n"
+"‏Yaron https://launchpad.net/~sh-yaron\n"
+"‏cow_2001 https://launchpad.net/~cow2001"
 "\n"
 "פרוייקט תרגום GNOME לעברית:\n"
 "‏http://gnome-il.berlios.de"
