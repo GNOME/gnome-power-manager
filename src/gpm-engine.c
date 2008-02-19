@@ -389,29 +389,41 @@ gpm_engine_get_icon (GpmEngine *engine)
 
 	/* we try CRITICAL: PRIMARY, UPS, MOUSE, KEYBOARD */
 	gpm_debug ("Trying CRITICAL icon: primary, ups, mouse, keyboard");
-	state = gpm_warnings_get_state (engine->priv->warnings, unit_primary);
-	if (unit_primary->is_present == TRUE && state == GPM_WARNINGS_CRITICAL) {
-		return gpm_cell_array_get_icon (collection->primary);
+	if (unit_primary->is_present == TRUE) {
+		state = gpm_warnings_get_state (engine->priv->warnings, unit_primary);
+		if (state == GPM_WARNINGS_CRITICAL) {
+			return gpm_cell_array_get_icon (collection->primary);
+		}
 	}
-	state = gpm_warnings_get_state (engine->priv->warnings, unit_ups); 
-	if (unit_ups->is_present == TRUE && state == GPM_WARNINGS_CRITICAL) {
-		return gpm_cell_array_get_icon (collection->ups);
+	if (unit_ups->is_present == TRUE) {
+		state = gpm_warnings_get_state (engine->priv->warnings, unit_ups); 
+		if (state == GPM_WARNINGS_CRITICAL) {
+			return gpm_cell_array_get_icon (collection->ups);
+		}
 	}
-	state = gpm_warnings_get_state (engine->priv->warnings, unit_phone);
-	if (unit_keyboard->is_present == TRUE && state == GPM_WARNINGS_CRITICAL) {
-		return gpm_cell_array_get_icon (collection->phone);
+	if (unit_keyboard->is_present == TRUE) {
+		state = gpm_warnings_get_state (engine->priv->warnings, unit_phone);
+		if (state == GPM_WARNINGS_CRITICAL) {
+			return gpm_cell_array_get_icon (collection->phone);
+		}
 	}
-	state = gpm_warnings_get_state (engine->priv->warnings, unit_mouse);
-	if (unit_mouse->is_present == TRUE && state == GPM_WARNINGS_CRITICAL) {
-		return gpm_cell_array_get_icon (collection->mouse);
+	if (unit_mouse->is_present == TRUE) {
+		state = gpm_warnings_get_state (engine->priv->warnings, unit_mouse);
+		if (state == GPM_WARNINGS_CRITICAL) {
+			return gpm_cell_array_get_icon (collection->mouse);
+		}
 	}
-	state = gpm_warnings_get_state (engine->priv->warnings, unit_keyboard);
-	if (unit_keyboard->is_present == TRUE && state == GPM_WARNINGS_CRITICAL) {
-		return gpm_cell_array_get_icon (collection->keyboard);
+	if (unit_keyboard->is_present == TRUE) {
+		state = gpm_warnings_get_state (engine->priv->warnings, unit_keyboard);
+		if (state == GPM_WARNINGS_CRITICAL) {
+			return gpm_cell_array_get_icon (collection->keyboard);
+		}
 	}
-	state = gpm_warnings_get_state (engine->priv->warnings, unit_pda);
-	if (unit_keyboard->is_present == TRUE && state == GPM_WARNINGS_CRITICAL) {
-		return gpm_cell_array_get_icon (collection->pda);
+	if (unit_keyboard->is_present == TRUE) {
+		state = gpm_warnings_get_state (engine->priv->warnings, unit_pda);
+		if (state == GPM_WARNINGS_CRITICAL) {
+			return gpm_cell_array_get_icon (collection->pda);
+		}
 	}
 
 	if (engine->priv->icon_policy == GPM_ICON_POLICY_CRITICAL) {

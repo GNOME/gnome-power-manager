@@ -1,5 +1,12 @@
 2008-02-19  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-engine.c: (gpm_engine_get_icon):
+	Only get the state if the collection item is present, to avoid lots of
+	printing of 'percentage zero, something's gone wrong'.
+	Should be no functional change.
+
+2008-02-19  Richard Hughes  <richard@hughsie.com>
+
 	* applets/brightness/brightness-applet.c: (gpm_applet_draw_cb):
 	The brightness applet leaks memory, and appears to be because it leaks
 	references like mad; this can be seen pretty easily by running xrestop
