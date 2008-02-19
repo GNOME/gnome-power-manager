@@ -305,6 +305,8 @@ gpm_applet_draw_cb (GpmBrightnessApplet *applet)
 			 applet->icon_width, applet->icon_height,
 			 GDK_RGB_DITHER_NONE, 0, 0);
 
+	g_object_unref (gc);
+
 	return TRUE;
 }
 
