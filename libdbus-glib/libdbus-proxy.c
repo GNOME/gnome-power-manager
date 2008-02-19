@@ -458,6 +458,7 @@ dbus_proxy_finalize (GObject *object)
 	if (dbus_proxy->priv->path != NULL) {
 		g_free (dbus_proxy->priv->path);
 	}
+	G_OBJECT_CLASS (dbus_proxy_parent_class)->finalize (object);
 }
 
 /**

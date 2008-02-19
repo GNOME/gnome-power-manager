@@ -1,5 +1,16 @@
 2008-02-19  Richard Hughes  <richard@hughsie.com>
 
+	* libdbus-glib/libdbus-proxy.c: (dbus_proxy_finalize):
+	* libdbus-glib/libdbus-watch.c: (dbus_watch_finalize):
+	* src/gpm-cell-array.c: (gpm_cell_array_finalize):
+	* src/gpm-cell.c: (gpm_cell_finalize):
+	* src/gpm-engine.c: (gpm_engine_finalize):
+	* src/gpm-graph-widget.c: (gpm_graph_widget_finalize):
+	* src/gpm-refcount.c: (gpm_refcount_finalize):
+	Add some missing finaliser calls.
+
+2008-02-19  Richard Hughes  <richard@hughsie.com>
+
 	* libhal-glib/libhal-gdevice.c: (hal_gdevice_get_udi):
 	* libhal-glib/libhal-gdevicestore.c: (hal_gdevicestore_find_udi):
 	* src/gpm-array.c: (gpm_array_get), (gpm_array_copy),

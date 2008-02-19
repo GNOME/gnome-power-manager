@@ -257,6 +257,7 @@ dbus_watch_finalize (GObject *object)
 	if (dbus_watch->priv->service != NULL) {
 		g_free (dbus_watch->priv->service);
 	}
+	G_OBJECT_CLASS (dbus_watch_parent_class)->finalize (object);
 }
 
 /**

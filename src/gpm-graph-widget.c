@@ -362,6 +362,7 @@ gpm_graph_widget_finalize (GObject *object)
 	context = pango_layout_get_context (graph->priv->layout);
 	g_object_unref (graph->priv->layout);
 	g_object_unref (context);
+	G_OBJECT_CLASS (gpm_graph_widget_parent_class)->finalize (object);
 }
 
 /**

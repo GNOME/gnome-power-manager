@@ -764,6 +764,7 @@ gpm_cell_finalize (GObject *object)
 	g_free (cell->priv->model);
 	g_object_unref (cell->priv->phone);
 	g_object_unref (cell->priv->hal_device);
+	G_OBJECT_CLASS (gpm_cell_parent_class)->finalize (object);
 }
 
 /**

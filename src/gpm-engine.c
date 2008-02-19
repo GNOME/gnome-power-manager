@@ -1070,6 +1070,7 @@ gpm_engine_finalize (GObject *object)
 	g_object_unref (engine->priv->warnings);
 	g_object_unref (engine->priv->ac_adapter);
 	g_object_unref (engine->priv->control);
+	G_OBJECT_CLASS (gpm_engine_parent_class)->finalize (object);
 }
 
 /**

@@ -1424,6 +1424,7 @@ gpm_cell_array_finalize (GObject *object)
 	g_object_unref (cell_array->priv->profile);
 	g_object_unref (cell_array->priv->conf);
 	g_object_unref (cell_array->priv->control);
+	G_OBJECT_CLASS (gpm_cell_array_parent_class)->finalize (object);
 }
 
 /**
