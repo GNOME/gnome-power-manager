@@ -224,7 +224,7 @@ gpm_brightness_kbd_get_step (GpmBrightnessKbd *brightness)
 {
 	int step;
 
-	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (brightness != NULL, 0);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), 0);
 
 	if (brightness->priv->levels < 20) {

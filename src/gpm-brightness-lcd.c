@@ -237,7 +237,7 @@ gpm_brightness_lcd_get_step (GpmBrightnessLcd *brightness)
 {
 	int step;
 
-	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (brightness != NULL, 0);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_LCD (brightness), 0);
 
 	if (brightness->priv->levels < 20) {

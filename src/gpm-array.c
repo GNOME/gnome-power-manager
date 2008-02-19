@@ -65,7 +65,7 @@ gpm_array_get (GpmArray *array,
 	GpmArrayPoint *point;
 	guint length;
 
-	g_return_val_if_fail (array != NULL, FALSE);
+	g_return_val_if_fail (array != NULL, NULL);
 
 	length = array->priv->array->len;
 	if (i + 1 > length) {
@@ -441,10 +441,10 @@ gpm_array_copy (GpmArray *from, GpmArray *to)
 	guint lengthto;
 	guint lengthfrom;
 
-	g_return_val_if_fail (from != NULL, 0);
-	g_return_val_if_fail (GPM_IS_ARRAY (from), 0);
-	g_return_val_if_fail (to != NULL, 0);
-	g_return_val_if_fail (GPM_IS_ARRAY (to), 0);
+	g_return_val_if_fail (from != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_ARRAY (from), FALSE);
+	g_return_val_if_fail (to != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_ARRAY (to), FALSE);
 
 	lengthto = gpm_array_get_size (to);
 	lengthfrom = gpm_array_get_size (from);
@@ -476,10 +476,10 @@ gpm_array_copy_append (GpmArray *from, GpmArray *to)
 	gint i;
 	guint length;
 
-	g_return_val_if_fail (from != NULL, 0);
-	g_return_val_if_fail (GPM_IS_ARRAY (from), 0);
-	g_return_val_if_fail (to != NULL, 0);
-	g_return_val_if_fail (GPM_IS_ARRAY (to), 0);
+	g_return_val_if_fail (from != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_ARRAY (from), FALSE);
+	g_return_val_if_fail (to != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_ARRAY (to), FALSE);
 
 	length = gpm_array_get_size (from);
 	for (i=0; i < length; i++) {
@@ -554,8 +554,8 @@ gpm_array_interpolate (GpmArray *array, gint xintersect)
 	guint i;
 	guint length;
 
-	g_return_val_if_fail (array != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_ARRAY (array), FALSE);
+	g_return_val_if_fail (array != NULL, 0);
+	g_return_val_if_fail (GPM_IS_ARRAY (array), 0);
 
 	/* we have to add a new data point */
 	length = gpm_array_get_size (array);

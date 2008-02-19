@@ -111,7 +111,7 @@ hal_gdevice_set_udi (HalGDevice  *device,
 const gchar *
 hal_gdevice_get_udi (HalGDevice *device)
 {
-	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), NULL);
 
 	return device->priv->udi;
 }

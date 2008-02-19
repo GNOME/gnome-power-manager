@@ -154,12 +154,12 @@ gpm_cell_array_get_cell (GpmCellArray *cell_array, guint id)
 {
 	GpmCell *cell;
 
-	g_return_val_if_fail (cell_array != NULL, 0);
-	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), 0);
+	g_return_val_if_fail (cell_array != NULL, NULL);
+	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), NULL);
 
 	if (id > cell_array->priv->array->len) {
 		gpm_warning ("not valid cell id");
-		return FALSE;
+		return NULL;
 	}
 
 	cell = (GpmCell *) g_ptr_array_index (cell_array->priv->array, id);
@@ -925,8 +925,8 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 	GpmCellUnit *unit;
 	gboolean plural = FALSE;
 
-	g_return_val_if_fail (cell_array != NULL, 0);
-	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), 0);
+	g_return_val_if_fail (cell_array != NULL, NULL);
+	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), NULL);
 
 	unit = &(cell_array->priv->unit);
 

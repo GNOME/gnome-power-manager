@@ -1,5 +1,18 @@
 2008-02-19  Richard Hughes  <richard@hughsie.com>
 
+	* libhal-glib/libhal-gdevice.c: (hal_gdevice_get_udi):
+	* libhal-glib/libhal-gdevicestore.c: (hal_gdevicestore_find_udi):
+	* src/gpm-array.c: (gpm_array_get), (gpm_array_copy),
+	(gpm_array_copy_append), (gpm_array_interpolate):
+	* src/gpm-brightness-kbd.c: (gpm_brightness_kbd_get_step):
+	* src/gpm-brightness-lcd.c: (gpm_brightness_lcd_get_step):
+	* src/gpm-cell-array.c: (gpm_cell_array_get_cell),
+	(gpm_cell_array_get_description):
+	* src/gpm-screensaver.c: (gpm_screensaver_add_throttle):
+	Fix some return types.
+
+2008-02-19  Richard Hughes  <richard@hughsie.com>
+
 	* autogen.sh:
 	* configure.in:
 	Rename configure.in to configure.ac

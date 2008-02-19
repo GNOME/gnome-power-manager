@@ -284,19 +284,19 @@ gpm_screensaver_add_throttle (GpmScreensaver *screensaver,
 	guint32  cookie;
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
+	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), 0);
 	g_return_val_if_fail (reason != NULL, 0);
 
 	proxy = dbus_proxy_get_proxy (screensaver->priv->gproxy);
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
-		return FALSE;
+		return 0;
 	}
 
 	/* shouldn't be, but make sure proxy valid */
 	if (proxy == NULL) {
 		gpm_warning ("g-s proxy is NULL!");
-		return FALSE;
+		return 0;
 	}
 
 	ret = dbus_g_proxy_call (proxy, "Throttle", &error,

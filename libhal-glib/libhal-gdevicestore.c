@@ -123,8 +123,8 @@ hal_gdevicestore_find_udi (HalGDevicestore *devicestore, const gchar *udi)
 {
 	gint index;
 
-	g_return_val_if_fail (LIBHAL_IS_GDEVICESTORE (devicestore), FALSE);
-	g_return_val_if_fail (udi != NULL, FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GDEVICESTORE (devicestore), NULL);
+	g_return_val_if_fail (udi != NULL, NULL);
 
 	index = hal_gdevicestore_index_udi (devicestore, udi);
 	if (index == -1) {
