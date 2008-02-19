@@ -76,7 +76,7 @@ enum {
 };
 
 G_DEFINE_TYPE (GpmBrightnessKbd, gpm_brightness_kbd, G_TYPE_OBJECT)
-static guint	     signals [LAST_SIGNAL] = { 0, };
+static guint	     signals [LAST_SIGNAL] = { 0 };
 
 /**
  * gpm_brightness_kbd_get_hw:

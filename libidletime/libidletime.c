@@ -63,7 +63,7 @@ enum {
 	LAST_SIGNAL
 };
 
-static guint signals [LAST_SIGNAL] = { 0, };
+static guint signals [LAST_SIGNAL] = { 0 };
 static gpointer idletime_object = NULL;
 
 G_DEFINE_TYPE (LibIdletime, idletime, G_TYPE_OBJECT)

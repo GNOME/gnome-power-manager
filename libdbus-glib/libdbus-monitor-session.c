@@ -47,7 +47,7 @@ enum {
 	LAST_SIGNAL
 };
 
-static guint signals [LAST_SIGNAL] = { 0, };
+static guint signals [LAST_SIGNAL] = { 0 };
 static gpointer dbus_monitor_session = NULL;
 
 G_DEFINE_TYPE (DbusMonitorSession, dbus_monitor_session, G_TYPE_OBJECT)

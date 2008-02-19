@@ -53,7 +53,7 @@ enum {
 	LAST_SIGNAL
 };
 
-static guint signals [LAST_SIGNAL] = { 0, };
+static guint signals [LAST_SIGNAL] = { 0 };
 static gpointer gpm_prefs_server_object = NULL;
 
 G_DEFINE_TYPE (GpmPrefsServer, gpm_prefs_server, G_TYPE_OBJECT)

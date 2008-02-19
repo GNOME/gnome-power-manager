@@ -67,7 +67,7 @@ enum {
 	LAST_SIGNAL
 };
 
-static guint signals [LAST_SIGNAL] = { 0, };
+static guint signals [LAST_SIGNAL] = { 0 };
 static gpointer hal_gmanager_object = NULL;
 
 G_DEFINE_TYPE (HalGManager, hal_gmanager, G_TYPE_OBJECT)

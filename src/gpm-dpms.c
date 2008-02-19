@@ -80,10 +80,10 @@ enum {
 	PROP_0,
 	PROP_STANDBY_TIMEOUT,
 	PROP_SUSPEND_TIMEOUT,
-	PROP_OFF_TIMEOUT,
+	PROP_OFF_TIMEOUT
 };
 
-static guint signals [LAST_SIGNAL] = { 0, };
+static guint signals [LAST_SIGNAL] = { 0 };
 static gpointer gpm_dpms_object = NULL;
 
 G_DEFINE_TYPE (GpmDpms, gpm_dpms, G_TYPE_OBJECT)

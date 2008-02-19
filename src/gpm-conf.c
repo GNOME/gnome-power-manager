@@ -47,7 +47,7 @@ enum {
 	LAST_SIGNAL
 };
 
-static guint signals [LAST_SIGNAL] = { 0, };
+static guint signals [LAST_SIGNAL] = { 0 };
 static gpointer gpm_conf_object = NULL;
 
 G_DEFINE_TYPE (GpmConf, gpm_conf, G_TYPE_OBJECT)

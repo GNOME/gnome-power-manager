@@ -66,7 +66,7 @@ enum {
 };
 
 G_DEFINE_TYPE (GpmBrightnessLcd, gpm_brightness_lcd, G_TYPE_OBJECT)
-static guint signals [LAST_SIGNAL] = { 0, };
+static guint signals [LAST_SIGNAL] = { 0 };
 static gpointer gpm_brightness_object = NULL;
 
 /**

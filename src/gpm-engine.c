@@ -81,7 +81,7 @@ enum {
 	LAST_SIGNAL
 };
 
-static guint signals [LAST_SIGNAL] = { 0, };
+static guint signals [LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (GpmEngine, gpm_engine, G_TYPE_OBJECT)
 

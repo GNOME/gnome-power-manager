@@ -82,7 +82,7 @@ enum {
 	PROP_MODE
 };
 
-static guint	 signals [LAST_SIGNAL] = { 0, };
+static guint	 signals [LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (GpmTrayIcon, gpm_tray_icon, G_TYPE_OBJECT)
 

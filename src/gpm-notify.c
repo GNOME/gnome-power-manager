@@ -70,7 +70,7 @@ enum {
 	LAST_SIGNAL
 };
 
-//static guint signals [LAST_SIGNAL] = { 0, };
+//static guint signals [LAST_SIGNAL] = { 0 };
 static gpointer gpm_notify_object = NULL;
 
 G_DEFINE_TYPE (GpmNotify, gpm_notify, G_TYPE_OBJECT)
