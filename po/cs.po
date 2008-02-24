@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-09 21:21+0100\n"
-"PO-Revision-Date: 2008-02-09 20:39+0100\n"
-"Last-Translator: Petr Kovar <pknbe@volny.cz>\n"
+"POT-Creation-Date: 2008-02-24 22:57+0100\n"
+"PO-Revision-Date: 2008-02-23 10:43+0100\n"
+"Last-Translator: Pavel Šefránek <ps@pjoul.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,28 +28,28 @@ msgstr "Applet Správce napájení pro nastavení jasu"
 msgid "Adjusts laptop panel brightness."
 msgstr "Upravuje jas displeje notebooku."
 
-#: ../applets/brightness/brightness-applet.c:353
+#: ../applets/brightness/brightness-applet.c:355
 #: ../applets/inhibit/inhibit-applet.c:338
 #, c-format
 msgid "Cannot connect to gnome-power-manager"
 msgstr "Nelze se připojit ke Správci napájení"
 
-#: ../applets/brightness/brightness-applet.c:355
+#: ../applets/brightness/brightness-applet.c:357
 #, c-format
 msgid "Cannot get laptop panel brightness"
 msgstr "Nelze zjistit jas displeje notebooku"
 
-#: ../applets/brightness/brightness-applet.c:357
+#: ../applets/brightness/brightness-applet.c:359
 #, c-format
 msgid "LCD brightness : %d%%"
 msgstr "Jas LCD: %d%%"
 
-#: ../applets/brightness/brightness-applet.c:744
+#: ../applets/brightness/brightness-applet.c:746
 #: ../applets/inhibit/inhibit-applet.c:406 ../src/gpm-tray-icon.c:310
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Licencováno pod licencí GNU General Public Licence Verze 2"
 
-#: ../applets/brightness/brightness-applet.c:745
+#: ../applets/brightness/brightness-applet.c:747
 #: ../applets/inhibit/inhibit-applet.c:407 ../src/gpm-tray-icon.c:311
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
@@ -62,7 +62,7 @@ msgstr ""
 "vydávané Free Software Foundation; a to buď verze 2 této\n"
 "licence anebo (podle vlastního uvážení) kterékoliv pozdější verze."
 
-#: ../applets/brightness/brightness-applet.c:749
+#: ../applets/brightness/brightness-applet.c:751
 #: ../applets/inhibit/inhibit-applet.c:411 ../src/gpm-tray-icon.c:315
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
@@ -75,7 +75,7 @@ msgstr ""
 "záruky PRODEJNOSTI anebo VHODNOSTI PRO URČITÝ ÚČEL.\n"
 "Další podrobnosti hledejte v GNU General Public License."
 
-#: ../applets/brightness/brightness-applet.c:753
+#: ../applets/brightness/brightness-applet.c:755
 #: ../applets/inhibit/inhibit-applet.c:415 ../src/gpm-tray-icon.c:319
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
@@ -88,7 +88,7 @@ msgstr ""
 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,\n"
 "MA 02110-1301, USA."
 
-#: ../applets/brightness/brightness-applet.c:767
+#: ../applets/brightness/brightness-applet.c:769
 msgid "Copyright © 2006 Benjamin Canou"
 msgstr "Copyright © 2006 Benjamin Canou"
 
@@ -1352,54 +1352,54 @@ msgid "Battery charge time is estimated\n"
 msgstr "Doba nabíjení baterie je odhadnutá\n"
 
 #. show a AC icon
-#: ../src/gpm-engine.c:598
+#: ../src/gpm-engine.c:610
 msgid "Unable to get data..."
 msgstr "Nelze získat data..."
 
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:484
+#: ../src/gpm-graph-widget.c:485
 #, c-format
 msgid "%ih"
 msgstr "%ih"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:487
+#: ../src/gpm-graph-widget.c:488
 #, c-format
 msgid "%ih%02i"
 msgstr "%ih%02i"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:492
+#: ../src/gpm-graph-widget.c:493
 #, c-format
 msgid "%2im"
 msgstr "%2im"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:495
+#: ../src/gpm-graph-widget.c:496
 #, c-format
 msgid "%2im%02i"
 msgstr "%2im%02i"
 
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:499
+#: ../src/gpm-graph-widget.c:500
 #, c-format
 msgid "%2is"
 msgstr "%2is"
 
 #. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:503
+#: ../src/gpm-graph-widget.c:504
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. Translators: This is %.1f Watts
-#: ../src/gpm-graph-widget.c:506
+#: ../src/gpm-graph-widget.c:507
 #, c-format
 msgid "%.1fW"
 msgstr "%.1fW"
 
 #. Translators: This is %.1f Volts
-#: ../src/gpm-graph-widget.c:509
+#: ../src/gpm-graph-widget.c:510
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fV"
@@ -2116,18 +2116,18 @@ msgid ""
 "%s fully charged (%i%%)\n"
 "Provides %s battery runtime\n"
 msgstr ""
-"%s plně nabito (%i%%)\n"
+"%s: plně nabito (%i%%)\n"
 "Výdrž baterie: %s\n"
 
 #: ../src/gpm-cell-array.c:980
 #, c-format
 msgid "%s fully charged (%i%%)\n"
-msgstr "%s plně nabito (%i%%)\n"
+msgstr "%s: plně nabito (%i%%)\n"
 
 #: ../src/gpm-cell-array.c:988
 #, c-format
 msgid "%s %s remaining (%i%%)\n"
-msgstr "%s %s zbývá (%i%%)\n"
+msgstr "%s: %s do úplného vybití (%i%%)\n"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-cell-array.c:993
@@ -2141,13 +2141,13 @@ msgid ""
 "%s %s until charged (%i%%)\n"
 "Provides %s battery runtime\n"
 msgstr ""
-"%s %s dokud nedobito (%i%%)\n"
+"%s: zbývá %s do plného nabití (nyní nabito %i%%)\n"
 "Výdrž baterie: %s\n"
 
 #: ../src/gpm-cell-array.c:1012
 #, c-format
 msgid "%s %s until charged (%i%%)\n"
-msgstr "%s %s dokud nedobito (%i%%)\n"
+msgstr "%s: zbývá %s do plného nabití (nyní nabito %i%%)\n"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-cell-array.c:1017
@@ -2199,7 +2199,7 @@ msgstr "Olověný"
 
 #: ../src/gpm-cell.c:532
 msgid "Lithium polymer"
-msgstr "Li-Poly"
+msgstr "Li-Pol"
 
 #: ../src/gpm-cell.c:534
 msgid "Nickel metal hydride"
@@ -2231,15 +2231,15 @@ msgstr "Vynikající"
 
 #: ../src/gpm-cell.c:570
 msgid "Good"
-msgstr "Dobrý"
+msgstr "Dobrá"
 
 #: ../src/gpm-cell.c:572
 msgid "Fair"
-msgstr "Slušný"
+msgstr "Slušná"
 
 #: ../src/gpm-cell.c:574
 msgid "Poor"
-msgstr "Špatný"
+msgstr "Špatná"
 
 #: ../src/gpm-cell.c:577
 msgid "Capacity:"
