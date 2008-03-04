@@ -2,7 +2,7 @@
 # Copyright (C) 2005 THE gnome-power'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-power package.
 # Hendrik Brandt <heb@gnome-de.org>, 2005, 2006.
-# Hendrik Richter <hendrikr@gnome.org>, 2006, 2007.
+# Hendrik Richter <hendrikr@gnome.org>, 2006, 2007, 2008.
 # Johannes Schmid <jhs@gnome.org>, 2006.
 # Tobias Wolf <towolf@gmx.net>, 2006.
 # Thomas Gier <mail@thomasgier.de>, 2007.
@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-10 11:15+0200\n"
-"PO-Revision-Date: 2007-09-10 11:15+0200\n"
+"POT-Creation-Date: 2008-03-04 10:19+0100\n"
+"PO-Revision-Date: 2008-03-04 19:47+0100\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -28,29 +28,29 @@ msgstr "Bildschirmhelligkeits-Applet"
 msgid "Adjusts laptop panel brightness."
 msgstr "Regeln Sie die Bildschirmhelligkeit Ihres Laptops."
 
-#: ../applets/brightness/brightness-applet.c:353
+#: ../applets/brightness/brightness-applet.c:355
 #: ../applets/inhibit/inhibit-applet.c:338
 #, c-format
 msgid "Cannot connect to gnome-power-manager"
 msgstr "Verbindung zur Energieverwaltung gescheitert"
 
-#: ../applets/brightness/brightness-applet.c:355
+#: ../applets/brightness/brightness-applet.c:357
 #, c-format
 msgid "Cannot get laptop panel brightness"
 msgstr "Helligkeit des Bildschirms konnte nicht ermittelt werden"
 
-#: ../applets/brightness/brightness-applet.c:357
+#: ../applets/brightness/brightness-applet.c:359
 #, c-format
 msgid "LCD brightness : %d%%"
 msgstr "LCD-Helligkeit: %d%%"
 
-#: ../applets/brightness/brightness-applet.c:744
-#: ../applets/inhibit/inhibit-applet.c:406 ../src/gpm-tray-icon.c:301
+#: ../applets/brightness/brightness-applet.c:746
+#: ../applets/inhibit/inhibit-applet.c:406 ../src/gpm-tray-icon.c:310
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Lizenziert unter der GNU General Public License Version 2"
 
-#: ../applets/brightness/brightness-applet.c:745
-#: ../applets/inhibit/inhibit-applet.c:407 ../src/gpm-tray-icon.c:302
+#: ../applets/brightness/brightness-applet.c:747
+#: ../applets/inhibit/inhibit-applet.c:407 ../src/gpm-tray-icon.c:311
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -65,8 +65,8 @@ msgstr ""
 "Version 2\n"
 "der Lizenz oder (wahlweise) jede spätere Version."
 
-#: ../applets/brightness/brightness-applet.c:749
-#: ../applets/inhibit/inhibit-applet.c:411 ../src/gpm-tray-icon.c:306
+#: ../applets/brightness/brightness-applet.c:751
+#: ../applets/inhibit/inhibit-applet.c:411 ../src/gpm-tray-icon.c:315
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -80,8 +80,8 @@ msgstr ""
 "BEI FEHLERHAFTEM VERHALTEN DER SOFTWARE.\n"
 "Lesen Sie die GNU General Public License für weiterführende Informationen."
 
-#: ../applets/brightness/brightness-applet.c:753
-#: ../applets/inhibit/inhibit-applet.c:415 ../src/gpm-tray-icon.c:310
+#: ../applets/brightness/brightness-applet.c:755
+#: ../applets/inhibit/inhibit-applet.c:415 ../src/gpm-tray-icon.c:319
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -93,7 +93,7 @@ msgstr ""
 "Sie bitte an die Free Software Foundation, Inc., 59 Temple Place,\n"
 "Suite 330, Boston, MA  02111-1307  USA"
 
-#: ../applets/brightness/brightness-applet.c:767
+#: ../applets/brightness/brightness-applet.c:769
 msgid "Copyright © 2006 Benjamin Canou"
 msgstr "Copyright © 2006 Benjamin Canou"
 
@@ -164,11 +164,11 @@ msgid "Inhibit Applet Factory"
 msgstr "Factory des Energiesparmodus-Unterdrückungsapplets"
 
 #. common descriptions of this program
-#: ../data/gnome-power-manager.desktop.in.h:1 ../src/gpm-common.h:43
+#: ../data/gnome-power-manager.desktop.in.in.h:1 ../src/gpm-common.h:43
 msgid "Power Manager"
 msgstr "Energieverwaltung"
 
-#: ../data/gnome-power-manager.desktop.in.h:2
+#: ../data/gnome-power-manager.desktop.in.in.h:2
 msgid "Power management daemon"
 msgstr "Hintergrundprozess der Energieverwaltung"
 
@@ -217,8 +217,8 @@ msgid ""
 "\"critical\", \"charge\", \"present\" and \"always\"."
 msgstr ""
 "Einstellungen für das Symbol im Benachrichtigungsfeld. Mögliche Zustände "
-"sind »never« (niemals), »critical« (kritisch) »charge« (laden), "
-"»present« (Akku vorhanden) und »always« (immer)."
+"sind »never« (niemals), »critical« (kritisch) »charge« (laden), »present« (Akku "
+"vorhanden) und »always« (immer)."
 
 #: ../data/gnome-power-manager.schemas.in.h:10
 msgid "Hibernate button action"
@@ -292,10 +292,14 @@ msgstr ""
 "hierfür eigentlich nicht ausreichen würde"
 
 #: ../data/gnome-power-manager.schemas.in.h:21
+msgid "If preferences should be shown"
+msgstr "Legt fest, ob Einstellungen angezeigt werden sollen"
+
+#: ../data/gnome-power-manager.schemas.in.h:22
 msgid "If sounds should be used"
 msgstr "Legt fest, ob Klänge verwendet werden sollen"
 
-#: ../data/gnome-power-manager.schemas.in.h:22
+#: ../data/gnome-power-manager.schemas.in.h:23
 msgid ""
 "If sounds should be used when the power is critically low, or inhibit "
 "requests have stopped the policy action."
@@ -303,13 +307,13 @@ msgstr ""
 "Legt fest, ob bei kritischem Ladezustand oder bei unterdrücktem Wechsel in "
 "den Energiesparmodus ein Klang als Warnmeldung ausgegeben werden soll."
 
-#: ../data/gnome-power-manager.schemas.in.h:23
+#: ../data/gnome-power-manager.schemas.in.h:24
 msgid "If the CPU load should be checked before doing the idle action."
 msgstr ""
 "Legt fest, ob die CPU-Last überprüft werden soll, bevor eine Leerlauf-Aktion "
 "durchgeführt wird."
 
-#: ../data/gnome-power-manager.schemas.in.h:24
+#: ../data/gnome-power-manager.schemas.in.h:25
 msgid ""
 "If the Suspend and Hibernate options should be allowed in the notification "
 "area drop down menu."
@@ -317,7 +321,7 @@ msgstr ""
 "Legt fest, ob Bereitschaft und Ruhezustand im Menü des Benachrichtungsfeldes "
 "als Optionen angezeigt werden sollen."
 
-#: ../data/gnome-power-manager.schemas.in.h:25
+#: ../data/gnome-power-manager.schemas.in.h:26
 msgid ""
 "If the battery event should occur when the lid is shut and the power "
 "disconnected"
@@ -325,7 +329,7 @@ msgstr ""
 "Legt fest, ob in den Akkubetrieb gewechselt werden soll, wenn der Deckel des "
 "Laptops geschlossen und das Stromkabel entfernt wird."
 
-#: ../data/gnome-power-manager.schemas.in.h:26
+#: ../data/gnome-power-manager.schemas.in.h:27
 msgid ""
 "If the battery lid close event should occur (for example 'Suspend when lid "
 "closed on battery') when the lid is previously shut and the AC power "
@@ -336,13 +340,13 @@ msgstr ""
 "wurde«), wenn der Deckel des Laptops zuvor geschlossen wurde und das "
 "Stromkabel später entfernt wird."
 
-#: ../data/gnome-power-manager.schemas.in.h:27
+#: ../data/gnome-power-manager.schemas.in.h:28
 msgid "If the learnt profile should be used to calculate the time remaining"
 msgstr ""
 "Legt fest, ob das gelernte Profil zur Berechnung der verbleibenden Zeit "
 "verwendet werden soll"
 
-#: ../data/gnome-power-manager.schemas.in.h:28
+#: ../data/gnome-power-manager.schemas.in.h:29
 msgid ""
 "If the learnt profile should be used to calculate the time remaining. Only "
 "turn this off for debugging."
@@ -350,31 +354,31 @@ msgstr ""
 "Legt fest, ob das gelernte Profil zur Berechnung der verbleibenden Zeit "
 "verwendet werden soll. Schalten Sie dies nur zur Fehlersuche aus."
 
-#: ../data/gnome-power-manager.schemas.in.h:29
+#: ../data/gnome-power-manager.schemas.in.h:30
 msgid "If the low-power mode should be enabled when on AC"
 msgstr ""
 "Legt fest, ob der der Rechner in Bereitschaft gehen soll, wenn das "
 "Stromkabel angeschlossen ist."
 
-#: ../data/gnome-power-manager.schemas.in.h:30
+#: ../data/gnome-power-manager.schemas.in.h:31
 msgid "If the low-power mode should be enabled when on UPS"
 msgstr ""
 "Legt fest, ob der Rechner in Bereitschaft geht, wenn er von einer USV "
 "versorgt wird."
 
-#: ../data/gnome-power-manager.schemas.in.h:31
+#: ../data/gnome-power-manager.schemas.in.h:32
 msgid "If the low-power mode should be enabled when on battery"
 msgstr "Legt fest, ob im Akkubetrieb in Bereitschaft gewechselt werden soll."
 
-#: ../data/gnome-power-manager.schemas.in.h:32
+#: ../data/gnome-power-manager.schemas.in.h:33
 msgid ""
 "If the screen brightness can be changed when switching between AC and "
 "battery power and by ambient light sensors."
 msgstr ""
 "Legt fest, ob die Bildschirmhelligkeit beim Wechsel zwischen Netz- und "
-"Akkuversorgung und durch Umgebungslichtsensoren angepasst werden kann."
+"Akkubetrieb und durch Umgebungslichtsensoren angepasst werden kann."
 
-#: ../data/gnome-power-manager.schemas.in.h:33
+#: ../data/gnome-power-manager.schemas.in.h:34
 msgid ""
 "If the screen brightness should be changed automatically using the ambient "
 "light sensors."
@@ -382,7 +386,7 @@ msgstr ""
 "Legt fest, ob die Helligkeit über die Umgebungslichtsensoren automatisch "
 "angepasst werden soll."
 
-#: ../data/gnome-power-manager.schemas.in.h:34
+#: ../data/gnome-power-manager.schemas.in.h:35
 msgid ""
 "If the screen brightness should be changed automatically using the ambient "
 "light sensors. Valid is 'none', 'light' and 'dark'"
@@ -390,7 +394,7 @@ msgstr ""
 "Legt fest, ob die Helligkeit über die Umgebungslichtsensoren automatisch "
 "angepasst werden soll. Gültige Werte sind »keine«, »hell« und »dunkel«"
 
-#: ../data/gnome-power-manager.schemas.in.h:35
+#: ../data/gnome-power-manager.schemas.in.h:36
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on AC power."
@@ -398,7 +402,7 @@ msgstr ""
 "Legt fest, ob der Bildschirm nach einer festgelegten Zeit des Leerlaufs im "
 "Netzbetrieb abgedunkelt wird, um Strom zu sparen"
 
-#: ../data/gnome-power-manager.schemas.in.h:36
+#: ../data/gnome-power-manager.schemas.in.h:37
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on battery power."
@@ -406,40 +410,46 @@ msgstr ""
 "Legt fest, ob der Bildschirm nach einer festgelegten Leerlaufzeit im "
 "Akkubetrieb abgedunkelt wird, um Strom zu sparen"
 
-#: ../data/gnome-power-manager.schemas.in.h:37
+#: ../data/gnome-power-manager.schemas.in.h:38
+msgid ""
+"If the screen should be reduced in brightness when the computer is on "
+"battery power."
+msgstr "Legt fest, ob der Bildschirm im Akkubetrieb abgedunkelt wird"
+
+#: ../data/gnome-power-manager.schemas.in.h:39
 msgid "If the system low-power mode should be enabled when on AC power."
 msgstr ""
 "Legt fest, ob der Energiesparmodus nach einer festgelegten Zeit des "
 "Leerlaufs im Netzbetrieb abgedunkelt wird um Strom zu sparen."
 
-#: ../data/gnome-power-manager.schemas.in.h:38
+#: ../data/gnome-power-manager.schemas.in.h:40
 msgid "If the system low-power mode should be enabled when on UPS power."
 msgstr ""
 "Legt fest, ob der Energiesparmodus aktiviert werden soll, wenn Strom aus "
 "einer USV bezogen wird."
 
-#: ../data/gnome-power-manager.schemas.in.h:39
+#: ../data/gnome-power-manager.schemas.in.h:41
 msgid ""
 "If the system low-power mode should be enabled when on laptop battery power."
 msgstr ""
 "Legt fest, ob der Energiesparmodus im Akkubetrieb aktiviert werden soll."
 
-#: ../data/gnome-power-manager.schemas.in.h:40
+#: ../data/gnome-power-manager.schemas.in.h:42
 msgid "If the user is authorized to hibernate the computer."
 msgstr ""
 "Legt fest, ob der Benutzer den Rechner in den Ruhezustand versetzen darf."
 
-#: ../data/gnome-power-manager.schemas.in.h:41
+#: ../data/gnome-power-manager.schemas.in.h:43
 msgid "If the user is authorized to suspend the computer."
 msgstr "Legt fest, ob der Benutzer den Rechner in Bereitschaft versetzen darf."
 
-#: ../data/gnome-power-manager.schemas.in.h:42
+#: ../data/gnome-power-manager.schemas.in.h:44
 msgid "If the user should be notified when the AC adapter is disconnected."
 msgstr ""
 "Legt fest, ob der Benutzer benachrichtigt werden soll, wenn die Verbindung "
 "zum Stromnetz getrennt wurde."
 
-#: ../data/gnome-power-manager.schemas.in.h:43
+#: ../data/gnome-power-manager.schemas.in.h:45
 msgid ""
 "If time based notifications should be used. If set to false, then the "
 "percentage change is used instead, which may fix a broken ACPI BIOS."
@@ -449,11 +459,11 @@ msgstr ""
 "Ladezustands benutzt, was möglicherweise mit einem defekten ACPI-BIOS besser "
 "funktioniert."
 
-#: ../data/gnome-power-manager.schemas.in.h:44
+#: ../data/gnome-power-manager.schemas.in.h:46
 msgid "If we should show the CPU frequency scaling in the UI"
 msgstr "Legt fest, ob die Anpassung der Taktfrequenz angezeigt werden soll"
 
-#: ../data/gnome-power-manager.schemas.in.h:45
+#: ../data/gnome-power-manager.schemas.in.h:47
 msgid ""
 "If we should show the CPU frequency scaling in the UI. Some people need to "
 "configure this for specific systems."
@@ -461,25 +471,25 @@ msgstr ""
 "Legt fest, ob die Anpassung der Taktfrequenz angezeigt werden soll. Auf "
 "bestimmten Systemen muss diese eingestellt werden."
 
-#: ../data/gnome-power-manager.schemas.in.h:46
+#: ../data/gnome-power-manager.schemas.in.h:48
 msgid "If we should show the low capacity warning for a broken battery"
 msgstr ""
 "Legt fest, ob die Warnung für geringe Kapazität bei einem defekten Akku "
 "angezeigt werden soll"
 
-#: ../data/gnome-power-manager.schemas.in.h:47
+#: ../data/gnome-power-manager.schemas.in.h:49
 msgid "If we should show the low capacity warning for a broken battery."
 msgstr ""
 "Legt fest, ob bei potenziell defekten Akkus eine Warnung angezeigt werden "
 "soll"
 
-#: ../data/gnome-power-manager.schemas.in.h:48
+#: ../data/gnome-power-manager.schemas.in.h:50
 msgid "If we should show the recalled battery warning for a broken battery"
 msgstr ""
 "Legt fest, ob bei potenziell defekten Akkus eine Warnung angezeigt werden "
 "soll"
 
-#: ../data/gnome-power-manager.schemas.in.h:49
+#: ../data/gnome-power-manager.schemas.in.h:51
 msgid ""
 "If we should show the recalled battery warning for a broken battery. Set "
 "this to false only if you know your battery is okay."
@@ -488,7 +498,7 @@ msgstr ""
 "soll. Setzten Sie dies nur auf »FALSCH« wenn Sie sicher sind, dass Ihr Akku "
 "in Ordnung ist."
 
-#: ../data/gnome-power-manager.schemas.in.h:50
+#: ../data/gnome-power-manager.schemas.in.h:52
 msgid ""
 "If we should show the warning when we have a valid inhibit and configured to "
 "sleep on lid close"
@@ -496,7 +506,7 @@ msgstr ""
 "Legt fest, ob die Warnung bei einer geltenden Sperrung und bei Konfiguration "
 "zum Schlafmodus bei geschlossenem Display angezeigt werden soll"
 
-#: ../data/gnome-power-manager.schemas.in.h:51
+#: ../data/gnome-power-manager.schemas.in.h:53
 msgid ""
 "If we should show the warning when we have a valid inhibit and configured to "
 "sleep on lid close."
@@ -504,120 +514,124 @@ msgstr ""
 "Legt fest, ob die Warnung bei einer geltenden Sperrung und bei Konfiguration "
 "zum Schlafmodus bei geschlossenem Display angezeigt werden soll."
 
-#: ../data/gnome-power-manager.schemas.in.h:52
+#: ../data/gnome-power-manager.schemas.in.h:54
 msgid "Keyboard brightness when on AC"
 msgstr "Tastaturhelligkeit bei Netzversorgung"
 
-#: ../data/gnome-power-manager.schemas.in.h:53
+#: ../data/gnome-power-manager.schemas.in.h:55
 msgid "Keyboard brightness when on battery"
-msgstr "Tastaturhelligkeit bei Akkuversorgung"
+msgstr "Tastaturhelligkeit bei Akkubetrieb"
 
-#: ../data/gnome-power-manager.schemas.in.h:54
+#: ../data/gnome-power-manager.schemas.in.h:56
 msgid "LCD brightness when on AC"
 msgstr "Bildschirmhelligkeit bei Netzversorgung"
 
-#: ../data/gnome-power-manager.schemas.in.h:55
-msgid "LCD brightness when on battery"
-msgstr "Bildschirmhelligkeit bei Akkuversorgung"
-
-#: ../data/gnome-power-manager.schemas.in.h:56
-msgid "Laptop lid close action on battery"
-msgstr "Aktion beim Schließen des Laptops bei Akkuversorgung"
-
 #: ../data/gnome-power-manager.schemas.in.h:57
+msgid "LCD brightness when on battery"
+msgstr "Bildschirmhelligkeit bei Akkubetrieb"
+
+#: ../data/gnome-power-manager.schemas.in.h:58
+msgid "Laptop lid close action on battery"
+msgstr "Aktion beim Schließen des Laptops bei Akkubetrieb"
+
+#: ../data/gnome-power-manager.schemas.in.h:59
 msgid "Laptop lid close action when on AC"
 msgstr "Aktion beim Schließen des Laptops bei Netzversorgung"
 
-#: ../data/gnome-power-manager.schemas.in.h:58
+#: ../data/gnome-power-manager.schemas.in.h:60
 msgid "Lock GNOME keyring on sleep"
 msgstr "Schlüsselbund im Schlafmodus sperren"
 
-#: ../data/gnome-power-manager.schemas.in.h:59
+#: ../data/gnome-power-manager.schemas.in.h:61
 msgid "Lock screen on hibernate"
 msgstr "Bildschirm beim Wechsel in den Ruhezustand sperren"
 
-#: ../data/gnome-power-manager.schemas.in.h:60
+#: ../data/gnome-power-manager.schemas.in.h:62
 msgid "Lock screen on suspend"
 msgstr "Bildschirm beim Wechsel in die Bereitschaft sperren"
 
-#: ../data/gnome-power-manager.schemas.in.h:61
+#: ../data/gnome-power-manager.schemas.in.h:63
 msgid "Lock screen when blanked"
 msgstr "Bildschirm beim Abdunkeln sperren"
 
-#: ../data/gnome-power-manager.schemas.in.h:62
+#: ../data/gnome-power-manager.schemas.in.h:64
 msgid "Method used to blank screen on AC"
 msgstr "Methode für die Abdunkelung des Bildschirms bei Netzversorgung"
 
-#: ../data/gnome-power-manager.schemas.in.h:63
+#: ../data/gnome-power-manager.schemas.in.h:65
 msgid "Method used to blank screen on battery"
-msgstr "Methode für die Abdunkelung des Bildschirms bei Akkuversorgung"
+msgstr "Methode für die Abdunkelung des Bildschirms bei Akkubetrieb"
 
-#: ../data/gnome-power-manager.schemas.in.h:64
+#: ../data/gnome-power-manager.schemas.in.h:66
 msgid "Notify on a low power"
 msgstr "Bei niedrigem Akkuladezustand benachrichtigen"
 
-#: ../data/gnome-power-manager.schemas.in.h:65
+#: ../data/gnome-power-manager.schemas.in.h:67
 msgid "Notify on a sleep failure"
 msgstr "Bei gescheitertem Ruhezustand benachrichtigen"
 
-#: ../data/gnome-power-manager.schemas.in.h:66
+#: ../data/gnome-power-manager.schemas.in.h:68
 msgid "Notify when AC adapter is disconnected"
 msgstr "Benachrichtigen, wenn der Rechner vom Netz getrennt wurde"
 
-#: ../data/gnome-power-manager.schemas.in.h:67
+#: ../data/gnome-power-manager.schemas.in.h:69
 msgid "Notify when fully charged"
 msgstr "Benachrichtigen wenn der Akku voll aufgeladen wurde"
 
-#: ../data/gnome-power-manager.schemas.in.h:68
+#: ../data/gnome-power-manager.schemas.in.h:70
 msgid "Notify when the profile data is guessed"
 msgstr "Benachrichtigen, wenn die Profildaten ermittelt werden"
 
-#: ../data/gnome-power-manager.schemas.in.h:69
+#: ../data/gnome-power-manager.schemas.in.h:71
 msgid "Number of seconds to suppress policy after resume"
 msgstr ""
 "Zeit in Sekunden während der nach dem Aufwachen Aktionen unterdrückt werden "
 
-#: ../data/gnome-power-manager.schemas.in.h:70
+#: ../data/gnome-power-manager.schemas.in.h:72
 msgid "Percentage action is taken"
 msgstr "Wegen des Ladezustands wird eine Aktion durchgeführt"
 
-#: ../data/gnome-power-manager.schemas.in.h:71
+#: ../data/gnome-power-manager.schemas.in.h:73
 msgid "Percentage considered critical"
 msgstr "Ladezustand kritisch"
 
-#: ../data/gnome-power-manager.schemas.in.h:72
+#: ../data/gnome-power-manager.schemas.in.h:74
 msgid "Percentage considered low"
 msgstr "Ladezustand niedrig"
 
-#: ../data/gnome-power-manager.schemas.in.h:73
+#: ../data/gnome-power-manager.schemas.in.h:75
 msgid "Power button action"
 msgstr "Aktion wenn der Netzschalter betätigt wurde"
 
-#: ../data/gnome-power-manager.schemas.in.h:74
+#: ../data/gnome-power-manager.schemas.in.h:76
+msgid "Reduce the backlight brightness when on battery power"
+msgstr "Hintergrundbeleuchtung im Akkubetrieb abdunkeln"
+
+#: ../data/gnome-power-manager.schemas.in.h:77
 msgid "Sleep timeout computer when on AC"
 msgstr "Zeitspanne bis zur Aktivierung des Energiesparmodus bei Netzversorgung"
 
-#: ../data/gnome-power-manager.schemas.in.h:75
+#: ../data/gnome-power-manager.schemas.in.h:78
 msgid "Sleep timeout computer when on battery"
-msgstr "Zeitspanne bis zur Aktivierung des Energiesparmodus bei Akkuversorgung"
+msgstr "Zeitspanne bis zur Aktivierung des Energiesparmodus bei Akkubetrieb"
 
-#: ../data/gnome-power-manager.schemas.in.h:76
+#: ../data/gnome-power-manager.schemas.in.h:79
 msgid "Sleep timeout display when on AC"
 msgstr "Zeitspanne bis zum Abdunkeln des Bildschirms bei Netzversorgung"
 
-#: ../data/gnome-power-manager.schemas.in.h:77
+#: ../data/gnome-power-manager.schemas.in.h:80
 msgid "Sleep timeout display when on battery"
-msgstr "Zeitspanne bis zum Abdunkeln des Bildschirms bei Akkuversorgung"
+msgstr "Zeitspanne bis zum Abdunkeln des Bildschirms bei Akkubetrieb"
 
-#: ../data/gnome-power-manager.schemas.in.h:78
+#: ../data/gnome-power-manager.schemas.in.h:81
 msgid "Suspend button action"
 msgstr "Aktion bei Betätigung des Schalters für Bereitschaft"
 
-#: ../data/gnome-power-manager.schemas.in.h:79
+#: ../data/gnome-power-manager.schemas.in.h:82
 msgid "Suspend enabled"
 msgstr "Bereitschaft aktiviert"
 
-#: ../data/gnome-power-manager.schemas.in.h:80
+#: ../data/gnome-power-manager.schemas.in.h:83
 msgid ""
 "The DPMS method used to blank the screen when on AC power. Possible values "
 "are \"default\", \"standby\", \"suspend\" and \"off\"."
@@ -626,7 +640,7 @@ msgstr ""
 "abzudunkeln. Mögliche Werte sind »default« (Standard), »standby«, "
 "»suspend« (Bereitschaft)und »off« (aus)."
 
-#: ../data/gnome-power-manager.schemas.in.h:81
+#: ../data/gnome-power-manager.schemas.in.h:84
 msgid ""
 "The DPMS method used to blank the screen when on battery power. Possible "
 "values are \"default\", \"standby\", \"suspend\" and \"off\"."
@@ -635,7 +649,7 @@ msgstr ""
 "abzudunkeln. Mögliche Werte sind »default« (Standard), »standby«, "
 "»suspend« (Bereitschaft)und »off« (aus)."
 
-#: ../data/gnome-power-manager.schemas.in.h:82
+#: ../data/gnome-power-manager.schemas.in.h:85
 msgid ""
 "The action to take when the UPS is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
@@ -644,7 +658,7 @@ msgstr ""
 "sind »hibernate« (Ruhezustand), »suspend« (Bereitschaft), "
 "»shutdown« (Ausschalten) und »nothing« (nichts)."
 
-#: ../data/gnome-power-manager.schemas.in.h:83
+#: ../data/gnome-power-manager.schemas.in.h:86
 msgid ""
 "The action to take when the UPS is low. Possible values are \"hibernate\", "
 "\"suspend\", \"shutdown\" and \"nothing\"."
@@ -653,7 +667,7 @@ msgstr ""
 "sind »hibernate« (Ruhezustand), »suspend« (Bereitschaft), "
 "»shutdown« (Ausschalten) und »nothing« (nichts)."
 
-#: ../data/gnome-power-manager.schemas.in.h:84
+#: ../data/gnome-power-manager.schemas.in.h:87
 msgid ""
 "The action to take when the battery is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
@@ -662,7 +676,7 @@ msgstr ""
 "Werte sind »hibernate« (Ruhezustand), »suspend« (Bereitschaft), "
 "»shutdown« (Ausschalten) und »nothing« (nichts)."
 
-#: ../data/gnome-power-manager.schemas.in.h:85
+#: ../data/gnome-power-manager.schemas.in.h:88
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on AC "
 "power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
@@ -670,10 +684,10 @@ msgid ""
 msgstr ""
 "Die auszuführende Aktion bei Schließen des Laptops, wenn dieses an die "
 "Netzversorgung angeschlossen ist. Mögliche Werte sind "
-"»hibernate« (Ruhezustand), »suspend« (Bereitschaft), »blank« (Abdunkeln)  "
-"und »nothing« (nichts)."
+"»hibernate« (Ruhezustand), »suspend« (Bereitschaft), »blank« (Abdunkeln)  und "
+"»nothing« (nichts)."
 
-#: ../data/gnome-power-manager.schemas.in.h:86
+#: ../data/gnome-power-manager.schemas.in.h:89
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on "
 "battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
@@ -683,7 +697,7 @@ msgstr ""
 "Akkubetrieb befindet. Mögliche Werte sind »hibernate« (Ruhezustand), "
 "»suspend« (Bereitschaft), »blank« (Abdunkeln) und »nothing« (nichts)."
 
-#: ../data/gnome-power-manager.schemas.in.h:87
+#: ../data/gnome-power-manager.schemas.in.h:90
 msgid ""
 "The action to take when the system hibernate button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
@@ -693,7 +707,7 @@ msgstr ""
 "Mögliche Werte sind »hibernate« (Ruhezustand), »suspend« (Bereitschaft), "
 "»interactive« (Interaktiv), »shutdown« (Ausschalten) und »nothing« (nichts)."
 
-#: ../data/gnome-power-manager.schemas.in.h:88
+#: ../data/gnome-power-manager.schemas.in.h:91
 msgid ""
 "The action to take when the system power button is pressed. Possible values "
 "are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
@@ -703,7 +717,7 @@ msgstr ""
 "sind »hibernate« (Ruhezustand), »suspend« (Bereitschaft), "
 "»interactive« (Interaktiv), »shutdown« (Ausschalten) und »nothing« (nichts)."
 
-#: ../data/gnome-power-manager.schemas.in.h:89
+#: ../data/gnome-power-manager.schemas.in.h:92
 msgid ""
 "The action to take when the system suspend button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
@@ -713,13 +727,13 @@ msgstr ""
 "Mögliche Werte sind »hibernate« (Ruhezustand), »suspend« (Bereitschaft), "
 "»interactive«, »shutdown« (Ausschalten) und »nothing« (nichts)."
 
-#: ../data/gnome-power-manager.schemas.in.h:90
+#: ../data/gnome-power-manager.schemas.in.h:93
 msgid ""
 "The amount of time in seconds before the display goes to sleep when the "
 "computer is on AC power."
 msgstr "Zeit in Sekunden vor Abdunkelung des Bildschirms bei Netzversorgung."
 
-#: ../data/gnome-power-manager.schemas.in.h:91
+#: ../data/gnome-power-manager.schemas.in.h:94
 msgid ""
 "The amount of time in seconds the computer on AC power needs to be inactive "
 "before it goes to sleep."
@@ -727,7 +741,7 @@ msgstr ""
 "Leerlaufzeit in Sekunden bevor der Rechner in die Bereitschaft versetzt "
 "wird, wenn dieser im Netzbetrieb läuft."
 
-#: ../data/gnome-power-manager.schemas.in.h:92
+#: ../data/gnome-power-manager.schemas.in.h:95
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before it goes to sleep."
@@ -735,7 +749,7 @@ msgstr ""
 "Leerlaufzeit in Sekunden bevor der Rechner in die Bereitschaft versetzt "
 "wird, wenn dieser im Akkubetrieb läuft."
 
-#: ../data/gnome-power-manager.schemas.in.h:93
+#: ../data/gnome-power-manager.schemas.in.h:96
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before the display goes to sleep."
@@ -743,19 +757,19 @@ msgstr ""
 "Leerlaufzeit in Sekunden bevor im Akkubetrieb der Bildschirm abgedunkelt "
 "wird."
 
-#: ../data/gnome-power-manager.schemas.in.h:94
+#: ../data/gnome-power-manager.schemas.in.h:97
 msgid "The amount the light sensors should contribute to the brightness"
 msgstr ""
 "Legt fest, wie stark die Lichtsensoren zur Anpassung der Helligkeit "
 "beitragen sollen."
 
-#: ../data/gnome-power-manager.schemas.in.h:95
+#: ../data/gnome-power-manager.schemas.in.h:98
 msgid "The amount the light sensors should contribute to the brightness."
 msgstr ""
 "Legt fest, wie stark die Lichtsensoren zur Anpassung der Helligkeit "
 "beitragen sollen."
 
-#: ../data/gnome-power-manager.schemas.in.h:96
+#: ../data/gnome-power-manager.schemas.in.h:99
 msgid ""
 "The brightness of the display when on AC power. Possible values are between "
 "0 and 100."
@@ -763,7 +777,7 @@ msgstr ""
 "Helligkeit des Bildschirms bei Netzversorgung. Mögliche Werte liegen "
 "zwischen 0 und 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:97
+#: ../data/gnome-power-manager.schemas.in.h:100
 msgid ""
 "The brightness of the display when on battery power. Possible values are "
 "between 0 and 100."
@@ -771,7 +785,7 @@ msgstr ""
 "Helligkeit des Bildschirms im Akkubetrieb. Mögliche Werte liegen zwischen 0 "
 "und 100"
 
-#: ../data/gnome-power-manager.schemas.in.h:98
+#: ../data/gnome-power-manager.schemas.in.h:101
 msgid ""
 "The brightness of the keyboard when on AC power. Possible values are between "
 "0 and 100."
@@ -779,7 +793,7 @@ msgstr ""
 "Helligkeit des Bildschirms bei Netzversorgung. Mögliche Werte liegen "
 "zwischen 0 und 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:99
+#: ../data/gnome-power-manager.schemas.in.h:102
 msgid ""
 "The brightness of the keyboard when on battery power. Possible values are "
 "between 0 and 100."
@@ -787,16 +801,16 @@ msgstr ""
 "Helligkeit des Bildschirms im Akkubetrieb. Mögliche Werte liegen zwischen 0 "
 "und 100"
 
-#: ../data/gnome-power-manager.schemas.in.h:100
+#: ../data/gnome-power-manager.schemas.in.h:103
 msgid "The brightness of the screen when idle"
 msgstr "Helligkeit des Bildschirms im Leerlauf"
 
-#: ../data/gnome-power-manager.schemas.in.h:101
+#: ../data/gnome-power-manager.schemas.in.h:104
 msgid ""
 "The calibration of the light sensors so that the screen is bright enough"
 msgstr "Einstellung der Lichtsensoren für ausreichende Bildschirmhelligkeit"
 
-#: ../data/gnome-power-manager.schemas.in.h:102
+#: ../data/gnome-power-manager.schemas.in.h:105
 msgid ""
 "The calibration of the light sensors so that the screen is bright enough, in "
 "percent."
@@ -804,40 +818,38 @@ msgstr ""
 "Prozentuale Einstellung der Lichtsensoren für ausreichende "
 "Bildschirmhelligkeit."
 
-#: ../data/gnome-power-manager.schemas.in.h:103
+#: ../data/gnome-power-manager.schemas.in.h:106
 msgid "The cpufreq performance value to use when on AC power"
 msgstr "Der Wert der Leistungsanpassung von »cpufreq« bei Netzbetrieb"
 
-#: ../data/gnome-power-manager.schemas.in.h:104
+#: ../data/gnome-power-manager.schemas.in.h:107
 msgid "The cpufreq performance value to use when on battery power"
 msgstr "Der Wert der Leistungsanpassung von »cpufreq« bei Akkubetrieb"
 
-#: ../data/gnome-power-manager.schemas.in.h:105
+#: ../data/gnome-power-manager.schemas.in.h:108
 msgid ""
 "The cpufreq performance value used to scale the processor when on AC power."
 msgstr ""
-"Der Wert zur Leistungsanpassung des Prozessors durch »cpufreq« bei "
-"Netzbetrieb"
+"Der Wert zur Leistungsanpassung des Prozessors durch »cpufreq« bei Netzbetrieb"
 
-#: ../data/gnome-power-manager.schemas.in.h:106
+#: ../data/gnome-power-manager.schemas.in.h:109
 msgid ""
 "The cpufreq performance value used to scale the processor when on battery "
 "power."
 msgstr ""
-"Der Wert zur Leistungsanpassung des Prozessors durch »cpufreq« bei "
-"Akkubetrieb"
+"Der Wert zur Leistungsanpassung des Prozessors durch »cpufreq« bei Akkubetrieb"
 
-#: ../data/gnome-power-manager.schemas.in.h:107
+#: ../data/gnome-power-manager.schemas.in.h:110
 msgid "The cpufreq policy to use when on AC power"
 msgstr ""
 "Die Richtlinie, die von »cpufreq« bei Netzversorgung verwendet werden soll"
 
-#: ../data/gnome-power-manager.schemas.in.h:108
+#: ../data/gnome-power-manager.schemas.in.h:111
 msgid "The cpufreq policy to use when on battery power"
 msgstr ""
-"Die Richtlinie, die von »cpufreq« bei Akkuversorgung verwendet werden soll"
+"Die Richtlinie, die von »cpufreq« bei Akkubetrieb verwendet werden soll"
 
-#: ../data/gnome-power-manager.schemas.in.h:109
+#: ../data/gnome-power-manager.schemas.in.h:112
 msgid ""
 "The cpufreq policy used to scale the processor when on AC power. Possible "
 "values are ondemand, conservative, powersave, userspace, performance, "
@@ -847,44 +859,44 @@ msgstr ""
 "Netzbetrieb verwendet wird. Mögliche Werte sind »ondemand«, »conservative«, "
 "»powersave«, »userspace«, »performance«, »nothing«."
 
-#: ../data/gnome-power-manager.schemas.in.h:110
+#: ../data/gnome-power-manager.schemas.in.h:113
 msgid ""
 "The cpufreq policy used to scale the processor when on battery power. "
 "Possible values are ondemand, conservative, powersave, userspace, "
 "performance, nothing."
 msgstr ""
-"Die Richtlinie, die von »cpufreq« zur Leistungsanpassung des Prozessors bei "
-"Akkuversorgung verwendet werden soll. Mögliche Werte sind »ondemand«, "
+"Die Richtlinie, die von »cpufreq« zur Leistungsanpassung des Prozessors im "
+"Akkubetrieb verwendet werden soll. Mögliche Werte sind »ondemand«, "
 "»conservative«, »powersave«, »userspace«, »performance« und »nothing«."
 
-#: ../data/gnome-power-manager.schemas.in.h:111
+#: ../data/gnome-power-manager.schemas.in.h:114
 msgid "The default amount of time to dim the screen after idle"
 msgstr ""
 "Der Standardzeitraum bis der Bildschirm bei Untätigkeit abgedunkelt wird"
 
-#: ../data/gnome-power-manager.schemas.in.h:112
+#: ../data/gnome-power-manager.schemas.in.h:115
 msgid "The default amount of time to dim the screen after idle."
 msgstr ""
 "Der Standardzeitraum bis der Bildschirm bei Untätigkeit abgedunkelt wird."
 
-#: ../data/gnome-power-manager.schemas.in.h:113
+#: ../data/gnome-power-manager.schemas.in.h:116
 msgid "The default configuration version."
 msgstr "Die Standardkonfigurationsversion."
 
-#: ../data/gnome-power-manager.schemas.in.h:114
+#: ../data/gnome-power-manager.schemas.in.h:117
 msgid "The default graph type to show in the statistics window"
 msgstr "Der Graph, der im Statistikfenster standardmäßig angezeigt werden soll"
 
-#: ../data/gnome-power-manager.schemas.in.h:115
+#: ../data/gnome-power-manager.schemas.in.h:118
 msgid "The default graph type to show in the statistics window."
 msgstr "Der Graph, der im Statistikfenster standardmäßig angezeigt werden soll"
 
-#: ../data/gnome-power-manager.schemas.in.h:116
+#: ../data/gnome-power-manager.schemas.in.h:119
 msgid "The device name for the v4l device used as a brightness sensor backup"
 msgstr ""
 "Der Gerätename für das v41-Gerät, dass als Helligkeitssensor-Ersatz dient"
 
-#: ../data/gnome-power-manager.schemas.in.h:117
+#: ../data/gnome-power-manager.schemas.in.h:120
 msgid ""
 "The device name for the v4l device used as a brightness sensor backup. A "
 "value of 'default' uses the first discovered sensor, or devices can be "
@@ -894,19 +906,19 @@ msgstr ""
 "Mit dem Wert »default« wird der erste gefundene Sensor verwendet, Geräte "
 "können auch angegeben werden, z.B. »/dev/video0«"
 
-#: ../data/gnome-power-manager.schemas.in.h:118
+#: ../data/gnome-power-manager.schemas.in.h:121
 msgid "The interval the ambient light sensors should be polled"
 msgstr "Intervall zum Abfragen des Umgebungslichtsensors"
 
-#: ../data/gnome-power-manager.schemas.in.h:119
+#: ../data/gnome-power-manager.schemas.in.h:122
 msgid "The interval the ambient light sensors should be polled in seconds."
 msgstr "Intervall zum Abfragen des Umgebungslichtsensors in Sekunden."
 
-#: ../data/gnome-power-manager.schemas.in.h:120
+#: ../data/gnome-power-manager.schemas.in.h:123
 msgid "The invalid timeout for power actions"
 msgstr "Abwartezeitraum für Aktionen"
 
-#: ../data/gnome-power-manager.schemas.in.h:121
+#: ../data/gnome-power-manager.schemas.in.h:124
 msgid ""
 "The invalid timeout in ms for power actions. Set this longer if you get "
 "'battery critical' messages when you unplug."
@@ -915,16 +927,16 @@ msgstr ""
 "wenn Sie »Ladezustand niedrig«-Warnungen kriegen, wenn Sie den Laptop vom "
 "Netz trennen."
 
-#: ../data/gnome-power-manager.schemas.in.h:122
+#: ../data/gnome-power-manager.schemas.in.h:125
 msgid "The maximum duration of time displayed on the x-axis of the graph."
 msgstr ""
 "Die Zeitspanne, die auf der x-Achse der Grafiken maximal dargestellt wird."
 
-#: ../data/gnome-power-manager.schemas.in.h:123
+#: ../data/gnome-power-manager.schemas.in.h:126
 msgid "The maximum time displayed on the graph"
 msgstr "Die maximale Zeitspanne, die in Grafiken dargestellt wird."
 
-#: ../data/gnome-power-manager.schemas.in.h:124
+#: ../data/gnome-power-manager.schemas.in.h:127
 msgid ""
 "The percentage of the battery when it is considered critical. Only valid "
 "when use_time_for_policy is false."
@@ -932,7 +944,7 @@ msgstr ""
 "Prozentwert, bei dem der Akkuladezustand als kritisch eingestuft wird. Wird "
 "nur berücksichtigt, wenn use_time_for_policy auf »false« steht."
 
-#: ../data/gnome-power-manager.schemas.in.h:125
+#: ../data/gnome-power-manager.schemas.in.h:128
 msgid ""
 "The percentage of the battery when it is considered low. Only valid when "
 "use_time_for_policy is false."
@@ -940,7 +952,7 @@ msgstr ""
 "Prozentwert, bei dem der Akkuladezustand als niedrig eingestuft wird. Wird "
 "nur berücksichtigt, wenn use_time_for_policy auf »false« steht."
 
-#: ../data/gnome-power-manager.schemas.in.h:126
+#: ../data/gnome-power-manager.schemas.in.h:129
 msgid ""
 "The percentage of the battery when the critical action is performed. Only "
 "valid when use_time_for_policy is false."
@@ -948,7 +960,7 @@ msgstr ""
 "Prozentwert, bei dem eine Aktion wegen kritischen Ladezustands durchgeführt "
 "wird. Wird nur berücksichtigt, wenn use_time_for_policy auf »false« steht."
 
-#: ../data/gnome-power-manager.schemas.in.h:127
+#: ../data/gnome-power-manager.schemas.in.h:130
 msgid ""
 "The time remaining in seconds of the battery when critical action is taken. "
 "Only valid when use_time_for_policy is true."
@@ -957,7 +969,7 @@ msgstr ""
 "kritischen Akkuladezustands durchgeführt wird. Wird nur berücksichtigt, wenn "
 "use_time_for_policy auf »true« steht."
 
-#: ../data/gnome-power-manager.schemas.in.h:128
+#: ../data/gnome-power-manager.schemas.in.h:131
 msgid ""
 "The time remaining in seconds of the battery when it is considered critical. "
 "Only valid when use_time_for_policy is true."
@@ -966,7 +978,7 @@ msgstr ""
 "kritisch angesehen wird. Wird nur berücksichtigt, wenn use_time_for_policy "
 "auf »true« steht."
 
-#: ../data/gnome-power-manager.schemas.in.h:129
+#: ../data/gnome-power-manager.schemas.in.h:132
 msgid ""
 "The time remaining in seconds of the battery when it is considered low. Only "
 "valid when use_time_for_policy is true."
@@ -975,19 +987,19 @@ msgstr ""
 "niedrig angesehen wird. Wird nur berücksichtigt, wenn use_time_for_policy "
 "auf »true« steht."
 
-#: ../data/gnome-power-manager.schemas.in.h:130
+#: ../data/gnome-power-manager.schemas.in.h:133
 msgid "The time remaining when action is taken"
 msgstr "Die verbleibende Laufzeit, bei der eine Aktion durchgeführt wird"
 
-#: ../data/gnome-power-manager.schemas.in.h:131
+#: ../data/gnome-power-manager.schemas.in.h:134
 msgid "The time remaining when critical"
 msgstr "Die verbleibende Laufzeit bei kritischem Ladezustand"
 
-#: ../data/gnome-power-manager.schemas.in.h:132
+#: ../data/gnome-power-manager.schemas.in.h:135
 msgid "The time remaining when low"
 msgstr "Die verbleibende Zeit bei niedrigem Ladezustand"
 
-#: ../data/gnome-power-manager.schemas.in.h:133
+#: ../data/gnome-power-manager.schemas.in.h:136
 msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
 "Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
@@ -995,7 +1007,7 @@ msgstr ""
 "Die auszuführende Aktion bei Leerlauf. Mögliche Werte sind "
 "»hibernate« (Ruhezustand), »suspend« (Bereitschaft) und »nothing« (nichts)."
 
-#: ../data/gnome-power-manager.schemas.in.h:134
+#: ../data/gnome-power-manager.schemas.in.h:137
 msgid ""
 "The version of the installed version of the schema. Do not edit this value, "
 "it is used so that configure changes between versions can be detected."
@@ -1003,7 +1015,7 @@ msgstr ""
 "Die Version der installierten Schema-Version. Ändern Sie diesen Wert nicht, "
 "da er verwendet wird, um die Änderungen zwischen Versionen zu erkennen."
 
-#: ../data/gnome-power-manager.schemas.in.h:135
+#: ../data/gnome-power-manager.schemas.in.h:138
 msgid ""
 "This is the laptop panel screen brightness used when the session is idle. "
 "Only valid when use_time_for_policy is true."
@@ -1011,30 +1023,30 @@ msgstr ""
 "Die Helligkeit des Bildschirms bei Leerlauf. Wird nur berücksichtigt, wenn "
 "use_time_for_policy auf true steht"
 
-#: ../data/gnome-power-manager.schemas.in.h:136
+#: ../data/gnome-power-manager.schemas.in.h:139
 msgid "UPS critical low action"
 msgstr "Aktion bei kritischem Ladezustand der USV"
 
-#: ../data/gnome-power-manager.schemas.in.h:137
+#: ../data/gnome-power-manager.schemas.in.h:140
 msgid "UPS low power action"
 msgstr "Aktion bei kritischem Ladezustand der USV"
 
-#: ../data/gnome-power-manager.schemas.in.h:138
+#: ../data/gnome-power-manager.schemas.in.h:141
 msgid "Use gnome-screensaver lock setting"
 msgstr ""
 "Einstellung zum Sperren des Bildschirms von »gnome-screensaver« übernehmen"
 
-#: ../data/gnome-power-manager.schemas.in.h:139
+#: ../data/gnome-power-manager.schemas.in.h:142
 msgid "When to show the notification icon"
 msgstr "Legt fest, wann das Benachrichtigungssymbol angezeigt werden soll"
 
-#: ../data/gnome-power-manager.schemas.in.h:140
+#: ../data/gnome-power-manager.schemas.in.h:143
 msgid "Whether NetworkManager should be connected and disconnected on sleep."
 msgstr ""
 "Legt fest, ob »NetworkManager« vor bzw. nach Bereitschaft das Netzwerk "
 "trennen bzw. verbinden soll."
 
-#: ../data/gnome-power-manager.schemas.in.h:141
+#: ../data/gnome-power-manager.schemas.in.h:144
 msgid ""
 "Whether NetworkManager should disconnect before suspending or hibernating "
 "and connect on resume."
@@ -1043,7 +1055,7 @@ msgstr ""
 "Ruhezustand die Netzwerkverbindung trennen und nach dem Aufwachen wieder "
 "aufbauen soll."
 
-#: ../data/gnome-power-manager.schemas.in.h:142
+#: ../data/gnome-power-manager.schemas.in.h:145
 msgid ""
 "Whether or not niced processes should be considered on processor load "
 "calculation"
@@ -1051,7 +1063,7 @@ msgstr ""
 "Legt fest, ob Prozesse niedriger Priorität bei der Berechnung der "
 "Prozessorlast einbezogen werden sollen"
 
-#: ../data/gnome-power-manager.schemas.in.h:143
+#: ../data/gnome-power-manager.schemas.in.h:146
 msgid ""
 "Whether the GNOME keyring is locked before the computer enters hibernate. "
 "This means the keyring will have to be unlocked on resume."
@@ -1060,7 +1072,7 @@ msgstr ""
 "den Ruhezustand wechselt. Das bedeutet, dass der Schlüsselbund beim "
 "Fortsetzen entsperrt werden muss."
 
-#: ../data/gnome-power-manager.schemas.in.h:144
+#: ../data/gnome-power-manager.schemas.in.h:147
 msgid ""
 "Whether the GNOME keyring is locked before the computer enters suspend. This "
 "means the keyring will have to be unlocked on resume."
@@ -1069,7 +1081,7 @@ msgstr ""
 "Bereitschaft wechselt. Das bedeutet, dass der Schlüsselbund beim Fortsetzen "
 "entsperrt werden muss."
 
-#: ../data/gnome-power-manager.schemas.in.h:145
+#: ../data/gnome-power-manager.schemas.in.h:148
 msgid ""
 "Whether the screen is locked when the computer wakes up from a hibernate. "
 "Only used if lock_use_screensaver_settings is false."
@@ -1078,7 +1090,7 @@ msgstr ""
 "Ruhezustand aufwacht. Wird nur berücksichtigt, wenn "
 "»lock_use_screensaver_settings« auf »false« steht."
 
-#: ../data/gnome-power-manager.schemas.in.h:146
+#: ../data/gnome-power-manager.schemas.in.h:149
 msgid ""
 "Whether the screen is locked when the computer wakes up from a suspend. Only "
 "used if lock_use_screensaver_settings is false."
@@ -1087,7 +1099,7 @@ msgstr ""
 "Bereitschaft aufwacht. Wird nur berücksichtigt, wenn "
 "»lock_use_screensaver_settings« auf »false« steht."
 
-#: ../data/gnome-power-manager.schemas.in.h:147
+#: ../data/gnome-power-manager.schemas.in.h:150
 msgid ""
 "Whether the screen is locked when the screen is turned off. Only used if "
 "lock_use_screensaver_settings is false."
@@ -1096,13 +1108,13 @@ msgstr ""
 "abgeschaltet wird. Wird nur berücksichtigt, falls "
 "»lock_use_screensaver_settings« auf »false« steht."
 
-#: ../data/gnome-power-manager.schemas.in.h:148
+#: ../data/gnome-power-manager.schemas.in.h:151
 msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr ""
 "Legt fest, ob bei Leerlauf der Ruhezustand, die Bereitschaft oder nichts zu "
 "aktivieren ist."
 
-#: ../data/gnome-power-manager.schemas.in.h:149
+#: ../data/gnome-power-manager.schemas.in.h:152
 msgid ""
 "Whether to use the screen lock setting of gnome-screensaver to decide if the "
 "screen is locked after a hibernate, suspend or blank screen."
@@ -1111,57 +1123,57 @@ msgstr ""
 "der Bildschirm nach einem Ruhezustand, einer Bereitschaft oder einem "
 "abgeschalteten Bildschirm gesperrt ist, verwendet werden soll."
 
-#: ../data/gnome-power-manager.schemas.in.h:150
+#: ../data/gnome-power-manager.schemas.in.h:153
 msgid "Whether to use time-based notifications"
 msgstr ""
 "Legt fest, ob Benachrichtigungen sich auf die verbleibende Zeit beziehen "
 "sollen"
 
-#: ../data/gnome-power-manager.schemas.in.h:151
+#: ../data/gnome-power-manager.schemas.in.h:154
 msgid "Whether we should show the axis labels in the statistics window"
 msgstr ""
 "Legt fest, ob Achsenbeschriftungen im Statistikfenster angezeigt werden "
 "sollen"
 
-#: ../data/gnome-power-manager.schemas.in.h:152
+#: ../data/gnome-power-manager.schemas.in.h:155
 msgid "Whether we should show the axis labels in the statistics window."
 msgstr ""
 "Legt fest, ob Achsenbeschriftungen im Statistikfenster angezeigt werden "
 "sollen."
 
-#: ../data/gnome-power-manager.schemas.in.h:153
+#: ../data/gnome-power-manager.schemas.in.h:156
 msgid "Whether we should show the events in the statistics window"
 msgstr ""
 "Legt fest, ob energiebezogene Ereignisse im Statistikfenster angezeigt "
 "werden sollen"
 
-#: ../data/gnome-power-manager.schemas.in.h:154
+#: ../data/gnome-power-manager.schemas.in.h:157
 msgid "Whether we should show the events in the statistics window."
 msgstr ""
 "Legt fest, ob energiebezogene Ereignisse im Statistikfenster angezeigt "
 "werden sollen."
 
-#: ../data/gnome-power-manager.schemas.in.h:155
+#: ../data/gnome-power-manager.schemas.in.h:158
 msgid "Whether we should smooth the data in the graph"
 msgstr "Legt fest, ob Daten in der Grafik geglättet werden sollen"
 
-#: ../data/gnome-power-manager.schemas.in.h:156
+#: ../data/gnome-power-manager.schemas.in.h:159
 msgid "Whether we should smooth the data in the graph."
 msgstr "Legt fest, ob Daten in der Grafik geglättet werden sollen."
 
-#: ../data/gnome-power-preferences.desktop.in.h:1
+#: ../data/gnome-power-preferences.desktop.in.in.h:1
 msgid "Configure power management"
 msgstr "Energiesparfunktionen einstellen"
 
-#: ../data/gnome-power-preferences.desktop.in.h:2
+#: ../data/gnome-power-preferences.desktop.in.in.h:2
 msgid "Power Management"
 msgstr "Energieverwaltung"
 
-#: ../data/gnome-power-statistics.desktop.in.h:1
+#: ../data/gnome-power-statistics.desktop.in.in.h:1
 msgid "Observe power management"
 msgstr "Energiesparfunktionen überwachen"
 
-#: ../data/gnome-power-statistics.desktop.in.h:2
+#: ../data/gnome-power-statistics.desktop.in.in.h:2
 msgid "Power Statistics"
 msgstr "Energiestatistiken"
 
@@ -1185,8 +1197,8 @@ msgstr "Graph:"
 msgid "Power History"
 msgstr "Energieverbrauch"
 
-#: ../data/gpm-graph.glade.h:5 ../src/gpm-info.c:293 ../src/gpm-info.c:302
-#: ../src/gpm-info.c:311 ../src/gpm-info.c:320
+#: ../data/gpm-graph.glade.h:5 ../src/gpm-info.c:296 ../src/gpm-info.c:305
+#: ../src/gpm-info.c:314 ../src/gpm-info.c:323
 msgid "Time since startup"
 msgstr "Zeit seit Hochfahren"
 
@@ -1243,108 +1255,108 @@ msgid "Computer sp_eed policy:"
 msgstr "_Leistungsanpassung des Rechners:"
 
 #: ../data/gpm-prefs.glade.h:7
-msgid "Dim display _brightness by:"
-msgstr "Bildschirm_helligkeit abdunkeln um:"
+msgid "Di_m display when idle"
+msgstr "Bildschirm bei Leerlauf ab_dunkeln"
 
 #: ../data/gpm-prefs.glade.h:8
-msgid "Dim display when idle"
-msgstr "Bildschirm bei Leerlauf abdunkeln"
-
-#: ../data/gpm-prefs.glade.h:9
 msgid "Enable UPS discharge _alarm"
 msgstr "Klang als _Entladewarnung der USV ausgeben"
 
-#: ../data/gpm-prefs.glade.h:10
+#: ../data/gpm-prefs.glade.h:9
 msgid "General"
 msgstr "Allgemein"
 
-#: ../data/gpm-prefs.glade.h:11
+#: ../data/gpm-prefs.glade.h:10
 msgid "Make _default"
 msgstr "Als _Vorgabe verwenden"
 
-#: ../data/gpm-prefs.glade.h:12
+#: ../data/gpm-prefs.glade.h:11
 msgid "On AC Power"
 msgstr "Im Netzbetrieb"
 
-#: ../data/gpm-prefs.glade.h:13
+#: ../data/gpm-prefs.glade.h:12
 msgid "On Battery Power"
 msgstr "Im Akkubetrieb"
 
-#: ../data/gpm-prefs.glade.h:14
+#: ../data/gpm-prefs.glade.h:13
 msgid "On UPS Power"
 msgstr "Im USV-Betrieb"
 
-#: ../data/gpm-prefs.glade.h:15
+#: ../data/gpm-prefs.glade.h:14
 msgid "Only display an icon when a battery is p_resent"
 msgstr "Nur bei vorhandenem _Akku Symbol anzeigen"
 
-#: ../data/gpm-prefs.glade.h:16
+#: ../data/gpm-prefs.glade.h:15
 msgid "Only display an icon when charging or _discharging"
 msgstr "Nur bei _Ladung oder Entladung des Akku Symbol anzeigen"
 
-#: ../data/gpm-prefs.glade.h:17
+#: ../data/gpm-prefs.glade.h:16
 msgid "Power Management Preferences"
 msgstr "Einstellungen der Energieverwaltung"
 
-#: ../data/gpm-prefs.glade.h:18
+#: ../data/gpm-prefs.glade.h:17
 msgid "Put _display to sleep when inactive for:"
 msgstr "_Bildschirm bei Leerlauf abdunkeln nach:"
 
-#: ../data/gpm-prefs.glade.h:19
+#: ../data/gpm-prefs.glade.h:18
 msgid "Put computer to _sleep when inactive for:"
 msgstr "_Rechner bei Leerlauf in Energiesparmodus versetzen nach:"
 
-#: ../data/gpm-prefs.glade.h:20
+#: ../data/gpm-prefs.glade.h:19
 msgid "Set display _brightness to:"
 msgstr "Bildschirm_helligkeit setzen auf:"
 
-#: ../data/gpm-prefs.glade.h:21
+#: ../data/gpm-prefs.glade.h:20
 msgid "Turn on keyboard light when light level is low"
 msgstr "Tastaturbeleuchtung bei geringem Beleuchtungsniveau einschalten"
 
-#: ../data/gpm-prefs.glade.h:22
+#: ../data/gpm-prefs.glade.h:21
 msgid "Use _ambient light to adjust LCD brightness"
 msgstr "Helligkeit an das _Umgebungslicht anpassen"
 
-#: ../data/gpm-prefs.glade.h:23
+#: ../data/gpm-prefs.glade.h:22
 msgid "Use _sound to notify in event of an error"
 msgstr "Bei Fehlern einen _Warnton ausgeben"
 
-#: ../data/gpm-prefs.glade.h:24
+#: ../data/gpm-prefs.glade.h:23
 msgid "When UPS power is _critically low:"
 msgstr "Bei _kritischem Ladezustand der USV:"
 
-#: ../data/gpm-prefs.glade.h:25
+#: ../data/gpm-prefs.glade.h:24
 msgid "When UPS power is l_ow:"
 msgstr "Bei _niedrigem Ladezustand der USV:"
 
-#: ../data/gpm-prefs.glade.h:26
+#: ../data/gpm-prefs.glade.h:25
 msgid "When battery po_wer is critically low:"
 msgstr "Bei k_ritischem Akkuladezustand:"
 
-#: ../data/gpm-prefs.glade.h:27
+#: ../data/gpm-prefs.glade.h:26
 msgid "When laptop lid is cl_osed:"
 msgstr "Beim _Schließen des Deckels:"
 
-#: ../data/gpm-prefs.glade.h:28
+#: ../data/gpm-prefs.glade.h:27
 msgid "When the _suspend button is pressed:"
 msgstr "Beim Drücken der _Bereitschaftstaste:"
 
-#: ../data/gpm-prefs.glade.h:29
+#: ../data/gpm-prefs.glade.h:28
 msgid "When the power _button is pressed:"
 msgstr "Beim Drücken des _Ein-/Ausschalters:"
 
-#: ../data/gpm-prefs.glade.h:30
+#: ../data/gpm-prefs.glade.h:29
 msgid "_Always display an icon"
 msgstr "Symbol _immer anzeigen"
 
-#: ../data/gpm-prefs.glade.h:31
+#: ../data/gpm-prefs.glade.h:30
 msgid "_Never display an icon"
 msgstr "Symbol _nie anzeigen"
 
-#: ../data/gpm-prefs.glade.h:32
+#: ../data/gpm-prefs.glade.h:31
 msgid "_Only display an icon when battery power is critically low"
 msgstr "Nur bei k_ritischem Akkuladezustand Symbol anzeigen"
+
+#: ../data/gpm-prefs.glade.h:32
+msgid "_Reduce backlight brightness"
+msgstr "_Hintergrundbeleuchtung abdunkeln"
 
 #: ../src/gpm-control.c:279
 #, c-format
@@ -1428,307 +1440,383 @@ msgid "Battery charge time is estimated\n"
 msgstr "Akku-Ladezeit ist geschätzt\n"
 
 #. show a AC icon
-#: ../src/gpm-engine.c:598
+#: ../src/gpm-engine.c:610
 msgid "Unable to get data..."
 msgstr "Daten können nicht abgerufen werden …"
 
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:484
+#: ../src/gpm-graph-widget.c:485
 #, c-format
 msgid "%ih"
 msgstr "%i Std."
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:487
+#: ../src/gpm-graph-widget.c:488
 #, c-format
 msgid "%ih%02i"
 msgstr "%i Std. %02i"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:492
+#: ../src/gpm-graph-widget.c:493
 #, c-format
 msgid "%2im"
 msgstr "%2i Min."
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:495
+#: ../src/gpm-graph-widget.c:496
 #, c-format
 msgid "%2im%02i"
 msgstr "%02i Min. %02i"
 
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:499
+#: ../src/gpm-graph-widget.c:500
 #, c-format
 msgid "%2is"
 msgstr "%2i Sek."
 
 #. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:503
+#: ../src/gpm-graph-widget.c:504
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. Translators: This is %.1f Watts
-#: ../src/gpm-graph-widget.c:506
+#: ../src/gpm-graph-widget.c:507
 #, c-format
 msgid "%.1fW"
 msgstr "%.1fW"
 
 #. Translators: This is %.1f Volts
-#: ../src/gpm-graph-widget.c:509
+#: ../src/gpm-graph-widget.c:510
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fV"
 
-#: ../src/gpm-info.c:121
+#: ../src/gpm-info.c:122
 #, c-format
-msgid "%s because %s"
-msgstr "%s da %s"
+msgid "Reason: %s"
+msgstr "Grund: %s"
 
-#: ../src/gpm-info.c:199
+#: ../src/gpm-info.c:202
 msgid "On AC"
 msgstr "Netzbetrieb"
 
-#: ../src/gpm-info.c:203
+#: ../src/gpm-info.c:206
 msgid "On battery"
 msgstr "Akkubetrieb"
 
-#: ../src/gpm-info.c:207
+#: ../src/gpm-info.c:210
 msgid "Session powersave"
 msgstr "Energiesparen"
 
-#: ../src/gpm-info.c:211
+#: ../src/gpm-info.c:214
 msgid "Session idle"
 msgstr "Leerlauf"
 
-#: ../src/gpm-info.c:215
+#: ../src/gpm-info.c:218
 msgid "Session active"
 msgstr "Aktivität"
 
 #. Translators: translate ONLY the string part after the |
-#: ../src/gpm-info.c:220
+#: ../src/gpm-info.c:223
 msgid "label shown on graph|Suspend"
 msgstr "Bereitschaft"
 
 #. Translators: translate ONLY the string part after the |
-#: ../src/gpm-info.c:225
+#: ../src/gpm-info.c:228
 msgid "label shown on graph|Resume"
 msgstr "Fortsetzen"
 
 #. Translators: translate ONLY the string part after the |
-#: ../src/gpm-info.c:230
+#: ../src/gpm-info.c:233
 msgid "label shown on graph|Hibernate"
 msgstr "Ruhezustand"
 
-#: ../src/gpm-info.c:234
+#: ../src/gpm-info.c:237
 msgid "Lid closed"
 msgstr "Deckel geschlossen"
 
-#: ../src/gpm-info.c:238
+#: ../src/gpm-info.c:241
 msgid "Lid opened"
 msgstr "Deckel geöffnet"
 
-#: ../src/gpm-info.c:242
+#: ../src/gpm-info.c:245
 msgid "Notification"
 msgstr "Benachrichtigung"
 
-#: ../src/gpm-info.c:247
+#: ../src/gpm-info.c:250
 msgid "DPMS On"
 msgstr "DPMS aktiviert"
 
-#: ../src/gpm-info.c:251
+#: ../src/gpm-info.c:254
 msgid "DPMS Standby"
 msgstr "DPMS Bereitschaft"
 
-#: ../src/gpm-info.c:255
+#: ../src/gpm-info.c:258
 msgid "DPMS Suspend"
 msgstr "DPMS Bereitschaft"
 
-#: ../src/gpm-info.c:259
+#: ../src/gpm-info.c:262
 msgid "DPMS Off"
 msgstr "DPMS deaktiviert"
 
-#: ../src/gpm-info.c:294 ../src/gpm-info.c:295
+#: ../src/gpm-info.c:297 ../src/gpm-info.c:298
 msgid "Power"
 msgstr "Leistung"
 
-#: ../src/gpm-info.c:303
+#: ../src/gpm-info.c:306
 msgid "Estimated time"
 msgstr "Geschätzte Zeit"
 
-#: ../src/gpm-info.c:304
+#: ../src/gpm-info.c:307
 msgid "Time"
 msgstr "Zeit"
 
-#: ../src/gpm-info.c:312 ../src/gpm-info.c:329 ../src/gpm-info.c:346
-#: ../src/gpm-info.c:364 ../src/gpm-info.c:381
+#: ../src/gpm-info.c:315 ../src/gpm-info.c:332 ../src/gpm-info.c:349
+#: ../src/gpm-info.c:367 ../src/gpm-info.c:384
 msgid "Battery percentage"
 msgstr "Prozentualer Ladezustand"
 
-#: ../src/gpm-info.c:313
+#: ../src/gpm-info.c:316
 msgid "Percentage"
 msgstr "Prozentanteil"
 
-#: ../src/gpm-info.c:321
+#: ../src/gpm-info.c:324
 msgid "Battery Voltage"
 msgstr "Batteriespannung"
 
-#: ../src/gpm-info.c:322
+#: ../src/gpm-info.c:325
 msgid "Voltage"
 msgstr "Spannung"
 
-#: ../src/gpm-info.c:330 ../src/gpm-info.c:365
+#: ../src/gpm-info.c:333 ../src/gpm-info.c:368
 msgid "Accuracy of reading"
 msgstr "Lesegenauigkeit"
 
-#: ../src/gpm-info.c:331 ../src/gpm-info.c:348 ../src/gpm-info.c:366
-#: ../src/gpm-info.c:383
+#: ../src/gpm-info.c:334 ../src/gpm-info.c:351 ../src/gpm-info.c:369
+#: ../src/gpm-info.c:386
 msgid "Valid data"
 msgstr "Gültige Daten"
 
-#: ../src/gpm-info.c:332 ../src/gpm-info.c:349 ../src/gpm-info.c:367
-#: ../src/gpm-info.c:384
+#: ../src/gpm-info.c:335 ../src/gpm-info.c:352 ../src/gpm-info.c:370
+#: ../src/gpm-info.c:387
 msgid "No data"
 msgstr "Keine Daten"
 
-#: ../src/gpm-info.c:336 ../src/gpm-info.c:354 ../src/gpm-info.c:371
-#: ../src/gpm-info.c:389
+#: ../src/gpm-info.c:339 ../src/gpm-info.c:357 ../src/gpm-info.c:374
+#: ../src/gpm-info.c:392
 msgid "Start point"
 msgstr "Startpunkt"
 
-#: ../src/gpm-info.c:340 ../src/gpm-info.c:358 ../src/gpm-info.c:375
-#: ../src/gpm-info.c:393
+#: ../src/gpm-info.c:343 ../src/gpm-info.c:361 ../src/gpm-info.c:378
+#: ../src/gpm-info.c:396
 msgid "Stop point"
 msgstr "Endpunkt"
 
-#: ../src/gpm-info.c:347 ../src/gpm-info.c:382
+#: ../src/gpm-info.c:350 ../src/gpm-info.c:385
 msgid "Average time elapsed"
 msgstr "Durchschnittliche Laufzeit"
 
-#: ../src/gpm-info.c:350 ../src/gpm-info.c:385
+#: ../src/gpm-info.c:353 ../src/gpm-info.c:388
 msgid "Extrapolated data"
 msgstr "Extrapolierte Daten"
 
-#: ../src/gpm-info.c:677
+#: ../src/gpm-info.c:680
 msgid "AC adapter inserted"
 msgstr "Netzstecker wurde angesteckt"
 
-#: ../src/gpm-info.c:680
+#: ../src/gpm-info.c:683
 msgid "AC adapter removed"
 msgstr "Netzstecker wurde gezogen"
 
-#: ../src/gpm-info.c:700
+#: ../src/gpm-info.c:703
 msgid "The laptop lid has been closed"
 msgstr "Deckel wurde geschlossen"
 
-#: ../src/gpm-info.c:706
+#: ../src/gpm-info.c:709
 msgid "The laptop lid has been re-opened"
 msgstr "Deckel wurde wieder geöffnet"
 
-#: ../src/gpm-info.c:728
+#: ../src/gpm-info.c:731
 msgid "idle mode ended"
 msgstr "Leerlauf beendet"
 
-#: ../src/gpm-info.c:730
+#: ../src/gpm-info.c:733
 msgid "idle mode started"
 msgstr "Leerlauf beginnt"
 
-#: ../src/gpm-info.c:732
+#: ../src/gpm-info.c:735
 msgid "powersave mode started"
 msgstr "Energiesparmodus beginnt"
 
-#: ../src/gpm-info.c:751
+#: ../src/gpm-info.c:754
 msgid "dpms on"
 msgstr "DPMS aktiviert"
 
-#: ../src/gpm-info.c:753
+#: ../src/gpm-info.c:756
 msgid "dpms standby"
 msgstr "DPMS-Bereitchaft"
 
-#: ../src/gpm-info.c:755
+#: ../src/gpm-info.c:758
 msgid "dpms suspend"
 msgstr "DPMS-Bereitschaft"
 
-#: ../src/gpm-info.c:757
+#: ../src/gpm-info.c:760
 msgid "dpms off"
 msgstr "DPMS deaktiviert"
 
-#: ../src/gpm-info.c:774
+#: ../src/gpm-info.c:777
 msgid "Resuming computer"
 msgstr "Rechner wird aufgeweckt"
 
-#: ../src/gpm-info.c:790
+#: ../src/gpm-info.c:793
 msgid "Hibernate Problem"
 msgstr "Problem mit dem Ruhezustand"
 
-#: ../src/gpm-info.c:792
+#: ../src/gpm-info.c:795
 msgid "Suspend Problem"
 msgstr "Problem mit der Bereitschaft"
 
-#: ../src/gpm-inhibit.c:370
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:373
 #, c-format
-msgid "has stopped the %s from taking place : "
-msgstr "verhinderte die Ausführung von %s : "
+msgid "%s has stopped the suspend from taking place: %s."
+msgstr "%s verhinderte die Bereitschaft: %s."
 
-#: ../src/gpm-inhibit.c:376
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:378
 #, c-format
-msgid "Multiple applications have stopped the %s from taking place."
-msgstr "Mehrere Anwendungen verhinderten die Ausführung von %s."
+msgid "%s has stopped the hibernate from taking place: %s."
+msgstr "%s verhinderte den Ruhezustand: %s."
 
-#: ../src/gpm-main.c:153
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:383
+#, c-format
+msgid "%s has stopped the policy action from taking place: %s."
+msgstr "%s verhinderte die Ausführung der Aktion: %s."
+
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:388
+#, c-format
+msgid "%s has stopped the reboot from taking place: %s."
+msgstr "%s verhinderte den Neustart: %s."
+
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:393
+#, c-format
+msgid "%s has stopped the shutdown from taking place: %s."
+msgstr "%s verhinderte das Ausschalten: %s."
+
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:398
+#, c-format
+msgid "%s has stopped the timeout action from taking place: %s."
+msgstr "%s verhinderte die Ausführung der Zeitspannen-Aktion: %s."
+
+#: ../src/gpm-inhibit.c:406 ../src/gpm-inhibit.c:421
+#, c-format
+msgid "Multiple applications have stopped the suspend from taking place."
+msgstr "Mehrere Anwendungen verhinderten die Bereitschaft."
+
+#: ../src/gpm-inhibit.c:409
+#, c-format
+msgid "Multiple applications have stopped the hibernate from taking place."
+msgstr "Mehrere Anwendungen verhinderten den Ruhezustand."
+
+#: ../src/gpm-inhibit.c:412
+#, c-format
+msgid "Multiple applications have stopped the policy action from taking place."
+msgstr "Mehrere Anwendungen verhinderten die Ausführung der Aktion."
+
+#: ../src/gpm-inhibit.c:415
+#, c-format
+msgid "Multiple applications have stopped the reboot from taking place."
+msgstr "Mehrere Anwendungen verhinderten den Neustart."
+
+#: ../src/gpm-inhibit.c:418
+#, c-format
+msgid "Multiple applications have stopped the shutdown from taking place."
+msgstr "Mehrere Anwendungen verhinderten das Ausschalten."
+
+#: ../src/gpm-main.c:137
 msgid "Do not daemonize"
 msgstr "Kein Hintergrundprozess"
 
-#: ../src/gpm-main.c:155 ../src/gpm-prefs.c:107 ../src/gpm-statistics.c:105
+#: ../src/gpm-main.c:139 ../src/gpm-prefs.c:107 ../src/gpm-statistics.c:105
 msgid "Show extra debugging information"
 msgstr "Zusätzliche Informationen zur Fehlererkennung anzeigen"
 
-#: ../src/gpm-main.c:157
+#: ../src/gpm-main.c:141
 msgid "Show version of installed program and exit"
 msgstr "Version des Programms anzeigen und beenden"
 
-#: ../src/gpm-main.c:159
+#: ../src/gpm-main.c:143
 msgid "Exit after a small delay (for debugging)"
 msgstr "Nach einer kurzen Verzögerung beenden (zur Fehlererkennung)"
 
-#: ../src/gpm-main.c:161
+#: ../src/gpm-main.c:145
 msgid "Exit after the manager has loaded (for debugging)"
 msgstr "Beenden nachdem der Verwalter geladen wurde (zur Fehlererkennung)"
 
-#: ../src/gpm-main.c:163
+#: ../src/gpm-main.c:147
 msgid "Debug specific files, e.g. power"
 msgstr "Bestimmte Dateien debuggen, z.B. »power«"
 
-#: ../src/gpm-main.c:167
+#: ../src/gpm-main.c:151
 msgid "GNOME Power Manager"
 msgstr "GNOME-Energieverwaltung"
 
-#: ../src/gpm-manager.c:183
+#: ../src/gpm-manager.c:185
 #, c-format
-msgid "Request to %s"
-msgstr "Anforderung von %s"
+msgid "Request to suspend"
+msgstr "Anforderung für Bereitschaft"
+
+#: ../src/gpm-manager.c:188
+#, c-format
+msgid "Request to hibernate"
+msgstr "Anforderung für Ruhezustand"
+
+#: ../src/gpm-manager.c:191
+#, c-format
+msgid "Request to do policy action"
+msgstr "Anforderung einer Aktion"
+
+#: ../src/gpm-manager.c:194
+#, c-format
+msgid "Request to reboot"
+msgstr "Anforderung zum Neustarten"
+
+#: ../src/gpm-manager.c:197
+#, c-format
+msgid "Request to shutdown"
+msgstr "Anforderung zum Ausschalten"
+
+#: ../src/gpm-manager.c:200
+#, c-format
+msgid "Request to do timeout action"
+msgstr "Anforderung für Zeitspannen-Aktion"
 
 #. I want this translated
-#: ../src/gpm-manager.c:192
+#: ../src/gpm-manager.c:211
 msgid "Perform action anyway"
 msgstr "Aktion dennoch ausführen"
 
-#: ../src/gpm-manager.c:311 ../src/gpm-manager.c:337 ../src/gpm-manager.c:362
-#: ../src/gpm-manager.c:388 ../src/gpm-manager.c:420
+#: ../src/gpm-manager.c:331 ../src/gpm-manager.c:357 ../src/gpm-manager.c:391
+#: ../src/gpm-manager.c:417 ../src/gpm-manager.c:457
 msgid "Action forbidden"
 msgstr "Aktion verboten"
 
-#: ../src/gpm-manager.c:312 ../src/gpm-manager.c:363 ../src/gpm-manager.c:421
+#: ../src/gpm-manager.c:332 ../src/gpm-manager.c:392 ../src/gpm-manager.c:458
 msgid "Policy timeout is not valid. Please wait a few seconds and try again."
 msgstr ""
 "Ungültiger Zeitspanne der Richtlinie. Bitte warten Sie ein paar Sekunden und "
 "versuchen Sie es erneut."
 
-#: ../src/gpm-manager.c:324 ../src/gpm-manager.c:375
+#: ../src/gpm-manager.c:344 ../src/gpm-manager.c:404
 msgid "Action disallowed"
 msgstr "Aktion nicht gestattet"
 
-#: ../src/gpm-manager.c:325
+#: ../src/gpm-manager.c:345
 msgid ""
 "Suspend support has been disabled. Contact your administrator for more "
 "details."
@@ -1736,15 +1824,15 @@ msgstr ""
 "Die Bereitschafts-Unterstützung wurde deaktiviert. Wenden Sie sich für "
 "weitere Details an Ihren Systemadministrator."
 
-#: ../src/gpm-manager.c:338
+#: ../src/gpm-manager.c:358
 msgid "Suspend is not available on this computer."
 msgstr "Der Bereitschaftsmodus ist für diesen Computer nicht verfügbar."
 
-#: ../src/gpm-manager.c:346 ../src/gpm-manager.c:725
-msgid "Suspending computer"
-msgstr "Rechner wird in Bereitschaft versetzt"
+#: ../src/gpm-manager.c:371 ../src/gpm-manager.c:790
+msgid "Suspending computer."
+msgstr "Rechner wird in Bereitschaft versetzt."
 
-#: ../src/gpm-manager.c:376
+#: ../src/gpm-manager.c:405
 msgid ""
 "Hibernate support has been disabled. Contact your administrator for more "
 "details."
@@ -1752,168 +1840,173 @@ msgstr ""
 "Die Unterstützung für den Ruhezustand wurde deaktiviert. Wenden Sie sich für "
 "weitere Details an Ihren Systemadministrator."
 
-#: ../src/gpm-manager.c:389
+#: ../src/gpm-manager.c:418
 msgid "Hibernate is not available on this computer."
 msgstr "Der Ruhezustand ist auf diesem Computer nicht verfügbar."
 
-#: ../src/gpm-manager.c:397 ../src/gpm-manager.c:737
-msgid "Hibernating computer"
-msgstr "Rechner wird in den Ruhezustand versetzt"
+#: ../src/gpm-manager.c:431 ../src/gpm-manager.c:805
+msgid "Hibernating computer."
+msgstr "Rechner wird in den Ruhezustand versetzt."
 
-#: ../src/gpm-manager.c:437
-msgid "Doing nothing"
-msgstr "Leerlauf"
+#: ../src/gpm-manager.c:479
+msgid "Doing nothing."
+msgstr "Nichts geschieht."
 
-#: ../src/gpm-manager.c:450
-msgid "Shutting down computer"
-msgstr "Rechner wird heruntergefahren"
+#: ../src/gpm-manager.c:492
+msgid "Shutting down computer."
+msgstr "Rechner wird heruntergefahren."
 
-#: ../src/gpm-manager.c:455
-msgid "GNOME interactive logout"
-msgstr "Interaktives GNOME-Layout"
+#: ../src/gpm-manager.c:497
+msgid "GNOME interactive logout."
+msgstr "Interaktives GNOME-Abmelden"
 
-#: ../src/gpm-manager.c:725 ../src/gpm-manager.c:737
-msgid "System idle"
-msgstr "Systemleerlauf"
+#: ../src/gpm-manager.c:790 ../src/gpm-manager.c:805
+msgid "System idle."
+msgstr "Systemleerlauf."
 
-#: ../src/gpm-manager.c:811
+#: ../src/gpm-manager.c:882
 msgid "Power Information"
-msgstr "Energieverwaltungsinformationen"
+msgstr "Energie-Informationen"
 
-#: ../src/gpm-manager.c:828
-msgid "the power button has been pressed"
-msgstr "Ein/Ausschalter wurde gedrückt"
+#: ../src/gpm-manager.c:899
+msgid "The power button has been pressed."
+msgstr "Ein-/Ausschalter wurde gedrückt."
 
-#: ../src/gpm-manager.c:840
-msgid "the suspend button has been pressed"
-msgstr "Bereitschaftstaste wurde gedrückt"
+#: ../src/gpm-manager.c:911
+msgid "The suspend button has been pressed."
+msgstr "Bereitschaftstaste wurde gedrückt."
 
-#: ../src/gpm-manager.c:852
-msgid "the hibernate button has been pressed"
-msgstr "Ruhezustandstaste wurde gedrückt"
+#: ../src/gpm-manager.c:923
+msgid "The hibernate button has been pressed."
+msgstr "Ruhezustandstaste wurde gedrückt."
 
-#: ../src/gpm-manager.c:883
-msgid "the lid has been closed on ac power"
-msgstr "Deckel wurde im Netzbetrieb geschlossen"
+#: ../src/gpm-manager.c:954
+msgid "The lid has been closed on ac power."
+msgstr "Deckel wurde im Netzbetrieb geschlossen."
 
-#: ../src/gpm-manager.c:913
-msgid "the lid has been closed on battery power"
-msgstr "Deckel wurde im Akkubetrieb geschlossen"
+#: ../src/gpm-manager.c:984
+msgid "The lid has been closed on battery power."
+msgstr "Deckel wurde im Akkubetrieb geschlossen."
 
-#: ../src/gpm-manager.c:1002
-msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
+#: ../src/gpm-manager.c:1073
+msgid ""
+"The lid has been closed, and the ac adapter removed (and gconf is okay)."
 msgstr ""
-"Deckel wurde geschlossen und Netzstecker gezogen (kein Problem von gconf)"
+"Deckel wurde geschlossen und Netzstecker gezogen (kein Problem von gconf)."
 
-#: ../src/gpm-manager.c:1025
-msgid "battery is critically low"
-msgstr "Ladezustand des Akkus ist kritisch"
+#: ../src/gpm-manager.c:1096
+msgid "Battery is critically low."
+msgstr "Ladezustand des Akkus ist kritisch."
 
-#: ../src/gpm-manager.c:1340
+#: ../src/gpm-manager.c:1186 ../src/gpm-manager.c:1201
+msgid "User clicked on tray"
+msgstr "Benutzer hat auf Benachrichtigungsfeld geklickt"
+
+#: ../src/gpm-manager.c:1411
 msgid "Laptop battery low"
 msgstr "Laptop-Akku niedrig"
 
-#: ../src/gpm-manager.c:1342
+#: ../src/gpm-manager.c:1413
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%d%%)"
 msgstr "Ihnen verbleiben <b>%s</b> im Akkubetrieb (Ladung bei %d%%)."
 
-#: ../src/gpm-manager.c:1345
+#: ../src/gpm-manager.c:1416
 msgid "UPS low"
 msgstr "USV niedrig"
 
-#: ../src/gpm-manager.c:1347
+#: ../src/gpm-manager.c:1418
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS backup power (%d%%)"
 msgstr "Ihnen verbleiben noch <b>%s</b> im USV-Betrieb (Ladung bei %d%%)."
 
-#: ../src/gpm-manager.c:1350 ../src/gpm-manager.c:1450
+#: ../src/gpm-manager.c:1421 ../src/gpm-manager.c:1521
 msgid "Mouse battery low"
 msgstr "Mausbatterie niedrig"
 
-#: ../src/gpm-manager.c:1351
+#: ../src/gpm-manager.c:1422
 #, c-format
 msgid "The wireless mouse attached to this computer is low in power (%d%%)"
 msgstr ""
 "Die an diesen Computer angeschlossene kabellose Maus hat nur noch wenig "
 "Energie (%d%%)"
 
-#: ../src/gpm-manager.c:1353 ../src/gpm-manager.c:1455
+#: ../src/gpm-manager.c:1424 ../src/gpm-manager.c:1526
 msgid "Keyboard battery low"
 msgstr "Tastaturbatterie niedrig"
 
-#: ../src/gpm-manager.c:1354
+#: ../src/gpm-manager.c:1425
 #, c-format
 msgid "The wireless keyboard attached to this computer is low in power (%d%%)"
 msgstr ""
 "Die an diesen Computer angeschlossene kabellose Tastatur hat nur noch wenig "
 "Energie (%d%%)"
 
-#: ../src/gpm-manager.c:1356 ../src/gpm-manager.c:1460
+#: ../src/gpm-manager.c:1427 ../src/gpm-manager.c:1531
 msgid "PDA battery low"
 msgstr "PDA-Batterie niedrig"
 
-#: ../src/gpm-manager.c:1357
+#: ../src/gpm-manager.c:1428
 #, c-format
 msgid "The PDA attached to this computer is low in power (%d%%)"
 msgstr ""
 "Der an diesen Computer angeschlossene PDA hat nur noch wenig Energie (%d%%)"
 
-#: ../src/gpm-manager.c:1359 ../src/gpm-manager.c:1465
+#: ../src/gpm-manager.c:1430 ../src/gpm-manager.c:1536
 msgid "Cell phone battery low"
 msgstr "Mobiltelefon-Akku niedrig"
 
-#: ../src/gpm-manager.c:1360
+#: ../src/gpm-manager.c:1431
 #, c-format
 msgid "The cell phone attached to this computer is low in power (%d%%)"
 msgstr ""
 "Das an diesen Computer angeschlossene Mobiltelefon hat nur noch wenig "
 "Energie (%d%%)"
 
-#: ../src/gpm-manager.c:1387
+#: ../src/gpm-manager.c:1458
 msgid "a short time"
 msgstr "kurze Zeit"
 
-#: ../src/gpm-manager.c:1410 ../src/gpm-manager.c:1496
+#: ../src/gpm-manager.c:1481 ../src/gpm-manager.c:1567
 msgid "Laptop battery critically low"
 msgstr "Kritischer Ladezustand des Laptop-Akkus"
 
-#: ../src/gpm-manager.c:1423
+#: ../src/gpm-manager.c:1494
 #, c-format
 msgid "Plug in your AC adapter to avoid losing data."
 msgstr "Schließen Sie Netzteil an, um Datenverlust zu vermeiden."
 
-#: ../src/gpm-manager.c:1426
+#: ../src/gpm-manager.c:1497
 #, c-format
 msgid "This computer will suspend in %s if the AC is not connected."
 msgstr ""
 "Dieser Computer wird in %s in Bereitschaft versetzt, wenn das Netzteil nicht "
 "angeschlossen wird."
 
-#: ../src/gpm-manager.c:1429
+#: ../src/gpm-manager.c:1500
 #, c-format
 msgid "This computer will hibernate in %s if the AC is not connected."
 msgstr ""
 "Dieser Computer wird in %s in den Ruhezustand versetzt, wenn das Netzteil "
 "nicht angeschlossen wird. "
 
-#: ../src/gpm-manager.c:1432
+#: ../src/gpm-manager.c:1503
 #, c-format
 msgid "This computer will shutdown in %s if the AC is not connected."
 msgstr ""
 "Dieser Computer wird in %s herunterfahren, wenn das Netzteil nicht "
 "angeschlossen wird."
 
-#: ../src/gpm-manager.c:1435
+#: ../src/gpm-manager.c:1506
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%d%%). %s"
 msgstr "Ihnen verbleiben <b>%s</b> im Akkubetrieb (Ladung bei %d%%). %s"
 
-#: ../src/gpm-manager.c:1443 ../src/gpm-manager.c:1528
+#: ../src/gpm-manager.c:1514 ../src/gpm-manager.c:1599
 msgid "UPS critically low"
 msgstr "Kritischer Ladezustand der USV"
 
-#: ../src/gpm-manager.c:1445
+#: ../src/gpm-manager.c:1516
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore AC "
@@ -1922,7 +2015,7 @@ msgstr ""
 "Ihnen verbleiben noch <b>%s</b> im USV-Energie (Ladung bei %d%%). Schließen "
 "Sie den Rechner an die Stromversorgung an, um Datenverlust zu verhindern."
 
-#: ../src/gpm-manager.c:1451
+#: ../src/gpm-manager.c:1522
 #, c-format
 msgid ""
 "The wireless mouse attached to this computer is very low in power (%d%%). "
@@ -1931,7 +2024,7 @@ msgstr ""
 "Die an diesen Computer angeschlossene drahtlose Maus hat nur noch wenig "
 "Energie (%d%%). Sie wird ausfallen, falls sie nicht bald aufgeladen wird."
 
-#: ../src/gpm-manager.c:1456
+#: ../src/gpm-manager.c:1527
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is very low in power (%d%%). "
@@ -1940,7 +2033,7 @@ msgstr ""
 "Die an diesen Computer angeschlossene drahtlose Tastatur hat nur noch wenig "
 "Energie (%d%%). Es wird ausfallen, falls es nicht bald aufgeladen wird."
 
-#: ../src/gpm-manager.c:1461
+#: ../src/gpm-manager.c:1532
 #, c-format
 msgid ""
 "The PDA attached to this computer is very low in power (%d%%). This device "
@@ -1949,7 +2042,7 @@ msgstr ""
 "Der an diesen Computer angeschlossene PDA hat nur noch wenig Energie (%d%%). "
 "Er wird ausfallen, falls er nicht bald aufgeladen wird."
 
-#: ../src/gpm-manager.c:1466
+#: ../src/gpm-manager.c:1537
 #, c-format
 msgid ""
 "Your cell phone is very low in power (%d%%). This device will soon stop "
@@ -1958,7 +2051,7 @@ msgstr ""
 "Ihr Mobiltelefon hat nur noch wenig Energie (%d%%). Es wird ausfallen, falls "
 "es nicht bald aufgeladen wird."
 
-#: ../src/gpm-manager.c:1503
+#: ../src/gpm-manager.c:1574
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
@@ -1966,7 +2059,7 @@ msgstr ""
 "Der Akkuladezustand ist im kritischen Bereich. Der Rechner wird <b>ausgehen</"
 "b>, sobald der Akku vollständig entladen ist."
 
-#: ../src/gpm-manager.c:1508
+#: ../src/gpm-manager.c:1579
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1976,7 +2069,7 @@ msgstr ""
 "deshalb in Bereitschaft versetzt. <br><b>Hinweis:</b> Der Rechner benötigt "
 "auch in Bereitschat weiterhin eine geringe Menge an Energie."
 
-#: ../src/gpm-manager.c:1514
+#: ../src/gpm-manager.c:1585
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
@@ -1984,7 +2077,7 @@ msgstr ""
 "Der Akkuladezustand ist im kritischen Bereich. Der Rechner wird deshalb nun "
 "in den Ruhezustand versetzt."
 
-#: ../src/gpm-manager.c:1518
+#: ../src/gpm-manager.c:1589
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
@@ -1992,7 +2085,7 @@ msgstr ""
 "Der Akkuladezustand ist im kritischen Bereich. Der Rechner wird deshalb nun "
 "heruntergefahren."
 
-#: ../src/gpm-manager.c:1535
+#: ../src/gpm-manager.c:1606
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
@@ -2000,25 +2093,25 @@ msgstr ""
 "Der Ladezustand der USV ist im kritischen Bereich. Der Rechner wird "
 "<b>ausgehen</b>, wenn sie vollständig entladen ist."
 
-#: ../src/gpm-manager.c:1540
+#: ../src/gpm-manager.c:1611
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr ""
 "Der Ladezustand der USV ist im kritisch Bereich. Der Rechner wird deshalb "
 "nun in den Ruhezustand versetzt."
 
-#: ../src/gpm-manager.c:1544
+#: ../src/gpm-manager.c:1615
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr ""
 "Der Ladezustand der USV ist im kritischen Bereich. Der Rechner wird deshalb "
 "nun heruntergefahren."
 
-#: ../src/gpm-manager.c:1650
+#: ../src/gpm-manager.c:1721
 msgid "Install problem!"
 msgstr "Installationsproblem!"
 
-#: ../src/gpm-manager.c:1651
+#: ../src/gpm-manager.c:1722
 msgid ""
 "The configuration defaults for GNOME Power Manager have not been installed "
 "correctly.\n"
@@ -2069,14 +2162,14 @@ msgstr ""
 "dass sie alt oder defekt sein kann."
 
 #: ../src/gpm-notify.c:439
-msgid "Inhibit warning!"
-msgstr "Unterdrückungswarnung!"
+msgid "Sleep warning"
+msgstr "Energiesparmodus-Warnung"
 
 #: ../src/gpm-notify.c:440
 #, c-format
 msgid ""
-"Your laptop will not sleep if you shut the lid as it is currently "
-"inhibited.\n"
+"Your laptop will not sleep if you shut the lid as a running program has "
+"prevented this.\n"
 "Some laptops can overheat if they do not sleep when the lid is closed."
 msgstr ""
 "Ihr Laptop wird nicht in den Ruhezustand versetzt wenn Sie den Deckel "
@@ -2181,105 +2274,105 @@ msgstr "%s lädt (%i%%)\n"
 msgid "Battery state could not be read at this time\n"
 msgstr "Der Batteriestatus kann momentan nicht ausgelesen werden\n"
 
-#: ../src/gpm-cell.c:488
+#: ../src/gpm-cell.c:506
 #, c-format
 msgid "<b>Product:</b> %s\n"
 msgstr "<b>Produkt:</b> %s\n"
 
-#: ../src/gpm-cell.c:491
+#: ../src/gpm-cell.c:509
 msgid "<b>Status:</b> Missing\n"
 msgstr "<b>Status:</b> nicht vorhanden\n"
 
-#: ../src/gpm-cell.c:493
+#: ../src/gpm-cell.c:511
 msgid "<b>Status:</b> Charged\n"
 msgstr "<b>Status:</b> Aufgeladen\n"
 
-#: ../src/gpm-cell.c:495
+#: ../src/gpm-cell.c:513
 msgid "<b>Status:</b> Charging\n"
 msgstr "<b>Status:</b> Laden\n"
 
-#: ../src/gpm-cell.c:497
+#: ../src/gpm-cell.c:515
 msgid "<b>Status:</b> Discharging\n"
 msgstr "<b>Status:</b> Entladen\n"
 
-#: ../src/gpm-cell.c:500
+#: ../src/gpm-cell.c:518
 #, c-format
 msgid "<b>Percentage charge:</b> %i%%\n"
 msgstr "<b>Ladezustand in Prozent:</b> %i%%\n"
 
-#: ../src/gpm-cell.c:505
+#: ../src/gpm-cell.c:523
 msgid "Vendor:"
 msgstr "Hersteller:"
 
-#: ../src/gpm-cell.c:510
+#: ../src/gpm-cell.c:528
 msgid "Lithium ion"
 msgstr "Lithium-Ionen (Li-Ion)"
 
-#: ../src/gpm-cell.c:512
+#: ../src/gpm-cell.c:530
 msgid "Lead acid"
 msgstr "Bleiakku (Pb)"
 
-#: ../src/gpm-cell.c:514
+#: ../src/gpm-cell.c:532
 msgid "Lithium polymer"
 msgstr "Lithium-Polymer (LiPo)"
 
-#: ../src/gpm-cell.c:516
+#: ../src/gpm-cell.c:534
 msgid "Nickel metal hydride"
 msgstr "Nickel-Metallhydrid (NiMH)"
 
-#: ../src/gpm-cell.c:523
+#: ../src/gpm-cell.c:541
 msgid "Technology:"
 msgstr "Technik:"
 
-#: ../src/gpm-cell.c:527
+#: ../src/gpm-cell.c:545
 msgid "Serial number:"
 msgstr "Seriennummer:"
 
-#: ../src/gpm-cell.c:531
+#: ../src/gpm-cell.c:549
 msgid "Model:"
 msgstr "Modell:"
 
-#: ../src/gpm-cell.c:537
+#: ../src/gpm-cell.c:555
 msgid "Charge time:"
 msgstr "Ladezeit:"
 
-#: ../src/gpm-cell.c:544
+#: ../src/gpm-cell.c:562
 msgid "Discharge time:"
 msgstr "Entladezeit:"
 
-#: ../src/gpm-cell.c:550
+#: ../src/gpm-cell.c:568
 msgid "Excellent"
 msgstr "Ausgezeichnet"
 
-#: ../src/gpm-cell.c:552
+#: ../src/gpm-cell.c:570
 msgid "Good"
 msgstr "Gut"
 
-#: ../src/gpm-cell.c:554
+#: ../src/gpm-cell.c:572
 msgid "Fair"
 msgstr "Befriedigend"
 
-#: ../src/gpm-cell.c:556
+#: ../src/gpm-cell.c:574
 msgid "Poor"
 msgstr "Dürftig"
 
-#: ../src/gpm-cell.c:559
+#: ../src/gpm-cell.c:577
 msgid "Capacity:"
 msgstr "Kapazität:"
 
-#: ../src/gpm-cell.c:565 ../src/gpm-cell.c:588
+#: ../src/gpm-cell.c:583 ../src/gpm-cell.c:606
 msgid "Current charge:"
 msgstr "Aktuelle Ladung:"
 
-#: ../src/gpm-cell.c:571
+#: ../src/gpm-cell.c:589
 msgid "Last full charge:"
 msgstr "Letzte vollständige Ladung:"
 
-#: ../src/gpm-cell.c:576 ../src/gpm-cell.c:593
+#: ../src/gpm-cell.c:594 ../src/gpm-cell.c:611
 msgid "Design charge:"
 msgstr "Spezifizierte Maximalladung:"
 
-#: ../src/gpm-cell.c:581
+#: ../src/gpm-cell.c:599
 msgid "Charge rate:"
 msgstr "Laderate:"
 
@@ -2439,52 +2532,61 @@ msgstr "Im Akkubetrieb"
 msgid "Laptop lid is closed"
 msgstr "Deckel wurde geschlossen"
 
-#: ../src/gpm-tray-icon.c:206
+#: ../src/gpm-tray-icon.c:215
 msgid "Device information"
 msgstr "Geräteinformation"
 
-#: ../src/gpm-tray-icon.c:315
+#: ../src/gpm-tray-icon.c:324
 msgid "translator-credits"
 msgstr ""
 "Hendrik Richter <hendrikr@gnome.org>\n"
 "Sebastian Heinlein <sebi@glatzor.de>\n"
 "Thomas Gier <mail@thomasgier.de>"
 
-#: ../src/gpm-tray-icon.c:331
+#: ../src/gpm-tray-icon.c:340
 msgid "GNOME Power Manager Website"
 msgstr "Web-Seite der GNOME-Energieverwaltung"
 
 #. Preferences
-#: ../src/gpm-tray-icon.c:433
+#: ../src/gpm-tray-icon.c:445
 msgid "_Preferences"
 msgstr "_Einstellungen"
 
 #. Statistics
-#: ../src/gpm-tray-icon.c:441
+#: ../src/gpm-tray-icon.c:453
 msgid "Power _History"
 msgstr "Energie_verbrauch"
 
 #. Help
-#: ../src/gpm-tray-icon.c:453
+#: ../src/gpm-tray-icon.c:465
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:2
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:2
 msgid "_Help"
 msgstr "_Hilfe"
 
 #. About
-#: ../src/gpm-tray-icon.c:461
+#: ../src/gpm-tray-icon.c:473
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:1
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:1
 msgid "_About"
 msgstr "_Info"
 
-#: ../src/gpm-tray-icon.c:575
+#: ../src/gpm-tray-icon.c:587
 msgid "_Suspend"
 msgstr "_Bereitschaft"
 
-#: ../src/gpm-tray-icon.c:585
+#: ../src/gpm-tray-icon.c:597
 msgid "Hi_bernate"
 msgstr "_Ruhezustand"
+
+#~ msgid "Dim display _brightness by:"
+#~ msgstr "Bildschirm_helligkeit abdunkeln um:"
+
+#~ msgid "%s because %s"
+#~ msgstr "%s da %s"
+
+#~ msgid "Inhibit warning!"
+#~ msgstr "Unterdrückungswarnung!"
 
 #~ msgid "Change the brightness to a preset level on AC state change"
 #~ msgstr ""
@@ -2543,9 +2645,6 @@ msgstr "_Ruhezustand"
 
 #~ msgid "user clicked hibernate from tray menu"
 #~ msgstr "Benutzer hat Ruhezustand im Menü gewählt"
-
-#~ msgid "user clicked suspend from tray menu"
-#~ msgstr "Benutzer hat Bereitschaft im Menü gewählt"
 
 #, fuzzy
 #~ msgid "Battery may be invalid"
