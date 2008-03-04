@@ -1,3 +1,9 @@
+2008-03-04  David Zeuthen  <davidz@redhat.com>
+
+	* src/gpm-prefs-core.c: (conf_key_changed_cb): Update the slider
+	when the value in gconf changes. This fixes a bug when using the
+	brightness applet and the slider isn't updated. Fixes bug #520411.
+
 2008-02-19  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-engine.c: (gpm_engine_get_icon):

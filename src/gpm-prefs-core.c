@@ -672,7 +672,15 @@ conf_key_changed_cb (GpmConf     *conf,
 		     const gchar *key,
 		     GpmPrefs    *prefs)
 {
+	int value;
+	GtkWidget *widget;
 	gboolean  enabled;
+
+	if (strcmp (key, GPM_CONF_BACKLIGHT_BRIGHTNESS_AC) == 0) {
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hscale_ac_brightness");
+		gpm_conf_get_int (conf, key, &value);
+		gtk_range_set_value (GTK_RANGE (widget), value);
+	}
 
 	if (strcmp (key, GPM_CONF_LOWPOWER_AC) == 0) {
 		gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_LOWPOWER_AC, &enabled);
