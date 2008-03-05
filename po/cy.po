@@ -1,13 +1,14 @@
 # GNOME Power Manager in Welsh.
 # This file is distributed under the same license as GNOME Power Manager.
-# Rhys Jones <rhys@sucs.org>, 2006.
+# Rhys Jones <rhys@sucs.org>, 2006-2008.
+# Iestyn Pryce <dylunio@gmail.com>, 2007.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-18 00:05+0000\n"
-"PO-Revision-Date: 2006-09-08 07:28-0000\n"
+"POT-Creation-Date: 2008-03-05 18:21+0000\n"
+"PO-Revision-Date: 2008-03-05 18:12-0000\n"
 "Last-Translator: Rhys Jones <rhys@sucs.org>\n"
 "Language-Team: Welsh <gnome-cy@lists.linux.org.uk>\n"
 "MIME-Version: 1.0\n"
@@ -16,57 +17,63 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural= (n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != "
 "11) ? 2 : 3;\n"
 
-#: ../applets/brightness/brightness-applet.c:60
-msgid "Power Manger Brightness Applet"
-msgstr ""
+#: ../applets/brightness/brightness-applet.c:106
+msgid "Power Manager Brightness Applet"
+msgstr "Rhaglennig Disgleirdeb Rheolwr Pŵer"
 
-#: ../applets/brightness/brightness-applet.c:61
+#: ../applets/brightness/brightness-applet.c:107
 msgid "Adjusts laptop panel brightness."
-msgstr ""
+msgstr "Newid disgleirdeb panel y gliniadur."
 
-#: ../applets/brightness/brightness-applet.c:215
-#, fuzzy, c-format
-msgid "LCD brightness : %d%%"
-msgstr "Disgleirdeb yr LCD ar bŵer AC"
+#: ../applets/brightness/brightness-applet.c:355
+#: ../applets/inhibit/inhibit-applet.c:338
+#, c-format
+msgid "Cannot connect to gnome-power-manager"
+msgstr "Methu cysylltu â Rheolwr Pŵer GNOME"
 
-#: ../applets/brightness/brightness-applet.c:217
+#: ../applets/brightness/brightness-applet.c:357
 #, c-format
 msgid "Cannot get laptop panel brightness"
-msgstr ""
+msgstr "Methu cael disgleirdeb panel y gliniadur"
 
-#: ../applets/brightness/brightness-applet.c:487
-#: ../applets/inhibit/inhibit-applet.c:259 ../src/gpm-tray-icon.c:299
+#: ../applets/brightness/brightness-applet.c:359
+#, c-format
+msgid "LCD brightness : %d%%"
+msgstr "Disgleirdeb yr LCD: %d%%"
+
+#: ../applets/brightness/brightness-applet.c:746
+#: ../applets/inhibit/inhibit-applet.c:406 ../src/gpm-tray-icon.c:310
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Trwyddedir dan dermau Trwydded Gyffredinol Gyhoeddus GNU Fersiwn 2"
 
-#: ../applets/brightness/brightness-applet.c:488
-#: ../applets/inhibit/inhibit-applet.c:260 ../src/gpm-tray-icon.c:300
+#: ../applets/brightness/brightness-applet.c:747
+#: ../applets/inhibit/inhibit-applet.c:407 ../src/gpm-tray-icon.c:311
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
 "as published by the Free Software Foundation; either version 2\n"
 "of the License, or (at your option) any later version."
 msgstr ""
-"Meddalwedd rhydd yw Power Manager; gallwch ei ailddosbarthu\n"
+"Meddalwedd rhydd yw'r Rheolwr Pŵer; gallwch ei ailddosbarthu\n"
 "ac/neu ei newid o dan dermau Trwydded Gyffredinol Gyhoeddus\n"
 "GNU a gyhoeddir gan y Free Software Foundation; naill ai fersiwn 2 y\n"
 "Drwydded, neu (o'ch dewis chi) unrhyw fersiwn mwy diweddar."
 
-#: ../applets/brightness/brightness-applet.c:492
-#: ../applets/inhibit/inhibit-applet.c:264 ../src/gpm-tray-icon.c:304
+#: ../applets/brightness/brightness-applet.c:751
+#: ../applets/inhibit/inhibit-applet.c:411 ../src/gpm-tray-icon.c:315
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
 "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
 "GNU General Public License for more details."
 msgstr ""
-"Mae Power Manager yn cael ei ddosbarthu yn y gobaith y bydd\n"
+"Mae'r Rheolwr Pŵer yn cael ei ddosbarthu yn y gobaith y bydd\n"
 "yn ddefnyddiol, ond HEB UNRHYW WARANT; heb hyd yn oed y warant\n"
 "ymhlyg o FARSIANDÏAETH ac ADDASRWYDD AT BWRPAS ARBENNIG. \n"
 "Gweler Trwydded Gyffredinol Gyhoeddus GNU am ragor o fanylion."
 
-#: ../applets/brightness/brightness-applet.c:496
-#: ../applets/inhibit/inhibit-applet.c:268 ../src/gpm-tray-icon.c:308
+#: ../applets/brightness/brightness-applet.c:755
+#: ../applets/inhibit/inhibit-applet.c:415 ../src/gpm-tray-icon.c:319
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -78,44 +85,74 @@ msgstr ""
 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
 "02110-1301, USA."
 
-#: ../applets/brightness/brightness-applet.c:510
+#: ../applets/brightness/brightness-applet.c:769
 msgid "Copyright © 2006 Benjamin Canou"
-msgstr ""
+msgstr "Hawlfraint © 2006 Benjamin Canou"
 
-#: ../applets/inhibit/inhibit-applet.c:56
-#, fuzzy
-msgid "Power Manger Inhibit Applet"
-msgstr "Prawf Atal Pŵer"
+#: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:1
+msgid "Adjusts Laptop panel brightness"
+msgstr "Addasu disgleirdeb panel y gliniadur"
 
-#: ../applets/inhibit/inhibit-applet.c:57
+#: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:2
+msgid "Brightness Applet"
+msgstr "Rhaglennig Disgleirdeb "
+
+#: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:3
+msgid "Brightness Applet Factory"
+msgstr "Ffatri Rhaglennig Disgleirdeb"
+
+#: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:4
+msgid "Factory for Brightness Applet"
+msgstr "Ffatri ar gyfer Rhaglennig Disgleirdeb"
+
+#: ../applets/inhibit/inhibit-applet.c:89
+msgid "Power Manager Inhibit Applet"
+msgstr "Rhaglennig Atal y Rheolwr Pŵer"
+
+#: ../applets/inhibit/inhibit-applet.c:90
 msgid "Allows user to inhibit automatic power saving."
-msgstr ""
+msgstr "Galluogi i ddefnyddiwr fedru atal yr arbed pŵer awtomatig."
 
-#: ../applets/inhibit/inhibit-applet.c:195
+#: ../applets/inhibit/inhibit-applet.c:341
 #, c-format
 msgid "Automatic sleep inhibited"
-msgstr ""
+msgstr "Cwsg awtomatig wedi'i atal"
 
-#: ../applets/inhibit/inhibit-applet.c:197
+#: ../applets/inhibit/inhibit-applet.c:343
 #, c-format
 msgid "Automatic sleep enabled"
-msgstr ""
+msgstr "Cwsg awtomatig wedi'i alluogi"
 
-#: ../applets/inhibit/inhibit-applet.c:224
-#, fuzzy
+#: ../applets/inhibit/inhibit-applet.c:371
 msgid "Manual inhibit"
-msgstr "Dad-atal"
+msgstr "Atal â llaw"
 
-#: ../applets/inhibit/inhibit-applet.c:282
-msgid "Copyright © 2006 Richard Hughes"
-msgstr ""
+#: ../applets/inhibit/inhibit-applet.c:429
+msgid "Copyright © 2006-2007 Richard Hughes"
+msgstr "Hawlfraint © 2006-2007 Richard Hughes"
+
+#: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:1
+msgid "Allows user to inhibit automatic power saving"
+msgstr "Galluogi i ddefnyddiwr fedru atal yr arbed pŵer awtomatig"
+
+#: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:2
+msgid "Factory for Inhibit Applet"
+msgstr "Ffatri ar gyfer Rhaglennig Atal"
+
+#: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:3
+msgid "Inhibit Applet"
+msgstr "Rhaglennig Atal"
+
+#: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:4
+msgid "Inhibit Applet Factory"
+msgstr "Ffatri Rhaglennig Atal"
 
 #. common descriptions of this program
-#: ../data/gnome-power-manager.desktop.in.h:1 ../src/gpm-common.h:30
+#: ../data/gnome-power-manager.desktop.in.in.h:1 ../src/gpm-common.h:43
 msgid "Power Manager"
 msgstr "Rheolwr Pŵer"
 
-#: ../data/gnome-power-manager.desktop.in.h:2
+#: ../data/gnome-power-manager.desktop.in.in.h:2
 msgid "Power management daemon"
 msgstr "Ellyll rheoli pŵer"
 
@@ -132,33 +169,33 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:2
 msgid "Allow Suspend and Hibernate in the menu"
-msgstr "Rhoi Seibio a Chysgu ar y ddewislen"
+msgstr "Caniatáu i'r opsiynau Seibio a Cysgu ymddangos ar y ddewislen"
 
 #: ../data/gnome-power-manager.schemas.in.h:3
+msgid "Allow backlight brightness adjustment"
+msgstr "Caniatáu i'r defnyddiwr newid disgleirdeb y golau cefn"
+
+#: ../data/gnome-power-manager.schemas.in.h:4
 msgid "Battery critical low action"
 msgstr "Gweithred pan fo'r batri'n argyfyngus o isel"
 
-#: ../data/gnome-power-manager.schemas.in.h:4
-msgid "Change the brightness to a preset level on AC state change"
-msgstr ""
-
 #: ../data/gnome-power-manager.schemas.in.h:5
-msgid "Change the brightness to automatically using the ambient light sensors"
+msgid "Change the brightness automatically using the ambient light sensors"
 msgstr ""
+"Defnyddio'r synwyryddion golau'r amgylchedd er mwyn newid disgleirdeb yn "
+"awtomatig"
 
 #: ../data/gnome-power-manager.schemas.in.h:6
 msgid "Check CPU load before sleeping"
 msgstr "Gwirio llwyth y CPU cyn cysgu"
 
 #: ../data/gnome-power-manager.schemas.in.h:7
-#, fuzzy
 msgid "Dim the screen after a period of inactivity when on AC power"
-msgstr "Tywyllu'r sgrin yn dilyn cyfnod heb weithgarwch"
+msgstr "Pan ar bŵer AC, tywyllu'r sgrin yn dilyn cyfnod heb weithgarwch"
 
 #: ../data/gnome-power-manager.schemas.in.h:8
-#, fuzzy
 msgid "Dim the screen after a period of inactivity when on battery power"
-msgstr "Tywyllu'r sgrin yn dilyn cyfnod heb weithgarwch"
+msgstr "Pan ar bŵer batri, tywyllu'r sgrin yn dilyn cyfnod heb weithgarwch"
 
 #: ../data/gnome-power-manager.schemas.in.h:9
 msgid ""
@@ -178,17 +215,17 @@ msgstr "Gellir cysgu"
 
 #: ../data/gnome-power-manager.schemas.in.h:12
 msgid "If DBUS inhibit requests should be ignored from other programs."
-msgstr "A ddylid anwybyddu ceisiadau atal ddaw ar DBUS o raglenni eraill."
+msgstr "A ddylid anwybyddu ceisiadau atal ddaw drwy DBUS o raglenni eraill."
 
 #: ../data/gnome-power-manager.schemas.in.h:13
 msgid "If DBUS inhibit requests should be ignored."
-msgstr "A ddylid anwybyddu ceisiadau atal ddaw ar DBUS."
+msgstr "A ddylid anwybyddu ceisiadau atal ddaw drwy DBUS."
 
 #: ../data/gnome-power-manager.schemas.in.h:14
 msgid ""
-"If a notification message should be displayed after the suspend or hibernate "
+"If a notification message should be displayed after suspend or hibernate "
 "failed."
-msgstr "A ddylid dangos neges hysbysu os yw'r seibio neu'r gorffwys yn methu."
+msgstr "A ddylid dangos neges hysbysu os yw'r seibio neu'r cwsg yn methu."
 
 #: ../data/gnome-power-manager.schemas.in.h:15
 msgid ""
@@ -198,37 +235,67 @@ msgstr "A ddylid dangos neges hysbysu pan fo'r batri ar bŵer llawn."
 
 #: ../data/gnome-power-manager.schemas.in.h:16
 msgid ""
+"If a notification message should be displayed when the battery is getting "
+"low."
+msgstr "A ddylid dangos neges hysbysu pan fo pŵer y batri'n mynd yn isel."
+
+#: ../data/gnome-power-manager.schemas.in.h:17
+msgid ""
+"If a notification message should be displayed when the profile data is "
+"guessed."
+msgstr ""
+"A ddylid dangos neges hysbysu pan fo'r data proffil wedi eu hamcangyfrif."
+
+#: ../data/gnome-power-manager.schemas.in.h:18
+msgid "If extra debugging messages should be used"
+msgstr "A ddylid defnyddio negeseuon dadfygio ychwanegol"
+
+#: ../data/gnome-power-manager.schemas.in.h:19
+msgid ""
+"If extra debugging messages should be used. Only turn this on for debugging."
+msgstr ""
+"A ddylid defnyddio negeseuon dadfygio ychwanegol. Dim ond ar gyfer dadfygio "
+"y dylid troi hyn ymlaen."
+
+#: ../data/gnome-power-manager.schemas.in.h:20
+msgid ""
 "If niced processes are considered, they can cause a frequency increment even "
 "though their absolute load percentage wouldn't trigger the scaling mechanism "
 "to switch up the frequency."
 msgstr ""
+"Os ystyrir prosesau sydd wedi'i neisio, maen nhw'n medru achosi cynnydd "
+"amledd, er na fyddai eu canran llwyth absoliwt yn achosi i'r mecanwaith "
+"raddio gynyddu'r amledd."
 
-#: ../data/gnome-power-manager.schemas.in.h:17
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:21
+msgid "If preferences should be shown"
+msgstr "A ddylid dangos hoffterau"
+
+#: ../data/gnome-power-manager.schemas.in.h:22
 msgid "If sounds should be used"
-msgstr "A ddylid defnyddio seinydd y PC (bipio)"
+msgstr "A ddylid defnyddio seiniau"
 
-#: ../data/gnome-power-manager.schemas.in.h:18
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:23
 msgid ""
 "If sounds should be used when the power is critically low, or inhibit "
 "requests have stopped the policy action."
 msgstr ""
-"A ddylid defnyddio seinydd y PC er mwyn rhoi bîp pan fo'r pŵer yn isel, neu "
-"pan fo ceisiadau atal wedi rhwystro gweithred bolisi."
+"A ddylid chwarae sain pan fo'r pŵer yn argyfyngus o isel, neu pan fo "
+"ceisiadau atal wedi rhwystro gweithred bolisi."
 
-#: ../data/gnome-power-manager.schemas.in.h:19
+#: ../data/gnome-power-manager.schemas.in.h:24
 msgid "If the CPU load should be checked before doing the idle action."
 msgstr "A ddylid gwirio llwyth y CPU cyn cyflawni'r weithred segura."
 
-#: ../data/gnome-power-manager.schemas.in.h:20
+#: ../data/gnome-power-manager.schemas.in.h:25
 msgid ""
 "If the Suspend and Hibernate options should be allowed in the notification "
 "area drop down menu."
 msgstr ""
-"A ddylid cynnwys opsiynau Seibio a Chysgu yn newislen gwympo'r ardal hysbysu."
+"A ddylid cynnwys yr opsiynau Seibio a Cysgu yn newislen gwympo'r ardal "
+"hysbysu."
 
-#: ../data/gnome-power-manager.schemas.in.h:21
+#: ../data/gnome-power-manager.schemas.in.h:26
 msgid ""
 "If the battery event should occur when the lid is shut and the power "
 "disconnected"
@@ -236,7 +303,7 @@ msgstr ""
 "A ddylai fod digwyddiad batri pan fo'r caead ar gau a'r pŵer wedi ei "
 "ddatgysylltu"
 
-#: ../data/gnome-power-manager.schemas.in.h:22
+#: ../data/gnome-power-manager.schemas.in.h:27
 msgid ""
 "If the battery lid close event should occur (for example 'Suspend when lid "
 "closed on battery') when the lid is previously shut and the AC power "
@@ -246,92 +313,102 @@ msgstr ""
 "clawr ar bŵer batri') pan fo'r clawr eisoes wedi ei gau a'r pŵer AC wedi ei "
 "ddatgysylltu'n hwyrach."
 
-#: ../data/gnome-power-manager.schemas.in.h:23
-msgid ""
-"If the laptop should be configured as if it is using an permanent external "
-"monitor"
+#: ../data/gnome-power-manager.schemas.in.h:28
+msgid "If the learnt profile should be used to calculate the time remaining"
 msgstr ""
+"A ddylid defnyddio'r proffil a ddysgwyd er mwyn cyfri'r amser sydd yn weddill"
 
-#: ../data/gnome-power-manager.schemas.in.h:24
+#: ../data/gnome-power-manager.schemas.in.h:29
 msgid ""
-"If the laptop should be configured to not do dimming actions and DPMS off if "
-"it is using a dock or external monitor. Most laptop and desktop users should "
-"select FALSE here."
+"If the learnt profile should be used to calculate the time remaining. Only "
+"turn this off for debugging."
 msgstr ""
+"A ddylid defnyddio'r proffil a ddysgwyd er mwyn cyfri'r amser sydd yn "
+"weddill. Troi hwn i ffwrdd er mwyn datnamu'n unig."
 
-#: ../data/gnome-power-manager.schemas.in.h:25
+#: ../data/gnome-power-manager.schemas.in.h:30
 msgid "If the low-power mode should be enabled when on AC"
 msgstr "A ddylid galluogi'r modd pŵer isel ar bŵer AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:26
+#: ../data/gnome-power-manager.schemas.in.h:31
 msgid "If the low-power mode should be enabled when on UPS"
 msgstr "A ddylid galluogi'r modd pŵer isel ar bŵer UPS"
 
-#: ../data/gnome-power-manager.schemas.in.h:27
+#: ../data/gnome-power-manager.schemas.in.h:32
 msgid "If the low-power mode should be enabled when on battery"
 msgstr "A ddylid galluogi'r modd pŵer isel ar bŵer batri"
 
-#: ../data/gnome-power-manager.schemas.in.h:28
+#: ../data/gnome-power-manager.schemas.in.h:33
+msgid ""
+"If the screen brightness can be changed when switching between AC and "
+"battery power and by ambient light sensors."
+msgstr ""
+"A ddylid medru newid disgleirdeb y sgrin wrth newid rhwng pŵer batri a phŵer "
+"AC, a chan synhwyrydd golau'r amgylchedd."
+
+#: ../data/gnome-power-manager.schemas.in.h:34
 msgid ""
 "If the screen brightness should be changed automatically using the ambient "
 "light sensors."
 msgstr ""
+"A ddylai synhwyrydd golau'r amgylchedd fedru newid disgleirdeb y sgrin."
 
-#: ../data/gnome-power-manager.schemas.in.h:29
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:35
 msgid ""
-"If the screen brightness should be changed when switching between AC and "
-"battery power."
-msgstr "A ddylid tywyllu'r sgrin i arbed pŵer pan fo'r cyfrifiadur yn segur."
-
-#: ../data/gnome-power-manager.schemas.in.h:30
-msgid ""
-"If the screen is locked when the screen is turned off. Only used if "
-"lock_use_screensaver_settings is false."
+"If the screen brightness should be changed automatically using the ambient "
+"light sensors. Valid is 'none', 'light' and 'dark'"
 msgstr ""
-"A yw'r sgrin wedi'i chloi pan gaiff ei diffodd. Defnyddir ddim ond os yw "
-"lock_use_screensaver_settings yn 'false'."
+"A ddylai synhwyrydd golau'r amgylchedd fedru newid disgleirdeb y sgrin. Mae "
+"'none', 'light' a 'dark' yn ddilys"
 
-#: ../data/gnome-power-manager.schemas.in.h:31
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:36
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on AC power."
-msgstr "A ddylid tywyllu'r sgrin i arbed pŵer pan fo'r cyfrifiadur yn segur."
+msgstr ""
+"A ddylid tywyllu'r sgrin i arbed pŵer pan fo'r cyfrifiadur yn segur ar bŵer "
+"AC."
 
-#: ../data/gnome-power-manager.schemas.in.h:32
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:37
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on battery power."
-msgstr "A ddylid tywyllu'r sgrin i arbed pŵer pan fo'r cyfrifiadur yn segur."
+msgstr ""
+"A ddylid tywyllu'r sgrin i arbed pŵer pan fo'r cyfrifiadur yn segur ar bŵer "
+"batri."
 
-#: ../data/gnome-power-manager.schemas.in.h:33
+#: ../data/gnome-power-manager.schemas.in.h:38
+msgid ""
+"If the screen should be reduced in brightness when the computer is on "
+"battery power."
+msgstr "A ddylid tywyllu'r sgrin pan fo'r cyfrifiadur ar bŵer batri."
+
+#: ../data/gnome-power-manager.schemas.in.h:39
 msgid "If the system low-power mode should be enabled when on AC power."
 msgstr "A ddylid galluogi modd pŵer isel y system ar bŵer AC."
 
-#: ../data/gnome-power-manager.schemas.in.h:34
+#: ../data/gnome-power-manager.schemas.in.h:40
 msgid "If the system low-power mode should be enabled when on UPS power."
 msgstr "A ddylid galluogi modd pŵer isel y system ar bŵer UPS."
 
-#: ../data/gnome-power-manager.schemas.in.h:35
+#: ../data/gnome-power-manager.schemas.in.h:41
 msgid ""
 "If the system low-power mode should be enabled when on laptop battery power."
 msgstr "A ddylid galluogi modd pŵer isel y system ar bŵer batri'r gliniadur."
 
-#: ../data/gnome-power-manager.schemas.in.h:36
+#: ../data/gnome-power-manager.schemas.in.h:42
 msgid "If the user is authorized to hibernate the computer."
 msgstr "A oes gan y defnyddiwr hawl i roi'r cyfrifiadur i gysgu."
 
-#: ../data/gnome-power-manager.schemas.in.h:37
+#: ../data/gnome-power-manager.schemas.in.h:43
 msgid "If the user is authorized to suspend the computer."
 msgstr "A oes gan y defnyddiwr hawl i seibio'r cyfrifiadur."
 
-#: ../data/gnome-power-manager.schemas.in.h:38
+#: ../data/gnome-power-manager.schemas.in.h:44
 msgid "If the user should be notified when the AC adapter is disconnected."
 msgstr "A ddylid hysbysu'r defnyddiwr pan fo'r pŵer AC wedi ei ddatgysylltu."
 
-#: ../data/gnome-power-manager.schemas.in.h:39
+#: ../data/gnome-power-manager.schemas.in.h:45
 msgid ""
 "If time based notifications should be used. If set to false, then the "
 "percentage change is used instead, which may fix a broken ACPI BIOS."
@@ -340,145 +417,173 @@ msgstr ""
 "defnyddir y canran gwefr yn lle hynny, all ddatrys problemau BIOS ACPI "
 "gwallus."
 
-#: ../data/gnome-power-manager.schemas.in.h:40
+#: ../data/gnome-power-manager.schemas.in.h:46
+msgid "If we should show the CPU frequency scaling in the UI"
+msgstr "A ddylid dangos graddio amledd CPU yn yr UI"
+
+#: ../data/gnome-power-manager.schemas.in.h:47
 msgid ""
-"If to lock the screen when the computer wakes up from a hibernate. Only used "
-"if lock_use_screensaver_settings is false."
+"If we should show the CPU frequency scaling in the UI. Some people need to "
+"configure this for specific systems."
 msgstr ""
-"A ddylid cloi'r sgrin pan fo'r cyfrifiadur yn dihuno wedi cysgu. Dim ond os "
-"yw lock_use_screensaver_settings yn 'false' y defnyddir hyn."
+"A ddylid dangos graddio amledd CPU yn yr UI. Mae angen i rai pobl gyflunio "
+"hyn ar gyfer systemau penodol."
 
-#: ../data/gnome-power-manager.schemas.in.h:41
-msgid ""
-"If to lock the screen when the computer wakes up from a suspend. Only used "
-"if lock_use_screensaver_settings is false."
-msgstr ""
-"A ddylid cloi'r sgrin pan fo'r cyfrifiadur yn dihuno wedi seibio. Dim ond os "
-"yw lock_use_screensaver_settings yn 'false' y defnyddir hyn."
+#: ../data/gnome-power-manager.schemas.in.h:48
+msgid "If we should show the low capacity warning for a broken battery"
+msgstr "A ddylid dangos rhybudd cynnwys isel os yw'r batri wedi torri"
 
-#: ../data/gnome-power-manager.schemas.in.h:42
-msgid ""
-"If to use the screen lock setting of gnome-screensaver to decide to lock the "
-"screen after a hibernate, suspend or blank screen."
-msgstr "A ddylid defnyddio gosodiad cloi sgrin gnome-screensaver"
+#: ../data/gnome-power-manager.schemas.in.h:49
+msgid "If we should show the low capacity warning for a broken battery."
+msgstr "A ddylid dangos rhybudd cynnwys isel os yw'r batri wedi torri."
 
-#: ../data/gnome-power-manager.schemas.in.h:43
+#: ../data/gnome-power-manager.schemas.in.h:50
 msgid "If we should show the recalled battery warning for a broken battery"
 msgstr ""
+"A ddylid dangos rhybudd bod y batri wedi'i alw'n ôl, os yw'r batri wedi torri"
 
-#: ../data/gnome-power-manager.schemas.in.h:44
+#: ../data/gnome-power-manager.schemas.in.h:51
 msgid ""
 "If we should show the recalled battery warning for a broken battery. Set "
 "this to false only if you know your battery is okay."
 msgstr ""
+"A ddylid dangos rhybudd bod y batri wedi'i alw'n ôl, os yw'r batri wedi "
+"torri. Dim ond os ydych chi'n gwybod bod eich batri'n iawn y dylech chi osod "
+"hyn yn 'false'."
 
-#: ../data/gnome-power-manager.schemas.in.h:45
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:52
+msgid ""
+"If we should show the warning when we have a valid inhibit and configured to "
+"sleep on lid close"
+msgstr ""
+"A ddylid dangos y rhybudd os oes cais atal dilys ac os yw'r system wedi'i "
+"ffurfweddu i gysgu pan fo'r caead yn cau"
+
+#: ../data/gnome-power-manager.schemas.in.h:53
+msgid ""
+"If we should show the warning when we have a valid inhibit and configured to "
+"sleep on lid close."
+msgstr ""
+"A ddylid dangos y rhybudd os oes cais atal dilys ac os yw'r system wedi'i "
+"ffurfweddu i gysgu pan fo'r clawr yn cau."
+
+#: ../data/gnome-power-manager.schemas.in.h:54
 msgid "Keyboard brightness when on AC"
-msgstr "Disgleirdeb yr LCD ar bŵer AC"
+msgstr "Disgleirdeb y bysellfwrdd ar bŵer AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:46
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:55
 msgid "Keyboard brightness when on battery"
-msgstr "Disgleirdeb yr LCD ar bŵer batri"
+msgstr "Disgleirdeb y bysellfwrdd ar bŵer batri"
 
-#: ../data/gnome-power-manager.schemas.in.h:47
+#: ../data/gnome-power-manager.schemas.in.h:56
 msgid "LCD brightness when on AC"
 msgstr "Disgleirdeb yr LCD ar bŵer AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:48
+#: ../data/gnome-power-manager.schemas.in.h:57
 msgid "LCD brightness when on battery"
 msgstr "Disgleirdeb yr LCD ar bŵer batri"
 
-#: ../data/gnome-power-manager.schemas.in.h:49
+#: ../data/gnome-power-manager.schemas.in.h:58
 msgid "Laptop lid close action on battery"
 msgstr "Gweithred cau clawr y gliniadur ar bŵer batri"
 
-#: ../data/gnome-power-manager.schemas.in.h:50
+#: ../data/gnome-power-manager.schemas.in.h:59
 msgid "Laptop lid close action when on AC"
 msgstr "Gweithred cau clawr y gliniadur ar bŵer AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:51
+#: ../data/gnome-power-manager.schemas.in.h:60
+msgid "Lock GNOME keyring on sleep"
+msgstr "Cloi cylch allweddau GNOME wrth gysgu"
+
+#: ../data/gnome-power-manager.schemas.in.h:61
 msgid "Lock screen on hibernate"
 msgstr "Cloi'r sgrin wrth gysgu"
 
-#: ../data/gnome-power-manager.schemas.in.h:52
+#: ../data/gnome-power-manager.schemas.in.h:62
 msgid "Lock screen on suspend"
 msgstr "Cloi'r sgrin wrth seibio"
 
-#: ../data/gnome-power-manager.schemas.in.h:53
+#: ../data/gnome-power-manager.schemas.in.h:63
 msgid "Lock screen when blanked"
 msgstr "Cloi'r sgrin wrth ei blancio"
 
-#: ../data/gnome-power-manager.schemas.in.h:54
+#: ../data/gnome-power-manager.schemas.in.h:64
 msgid "Method used to blank screen on AC"
 msgstr "Sut i flancio'r sgrin ar bŵer AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:55
+#: ../data/gnome-power-manager.schemas.in.h:65
 msgid "Method used to blank screen on battery"
 msgstr "Sut i flancio'r sgrin ar bŵer batri"
 
-#: ../data/gnome-power-manager.schemas.in.h:56
-msgid "Notify on a HAL error"
-msgstr "Hysbysu pan fo gwall HAL"
+#: ../data/gnome-power-manager.schemas.in.h:66
+msgid "Notify on a low power"
+msgstr "Hysbysu pan ar bŵer isel"
 
-#: ../data/gnome-power-manager.schemas.in.h:57
+#: ../data/gnome-power-manager.schemas.in.h:67
+msgid "Notify on a sleep failure"
+msgstr "Hysbysu pan fo cysgu'n methu"
+
+#: ../data/gnome-power-manager.schemas.in.h:68
 msgid "Notify when AC adapter is disconnected"
 msgstr "Hysbysu pan fo'r addasydd AC wedi ei ddatgysylltu"
 
-#: ../data/gnome-power-manager.schemas.in.h:58
+#: ../data/gnome-power-manager.schemas.in.h:69
 msgid "Notify when fully charged"
-msgstr "Hysbysu pan fo'r wefr yn llawn"
+msgstr "Hysbysu pan fo'r batri wedi gwefru'n llawn"
 
-#: ../data/gnome-power-manager.schemas.in.h:59
+#: ../data/gnome-power-manager.schemas.in.h:70
+msgid "Notify when the profile data is guessed"
+msgstr "Hysbysu pan fo data proffil wedi'i amcangyfrif"
+
+#: ../data/gnome-power-manager.schemas.in.h:71
 msgid "Number of seconds to suppress policy after resume"
 msgstr "Y nifer o eiliadau i atal gweithredoedd polisi ar ôl ail-gychwyn"
 
-#: ../data/gnome-power-manager.schemas.in.h:60
+#: ../data/gnome-power-manager.schemas.in.h:72
 msgid "Percentage action is taken"
 msgstr "Y canran pan ddylid gweithredu"
 
-#: ../data/gnome-power-manager.schemas.in.h:61
+#: ../data/gnome-power-manager.schemas.in.h:73
 msgid "Percentage considered critical"
 msgstr "Y canran fydd yn argyfyngus"
 
-#: ../data/gnome-power-manager.schemas.in.h:62
+#: ../data/gnome-power-manager.schemas.in.h:74
 msgid "Percentage considered low"
 msgstr "Y canran fydd yn isel"
 
-#: ../data/gnome-power-manager.schemas.in.h:63
-msgid "Percentage considered very low"
-msgstr "Y canran fydd yn isel iawn"
-
-#: ../data/gnome-power-manager.schemas.in.h:64
+#: ../data/gnome-power-manager.schemas.in.h:75
 msgid "Power button action"
 msgstr "Gweithred botwm pŵer"
 
-#: ../data/gnome-power-manager.schemas.in.h:65
+#: ../data/gnome-power-manager.schemas.in.h:76
+msgid "Reduce the backlight brightness when on battery power"
+msgstr "Lleihau disgleirdeb y golau cefn pan ar bŵer batri"
+
+#: ../data/gnome-power-manager.schemas.in.h:77
 msgid "Sleep timeout computer when on AC"
 msgstr "Rhoi'r cyfrifiadur i gysgu ar ôl yr adeg hon ar bŵer AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:66
+#: ../data/gnome-power-manager.schemas.in.h:78
 msgid "Sleep timeout computer when on battery"
 msgstr "Rhoi'r cyfrifiadur i gysgu ar ôl yr adeg hon ar bŵer batri"
 
-#: ../data/gnome-power-manager.schemas.in.h:67
+#: ../data/gnome-power-manager.schemas.in.h:79
 msgid "Sleep timeout display when on AC"
 msgstr "Rhoi'r dangosydd i gysgu ar ôl yr adeg hon ar bŵer AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:68
+#: ../data/gnome-power-manager.schemas.in.h:80
 msgid "Sleep timeout display when on battery"
 msgstr "Rhoi'r dangosydd i gysgu ar ôl yr adeg hon ar bŵer batri"
 
-#: ../data/gnome-power-manager.schemas.in.h:69
+#: ../data/gnome-power-manager.schemas.in.h:81
 msgid "Suspend button action"
 msgstr "Gweithred y botwm seibio"
 
-#: ../data/gnome-power-manager.schemas.in.h:70
+#: ../data/gnome-power-manager.schemas.in.h:82
 msgid "Suspend enabled"
 msgstr "Seibio wedi'i alluogi"
 
-#: ../data/gnome-power-manager.schemas.in.h:71
+#: ../data/gnome-power-manager.schemas.in.h:83
 msgid ""
 "The DPMS method used to blank the screen when on AC power. Possible values "
 "are \"default\", \"standby\", \"suspend\" and \"off\"."
@@ -486,7 +591,7 @@ msgstr ""
 "Y dull DPMS ddefnyddir i flancio'r sgrin ar bŵer AC. Y gwerthoedd posib yw "
 "\"default\", \"standby\", \"suspend\" ac \"off\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:72
+#: ../data/gnome-power-manager.schemas.in.h:84
 msgid ""
 "The DPMS method used to blank the screen when on battery power. Possible "
 "values are \"default\", \"standby\", \"suspend\" and \"off\"."
@@ -494,7 +599,7 @@ msgstr ""
 "Y dull DPMS ddefnyddir i flancio'r sgrin ar bŵer batri. Y gwerthoedd posib "
 "yw \"default\", \"standby\", \"suspend\" ac \"off\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:73
+#: ../data/gnome-power-manager.schemas.in.h:85
 msgid ""
 "The action to take when the UPS is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
@@ -502,16 +607,15 @@ msgstr ""
 "Yr hyn i'w wneud pan fo'r UPS yn argyfyngus o isel. Y gwerthoedd posib yw "
 "\"hibernate\", \"suspend\", \"shutdown\" a \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:74
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:86
 msgid ""
 "The action to take when the UPS is low. Possible values are \"hibernate\", "
 "\"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
-"Yr hyn i'w wneud pan fo'r UPS yn argyfyngus o isel. Y gwerthoedd posib yw "
-"\"hibernate\", \"suspend\", \"shutdown\" a \"nothing\"."
+"Yr hyn i'w wneud pan fo'r UPS yn isel. Y gwerthoedd posib yw \"hibernate\", "
+"\"suspend\", \"shutdown\" a \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:75
+#: ../data/gnome-power-manager.schemas.in.h:87
 msgid ""
 "The action to take when the battery is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
@@ -519,7 +623,7 @@ msgstr ""
 "Yr hyn i'w wneud pan fo'r batri'n argyfyngus o isel. Y gwerthoedd posib yw "
 "\"hibernate\", \"suspend\", \"shutdown\" a \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:76
+#: ../data/gnome-power-manager.schemas.in.h:88
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on AC "
 "power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
@@ -528,7 +632,7 @@ msgstr ""
 "Yr hyn i'w wneud pan fo clawr y gliniadur ar gau a'r gliniadur ar bŵer AC. Y "
 "gwerthoedd posib yw \"suspend\", \"hibernate\", \"blank\" a \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:77
+#: ../data/gnome-power-manager.schemas.in.h:89
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on "
 "battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
@@ -538,7 +642,7 @@ msgstr ""
 "batri. Y gwerthoedd posib yw \"suspend\", \"hibernate\", \"blank\", and "
 "\"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:78
+#: ../data/gnome-power-manager.schemas.in.h:90
 msgid ""
 "The action to take when the system hibernate button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
@@ -547,7 +651,7 @@ msgstr ""
 "Yr hyn i'w wneud pan fo botwm cysgu'r system newydd ei wasgu. Y gwerthoedd "
 "posib yw \"suspend\", \"hibernate\", \"blank\", and \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:79
+#: ../data/gnome-power-manager.schemas.in.h:91
 msgid ""
 "The action to take when the system power button is pressed. Possible values "
 "are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
@@ -556,7 +660,7 @@ msgstr ""
 "Yr hyn i'w wneud pan fo botwm pŵer y system wedi'i wasgu. Gwerthoedd posib "
 "yw \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" a \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:80
+#: ../data/gnome-power-manager.schemas.in.h:92
 msgid ""
 "The action to take when the system suspend button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
@@ -565,7 +669,7 @@ msgstr ""
 "Yr hyn i'w wneud pan fo botwm seibio'r system wedi'i wasgu. Gwerthoedd posib "
 "yw \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" a \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:81
+#: ../data/gnome-power-manager.schemas.in.h:93
 msgid ""
 "The amount of time in seconds before the display goes to sleep when the "
 "computer is on AC power."
@@ -573,7 +677,7 @@ msgstr ""
 "Y nifer o eiliadau cyn i'r dangosydd ddiffodd, os yw'r cyfrifiadur ar bŵer "
 "AC."
 
-#: ../data/gnome-power-manager.schemas.in.h:82
+#: ../data/gnome-power-manager.schemas.in.h:94
 msgid ""
 "The amount of time in seconds the computer on AC power needs to be inactive "
 "before it goes to sleep."
@@ -581,136 +685,193 @@ msgstr ""
 "Y nifer o eiliadau sydd raid i'r cyfrifiadur fod yn segur, ar bŵer AC, cyn "
 "mynd i gysgu."
 
-#: ../data/gnome-power-manager.schemas.in.h:83
+#: ../data/gnome-power-manager.schemas.in.h:95
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before it goes to sleep."
 msgstr ""
-"Y nifer o eiliadau y mae angen i'r cyfrifiadur fod yn segur, ar bŵer AC, cyn "
+"Y nifer o eiliadau sydd raid i'r cyfrifiadur fod yn segur, ar bŵer AC, cyn "
 "mynd i gysgu."
 
-#: ../data/gnome-power-manager.schemas.in.h:84
+#: ../data/gnome-power-manager.schemas.in.h:96
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before the display goes to sleep."
 msgstr ""
-"Y nifer o eiliadau y mae angen i'r cyfrifiadur fod yn segur, ar bŵer batri, "
+"Y nifer o eiliadau sydd raid i'r cyfrifiadur fod yn segur, ar bŵer batri, "
 "cyn mynd i gysgu."
 
-#: ../data/gnome-power-manager.schemas.in.h:85
+#: ../data/gnome-power-manager.schemas.in.h:97
+msgid "The amount the light sensors should contribute to the brightness"
+msgstr "Faint y dylai'r synwyryddion golau gyfrannu at y disgleirdeb"
+
+#: ../data/gnome-power-manager.schemas.in.h:98
+msgid "The amount the light sensors should contribute to the brightness."
+msgstr "Faint y dylai'r synwyryddion golau gyfrannu at y disgleirdeb."
+
+#: ../data/gnome-power-manager.schemas.in.h:99
 msgid ""
 "The brightness of the display when on AC power. Possible values are between "
 "0 and 100."
 msgstr ""
 "Disgleirdeb y dangosydd ar bŵer AC. Mae'r gwerthoedd posib rhwng 0 a 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:86
+#: ../data/gnome-power-manager.schemas.in.h:100
 msgid ""
 "The brightness of the display when on battery power. Possible values are "
 "between 0 and 100."
 msgstr ""
 "Disgleirdeb y dangosydd ar bŵer batri. Mae'r gwerthoedd posib rhwng 0 a 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:87
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:101
 msgid ""
 "The brightness of the keyboard when on AC power. Possible values are between "
 "0 and 100."
 msgstr ""
-"Disgleirdeb y dangosydd ar bŵer AC. Mae'r gwerthoedd posib rhwng 0 a 100."
+"Disgleirdeb y bysellfwrdd ar bŵer AC. Mae'r gwerthoedd posib rhwng 0 a 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:88
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:102
 msgid ""
 "The brightness of the keyboard when on battery power. Possible values are "
 "between 0 and 100."
 msgstr ""
-"Disgleirdeb y dangosydd ar bŵer batri. Mae'r gwerthoedd posib rhwng 0 a 100."
+"Disgleirdeb y bysellfwrdd ar bŵer batri. Mae'r gwerthoedd posib rhwng 0 a "
+"100."
 
-#: ../data/gnome-power-manager.schemas.in.h:89
+#: ../data/gnome-power-manager.schemas.in.h:103
 msgid "The brightness of the screen when idle"
-msgstr "Disgleirdeb y sgrîn pan yn segur"
+msgstr "Disgleirdeb y sgrin pan yn segur"
 
-#: ../data/gnome-power-manager.schemas.in.h:90
-msgid "The cpufreq custom performance value to use when on AC power"
-msgstr ""
-
-#: ../data/gnome-power-manager.schemas.in.h:91
-msgid "The cpufreq custom performance value to use when on battery power"
-msgstr ""
-
-#: ../data/gnome-power-manager.schemas.in.h:92
+#: ../data/gnome-power-manager.schemas.in.h:104
 msgid ""
-"The cpufreq custom performance value to used to scale the processor when on "
-"AC power."
-msgstr ""
+"The calibration of the light sensors so that the screen is bright enough"
+msgstr "Calibrad y synwyryddion golau er mwyn i'r sgrin fod yn ddigon llachar"
 
-#: ../data/gnome-power-manager.schemas.in.h:93
+#: ../data/gnome-power-manager.schemas.in.h:105
 msgid ""
-"The cpufreq custom performance value to used to scale the processor when on "
-"battery power."
+"The calibration of the light sensors so that the screen is bright enough, in "
+"percent."
 msgstr ""
+"Calibrad y synwyryddion golau, fel canran, er mwyn i'r sgrin fod yn ddigon "
+"llachar"
 
-#: ../data/gnome-power-manager.schemas.in.h:94
+#: ../data/gnome-power-manager.schemas.in.h:106
+msgid "The cpufreq performance value to use when on AC power"
+msgstr "Y gwerth perfformiad cpufreq i'w ddefnyddio pan ar bŵer AC"
+
+#: ../data/gnome-power-manager.schemas.in.h:107
+msgid "The cpufreq performance value to use when on battery power"
+msgstr "Y gwerth perfformiad cpufreq i'w ddefnyddio pan ar bŵer batri"
+
+#: ../data/gnome-power-manager.schemas.in.h:108
+msgid ""
+"The cpufreq performance value used to scale the processor when on AC power."
+msgstr ""
+"Y gwerth perfformiad cpufreq i'w ddefnyddio i raddio'r prosesydd pan ar bŵer "
+"AC."
+
+#: ../data/gnome-power-manager.schemas.in.h:109
+msgid ""
+"The cpufreq performance value used to scale the processor when on battery "
+"power."
+msgstr ""
+"Y gwerth perfformiad cpufreq i'w ddefnyddio i raddio'r prosesydd pan ar bŵer "
+"batri."
+
+#: ../data/gnome-power-manager.schemas.in.h:110
 msgid "The cpufreq policy to use when on AC power"
-msgstr ""
+msgstr "Y polisi cpufreq i ddefnyddio pan ar bŵer AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:95
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:111
 msgid "The cpufreq policy to use when on battery power"
-msgstr "mae'r caead wedi'i gau ar bŵer batri"
+msgstr "Y polisi cpufreq i ddefnyddio pan ar bŵer batri"
 
-#: ../data/gnome-power-manager.schemas.in.h:96
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:112
 msgid ""
-"The cpufreq policy to used to scale the processor when on AC power. Possible "
+"The cpufreq policy used to scale the processor when on AC power. Possible "
 "values are ondemand, conservative, powersave, userspace, performance, "
 "nothing."
 msgstr ""
-"Y dull DPMS ddefnyddir i flancio'r sgrin ar bŵer AC. Y gwerthoedd posib yw "
-"\"default\", \"standby\", \"suspend\" ac \"off\"."
+"Y polisi cpufreq i'w ddefnyddio r i raddio'r prosesydd ar bŵer AC. Y "
+"gwerthoedd posib yw 'ondemand', 'powersave', 'conservative', 'powersave', "
+"'userspace', 'performance', 'nothing'."
 
-#: ../data/gnome-power-manager.schemas.in.h:97
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:113
 msgid ""
-"The cpufreq policy to used to scale the processor when on battery power. "
+"The cpufreq policy used to scale the processor when on battery power. "
 "Possible values are ondemand, conservative, powersave, userspace, "
 "performance, nothing."
 msgstr ""
-"Y dull DPMS ddefnyddir i flancio'r sgrin ar bŵer batri. Y gwerthoedd posib "
-"yw \"default\", \"standby\", \"suspend\" ac \"off\"."
+"Y polisi cpufreq i'w ddefnyddio r i raddio'r prosesydd ar bŵer batri. Y "
+"gwerthoedd posib yw 'ondemand', 'powersave', 'conservative', 'powersave', "
+"'userspace', 'performance', 'nothing'."
 
-#: ../data/gnome-power-manager.schemas.in.h:98
-msgid "The damping factor for the rate"
-msgstr "Ffactor wanychu ar gyfer y gyfradd"
+#: ../data/gnome-power-manager.schemas.in.h:114
+msgid "The default amount of time to dim the screen after idle"
+msgstr "Yr amser rhagosodedig cyn tywyllu'r sgrin ar ôl mynd yn segur"
 
-#: ../data/gnome-power-manager.schemas.in.h:99
+#: ../data/gnome-power-manager.schemas.in.h:115
+msgid "The default amount of time to dim the screen after idle."
+msgstr "Yr amser rhagosodedig cyn tywyllu'r sgrin ar ôl mynd yn segur."
+
+#: ../data/gnome-power-manager.schemas.in.h:116
+msgid "The default configuration version."
+msgstr "Y fersiwn ffurfweddu rhagosodedig."
+
+#: ../data/gnome-power-manager.schemas.in.h:117
 msgid "The default graph type to show in the statistics window"
-msgstr ""
+msgstr "Y math rhagosodedig o graff i'w ddangos yn y ffenest ystadegau"
 
-#: ../data/gnome-power-manager.schemas.in.h:100
+#: ../data/gnome-power-manager.schemas.in.h:118
 msgid "The default graph type to show in the statistics window."
-msgstr ""
+msgstr "Y math rhagosodedig o graff i'w ddangos yn y ffenest ystadegau."
 
-#: ../data/gnome-power-manager.schemas.in.h:101
+#: ../data/gnome-power-manager.schemas.in.h:119
+msgid "The device name for the v4l device used as a brightness sensor backup"
+msgstr "Enw'r ddyfais v4l ddefnyddir fel synhwyrydd disgleirdeb wrth gefn"
+
+#: ../data/gnome-power-manager.schemas.in.h:120
+msgid ""
+"The device name for the v4l device used as a brightness sensor backup. A "
+"value of 'default' uses the first discovered sensor, or devices can be "
+"specified, e.g. '/dev/video0'"
+msgstr ""
+"Enw'r ddyfais v4l ddefnyddir fel synhwyrydd disgleirdeb wrth gefn. Defnyddir "
+"gwerth 'default' ar gyfer y synhwyrydd cyntaf i'w ganfod, neu medrir penodi "
+"dyfeisiau, e.e. '/dev/video0'"
+
+#: ../data/gnome-power-manager.schemas.in.h:121
+msgid "The interval the ambient light sensors should be polled"
+msgstr "Pa mor aml y dylid holi synwyryddion golau'r amgylchedd am wybodaeth "
+
+#: ../data/gnome-power-manager.schemas.in.h:122
+msgid "The interval the ambient light sensors should be polled in seconds."
+msgstr ""
+"Pa mor aml, mewn eiliadau, y dylid holi synwyryddion golau'r amgylchedd am "
+"wybodaeth."
+
+#: ../data/gnome-power-manager.schemas.in.h:123
 msgid "The invalid timeout for power actions"
-msgstr ""
+msgstr "Y terfyn amser annilys ar gyfer gweithredoedd pŵer"
 
-#: ../data/gnome-power-manager.schemas.in.h:102
+#: ../data/gnome-power-manager.schemas.in.h:124
 msgid ""
 "The invalid timeout in ms for power actions. Set this longer if you get "
 "'battery critical' messages when you unplug."
 msgstr ""
+"Y terfyn amser annilys ar gyfer gweithredoedd pŵer. Rhowch werth hirach i "
+"hyn os ydych chi'n derbyn negeseuon 'batri'n gritigol' wrth ddatgysylltu'r "
+"pŵer."
 
-#: ../data/gnome-power-manager.schemas.in.h:103
+#: ../data/gnome-power-manager.schemas.in.h:125
 msgid "The maximum duration of time displayed on the x-axis of the graph."
 msgstr "Yr uchafswm hyd amser a ddangosir ar echelin x y graff."
 
-#: ../data/gnome-power-manager.schemas.in.h:104
+#: ../data/gnome-power-manager.schemas.in.h:126
 msgid "The maximum time displayed on the graph"
 msgstr "Yr amser uchaf ddangosir ar y graff"
 
-#: ../data/gnome-power-manager.schemas.in.h:105
+#: ../data/gnome-power-manager.schemas.in.h:127
 msgid ""
 "The percentage of the battery when it is considered critical. Only valid "
 "when use_time_for_policy is false."
@@ -718,7 +879,7 @@ msgstr ""
 "Canran y batri sy'n weddill pan fo'n gritigol. Defnyddir y gwerth hwn ddim "
 "ond os yw use_time_for_policy yn 'false'."
 
-#: ../data/gnome-power-manager.schemas.in.h:106
+#: ../data/gnome-power-manager.schemas.in.h:128
 msgid ""
 "The percentage of the battery when it is considered low. Only valid when "
 "use_time_for_policy is false."
@@ -726,15 +887,7 @@ msgstr ""
 "Canran y batri sy'n weddill pan fo'n isel. Defnyddir y gwerth hwn ddim ond "
 "os yw use_time_for_policy yn 'false'."
 
-#: ../data/gnome-power-manager.schemas.in.h:107
-msgid ""
-"The percentage of the battery when it is considered very low. Only valid "
-"when use_time_for_policy is false."
-msgstr ""
-"Canran y batri sy'n weddill pan fo'n isel iawn. Defnyddir y gwerth hwn ddim "
-"ond os yw use_time_for_policy yn 'false'."
-
-#: ../data/gnome-power-manager.schemas.in.h:108
+#: ../data/gnome-power-manager.schemas.in.h:129
 msgid ""
 "The percentage of the battery when the critical action is performed. Only "
 "valid when use_time_for_policy is false."
@@ -742,7 +895,7 @@ msgstr ""
 "Canran y batri sy'n weddill wrth wneud y weithred gritigol. Defnyddir y "
 "gwerth hwn ddim ond os yw use_time_for_policy yn 'false'."
 
-#: ../data/gnome-power-manager.schemas.in.h:109
+#: ../data/gnome-power-manager.schemas.in.h:130
 msgid ""
 "The time remaining in seconds of the battery when critical action is taken. "
 "Only valid when use_time_for_policy is true."
@@ -750,7 +903,7 @@ msgstr ""
 "Eiliadau o bŵer batri sy'n weddill wrth wneud y weithred gritigol. Defnyddir "
 "y gwerth hwn ddim ond os yw use_time_for_policy yn 'true'."
 
-#: ../data/gnome-power-manager.schemas.in.h:110
+#: ../data/gnome-power-manager.schemas.in.h:131
 msgid ""
 "The time remaining in seconds of the battery when it is considered critical. "
 "Only valid when use_time_for_policy is true."
@@ -758,7 +911,7 @@ msgstr ""
 "Eiliadau o bŵer batri sy'n weddill pan fo'n gritigol. Defnyddir y gwerth hwn "
 "ddim ond os yw use_time_for_policy yn 'false'."
 
-#: ../data/gnome-power-manager.schemas.in.h:111
+#: ../data/gnome-power-manager.schemas.in.h:132
 msgid ""
 "The time remaining in seconds of the battery when it is considered low. Only "
 "valid when use_time_for_policy is true."
@@ -766,31 +919,19 @@ msgstr ""
 "Eiliadau o bŵer batri sy'n weddill pan fo'n isel. Defnyddir y gwerth hwn "
 "ddim ond os yw use_time_for_policy yn 'false'."
 
-#: ../data/gnome-power-manager.schemas.in.h:112
-msgid ""
-"The time remaining in seconds of the battery when it is considered very low. "
-"Only valid when use_time_for_policy is true."
-msgstr ""
-"Eiliadau o bŵer batri sy'n weddill pan fo'n isel iawn. Defnyddir y gwerth "
-"hwn ddim ond os yw use_time_for_policy yn 'false'."
-
-#: ../data/gnome-power-manager.schemas.in.h:113
+#: ../data/gnome-power-manager.schemas.in.h:133
 msgid "The time remaining when action is taken"
 msgstr "Amser sy'n weddill wrth wneud y weithred"
 
-#: ../data/gnome-power-manager.schemas.in.h:114
+#: ../data/gnome-power-manager.schemas.in.h:134
 msgid "The time remaining when critical"
 msgstr "Amser sy'n weddill pan yn gritigol"
 
-#: ../data/gnome-power-manager.schemas.in.h:115
+#: ../data/gnome-power-manager.schemas.in.h:135
 msgid "The time remaining when low"
 msgstr "Amser sy'n weddill pan yn isel"
 
-#: ../data/gnome-power-manager.schemas.in.h:116
-msgid "The time remaining when very low"
-msgstr "Amser sy'n weddill pan yn isel iawn"
-
-#: ../data/gnome-power-manager.schemas.in.h:117
+#: ../data/gnome-power-manager.schemas.in.h:136
 msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
 "Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
@@ -798,19 +939,15 @@ msgstr ""
 "Sut y dylai'r cyfrifiadur gysgu pan fo'n anweithredol. Gwerthoedd posib yw "
 "\"hibernate\", \"suspend\" a \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:118
+#: ../data/gnome-power-manager.schemas.in.h:137
 msgid ""
-"The value of the damping factor used when calculating the exponentially "
-"weighted average of the rate. Increasing this value will increase the "
-"damping effect of the rate calculations, which makes the time remaining more "
-"accurate, but the graphs less responsive."
+"The version of the installed version of the schema. Do not edit this value, "
+"it is used so that configure changes between versions can be detected."
 msgstr ""
-"Gwerth y ffactor wanychu a ddefnyddir wrth gyfrif cyfartaledd y gyfradd â "
-"phwysau esbonyddol. Wrth godi'r gwerth hwn, cynyddir effaith ddampio'r "
-"cyfrifon cyfradd. Mae hyn yn gwella cywirdeb gwerth yr amser ar ôl, ond ni "
-"fydd y graffiau'n ymateb gystal."
+"Fersiwn y sgema sydd wedi'i osod. Peidiwch â newid ei werth: fe'i ddefnyddir "
+"fel bod newidiadau cyflunio rhwng fersiynau’n cael eu darganfod."
 
-#: ../data/gnome-power-manager.schemas.in.h:119
+#: ../data/gnome-power-manager.schemas.in.h:138
 msgid ""
 "This is the laptop panel screen brightness used when the session is idle. "
 "Only valid when use_time_for_policy is true."
@@ -818,104 +955,161 @@ msgstr ""
 "Dyma ddisgleirdeb panel y gliniadur pan fo'r sesiwn yn segur. Defnyddir ddim "
 "ond os yw use_time_for_policy yn 'true'."
 
-#: ../data/gnome-power-manager.schemas.in.h:120
+#: ../data/gnome-power-manager.schemas.in.h:139
 msgid "UPS critical low action"
-msgstr "Gweithred pan fo'r UPS yn argyfyngus o isel"
+msgstr "Gweithred pan fo'r UPS yn argyfyngus o isel ei bŵer"
 
-#: ../data/gnome-power-manager.schemas.in.h:121
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:140
 msgid "UPS low power action"
-msgstr "Gweithred pan fo'r UPS yn argyfyngus o isel"
+msgstr "Gweithred pan fo'r UPS yn isel ei bŵer"
 
-#: ../data/gnome-power-manager.schemas.in.h:122
+#: ../data/gnome-power-manager.schemas.in.h:141
 msgid "Use gnome-screensaver lock setting"
 msgstr "Defnyddio gosodiad cloi gnome-screensaver"
 
-#: ../data/gnome-power-manager.schemas.in.h:123
+#: ../data/gnome-power-manager.schemas.in.h:142
 msgid "When to show the notification icon"
 msgstr "Pryd dylid dangos yr eicon hysbysu"
 
-#: ../data/gnome-power-manager.schemas.in.h:124
+#: ../data/gnome-power-manager.schemas.in.h:143
 msgid "Whether NetworkManager should be connected and disconnected on sleep."
-msgstr ""
+msgstr "A ddylid cysylltu a datgysylltu NetworkManager cyn cysgu."
 
-#: ../data/gnome-power-manager.schemas.in.h:125
+#: ../data/gnome-power-manager.schemas.in.h:144
 msgid ""
 "Whether NetworkManager should disconnect before suspending or hibernating "
 "and connect on resume."
 msgstr ""
+"A ddylid cysylltu a datgysylltu NetworkManager cyn cysgu neu seibio, ac "
+"ailgysylltu wrth ailgychwyn."
 
-#: ../data/gnome-power-manager.schemas.in.h:126
+#: ../data/gnome-power-manager.schemas.in.h:145
 msgid ""
 "Whether or not niced processes should be considered on processor load "
 "calculation"
 msgstr ""
+"A ddylid ystyried prosesau sydd wedi'u neisio wrth gyfrif llwyth y prosesydd"
 
-#: ../data/gnome-power-manager.schemas.in.h:127
+#: ../data/gnome-power-manager.schemas.in.h:146
+msgid ""
+"Whether the GNOME keyring is locked before the computer enters hibernate. "
+"This means the keyring will have to be unlocked on resume."
+msgstr ""
+"A ddylid cloi cylch allweddi GNOME cyn i'r cyfrifiadur gysgu. Mae hyn yn "
+"golygu bydd rhaid datgloi'r cylch allweddi wrth ailgychwyn."
+
+#: ../data/gnome-power-manager.schemas.in.h:147
+msgid ""
+"Whether the GNOME keyring is locked before the computer enters suspend. This "
+"means the keyring will have to be unlocked on resume."
+msgstr ""
+"A ddylid cloi cylch allweddi GNOME cyn i'r cyfrifiadur seibio. Mae hyn yn "
+"golygu bydd rhaid datgloi'r cylch allweddi wrth ailgychwyn."
+
+#: ../data/gnome-power-manager.schemas.in.h:148
+msgid ""
+"Whether the screen is locked when the computer wakes up from a hibernate. "
+"Only used if lock_use_screensaver_settings is false."
+msgstr ""
+"A ddylid cloi'r sgrin pan fo'r cyfrifiadur yn dihuno wedi cysgu. Dim ond os "
+"yw lock_use_screensaver_settings yn ffug y defnyddir hyn."
+
+#: ../data/gnome-power-manager.schemas.in.h:149
+msgid ""
+"Whether the screen is locked when the computer wakes up from a suspend. Only "
+"used if lock_use_screensaver_settings is false."
+msgstr ""
+"A ddylid cloi'r sgrin pan fo'r cyfrifiadur yn deffro wedi seibio. Dim ond os "
+"yw lock_use_screensaver_settings yn ffug y defnyddir hyn."
+
+#: ../data/gnome-power-manager.schemas.in.h:150
+msgid ""
+"Whether the screen is locked when the screen is turned off. Only used if "
+"lock_use_screensaver_settings is false."
+msgstr ""
+"A yw'r sgrin wedi'i chloi pan gaiff ei diffodd. Defnyddir ddim ond os yw "
+"lock_use_screensaver_settings yn 'false'."
+
+#: ../data/gnome-power-manager.schemas.in.h:151
 msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr "A ddylid cysgu, seibio neu wneud dim pan yn anweithredol"
 
-#: ../data/gnome-power-manager.schemas.in.h:128
+#: ../data/gnome-power-manager.schemas.in.h:152
+msgid ""
+"Whether to use the screen lock setting of gnome-screensaver to decide if the "
+"screen is locked after a hibernate, suspend or blank screen."
+msgstr ""
+"A ddylid defnyddio gosodiad cloi sgrin gnome-screensaver i benderfynu a yw'r "
+"sgrin wedi'i chloi gan ddilyn gweithred cwsg, seibio neu flancio sgrin."
+
+#: ../data/gnome-power-manager.schemas.in.h:153
 msgid "Whether to use time-based notifications"
 msgstr "A ddylid defnyddio hysbysiadau'n seiliedig ar amser"
 
-#: ../data/gnome-power-manager.schemas.in.h:129
+#: ../data/gnome-power-manager.schemas.in.h:154
+msgid "Whether we should show the axis labels in the statistics window"
+msgstr "A ddylid dangos y labeli echel yn y ffenest ystadegau"
+
+#: ../data/gnome-power-manager.schemas.in.h:155
+msgid "Whether we should show the axis labels in the statistics window."
+msgstr "A ddylid dangos y labeli echel yn y ffenest ystadegau."
+
+#: ../data/gnome-power-manager.schemas.in.h:156
 msgid "Whether we should show the events in the statistics window"
-msgstr ""
+msgstr "A ddylid dangos y digwyddiadau yn y ffenest ystadegau"
 
-#: ../data/gnome-power-manager.schemas.in.h:130
+#: ../data/gnome-power-manager.schemas.in.h:157
 msgid "Whether we should show the events in the statistics window."
-msgstr ""
+msgstr "A ddylid dangos y digwyddiadau yn y ffenest ystadegau."
 
-#: ../data/gnome-power-manager.schemas.in.h:131
-msgid "Whether we should show the legend in the statistics window"
-msgstr ""
+#: ../data/gnome-power-manager.schemas.in.h:158
+msgid "Whether we should smooth the data in the graph"
+msgstr "A ddylid llyfnhau'r data yn y graff"
 
-#: ../data/gnome-power-manager.schemas.in.h:132
-msgid "Whether we should show the legend in the statistics window."
-msgstr ""
+#: ../data/gnome-power-manager.schemas.in.h:159
+msgid "Whether we should smooth the data in the graph."
+msgstr "A ddylid llyfnhau'r data yn y graff."
 
-#: ../data/gnome-power-preferences.desktop.in.h:1
+#: ../data/gnome-power-preferences.desktop.in.in.h:1
 msgid "Configure power management"
 msgstr "Cyflunio rheoli pŵer"
 
-#: ../data/gnome-power-preferences.desktop.in.h:2
+#: ../data/gnome-power-preferences.desktop.in.in.h:2
 msgid "Power Management"
 msgstr "Rheoli Pŵer"
 
-#: ../data/gnome-power-statistics.desktop.in.h:1
-#, fuzzy
+#: ../data/gnome-power-statistics.desktop.in.in.h:1
 msgid "Observe power management"
-msgstr "Cyflunio rheoli pŵer"
+msgstr "Arsylwi'r rheoli pŵer"
 
-#: ../data/gnome-power-statistics.desktop.in.h:2 ../src/gpm-statistics.c:139
-#, fuzzy
+#: ../data/gnome-power-statistics.desktop.in.in.h:2
 msgid "Power Statistics"
-msgstr "Hanes Pŵer"
+msgstr "Ystadegau Pŵer"
 
 #: ../data/gpm-feedback-widget.glade.h:1
 msgid "Brightness"
 msgstr "Disgleirdeb"
 
 #: ../data/gpm-graph.glade.h:1
-msgid "Add legend"
-msgstr ""
+msgid "Add related _events"
+msgstr "Ychwanegu digwyddiadau _cysylltiedig"
 
 #: ../data/gpm-graph.glade.h:2
-msgid "Add related events"
-msgstr ""
+msgid "Cell Voltage"
+msgstr "Foltedd Cell"
 
 #: ../data/gpm-graph.glade.h:3
-msgid "Device:"
-msgstr ""
+msgid "Graph type:"
+msgstr "Math y graff:"
 
 #: ../data/gpm-graph.glade.h:4
-msgid "Graph type:"
-msgstr ""
-
-#: ../data/gpm-graph.glade.h:5 ../src/gpm-statistics-core.c:55
 msgid "Power History"
 msgstr "Hanes Pŵer"
+
+#: ../data/gpm-graph.glade.h:5 ../src/gpm-info.c:296 ../src/gpm-info.c:305
+#: ../src/gpm-info.c:314 ../src/gpm-info.c:323
+msgid "Time since startup"
+msgstr "Amser ers ymgychwyn"
 
 #: ../data/gpm-inhibit-test.glade.h:1
 msgid "Application:"
@@ -926,161 +1120,169 @@ msgid "Burning DVD, titled \"My Photos\""
 msgstr "Llosgi DVD, o'r enw \"Fy Lluniau i\""
 
 #: ../data/gpm-inhibit-test.glade.h:3
-msgid "GNOME Acme Foo"
-msgstr "Acme Foo GNOME"
-
-#: ../data/gpm-inhibit-test.glade.h:4
 msgid "Inhibit"
 msgstr "Atal"
 
-#: ../data/gpm-inhibit-test.glade.h:5
+#: ../data/gpm-inhibit-test.glade.h:4
 msgid "Inhibit Tester"
 msgstr "Prawf Atal"
 
-#: ../data/gpm-inhibit-test.glade.h:6
+#: ../data/gpm-inhibit-test.glade.h:5
 msgid "Reason:"
 msgstr "Rheswm:"
 
-#: ../data/gpm-inhibit-test.glade.h:7
+#: ../data/gpm-inhibit-test.glade.h:6
 msgid "UnInhibit"
 msgstr "Dad-atal"
 
+#: ../data/gpm-inhibit-test.glade.h:7
+msgid "Vendor Acme Foo"
+msgstr "Gwerthwr Acme Foo"
+
 #: ../data/gpm-prefs.glade.h:1
-#, fuzzy
-msgid "<b>Buttons</b>"
+msgid "<b>Actions</b>"
 msgstr "<b>Gweithredoedd</b>"
 
 #: ../data/gpm-prefs.glade.h:2
-#, fuzzy
-msgid "<b>Extras</b>"
-msgstr "<b>Cyffredinol</b>"
+msgid "<b>Display</b>"
+msgstr "<b>Dangosydd</b>"
 
 #: ../data/gpm-prefs.glade.h:3
+msgid "<b>Extras</b>"
+msgstr "<b>Ychwanegiadau</b>"
+
+#: ../data/gpm-prefs.glade.h:4
 msgid "<b>Notification Area</b>"
 msgstr "<b>Ardal Hysbysu</b>"
 
-#: ../data/gpm-prefs.glade.h:4
-#, fuzzy
-msgid "Always sleep when the _lid is closed"
-msgstr "Cysgu bob _amser mae'r caead ar gau"
-
 #: ../data/gpm-prefs.glade.h:5
-msgid "Computer _speed policy:"
-msgstr ""
+msgid "Always sleep when the lid is _closed"
+msgstr "Cysgu bob amser mae'r _caead ar gau"
 
 #: ../data/gpm-prefs.glade.h:6
-msgid "Enable UPS discharge _alarm"
-msgstr ""
+msgid "Computer sp_eed policy:"
+msgstr "Polisi _cyflymder y cyfrifiadur:"
 
 #: ../data/gpm-prefs.glade.h:7
+msgid "Di_m display when idle"
+msgstr "_Tywyllu'r dangosydd pan yn segur"
+
+#: ../data/gpm-prefs.glade.h:8
+msgid "Enable UPS discharge _alarm"
+msgstr "Galluogi'r l_arwm pan fo'r UPS yn dadwefru"
+
+#: ../data/gpm-prefs.glade.h:9
 msgid "General"
 msgstr "Cyffredinol"
 
-#: ../data/gpm-prefs.glade.h:8
-msgid "Make _default"
-msgstr ""
-
-#: ../data/gpm-prefs.glade.h:9
-#, fuzzy
-msgid "On AC Power"
-msgstr "Yn defnyddio AC"
-
 #: ../data/gpm-prefs.glade.h:10
-#, fuzzy
-msgid "On Battery Power"
-msgstr "Ar bŵer batri"
+msgid "Make _default"
+msgstr "Gwneud yn rhagoso_diad"
 
 #: ../data/gpm-prefs.glade.h:11
-#, fuzzy
-msgid "On UPS Power"
-msgstr "Pan fo'r pŵer UPS yn _argyfyngus:"
+msgid "On AC Power"
+msgstr "Ar Bŵer AC"
 
 #: ../data/gpm-prefs.glade.h:12
-#, fuzzy
-msgid "Only display an icon when a _battery is present"
-msgstr "Dangos hwn dim ond pan fo'r batri'n _bresennol"
+msgid "On Battery Power"
+msgstr "Ar Bŵer Batri"
 
 #: ../data/gpm-prefs.glade.h:13
-#, fuzzy
-msgid "Only display an icon when charging or _discharging"
-msgstr "Dangos hwn dim ond wrth _wefru neu ddadwefru"
+msgid "On UPS Power"
+msgstr "Ar Bŵer UPS"
 
 #: ../data/gpm-prefs.glade.h:14
+msgid "Only display an icon when a battery is p_resent"
+msgstr "Dangos eicon dim ond pan fo'r batri'n b_resennol"
+
+#: ../data/gpm-prefs.glade.h:15
+msgid "Only display an icon when charging or _discharging"
+msgstr "Dangos eicon dim ond wrth _wefru neu ddadwefru"
+
+#: ../data/gpm-prefs.glade.h:16
 msgid "Power Management Preferences"
 msgstr "Hoffterau Rheoli Pŵer"
 
-#: ../data/gpm-prefs.glade.h:15
-#, fuzzy
-msgid "Put _computer to sleep when inactive for:"
-msgstr "Rhoi'r cyfrifiadur i _gysgu os yw'n anweithredol ers:"
-
-#: ../data/gpm-prefs.glade.h:16
-#, fuzzy
-msgid "Put _display to sleep when inactive for:"
-msgstr "Rhoi'r _dangosydd i gysgu os yw'r cyfrifiadur yn anweithredol ers:"
-
 #: ../data/gpm-prefs.glade.h:17
-msgid "Set display _brightness to:"
-msgstr "Gosod _disgleirdeb y dangosydd:"
+msgid "Put _display to sleep when inactive for:"
+msgstr "Rhoi'r _dangosydd i gysgu os yw'n anweithredol ers:"
 
 #: ../data/gpm-prefs.glade.h:18
-msgid "Use _ambient light to adjust LCD brightness"
-msgstr ""
+msgid "Put computer to _sleep when inactive for:"
+msgstr "Rhoi'r cyfrifiadur i g_ysgu os yw'n anweithredol ers:"
 
 #: ../data/gpm-prefs.glade.h:19
-msgid "Use _sound to notify in event of an error"
-msgstr ""
+msgid "Set display _brightness to:"
+msgstr "Gosod disgleirde_b y dangosydd:"
 
 #: ../data/gpm-prefs.glade.h:20
-#, fuzzy
-msgid "When UPS power is _critically low:"
-msgstr "Pan fo'r pŵer UPS yn _argyfyngus:"
+msgid "Turn on keyboard light when light level is low"
+msgstr "Cynnau golau'r bysellfwrdd pan fo lefel y golau'n isel"
 
 #: ../data/gpm-prefs.glade.h:21
-#, fuzzy
-msgid "When UPS power is _low:"
-msgstr "Pan fo'r pŵer UPS yn _argyfyngus:"
+msgid "Use _ambient light to adjust LCD brightness"
+msgstr "Addasu disgleirdeb yr LCD yn ôl golau'r _amgylchedd"
 
 #: ../data/gpm-prefs.glade.h:22
-#, fuzzy
-msgid "When battery _power is critically low:"
-msgstr "Pan fo pŵer y batri'n _argyfyngus o isel:"
+msgid "Use _sound to notify in event of an error"
+msgstr "Defnyddio _sain i hysbysu os oes gwall"
 
 #: ../data/gpm-prefs.glade.h:23
-#, fuzzy
-msgid "When laptop _lid is closed:"
-msgstr "Pan fo _clawr y gliniadur ar gau:"
+msgid "When UPS power is _critically low:"
+msgstr "Pan fo'r pŵer UPS yn a_rgyfyngus o isel:"
 
 #: ../data/gpm-prefs.glade.h:24
-#, fuzzy
-msgid "When the _power button is pressed:"
-msgstr "Wrth _wasgu'r botwm pŵer:"
+msgid "When UPS power is l_ow:"
+msgstr "Pan f_o'r pŵer UPS yn isel:"
 
 #: ../data/gpm-prefs.glade.h:25
-#, fuzzy
-msgid "When the _suspend button is pressed:"
-msgstr "Wrth _wasgu'r botwm pŵer:"
+msgid "When battery po_wer is critically low:"
+msgstr "Pan fo pŵer y batri'n argyfyngus o isel:"
 
 #: ../data/gpm-prefs.glade.h:26
-#, fuzzy
-msgid "_Always display an icon"
-msgstr "_Dangos yr eicon o hyd"
+msgid "When laptop lid is cl_osed:"
+msgstr "Pan f_o clawr y gliniadur ar gau:"
 
 #: ../data/gpm-prefs.glade.h:27
-#, fuzzy
-msgid "_Never display an icon"
-msgstr "_Byth â dangos yr eicon"
+msgid "When the _suspend button is pressed:"
+msgstr "Wrth wasgu'r botwm _seibio:"
 
 #: ../data/gpm-prefs.glade.h:28
-#, fuzzy
-msgid "_Only display an icon when battery power is critically low"
-msgstr "_Dangos hwn ddim ond os yw cyflwr y batri'n argyfyngus"
+msgid "When the power _button is pressed:"
+msgstr "Wrth wasgu'r _botwm pŵer:"
 
-#: ../src/gpm-common.c:93
+#: ../data/gpm-prefs.glade.h:29
+msgid "_Always display an icon"
+msgstr "D_angos eicon bob amser"
+
+#: ../data/gpm-prefs.glade.h:30
+msgid "_Never display an icon"
+msgstr "Byth â da_ngos eicon"
+
+#: ../data/gpm-prefs.glade.h:31
+msgid "_Only display an icon when battery power is critically low"
+msgstr "Dangos eicon ddim ond _os yw cyflwr y batri'n argyfyngus"
+
+#: ../data/gpm-prefs.glade.h:32
+msgid "_Reduce backlight brightness"
+msgstr "_Lleihau disgleirdeb y golau cefn"
+
+#: ../src/gpm-control.c:279
+#, c-format
+msgid "The message was not sent due to DBUS security rules"
+msgstr "Ni anfonwyd y neges oherwydd rheolau diogelwch DBUS"
+
+#: ../src/gpm-control.c:282
+#, c-format
+msgid "General failure: %s"
+msgstr "Methiant cyffredinol: %s"
+
+#: ../src/gpm-common.c:242
+#, c-format
 msgid "Unknown time"
 msgstr "Amser anhysbys"
 
-#: ../src/gpm-common.c:98
+#: ../src/gpm-common.c:247
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
@@ -1089,7 +1291,7 @@ msgstr[1] "%i funud"
 msgstr[2] "%i munud"
 msgstr[3] "%i munud"
 
-#: ../src/gpm-common.c:109
+#: ../src/gpm-common.c:258
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -1100,12 +1302,12 @@ msgstr[3] "%i awr"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:115
+#: ../src/gpm-common.c:264
 #, c-format
-msgid "%i %s, %i %s"
-msgstr "%i %s, %i %s"
+msgid "%i %s %i %s"
+msgstr "%i %s %i %s"
 
-#: ../src/gpm-common.c:116
+#: ../src/gpm-common.c:265
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "awr"
@@ -1113,7 +1315,7 @@ msgstr[1] "awr"
 msgstr[2] "awr"
 msgstr[3] "awr"
 
-#: ../src/gpm-common.c:117
+#: ../src/gpm-common.c:266
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "funud"
@@ -1121,300 +1323,657 @@ msgstr[1] "funud"
 msgstr[2] "munud"
 msgstr[3] "munud"
 
-#: ../src/gpm-common.h:31
+#: ../src/gpm-common.h:44
 msgid "Power Manager for the GNOME desktop"
 msgstr "Rheolwr Pŵer Penbwrdd GNOME"
 
-#: ../src/gpm-graph-widget.c:73 ../src/gpm-power.c:727
-#, fuzzy
-msgid "Charged"
-msgstr "Batri wedi Gwefru"
+#. only enable this if discharging on UPS
+#: ../src/gpm-engine.c:283
+msgid "Computer is running on backup power\n"
+msgstr "Mae'r cyfrifiadur ar bŵer wrth gefn\n"
 
-#: ../src/gpm-graph-widget.c:74 ../src/gpm-power.c:730
-#, fuzzy
-msgid "Charging"
-msgstr "gwefru"
+#: ../src/gpm-engine.c:286
+msgid "Computer is running on AC power\n"
+msgstr "Mae'r cyfrifiadur ar bŵer AC\n"
 
-#: ../src/gpm-graph-widget.c:75 ../src/gpm-power.c:733
-#, fuzzy
-msgid "Discharging"
-msgstr "dadwefru"
+#: ../src/gpm-engine.c:289
+msgid "Computer is running on battery power\n"
+msgstr "Mae'r cyfrifiadur ar bŵer batri\n"
+
+#: ../src/gpm-engine.c:307
+msgid "Battery discharge time is currently unknown\n"
+msgstr "Amser dadwefru'r batri yn anhysbys ar hyn o bryd\n"
+
+#: ../src/gpm-engine.c:309
+msgid "Battery charge time is currently unknown\n"
+msgstr "Amser gwefru'r batri yn anhysbys ar hyn o bryd\n"
+
+#: ../src/gpm-engine.c:313
+msgid "Battery discharge time is estimated\n"
+msgstr "Amser dadwefru'r batri wedi'i amcangyfrif\n"
+
+#: ../src/gpm-engine.c:315
+msgid "Battery charge time is estimated\n"
+msgstr "Amser gwefru'r batri wedi'i amcangyfrif\n"
+
+#. show a AC icon
+#: ../src/gpm-engine.c:610
+msgid "Unable to get data..."
+msgstr "Methu cael data..."
 
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:379
-#, fuzzy, c-format
+#: ../src/gpm-graph-widget.c:485
+#, c-format
 msgid "%ih"
 msgstr "%i awr"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:382
+#: ../src/gpm-graph-widget.c:488
 #, c-format
 msgid "%ih%02i"
-msgstr ""
+msgstr "%ih:%02i"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:387
+#: ../src/gpm-graph-widget.c:493
 #, c-format
 msgid "%2im"
-msgstr ""
+msgstr "%2im"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:390
+#: ../src/gpm-graph-widget.c:496
 #, c-format
 msgid "%2im%02i"
-msgstr ""
+msgstr "%2im:%02i"
 
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:394
+#: ../src/gpm-graph-widget.c:500
 #, c-format
 msgid "%2is"
-msgstr ""
+msgstr "%2ieil"
 
 #. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:398
+#: ../src/gpm-graph-widget.c:504
 #, c-format
 msgid "%i%%"
-msgstr ""
+msgstr "%i%%"
 
-#. Translators: This is %i Watts
-#: ../src/gpm-graph-widget.c:401
+#. Translators: This is %.1f Watts
+#: ../src/gpm-graph-widget.c:507
 #, c-format
-msgid "%iW"
-msgstr ""
+msgid "%.1fW"
+msgstr "%.1fW"
 
-#. Translators: This is %i Volts
-#: ../src/gpm-graph-widget.c:404
+#. Translators: This is %.1f Volts
+#: ../src/gpm-graph-widget.c:510
 #, c-format
-msgid "%iV"
-msgstr ""
+msgid "%.1fV"
+msgstr "%.1fV"
 
-#: ../src/gpm-info.c:388
+#: ../src/gpm-info.c:122
+#, c-format
+msgid "Reason: %s"
+msgstr "Rheswm: %s"
+
+#: ../src/gpm-info.c:202
+msgid "On AC"
+msgstr "Yn defnyddio AC"
+
+#: ../src/gpm-info.c:206
+msgid "On battery"
+msgstr "Yn defnyddio batri"
+
+#: ../src/gpm-info.c:210
+msgid "Session powersave"
+msgstr "Modd arbed pŵer sesiwn"
+
+#: ../src/gpm-info.c:214
+msgid "Session idle"
+msgstr "Sesiwn segur"
+
+#: ../src/gpm-info.c:218
+msgid "Session active"
+msgstr "Sesiwn weithredol"
+
+#. Translators: translate ONLY the string part after the |
+#: ../src/gpm-info.c:223
+msgid "label shown on graph|Suspend"
+msgstr "Seibio"
+
+#. Translators: translate ONLY the string part after the |
+#: ../src/gpm-info.c:228
+msgid "label shown on graph|Resume"
+msgstr "Ailgychwyn"
+
+#. Translators: translate ONLY the string part after the |
+#: ../src/gpm-info.c:233
+msgid "label shown on graph|Hibernate"
+msgstr "Cysgu"
+
+#: ../src/gpm-info.c:237
+msgid "Lid closed"
+msgstr "Caead ar gau"
+
+#: ../src/gpm-info.c:241
+msgid "Lid opened"
+msgstr "Caead ar agor"
+
+#: ../src/gpm-info.c:245
+msgid "Notification"
+msgstr "Hysbysu"
+
+#: ../src/gpm-info.c:250
+msgid "DPMS On"
+msgstr "DPMS ymlaen"
+
+#: ../src/gpm-info.c:254
+msgid "DPMS Standby"
+msgstr "DPMS Wrth Gefn"
+
+#: ../src/gpm-info.c:258
+msgid "DPMS Suspend"
+msgstr "Seibio DPMS"
+
+#: ../src/gpm-info.c:262
+msgid "DPMS Off"
+msgstr "DPMS i Ffwrdd"
+
+#: ../src/gpm-info.c:297 ../src/gpm-info.c:298
+msgid "Power"
+msgstr "Pŵer"
+
+#: ../src/gpm-info.c:306
+msgid "Estimated time"
+msgstr "Amcan Amser"
+
+#: ../src/gpm-info.c:307
+msgid "Time"
+msgstr "Amser"
+
+#: ../src/gpm-info.c:315 ../src/gpm-info.c:332 ../src/gpm-info.c:349
+#: ../src/gpm-info.c:367 ../src/gpm-info.c:384
+msgid "Battery percentage"
+msgstr "Canran batri"
+
+#: ../src/gpm-info.c:316
+msgid "Percentage"
+msgstr "Canran"
+
+#: ../src/gpm-info.c:324
+msgid "Battery Voltage"
+msgstr "Foltedd Batri"
+
+#: ../src/gpm-info.c:325
+msgid "Voltage"
+msgstr "Foltedd"
+
+#: ../src/gpm-info.c:333 ../src/gpm-info.c:368
+msgid "Accuracy of reading"
+msgstr "Cywirdeb darlleniad"
+
+#: ../src/gpm-info.c:334 ../src/gpm-info.c:351 ../src/gpm-info.c:369
+#: ../src/gpm-info.c:386
+msgid "Valid data"
+msgstr "Data dilys"
+
+#: ../src/gpm-info.c:335 ../src/gpm-info.c:352 ../src/gpm-info.c:370
+#: ../src/gpm-info.c:387
+msgid "No data"
+msgstr "Dim data"
+
+#: ../src/gpm-info.c:339 ../src/gpm-info.c:357 ../src/gpm-info.c:374
+#: ../src/gpm-info.c:392
+msgid "Start point"
+msgstr "Man dechrau"
+
+#: ../src/gpm-info.c:343 ../src/gpm-info.c:361 ../src/gpm-info.c:378
+#: ../src/gpm-info.c:396
+msgid "Stop point"
+msgstr "Man gorffen"
+
+#: ../src/gpm-info.c:350 ../src/gpm-info.c:385
+msgid "Average time elapsed"
+msgstr "Amser sydd wedi mynd heibio, ar gyfartaledd"
+
+#: ../src/gpm-info.c:353 ../src/gpm-info.c:388
+msgid "Extrapolated data"
+msgstr "Data wedi'i allosod"
+
+#: ../src/gpm-info.c:680
 msgid "AC adapter inserted"
 msgstr "Addasydd AC newydd ei blygio"
 
-#: ../src/gpm-info.c:391
+#: ../src/gpm-info.c:683
 msgid "AC adapter removed"
 msgstr "Addasydd AC newydd ei dynnu"
 
-#: ../src/gpm-info.c:412
+#: ../src/gpm-info.c:703
 msgid "The laptop lid has been closed"
-msgstr "caewyd clawr y gliniadur"
+msgstr "Caewyd clawr y gliniadur"
 
-#: ../src/gpm-info.c:418
+#: ../src/gpm-info.c:709
 msgid "The laptop lid has been re-opened"
-msgstr "ail-agorwyd clawr y gliniadur"
+msgstr "Ail-agorwyd clawr y gliniadur"
 
-#: ../src/gpm-info.c:440
+#: ../src/gpm-info.c:731
 msgid "idle mode ended"
 msgstr "modd segur ar ben"
 
-#: ../src/gpm-info.c:443
+#: ../src/gpm-info.c:733
 msgid "idle mode started"
 msgstr "modd segur wedi cychwyn"
 
-#: ../src/gpm-info.c:462
+#: ../src/gpm-info.c:735
+msgid "powersave mode started"
+msgstr "modd arbed pŵer wedi cychwyn"
+
+#: ../src/gpm-info.c:754
 msgid "dpms on"
-msgstr ""
+msgstr "dpms ymlaen"
 
-#: ../src/gpm-info.c:464
+#: ../src/gpm-info.c:756
 msgid "dpms standby"
-msgstr ""
+msgstr "dpms wrth gefn"
 
-#: ../src/gpm-info.c:466
-#, fuzzy
+#: ../src/gpm-info.c:758
 msgid "dpms suspend"
-msgstr "seibio"
+msgstr "seibio dpms"
 
-#: ../src/gpm-info.c:468
+#: ../src/gpm-info.c:760
 msgid "dpms off"
-msgstr ""
+msgstr "dpms wedi'i ddiffodd"
 
-#: ../src/gpm-inhibit.c:300
-#, fuzzy, c-format
-msgid "has stopped the %s from taking place : "
-msgstr "Mae <b>%s</b> wedi atal %s rhag digwydd  : <i>%s</i>."
-
-#: ../src/gpm-inhibit.c:306
-#, c-format
-msgid "Multiple applications have stopped the %s from taking place."
-msgstr "Mae sawl rhaglen wedi atal %s rhag digwydd."
-
-#: ../src/gpm-inhibit-test.c:188 ../src/gpm-prefs.c:119
-msgid "GNOME Power Preferences"
-msgstr "Hoffterau Pŵer GNOME"
-
-#: ../src/gpm-inhibit-test.c:194
-msgid "Power Inhibit Test"
-msgstr "Prawf Atal Pŵer"
-
-#: ../src/gpm-main.c:151
-msgid "Do not daemonize"
-msgstr "Peidio â gwneud yn ellyll"
-
-#: ../src/gpm-main.c:153 ../src/gpm-prefs.c:115 ../src/gpm-statistics.c:113
-msgid "Show extra debugging information"
-msgstr "Dangos gwybodaeth datnamu ychwanegol"
-
-#: ../src/gpm-main.c:155
-msgid "Exit after a small delay (for debugging)"
-msgstr "Gadael wedi saib byr (er mwyn datnamu)"
-
-#: ../src/gpm-main.c:157
-msgid "Debug specific files, e.g. power"
-msgstr ""
-
-#: ../src/gpm-main.c:161
-msgid "GNOME Power Manager"
-msgstr "Rheolwr Pŵer GNOME"
-
-#: ../src/gpm-manager.c:213
-#, c-format
-msgid "Request to %s"
-msgstr "Cais at %s"
-
-#. I want this translated
-#: ../src/gpm-manager.c:222
-#, fuzzy
-msgid "Perform action anyway"
-msgstr "Gwybodaeth Pŵer"
-
-#: ../src/gpm-manager.c:447
-#, c-format
-msgid "%s because %s"
-msgstr "%s oherwydd %s"
-
-#: ../src/gpm-manager.c:483
-msgid "Doing nothing"
-msgstr "Yn gwneud dim"
-
-#: ../src/gpm-manager.c:487 ../src/gpm-manager.c:906 ../src/gpm-manager.c:988
-#: ../src/gpm-manager.c:1787
-msgid "Suspending computer"
-msgstr "Wrthi'n seibio'r cyfrifiadur"
-
-#: ../src/gpm-manager.c:492 ../src/gpm-manager.c:920 ../src/gpm-manager.c:1000
-#: ../src/gpm-manager.c:1762
-msgid "Hibernating computer"
-msgstr "Wrthi'n rhoi'r cyfrifiadur i gysgu"
-
-#: ../src/gpm-manager.c:500 ../src/gpm-manager.c:935
-msgid "Shutting down computer"
-msgstr "Wrthi'n cau'r cyfrifiadur"
-
-#: ../src/gpm-manager.c:505
-msgid "GNOME interactive logout"
-msgstr "Allgofnodi rhyngweithiol GNOME"
-
-#: ../src/gpm-manager.c:745 ../src/gpm-manager.c:845
+#: ../src/gpm-info.c:777
 msgid "Resuming computer"
 msgstr "Wrthi'n ail-gychwyn y cyfrifiadur"
 
-#: ../src/gpm-manager.c:759
+#: ../src/gpm-info.c:793
 msgid "Hibernate Problem"
 msgstr "Problem wrth roi'r cyfrifiadur i gysgu"
 
-#: ../src/gpm-manager.c:760
-#, fuzzy, c-format
-msgid "HAL failed to %s. Check the help file for common problems."
-msgstr ""
-"Methodd HAL wneud hyn: %s. Chwiliwch y <a href=\"%s\">cwestiynau cyffredin</"
-"a> am ateb posibl."
-
-#: ../src/gpm-manager.c:762
-msgid "hibernate"
-msgstr "cysgu"
-
-#: ../src/gpm-manager.c:860
-#, fuzzy, c-format
-msgid ""
-"Your computer failed to %s.\n"
-"Check the help file for common problems."
-msgstr ""
-"Methodd eich cyfrifiadur â gwneud hyn: %s.\n"
-" Chwiliwch y <a href=\"%s\">cwestiynau cyffredin</a> am ateb posibl."
-
-#: ../src/gpm-manager.c:862
-msgid "suspend"
-msgstr "seibio"
-
-#: ../src/gpm-manager.c:863
+#: ../src/gpm-info.c:795
 msgid "Suspend Problem"
 msgstr "Problem wrth seibio"
 
-#: ../src/gpm-manager.c:907
-msgid "the DBUS method Suspend() was invoked"
-msgstr "Cafodd y dull DBUS Suspend() ei alw"
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:373
+#, c-format
+msgid "%s has stopped the suspend from taking place: %s."
+msgstr "Mae %s wedi atal y seibio rhag digwydd: %s."
 
-#: ../src/gpm-manager.c:921
-msgid "the DBUS method Hibernate() was invoked"
-msgstr "Cafodd y dull DBUS Hibernate() ei alw"
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:378
+#, c-format
+msgid "%s has stopped the hibernate from taking place: %s."
+msgstr "Mae %s wedi atal y cysgu rhag digwydd: %s."
 
-#: ../src/gpm-manager.c:936
-msgid "the DBUS method Shutdown() was invoked"
-msgstr "Cafodd y dull DBUS Shutdown() ei alw"
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:383
+#, c-format
+msgid "%s has stopped the policy action from taking place: %s."
+msgstr "Mae %s wedi atal y gweithred bolisi rhag digwydd: %s."
 
-#: ../src/gpm-manager.c:950
-msgid "Rebooting computer"
-msgstr "Wrthi'n ailgychwyn y cyfrifiadur"
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:388
+#, c-format
+msgid "%s has stopped the reboot from taking place: %s."
+msgstr "Mae %s wedi atal yr ailgychwyn rhag digwydd: %s."
 
-#: ../src/gpm-manager.c:951
-msgid "the DBUS method Reboot() was invoked"
-msgstr "Cafodd y dull DBUS Reboot() ei alw"
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:393
+#, c-format
+msgid "%s has stopped the shutdown from taking place: %s."
+msgstr "Mae %s wedi atal y cau i lawr rhag digwydd: %s."
 
-#: ../src/gpm-manager.c:988 ../src/gpm-manager.c:1000
-msgid "System idle"
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:398
+#, c-format
+msgid "%s has stopped the timeout action from taking place: %s."
+msgstr "Mae %s wedi atal y gweithred terfyn amser rhag digwydd: %s."
+
+#: ../src/gpm-inhibit.c:406 ../src/gpm-inhibit.c:421
+#, c-format
+msgid "Multiple applications have stopped the suspend from taking place."
+msgstr "Mae sawl rhaglen wedi atal y seibio rhag digwydd."
+
+#: ../src/gpm-inhibit.c:409
+#, c-format
+msgid "Multiple applications have stopped the hibernate from taking place."
+msgstr "Mae sawl rhaglen wedi atal y cysgu rhag digwydd."
+
+#: ../src/gpm-inhibit.c:412
+#, c-format
+msgid "Multiple applications have stopped the policy action from taking place."
+msgstr "Mae sawl rhaglen wedi atal y gweithred bolisi rhag digwydd."
+
+#: ../src/gpm-inhibit.c:415
+#, c-format
+msgid "Multiple applications have stopped the reboot from taking place."
+msgstr "Mae sawl rhaglen wedi atal yr ailgychwyn rhag digwydd."
+
+#: ../src/gpm-inhibit.c:418
+#, c-format
+msgid "Multiple applications have stopped the shutdown from taking place."
+msgstr "Mae sawl rhaglen wedi atal y cau i lawr rhag digwydd."
+
+#: ../src/gpm-main.c:137
+msgid "Do not daemonize"
+msgstr "Peidio â gwneud yn ellyll"
+
+#: ../src/gpm-main.c:139 ../src/gpm-prefs.c:107 ../src/gpm-statistics.c:105
+msgid "Show extra debugging information"
+msgstr "Dangos gwybodaeth datnamu ychwanegol"
+
+#: ../src/gpm-main.c:141
+msgid "Show version of installed program and exit"
+msgstr "Dangos fersiwn rhaglen sydd wedi'i sefydlu, wedyn gadael"
+
+#: ../src/gpm-main.c:143
+msgid "Exit after a small delay (for debugging)"
+msgstr "Gadael wedi saib byr (er mwyn dadnamu)"
+
+#: ../src/gpm-main.c:145
+msgid "Exit after the manager has loaded (for debugging)"
+msgstr "Gadael wedi i'r rheolwr lwytho (er mwyn dadnamu)"
+
+#: ../src/gpm-main.c:147
+msgid "Debug specific files, e.g. power"
+msgstr "Ffeiliau dadnamu penodol, e.e. pŵer"
+
+#: ../src/gpm-main.c:151
+msgid "GNOME Power Manager"
+msgstr "Rheolwr Pŵer GNOME"
+
+#: ../src/gpm-manager.c:185
+#, c-format
+msgid "Request to suspend"
+msgstr "Cais i seibio"
+
+#: ../src/gpm-manager.c:188
+#, c-format
+msgid "Request to hibernate"
+msgstr "Cais i gysgu"
+
+#: ../src/gpm-manager.c:191
+#, c-format
+msgid "Request to do policy action"
+msgstr "Cais i wneud gweithred bolisi"
+
+#: ../src/gpm-manager.c:194
+#, c-format
+msgid "Request to reboot"
+msgstr "Cais i ailgychwyn"
+
+#: ../src/gpm-manager.c:197
+#, c-format
+msgid "Request to shutdown"
+msgstr "Cais i gau i lawr"
+
+#: ../src/gpm-manager.c:200
+#, c-format
+msgid "Request to do timeout action"
+msgstr "Cais i wneud gweithred terfyn amser"
+
+#. I want this translated
+#: ../src/gpm-manager.c:211
+msgid "Perform action anyway"
+msgstr "Gweithredu beth bynnag"
+
+#: ../src/gpm-manager.c:331 ../src/gpm-manager.c:357 ../src/gpm-manager.c:391
+#: ../src/gpm-manager.c:417 ../src/gpm-manager.c:457
+msgid "Action forbidden"
+msgstr "Gweithred waharddedig"
+
+#: ../src/gpm-manager.c:332 ../src/gpm-manager.c:392 ../src/gpm-manager.c:458
+msgid "Policy timeout is not valid. Please wait a few seconds and try again."
 msgstr ""
+"Mae'r polisi goramser yn annilys. Arhoswch ychydig eiliadau cyn ail-geisio."
 
-#: ../src/gpm-manager.c:1086 ../src/gpm-warning.c:159
+#: ../src/gpm-manager.c:344 ../src/gpm-manager.c:404
+msgid "Action disallowed"
+msgstr "Gweithred heb ei chaniatáu"
+
+#: ../src/gpm-manager.c:345
+msgid ""
+"Suspend support has been disabled. Contact your administrator for more "
+"details."
+msgstr ""
+"Mae cynhaliaeth seibio wedi'i analluogi. Cysylltwch â gweinyddwr eich system "
+"am fanylion pellach."
+
+#: ../src/gpm-manager.c:358
+msgid "Suspend is not available on this computer."
+msgstr "Dydy seibio ddim ar gael ar y cyfrifiadur hwn."
+
+#: ../src/gpm-manager.c:371 ../src/gpm-manager.c:790
+msgid "Suspending computer."
+msgstr "Wrthi'n seibio'r cyfrifiadur."
+
+#: ../src/gpm-manager.c:405
+msgid ""
+"Hibernate support has been disabled. Contact your administrator for more "
+"details."
+msgstr ""
+"Mae cynhaliaeth cysgu wedi'i analluogi. Cysylltwch â gweinyddwr eich system "
+"am fanylion pellach."
+
+#: ../src/gpm-manager.c:418
+msgid "Hibernate is not available on this computer."
+msgstr "Dydy cwsg ddim ar gael ar y cyfrifiadur hwn."
+
+#: ../src/gpm-manager.c:431 ../src/gpm-manager.c:805
+msgid "Hibernating computer."
+msgstr "Wrthi'n rhoi'r cyfrifiadur i gysgu."
+
+#: ../src/gpm-manager.c:479
+msgid "Doing nothing."
+msgstr "Yn gwneud dim."
+
+#: ../src/gpm-manager.c:492
+msgid "Shutting down computer."
+msgstr "Wrthi'n cau'r cyfrifiadur."
+
+#: ../src/gpm-manager.c:497
+msgid "GNOME interactive logout."
+msgstr "Allgofnodi rhyngweithiol GNOME."
+
+#: ../src/gpm-manager.c:790 ../src/gpm-manager.c:805
+msgid "System idle."
+msgstr "System yn segur."
+
+#: ../src/gpm-manager.c:882
 msgid "Power Information"
 msgstr "Gwybodaeth Pŵer"
 
-#: ../src/gpm-manager.c:1110
-msgid "the power button has been pressed"
-msgstr "gwasgwyd y botwm pŵer"
+#: ../src/gpm-manager.c:899
+msgid "The power button has been pressed."
+msgstr "Gwasgwyd y botwm pŵer."
 
-#: ../src/gpm-manager.c:1129
-msgid "the suspend button has been pressed"
-msgstr "gwasgwyd y botwm seibio"
+#: ../src/gpm-manager.c:911
+msgid "The suspend button has been pressed."
+msgstr "Gwasgwyd y botwm seibio."
 
-#: ../src/gpm-manager.c:1149
-msgid "the hibernate button has been pressed"
-msgstr "gwasgwyd y botwm cysgu"
+#: ../src/gpm-manager.c:923
+msgid "The hibernate button has been pressed."
+msgstr "Gwasgwyd y botwm cysgu."
 
-#: ../src/gpm-manager.c:1173
-msgid "the lid has been closed on ac power"
-msgstr "mae'r caead wedi'i gau ar bŵer AC"
+#: ../src/gpm-manager.c:954
+msgid "The lid has been closed on ac power."
+msgstr "Mae'r caead wedi'i gau ar bŵer AC."
 
-#: ../src/gpm-manager.c:1178
-msgid "the lid has been closed on battery power"
-msgstr "mae'r caead wedi'i gau ar bŵer batri"
+#: ../src/gpm-manager.c:984
+msgid "The lid has been closed on battery power."
+msgstr "Mae'r caead wedi'i gau ar bŵer batri."
 
-#: ../src/gpm-manager.c:1267
-msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
+#: ../src/gpm-manager.c:1073
+msgid ""
+"The lid has been closed, and the ac adapter removed (and gconf is okay)."
 msgstr ""
-"mae'r caead wedi'i gau, a'r addasydd AC wedi ei dynnu (ac mae gconf yn iawn)"
+"Mae'r caead wedi'i gau, a'r addasydd AC wedi ei dynnu (ac mae gconf yn iawn)."
 
-#: ../src/gpm-manager.c:1290
-msgid "battery is critically low"
-msgstr "batri'n argyfyngus o isel"
+#: ../src/gpm-manager.c:1096
+msgid "Battery is critically low."
+msgstr "Batri'n argyfyngus o isel."
 
-#: ../src/gpm-manager.c:1340
-msgid "Your battery is now fully charged"
-msgstr "Mae'ch batri wedi'i wefru'n llawn"
+#: ../src/gpm-manager.c:1186 ../src/gpm-manager.c:1201
+msgid "User clicked on tray"
+msgstr "Cliciodd y defnyddiwr ar yr hambwrdd"
 
-#: ../src/gpm-manager.c:1341
-msgid "Battery Charged"
-msgstr "Batri wedi Gwefru"
+#: ../src/gpm-manager.c:1411
+msgid "Laptop battery low"
+msgstr "Batri gliniadur yn isel"
 
-#: ../src/gpm-manager.c:1406
+#: ../src/gpm-manager.c:1413
+#, c-format
+msgid "You have approximately <b>%s</b> of remaining battery life (%d%%)"
+msgstr "Mae gennych chi tua <b>%s</b> o bŵer batri'n weddill (%d%%)"
+
+#: ../src/gpm-manager.c:1416
+msgid "UPS low"
+msgstr "UPS yn isel"
+
+#: ../src/gpm-manager.c:1418
+#, c-format
+msgid "You have approximately <b>%s</b> of remaining UPS backup power (%d%%)"
+msgstr "Tua <b>%s</b> o bŵer wrth gefn UPS sy'n weddill (%d%%)"
+
+#: ../src/gpm-manager.c:1421 ../src/gpm-manager.c:1521
+msgid "Mouse battery low"
+msgstr "Batri llygoden yn isel"
+
+#: ../src/gpm-manager.c:1422
+#, c-format
+msgid "The wireless mouse attached to this computer is low in power (%d%%)"
+msgstr ""
+"Mae'r llygoden ddiwifr sydd wedi'i chysylltu â'r cyfrifiadur yn isel ei "
+"phŵer (%d%%)"
+
+#: ../src/gpm-manager.c:1424 ../src/gpm-manager.c:1526
+msgid "Keyboard battery low"
+msgstr "Batri bysellfwrdd yn isel"
+
+#: ../src/gpm-manager.c:1425
+#, c-format
+msgid "The wireless keyboard attached to this computer is low in power (%d%%)"
+msgstr ""
+"Mae'r bysellfwrdd diwifr sydd wedi'i gysylltu â'r cyfrifiadur yn isel ei "
+"bŵer (%d%%)"
+
+#: ../src/gpm-manager.c:1427 ../src/gpm-manager.c:1531
+msgid "PDA battery low"
+msgstr "Batri PDA yn isel"
+
+#: ../src/gpm-manager.c:1428
+#, c-format
+msgid "The PDA attached to this computer is low in power (%d%%)"
+msgstr "Mae'r PDA sydd wedi'i gysylltu â'r cyfrifiadur yn isel ei bŵer (%d%%)"
+
+#: ../src/gpm-manager.c:1430 ../src/gpm-manager.c:1536
+msgid "Cell phone battery low"
+msgstr "Batri ffôn symudol yn isel"
+
+#: ../src/gpm-manager.c:1431
+#, c-format
+msgid "The cell phone attached to this computer is low in power (%d%%)"
+msgstr ""
+"Mae'r ffôn symudol sydd wedi'i gysylltu â'r cyfrifiadur yn isel ei bŵer (%d%"
+"%)"
+
+#: ../src/gpm-manager.c:1458
+msgid "a short time"
+msgstr "amser byr"
+
+#: ../src/gpm-manager.c:1481 ../src/gpm-manager.c:1567
+msgid "Laptop battery critically low"
+msgstr "Batri'r gliniadur yn argyfyngus o isel"
+
+#: ../src/gpm-manager.c:1494
+#, c-format
+msgid "Plug in your AC adapter to avoid losing data."
+msgstr "Cysylltwch yr addasydd AC i osgoi colli data."
+
+#: ../src/gpm-manager.c:1497
+#, c-format
+msgid "This computer will suspend in %s if the AC is not connected."
+msgstr ""
+"Bydd y cyfrifiadur hwn yn seibio ymhen %s os nad yw'r AC yn cael ei gysylltu."
+
+#: ../src/gpm-manager.c:1500
+#, c-format
+msgid "This computer will hibernate in %s if the AC is not connected."
+msgstr ""
+"Bydd y cyfrifiadur hwn yn cysgu ymhen %s os nad yw'r AC yn cael ei gysylltu."
+
+#: ../src/gpm-manager.c:1503
+#, c-format
+msgid "This computer will shutdown in %s if the AC is not connected."
+msgstr ""
+"Bydd y cyfrifiadur hwn yn cau ymhen %s os nad yw'r AC yn cael ei gysylltu."
+
+#: ../src/gpm-manager.c:1506
+#, c-format
+msgid "You have approximately <b>%s</b> of remaining battery life (%d%%). %s"
+msgstr "Mae gennych chi tua <b>%s</b> o bŵer batri'n weddill (%d%%). %s"
+
+#: ../src/gpm-manager.c:1514 ../src/gpm-manager.c:1599
+msgid "UPS critically low"
+msgstr "UPS yn argyfyngus o isel"
+
+#: ../src/gpm-manager.c:1516
+#, c-format
+msgid ""
+"You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore AC "
+"power to your computer to avoid losing data."
+msgstr ""
+"Tua <b>%s</b> o bŵer UPS sy'n weddill (%d%%). Adferwch bŵer AC y cyfrifiadur "
+"i osgoi colli data."
+
+#: ../src/gpm-manager.c:1522
+#, c-format
+msgid ""
+"The wireless mouse attached to this computer is very low in power (%d%%). "
+"This device will soon stop functioning if not charged."
+msgstr ""
+"Mae'r llygoden ddiwifr sydd wedi'i chysylltu â'r cyfrifiadur yn isel ei "
+"phŵer (%d%%). Bydd y ddyfais yn peidio â gweithio'n fuan os na chaiff ei "
+"gwefru."
+
+#: ../src/gpm-manager.c:1527
+#, c-format
+msgid ""
+"The wireless keyboard attached to this computer is very low in power (%d%%). "
+"This device will soon stop functioning if not charged."
+msgstr ""
+"Mae'r bysellfwrdd diwifr sydd wedi'i gysylltu â'r cyfrifiadur yn isel ei "
+"bŵer (%d%%). Bydd y ddyfais yn peidio â gweithio'n fuan os na chaiff ei "
+"gwefru."
+
+#: ../src/gpm-manager.c:1532
+#, c-format
+msgid ""
+"The PDA attached to this computer is very low in power (%d%%). This device "
+"will soon stop functioning if not charged."
+msgstr ""
+"Mae'r PDA diwifr sydd wedi'i gysylltu â'r cyfrifiadur yn isel ei bŵer (%d%"
+"%). Bydd y ddyfais yn peidio â gweithio'n fuan os na chaiff ei gwefru."
+
+#: ../src/gpm-manager.c:1537
+#, c-format
+msgid ""
+"Your cell phone is very low in power (%d%%). This device will soon stop "
+"functioning if not charged."
+msgstr ""
+"Mae'r ffôn symudol sydd wedi'i gysylltu â'r cyfrifiadur yn isel ei bŵer (%d%"
+"%). Bydd y ddyfais yn peidio â gweithio'n fuan os na chaiff ei gwefru."
+
+#: ../src/gpm-manager.c:1574
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
 msgstr ""
 "Mae'r batri islaw'r lefel argyfwng ac fe fydd y cyfrifiadur yn <b>diffodd yn "
-"gyfangwbl</b> pan fo'r batri'n gyfangwbl wag."
+"gyfangwbl</b> pan fydd y batri'n gyfangwbl wag."
 
-#: ../src/gpm-manager.c:1411
+#: ../src/gpm-manager.c:1579
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1424,36 +1983,21 @@ msgstr ""
 "<br><b>SYLWER:</b> Mae angen rhyw ychydig o bŵer er mwyn cadw'ch cyfrifiadur "
 "wedi'i seibio."
 
-#: ../src/gpm-manager.c:1417
+#: ../src/gpm-manager.c:1585
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr ""
 "Mae'r batri islaw'r lefel argyfwng ac mae'r cyfrifiadur hwn ar fin cysgu."
 
-#: ../src/gpm-manager.c:1421
+#: ../src/gpm-manager.c:1589
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr ""
 "Mae'r batri islaw'r lefel argyfwng ac mae'r cyfrifiadur hwn ar fin cau."
 
-#: ../src/gpm-manager.c:1433
-msgid "The AC Power has been unplugged. The system is now using battery power."
-msgstr ""
-"Mae'r Pŵer AC newydd ei dynnu. Mae'r system yn defnyddio pŵer batri erbyn "
-"hyn."
-
-#: ../src/gpm-manager.c:1440
-#, c-format
-msgid ""
-"You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
-"your AC Adapter to avoid losing data."
-msgstr ""
-"Mae gennych chi tua <b>%s</b> o bŵer batri'n weddill (%d%%). I osgoi colli "
-"data, plygiwch eich addasydd AC i mewn."
-
-#: ../src/gpm-manager.c:1524
+#: ../src/gpm-manager.c:1606
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
@@ -1461,83 +2005,37 @@ msgstr ""
 "Mae'r UPS islaw'r lefel argyfwng ac fe fydd y cyfrifiadur yn <b>diffodd yn "
 "gyfangwbl</b> pan fo'r UPS yn gyfangwbl wag."
 
-#: ../src/gpm-manager.c:1529
+#: ../src/gpm-manager.c:1611
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr ""
 "Mae'r UPS islaw'r lefel argyfwng ac mae'r cyfrifiadur hwn ar fin cysgu."
 
-#: ../src/gpm-manager.c:1533
+#: ../src/gpm-manager.c:1615
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr "Mae'r UPS islaw'r lefel argyfwng ac mae'r cyfrifiadur hwn ar fin cau."
 
-#: ../src/gpm-manager.c:1540
-msgid "UPS is critically low"
-msgstr "UPS yn argyfyngus o isel"
+#: ../src/gpm-manager.c:1721
+msgid "Install problem!"
+msgstr "Problem wrth sefydlu!"
 
-#: ../src/gpm-manager.c:1544
-msgid "Your system is running on backup power!"
-msgstr "Mae'ch system yn rhedeg ar bŵer wrth gefn!"
-
-#: ../src/gpm-manager.c:1548
-#, c-format
+#: ../src/gpm-manager.c:1722
 msgid ""
-"You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
-"power to your computer to avoid losing data."
+"The configuration defaults for GNOME Power Manager have not been installed "
+"correctly.\n"
+"Please contact your computer administrator."
 msgstr ""
-"Tua <b>%s</b> o bŵer UPS sy'n weddill (sef %d%%). A wnewch chi adfer pŵer y "
-"cyfrifiadur i osgoi colli data?"
+"Nid yw'r rhagosodiadau ffurfweddu ar gyfer Rheolwr Pŵer GNOME wedi'u gosod "
+"yn gywir.\n"
+"Cysylltwch â gweinyddwr eich system."
 
-#: ../src/gpm-manager.c:1637
-#, c-format
-msgid ""
-"The %s device attached to this computer is low in power (%d%%). This device "
-"will soon stop functioning if not charged."
-msgstr ""
-"Mae'r ddyfais %s sydd wedi'i chysylltu â'r cyfrifiadur yn isel ei phŵer (%d%"
-"%). Fe fydd y ddyfais yn atal gweithio'n fuan os na chaiff ei gwefru."
-
-#: ../src/gpm-manager.c:1763
-msgid "user clicked hibernate from tray menu"
-msgstr "cliciodd y defnyddiwr 'cysgu' ar ddewislen yr hambwrdd"
-
-#: ../src/gpm-manager.c:1788
-msgid "user clicked suspend from tray menu"
-msgstr "cliciodd y defnyddiwr 'seibio' ar ddewislen yr hambwrdd"
-
-#: ../src/gpm-manager.c:1811
-#, fuzzy
-msgid "Suspend failure"
-msgstr "Seibio wedi'i alluogi"
-
-#: ../src/gpm-manager.c:1812
-msgid "Your computer did not appear to resume correctly from suspend."
-msgstr ""
-
-#: ../src/gpm-manager.c:1815
-#, fuzzy
-msgid "Hibernate failure"
-msgstr "Gellir cysgu"
-
-#: ../src/gpm-manager.c:1816
-msgid "Your computer did not appear to resume correctly from hibernate."
-msgstr ""
-
-#: ../src/gpm-manager.c:1821
-msgid "This may be a driver or hardware problem."
-msgstr ""
-
-#: ../src/gpm-manager.c:1822
-msgid "Check the GNOME Power Manager manual for common problems."
-msgstr ""
-
-#: ../src/gpm-notify.c:328
-#, fuzzy
+#. save in state
+#: ../src/gpm-notify.c:364
 msgid "Battery may be recalled"
-msgstr "Batri wedi Gwefru"
+msgstr "Mae'n debyg fod rhaid dychwelyd y batri at y gwneuthurwr"
 
-#: ../src/gpm-notify.c:329
+#: ../src/gpm-notify.c:365
 #, c-format
 msgid ""
 "The battery in your computer may have been recalled by %s and you may be at "
@@ -1545,401 +2043,650 @@ msgid ""
 "\n"
 "For more information visit the %s battery recall website."
 msgstr ""
+"Mae'n bosib bod %s wedi gofyn am fatri'ch cyfrifiadur yn ôl - gallwch fod "
+"mewn perygl.\n"
+"\n"
+"Am ragor o wybodaeth ewch i wefan adalw batri %s."
 
-#: ../src/gpm-notify.c:342
+#: ../src/gpm-notify.c:380
 msgid "Visit recall website"
-msgstr ""
+msgstr "Ymweld â'r wefan adalw batri"
 
-#: ../src/gpm-notify.c:347
+#: ../src/gpm-notify.c:386 ../src/gpm-notify.c:420 ../src/gpm-notify.c:454
+#: ../src/gpm-notify.c:485 ../src/gpm-notify.c:515 ../src/gpm-notify.c:545
+#: ../src/gpm-notify.c:581
 msgid "Do not show me this again"
+msgstr "Peidio â dangos hyn i mi eto"
+
+#: ../src/gpm-notify.c:406
+msgid "Battery may be broken"
+msgstr "Mae'n debyg fod y batri wedi torri"
+
+#: ../src/gpm-notify.c:407
+#, c-format
+msgid ""
+"Your battery has a very low capacity (%i%%), which means that it may be old "
+"or broken."
 msgstr ""
+"Mae gan eich batri gynhwysedd isel (%i%%), sy'n golygu gall fod yn hen neu "
+"wedi torri."
 
-#: ../src/gpm-power.c:495
-msgid "Laptop battery"
-msgstr "Batri gliniadur"
+#: ../src/gpm-notify.c:439
+msgid "Sleep warning"
+msgstr "Rhybudd cysgu"
 
-#: ../src/gpm-power.c:497
-msgid "UPS"
-msgstr "UPS (Cyflenwad trydan annhoradwy)"
-
-#: ../src/gpm-power.c:499
-msgid "Wireless mouse"
-msgstr "Llygoden ddiwifr"
-
-#: ../src/gpm-power.c:501
-msgid "Wireless keyboard"
-msgstr "Allweddell ddiwifr"
-
-#: ../src/gpm-power.c:503
-msgid "PDA"
-msgstr "PDA"
-
-#: ../src/gpm-power.c:505 ../src/gpm-statistics-core.c:618
-msgid "Unknown"
-msgstr "Anhysbys"
-
-#: ../src/gpm-power.c:523
-msgid "ups"
-msgstr "ups"
-
-#: ../src/gpm-power.c:525
-msgid "mouse"
-msgstr "llygoden"
-
-#: ../src/gpm-power.c:527
-msgid "keyboard"
-msgstr "allweddell"
-
-#: ../src/gpm-power.c:529
-msgid "pda"
-msgstr "pda"
-
-#: ../src/gpm-power.c:531
-msgid "unknown"
-msgstr "anhysbys"
-
-#: ../src/gpm-power.c:720
-msgid "Product:"
+#: ../src/gpm-notify.c:440
+#, c-format
+msgid ""
+"Your laptop will not sleep if you shut the lid as a running program has "
+"prevented this.\n"
+"Some laptops can overheat if they do not sleep when the lid is closed."
 msgstr ""
+"Ar hyn o bryd, fydd eich cyfrifiadur ddim yn cysgu wrth i chi gau'r caead, "
+"am fod rhaglen sydd ar waith wedi atal hyn rhag digwydd.\n"
+"Gall rhai gliniaduron or-gynhesu os nad ydyn nhw'n cysgu pan fo'r caead ar "
+"gau."
 
-#: ../src/gpm-power.c:724 ../src/gpm-power.c:727 ../src/gpm-power.c:730
-#: ../src/gpm-power.c:733
-msgid "Status:"
+#: ../src/gpm-notify.c:473
+msgid "Battery Charged"
+msgstr "Batri wedi'i Wefru"
+
+#: ../src/gpm-notify.c:474
+msgid "Your laptop battery is now fully charged"
+msgstr "Mae batri'r gliniadur wedi'i wefru'n llawn"
+
+#: ../src/gpm-notify.c:503
+msgid "Battery Discharging"
+msgstr "Batri'n Dadwefru"
+
+#: ../src/gpm-notify.c:504
+msgid "The AC power has been unplugged. The system is now using battery power."
 msgstr ""
+"Mae'r pŵer AC newydd ei dynnu. Mae'r system yn defnyddio pŵer batri erbyn "
+"hyn."
 
-#: ../src/gpm-power.c:724
-msgid "Missing"
+#: ../src/gpm-notify.c:533
+msgid "UPS Discharging"
+msgstr "UPS yn Dadwefru"
+
+#: ../src/gpm-notify.c:534
+msgid "The AC power has been unplugged. The system is now using backup power."
 msgstr ""
+"Mae'r pŵer AC newydd ei dynnu. Mae'r system yn defnyddio pŵer wrth gefn "
+"erbyn hyn."
 
-#: ../src/gpm-power.c:737
-#, fuzzy
-msgid "Percentage charge:"
+#: ../src/gpm-notify.c:564
+msgid "Sleep Problem"
+msgstr "Problem Cysgu"
+
+#: ../src/gpm-notify.c:566
+msgid ""
+"Your computer failed to hibernate.\n"
+"Check the help file for common problems."
+msgstr ""
+"Methodd eich cyfrifiadur â chysgu.\n"
+"Chwiliwch y ffeil help am atebion i broblemau cyffredin."
+
+#: ../src/gpm-notify.c:569
+msgid ""
+"Your computer failed to suspend.\n"
+"Check the help file for common problems."
+msgstr ""
+"Methodd eich cyfrifiadur â seibio.\n"
+"Chwiliwch y ffeil help am atebion i broblemau cyffredin."
+
+#: ../src/gpm-notify.c:594
+msgid "Visit quirk website"
+msgstr "Ymweld â gwefan 'quirk'"
+
+#: ../src/gpm-cell-array.c:976
+#, c-format
+msgid ""
+"%s fully charged (%i%%)\n"
+"Provides %s battery runtime\n"
+msgstr ""
+"%s wedi gwefru'n llawn (%i%%)\n"
+"Bydd y batri ar waith am %s\n"
+
+#: ../src/gpm-cell-array.c:980
+#, c-format
+msgid "%s fully charged (%i%%)\n"
+msgstr "%s wedi gwefru'n llawn (%i%%)\n"
+
+#: ../src/gpm-cell-array.c:988
+#, c-format
+msgid "%s %s remaining (%i%%)\n"
+msgstr "%s %s ar ôl (%i%%)\n"
+
+#. don't display "Unknown remaining"
+#: ../src/gpm-cell-array.c:993
+#, c-format
+msgid "%s discharging (%i%%)\n"
+msgstr "%s dadwefru (%i%%)\n"
+
+#: ../src/gpm-cell-array.c:1005
+#, c-format
+msgid ""
+"%s %s until charged (%i%%)\n"
+"Provides %s battery runtime\n"
+msgstr ""
+"%s %s hyd y bydd wedi gwefru'n llawn (%i%%)\n"
+"Bydd y batri ar waith am %s\n"
+
+#: ../src/gpm-cell-array.c:1012
+#, c-format
+msgid "%s %s until charged (%i%%)\n"
+msgstr "%s %s hyd y bydd wedi gwefru'n llawn (%i%%)\n"
+
+#. don't display "Unknown remaining"
+#: ../src/gpm-cell-array.c:1017
+#, c-format
+msgid "%s charging (%i%%)\n"
+msgstr "%s yn gwefru (%i%%)\n"
+
+#: ../src/gpm-cell-array.c:1024
+msgid "Battery state could not be read at this time\n"
+msgstr "Nid oedd yn bosib darllen cyflwr y batri ar hyn o bryd\n"
+
+#: ../src/gpm-cell.c:506
+#, c-format
+msgid "<b>Product:</b> %s\n"
+msgstr "<b>Cynnyrch:</b> %s\n"
+
+#: ../src/gpm-cell.c:509
+msgid "<b>Status:</b> Missing\n"
+msgstr "<b>Statws:</b> Ar goll\n"
+
+#: ../src/gpm-cell.c:511
+msgid "<b>Status:</b> Charged\n"
+msgstr "<b>Statws:</b> Wedi'i wefru\n"
+
+#: ../src/gpm-cell.c:513
+msgid "<b>Status:</b> Charging\n"
+msgstr "<b>Statws:</b> Wrthi'n gwefru\n"
+
+#: ../src/gpm-cell.c:515
+msgid "<b>Status:</b> Discharging\n"
+msgstr "<b>Statws:</b> Wrthi'n dadwefru\n"
+
+#: ../src/gpm-cell.c:518
+#, c-format
+msgid "<b>Percentage charge:</b> %i%%\n"
 msgstr "<b>Canran wedi'i wefru:</b> %i%%\n"
 
-#: ../src/gpm-power.c:766
+#: ../src/gpm-cell.c:523
 msgid "Vendor:"
-msgstr ""
+msgstr "Gwerthwr:"
 
-#: ../src/gpm-power.c:774 ../src/gpm-power.c:779
+#: ../src/gpm-cell.c:528
 msgid "Lithium ion"
 msgstr "Ion lithiwm"
 
-#: ../src/gpm-power.c:776 ../src/gpm-power.c:781
+#: ../src/gpm-cell.c:530
 msgid "Lead acid"
 msgstr "Plwm ac asid"
 
-#: ../src/gpm-power.c:783
-#, fuzzy
+#: ../src/gpm-cell.c:532
 msgid "Lithium polymer"
-msgstr "Ion lithiwm"
+msgstr "Polimer lithiwm"
 
-#: ../src/gpm-power.c:785
+#: ../src/gpm-cell.c:534
 msgid "Nickel metal hydride"
-msgstr ""
+msgstr "Hydrid nicel metel"
 
-#: ../src/gpm-power.c:792
-#, fuzzy
+#: ../src/gpm-cell.c:541
 msgid "Technology:"
-msgstr "<b>Technoleg:</b> %s\n"
+msgstr "Technoleg:"
 
-#: ../src/gpm-power.c:796
-#, fuzzy
+#: ../src/gpm-cell.c:545
 msgid "Serial number:"
-msgstr "<b>Rhif cyfresol:</b> %s\n"
+msgstr "Rhif cyfresol:"
 
-#: ../src/gpm-power.c:800
-#, fuzzy
+#: ../src/gpm-cell.c:549
 msgid "Model:"
-msgstr "Mwy"
+msgstr "Model:"
 
-#: ../src/gpm-power.c:806
-#, fuzzy
-msgid "Remaining time:"
-msgstr "<b>Amser sy'n weddill:</b> %s\n"
+#: ../src/gpm-cell.c:555
+msgid "Charge time:"
+msgstr "Amser gwefru:"
 
-#: ../src/gpm-power.c:812
+#: ../src/gpm-cell.c:562
+msgid "Discharge time:"
+msgstr "Amser dadwefru:"
+
+#: ../src/gpm-cell.c:568
 msgid "Excellent"
 msgstr "Ardderchog"
 
-#: ../src/gpm-power.c:814
+#: ../src/gpm-cell.c:570
 msgid "Good"
 msgstr "Da"
 
-#: ../src/gpm-power.c:816
+#: ../src/gpm-cell.c:572
 msgid "Fair"
 msgstr "Gweddol"
 
-#: ../src/gpm-power.c:818
+#: ../src/gpm-cell.c:574
 msgid "Poor"
 msgstr "Gwael"
 
-#: ../src/gpm-power.c:821
+#: ../src/gpm-cell.c:577
 msgid "Capacity:"
-msgstr ""
+msgstr "Maint:"
 
-#: ../src/gpm-power.c:827 ../src/gpm-power.c:855
-#, fuzzy
+#: ../src/gpm-cell.c:583 ../src/gpm-cell.c:606
 msgid "Current charge:"
-msgstr "<b>Gwefriad ar hyn o bryd:</b> %.1f %s\n"
+msgstr "Gwefriad ar hyn o bryd:"
 
-#: ../src/gpm-power.c:833
-#, fuzzy
+#: ../src/gpm-cell.c:589
 msgid "Last full charge:"
-msgstr "<b>Gwefriad llawn diweddaraf:</b> %.1f %s\n"
+msgstr "Gwefriad llawn diweddaraf:"
 
-#: ../src/gpm-power.c:838 ../src/gpm-power.c:860
-#, fuzzy
+#: ../src/gpm-cell.c:594 ../src/gpm-cell.c:611
 msgid "Design charge:"
-msgstr "<b>Gwefriad adeiladwyd ar ei gyfer:</b> %.1f %s\n"
+msgstr "Gwefriad dyluniwyd ar ei gyfer:"
 
-#: ../src/gpm-power.c:843
-#, fuzzy
-msgid "Charge rate (raw):"
-msgstr "<b>Cyfradd gwefru (crai):</b> %.1f %sh\n"
+#: ../src/gpm-cell.c:599
+msgid "Charge rate:"
+msgstr "Cyfradd gwefru:"
 
-#: ../src/gpm-power.c:848
-#, fuzzy
-msgid "Charge rate (smoothed):"
-msgstr "<b>Cyfradd gwefru (wedi llyfnhau):</b> %.1f %sh\n"
+#: ../src/gpm-cell-unit.c:247
+msgid "Laptop batteries"
+msgstr "Batris gliniadur"
 
-#: ../src/gpm-power.c:1346
-#, fuzzy, c-format
-msgid "%s fully charged (%i%%)\n"
-msgstr "wedi gwefru (ar bŵer llawn)"
+#: ../src/gpm-cell-unit.c:249
+msgid "UPSs"
+msgstr "UPSau"
 
-#: ../src/gpm-power.c:1352
-#, fuzzy, c-format
-msgid "%s %s remaining (%i%%)\n"
-msgstr "%s ar ôl"
+#: ../src/gpm-cell-unit.c:251
+msgid "Wireless mice"
+msgstr "Llygod diwifr"
 
-#. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1356
-#, fuzzy, c-format
-msgid "%s discharging (%i%%)\n"
-msgstr "dadwefru"
+#: ../src/gpm-cell-unit.c:253
+msgid "Wireless keyboards"
+msgstr "Allweddellau diwifr"
 
-#: ../src/gpm-power.c:1363
-#, fuzzy, c-format
-msgid "%s %s until charged (%i%%)\n"
-msgstr "%s tan bŵer llawn"
+#: ../src/gpm-cell-unit.c:255
+msgid "PDAs"
+msgstr "PDAs"
 
-#. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1367
-#, fuzzy, c-format
-msgid "%s charging (%i%%)\n"
-msgstr "dadwefru"
+#: ../src/gpm-cell-unit.c:257
+msgid "Cell phones"
+msgstr "Ffonau symudol"
 
-#: ../src/gpm-power.c:1404
-#, fuzzy
-msgid "Recalculating information..."
-msgstr "Dangos gwybodaeth datnamu ychwanegol"
+#: ../src/gpm-cell-unit.c:259 ../src/gpm-cell-unit.c:275
+#: ../src/gpm-statistics-core.c:739
+msgid "Unknown"
+msgstr "Anhysbys"
 
-#. only enable this if discharging on UPS, for details see:
-#. http://bugzilla.gnome.org/show_bug.cgi?id=329027
-#: ../src/gpm-power.c:1415
-msgid "Computer is running on backup power\n"
-msgstr "Mae'r cyfrifiadur ar bŵer wrth gefn\n"
+#: ../src/gpm-cell-unit.c:263
+msgid "Laptop battery"
+msgstr "Batri gliniadur"
 
-#: ../src/gpm-power.c:1418
-msgid "Computer is running on AC power\n"
-msgstr "Mae'r cyfrifiadur ar bŵer batri\n"
+#: ../src/gpm-cell-unit.c:265
+msgid "UPS"
+msgstr "UPS (Cyflenwad trydan annhoradwy)"
 
-#: ../src/gpm-power.c:1421
-msgid "Computer is running on battery power\n"
-msgstr "Mae'r cyfrifiadur ar bŵer batri\n"
+#: ../src/gpm-cell-unit.c:267
+msgid "Wireless mouse"
+msgstr "Llygoden ddiwifr"
 
-#: ../src/gpm-prefs.c:141
-msgid "Power Preferences"
-msgstr "Hoffterau Pŵer"
+#: ../src/gpm-cell-unit.c:269
+msgid "Wireless keyboard"
+msgstr "Allweddell ddiwifr"
+
+#: ../src/gpm-cell-unit.c:271
+msgid "PDA"
+msgstr "PDA"
+
+#: ../src/gpm-cell-unit.c:273
+msgid "Cell phone"
+msgstr "Ffôn symudol"
+
+#: ../src/gpm-prefs.c:111 ../test/gpm-inhibit-test.c:186
+msgid "GNOME Power Preferences"
+msgstr "Hoffterau Pŵer GNOME"
 
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs-core.c:81 ../src/gpm-statistics-core.c:83
+#: ../src/gpm-prefs-core.c:82 ../src/gpm-statistics-core.c:95
 msgid "Ask me"
 msgstr "Gofyn i fi"
 
-#: ../src/gpm-prefs-core.c:82 ../src/gpm-statistics-core.c:84
-#: ../src/gpm-statistics-core.c:744
+#: ../src/gpm-prefs-core.c:83 ../src/gpm-statistics-core.c:96
 msgid "Suspend"
 msgstr "Seibio"
 
-#: ../src/gpm-prefs-core.c:83 ../src/gpm-statistics-core.c:85
+#: ../src/gpm-prefs-core.c:84 ../src/gpm-statistics-core.c:97
 msgid "Shutdown"
 msgstr "Cau i lawr"
 
-#: ../src/gpm-prefs-core.c:84 ../src/gpm-statistics-core.c:86
-#: ../src/gpm-statistics-core.c:754
+#: ../src/gpm-prefs-core.c:85 ../src/gpm-statistics-core.c:98
 msgid "Hibernate"
 msgstr "Cysgu"
 
-#: ../src/gpm-prefs-core.c:85 ../src/gpm-statistics-core.c:87
+#: ../src/gpm-prefs-core.c:86 ../src/gpm-statistics-core.c:99
 msgid "Blank screen"
-msgstr "Sgrîn wag"
+msgstr "Sgrin wag"
 
-#: ../src/gpm-prefs-core.c:86 ../src/gpm-statistics-core.c:88
+#. The text that should appear in the processor combo box
+#: ../src/gpm-prefs-core.c:87 ../src/gpm-prefs-core.c:90
+#: ../src/gpm-statistics-core.c:100
 msgid "Do nothing"
 msgstr "Gwneud dim"
 
-#. The text that should appear in the processor combo box
-#: ../src/gpm-prefs-core.c:89
-msgid "Based on processor load"
-msgstr ""
-
-#: ../src/gpm-prefs-core.c:90
-msgid "Automatic power saving"
-msgstr ""
-
 #: ../src/gpm-prefs-core.c:91
-msgid "Maximum power saving"
-msgstr ""
+msgid "Based on processor load"
+msgstr "Seiliedig ar lwyth y prosesydd"
 
 #: ../src/gpm-prefs-core.c:92
-msgid "Always maximum speed"
-msgstr ""
+msgid "Automatic power saving"
+msgstr "Arbed pŵer yn awtomatig"
 
-#: ../src/gpm-prefs-core.c:241
+#: ../src/gpm-prefs-core.c:93
+msgid "Maximum power saving"
+msgstr "Arbed pŵer ar ei uchaf"
+
+#: ../src/gpm-prefs-core.c:94
+msgid "Always maximum speed"
+msgstr "Cyflymder uchaf o hyd"
+
+#: ../src/gpm-prefs-core.c:287
 msgid "Never"
 msgstr "Byth"
 
-#: ../src/gpm-statistics.c:117
-#, fuzzy
+#: ../src/gpm-statistics.c:109
 msgid "GNOME Power Statistics"
-msgstr "Rheolwr Pŵer GNOME"
+msgstr "Ystadegau Pŵer GNOME"
 
-#: ../src/gpm-statistics-core.c:54
-msgid "Charge History"
-msgstr "Hanes Gwefru"
+#: ../src/gpm-statistics-core.c:60
+msgid "Charge history"
+msgstr "Hanes gwefru"
 
-#: ../src/gpm-statistics-core.c:56
-#, fuzzy
-msgid "Voltage History"
-msgstr "Hanes Gwefru"
+#: ../src/gpm-statistics-core.c:61
+msgid "Power history"
+msgstr "Hanes pŵer"
 
-#: ../src/gpm-statistics-core.c:57
-msgid "Estimated Time History"
-msgstr "Hanes Amcan Amser"
+#: ../src/gpm-statistics-core.c:62
+msgid "Voltage history"
+msgstr "Hanes foltedd"
 
-#: ../src/gpm-statistics-core.c:688
-#, fuzzy
+#: ../src/gpm-statistics-core.c:63
+msgid "Estimated time history"
+msgstr "Hanes amcan amser"
+
+#: ../src/gpm-statistics-core.c:64
+msgid "Charge time profile"
+msgstr "Proffil amser gwefru:"
+
+#: ../src/gpm-statistics-core.c:65
+msgid "Discharge time profile"
+msgstr "Proffil Amser dadwefru:"
+
+#: ../src/gpm-statistics-core.c:66
+msgid "Charge time accuracy profile"
+msgstr "Newid proffil cywirdeb amser"
+
+#: ../src/gpm-statistics-core.c:67
+msgid "Discharge time accuracy profile"
+msgstr "Proffil cywirdeb amser dadwefru:"
+
+#: ../src/gpm-statistics-core.c:810
 msgid "Could not connect to GNOME Power Manager."
-msgstr "Rheolwr Pŵer GNOME"
-
-#: ../src/gpm-statistics-core.c:689
-msgid "Perhaps the program is not running or you are using an old version?"
-msgstr ""
-
-#: ../src/gpm-statistics-core.c:724
-msgid "On AC"
-msgstr "Yn defnyddio AC"
-
-#: ../src/gpm-statistics-core.c:729
-msgid "On battery"
-msgstr "Yn defnyddio batri"
-
-#: ../src/gpm-statistics-core.c:734
-msgid "Session idle"
-msgstr ""
-
-#: ../src/gpm-statistics-core.c:739
-msgid "Session active"
-msgstr ""
-
-#: ../src/gpm-statistics-core.c:749
-msgid "Resume"
-msgstr "Ail-gychwyn"
-
-#: ../src/gpm-statistics-core.c:759
-msgid "Lid closed"
-msgstr "Caead ar gau"
-
-#: ../src/gpm-statistics-core.c:764
-msgid "Lid opened"
-msgstr "Caead ar agor"
-
-#: ../src/gpm-statistics-core.c:769
-msgid "Notification"
-msgstr "Hysbysu"
-
-#: ../src/gpm-statistics-core.c:774
-#, fuzzy
-msgid "DPMS On"
-msgstr "DPMS ymlaen"
-
-#: ../src/gpm-statistics-core.c:779
-#, fuzzy
-msgid "DPMS Standby"
-msgstr "DPMS ymlaen"
-
-#: ../src/gpm-statistics-core.c:784
-#, fuzzy
-msgid "DPMS Suspend"
-msgstr "Seibio"
-
-#: ../src/gpm-statistics-core.c:789
-#, fuzzy
-msgid "DPMS Off"
-msgstr "DPMS wedi'i ddiffodd"
+msgstr "Methu cysylltu â Rheolwr Pŵer GNOME"
 
 #: ../src/gpm-srv-screensaver.c:111
-#, fuzzy
 msgid "Display DPMS activated"
-msgstr "Rheolaeth pŵer y dangosydd ar waith"
+msgstr "DPMS dangosydd ar waith"
 
 #: ../src/gpm-srv-screensaver.c:131
 msgid "On battery power"
 msgstr "Ar bŵer batri"
 
-#: ../src/gpm-srv-screensaver.c:157
+#: ../src/gpm-srv-screensaver.c:151
 msgid "Laptop lid is closed"
 msgstr "Caead y gliniadur ar gau"
 
-#: ../src/gpm-tray-icon.c:313
+#: ../src/gpm-tray-icon.c:215
+msgid "Device information"
+msgstr "Gwybodaeth dyfais"
+
+#: ../src/gpm-tray-icon.c:324
 msgid "translator-credits"
-msgstr "Rhys Jones <rhys@sucs.org>"
+msgstr ""
+"Rhys Jones <rhys@sucs.org>\n"
+"Iestyn Pryce <dylunio@gmail.com>"
+
+#: ../src/gpm-tray-icon.c:340
+msgid "GNOME Power Manager Website"
+msgstr "Wefan Rheolwr Pŵer GNOME"
 
 #. Preferences
-#: ../src/gpm-tray-icon.c:449
+#: ../src/gpm-tray-icon.c:445
 msgid "_Preferences"
 msgstr "H_offterau"
 
 #. Statistics
-#: ../src/gpm-tray-icon.c:457
-#, fuzzy
+#: ../src/gpm-tray-icon.c:453
 msgid "Power _History"
-msgstr "Hanes Pŵer"
+msgstr "_Hanes Pŵer"
 
 #. Help
-#: ../src/gpm-tray-icon.c:469
+#: ../src/gpm-tray-icon.c:465
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:2
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:2
 msgid "_Help"
-msgstr "_Help"
+msgstr "_Cymorth"
 
 #. About
-#: ../src/gpm-tray-icon.c:477
+#: ../src/gpm-tray-icon.c:473
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:1
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:1
 msgid "_About"
 msgstr "_Ynghylch"
 
-#: ../src/gpm-tray-icon.c:580
+#: ../src/gpm-tray-icon.c:587
 msgid "_Suspend"
 msgstr "_Seibio"
 
-#: ../src/gpm-tray-icon.c:590
+#: ../src/gpm-tray-icon.c:597
 msgid "Hi_bernate"
 msgstr "_Cysgu"
 
-#: ../src/gpm-warning.c:153
-msgid "Power Critically Low"
-msgstr "Pŵer yn Argyfyngus o Isel"
+#~ msgid "Dim display _brightness by:"
+#~ msgstr "Faint i dywyllu disgleirde_b y dangosydd:"
 
-#: ../src/gpm-warning.c:155
-msgid "Power Very Low"
-msgstr "Pŵer yn Isel Iawn"
+#~ msgid "%s because %s"
+#~ msgstr "%s oherwydd %s"
 
-#: ../src/gpm-warning.c:157
-msgid "Power Low"
-msgstr "Pŵer yn Isel"
+#~ msgid "Inhibit warning!"
+#~ msgstr "Rhybudd atal!"
+
+#~ msgid "Profiled Charge Time"
+#~ msgstr "Amser Gwefru Gyda Phroffil"
+
+#~ msgid "Profiled Charge Accuracy"
+#~ msgstr "Cywirdeb Gwefru Gyda Phroffil"
+
+#~ msgid "Profiled Discharge Time"
+#~ msgstr "Amser Dadwefru Gyda Phroffil"
+
+#~ msgid "Profiled Discharge Accuracy"
+#~ msgstr "Cywirdeb Dadwefru Gyda Phroffil"
+
+#~ msgid "Power Preferences"
+#~ msgstr "Hoffterau Pŵer"
+
+#~ msgid "Power Inhibit Test"
+#~ msgstr "Prawf Atal Pŵer"
+
+#~ msgid ""
+#~ "If the laptop should be configured as if it is using a permanent external "
+#~ "monitor"
+#~ msgstr ""
+#~ "A dyli'r gliniadur cael ei osod fel pe bai'n defnyddio dangosydd allanol "
+#~ "parhaol"
+
+#~ msgid "Charge Void"
+#~ msgstr "Gwefr Ddirym"
+
+#~ msgid "Discharge Void"
+#~ msgstr "Dadwefru Yn Anilys"
+
+#~ msgid "Battery may be invalid"
+#~ msgstr "Gall y batri fod yn annilys"
+
+#~ msgid "Change the brightness to a preset level on AC state change"
+#~ msgstr "Newid disgleirdeb i lefel rhagosodiedig ar newid yng nghyflwr CE"
+
+#~ msgid "Percentage considered very low"
+#~ msgstr "Y canran fydd yn isel iawn"
+
+#~ msgid "The damping factor for the rate"
+#~ msgstr "Ffactor wanychu ar gyfer y gyfradd"
+
+#~ msgid ""
+#~ "The percentage of the battery when it is considered very low. Only valid "
+#~ "when use_time_for_policy is false."
+#~ msgstr ""
+#~ "Canran y batri sy'n weddill pan fo'n isel iawn. Defnyddir y gwerth hwn "
+#~ "ddim ond os yw use_time_for_policy yn 'false'."
+
+#~ msgid ""
+#~ "The time remaining in seconds of the battery when it is considered very "
+#~ "low. Only valid when use_time_for_policy is true."
+#~ msgstr ""
+#~ "Eiliadau o bŵer batri sy'n weddill pan fo'n isel iawn. Defnyddir y gwerth "
+#~ "hwn ddim ond os yw use_time_for_policy yn 'false'."
+
+#~ msgid "The time remaining when very low"
+#~ msgstr "Amser sy'n weddill pan yn isel iawn"
+
+#~ msgid ""
+#~ "The value of the damping factor used when calculating the exponentially "
+#~ "weighted average of the rate. Increasing this value will increase the "
+#~ "damping effect of the rate calculations, which makes the time remaining "
+#~ "more accurate, but the graphs less responsive."
+#~ msgstr ""
+#~ "Gwerth y ffactor wanychu a ddefnyddir wrth gyfrif cyfartaledd y gyfradd â "
+#~ "phwysau esbonyddol. Wrth godi'r gwerth hwn, cynyddir effaith ddampio'r "
+#~ "cyfrifon cyfradd. Mae hyn yn gwella cywirdeb gwerth yr amser ar ôl, ond "
+#~ "ni fydd y graffiau'n ymateb gystal."
+
+#~ msgid "Whether we should show the legend in the statistics window"
+#~ msgstr "A ddylid dangos y mynegai yn y ffenest ystadegau"
+
+#~ msgid "Whether we should show the legend in the statistics window."
+#~ msgstr "A ddylid dangos y mynegai yn y ffenest ystadegau."
+
+#~ msgid "Add legend"
+#~ msgstr "Ychwanegu mynegai"
+
+#~ msgid "Device:"
+#~ msgstr "Dyfais:"
+
+#~ msgid "Charging"
+#~ msgstr "Gwefru"
+
+#~ msgid "%iW"
+#~ msgstr "%iW"
+
+#~ msgid "%iV"
+#~ msgstr "%iV"
+
+#~ msgid "HAL failed to %s. Check the help file for common problems."
+#~ msgstr ""
+#~ "Methodd HAL wneud hyn: %s. Chwiliwch y ffeil help am cwestiynau cyffredin."
+
+#~ msgid "hibernate"
+#~ msgstr "cysgu"
+
+#~ msgid "suspend"
+#~ msgstr "seibio"
+
+#~ msgid "the DBUS method Suspend() was invoked"
+#~ msgstr "Cafodd y dull DBUS Suspend() ei alw"
+
+#~ msgid "the DBUS method Hibernate() was invoked"
+#~ msgstr "Cafodd y dull DBUS Hibernate() ei alw"
+
+#~ msgid "the DBUS method Shutdown() was invoked"
+#~ msgstr "Cafodd y dull DBUS Shutdown() ei alw"
+
+#~ msgid "Rebooting computer"
+#~ msgstr "Wrthi'n ailgychwyn y cyfrifiadur"
+
+#~ msgid "the DBUS method Reboot() was invoked"
+#~ msgstr "Cafodd y dull DBUS Reboot() ei alw"
+
+#~ msgid "Your system is running on backup power!"
+#~ msgstr "Mae'ch system yn rhedeg ar bŵer wrth gefn!"
+
+#~ msgid "user clicked hibernate from tray menu"
+#~ msgstr "cliciodd y defnyddiwr 'cysgu' ar ddewislen yr hambwrdd"
+
+#~ msgid "Suspend failure"
+#~ msgstr "Seibio wedi methu"
+
+#~ msgid "Your computer did not appear to resume correctly from suspend."
+#~ msgstr ""
+#~ "Mae'n edrych fel pe bai eich cyfrifiadur heb ailgychwyn yn gywir o "
+#~ "seibiant."
+
+#~ msgid "Your computer did not appear to resume correctly from hibernate."
+#~ msgstr ""
+#~ "Mae'n edrych fel pe bai eich cyfrifiadur heb ailgychwyn yn gywir o cŵsg."
+
+#~ msgid "This may be a driver or hardware problem."
+#~ msgstr "Gall hyn bod yn broblem gyrrydd neu caledwedd."
+
+#~ msgid "Check the GNOME Power Manager manual for common problems."
+#~ msgstr "Edrychwch yn llawlyfr Rheolwr Pŵer GNOME am problemau cyfredin."
+
+#~ msgid "ups"
+#~ msgstr "ups"
+
+#~ msgid "mouse"
+#~ msgstr "llygoden"
+
+#~ msgid "keyboard"
+#~ msgstr "bysellfwrdd"
+
+#~ msgid "pda"
+#~ msgstr "pda"
+
+#~ msgid "unknown"
+#~ msgstr "anhysbys"
+
+#~ msgid "Product:"
+#~ msgstr "Cynnyrch:"
+
+#~ msgid "Status:"
+#~ msgstr "Statws:"
+
+#~ msgid "Missing"
+#~ msgstr "Ar Goll"
+
+#~ msgid "Remaining time:"
+#~ msgstr "Amser sy'n weddill:"
+
+#~ msgid "Charge rate (smoothed):"
+#~ msgstr "Cyfradd gwefru (wedi llyfnhau):"
+
+#~ msgid "Recalculating information..."
+#~ msgstr "Ailcyfrifo gwybodaeth"
+
+#~ msgid "Perhaps the program is not running or you are using an old version?"
+#~ msgstr ""
+#~ "Efallau nad yw'r rhaglen yn rhedeg neu rydych yn defnyddio hen fersiwn?"
+
+#~ msgid "Resume"
+#~ msgstr "Ail-gychwyn"
+
+#~ msgid "Power Critically Low"
+#~ msgstr "Pŵer yn Argyfyngus o Isel"
+
+#~ msgid "Power Very Low"
+#~ msgstr "Pŵer yn Isel Iawn"
 
 #, fuzzy
 #~ msgid "<b>Running on AC power</b>"
@@ -1959,9 +2706,6 @@ msgstr "Pŵer yn Isel"
 
 #~ msgid "Sleep _type when inactive:"
 #~ msgstr "Math y _cwsg pan yn anweithredol:"
-
-#~ msgid "_Dim the laptop panel when idle"
-#~ msgstr "_Tywyllu panel y gliniadur pan yn segur"
 
 #~ msgid "LCD dim"
 #~ msgstr "Tywyllu LCD"
@@ -2000,9 +2744,6 @@ msgstr "Pŵer yn Isel"
 
 #~ msgid "<b>Wireless devices</b>"
 #~ msgstr "<b>Dyfeisiau diwifr</b>"
-
-#~ msgid "Device Information"
-#~ msgstr "Gwybodaeth am y Dyfeisiau"
 
 #~ msgid ""
 #~ "Device type: Laptop battery (1)\n"
@@ -2044,9 +2785,6 @@ msgstr "Pŵer yn Isel"
 #~ msgid "The orientation of the tray."
 #~ msgstr "Gogwydd yr hambwrdd."
 
-#~ msgid "Time"
-#~ msgstr "Amser"
-
 #~ msgid "Event"
 #~ msgstr "Digwyddiad"
 
@@ -2056,32 +2794,11 @@ msgstr "Pŵer yn Isel"
 #~ msgid "DPMS blanking screen"
 #~ msgstr "Sgrîn blancio DPMS"
 
-#~ msgid "Battery charged %imWh during suspend"
-#~ msgstr "Batri wedi gwefru %imWh yn ystod y seibiant"
-
-#~ msgid "Battery discharged %imWh during suspend"
-#~ msgstr "Batri wedi dadwefru %imWh yn ystod y seibiant"
-
 #~ msgid "Turning LCD panel back on"
 #~ msgstr "Ail-oleuo'r panel LCD"
 
 #~ msgid "laptop lid re-opened"
 #~ msgstr "Caead y gliniadur wedi'i ail-agor"
-
-#~ msgid "<b>Product:</b> %s\n"
-#~ msgstr "<b>Cynnyrch:</b> %s\n"
-
-#~ msgid "<b>Status:</b> Missing\n"
-#~ msgstr "<b>Statws:</b> Ar goll\n"
-
-#~ msgid "<b>Status:</b> Charged\n"
-#~ msgstr "<b>Statws:</b> Wedi'i wefru\n"
-
-#~ msgid "<b>Status:</b> Charging\n"
-#~ msgstr "<b>Statws:</b> Wrthi'n gwefru\n"
-
-#~ msgid "<b>Status:</b> Discharging\n"
-#~ msgstr "<b>Statws:</b> Wrthi'n dadwefru\n"
 
 #~ msgid "<b>Vendor:</b> %s\n"
 #~ msgstr "<b>Gwerthwr:</b> %s\n"
@@ -2092,9 +2809,6 @@ msgstr "Pŵer yn Isel"
 #~ msgid "<b>Capacity:</b> %i%% (%s)\n"
 #~ msgstr "<b>Cynhwysedd:</b> %i%% (%s)\n"
 
-#~ msgid "Suspend the computer"
-#~ msgstr "Seibio'r cyfrifiadur"
-
 #~ msgid "Make the computer go to sleep"
 #~ msgstr "Gwneud i'r cyfrifiadur gysgu"
 
@@ -2103,9 +2817,6 @@ msgstr "Pŵer yn Isel"
 
 #~ msgid "<b>Brightness</b>"
 #~ msgstr "<b>Disgleirdeb</b>"
-
-#~ msgid "<b>Sleep</b>"
-#~ msgstr "<b>Cysgu</b>"
 
 #~ msgid "Prefer power savings over performance"
 #~ msgstr ""
