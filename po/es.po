@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-24 10:13+0000\n"
-"PO-Revision-Date: 2008-03-03 22:13+0100\n"
+"POT-Creation-Date: 2008-03-03 21:13+0000\n"
+"PO-Revision-Date: 2008-03-05 13:33+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -27,28 +27,28 @@ msgstr "Miniaplicación de gestión del brillo"
 msgid "Adjusts laptop panel brightness."
 msgstr "Ajusta el brillo del panel del portátil."
 
-#: ../applets/brightness/brightness-applet.c:353
+#: ../applets/brightness/brightness-applet.c:355
 #: ../applets/inhibit/inhibit-applet.c:338
 #, c-format
 msgid "Cannot connect to gnome-power-manager"
 msgstr "No es posible conectar con el Gestor de energía de GNOME"
 
-#: ../applets/brightness/brightness-applet.c:355
+#: ../applets/brightness/brightness-applet.c:357
 #, c-format
 msgid "Cannot get laptop panel brightness"
 msgstr "No se puede obtener el brillo del panel del portátil"
 
-#: ../applets/brightness/brightness-applet.c:357
+#: ../applets/brightness/brightness-applet.c:359
 #, c-format
 msgid "LCD brightness : %d%%"
 msgstr "Brillo del LCD : %d%%"
 
-#: ../applets/brightness/brightness-applet.c:744
+#: ../applets/brightness/brightness-applet.c:746
 #: ../applets/inhibit/inhibit-applet.c:406 ../src/gpm-tray-icon.c:310
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Licenciado bajo la Licencia Pública General GNU Versión 2"
 
-#: ../applets/brightness/brightness-applet.c:745
+#: ../applets/brightness/brightness-applet.c:747
 #: ../applets/inhibit/inhibit-applet.c:407 ../src/gpm-tray-icon.c:311
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
@@ -61,7 +61,7 @@ msgstr ""
 "tal como la publica la Free Software Foundation; ya sea en la versión 2\n"
 "de la Licencia, o (a su opción) cualquier versión posterior."
 
-#: ../applets/brightness/brightness-applet.c:749
+#: ../applets/brightness/brightness-applet.c:751
 #: ../applets/inhibit/inhibit-applet.c:411 ../src/gpm-tray-icon.c:315
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
@@ -74,7 +74,7 @@ msgstr ""
 "MERCANTILIDAD o IDONEIDAD PARA UN PROPÓSITO PARTICULAR. Vea la\n"
 "Licencia Pública General GNU para más detalles."
 
-#: ../applets/brightness/brightness-applet.c:753
+#: ../applets/brightness/brightness-applet.c:755
 #: ../applets/inhibit/inhibit-applet.c:415 ../src/gpm-tray-icon.c:319
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
@@ -86,7 +86,7 @@ msgstr ""
 "junto con este programa; si no, escriba a la Free Software Foundation,\n"
 "Inc., 51 Franklin Street, Fifth Floor, Boston,MA, 02110-1301, EE. UU."
 
-#: ../applets/brightness/brightness-applet.c:767
+#: ../applets/brightness/brightness-applet.c:769
 msgid "Copyright © 2006 Benjamin Canou"
 msgstr "Copyright © 2006 Benjamin Canou"
 
@@ -149,11 +149,11 @@ msgid "Inhibit Applet Factory"
 msgstr "Inhibir la fábrica de la miniaplicación"
 
 #. common descriptions of this program
-#: ../data/gnome-power-manager.desktop.in.h:1 ../src/gpm-common.h:43
+#: ../data/gnome-power-manager.desktop.in.in.h:1 ../src/gpm-common.h:43
 msgid "Power Manager"
 msgstr "Gestión de energía"
 
-#: ../data/gnome-power-manager.desktop.in.h:2
+#: ../data/gnome-power-manager.desktop.in.in.h:2
 msgid "Power management daemon"
 msgstr "Demonio de gestión de energía"
 
@@ -1145,19 +1145,19 @@ msgstr "Indica si se deben suavizar los datos en el gráfico"
 msgid "Whether we should smooth the data in the graph."
 msgstr "Indica si se deben suavizar los datos en el gráfico."
 
-#: ../data/gnome-power-preferences.desktop.in.h:1
+#: ../data/gnome-power-preferences.desktop.in.in.h:1
 msgid "Configure power management"
 msgstr "Configure la gestión de energía"
 
-#: ../data/gnome-power-preferences.desktop.in.h:2
+#: ../data/gnome-power-preferences.desktop.in.in.h:2
 msgid "Power Management"
 msgstr "Gestión de energía"
 
-#: ../data/gnome-power-statistics.desktop.in.h:1
+#: ../data/gnome-power-statistics.desktop.in.in.h:1
 msgid "Observe power management"
 msgstr "Observar la gestión de energía"
 
-#: ../data/gnome-power-statistics.desktop.in.h:2
+#: ../data/gnome-power-statistics.desktop.in.in.h:2
 msgid "Power Statistics"
 msgstr "Estadísticas de energía"
 
@@ -1343,6 +1343,7 @@ msgid "_Reduce backlight brightness"
 msgstr "_Reducir el brillo de fondo"
 
 #: ../src/gpm-control.c:279
+#, c-format
 msgid "The message was not sent due to DBUS security rules"
 msgstr "El mensaje no se envió debido a las reglas de seguridad de DBUS"
 
@@ -1352,6 +1353,7 @@ msgid "General failure: %s"
 msgstr "Fallo general: %s"
 
 #: ../src/gpm-common.c:242
+#, c-format
 msgid "Unknown time"
 msgstr "Tiempo desconocido"
 
@@ -1422,54 +1424,54 @@ msgid "Battery charge time is estimated\n"
 msgstr "El tiempo de carga de la batería es estimado\n"
 
 #. show a AC icon
-#: ../src/gpm-engine.c:598
+#: ../src/gpm-engine.c:610
 msgid "Unable to get data..."
 msgstr "No se pudo obtener la información…"
 
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:484
+#: ../src/gpm-graph-widget.c:485
 #, c-format
 msgid "%ih"
 msgstr "%ih"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:487
+#: ../src/gpm-graph-widget.c:488
 #, c-format
 msgid "%ih%02i"
 msgstr "%ih:%02i"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:492
+#: ../src/gpm-graph-widget.c:493
 #, c-format
 msgid "%2im"
 msgstr "%2im"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:495
+#: ../src/gpm-graph-widget.c:496
 #, c-format
 msgid "%2im%02i"
 msgstr "%2im%02i"
 
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:499
+#: ../src/gpm-graph-widget.c:500
 #, c-format
 msgid "%2is"
 msgstr "%2is"
 
 #. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:503
+#: ../src/gpm-graph-widget.c:504
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. Translators: This is %.1f Watts
-#: ../src/gpm-graph-widget.c:506
+#: ../src/gpm-graph-widget.c:507
 #, c-format
 msgid "%.1fW"
 msgstr "%.1fW"
 
 #. Translators: This is %.1f Volts
-#: ../src/gpm-graph-widget.c:509
+#: ../src/gpm-graph-widget.c:510
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fV"
@@ -1696,22 +1698,27 @@ msgid "%s has stopped the timeout action from taking place: %s."
 msgstr "%s ha impedido que el sistema se suspenda: %s."
 
 #: ../src/gpm-inhibit.c:406 ../src/gpm-inhibit.c:421
+#, c-format
 msgid "Multiple applications have stopped the suspend from taking place."
 msgstr "Varias aplicaciones han impedido que la acción de suspensión se ejecute."
 
 #: ../src/gpm-inhibit.c:409
+#, c-format
 msgid "Multiple applications have stopped the hibernate from taking place."
 msgstr "Varias aplicaciones han impedido que la acción de hibernado se ejecute."
 
 #: ../src/gpm-inhibit.c:412
+#, c-format
 msgid "Multiple applications have stopped the policy action from taking place."
 msgstr "Varias aplicaciones han impedido que la acción de política se ejecute."
 
 #: ../src/gpm-inhibit.c:415
+#, c-format
 msgid "Multiple applications have stopped the reboot from taking place."
 msgstr "Varias aplicaciones han impedido que la acción de reinicio se ejecute."
 
 #: ../src/gpm-inhibit.c:418
+#, c-format
 msgid "Multiple applications have stopped the shutdown from taking place."
 msgstr "Varias aplicaciones han impedido que la acción de apagado se ejecute."
 
@@ -1744,26 +1751,32 @@ msgid "GNOME Power Manager"
 msgstr "Gestor de energía de GNOME"
 
 #: ../src/gpm-manager.c:185
+#, c-format
 msgid "Request to suspend"
 msgstr "Solicitud de suspensión"
 
 #: ../src/gpm-manager.c:188
+#, c-format
 msgid "Request to hibernate"
 msgstr "Solicitud de hibernado"
 
 #: ../src/gpm-manager.c:191
+#, c-format
 msgid "Request to do policy action"
 msgstr "Solicitud de acción de política"
 
 #: ../src/gpm-manager.c:194
+#, c-format
 msgid "Request to reboot"
 msgstr "Solicitud de reinicio"
 
 #: ../src/gpm-manager.c:197
+#, c-format
 msgid "Request to shutdown"
 msgstr "Solicitud de apagado"
 
 #: ../src/gpm-manager.c:200
+#, c-format
 msgid "Request to do timeout action"
 msgstr "Solicitud de acción de tiempo de expiración"
 
@@ -1940,6 +1953,7 @@ msgid "Laptop battery critically low"
 msgstr "La batería del portátil está críticamente baja"
 
 #: ../src/gpm-manager.c:1494
+#, c-format
 msgid "Plug in your AC adapter to avoid losing data."
 msgstr "Conecte su adaptador de adaptador de corriente para evitar perder datos."
 
@@ -2126,6 +2140,7 @@ msgid "Sleep warning"
 msgstr "Aviso de paso a reposo"
 
 #: ../src/gpm-notify.c:440
+#, c-format
 msgid ""
 "Your laptop will not sleep if you shut the lid as a running program has "
 "prevented this.\n"
@@ -2219,13 +2234,13 @@ msgid ""
 "%s %s until charged (%i%%)\n"
 "Provides %s battery runtime\n"
 msgstr ""
-"%s %s hasta su carga(%i%%)\n"
+"%s %s hasta su carga (%i%%)\n"
 "Proporciona %s tiempo de uso de batería\n"
 
 #: ../src/gpm-cell-array.c:1012
 #, c-format
 msgid "%s %s until charged (%i%%)\n"
-msgstr "%s %s hasta su carga(%i%%)\n"
+msgstr "%s %s hasta su carga (%i%%)\n"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-cell-array.c:1017
@@ -2237,105 +2252,105 @@ msgstr "%s cargando (%i%%)\n"
 msgid "Battery state could not be read at this time\n"
 msgstr "No se pudo leer el estado de la batería en este momento\n"
 
-#: ../src/gpm-cell.c:488
+#: ../src/gpm-cell.c:506
 #, c-format
 msgid "<b>Product:</b> %s\n"
 msgstr "<b>Producto:</b> %s\n"
 
-#: ../src/gpm-cell.c:491
+#: ../src/gpm-cell.c:509
 msgid "<b>Status:</b> Missing\n"
 msgstr "<b>Estado:</b> Inexistente\n"
 
-#: ../src/gpm-cell.c:493
+#: ../src/gpm-cell.c:511
 msgid "<b>Status:</b> Charged\n"
 msgstr "<b>Estado:</b> Cargada\n"
 
-#: ../src/gpm-cell.c:495
+#: ../src/gpm-cell.c:513
 msgid "<b>Status:</b> Charging\n"
 msgstr "<b>Estado:</b> Cargando\n"
 
-#: ../src/gpm-cell.c:497
+#: ../src/gpm-cell.c:515
 msgid "<b>Status:</b> Discharging\n"
 msgstr "<b>Estado:</b> Descargando\n"
 
-#: ../src/gpm-cell.c:500
+#: ../src/gpm-cell.c:518
 #, c-format
 msgid "<b>Percentage charge:</b> %i%%\n"
 msgstr "<b>Porcentaje de la carga:</b> %i%%\n"
 
-#: ../src/gpm-cell.c:505
+#: ../src/gpm-cell.c:523
 msgid "Vendor:"
 msgstr "Fabricante:"
 
-#: ../src/gpm-cell.c:510
+#: ../src/gpm-cell.c:528
 msgid "Lithium ion"
 msgstr "Ion litio"
 
-#: ../src/gpm-cell.c:512
+#: ../src/gpm-cell.c:530
 msgid "Lead acid"
 msgstr "Plomo y ácido"
 
-#: ../src/gpm-cell.c:514
+#: ../src/gpm-cell.c:532
 msgid "Lithium polymer"
 msgstr "Polímero de litio"
 
-#: ../src/gpm-cell.c:516
+#: ../src/gpm-cell.c:534
 msgid "Nickel metal hydride"
 msgstr "Híbrido de níquel metal"
 
-#: ../src/gpm-cell.c:523
+#: ../src/gpm-cell.c:541
 msgid "Technology:"
 msgstr "Tecnología:"
 
-#: ../src/gpm-cell.c:527
+#: ../src/gpm-cell.c:545
 msgid "Serial number:"
 msgstr "Número de serie:"
 
-#: ../src/gpm-cell.c:531
+#: ../src/gpm-cell.c:549
 msgid "Model:"
 msgstr "Modelo:"
 
-#: ../src/gpm-cell.c:537
+#: ../src/gpm-cell.c:555
 msgid "Charge time:"
 msgstr "Tiempo de carga:"
 
-#: ../src/gpm-cell.c:544
+#: ../src/gpm-cell.c:562
 msgid "Discharge time:"
 msgstr "Tiempo de descarga:"
 
-#: ../src/gpm-cell.c:550
+#: ../src/gpm-cell.c:568
 msgid "Excellent"
 msgstr "Excelente"
 
-#: ../src/gpm-cell.c:552
+#: ../src/gpm-cell.c:570
 msgid "Good"
 msgstr "Bueno"
 
-#: ../src/gpm-cell.c:554
+#: ../src/gpm-cell.c:572
 msgid "Fair"
 msgstr "Normal"
 
-#: ../src/gpm-cell.c:556
+#: ../src/gpm-cell.c:574
 msgid "Poor"
 msgstr "Pobre"
 
-#: ../src/gpm-cell.c:559
+#: ../src/gpm-cell.c:577
 msgid "Capacity:"
 msgstr "Capacidad:"
 
-#: ../src/gpm-cell.c:565 ../src/gpm-cell.c:588
+#: ../src/gpm-cell.c:583 ../src/gpm-cell.c:606
 msgid "Current charge:"
 msgstr "Carga actual:"
 
-#: ../src/gpm-cell.c:571
+#: ../src/gpm-cell.c:589
 msgid "Last full charge:"
 msgstr "Última carga completa:"
 
-#: ../src/gpm-cell.c:576 ../src/gpm-cell.c:593
+#: ../src/gpm-cell.c:594 ../src/gpm-cell.c:611
 msgid "Design charge:"
 msgstr "Carga de diseño:"
 
-#: ../src/gpm-cell.c:581
+#: ../src/gpm-cell.c:599
 msgid "Charge rate:"
 msgstr "Tasa de carga:"
 
