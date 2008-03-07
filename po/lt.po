@@ -1,18 +1,18 @@
 # translation of lt.po to Lithuanian
 # Lithuanian translation of gnome-power-manager.
-# Copyright (C) 2005-2007 Free Software Foundation, Inc.
+# Copyright (C) 2005-2007, 2008 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnome-power-manager package.
 #
 # „Listen for the feet as they pound the land to a tune of thunder“
 #
-# Gintautas Miliauskas <gintas@akl.lt>, 2006, 2007.
+# Gintautas Miliauskas <gintas@akl.lt>, 2006, 2007, 2008.
 # Žygimantas Beručka <zygis@gnome.org>, 2005-2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-18 01:15+0200\n"
-"PO-Revision-Date: 2007-09-16 15:59+0300\n"
+"POT-Creation-Date: 2008-03-08 00:23+0200\n"
+"PO-Revision-Date: 2008-03-08 00:22+0200\n"
 "Last-Translator: Gintautas Miliauskas <gintas@akl.lt>\n"
 "Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
 "MIME-Version: 1.0\n"
@@ -30,28 +30,28 @@ msgstr "Energijos valdyklės ryškumo įtaisas"
 msgid "Adjusts laptop panel brightness."
 msgstr "Reguliuoja nešiojamojo kompiuterio skydelio ryškumą."
 
-#: ../applets/brightness/brightness-applet.c:353
+#: ../applets/brightness/brightness-applet.c:355
 #: ../applets/inhibit/inhibit-applet.c:338
 #, c-format
 msgid "Cannot connect to gnome-power-manager"
 msgstr "Nepavyko prisijungti prie gnome-power-manager"
 
-#: ../applets/brightness/brightness-applet.c:355
+#: ../applets/brightness/brightness-applet.c:357
 #, c-format
 msgid "Cannot get laptop panel brightness"
 msgstr "Nepavyko gauti nešiojamojo kompiuterio skydelio ryškumo"
 
-#: ../applets/brightness/brightness-applet.c:357
+#: ../applets/brightness/brightness-applet.c:359
 #, c-format
 msgid "LCD brightness : %d%%"
 msgstr "LCD ryškumas: %d%%"
 
-#: ../applets/brightness/brightness-applet.c:744
+#: ../applets/brightness/brightness-applet.c:746
 #: ../applets/inhibit/inhibit-applet.c:406 ../src/gpm-tray-icon.c:310
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Licencijuota GNU Genereal Public Licence Version 2 sąlygomis"
 
-#: ../applets/brightness/brightness-applet.c:745
+#: ../applets/brightness/brightness-applet.c:747
 #: ../applets/inhibit/inhibit-applet.c:407 ../src/gpm-tray-icon.c:311
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
@@ -64,7 +64,7 @@ msgstr ""
 "sąlygomis, paskelbtomis Laisvosios programinės įrangos fondo; 2-osios\n"
 "arba (Jūsų pasirinkimu) bet kurios vėlesnės licencijos versijos sąlygomis."
 
-#: ../applets/brightness/brightness-applet.c:749
+#: ../applets/brightness/brightness-applet.c:751
 #: ../applets/inhibit/inhibit-applet.c:411 ../src/gpm-tray-icon.c:315
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
@@ -77,7 +77,7 @@ msgstr ""
 "TAM TIKRAM TIKSLUI garantijų. Dėl išsamesnės informacijos žiūrėkite GNU\n"
 "bendrąją viešąją licenciją."
 
-#: ../applets/brightness/brightness-applet.c:753
+#: ../applets/brightness/brightness-applet.c:755
 #: ../applets/inhibit/inhibit-applet.c:415 ../src/gpm-tray-icon.c:319
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
@@ -90,7 +90,7 @@ msgstr ""
 "Foundation,\n"
 "Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 
-#: ../applets/brightness/brightness-applet.c:767
+#: ../applets/brightness/brightness-applet.c:769
 msgid "Copyright © 2006 Benjamin Canou"
 msgstr "Autorinės teisės priklauso © 2006 Benjamin Canou"
 
@@ -153,11 +153,11 @@ msgid "Inhibit Applet Factory"
 msgstr "Uždraudimo įtaiso gamykla"
 
 #. common descriptions of this program
-#: ../data/gnome-power-manager.desktop.in.h:1 ../src/gpm-common.h:43
+#: ../data/gnome-power-manager.desktop.in.in.h:1 ../src/gpm-common.h:43
 msgid "Power Manager"
 msgstr "Energijos valdymo programa"
 
-#: ../data/gnome-power-manager.desktop.in.h:2
+#: ../data/gnome-power-manager.desktop.in.in.h:2
 msgid "Power management daemon"
 msgstr "Energijos valdymo tarnyba"
 
@@ -270,9 +270,8 @@ msgstr ""
 "mechanizmo."
 
 #: ../data/gnome-power-manager.schemas.in.h:21
-#, fuzzy
 msgid "If preferences should be shown"
-msgstr "Ar naudoti garsus"
+msgstr "Ar rodyti nustatymus"
 
 #: ../data/gnome-power-manager.schemas.in.h:22
 msgid "If sounds should be used"
@@ -384,13 +383,12 @@ msgstr ""
 "baterijos energiją."
 
 #: ../data/gnome-power-manager.schemas.in.h:38
-#, fuzzy
 msgid ""
 "If the screen should be reduced in brightness when the computer is on "
 "battery power."
 msgstr ""
-"Ar užtemdyti ekraną taupant energiją, kai kompiuteris neveiklus ir naudoja "
-"baterijos energiją."
+"Ar užtemdyti ekraną taupant energiją, kai kompiuteris naudoja baterijos "
+"energiją."
 
 #: ../data/gnome-power-manager.schemas.in.h:39
 msgid "If the system low-power mode should be enabled when on AC power."
@@ -578,9 +576,8 @@ msgid "Power button action"
 msgstr "Išjungimo mygtuko veiksmas"
 
 #: ../data/gnome-power-manager.schemas.in.h:76
-#, fuzzy
 msgid "Reduce the backlight brightness when on battery power"
-msgstr "Klaviatūros ryškumas naudojant baterijos energiją"
+msgstr "Mažinti monitoriaus lempos šviesumą, kai naudojama baterijos energija"
 
 #: ../data/gnome-power-manager.schemas.in.h:77
 msgid "Sleep timeout computer when on AC"
@@ -1100,19 +1097,19 @@ msgstr "Ar glotninti grafiką"
 msgid "Whether we should smooth the data in the graph."
 msgstr "Ar glotninti grafiką."
 
-#: ../data/gnome-power-preferences.desktop.in.h:1
+#: ../data/gnome-power-preferences.desktop.in.in.h:1
 msgid "Configure power management"
 msgstr "Konfigūruokite energijos tvarkymą"
 
-#: ../data/gnome-power-preferences.desktop.in.h:2
+#: ../data/gnome-power-preferences.desktop.in.in.h:2
 msgid "Power Management"
 msgstr "Energijos valdymas"
 
-#: ../data/gnome-power-statistics.desktop.in.h:1
+#: ../data/gnome-power-statistics.desktop.in.in.h:1
 msgid "Observe power management"
 msgstr "Stebėkite energijos valdymą"
 
-#: ../data/gnome-power-statistics.desktop.in.h:2
+#: ../data/gnome-power-statistics.desktop.in.in.h:2
 msgid "Power Statistics"
 msgstr "Energijos statistika"
 
@@ -1194,9 +1191,8 @@ msgid "Computer sp_eed policy:"
 msgstr "Kompiuterio _spartos politika:"
 
 #: ../data/gpm-prefs.glade.h:7
-#, fuzzy
 msgid "Di_m display when idle"
-msgstr "Pritemdyti ekraną, kai nenaudojamas"
+msgstr "Prite_mdyti ekraną, kai nenaudojamas"
 
 #: ../data/gpm-prefs.glade.h:8
 msgid "Enable UPS discharge _alarm"
@@ -1295,9 +1291,8 @@ msgid "_Only display an icon when battery power is critically low"
 msgstr "Rodyti piktogramą tik kai baterijos energijos lygis _kritiškai mažas"
 
 #: ../data/gpm-prefs.glade.h:32
-#, fuzzy
 msgid "_Reduce backlight brightness"
-msgstr "Leisti keisti monitoriaus lempos ryškumą"
+msgstr "_Mažinti monitoriaus lempos ryškumą"
 
 #: ../src/gpm-control.c:279
 #, c-format
@@ -1385,62 +1380,62 @@ msgid "Battery charge time is estimated\n"
 msgstr "Baterijos įkrovos laikas prognozuojamas\n"
 
 #. show a AC icon
-#: ../src/gpm-engine.c:598
+#: ../src/gpm-engine.c:610
 msgid "Unable to get data..."
 msgstr "Nepavyko gauti duomenų..."
 
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:484
+#: ../src/gpm-graph-widget.c:485
 #, c-format
 msgid "%ih"
 msgstr "%i h"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:487
+#: ../src/gpm-graph-widget.c:488
 #, c-format
 msgid "%ih%02i"
 msgstr "%i h %02i"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:492
+#: ../src/gpm-graph-widget.c:493
 #, c-format
 msgid "%2im"
 msgstr "%2i min"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:495
+#: ../src/gpm-graph-widget.c:496
 #, c-format
 msgid "%2im%02i"
 msgstr "%2i min %02i"
 
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:499
+#: ../src/gpm-graph-widget.c:500
 #, c-format
 msgid "%2is"
 msgstr "%2i s"
 
 #. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:503
+#: ../src/gpm-graph-widget.c:504
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. Translators: This is %.1f Watts
-#: ../src/gpm-graph-widget.c:506
+#: ../src/gpm-graph-widget.c:507
 #, c-format
 msgid "%.1fW"
 msgstr "%.1fW"
 
 #. Translators: This is %.1f Volts
-#: ../src/gpm-graph-widget.c:509
+#: ../src/gpm-graph-widget.c:510
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fV"
 
 #: ../src/gpm-info.c:122
-#, fuzzy, c-format
+#, c-format
 msgid "Reason: %s"
-msgstr "Priežastis:"
+msgstr "Priežastis: %s"
 
 #: ../src/gpm-info.c:202
 msgid "On AC"
@@ -1624,64 +1619,64 @@ msgstr "Užmigdymo problema"
 
 #. Translators: first %s is an application name, second %s is the reason
 #: ../src/gpm-inhibit.c:373
-#, fuzzy, c-format
+#, c-format
 msgid "%s has stopped the suspend from taking place: %s."
-msgstr "sustabdė %s nuo: "
+msgstr "%s sustabdė užmigimo procesą: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
 #: ../src/gpm-inhibit.c:378
-#, fuzzy, c-format
+#, c-format
 msgid "%s has stopped the hibernate from taking place: %s."
-msgstr "sustabdė %s nuo: "
+msgstr "%s sustabdė hibernavimo procesą: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
 #: ../src/gpm-inhibit.c:383
-#, fuzzy, c-format
+#, c-format
 msgid "%s has stopped the policy action from taking place: %s."
-msgstr "sustabdė %s nuo: "
+msgstr "%s sustabdė veiksmą: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
 #: ../src/gpm-inhibit.c:388
-#, fuzzy, c-format
+#, c-format
 msgid "%s has stopped the reboot from taking place: %s."
-msgstr "sustabdė %s nuo: "
+msgstr "%s sustabdė įkrovimą iš naujo: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
 #: ../src/gpm-inhibit.c:393
-#, fuzzy, c-format
+#, c-format
 msgid "%s has stopped the shutdown from taking place: %s."
-msgstr "sustabdė %s nuo: "
+msgstr "%s sustabdė išjungimą: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
 #: ../src/gpm-inhibit.c:398
-#, fuzzy, c-format
+#, c-format
 msgid "%s has stopped the timeout action from taking place: %s."
-msgstr "sustabdė %s nuo: "
+msgstr "%s sustabdė laiko baigimosi veiksmą: %s."
 
 #: ../src/gpm-inhibit.c:406 ../src/gpm-inhibit.c:421
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple applications have stopped the suspend from taking place."
-msgstr "Kelios programos sustabdė %s."
+msgstr "Kelios programos sustabdė užmigimą."
 
 #: ../src/gpm-inhibit.c:409
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple applications have stopped the hibernate from taking place."
-msgstr "Kelios programos sustabdė %s."
+msgstr "Kelios programos sustabdė hibernaciją."
 
 #: ../src/gpm-inhibit.c:412
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple applications have stopped the policy action from taking place."
-msgstr "Kelios programos sustabdė %s."
+msgstr "Kelios programos sustabdė veiksmą."
 
 #: ../src/gpm-inhibit.c:415
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple applications have stopped the reboot from taking place."
-msgstr "Kelios programos sustabdė %s."
+msgstr "Kelios programos sustabdė įkrovimą iš naujo."
 
 #: ../src/gpm-inhibit.c:418
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple applications have stopped the shutdown from taking place."
-msgstr "Kelios programos sustabdė %s."
+msgstr "Kelios programos sustabdė išjungimą."
 
 #: ../src/gpm-main.c:137
 msgid "Do not daemonize"
@@ -1712,34 +1707,34 @@ msgid "GNOME Power Manager"
 msgstr "GNOME energijos valdymo programa"
 
 #: ../src/gpm-manager.c:185
-#, fuzzy, c-format
+#, c-format
 msgid "Request to suspend"
-msgstr "Prašymas %s"
+msgstr "Prašymas užmigdyti"
 
 #: ../src/gpm-manager.c:188
-#, fuzzy, c-format
+#, c-format
 msgid "Request to hibernate"
-msgstr "Prašymas %s"
+msgstr "Prašymas hibernuoti"
 
 #: ../src/gpm-manager.c:191
 #, c-format
 msgid "Request to do policy action"
-msgstr ""
+msgstr "Prašymas vykdyti veiksmą"
 
 #: ../src/gpm-manager.c:194
-#, fuzzy, c-format
+#, c-format
 msgid "Request to reboot"
-msgstr "Prašymas %s"
+msgstr "Prašymas įkrauti iš naujo"
 
 #: ../src/gpm-manager.c:197
-#, fuzzy, c-format
+#, c-format
 msgid "Request to shutdown"
-msgstr "Prašymas %s"
+msgstr "Prašymas išjungti"
 
 #: ../src/gpm-manager.c:200
 #, c-format
 msgid "Request to do timeout action"
-msgstr ""
+msgstr "Prašymas įvykdyti laiko baigimosi veiksmą"
 
 #. I want this translated
 #: ../src/gpm-manager.c:211
@@ -1774,9 +1769,8 @@ msgid "Suspend is not available on this computer."
 msgstr "Užmigimas nepalaikomas šiame kompiuteryje."
 
 #: ../src/gpm-manager.c:371 ../src/gpm-manager.c:790
-#, fuzzy
 msgid "Suspending computer."
-msgstr "Užmigdomas kompiuterį"
+msgstr "Kompiuteris užmigdomas."
 
 #: ../src/gpm-manager.c:405
 msgid ""
@@ -1791,73 +1785,61 @@ msgid "Hibernate is not available on this computer."
 msgstr "Hibernacija nepalaikoma šiame kompiuteryje."
 
 #: ../src/gpm-manager.c:431 ../src/gpm-manager.c:805
-#, fuzzy
 msgid "Hibernating computer."
-msgstr "Hibernuojamas kompiuteris"
+msgstr "Kompiuteris hibernuojamas."
 
 #: ../src/gpm-manager.c:479
-#, fuzzy
 msgid "Doing nothing."
-msgstr "Nieko nedaroma"
+msgstr "Nieko nedaroma."
 
 #: ../src/gpm-manager.c:492
-#, fuzzy
 msgid "Shutting down computer."
-msgstr "Išjungiamas kompiuteris"
+msgstr "Kompiuteris išjungiamas."
 
 #: ../src/gpm-manager.c:497
-#, fuzzy
 msgid "GNOME interactive logout."
-msgstr "GNOME interaktyvus atsijungimas"
+msgstr "GNOME interaktyvus atsijungimas."
 
 #: ../src/gpm-manager.c:790 ../src/gpm-manager.c:805
-#, fuzzy
 msgid "System idle."
-msgstr "Sistema neveikli"
+msgstr "Sistema neveikli."
 
 #: ../src/gpm-manager.c:882
 msgid "Power Information"
 msgstr "Energijos informacija"
 
 #: ../src/gpm-manager.c:899
-#, fuzzy
 msgid "The power button has been pressed."
-msgstr "paspaustas įjungimo mygtukas"
+msgstr "Paspaustas įjungimo mygtukas."
 
 #: ../src/gpm-manager.c:911
-#, fuzzy
 msgid "The suspend button has been pressed."
-msgstr "paspaustas užmigdymo mygtukas"
+msgstr "Paspaustas užmigdymo mygtukas."
 
 #: ../src/gpm-manager.c:923
-#, fuzzy
 msgid "The hibernate button has been pressed."
-msgstr "paspaustas hibernavimo mygtukas"
+msgstr "Paspaustas hibernavimo mygtukas."
 
 #: ../src/gpm-manager.c:954
-#, fuzzy
 msgid "The lid has been closed on ac power."
-msgstr "užvertas dangtis, prijungta prie elektros tinklo"
+msgstr "Užvertas dangtis, prijungta prie elektros tinklo."
 
 #: ../src/gpm-manager.c:984
-#, fuzzy
 msgid "The lid has been closed on battery power."
-msgstr "užvertas dangtis, naudojama baterija"
+msgstr "Užvertas dangtis, naudojama baterija."
 
 #: ../src/gpm-manager.c:1073
-#, fuzzy
 msgid ""
 "The lid has been closed, and the ac adapter removed (and gconf is okay)."
-msgstr "užvertas dangtis, elektro tinklo adapteris ištrauktas"
+msgstr "Užvertas dangtis, elektros tinklo adapteris ištrauktas (gconf veikia)."
 
 #: ../src/gpm-manager.c:1096
-#, fuzzy
 msgid "Battery is critically low."
-msgstr "baterijos energijos lygis kritiškai mažas"
+msgstr "Baterijos energijos lygis kritiškai mažas."
 
 #: ../src/gpm-manager.c:1186 ../src/gpm-manager.c:1201
 msgid "User clicked on tray"
-msgstr ""
+msgstr "Naudotojas paspaudė ant dėklės"
 
 #: ../src/gpm-manager.c:1411
 msgid "Laptop battery low"
@@ -2115,17 +2097,17 @@ msgstr ""
 
 #: ../src/gpm-notify.c:439
 msgid "Sleep warning"
-msgstr ""
+msgstr "Miego įspėjimas"
 
 #: ../src/gpm-notify.c:440
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your laptop will not sleep if you shut the lid as a running program has "
 "prevented this.\n"
 "Some laptops can overheat if they do not sleep when the lid is closed."
 msgstr ""
-"Nešiojamasis kompiuteris neužmigs, jei užversite dangtį, nes užmigimas "
-"uždraustas.\n"
+"Nešiojamasis kompiuteris neužmigs, jei užversite dangtį, nes viena iš "
+"veikiančių programų tai draudžia.\n"
 "Kai kurie nešiojamieji kompiuteriai gali perkaisti, jei jie neužmigdomi "
 "užvėrus dangtį."
 
@@ -2229,105 +2211,105 @@ msgstr "%s įkraunama (%i%%)\n"
 msgid "Battery state could not be read at this time\n"
 msgstr "Nepavyko perskaityti baterijos būsenos\n"
 
-#: ../src/gpm-cell.c:492
+#: ../src/gpm-cell.c:506
 #, c-format
 msgid "<b>Product:</b> %s\n"
 msgstr "<b>Produktas:</b> %s\n"
 
-#: ../src/gpm-cell.c:495
+#: ../src/gpm-cell.c:509
 msgid "<b>Status:</b> Missing\n"
 msgstr "<b>Būsena:</b> Nėra\n"
 
-#: ../src/gpm-cell.c:497
+#: ../src/gpm-cell.c:511
 msgid "<b>Status:</b> Charged\n"
 msgstr "<b>Būsena:</b> Įkrauta\n"
 
-#: ../src/gpm-cell.c:499
+#: ../src/gpm-cell.c:513
 msgid "<b>Status:</b> Charging\n"
 msgstr "<b>Būsena:</b> Įkraunama\n"
 
-#: ../src/gpm-cell.c:501
+#: ../src/gpm-cell.c:515
 msgid "<b>Status:</b> Discharging\n"
 msgstr "<b>Būsena:</b> Iškraunama\n"
 
-#: ../src/gpm-cell.c:504
+#: ../src/gpm-cell.c:518
 #, c-format
 msgid "<b>Percentage charge:</b> %i%%\n"
 msgstr "<b>Percentų įkrauta:</b> %i%%\n"
 
-#: ../src/gpm-cell.c:509
+#: ../src/gpm-cell.c:523
 msgid "Vendor:"
 msgstr "Gamintojas:"
 
-#: ../src/gpm-cell.c:514
+#: ../src/gpm-cell.c:528
 msgid "Lithium ion"
 msgstr "Ličio jonų"
 
-#: ../src/gpm-cell.c:516
+#: ../src/gpm-cell.c:530
 msgid "Lead acid"
 msgstr "Švino rūgšties"
 
-#: ../src/gpm-cell.c:518
+#: ../src/gpm-cell.c:532
 msgid "Lithium polymer"
 msgstr "Ličio polimerų"
 
-#: ../src/gpm-cell.c:520
+#: ../src/gpm-cell.c:534
 msgid "Nickel metal hydride"
 msgstr "Nikelio metalo hidrido"
 
-#: ../src/gpm-cell.c:527
+#: ../src/gpm-cell.c:541
 msgid "Technology:"
 msgstr "Technologija:"
 
-#: ../src/gpm-cell.c:531
+#: ../src/gpm-cell.c:545
 msgid "Serial number:"
 msgstr "Serijos numeris:"
 
-#: ../src/gpm-cell.c:535
+#: ../src/gpm-cell.c:549
 msgid "Model:"
 msgstr "Modelis:"
 
-#: ../src/gpm-cell.c:541
+#: ../src/gpm-cell.c:555
 msgid "Charge time:"
 msgstr "Įkrovimo laikas:"
 
-#: ../src/gpm-cell.c:548
+#: ../src/gpm-cell.c:562
 msgid "Discharge time:"
 msgstr "Iškrovimo laikas:"
 
-#: ../src/gpm-cell.c:554
+#: ../src/gpm-cell.c:568
 msgid "Excellent"
 msgstr "Puiki"
 
-#: ../src/gpm-cell.c:556
+#: ../src/gpm-cell.c:570
 msgid "Good"
 msgstr "Gera"
 
-#: ../src/gpm-cell.c:558
+#: ../src/gpm-cell.c:572
 msgid "Fair"
 msgstr "Normali"
 
-#: ../src/gpm-cell.c:560
+#: ../src/gpm-cell.c:574
 msgid "Poor"
 msgstr "Prasta"
 
-#: ../src/gpm-cell.c:563
+#: ../src/gpm-cell.c:577
 msgid "Capacity:"
 msgstr "Talpa:"
 
-#: ../src/gpm-cell.c:569 ../src/gpm-cell.c:592
+#: ../src/gpm-cell.c:583 ../src/gpm-cell.c:606
 msgid "Current charge:"
 msgstr "Esama įkrova:"
 
-#: ../src/gpm-cell.c:575
+#: ../src/gpm-cell.c:589
 msgid "Last full charge:"
 msgstr "Paskutinioji pilna įkrova:"
 
-#: ../src/gpm-cell.c:580 ../src/gpm-cell.c:597
+#: ../src/gpm-cell.c:594 ../src/gpm-cell.c:611
 msgid "Design charge:"
 msgstr "Suprojektuota įkrova:"
 
-#: ../src/gpm-cell.c:585
+#: ../src/gpm-cell.c:599
 msgid "Charge rate:"
 msgstr "Įkrovos greitis:"
 
@@ -2530,12 +2512,3 @@ msgstr "_Užmigdyti"
 #: ../src/gpm-tray-icon.c:597
 msgid "Hi_bernate"
 msgstr "Hi_bernuoti"
-
-#~ msgid "Dim display _brightness by:"
-#~ msgstr "_Mažinti ekrano r_yškumą tiek:"
-
-#~ msgid "%s because %s"
-#~ msgstr "%s nes %s"
-
-#~ msgid "Inhibit warning!"
-#~ msgstr "Uždrausti įspėjimą!"
