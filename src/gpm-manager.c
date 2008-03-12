@@ -325,17 +325,6 @@ gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 	gboolean allowed;
 	GError *error = NULL;
 
-	if (gpm_control_is_policy_timout_valid (manager->priv->control) == FALSE) {
-		/* error msg timeout not valid */
-		gpm_notify_display (manager->priv->notify,
-				    _("Action forbidden"),
-				    _("Policy timeout is not valid. Please wait a few seconds and try again."),
-				    GPM_NOTIFY_TIMEOUT_SHORT,
-				    GPM_STOCK_APP_ICON,
-				    GPM_NOTIFY_URGENCY_NORMAL);
-		return FALSE;
-	}
-
 	/* check if the admin has disabled */
 	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_CAN_SUSPEND, &allowed);
 	if (allowed == FALSE) {
@@ -384,17 +373,6 @@ gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 {
 	gboolean allowed;
 	GError *error = NULL;
-
-	if (gpm_control_is_policy_timout_valid (manager->priv->control) == FALSE) {
-		/* error msg timeout not valid */
-		gpm_notify_display (manager->priv->notify,
-				    _("Action forbidden"),
-				    _("Policy timeout is not valid. Please wait a few seconds and try again."),
-				    GPM_NOTIFY_TIMEOUT_SHORT,
-				    GPM_STOCK_APP_ICON,
-				    GPM_NOTIFY_URGENCY_NORMAL);
-		return FALSE;
-	}
 
 	/* check if the admin has disabled */
 	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_CAN_HIBERNATE, &allowed);
