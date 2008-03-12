@@ -1,5 +1,12 @@
 2008-03-12  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-main.c: (gpm_exit), (main):
+	This is was removed from gpm-main.c, but GpmManager breaks,
+	What the users sees is that GPM can no longer cause a session kill.
+	Found by Ted Gould, many thanks. (#521686)
+
+2008-03-12  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-cell-array.c: (gpm_cell_array_collection_changed):
 	Don't try to generate a config_id when we have no primary batteries.
 	Fixes a segfault in gdm2 (#522078)
