@@ -730,6 +730,14 @@ gpm_cell_array_collection_changed (GpmCellArray *cell_array)
 {
 	GpmCellUnit *unit;
 	gchar *config_id;
+	guint length;
+
+	length = cell_array->priv->array->len;
+	/* if we have no devices, don't try to get refresh anything */
+	if (length == 0) {
+		gpm_debug ("no devices of type");
+		return FALSE;
+	}
 
 	unit = &(cell_array->priv->unit);
 
