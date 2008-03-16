@@ -315,7 +315,6 @@ emit_button_pressed (GpmButton   *button,
 			return;
 		}
 		button->priv->lid_is_closed = TRUE;
-		gpm_sound_event (button->priv->sound, GPM_SOUND_LID_DOWN);
 	}
 	if (strcmp (atype, GPM_BUTTON_LID_OPEN) == 0) {
 		if (button->priv->lid_is_closed == FALSE) {
@@ -323,7 +322,6 @@ emit_button_pressed (GpmButton   *button,
 			return;
 		}
 		button->priv->lid_is_closed = FALSE;
-		gpm_sound_event (button->priv->sound, GPM_SOUND_LID_UP);
 	}
 
 	/* the names changed in 0.5.8 */
