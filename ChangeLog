@@ -1,5 +1,18 @@
 2008-03-16  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-sound.c: (gpm_sound_gst_bus_cb), (gpm_sound_init):
+	We never change state of the playbin back to NULL when playing a sound
+	event.
+	This as multiple problems :
+	- lock indefinitely the mixer when using ALSA as gstreamer audio sink :
+	- Create an HUGE leak when using pulsaudio as gstreamer audio sink and for
+	  some reasons pulsaudio crash, or you terminate the stream in pavucontrol.
+
+	Patch by Florent Mertens <outpourav@yahoo.fr>, and slightly tweaked by
+	me. Fixes #522336
+
+2008-03-16  Richard Hughes  <richard@hughsie.com>
+
 	* applets/brightness/brightness-applet.c:
 	(gpm_applet_create_popup):
 	* data/gpm-feedback-widget.glade:
