@@ -1,5 +1,15 @@
 2008-03-16  Richard Hughes  <richard@hughsie.com>
 
+	* applets/brightness/brightness-applet.c:
+	(gpm_applet_create_popup):
+	* data/gpm-feedback-widget.glade:
+	g-p-m should set a window type hint for the brightness feedback window.
+	That makes it easier for compositors like Compiz to properly animate
+	the window.
+	Patch by Danny Baumann <dannybaumann@web.de>, many thanks. Fixes #522236
+
+2008-03-16  Richard Hughes  <richard@hughsie.com>
+
 	* data/sounds/Makefile.am:
 	* src/gpm-button.c: (emit_button_pressed):
 	* src/gpm-sound.c: (gpm_sound_force):
