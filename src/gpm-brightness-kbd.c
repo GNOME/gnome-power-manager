@@ -93,6 +93,7 @@ gpm_brightness_kbd_get_hw (GpmBrightnessKbd *brightness,
 	GError     *error = NULL;
 	gboolean    ret;
 	DBusGProxy *proxy;
+	gint brightness_level;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
@@ -105,7 +106,7 @@ gpm_brightness_kbd_get_hw (GpmBrightnessKbd *brightness,
 
 	ret = dbus_g_proxy_call (proxy, "GetBrightness", &error,
 				 G_TYPE_INVALID,
-				 G_TYPE_UINT, brightness_level_hw,
+				 G_TYPE_INT, &brightness_level,
 				 G_TYPE_INVALID);
 	if (error) {
 		gpm_debug ("ERROR: %s", error->message);
@@ -115,7 +116,9 @@ gpm_brightness_kbd_get_hw (GpmBrightnessKbd *brightness,
 		/* abort as the DBUS method failed */
 		gpm_warning ("GetBrightness failed!");
 		return FALSE;
-	}
+	} 
+
+	*brightness_level_hw = (guint)brightness_level;
 	return TRUE;
 }
 
