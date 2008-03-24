@@ -138,6 +138,7 @@ gpm_array_append (GpmArray *array,
 	point->y = y;
 	point->data = data;
 	g_ptr_array_add (array->priv->array, (gpointer) point);
+	gpm_debug ("adding to %p, x=%i, y=%i, data=%i", array->priv->array, x, y, data);
 	return TRUE;
 }
 
@@ -672,6 +673,7 @@ gpm_array_limit_x_size (GpmArray *array,
 	g_return_val_if_fail (GPM_IS_ARRAY (array), FALSE);
 
 	length = gpm_array_get_size (array);
+	gpm_debug ("length of array (before) %i", length);
 
 	/* sanity check */
 	if (length < max_num) {
@@ -705,6 +707,11 @@ gpm_array_limit_x_size (GpmArray *array,
 			a--;
 		}
 	}
+
+	/* check length */
+	length = gpm_array_get_size (array);
+	gpm_debug ("length of array (after) %i", length);
+
 	return TRUE;
 }
 
