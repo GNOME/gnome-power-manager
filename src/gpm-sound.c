@@ -225,6 +225,37 @@ gpm_sound_class_init (GpmSoundClass *klass)
 }
 
 /**
+ * gpm_sound_class_init:
+ *
+ * Needed to change state of the playbin back to NULL to avoid lockups
+ **/
+static void
+gpm_sound_gst_bus_cb (GstBus *bus, GstMessage *message, GpmSound *sound)
+{
+	switch (GST_MESSAGE_TYPE (message)) {
+	case GST_MESSAGE_ERROR: {
+		GError	*error;
+		gchar	*debug;
+		
+		gst_element_set_state (sound->priv->playbin, GST_STATE_NULL);
+
+		gst_message_parse_error (message, &error, &debug);
+		gpm_warning ("%s (%s)", error->message, debug);
+
+		g_error_free (error);
+		g_free (debug);
+		break;
+	}
+	case GST_MESSAGE_EOS: {
+		gst_element_set_state (sound->priv->playbin, GST_STATE_NULL);
+		break;
+	}
+	default:
+		break;
+	}
+}
+
+/**
  * gpm_sound_init:
  * @sound: This class instance
  *
@@ -236,6 +267,7 @@ static void
 gpm_sound_init (GpmSound *sound)
 {
 	GstElement *audio_sink;
+	GstBus *bus;
 
 	sound->priv = GPM_SOUND_GET_PRIVATE (sound);
 
@@ -263,6 +295,11 @@ gpm_sound_init (GpmSound *sound)
 	sound->priv->playbin = gst_element_factory_make ("playbin", "play");
 	if (audio_sink != NULL)
 	g_object_set (sound->priv->playbin, "audio-sink", audio_sink, NULL);
+
+	bus = gst_element_get_bus (GST_ELEMENT (sound->priv->playbin));
+	gst_bus_add_signal_watch (bus);
+	g_signal_connect (bus, "message", G_CALLBACK (gpm_sound_gst_bus_cb), sound);
+	gst_object_unref (bus);
 
 	/* do we beep? */
 	gpm_conf_get_bool (sound->priv->conf, GPM_CONF_UI_ENABLE_BEEPING, &sound->priv->enable_beeping);
