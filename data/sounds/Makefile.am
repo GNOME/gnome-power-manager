@@ -4,8 +4,6 @@ EXTRA_DIST =				\
 Datadir = $(pkgdatadir)
 
 Data_DATA =				\
-	gpm-lid-up.wav  		\
-	gpm-lid-down.wav		\
 	gpm-critical-power.wav		\
 	gpm-suspend-failure.wav		\
 	gpm-unplugged.wav
