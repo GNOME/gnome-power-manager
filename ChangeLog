@@ -1,5 +1,12 @@
 2008-03-19  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-info.c: (gpm_statistics_get_parameters):
+	The graph colors are used inconsistently between the various graphs.
+	Patch by Jérôme Guelfucci <jerome.guelfucci@gmail.com>, many thanks.
+	Fixes #517914
+
+2008-03-19  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness-kbd.c: (gpm_brightness_kbd_get_hw):
 	GetBrightness returns a INT not a UINT, so fix the keyboard brightness.
 	Patch by Sjoerd Simons <sjoerd@luon.net>, many thanks.
