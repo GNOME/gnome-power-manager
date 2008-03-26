@@ -1,5 +1,11 @@
 2008-03-26  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-notify.c: (gpm_notify_perhaps_recall),
+	(gpm_notify_low_capacity), (gpm_notify_inhibit_lid):
+	Don't show some notifications under GDM. Fixes #108075
+
+2008-03-26  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-prefs-core.c: (prefs_setup_battery):
 	Fix a critical warning in gnome-power-preferences. Fixes #524449
 

@@ -360,6 +360,12 @@ gpm_notify_perhaps_recall (GpmNotify   *notify,
 	gchar *msg;
 	const gchar *title;
 
+	/* don't show when running under GDM */
+	if (g_getenv ("RUNNING_UNDER_GDM") != NULL) {
+		gpm_debug ("running under gdm, so no notification");
+		return FALSE;
+	}
+
 	/* save in state */
 	title = _("Battery may be recalled");
 	msg = g_strdup_printf (_("The battery in your computer may have been "
@@ -403,6 +409,12 @@ gpm_notify_low_capacity (GpmNotify *notify,
 	gchar *msg;
 	const gchar *title;
 
+	/* don't show when running under GDM */
+	if (g_getenv ("RUNNING_UNDER_GDM") != NULL) {
+		gpm_debug ("running under gdm, so no notification");
+		return FALSE;
+	}
+
 	title = _("Battery may be broken");
 	msg = g_strdup_printf (_("Your battery has a very low capacity (%i%%), "
 				 "which means that it may be old or broken."),
@@ -435,6 +447,12 @@ gpm_notify_inhibit_lid (GpmNotify *notify)
 {
 	gchar *msg;
 	const gchar *title;
+
+	/* don't show when running under GDM */
+	if (g_getenv ("RUNNING_UNDER_GDM") != NULL) {
+		gpm_debug ("running under gdm, so no notification");
+		return FALSE;
+	}
 
 	title = _("Sleep warning");
 	msg = g_strdup_printf (_("Your laptop will not sleep if you shut the "
