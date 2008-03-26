@@ -1037,8 +1037,6 @@ prefs_setup_battery (GpmPrefs *prefs)
 		gtk_widget_hide_all (widget);
 	}
 	if (prefs->priv->has_lcd == FALSE) {
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_battery_brightness");
-		gtk_widget_hide_all (widget);
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "checkbutton_battery_display_dim");
 		gtk_widget_hide_all (widget);
 	}
