@@ -57,6 +57,12 @@
 
 2008-03-12  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c: (gpm_manager_action_suspend),
+	(gpm_manager_action_hibernate):
+	Remove some dead code.
+
+2008-03-12  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-cell-array.c: (gpm_cell_array_collection_changed):
 	Don't try to generate a config_id when we have no primary batteries.
 	Fixes a segfault in gdm2 (#522078)
