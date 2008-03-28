@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-14 14:50+0000\n"
-"PO-Revision-Date: 2008-03-05 22:01+0100\n"
+"POT-Creation-Date: 2008-03-12 03:43+0000\n"
+"PO-Revision-Date: 2008-03-28 09:57+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian <SL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgstr "Aplet svetlosti upravljalnika porabe"
 
 #: ../applets/brightness/brightness-applet.c:107
 msgid "Adjusts laptop panel brightness."
-msgstr "Prilagodi svetlost plošče prenostnika."
+msgstr "Prilagodi svetlost plošče prenosnika."
 
 #: ../applets/brightness/brightness-applet.c:355
 #: ../applets/inhibit/inhibit-applet.c:338
@@ -97,7 +97,7 @@ msgstr "Avtorske pravice © 2006 Benjamin Canou"
 
 #: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:1
 msgid "Adjusts Laptop panel brightness"
-msgstr "Prilagodi svetlost plošče prenostnika."
+msgstr "Prilagodi svetlost plošče prenosnika."
 
 #: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:2
 msgid "Brightness Applet"
@@ -177,11 +177,11 @@ msgstr "Omogoči uravnavanje svetlosti ozadja."
 
 #: ../data/gnome-power-manager.schemas.in.h:4
 msgid "Battery critical low action"
-msgstr "Dejanje ob izpraznjenji bateriji"
+msgstr "Dejanje ob izpraznjeni bateriji"
 
 #: ../data/gnome-power-manager.schemas.in.h:5
 msgid "Change the brightness automatically using the ambient light sensors"
-msgstr "Spremeni svetlost samodejno z uporabo ambientnega senzorja"
+msgstr "Spremeni svetlost samodejno z uporabo senzorja okolja"
 
 #: ../data/gnome-power-manager.schemas.in.h:6
 msgid "Check CPU load before sleeping"
@@ -241,7 +241,7 @@ msgstr "Omogoča, da so uporabljena dodatna sporočila razhroščevanja. Uporaba
 
 #: ../data/gnome-power-manager.schemas.in.h:20
 msgid "If niced processes are considered, they can cause a frequency increment even though their absolute load percentage wouldn't trigger the scaling mechanism to switch up the frequency."
-msgstr ""
+msgstr "Procesi nice lahko povzročijo povečanje frekvence delovanja tudi, če je odstotek nalaganja sproži postopek spreminjanja velikosti za preklop frekvence."
 
 #: ../data/gnome-power-manager.schemas.in.h:21
 msgid "If preferences should be shown"
@@ -257,7 +257,7 @@ msgstr "Ali naj se ob skorajšnji izpraznjeni bateriji in zahtevah za zadrževan
 
 #: ../data/gnome-power-manager.schemas.in.h:24
 msgid "If the CPU load should be checked before doing the idle action."
-msgstr "Ali naj se pred dejanjem nedejavnostji preveri obremenitev procesorja."
+msgstr "Ali naj se pred dejanjem nedejavnosti preveri obremenitev procesorja."
 
 #: ../data/gnome-power-manager.schemas.in.h:25
 msgid "If the Suspend and Hibernate options should be allowed in the notification area drop down menu."
@@ -361,11 +361,11 @@ msgstr "Ali naj se prikaže opozorilo prazne baterije tudi, kadar je baterija po
 
 #: ../data/gnome-power-manager.schemas.in.h:50
 msgid "If we should show the recalled battery warning for a broken battery"
-msgstr ""
+msgstr "Ali naj bo prikazano opozorilo o preklicu pokvarjene baterije."
 
 #: ../data/gnome-power-manager.schemas.in.h:51
 msgid "If we should show the recalled battery warning for a broken battery. Set this to false only if you know your battery is okay."
-msgstr ""
+msgstr "Ali naj bo prikazano opozorilo o preklicu pokvarjene baterije. Vrednost spremenite le, če ste prepričani, da vaša baterija deluje pravilno."
 
 #: ../data/gnome-power-manager.schemas.in.h:52
 msgid "If we should show the warning when we have a valid inhibit and configured to sleep on lid close"
@@ -453,7 +453,7 @@ msgstr "Uporabljeno dejanje odstotkov"
 
 #: ../data/gnome-power-manager.schemas.in.h:73
 msgid "Percentage considered critical"
-msgstr "Odstotek je kritiče"
+msgstr "Odstotek je kritično nizek"
 
 #: ../data/gnome-power-manager.schemas.in.h:74
 msgid "Percentage considered low"
@@ -637,27 +637,27 @@ msgstr "Privzeta vrsta grafa prikazana v oknu statistike."
 
 #: ../data/gnome-power-manager.schemas.in.h:119
 msgid "The device name for the v4l device used as a brightness sensor backup"
-msgstr ""
+msgstr "Ime naprave za v4l za pomoč pri zaznavanju svetlobe."
 
 #: ../data/gnome-power-manager.schemas.in.h:120
 msgid "The device name for the v4l device used as a brightness sensor backup. A value of 'default' uses the first discovered sensor, or devices can be specified, e.g. '/dev/video0'"
-msgstr ""
+msgstr "Ime naprave za v4l za pomoč pri zaznavanju svetlobe. Privzeta rednost uporablja prvi odkriti senzor ali napravo; primer '/dev/video0'"
 
 #: ../data/gnome-power-manager.schemas.in.h:121
 msgid "The interval the ambient light sensors should be polled"
-msgstr ""
+msgstr "Razmik zaznave senzorja okolja svetlobe"
 
 #: ../data/gnome-power-manager.schemas.in.h:122
 msgid "The interval the ambient light sensors should be polled in seconds."
-msgstr ""
+msgstr "Razmik zaznave senzorja okolja svetlobe v sekundah."
 
 #: ../data/gnome-power-manager.schemas.in.h:123
 msgid "The invalid timeout for power actions"
-msgstr ""
+msgstr "Neveljaven časovni zamik za dejanja napajanja."
 
 #: ../data/gnome-power-manager.schemas.in.h:124
 msgid "The invalid timeout in ms for power actions. Set this longer if you get 'battery critical' messages when you unplug."
-msgstr ""
+msgstr "Neveljaven časovni zamik v ms za dejanja napajanja. Vrednost povečajte, če pogosto prejmete sporočila o kritični vrednosti baterije med odklopom."
 
 #: ../data/gnome-power-manager.schemas.in.h:125
 msgid "The maximum duration of time displayed on the x-axis of the graph."
@@ -709,7 +709,7 @@ msgstr "Vrsta spanja, ki naj se uporabi, ko je računalnik nedejaven. Mogoče vr
 
 #: ../data/gnome-power-manager.schemas.in.h:137
 msgid "The version of the installed version of the schema. Do not edit this value, it is used so that configure changes between versions can be detected."
-msgstr ""
+msgstr "Različica nameščene različice sheme. Te vrednosti ni priporočljivo spreminjati, saj lahko onemogočite zaznavo posodobitve."
 
 #: ../data/gnome-power-manager.schemas.in.h:138
 msgid "This is the laptop panel screen brightness used when the session is idle. Only valid when use_time_for_policy is true."
@@ -733,15 +733,15 @@ msgstr "Kdaj naj se prikaže ikona z obvestili"
 
 #: ../data/gnome-power-manager.schemas.in.h:143
 msgid "Whether NetworkManager should be connected and disconnected on sleep."
-msgstr ""
+msgstr "Ali naj se uporavljalnik omrežja priklopi in odklopi med spanjem."
 
 #: ../data/gnome-power-manager.schemas.in.h:144
 msgid "Whether NetworkManager should disconnect before suspending or hibernating and connect on resume."
-msgstr ""
+msgstr "Ali naj se uporavljalnik omrežja odklopi preden se začne postopek ustavitve ali hibernacija in ponovnega priklopa ob naslednji seji."
 
 #: ../data/gnome-power-manager.schemas.in.h:145
 msgid "Whether or not niced processes should be considered on processor load calculation"
-msgstr ""
+msgstr "Ali naj bodo postopki 'nice' zaznani med jedrnimi operacijami."
 
 #: ../data/gnome-power-manager.schemas.in.h:146
 msgid "Whether the GNOME keyring is locked before the computer enters hibernate. This means the keyring will have to be unlocked on resume."
@@ -1179,7 +1179,7 @@ msgstr "Obnovi"
 #. Translators: translate ONLY the string part after the |
 #: ../src/gpm-info.c:233
 msgid "label shown on graph|Hibernate"
-msgstr "HIbernacija"
+msgstr "Hibernacija"
 
 #: ../src/gpm-info.c:237
 msgid "Lid closed"
@@ -1287,7 +1287,7 @@ msgstr "Ekstrapolirani podatki"
 
 #: ../src/gpm-info.c:680
 msgid "AC adapter inserted"
-msgstr "Napajalnik vsavljen"
+msgstr "Napajalnik vstavljen"
 
 #: ../src/gpm-info.c:683
 msgid "AC adapter removed"
@@ -1732,7 +1732,7 @@ msgstr ""
 #. save in state
 #: ../src/gpm-notify.c:364
 msgid "Battery may be recalled"
-msgstr ""
+msgstr "Baterija je bila morda preklicana"
 
 #: ../src/gpm-notify.c:365
 #, c-format
@@ -1741,10 +1741,13 @@ msgid ""
 "\n"
 "For more information visit the %s battery recall website."
 msgstr ""
+"Baterija računalnika je bila preklicana s strani %s , zato je mogoče, da nastopijo težave.\n"
+"\n"
+"Za več podrobnosti obiščite preklicno spletno stran %s."
 
 #: ../src/gpm-notify.c:380
 msgid "Visit recall website"
-msgstr ""
+msgstr "Obišči preklicno spletno stran"
 
 #: ../src/gpm-notify.c:386
 #: ../src/gpm-notify.c:420
