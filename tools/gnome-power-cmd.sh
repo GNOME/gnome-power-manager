@@ -20,7 +20,7 @@ execute_dbus_method ()
 		  --type=method_call --print-reply --reply-timeout=2000	\
 		  /org/freedesktop/PowerManagement 			\
 		  org.freedesktop.PowerManagement.$1
-	if [ $? -eq 0 ]; then
+	if [ $? -ne 0 ]; then
 		echo "Failed"
 	fi 
 }
