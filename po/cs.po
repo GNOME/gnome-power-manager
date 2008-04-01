@@ -1,5 +1,5 @@
 # Czech translation of gnome-power-manager.
-# Copyright (C) 2008 Free Software Foundation, Inc.
+# Copyright (C) 2008 the author(s) of gnome-power-manager.
 # Copyright (C) 2008 Pavel Šefránek <ps@pjoul.cz>.
 # This file is distributed under the same license as the gnome-power-manager package.
 # Tomas Kyjovsky <tomas.kyjovsky@mail.muni.cz>, 2006.
@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-24 22:57+0100\n"
-"PO-Revision-Date: 2008-02-23 10:43+0100\n"
-"Last-Translator: Pavel Šefránek <ps@pjoul.cz>\n"
+"POT-Creation-Date: 2008-04-02 01:16+0200\n"
+"PO-Revision-Date: 2008-04-02 01:13+0100\n"
+"Last-Translator: Petr Kovar <pknbe@volny.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -44,12 +44,12 @@ msgstr "Nelze zjistit jas displeje notebooku"
 msgid "LCD brightness : %d%%"
 msgstr "Jas LCD: %d%%"
 
-#: ../applets/brightness/brightness-applet.c:746
+#: ../applets/brightness/brightness-applet.c:747
 #: ../applets/inhibit/inhibit-applet.c:406 ../src/gpm-tray-icon.c:310
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Licencováno pod licencí GNU General Public Licence Verze 2"
 
-#: ../applets/brightness/brightness-applet.c:747
+#: ../applets/brightness/brightness-applet.c:748
 #: ../applets/inhibit/inhibit-applet.c:407 ../src/gpm-tray-icon.c:311
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
@@ -62,7 +62,7 @@ msgstr ""
 "vydávané Free Software Foundation; a to buď verze 2 této\n"
 "licence anebo (podle vlastního uvážení) kterékoliv pozdější verze."
 
-#: ../applets/brightness/brightness-applet.c:751
+#: ../applets/brightness/brightness-applet.c:752
 #: ../applets/inhibit/inhibit-applet.c:411 ../src/gpm-tray-icon.c:315
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
@@ -75,7 +75,7 @@ msgstr ""
 "záruky PRODEJNOSTI anebo VHODNOSTI PRO URČITÝ ÚČEL.\n"
 "Další podrobnosti hledejte v GNU General Public License."
 
-#: ../applets/brightness/brightness-applet.c:755
+#: ../applets/brightness/brightness-applet.c:756
 #: ../applets/inhibit/inhibit-applet.c:415 ../src/gpm-tray-icon.c:319
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
@@ -88,7 +88,7 @@ msgstr ""
 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,\n"
 "MA 02110-1301, USA."
 
-#: ../applets/brightness/brightness-applet.c:769
+#: ../applets/brightness/brightness-applet.c:770
 msgid "Copyright © 2006 Benjamin Canou"
 msgstr "Copyright © 2006 Benjamin Canou"
 
@@ -1269,6 +1269,7 @@ msgid "_Reduce backlight brightness"
 msgstr "Zeslabit _jas podsvícení"
 
 #: ../src/gpm-control.c:279
+#, c-format
 msgid "The message was not sent due to DBUS security rules"
 msgstr "Zpráva nebyla odeslána z důvodu bezpečnostního opatření D-Bus"
 
@@ -1278,6 +1279,7 @@ msgid "General failure: %s"
 msgstr "Obecná chyba: %s"
 
 #: ../src/gpm-common.c:242
+#, c-format
 msgid "Unknown time"
 msgstr "Neznámý čas"
 
@@ -1626,74 +1628,85 @@ msgid "%s has stopped the timeout action from taking place: %s."
 msgstr "Aplikace %s zastavila naplánovanou akci z důvodu: %s."
 
 #: ../src/gpm-inhibit.c:406 ../src/gpm-inhibit.c:421
+#, c-format
 msgid "Multiple applications have stopped the suspend from taking place."
 msgstr "Více aplikací zastavilo uspání počítače do paměti."
 
 #: ../src/gpm-inhibit.c:409
+#, c-format
 msgid "Multiple applications have stopped the hibernate from taking place."
 msgstr "Více aplikací zastavilo uspání počítače na disk."
 
 #: ../src/gpm-inhibit.c:412
+#, c-format
 msgid "Multiple applications have stopped the policy action from taking place."
 msgstr "Více aplikací zastavilo uplatňování pravidel."
 
 #: ../src/gpm-inhibit.c:415
+#, c-format
 msgid "Multiple applications have stopped the reboot from taking place."
 msgstr "Více aplikací zastavilo restart počítače."
 
 #: ../src/gpm-inhibit.c:418
+#, c-format
 msgid "Multiple applications have stopped the shutdown from taking place."
 msgstr "Více aplikací zastavilo vypnutí počítače."
 
-#: ../src/gpm-main.c:137
+#: ../src/gpm-main.c:153
 msgid "Do not daemonize"
 msgstr "Nespouštět jako démona"
 
-#: ../src/gpm-main.c:139 ../src/gpm-prefs.c:107 ../src/gpm-statistics.c:105
+#: ../src/gpm-main.c:155 ../src/gpm-prefs.c:107 ../src/gpm-statistics.c:105
 msgid "Show extra debugging information"
 msgstr "Zobrazit dodatečné ladicí informace"
 
-#: ../src/gpm-main.c:141
+#: ../src/gpm-main.c:157
 msgid "Show version of installed program and exit"
 msgstr "Zobrazit verzi nainstalovaného programu a skončit"
 
-#: ../src/gpm-main.c:143
+#: ../src/gpm-main.c:159
 msgid "Exit after a small delay (for debugging)"
 msgstr "Ukončit po malé prodlevě (pro ladění)"
 
-#: ../src/gpm-main.c:145
+#: ../src/gpm-main.c:161
 msgid "Exit after the manager has loaded (for debugging)"
 msgstr "Ukončit poté, co se načte správce (kvůli ladění)"
 
-#: ../src/gpm-main.c:147
+#: ../src/gpm-main.c:163
 msgid "Debug specific files, e.g. power"
 msgstr "Ladit specifické soubory, např. power"
 
-#: ../src/gpm-main.c:151
+#: ../src/gpm-main.c:167
 msgid "GNOME Power Manager"
 msgstr "Správce napájení GNOME"
 
 #: ../src/gpm-manager.c:185
+#, c-format
 msgid "Request to suspend"
 msgstr "Požadavek na uspání do paměti"
 
 #: ../src/gpm-manager.c:188
+#, c-format
 msgid "Request to hibernate"
 msgstr "Požadavek na uspání na disk"
 
 #: ../src/gpm-manager.c:191
+#, c-format
 msgid "Request to do policy action"
 msgstr "Požadavek pro uplatnění pravidel"
 
 #: ../src/gpm-manager.c:194
+#, c-format
 msgid "Request to reboot"
 msgstr "Požadavek na restart"
 
 #: ../src/gpm-manager.c:197
+#, c-format
 msgid "Request to shutdown"
 msgstr "Požadavek na vypnutí"
 
 #: ../src/gpm-manager.c:200
+#, c-format
 msgid "Request to do timeout action"
 msgstr "Požadavek na vykonání časově omezené akce"
 
@@ -1702,21 +1715,11 @@ msgstr "Požadavek na vykonání časově omezené akce"
 msgid "Perform action anyway"
 msgstr "Akci přesto vykonat"
 
-#: ../src/gpm-manager.c:331 ../src/gpm-manager.c:357 ../src/gpm-manager.c:391
-#: ../src/gpm-manager.c:417 ../src/gpm-manager.c:457
-msgid "Action forbidden"
-msgstr "Akce je zakázána"
-
-#: ../src/gpm-manager.c:332 ../src/gpm-manager.c:392 ../src/gpm-manager.c:458
-msgid "Policy timeout is not valid. Please wait a few seconds and try again."
-msgstr ""
-"Časový limit pravidel není platný. Počkejte pár sekund a zkuste to znovu."
-
-#: ../src/gpm-manager.c:344 ../src/gpm-manager.c:404
+#: ../src/gpm-manager.c:333 ../src/gpm-manager.c:382
 msgid "Action disallowed"
 msgstr "Akce není povolena"
 
-#: ../src/gpm-manager.c:345
+#: ../src/gpm-manager.c:334
 msgid ""
 "Suspend support has been disabled. Contact your administrator for more "
 "details."
@@ -1724,15 +1727,19 @@ msgstr ""
 "Uspání do paměti bylo zakázáno. Kontaktujte svého správce systému, chcete-li "
 "více informací."
 
-#: ../src/gpm-manager.c:358
+#: ../src/gpm-manager.c:346 ../src/gpm-manager.c:395 ../src/gpm-manager.c:435
+msgid "Action forbidden"
+msgstr "Akce je zakázána"
+
+#: ../src/gpm-manager.c:347
 msgid "Suspend is not available on this computer."
 msgstr "Uspání do paměti není dostupné na tomto počítači."
 
-#: ../src/gpm-manager.c:371 ../src/gpm-manager.c:790
+#: ../src/gpm-manager.c:360 ../src/gpm-manager.c:768
 msgid "Suspending computer."
 msgstr "Uspávám počítač do paměti."
 
-#: ../src/gpm-manager.c:405
+#: ../src/gpm-manager.c:383
 msgid ""
 "Hibernate support has been disabled. Contact your administrator for more "
 "details."
@@ -1740,163 +1747,169 @@ msgstr ""
 "Uspání na disk bylo zakázáno. Kontaktujte svého správce systému, chcete-li "
 "více informací."
 
-#: ../src/gpm-manager.c:418
+#: ../src/gpm-manager.c:396
 msgid "Hibernate is not available on this computer."
 msgstr "Uspání na disk není dostupné na tomto počítači."
 
-#: ../src/gpm-manager.c:431 ../src/gpm-manager.c:805
+#: ../src/gpm-manager.c:409 ../src/gpm-manager.c:783
 msgid "Hibernating computer."
 msgstr "Uspávám počítač na disk."
 
-#: ../src/gpm-manager.c:479
+#: ../src/gpm-manager.c:436
+msgid "Policy timeout is not valid. Please wait a few seconds and try again."
+msgstr ""
+"Časový limit pravidel není platný. Počkejte pár sekund a zkuste to znovu."
+
+#: ../src/gpm-manager.c:457
 msgid "Doing nothing."
 msgstr "Nedělám nic."
 
-#: ../src/gpm-manager.c:492
+#: ../src/gpm-manager.c:470
 msgid "Shutting down computer."
 msgstr "Vypíná se počítač."
 
-#: ../src/gpm-manager.c:497
+#: ../src/gpm-manager.c:475
 msgid "GNOME interactive logout."
 msgstr "Interaktivní odhlášení z GNOME."
 
-#: ../src/gpm-manager.c:790 ../src/gpm-manager.c:805
+#: ../src/gpm-manager.c:768 ../src/gpm-manager.c:783
 msgid "System idle."
 msgstr "Systém nečinný."
 
-#: ../src/gpm-manager.c:882
+#: ../src/gpm-manager.c:860
 msgid "Power Information"
 msgstr "Informace o napájení"
 
-#: ../src/gpm-manager.c:899
+#: ../src/gpm-manager.c:877
 msgid "The power button has been pressed."
 msgstr "Bylo stisknuto tlačítko napájení."
 
-#: ../src/gpm-manager.c:911
+#: ../src/gpm-manager.c:889
 msgid "The suspend button has been pressed."
 msgstr "Bylo stisknuto tlačítko uspání počítače do paměti."
 
-#: ../src/gpm-manager.c:923
+#: ../src/gpm-manager.c:901
 msgid "The hibernate button has been pressed."
 msgstr "Bylo stisknuto tlačítko uspání počítače na disk."
 
-#: ../src/gpm-manager.c:954
+#: ../src/gpm-manager.c:932
 msgid "The lid has been closed on ac power."
 msgstr "Víko notebooku bylo zavřeno při napájení ze sítě."
 
-#: ../src/gpm-manager.c:984
+#: ../src/gpm-manager.c:962
 msgid "The lid has been closed on battery power."
 msgstr "Víko notebooku bylo zavřeno při napájení z baterie."
 
-#: ../src/gpm-manager.c:1073
+#: ../src/gpm-manager.c:1051
 msgid ""
 "The lid has been closed, and the ac adapter removed (and gconf is okay)."
 msgstr ""
 "Víko notebooku bylo zavřeno a byl vyjmut síťový adaptér (a gconf je v "
 "pořádku)."
 
-#: ../src/gpm-manager.c:1096
+#: ../src/gpm-manager.c:1074
 msgid "Battery is critically low."
 msgstr "Kriticky nízký stav baterie."
 
-#: ../src/gpm-manager.c:1186 ../src/gpm-manager.c:1201
+#: ../src/gpm-manager.c:1164 ../src/gpm-manager.c:1179
 msgid "User clicked on tray"
 msgstr "Uživatel klikl na oznamovací oblast"
 
-#: ../src/gpm-manager.c:1411
+#: ../src/gpm-manager.c:1389
 msgid "Laptop battery low"
 msgstr "Baterie notebooku je téměř vybitá"
 
-#: ../src/gpm-manager.c:1413
+#: ../src/gpm-manager.c:1391
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%d%%)"
 msgstr "Zbývá vám přibližně <b>%s</b> kapacity baterie (%d%%)"
 
-#: ../src/gpm-manager.c:1416
+#: ../src/gpm-manager.c:1394
 msgid "UPS low"
 msgstr "Záložní zdroj je téměř vybitý"
 
-#: ../src/gpm-manager.c:1418
+#: ../src/gpm-manager.c:1396
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS backup power (%d%%)"
 msgstr "Zbývá vám přibližně <b>%s</b> energie záložního zdroje (%d%%)"
 
-#: ../src/gpm-manager.c:1421 ../src/gpm-manager.c:1521
+#: ../src/gpm-manager.c:1399 ../src/gpm-manager.c:1499
 msgid "Mouse battery low"
 msgstr "Baterie v myši je téměř vybitá"
 
-#: ../src/gpm-manager.c:1422
+#: ../src/gpm-manager.c:1400
 #, c-format
 msgid "The wireless mouse attached to this computer is low in power (%d%%)"
 msgstr "Bezdrátová myš připojená k tomuto počítači je téměř vybita (%d%%)"
 
-#: ../src/gpm-manager.c:1424 ../src/gpm-manager.c:1526
+#: ../src/gpm-manager.c:1402 ../src/gpm-manager.c:1504
 msgid "Keyboard battery low"
 msgstr "Baterie v klávesnici je téměř vybitá"
 
-#: ../src/gpm-manager.c:1425
+#: ../src/gpm-manager.c:1403
 #, c-format
 msgid "The wireless keyboard attached to this computer is low in power (%d%%)"
 msgstr ""
 "Bezdrátová klávesnice připojená k tomuto počítači je téměř vybita (%d%%)"
 
-#: ../src/gpm-manager.c:1427 ../src/gpm-manager.c:1531
+#: ../src/gpm-manager.c:1405 ../src/gpm-manager.c:1509
 msgid "PDA battery low"
 msgstr "Nízký stav baterie PDA"
 
-#: ../src/gpm-manager.c:1428
+#: ../src/gpm-manager.c:1406
 #, c-format
 msgid "The PDA attached to this computer is low in power (%d%%)"
 msgstr "PDA připojené k tomuto počítači je téměř vybito (%d%%)"
 
-#: ../src/gpm-manager.c:1430 ../src/gpm-manager.c:1536
+#: ../src/gpm-manager.c:1408 ../src/gpm-manager.c:1514
 msgid "Cell phone battery low"
 msgstr "Baterie mobilního telefonu je téměř vybitá"
 
-#: ../src/gpm-manager.c:1431
+#: ../src/gpm-manager.c:1409
 #, c-format
 msgid "The cell phone attached to this computer is low in power (%d%%)"
 msgstr "Mobilní telefon připojený k tomuto počítači je téměř vybitý (%d%%)"
 
-#: ../src/gpm-manager.c:1458
+#: ../src/gpm-manager.c:1436
 msgid "a short time"
 msgstr "krátký čas"
 
-#: ../src/gpm-manager.c:1481 ../src/gpm-manager.c:1567
+#: ../src/gpm-manager.c:1459 ../src/gpm-manager.c:1545
 msgid "Laptop battery critically low"
 msgstr "Kriticky nízký stav baterie notebooku"
 
-#: ../src/gpm-manager.c:1494
+#: ../src/gpm-manager.c:1472
+#, c-format
 msgid "Plug in your AC adapter to avoid losing data."
 msgstr "Připojte svůj síťový adaptér, abyste zabránili ztrátě dat."
 
-#: ../src/gpm-manager.c:1497
+#: ../src/gpm-manager.c:1475
 #, c-format
 msgid "This computer will suspend in %s if the AC is not connected."
 msgstr ""
 "Tento počítač bude uspán do paměti za %s, pokud nepřipojíte síťový adaptér."
 
-#: ../src/gpm-manager.c:1500
+#: ../src/gpm-manager.c:1478
 #, c-format
 msgid "This computer will hibernate in %s if the AC is not connected."
 msgstr ""
 "Tento počítač bude uspán na disk za %s, pokud nepřipojíte síťový adaptér."
 
-#: ../src/gpm-manager.c:1503
+#: ../src/gpm-manager.c:1481
 #, c-format
 msgid "This computer will shutdown in %s if the AC is not connected."
 msgstr "Tento počítač bude vypnut za %s, pokud nepřipojíte síťový adaptér."
 
-#: ../src/gpm-manager.c:1506
+#: ../src/gpm-manager.c:1484
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%d%%). %s"
 msgstr "Zbývá vám přibližně <b>%s</b> kapacity baterie (%d%%). %s"
 
-#: ../src/gpm-manager.c:1514 ../src/gpm-manager.c:1599
+#: ../src/gpm-manager.c:1492 ../src/gpm-manager.c:1577
 msgid "UPS critically low"
 msgstr "Kriticky nízký stav záložního zdroje"
 
-#: ../src/gpm-manager.c:1516
+#: ../src/gpm-manager.c:1494
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore AC "
@@ -1905,7 +1918,7 @@ msgstr ""
 "Zbývá vám přibližně <b>%s</b> energie záložního zdroje (%d%%). Obnovte "
 "prosím napájení počítače ze sítě, abyste předešli ztrátě dat."
 
-#: ../src/gpm-manager.c:1522
+#: ../src/gpm-manager.c:1500
 #, c-format
 msgid ""
 "The wireless mouse attached to this computer is very low in power (%d%%). "
@@ -1914,7 +1927,7 @@ msgstr ""
 "Bezdrátová myš připojená k tomuto počítači je téměř vybita (%d%%). Nebude-li "
 "dobita, přestane brzy pracovat."
 
-#: ../src/gpm-manager.c:1527
+#: ../src/gpm-manager.c:1505
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is very low in power (%d%%). "
@@ -1923,7 +1936,7 @@ msgstr ""
 "Bezdrátová klávesnice připojená k tomuto počítači je téměř vybita (%d%%). "
 "Nebude-li dobita, přestane brzy pracovat."
 
-#: ../src/gpm-manager.c:1532
+#: ../src/gpm-manager.c:1510
 #, c-format
 msgid ""
 "The PDA attached to this computer is very low in power (%d%%). This device "
@@ -1932,7 +1945,7 @@ msgstr ""
 "PDA připojené k tomuto počítači je téměř vybito (%d%%). Nebude-li dobito, "
 "přestane brzy pracovat."
 
-#: ../src/gpm-manager.c:1537
+#: ../src/gpm-manager.c:1515
 #, c-format
 msgid ""
 "Your cell phone is very low in power (%d%%). This device will soon stop "
@@ -1941,7 +1954,7 @@ msgstr ""
 "Mobilní telefon připojený k tomuto počítači je téměř vybitý (%d%%). Nebude-"
 "li dobit, přestane brzy pracovat."
 
-#: ../src/gpm-manager.c:1574
+#: ../src/gpm-manager.c:1552
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
@@ -1949,7 +1962,7 @@ msgstr ""
 "Baterie je pod kritickou úrovní; jakmile se baterie zcela vyprázdní, bude "
 "<b>přerušeno napájení</b> počítače."
 
-#: ../src/gpm-manager.c:1579
+#: ../src/gpm-manager.c:1557
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1959,19 +1972,19 @@ msgstr ""
 "</b> K udržení počítače v uspaném stavu je třeba stálý přísun malého "
 "množství energie."
 
-#: ../src/gpm-manager.c:1585
+#: ../src/gpm-manager.c:1563
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr "Baterie je pod kritickou úrovní a počítač bude uspán na disk."
 
-#: ../src/gpm-manager.c:1589
+#: ../src/gpm-manager.c:1567
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr "Baterie je pod kritickou úrovní a počítač bude vypnut."
 
-#: ../src/gpm-manager.c:1606
+#: ../src/gpm-manager.c:1584
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
@@ -1979,24 +1992,24 @@ msgstr ""
 "Záložní zdroj je pod kritickou úrovní; jakmile se záložní zdroj zcela "
 "vyprázdní, bude <b>přerušeno napájení</b> počítače."
 
-#: ../src/gpm-manager.c:1611
+#: ../src/gpm-manager.c:1589
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr ""
 "Záložní zdroj je pod kritickou úrovní nabití a počítač bude brzy uspán na "
 "disk."
 
-#: ../src/gpm-manager.c:1615
+#: ../src/gpm-manager.c:1593
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr ""
 "Záložní zdroj je pod kritickou úrovní nabití a počítač bude brzy vypnut."
 
-#: ../src/gpm-manager.c:1721
+#: ../src/gpm-manager.c:1699
 msgid "Install problem!"
 msgstr "Problém s instalací!"
 
-#: ../src/gpm-manager.c:1722
+#: ../src/gpm-manager.c:1700
 msgid ""
 "The configuration defaults for GNOME Power Manager have not been installed "
 "correctly.\n"
@@ -2006,11 +2019,11 @@ msgstr ""
 "Prosím kontaktujte svého správce systému."
 
 #. save in state
-#: ../src/gpm-notify.c:364
+#: ../src/gpm-notify.c:370
 msgid "Battery may be recalled"
 msgstr "Baterie můře být stahována z trhu"
 
-#: ../src/gpm-notify.c:365
+#: ../src/gpm-notify.c:371
 #, c-format
 msgid ""
 "The battery in your computer may have been recalled by %s and you may be at "
@@ -2023,21 +2036,21 @@ msgstr ""
 "\n"
 "Více informací získáte na webu věnovanému stahování baterií z trhu %s."
 
-#: ../src/gpm-notify.c:380
+#: ../src/gpm-notify.c:386
 msgid "Visit recall website"
 msgstr "Navštívit web stahování baterií z trhu"
 
-#: ../src/gpm-notify.c:386 ../src/gpm-notify.c:420 ../src/gpm-notify.c:454
-#: ../src/gpm-notify.c:485 ../src/gpm-notify.c:515 ../src/gpm-notify.c:545
-#: ../src/gpm-notify.c:581
+#: ../src/gpm-notify.c:392 ../src/gpm-notify.c:432 ../src/gpm-notify.c:472
+#: ../src/gpm-notify.c:503 ../src/gpm-notify.c:533 ../src/gpm-notify.c:563
+#: ../src/gpm-notify.c:599
 msgid "Do not show me this again"
 msgstr "Znovu nezobrazovat"
 
-#: ../src/gpm-notify.c:406
+#: ../src/gpm-notify.c:418
 msgid "Battery may be broken"
 msgstr "Baterie může být poškozena"
 
-#: ../src/gpm-notify.c:407
+#: ../src/gpm-notify.c:419
 #, c-format
 msgid ""
 "Your battery has a very low capacity (%i%%), which means that it may be old "
@@ -2046,11 +2059,12 @@ msgstr ""
 "Vaše baterie má velmi malou kapacitu (%i%%), což znamená, že může být stará "
 "nebo poškozená."
 
-#: ../src/gpm-notify.c:439
+#: ../src/gpm-notify.c:457
 msgid "Sleep warning"
 msgstr "Varování režimu spánku"
 
-#: ../src/gpm-notify.c:440
+#: ../src/gpm-notify.c:458
+#, c-format
 msgid ""
 "Your laptop will not sleep if you shut the lid as a running program has "
 "prevented this.\n"
@@ -2061,36 +2075,36 @@ msgstr ""
 "Některé notebooky se mohou přehřát, pokud mají zavřené víko a nejsou v "
 "režimu spánku."
 
-#: ../src/gpm-notify.c:473
+#: ../src/gpm-notify.c:491
 msgid "Battery Charged"
 msgstr "Baterie dobita"
 
-#: ../src/gpm-notify.c:474
+#: ../src/gpm-notify.c:492
 msgid "Your laptop battery is now fully charged"
 msgstr "Baterie vašeho notebooku je nyní plně dobita"
 
-#: ../src/gpm-notify.c:503
+#: ../src/gpm-notify.c:521
 msgid "Battery Discharging"
 msgstr "Baterie se vybíjí"
 
-#: ../src/gpm-notify.c:504
+#: ../src/gpm-notify.c:522
 msgid "The AC power has been unplugged. The system is now using battery power."
 msgstr "Byl odpojen síťový adaptér. Systém nyní používá napájení z baterie."
 
-#: ../src/gpm-notify.c:533
+#: ../src/gpm-notify.c:551
 msgid "UPS Discharging"
 msgstr "Záložní zdroj se vybíjí"
 
-#: ../src/gpm-notify.c:534
+#: ../src/gpm-notify.c:552
 msgid "The AC power has been unplugged. The system is now using backup power."
 msgstr ""
 "Byl odpojen síťový adaptér. Systém nyní používá napájení ze záložního zdroje."
 
-#: ../src/gpm-notify.c:564
+#: ../src/gpm-notify.c:582
 msgid "Sleep Problem"
 msgstr "Problém s uspáním"
 
-#: ../src/gpm-notify.c:566
+#: ../src/gpm-notify.c:584
 msgid ""
 "Your computer failed to hibernate.\n"
 "Check the help file for common problems."
@@ -2098,7 +2112,7 @@ msgstr ""
 "Váš počítač se nepodařilo uspat na disk.\n"
 "Řešení běžných problémů naleznete v souboru nápovědy."
 
-#: ../src/gpm-notify.c:569
+#: ../src/gpm-notify.c:587
 msgid ""
 "Your computer failed to suspend.\n"
 "Check the help file for common problems."
@@ -2106,11 +2120,11 @@ msgstr ""
 "Váš počítač se nepodařilo uspat do paměti.\n"
 "Řešení běžných problémů naleznete v souboru nápovědy."
 
-#: ../src/gpm-notify.c:594
+#: ../src/gpm-notify.c:612
 msgid "Visit quirk website"
 msgstr "Navštívit web HAL Quirk Site"
 
-#: ../src/gpm-cell-array.c:976
+#: ../src/gpm-cell-array.c:984
 #, c-format
 msgid ""
 "%s fully charged (%i%%)\n"
@@ -2119,23 +2133,23 @@ msgstr ""
 "%s: plně nabito (%i%%)\n"
 "Výdrž baterie: %s\n"
 
-#: ../src/gpm-cell-array.c:980
+#: ../src/gpm-cell-array.c:988
 #, c-format
 msgid "%s fully charged (%i%%)\n"
 msgstr "%s: plně nabito (%i%%)\n"
 
-#: ../src/gpm-cell-array.c:988
+#: ../src/gpm-cell-array.c:996
 #, c-format
 msgid "%s %s remaining (%i%%)\n"
 msgstr "%s: %s do úplného vybití (%i%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:993
+#: ../src/gpm-cell-array.c:1001
 #, c-format
 msgid "%s discharging (%i%%)\n"
 msgstr "%s se vybíjí (%i%%)\n"
 
-#: ../src/gpm-cell-array.c:1005
+#: ../src/gpm-cell-array.c:1013
 #, c-format
 msgid ""
 "%s %s until charged (%i%%)\n"
@@ -2144,18 +2158,18 @@ msgstr ""
 "%s: zbývá %s do plného nabití (nyní nabito %i%%)\n"
 "Výdrž baterie: %s\n"
 
-#: ../src/gpm-cell-array.c:1012
+#: ../src/gpm-cell-array.c:1020
 #, c-format
 msgid "%s %s until charged (%i%%)\n"
 msgstr "%s: zbývá %s do plného nabití (nyní nabito %i%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:1017
+#: ../src/gpm-cell-array.c:1025
 #, c-format
 msgid "%s charging (%i%%)\n"
 msgstr "%s se nabíjí (%i%%)\n"
 
-#: ../src/gpm-cell-array.c:1024
+#: ../src/gpm-cell-array.c:1032
 msgid "Battery state could not be read at this time\n"
 msgstr "Stav baterie nemůže být zjištěn\n"
 
@@ -2325,7 +2339,7 @@ msgstr "Zeptat se"
 
 #: ../src/gpm-prefs-core.c:83 ../src/gpm-statistics-core.c:96
 msgid "Suspend"
-msgstr "Uspat to paměti"
+msgstr "Uspat do paměti"
 
 #: ../src/gpm-prefs-core.c:84 ../src/gpm-statistics-core.c:97
 msgid "Shutdown"
