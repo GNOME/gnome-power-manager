@@ -60,6 +60,7 @@ struct GpmPrefsPrivate
 	gboolean		 has_ambient;
 	gboolean		 has_button_lid;
 	gboolean		 has_button_suspend;
+	gboolean		 can_shutdown;
 	gboolean		 can_suspend;
 	gboolean		 can_hibernate;
 	GpmConf			*conf;
@@ -500,7 +501,9 @@ gpm_prefs_setup_action_combo (GpmPrefs     *prefs,
 	}
 
 	while (actions[i] != NULL) {
-		if (strcmp (actions[i], ACTION_SHUTDOWN) == 0) {
+		if ((strcmp (actions[i], ACTION_SHUTDOWN) == 0) && !prefs->priv->can_shutdown) {
+			gpm_debug ("Cannot add option, as cannot shutdown.");
+		} else if (strcmp (actions[i], ACTION_SHUTDOWN) == 0 && prefs->priv->can_shutdown) {
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
 						   ACTION_SHUTDOWN_TEXT);
 			n_added++;
@@ -1147,6 +1150,7 @@ gpm_prefs_init (GpmPrefs *prefs)
 	prefs->priv->has_ambient = ((caps & GPM_PREFS_SERVER_AMBIENT) > 0);
 	prefs->priv->has_button_lid = ((caps & GPM_PREFS_SERVER_LID) > 0);
 	prefs->priv->has_button_suspend = TRUE;
+	prefs->priv->can_shutdown = gpm_dbus_method_bool ("CanShutdown");
 	prefs->priv->can_suspend = gpm_dbus_method_bool ("CanSuspend");
 	prefs->priv->can_hibernate = gpm_dbus_method_bool ("CanHibernate");
 	gpm_debug ("caps=%i", caps);

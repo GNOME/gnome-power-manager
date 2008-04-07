@@ -1,3 +1,12 @@
+2008-04-07  simon.zheng  <simon.zheng@sun.com>
+
+	* src/gpm-prefs-core.c: (gpm_prefs_setup_action_combo),
+	(gpm_prefs_init):
+	Check "CanShutdown" before showing option shutdown in 
+	preferences, as well as suspend and hibernate. Fixes #526178.
+	* tools/gnome-power-bugreport.sh:
+	Support Solaris platform. See #526349.
+
 2008-04-01  simon.zheng  <simon.zheng@sun.com>
 
 	* tools/gnome-power-cmd.sh:

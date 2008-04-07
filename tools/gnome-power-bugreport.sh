@@ -36,7 +36,7 @@ print_hal_capability ()
 }
 
 echo -n "Distro version:       "
-cat /etc/*-release | uniq
+cat /etc/*release | uniq
 
 echo -n "Kernel version:       "
 uname -r
@@ -69,9 +69,18 @@ print_hal_capability "cpufreq_control"
 echo "Battery Information:"
 lshal | grep "battery\."
 
+OS=`uname -s`
+
 echo "GNOME Power Manager Process Information:"
-ps aux --forest | grep gnome-power | grep -v grep
+if [ "$OS" = "SunOS" ]; then
+	ptree -a `pgrep power`
+else
+	ps aux --forest | grep gnome-power | grep -v grep
+fi
 
 echo "HAL Process Information:"
-ps aux --forest | grep hald | grep -v grep
-
+if [ "$OS" = "SunOS" ]; then
+        ptree -a `pgrep hald`
+else
+	ps aux --forest | grep hald | grep -v grep
+fi
