@@ -157,8 +157,7 @@ gpm_exponential_average (gint previous, gint new, guint slew)
  * Return value: The discrete value for this percentage.
  **/
 guint
-gpm_percent_to_discrete (guint percentage,
-			 guint levels)
+gpm_percent_to_discrete (guint percentage, guint levels)
 {
 	/* check we are in range */
 	if (percentage > 100) {
@@ -181,8 +180,7 @@ gpm_percent_to_discrete (guint percentage,
  * Return value: The percentage for this discrete value.
  **/
 guint
-gpm_discrete_to_percent (guint discrete,
-			 guint levels)
+gpm_discrete_to_percent (guint discrete, guint levels)
 {
 	/* check we are in range */
 	if (discrete > levels) {

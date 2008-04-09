@@ -1,5 +1,30 @@
 2008-04-09  Richard Hughes  <richard@hughsie.com>
 
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-backlight.c: (gpm_backlight_get_brightness),
+	(gpm_backlight_set_brightness),
+	(gpm_backlight_brightness_evaluate_and_set), (button_pressed_cb),
+	(brightness_changed_cb), (gpm_backlight_init):
+	* src/gpm-brightness-hal.c: (gpm_brightness_hal_get_hw),
+	(gpm_brightness_hal_set_hw), (gpm_brightness_hal_dim_hw_step),
+	(gpm_brightness_hal_get_step), (gpm_brightness_hal_dim_hw),
+	(gpm_brightness_hal_set), (gpm_brightness_hal_get),
+	(gpm_brightness_hal_up), (gpm_brightness_hal_down),
+	(gpm_brightness_hal_has_hw), (gpm_brightness_hal_finalize),
+	(gpm_brightness_hal_class_init), (gpm_brightness_hal_init),
+	(gpm_brightness_hal_new):
+	* src/gpm-brightness-hal.h:
+	* src/gpm-brightness-lcd.c:
+	* src/gpm-brightness-lcd.h:
+	* src/gpm-common.c: (gpm_percent_to_discrete),
+	(gpm_discrete_to_percent):
+	* src/gpm-srv-screensaver.c: (screensaver_auth_request_cb),
+	(gpm_srv_screensaver_init), (gpm_srv_screensaver_finalize):
+	Convert the GpmBacklight class to use GpmBrightness and fix up a few issues along the way.
+
+2008-04-09  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness.c: (gpm_brightness_set), (gpm_brightness_get),
 	(gpm_brightness_up), (gpm_brightness_down),
 	(gpm_brightness_has_hw), (gpm_brightness_finalize),

@@ -14,6 +14,7 @@ INCLUDES =						\
 	$(HAL_CFLAGS)					\
 	$(DBUS_CFLAGS)					\
 	$(GNOME_CFLAGS)					\
+	$(XRANDR_CFLAGS)				\
 	$(LIBNOTIFY_CFLAGS)				\
 	$(GTKUNIQUE_CFLAGS)				\
 	$(GSTREAMER_CFLAGS)				\
@@ -167,8 +168,12 @@ gnome_power_manager_SOURCES =				\
 	gpm-button.c					\
 	gpm-polkit.h					\
 	gpm-polkit.c					\
-	gpm-brightness-lcd.h				\
-	gpm-brightness-lcd.c				\
+	gpm-brightness.h				\
+	gpm-brightness.c				\
+	gpm-brightness-hal.h				\
+	gpm-brightness-hal.c				\
+	gpm-brightness-xrandr.h				\
+	gpm-brightness-xrandr.c				\
 	gpm-brightness-kbd.h				\
 	gpm-brightness-kbd.c				\
 	gpm-light-sensor.h				\
@@ -211,6 +216,7 @@ gnome_power_manager_LDADD =				\
 	$(GNOME_LIBS)					\
 	$(HAL_LIBS)					\
 	$(DBUS_LIBS)					\
+	$(XRANDR_LIBS)					\
 	$(GPM_EXTRA_LIBS)				\
 	$(LOCAL_LIBHAL_LIBS)				\
 	$(LOCAL_LIBDBUS_LIBS)				\

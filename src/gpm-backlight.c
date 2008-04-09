@@ -45,7 +45,7 @@
 #include "gpm-ac-adapter.h"
 #include "gpm-button.h"
 #include "gpm-backlight.h"
-#include "gpm-brightness-lcd.h"
+#include "gpm-brightness.h"
 #include "gpm-conf.h"
 #include "gpm-control.h"
 #include "gpm-common.h"
@@ -65,7 +65,7 @@
 struct GpmBacklightPrivate
 {
 	GpmAcAdapter		*ac_adapter;
-	GpmBrightnessLcd	*brightness;
+	GpmBrightness	*brightness;
 	GpmButton		*button;
 	GpmConf			*conf;
 	GpmFeedback		*feedback;
@@ -285,7 +285,7 @@ gpm_backlight_get_brightness (GpmBacklight *backlight,
 	}
 
 	/* gets the current brightness */
-	ret = gpm_brightness_lcd_get (backlight->priv->brightness, &level);
+	ret = gpm_brightness_get (backlight->priv->brightness, &level);
 	if (ret == TRUE) {
 		*brightness = level;
 	} else {
@@ -320,7 +320,7 @@ gpm_backlight_set_brightness (GpmBacklight *backlight,
 #if 0
 	gboolean ret;
 	/* sets the current policy brightness */
-	ret = gpm_brightness_lcd_set_std (backlight->priv->brightness, brightness);
+	ret = gpm_brightness_set (backlight->priv->brightness, brightness);
 	if (ret == FALSE) {
 		*error = g_error_new (gpm_backlight_error_quark (),
 				      GPM_BACKLIGHT_ERROR_GENERAL,
@@ -428,7 +428,7 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	value = roundf (brightness * 100.0f);
 
 	/* only do stuff if the brightness is different */
-	gpm_brightness_lcd_get (backlight->priv->brightness, &old_value);
+	gpm_brightness_get (backlight->priv->brightness, &old_value);
 	if (old_value == value) {
 		gpm_debug ("values are the same, no action");
 		return FALSE;
@@ -443,7 +443,7 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	gpm_debug ("emitting brightness-changed : %i", value);
 	g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, value);
 
-	gpm_brightness_lcd_set_std (backlight->priv->brightness, value);
+	gpm_brightness_set (backlight->priv->brightness, value);
 	return TRUE;
 }
 
@@ -515,19 +515,10 @@ button_pressed_cb (GpmButton    *button,
 	gpm_debug ("Button press event type=%s", type);
 
 	if (strcmp (type, GPM_BUTTON_BRIGHT_UP) == 0) {
-
-		if (backlight->priv->can_dim == TRUE) {
-			gpm_brightness_lcd_up (backlight->priv->brightness);
-		}
-
+		gpm_brightness_up (backlight->priv->brightness);
 	} else if (strcmp (type, GPM_BUTTON_BRIGHT_DOWN) == 0) {
-
-		if (backlight->priv->can_dim == TRUE) {
-			gpm_brightness_lcd_down (backlight->priv->brightness);
-		}
-
+		gpm_brightness_down (backlight->priv->brightness);
 	} else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0) {
-
 		/* make sure we undim when we lift the lid */
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 		gpm_backlight_sync_policy (backlight);
@@ -676,14 +667,14 @@ mode_changed_cb (GpmDpms      *dpms,
 
 /**
  * brightness_changed_cb:
- * @brightness: The GpmBrightnessLcd class instance
+ * @brightness: The GpmBrightness class instance
  * @percentage: The new percentage brightness
  * @brightness: This class instance
  *
  * This callback is called when the brightness value changes.
  **/
 static void
-brightness_changed_cb (GpmBrightnessLcd *brightness,
+brightness_changed_cb (GpmBrightness *brightness,
 		       guint             percentage,
 		       GpmBacklight     *backlight)
 {
@@ -697,7 +688,7 @@ brightness_changed_cb (GpmBrightnessLcd *brightness,
 
 /**
  * brightness_changed_cb:
- * @brightness: The GpmBrightnessLcd class instance
+ * @brightness: The GpmBrightness class instance
  * @percentage: The new percentage brightness
  * @brightness: This class instance
  *
@@ -827,8 +818,13 @@ gpm_backlight_init (GpmBacklight *backlight)
 	g_signal_connect (backlight->priv->light_sensor, "sensor-changed",
 			  G_CALLBACK (sensor_changed_cb), backlight);
 
+	/* watch for manual brightness changes (for the feedback widget) */
+	backlight->priv->brightness = gpm_brightness_new ();
+	g_signal_connect (backlight->priv->brightness, "brightness-changed",
+			  G_CALLBACK (brightness_changed_cb), backlight);
+
 	/* gets caps */
-	backlight->priv->can_dim = gpm_brightness_lcd_has_hw ();
+	backlight->priv->can_dim = gpm_brightness_has_hw (backlight->priv->brightness);
 	backlight->priv->can_dpms = gpm_dpms_has_hw ();
 	backlight->priv->can_sense = gpm_light_sensor_has_hw (backlight->priv->light_sensor);
 
@@ -882,17 +878,10 @@ gpm_backlight_init (GpmBacklight *backlight)
 			   GPM_CONF_GNOME_SS_PM_DELAY,
 			   backlight->priv->idle_dim_timeout);
 
-	if (backlight->priv->can_dim == TRUE) {
-		/* watch for manual brightness changes (for the feedback widget) */
-		backlight->priv->brightness = gpm_brightness_lcd_new ();
-		g_signal_connect (backlight->priv->brightness, "brightness-changed",
-				  G_CALLBACK (brightness_changed_cb), backlight);
-
-		/* use a visual widget */
-		backlight->priv->feedback = gpm_feedback_new ();
-		gpm_feedback_set_icon_name (backlight->priv->feedback,
-					    GPM_STOCK_BRIGHTNESS_LCD);
-	}
+	/* use a visual widget */
+	backlight->priv->feedback = gpm_feedback_new ();
+	gpm_feedback_set_icon_name (backlight->priv->feedback,
+				    GPM_STOCK_BRIGHTNESS_LCD);
 
 	if (backlight->priv->can_dpms == TRUE) {
 		/* DPMS mode poll class */

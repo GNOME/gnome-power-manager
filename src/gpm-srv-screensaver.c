@@ -33,7 +33,7 @@
 #include "gpm-button.h"
 #include "gpm-dpms.h"
 #include "gpm-ac-adapter.h"
-#include "gpm-brightness-lcd.h"
+#include "gpm-brightness.h"
 
 static void     gpm_srv_screensaver_class_init (GpmSrvScreensaverClass *klass);
 static void     gpm_srv_screensaver_init       (GpmSrvScreensaver      *srv_screensaver);
@@ -45,7 +45,7 @@ struct GpmSrvScreensaverPrivate
 {
 	GpmAcAdapter		*ac_adapter;
 	GpmButton		*button;
-	GpmBrightnessLcd	*brightness_lcd;
+	GpmBrightness		*brightness;
 	GpmConf			*conf;
 	GpmDpms			*dpms;
 	GpmScreensaver		*screensaver;
@@ -74,9 +74,9 @@ screensaver_auth_request_cb (GpmScreensaver *screensaver,
 
 		/* TODO: This may be a bid of a bodge, as we will have multiple
 			 resume requests -- maybe this need a logic cleanup */
-		if (srv_screensaver->priv->brightness_lcd) {
+		if (srv_screensaver->priv->brightness) {
 			gpm_debug ("undimming lcd due to auth begin");
-//			gpm_brightness_lcd_undim (srv_screensaver->priv->brightness_lcd);
+//			gpm_brightness_undim (srv_screensaver->priv->brightness);
 		}
 
 		/* We turn on the monitor unconditionally, as we may be using
@@ -266,7 +266,7 @@ gpm_srv_screensaver_init (GpmSrvScreensaver *srv_screensaver)
 			  G_CALLBACK (ac_adapter_changed_cb), srv_screensaver);
 
 	/* we use brightness so we undim when we need authentication */
-	srv_screensaver->priv->brightness_lcd = gpm_brightness_lcd_new ();
+	srv_screensaver->priv->brightness = gpm_brightness_new ();
 
 	/* init to unthrottled */
 	srv_screensaver->priv->ac_throttle_id = 0;
@@ -304,8 +304,8 @@ gpm_srv_screensaver_finalize (GObject *object)
 	if (srv_screensaver->priv->ac_adapter != NULL) {
 		g_object_unref (srv_screensaver->priv->ac_adapter);
 	}
-	if (srv_screensaver->priv->brightness_lcd != NULL) {
-		g_object_unref (srv_screensaver->priv->brightness_lcd);
+	if (srv_screensaver->priv->brightness != NULL) {
+		g_object_unref (srv_screensaver->priv->brightness);
 	}
 	if (srv_screensaver->priv->ac_adapter != NULL) {
 		g_object_unref (srv_screensaver->priv->ac_adapter);
