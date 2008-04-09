@@ -81,6 +81,7 @@ struct GpmBacklightPrivate
 	GTimer			*idle_timer;
 	gfloat			 ambient_sensor_value;
 	guint			 idle_dim_timeout;
+	guint			 master_percentage;
 };
 
 enum {
@@ -266,9 +267,7 @@ gpm_backlight_get_mode (GpmBacklight *backlight,
  * gpm_backlight_get_brightness:
  **/
 gboolean
-gpm_backlight_get_brightness (GpmBacklight *backlight,
-			      guint	   *brightness,
-			      GError	  **error)
+gpm_backlight_get_brightness (GpmBacklight *backlight, guint *brightness, GError **error)
 {
 	guint level;
 	gboolean ret;
@@ -300,10 +299,10 @@ gpm_backlight_get_brightness (GpmBacklight *backlight,
  * gpm_backlight_set_brightness:
  **/
 gboolean
-gpm_backlight_set_brightness (GpmBacklight *backlight,
-			      guint	    brightness,
-			      GError	   **error)
+gpm_backlight_set_brightness (GpmBacklight *backlight, guint brightness, GError **error)
 {
+	gboolean ret;
+
 	g_return_val_if_fail (backlight != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BACKLIGHT (backlight), FALSE);
 
@@ -316,9 +315,8 @@ gpm_backlight_set_brightness (GpmBacklight *backlight,
 	}
 
 	/* just set the AC brightness for now, don't try to be clever */
-	gpm_conf_set_uint (backlight->priv->conf, GPM_CONF_BACKLIGHT_BRIGHTNESS_AC, brightness);
-#if 0
-	gboolean ret;
+	backlight->priv->master_percentage = brightness;
+
 	/* sets the current policy brightness */
 	ret = gpm_brightness_set (backlight->priv->brightness, brightness);
 	if (ret == FALSE) {
@@ -326,9 +324,7 @@ gpm_backlight_set_brightness (GpmBacklight *backlight,
 				      GPM_BACKLIGHT_ERROR_GENERAL,
 				      "Cannot set policy brightness");
 	}
-#endif
-
-	return TRUE;
+	return ret;
 }
 
 /**
@@ -370,9 +366,8 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 		return FALSE;
 	}
 
-	/* get the 'main' brightness */
-	gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BACKLIGHT_BRIGHTNESS_AC, &value);
-	brightness = value / 100.0f;
+	/* get the last set brightness */
+	brightness = backlight->priv->master_percentage / 100.0f;
 	gpm_debug ("1. main brightness %f", brightness);
 
 	/* get AC status */
@@ -436,6 +431,7 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 
 	/* only show dialog if interactive */
 	if (interactive == TRUE) {
+		gpm_warning ("moo %f", brightness);
 		gpm_feedback_display_value (backlight->priv->feedback, (float) brightness);
 	}
 
@@ -453,17 +449,18 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
  * We might have to do things when the gconf keys change; do them here.
  **/
 static void
-conf_key_changed_cb (GpmConf      *conf,
-		     const gchar  *key,
-		     GpmBacklight *backlight)
+conf_key_changed_cb (GpmConf *conf, const gchar *key, GpmBacklight *backlight)
 {
 	gboolean on_ac;
 	on_ac = gpm_ac_adapter_is_present (backlight->priv->ac_adapter);
 
-	if (strcmp (key, GPM_CONF_BACKLIGHT_BRIGHTNESS_AC) == 0) {
+	if (on_ac && strcmp (key, GPM_CONF_BACKLIGHT_BRIGHTNESS_AC) == 0) {
+		gpm_conf_get_uint (backlight->priv->conf,
+				   GPM_CONF_BACKLIGHT_BRIGHTNESS_AC,
+				   &backlight->priv->master_percentage);
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 
-	} else if (strcmp (key, GPM_CONF_BACKLIGHT_BRIGHTNESS_BATT) == 0) {
+	} else if (!on_ac && strcmp (key, GPM_CONF_BACKLIGHT_BRIGHTNESS_BATT) == 0) {
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 	}
 
@@ -501,23 +498,37 @@ ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
 }
 
 /**
- * button_pressed_cb:
+ * gpm_backlight_button_pressed_cb:
  * @power: The power class instance
  * @type: The button type, e.g. "power"
  * @state: The state, where TRUE is depressed or closed
  * @brightness: This class instance
  **/
 static void
-button_pressed_cb (GpmButton    *button,
-		   const gchar  *type,
-		   GpmBacklight *backlight)
+gpm_backlight_button_pressed_cb (GpmButton *button, const gchar *type, GpmBacklight *backlight)
 {
+	guint percentage;
 	gpm_debug ("Button press event type=%s", type);
 
 	if (strcmp (type, GPM_BUTTON_BRIGHT_UP) == 0) {
+		/* go up one step */
 		gpm_brightness_up (backlight->priv->brightness);
+
+		/* get the new value */
+		gpm_brightness_get (backlight->priv->brightness, &percentage);
+		gpm_feedback_display_value (backlight->priv->feedback, (float) percentage/100.0f);
+		/* save the new percentage */
+		backlight->priv->master_percentage = percentage;
 	} else if (strcmp (type, GPM_BUTTON_BRIGHT_DOWN) == 0) {
+		/* go up down step */
 		gpm_brightness_down (backlight->priv->brightness);
+
+		/* get the new value */
+		gpm_brightness_get (backlight->priv->brightness, &percentage);
+		gpm_feedback_display_value (backlight->priv->feedback, (float) percentage/100.0f);
+
+		/* save the new percentage */
+		backlight->priv->master_percentage = percentage;
 	} else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0) {
 		/* make sure we undim when we lift the lid */
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
@@ -604,7 +615,6 @@ idle_changed_cb (GpmIdle      *idle,
 	}
 
 	if (mode == GPM_IDLE_MODE_NORMAL) {
-
 		/* deactivate display power management */
 		if (backlight->priv->can_dpms == TRUE) {
 			error = NULL;
@@ -623,7 +633,6 @@ idle_changed_cb (GpmIdle      *idle,
 		gpm_backlight_sync_policy (backlight);
 
 	} else if (mode == GPM_IDLE_MODE_SESSION) {
-
 		/* activate display power management */
 		if (backlight->priv->can_dpms == TRUE) {
 			error = NULL;
@@ -859,10 +868,16 @@ gpm_backlight_init (GpmBacklight *backlight)
 			   GPM_CONF_GNOME_SS_PM_DELAY,
 			   backlight->priv->idle_dim_timeout);
 
+	/* set the main brightness, this is designed to be updated if the user changes the
+	 * brightness so we can undim to the 'correct' value */
+	gpm_conf_get_uint (backlight->priv->conf,
+			   GPM_CONF_BACKLIGHT_BRIGHTNESS_AC,
+			   &backlight->priv->master_percentage);
+
 	/* watch for brightness up and down buttons and also check lid state */
 	backlight->priv->button = gpm_button_new ();
 	g_signal_connect (backlight->priv->button, "button-pressed",
-			  G_CALLBACK (button_pressed_cb), backlight);
+			  G_CALLBACK (gpm_backlight_button_pressed_cb), backlight);
 
 	/* we use ac_adapter for the ac-adapter-changed signal */
 	backlight->priv->ac_adapter = gpm_ac_adapter_new ();

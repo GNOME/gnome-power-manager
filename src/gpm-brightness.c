@@ -73,6 +73,7 @@ gpm_brightness_set (GpmBrightness *brightness, guint percentage)
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
 	if (brightness->priv->use_xrandr) {
 		ret = gpm_brightness_xrandr_set (brightness->priv->xrandr, percentage);
+		return ret;
 	}
 	if (brightness->priv->use_hal) {
 		ret = gpm_brightness_hal_set (brightness->priv->hal, percentage);
@@ -95,6 +96,7 @@ gpm_brightness_get (GpmBrightness *brightness, guint *percentage)
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
 	if (brightness->priv->use_xrandr) {
 		ret = gpm_brightness_xrandr_get (brightness->priv->xrandr, percentage);
+		return ret;
 	}
 	if (brightness->priv->use_hal) {
 		ret = gpm_brightness_hal_get (brightness->priv->hal, percentage);
@@ -115,6 +117,7 @@ gpm_brightness_up (GpmBrightness *brightness)
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
 	if (brightness->priv->use_xrandr) {
 		ret = gpm_brightness_xrandr_up (brightness->priv->xrandr);
+		return ret;
 	}
 	if (brightness->priv->use_hal) {
 		ret = gpm_brightness_hal_up (brightness->priv->hal);
@@ -135,6 +138,7 @@ gpm_brightness_down (GpmBrightness *brightness)
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
 	if (brightness->priv->use_xrandr) {
 		ret = gpm_brightness_xrandr_down (brightness->priv->xrandr);
+		return ret;
 	}
 	if (brightness->priv->use_hal) {
 		ret = gpm_brightness_hal_down (brightness->priv->hal);
