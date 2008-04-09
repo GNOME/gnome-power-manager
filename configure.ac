@@ -62,6 +62,7 @@ CAIRO_REQUIRED=1.0.0
 GTKUNIQUE_REQUIRED=0.9.1
 LIBPANEL_REQUIRED=2.0.0
 GSTREAMER_REQUIRED=0.10
+XRANDR_REQUIRED=1.2.0
 
 dnl ---------------------------------------------------------------------------
 dnl - Make above strings available for packaging files (e.g. rpm spec files)
@@ -80,6 +81,7 @@ AC_SUBST(CAIRO_REQUIRED)
 AC_SUBST(GTKUNIQUE_REQUIRED)
 AC_SUBST(LIBPANEL_REQUIRED)
 AC_SUBST(GSTREAMER_REQUIRED)
+AC_SUBST(XRANDR_REQUIRED)
 
 dnl ---------------------------------------------------------------------------
 dnl - Check library dependencies
@@ -119,6 +121,12 @@ PKG_CHECK_MODULES(GDK, \
  gdk-x11-2.0 >= $GDK_REQUIRED)
 AC_SUBST(GDK_CFLAGS)
 AC_SUBST(GDK_LIBS)
+
+PKG_CHECK_MODULES(XRANDR, \
+ xrandr >= $XRANDR_REQUIRED \
+ xrender x11)
+AC_SUBST(XRANDR_CFLAGS)
+AC_SUBST(XRANDR_LIBS)
 
 AC_PATH_PROG(GCONFTOOL, gconftool-2)
 AM_GCONF_SOURCE_2
@@ -175,7 +183,7 @@ fi
 dnl ---------------------------------------------------------------------------
 dnl - Respond to XEvents
 dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(xevents, [  --enable-xevents        Support XEVENTS (requires a new x.org)],enable_xevents=$enableval,enable_xevents=no)
+AC_ARG_ENABLE(xevents, [  --enable-xevents        Support XEVENTS (requires a new x.org)],enable_xevents=$enableval,enable_xevents=yes)
 AC_MSG_CHECKING([whether to support xevents])
 have_xevents=no
 if test x$enable_xevents = xyes ; then
