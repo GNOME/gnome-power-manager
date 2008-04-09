@@ -1,5 +1,26 @@
 2008-04-09  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-brightness-xrandr.c:
+	(gpm_brightness_xrandr_output_get_internal),
+	(gpm_brightness_xrandr_output_set_internal),
+	(gpm_brightness_xrandr_setup_display),
+	(gpm_brightness_xrandr_output_get_limits),
+	(gpm_brightness_xrandr_output_get_percentage),
+	(gpm_brightness_xrandr_output_down),
+	(gpm_brightness_xrandr_output_up),
+	(gpm_brightness_xrandr_output_set),
+	(gpm_brightness_xrandr_foreach_resource),
+	(gpm_brightness_xrandr_foreach_screen),
+	(gpm_brightness_xrandr_set), (gpm_brightness_xrandr_get),
+	(gpm_brightness_xrandr_up), (gpm_brightness_xrandr_down),
+	(gpm_brightness_xrandr_has_hw), (gpm_brightness_xrandr_finalize),
+	(gpm_brightness_xrandr_class_init), (gpm_brightness_xrandr_init),
+	(gpm_brightness_xrandr_new):
+	* src/gpm-brightness-xrandr.h:
+	New class allowing us to change the backlight brightness using XRANDR.
+
+2008-04-09  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-debug.c: (gpm_set_console_mode), (gpm_print_line),
 	(gpm_debug_real), (gpm_warning_real), (gpm_syslog_internal),
 	(gpm_error_real), (gpm_syslog), (gpm_debug_init):
