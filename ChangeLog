@@ -1,5 +1,14 @@
 2008-04-09  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-debug.c: (gpm_set_console_mode), (gpm_print_line),
+	(gpm_debug_real), (gpm_warning_real), (gpm_syslog_internal),
+	(gpm_error_real), (gpm_syslog), (gpm_debug_init):
+	* src/gpm-main.c: (main):
+	* src/run-gpm.sh:
+	Use better debugging output, code mostly stolen from PackageKit.
+
+2008-04-09  Richard Hughes  <richard@hughsie.com>
+
 	* configure.ac:
 	Add a hard dep on XRANDR for the upcoming brightness changes.
 

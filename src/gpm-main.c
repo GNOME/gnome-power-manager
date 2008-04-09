@@ -145,7 +145,6 @@ main (int argc, char *argv[])
 	GError *error = NULL;
 	GOptionContext *context;
  	GnomeProgram *program;
-	char **debugoptions = NULL;
 	int i;
 
 	const GOptionEntry options[] = {
@@ -159,8 +158,6 @@ main (int argc, char *argv[])
 		  N_("Exit after a small delay (for debugging)"), NULL },
 		{ "immediate-exit", '\0', 0, G_OPTION_ARG_NONE, &immediate_exit,
 		  N_("Exit after the manager has loaded (for debugging)"), NULL },
-		{ "debug", '\0', 0, G_OPTION_ARG_STRING_ARRAY, &debugoptions,
-		  N_("Debug specific files, e.g. power"), NULL },
 		{ NULL}
 	};
 
@@ -203,13 +200,6 @@ main (int argc, char *argv[])
 
 	gpm_debug_init (verbose);
 
-	/* Add all of the options specified on the --debug line */
-	if (debugoptions) {
-		for (i = 0; debugoptions[i]; i++) {
-			gpm_debug_add_option (debugoptions[i]);
-		}
-	}
-
 	/* we need to daemonize before we get a system connection to fix #366057 */
 	if (no_daemon == FALSE && daemon (0, 0)) {
 		gpm_error ("Could not daemonize: %s", g_strerror (errno));
@@ -217,7 +207,6 @@ main (int argc, char *argv[])
 
 	gpm_debug ("GNOME %s %s", GPM_NAME, VERSION);
 
-if (0) {
 	/* check dbus connections, exit if not valid */
 	system_connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (error) {
@@ -228,7 +217,6 @@ if (0) {
 			   "It is <b>strongly recommended</b> you reboot "
 			   "your computer after starting this service.");
 	}
-}
 
 	session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (error) {

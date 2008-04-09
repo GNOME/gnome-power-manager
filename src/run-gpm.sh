@@ -75,5 +75,5 @@ elif [ "$1" = "--underfence" ] ; then
 fi
 
 echo "Execing: $prefix ./gnome-power-manager $extra $@"
-$prefix ./gnome-power-manager $extra $@ | tee debug.log
+$prefix ./gnome-power-manager $extra $@
 

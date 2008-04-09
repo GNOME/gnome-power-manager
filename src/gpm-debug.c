@@ -23,6 +23,7 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <glib/gprintf.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
@@ -34,11 +35,21 @@
 #include "gpm-common.h"
 #include "gpm-debug.h"
 
+#define CONSOLE_RESET		0
+#define CONSOLE_BLACK 		30
+#define CONSOLE_RED		31
+#define CONSOLE_GREEN		32
+#define CONSOLE_YELLOW		33
+#define CONSOLE_BLUE		34
+#define CONSOLE_MAGENTA		35
+#define CONSOLE_CYAN		36
+#define CONSOLE_WHITE		37
+
 static gboolean is_init = FALSE;	/* if we are initialised */
 static gboolean do_verbose = FALSE;	/* if we should print out debugging */
+static gboolean is_console = FALSE;
 static GSList *list = NULL;
 static gchar va_args_buffer [1025];
-
 
 /**
  * gpm_debug_is_verbose:
@@ -50,123 +61,105 @@ gpm_debug_is_verbose (void)
 }
 
 /**
- * gpm_debug_add_option:
+ * pk_set_console_mode:
  **/
-void
-gpm_debug_add_option (const gchar *option)
+static void
+gpm_set_console_mode (guint console_code)
 {
-	/* adding debug option to list */
-	list = g_slist_prepend (list, (gpointer) option);
+	gchar command[13];
+
+	/* don't put extra commands into logs */
+	if (!is_console) {
+		return;
+	}
+	/* Command is the control command to the terminal */
+	sprintf (command, "%c[%dm", 0x1B, console_code);
+	printf ("%s", command);
 }
 
 /**
  * gpm_print_line:
  **/
 static void
-gpm_print_line (const gchar *func,
-		const gchar *file,
-		const int    line,
-		const gchar *buffer)
+gpm_print_line (const gchar *func, const gchar *file, const int line, const gchar *buffer, guint color)
 {
-	gchar   *str_time;
-	time_t  the_time;
+	gchar *str_time;
+	gchar *header;
+	time_t the_time;
 
 	time (&the_time);
 	str_time = g_new0 (gchar, 255);
 	strftime (str_time, 254, "%H:%M:%S", localtime (&the_time));
 
-	fprintf (stderr, "[%s] %s:%d (%s):\t %s\n",
-		 func, file, line, str_time, buffer);
+	/* generate header text */
+	header = g_strdup_printf ("TI:%s\tFI:%s\tFN:%s,%d", str_time, file, func, line);
 	g_free (str_time);
-}
 
-/**
- * gpm_debug_strcmp_func
- * @a: Pointer to the data to test
- * @b: Pointer to a cookie to compare
- * Return value: 0 if cookie matches
- **/
-static gint
-gpm_debug_strcmp_func (gconstpointer a, gconstpointer b)
-{
-	gchar *aa = (gchar *) a;
-	gchar *bb = (gchar *) b;
-	return strcmp (aa, bb);
-}
+	/* always in light green */
+	gpm_set_console_mode (CONSOLE_GREEN);
+	printf ("%s\n", header);
 
-/**
- * gpm_debug_in_options:
- **/
-static gboolean
-gpm_debug_in_options (const gchar *file)
-{
-	GSList *node;
-	gchar *name;
-	guint8 len;
+	/* different colours according to the severity */
+	gpm_set_console_mode (color);
+	printf (" - %s\n", buffer);
+	gpm_set_console_mode (CONSOLE_RESET);
 
-	/* get rid of the "gpm-" prefix */
-	name = strdup (&file[4]);
+	/* flush this output, as we need to debug */
+	fflush (stdout);
 
-	/* get rid of .c */
-	len = strlen (name);
-	if (len>2) {
-		name[len-2] = '\0';
-	}
-
-	/* find string in list */
-	node = g_slist_find_custom (list, name, gpm_debug_strcmp_func);
-	g_free (name);
-	return (node != NULL);
+	g_free (header);
 }
 
 /**
  * gpm_debug_real:
  **/
 void
-gpm_debug_real (const gchar *func,
-		const gchar *file,
-		const int    line,
-		const gchar *format, ...)
+gpm_debug_real (const gchar *func, const gchar *file, const int line, const gchar *format, ...)
 {
 	va_list args;
-
-	if (do_verbose == FALSE && gpm_debug_in_options (file) == FALSE) {
-		return;
-	}
-
-	va_start (args, format);
-	g_vsnprintf (va_args_buffer, 1024, format, args);
-	va_end (args);
-
-	gpm_print_line (func, file, line, va_args_buffer);
-}
-
-/**
- * gpm_warning_real:
- **/
-void
-gpm_warning_real (const gchar *func,
-		  const gchar *file,
-		  const int    line,
-		  const gchar *format, ...)
-{
-	va_list args;
+	gchar *buffer = NULL;
 
 	if (do_verbose == FALSE) {
 		return;
 	}
 
 	va_start (args, format);
-	g_vsnprintf (va_args_buffer, 1024, format, args);
+	g_vasprintf (&buffer, format, args);
 	va_end (args);
 
-	/* do extra stuff for a warning */
-	fprintf (stderr, "*** WARNING ***\n");
-	gpm_print_line (func, file, line, va_args_buffer);
+	gpm_print_line (func, file, line, buffer, CONSOLE_BLUE);
+
+	g_free(buffer);
 }
 
 /**
- * gpm_syslog:
+ * gpm_warning_real:
+ **/
+void
+gpm_warning_real (const gchar *func, const gchar *file, const int line, const gchar *format, ...)
+{
+	va_list args;
+	gchar *buffer = NULL;
+
+	if (do_verbose == FALSE) {
+		return;
+	}
+
+	va_start (args, format);
+	g_vasprintf (&buffer, format, args);
+	va_end (args);
+
+	/* do extra stuff for a warning */
+	if (!is_console) {
+		printf ("*** WARNING ***\n");
+	}
+	gpm_print_line (func, file, line, buffer, CONSOLE_RED);
+
+	g_free(buffer);
+}
+
+/**
+ * gpm_syslog_internal:
  * @format: This va format string, e.g. ("test %s", hello)
  *
  * Logs some text to the syslog, usually in /var/log/messages
@@ -174,7 +167,7 @@ gpm_warning_real (const gchar *func,
 static void
 gpm_syslog_internal (const gchar *string)
 {
-	fprintf (stderr, "Saving to syslog: %s", string);
+	gpm_debug ("Saving to syslog: %s", string);
 	syslog (LOG_NOTICE, "(%s) %s", g_get_user_name (), string);
 }
 
@@ -183,22 +176,23 @@ gpm_syslog_internal (const gchar *string)
  * gpm_error_real:
  **/
 void
-gpm_error_real (const gchar *func,
-		const gchar *file,
-		const int    line,
-		const gchar *format, ...)
+gpm_error_real (const gchar *func, const gchar *file, const int line, const gchar *format, ...)
 {
 	va_list args;
+	gchar *buffer = NULL;
 
 	va_start (args, format);
-	g_vsnprintf (va_args_buffer, 1024, format, args);
+	g_vasprintf (&buffer, format, args);
 	va_end (args);
 
 	/* do extra stuff for a warning */
-	fprintf (stderr, "*** ERROR ***\n");
-	gpm_print_line (func, file, line, va_args_buffer);
-	gpm_syslog_internal (va_args_buffer);
-	exit (0);
+	if (!is_console) {
+		printf ("*** ERROR ***\n");
+	}
+	gpm_print_line (func, file, line, buffer, CONSOLE_RED);
+	g_free(buffer);
+
+	exit (1);
 }
 
 /**
@@ -211,12 +205,14 @@ void
 gpm_syslog (const gchar *format, ...)
 {
 	va_list args;
+	gchar *buffer = NULL;
 
 	va_start (args, format);
-	g_vsnprintf (va_args_buffer, 1024, format, args);
+	g_vasprintf (&buffer, format, args);
 	va_end (args);
 
-	gpm_syslog_internal (va_args_buffer);
+	gpm_syslog_internal (buffer);
+	g_free (buffer);
 }
 
 /**
@@ -233,7 +229,11 @@ gpm_debug_init (gboolean debug)
 	is_init = TRUE;
 
 	do_verbose = debug;
-	gpm_debug ("Verbose debugging %s", (do_verbose) ? "enabled" : "disabled");
+	/* check if we are on console */
+	if (isatty (fileno (stdout)) == 1) {
+		is_console = TRUE;
+	}
+	gpm_debug ("Verbose debugging %i (on console %i)", do_verbose, is_console);
 
 	/* open syslog */
 	openlog ("gnome-power-manager", LOG_NDELAY, LOG_USER);
