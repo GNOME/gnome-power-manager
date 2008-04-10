@@ -486,6 +486,7 @@ conf_key_changed_cb (GpmConf *conf, const gchar *key, GpmBacklight *backlight)
 	         strcmp (key, GPM_CONF_AMBIENT_SCALE) == 0 ||
 	         strcmp (key, GPM_CONF_BACKLIGHT_ENABLE) == 0 ||
 	         strcmp (key, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_BATT) == 0 ||
+	         strcmp (key, GPM_CONF_BACKLIGHT_BATTERY_REDUCE) == 0 ||
 	         strcmp (key, GPM_CONF_BACKLIGHT_IDLE_BRIGHTNESS) == 0) {
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 
@@ -494,6 +495,12 @@ conf_key_changed_cb (GpmConf *conf, const gchar *key, GpmBacklight *backlight)
 	           strcmp (key, GPM_CONF_BACKLIGHT_DPMS_METHOD_AC) == 0 ||
 	           strcmp (key, GPM_CONF_BACKLIGHT_DPMS_METHOD_BATT) == 0) {
 		gpm_backlight_sync_policy (backlight);
+	} else if (strcmp (key, GPM_CONF_BACKLIGHT_IDLE_DIM_TIME) == 0) {
+		gpm_conf_get_uint (backlight->priv->conf,
+				   GPM_CONF_BACKLIGHT_IDLE_DIM_TIME,
+				   &backlight->priv->idle_dim_timeout);
+	} else {
+		gpm_debug ("unknown key %s", key);
 	}
 }
 

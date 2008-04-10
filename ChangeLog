@@ -1,5 +1,11 @@
 2008-04-10  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-backlight.c: (conf_key_changed_cb):
+	Watch for two new gconf keys, so checking the 'Reduce battery brightness' in the battery
+	tab of gnome-power-preferences makes the panel dim if we are on battery power.
+
+2008-04-10  Richard Hughes  <richard@hughsie.com>
+
 	* applets/inhibit/inhibit-applet.c: (gpm_applet_check_size),
 	(gpm_applet_click_cb):
 	Watch the panel size in case we resize the panel and need to change the icon.
