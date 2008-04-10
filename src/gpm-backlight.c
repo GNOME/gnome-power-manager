@@ -377,6 +377,10 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	gpm_conf_get_bool (backlight->priv->conf, GPM_CONF_BACKLIGHT_BATTERY_REDUCE, &battery_reduce);
 	if (on_ac == FALSE && battery_reduce == TRUE) {
 		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BACKLIGHT_BRIGHTNESS_BATT, &value);
+		if (value > 100) {
+			gpm_warning ("cannot use battery brightness value %i, correcting to 50", value);
+			value = 50;
+		}
 		scale = (100 - value) / 100.0f;
 		brightness *= scale;
 	} else {
@@ -392,6 +396,10 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	}
 	if (enable_action == TRUE && backlight->priv->system_is_idle == TRUE) {
 		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BACKLIGHT_IDLE_BRIGHTNESS, &value);
+		if (value > 100) {
+			gpm_warning ("cannot use idle brightness value %i, correcting to 50", value);
+			value = 50;
+		}
 		scale = value / 100.0f;
 		brightness *= scale;
 	} else {
@@ -431,7 +439,6 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 
 	/* only show dialog if interactive */
 	if (interactive == TRUE) {
-		gpm_warning ("moo %f", brightness);
 		gpm_feedback_display_value (backlight->priv->feedback, (float) brightness);
 	}
 

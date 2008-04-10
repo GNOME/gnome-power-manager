@@ -1,5 +1,20 @@
 2008-04-10  Richard Hughes  <richard@hughsie.com>
 
+	reviewed by: <delete if not using a buddy>
+
+	* src/gpm-backlight.c: (gpm_backlight_brightness_evaluate_and_set):
+	* src/gpm-brightness-xrandr.c:
+	(gpm_brightness_xrandr_output_get_internal),
+	(gpm_brightness_xrandr_output_set_internal),
+	(gpm_brightness_xrandr_init):
+
+2008-04-10  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-backlight.c: (gpm_backlight_brightness_evaluate_and_set):
+	Don't let the user supply invalid gconf values to upset the brightness calculation.
+
+2008-04-10  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-backlight.c: (brightness_changed_cb):
 	* src/gpm-brightness-hal.c: (gpm_brightness_hal_up),
 	(gpm_brightness_hal_down):

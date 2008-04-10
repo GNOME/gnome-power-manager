@@ -98,9 +98,7 @@ gpm_brightness_xrandr_output_get_internal (GpmBrightnessXRandR *brightness, RROu
 		gpm_debug ("failed to get property");
 		return FALSE;
 	}
-	if (actual_type != XA_INTEGER || nitems != 1 || actual_format != 32) {
-		gpm_debug ("wrong format");
-	} else {
+	if (actual_type == XA_INTEGER && nitems == 1 && actual_format == 32) {
 		*cur = *((int *) prop);
 		ret = TRUE;
 	}
@@ -114,15 +112,18 @@ gpm_brightness_xrandr_output_get_internal (GpmBrightnessXRandR *brightness, RROu
 static void
 gpm_brightness_xrandr_output_set_internal (GpmBrightnessXRandR *brightness, RROutput output, guint value)
 {
-	int value_int;
 	g_return_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness));
 	g_return_if_fail (value >= 0);
 
-	value_int = (int) value;
-	gpm_debug ("value=%u", value);
+	/* don't abort on error */
+	gdk_error_trap_push ();
 	XRRChangeOutputProperty (brightness->priv->dpy, output, brightness->priv->backlight, XA_INTEGER, 32,
-				 PropModeReplace, &value_int, 1);
+				 PropModeReplace, (unsigned char *) &value, 1);
 	XFlush (brightness->priv->dpy);
+	gdk_flush ();
+	if (gdk_error_trap_pop ()) {
+		gpm_warning ("failed to XRRChangeOutputProperty for brightness %i", value);
+	}
 }
 
 /**
@@ -543,6 +544,7 @@ gpm_brightness_xrandr_init (GpmBrightnessXRandR *brightness)
 {
 	GdkScreen *screen;
 	GdkWindow *window;
+	GdkDisplay *display;
 	int event_base;
 	int ignore;
 
@@ -553,12 +555,13 @@ gpm_brightness_xrandr_init (GpmBrightnessXRandR *brightness)
 
 	screen = gdk_screen_get_default ();
 	window = gdk_screen_get_root_window (screen);
+	display = gdk_display_get_default ();
 
 	/* as we a filtering by a window, we have to add an event type */
 	if (!XRRQueryExtension (GDK_DISPLAY(), &event_base, &ignore)) {
 		gpm_error ("can't get event_base for XRR");
 	}
-	gdk_x11_register_standard_event_type (GDK_DISPLAY(), event_base, RRNotify + 1);
+	gdk_x11_register_standard_event_type (display, event_base, RRNotify + 1);
 	gdk_window_add_filter (window, gpm_brightness_xrandr_filter_xevents, (gpointer) brightness);
 
 	/* don't abort on error */
@@ -568,7 +571,7 @@ gpm_brightness_xrandr_init (GpmBrightnessXRandR *brightness)
 			RROutputPropertyNotifyMask); /* <--- the only one we need, but see rh:345551 */
 	gdk_flush ();
 	if (gdk_error_trap_pop ()) {
-		gpm_error ("failed to select XRRSelectInput");
+		gpm_warning ("failed to select XRRSelectInput");
 	}
 }
 
