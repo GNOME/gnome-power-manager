@@ -1,5 +1,11 @@
 2008-04-10  Richard Hughes  <richard@hughsie.com>
 
+	* applets/inhibit/inhibit-applet.c: (gpm_applet_draw_cb):
+	Clear the brightness applet background so we can draw on it later.
+	Patch from Ted Gould, many thanks.
+
+2008-04-10  Richard Hughes  <richard@hughsie.com>
+
 	* configure.ac:
 	Turn on some extra warnings for GCC.
 

@@ -271,6 +271,9 @@ gpm_applet_draw_cb (GpmInhibitApplet *applet)
 		return FALSE;
 	}
 
+	/* Clear the window so we can draw on it later */
+	gdk_window_clear(GTK_WIDGET(applet)->window);
+
 	/* retrieve applet size */
 	gpm_applet_get_icon (applet);
 	gpm_applet_check_size (applet);
