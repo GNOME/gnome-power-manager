@@ -1,5 +1,12 @@
 2008-04-10  Richard Hughes  <richard@hughsie.com>
 
+	* applets/inhibit/inhibit-applet.c: (gpm_applet_check_size),
+	(gpm_applet_click_cb):
+	Watch the panel size in case we resize the panel and need to change the icon.
+	Patch from Ted Gould, many thanks.
+
+2008-04-10  Richard Hughes  <richard@hughsie.com>
+
 	* applets/inhibit/inhibit-applet.c: (gpm_applet_draw_cb):
 	Clear the brightness applet background so we can draw on it later.
 	Patch from Ted Gould, many thanks.

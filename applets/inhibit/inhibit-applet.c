@@ -244,10 +244,18 @@ gpm_applet_check_size (GpmInhibitApplet *applet)
 			gpm_applet_get_icon (applet);
 			gtk_widget_set_size_request (GTK_WIDGET(applet), applet->size, applet->icon_height + 2);
 		}
+		/* Adjusting incase the icon size has changed */
+		if (GTK_WIDGET(applet)->allocation.height < applet->icon_height + 2) {
+			gtk_widget_set_size_request (GTK_WIDGET(applet), applet->size, applet->icon_height + 2);
+		}
 	} else {
 		if (applet->size != GTK_WIDGET(applet)->allocation.height) {
 			applet->size = GTK_WIDGET(applet)->allocation.height;
 			gpm_applet_get_icon (applet);
+			gtk_widget_set_size_request (GTK_WIDGET(applet), applet->icon_width + 2, applet->size);
+		}
+		/* Adjusting incase the icon size has changed */
+		if (GTK_WIDGET(applet)->allocation.width < applet->icon_width + 2) {
 			gtk_widget_set_size_request (GTK_WIDGET(applet), applet->icon_width + 2, applet->size);
 		}
 	}
@@ -376,6 +384,7 @@ gpm_applet_click_cb (GpmInhibitApplet *applet, GdkEventButton *event)
 	}
 	/* update icon */
 	gpm_applet_get_icon (applet);
+	gpm_applet_check_size (applet);
 	gpm_applet_update_tooltip (applet);
 	gpm_applet_draw_cb (applet);
 
