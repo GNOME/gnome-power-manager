@@ -327,7 +327,6 @@ gpm_brightness_hal_up (GpmBrightnessHal *brightness, gboolean *hw_changed)
 {
 	gboolean ret = FALSE;
 	gint step;
-	gint percentage;
 	guint current_hw;
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_HAL (brightness), FALSE);
@@ -370,7 +369,6 @@ gpm_brightness_hal_down (GpmBrightnessHal *brightness, gboolean *hw_changed)
 {
 	gboolean ret = FALSE;
 	gint step;
-	gint percentage;
 	guint current_hw;
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_HAL (brightness), FALSE);

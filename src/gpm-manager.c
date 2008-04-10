@@ -171,7 +171,7 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 			      const char *action)
 {
 	gboolean has_inhibit;
-	gchar *title;
+	gchar *title = NULL;
 
 	/* We have to decide on whether this is a idle action or a user keypress */
 	gpm_inhibit_has_inhibit (manager->priv->inhibit, &has_inhibit, NULL);

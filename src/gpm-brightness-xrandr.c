@@ -80,7 +80,7 @@ static guint signals [LAST_SIGNAL] = { 0 };
  * gpm_brightness_xrandr_output_get_internal:
  **/
 static gboolean
-gpm_brightness_xrandr_output_get_internal (GpmBrightnessXRandR *brightness, RROutput output, int *cur)
+gpm_brightness_xrandr_output_get_internal (GpmBrightnessXRandR *brightness, RROutput output, guint *cur)
 {
 	unsigned long nitems;
 	unsigned long bytes_after;
@@ -88,7 +88,6 @@ gpm_brightness_xrandr_output_get_internal (GpmBrightnessXRandR *brightness, RROu
 	Atom actual_type;
 	int actual_format;
 	gboolean ret = FALSE;
-	long value;
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness), FALSE);
 
@@ -115,8 +114,8 @@ gpm_brightness_xrandr_output_set_internal (GpmBrightnessXRandR *brightness, RROu
 {
 	gboolean ret = TRUE;
 
-	g_return_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness));
-	g_return_if_fail (value >= 0);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness), FALSE);
+	g_return_val_if_fail (value >= 0, FALSE);
 
 	/* don't abort on error */
 	gdk_error_trap_push ();
@@ -306,7 +305,7 @@ gpm_brightness_xrandr_output_set (GpmBrightnessXRandR *brightness, RROutput outp
 	gint i;
 	gint shared_value_abs;
 
-	g_return_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness));
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness), FALSE);
 
 	ret = gpm_brightness_xrandr_output_get_internal (brightness, output, &cur);
 	if (!ret) {
@@ -367,7 +366,7 @@ gpm_brightness_xrandr_foreach_resource (GpmBrightnessXRandR *brightness, GpmXRan
 	gboolean ret;
 	gboolean success_any = FALSE;
 
-	g_return_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness));
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness), FALSE);
 
 	/* do for each output */
 	for (i=0; i<resources->noutput; i++) {

@@ -18,10 +18,10 @@ AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal)
 dnl ---------------------------------------------------------------------------
 dnl - Extra verbose warning switches
 dnl ---------------------------------------------------------------------------
-#if test "$GCC" = "yes"; then
-#    CPPFLAGS="$CPPFLAGS -Werror -Wcast-align -Wno-uninitialized"
-#    CPPFLAGS="$CPPFLAGS -Wall"
-#fi
+if test "$GCC" = "yes"; then
+    CPPFLAGS="$CPPFLAGS -Werror -Wcast-align -Wno-uninitialized"
+    CPPFLAGS="$CPPFLAGS -Wall -Wformat-security"
+fi
 
 dnl ---------------------------------------------------------------------------
 dnl - Debugging switches (uncomment this if you want to use gdb)

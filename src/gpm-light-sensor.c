@@ -292,7 +292,6 @@ gpm_light_sensor_poll_cb (gpointer userdata)
 	gboolean ret;
 	gboolean enable;
 	GpmLightSensor *sensor;
-	gfloat bright;
 
 	g_return_val_if_fail (userdata != NULL, TRUE);
 
@@ -348,7 +347,6 @@ gpm_light_sensor_init (GpmLightSensor *sensor)
 	HalGManager *manager;
 	HalGDevice *device;
 	guint timeout;
-	gfloat bright;
 
 	sensor->priv = GPM_LIGHT_SENSOR_GET_PRIVATE (sensor);
 	sensor->priv->udi = NULL;

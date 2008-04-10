@@ -436,7 +436,7 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	gpm_debug ("4. ambient scale %f, brightness %f", scale, brightness);
 
 	/* convert to percentage */
-	value = roundf (brightness * 100.0f);
+	value = (guint) ((brightness * 100.0f) + 0.5);
 
 	/* only do stuff if the brightness is different */
 	gpm_brightness_get (backlight->priv->brightness, &old_value);

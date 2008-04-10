@@ -1,5 +1,30 @@
 2008-04-10  Richard Hughes  <richard@hughsie.com>
 
+	* configure.ac:
+	Turn on some extra warnings for GCC.
+
+	* applets/brightness/brightness-applet.c: (gpm_applet_help_cb):
+	* applets/inhibit/inhibit-applet.c: (gpm_applet_help_cb):
+	* src/gpm-backlight.c: (gpm_backlight_brightness_evaluate_and_set):
+	* src/gpm-brightness-hal.c: (gpm_brightness_hal_up),
+	(gpm_brightness_hal_down):
+	* src/gpm-brightness-xrandr.c:
+	(gpm_brightness_xrandr_output_get_internal),
+	(gpm_brightness_xrandr_output_set_internal),
+	(gpm_brightness_xrandr_output_set),
+	(gpm_brightness_xrandr_foreach_resource):
+	* src/gpm-brightness.c: (gpm_brightness_get):
+	* src/gpm-common.c: (gpm_help_display):
+	* src/gpm-inhibit.c: (gpm_inhibit_get_message):
+	* src/gpm-light-sensor.c: (gpm_light_sensor_poll_cb),
+	(gpm_light_sensor_init):
+	* src/gpm-debug.c:
+	* src/gpm-main.c: (main):
+	* src/gpm-manager.c: (gpm_manager_is_inhibit_valid):
+	Fix the warnings!
+
+2008-04-10  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness.c: (gpm_brightness_trust_cache),
 	(gpm_brightness_set), (gpm_brightness_get), (gpm_brightness_up),
 	(gpm_brightness_down), (gpm_brightness_changed_cb),

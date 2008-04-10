@@ -177,7 +177,6 @@ out:
 	if (percentage_local > 100) {
 		gpm_warning ("percentage value of %i will be ignored", percentage_local);
 		ret = FALSE;
-		return;
 	}
 	/* a new value is always trusted if the method and checks succeed */
 	if (ret) {

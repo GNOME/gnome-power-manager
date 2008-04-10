@@ -31,6 +31,7 @@
 #include <signal.h>
 #include <time.h>
 #include <syslog.h>
+#include <unistd.h>
 
 #include "gpm-common.h"
 #include "gpm-debug.h"
@@ -48,8 +49,6 @@
 static gboolean is_init = FALSE;	/* if we are initialised */
 static gboolean do_verbose = FALSE;	/* if we should print out debugging */
 static gboolean is_console = FALSE;
-static GSList *list = NULL;
-static gchar va_args_buffer [1025];
 
 /**
  * gpm_debug_is_verbose:

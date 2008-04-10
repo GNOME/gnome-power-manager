@@ -145,7 +145,6 @@ main (int argc, char *argv[])
 	GError *error = NULL;
 	GOptionContext *context;
  	GnomeProgram *program;
-	int i;
 
 	const GOptionEntry options[] = {
 		{ "no-daemon", '\0', 0, G_OPTION_ARG_NONE, &no_daemon,
