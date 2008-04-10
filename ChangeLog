@@ -1,5 +1,18 @@
 2008-04-10  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-backlight.c: (brightness_changed_cb):
+	* src/gpm-brightness-hal.c: (gpm_brightness_hal_up),
+	(gpm_brightness_hal_down):
+	* src/gpm-brightness-xrandr.c:
+	(gpm_brightness_xrandr_output_get_limits),
+	(gpm_brightness_xrandr_may_have_changed),
+	(gpm_brightness_xrandr_filter_xevents):
+	More code in preparation to emit a ::changed signal when xrandr changes.
+	Also don't emit this when we do up&down in the HAL backend, else we will get
+	a double notification event.
+
+2008-04-10  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness-xrandr.c:
 	(gpm_brightness_xrandr_setup_display),
 	(gpm_brightness_xrandr_filter_xevents),

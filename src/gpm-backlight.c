@@ -683,12 +683,14 @@ mode_changed_cb (GpmDpms      *dpms,
  * This callback is called when the brightness value changes.
  **/
 static void
-brightness_changed_cb (GpmBrightness *brightness,
-		       guint             percentage,
-		       GpmBacklight     *backlight)
+brightness_changed_cb (GpmBrightness *brightness, guint percentage, GpmBacklight *backlight)
 {
+	/* display the widget when something else changed the backlight */
 	gpm_debug ("Need to display backlight feedback value %i", percentage);
 	gpm_feedback_display_value (backlight->priv->feedback, (float) percentage / 100.0f);
+
+	/* save the new percentage */
+	backlight->priv->master_percentage = percentage;
 
 	/* we emit a signal for the brightness applet */
 	gpm_debug ("emitting brightness-changed : %i", percentage);

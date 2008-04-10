@@ -328,11 +328,6 @@ gpm_brightness_hal_up (GpmBrightnessHal *brightness)
 		gpm_brightness_hal_set_hw (brightness, brightness->priv->last_set_hw + step);
 	}
 
-	percentage = gpm_discrete_to_percent (brightness->priv->last_set_hw,
-					      brightness->priv->levels);
-	gpm_debug ("emitting brightness-changed (%i)", percentage);
-	g_signal_emit (brightness, signals [BRIGHTNESS_CHANGED], 0, percentage);
-
 	return TRUE;
 }
 
@@ -366,11 +361,6 @@ gpm_brightness_hal_down (GpmBrightnessHal *brightness)
 		}
 		gpm_brightness_hal_set_hw (brightness, brightness->priv->last_set_hw - step);
 	}
-
-	percentage = gpm_discrete_to_percent (brightness->priv->last_set_hw,
-					      brightness->priv->levels);
-	gpm_debug ("emitting brightness-changed (%i)", percentage);
-	g_signal_emit (brightness, signals [BRIGHTNESS_CHANGED], 0, percentage);
 
 	return TRUE;
 }

@@ -163,7 +163,8 @@ gpm_brightness_xrandr_setup_display (GpmBrightnessXRandR *brightness)
  * gpm_brightness_xrandr_output_get_limits:
  **/
 static gboolean
-gpm_brightness_xrandr_output_get_limits (GpmBrightnessXRandR *brightness, RROutput output, guint *min, guint *max)
+gpm_brightness_xrandr_output_get_limits (GpmBrightnessXRandR *brightness, RROutput output,
+					 guint *min, guint *max)
 {
 	XRRPropertyInfo *info;
 	gboolean ret = TRUE;
@@ -471,6 +472,23 @@ gpm_brightness_xrandr_has_hw (GpmBrightnessXRandR *brightness)
 }
 
 /**
+ * gpm_brightness_xrandr_may_have_changed:
+ **/
+static void
+gpm_brightness_xrandr_may_have_changed (GpmBrightnessXRandR *brightness)
+{
+	gboolean ret;
+	guint percentage;
+	ret = gpm_brightness_xrandr_get (brightness, &percentage);
+	if (!ret) {
+		gpm_warning ("failed to get output");
+		return;
+	}
+	gpm_debug ("emitting brightness-changed (%i)", percentage);
+	g_signal_emit (brightness, signals [BRIGHTNESS_CHANGED], 0, percentage);
+}
+
+/**
  * gpm_brightness_xrandr_filter_xevents:
  **/
 static GdkFilterReturn
@@ -478,6 +496,9 @@ gpm_brightness_xrandr_filter_xevents (GdkXEvent *xevent, GdkEvent *event, gpoint
 {
 	GpmBrightnessXRandR *brightness = GPM_BRIGHTNESS_XRANDR (data);
 	gpm_warning ("Event0 %p", brightness);
+	if (FALSE) {
+		gpm_brightness_xrandr_may_have_changed (brightness);
+	}
 	return GDK_FILTER_CONTINUE;
 }
 
