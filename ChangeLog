@@ -1,17 +1,24 @@
 2008-04-10  Richard Hughes  <richard@hughsie.com>
 
-	reviewed by: <delete if not using a buddy>
-
-	* src/gpm-backlight.c: (gpm_backlight_brightness_evaluate_and_set):
 	* src/gpm-brightness-xrandr.c:
-	(gpm_brightness_xrandr_output_get_internal),
 	(gpm_brightness_xrandr_output_set_internal),
-	(gpm_brightness_xrandr_init):
+	(gpm_brightness_xrandr_output_down),
+	(gpm_brightness_xrandr_output_up),
+	(gpm_brightness_xrandr_output_set),
+	(gpm_brightness_xrandr_foreach_resource),
+	(gpm_brightness_xrandr_foreach_screen):
+	Add better error handling to detect if functions had any effect on the hardware.
 
 2008-04-10  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-backlight.c: (gpm_backlight_brightness_evaluate_and_set):
 	Don't let the user supply invalid gconf values to upset the brightness calculation.
+
+	* src/gpm-brightness-xrandr.c:
+	(gpm_brightness_xrandr_output_get_internal),
+	(gpm_brightness_xrandr_output_set_internal),
+	(gpm_brightness_xrandr_init):
+	Fix some warnings in the current code.
 
 2008-04-10  Richard Hughes  <richard@hughsie.com>
 

@@ -109,9 +109,11 @@ gpm_brightness_xrandr_output_get_internal (GpmBrightnessXRandR *brightness, RROu
 /**
  * gpm_brightness_xrandr_output_set_internal:
  **/
-static void
+static gboolean
 gpm_brightness_xrandr_output_set_internal (GpmBrightnessXRandR *brightness, RROutput output, guint value)
 {
+	gboolean ret = TRUE;
+
 	g_return_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness));
 	g_return_if_fail (value >= 0);
 
@@ -123,7 +125,9 @@ gpm_brightness_xrandr_output_set_internal (GpmBrightnessXRandR *brightness, RROu
 	gdk_flush ();
 	if (gdk_error_trap_pop ()) {
 		gpm_warning ("failed to XRRChangeOutputProperty for brightness %i", value);
+		ret = FALSE;
 	}
+	return ret;
 }
 
 /**
@@ -247,8 +251,8 @@ gpm_brightness_xrandr_output_down (GpmBrightnessXRandR *brightness, RROutput out
 		gpm_debug ("truncating to %i", min);
 		cur = min;
 	}
-	gpm_brightness_xrandr_output_set_internal (brightness, output, cur);
-	return TRUE;
+	ret = gpm_brightness_xrandr_output_set_internal (brightness, output, cur);
+	return ret;
 }
 
 /**
@@ -281,8 +285,8 @@ gpm_brightness_xrandr_output_up (GpmBrightnessXRandR *brightness, RROutput outpu
 		gpm_debug ("truncating to %i", max);
 		cur = max;
 	}
-	gpm_brightness_xrandr_output_set_internal (brightness, output, cur);
-	return TRUE;
+	ret = gpm_brightness_xrandr_output_set_internal (brightness, output, cur);
+	return ret;
 }
 
 /**
@@ -325,7 +329,10 @@ gpm_brightness_xrandr_output_set (GpmBrightnessXRandR *brightness, RROutput outp
 	if (cur < shared_value_abs) {
 		/* going up */
 		for (i=cur; i<=shared_value_abs; i++) {
-			gpm_brightness_xrandr_output_set_internal (brightness, output, i);
+			ret = gpm_brightness_xrandr_output_set_internal (brightness, output, i);
+			if (!ret) {
+				break;
+			}
 			if (cur != shared_value_abs) {
 				g_usleep (1000 * GPM_BRIGHTNESS_DIM_INTERVAL);
 			}
@@ -333,7 +340,10 @@ gpm_brightness_xrandr_output_set (GpmBrightnessXRandR *brightness, RROutput outp
 	} else {
 		/* going down */
 		for (i=cur; i>=shared_value_abs; i--) {
-			gpm_brightness_xrandr_output_set_internal (brightness, output, i);
+			ret = gpm_brightness_xrandr_output_set_internal (brightness, output, i);
+			if (!ret) {
+				break;
+			}
 			if (cur != shared_value_abs) {
 				g_usleep (1000 * GPM_BRIGHTNESS_DIM_INTERVAL);
 			}
@@ -345,10 +355,12 @@ gpm_brightness_xrandr_output_set (GpmBrightnessXRandR *brightness, RROutput outp
 /**
  * gpm_brightness_xrandr_foreach_resource:
  **/
-static void
+static gboolean
 gpm_brightness_xrandr_foreach_resource (GpmBrightnessXRandR *brightness, GpmXRandROp op, XRRScreenResources *resources)
 {
 	guint i;
+	gboolean ret;
+	gboolean success_any = FALSE;
 
 	g_return_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness));
 
@@ -357,17 +369,22 @@ gpm_brightness_xrandr_foreach_resource (GpmBrightnessXRandR *brightness, GpmXRan
 		gpm_debug ("resource %i of %i", i+1, resources->noutput);
 		RROutput output = resources->outputs[i];
 		if (op==ACTION_BACKLIGHT_GET) {
-			gpm_brightness_xrandr_output_get_percentage (brightness, output);
+			ret = gpm_brightness_xrandr_output_get_percentage (brightness, output);
 		} else if (op==ACTION_BACKLIGHT_INC) {
-			gpm_brightness_xrandr_output_up (brightness, output);
+			ret = gpm_brightness_xrandr_output_up (brightness, output);
 		} else if (op==ACTION_BACKLIGHT_DEC) {
-			gpm_brightness_xrandr_output_down (brightness, output);
+			ret = gpm_brightness_xrandr_output_down (brightness, output);
 		} else if (op==ACTION_BACKLIGHT_SET) {
-			gpm_brightness_xrandr_output_set (brightness, output);
+			ret = gpm_brightness_xrandr_output_set (brightness, output);
 		} else {
+			ret = FALSE;
 			gpm_warning ("op not known");
 		}
+		if (ret) {
+			success_any = TRUE;
+		}
 	}
+	return success_any;
 }
 
 /**
@@ -380,7 +397,8 @@ gpm_brightness_xrandr_foreach_screen (GpmBrightnessXRandR *brightness, GpmXRandR
 	guint screencount;
 	Window root;
 	XRRScreenResources *resources;
-	gboolean got_resource = FALSE;
+	gboolean ret;
+	gboolean success_any = FALSE;
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness), FALSE);
 
@@ -394,12 +412,14 @@ gpm_brightness_xrandr_foreach_screen (GpmBrightnessXRandR *brightness, GpmXRandR
 			gpm_debug ("no resources");
 			continue;
 		}
-		got_resource = TRUE;
-		gpm_brightness_xrandr_foreach_resource (brightness, op, resources);
+		ret = gpm_brightness_xrandr_foreach_resource (brightness, op, resources);
+		if (ret) {
+			success_any = TRUE;
+		}
 		XRRFreeScreenResources (resources);
 	}
 	XSync (brightness->priv->dpy, False);
-	return got_resource;
+	return success_any;
 }
 
 /**
@@ -418,10 +438,7 @@ gpm_brightness_xrandr_set (GpmBrightnessXRandR *brightness, guint percentage)
 /**
  * gpm_brightness_xrandr_get:
  * @brightness: This brightness class instance
- * Return value: The percentage brightness, or -1 for no hardware or error
- *
- * Gets the current (or at least what this class thinks is current) percentage
- * brightness. This is quick as no HAL inquiry is done.
+ * Return value: Success
  **/
 gboolean
 gpm_brightness_xrandr_get (GpmBrightnessXRandR *brightness, guint *percentage)
