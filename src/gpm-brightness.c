@@ -43,11 +43,15 @@
 #include "gpm-marshal.h"
 
 #define GPM_BRIGHTNESS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_BRIGHTNESS, GpmBrightnessPrivate))
+#define GPM_SOLE_SETTER_USE_CACHE	TRUE	/* this may be insanity */
 
 struct GpmBrightnessPrivate
 {
 	gboolean		 use_xrandr;
 	gboolean		 use_hal;
+	gboolean		 has_changed_events;
+	gboolean		 cache_trusted;
+	guint			 cache_percentage;
 	GpmBrightnessHal	*hal;
 	GpmBrightnessXRandR	*xrandr;
 };
@@ -62,22 +66,73 @@ static guint signals [LAST_SIGNAL] = { 0 };
 static gpointer gpm_brightness_object = NULL;
 
 /**
+ * gpm_brightness_trust_cache:
+ * @brightness: This brightness class instance
+ * Return value: if we can trust the cache
+ **/
+static gboolean
+gpm_brightness_trust_cache (GpmBrightness *brightness)
+{
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
+	/* only return the cached value if the cache is trusted and we have change events */
+	if (brightness->priv->cache_trusted && brightness->priv->has_changed_events) {
+		gpm_debug ("using cache for value %u (okay)", brightness->priv->cache_percentage);
+		return TRUE;
+	}
+
+	/* can we trust that if we set a value 5 minutes ago, will it still be valid now?
+	 * if we have multiple things setting policy on the workstation, e.g. fast user switching
+	 * or kpowersave, then this will be invalid -- this logic may be insane */
+	if (GPM_SOLE_SETTER_USE_CACHE && brightness->priv->cache_trusted) {
+		gpm_warning ("using cache for value %u (probably okay)", brightness->priv->cache_percentage);
+		return TRUE;
+	}
+	return FALSE;
+}
+
+/**
  * gpm_brightness_set:
  * @brightness: This brightness class instance
  * @percentage: The percentage brightness
+ * @hw_changed: If the hardware was changed, i.e. the brightness changed
+ * Return value: %TRUE if success, %FALSE if there was an error
  **/
 gboolean
-gpm_brightness_set (GpmBrightness *brightness, guint percentage)
+gpm_brightness_set (GpmBrightness *brightness, guint percentage, gboolean *hw_changed)
 {
 	gboolean ret = FALSE;
+	gboolean trust_cache;
+	gboolean hw_changed_local = FALSE;
+
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
+
+	/* can we check the new value with the cache? */
+	trust_cache = gpm_brightness_trust_cache (brightness);
+	if (trust_cache && percentage == brightness->priv->cache_percentage) {
+		gpm_debug ("not setting the same value %i", percentage);
+		return TRUE;
+	}
+
+	/* set the hardware */
 	if (brightness->priv->use_xrandr) {
-		ret = gpm_brightness_xrandr_set (brightness->priv->xrandr, percentage);
-		return ret;
+		ret = gpm_brightness_xrandr_set (brightness->priv->xrandr, percentage, &hw_changed_local);
+		goto out;
 	}
 	if (brightness->priv->use_hal) {
-		ret = gpm_brightness_hal_set (brightness->priv->hal, percentage);
-	}	
+		ret = gpm_brightness_hal_set (brightness->priv->hal, percentage, &hw_changed_local);
+		goto out;
+	}
+	gpm_debug ("no hardware support");
+	return FALSE;
+out:
+	/* we did something to the hardware, so untrusted */
+	if (ret) {
+		brightness->priv->cache_trusted = FALSE;
+	}
+	/* is the caller interested? */
+	if (ret && hw_changed != NULL) {
+		*hw_changed = hw_changed_local;
+	}
 	return ret;
 }
 
@@ -93,56 +148,121 @@ gboolean
 gpm_brightness_get (GpmBrightness *brightness, guint *percentage)
 {
 	gboolean ret = FALSE;
+	gboolean trust_cache;
+	guint percentage_local;
+
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
+	g_return_val_if_fail (percentage != NULL, FALSE);
+
+	/* can we use the cache? */
+	trust_cache = gpm_brightness_trust_cache (brightness);
+	if (trust_cache) {
+		*percentage = brightness->priv->cache_percentage;
+		return TRUE;
+	}
+
+	/* get the brightness from hardware -- slow */
 	if (brightness->priv->use_xrandr) {
-		ret = gpm_brightness_xrandr_get (brightness->priv->xrandr, percentage);
-		return ret;
+		ret = gpm_brightness_xrandr_get (brightness->priv->xrandr, &percentage_local);
+		goto out;
 	}
 	if (brightness->priv->use_hal) {
-		ret = gpm_brightness_hal_get (brightness->priv->hal, percentage);
-	}	
+		ret = gpm_brightness_hal_get (brightness->priv->hal, &percentage_local);
+		goto out;
+	}
+	gpm_debug ("no hardware support");
+	return FALSE;
+out:
+	/* valid? */
+	if (percentage_local > 100) {
+		gpm_warning ("percentage value of %i will be ignored", percentage_local);
+		ret = FALSE;
+		return;
+	}
+	/* a new value is always trusted if the method and checks succeed */
+	if (ret) {
+		brightness->priv->cache_percentage = percentage_local;
+		brightness->priv->cache_trusted = TRUE;
+		*percentage = percentage_local;
+	} else {
+		brightness->priv->cache_trusted = FALSE;
+	}
 	return ret;
 }
 
 /**
  * gpm_brightness_up:
  * @brightness: This brightness class instance
+ * @hw_changed: If the hardware was changed, i.e. the brightness changed
+ * Return value: %TRUE if success, %FALSE if there was an error
  *
  * If possible, put the brightness of the LCD up one unit.
  **/
 gboolean
-gpm_brightness_up (GpmBrightness *brightness)
+gpm_brightness_up (GpmBrightness *brightness, gboolean *hw_changed)
 {
 	gboolean ret = FALSE;
+	gboolean hw_changed_local = FALSE;
+
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
+
 	if (brightness->priv->use_xrandr) {
-		ret = gpm_brightness_xrandr_up (brightness->priv->xrandr);
-		return ret;
+		ret = gpm_brightness_xrandr_up (brightness->priv->xrandr, &hw_changed_local);
+		goto out;
 	}
 	if (brightness->priv->use_hal) {
-		ret = gpm_brightness_hal_up (brightness->priv->hal);
-	}	
+		ret = gpm_brightness_hal_up (brightness->priv->hal, &hw_changed_local);
+		goto out;
+	}
+	gpm_debug ("no hardware support");
+	return FALSE;
+out:
+	/* we did something to the hardware, so untrusted */
+	if (ret) {
+		brightness->priv->cache_trusted = FALSE;
+	}
+	/* is the caller interested? */
+	if (ret && hw_changed != NULL) {
+		*hw_changed = hw_changed_local;
+	}
 	return ret;
 }
 
 /**
  * gpm_brightness_down:
  * @brightness: This brightness class instance
+ * @hw_changed: If the hardware was changed, i.e. the brightness changed
+ * Return value: %TRUE if success, %FALSE if there was an error
  *
  * If possible, put the brightness of the LCD down one unit.
  **/
 gboolean
-gpm_brightness_down (GpmBrightness *brightness)
+gpm_brightness_down (GpmBrightness *brightness, gboolean *hw_changed)
 {
 	gboolean ret = FALSE;
+	gboolean hw_changed_local = FALSE;
+
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
+
 	if (brightness->priv->use_xrandr) {
-		ret = gpm_brightness_xrandr_down (brightness->priv->xrandr);
-		return ret;
+		ret = gpm_brightness_xrandr_down (brightness->priv->xrandr, &hw_changed_local);
+		goto out;
 	}
 	if (brightness->priv->use_hal) {
-		ret = gpm_brightness_hal_down (brightness->priv->hal);
-	}	
+		ret = gpm_brightness_hal_down (brightness->priv->hal, &hw_changed_local);
+		goto out;
+	}
+	gpm_debug ("no hardware support");
+	return FALSE;
+out:
+	/* we did something to the hardware, so untrusted */
+	if (ret) {
+		brightness->priv->cache_trusted = FALSE;
+	}
+	/* is the caller interested? */
+	if (ret && hw_changed != NULL) {
+		*hw_changed = hw_changed_local;
+	}
 	return ret;
 }
 
@@ -196,6 +316,22 @@ gpm_brightness_class_init (GpmBrightnessClass *klass)
 static void
 gpm_brightness_changed_cb (gpointer caller, guint percentage, GpmBrightness *brightness)
 {
+	g_return_if_fail (GPM_IS_BRIGHTNESS (brightness));
+	brightness->priv->cache_trusted = TRUE;
+
+	/* valid? */
+	if (percentage > 100) {
+		gpm_warning ("percentage value of %i will be ignored", percentage);
+		/* no longer trust the cache */
+		brightness->priv->has_changed_events = FALSE;
+		brightness->priv->cache_trusted = FALSE;
+		return;
+	}
+
+	brightness->priv->has_changed_events = TRUE;
+	brightness->priv->cache_trusted = TRUE;
+	brightness->priv->cache_percentage = percentage;
+	/* ONLY EMIT THIS SIGNAL WHEN SOMETHING _ELSE_ HAS CHANGED THE BACKLIGHT */
 	gpm_debug ("emitting brightness-changed (%i)", percentage);
 	g_signal_emit (brightness, signals [BRIGHTNESS_CHANGED], 0, percentage);
 }
@@ -211,6 +347,9 @@ gpm_brightness_init (GpmBrightness *brightness)
 
 	brightness->priv->use_xrandr = FALSE;
 	brightness->priv->use_hal = FALSE;
+	brightness->priv->cache_trusted = FALSE;
+	brightness->priv->has_changed_events = FALSE;
+	brightness->priv->cache_percentage = 0;
 
 	brightness->priv->xrandr = gpm_brightness_xrandr_new ();
 	if (gpm_brightness_xrandr_has_hw (brightness->priv->xrandr)) {

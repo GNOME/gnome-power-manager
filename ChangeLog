@@ -1,5 +1,32 @@
 2008-04-10  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-brightness.c: (gpm_brightness_trust_cache),
+	(gpm_brightness_set), (gpm_brightness_get), (gpm_brightness_up),
+	(gpm_brightness_down), (gpm_brightness_changed_cb),
+	(gpm_brightness_init):
+	* src/gpm-brightness.h:
+	Allow some data to be cached to speed up querying brightess.
+
+	* src/gpm-backlight.c: (gpm_backlight_set_brightness),
+	(gpm_backlight_brightness_evaluate_and_set),
+	(gpm_backlight_button_pressed_cb):
+	* src/gpm-brightness-hal.c: (gpm_brightness_hal_set_hw),
+	(gpm_brightness_hal_dim_hw_step), (gpm_brightness_hal_set),
+	(gpm_brightness_hal_up), (gpm_brightness_hal_down),
+	(gpm_brightness_hal_init):
+	* src/gpm-brightness-hal.h:
+	* src/gpm-brightness-xrandr.c:
+	(gpm_brightness_xrandr_output_set_internal),
+	(gpm_brightness_xrandr_output_set), (gpm_brightness_xrandr_set),
+	(gpm_brightness_xrandr_get), (gpm_brightness_xrandr_up),
+	(gpm_brightness_xrandr_down), (gpm_brightness_xrandr_init):
+	* src/gpm-brightness-xrandr.h:
+	Make the methods sane, so we can tell the difference between a failed method, and one
+	that did not change the hardware brightness. This should fix lots of issues with the
+	brightness applet.
+
+2008-04-10  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness-xrandr.c:
 	(gpm_brightness_xrandr_output_set_internal),
 	(gpm_brightness_xrandr_output_down),

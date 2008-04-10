@@ -52,12 +52,15 @@ GType		 gpm_brightness_xrandr_get_type	(void);
 GpmBrightnessXRandR *gpm_brightness_xrandr_new	(void);
 
 gboolean	 gpm_brightness_xrandr_has_hw	(GpmBrightnessXRandR	*brightness);
-gboolean	 gpm_brightness_xrandr_up	(GpmBrightnessXRandR	*brightness);
-gboolean	 gpm_brightness_xrandr_down	(GpmBrightnessXRandR	*brightness);
+gboolean	 gpm_brightness_xrandr_up	(GpmBrightnessXRandR	*brightness,
+						 gboolean		*hw_changed);
+gboolean	 gpm_brightness_xrandr_down	(GpmBrightnessXRandR	*brightness,
+						 gboolean		*hw_changed);
 gboolean	 gpm_brightness_xrandr_get	(GpmBrightnessXRandR	*brightness,
 						 guint			*percentage);
 gboolean	 gpm_brightness_xrandr_set	(GpmBrightnessXRandR	*brightness,
-						 guint			 percentage);
+						 guint			 percentage,
+						 gboolean		*hw_changed);
 
 G_END_DECLS
 

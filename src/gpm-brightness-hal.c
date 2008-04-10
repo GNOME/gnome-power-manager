@@ -56,6 +56,7 @@ struct GpmBrightnessHalPrivate
 	guint			 level_std_hw;
 	guint			 levels;
 	gchar			*udi;
+	gboolean		 hw_changed;
 	DbusProxy		*gproxy;
 };
 
@@ -165,6 +166,11 @@ gpm_brightness_hal_set_hw (GpmBrightnessHal *brightness, guint value_hw)
 		return FALSE;
 	}
 
+	/* we changed the hardware */
+	if (ret) {
+		brightness->priv->hw_changed = TRUE;
+	}
+
 	brightness->priv->last_set_hw = value_hw;
 	return TRUE;
 }
@@ -181,7 +187,7 @@ gpm_brightness_hal_dim_hw_step (GpmBrightnessHal *brightness, guint new_level_hw
 {
 	guint last_set_hw;
 	gint a;
-	gboolean ret;
+	gboolean ret = FALSE;
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_HAL (brightness), FALSE);
 
@@ -214,7 +220,7 @@ gpm_brightness_hal_dim_hw_step (GpmBrightnessHal *brightness, guint new_level_hw
 			g_usleep (1000 * GPM_BRIGHTNESS_DIM_INTERVAL);
 		}
 	}
-	return TRUE;
+	return ret;
 }
 
 /**
@@ -264,19 +270,30 @@ gpm_brightness_hal_dim_hw (GpmBrightnessHal *brightness, guint new_level_hw)
  * gpm_brightness_hal_set:
  * @brightness: This brightness class instance
  * @percentage: The percentage brightness
+ * @hw_changed: If the hardware was changed, i.e. the brightness changed
+ * Return value: %TRUE if success, %FALSE if there was an error
  **/
 gboolean
-gpm_brightness_hal_set (GpmBrightnessHal *brightness, guint	percentage)
+gpm_brightness_hal_set (GpmBrightnessHal *brightness, guint percentage, gboolean *hw_changed)
 {
 	guint level_hw;
+	gboolean ret;
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_HAL (brightness), FALSE);
+	g_return_val_if_fail (hw_changed != NULL, FALSE);
+
+	/* reset to not-changed */
+	brightness->priv->hw_changed = FALSE;
 
 	level_hw = gpm_percent_to_discrete (percentage, brightness->priv->levels);
 	brightness->priv->level_std_hw = level_hw;
 
 	/* update */
-	return gpm_brightness_hal_dim_hw (brightness, level_hw);
+	ret = gpm_brightness_hal_dim_hw (brightness, level_hw);
+
+	/* did the hardware have to be modified? */
+	*hw_changed = brightness->priv->hw_changed;
+	return ret;
 }
 
 /**
@@ -300,17 +317,24 @@ gpm_brightness_hal_get (GpmBrightnessHal *brightness, guint *percentage)
 /**
  * gpm_brightness_hal_up:
  * @brightness: This brightness class instance
+ * @hw_changed: If the hardware was changed, i.e. the brightness changed
+ * Return value: %TRUE if success, %FALSE if there was an error
  *
  * If possible, put the brightness of the LCD up one unit.
  **/
 gboolean
-gpm_brightness_hal_up (GpmBrightnessHal *brightness)
+gpm_brightness_hal_up (GpmBrightnessHal *brightness, gboolean *hw_changed)
 {
+	gboolean ret = FALSE;
 	gint step;
 	gint percentage;
 	guint current_hw;
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_HAL (brightness), FALSE);
+	g_return_val_if_fail (hw_changed != NULL, FALSE);
+
+	/* reset to not-changed */
+	brightness->priv->hw_changed = FALSE;
 
 	/* check to see if the panel has changed */
 	gpm_brightness_hal_get_hw (brightness, &current_hw);
@@ -325,26 +349,35 @@ gpm_brightness_hal_up (GpmBrightnessHal *brightness)
 		if (brightness->priv->last_set_hw + step > brightness->priv->levels - 1) {
 			step = (brightness->priv->levels - 1) - brightness->priv->last_set_hw;
 		}
-		gpm_brightness_hal_set_hw (brightness, brightness->priv->last_set_hw + step);
+		ret = gpm_brightness_hal_set_hw (brightness, brightness->priv->last_set_hw + step);
 	}
 
-	return TRUE;
+	/* did the hardware have to be modified? */
+	*hw_changed = brightness->priv->hw_changed;
+	return ret;
 }
 
 /**
  * gpm_brightness_hal_down:
  * @brightness: This brightness class instance
+ * @hw_changed: If the hardware was changed, i.e. the brightness changed
+ * Return value: %TRUE if success, %FALSE if there was an error
  *
  * If possible, put the brightness of the LCD down one unit.
  **/
 gboolean
-gpm_brightness_hal_down (GpmBrightnessHal *brightness)
+gpm_brightness_hal_down (GpmBrightnessHal *brightness, gboolean *hw_changed)
 {
+	gboolean ret = FALSE;
 	gint step;
 	gint percentage;
 	guint current_hw;
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_HAL (brightness), FALSE);
+	g_return_val_if_fail (hw_changed != NULL, FALSE);
+
+	/* reset to not-changed */
+	brightness->priv->hw_changed = FALSE;
 
 	/* check to see if the panel has changed */
 	gpm_brightness_hal_get_hw (brightness, &current_hw);
@@ -359,10 +392,13 @@ gpm_brightness_hal_down (GpmBrightnessHal *brightness)
 		if (brightness->priv->last_set_hw < step) {
 			step = brightness->priv->last_set_hw;
 		}
-		gpm_brightness_hal_set_hw (brightness, brightness->priv->last_set_hw - step);
+		ret = gpm_brightness_hal_set_hw (brightness, brightness->priv->last_set_hw - step);
 	}
 
-	return TRUE;
+
+	/* did the hardware have to be modified? */
+	*hw_changed = brightness->priv->hw_changed;
+	return ret;
 }
 
 /**
@@ -431,6 +467,7 @@ gpm_brightness_hal_init (GpmBrightnessHal *brightness)
 
 	brightness->priv = GPM_BRIGHTNESS_HAL_GET_PRIVATE (brightness);
 	brightness->priv->gproxy = NULL;
+	brightness->priv->hw_changed = FALSE;
 
 	/* save udi of lcd adapter */
 	manager = hal_gmanager_new ();

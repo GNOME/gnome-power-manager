@@ -58,6 +58,7 @@ struct GpmBrightnessXRandRPrivate
 	Display			*dpy;
 	guint			 shared_value;
 	gboolean		 has_extension;
+	gboolean		 hw_changed;
 };
 
 enum {
@@ -126,6 +127,10 @@ gpm_brightness_xrandr_output_set_internal (GpmBrightnessXRandR *brightness, RROu
 	if (gdk_error_trap_pop ()) {
 		gpm_warning ("failed to XRRChangeOutputProperty for brightness %i", value);
 		ret = FALSE;
+	}
+	/* we changed the hardware */
+	if (ret) {
+		brightness->priv->hw_changed = TRUE;
 	}
 	return ret;
 }
@@ -244,7 +249,7 @@ gpm_brightness_xrandr_output_down (GpmBrightnessXRandR *brightness, RROutput out
 	gpm_debug ("hard value=%i, min=%i, max=%i", cur, min, max);
 	if (cur == min) {
 		gpm_debug ("already min");
-		return FALSE;
+		return TRUE;
 	}
 	cur -= brightness->priv->shared_value;
 	if (cur < min) {
@@ -278,7 +283,7 @@ gpm_brightness_xrandr_output_up (GpmBrightnessXRandR *brightness, RROutput outpu
 	gpm_debug ("hard value=%i, min=%i, max=%i", cur, min, max);
 	if (cur == max) {
 		gpm_debug ("already max");
-		return FALSE;
+		return TRUE;
 	}
 	cur += brightness->priv->shared_value;
 	if (cur > max) {
@@ -322,7 +327,7 @@ gpm_brightness_xrandr_output_set (GpmBrightnessXRandR *brightness, RROutput outp
 		shared_value_abs = min;
 	if (cur == shared_value_abs) {
 		gpm_debug ("already set %i", cur);
-		return FALSE;
+		return TRUE;
 	}
 
 	/* step the correct way */
@@ -423,28 +428,45 @@ gpm_brightness_xrandr_foreach_screen (GpmBrightnessXRandR *brightness, GpmXRandR
 }
 
 /**
- * gpm_brightness_xrandr_set_std:
+ * gpm_brightness_xrandr_set:
  * @brightness: This brightness class instance
  * @percentage: The percentage brightness
+ * @hw_changed: If the hardware was changed, i.e. the brightness changed
+ * Return value: %TRUE if success, %FALSE if there was an error
  **/
 gboolean
-gpm_brightness_xrandr_set (GpmBrightnessXRandR *brightness, guint percentage)
+gpm_brightness_xrandr_set (GpmBrightnessXRandR *brightness, guint percentage, gboolean *hw_changed)
 {
+	gboolean ret;
+
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness), FALSE);
+	g_return_val_if_fail (hw_changed != NULL, FALSE);
+
 	brightness->priv->shared_value = percentage;
-	return gpm_brightness_xrandr_foreach_screen (brightness, ACTION_BACKLIGHT_SET);
+
+	/* reset to not-changed */
+	brightness->priv->hw_changed = FALSE;
+	ret = gpm_brightness_xrandr_foreach_screen (brightness, ACTION_BACKLIGHT_SET);
+
+	/* did the hardware have to be modified? */
+	*hw_changed = brightness->priv->hw_changed;
+	return ret;
 }
 
 /**
  * gpm_brightness_xrandr_get:
  * @brightness: This brightness class instance
- * Return value: Success
+ * @percentage: Value to retrieve
+ * Return value: %TRUE if success, %FALSE if there was an error
  **/
 gboolean
 gpm_brightness_xrandr_get (GpmBrightnessXRandR *brightness, guint *percentage)
 {
 	gboolean ret;
+
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness), FALSE);
+	g_return_val_if_fail (percentage != NULL, FALSE);
+
 	ret = gpm_brightness_xrandr_foreach_screen (brightness, ACTION_BACKLIGHT_GET);
 	*percentage = brightness->priv->shared_value;
 	return ret;
@@ -453,31 +475,57 @@ gpm_brightness_xrandr_get (GpmBrightnessXRandR *brightness, guint *percentage)
 /**
  * gpm_brightness_xrandr_up:
  * @brightness: This brightness class instance
+ * @hw_changed: If the hardware was changed, i.e. the brightness changed
+ * Return value: %TRUE if success, %FALSE if there was an error
  *
  * If possible, put the brightness of the LCD up one unit.
  **/
 gboolean
-gpm_brightness_xrandr_up (GpmBrightnessXRandR *brightness)
+gpm_brightness_xrandr_up (GpmBrightnessXRandR *brightness, gboolean *hw_changed)
 {
+	gboolean ret;
+
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness), FALSE);
+	g_return_val_if_fail (hw_changed != NULL, FALSE);
+
 	/* single step */
 	brightness->priv->shared_value = 1;
-	return gpm_brightness_xrandr_foreach_screen (brightness, ACTION_BACKLIGHT_INC);
+
+	/* reset to not-changed */
+	brightness->priv->hw_changed = FALSE;
+	ret = gpm_brightness_xrandr_foreach_screen (brightness, ACTION_BACKLIGHT_INC);
+
+	/* did the hardware have to be modified? */
+	*hw_changed = brightness->priv->hw_changed;
+	return ret;
 }
 
 /**
  * gpm_brightness_xrandr_down:
  * @brightness: This brightness class instance
+ * @hw_changed: If the hardware was changed, i.e. the brightness changed
+ * Return value: %TRUE if success, %FALSE if there was an error
  *
  * If possible, put the brightness of the LCD down one unit.
  **/
 gboolean
-gpm_brightness_xrandr_down (GpmBrightnessXRandR *brightness)
+gpm_brightness_xrandr_down (GpmBrightnessXRandR *brightness, gboolean *hw_changed)
 {
+	gboolean ret;
+
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness), FALSE);
+	g_return_val_if_fail (hw_changed != NULL, FALSE);
+
 	/* single step */
 	brightness->priv->shared_value = 1;
-	return gpm_brightness_xrandr_foreach_screen (brightness, ACTION_BACKLIGHT_DEC);
+
+	/* reset to not-changed */
+	brightness->priv->hw_changed = FALSE;
+	ret = gpm_brightness_xrandr_foreach_screen (brightness, ACTION_BACKLIGHT_DEC);
+
+	/* did the hardware have to be modified? */
+	*hw_changed = brightness->priv->hw_changed;
+	return ret;
 }
 
 /**
@@ -566,6 +614,7 @@ gpm_brightness_xrandr_init (GpmBrightnessXRandR *brightness)
 	int ignore;
 
 	brightness->priv = GPM_BRIGHTNESS_XRANDR_GET_PRIVATE (brightness);
+	brightness->priv->hw_changed = FALSE;
 
 	/* can we do this */
 	brightness->priv->has_extension = gpm_brightness_xrandr_setup_display (brightness);

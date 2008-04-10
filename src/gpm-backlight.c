@@ -65,7 +65,7 @@
 struct GpmBacklightPrivate
 {
 	GpmAcAdapter		*ac_adapter;
-	GpmBrightness	*brightness;
+	GpmBrightness		*brightness;
 	GpmButton		*button;
 	GpmConf			*conf;
 	GpmFeedback		*feedback;
@@ -299,9 +299,10 @@ gpm_backlight_get_brightness (GpmBacklight *backlight, guint *brightness, GError
  * gpm_backlight_set_brightness:
  **/
 gboolean
-gpm_backlight_set_brightness (GpmBacklight *backlight, guint brightness, GError **error)
+gpm_backlight_set_brightness (GpmBacklight *backlight, guint percentage, GError **error)
 {
 	gboolean ret;
+	gboolean hw_changed;
 
 	g_return_val_if_fail (backlight != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BACKLIGHT (backlight), FALSE);
@@ -314,15 +315,20 @@ gpm_backlight_set_brightness (GpmBacklight *backlight, guint brightness, GError 
 		return FALSE;
 	}
 
-	/* just set the AC brightness for now, don't try to be clever */
-	backlight->priv->master_percentage = brightness;
+	/* just set the master percentage for now, don't try to be clever */
+	backlight->priv->master_percentage = percentage;
 
 	/* sets the current policy brightness */
-	ret = gpm_brightness_set (backlight->priv->brightness, brightness);
+	ret = gpm_brightness_set (backlight->priv->brightness, percentage, &hw_changed);
 	if (ret == FALSE) {
 		*error = g_error_new (gpm_backlight_error_quark (),
 				      GPM_BACKLIGHT_ERROR_GENERAL,
 				      "Cannot set policy brightness");
+	}
+	/* we emit a signal for the brightness applet */
+	if (ret && hw_changed) {
+		gpm_debug ("emitting brightness-changed : %i", percentage);
+		g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, percentage);
 	}
 	return ret;
 }
@@ -348,10 +354,12 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 {
 	gfloat brightness;
 	gfloat scale;
+	gboolean ret;
 	gboolean on_ac;
 	gboolean do_laptop_lcd;
 	gboolean enable_action;
 	gboolean battery_reduce;
+	gboolean hw_changed;
 	guint value;
 	guint old_value;
 
@@ -442,11 +450,12 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 		gpm_feedback_display_value (backlight->priv->feedback, (float) brightness);
 	}
 
+	ret = gpm_brightness_set (backlight->priv->brightness, value, &hw_changed);
 	/* we emit a signal for the brightness applet */
-	gpm_debug ("emitting brightness-changed : %i", value);
-	g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, value);
-
-	gpm_brightness_set (backlight->priv->brightness, value);
+	if (ret && hw_changed) {
+		gpm_debug ("emitting brightness-changed : %i", value);
+		g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, value);
+	}
 	return TRUE;
 }
 
@@ -515,27 +524,42 @@ static void
 gpm_backlight_button_pressed_cb (GpmButton *button, const gchar *type, GpmBacklight *backlight)
 {
 	guint percentage;
+	gboolean ret;
+	gboolean hw_changed;
 	gpm_debug ("Button press event type=%s", type);
 
 	if (strcmp (type, GPM_BUTTON_BRIGHT_UP) == 0) {
 		/* go up one step */
-		gpm_brightness_up (backlight->priv->brightness);
+		ret = gpm_brightness_up (backlight->priv->brightness, &hw_changed);
 
-		/* get the new value */
-		gpm_brightness_get (backlight->priv->brightness, &percentage);
-		gpm_feedback_display_value (backlight->priv->feedback, (float) percentage/100.0f);
-		/* save the new percentage */
-		backlight->priv->master_percentage = percentage;
+		/* show the new value */
+		if (ret) {
+			gpm_brightness_get (backlight->priv->brightness, &percentage);
+			gpm_feedback_display_value (backlight->priv->feedback, (float) percentage/100.0f);
+			/* save the new percentage */
+			backlight->priv->master_percentage = percentage;
+		}
+		/* we emit a signal for the brightness applet */
+		if (ret && hw_changed) {
+			gpm_debug ("emitting brightness-changed : %i", percentage);
+			g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, percentage);
+		}
 	} else if (strcmp (type, GPM_BUTTON_BRIGHT_DOWN) == 0) {
 		/* go up down step */
-		gpm_brightness_down (backlight->priv->brightness);
+		ret = gpm_brightness_down (backlight->priv->brightness, &hw_changed);
 
-		/* get the new value */
-		gpm_brightness_get (backlight->priv->brightness, &percentage);
-		gpm_feedback_display_value (backlight->priv->feedback, (float) percentage/100.0f);
-
-		/* save the new percentage */
-		backlight->priv->master_percentage = percentage;
+		/* show the new value */
+		if (ret) {
+			gpm_brightness_get (backlight->priv->brightness, &percentage);
+			gpm_feedback_display_value (backlight->priv->feedback, (float) percentage/100.0f);
+			/* save the new percentage */
+			backlight->priv->master_percentage = percentage;
+		}
+		/* we emit a signal for the brightness applet */
+		if (ret && hw_changed) {
+			gpm_debug ("emitting brightness-changed : %i", percentage);
+			g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, percentage);
+		}
 	} else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0) {
 		/* make sure we undim when we lift the lid */
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);

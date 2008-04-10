@@ -52,12 +52,15 @@ GType		 gpm_brightness_hal_get_type	(void);
 GpmBrightnessHal *gpm_brightness_hal_new	(void);
 
 gboolean	 gpm_brightness_hal_has_hw	(GpmBrightnessHal	*brightness);
-gboolean	 gpm_brightness_hal_up		(GpmBrightnessHal	*brightness);
-gboolean	 gpm_brightness_hal_down	(GpmBrightnessHal	*brightness);
+gboolean	 gpm_brightness_hal_up		(GpmBrightnessHal	*brightness,
+						 gboolean		*hw_changed);
+gboolean	 gpm_brightness_hal_down	(GpmBrightnessHal	*brightness,
+						 gboolean		*hw_changed);
 gboolean	 gpm_brightness_hal_get		(GpmBrightnessHal	*brightness,
 						 guint			*percentage);
 gboolean	 gpm_brightness_hal_set		(GpmBrightnessHal	*brightness,
-						 guint			 percentage);
+						 guint			 percentage,
+						 gboolean		*hw_changed);
 
 G_END_DECLS
 
