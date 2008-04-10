@@ -1,3 +1,11 @@
+2008-04-10  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-brightness-xrandr.c:
+	(gpm_brightness_xrandr_setup_display),
+	(gpm_brightness_xrandr_filter_xevents),
+	(gpm_brightness_xrandr_finalize), (gpm_brightness_xrandr_init):
+	Try to grab brightness_changed events from BACKLIGHT.
+
 2008-04-09  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-backlight.c: (gpm_backlight_get_brightness),

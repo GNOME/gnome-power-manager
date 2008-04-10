@@ -40,6 +40,8 @@
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
 #include <X11/extensions/Xrandr.h>
+#include <gdk/gdkx.h>
+#include <gtk/gtk.h>
 
 #include "gpm-brightness.h"
 #include "gpm-brightness-xrandr.h"
@@ -56,7 +58,6 @@ struct GpmBrightnessXRandRPrivate
 	Display			*dpy;
 	guint			 shared_value;
 	gboolean		 has_extension;
-	const gchar		*dpy_name;
 };
 
 enum {
@@ -135,9 +136,9 @@ gpm_brightness_xrandr_setup_display (GpmBrightnessXRandR *brightness)
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness), FALSE);
 
 	/* get the display */
-	brightness->priv->dpy = XOpenDisplay (brightness->priv->dpy_name);
+	brightness->priv->dpy = GDK_DISPLAY();
 	if (!brightness->priv->dpy) {
-		gpm_debug ("Cannot open display %s", XDisplayName (brightness->priv->dpy_name));
+		gpm_error ("Cannot open display");
 		return FALSE;
 	}
 	/* is XRandR new enough? */
@@ -470,6 +471,17 @@ gpm_brightness_xrandr_has_hw (GpmBrightnessXRandR *brightness)
 }
 
 /**
+ * gpm_brightness_xrandr_filter_xevents:
+ **/
+static GdkFilterReturn
+gpm_brightness_xrandr_filter_xevents (GdkXEvent *xevent, GdkEvent *event, gpointer data)
+{
+	GpmBrightnessXRandR *brightness = GPM_BRIGHTNESS_XRANDR (data);
+	gpm_warning ("Event0 %p", brightness);
+	return GDK_FILTER_CONTINUE;
+}
+
+/**
  * gpm_brightness_xrandr_finalize:
  **/
 static void
@@ -479,9 +491,6 @@ gpm_brightness_xrandr_finalize (GObject *object)
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GPM_IS_BRIGHTNESS_XRANDR (object));
 	brightness = GPM_BRIGHTNESS_XRANDR (object);
-	if (brightness->priv->dpy) {
-		XCloseDisplay (brightness->priv->dpy);
-	}
 	G_OBJECT_CLASS (gpm_brightness_xrandr_parent_class)->finalize (object);
 }
 
@@ -507,21 +516,39 @@ gpm_brightness_xrandr_class_init (GpmBrightnessXRandRClass *klass)
 /**
  * gpm_brightness_xrandr_init:
  * @brightness: This brightness class instance
- *
- * initialises the brightness class. NOTE: We expect laptop_panel objects
- * to *NOT* be removed or added during the session.
- * We only control the first laptop_panel object if there are more than one.
  **/
 static void
 gpm_brightness_xrandr_init (GpmBrightnessXRandR *brightness)
 {
-	brightness->priv = GPM_BRIGHTNESS_XRANDR_GET_PRIVATE (brightness);
+	GdkScreen *screen;
+	GdkWindow *window;
+	int event_base;
+	int ignore;
 
-	/* override if needed? */
-	brightness->priv->dpy_name = NULL;
+	brightness->priv = GPM_BRIGHTNESS_XRANDR_GET_PRIVATE (brightness);
 
 	/* can we do this */
 	brightness->priv->has_extension = gpm_brightness_xrandr_setup_display (brightness);
+
+	screen = gdk_screen_get_default ();
+	window = gdk_screen_get_root_window (screen);
+
+	/* as we a filtering by a window, we have to add an event type */
+	if (!XRRQueryExtension (GDK_DISPLAY(), &event_base, &ignore)) {
+		gpm_error ("can't get event_base for XRR");
+	}
+	gdk_x11_register_standard_event_type (GDK_DISPLAY(), event_base, RRNotify + 1);
+	gdk_window_add_filter (window, gpm_brightness_xrandr_filter_xevents, (gpointer) brightness);
+
+	/* don't abort on error */
+	gdk_error_trap_push ();
+	XRRSelectInput (GDK_DISPLAY(), GDK_WINDOW_XID (window),
+			RRScreenChangeNotifyMask |
+			RROutputPropertyNotifyMask); /* <--- the only one we need, but see rh:345551 */
+	gdk_flush ();
+	if (gdk_error_trap_pop ()) {
+		gpm_error ("failed to select XRRSelectInput");
+	}
 }
 
 /**
