@@ -1,3 +1,12 @@
+2008-04-18  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-cell-array.c: (gpm_cell_array_update):
+	* src/gpm-cell.c: (gpm_cell_refresh_hal_all),
+	(hal_device_property_modified_cb):
+	* src/gpm-info.c: (gpm_info_log_do_poll):
+	Be more paranoid about the rates reported from HAL, and also only add data to the graph if
+	it's notn-zero. Perhaps fixes rh#443069
+
 2008-04-10  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-backlight.c: (conf_key_changed_cb):

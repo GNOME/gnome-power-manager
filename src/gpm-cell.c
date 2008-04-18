@@ -139,6 +139,11 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 		if (exists == FALSE && (unit->is_discharging == TRUE || unit->is_charging == TRUE)) {
 			gpm_warning ("could not read your battery's charge rate");
 		}
+		/* sanity check to less than 100W */
+		if (unit->rate > 100*1000) {
+			gpm_warning ("sanity checking rate from %i to 0", unit->rate);
+			unit->rate = 0;
+		}
 	}
 
 	/* sanity check that charge_level.percentage exists (if it should) */
@@ -297,6 +302,11 @@ hal_device_property_modified_cb (HalGDevice   *device,
 
 	} else if (strcmp (key, "battery.charge_level.rate") == 0) {
 		hal_gdevice_get_uint (device, key, &unit->rate, NULL);
+		/* sanity check to less than 100W */
+		if (unit->rate > 100*1000) {
+			gpm_warning ("sanity checking rate from %i to 0", unit->rate);
+			unit->rate = 0;
+		}
 
 	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
 		hal_gdevice_get_uint (device, key, &unit->percentage, NULL);

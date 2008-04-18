@@ -645,22 +645,18 @@ gpm_info_log_do_poll (gpointer data)
 			colour = GPM_COLOUR_CHARGED;
 		}
 
-		gpm_array_add (info->priv->percentage_data, value_x,
-			       unit->percentage, colour);
-
-		/* sanity check to less than 100W */
-		if (unit->rate < 100000) {
+		if (unit->percentage > 0) {
+			gpm_array_add (info->priv->percentage_data, value_x,
+				       unit->percentage, colour);
+		}
+		if (unit->rate > 0) {
 			gpm_array_add (info->priv->rate_data, value_x,
 				       unit->rate, colour);
 		}
-
-		/* sanity check to less than 10 hours */
-		if (unit->time_discharge < 10*60*60) {
-			gpm_array_add (info->priv->time_data, value_x,
-					   unit->time_discharge, colour);
+		if (unit->voltage > 0) {
+			gpm_array_add (info->priv->voltage_data, value_x,
+				       unit->voltage, colour);
 		}
-		gpm_array_add (info->priv->voltage_data, value_x,
-			       unit->voltage, colour);
 	}
 	return TRUE;
 }

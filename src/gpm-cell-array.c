@@ -334,6 +334,12 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 		unit->time_discharge /= num_present;
 	}
 
+	/* sanity check to less than 100W */
+	if (unit->rate > 100*1000) {
+		gpm_warning ("sanity checking rate from %i to 0", unit->rate);
+		unit->rate = 0;
+	}
+
 	/* sanity check */
 	if (unit->is_discharging == TRUE && unit->is_charging == TRUE) {
 		gpm_warning ("Sanity check kicked in! "
