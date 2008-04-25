@@ -85,14 +85,14 @@ conf_key_changed_cb (GpmConf          *conf,
 
 	if (strcmp (key, GPM_CONF_KEYBOARD_BRIGHTNESS_AC) == 0) {
 
-		gpm_conf_get_int (srv_brightness->priv->conf, GPM_CONF_BACKLIGHT_BRIGHTNESS_AC, &value);
+		gpm_conf_get_int (srv_brightness->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_AC, &value);
 		if (on_ac == TRUE) {
 			gpm_brightness_kbd_set_std (srv_brightness->priv->brightness, value);
 		}
 
 	} else if (strcmp (key, GPM_CONF_KEYBOARD_BRIGHTNESS_BATT) == 0) {
 
-		gpm_conf_get_int (srv_brightness->priv->conf, GPM_CONF_BACKLIGHT_BRIGHTNESS_AC, &value);
+		gpm_conf_get_int (srv_brightness->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_AC, &value);
 		if (on_ac == FALSE) {
 			gpm_brightness_kbd_set_std (srv_brightness->priv->brightness, value);
 		}
