@@ -301,6 +301,7 @@ gpm_brightness_finalize (GObject *object)
 	g_return_if_fail (GPM_IS_BRIGHTNESS (object));
 	brightness = GPM_BRIGHTNESS (object);
 	g_object_unref (brightness->priv->hal);
+	g_object_unref (brightness->priv->xrandr);
 	G_OBJECT_CLASS (gpm_brightness_parent_class)->finalize (object);
 }
 
@@ -324,11 +325,11 @@ gpm_brightness_class_init (GpmBrightnessClass *klass)
 }
 
 /**
- * gpm_brightness_changed_cb:
+ * gpm_brightness_changed:
  * This callback is called when the brightness value changes.
  **/
 static void
-gpm_brightness_changed_cb (gpointer caller, guint percentage, GpmBrightness *brightness)
+gpm_brightness_changed (GpmBrightness *brightness, guint percentage)
 {
 	g_return_if_fail (GPM_IS_BRIGHTNESS (brightness));
 	brightness->priv->cache_trusted = TRUE;
@@ -348,6 +349,32 @@ gpm_brightness_changed_cb (gpointer caller, guint percentage, GpmBrightness *bri
 	/* ONLY EMIT THIS SIGNAL WHEN SOMETHING _ELSE_ HAS CHANGED THE BACKLIGHT */
 	gpm_debug ("emitting brightness-changed (%i)", percentage);
 	g_signal_emit (brightness, signals [BRIGHTNESS_CHANGED], 0, percentage);
+}
+
+/**
+ * gpm_brightness_xrandr_changed_cb:
+ * This callback is called when the brightness value changes.
+ **/
+static void
+gpm_brightness_xrandr_changed_cb (GpmBrightnessXRandR *xrandr, guint percentage, GpmBrightness *brightness)
+{
+	g_return_if_fail (GPM_IS_BRIGHTNESS (brightness));
+	if (brightness->priv->use_xrandr) {
+		gpm_brightness_changed (brightness, percentage);
+	}
+}
+
+/**
+ * gpm_brightness_hal_changed_cb:
+ * This callback is called when the brightness value changes.
+ **/
+static void
+gpm_brightness_hal_changed_cb (GpmBrightnessHal *hal, guint percentage, GpmBrightness *brightness)
+{
+	g_return_if_fail (GPM_IS_BRIGHTNESS (brightness));
+	if (brightness->priv->use_hal) {
+		gpm_brightness_changed (brightness, percentage);
+	}
 }
 
 /**
@@ -373,10 +400,14 @@ gpm_brightness_init (GpmBrightness *brightness)
 	if (gpm_brightness_hal_has_hw (brightness->priv->hal)) {
 		brightness->priv->use_hal = TRUE;
 	}
+	/* we want to default to only use XRANDR if available, as some hardware can use either */
+	if (brightness->priv->use_xrandr) {
+		brightness->priv->use_hal = FALSE;
+	}
 	g_signal_connect (brightness->priv->hal, "brightness-changed",
-			  G_CALLBACK (gpm_brightness_changed_cb), brightness);
+			  G_CALLBACK (gpm_brightness_hal_changed_cb), brightness);
 	g_signal_connect (brightness->priv->xrandr, "brightness-changed",
-			  G_CALLBACK (gpm_brightness_changed_cb), brightness);
+			  G_CALLBACK (gpm_brightness_xrandr_changed_cb), brightness);
 }
 
 /**

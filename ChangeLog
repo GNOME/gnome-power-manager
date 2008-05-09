@@ -1,5 +1,14 @@
 2008-05-09  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-brightness.c: (gpm_brightness_finalize),
+	(gpm_brightness_changed), (gpm_brightness_xrandr_changed_cb),
+	(gpm_brightness_hal_changed_cb), (gpm_brightness_init):
+	Be more careful only listening to the brightness changed signals from the event source
+	we are using. This should fix duplicate notifications from hardware that can do both sorts
+	of dimming.
+
+2008-05-09  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness-hal.c: (gpm_brightness_hal_dim_hw),
 	(gpm_brightness_hal_up), (gpm_brightness_hal_down):
 	* src/gpm-brightness-xrandr.c: (gpm_brightness_xrandr_output_down),
