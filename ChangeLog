@@ -1,3 +1,23 @@
+2008-05-09  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in:
+	* data/gpm-prefs.glade:
+	* libhal-glib/Makefile.am:
+	* libhal-glib/libhal-gcpufreq.c:
+	* libhal-glib/libhal-gcpufreq.h:
+	* po/POTFILES.in:
+	* help/C/gnome-power-manager.xml
+	* src/Makefile.am:
+	* src/gpm-conf.h:
+	* src/gpm-cpufreq.c:
+	* src/gpm-cpufreq.h:
+	* src/gpm-manager.c: (gpm_manager_init), (gpm_manager_finalize):
+	* src/gpm-prefs-core.c: (prefs_setup_ac), (prefs_setup_battery),
+	(gpm_prefs_init), (gpm_prefs_finalize):
+	We've not had the CPU freq stuff by default in the UI for many releases.
+	Remove all the cpufreq code, as I keep being told I'm insane by Matthew.
+	See http://www.advogato.org/person/mjg59/diary.html?start=123 for rationale.
+
 2008-04-25  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-srv-brightness-kbd.c: (conf_key_changed_cb):

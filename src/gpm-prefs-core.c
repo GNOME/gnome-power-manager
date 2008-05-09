@@ -33,7 +33,6 @@
 #include <string.h>
 
 #include <libhal-gmanager.h>
-#include <libhal-gcpufreq.h>
 
 #include "gpm-tray-icon.h"
 #include "gpm-common.h"
@@ -65,8 +64,6 @@ struct GpmPrefsPrivate
 	gboolean		 can_hibernate;
 	GpmConf			*conf;
 	GpmScreensaver		*screensaver;
-	HalGCpufreq		*hal_cpufreq;
-	HalGCpufreqType		 cpufreq_types;
 };
 
 enum {
@@ -86,13 +83,6 @@ G_DEFINE_TYPE (GpmPrefs, gpm_prefs, G_TYPE_OBJECT)
 #define ACTION_HIBERNATE_TEXT		_("Hibernate")
 #define ACTION_BLANK_TEXT		_("Blank screen")
 #define ACTION_NOTHING_TEXT		_("Do nothing")
-
-/* The text that should appear in the processor combo box */
-#define CPUFREQ_NOTHING_TEXT		_("Do nothing")
-#define CPUFREQ_ONDEMAND_TEXT		_("Based on processor load")
-#define CPUFREQ_CONSERVATIVE_TEXT	_("Automatic power saving")
-#define CPUFREQ_POWERSAVE_TEXT		_("Maximum power saving")
-#define CPUFREQ_PERFORMANCE_TEXT	_("Always maximum speed")
 
 /* If sleep time in a slider is set to 61 it is considered as never */
 const int NEVER_TIME_ON_SLIDER = 61;
@@ -699,134 +689,6 @@ conf_key_changed_cb (GpmConf     *conf,
 	}
 }
 
-/**
- * gpm_prefs_processor_combo_changed_cb:
- * @widget: The GtkWidget object
- * @gpm_pref_key: The GConf key for this preference setting.
- **/
-static void
-gpm_prefs_processor_combo_changed_cb (GtkWidget *widget,
-				      GpmPrefs  *prefs)
-{
-	gchar *value;
-	const gchar *policy;
-	gchar *gpm_pref_key;
-
-	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
-	if (value == NULL) {
-		gpm_warning ("active text failed");
-		return;
-	}
-	if (strcmp (value, CPUFREQ_ONDEMAND_TEXT) == 0) {
-		policy = CODE_CPUFREQ_ONDEMAND;
-	} else if (strcmp (value, CPUFREQ_CONSERVATIVE_TEXT) == 0) {
-		policy = CODE_CPUFREQ_CONSERVATIVE;
-	} else if (strcmp (value, CPUFREQ_POWERSAVE_TEXT) == 0) {
-		policy = CODE_CPUFREQ_POWERSAVE;
-	} else if (strcmp (value, CPUFREQ_PERFORMANCE_TEXT) == 0) {
-		policy = CODE_CPUFREQ_PERFORMANCE;
-	} else if (strcmp (value, CPUFREQ_NOTHING_TEXT) == 0) {
-		policy = CODE_CPUFREQ_NOTHING;
-	} else {
-		g_assert (FALSE);
-	}
-
-	g_free (value);
-	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (widget), "conf_key");
-	gpm_debug ("Changing %s to %s", gpm_pref_key, policy);
-	gpm_conf_set_string (prefs->priv->conf, gpm_pref_key, policy);
-}
-
-/**
- * gpm_prefs_setup_action_combo:
- * @prefs: This prefs class instance
- * @widget_name: The GtkWidget name
- * @gpm_pref_key: The GConf key for this preference setting.
- * @actions: The actions to associate in an array.
- **/
-static void
-gpm_prefs_setup_processor_combo (GpmPrefs         *prefs,
-				 const gchar      *widget_name,
-				 const gchar      *gpm_pref_key,
-				 HalGCpufreqType cpufreq_types)
-{
-	gchar *value;
-	guint n_added = 0;
-	gboolean has_option = FALSE;
-	gboolean is_writable;
-	GtkWidget *widget;
-	HalGCpufreqType cpufreq_type;
-
-	widget = glade_xml_get_widget (prefs->priv->glade_xml, widget_name);
-	gpm_conf_get_string (prefs->priv->conf, gpm_pref_key, &value);
-	gpm_conf_is_writable (prefs->priv->conf, gpm_pref_key, &is_writable);
-
-	gtk_widget_set_sensitive (widget, is_writable);
-
-	if (value == NULL) {
-		gpm_warning ("invalid schema, please re-install");
-		value = g_strdup ("nothing");
-	}
-
-	g_object_set_data (G_OBJECT (widget), "conf_key", (gpointer) gpm_pref_key);
-	g_signal_connect (G_OBJECT (widget), "changed",
-			  G_CALLBACK (gpm_prefs_processor_combo_changed_cb),
-			  prefs);
-
-	cpufreq_type = hal_gcpufreq_string_to_enum (value);
-
-	if (cpufreq_types & LIBHAL_CPUFREQ_ONDEMAND) {
-		gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
-					   CPUFREQ_ONDEMAND_TEXT);
-		if (cpufreq_type == LIBHAL_CPUFREQ_ONDEMAND) {
-			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
-			has_option = TRUE;
-		}
-		n_added++;
-	}
-	if (cpufreq_types & LIBHAL_CPUFREQ_NOTHING) {
-		gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
-					   CPUFREQ_NOTHING_TEXT);
-		if (cpufreq_type == LIBHAL_CPUFREQ_ONDEMAND) {
-			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
-			has_option = TRUE;
-		}
-		n_added++;
-	}
-	if (cpufreq_types & LIBHAL_CPUFREQ_CONSERVATIVE) {
-		gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
-					   CPUFREQ_CONSERVATIVE_TEXT);
-		if (cpufreq_type == LIBHAL_CPUFREQ_CONSERVATIVE) {
-			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
-			has_option = TRUE;
-		}
-		n_added++;
-	}
-	if (cpufreq_types & LIBHAL_CPUFREQ_POWERSAVE) {
-		gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
-					   CPUFREQ_POWERSAVE_TEXT);
-		if (cpufreq_type == LIBHAL_CPUFREQ_POWERSAVE) {
-			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
-			has_option = TRUE;
-		}
-		n_added++;
-	}
-	if (cpufreq_types & LIBHAL_CPUFREQ_PERFORMANCE) {
-		gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
-					   CPUFREQ_PERFORMANCE_TEXT);
-		if (cpufreq_type == LIBHAL_CPUFREQ_PERFORMANCE) {
-			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
-			has_option = TRUE;
-		}
-		n_added++;
-	}
-
-	if (has_option == FALSE || cpufreq_type == LIBHAL_CPUFREQ_NOTHING) {
-		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
-	}
-	g_free (value);
-}
-
 /** setup the notification page */
 static void
 prefs_setup_notification (GpmPrefs *prefs)
@@ -921,7 +783,6 @@ prefs_setup_ac (GpmPrefs *prefs)
 {
 	GtkWidget *widget;
 	gint delay;
-	gboolean show_cpufreq;
 	const gchar  *button_lid_actions[] =
 				{ACTION_NOTHING,
 				 ACTION_BLANK,
@@ -933,8 +794,6 @@ prefs_setup_ac (GpmPrefs *prefs)
 	gpm_prefs_setup_action_combo (prefs, "combobox_ac_lid",
 				      GPM_CONF_BUTTON_LID_AC,
 				      button_lid_actions);
-	gpm_prefs_setup_processor_combo (prefs, "combobox_ac_cpu",
-					 GPM_CONF_CPUFREQ_POLICY_AC, prefs->priv->cpufreq_types);
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_ac_computer",
 				      GPM_CONF_TIMEOUT_SLEEP_COMPUTER_AC);
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_ac_display",
@@ -953,20 +812,10 @@ prefs_setup_ac (GpmPrefs *prefs)
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_ac_lid");
 		gtk_widget_hide_all (widget);
 	}
-	if (prefs->priv->hal_cpufreq == NULL) {
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_ac_cpu");
-		gtk_widget_hide_all (widget);
-	}
 	if (prefs->priv->has_lcd == FALSE) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_ac_brightness");
 		gtk_widget_hide_all (widget);
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "checkbutton_ac_display_dim");
-		gtk_widget_hide_all (widget);
-	}
-
-	gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_UI_SHOW_CPUFREQ, &show_cpufreq);
-	if (show_cpufreq == FALSE) {
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_ac_cpu");
 		gtk_widget_hide_all (widget);
 	}
 }
@@ -978,7 +827,6 @@ prefs_setup_battery (GpmPrefs *prefs)
 	GtkWidget *notebook;
 	gint delay;
 	gint page;
-	gboolean show_cpufreq;
 
 	const gchar  *button_lid_actions[] =
 				{ACTION_NOTHING,
@@ -1008,8 +856,6 @@ prefs_setup_battery (GpmPrefs *prefs)
 	gpm_prefs_setup_action_combo (prefs, "combobox_battery_critical",
 				      GPM_CONF_ACTIONS_CRITICAL_BATT,
 				      battery_critical_actions);
-	gpm_prefs_setup_processor_combo (prefs, "combobox_battery_cpu",
-					 GPM_CONF_CPUFREQ_POLICY_BATT, prefs->priv->cpufreq_types);
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_battery_computer",
 				      GPM_CONF_TIMEOUT_SLEEP_COMPUTER_BATT);
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_battery_display",
@@ -1035,17 +881,8 @@ prefs_setup_battery (GpmPrefs *prefs)
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_battery_lid");
 		gtk_widget_hide_all (widget);
 	}
-	if (prefs->priv->hal_cpufreq == NULL) {
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_battery_cpu");
-		gtk_widget_hide_all (widget);
-	}
 	if (prefs->priv->has_lcd == FALSE) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "checkbutton_battery_display_dim");
-		gtk_widget_hide_all (widget);
-	}
-	gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_UI_SHOW_CPUFREQ, &show_cpufreq);
-	if (show_cpufreq == FALSE) {
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_battery_cpu");
 		gtk_widget_hide_all (widget);
 	}
 }
@@ -1133,8 +970,6 @@ gpm_prefs_init (GpmPrefs *prefs)
 
 	prefs->priv = GPM_PREFS_GET_PRIVATE (prefs);
 
-	prefs->priv->hal_cpufreq = hal_gcpufreq_new ();
-
 	prefs->priv->screensaver = gpm_screensaver_new ();
 	g_signal_connect (prefs->priv->screensaver, "gs-delay-changed",
 			  G_CALLBACK (gs_delay_changed_cb), prefs);
@@ -1154,14 +989,6 @@ gpm_prefs_init (GpmPrefs *prefs)
 	prefs->priv->can_suspend = gpm_dbus_method_bool ("CanSuspend");
 	prefs->priv->can_hibernate = gpm_dbus_method_bool ("CanHibernate");
 	gpm_debug ("caps=%i", caps);
-
-	/* only enable cpufreq stuff if we have the hardware */
-	if (prefs->priv->hal_cpufreq) {
-		hal_gcpufreq_get_governors (prefs->priv->hal_cpufreq,
-					    &prefs->priv->cpufreq_types);
-	} else {
-		prefs->priv->cpufreq_types = LIBHAL_CPUFREQ_NOTHING;
-	}
 
 	prefs->priv->glade_xml = glade_xml_new (GPM_DATA "/gpm-prefs.glade", NULL, NULL);
 	if (prefs->priv->glade_xml == NULL) {
@@ -1213,9 +1040,6 @@ gpm_prefs_finalize (GObject *object)
 	g_object_unref (prefs->priv->conf);
 	if (prefs->priv->screensaver) {
 		g_object_unref (prefs->priv->screensaver);
-	}
-	if (prefs->priv->hal_cpufreq) {
-		g_object_unref (prefs->priv->hal_cpufreq);
 	}
 
 	G_OBJECT_CLASS (gpm_prefs_parent_class)->finalize (object);

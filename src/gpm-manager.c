@@ -48,7 +48,6 @@
 #include "gpm-conf.h"
 #include "gpm-control.h"
 #include "gpm-common.h"
-#include "gpm-cpufreq.h"
 #include "gpm-debug.h"
 #include "gpm-dpms.h"
 #include "gpm-idle.h"
@@ -100,7 +99,6 @@ struct GpmManagerPrivate
 	/* interactive services */
 	GpmBacklight		*backlight;
 	GpmSrvBrightnessKbd	*srv_brightness_kbd;
-	GpmCpufreq	 	*cpufreq;
 	GpmSrvScreensaver 	*srv_screensaver;
 };
 
@@ -1726,9 +1724,6 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->sound = gpm_sound_new ();
 
 	/* try and start an interactive service */
-	manager->priv->cpufreq = gpm_cpufreq_new ();
-
-	/* try and start an interactive service */
 	manager->priv->screensaver = gpm_screensaver_new ();
 	g_signal_connect (manager->priv->screensaver, "auth-request",
  			  G_CALLBACK (screensaver_auth_request_cb), manager);
@@ -1858,9 +1853,6 @@ gpm_manager_finalize (GObject *object)
 	/* optional gobjects */
 	if (manager->priv->button) {
 		g_object_unref (manager->priv->button);
-	}
-	if (manager->priv->cpufreq) {
-		g_object_unref (manager->priv->cpufreq);
 	}
 	if (manager->priv->backlight) {
 		g_object_unref (manager->priv->backlight);

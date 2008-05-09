@@ -35,7 +35,6 @@ LOCAL_LIBHAL_LIBS =					\
 	$(top_builddir)/libhal-glib/libhal-gdevice.la	\
 	$(top_builddir)/libhal-glib/libhal-gdevicestore.la	\
 	$(top_builddir)/libhal-glib/libhal-gmanager.la	\
-	$(top_builddir)/libhal-glib/libhal-gcpufreq.la	\
 	$(top_builddir)/libhal-glib/libhal-gpower.la
 
 LOCAL_LIBDBUS_LIBS =						\
@@ -150,8 +149,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-srv-brightness-kbd.c			\
 	gpm-srv-screensaver.h				\
 	gpm-srv-screensaver.c				\
-	gpm-cpufreq.h					\
-	gpm-cpufreq.c					\
 	gpm-conf.h					\
 	gpm-conf.c					\
 	gpm-idle.h					\
@@ -263,8 +260,6 @@ gnome_power_self_test_SOURCES =				\
 	gpm-cell-array.c				\
 	gpm-warnings.h					\
 	gpm-warnings.c					\
-	gpm-cpufreq.h					\
-	gpm-cpufreq.c					\
 	gpm-conf.h					\
 	gpm-conf.c					\
 	gpm-idle.h					\
