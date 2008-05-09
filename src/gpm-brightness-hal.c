@@ -224,30 +224,6 @@ gpm_brightness_hal_dim_hw_step (GpmBrightnessHal *brightness, guint new_level_hw
 }
 
 /**
- * gpm_brightness_hal_get_step:
- * @brightness: This brightness class instance
- * Return value: the amount of hardware steps to do on each update or
- * zero for error.
- **/
-static guint
-gpm_brightness_hal_get_step (GpmBrightnessHal *brightness)
-{
-	int step;
-
-	g_return_val_if_fail (brightness != NULL, 0);
-	g_return_val_if_fail (GPM_IS_BRIGHTNESS_HAL (brightness), 0);
-
-	if (brightness->priv->levels < 20) {
-		/* less than 20 states should do every state */
-		step = 1;
-	} else {
-		/* macbook pro has a bazzillion brightness levels, do in 5% steps */
-		step = brightness->priv->levels / 20;
-	}
-	return step;
-}
-
-/**
  * gpm_brightness_hal_dim_hw:
  * @brightness: This brightness class instance
  * @new_level_hw: The new hardware level
@@ -262,7 +238,7 @@ gpm_brightness_hal_dim_hw (GpmBrightnessHal *brightness, guint new_level_hw)
 	gpm_debug ("new_level_hw=%i", new_level_hw);
 
 	/* macbook pro has a bazzillion brightness levels, be a bit clever */
-	step = gpm_brightness_hal_get_step (brightness);
+	step = gpm_brightness_get_step (brightness->priv->levels);
 	return gpm_brightness_hal_dim_hw_step (brightness, new_level_hw, step);
 }
 
@@ -343,7 +319,7 @@ gpm_brightness_hal_up (GpmBrightnessHal *brightness, gboolean *hw_changed)
 		brightness->priv->last_set_hw = current_hw;
 	} else {
 		/* macbook pro has a bazzillion brightness levels, be a bit clever */
-		step = gpm_brightness_hal_get_step (brightness);
+		step = gpm_brightness_get_step (brightness->priv->levels);
 		/* don't overflow */
 		if (brightness->priv->last_set_hw + step > brightness->priv->levels - 1) {
 			step = (brightness->priv->levels - 1) - brightness->priv->last_set_hw;
@@ -385,7 +361,7 @@ gpm_brightness_hal_down (GpmBrightnessHal *brightness, gboolean *hw_changed)
 		gpm_brightness_hal_get_hw (brightness, &brightness->priv->last_set_hw);
 	} else {
 		/* macbook pro has a bazzillion brightness levels, be a bit clever */
-		step = gpm_brightness_hal_get_step (brightness);
+		step = gpm_brightness_get_step (brightness->priv->levels);
 		/* don't underflow */
 		if (brightness->priv->last_set_hw < step) {
 			step = brightness->priv->last_set_hw;

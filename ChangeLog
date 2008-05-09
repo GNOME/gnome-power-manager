@@ -1,5 +1,16 @@
 2008-05-09  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-brightness-hal.c: (gpm_brightness_hal_dim_hw),
+	(gpm_brightness_hal_up), (gpm_brightness_hal_down):
+	* src/gpm-brightness-xrandr.c: (gpm_brightness_xrandr_output_down),
+	(gpm_brightness_xrandr_output_up), (gpm_brightness_xrandr_up),
+	(gpm_brightness_xrandr_down):
+	* src/gpm-brightness.c: (gpm_brightness_get_step):
+	* src/gpm-brightness.h:
+	Use the same logic for xrandr as hal when we have a large number of brightness steps.
+
+2008-05-09  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in:
 	* data/gpm-prefs.glade:
 	* libhal-glib/Makefile.am:

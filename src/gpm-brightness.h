@@ -64,6 +64,9 @@ gboolean	 gpm_brightness_set		(GpmBrightness		*brightness,
 						 guint			 percentage,
 						 gboolean		*hw_changed);
 
+/* not designed to be used outside of gpm-brightness-*.c */
+guint		 gpm_brightness_get_step	(guint			 levels);
+
 G_END_DECLS
 
 #endif /* __GPM_BRIGHTNESS_H */

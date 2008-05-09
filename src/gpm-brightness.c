@@ -66,6 +66,21 @@ static guint signals [LAST_SIGNAL] = { 0 };
 static gpointer gpm_brightness_object = NULL;
 
 /**
+ * gpm_brightness_get_step:
+ * @levels: The number of levels supported
+ * Return value: the amount of hardware steps to do on each increment or decrement
+ **/
+guint
+gpm_brightness_get_step (guint levels)
+{
+	if (levels > 20) {
+		/* macbook pro has a bazzillion brightness levels, do in 5% steps */
+		return levels / 20;
+	}
+	return 1;
+}
+
+/**
  * gpm_brightness_trust_cache:
  * @brightness: This brightness class instance
  * Return value: if we can trust the cache

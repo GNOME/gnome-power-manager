@@ -250,7 +250,7 @@ gpm_brightness_xrandr_output_down (GpmBrightnessXRandR *brightness, RROutput out
 		gpm_debug ("already min");
 		return TRUE;
 	}
-	cur -= brightness->priv->shared_value;
+	cur -= gpm_brightness_get_step ((max-min)+1);
 	if (cur < min) {
 		gpm_debug ("truncating to %i", min);
 		cur = min;
@@ -284,7 +284,7 @@ gpm_brightness_xrandr_output_up (GpmBrightnessXRandR *brightness, RROutput outpu
 		gpm_debug ("already max");
 		return TRUE;
 	}
-	cur += brightness->priv->shared_value;
+	cur += gpm_brightness_get_step ((max-min)+1);
 	if (cur > max) {
 		gpm_debug ("truncating to %i", max);
 		cur = max;
@@ -487,9 +487,6 @@ gpm_brightness_xrandr_up (GpmBrightnessXRandR *brightness, gboolean *hw_changed)
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness), FALSE);
 	g_return_val_if_fail (hw_changed != NULL, FALSE);
 
-	/* single step */
-	brightness->priv->shared_value = 1;
-
 	/* reset to not-changed */
 	brightness->priv->hw_changed = FALSE;
 	ret = gpm_brightness_xrandr_foreach_screen (brightness, ACTION_BACKLIGHT_INC);
@@ -514,9 +511,6 @@ gpm_brightness_xrandr_down (GpmBrightnessXRandR *brightness, gboolean *hw_change
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness), FALSE);
 	g_return_val_if_fail (hw_changed != NULL, FALSE);
-
-	/* single step */
-	brightness->priv->shared_value = 1;
 
 	/* reset to not-changed */
 	brightness->priv->hw_changed = FALSE;
