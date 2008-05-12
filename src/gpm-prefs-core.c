@@ -44,6 +44,10 @@
 #include "gpm-screensaver.h"
 #include "gpm-prefs-server.h"
 
+#ifdef HAVE_GCONF_DEFAULTS
+#include <polkit-gnome/polkit-gnome.h>
+#endif
+
 static void     gpm_prefs_class_init (GpmPrefsClass *klass);
 static void     gpm_prefs_init       (GpmPrefs      *prefs);
 static void     gpm_prefs_finalize   (GObject	    *object);
@@ -64,6 +68,9 @@ struct GpmPrefsPrivate
 	gboolean		 can_hibernate;
 	GpmConf			*conf;
 	GpmScreensaver		*screensaver;
+#ifdef HAVE_GCONF_DEFAULTS
+	PolKitGnomeAction	*default_action;
+#endif
 };
 
 enum {
@@ -957,6 +964,92 @@ prefs_setup_general (GpmPrefs *prefs)
 	}
 }
 
+#ifdef HAVE_GCONF_DEFAULTS
+/**
+ * pk_prefs_set_defaults_cb:
+ **/
+static void
+pk_prefs_set_defaults_cb (PolKitGnomeAction *default_action, GpmPrefs *prefs)
+{
+	DBusGProxy *proxy;
+	DBusGConnection *connection;
+	GError *error;
+	gchar *keys[5] = {
+		"/apps/gnome-power-manager/actions",
+		"/apps/gnome-power-manager/ui",
+		"/apps/gnome-power-manager/buttons",
+		"/apps/gnome-power-manager/backlight",
+		"/apps/gnome-power-manager/timeout"
+	};
+
+	error = NULL;
+	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
+	if (error != NULL) {
+		g_warning ("failed to get system bus connection: %s", error->message);
+		g_error_free (error);
+		return;
+	}
+
+	proxy = dbus_g_proxy_new_for_name (connection,
+					   "org.gnome.GConf.Defaults",
+					   "/",
+					   "org.gnome.GConf.Defaults");
+	if (proxy == NULL) {
+		g_warning ("Cannot connect to defaults mechanism");
+		return;
+	}
+
+	dbus_g_proxy_call (proxy, "SetSystem", &error,
+			   G_TYPE_STRV, keys,
+			   G_TYPE_STRV, NULL,
+			   G_TYPE_INVALID, G_TYPE_INVALID);
+
+	g_object_unref (proxy);
+}
+
+/**
+ * gpk_prefs_create_custom_widget:
+ **/
+static GtkWidget *
+gpk_prefs_create_custom_widget (GladeXML *xml, gchar *func_name, gchar *name,
+				     gchar *string1, gchar *string2,
+				     gint int1, gint int2, gpointer user_data)
+{
+	GpmPrefs *prefs = GPM_PREFS (user_data);
+	if (strcmp (name, "button_default") == 0) {
+		return polkit_gnome_action_create_button (prefs->priv->default_action);
+	}
+	gpm_warning ("name unknown=%s", name);
+	return NULL;
+}
+
+/**
+ * gpk_prefs_setup_policykit:
+ *
+ * We have to do this before the glade stuff if done as the custom handler needs the actions setup
+ **/
+static void
+gpk_prefs_setup_policykit (GpmPrefs *prefs)
+{
+	PolKitAction *pk_action;
+
+	g_return_if_fail (GPM_IS_PREFS (prefs));
+
+	/* set default */
+	pk_action = polkit_action_new ();
+	polkit_action_set_action_id (pk_action, "org.freedesktop.packagekit.set-defaults");
+	prefs->priv->default_action = polkit_gnome_action_new_default ("set-defaults", pk_action,
+								       _("Make Default"), NULL);
+	g_object_set (prefs->priv->default_action,
+		      "no-icon-name", GTK_STOCK_FLOPPY,
+		      "auth-icon-name", GTK_STOCK_FLOPPY,
+		      "yes-icon-name", GTK_STOCK_FLOPPY,
+		      "self-blocked-icon-name", GTK_STOCK_FLOPPY,
+		      NULL);
+	polkit_action_unref (pk_action);
+}
+#endif
+
 /**
  * gpm_prefs_init:
  * @prefs: This prefs class instance
@@ -990,6 +1083,14 @@ gpm_prefs_init (GpmPrefs *prefs)
 	prefs->priv->can_hibernate = gpm_dbus_method_bool ("CanHibernate");
 	gpm_debug ("caps=%i", caps);
 
+#ifdef HAVE_GCONF_DEFAULTS
+	/* use custom widgets */
+	glade_set_custom_handler (gpk_prefs_create_custom_widget, prefs);
+
+	/* we have to do this before we connect up the glade file */
+	gpk_prefs_setup_policykit (prefs);
+#endif
+
 	prefs->priv->glade_xml = glade_xml_new (GPM_DATA "/gpm-prefs.glade", NULL, NULL);
 	if (prefs->priv->glade_xml == NULL) {
 		g_error ("Cannot find 'gpm-prefs.glade'");
@@ -1013,6 +1114,11 @@ gpm_prefs_init (GpmPrefs *prefs)
 	widget = glade_xml_get_widget (prefs->priv->glade_xml, "button_help");
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_prefs_help_cb), prefs);
+
+#ifdef HAVE_GCONF_DEFAULTS
+	g_signal_connect (prefs->priv->default_action, "activate",
+			  G_CALLBACK (pk_prefs_set_defaults_cb), prefs);
+#endif
 
 	prefs_setup_ac (prefs);
 	prefs_setup_battery (prefs);

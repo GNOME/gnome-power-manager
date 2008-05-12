@@ -1,3 +1,14 @@
+2008-05-12  Richard Hughes  <richard@hughsie.com>
+
+	* configure.ac:
+	* data/gpm-prefs.glade:
+	* src/Makefile.am:
+	* src/gpm-prefs-core.c: (pk_prefs_set_defaults_cb),
+	(gpk_prefs_create_custom_widget), (gpk_prefs_setup_policykit),
+	(gpm_prefs_init):
+	Rework a patch from Matthias Clasen adding a default button for GConf settings.
+	This option requires an optional dep on polkit-gnome.
+
 2008-05-09  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-brightness.c: (gpm_brightness_finalize),

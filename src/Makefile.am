@@ -18,6 +18,7 @@ INCLUDES =						\
 	$(LIBNOTIFY_CFLAGS)				\
 	$(GTKUNIQUE_CFLAGS)				\
 	$(GSTREAMER_CFLAGS)				\
+	$(POLKIT_GNOME_CFLAGS)				\
 	-DBINDIR=\"$(bindir)\"			 	\
 	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
 	-DDATADIR=\"$(datadir)\"			\
@@ -112,6 +113,7 @@ gnome_power_preferences_LDADD =				\
 	$(GNOME_LIBS)					\
 	$(HAL_LIBS)					\
 	$(DBUS_LIBS)					\
+	$(POLKIT_GNOME_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
 	$(LOCAL_LIBHAL_LIBS)				\
 	$(LOCAL_LIBDBUS_LIBS)				\

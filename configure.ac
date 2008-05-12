@@ -63,6 +63,7 @@ GTKUNIQUE_REQUIRED=0.9.1
 LIBPANEL_REQUIRED=2.0.0
 GSTREAMER_REQUIRED=0.10
 XRANDR_REQUIRED=1.2.0
+POLKIT_GNOME_REQUIRED=0.8
 
 dnl ---------------------------------------------------------------------------
 dnl - Make above strings available for packaging files (e.g. rpm spec files)
@@ -82,6 +83,7 @@ AC_SUBST(GTKUNIQUE_REQUIRED)
 AC_SUBST(LIBPANEL_REQUIRED)
 AC_SUBST(GSTREAMER_REQUIRED)
 AC_SUBST(XRANDR_REQUIRED)
+AC_SUBST(POLKIT_GNOME_REQUIRED)
 
 dnl ---------------------------------------------------------------------------
 dnl - Check library dependencies
@@ -202,6 +204,23 @@ if test x$enable_tests = xyes ; then
     AC_DEFINE(HAVE_TESTS, 1, [Define if we want to use the self tests])
 fi
 AM_CONDITIONAL([HAVE_TESTS], [test $have_tests = yes])
+
+dnl ---------------------------------------------------------------------------
+dnl - Build gconf default button?
+dnl ---------------------------------------------------------------------------
+AC_ARG_ENABLE(gconfdefaults, [  --gconf-defaults        Allow setting gconf default settings],
+              enable_gconfdefaults=$enableval,enable_gconfdefaults=yes)
+AC_MSG_CHECKING([whether to support gconf defaults])
+have_gconfdefaults=no
+if test x$enable_gconfdefaults = xyes ; then
+    PKG_CHECK_MODULES(POLKIT_GNOME, \
+                      polkit-gnome >= $POLKIT_GNOME_REQUIRED)
+    AC_SUBST(POLKIT_GNOME_CFLAGS)
+    AC_SUBST(POLKIT_GNOME_LIBS)
+    have_gconfdefaults=yes
+    AC_DEFINE(HAVE_GCONF_DEFAULTS, 1, [Define if have policykit-gnome])
+fi
+AM_CONDITIONAL([HAVE_GCONF_DEFAULTS], [test $have_gconfdefaults = yes])
 
 dnl ---------------------------------------------------------------------------
 dnl - Build applets
@@ -578,6 +597,7 @@ echo "
         PolicyKit support:         ${have_polkit}
         XEVENTS support:           ${have_xevents}
         Self test support:         ${have_tests}
+        GConf default support:     ${have_gconfdefaults}
         Docbook support:           ${enable_docbook_docs}
         documentation dir:         $DOCDIR
         dbus-1 system.d dir:       $DBUS_SYS_DIR
