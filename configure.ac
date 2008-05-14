@@ -59,7 +59,7 @@ LIBGLADE_REQUIRED=2.5.0
 LIBNOTIFY_REQUIRED=0.4.3
 LIBWNCK_REQUIRED=2.10.0
 CAIRO_REQUIRED=1.0.0
-GTKUNIQUE_REQUIRED=0.9.1
+UNIQUE_REQUIRED=0.9.1
 LIBPANEL_REQUIRED=2.0.0
 GSTREAMER_REQUIRED=0.10
 XRANDR_REQUIRED=1.2.0
@@ -79,7 +79,7 @@ AC_SUBST(LIBGLADE_REQUIRED)
 AC_SUBST(LIBNOTIFY_REQUIRED)
 AC_SUBST(LIBWNCK_REQUIRED)
 AC_SUBST(CAIRO_REQUIRED)
-AC_SUBST(GTKUNIQUE_REQUIRED)
+AC_SUBST(UNIQUE_REQUIRED)
 AC_SUBST(LIBPANEL_REQUIRED)
 AC_SUBST(GSTREAMER_REQUIRED)
 AC_SUBST(XRANDR_REQUIRED)
@@ -310,19 +310,19 @@ fi
 AM_CONDITIONAL([HAVE_LIBNOTIFY], [test $have_libnotify = yes])
 
 dnl ---------------------------------------------------------------------------
-dnl - Is gtkunique available?
+dnl - Is unique available?
 dnl ---------------------------------------------------------------------------
-if $PKG_CONFIG --atleast-version $GTKUNIQUE_REQUIRED gtkunique-1.0; then
-   have_gtkunique=yes
-   PKG_CHECK_MODULES(GTKUNIQUE, gtkunique-1.0 >= $GTKUNIQUE_REQUIRED)
-   AC_SUBST(GTKUNIQUE_CFLAGS)
-   AC_SUBST(GTKUNIQUE_LIBS)
-   AC_DEFINE(HAVE_GTKUNIQUE, 1, [Building with gtkunique support]) 
+if $PKG_CONFIG --atleast-version $UNIQUE_REQUIRED unique-1.0; then
+   have_unique=yes
+   PKG_CHECK_MODULES(UNIQUE, unique-1.0 >= $UNIQUE_REQUIRED)
+   AC_SUBST(UNIQUE_CFLAGS)
+   AC_SUBST(UNIQUE_LIBS)
+   AC_DEFINE(HAVE_UNIQUE, 1, [Building with unique support]) 
 else
-   have_gtkunique=no
-   AC_DEFINE(HAVE_GTKUNIQUE, 0, [Not building with gtkunique support]) 
+   have_unique=no
+   AC_DEFINE(HAVE_UNIQUE, 0, [Not building with unique support]) 
 fi
-AM_CONDITIONAL([HAVE_GTKUNIQUE], [test $have_gtkunique = yes])
+AM_CONDITIONAL([HAVE_UNIQUE], [test $have_unique = yes])
 
 dnl ---------------------------------------------------------------------------
 dnl - Some utility functions to make checking for X things easier.
@@ -547,6 +547,7 @@ applets/inhibit/Makefile
 libhal-glib/Makefile
 libdbus-glib/Makefile
 libidletime/Makefile
+libunique/Makefile
 docs/Makefile
 man/Makefile
 help/Makefile
@@ -591,7 +592,7 @@ echo "
         compiler:                  ${CC}
         cflags:                    ${CFLAGS}
         libnotify support:         ${have_libnotify}
-        gtkunique support:         ${have_gtkunique}
+        unique support:            ${have_unique}
         Building extra applets:    ${enable_applets}
         DPMS support:              ${have_dpms}
         PolicyKit support:         ${have_polkit}

@@ -16,7 +16,7 @@ INCLUDES =						\
 	$(GNOME_CFLAGS)					\
 	$(XRANDR_CFLAGS)				\
 	$(LIBNOTIFY_CFLAGS)				\
-	$(GTKUNIQUE_CFLAGS)				\
+	$(UNIQUE_CFLAGS)				\
 	$(GSTREAMER_CFLAGS)				\
 	$(POLKIT_GNOME_CFLAGS)				\
 	-DBINDIR=\"$(bindir)\"			 	\
@@ -28,6 +28,7 @@ INCLUDES =						\
 	-DVERSION="\"$(VERSION)\"" 			\
 	-DGPM_DATA=\"$(pkgdatadir)\"			\
 	-I$(top_srcdir)					\
+	-I$(top_srcdir)/libunique			\
 	-I$(top_srcdir)/libhal-glib			\
 	-I$(top_srcdir)/libdbus-glib			\
 	$(NULL)
@@ -43,6 +44,9 @@ LOCAL_LIBDBUS_LIBS =						\
 	$(top_builddir)/libdbus-glib/libdbus-monitor-system.la	\
 	$(top_builddir)/libdbus-glib/libdbus-watch.la		\
 	$(top_builddir)/libdbus-glib/libdbus-proxy.la
+
+LOCAL_LIBUNIQUE_LIBS =						\
+	$(top_builddir)/libunique/libunique.la
 
 bin_PROGRAMS =						\
 	gnome-power-manager				\
@@ -78,11 +82,12 @@ gnome_power_statistics_LDADD =				\
 	$(GNOME_LIBS)					\
 	$(DBUS_LIBS)					\
 	$(LOCAL_LIBDBUS_LIBS)				\
+	$(LOCAL_LIBUNIQUE_LIBS)				\
 	$(NULL)
 
-if HAVE_GTKUNIQUE
+if HAVE_UNIQUE
 gnome_power_statistics_LDADD +=				\
-	$(GTKUNIQUE_LIBS)
+	$(UNIQUE_LIBS)
 endif
 
 gnome_power_preferences_SOURCES =			\
@@ -117,11 +122,12 @@ gnome_power_preferences_LDADD =				\
 	$(GPM_EXTRA_LIBS)				\
 	$(LOCAL_LIBHAL_LIBS)				\
 	$(LOCAL_LIBDBUS_LIBS)				\
+	$(LOCAL_LIBUNIQUE_LIBS)				\
 	$(NULL)
 
-if HAVE_GTKUNIQUE
+if HAVE_UNIQUE
 gnome_power_preferences_LDADD +=			\
-	$(GTKUNIQUE_LIBS)
+	$(UNIQUE_LIBS)
 endif
 
 gnome_power_manager_SOURCES =				\

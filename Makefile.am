@@ -2,6 +2,7 @@ SUBDIRS =						\
 	libdbus-glib					\
 	libhal-glib					\
 	libidletime					\
+	libunique					\
 	src						\
 	po						\
 	docs						\

@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2005 Jaap Haitsma <jaap@haitsma.org>
  * Copyright (C) 2005 William Jon McCann <mccann@jhu.edu>
- * Copyright (C) 2005-2007 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2005-2008 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -21,16 +21,17 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "config.h"
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
 
 #include <stdlib.h>
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-#if HAVE_GTKUNIQUE
-#include <gtkunique/gtkunique.h>
-#endif
+/* local .la */
+#include <libunique.h>
 
 #include "gpm-common.h"
 #include "gpm-conf.h"
@@ -58,32 +59,20 @@ gpm_statistics_help_cb (GpmStatistics *statistics)
 static void
 gpm_statistics_close_cb (GpmStatistics *statistics)
 {
-	g_object_unref (statistics);
-	exit (0);
+	gtk_main_quit ();
 }
 
-#if HAVE_GTKUNIQUE
 /**
- * gtkuniqueapp_command_cb:
+ * gpm_statistics_activated_cb
+ * @statistics: This statistics class instance
+ *
+ * We have been asked to show the window
  **/
 static void
-gtkuniqueapp_command_cb (GtkUniqueApp    *app,
-		         GtkUniqueCommand command,
-		         const gchar     *data,
-		         const gchar     *startup_id,
-		         GdkScreen	 *screen,
-		         guint            workspace,
-		         gpointer         user_data)
+gpm_statistics_activated_cb (LibUnique *libunique, GpmStatistics *statistics)
 {
-	GpmStatistics *statistics;
-
-	gpm_debug ("GtkUnique message %i", command);
-	statistics = GPM_STATISTICS (user_data);
-	if (command == GTK_UNIQUE_ACTIVATE) {
-		gpm_statistics_activate_window (statistics);
-	}
+	gpm_statistics_activate_window (statistics);
 }
-#endif
 
 /**
  * main:
@@ -91,14 +80,11 @@ gtkuniqueapp_command_cb (GtkUniqueApp    *app,
 int
 main (int argc, char **argv)
 {
-	gboolean	 verbose = FALSE;
-	GOptionContext  *context;
-	GpmStatistics	*statistics = NULL;
-	GMainLoop       *loop;
-#if HAVE_GTKUNIQUE
-	GtkUniqueApp *uniqueapp;
-	const gchar *startup_id = NULL;
-#endif
+	gboolean verbose = FALSE;
+	GOptionContext *context;
+	GpmStatistics *statistics = NULL;
+	gboolean ret;
+	LibUnique *libunique;
 
 	const GOptionEntry options[] = {
 		{ "verbose", '\0', 0, G_OPTION_ARG_NONE, &verbose,
@@ -113,68 +99,33 @@ main (int argc, char **argv)
 	textdomain (GETTEXT_PACKAGE);
 
 	g_option_context_set_translation_domain(context, GETTEXT_PACKAGE);
-
-#if HAVE_GTKUNIQUE
-	/* FIXME: We don't need to get the startup id once we can
-	 * depend on gtk+-2.12.  Until then we must get it BEFORE
-	 * gtk_init() is called, otherwise gtk_init() will clear it
-	 * and GtkUnique has to use racy workarounds.
-	 */
-	startup_id = g_getenv ("DESKTOP_STARTUP_ID");
-#endif
 	g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
 	g_option_context_add_group (context, gtk_get_option_group (FALSE));
 	g_option_context_parse (context, &argc, &argv, NULL);
-	gtk_init (&argc, &argv);
 
+	gtk_init (&argc, &argv);
 	gpm_debug_init (verbose);
 
-#if HAVE_GTKUNIQUE
-	gpm_debug ("Using GtkUnique support.");
-
-	/* Arrr! Until we depend on gtk+2 2.12 we can't just use gtk_unique_app_new */
-	uniqueapp = gtk_unique_app_new_with_id ("org.freedesktop.PowerManagement.Statistics", startup_id);
-	/* check to see if the user has another prefs window open */
-	if (gtk_unique_app_is_running (uniqueapp)) {
-		gpm_warning ("You have another instance running. "
-			     "This program will now close");
-		gtk_unique_app_activate (uniqueapp);
-
-		/* FIXME: This next line should be removed once we can depend
-		 * upon gtk+-2.12.  This causes the busy cursor and temporary
-		 * task in the tasklist to go away too soon (though that's
-		 * better than having them be stuck until the 30-second-or-so
-		 * timeout ends).
-		 */
-		gdk_notify_startup_complete ();
-	} else {
-#else
-	gpm_warning ("No GtkUnique support. Cannot signal other instances");
-	/* we always assume we have no other running instance */
-	if (1) {
-#endif
-		statistics = gpm_statistics_new ();
-
-		g_signal_connect (statistics, "action-help",
-				  G_CALLBACK (gpm_statistics_help_cb), NULL);
-		g_signal_connect (statistics, "action-close",
-				  G_CALLBACK (gpm_statistics_close_cb), NULL);
-#if HAVE_GTKUNIQUE
-		/* Listen for messages from another instances */
-		g_signal_connect (G_OBJECT (uniqueapp), "message",
-				  G_CALLBACK (gtkuniqueapp_command_cb), statistics);
-#endif
-		loop = g_main_loop_new (NULL, FALSE);
-		g_main_loop_run (loop);
-
-		g_object_unref (statistics);
+	/* are we already activated? */
+	libunique = libunique_new ();
+	ret = libunique_assign (libunique, "org.freedesktop.PowerManagement.Statistics");
+	if (!ret) {
+		goto unique_out;
 	}
 
-	gpm_debug_shutdown ();
+	statistics = gpm_statistics_new ();
+	g_signal_connect (libunique, "activated",
+			  G_CALLBACK (gpm_statistics_activated_cb), statistics);
+	g_signal_connect (statistics, "action-help",
+			  G_CALLBACK (gpm_statistics_help_cb), statistics);
+	g_signal_connect (statistics, "action-close",
+			  G_CALLBACK (gpm_statistics_close_cb), statistics);
+	gtk_main ();
+	g_object_unref (statistics);
 
-#if HAVE_GTKUNIQUE
-	g_object_unref (uniqueapp);
-#endif
+unique_out:
+	gpm_debug_shutdown ();
+	g_object_unref (libunique);
 
 /* seems to not work...
 	g_option_context_free (context); */

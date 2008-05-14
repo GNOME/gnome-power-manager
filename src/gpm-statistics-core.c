@@ -775,6 +775,9 @@ void
 gpm_statistics_activate_window (GpmStatistics *statistics)
 {
 	GtkWidget *widget;
+
+	g_return_if_fail (GPM_IS_STATISTICS (statistics));
+
 	widget = glade_xml_get_widget (statistics->priv->glade_xml, "window_graph");
 	gtk_window_present (GTK_WINDOW (widget));
 }

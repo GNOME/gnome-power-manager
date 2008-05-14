@@ -1,3 +1,24 @@
+2008-05-14  Richard Hughes  <richard@hughsie.com>
+
+	* Makefile.am:
+	* configure.ac:
+	* libunique/Makefile.am:
+	* libunique/libunique.c: (libunique_message_cb),
+	(libunique_assign), (libunique_class_init), (libunique_init),
+	(libunique_finalize), (libunique_new):
+	* libunique/libunique.h:
+	Add a simple GObject that can optionally use Unique to give single instance capability
+	to the client tools. This removes a lot of HAVE_GTK_UNIQUE and random complexity from
+	source files also.
+
+	* src/Makefile.am:
+	* src/gpm-prefs.c: (gpm_prefs_close_cb), (gpm_prefs_activated_cb),
+	(main):
+	* src/gpm-statistics-core.c: (gpm_statistics_activate_window):
+	* src/gpm-statistics.c: (gpm_statistics_close_cb),
+	(gpm_statistics_activated_cb), (main):
+	Use LibUnique to make g-p-p and g-p-s single instance. GtkUnique is now obsolete.
+
 2008-05-12  Richard Hughes  <richard@hughsie.com>
 
 	* configure.ac:
