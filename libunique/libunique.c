@@ -38,9 +38,10 @@ static void     libunique_finalize   (GObject        *object);
 
 struct LibUniquePrivate
 {
-	gboolean		 dummy;
 #if HAVE_UNIQUE
 	UniqueApp		*uniqueapp;
+#else
+	gpointer		 uniqueapp;
 #endif
 };
 
@@ -87,7 +88,7 @@ libunique_assign (LibUnique *libunique, const gchar *service)
 	/* check to see if the user has another instance open */
 	libunique->priv->uniqueapp = unique_app_new (service, NULL);
 	if (unique_app_is_running (libunique->priv->uniqueapp)) {
-		g_warning ("You have another instance running. This program will now close");
+		g_debug ("You have another instance running. This program will now close");
 		unique_app_send_message (libunique->priv->uniqueapp, UNIQUE_ACTIVATE, NULL);
 		return FALSE;
 	}
