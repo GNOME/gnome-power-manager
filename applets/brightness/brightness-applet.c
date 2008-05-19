@@ -349,19 +349,20 @@ gpm_applet_destroy_popup_cb (GpmBrightnessApplet *applet)
 static void
 gpm_applet_update_tooltip (GpmBrightnessApplet *applet)
 {
-	static gchar buf[101];
+	gchar *buf = NULL;
 	if (applet->popped == FALSE) {
 		if (applet->proxy == NULL) {
-			snprintf (buf, 100, _("Cannot connect to gnome-power-manager"));
+			buf = g_strdup (_("Cannot connect to gnome-power-manager"));
 		} else if (applet->call_worked == FALSE) {
-			snprintf (buf, 100, _("Cannot get laptop panel brightness"));
+			buf = g_strdup (_("Cannot get laptop panel brightness"));
 		} else {
-			snprintf (buf, 100, _("LCD brightness : %d%%"), applet->level);
+			buf = g_strdup_printf (_("LCD brightness : %d%%"), applet->level);
 		}
 		gtk_widget_set_tooltip_text (GTK_WIDGET(applet), buf);
 	} else {
 		gtk_widget_set_tooltip_text (GTK_WIDGET(applet), NULL);
 	}
+	g_free (buf);
 }
 
 /**

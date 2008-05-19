@@ -700,7 +700,7 @@ gpm_statistics_populate_graph_types (GpmStatistics *statistics,
 	GList *l;
 	gchar *type;
 	gchar *saved;
-	gchar *type_localized;
+	const gchar *type_localized;
 	gboolean ret;
 	guint count, pos;
 

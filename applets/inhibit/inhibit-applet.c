@@ -344,14 +344,14 @@ gpm_applet_change_background_cb (GpmInhibitApplet *applet,
 static void
 gpm_applet_update_tooltip (GpmInhibitApplet *applet)
 {
-	static gchar buf[101];
+	const gchar *buf;
 	if (applet->proxy == NULL) {
-		snprintf (buf, 100, _("Cannot connect to gnome-power-manager"));
+		buf = g_strdup (_("Cannot connect to gnome-power-manager"));
 	} else {
 		if (applet->cookie > 0) {
-			snprintf (buf, 100, _("Automatic sleep inhibited"));
+			buf = g_strdup (_("Automatic sleep inhibited"));
 		} else {
-			snprintf (buf, 100, _("Automatic sleep enabled"));
+			buf = g_strdup (_("Automatic sleep enabled"));
 		}
 	}
 	gtk_widget_set_tooltip_text (GTK_WIDGET(applet), buf);

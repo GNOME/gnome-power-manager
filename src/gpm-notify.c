@@ -455,10 +455,10 @@ gpm_notify_inhibit_lid (GpmNotify *notify)
 	}
 
 	title = _("Sleep warning");
-	msg = g_strdup_printf (_("Your laptop will not sleep if you shut the "
-				 "lid as a running program has prevented this.\n"
-				 "Some laptops can overheat if they do not sleep "
-				 "when the lid is closed."));
+	msg = g_strdup (_("Your laptop will not sleep if you shut the "
+			  "lid as a running program has prevented this.\n"
+			  "Some laptops can overheat if they do not sleep "
+			  "when the lid is closed."));
 
 	gpm_notify_create (notify, title, msg, GPM_NOTIFY_TIMEOUT_LONG,
 			   GPM_STOCK_INHIBIT,

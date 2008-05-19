@@ -276,10 +276,10 @@ gpm_control_convert_hal_error (GpmControl *control,
 	if (code == 9) {
 		/* DBUS security prevents sending */
 		g_set_error (error, GPM_CONTROL_ERROR, GPM_CONTROL_ERROR_GENERAL,
-			     _("The message was not sent due to DBUS security rules"));
+			     "%s", _("The message was not sent due to DBUS security rules"));
 	} else {
 		g_set_error (error, GPM_CONTROL_ERROR, GPM_CONTROL_ERROR_GENERAL,
-			     _("General failure: %s"), message);
+			     "%s:%s", _("General failure"), message);
 	}
 	g_free (message);
 }

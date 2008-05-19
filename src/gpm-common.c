@@ -237,7 +237,7 @@ gpm_get_timestring (guint time_secs)
 	minutes = (int) ( ( time_secs / 60.0 ) + 0.5 );
 
 	if (minutes == 0) {
-		timestring = g_strdup_printf (_("Unknown time"));
+		timestring = g_strdup (_("Unknown time"));
 		return timestring;
 	}
 

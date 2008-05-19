@@ -180,22 +180,22 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 
 		/*Compose message for each possible action*/
 		if (strcmp (action, "suspend") == 0) {
-				title = g_strdup_printf (_("Request to suspend")); 
+				title = g_strdup (_("Request to suspend")); 
 
 		} else if (strcmp (action, "hibernate") == 0) {
-				title = g_strdup_printf (_("Request to hibernate")); 
+				title = g_strdup (_("Request to hibernate")); 
 
 		} else if (strcmp (action, "policy action") == 0) {
-				title = g_strdup_printf (_("Request to do policy action")); 
+				title = g_strdup (_("Request to do policy action")); 
 
 		} else if (strcmp (action, "reboot") == 0) {
-				title = g_strdup_printf (_("Request to reboot")); 
+				title = g_strdup (_("Request to reboot")); 
 
 		} else if (strcmp (action, "shutdown") == 0) {
-				title = g_strdup_printf (_("Request to shutdown")); 
+				title = g_strdup (_("Request to shutdown")); 
 
 		} else if (strcmp (action, "timeout action") == 0) {
-				title = g_strdup_printf (_("Request to do timeout action"));
+				title = g_strdup (_("Request to do timeout action"));
 		}
 		
 		gpm_inhibit_get_message (manager->priv->inhibit, message, action);
@@ -1467,7 +1467,7 @@ gpm_engine_charge_critical_cb (GpmEngine      *engine,
 
 		/* use different text for different actions */
 		if (strcmp (action, ACTION_NOTHING) == 0) {
-			action_text = g_strdup_printf (_("Plug in your AC adapter to avoid losing data."));
+			action_text = g_strdup (_("Plug in your AC adapter to avoid losing data."));
 
 		} else if (strcmp (action, ACTION_SUSPEND) == 0) {
 			action_text = g_strdup_printf (_("This computer will suspend in %s if the AC is not connected."), time_text);
@@ -1579,17 +1579,17 @@ gpm_engine_charge_action_cb (GpmEngine      *engine,
 
 		/* use different text for different actions */
 		if (strcmp (action, ACTION_NOTHING) == 0) {
-			message = _("The UPS is below the critical level and "
-				    "this computer will <b>power-off</b> when the "
-				    "UPS becomes completely empty.");
+			message = g_strdup (_("The UPS is below the critical level and "
+				              "this computer will <b>power-off</b> when the "
+				              "UPS becomes completely empty."));
 
 		} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
-			message = _("The UPS is below the critical level and "
-				    "this computer is about to hibernate.");
+			message = g_strdup (_("The UPS is below the critical level and "
+				              "this computer is about to hibernate."));
 
 		} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
-			message = _("The UPS is below the critical level and "
-				    "this computer is about to shutdown.");
+			message = g_strdup (_("The UPS is below the critical level and "
+				              "this computer is about to shutdown."));
 		}
 
 		g_free (action);

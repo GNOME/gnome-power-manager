@@ -404,22 +404,22 @@ gpm_inhibit_get_message (GpmInhibit  *inhibit,
 
 	} else {
 		if (strcmp (action, "suspend") == 0) {
-			g_string_append_printf (message, _("Multiple applications have stopped the suspend from taking place."));
+			g_string_append (message, _("Multiple applications have stopped the suspend from taking place."));
 
 		} else if (strcmp (action, "hibernate") == 0) {
-			g_string_append_printf (message, _("Multiple applications have stopped the hibernate from taking place."));
+			g_string_append (message, _("Multiple applications have stopped the hibernate from taking place."));
 
 		} else if (strcmp (action, "policy action") == 0) {
-			g_string_append_printf (message, _("Multiple applications have stopped the policy action from taking place."));
+			g_string_append (message, _("Multiple applications have stopped the policy action from taking place."));
 
 		} else if (strcmp (action, "reboot") == 0) {
-			g_string_append_printf (message, _("Multiple applications have stopped the reboot from taking place.")); 
+			g_string_append (message, _("Multiple applications have stopped the reboot from taking place.")); 
 
 		} else if (strcmp (action, "shutdown") == 0) {
-			g_string_append_printf (message, _("Multiple applications have stopped the shutdown from taking place."));
+			g_string_append (message, _("Multiple applications have stopped the shutdown from taking place."));
 
 		} else if (strcmp (action, "timeout action") == 0) {
-			g_string_append_printf (message, _("Multiple applications have stopped the suspend from taking place."));
+			g_string_append (message, _("Multiple applications have stopped the suspend from taking place."));
 		}
 		
 		for (a=0; a<g_slist_length (inhibit->priv->list); a++) {
