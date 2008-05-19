@@ -346,12 +346,12 @@ gpm_applet_update_tooltip (GpmInhibitApplet *applet)
 {
 	const gchar *buf;
 	if (applet->proxy == NULL) {
-		buf = g_strdup (_("Cannot connect to gnome-power-manager"));
+		buf = _("Cannot connect to gnome-power-manager");
 	} else {
 		if (applet->cookie > 0) {
-			buf = g_strdup (_("Automatic sleep inhibited"));
+			buf = _("Automatic sleep inhibited");
 		} else {
-			buf = g_strdup (_("Automatic sleep enabled"));
+			buf = _("Automatic sleep enabled");
 		}
 	}
 	gtk_widget_set_tooltip_text (GTK_WIDGET(applet), buf);

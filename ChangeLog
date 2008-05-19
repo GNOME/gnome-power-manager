@@ -1,5 +1,10 @@
 2008-05-19  Kjartan Maraas  <kmaraas@gnome.org>
 
+	* applets/inhibit/inhibit-applet.c: (gpm_applet_update_tooltip):
+	Don't g_strdup() strings when it's not needed.
+
+2008-05-19  Kjartan Maraas  <kmaraas@gnome.org>
+
 	* applets/brightness/brightness-applet.c:
 	(gpm_applet_update_tooltip):
 	* applets/inhibit/inhibit-applet.c: (gpm_applet_update_tooltip):
