@@ -1,10 +1,16 @@
+2008-05-15  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-conf.c: (gpm_conf_set_bool), (gpm_conf_set_string),
+	(gpm_conf_set_int):
+	Check keys for writability before we try to change them. Fixes rh#444026
+
 2008-05-14  Richard Hughes  <richard@hughsie.com>
 
 	* configure.ac:
 	Correct the Unique buildrequire.
 
 	* libunique/libunique.c: (libunique_assign):
-	Fix build for non-HAV_UNIQUE
+	Fix build for non-HAVE_UNIQUE
 
 2008-05-14  Richard Hughes  <richard@hughsie.com>
 
