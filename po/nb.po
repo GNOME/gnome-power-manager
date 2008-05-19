@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 2.20.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-27 15:22+0100\n"
+"POT-Creation-Date: 2008-03-27 00:43+0100\n"
 "PO-Revision-Date: 2008-01-27 15:26+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
@@ -26,28 +26,28 @@ msgstr "Panelprogram for styring av lysstyrke"
 msgid "Adjusts laptop panel brightness."
 msgstr "Justerer lysstyrke for skjerm på bærbare datamaskiner"
 
-#: ../applets/brightness/brightness-applet.c:353
+#: ../applets/brightness/brightness-applet.c:355
 #: ../applets/inhibit/inhibit-applet.c:338
 #, c-format
 msgid "Cannot connect to gnome-power-manager"
 msgstr "Kunne ikke koble til gnome-power-manager"
 
-#: ../applets/brightness/brightness-applet.c:355
+#: ../applets/brightness/brightness-applet.c:357
 #, c-format
 msgid "Cannot get laptop panel brightness"
 msgstr "Kan ikke hente lysstyrke for skjerm"
 
-#: ../applets/brightness/brightness-applet.c:357
+#: ../applets/brightness/brightness-applet.c:359
 #, c-format
 msgid "LCD brightness : %d%%"
 msgstr "LCD lysstyrke: %d%%"
 
-#: ../applets/brightness/brightness-applet.c:744
+#: ../applets/brightness/brightness-applet.c:747
 #: ../applets/inhibit/inhibit-applet.c:406 ../src/gpm-tray-icon.c:310
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Lisensiert under GNU General Public License versjon 2"
 
-#: ../applets/brightness/brightness-applet.c:745
+#: ../applets/brightness/brightness-applet.c:748
 #: ../applets/inhibit/inhibit-applet.c:407 ../src/gpm-tray-icon.c:311
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
@@ -60,7 +60,7 @@ msgstr ""
 "som publisert av Free Software Foundation, enten versjon 2\n"
 "av lisensen eller valgfri senere versjon."
 
-#: ../applets/brightness/brightness-applet.c:749
+#: ../applets/brightness/brightness-applet.c:752
 #: ../applets/inhibit/inhibit-applet.c:411 ../src/gpm-tray-icon.c:315
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
@@ -73,7 +73,7 @@ msgstr ""
 "ET\n"
 "BESTEMT FORMÅL. Se GNU General Public License for detaljer."
 
-#: ../applets/brightness/brightness-applet.c:753
+#: ../applets/brightness/brightness-applet.c:756
 #: ../applets/inhibit/inhibit-applet.c:415 ../src/gpm-tray-icon.c:319
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
@@ -85,7 +85,7 @@ msgstr ""
 "Strømstyring. Hvis dette ikke er tilfelle, kan du skrive til Free Software "
 "Foundation, Inc. 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA"
 
-#: ../applets/brightness/brightness-applet.c:767
+#: ../applets/brightness/brightness-applet.c:770
 msgid "Copyright © 2006 Benjamin Canou"
 msgstr "Opphavsrett © 2006 Benjamin Canou"
 
@@ -1268,54 +1268,54 @@ msgid "Battery charge time is estimated\n"
 msgstr "Tid for lading av batteri er estimert\n"
 
 #. show a AC icon
-#: ../src/gpm-engine.c:598
+#: ../src/gpm-engine.c:610
 msgid "Unable to get data..."
 msgstr "Kunne ikke hente data..."
 
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:484
+#: ../src/gpm-graph-widget.c:485
 #, c-format
 msgid "%ih"
 msgstr "%i time"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:487
+#: ../src/gpm-graph-widget.c:488
 #, c-format
 msgid "%ih%02i"
 msgstr "%it%02i"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:492
+#: ../src/gpm-graph-widget.c:493
 #, c-format
 msgid "%2im"
 msgstr "%2im"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:495
+#: ../src/gpm-graph-widget.c:496
 #, c-format
 msgid "%2im%02i"
 msgstr "%2im%02i"
 
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:499
+#: ../src/gpm-graph-widget.c:500
 #, c-format
 msgid "%2is"
 msgstr "%2is"
 
 #. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:503
+#: ../src/gpm-graph-widget.c:504
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. Translators: This is %.1f Watts
-#: ../src/gpm-graph-widget.c:506
+#: ../src/gpm-graph-widget.c:507
 #, c-format
 msgid "%.1fW"
 msgstr "%.1fW"
 
 #. Translators: This is %.1f Volts
-#: ../src/gpm-graph-widget.c:509
+#: ../src/gpm-graph-widget.c:510
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fV"
@@ -1566,31 +1566,31 @@ msgstr "Flere programmer har hindret omstart."
 msgid "Multiple applications have stopped the shutdown from taking place."
 msgstr "Flere programmer har hindret nedstenging av maskinen."
 
-#: ../src/gpm-main.c:137
+#: ../src/gpm-main.c:153
 msgid "Do not daemonize"
 msgstr "Ikke kjør som tjeneste"
 
-#: ../src/gpm-main.c:139 ../src/gpm-prefs.c:107 ../src/gpm-statistics.c:105
+#: ../src/gpm-main.c:155 ../src/gpm-prefs.c:107 ../src/gpm-statistics.c:105
 msgid "Show extra debugging information"
 msgstr "Vis ekstra feilsøkingsinformasjon"
 
-#: ../src/gpm-main.c:141
+#: ../src/gpm-main.c:157
 msgid "Show version of installed program and exit"
 msgstr "Vis versjon for installert program og avslutt"
 
-#: ../src/gpm-main.c:143
+#: ../src/gpm-main.c:159
 msgid "Exit after a small delay (for debugging)"
 msgstr "Avslutt etter en liten pause (for feilsøking)"
 
-#: ../src/gpm-main.c:145
+#: ../src/gpm-main.c:161
 msgid "Exit after the manager has loaded (for debugging)"
 msgstr "Avslutt når tjenesten har startet (for feilsøking)"
 
-#: ../src/gpm-main.c:147
+#: ../src/gpm-main.c:163
 msgid "Debug specific files, e.g. power"
 msgstr "Feilsøk spesifikke filer, f.eks strøm"
 
-#: ../src/gpm-main.c:151
+#: ../src/gpm-main.c:167
 msgid "GNOME Power Manager"
 msgstr "GNOME strømstyring"
 
@@ -1629,22 +1629,11 @@ msgstr "Forespørsel om tidsbasert handling"
 msgid "Perform action anyway"
 msgstr "Utfør handling likevel"
 
-#: ../src/gpm-manager.c:331 ../src/gpm-manager.c:357 ../src/gpm-manager.c:391
-#: ../src/gpm-manager.c:417 ../src/gpm-manager.c:457
-msgid "Action forbidden"
-msgstr "Handling forbudt"
-
-#: ../src/gpm-manager.c:332 ../src/gpm-manager.c:392 ../src/gpm-manager.c:458
-msgid "Policy timeout is not valid. Please wait a few seconds and try again."
-msgstr ""
-"Tidsavbrudd for regel er ikke gyldig. Vennligst vent et par sekunder og prøv "
-"igjen."
-
-#: ../src/gpm-manager.c:344 ../src/gpm-manager.c:404
+#: ../src/gpm-manager.c:333 ../src/gpm-manager.c:382
 msgid "Action disallowed"
 msgstr "Handling ikke tillatt"
 
-#: ../src/gpm-manager.c:345
+#: ../src/gpm-manager.c:334
 msgid ""
 "Suspend support has been disabled. Contact your administrator for more "
 "details."
@@ -1652,15 +1641,19 @@ msgstr ""
 "Støtte for hvilemodus er deaktivert. Kontakt administrator for flere "
 "detaljer."
 
-#: ../src/gpm-manager.c:358
+#: ../src/gpm-manager.c:346 ../src/gpm-manager.c:395 ../src/gpm-manager.c:435
+msgid "Action forbidden"
+msgstr "Handling forbudt"
+
+#: ../src/gpm-manager.c:347
 msgid "Suspend is not available on this computer."
 msgstr "Hvilemodus er ikke tilgjengelig på denne datamaskinen."
 
-#: ../src/gpm-manager.c:371 ../src/gpm-manager.c:790
+#: ../src/gpm-manager.c:360 ../src/gpm-manager.c:768
 msgid "Suspending computer."
 msgstr "Setter datamaskinen i hvilemodus."
 
-#: ../src/gpm-manager.c:405
+#: ../src/gpm-manager.c:383
 msgid ""
 "Hibernate support has been disabled. Contact your administrator for more "
 "details."
@@ -1668,169 +1661,175 @@ msgstr ""
 "Støtte for dvalemodus er deaktivert. Kontakt systemadministrator for flere "
 "detaljer."
 
-#: ../src/gpm-manager.c:418
+#: ../src/gpm-manager.c:396
 msgid "Hibernate is not available on this computer."
 msgstr "Dvalemodus er ikke tilgjengelig på denne datamaskinen."
 
-#: ../src/gpm-manager.c:431 ../src/gpm-manager.c:805
+#: ../src/gpm-manager.c:409 ../src/gpm-manager.c:783
 msgid "Hibernating computer."
 msgstr "Setter datamaskinen i dvalemodus."
 
-#: ../src/gpm-manager.c:479
+#: ../src/gpm-manager.c:436
+msgid "Policy timeout is not valid. Please wait a few seconds and try again."
+msgstr ""
+"Tidsavbrudd for regel er ikke gyldig. Vennligst vent et par sekunder og prøv "
+"igjen."
+
+#: ../src/gpm-manager.c:457
 msgid "Doing nothing."
 msgstr "Gjør ingenting"
 
-#: ../src/gpm-manager.c:492
+#: ../src/gpm-manager.c:470
 msgid "Shutting down computer."
 msgstr "Stenger ned datamaskinen."
 
-#: ../src/gpm-manager.c:497
+#: ../src/gpm-manager.c:475
 msgid "GNOME interactive logout."
 msgstr "Interaktiv utlogging for GNOME."
 
-#: ../src/gpm-manager.c:790 ../src/gpm-manager.c:805
+#: ../src/gpm-manager.c:768 ../src/gpm-manager.c:783
 msgid "System idle."
 msgstr "Systemet ledig."
 
-#: ../src/gpm-manager.c:882
+#: ../src/gpm-manager.c:860
 msgid "Power Information"
 msgstr "Informasjon om strøm"
 
-#: ../src/gpm-manager.c:899
+#: ../src/gpm-manager.c:877
 msgid "The power button has been pressed."
 msgstr "Strømknappen ble trykket."
 
-#: ../src/gpm-manager.c:911
+#: ../src/gpm-manager.c:889
 msgid "The suspend button has been pressed."
 msgstr "Hvilemodus-knappen ble trykket."
 
-#: ../src/gpm-manager.c:923
+#: ../src/gpm-manager.c:901
 msgid "The hibernate button has been pressed."
 msgstr "Dvalemodus-knappen ble trykket."
 
-#: ../src/gpm-manager.c:954
+#: ../src/gpm-manager.c:932
 msgid "The lid has been closed on ac power."
 msgstr "Lokket ble lukket - tilkoblet nettstrøm."
 
-#: ../src/gpm-manager.c:984
+#: ../src/gpm-manager.c:962
 msgid "The lid has been closed on battery power."
 msgstr "Lokket ble lukket ved bruk av batteristrøm."
 
 # gconf is okay??
-#: ../src/gpm-manager.c:1073
+#: ../src/gpm-manager.c:1051
 msgid ""
 "The lid has been closed, and the ac adapter removed (and gconf is okay)."
 msgstr "Lokket har blitt lukket, strømkabelen fjernet (og gconf har det bra)."
 
-#: ../src/gpm-manager.c:1096
+#: ../src/gpm-manager.c:1074
 msgid "Battery is critically low."
 msgstr "Batterikapasiteten er kritisk lav."
 
-#: ../src/gpm-manager.c:1186 ../src/gpm-manager.c:1201
+#: ../src/gpm-manager.c:1164 ../src/gpm-manager.c:1179
 msgid "User clicked on tray"
 msgstr "Bruker klikket på systemområdet"
 
-#: ../src/gpm-manager.c:1411
+#: ../src/gpm-manager.c:1389
 msgid "Laptop battery low"
 msgstr "Batteri på bærbar datamaskin har lav strømstyrke"
 
-#: ../src/gpm-manager.c:1413
+#: ../src/gpm-manager.c:1391
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%d%%)"
 msgstr "Du har omtrent <b>%s</b> batteritid igjen (%d%%)"
 
-#: ../src/gpm-manager.c:1416
+#: ../src/gpm-manager.c:1394
 msgid "UPS low"
 msgstr "UPS har lav strømstyrke"
 
-#: ../src/gpm-manager.c:1418
+#: ../src/gpm-manager.c:1396
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS backup power (%d%%)"
 msgstr "Du har omtrent <b>%s</b> batteritid igjen på UPS-strøm (%d%%)"
 
-#: ../src/gpm-manager.c:1421 ../src/gpm-manager.c:1521
+#: ../src/gpm-manager.c:1399 ../src/gpm-manager.c:1499
 msgid "Mouse battery low"
 msgstr "Batteri i mus har lav strømstyrke"
 
-#: ../src/gpm-manager.c:1422
+#: ../src/gpm-manager.c:1400
 #, c-format
 msgid "The wireless mouse attached to this computer is low in power (%d%%)"
 msgstr ""
 "Den trådløse musen som er koblet til denne datamaskinen har lite strøm (%d%%)"
 
-#: ../src/gpm-manager.c:1424 ../src/gpm-manager.c:1526
+#: ../src/gpm-manager.c:1402 ../src/gpm-manager.c:1504
 msgid "Keyboard battery low"
 msgstr "Batteriet i tastaturet har lav strømstyrke"
 
-#: ../src/gpm-manager.c:1425
+#: ../src/gpm-manager.c:1403
 #, c-format
 msgid "The wireless keyboard attached to this computer is low in power (%d%%)"
 msgstr ""
 "Det trådløse tastaturet som er koblet til denne datamaskinen har lav "
 "strømstyrke (%d%%)"
 
-#: ../src/gpm-manager.c:1427 ../src/gpm-manager.c:1531
+#: ../src/gpm-manager.c:1405 ../src/gpm-manager.c:1509
 msgid "PDA battery low"
 msgstr "Batteriet på PDAen har lav strømstyrke"
 
-#: ../src/gpm-manager.c:1428
+#: ../src/gpm-manager.c:1406
 #, c-format
 msgid "The PDA attached to this computer is low in power (%d%%)"
 msgstr "PDAen som er koblet til denne datamaskinen har lite strøm (%d%%)"
 
-#: ../src/gpm-manager.c:1430 ../src/gpm-manager.c:1536
+#: ../src/gpm-manager.c:1408 ../src/gpm-manager.c:1514
 msgid "Cell phone battery low"
 msgstr "Batteri på mobiltelefon har lav strømstyrke"
 
-#: ../src/gpm-manager.c:1431
+#: ../src/gpm-manager.c:1409
 #, c-format
 msgid "The cell phone attached to this computer is low in power (%d%%)"
 msgstr ""
 "Mobiltelefonen som er koblet til denne datamaskinen har lite strøm (%d%%)"
 
-#: ../src/gpm-manager.c:1458
+#: ../src/gpm-manager.c:1436
 msgid "a short time"
 msgstr "en kort stund"
 
-#: ../src/gpm-manager.c:1481 ../src/gpm-manager.c:1567
+#: ../src/gpm-manager.c:1459 ../src/gpm-manager.c:1545
 msgid "Laptop battery critically low"
 msgstr "Batterikapasiteten er kritisk lav"
 
-#: ../src/gpm-manager.c:1494
+#: ../src/gpm-manager.c:1472
 #, c-format
 msgid "Plug in your AC adapter to avoid losing data."
 msgstr "Sett inn strømkabelen for å unngå å tape data."
 
-#: ../src/gpm-manager.c:1497
+#: ../src/gpm-manager.c:1475
 #, c-format
 msgid "This computer will suspend in %s if the AC is not connected."
 msgstr ""
 "Denne datamaskinen vil gå i hvilemodus om %s hvis ikke strømkabelen kobles "
 "til."
 
-#: ../src/gpm-manager.c:1500
+#: ../src/gpm-manager.c:1478
 #, c-format
 msgid "This computer will hibernate in %s if the AC is not connected."
 msgstr ""
 "Denne datamaskinen vil gå i dvalemodus om %s hvis ikke strømkabelen kobles "
 "til."
 
-#: ../src/gpm-manager.c:1503
+#: ../src/gpm-manager.c:1481
 #, c-format
 msgid "This computer will shutdown in %s if the AC is not connected."
 msgstr ""
 "Denne datamaskinen vil slås av om %s hvis ikke strømkabelen kobles til."
 
-#: ../src/gpm-manager.c:1506
+#: ../src/gpm-manager.c:1484
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%d%%). %s"
 msgstr "Du har omtrent <b>%s</b> batteritid igjen (%d%%). %s"
 
-#: ../src/gpm-manager.c:1514 ../src/gpm-manager.c:1599
+#: ../src/gpm-manager.c:1492 ../src/gpm-manager.c:1577
 msgid "UPS critically low"
 msgstr "UPS-kapasitet kritisk lav"
 
-#: ../src/gpm-manager.c:1516
+#: ../src/gpm-manager.c:1494
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore AC "
@@ -1839,7 +1838,7 @@ msgstr ""
 "Du har omtrent <b>%s</b> batteritid igjen på UPS-strøm (%d%%). Gjenopprett "
 "strømtilførsel for datamaskinen for å unngå å tape data."
 
-#: ../src/gpm-manager.c:1522
+#: ../src/gpm-manager.c:1500
 #, c-format
 msgid ""
 "The wireless mouse attached to this computer is very low in power (%d%%). "
@@ -1848,7 +1847,7 @@ msgstr ""
 "Den trådløse musen som er koblet til denne datamaskinen har lite strøm (%d%"
 "%). Denne enheten vil snart slutte å fungere hvis den ikke blir ladet."
 
-#: ../src/gpm-manager.c:1527
+#: ../src/gpm-manager.c:1505
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is very low in power (%d%%). "
@@ -1857,7 +1856,7 @@ msgstr ""
 "Det trådløse tastaturet som er koblet til denne datamaskinen har lite strøm "
 "(%d%%). Denne enheten vil snart slutte å fungere hvis den ikke blir ladet."
 
-#: ../src/gpm-manager.c:1532
+#: ../src/gpm-manager.c:1510
 #, c-format
 msgid ""
 "The PDA attached to this computer is very low in power (%d%%). This device "
@@ -1866,7 +1865,7 @@ msgstr ""
 "PDAen som er koblet til denne datamaskinen har lite strøm (%d%%). Denne "
 "enheten vil snart slutte å fungere hvis den ikke blir ladet."
 
-#: ../src/gpm-manager.c:1537
+#: ../src/gpm-manager.c:1515
 #, c-format
 msgid ""
 "Your cell phone is very low in power (%d%%). This device will soon stop "
@@ -1875,7 +1874,7 @@ msgstr ""
 "Mobiltelefonen som er koblet til denne datamaskinen har lite strøm (%d%%). "
 "Denne enheten vil snart slutte å fungere hvis den ikke blir ladet."
 
-#: ../src/gpm-manager.c:1574
+#: ../src/gpm-manager.c:1552
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
@@ -1883,7 +1882,7 @@ msgstr ""
 "Batterinivået er kritisk, og datamaskinen vil <b>slå seg av</b> når "
 "batteriet er tomt."
 
-#: ../src/gpm-manager.c:1579
+#: ../src/gpm-manager.c:1557
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1893,19 +1892,19 @@ msgstr ""
 "<br><b>MERK:</b> Du trenger noe strøm selv når datamaskinen kjører i "
 "hvilemodus."
 
-#: ../src/gpm-manager.c:1585
+#: ../src/gpm-manager.c:1563
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr "Batterinivået er kritisk, og datamaskinen er i ferd med å gå i dvale."
 
-#: ../src/gpm-manager.c:1589
+#: ../src/gpm-manager.c:1567
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr "Batterinivået er kritisk, og datamaskinen er i ferd med å skru seg av."
 
-#: ../src/gpm-manager.c:1606
+#: ../src/gpm-manager.c:1584
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
@@ -1913,23 +1912,23 @@ msgstr ""
 "UPSen er under kritisk nivå og datamaskinen vil <b>slå seg av</b> når UPSen "
 "er tom."
 
-#: ../src/gpm-manager.c:1611
+#: ../src/gpm-manager.c:1589
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr ""
 "UPSen er under kritisk nivå og datamaskinen er i ferd med å gå i dvalemodus."
 
-#: ../src/gpm-manager.c:1615
+#: ../src/gpm-manager.c:1593
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr ""
 "UPSen er under kritisk nivå og datamaskinen er i ferd med å slå seg av."
 
-#: ../src/gpm-manager.c:1721
+#: ../src/gpm-manager.c:1699
 msgid "Install problem!"
 msgstr "Problem med installasjonen!"
 
-#: ../src/gpm-manager.c:1722
+#: ../src/gpm-manager.c:1700
 msgid ""
 "The configuration defaults for GNOME Power Manager have not been installed "
 "correctly.\n"
@@ -1939,11 +1938,11 @@ msgstr ""
 "Vennligst kontakt systemadministrator."
 
 #. save in state
-#: ../src/gpm-notify.c:364
+#: ../src/gpm-notify.c:370
 msgid "Battery may be recalled"
 msgstr "Batteriet kan være tilbakekalt"
 
-#: ../src/gpm-notify.c:365
+#: ../src/gpm-notify.c:371
 #, c-format
 msgid ""
 "The battery in your computer may have been recalled by %s and you may be at "
@@ -1956,21 +1955,21 @@ msgstr ""
 "\n"
 "For mer informasjon se nettsted %s for tilbakekalling av batterier."
 
-#: ../src/gpm-notify.c:380
+#: ../src/gpm-notify.c:386
 msgid "Visit recall website"
 msgstr "Gå til nettside for tilbakekalling"
 
-#: ../src/gpm-notify.c:386 ../src/gpm-notify.c:420 ../src/gpm-notify.c:454
-#: ../src/gpm-notify.c:485 ../src/gpm-notify.c:515 ../src/gpm-notify.c:545
-#: ../src/gpm-notify.c:581
+#: ../src/gpm-notify.c:392 ../src/gpm-notify.c:432 ../src/gpm-notify.c:472
+#: ../src/gpm-notify.c:503 ../src/gpm-notify.c:533 ../src/gpm-notify.c:563
+#: ../src/gpm-notify.c:599
 msgid "Do not show me this again"
 msgstr "Ikke vis dette igjen"
 
-#: ../src/gpm-notify.c:406
+#: ../src/gpm-notify.c:418
 msgid "Battery may be broken"
 msgstr "Batteriet kan være ødelagt"
 
-#: ../src/gpm-notify.c:407
+#: ../src/gpm-notify.c:419
 #, c-format
 msgid ""
 "Your battery has a very low capacity (%i%%), which means that it may be old "
@@ -1979,11 +1978,11 @@ msgstr ""
 "Batteriet har meget lav kapasitet (%i%%), hvilket betyr at det kan være "
 "gammelt eller ødelagt."
 
-#: ../src/gpm-notify.c:439
+#: ../src/gpm-notify.c:457
 msgid "Sleep warning"
 msgstr "Advarsel ved hvilemodus"
 
-#: ../src/gpm-notify.c:440
+#: ../src/gpm-notify.c:458
 #, c-format
 msgid ""
 "Your laptop will not sleep if you shut the lid as a running program has "
@@ -1995,35 +1994,35 @@ msgstr ""
 "Noen bærbare datamaskiner kan bli overopphetet hvis de ikke går i hvilemodus "
 "når lokket lukkes."
 
-#: ../src/gpm-notify.c:473
+#: ../src/gpm-notify.c:491
 msgid "Battery Charged"
 msgstr "Batteriet er ladet"
 
-#: ../src/gpm-notify.c:474
+#: ../src/gpm-notify.c:492
 msgid "Your laptop battery is now fully charged"
 msgstr "Batteriet er nå ladet fulladet"
 
-#: ../src/gpm-notify.c:503
+#: ../src/gpm-notify.c:521
 msgid "Battery Discharging"
 msgstr "Batteriet lades ut"
 
-#: ../src/gpm-notify.c:504
+#: ../src/gpm-notify.c:522
 msgid "The AC power has been unplugged. The system is now using battery power."
 msgstr "Strømkabelen ble dratt ut. Systemet bruker nå batteristrøm."
 
-#: ../src/gpm-notify.c:533
+#: ../src/gpm-notify.c:551
 msgid "UPS Discharging"
 msgstr "UPS lades ut"
 
-#: ../src/gpm-notify.c:534
+#: ../src/gpm-notify.c:552
 msgid "The AC power has been unplugged. The system is now using backup power."
 msgstr "Strømkabelen Ble dratt ut. Systemet bruker nå reservestrøm."
 
-#: ../src/gpm-notify.c:564
+#: ../src/gpm-notify.c:582
 msgid "Sleep Problem"
 msgstr "Problem med dvalemodus"
 
-#: ../src/gpm-notify.c:566
+#: ../src/gpm-notify.c:584
 msgid ""
 "Your computer failed to hibernate.\n"
 "Check the help file for common problems."
@@ -2031,7 +2030,7 @@ msgstr ""
 "Din datamaskin klarte ikke å gå i dvalemodus.\n"
 "Sjekk hjelpfilen for vanlige problemer."
 
-#: ../src/gpm-notify.c:569
+#: ../src/gpm-notify.c:587
 msgid ""
 "Your computer failed to suspend.\n"
 "Check the help file for common problems."
@@ -2039,11 +2038,11 @@ msgstr ""
 "Din datamaskin klarte ikke å gå i hvilemodus.\n"
 "Sjekk hjelpfilen for vanlige problemer."
 
-#: ../src/gpm-notify.c:594
+#: ../src/gpm-notify.c:612
 msgid "Visit quirk website"
 msgstr "Gå til nettsiden"
 
-#: ../src/gpm-cell-array.c:976
+#: ../src/gpm-cell-array.c:984
 #, c-format
 msgid ""
 "%s fully charged (%i%%)\n"
@@ -2052,23 +2051,23 @@ msgstr ""
 "%s fullt ladet (%i%%)\n"
 "Gir %s kjøringstid\n"
 
-#: ../src/gpm-cell-array.c:980
+#: ../src/gpm-cell-array.c:988
 #, c-format
 msgid "%s fully charged (%i%%)\n"
 msgstr "%s fullt ladet (%i%%)\n"
 
-#: ../src/gpm-cell-array.c:988
+#: ../src/gpm-cell-array.c:996
 #, c-format
 msgid "%s %s remaining (%i%%)\n"
 msgstr "%s %s gjenstår (%i%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:993
+#: ../src/gpm-cell-array.c:1001
 #, c-format
 msgid "%s discharging (%i%%)\n"
 msgstr "%s lader ut (%i%%)\n"
 
-#: ../src/gpm-cell-array.c:1005
+#: ../src/gpm-cell-array.c:1013
 #, c-format
 msgid ""
 "%s %s until charged (%i%%)\n"
@@ -2077,120 +2076,120 @@ msgstr ""
 "%s %s til batteriet er ladet (%i%%)\n"
 "Gir %s kjøretid\n"
 
-#: ../src/gpm-cell-array.c:1012
+#: ../src/gpm-cell-array.c:1020
 #, c-format
 msgid "%s %s until charged (%i%%)\n"
 msgstr "%s %s til batteriet er ladet (%i%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:1017
+#: ../src/gpm-cell-array.c:1025
 #, c-format
 msgid "%s charging (%i%%)\n"
 msgstr "%s lader (%i%%)\n"
 
-#: ../src/gpm-cell-array.c:1024
+#: ../src/gpm-cell-array.c:1032
 msgid "Battery state could not be read at this time\n"
 msgstr "Batteriets tilstand kunne ikke leses nå\n"
 
-#: ../src/gpm-cell.c:497
+#: ../src/gpm-cell.c:506
 #, c-format
 msgid "<b>Product:</b> %s\n"
 msgstr "<b>Produkt:</b> %s\n"
 
-#: ../src/gpm-cell.c:500
+#: ../src/gpm-cell.c:509
 msgid "<b>Status:</b> Missing\n"
 msgstr "<b>Status:</b> Mangler\n"
 
-#: ../src/gpm-cell.c:502
+#: ../src/gpm-cell.c:511
 msgid "<b>Status:</b> Charged\n"
 msgstr "<b>Status:</b> Ladet\n"
 
-#: ../src/gpm-cell.c:504
+#: ../src/gpm-cell.c:513
 msgid "<b>Status:</b> Charging\n"
 msgstr "<b>Status:</b> Lader\n"
 
-#: ../src/gpm-cell.c:506
+#: ../src/gpm-cell.c:515
 msgid "<b>Status:</b> Discharging\n"
 msgstr "<b>Status:</b> Lader ut\n"
 
-#: ../src/gpm-cell.c:509
+#: ../src/gpm-cell.c:518
 #, c-format
 msgid "<b>Percentage charge:</b> %i%%\n"
 msgstr "<b>Ladeprosent:</b> %i%%\n"
 
-#: ../src/gpm-cell.c:514
+#: ../src/gpm-cell.c:523
 msgid "Vendor:"
 msgstr "Leverandør:"
 
-#: ../src/gpm-cell.c:519
+#: ../src/gpm-cell.c:528
 msgid "Lithium ion"
 msgstr "Lithium ion"
 
-#: ../src/gpm-cell.c:521
+#: ../src/gpm-cell.c:530
 msgid "Lead acid"
 msgstr "Lead acid"
 
-#: ../src/gpm-cell.c:523
+#: ../src/gpm-cell.c:532
 msgid "Lithium polymer"
 msgstr "Lithium polymer"
 
-#: ../src/gpm-cell.c:525
+#: ../src/gpm-cell.c:534
 msgid "Nickel metal hydride"
 msgstr "Nikkel/metall hybrid"
 
-#: ../src/gpm-cell.c:532
+#: ../src/gpm-cell.c:541
 msgid "Technology:"
 msgstr "Teknologi:"
 
-#: ../src/gpm-cell.c:536
+#: ../src/gpm-cell.c:545
 msgid "Serial number:"
 msgstr "Serienummer:"
 
-#: ../src/gpm-cell.c:540
+#: ../src/gpm-cell.c:549
 msgid "Model:"
 msgstr "Modell:"
 
-#: ../src/gpm-cell.c:546
+#: ../src/gpm-cell.c:555
 msgid "Charge time:"
 msgstr "Ladetid:"
 
-#: ../src/gpm-cell.c:553
+#: ../src/gpm-cell.c:562
 msgid "Discharge time:"
 msgstr "Utladingstid:"
 
-#: ../src/gpm-cell.c:559
+#: ../src/gpm-cell.c:568
 msgid "Excellent"
 msgstr "Utmerket"
 
-#: ../src/gpm-cell.c:561
+#: ../src/gpm-cell.c:570
 msgid "Good"
 msgstr "God"
 
-#: ../src/gpm-cell.c:563
+#: ../src/gpm-cell.c:572
 msgid "Fair"
 msgstr "Akseptabel"
 
-#: ../src/gpm-cell.c:565
+#: ../src/gpm-cell.c:574
 msgid "Poor"
 msgstr "Dårlig"
 
-#: ../src/gpm-cell.c:568
+#: ../src/gpm-cell.c:577
 msgid "Capacity:"
 msgstr "Kapasitet"
 
-#: ../src/gpm-cell.c:574 ../src/gpm-cell.c:597
+#: ../src/gpm-cell.c:583 ../src/gpm-cell.c:606
 msgid "Current charge:"
 msgstr "Nåværende nivå:"
 
-#: ../src/gpm-cell.c:580
+#: ../src/gpm-cell.c:589
 msgid "Last full charge:"
 msgstr "Sist gang fullt ladet:"
 
-#: ../src/gpm-cell.c:585 ../src/gpm-cell.c:602
+#: ../src/gpm-cell.c:594 ../src/gpm-cell.c:611
 msgid "Design charge:"
 msgstr "Ladekapasitet fra fabrikk:"
 
-#: ../src/gpm-cell.c:590
+#: ../src/gpm-cell.c:599
 msgid "Charge rate:"
 msgstr "Laderate:"
 
