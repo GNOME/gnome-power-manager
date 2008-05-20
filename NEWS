@@ -1,4 +1,36 @@
 ==============
+Version 2.23.1
+==============
+- Fixed #526178, Should check user capability "CanShutdown" before providing shutdown option in combo box (Simon Zheng)
+- Fixed #526349, gnome-power-bugreport.sh doesn't work on Solairs (Simon Zheng)
+- Fixed #522236, g-p-m should set a window type hint for the brightness feedback window (Danny Baumann)
+- Fixed #522078, Don't try to generate a config_id when we have no primary batteries (Richard Hughes)
+- Fixed #517914, The graph colors are used inconsistently between the various graphs (Jérôme Guelfucci)
+- Fixed #524449, Fix a critical warning in gnome-power-preferences (Richard Hughes)
+- Fixed #108075, Don't show some notifications under GDM (Richard Hughes)
+- Fixed rh#444026, Check keys for writability before we try to change them (Richard Hughes)
+- Fixed rh#443069, Be more paranoid about the rates reported from HAL (Richard Hughes)
+- Fix a bunch of build warnings with glib trunk (Kjartan Maraas)
+- Use Unique to make g-p-p and g-p-s single instance (Richard Hughes)
+- Add a default button for GConf settings (Matthias Clasen)
+- Remove all the hidden cpufreq code, as I keep being told I'm insane by Matthew (Richard Hughes)
+- Use the same logic for xrandr as hal when we have a large number of brightness steps (Richard Hughes)
+- Clear the brightness applet background properly so we can draw on it later (Ted Gould)
+- Remove the lid sounds. Everbody hates them (Richard Hughes)
+- Add new functionality allowing us to change the backlight brightness using XRANDR (Richard Hughes)
+- Make the backlight do what the user expects rather than what the policy says (Richard Hughes)
+
+Translations:
+- Updated bg: Alexander Shopov
+- Updated nn: Eskild Hustvedt
+- Updated is: Andre Klapper
+- Updated ar: Djihed Afifi
+- Updated th: Theppitak Karoonboonyanan
+- Updated cs: Petr Kovar
+- Updated et: Priit Laes
+- Updated en_GB: Richard Hughes
+
+==============
 Version 2.22.0
 ==============
 
