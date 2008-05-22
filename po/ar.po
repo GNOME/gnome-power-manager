@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-19 00:25+0000\n"
+"POT-Creation-Date: 2008-05-22 23:37+0100\n"
 "PO-Revision-Date: 2008-05-17 03:38+0300\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -31,12 +31,10 @@ msgstr "يضبط سطوع لوحة الحاسوب المحمول."
 
 #: ../applets/brightness/brightness-applet.c:355
 #: ../applets/inhibit/inhibit-applet.c:349
-#, c-format
 msgid "Cannot connect to gnome-power-manager"
 msgstr "تعذّر الاتصال بمدير طاقة جنوم"
 
 #: ../applets/brightness/brightness-applet.c:357
-#, c-format
 msgid "Cannot get laptop panel brightness"
 msgstr "تعذّر معرفة سطوع لوحة الحاسوب المحمول"
 
@@ -45,12 +43,12 @@ msgstr "تعذّر معرفة سطوع لوحة الحاسوب المحمول"
 msgid "LCD brightness : %d%%"
 msgstr "سطوع LCD: %d%%"
 
-#: ../applets/brightness/brightness-applet.c:747
+#: ../applets/brightness/brightness-applet.c:748
 #: ../applets/inhibit/inhibit-applet.c:418 ../src/gpm-tray-icon.c:310
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "مرخّص تحت الإصدارة الثانية من رخصة جنو العمومية العامة "
 
-#: ../applets/brightness/brightness-applet.c:748
+#: ../applets/brightness/brightness-applet.c:749
 #: ../applets/inhibit/inhibit-applet.c:419 ../src/gpm-tray-icon.c:311
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
@@ -63,7 +61,7 @@ msgstr ""
 "العامة لجنو والتي نشرتها منظمة البرمجيات الحرة؛ سواء الإصدارة 2 من الرخصة أو "
 "أي إصدارة بعدها حسب رغبتك."
 
-#: ../applets/brightness/brightness-applet.c:752
+#: ../applets/brightness/brightness-applet.c:753
 #: ../applets/inhibit/inhibit-applet.c:423 ../src/gpm-tray-icon.c:315
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
@@ -75,7 +73,7 @@ msgstr ""
 "أي ضمان يضمن صلاحية العرض في السوق أو توافقه مع أي استخدام محدد. يمكنك \n"
 "مراجعةالرخصة العمومية العامة لجنو لمزيد من التفاصيل."
 
-#: ../applets/brightness/brightness-applet.c:756
+#: ../applets/brightness/brightness-applet.c:757
 #: ../applets/inhibit/inhibit-applet.c:427 ../src/gpm-tray-icon.c:319
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
@@ -89,7 +87,7 @@ msgstr ""
 "Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA "
 "02110-1301, USA"
 
-#: ../applets/brightness/brightness-applet.c:770
+#: ../applets/brightness/brightness-applet.c:771
 msgid "Copyright © 2006 Benjamin Canou"
 msgstr "حقوق النشر © 2006 Benjamin Canou"
 
@@ -118,12 +116,10 @@ msgid "Allows user to inhibit automatic power saving."
 msgstr "يسمح للمستخدم بتثبيط حفظ الطاقة الآلي."
 
 #: ../applets/inhibit/inhibit-applet.c:352
-#, c-format
 msgid "Automatic sleep inhibited"
 msgstr "ثُبِّط النوم الآلي"
 
 #: ../applets/inhibit/inhibit-applet.c:354
-#, c-format
 msgid "Automatic sleep enabled"
 msgstr "فُعِّل النوم الآلي"
 
@@ -1183,17 +1179,15 @@ msgid "_Reduce backlight brightness"
 msgstr "أ_خفض سطوع الضوء الخلفي"
 
 #: ../src/gpm-control.c:279
-#, c-format
 msgid "The message was not sent due to DBUS security rules"
 msgstr "لم ترسَل الرسالة بسبب قواعد أمن DBUS"
 
 #: ../src/gpm-control.c:282
-#, c-format
-msgid "General failure: %s"
+#, fuzzy
+msgid "General failure"
 msgstr "فشل عام: %s"
 
 #: ../src/gpm-common.c:240
-#, c-format
 msgid "Unknown time"
 msgstr "وقت غير معروف"
 
@@ -1554,27 +1548,22 @@ msgid "%s has stopped the timeout action from taking place: %s."
 msgstr "%s منع إجراءات انتهاء المهلة من الحدوث: %s."
 
 #: ../src/gpm-inhibit.c:407 ../src/gpm-inhibit.c:422
-#, c-format
 msgid "Multiple applications have stopped the suspend from taking place."
 msgstr "تطبيقات عديدة منعت التعليق من الحدوث."
 
 #: ../src/gpm-inhibit.c:410
-#, c-format
 msgid "Multiple applications have stopped the hibernate from taking place."
 msgstr "تطبيقات عديدة منعت السبات من الحدوث."
 
 #: ../src/gpm-inhibit.c:413
-#, c-format
 msgid "Multiple applications have stopped the policy action from taking place."
 msgstr "تطبيقات عديدة منعت إجراءات السياسة من الحدوث."
 
 #: ../src/gpm-inhibit.c:416
-#, c-format
 msgid "Multiple applications have stopped the reboot from taking place."
 msgstr "تطبيقات عديدة منعت إعادة الإقلاع من الحدوث."
 
 #: ../src/gpm-inhibit.c:419
-#, c-format
 msgid "Multiple applications have stopped the shutdown from taking place."
 msgstr "تطبيقات عديدة منعت إيقاف التشغيل من الحدوث."
 
@@ -1603,32 +1592,26 @@ msgid "GNOME Power Manager"
 msgstr "مدير طاقة جنوم"
 
 #: ../src/gpm-manager.c:183
-#, c-format
 msgid "Request to suspend"
 msgstr "طلب تعليق"
 
 #: ../src/gpm-manager.c:186
-#, c-format
 msgid "Request to hibernate"
 msgstr "طلب إسبات"
 
 #: ../src/gpm-manager.c:189
-#, c-format
 msgid "Request to do policy action"
 msgstr "طلب القيام بإجراء سياسة"
 
 #: ../src/gpm-manager.c:192
-#, c-format
 msgid "Request to reboot"
 msgstr "طلب إعادة إقلاع"
 
 #: ../src/gpm-manager.c:195
-#, c-format
 msgid "Request to shutdown"
 msgstr "طلب إيقاف التشغيل"
 
 #: ../src/gpm-manager.c:198
-#, c-format
 msgid "Request to do timeout action"
 msgstr "طلب القيام بإجراء انتهاء المهلة"
 
@@ -1793,7 +1776,6 @@ msgid "Laptop battery critically low"
 msgstr "بطارية الحاسوب المحمول منخفضة جدًا"
 
 #: ../src/gpm-manager.c:1470
-#, c-format
 msgid "Plug in your AC adapter to avoid losing data."
 msgstr "وصّل محوّل التيار لتتجنب فقدان البيانات."
 
@@ -1967,7 +1949,6 @@ msgid "Sleep warning"
 msgstr "تحذير النوم"
 
 #: ../src/gpm-notify.c:458
-#, c-format
 msgid ""
 "Your laptop will not sleep if you shut the lid as a running program has "
 "prevented this.\n"
