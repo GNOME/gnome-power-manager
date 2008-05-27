@@ -36,7 +36,6 @@
 #include "gpm-common.h"
 #include "gpm-button.h"
 #include "gpm-debug.h"
-#include "gpm-sound.h"
 #include "gpm-marshal.h"
 
 static void     gpm_button_class_init (GpmButtonClass *klass);
@@ -49,7 +48,6 @@ struct GpmButtonPrivate
 {
 	GdkScreen		*screen;
 	GdkWindow		*window;
-	GpmSound		*sound;
 	GHashTable		*hash_to_hal;
 	gboolean		 lid_is_closed;
 	HalGManager		*hal_manager; /* remove when input events is in the kernel */
@@ -497,7 +495,6 @@ gpm_button_init (GpmButton *button)
 	button->priv->hash_to_hal = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
 	button->priv->lid_is_closed = FALSE;
-	button->priv->sound = gpm_sound_new ();
 
 #ifdef HAVE_XEVENTS
 	have_xevents = TRUE;
@@ -551,7 +548,6 @@ gpm_button_finalize (GObject *object)
 
 	g_object_unref (button->priv->hal_manager);
 	g_object_unref (button->priv->hal_devicestore);
-	g_object_unref (button->priv->sound);
 
 	g_hash_table_unref (button->priv->hash_to_hal);
 
