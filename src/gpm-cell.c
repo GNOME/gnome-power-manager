@@ -458,24 +458,39 @@ gpm_cell_get_icon (GpmCell *cell)
 gchar *
 gpm_cell_get_id (GpmCell *cell)
 {
+	GString *string;
 	gchar *id = NULL;
 
 	g_return_val_if_fail (cell != NULL, NULL);
 	g_return_val_if_fail (GPM_IS_CELL (cell), NULL);
 
-	/* try to use these in order of uniqueness */
-	if (cell->priv->serial != NULL && strlen (cell->priv->serial) > 2) {
-		/* serial number */
-		id = g_strdup (cell->priv->serial);
-	} else if (cell->priv->model != NULL && strlen (cell->priv->model) > 2) {
-		/* model number */
-		id = g_strdup (cell->priv->model);
+	string = g_string_new ("");
+
+	/* in an ideal world, model-capacity-serial */
+	if (strlen (cell->priv->model) > 2) {
+		g_string_append (string, cell->priv->model);
+		g_string_append_c (string, '-');
+	}
+	if (cell->priv->unit.charge_design > 0) {
+		g_string_append_printf (string, "%i", cell->priv->unit.charge_design);
+		g_string_append_c (string, '-');
+	}
+	if (strlen (cell->priv->serial) > 2) {
+		g_string_append (string, cell->priv->serial);
+		g_string_append_c (string, '-');
+	}
+
+	/* make sure we are sane */
+	if (string->len == 0) {
+		/* just use something generic */
+		g_string_append (string, "generic_id");
 	} else {
-		/* just return something generic */
-		id = g_strdup ("generic_id");
+		/* remove trailing '-' */
+		g_string_set_size (string, string->len - 1);
 	}
 
 	/* the id may have invalid chars that need to be replaced */
+	id = g_string_free (string, FALSE);
 	g_strdelimit (id, "\\\t\"' /", '_');
 
 	return id;

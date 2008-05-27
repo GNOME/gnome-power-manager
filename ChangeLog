@@ -1,5 +1,12 @@
 2008-05-27  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-cell.c: (gpm_cell_get_id):
+	Use model-capacity-serial in the config_id so we can still distinguish
+	between batteries of different capacity even when the battery vendor is a dumb-ass
+	and does not set serial or model numbers.
+
+2008-05-27  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-button.c: (gpm_button_init), (gpm_button_finalize):
 	Don't use GpmSound, we don't need to use it.
 
