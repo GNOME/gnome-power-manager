@@ -59,6 +59,7 @@ struct GpmBrightnessXRandRPrivate
 	guint			 shared_value;
 	gboolean		 has_extension;
 	gboolean		 hw_changed;
+	GPtrArray		*resources;
 };
 
 enum {
@@ -397,30 +398,23 @@ gpm_brightness_xrandr_foreach_resource (GpmBrightnessXRandR *brightness, GpmXRan
 static gboolean
 gpm_brightness_xrandr_foreach_screen (GpmBrightnessXRandR *brightness, GpmXRandROp op)
 {
-	gint screen;
-	guint screencount;
-	Window root;
-	XRRScreenResources *resources;
+	guint i;
+	guint length;
+	XRRScreenResources *resource;
 	gboolean ret;
 	gboolean success_any = FALSE;
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness), FALSE);
 
 	/* do for each screen */
-	screencount = ScreenCount (brightness->priv->dpy);
-	for (screen = 0; screen < screencount; screen++) {
-		gpm_debug ("screen %i of %i", screen+1, screencount);
-		root = RootWindow (brightness->priv->dpy, screen);
-		resources = XRRGetScreenResources (brightness->priv->dpy, root);
-		if (resources == NULL) {
-			gpm_debug ("no resources");
-			continue;
-		}
-		ret = gpm_brightness_xrandr_foreach_resource (brightness, op, resources);
+	length = brightness->priv->resources->len;
+	for (i=0; i<length; i++) {
+		resource = (XRRScreenResources *) g_ptr_array_index (brightness->priv->resources, i);
+		gpm_debug ("using resource %p", resource);
+		ret = gpm_brightness_xrandr_foreach_resource (brightness, op, resource);
 		if (ret) {
 			success_any = TRUE;
 		}
-		XRRFreeScreenResources (resources);
 	}
 	XSync (brightness->priv->dpy, False);
 	return success_any;
@@ -561,6 +555,71 @@ gpm_brightness_xrandr_filter_xevents (GdkXEvent *xevent, GdkEvent *event, gpoint
 	return GDK_FILTER_CONTINUE;
 }
 
+
+static void gpm_brightness_xrandr_update_cache (GpmBrightnessXRandR *brightness);
+
+/**
+ * gpm_brightness_monitors_changed:
+ **/
+static void
+gpm_brightness_monitors_changed (GdkScreen *screen, GpmBrightnessXRandR *brightness)
+{
+	g_return_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness));
+	gpm_brightness_xrandr_update_cache (brightness);
+}
+
+/**
+ * gpm_brightness_xrandr_update_cache:
+ **/
+static void
+gpm_brightness_xrandr_update_cache (GpmBrightnessXRandR *brightness)
+{
+	guint i;
+	guint length;
+	gint screen;
+	Window root;
+	GdkScreen *gscreen;
+	GdkDisplay *display;
+	XRRScreenResources *resource;
+
+	g_return_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness));
+
+	/* invalidate and remove all the previous entries */
+	length = brightness->priv->resources->len;
+	for (i=0; i<length; i++) {
+		resource = (XRRScreenResources *) g_ptr_array_index (brightness->priv->resources, i);
+		gpm_debug ("freeing resource %p", resource);
+		XRRFreeScreenResources (resource);
+	}
+	if (length > 0) {
+		g_ptr_array_remove_range (brightness->priv->resources, 0, length);
+	}
+
+	/* do for each screen */
+	display = gdk_display_get_default ();
+	length = ScreenCount (brightness->priv->dpy);
+	for (screen = 0; screen < length; screen++) {
+		gpm_debug ("screen %i of %i", screen+1, length);
+		gscreen = gdk_display_get_screen (display, screen);
+
+		/* if we have not setup the changed on the monitor, set it here */
+		if (g_object_get_data (G_OBJECT (gscreen), "gpk-set-monitors-changed") == NULL) {
+			gpm_debug ("watching ::monitors_changed on %p", gscreen);
+			g_object_set_data (G_OBJECT (gscreen), "gpk-set-monitors-changed", "true");
+			g_signal_connect (G_OBJECT (gscreen), "monitors_changed",
+					  G_CALLBACK (gpm_brightness_monitors_changed), brightness);
+		}
+
+		/* this is slow */
+		root = RootWindow (brightness->priv->dpy, screen);
+		resource = XRRGetScreenResources (brightness->priv->dpy, root);
+		if (resource != NULL) {
+			gpm_debug ("adding resource %p", resource);
+			g_ptr_array_add (brightness->priv->resources, resource);
+		}
+	}
+}
+
 /**
  * gpm_brightness_xrandr_finalize:
  **/
@@ -571,6 +630,10 @@ gpm_brightness_xrandr_finalize (GObject *object)
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GPM_IS_BRIGHTNESS_XRANDR (object));
 	brightness = GPM_BRIGHTNESS_XRANDR (object);
+
+	g_ptr_array_foreach (brightness->priv->resources, (GFunc) XRRFreeScreenResources, NULL);
+	g_ptr_array_free (brightness->priv->resources, FALSE);
+
 	G_OBJECT_CLASS (gpm_brightness_xrandr_parent_class)->finalize (object);
 }
 
@@ -608,6 +671,7 @@ gpm_brightness_xrandr_init (GpmBrightnessXRandR *brightness)
 
 	brightness->priv = GPM_BRIGHTNESS_XRANDR_GET_PRIVATE (brightness);
 	brightness->priv->hw_changed = FALSE;
+	brightness->priv->resources = g_ptr_array_new ();
 
 	/* can we do this */
 	brightness->priv->has_extension = gpm_brightness_xrandr_setup_display (brightness);
@@ -632,6 +696,9 @@ gpm_brightness_xrandr_init (GpmBrightnessXRandR *brightness)
 	if (gdk_error_trap_pop ()) {
 		gpm_warning ("failed to select XRRSelectInput");
 	}
+
+	/* create cache of XRRScreenResources as XRRGetScreenResources() is slow */
+	gpm_brightness_xrandr_update_cache (brightness);
 }
 
 /**

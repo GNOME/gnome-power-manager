@@ -1,3 +1,14 @@
+2008-05-29  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-brightness-xrandr.c:
+	(gpm_brightness_xrandr_foreach_screen),
+	(gpm_brightness_monitors_changed),
+	(gpm_brightness_xrandr_update_cache),
+	(gpm_brightness_xrandr_finalize), (gpm_brightness_xrandr_init):
+	When using XRANDR, cache the list of resources as getting a new list on each brightness
+	change causes the outputs to be reprobed, which is done over i2c in some cases.
+	This fix was insired from a patch by Bastien Nocera, and fixes #535271
+
 2008-05-29  simon.zheng  <simon.zheng@sun.com>
 
 	* configure.ac:
