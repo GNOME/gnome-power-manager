@@ -29,6 +29,10 @@
 #include <string.h>
 #include <sys/time.h>
 #include <sys/types.h>
+#if defined(sun) && defined(__SVR4)
+#include <kstat.h>
+#include <sys/sysinfo.h>
+#endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif /* HAVE_UNISTD_H */
@@ -75,6 +79,88 @@ gpm_load_class_init (GpmLoadClass *klass)
 	g_type_class_add_private (klass, sizeof (GpmLoadPrivate));
 }
 
+#if defined(sun) && defined(__SVR4)
+
+/**
+ * gpm_load_get_cpu_values:
+ * @cpu_idle: The idle time reported by the CPU
+ * @cpu_total: The total time reported by the CPU
+ * Return value: Success of reading /proc/stat.
+ **/
+static gboolean
+gpm_load_get_cpu_values (long unsigned *cpu_idle, long unsigned *cpu_total)
+{	
+	long unsigned cpu_user = 0;
+	long unsigned cpu_kernel = 0;
+	long unsigned cpu_wait = 0;
+	kstat_ctl_t *kc = NULL;
+	kstat_named_t *kn = NULL;
+	kstat_t     *ks = NULL;
+	cpu_stat_t  data;
+	int ncpus;
+	int count;
+	   	
+	kc = kstat_open();
+	if (!kc){
+		gpm_warning ("Cannot open kstat!\n");
+		return FALSE;
+	}
+
+	ks = kstat_lookup(kc, "unix", 0, "system_misc");
+  	if (kstat_read(kc, ks, NULL) == -1) {
+		gpm_warning ("Cannot read kstat on module unix!\n");
+		goto out;
+	}
+	kn = kstat_data_lookup (ks, "ncpus");
+	if (!kn) {
+		gpm_warning ("Cannot get number of cpus in current system!\n");
+		goto out;
+	}
+	ncpus = kn->value.ui32;
+
+	/* 
+ 	 * To aggresive ticks used of all cpus,
+	 * traverse kstat chain to access very cpu_stat instane.
+	 */
+	for(count = 0, *cpu_idle =0, *cpu_total = 0; count < ncpus; count++){
+		
+		ks = kstat_lookup(kc, "cpu_stat", count, NULL);
+		if (ks == NULL) {
+			gpm_warning ("Null output for kstat on cpu%d\n", count);
+			goto out;
+		}
+     
+		if (kstat_read(kc, ks, &data) == -1) {
+			gpm_warning ("Cannot read kstat entry on cpu%d\n", count);
+			goto out;
+		}
+
+		gpm_debug ("cpu%d:\t%lu\t%lu\t%lu\t%lu\n", count,
+					data.cpu_sysinfo.cpu[CPU_IDLE],
+					data.cpu_sysinfo.cpu[CPU_USER],
+					data.cpu_sysinfo.cpu[CPU_KERNEL],
+					data.cpu_sysinfo.cpu[CPU_WAIT]);
+
+		*cpu_idle += data.cpu_sysinfo.cpu[CPU_IDLE];
+		cpu_user += data.cpu_sysinfo.cpu[CPU_USER];
+		cpu_kernel += data.cpu_sysinfo.cpu[CPU_KERNEL];
+		cpu_wait += data.cpu_sysinfo.cpu[CPU_WAIT];
+	}
+	kstat_close(kc);
+	/*
+         * Summing up all these times gives you the system uptime.
+         * This is what the uptime command does.
+         */
+        *cpu_total = cpu_user + cpu_kernel + cpu_wait + *cpu_idle;
+        return TRUE;
+
+out:
+	kstat_close(kc);
+	return FALSE;
+}
+
+#else
+
 /**
  * gpm_load_get_cpu_values:
  * @cpu_idle: The idle time reported by the CPU
@@ -108,6 +194,7 @@ gpm_load_get_cpu_values (long unsigned *cpu_idle, long unsigned *cpu_total)
 	*cpu_total = cpu_user + cpu_nice + cpu_system + *cpu_idle;
 	return TRUE;
 }
+#endif /* sun & __SVR4 */
 
 /**
  * gpm_load_get_current:

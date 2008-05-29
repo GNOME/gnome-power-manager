@@ -302,6 +302,7 @@ gnome_power_self_test_LDADD =				\
 	$(LIBNOTIFY_LIBS)				\
 	$(LOCAL_LIBDBUS_LIBS)				\
 	$(LOCAL_LIBHAL_LIBS)				\
+	$(GPM_EXTRA_LIBS)				\
 	$(NULL)
 
 gnome_power_self_test_CPPFLAGS=	\
