@@ -198,9 +198,9 @@ gpm_profile_get_data_time_percent (GpmProfile *profile, gboolean discharge)
 		value_accuracy = gpm_array_float_get (array_accuracy, i);
 		/* only set points that are not zero */
 		if (value_data == 0) {
-			gpm_array_set (profile->priv->present_array_data, i, i, value_data, GPM_COLOUR_BLUE);
-		} else if (value_accuracy == 0) {
 			gpm_array_set (profile->priv->present_array_data, i, i, value_data, GPM_COLOUR_DARK_GREY);
+		} else if (value_accuracy == 0) {
+			gpm_array_set (profile->priv->present_array_data, i, i, value_data, GPM_COLOUR_BLUE);
 		} else if (value_data > 0) {
 			gpm_array_set (profile->priv->present_array_data, i, i, value_data, GPM_COLOUR_RED);
 		}
@@ -254,12 +254,12 @@ gpm_profile_get_data_accuracy_percent (GpmProfile *profile, gboolean discharge)
 	g_return_val_if_fail (profile != NULL, NULL);
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), NULL);
 
-	if (discharge == TRUE) {
-		colour_active = GPM_COLOUR_RED;
-		colour_nonactive = GPM_COLOUR_DARK_RED;
-	} else {
+	if (discharge) {
 		colour_active = GPM_COLOUR_BLUE;
 		colour_nonactive = GPM_COLOUR_DARK_BLUE;
+	} else {
+		colour_active = GPM_COLOUR_RED;
+		colour_nonactive = GPM_COLOUR_DARK_RED;
 	}
 
 	/* get the correct data */

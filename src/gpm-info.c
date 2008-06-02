@@ -201,7 +201,7 @@ gpm_statistics_add_events_typical (GPtrArray *array)
 				       GPM_GRAPH_WIDGET_SHAPE_CIRCLE,
 				       _("On AC"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_ON_BATTERY,
-				       GPM_COLOUR_DARK_BLUE,
+				       GPM_COLOUR_RED,
 				       GPM_GRAPH_WIDGET_SHAPE_CIRCLE,
 				       _("On battery"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_SESSION_POWERSAVE,
@@ -295,7 +295,7 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_y = g_strdup ("power");
 		*axis_desc_x = g_strdup (_("Time since startup"));
 		*axis_desc_y = g_strdup (_("Power"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_DARK_RED, _("Power"));
+		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_GREEN, _("Power"));
 		gpm_statistics_add_events_typical (*key_event);
 		return TRUE;
 	}
@@ -304,7 +304,7 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_y = g_strdup ("time");
 		*axis_desc_x = g_strdup (_("Time since startup"));
 		*axis_desc_y = g_strdup (_("Estimated time"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_DARK_RED, _("Time"));
+		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_GREEN, _("Time"));
 		gpm_statistics_add_events_typical (*key_event);
 		return TRUE;
 	}
@@ -313,7 +313,7 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_y = g_strdup ("percentage");
 		*axis_desc_x = g_strdup (_("Time since startup"));
 		*axis_desc_y = g_strdup (_("Battery percentage"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_DARK_RED, _("Percentage"));
+		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_GREEN, _("Percentage"));
 		gpm_statistics_add_events_typical (*key_event);
 		return TRUE;
 	}
@@ -331,34 +331,8 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_y = g_strdup ("percentage");
 		*axis_desc_x = g_strdup (_("Battery percentage"));
 		*axis_desc_y = g_strdup (_("Accuracy of reading"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_GREEN, _("Valid data"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_DARK_RED, _("No data"));
-		gpm_statistics_add_event_type (*key_event, GPM_EVENT_HIBERNATE,
-					       GPM_COLOUR_CYAN,
-					       GPM_GRAPH_WIDGET_SHAPE_SQUARE,
-				 	      _("Start point"));
-		gpm_statistics_add_event_type (*key_event, GPM_EVENT_SUSPEND,
-					       GPM_COLOUR_YELLOW,
-					       GPM_GRAPH_WIDGET_SHAPE_TRIANGLE,
-				 	      _("Stop point"));
-		return TRUE;
-	}
-	if (strcmp (type, "profile-charge-time") == 0) {
-		*axis_type_x = g_strdup ("percentage");
-		*axis_type_y = g_strdup ("time");
-		*axis_desc_x = g_strdup (_("Battery percentage"));
-		*axis_desc_y = g_strdup (_("Average time elapsed"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_GREEN, _("Valid data"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_DARK_RED, _("No data"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_BLUE, _("Extrapolated data"));
-		gpm_statistics_add_event_type (*key_event, GPM_EVENT_HIBERNATE,
-					       GPM_COLOUR_CYAN,
-					       GPM_GRAPH_WIDGET_SHAPE_SQUARE,
-				 	      _("Start point"));
-		gpm_statistics_add_event_type (*key_event, GPM_EVENT_SUSPEND,
-					       GPM_COLOUR_YELLOW,
-					       GPM_GRAPH_WIDGET_SHAPE_TRIANGLE,
-				 	      _("Stop point"));
+		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_RED, _("Trusted"));
+		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_DARK_RED, _("Untrusted"));
 		return TRUE;
 	}
 	if (strcmp (type, "profile-discharge-accuracy") == 0) {
@@ -366,8 +340,18 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_y = g_strdup ("percentage");
 		*axis_desc_x = g_strdup (_("Battery percentage"));
 		*axis_desc_y = g_strdup (_("Accuracy of reading"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_GREEN, _("Valid data"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_DARK_RED, _("No data"));
+		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_BLUE, _("Trusted"));
+		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_DARK_BLUE, _("Untrusted"));
+		return TRUE;
+	}
+	if (strcmp (type, "profile-charge-time") == 0) {
+		*axis_type_x = g_strdup ("percentage");
+		*axis_type_y = g_strdup ("time");
+		*axis_desc_x = g_strdup (_("Battery percentage"));
+		*axis_desc_y = g_strdup (_("Average time elapsed"));
+		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_RED, _("Valid data"));
+		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_DARK_GREY, _("Extrapolated data"));
+		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_BLUE, _("No data"));
 		gpm_statistics_add_event_type (*key_event, GPM_EVENT_HIBERNATE,
 					       GPM_COLOUR_CYAN,
 					       GPM_GRAPH_WIDGET_SHAPE_SQUARE,
@@ -383,9 +367,9 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_y = g_strdup ("time");
 		*axis_desc_x = g_strdup (_("Battery percentage"));
 		*axis_desc_y = g_strdup (_("Average time elapsed"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_GREEN, _("Valid data"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_DARK_RED, _("No data"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_BLUE, _("Extrapolated data"));
+		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_RED, _("Valid data"));
+		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_DARK_GREY, _("Extrapolated data"));
+		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_BLUE, _("No data"));
 		gpm_statistics_add_event_type (*key_event, GPM_EVENT_HIBERNATE,
 					       GPM_COLOUR_CYAN,
 					       GPM_GRAPH_WIDGET_SHAPE_SQUARE,
