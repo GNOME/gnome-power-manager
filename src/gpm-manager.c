@@ -1049,10 +1049,6 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 				   _("The lid has been closed, and the ac adapter "
 				     "removed (and gconf is okay)."));
 	}
-
-	/* Don't do any events for a few seconds after we remove the
-	 * ac_adapter. See #348201 for details */
-	gpm_control_reset_event_time (manager->priv->control);
 }
 
 /**

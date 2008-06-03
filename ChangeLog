@@ -1,3 +1,8 @@
+2008-06-03  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c: (ac_adapter_changed_cb):
+	Allow events a few seconds after the ac unplug. Fixes #492132
+
 2008-06-02  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-info.c: (gpm_statistics_add_events_typical),
