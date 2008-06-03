@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 2.23.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-19 14:25+0000\n"
-"PO-Revision-Date: 2008-05-25 23:44+0930\n"
+"POT-Creation-Date: 2008-06-02 10:10+0000\n"
+"PO-Revision-Date: 2008-06-03 23:29+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -1442,8 +1442,8 @@ msgstr "Thời gian xấp xỉ"
 msgid "Time"
 msgstr "Thời gian"
 
-#: ../src/gpm-info.c:315 ../src/gpm-info.c:332 ../src/gpm-info.c:349
-#: ../src/gpm-info.c:367 ../src/gpm-info.c:384
+#: ../src/gpm-info.c:315 ../src/gpm-info.c:332 ../src/gpm-info.c:341
+#: ../src/gpm-info.c:350 ../src/gpm-info.c:368
 msgid "Battery percentage"
 msgstr "Phần trăm pin"
 
@@ -1459,91 +1459,95 @@ msgstr "Điện áp pin"
 msgid "Voltage"
 msgstr "Điện áp"
 
-#: ../src/gpm-info.c:333 ../src/gpm-info.c:368
+#: ../src/gpm-info.c:333 ../src/gpm-info.c:342
 msgid "Accuracy of reading"
 msgstr "Độ chính xác đọc"
 
-#: ../src/gpm-info.c:334 ../src/gpm-info.c:351 ../src/gpm-info.c:369
-#: ../src/gpm-info.c:386
-msgid "Valid data"
-msgstr "Dữ liệu hợp lệ"
+#: ../src/gpm-info.c:334 ../src/gpm-info.c:343
+msgid "Trusted"
+msgstr "Đáng tin"
 
-#: ../src/gpm-info.c:335 ../src/gpm-info.c:352 ../src/gpm-info.c:370
-#: ../src/gpm-info.c:387
-msgid "No data"
-msgstr "Không có dữ liệu"
+#: ../src/gpm-info.c:335 ../src/gpm-info.c:344
+msgid "Untrusted"
+msgstr "Không đáng tin"
 
-#: ../src/gpm-info.c:339 ../src/gpm-info.c:357 ../src/gpm-info.c:374
-#: ../src/gpm-info.c:392
-msgid "Start point"
-msgstr "ĐIểm bắt đầu"
-
-#: ../src/gpm-info.c:343 ../src/gpm-info.c:361 ../src/gpm-info.c:378
-#: ../src/gpm-info.c:396
-msgid "Stop point"
-msgstr "Điểm kết thúc"
-
-#: ../src/gpm-info.c:350 ../src/gpm-info.c:385
+#: ../src/gpm-info.c:351 ../src/gpm-info.c:369
 msgid "Average time elapsed"
 msgstr "Thời gian trung bình đã qua"
 
-#: ../src/gpm-info.c:353 ../src/gpm-info.c:388
+#: ../src/gpm-info.c:352 ../src/gpm-info.c:370
+msgid "Valid data"
+msgstr "Dữ liệu hợp lệ"
+
+#: ../src/gpm-info.c:353 ../src/gpm-info.c:371
 msgid "Extrapolated data"
 msgstr "Dữ liệu đã ngoại suy"
 
-#: ../src/gpm-info.c:676
+#: ../src/gpm-info.c:354 ../src/gpm-info.c:372
+msgid "No data"
+msgstr "Không có dữ liệu"
+
+#: ../src/gpm-info.c:358 ../src/gpm-info.c:376
+msgid "Start point"
+msgstr "ĐIểm bắt đầu"
+
+#: ../src/gpm-info.c:362 ../src/gpm-info.c:380
+msgid "Stop point"
+msgstr "Điểm kết thúc"
+
+#: ../src/gpm-info.c:660
 msgid "AC adapter inserted"
 msgstr "Bộ tiếp hợp điện chính đã được cắm phít"
 
-#: ../src/gpm-info.c:679
+#: ../src/gpm-info.c:663
 msgid "AC adapter removed"
 msgstr "Bộ tiếp hợp điện chính đã bị tháo ra"
 
-#: ../src/gpm-info.c:699
+#: ../src/gpm-info.c:683
 msgid "The laptop lid has been closed"
 msgstr "Nắp máy tính xách tây đã được đóng"
 
-#: ../src/gpm-info.c:705
+#: ../src/gpm-info.c:689
 msgid "The laptop lid has been re-opened"
 msgstr "Nắp máy tính xách tay đã được mở lại"
 
-#: ../src/gpm-info.c:727
+#: ../src/gpm-info.c:711
 msgid "idle mode ended"
 msgstr "chế độ nghỉ đã kết thúc"
 
-#: ../src/gpm-info.c:729
+#: ../src/gpm-info.c:713
 msgid "idle mode started"
 msgstr "chế độ nghỉ đã bắt đầu"
 
-#: ../src/gpm-info.c:731
+#: ../src/gpm-info.c:715
 msgid "powersave mode started"
 msgstr "chế độ tiết kiếm điện đã bắt đầu"
 
-#: ../src/gpm-info.c:750
+#: ../src/gpm-info.c:734
 msgid "dpms on"
 msgstr "dpms bật"
 
-#: ../src/gpm-info.c:752
+#: ../src/gpm-info.c:736
 msgid "dpms standby"
 msgstr "dpms chờ"
 
-#: ../src/gpm-info.c:754
+#: ../src/gpm-info.c:738
 msgid "dpms suspend"
 msgstr "dpms ngưng"
 
-#: ../src/gpm-info.c:756
+#: ../src/gpm-info.c:740
 msgid "dpms off"
 msgstr "dpms tắt"
 
-#: ../src/gpm-info.c:773
+#: ../src/gpm-info.c:757
 msgid "Resuming computer"
 msgstr "Tiếp tục lại máy tính"
 
-#: ../src/gpm-info.c:789
+#: ../src/gpm-info.c:773
 msgid "Hibernate Problem"
 msgstr "Lỗi ngủ đông"
 
-#: ../src/gpm-info.c:791
+#: ../src/gpm-info.c:775
 msgid "Suspend Problem"
 msgstr "Lỗi ngưng"
 
@@ -2098,105 +2102,105 @@ msgstr "%s đang sạc (%i%%)\n"
 msgid "Battery state could not be read at this time\n"
 msgstr "Tình trạng pin không thể được đọc vào lúc này\n"
 
-#: ../src/gpm-cell.c:516
+#: ../src/gpm-cell.c:531
 #, c-format
 msgid "<b>Product:</b> %s\n"
 msgstr "<b>Sản xuất:</b> %s\n"
 
-#: ../src/gpm-cell.c:519
+#: ../src/gpm-cell.c:534
 msgid "<b>Status:</b> Missing\n"
 msgstr "<b>Tình trạng:</b> Thiếu\n"
 
-#: ../src/gpm-cell.c:521
+#: ../src/gpm-cell.c:536
 msgid "<b>Status:</b> Charged\n"
 msgstr "<b>Tình trạng:</b> Đã sạc\n"
 
-#: ../src/gpm-cell.c:523
+#: ../src/gpm-cell.c:538
 msgid "<b>Status:</b> Charging\n"
 msgstr "<b>Tình trạng:</b> Đang sạc\n"
 
-#: ../src/gpm-cell.c:525
+#: ../src/gpm-cell.c:540
 msgid "<b>Status:</b> Discharging\n"
 msgstr "<b>Tình trạng:</b> Đang xả\n"
 
-#: ../src/gpm-cell.c:528
+#: ../src/gpm-cell.c:543
 #, c-format
 msgid "<b>Percentage charge:</b> %i%%\n"
 msgstr "<b>Phần trăm đầy:</b> %i%%\n"
 
-#: ../src/gpm-cell.c:533
+#: ../src/gpm-cell.c:548
 msgid "Vendor:"
 msgstr "Nhà sản xuất:"
 
-#: ../src/gpm-cell.c:538
+#: ../src/gpm-cell.c:553
 msgid "Lithium ion"
 msgstr "Lithi ion"
 
-#: ../src/gpm-cell.c:540
+#: ../src/gpm-cell.c:555
 msgid "Lead acid"
 msgstr "Axit chì"
 
-#: ../src/gpm-cell.c:542
+#: ../src/gpm-cell.c:557
 msgid "Lithium polymer"
 msgstr "Lithi polime (LiP)"
 
-#: ../src/gpm-cell.c:544
+#: ../src/gpm-cell.c:559
 msgid "Nickel metal hydride"
 msgstr "Mạ kền kim loại hyddrua (NMH)"
 
-#: ../src/gpm-cell.c:551
+#: ../src/gpm-cell.c:566
 msgid "Technology:"
 msgstr "Công nghệ:"
 
-#: ../src/gpm-cell.c:555
+#: ../src/gpm-cell.c:570
 msgid "Serial number:"
 msgstr "Số sản xuất:"
 
-#: ../src/gpm-cell.c:559
+#: ../src/gpm-cell.c:574
 msgid "Model:"
 msgstr "Mô hình:"
 
-#: ../src/gpm-cell.c:565
+#: ../src/gpm-cell.c:580
 msgid "Charge time:"
 msgstr "Thời gian sạc:"
 
-#: ../src/gpm-cell.c:572
+#: ../src/gpm-cell.c:587
 msgid "Discharge time:"
 msgstr "Thời gian xả:"
 
-#: ../src/gpm-cell.c:578
+#: ../src/gpm-cell.c:593
 msgid "Excellent"
 msgstr "Tốt lắm"
 
-#: ../src/gpm-cell.c:580
+#: ../src/gpm-cell.c:595
 msgid "Good"
 msgstr "Tốt"
 
-#: ../src/gpm-cell.c:582
+#: ../src/gpm-cell.c:597
 msgid "Fair"
 msgstr "Vừa"
 
-#: ../src/gpm-cell.c:584
+#: ../src/gpm-cell.c:599
 msgid "Poor"
 msgstr "Xấu"
 
-#: ../src/gpm-cell.c:587
+#: ../src/gpm-cell.c:602
 msgid "Capacity:"
 msgstr "Khả năng:"
 
-#: ../src/gpm-cell.c:593 ../src/gpm-cell.c:616
+#: ../src/gpm-cell.c:608 ../src/gpm-cell.c:631
 msgid "Current charge:"
 msgstr "Điện hiện có :"
 
-#: ../src/gpm-cell.c:599
+#: ../src/gpm-cell.c:614
 msgid "Last full charge:"
 msgstr "Sạc đầy cuối cùng:"
 
-#: ../src/gpm-cell.c:604 ../src/gpm-cell.c:621
+#: ../src/gpm-cell.c:619 ../src/gpm-cell.c:636
 msgid "Design charge:"
 msgstr "Điện thiết kế:"
 
-#: ../src/gpm-cell.c:609
+#: ../src/gpm-cell.c:624
 msgid "Charge rate:"
 msgstr "Tần số sạc:"
 
