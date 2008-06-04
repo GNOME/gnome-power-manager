@@ -31,6 +31,7 @@
 #include <dbus/dbus-glib.h>
 #include <math.h>
 #include <string.h>
+#include <gconf/gconf-client.h>
 
 #include <libhal-gmanager.h>
 
@@ -999,6 +1000,10 @@ pk_prefs_set_defaults_cb (PolKitGnomeAction *default_action, GpmPrefs *prefs)
 		return;
 	}
 
+	GConfClient *client;
+	client = gconf_client_get_default ();
+	gconf_client_suggest_sync (client, NULL);
+	g_object_unref (client);
 	dbus_g_proxy_call (proxy, "SetSystem", &error,
 			   G_TYPE_STRV, keys,
 			   G_TYPE_STRV, NULL,

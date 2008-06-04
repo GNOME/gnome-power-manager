@@ -1,3 +1,10 @@
+2008-06-04  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-prefs-core.c: (pk_prefs_set_defaults_cb):
+	Matthias pointed out that we need to call gconf_client_suggest_sync() before calling into
+	the 'make settings default' service otherwise you push system-wide whatever is in the files
+	not your latest setting that is still in the gconf cache.
+
 2008-06-03  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c: (ac_adapter_changed_cb):
