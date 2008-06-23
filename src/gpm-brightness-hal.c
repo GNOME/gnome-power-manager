@@ -58,6 +58,10 @@ struct GpmBrightnessHalPrivate
 	gchar			*udi;
 	gboolean		 hw_changed;
 	DbusProxy		*gproxy;
+
+ 	/* true if hardware automatically sets brightness in response to
+ 	 * key press events */
+ 	gboolean		 does_own_updates;
 };
 
 enum {
@@ -315,7 +319,8 @@ gpm_brightness_hal_up (GpmBrightnessHal *brightness, gboolean *hw_changed)
 	gpm_brightness_hal_get_hw (brightness, &current_hw);
 
 	/* the panel has been updated in firmware */
-	if (current_hw != brightness->priv->last_set_hw) {
+	if (current_hw != brightness->priv->last_set_hw || 
+            brightness->priv->does_own_updates) {
 		brightness->priv->last_set_hw = current_hw;
 	} else {
 		/* macbook pro has a bazzillion brightness levels, be a bit clever */
@@ -357,7 +362,8 @@ gpm_brightness_hal_down (GpmBrightnessHal *brightness, gboolean *hw_changed)
 	gpm_brightness_hal_get_hw (brightness, &current_hw);
 
 	/* the panel has been updated in firmware */
-	if (current_hw != brightness->priv->last_set_hw) {
+ 	if (current_hw != brightness->priv->last_set_hw ||
+              brightness->priv->does_own_updates) {
 		gpm_brightness_hal_get_hw (brightness, &brightness->priv->last_set_hw);
 	} else {
 		/* macbook pro has a bazzillion brightness levels, be a bit clever */
@@ -438,6 +444,7 @@ gpm_brightness_hal_init (GpmBrightnessHal *brightness)
 	gchar **names;
 	HalGManager *manager;
 	HalGDevice *device;
+	gboolean res;
 
 	brightness->priv = GPM_BRIGHTNESS_HAL_GET_PRIVATE (brightness);
 	brightness->priv->gproxy = NULL;
@@ -466,6 +473,24 @@ gpm_brightness_hal_init (GpmBrightnessHal *brightness)
 	if (brightness->priv->levels == 0 || brightness->priv->levels > 256) {
 		gpm_warning ("Laptop panel levels are invalid!");
 	}
+
+	/* Check if hardware handles brightness changes automatically */
+	res = hal_gdevice_get_bool (device, 
+				    "laptop_panel.brightness_in_hardware",
+			            &brightness->priv->does_own_updates, NULL);
+
+	if (!res) {
+		brightness->priv->does_own_updates = FALSE;
+		gpm_debug ("laptop_panel.brightness_in_hardware not found. "
+			   "Assuming false");
+	} else {
+		if (brightness->priv->does_own_updates) {
+			gpm_debug ("laptop_panel.brightness_in_hardware: True");
+		} else {
+			gpm_debug ("laptop_panel.brightness_in_hardware: False");
+		}
+	}
+
 	g_object_unref (device);
 
 	/* get a managed proxy */
