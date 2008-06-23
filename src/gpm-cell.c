@@ -467,7 +467,7 @@ gpm_cell_get_id (GpmCell *cell)
 	string = g_string_new ("");
 
 	/* in an ideal world, model-capacity-serial */
-	if (strlen (cell->priv->model) > 2) {
+	if (cell->priv->model != NULL && strlen (cell->priv->model) > 2) {
 		g_string_append (string, cell->priv->model);
 		g_string_append_c (string, '-');
 	}
@@ -475,7 +475,7 @@ gpm_cell_get_id (GpmCell *cell)
 		g_string_append_printf (string, "%i", cell->priv->unit.charge_design);
 		g_string_append_c (string, '-');
 	}
-	if (strlen (cell->priv->serial) > 2) {
+	if (cell->priv->serial != NULL && strlen (cell->priv->serial) > 2) {
 		g_string_append (string, cell->priv->serial);
 		g_string_append_c (string, '-');
 	}
