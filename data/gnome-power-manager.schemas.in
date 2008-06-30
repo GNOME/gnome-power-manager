@@ -14,18 +14,6 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/ambient/v4l_device</key>
-      <applyto>/apps/gnome-power-manager/ambient/v4l_device</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>string</type>
-      <default>default</default>
-      <locale name="C">
-        <short>The device name for the v4l device used as a brightness sensor backup</short>
-        <long>The device name for the v4l device used as a brightness sensor backup. A value of 'default' uses the first discovered sensor, or devices can be specified, e.g. '/dev/video0'</long>
-      </locale>
-    </schema>
-
-    <schema>
       <key>/schemas/apps/gnome-power-manager/ambient/poll_timeout</key>
       <applyto>/apps/gnome-power-manager/ambient/poll_timeout</applyto>
       <owner>gnome-power-manager</owner>
@@ -201,13 +189,13 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/backlight/brightness_battery</key>
-      <applyto>/apps/gnome-power-manager/backlight/brightness_battery</applyto>
+      <key>/schemas/apps/gnome-power-manager/backlight/brightness_dim_battery</key>
+      <applyto>/apps/gnome-power-manager/backlight/brightness_dim_battery</applyto>
       <type>int</type>
       <default>50</default>
       <locale name="C">
-        <short>LCD brightness when on battery</short>
-        <long>The brightness of the display when on battery power. Possible values are between 0 and 100.</long>
+        <short>LCD dimming amount when on battery</short>
+        <long>The amount to dim the brightness of the display when on battery power. Possible values are between 0 and 100.</long>
       </locale>
     </schema>
 

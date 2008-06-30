@@ -43,7 +43,6 @@ G_BEGIN_DECLS
 #define GPM_CONF_AMBIENT_POLL			GPM_CONF_DIR "/ambient/poll_timeout"
 #define GPM_CONF_AMBIENT_FACTOR			GPM_CONF_DIR "/ambient/correction_factor"
 #define GPM_CONF_AMBIENT_SCALE			GPM_CONF_DIR "/ambient/correction_scale"
-#define GPM_CONF_AMBIENT_V4L_DEVICE		GPM_CONF_DIR "/ambient/v4l_device"
 #define GPM_CONF_AMBIENT_DIM_POLICY		GPM_CONF_DIR "/ambient/dim_policy"
 
 /* actions */
@@ -64,7 +63,7 @@ G_BEGIN_DECLS
 #define GPM_CONF_BACKLIGHT_IDLE_DIM_BATT	GPM_CONF_DIR "/backlight/idle_dim_battery"
 #define GPM_CONF_BACKLIGHT_IDLE_DIM_TIME	GPM_CONF_DIR "/backlight/idle_dim_time"
 #define GPM_CONF_BACKLIGHT_BRIGHTNESS_AC	GPM_CONF_DIR "/backlight/brightness_ac"
-#define GPM_CONF_BACKLIGHT_BRIGHTNESS_BATT	GPM_CONF_DIR "/backlight/brightness_battery"
+#define GPM_CONF_BACKLIGHT_BRIGHTNESS_DIM_BATT	GPM_CONF_DIR "/backlight/brightness_battery"
 
 /* buttons */
 #define GPM_CONF_BUTTON_LID_AC			GPM_CONF_DIR "/buttons/lid_ac"

@@ -1,3 +1,13 @@
+2008-06-30  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-backlight.c: (gpm_backlight_brightness_evaluate_and_set),
+	(conf_key_changed_cb):
+	* src/gpm-conf.h:
+	Fix the name and description of the gconf key:
+	/apps/gnome-power-manager/backlight/brightness_dim_battery
+	Fixes #483144
+
 2008-06-23  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-cell.c: (gpm_cell_get_id):
