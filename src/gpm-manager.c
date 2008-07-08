@@ -1581,17 +1581,17 @@ gpm_engine_charge_action_cb (GpmEngine      *engine,
 
 		/* use different text for different actions */
 		if (strcmp (action, ACTION_NOTHING) == 0) {
-			message = _("The UPS is below the critical level and "
-				    "this computer will <b>power-off</b> when the "
-				    "UPS becomes completely empty.");
+			message = g_strdup (_("The UPS is below the critical level and "
+				              "this computer will <b>power-off</b> when the "
+				              "UPS becomes completely empty."));
 
 		} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
-			message = _("The UPS is below the critical level and "
-				    "this computer is about to hibernate.");
+			message = g_strdup (_("The UPS is below the critical level and "
+				              "this computer is about to hibernate."));
 
 		} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
-			message = _("The UPS is below the critical level and "
-				    "this computer is about to shutdown.");
+			message = g_strdup (_("The UPS is below the critical level and "
+				              "this computer is about to shutdown."));
 		}
 
 		g_free (action);
