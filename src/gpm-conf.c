@@ -189,13 +189,18 @@ gpm_conf_set_bool (GpmConf     *conf,
 	g_return_val_if_fail (GPM_IS_CONF (conf), FALSE);
 	g_return_val_if_fail (key != NULL, FALSE);
 
+	ret = gconf_client_key_is_writable (conf->priv->gconf_client, key, NULL);
+	if (!ret) {
+		gpm_debug ("%s not writable", key);
+		goto out;
+	}
 	gconf_client_set_bool (conf->priv->gconf_client, key, value, &error);
 	if (error) {
 		gpm_debug ("Error: %s", error->message);
 		g_error_free (error);
 		ret = FALSE;
 	}
-
+out:
 	return ret;
 }
 
@@ -221,13 +226,18 @@ gpm_conf_set_string (GpmConf     *conf,
 	g_return_val_if_fail (key != NULL, FALSE);
 	g_return_val_if_fail (value != NULL, FALSE);
 
+	ret = gconf_client_key_is_writable (conf->priv->gconf_client, key, NULL);
+	if (!ret) {
+		gpm_debug ("%s not writable", key);
+		goto out;
+	}
 	gconf_client_set_string (conf->priv->gconf_client, key, value, &error);
 	if (error) {
 		gpm_debug ("Error: %s", error->message);
 		g_error_free (error);
 		ret = FALSE;
 	}
-
+out:
 	return ret;
 }
 
@@ -250,13 +260,18 @@ gpm_conf_set_int (GpmConf     *conf,
 	g_return_val_if_fail (GPM_IS_CONF (conf), FALSE);
 	g_return_val_if_fail (key != NULL, FALSE);
 
+	ret = gconf_client_key_is_writable (conf->priv->gconf_client, key, NULL);
+	if (!ret) {
+		gpm_debug ("%s not writable", key);
+		goto out;
+	}
 	gconf_client_set_int (conf->priv->gconf_client, key, value, &error);
 	if (error) {
 		gpm_debug ("Error: %s", error->message);
 		g_error_free (error);
 		ret = FALSE;
 	}
-
+out:
 	return ret;
 }
 

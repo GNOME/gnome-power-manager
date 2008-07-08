@@ -1,3 +1,9 @@
+2008-05-15  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-conf.c: (gpm_conf_set_bool), (gpm_conf_set_string),
+	(gpm_conf_set_int):
+	Check keys for writability before we try to change them. Fixes rh#444026
+
 2008-04-25  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-srv-brightness-kbd.c: (conf_key_changed_cb):
