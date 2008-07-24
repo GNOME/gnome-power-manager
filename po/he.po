@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-30 10:23+0000\n"
+"POT-Creation-Date: 2008-07-07 03:40+0000\n"
 "PO-Revision-Date: 2008-02-09 12:10+0000\n"
 "Last-Translator: Yaniv Abir <yanivabir at gmail dot com>\n"
 "Language-Team: he <he@li.org>\n"
@@ -151,7 +151,7 @@ msgstr "מנהל צריכת החשמל"
 
 #: ../data/gnome-power-manager.desktop.in.in.h:2
 msgid "Power management daemon"
-msgstr ""
+msgstr "מנוע ניהול צריכת החשמל"
 
 #: ../data/gnome-power-manager.schemas.in.h:1
 msgid ""
@@ -1025,31 +1025,31 @@ msgstr "זמן מאז ההפעלה"
 
 #: ../data/gpm-inhibit-test.glade.h:1
 msgid "Application:"
-msgstr "יישום:"
+msgstr "Application:"
 
 #: ../data/gpm-inhibit-test.glade.h:2
 msgid "Burning DVD, titled \"My Photos\""
-msgstr "צריבת DVD בשם \"התמונות שלי\""
+msgstr "Burning DVD, titled \"My Photos\""
 
 #: ../data/gpm-inhibit-test.glade.h:3
 msgid "Inhibit"
-msgstr "מנע"
+msgstr "Inhibit"
 
 #: ../data/gpm-inhibit-test.glade.h:4
 msgid "Inhibit Tester"
-msgstr "בודק מניעה"
+msgstr "Inhibit Tester"
 
 #: ../data/gpm-inhibit-test.glade.h:5
 msgid "Reason:"
-msgstr "סיבה:"
+msgstr "Reason:"
 
 #: ../data/gpm-inhibit-test.glade.h:6
 msgid "UnInhibit"
-msgstr "בטל מניעה"
+msgstr "UnInhibit"
 
 #: ../data/gpm-inhibit-test.glade.h:7
 msgid "Vendor Acme Foo"
-msgstr ""
+msgstr "Vendor Acme Foo"
 
 #: ../data/gpm-prefs.glade.h:1
 msgid "<b>Actions</b>"
@@ -1164,9 +1164,8 @@ msgid "_Never display an icon"
 msgstr "_לעולם אל תציג סמל"
 
 #: ../data/gpm-prefs.glade.h:29
-#, fuzzy
 msgid "_Only display an icon when battery power is critically low"
-msgstr "הצג רק כאשר ישנה _סוללה"
+msgstr "הצג איקון רק כאשר הסוללה _כמעט ריקה"
 
 #: ../data/gpm-prefs.glade.h:30
 msgid "_Reduce backlight brightness"
@@ -1310,7 +1309,7 @@ msgstr "סיבה: %s"
 
 #: ../src/gpm-info.c:202
 msgid "On AC"
-msgstr "מחובר לשקע"
+msgstr "מחובר לחשמל"
 
 #: ../src/gpm-info.c:206
 msgid "On battery"
@@ -1322,16 +1321,16 @@ msgstr ""
 
 #: ../src/gpm-info.c:214
 msgid "Session idle"
-msgstr ""
+msgstr "הפעלה לא פעילה"
 
 #: ../src/gpm-info.c:218
 msgid "Session active"
-msgstr ""
+msgstr "הפעלה פעילה"
 
 #. Translators: translate ONLY the string part after the |
 #: ../src/gpm-info.c:223
 msgid "label shown on graph|Suspend"
-msgstr "השהה"
+msgstr "השהייה"
 
 #. Translators: translate ONLY the string part after the |
 #: ../src/gpm-info.c:228
@@ -1345,7 +1344,7 @@ msgstr "שנת חורף"
 
 #: ../src/gpm-info.c:237
 msgid "Lid closed"
-msgstr "מכסה סגור"
+msgstr "מכסה נסגר"
 
 #: ../src/gpm-info.c:241
 msgid "Lid opened"
@@ -1482,7 +1481,7 @@ msgstr "‏DPMS כבוי"
 
 #: ../src/gpm-info.c:757
 msgid "Resuming computer"
-msgstr ""
+msgstr "ממשיך את המחשב"
 
 #: ../src/gpm-info.c:773
 msgid "Hibernate Problem"
@@ -1657,7 +1656,7 @@ msgstr "יציאה אינטרקטיבית של GNOME."
 
 #: ../src/gpm-manager.c:766 ../src/gpm-manager.c:781
 msgid "System idle."
-msgstr ""
+msgstr "המערכת לא פעילה."
 
 #: ../src/gpm-manager.c:858
 msgid "Power Information"
@@ -1676,32 +1675,30 @@ msgid "The hibernate button has been pressed."
 msgstr "כפתור שנת החורף נלחץ."
 
 #: ../src/gpm-manager.c:930
-#, fuzzy
 msgid "The lid has been closed on ac power."
-msgstr "מכסה המחשב הנייד נסגד"
+msgstr "המכסה נסגר כאשר המחשב מחובר לחשמל."
 
 #: ../src/gpm-manager.c:960
-#, fuzzy
 msgid "The lid has been closed on battery power."
-msgstr "מכסה המחשב הנייד נסגד"
+msgstr "המכסה נסגר כאשר המחשב פועל על סוללה."
 
 #: ../src/gpm-manager.c:1049
 msgid ""
 "The lid has been closed, and the ac adapter removed (and gconf is okay)."
 msgstr ""
+"המכסה נסגר, והמחשב נותק מהחשמל."
 
 #: ../src/gpm-manager.c:1068
 msgid "Battery is critically low."
-msgstr "הסוללה כמעט מרוקנת"
+msgstr "הסוללה כמעט מרוקנת."
 
 #: ../src/gpm-manager.c:1158 ../src/gpm-manager.c:1173
 msgid "User clicked on tray"
 msgstr "המשתמש לחץ על המגש."
 
 #: ../src/gpm-manager.c:1383
-#, fuzzy
 msgid "Laptop battery low"
-msgstr "סוללת מחשב נייד"
+msgstr "סוללת המחשב הנייד חלשה"
 
 #: ../src/gpm-manager.c:1385
 #, c-format
@@ -1758,9 +1755,8 @@ msgid "a short time"
 msgstr "זמן קצר"
 
 #: ../src/gpm-manager.c:1453 ../src/gpm-manager.c:1539
-#, fuzzy
 msgid "Laptop battery critically low"
-msgstr "סוללת המחשב הנייד חלשה באופן משמעותי"
+msgstr "סוללת המחשב הנייד כמעט מרוקנת"
 
 #: ../src/gpm-manager.c:1466
 msgid "Plug in your AC adapter to avoid losing data."
@@ -1769,17 +1765,18 @@ msgstr "חבר את מתאם החשמל כדי למנוע אובדן נתוני�
 #: ../src/gpm-manager.c:1469
 #, c-format
 msgid "This computer will suspend in %s if the AC is not connected."
-msgstr ""
+msgstr "המחשב יושהה בעוד %s אם הוא לא יחוסר לחשמל."
 
 #: ../src/gpm-manager.c:1472
 #, c-format
 msgid "This computer will hibernate in %s if the AC is not connected."
-msgstr ""
+msgstr "המחשב יעבור למצב שינה בעוד %s אם הוא לא יחובר לחשמל."
 
 #: ../src/gpm-manager.c:1475
 #, c-format
 msgid "This computer will shutdown in %s if the AC is not connected."
 msgstr ""
+"המחשב יכובה בעוד %s אם הוא לא יחובר לחשמל."
 
 #: ../src/gpm-manager.c:1478
 #, c-format
@@ -1787,9 +1784,8 @@ msgid "You have approximately <b>%s</b> of remaining battery life (%d%%). %s"
 msgstr "חיי הסוללה הנותרים המוערכים הם <b>%s</b> (%d%%). %s"
 
 #: ../src/gpm-manager.c:1486 ../src/gpm-manager.c:1571
-#, fuzzy
 msgid "UPS critically low"
-msgstr "האל-פסק כמעט מרוקן."
+msgstr "האל-פסק כמעט מרוקן"
 
 #: ../src/gpm-manager.c:1488
 #, c-format
@@ -1939,25 +1935,22 @@ msgstr "הסוללה טעונה"
 
 #: ../src/gpm-notify.c:492
 msgid "Your laptop battery is now fully charged"
-msgstr "סוללת המחשב הנייד שלך כעת טעונה במלואה"
+msgstr "סוללת המחשב הנייד שלך טעונה במלואה"
 
 #: ../src/gpm-notify.c:521
 msgid "Battery Discharging"
 msgstr "סוללה נפרקת"
 
 #: ../src/gpm-notify.c:522
-#, fuzzy
 msgid "The AC power has been unplugged. The system is now using battery power."
-msgstr "המחשב נותק מהשקע, המערכת עובדת על סוללה כעת."
-
+msgstr "המחשב נותק מהחשמל, המערכת פועלת על סוללה."
 #: ../src/gpm-notify.c:551
 msgid "UPS Discharging"
 msgstr "‏UPS נפרק"
 
 #: ../src/gpm-notify.c:552
-#, fuzzy
 msgid "The AC power has been unplugged. The system is now using backup power."
-msgstr "המחשב נותק מהשקע, המערכת עובדת על סוללה כעת."
+msgstr "המחשב נותק מהחשמל, המערכת פועלת על סוללת גיבוי."
 
 #: ../src/gpm-notify.c:582
 msgid "Sleep Problem"
@@ -1977,19 +1970,22 @@ msgstr ""
 
 #: ../src/gpm-notify.c:612
 msgid "Visit quirk website"
-msgstr ""
+msgstr "בקר באתר של quirk"
 
 #: ../src/gpm-cell-array.c:990
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s fully charged (%i%%)\n"
 "Provides %s battery runtime\n"
-msgstr "טעונה במלואה"
+msgstr ""
+"‏%s טעונה במלואה (%i%%)‏\n"
+"מספקת %s זמן סוללה\n"
 
 #: ../src/gpm-cell-array.c:994
 #, c-format
 msgid "%s fully charged (%i%%)\n"
-msgstr "‏%s טעונה במלואה (%i%%)\n"
+msgstr ""
+"‏%s טעונה במלואה (%i%%)\n"
 
 #: ../src/gpm-cell-array.c:1002
 #, c-format
@@ -2213,13 +2209,12 @@ msgid "Never"
 msgstr "לעולם לא"
 
 #: ../src/gpm-prefs-core.c:1047
-#, fuzzy
 msgid "Make Default"
-msgstr "הפוך ל_ברירת מחדל"
+msgstr "הפוך לברירת מחדל"
 
 #: ../src/gpm-statistics.c:95
 msgid "GNOME Power Statistics"
-msgstr "סטטיסטיקת החשמל של GNOME"
+msgstr "סטטיסטיקת צריכת החשמל של GNOME"
 
 #: ../src/gpm-statistics-core.c:60
 msgid "Charge history"
@@ -2284,7 +2279,7 @@ msgstr ""
 "‏Yaniv Abir https://launchpad.net/~yanivabir\n"
 "‏Mark Krapivner https://launchpad.net/~mark125\n"
 "‏Yaron https://launchpad.net/~sh-yaron\n"
-"‏cow_2001 https://launchpad.net/~cow2001\n"
+"‏cow_2001 https://launchpad.net/~cow2001\n\n"
 "פרוייקט תרגום GNOME לעברית:\n"
 "‏http://gnome-il.berlios.de"
 
