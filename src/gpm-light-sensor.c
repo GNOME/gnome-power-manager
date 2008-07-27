@@ -208,22 +208,6 @@ gpm_light_sensor_get_relative (GpmLightSensor *sensor,
 }
 
 /**
- * gpm_light_sensor_constructor:
- **/
-static GObject *
-gpm_light_sensor_constructor (GType		  type,
-			      guint		  n_construct_properties,
-			      GObjectConstructParam *construct_properties)
-{
-	GpmLightSensor      *sensor;
-	GpmLightSensorClass *klass;
-	klass = GPM_LIGHT_SENSOR_CLASS (g_type_class_peek (GPM_TYPE_LIGHT_SENSOR));
-	sensor = GPM_LIGHT_SENSOR (G_OBJECT_CLASS (gpm_light_sensor_parent_class)->constructor
-			      		     (type, n_construct_properties, construct_properties));
-	return G_OBJECT (sensor);
-}
-
-/**
  * gpm_light_sensor_finalize:
  **/
 static void
@@ -251,7 +235,6 @@ gpm_light_sensor_class_init (GpmLightSensorClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	object_class->finalize	   = gpm_light_sensor_finalize;
-	object_class->constructor  = gpm_light_sensor_constructor;
 
 	signals [SENSOR_CHANGED] =
 		g_signal_new ("sensor-changed",

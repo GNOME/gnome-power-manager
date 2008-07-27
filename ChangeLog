@@ -1,5 +1,18 @@
 2008-07-27  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-ac-adapter.c: (gpm_ac_adapter_class_init):
+	* src/gpm-brightness-kbd.c: (gpm_brightness_kbd_class_init):
+	* src/gpm-light-sensor.c: (gpm_light_sensor_class_init):
+	* src/gpm-notify.c: (gpm_notify_class_init):
+	* src/gpm-sound.c: (gpm_sound_class_init):
+	* src/gpm-srv-brightness-kbd.c:
+	(gpm_srv_brightness_kbd_class_init):
+	* src/gpm-tray-icon.c: (gpm_tray_icon_class_init):
+	* src/gpm-warnings.c: (gpm_warnings_class_init):
+	Remove some default contructors from some GObjects.
+
+2008-07-27  Richard Hughes  <richard@hughsie.com>
+
 	* configure.ac:
 	Rip out the DBUS_VERSION_X logic, nothing uses it
 

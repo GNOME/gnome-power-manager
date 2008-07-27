@@ -174,22 +174,6 @@ control_sleep_failure_cb (GpmControl      *control,
 }
 
 /**
- * gpm_sound_constructor:
- **/
-static GObject *
-gpm_sound_constructor (GType type,
-		       guint n_construct_properties,
-		       GObjectConstructParam *construct_properties)
-{
-	GpmSound      *sound;
-	GpmSoundClass *klass;
-	klass = GPM_SOUND_CLASS (g_type_class_peek (GPM_TYPE_SOUND));
-	sound = GPM_SOUND (G_OBJECT_CLASS (gpm_sound_parent_class)->constructor
-			      		     (type, n_construct_properties, construct_properties));
-	return G_OBJECT (sound);
-}
-
-/**
  * gpm_sound_finalize:
  **/
 static void
@@ -219,7 +203,6 @@ gpm_sound_class_init (GpmSoundClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	object_class->finalize	   = gpm_sound_finalize;
-	object_class->constructor  = gpm_sound_constructor;
 
 	g_type_class_add_private (klass, sizeof (GpmSoundPrivate));
 }

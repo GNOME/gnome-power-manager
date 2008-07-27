@@ -619,22 +619,6 @@ gpm_notify_sleep_failed (GpmNotify *notify, gboolean hibernate)
 }
 
 /**
- * gpm_notify_constructor:
- **/
-static GObject *
-gpm_notify_constructor (GType		  type,
-			guint		  n_construct_properties,
-			GObjectConstructParam *construct_properties)
-{
-	GpmNotify      *notify;
-	GpmNotifyClass *klass;
-	klass = GPM_NOTIFY_CLASS (g_type_class_peek (GPM_TYPE_NOTIFY));
-	notify = GPM_NOTIFY (G_OBJECT_CLASS (gpm_notify_parent_class)->constructor
-			     (type, n_construct_properties, construct_properties));
-	return G_OBJECT (notify);
-}
-
-/**
  * gpm_notify_finalize:
  **/
 static void
@@ -667,7 +651,6 @@ gpm_notify_class_init (GpmNotifyClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	object_class->finalize	   = gpm_notify_finalize;
-	object_class->constructor  = gpm_notify_constructor;
 
 	g_type_class_add_private (klass, sizeof (GpmNotifyPrivate));
 }

@@ -125,22 +125,6 @@ hal_device_property_modified_cb (HalGDevice   *hal_device,
 }
 
 /**
- * gpm_ac_adapter_constructor:
- **/
-static GObject *
-gpm_ac_adapter_constructor (GType		  type,
-			      guint		  n_construct_properties,
-			      GObjectConstructParam *construct_properties)
-{
-	GpmAcAdapter      *ac_adapter;
-	GpmAcAdapterClass *klass;
-	klass = GPM_AC_ADAPTER_CLASS (g_type_class_peek (GPM_TYPE_AC_ADAPTER));
-	ac_adapter = GPM_AC_ADAPTER (G_OBJECT_CLASS (gpm_ac_adapter_parent_class)->constructor
-			      		     (type, n_construct_properties, construct_properties));
-	return G_OBJECT (ac_adapter);
-}
-
-/**
  * gpm_ac_adapter_finalize:
  **/
 static void
@@ -165,7 +149,6 @@ gpm_ac_adapter_class_init (GpmAcAdapterClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	object_class->finalize	   = gpm_ac_adapter_finalize;
-	object_class->constructor  = gpm_ac_adapter_constructor;
 
 	signals [AC_ADAPTER_CHANGED] =
 		g_signal_new ("ac-adapter-changed",

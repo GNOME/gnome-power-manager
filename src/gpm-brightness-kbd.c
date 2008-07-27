@@ -466,22 +466,6 @@ gpm_brightness_kbd_down (GpmBrightnessKbd *brightness)
 	return TRUE;
 }
 
-/**keyboard_backlight
- * gpm_brightness_kbd_constructor:
- **/
-static GObject *
-gpm_brightness_kbd_constructor (GType		  type,
-			        guint		  n_construct_properties,
-			        GObjectConstructParam *construct_properties)
-{
-	GpmBrightnessKbd      *brightness;
-	GpmBrightnessKbdClass *klass;
-	klass = GPM_BRIGHTNESS_KBD_CLASS (g_type_class_peek (GPM_TYPE_BRIGHTNESS_KBD));
-	brightness = GPM_BRIGHTNESS_KBD (G_OBJECT_CLASS (gpm_brightness_kbd_parent_class)->constructor
-			      		     (type, n_construct_properties, construct_properties));
-	return G_OBJECT (brightness);
-}
-
 /**
  * gpm_brightness_kbd_finalize:
  **/
@@ -518,7 +502,6 @@ gpm_brightness_kbd_class_init (GpmBrightnessKbdClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	object_class->finalize	   = gpm_brightness_kbd_finalize;
-	object_class->constructor  = gpm_brightness_kbd_constructor;
 
 	signals [BRIGHTNESS_CHANGED] =
 		g_signal_new ("brightness-changed",

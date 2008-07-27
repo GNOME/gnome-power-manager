@@ -171,22 +171,6 @@ gpm_warnings_get_state (GpmWarnings  *warnings,
 }
 
 /**
- * gpm_warnings_constructor:
- **/
-static GObject *
-gpm_warnings_constructor (GType type,
-			 guint n_construct_properties,
-			 GObjectConstructParam *construct_properties)
-{
-	GpmWarnings *warnings;
-	GpmWarningsClass *klass;
-	klass = GPM_WARNINGS_CLASS (g_type_class_peek (GPM_TYPE_WARNINGS));
-	warnings = GPM_WARNINGS (G_OBJECT_CLASS (gpm_warnings_parent_class)->constructor
-			      		     (type, n_construct_properties, construct_properties));
-	return G_OBJECT (warnings);
-}
-
-/**
  * gpm_warnings_finalize:
  **/
 static void
@@ -227,7 +211,6 @@ gpm_warnings_class_init (GpmWarningsClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	object_class->finalize	   = gpm_warnings_finalize;
-	object_class->constructor  = gpm_warnings_constructor;
 
 	g_type_class_add_private (klass, sizeof (GpmWarningsPrivate));
 }
