@@ -1,5 +1,13 @@
 2008-07-22  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-button.c: (gpm_button_filter_x_events),
+	(gpm_button_grab_keystring), (gpm_button_xevent_key),
+	(gpm_button_init):
+	Don't use KeySyms, instead use KeyCodes directly. This should fix
+	multimedia keyboards and get rid of the warnings at startup.
+
+2008-07-22  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-tray-icon.c: (gpm_tray_icon_show_info_cb):
 	Don't use a libnotify window for the battery information, use a
 	GtkDialog instead.

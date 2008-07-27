@@ -28,6 +28,7 @@
 #include <X11/X.h>
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
+#include <X11/XF86keysym.h>
 
 #include <libhal-gmanager.h>
 #include <libhal-gdevice.h>
@@ -71,32 +72,31 @@ gpm_button_filter_x_events (GdkXEvent *xevent,
 {
 	GpmButton *button = (GpmButton *) data;
 	XEvent *xev = (XEvent *) xevent;
-	guint keycode, state;
-	gchar *hashkey;
+	guint keycode;
 	gchar *key;
+	gchar *keycode_str;
 
 	if (xev->type != KeyPress) {
 		return GDK_FILTER_CONTINUE;
 	}
 
 	keycode = xev->xkey.keycode;
-	state = xev->xkey.state;
-
-	hashkey = g_strdup_printf ("key_%x_%x", state, keycode);
 
 	/* is the key string already in our DB? */
-	key = g_hash_table_lookup (button->priv->hash_to_hal, hashkey);
+	keycode_str = g_strdup_printf ("0x%x", keycode);
+	key = g_hash_table_lookup (button->priv->hash_to_hal, (gpointer) keycode_str);
+	g_free (keycode_str);
+
+	/* found anything? */
 	if (key == NULL) {
-		gpm_debug ("Key '%s' not found in hash", hashkey);
+		gpm_debug ("Key %p not found in hash", keycode);
 		/* pass normal keypresses on, which might help with accessibility access */
-		g_free (hashkey);
 		return GDK_FILTER_CONTINUE;
 	}
 
-	gpm_debug ("Key '%s' mapped to HAL key %s", hashkey, key);
+	gpm_debug ("Key %p mapped to HAL key %s", keycode, key);
 	g_signal_emit (button, signals [BUTTON_PRESSED], 0, key);
 
-	g_free (hashkey);
 	return GDK_FILTER_REMOVE;
 }
 
@@ -113,32 +113,14 @@ gpm_button_filter_x_events (GdkXEvent *xevent,
  * Return value: TRUE if we parsed and grabbed okay
  **/
 static gboolean
-gpm_button_grab_keystring (GpmButton   *button,
-			   const gchar *keystr,
-			   gchar      **hashkey)
+gpm_button_grab_keystring (GpmButton *button, guint64 keycode)
 {
 	guint modmask = 0;
-	KeySym keysym = 0;
-	KeyCode keycode = 0;
 	Display *display;
 	gint ret;
 
 	/* get the current X Display */
 	display = GDK_DISPLAY ();
-
-	keysym = XStringToKeysym (keystr);
-
-	/* no mask string, lets try find a keysym */
-	if (keysym == NoSymbol) {
-		gpm_debug ("'%s' not in XStringToKeysym", keystr);
-		return FALSE;
-	}
-
-	keycode = XKeysymToKeycode (display, keysym);
-	/* check we got a valid keycode */
-	if (keycode == 0) {
-		return FALSE;
-	}
 
 	/* don't abort on error */
 	gdk_error_trap_push ();
@@ -167,12 +149,7 @@ gpm_button_grab_keystring (GpmButton   *button,
 	gdk_flush ();
 	gdk_error_trap_pop ();
 
-	/* generate the unique hash */
-	if (hashkey) {
-		*hashkey = g_strdup_printf ("key_%x_%x", modmask, keycode);
-	}
-
-	gpm_debug ("Grabbed %s (+lock) modmask=%x, keycode=%x", keystr, modmask, keycode);
+	gpm_debug ("Grabbed modmask=%x, keycode=%p", modmask, keycode);
 	return TRUE;
 }
 
@@ -189,29 +166,31 @@ gpm_button_grab_keystring (GpmButton   *button,
  * Return value: TRUE if we parsed and grabbed okay
  **/
 static gboolean
-gpm_button_button_key (GpmButton   *button,
-		       const gchar *keystr,
-		       const gchar *hal_key)
+gpm_button_xevent_key (GpmButton *button, guint keycode, const gchar *hal_key)
 {
-	char *key = NULL;
+	gchar *key = NULL;
 	gboolean ret;
+	gchar *keycode_str;
 
 	/* is the key string already in our DB? */
-	key = g_hash_table_lookup (button->priv->hash_to_hal, keystr);
+	keycode_str = g_strdup_printf ("0x%x", keycode);
+	key = g_hash_table_lookup (button->priv->hash_to_hal, (gpointer) keycode_str);
 	if (key != NULL) {
-		gpm_warning ("Already buttoning %s", keystr);
+		gpm_warning ("found in hash %p", keycode);
+		g_free (keycode_str);
 		return FALSE;
 	}
 
 	/* try to register X event */
-	ret = gpm_button_grab_keystring (button, keystr, &key);
+	ret = gpm_button_grab_keystring (button, keycode);
 	if (ret == FALSE) {
-		gpm_warning ("Failed to grab %s", keystr);
+		gpm_warning ("Failed to grab %p", keycode);
+		g_free (keycode_str);
 		return FALSE;
 	}
 
 	/* add to hash table */
-	g_hash_table_insert (button->priv->hash_to_hal, key, (gpointer) hal_key);
+	g_hash_table_insert (button->priv->hash_to_hal, (gpointer) keycode_str, (gpointer) g_strdup (hal_key));
 
 	/* the key is freed in the hash function unref */
 	return TRUE;
@@ -492,7 +471,7 @@ gpm_button_init (GpmButton *button)
 	button->priv->screen = gdk_screen_get_default ();
 	button->priv->window = gdk_screen_get_root_window (button->priv->screen);
 
-	button->priv->hash_to_hal = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+	button->priv->hash_to_hal = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
 	button->priv->lid_is_closed = FALSE;
 
@@ -502,18 +481,18 @@ gpm_button_init (GpmButton *button)
 
 	if (have_xevents == TRUE) {
 		/* register the brightness keys */
-		gpm_button_button_key (button, "XF86XK_Execute", GPM_BUTTON_POWER);
-		gpm_button_button_key (button, "XF86XK_PowerOff", GPM_BUTTON_POWER);
-		gpm_button_button_key (button, "XF86XK_Suspend", GPM_BUTTON_SUSPEND);
-		gpm_button_button_key (button, "XF86XK_Sleep", GPM_BUTTON_SUSPEND); /* should be configurable */
-		gpm_button_button_key (button, "XF86XK_Hibernate", GPM_BUTTON_HIBERNATE);
-		gpm_button_button_key (button, "XF86BrightnessUp", GPM_BUTTON_BRIGHT_UP);
-		gpm_button_button_key (button, "XF86BrightnessDown", GPM_BUTTON_BRIGHT_DOWN);
-		gpm_button_button_key (button, "XF86XK_ScreenSaver", GPM_BUTTON_LOCK);
-		gpm_button_button_key (button, "XF86XK_Battery", GPM_BUTTON_BATTERY);
-		gpm_button_button_key (button, "XF86KeyboardLightUp", GPM_BUTTON_KBD_BRIGHT_UP);
-		gpm_button_button_key (button, "XF86KeyboardLightDown", GPM_BUTTON_KBD_BRIGHT_DOWN);
-		gpm_button_button_key (button, "XF86KeyboardLightOnOff", GPM_BUTTON_KBD_BRIGHT_TOGGLE);
+//		gpm_button_xevent_key (button, XF86XK_Execute, GPM_BUTTON_POWER);
+		gpm_button_xevent_key (button, XF86XK_PowerOff, GPM_BUTTON_POWER);
+//		gpm_button_xevent_key (button, XF86XK_Suspend, GPM_BUTTON_SUSPEND);
+		gpm_button_xevent_key (button, XF86XK_Sleep, GPM_BUTTON_SUSPEND); /* should be configurable */
+//		gpm_button_xevent_key (button, XF86XK_Hibernate, GPM_BUTTON_HIBERNATE);
+		gpm_button_xevent_key (button, XF86XK_MonBrightnessUp, GPM_BUTTON_BRIGHT_UP);
+		gpm_button_xevent_key (button, XF86XK_MonBrightnessDown, GPM_BUTTON_BRIGHT_DOWN);
+		gpm_button_xevent_key (button, XF86XK_ScreenSaver, GPM_BUTTON_LOCK);
+//		gpm_button_xevent_key (button, XF86XK_Battery, GPM_BUTTON_BATTERY);
+		gpm_button_xevent_key (button, XF86XK_KbdBrightnessUp, GPM_BUTTON_KBD_BRIGHT_UP);
+		gpm_button_xevent_key (button, XF86XK_KbdBrightnessDown, GPM_BUTTON_KBD_BRIGHT_DOWN);
+		gpm_button_xevent_key (button, XF86XK_KbdLightOnOff, GPM_BUTTON_KBD_BRIGHT_TOGGLE);
 
 		/* use global filter */
 		gdk_window_add_filter (button->priv->window,
