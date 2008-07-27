@@ -1,5 +1,18 @@
 2008-07-27  Richard Hughes  <richard@hughsie.com>
 
+	* configure.ac:
+	* src/Makefile.am:
+	* src/gpm-control.c: (gpm_control_is_user_privileged),
+	(gpm_control_allowed_suspend), (gpm_control_allowed_hibernate),
+	(gpm_control_allowed_shutdown), (gpm_control_allowed_reboot),
+	(gpm_control_finalize), (gpm_control_init):
+	* src/gpm-polkit.c:
+	* src/gpm-polkit.h:
+	Use polkit-simple to simplify the PolicyKit bits.
+	This wasn't around when the support in g-p-m was added, but now it is.
+
+2008-07-27  Richard Hughes  <richard@hughsie.com>
+
 	* applets/brightness/brightness-applet.c:
 	(gpm_applet_get_brightness), (gpm_applet_set_brightness):
 	* applets/inhibit/inhibit-applet.c: (gpm_applet_inhibit),

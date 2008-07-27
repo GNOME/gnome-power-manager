@@ -44,12 +44,16 @@
 
 #include <libhal-gpower.h>
 
+#ifdef HAVE_POLKIT
+#include <polkit/polkit.h>
+#include <polkit-dbus/polkit-dbus.h>
+#endif
+
 #include "gpm-conf.h"
 #include "gpm-screensaver.h"
 #include "gpm-common.h"
 #include "gpm-debug.h"
 #include "gpm-control.h"
-#include "gpm-polkit.h"
 #include "gpm-networkmanager.h"
 
 #define GPM_CONTROL_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_CONTROL, GpmControlPrivate))
@@ -58,7 +62,6 @@ struct GpmControlPrivate
 {
 	GpmConf			*conf;
 	HalGPower		*hal_power;
-	GpmPolkit		*polkit;
 };
 
 enum {
@@ -86,6 +89,29 @@ gpm_control_error_quark (void)
 		quark = g_quark_from_static_string ("gpm_control_error");
 	}
 	return quark;
+}
+
+/**
+ * gpm_control_is_user_privileged:
+ * @polkit: This polkit class instance
+ * Return value: Success value.
+ **/
+gboolean
+gpm_control_is_user_privileged (GpmControl *control, const gchar *privilege)
+{
+	gboolean ret = TRUE;
+#ifdef HAVE_POLKIT
+	polkit_uint64_t mask;
+	pid_t pid;
+
+	pid = getpid ();
+	mask = polkit_check_auth (pid, privilege, NULL);
+	if (mask == 0) {
+		gpm_warning ("failed to authorise for privilege");
+		ret = FALSE;
+	}
+#endif
+	return ret;
 }
 
 /**
@@ -144,9 +170,7 @@ gpm_control_allowed_suspend (GpmControl *control,
 	*can = FALSE;
 	gpm_conf_get_bool (control->priv->conf, GPM_CONF_CAN_SUSPEND, &conf_ok);
 	hal_ok = hal_gpower_can_suspend (control->priv->hal_power);
-	if (control->priv->polkit) {
-		polkit_ok = gpm_polkit_is_user_privileged (control->priv->polkit, "hal-power-suspend");
-	}
+	polkit_ok = gpm_control_is_user_privileged (control, "hal-power-suspend");
 	fg = gpm_control_check_foreground_console (control);
 	if (conf_ok && hal_ok && polkit_ok && fg) {
 		*can = TRUE;
@@ -178,9 +202,7 @@ gpm_control_allowed_hibernate (GpmControl *control,
 	gpm_conf_get_bool (control->priv->conf, GPM_CONF_CAN_HIBERNATE, &conf_ok);
 	hal_ok = hal_gpower_can_hibernate (control->priv->hal_power);
 	fg = gpm_control_check_foreground_console (control);
-	if (control->priv->polkit) {
-		polkit_ok = gpm_polkit_is_user_privileged (control->priv->polkit, "hal-power-hibernate");
-	}
+	polkit_ok = gpm_control_is_user_privileged (control, "hal-power-hibernate");
 	if (conf_ok && hal_ok && polkit_ok && fg) {
 		*can = TRUE;
 	}
@@ -203,9 +225,7 @@ gpm_control_allowed_shutdown (GpmControl *control,
 	g_return_val_if_fail (can, FALSE);
 	*can = FALSE;
 	fg = gpm_control_check_foreground_console (control);
-	if (control->priv->polkit) {
-		polkit_ok = gpm_polkit_is_user_privileged (control->priv->polkit, "hal-power-shutdown");
-	}
+	polkit_ok = gpm_control_is_user_privileged (control, "hal-power-shutdown");
 	if (polkit_ok && fg) {
 		*can = TRUE;
 	}
@@ -229,9 +249,7 @@ gpm_control_allowed_reboot (GpmControl *control,
 	g_return_val_if_fail (can, FALSE);
 	*can = FALSE;
 	fg = gpm_control_check_foreground_console (control);
-	if (control->priv->polkit) {
-		polkit_ok = gpm_polkit_is_user_privileged (control->priv->polkit, "hal-power-reboot");
-	}
+	polkit_ok = gpm_control_is_user_privileged (control, "hal-power-reboot");
 	if (polkit_ok && fg) {
 		*can = TRUE;
 	}
@@ -540,9 +558,6 @@ gpm_control_finalize (GObject *object)
 
 	g_object_unref (control->priv->conf);
 	g_object_unref (control->priv->hal_power);
-	if (control->priv->polkit) {
-		g_object_unref (control->priv->polkit);
-	}
 
 	g_return_if_fail (control->priv != NULL);
 	G_OBJECT_CLASS (gpm_control_parent_class)->finalize (object);
@@ -600,20 +615,13 @@ gpm_control_class_init (GpmControlClass *klass)
 /**
  * gpm_control_init:
  * @control: This control class instance
- *
- * initialises the control class. NOTE: We expect control objects
- * to *NOT* be removed or added during the session.
- * We only control the first control object if there are more than one.
  **/
 static void
 gpm_control_init (GpmControl *control)
 {
 	control->priv = GPM_CONTROL_GET_PRIVATE (control);
 
-	/* this will be NULL if we don't compile in support */
-	control->priv->polkit = gpm_polkit_new ();
 	control->priv->hal_power = hal_gpower_new ();
-
 	control->priv->conf = gpm_conf_new ();
 }
 

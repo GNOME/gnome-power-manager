@@ -18,6 +18,7 @@ INCLUDES =						\
 	$(LIBNOTIFY_CFLAGS)				\
 	$(UNIQUE_CFLAGS)				\
 	$(GSTREAMER_CFLAGS)				\
+	$(POLKIT_CFLAGS)				\
 	$(POLKIT_GNOME_CFLAGS)				\
 	-DBINDIR=\"$(bindir)\"			 	\
 	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
@@ -171,8 +172,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-refcount.c					\
 	gpm-button.h					\
 	gpm-button.c					\
-	gpm-polkit.h					\
-	gpm-polkit.c					\
 	gpm-brightness.h				\
 	gpm-brightness.c				\
 	gpm-brightness-hal.h				\
@@ -220,6 +219,7 @@ gnome_power_manager_LDADD =				\
 	$(GSTREAMER_LIBS)				\
 	$(GNOME_LIBS)					\
 	$(HAL_LIBS)					\
+	$(POLKIT_LIBS)					\
 	$(DBUS_LIBS)					\
 	$(XRANDR_LIBS)					\
 	$(GPM_EXTRA_LIBS)				\
@@ -256,8 +256,6 @@ gnome_power_self_test_SOURCES =				\
 	gpm-screensaver.c				\
 	gpm-engine.h					\
 	gpm-engine.c					\
-	gpm-polkit.h					\
-	gpm-polkit.c					\
 	gpm-phone.h					\
 	gpm-phone.c					\
 	gpm-cell.h					\

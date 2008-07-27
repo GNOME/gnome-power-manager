@@ -165,6 +165,11 @@ AC_ARG_ENABLE(policykit, [  --enable-policykit      support PolicyKit permission
 AC_MSG_CHECKING([whether to support PolicyKit])
 have_polkit=no
 if test x$enable_polkit = xyes ; then
+    PKG_CHECK_MODULES(POLKIT, \
+                      polkit-grant >= $POLKIT_GNOME_REQUIRED\
+                      polkit-dbus >= $POLKIT_GNOME_REQUIRED)
+    AC_SUBST(POLKIT_CFLAGS)
+    AC_SUBST(POLKIT_LIBS)
     have_polkit=yes
     AC_DEFINE(HAVE_POLKIT, 1, [Define if we use PolicyKit])
 fi
@@ -208,7 +213,7 @@ AM_CONDITIONAL([HAVE_TESTS], [test $have_tests = yes])
 dnl ---------------------------------------------------------------------------
 dnl - Build gconf default button?
 dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(gconfdefaults, [  --gconf-defaults        Allow setting gconf default settings],
+AC_ARG_ENABLE(gconfdefaults, [  --enable-gconf-defaults        Allow setting gconf default settings],
               enable_gconfdefaults=$enableval,enable_gconfdefaults=yes)
 AC_MSG_CHECKING([whether to support gconf defaults])
 have_gconfdefaults=no
