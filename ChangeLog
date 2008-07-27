@@ -1,3 +1,16 @@
+2008-07-23  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-control.c: (gpm_control_check_foreground_console),
+	(gpm_control_allowed_suspend), (gpm_control_allowed_hibernate),
+	(gpm_control_allowed_shutdown), (gpm_control_allowed_reboot),
+	(gpm_control_suspend), (gpm_control_hibernate),
+	(gpm_control_class_init), (gpm_control_init):
+	* src/gpm-control.h:
+	* src/gpm-manager.c: (manager_policy_do), (idle_changed_cb):
+	Completely remove all traces of the skipping suppressed action --
+	we might introduce regressions, but people are complaining about
+	the bad error message.
+
 2008-07-22  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-button.c: (gpm_button_filter_x_events),

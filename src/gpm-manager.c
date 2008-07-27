@@ -427,17 +427,6 @@ manager_policy_do (GpmManager  *manager,
 {
 	gchar *action = NULL;
 
-	/* error msg timeout not valid */
-	if (gpm_control_is_policy_timout_valid (manager->priv->control) == FALSE) {
-		gpm_notify_display (manager->priv->notify,
-				    _("Action forbidden"),
-				    _("Policy timeout is not valid. Please wait a few seconds and try again."),
-				    GPM_NOTIFY_TIMEOUT_SHORT,
-				    GPM_STOCK_APP_ICON,
-				    GPM_NOTIFY_URGENCY_NORMAL);
-		return FALSE;
-	}
-
 	/* are we inhibited? */
 	if (gpm_manager_is_inhibit_valid (manager, FALSE, "policy action") == FALSE) {
 		return FALSE;
@@ -831,9 +820,6 @@ idle_changed_cb (GpmIdle    *idle,
 	} else if (mode == GPM_IDLE_MODE_SYSTEM) {
 		gpm_debug ("Idle state changed: SYSTEM");
 
-		if (gpm_control_is_policy_timout_valid (manager->priv->control) == FALSE) {
-			return;
-		}
 		if (gpm_manager_is_inhibit_valid (manager, FALSE, "timeout action") == FALSE) {
 			return;
 		}

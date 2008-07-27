@@ -59,8 +59,6 @@ struct GpmControlPrivate
 	GpmConf			*conf;
 	HalGPower		*hal_power;
 	GpmPolkit		*polkit;
-	time_t			 last_resume_event;
-	guint			 suppress_policy_timeout;
 };
 
 enum {
@@ -91,7 +89,7 @@ gpm_control_error_quark (void)
 }
 
 /**
- * gpm_control_is_policy_timout_valid:
+ * gpm_control_check_foreground_console:
  * @manager: This class instance
  * @action: The action we want to do, e.g. "suspend"
  *
@@ -103,21 +101,13 @@ gpm_control_error_quark (void)
  *
  * Return value: TRUE if we can perform the action.
  **/
-gboolean
-gpm_control_is_policy_timout_valid (GpmControl *control)
+static gboolean
+gpm_control_check_foreground_console (GpmControl *control)
 {
 #ifdef HAVE_CHECK_FG
 	gchar *argv[] = { "check-foreground-console", NULL };
 	int retcode;
-#endif
 
-	if ((time (NULL) - control->priv->last_resume_event) <=
-	    control->priv->suppress_policy_timeout) {
-		gpm_debug ("Skipping suppressed action");
-		return FALSE;
-	}
-
-#ifdef HAVE_CHECK_FG
 	if (!g_spawn_sync (NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL,
 				 NULL, NULL, &retcode, NULL)  || ! WIFEXITED (retcode) ) {
 		/* if check-foreground-console could not be executed,
@@ -130,19 +120,6 @@ gpm_control_is_policy_timout_valid (GpmControl *control)
 #endif
 	/* no other checks failed, so return okay */
 	return TRUE;
-}
-
-/**
- * gpm_control_reset_event_time:
- * @manager: This class instance
- *
- * Resets the time so we do not do any more actions until the
- * timeout has passed.
- **/
-void
-gpm_control_reset_event_time (GpmControl *control)
-{
-	control->priv->last_resume_event = time (NULL);
 }
 
 /**
@@ -161,6 +138,7 @@ gpm_control_allowed_suspend (GpmControl *control,
 	gboolean conf_ok;
 	gboolean polkit_ok = TRUE;
 	gboolean hal_ok = FALSE;
+	gboolean fg;
 	g_return_val_if_fail (can, FALSE);
 
 	*can = FALSE;
@@ -169,7 +147,8 @@ gpm_control_allowed_suspend (GpmControl *control,
 	if (control->priv->polkit) {
 		polkit_ok = gpm_polkit_is_user_privileged (control->priv->polkit, "hal-power-suspend");
 	}
-	if ( conf_ok && hal_ok && polkit_ok ) {
+	fg = gpm_control_check_foreground_console (control);
+	if ( conf_ok && hal_ok && polkit_ok && fg ) {
 		*can = TRUE;
 	}
 
@@ -192,15 +171,17 @@ gpm_control_allowed_hibernate (GpmControl *control,
 	gboolean conf_ok;
 	gboolean polkit_ok = TRUE;
 	gboolean hal_ok = FALSE;
+	gboolean fg;
 	g_return_val_if_fail (can, FALSE);
 
 	*can = FALSE;
 	gpm_conf_get_bool (control->priv->conf, GPM_CONF_CAN_HIBERNATE, &conf_ok);
 	hal_ok = hal_gpower_can_hibernate (control->priv->hal_power);
+	fg = gpm_control_check_foreground_console (control);
 	if (control->priv->polkit) {
 		polkit_ok = gpm_polkit_is_user_privileged (control->priv->polkit, "hal-power-hibernate");
 	}
-	if ( conf_ok && hal_ok && polkit_ok ) {
+	if ( conf_ok && hal_ok && polkit_ok && fg ) {
 		*can = TRUE;
 	}
 	return TRUE;
@@ -218,12 +199,14 @@ gpm_control_allowed_shutdown (GpmControl *control,
 			      GError    **error)
 {
 	gboolean polkit_ok = TRUE;
+	gboolean fg;
 	g_return_val_if_fail (can, FALSE);
 	*can = FALSE;
+	fg = gpm_control_check_foreground_console (control);
 	if (control->priv->polkit) {
 		polkit_ok = gpm_polkit_is_user_privileged (control->priv->polkit, "hal-power-shutdown");
 	}
-	if (polkit_ok == TRUE) {
+	if (polkit_ok && fg) {
 		*can = TRUE;
 	}
 	return TRUE;
@@ -242,12 +225,14 @@ gpm_control_allowed_reboot (GpmControl *control,
 			    GError    **error)
 {
 	gboolean polkit_ok = TRUE;
+	gboolean fg;
 	g_return_val_if_fail (can, FALSE);
 	*can = FALSE;
+	fg = gpm_control_check_foreground_console (control);
 	if (control->priv->polkit) {
 		polkit_ok = gpm_polkit_is_user_privileged (control->priv->polkit, "hal-power-reboot");
 	}
-	if (polkit_ok == TRUE) {
+	if (polkit_ok && fg) {
 		*can = TRUE;
 	}
 	return TRUE;
@@ -461,8 +446,6 @@ gpm_control_suspend (GpmControl *control,
 		gpm_networkmanager_wake ();
 	}
 
-	/* save the time that we resumed */
-	gpm_control_reset_event_time (control);
 	g_object_unref (screensaver);
 
 	return ret;
@@ -538,27 +521,9 @@ gpm_control_hibernate (GpmControl *control,
 		gpm_networkmanager_wake ();
 	}
 
-	/* save the time that we resumed */
-	gpm_control_reset_event_time (control);
 	g_object_unref (screensaver);
 
 	return ret;
-}
-
-/**
- * gpm_control_constructor:
- **/
-static GObject *
-gpm_control_constructor (GType		  type,
-			 guint		  n_construct_properties,
-			 GObjectConstructParam *construct_properties)
-{
-	GpmControl      *control;
-	GpmControlClass *klass;
-	klass = GPM_CONTROL_CLASS (g_type_class_peek (GPM_TYPE_CONTROL));
-	control = GPM_CONTROL (G_OBJECT_CLASS (gpm_control_parent_class)->constructor
-			      		     (type, n_construct_properties, construct_properties));
-	return G_OBJECT (control);
 }
 
 /**
@@ -590,8 +555,7 @@ static void
 gpm_control_class_init (GpmControlClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	object_class->finalize	   = gpm_control_finalize;
-	object_class->constructor  = gpm_control_constructor;
+	object_class->finalize = gpm_control_finalize;
 
 	signals [RESUME] =
 		g_signal_new ("resume",
@@ -651,13 +615,6 @@ gpm_control_init (GpmControl *control)
 	control->priv->hal_power = hal_gpower_new ();
 
 	control->priv->conf = gpm_conf_new ();
-	gpm_conf_get_uint (control->priv->conf, GPM_CONF_POLICY_TIMEOUT,
-			   &control->priv->suppress_policy_timeout);
-	gpm_debug ("Using a supressed policy timeout of %i seconds",
-		   control->priv->suppress_policy_timeout);
-
-	/* Pretend we just resumed when we start to let actions settle */
-	gpm_control_reset_event_time (control);
 }
 
 /**

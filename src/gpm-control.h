@@ -108,8 +108,6 @@ gboolean	 gpm_control_policy			(GpmControl	*control,
 							 GError		**error);
 gboolean	 gpm_control_get_lock_policy		(GpmControl	*control,
 							 const gchar	*policy);
-gboolean	 gpm_control_is_policy_timout_valid	(GpmControl	*control);
-void		 gpm_control_reset_event_time		(GpmControl	*control);
 
 G_END_DECLS
 
