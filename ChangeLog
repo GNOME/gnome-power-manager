@@ -1,3 +1,9 @@
+2008-07-22  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-tray-icon.c: (gpm_tray_icon_show_info_cb):
+	Don't use a libnotify window for the battery information, use a
+	GtkDialog instead.
+
 2008-07-08  Richard Hughes  <richard@hughsie.com>
 
 	* configure.ac:

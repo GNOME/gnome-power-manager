@@ -203,18 +203,31 @@ static void
 gpm_tray_icon_show_info_cb (GtkMenuItem *item, gpointer data)
 {
 	GpmCell *cell;
+	GtkWidget *dialog;
+	GtkWidget *image;
 	gchar *icon_name;
 	gchar *description;
 
-	GpmTrayIcon *icon = GPM_TRAY_ICON (data);
 	cell = g_object_get_data (G_OBJECT (item), "cell");
 
 	/* get long description */
 	description = gpm_cell_get_description (cell);
 	icon_name = gpm_cell_get_icon (cell);
-	gpm_notify_display (icon->priv->notify, _("Device information"), description,
-			    GPM_NOTIFY_TIMEOUT_NEVER, icon_name,
-			    GPM_NOTIFY_URGENCY_LOW);
+
+	image = gtk_image_new ();
+	dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
+					 GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "%s",
+					 _("Device information"));
+	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog),
+						    "%s", description);
+	gtk_window_set_icon_name (GTK_WINDOW (dialog), icon_name);
+	gtk_image_set_from_icon_name (GTK_IMAGE (image), icon_name, GTK_ICON_SIZE_DIALOG);
+	gtk_message_dialog_set_image (GTK_MESSAGE_DIALOG (dialog), image);
+	gtk_widget_show (image);
+
+	gtk_dialog_run (GTK_DIALOG (dialog));
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+
 	g_free (description);
 	g_free (icon_name);
 }
