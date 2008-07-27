@@ -109,7 +109,7 @@ gpm_control_check_foreground_console (GpmControl *control)
 	int retcode;
 
 	if (!g_spawn_sync (NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL,
-				 NULL, NULL, &retcode, NULL)  || ! WIFEXITED (retcode) ) {
+				 NULL, NULL, &retcode, NULL)  || ! WIFEXITED (retcode)) {
 		/* if check-foreground-console could not be executed,
 		 * assume active console */
 		gpm_debug ("could not execute check-foreground-console");
@@ -148,7 +148,7 @@ gpm_control_allowed_suspend (GpmControl *control,
 		polkit_ok = gpm_polkit_is_user_privileged (control->priv->polkit, "hal-power-suspend");
 	}
 	fg = gpm_control_check_foreground_console (control);
-	if ( conf_ok && hal_ok && polkit_ok && fg ) {
+	if (conf_ok && hal_ok && polkit_ok && fg) {
 		*can = TRUE;
 	}
 
@@ -181,7 +181,7 @@ gpm_control_allowed_hibernate (GpmControl *control,
 	if (control->priv->polkit) {
 		polkit_ok = gpm_polkit_is_user_privileged (control->priv->polkit, "hal-power-hibernate");
 	}
-	if ( conf_ok && hal_ok && polkit_ok && fg ) {
+	if (conf_ok && hal_ok && polkit_ok && fg) {
 		*can = TRUE;
 	}
 	return TRUE;
@@ -296,14 +296,14 @@ gpm_control_shutdown (GpmControl *control,
 	gpm_conf_get_bool (control->priv->conf, GPM_CONF_SESSION_REQUEST_SAVE, &save_session);
 	/* We can set g-p-m to not save the session to avoid confusing new
 	   users. By default we save the session to preserve data. */
-	if (save_session == TRUE) {
+	if (save_session) {
 		gnome_client_request_save (gnome_master_client (),
 					   GNOME_SAVE_GLOBAL,
 					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
 	}
 
 	ret = hal_gpower_shutdown (control->priv->hal_power, error);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_control_convert_hal_error (control, error);
 	}
 
@@ -336,7 +336,7 @@ gpm_control_reboot (GpmControl *control,
 	gpm_conf_get_bool (control->priv->conf, GPM_CONF_SESSION_REQUEST_SAVE, &save_session);
 	/* We can set g-p-m to not save the session to avoid confusing new
 	   users. By default we save the session to preserve data. */
-	if (save_session == TRUE) {
+	if (save_session) {
 		gnome_client_request_save (gnome_master_client (),
 					   GNOME_SAVE_GLOBAL,
 					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
@@ -403,7 +403,7 @@ gpm_control_suspend (GpmControl *control,
 
 	/* we should perhaps lock keyrings when sleeping #375681 */
 	gpm_conf_get_bool (control->priv->conf, GPM_CONF_LOCK_GNOME_KEYRING_SUSPEND, &lock_gnome_keyring);
-	if (lock_gnome_keyring == TRUE) {
+	if (lock_gnome_keyring) {
 		keyres = gnome_keyring_lock_all_sync ();
 		if (keyres != GNOME_KEYRING_RESULT_OK) {
 			gpm_warning ("could not lock keyring");
@@ -411,12 +411,12 @@ gpm_control_suspend (GpmControl *control,
 	}
 
 	do_lock = gpm_control_get_lock_policy (control, GPM_CONF_LOCK_ON_SUSPEND);
-	if (do_lock == TRUE) {
+	if (do_lock) {
 		gpm_screensaver_lock (screensaver);
 	}
 
 	gpm_conf_get_bool (control->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
-	if (nm_sleep == TRUE) {
+	if (nm_sleep) {
 		gpm_networkmanager_sleep ();
 	}
 
@@ -425,24 +425,24 @@ gpm_control_suspend (GpmControl *control,
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_SUSPEND);
 
 	ret = hal_gpower_suspend (control->priv->hal_power, 0, error);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_control_convert_hal_error (control, error);
 	}
 
 	gpm_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_SUSPEND);
 
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_debug ("emitting sleep-failure");
 		g_signal_emit (control, signals [SLEEP_FAILURE], 0, GPM_CONTROL_ACTION_SUSPEND);
 	}
 
-	if (do_lock == TRUE) {
+	if (do_lock) {
 		gpm_screensaver_poke (screensaver);
 	}
 
 	gpm_conf_get_bool (control->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
-	if (nm_sleep == TRUE) {
+	if (nm_sleep) {
 		gpm_networkmanager_wake ();
 	}
 
@@ -479,7 +479,7 @@ gpm_control_hibernate (GpmControl *control,
 
 	/* we should perhaps lock keyrings when sleeping #375681 */
 	gpm_conf_get_bool (control->priv->conf, GPM_CONF_LOCK_GNOME_KEYRING_HIBERNATE, &lock_gnome_keyring);
-	if (lock_gnome_keyring == TRUE) {
+	if (lock_gnome_keyring) {
 		keyres = gnome_keyring_lock_all_sync ();
 		if (keyres != GNOME_KEYRING_RESULT_OK) {
 			gpm_warning ("could not lock keyring");
@@ -487,12 +487,12 @@ gpm_control_hibernate (GpmControl *control,
 	}
 
 	do_lock = gpm_control_get_lock_policy (control, GPM_CONF_LOCK_ON_HIBERNATE);
-	if (do_lock == TRUE) {
+	if (do_lock) {
 		gpm_screensaver_lock (screensaver);
 	}
 
 	gpm_conf_get_bool (control->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
-	if (nm_sleep == TRUE) {
+	if (nm_sleep) {
 		gpm_networkmanager_sleep ();
 	}
 
@@ -500,24 +500,24 @@ gpm_control_hibernate (GpmControl *control,
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_HIBERNATE);
 
 	ret = hal_gpower_hibernate (control->priv->hal_power, error);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_control_convert_hal_error (control, error);
 	}
 
 	gpm_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_HIBERNATE);
 
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_debug ("emitting sleep-failure");
 		g_signal_emit (control, signals [SLEEP_FAILURE], 0, GPM_CONTROL_ACTION_HIBERNATE);
 	}
 
-	if (do_lock == TRUE) {
+	if (do_lock) {
 		gpm_screensaver_poke (screensaver);
 	}
 
 	gpm_conf_get_bool (control->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
-	if (nm_sleep == TRUE) {
+	if (nm_sleep) {
 		gpm_networkmanager_wake ();
 	}
 

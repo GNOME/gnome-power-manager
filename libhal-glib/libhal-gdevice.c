@@ -148,7 +148,7 @@ hal_gdevice_get_bool (HalGDevice  *device,
 				 G_TYPE_INVALID,
 				 G_TYPE_BOOLEAN, value,
 				 G_TYPE_INVALID);
-	if (ret == FALSE) {
+	if (!ret) {
 		*value = FALSE;
 	}
 	return ret;
@@ -188,7 +188,7 @@ hal_gdevice_get_string (HalGDevice   *device,
 				 G_TYPE_INVALID,
 				 G_TYPE_STRING, value,
 				 G_TYPE_INVALID);
-	if (ret == FALSE) {
+	if (!ret) {
 		*value = NULL;
 	}
 	return ret;
@@ -226,7 +226,7 @@ hal_gdevice_get_int (HalGDevice   *device,
 				 G_TYPE_INVALID,
 				 G_TYPE_INT, value,
 				 G_TYPE_INVALID);
-	if (ret == FALSE) {
+	if (!ret) {
 		*value = 0;
 	}
 	return ret;
@@ -284,7 +284,7 @@ hal_gdevice_query_capability (HalGDevice  *device,
 				 G_TYPE_INVALID,
 				 G_TYPE_BOOLEAN, has_capability,
 				 G_TYPE_INVALID);
-	if (ret == FALSE) {
+	if (!ret) {
 		*has_capability = FALSE;
 	}
 	return ret;
@@ -375,7 +375,7 @@ hal_gdevice_watch_property_modified (HalGDevice *device)
 	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
 	g_return_val_if_fail (device->priv->udi != NULL, FALSE);
 
-	if (device->priv->use_property_modified == TRUE) {
+	if (device->priv->use_property_modified) {
 		/* already watched */
 		return FALSE;
 	}
@@ -438,7 +438,7 @@ hal_gdevice_watch_condition (HalGDevice *device)
 	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
 	g_return_val_if_fail (device->priv->udi != NULL, FALSE);
 
-	if (device->priv->use_condition == TRUE) {
+	if (device->priv->use_condition) {
 		/* already watched */
 		return FALSE;
 	}
@@ -531,7 +531,7 @@ proxy_status_cb (DBusGProxy *proxy,
 		 HalGDevice *device)
 {
 	g_return_if_fail (LIBHAL_IS_GDEVICE (device));
-	if (status == TRUE) {
+	if (status) {
 		/* should join */
 	} else {
 		/* should unjoin */
@@ -611,10 +611,10 @@ hal_gdevice_finalize (GObject *object)
 	device = LIBHAL_GDEVICE (object);
 	device->priv = LIBHAL_GDEVICE_GET_PRIVATE (device);
 
-	if (device->priv->use_property_modified == TRUE) {
+	if (device->priv->use_property_modified) {
 		hal_gdevice_remove_property_modified (device);
 	}
-	if (device->priv->use_condition == TRUE) {
+	if (device->priv->use_condition) {
 		hal_gdevice_remove_condition (device);
 	}
 

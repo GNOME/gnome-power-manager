@@ -175,7 +175,7 @@ gpm_dbus_method_bool (const gchar *method)
 		gpm_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		gpm_warning ("%s failed!", method);
 		return FALSE;
@@ -219,7 +219,7 @@ gpm_dbus_method_int (const gchar *method)
 		gpm_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		gpm_warning ("%s failed!", method);
 		return FALSE;
@@ -771,7 +771,7 @@ prefs_setup_notification (GpmPrefs *prefs)
 	gpm_prefs_setup_checkbox (prefs, "checkbutton_notification_sound",
 	  			  GPM_CONF_UI_ENABLE_BEEPING);
 
-	if (prefs->priv->has_batteries == TRUE) {
+	if (prefs->priv->has_batteries) {
 		/* there's no use case for displaying this option */
 		gtk_widget_hide_all (radiobutton_icon_never);
 	}

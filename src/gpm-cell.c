@@ -136,7 +136,7 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
 		exists = hal_gdevice_get_uint (device, "battery.charge_level.rate",
 						  &unit->rate, NULL);
-		if (exists == FALSE && (unit->is_discharging == TRUE || unit->is_charging == TRUE)) {
+		if (exists == FALSE && (unit->is_discharging || unit->is_charging == TRUE)) {
 			gpm_warning ("could not read your battery's charge rate");
 		}
 		/* sanity check to less than 100W */
@@ -158,13 +158,13 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 	    unit->kind == GPM_CELL_UNIT_KIND_UPS) {
 		exists = hal_gdevice_get_uint (device,"battery.remaining_time",
 						  &unit->time_charge, NULL);
-		if (exists == FALSE && (unit->is_discharging == TRUE || unit->is_charging == TRUE)) {
+		if (exists == FALSE && (unit->is_discharging || unit->is_charging == TRUE)) {
 			gpm_warning ("could not read your battery's remaining time");
 		}
 	}
 
 	/* calculate the batteries capacity if it is primary and present */
-	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY && unit->is_present == TRUE) {
+	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY && unit->is_present) {
 		if (unit->charge_design > 0 && unit->charge_last_full > 0) {
 			if (unit->charge_design != unit->charge_last_full) {
 				float capacity;
@@ -199,7 +199,7 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 
 	/* this is more common than you might expect: hardware that might blow up */
 	hal_gdevice_get_bool (device, "info.is_recalled", &is_recalled, NULL);
-	if (is_recalled == TRUE) {
+	if (is_recalled) {
 		gchar *oem_vendor;
 		gchar *website;
 		hal_gdevice_get_string (device, "info.recall.vendor", &oem_vendor, NULL);
@@ -278,7 +278,7 @@ hal_device_property_modified_cb (HalGDevice   *device,
 		gpm_debug ("** EMIT: charging-changed: %i", unit->is_charging);
 		g_signal_emit (cell, signals [CHARGING_CHANGED], 0, unit->is_charging);
 		/* reset the time, as we really can't guess this without profiling */
-		if (unit->is_charging == TRUE) {
+		if (unit->is_charging) {
 			unit->time_discharge = 0;
 		}
 
@@ -287,7 +287,7 @@ hal_device_property_modified_cb (HalGDevice   *device,
 		gpm_debug ("** EMIT: discharging-changed: %i", unit->is_discharging);
 		g_signal_emit (cell, signals [DISCHARGING_CHANGED], 0, unit->is_discharging);
 		/* reset the time, as we really can't guess this without profiling */
-		if (unit->is_discharging == TRUE) {
+		if (unit->is_discharging) {
 			unit->time_charge = 0;
 		}
 
@@ -316,10 +316,10 @@ hal_device_property_modified_cb (HalGDevice   *device,
 	} else if (strcmp (key, "battery.remaining_time") == 0) {
 		hal_gdevice_get_uint (device, key, &time_hal, NULL);
 		/* Gahh. We have to multiplex the time as HAL shares a key. */
-		if (unit->is_charging == TRUE) {
+		if (unit->is_charging) {
 			unit->time_charge = time_hal;
 		}
-		if (unit->is_discharging == TRUE) {
+		if (unit->is_discharging) {
 			unit->time_discharge = time_hal;
 		}
 
@@ -374,7 +374,7 @@ gpm_cell_set_hal_udi (GpmCell *cell, const gchar *udi)
 	device = cell->priv->hal_device;
 
 	ret = hal_gdevice_set_udi (device, udi);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_warning ("cannot set udi");
 		return FALSE;
 	}
@@ -391,7 +391,7 @@ gpm_cell_set_hal_udi (GpmCell *cell, const gchar *udi)
 	}
 
 	ret = gpm_cell_unit_set_kind (unit, battery_kind_str);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_warning ("battery type %s unknown", battery_kind_str);
 		g_free (battery_kind_str);
 		return FALSE;
@@ -532,7 +532,7 @@ gpm_cell_get_description (GpmCell *cell)
 	}
 	if (unit->is_present == FALSE) {
 		g_string_append (details, _("<b>Status:</b> Missing\n"));
-	} else if (gpm_cell_unit_is_charged (unit) == TRUE) {
+	} else if (gpm_cell_unit_is_charged (unit)) {
 		g_string_append (details, _("<b>Status:</b> Charged\n"));
 	} else if (unit->is_charging) {
 		g_string_append (details, _("<b>Status:</b> Charging\n"));
@@ -829,7 +829,7 @@ gpm_cell_get_battery (void)
 
 	manager = hal_gmanager_new ();
 	ret = hal_gmanager_find_capability (manager, "battery", &value, NULL);
-	if (ret == TRUE && value != NULL && value[0] != NULL) {
+	if (ret && value != NULL && value[0] != NULL) {
 		udi = g_strdup (value[0]);
 	}
 	hal_gmanager_free_capability (value);
@@ -892,7 +892,7 @@ gpm_st_cell (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "can we assign device");
 	ret = gpm_cell_set_hal_udi (cell, udi);
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "set type okay");
 	} else {
 		gpm_st_failed (test, "could not set type");

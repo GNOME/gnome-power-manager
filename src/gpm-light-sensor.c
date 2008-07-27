@@ -106,7 +106,7 @@ gpm_light_sensor_get_hw (GpmLightSensor *sensor)
 		gpm_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		gpm_warning ("GetBrightness failed!");
 		return FALSE;
@@ -114,7 +114,7 @@ gpm_light_sensor_get_hw (GpmLightSensor *sensor)
 
 	/* work out average */
 	sensor_level_hw = 0;
-	for (i = 0; i < levels->len; i++ ) {
+	for (i = 0; i < levels->len; i++) {
 		sensor_level_hw += g_array_index (levels, gint, i);
 	}
 	sensor_level_hw /= levels->len;
@@ -304,12 +304,12 @@ gpm_light_sensor_poll_cb (gpointer userdata)
 		return TRUE;
 	}
 
-	if (sensor->priv->has_sensor == TRUE) {
+	if (sensor->priv->has_sensor) {
 		/* fairly slow */
 		ret = gpm_light_sensor_get_hw (sensor);
 
 		/* this could fail if hal refuses us */
-		if (ret == TRUE) {
+		if (ret) {
 			gpm_light_sensor_get_absolute (sensor, &new);
 			gpm_debug ("brightness = %i, %i", sensor->priv->current_hw, new);
 			g_signal_emit (sensor, signals [SENSOR_CHANGED], 0, new);
@@ -372,7 +372,7 @@ gpm_light_sensor_init (GpmLightSensor *sensor)
 	hal_gmanager_free_capability (names);
 
 	/* connect to the devices */
-	if (sensor->priv->has_sensor == TRUE) {
+	if (sensor->priv->has_sensor) {
 		gpm_debug ("Using proper brightness sensor");
 		/* get a managed proxy */
 		sensor->priv->gproxy = dbus_proxy_new ();
@@ -394,7 +394,7 @@ gpm_light_sensor_init (GpmLightSensor *sensor)
 	}
 
 	/* do we have a info source? */
-	if (sensor->priv->has_sensor == TRUE) {
+	if (sensor->priv->has_sensor) {
 		gpm_debug ("current brightness is %i%%", sensor->priv->current_hw);
 
 		/* get poll timeout */

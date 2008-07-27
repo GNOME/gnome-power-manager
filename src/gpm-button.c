@@ -183,7 +183,7 @@ gpm_button_xevent_key (GpmButton *button, guint keycode, const gchar *hal_key)
 
 	/* try to register X event */
 	ret = gpm_button_grab_keystring (button, keycode);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_warning ("Failed to grab %p", keycode);
 		g_free (keycode_str);
 		return FALSE;
@@ -281,13 +281,13 @@ emit_button_pressed (GpmButton   *button,
 	/* abstact away that HAL has an extra parameter */
 	if (strcmp (type, GPM_BUTTON_LID_DEP) == 0 && state == FALSE) {
 		atype = GPM_BUTTON_LID_OPEN;
-	} else if (strcmp (type, GPM_BUTTON_LID_DEP) == 0 && state == TRUE) {
+	} else if (strcmp (type, GPM_BUTTON_LID_DEP) == 0 && state) {
 		atype = GPM_BUTTON_LID_CLOSED;
 	}
 
 	/* filter out duplicate lid events */
 	if (strcmp (atype, GPM_BUTTON_LID_CLOSED) == 0) {
-		if (button->priv->lid_is_closed == TRUE) {
+		if (button->priv->lid_is_closed) {
 			gpm_debug ("ignoring duplicate lid event");
 			return;
 		}
@@ -338,7 +338,7 @@ hal_device_property_modified_cb (HalGDevice    *device,
 		   key, is_added, is_removed, finally);
 
 	/* do not process keys that have been removed */
-	if (is_removed == TRUE) {
+	if (is_removed) {
 		return;
 	}
 
@@ -411,7 +411,7 @@ coldplug_buttons (GpmButton *button)
 	/* devices of type button */
 	error = NULL;
 	ret = hal_gmanager_find_capability (button->priv->hal_manager, "button", &device_names, &error);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_warning ("Couldn't obtain list of buttons: %s", error->message);
 		g_error_free (error);
 		return;
@@ -479,7 +479,7 @@ gpm_button_init (GpmButton *button)
 	have_xevents = TRUE;
 #endif
 
-	if (have_xevents == TRUE) {
+	if (have_xevents) {
 		/* register the brightness keys */
 //		gpm_button_xevent_key (button, XF86XK_Execute, GPM_BUTTON_POWER);
 		gpm_button_xevent_key (button, XF86XK_PowerOff, GPM_BUTTON_POWER);

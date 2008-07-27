@@ -172,10 +172,10 @@ gpm_cell_unit_get_icon (GpmCellUnit *unit)
 			/* battery missing */
 			filename = g_strdup_printf ("gpm-%s-missing", prefix);
 
-		} else if (gpm_cell_unit_is_charged (unit) == TRUE) {
+		} else if (gpm_cell_unit_is_charged (unit)) {
 			filename = g_strdup_printf ("gpm-%s-charged", prefix);
 
-		} else if (unit->is_charging == TRUE) {
+		} else if (unit->is_charging) {
 			index_str = gpm_cell_unit_get_icon_index (unit);
 			filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index_str);
 
@@ -242,7 +242,7 @@ gpm_cell_unit_get_kind_localised (GpmCellUnit *unit, gboolean plural)
 
 	g_return_val_if_fail (unit != NULL, NULL);
 
-	if (plural == TRUE) {
+	if (plural) {
 		if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
 	 		str = _("Laptop batteries");
 		} else if (unit->kind == GPM_CELL_UNIT_KIND_UPS) {
@@ -374,7 +374,7 @@ gpm_st_cell_unit (GpmSelfTest *test)
 	unit->is_charging = FALSE;
 	unit->is_discharging = TRUE;
 	ret = gpm_cell_unit_is_charged (unit);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_success (test, "not charged");
 	} else {
 		gpm_st_failed (test, "declaring charged");
@@ -413,7 +413,7 @@ gpm_st_cell_unit (GpmSelfTest *test)
 	unit->is_charging = TRUE;
 	unit->is_discharging = FALSE;
 	ret = gpm_cell_unit_is_charged (unit);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_success (test, "not charged");
 	} else {
 		gpm_st_failed (test, "declaring charged");
@@ -425,7 +425,7 @@ gpm_st_cell_unit (GpmSelfTest *test)
 	unit->is_charging = FALSE;
 	unit->is_discharging = FALSE;
 	ret = gpm_cell_unit_is_charged (unit);
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "charged");
 	} else {
 		gpm_st_failed (test, "declaring non-charged");
@@ -437,7 +437,7 @@ gpm_st_cell_unit (GpmSelfTest *test)
 	unit->is_charging = FALSE;
 	unit->is_discharging = FALSE;
 	ret = gpm_cell_unit_is_charged (unit);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_success (test, "not charged");
 	} else {
 		gpm_st_failed (test, "declaring charged");

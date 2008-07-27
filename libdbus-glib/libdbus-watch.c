@@ -83,11 +83,11 @@ dbus_noc_session_cb (DbusMonitorSession *monitor_session,
 	}
 
 	if (strcmp (name, dbus_watch->priv->service) == 0) {
-		if (strlen (prev) != 0 && strlen (new) == 0 ) {
+		if (strlen (prev) != 0 && strlen (new) == 0) {
 			g_debug ("emitting connection-changed FALSE: %s", dbus_watch->priv->service);
 			g_signal_emit (dbus_watch, signals [CONNECTION_CHANGED], 0, FALSE);
 		}
-		if (strlen (prev) == 0 && strlen (new) != 0 ) {
+		if (strlen (prev) == 0 && strlen (new) != 0) {
 			g_debug ("emitting connection-changed TRUE: %s", dbus_watch->priv->service);
 			g_signal_emit (dbus_watch, signals [CONNECTION_CHANGED], 0, TRUE);
 		}
@@ -120,11 +120,11 @@ dbus_noc_system_cb (DbusMonitorSystem *monitor_system,
 	}
 
 	if (strcmp (name, dbus_watch->priv->service) == 0) {
-		if (strlen (prev) != 0 && strlen (new) == 0 ) {
+		if (strlen (prev) != 0 && strlen (new) == 0) {
 			g_debug ("emitting connection-changed FALSE: %s", dbus_watch->priv->service);
 			g_signal_emit (dbus_watch, signals [CONNECTION_CHANGED], 0, FALSE);
 		}
-		if (strlen (prev) == 0 && strlen (new) != 0 ) {
+		if (strlen (prev) == 0 && strlen (new) != 0) {
 			g_debug ("emitting connection-changed TRUE: %s", dbus_watch->priv->service);
 			g_signal_emit (dbus_watch, signals [CONNECTION_CHANGED], 0, TRUE);
 		}
@@ -146,7 +146,7 @@ dbus_watch_assign (DbusWatch   *dbus_watch,
 	g_return_val_if_fail (DBUS_IS_WATCH (dbus_watch), FALSE);
 	g_return_val_if_fail (service != NULL, FALSE);
 
-	if (dbus_watch->priv->assigned == TRUE) {
+	if (dbus_watch->priv->assigned) {
 		g_warning ("already assigned watch!");
 		return FALSE;
 	}

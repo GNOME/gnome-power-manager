@@ -46,7 +46,7 @@ gpm_st_hal_manager (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "check if we are a laptop");
 	ret = hal_gmanager_is_laptop (manager);
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "identified as a laptop");
 	} else {
 		gpm_st_failed (test, "not identified as a laptop");
@@ -57,7 +57,7 @@ gpm_st_hal_manager (GpmSelfTest *test)
 	gchar **value;
 	gpm_st_title (test, "search for battery devices");
 	ret = hal_gmanager_find_capability (manager, "battery", &value, NULL);
-	if (ret == TRUE && value != NULL && value[0] != NULL) {
+	if (ret && value != NULL && value[0] != NULL) {
 		gpm_st_success (test, "found battery device");
 	} else {
 		gpm_st_failed (test, "did not find battery device");

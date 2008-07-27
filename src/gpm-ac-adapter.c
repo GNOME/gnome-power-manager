@@ -91,7 +91,7 @@ gpm_ac_adapter_is_present (GpmAcAdapter *ac_adapter)
 		g_error_free (error);
 	}
 
-	if (is_on_ac == TRUE) {
+	if (is_on_ac) {
 		return TRUE;
 	}
 	return FALSE;
@@ -205,7 +205,7 @@ gpm_ac_adapter_init (GpmAcAdapter *ac_adapter)
 	/* save udi of lcd adapter */
 	error = NULL;
 	ret = hal_gmanager_find_capability (hal_manager, "ac_adapter", &device_names, &error);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_warning ("Couldn't obtain list of AC adapters: %s", error->message);
 		g_error_free (error);
 		return;

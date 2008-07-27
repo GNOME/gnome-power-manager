@@ -123,7 +123,7 @@ hal_gmanager_find_capability (HalGManager *manager,
 				 G_TYPE_INVALID,
 				 G_TYPE_STRV, value,
 				 G_TYPE_INVALID);
-	if (ret == FALSE) {
+	if (!ret) {
 		*value = NULL;
 	}
 	return ret;
@@ -163,7 +163,7 @@ hal_gmanager_find_device_string_match (HalGManager *manager,
 				 G_TYPE_INVALID,
 				 G_TYPE_STRV, devices,
 				 G_TYPE_INVALID);
-	if (ret == FALSE) {
+	if (!ret) {
 		*devices = NULL;
 	}
 	return ret;
@@ -211,7 +211,7 @@ hal_gmanager_num_devices_of_capability (HalGManager *manager,
 	g_return_val_if_fail (capability != NULL, 0);
 
 	ret = hal_gmanager_find_capability (manager, capability, &names, NULL);
-	if (ret == FALSE) {
+	if (!ret) {
 		return 0;
 	}
 	/* iterate to find number of items */
@@ -249,7 +249,7 @@ hal_gmanager_num_devices_of_capability_with_value (HalGManager *manager,
 	g_return_val_if_fail (value != NULL, 0);
 
 	ret = hal_gmanager_find_capability (manager, capability, &names, NULL);
-	if (ret == FALSE) {
+	if (!ret) {
 		return 0;
 	}
 	for (i = 0; names[i]; i++) {
@@ -478,7 +478,7 @@ proxy_status_cb (DBusGProxy    *proxy,
 		 HalGManager *manager)
 {
 	g_return_if_fail (LIBHAL_IS_GMANAGER (manager));
-	if (status == TRUE) {
+	if (status) {
 		g_signal_emit (manager, signals [DAEMON_START], 0);
 		hal_gmanager_proxy_connect_more (manager);
 	} else {
@@ -525,7 +525,7 @@ hal_gmanager_init (HalGManager *manager)
 	/* use the computer object */
 	manager->priv->computer = hal_gdevice_new();
 	ret = hal_gdevice_set_udi (manager->priv->computer, HAL_ROOT_COMPUTER);
-	if (ret == FALSE) {
+	if (!ret) {
 		g_warning ("failed to get Computer root object");
 	}
 

@@ -83,7 +83,7 @@ idletime_xsync_alarm_set (LibIdletime *idletime, LibIdletimeAlarm *alarm, gboole
 	XSyncTestType test;
 
 	/* which way do we do the test? */
-	if (positive == TRUE) {
+	if (positive) {
 		test = XSyncPositiveComparison;
 	} else {
 		test = XSyncNegativeComparison;

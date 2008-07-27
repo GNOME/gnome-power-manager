@@ -278,11 +278,11 @@ gpm_engine_get_summary (GpmEngine *engine)
 
 	unit = gpm_cell_array_get_unit (collection->ups);
 
-	if (unit->is_present == TRUE && unit->is_discharging == TRUE) {
+	if (unit->is_present && unit->is_discharging == TRUE) {
 		/* only enable this if discharging on UPS  */
 		tooltip = g_string_new (_("Computer is running on backup power\n"));
 
-	} else if (on_ac == TRUE) {
+	} else if (on_ac) {
 		tooltip = g_string_new (_("Computer is running on AC power\n"));
 
 	} else {
@@ -301,7 +301,7 @@ gpm_engine_get_summary (GpmEngine *engine)
 	accuracy = gpm_profile_get_accuracy_average (engine->priv->profile,
 						     unit->is_discharging);
 
-	if (unit->is_present == TRUE) {
+	if (unit->is_present) {
 		if (accuracy == 0) {
 			if (unit->is_discharging) {
 				tooltip = g_string_append (tooltip, _("Battery discharge time is currently unknown\n"));
@@ -389,37 +389,37 @@ gpm_engine_get_icon (GpmEngine *engine)
 
 	/* we try CRITICAL: PRIMARY, UPS, MOUSE, KEYBOARD */
 	gpm_debug ("Trying CRITICAL icon: primary, ups, mouse, keyboard");
-	if (unit_primary->is_present == TRUE) {
+	if (unit_primary->is_present) {
 		state = gpm_warnings_get_state (engine->priv->warnings, unit_primary);
 		if (state == GPM_WARNINGS_CRITICAL) {
 			return gpm_cell_array_get_icon (collection->primary);
 		}
 	}
-	if (unit_ups->is_present == TRUE) {
+	if (unit_ups->is_present) {
 		state = gpm_warnings_get_state (engine->priv->warnings, unit_ups); 
 		if (state == GPM_WARNINGS_CRITICAL) {
 			return gpm_cell_array_get_icon (collection->ups);
 		}
 	}
-	if (unit_keyboard->is_present == TRUE) {
+	if (unit_keyboard->is_present) {
 		state = gpm_warnings_get_state (engine->priv->warnings, unit_phone);
 		if (state == GPM_WARNINGS_CRITICAL) {
 			return gpm_cell_array_get_icon (collection->phone);
 		}
 	}
-	if (unit_mouse->is_present == TRUE) {
+	if (unit_mouse->is_present) {
 		state = gpm_warnings_get_state (engine->priv->warnings, unit_mouse);
 		if (state == GPM_WARNINGS_CRITICAL) {
 			return gpm_cell_array_get_icon (collection->mouse);
 		}
 	}
-	if (unit_keyboard->is_present == TRUE) {
+	if (unit_keyboard->is_present) {
 		state = gpm_warnings_get_state (engine->priv->warnings, unit_keyboard);
 		if (state == GPM_WARNINGS_CRITICAL) {
 			return gpm_cell_array_get_icon (collection->keyboard);
 		}
 	}
-	if (unit_keyboard->is_present == TRUE) {
+	if (unit_keyboard->is_present) {
 		state = gpm_warnings_get_state (engine->priv->warnings, unit_pda);
 		if (state == GPM_WARNINGS_CRITICAL) {
 			return gpm_cell_array_get_icon (collection->pda);
@@ -433,12 +433,12 @@ gpm_engine_get_icon (GpmEngine *engine)
 
 	/* we try (DIS)CHARGING: PRIMARY, UPS */
 	gpm_debug ("Trying CHARGING icon: primary, ups");
-	if (unit_primary->is_present == TRUE &&
-	    (unit_primary->is_charging == TRUE || unit_primary->is_discharging == TRUE) ) {
+	if (unit_primary->is_present &&
+	    (unit_primary->is_charging || unit_primary->is_discharging == TRUE)) {
 		return gpm_cell_array_get_icon (collection->primary);
 
-	} else if (unit_ups->is_present == TRUE &&
-		   (unit_ups->is_charging == TRUE || unit_ups->is_discharging == TRUE) ) {
+	} else if (unit_ups->is_present &&
+		   (unit_ups->is_charging || unit_ups->is_discharging == TRUE)) {
 		return gpm_cell_array_get_icon (collection->ups);
 	}
 
@@ -450,10 +450,10 @@ gpm_engine_get_icon (GpmEngine *engine)
 
 	/* we try PRESENT: PRIMARY, UPS */
 	gpm_debug ("Trying PRESENT icon: primary, ups");
-	if (unit_primary->is_present == TRUE) {
+	if (unit_primary->is_present) {
 		return gpm_cell_array_get_icon (collection->primary);
 
-	} else if (unit_ups->is_present == TRUE) {
+	} else if (unit_ups->is_present) {
 		return gpm_cell_array_get_icon (collection->ups);
 	}
 
@@ -486,7 +486,7 @@ gpm_cell_array_perhaps_recall_cb (GpmCellArray *cell_array, gchar *oem_vendor, g
 	/* only emit this if specified in gconf */
 	gpm_conf_get_bool (engine->priv->conf, GPM_CONF_NOTIFY_PERHAPS_RECALL, &show_recall);
 
-	if (show_recall == TRUE) {
+	if (show_recall) {
 		/* just proxy it to the GUI layer */
 		gpm_debug ("** EMIT: perhaps-recall");
 		g_signal_emit (engine, signals [PERHAPS_RECALL], 0, kind, oem_vendor, website);
@@ -512,7 +512,7 @@ gpm_cell_array_low_capacity_cb (GpmCellArray *cell_array, guint capacity, GpmEng
 	gpm_conf_get_bool (engine->priv->conf, GPM_CONF_NOTIFY_LOW_CAPACITY, &show_capacity);
 
 	/* only emit this once per startup */
-	if (show_capacity == TRUE) {
+	if (show_capacity) {
 		/* just proxy it to the GUI layer */
 		gpm_debug ("** EMIT: low-capacity");
 		g_signal_emit (engine, signals [LOW_CAPACITY], 0, kind, capacity);
@@ -546,7 +546,7 @@ gpm_engine_recalculate_state_icon (GpmEngine *engine)
 	g_return_val_if_fail (GPM_IS_ENGINE (engine), FALSE);
 
 	/* show a different icon if we are disconnected */
-	if (engine->priv->hal_connected == TRUE) {
+	if (engine->priv->hal_connected) {
 		/* check the icon */
 		icon = gpm_engine_get_icon (engine);
 	} else {
@@ -602,7 +602,7 @@ gpm_engine_recalculate_state_summary (GpmEngine *engine)
 	gchar *summary;
 
 	/* show a different icon if we are disconnected */
-	if (engine->priv->hal_connected == TRUE) {
+	if (engine->priv->hal_connected) {
 		/* check the summary */
 		summary = gpm_engine_get_summary (engine);
 	} else {
@@ -640,7 +640,7 @@ gpm_engine_recalculate_state (GpmEngine *engine)
 	g_return_if_fail (GPM_IS_ENGINE (engine));
 
 	/* we want to make this quicker */
-	if (engine->priv->during_coldplug == TRUE) {
+	if (engine->priv->during_coldplug) {
 		gpm_debug ("ignoring due to coldplug");
 		return;
 	}
@@ -706,7 +706,7 @@ gpm_cell_array_discharging_changed_cb (GpmCellArray *cell_array,
 	gpm_engine_recalculate_state (engine);
 
 	/* do we need to send discharging warning? */
-	if (discharging == TRUE) {
+	if (discharging) {
 
 		/* only emit this if specified in gconf */
 		gpm_conf_get_bool (engine->priv->conf, GPM_CONF_NOTIFY_DISCHARGING, &show_discharging);
@@ -774,7 +774,7 @@ gpm_cell_array_fully_charged_cb (GpmCellArray *cell_array,
 	gpm_conf_get_bool (engine->priv->conf, GPM_CONF_NOTIFY_FULLY_CHARGED, &show_fully_charged);
 
 	/* only emit if in GConf */
-	if (show_fully_charged == TRUE) {
+	if (show_fully_charged) {
 		/* find the kind for easy multiplexing */
 		kind = gpm_cell_array_get_kind (cell_array);
 

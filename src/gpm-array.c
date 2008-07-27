@@ -125,7 +125,7 @@ gpm_array_append (GpmArray *array,
 
 	g_return_val_if_fail (array != NULL, FALSE);
 
-	if (array->priv->fixed_size == TRUE) {
+	if (array->priv->fixed_size) {
 		/* not valid as array is fixed size */
 		return FALSE;
 	}
@@ -211,7 +211,7 @@ gpm_array_append_from_file (GpmArray *array, const gchar *filename)
 	guint y;
 	guint data;
 
-	if (array->priv->fixed_size == TRUE) {
+	if (array->priv->fixed_size) {
 		/* not valid as array is fixed size */
 		return FALSE;
 	}
@@ -316,7 +316,7 @@ gpm_array_save_to_file (GpmArray *array, const gchar *filename)
 	contents = g_string_free (string, FALSE);
 
 	ret = g_file_set_contents (filename, contents, -1, NULL);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_warning ("cannot write file %s", filename);
 		return FALSE;
 	}
@@ -814,7 +814,7 @@ gpm_array_add (GpmArray *array,
 	g_return_val_if_fail (array != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_ARRAY (array), FALSE);
 
-	if (array->priv->fixed_size == TRUE) {
+	if (array->priv->fixed_size) {
 		/* not valid as array is fixed size */
 		return FALSE;
 	}
@@ -953,7 +953,7 @@ gpm_st_array (GpmSelfTest *test)
 	/************** FIXED SIZE TESTS ****************************/
 	gpm_st_title (test, "set fixed size of 10");
 	ret = gpm_array_set_fixed_size (array, 10);
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "set size");
 	} else {
 		gpm_st_failed (test, "set size failed");
@@ -971,7 +971,7 @@ gpm_st_array (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "add some data (should fail as fixed size)");
 	ret = gpm_array_add (array, 1, 2, 3);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_success (test, "could not append to fixed size");
 	} else {
 		gpm_st_failed (test, "appended to fixed size array");
@@ -1001,7 +1001,7 @@ gpm_st_array (GpmSelfTest *test)
 	/************* VARIABLE SIZED TESTS *************************/
 	gpm_st_title (test, "add some data (should pass as variable size)");
 	ret = gpm_array_add (array, 1, 2, 3);
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "appended to variable size");
 	} else {
 		gpm_st_failed (test, "did not append to variable size array");
@@ -1028,7 +1028,7 @@ gpm_st_array (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "clear array");
 	ret = gpm_array_clear (array);
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "cleared");
 	} else {
 		gpm_st_failed (test, "did not clear");
@@ -1049,7 +1049,7 @@ gpm_st_array (GpmSelfTest *test)
 		gpm_array_add (array, i, i, i);
 	}
 	ret = gpm_array_save_to_file (array, "/tmp/gpm-self-test.txt");
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "saved to disk");
 	} else {
 		gpm_st_failed (test, "could not save to disk");
@@ -1059,7 +1059,7 @@ gpm_st_array (GpmSelfTest *test)
 	gpm_st_title (test, "load from disk");
 	gpm_array_clear (array);
 	ret = gpm_array_append_from_file (array, "/tmp/gpm-self-test.txt");
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "loaded from disk");
 	} else {
 		gpm_st_failed (test, "could not load from disk");

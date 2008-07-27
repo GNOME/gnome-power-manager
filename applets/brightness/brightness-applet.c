@@ -132,7 +132,7 @@ gpm_applet_get_brightness (GpmBrightnessApplet *applet)
 		printf ("DEBUG: ERROR: %s\n", error->message);
 		g_error_free (error);
 	}
-	if (ret == TRUE) {
+	if (ret) {
 		applet->level = policy_brightness;
 	} else {
 		/* abort as the DBUS method failed */
@@ -165,7 +165,7 @@ gpm_applet_set_brightness (GpmBrightnessApplet *applet)
 		printf ("DEBUG: ERROR: %s", error->message);
 		g_error_free (error);
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		printf ("WARNING: SetBrightness failed!");
 	}

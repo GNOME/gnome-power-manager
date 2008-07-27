@@ -166,7 +166,7 @@ hal_gdevicestore_insert (HalGDevicestore *devicestore, HalGDevice *device)
 	g_return_val_if_fail (LIBHAL_IS_GDEVICESTORE (devicestore), FALSE);
 	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
 
-	if (hal_gdevicestore_present (devicestore, device) == TRUE) {
+	if (hal_gdevicestore_present (devicestore, device)) {
 		return FALSE;
 	}
 

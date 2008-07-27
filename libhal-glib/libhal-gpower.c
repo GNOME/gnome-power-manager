@@ -250,7 +250,7 @@ hal_gpower_suspend (HalGPower *power, guint wakeup, GError **error)
 				 G_TYPE_INT, &retval,
 				 G_TYPE_INVALID);
 	/* we might have to ignore the error */
-	if (error != NULL && hal_gpower_filter_error (error) == TRUE) {
+	if (error != NULL && hal_gpower_filter_error (error)) {
 		return TRUE;
 	}
 	if (retval != 0) {
@@ -294,7 +294,7 @@ hal_gpower_pm_method_void (HalGPower *power, const gchar *method, GError **error
 				 G_TYPE_INT, &retval,
 				 G_TYPE_INVALID);
 	/* we might have to ignore the error */
-	if (error != NULL && hal_gpower_filter_error (error) == TRUE) {
+	if (error != NULL && hal_gpower_filter_error (error)) {
 		return TRUE;
 	}
 	if (retval != 0) {

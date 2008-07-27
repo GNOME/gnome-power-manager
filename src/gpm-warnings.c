@@ -151,7 +151,7 @@ gpm_warnings_get_state (GpmWarnings  *warnings,
 		type = gpm_warnings_get_state_percentage (warnings, unit);
 
 	} else if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY &&
-		   warnings->priv->use_time_primary == TRUE) {
+		   warnings->priv->use_time_primary) {
 
 		type = gpm_warnings_get_state_time (warnings, unit);
 
@@ -262,7 +262,7 @@ gpm_warnings_init (GpmWarnings *warnings)
 	/* We can disable this if the ACPI BIOS is broken, and the
 	   time_remaining is therefore inaccurate or just plain wrong. */
 	gpm_conf_get_bool (warnings->priv->conf, GPM_CONF_USE_TIME_POLICY, &warnings->priv->use_time_primary);
-	if (warnings->priv->use_time_primary == TRUE) {
+	if (warnings->priv->use_time_primary) {
 		gpm_debug ("Using per-time notification policy");
 	} else {
 		gpm_debug ("Using percentage notification policy");

@@ -122,7 +122,7 @@ gpm_st_idletime (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "check if we can set an reset alarm");
 	ret = idletime_alarm_set (idletime, 0, 100);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_success (test, "ignored reset alarm");
 	} else {
 		gpm_st_failed (test, "did not ignore reset alarm");
@@ -131,7 +131,7 @@ gpm_st_idletime (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "check if we can set an alarm timeout of zero");
 	ret = idletime_alarm_set (idletime, 999, 0);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_success (test, "ignored invalid alarm");
 	} else {
 		gpm_st_failed (test, "did not ignore invalid alarm");
@@ -141,7 +141,7 @@ gpm_st_idletime (GpmSelfTest *test)
 	g_timer_start (timer);
 	gpm_st_title (test, "check if we can set an alarm");
 	ret = idletime_alarm_set (idletime, 101, 5000);
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "set alarm okay");
 	} else {
 		gpm_st_failed (test, "could not set alarm");
@@ -160,7 +160,7 @@ gpm_st_idletime (GpmSelfTest *test)
 		g_timer_start (timer);
 		gpm_st_title (test, "check if we can set an alarm");
 		ret = idletime_alarm_set (idletime, 101, 5000);
-		if (ret == TRUE) {
+		if (ret) {
 			gpm_st_success (test, "set alarm 5000ms okay");
 		} else {
 			gpm_st_failed (test, "could not set alarm 5000ms");
@@ -197,7 +197,7 @@ gpm_st_idletime (GpmSelfTest *test)
 	g_timer_start (timer);
 	gpm_st_title (test, "check if we can set an existing alarm");
 	ret = idletime_alarm_set (idletime, 101, 10000);
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "set alarm 10000ms okay");
 	} else {
 		gpm_st_failed (test, "could not set alarm 10000ms");
@@ -219,7 +219,7 @@ gpm_st_idletime (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "check if we can remove an invalid alarm");
 	ret = idletime_alarm_remove (idletime, 202);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_success (test, "ignored invalid alarm");
 	} else {
 		gpm_st_failed (test, "removed invalid alarm");
@@ -228,7 +228,7 @@ gpm_st_idletime (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "check if we can remove an valid alarm");
 	ret = idletime_alarm_remove (idletime, 101);
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "removed valid alarm");
 	} else {
 		gpm_st_failed (test, "failed to remove valid alarm");

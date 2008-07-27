@@ -109,7 +109,7 @@ gpm_brightness_hal_get_hw (GpmBrightnessHal *brightness, guint *value_hw)
 		gpm_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		gpm_warning ("GetBrightness failed!");
 		return FALSE;
@@ -164,7 +164,7 @@ gpm_brightness_hal_set_hw (GpmBrightnessHal *brightness, guint value_hw)
 		gpm_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		gpm_warning ("SetBrightness failed!");
 		return FALSE;
@@ -208,7 +208,7 @@ gpm_brightness_hal_dim_hw_step (GpmBrightnessHal *brightness, guint new_level_hw
 		for (a=last_set_hw; a <= new_level_hw; a+=step_interval) {
 			ret = gpm_brightness_hal_set_hw (brightness, a);
 			/* we failed the last brightness set command, don't keep trying */
-			if (ret == FALSE) {
+			if (!ret) {
 				break;
 			}
 			g_usleep (1000 * GPM_BRIGHTNESS_DIM_INTERVAL);
@@ -218,7 +218,7 @@ gpm_brightness_hal_dim_hw_step (GpmBrightnessHal *brightness, guint new_level_hw
 		for (a=last_set_hw; (gint) (a + 1) > (gint) new_level_hw; a-=step_interval) {
 			ret = gpm_brightness_hal_set_hw (brightness, a);
 			/* we failed the last brightness set command, don't keep trying */
-			if (ret == FALSE) {
+			if (!ret) {
 				break;
 			}
 			g_usleep (1000 * GPM_BRIGHTNESS_DIM_INTERVAL);

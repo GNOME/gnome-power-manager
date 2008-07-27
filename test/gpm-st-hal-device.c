@@ -59,7 +59,7 @@ gpm_st_hal_device (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "make sure we can set a UDI");
 	ret = hal_gdevice_set_udi (device, HAL_ROOT_COMPUTER);
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "set UDI");
 	} else {
 		gpm_st_failed (test, "could not set UDI");
@@ -77,7 +77,7 @@ gpm_st_hal_device (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "make sure we cannot set another UDI");
 	ret = hal_gdevice_set_udi (device, "foo");
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_success (test, "Cannot set another UDI");
 	} else {
 		gpm_st_failed (test, "Able to overwrite UDI");
@@ -86,7 +86,7 @@ gpm_st_hal_device (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "make sure we can get a string key");
 	ret = hal_gdevice_get_string (device, "info.product", &retstr, NULL);
-	if (ret == TRUE && retstr && strcmp (retstr, "Computer") == 0) {
+	if (ret && retstr && strcmp (retstr, "Computer") == 0) {
 		gpm_st_success (test, "got correct key");
 	} else {
 		gpm_st_failed (test, "got invalid key");
@@ -96,7 +96,7 @@ gpm_st_hal_device (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "try to get property modified events");
 	ret = hal_gdevice_watch_property_modified (device);
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "got notification");
 	} else {
 		gpm_st_failed (test, "could not get notification");
@@ -105,7 +105,7 @@ gpm_st_hal_device (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "try to get duplicate property modified events");
 	ret = hal_gdevice_watch_property_modified (device);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_success (test, "duplicate notification refused");
 	} else {
 		gpm_st_failed (test, "got duplicate notification");
@@ -114,7 +114,7 @@ gpm_st_hal_device (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "try to cancel property modified events");
 	ret = hal_gdevice_remove_property_modified (device);
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "cancel notification");
 	} else {
 		gpm_st_failed (test, "could not cancel notification");
@@ -123,7 +123,7 @@ gpm_st_hal_device (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "try to get duplicate property modified cancel");
 	ret = hal_gdevice_remove_property_modified (device);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_success (test, "duplicate cancel refused");
 	} else {
 		gpm_st_failed (test, "did duplicate cancel");

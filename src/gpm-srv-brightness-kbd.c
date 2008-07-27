@@ -86,7 +86,7 @@ conf_key_changed_cb (GpmConf          *conf,
 	if (strcmp (key, GPM_CONF_KEYBOARD_BRIGHTNESS_AC) == 0) {
 
 		gpm_conf_get_int (srv_brightness->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_AC, &value);
-		if (on_ac == TRUE) {
+		if (on_ac) {
 			gpm_brightness_kbd_set_std (srv_brightness->priv->brightness, value);
 		}
 
@@ -115,7 +115,7 @@ ac_adapter_changed_cb (GpmAcAdapter      *ac_adapter,
 {
 	guint value;
 
-	if (on_ac == TRUE) {
+	if (on_ac) {
 		gpm_conf_get_uint (srv_brightness->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_AC, &value);
 	} else {
 		gpm_conf_get_uint (srv_brightness->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_BATT, &value);
@@ -315,7 +315,7 @@ gpm_srv_brightness_kbd_new (void)
 	GpmSrvBrightnessKbd *srv_brightness = NULL;
 
 	/* only load an instance of this module if we have the hardware */
-	if (gpm_brightness_kbd_has_hw () == TRUE) {
+	if (gpm_brightness_kbd_has_hw ()) {
 		srv_brightness = g_object_new (GPM_TYPE_SRV_BRIGHTNESS_KBD, NULL);
 	}
 

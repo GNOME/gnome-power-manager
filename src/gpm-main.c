@@ -78,7 +78,7 @@ gpm_object_register (DBusGConnection *connection,
 		gpm_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		gpm_warning ("RequestName failed!");
 		return FALSE;
@@ -180,7 +180,7 @@ main (int argc, char *argv[])
 	master = gnome_master_client ();
 	flags = gnome_client_get_flags (master);
 
-	if (version == TRUE) {
+	if (version) {
 		g_print ("Version %s\n", VERSION);
 		goto unref_program;
 	}
@@ -246,7 +246,7 @@ main (int argc, char *argv[])
 
 	/* Only timeout and close the mainloop if we have specified it
 	 * on the command line */
-	if (timed_exit == TRUE) {
+	if (timed_exit) {
 		g_timeout_add (1000 * 20, (GSourceFunc) timed_exit_cb, loop);
 	}
 

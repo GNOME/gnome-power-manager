@@ -183,7 +183,7 @@ gpm_cell_array_get_time_until_action (GpmCellArray *cell_array)
 	gpm_cell_unit_init (unit);
 
 	/* not valid */
-	if (unit->is_charging == TRUE || unit->is_discharging == FALSE) {
+	if (unit->is_charging || unit->is_discharging == FALSE) {
 		return 0;
 	}
 
@@ -194,7 +194,7 @@ gpm_cell_array_get_time_until_action (GpmCellArray *cell_array)
 
 	/* calculate! */
 	gpm_conf_get_bool (cell_array->priv->conf, GPM_CONF_USE_TIME_POLICY, &use_time_primary);
-	if (use_time_primary == TRUE) {
+	if (use_time_primary) {
 		/* simple subtraction */
 		gpm_conf_get_uint (cell_array->priv->conf, GPM_CONF_THRESH_TIME_ACTION, &action_time);
 		difference = (gint) unit->time_discharge - (gint) action_time;
@@ -296,11 +296,11 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 		 * be present. */
 		unit->is_present = TRUE;
 
-		if (unit_temp->is_charging == TRUE) {
+		if (unit_temp->is_charging) {
 			unit->is_charging = TRUE;
 		}
 
-		if (unit_temp->is_discharging == TRUE) {
+		if (unit_temp->is_discharging) {
 			unit->is_discharging = TRUE;
 			num_discharging++;
 		}
@@ -341,7 +341,7 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 	}
 
 	/* sanity check */
-	if (unit->is_discharging == TRUE && unit->is_charging == TRUE) {
+	if (unit->is_discharging && unit->is_charging == TRUE) {
 		gpm_warning ("Sanity check kicked in! "
 			     "Multiple device object cannot be charging and discharging simultaneously!");
 		unit->is_charging = FALSE;
@@ -381,7 +381,7 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 		on_ac = gpm_ac_adapter_is_present (cell_array->priv->ac_adapter);
 		gpm_debug ("Battery is neither charging nor discharging, "
 			   "using ac_adaptor value %i", on_ac);
-		if (on_ac == TRUE) {
+		if (on_ac) {
 			unit->is_charging = TRUE;
 			unit->is_discharging = FALSE;
 		} else {
@@ -392,7 +392,7 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 
 	/* We may want to use the old time remaining code.
 	 * Hopefully we can remove this in 2.19.x sometime. */
-	if (cell_array->priv->use_profile_calc == TRUE &&
+	if (cell_array->priv->use_profile_calc &&
 	    unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
 		gpm_debug ("unit->percentage = %i", unit->percentage);
 		unit->time_discharge = gpm_profile_get_time (cell_array->priv->profile, unit->percentage, TRUE);
@@ -401,10 +401,10 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 		/* We only do the "better" remaining time algorithm if the battery has rate,
 		 * i.e not a UPS, which gives it's own battery.time_charge but has no rate */
 		if (unit->rate > 0) {
-			if (unit->is_discharging == TRUE) {
+			if (unit->is_discharging) {
 				unit->time_discharge = 3600 * ((float)unit->charge_current /
 								      (float)unit->rate);
-			} else if (unit->is_charging == TRUE) {
+			} else if (unit->is_charging) {
 				unit->time_charge = 3600 *
 					((float)(unit->charge_last_full - unit->charge_current) /
 					(float)unit->rate);
@@ -532,7 +532,7 @@ gpm_cell_array_percent_changed (GpmCellArray *cell_array)
 
 	/* only emit if all devices are fully charged */
 	if (cell_array->priv->done_fully_charged == FALSE &&
-	    gpm_cell_unit_is_charged (unit) == TRUE) {
+	    gpm_cell_unit_is_charged (unit)) {
 		gpm_debug ("** EMIT: fully-charged");
 		g_signal_emit (cell_array, signals [FULLY_CHARGED], 0);
 		cell_array->priv->done_fully_charged = TRUE;
@@ -541,7 +541,7 @@ gpm_cell_array_percent_changed (GpmCellArray *cell_array)
 	/* We only re-enable the fully charged notification when the battery
 	   drops down to 95% as some batteries charge to 100% and then fluctuate
 	   from ~98% to 100%. See #338281 for details */
-	if (cell_array->priv->done_fully_charged == TRUE &&
+	if (cell_array->priv->done_fully_charged &&
 	    unit->percentage < GPM_CELL_UNIT_MIN_CHARGED_PERCENTAGE &&
 	    gpm_cell_unit_is_charged (unit) == FALSE) {
 		gpm_debug ("enabled fully charged");
@@ -549,7 +549,7 @@ gpm_cell_array_percent_changed (GpmCellArray *cell_array)
 	}
 
 	/* only get a warning state if we are discharging */
-	if (unit->is_discharging == TRUE) {
+	if (unit->is_discharging) {
 		warnings_state = gpm_warnings_get_state (cell_array->priv->warnings, unit);
 	} else {
 		warnings_state = GPM_WARNINGS_NONE;
@@ -626,7 +626,7 @@ gpm_cell_charging_changed_cb (GpmCell *cell, gboolean charging, GpmCellArray *ce
 	gpm_cell_unit_print (unit);
 
 	/* invalidate warning */
-	if (unit->is_discharging == FALSE || unit->is_charging == TRUE) {
+	if (unit->is_discharging == FALSE || unit->is_charging) {
 		gpm_debug ("warning state invalidated");
 		cell_array->priv->warnings_state = GPM_WARNINGS_NONE;
 	}
@@ -658,7 +658,7 @@ gpm_cell_discharging_changed_cb (GpmCell *cell, gboolean discharging, GpmCellArr
 	gpm_cell_unit_print (unit);
 
 	/* invalidate warning */
-	if (unit->is_discharging == FALSE || unit->is_charging == TRUE) {
+	if (unit->is_discharging == FALSE || unit->is_charging) {
 		cell_array->priv->warnings_state = GPM_WARNINGS_NONE;
 	}
 
@@ -706,14 +706,14 @@ gpm_check_device_key (GpmCellArray *cell_array, const gchar *udi, const gchar *k
 
 	device = hal_gdevice_new ();
 	ret = hal_gdevice_set_udi (device, udi);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_warning ("failed to set UDI %s", udi);
 		return FALSE;
 	}
 
 	/* check type */
 	ret = hal_gdevice_get_string (device, key, &rettype, NULL);
-	if (ret == FALSE || rettype == NULL) {
+	if (!ret || rettype == NULL) {
 		gpm_warning ("failed to get %s", key);
 		return FALSE;
 	}
@@ -784,7 +784,7 @@ gpm_cell_array_add_hal_udi (GpmCellArray *cell_array, const gchar *udi)
 	/* check type */
 	kind_string = gpm_cell_unit_get_kind_string (unit);
 	ret = gpm_check_device_key (cell_array, udi, "battery.type", kind_string);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_debug ("not adding %s for %s", udi, kind_string);
 		return FALSE;
 	}
@@ -844,7 +844,7 @@ gpm_cell_array_coldplug (GpmCellArray *cell_array)
 	/* get all the hal devices of this type */
 	error = NULL;
 	ret = hal_gmanager_find_capability (cell_array->priv->hal_manager, "battery", &device_names, &error);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_warning ("Couldn't obtain list of batteries: %s", error->message);
 		g_error_free (error);
 		return FALSE;
@@ -963,7 +963,7 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 
 	/* we care if we are on AC */
 	if (unit->kind == GPM_CELL_UNIT_KIND_PHONE) {
-		if (unit->is_charging == TRUE || unit->is_discharging == FALSE) {
+		if (unit->is_charging || unit->is_discharging == FALSE) {
 			return g_strdup_printf ("%s charging (%i%%)\n", type_desc, unit->percentage);
 		}
 		return g_strdup_printf ("%s (%i%%)\n", type_desc, unit->percentage);
@@ -980,7 +980,7 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 	/* We always display "Laptop battery 16 minutes remaining" as we need
 	   to clarify what device we are refering to. For details see :
 	   http://bugzilla.gnome.org/show_bug.cgi?id=329027 */
-	if (gpm_cell_unit_is_charged (unit) == TRUE) {
+	if (gpm_cell_unit_is_charged (unit)) {
 
 		if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY &&
 		    accuracy > GPM_CELL_ARRAY_TEXT_MIN_ACCURACY) {
@@ -995,7 +995,7 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 							type_desc, unit->percentage);
 		}
 
-	} else if (unit->is_discharging == TRUE) {
+	} else if (unit->is_discharging) {
 
 		if (discharge_time_round > GPM_CELL_ARRAY_TEXT_MIN_TIME) {
 			discharge_timestring = gpm_get_timestring (discharge_time_round);
@@ -1008,7 +1008,7 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 						type_desc, unit->percentage);
 		}
 
-	} else if (unit->is_charging == TRUE) {
+	} else if (unit->is_charging) {
 
 		if (charge_time_round > GPM_CELL_ARRAY_TEXT_MIN_TIME &&
 		    discharge_time_round > GPM_CELL_ARRAY_TEXT_MIN_TIME &&
@@ -1126,7 +1126,7 @@ hal_device_added_cb (HalGManager  *hal_manager,
 	}
 
 	/* if a battery, then add */
-	if (is_battery == TRUE) {
+	if (is_battery) {
 		gpm_cell_array_add_hal_udi (cell_array, udi);
 	}
 	g_object_unref (device);
@@ -1495,7 +1495,7 @@ gpm_st_cell_array (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "make sure we get set type");
 	ret = gpm_cell_array_set_type (cell_array, GPM_CELL_UNIT_KIND_PRIMARY);
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "set type");
 	} else {
 		gpm_st_failed (test, "could not set type");

@@ -112,7 +112,7 @@ gpm_brightness_kbd_get_hw (GpmBrightnessKbd *brightness,
 		gpm_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		gpm_warning ("GetBrightness failed!");
 		return FALSE;
@@ -165,7 +165,7 @@ gpm_brightness_kbd_set_hw (GpmBrightnessKbd *brightness,
 		gpm_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		gpm_warning ("SetBrightness failed!");
 		return FALSE;
@@ -296,7 +296,7 @@ gpm_brightness_kbd_set_dim (GpmBrightnessKbd *brightness,
 		brightness->priv->level_dim_hw = brightness->priv->level_std_hw;
 	}
 	/* if in this state, then update */
-	if (brightness->priv->is_dimmed == TRUE) {
+	if (brightness->priv->is_dimmed) {
 		gpm_brightness_kbd_dim_hw (brightness, brightness->priv->level_dim_hw);
 	}
 	return TRUE;
@@ -340,7 +340,7 @@ gpm_brightness_kbd_dim (GpmBrightnessKbd *brightness)
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
 	/* check to see if we are already dimmed */
-	if (brightness->priv->is_dimmed == TRUE) {
+	if (brightness->priv->is_dimmed) {
 		gpm_warning ("already dim'ed");
 		return FALSE;
 	}
@@ -584,7 +584,7 @@ adjust_kbd_brightness_according_to_ambient_light (GpmBrightnessKbd *brightness,
 
 	if (state == STATE_FORCED_UNKNOWN) {
 		/* if this is the first time we're launched with ambient light data... */
-		if (ambient_light < 50 ) {
+		if (ambient_light < 50) {
 			gpm_brightness_kbd_set_std (brightness, 100);
 			state = STATE_FORCED_ON;
 		} else {
@@ -592,7 +592,7 @@ adjust_kbd_brightness_according_to_ambient_light (GpmBrightnessKbd *brightness,
 			state = STATE_FORCED_OFF;
 		}
 	} else {
-		if (ambient_light < 30 && state != STATE_FORCED_ON ) {
+		if (ambient_light < 30 && state != STATE_FORCED_ON) {
 			/* if it's dark.. and we haven't already turned light on...
 			 *   => turn it on.. full blast! */
 			gpm_brightness_kbd_set_std (brightness, 100);

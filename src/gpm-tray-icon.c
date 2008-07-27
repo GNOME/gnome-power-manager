@@ -590,13 +590,13 @@ gpm_tray_icon_activate_cb (GtkStatusIcon *status_icon,
 	}
 
 	/* only do the seporator if we have at least one device and can do an action */
-	if (dev_cnt != 0 && (icon->priv->show_suspend == TRUE || icon->priv->show_hibernate == TRUE)) {
+	if (dev_cnt != 0 && (icon->priv->show_suspend || icon->priv->show_hibernate == TRUE)) {
 		item = gtk_separator_menu_item_new ();
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	}
 
 	/* Suspend if available */
-	if (icon->priv->show_suspend == TRUE) {
+	if (icon->priv->show_suspend) {
 		item = gtk_image_menu_item_new_with_mnemonic (_("_Suspend"));
 		image = gtk_image_new_from_icon_name (GPM_STOCK_SUSPEND, GTK_ICON_SIZE_MENU);
 		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
@@ -606,7 +606,7 @@ gpm_tray_icon_activate_cb (GtkStatusIcon *status_icon,
 	}
 
 	/* Hibernate if available */
-	if (icon->priv->show_hibernate == TRUE) {
+	if (icon->priv->show_hibernate) {
 		item = gtk_image_menu_item_new_with_mnemonic (_("Hi_bernate"));
 		image = gtk_image_new_from_icon_name (GPM_STOCK_HIBERNATE, GTK_ICON_SIZE_MENU);
 		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);

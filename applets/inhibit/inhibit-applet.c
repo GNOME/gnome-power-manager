@@ -120,7 +120,7 @@ gpm_applet_inhibit (GpmInhibitApplet *applet,
 		g_error_free (error);
 		*cookie = 0;
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		g_warning ("Inhibit failed!");
 	}
@@ -148,7 +148,7 @@ gpm_applet_uninhibit (GpmInhibitApplet *applet,
 		g_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		g_warning ("UnInhibit failed!");
 	}
@@ -178,7 +178,7 @@ gpm_applet_has_inhibit (GpmInhibitApplet *applet,
 		g_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		g_warning ("HasInhibit failed!");
 	}

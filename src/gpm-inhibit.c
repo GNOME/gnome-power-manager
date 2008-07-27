@@ -326,7 +326,7 @@ gpm_inhibit_has_inhibit (GpmInhibit *inhibit,
 
 	length = g_slist_length (inhibit->priv->list);
 
-	if (inhibit->priv->ignore_inhibits == TRUE) {
+	if (inhibit->priv->ignore_inhibits) {
 		gpm_debug ("Inhibit ignored through gconf policy!");
 		*has_inihibit = FALSE;
 	}
@@ -553,7 +553,7 @@ inhibit (DbusProxy       *gproxy,
 		g_error_free (error);
 		*cookie = 0;
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		g_warning ("Inhibit failed!");
 	}
@@ -608,7 +608,7 @@ has_inhibit (DbusProxy *gproxy,
 		g_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		g_warning ("HasInhibit failed!");
 	}
@@ -643,9 +643,9 @@ gpm_st_inhibit (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "make sure we are not inhibited");
 	ret = has_inhibit (gproxy, &valid);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_failed (test, "Unable to test validity");
-	} else if (valid == TRUE) {
+	} else if (valid) {
 		gpm_st_failed (test, "Already inhibited");
 	} else {
 		gpm_st_success (test, NULL);
@@ -654,7 +654,7 @@ gpm_st_inhibit (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "clear an invalid cookie");
 	ret = uninhibit (gproxy, 123456);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_success (test, "invalid cookie failed as expected");
 	} else {
 		gpm_st_failed (test, "should have rejected invalid cookie");
@@ -666,7 +666,7 @@ gpm_st_inhibit (GpmSelfTest *test)
 				  "gnome-power-self-test",
 				  "test inhibit",
 				  &cookie1);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_failed (test, "Unable to inhibit");
 	} else if (cookie1 == 0) {
 		gpm_st_failed (test, "Cookie invalid (cookie: %u)", cookie1);
@@ -677,9 +677,9 @@ gpm_st_inhibit (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "make sure we are auto inhibited");
 	ret = has_inhibit (gproxy, &valid);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_failed (test, "Unable to test validity");
-	} else if (valid == TRUE) {
+	} else if (valid) {
 		gpm_st_success (test, "inhibited");
 	} else {
 		gpm_st_failed (test, "inhibit failed");
@@ -691,7 +691,7 @@ gpm_st_inhibit (GpmSelfTest *test)
 				  "gnome-power-self-test",
 				  "test inhibit",
 				  &cookie2);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_failed (test, "Unable to inhibit");
 	} else if (cookie2 == 0) {
 		gpm_st_failed (test, "Cookie invalid (cookie: %u)", cookie2);
@@ -702,7 +702,7 @@ gpm_st_inhibit (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "clear cookie 1");
 	ret = uninhibit (gproxy, cookie1);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_failed (test, "cookie failed to clear");
 	} else {
 		gpm_st_success (test, NULL);
@@ -711,9 +711,9 @@ gpm_st_inhibit (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "make sure we are still inhibited");
 	ret = has_inhibit (gproxy, &valid);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_failed (test, "Unable to test validity");
-	} else if (valid == TRUE) {
+	} else if (valid) {
 		gpm_st_success (test, "inhibited");
 	} else {
 		gpm_st_failed (test, "inhibit failed");
@@ -722,7 +722,7 @@ gpm_st_inhibit (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "clear cookie 2");
 	ret = uninhibit (gproxy, cookie2);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_failed (test, "cookie failed to clear");
 	} else {
 		gpm_st_success (test, NULL);

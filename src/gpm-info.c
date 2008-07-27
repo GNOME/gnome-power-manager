@@ -616,7 +616,7 @@ gpm_info_log_do_poll (gpointer data)
 	array = info->priv->collection->primary;
 	unit = gpm_cell_array_get_unit (array);
 
-	if (info->priv->is_laptop == TRUE) {
+	if (info->priv->is_laptop) {
 		/* work out seconds elapsed */
 		value_x = g_timer_elapsed (info->priv->timer, NULL) - GPM_INFO_DATA_POLL;
 
@@ -655,7 +655,7 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 		       gboolean      on_ac,
 		       GpmInfo      *info)
 {
-	if (on_ac == TRUE) {
+	if (on_ac) {
 		gpm_info_event_log (info, GPM_EVENT_ON_AC,
 				    _("AC adapter inserted"));
 	} else {
@@ -837,7 +837,7 @@ gpm_info_init (GpmInfo *info)
 
 	/* set to a blank list */
 	info->priv->events = gpm_array_new ();
-	if (info->priv->is_laptop == TRUE) {
+	if (info->priv->is_laptop) {
 		info->priv->percentage_data = gpm_array_new ();
 		info->priv->rate_data = gpm_array_new ();
 		info->priv->time_data = gpm_array_new ();
@@ -853,7 +853,7 @@ gpm_info_init (GpmInfo *info)
 		info->priv->voltage_data = NULL;
 	}
 
-	if (info->priv->is_laptop == TRUE) {
+	if (info->priv->is_laptop) {
 		/* get the maximum x-axis size from gconf */
 		GpmConf *conf = gpm_conf_new ();
 		guint max_time;

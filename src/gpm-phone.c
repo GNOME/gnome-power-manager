@@ -135,7 +135,7 @@ gpm_phone_get_num_batteries (GpmPhone *phone)
 {
 	g_return_val_if_fail (phone != NULL, 0);
 	g_return_val_if_fail (GPM_IS_PHONE (phone), 0);
-	if (phone->priv->present == TRUE) {
+	if (phone->priv->present) {
 		return 1;
 	}
 	return 0;
@@ -187,7 +187,7 @@ gpm_phone_num_batteries_changed (DBusGProxy     *proxy,
 		return;
 	}
 
-	if (phone->priv->present == TRUE) {
+	if (phone->priv->present) {
 		gpm_warning ("duplicate NumberBatteriesChanged with no change");
 		return;
 	}
@@ -325,7 +325,7 @@ gpm_phone_dbus_disconnect (GpmPhone *phone)
 		gpm_debug ("removing proxy\n");
 		g_object_unref (phone->priv->proxy);
 		phone->priv->proxy = NULL;
-		if (phone->priv->present == TRUE) {
+		if (phone->priv->present) {
 			phone->priv->present = FALSE;
 			phone->priv->percentage = 0;
 			gpm_debug ("emitting device-removed : (%i)", 0);
@@ -476,7 +476,7 @@ gpm_st_phone (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "coldplug the data");
 	ret = gpm_phone_coldplug (phone);
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "coldplug okay");
 	} else {
 		gpm_st_failed (test, "could not coldplug");
@@ -486,7 +486,7 @@ gpm_st_phone (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "got refresh");
-	if (test_got_refresh == TRUE) {
+	if (test_got_refresh) {
 		gpm_st_success (test, NULL);
 	} else {
 		gpm_st_failed (test, "did not get refresh");
@@ -504,7 +504,7 @@ gpm_st_phone (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "check the present value");
 	ret = gpm_phone_get_present (phone, 0);
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "we are here!");
 	} else {
 		gpm_st_failed (test, "not here...");
@@ -522,7 +522,7 @@ gpm_st_phone (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "check the ac value");
 	ret = gpm_phone_get_on_ac (phone, 0);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_success (test, "not charging, correct");
 	} else {
 		gpm_st_failed (test, "charging?");

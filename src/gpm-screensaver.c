@@ -309,7 +309,7 @@ gpm_screensaver_add_throttle (GpmScreensaver *screensaver,
 		gpm_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		gpm_warning ("Throttle failed!");
 		return 0;
@@ -344,7 +344,7 @@ gpm_screensaver_remove_throttle (GpmScreensaver *screensaver,
 		gpm_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		gpm_warning ("UnThrottle failed!");
 		return FALSE;
@@ -444,7 +444,7 @@ gpm_screensaver_get_idle (GpmScreensaver *screensaver, gint *time_secs)
 		gpm_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		gpm_warning ("GetActiveTime failed!");
 		return FALSE;

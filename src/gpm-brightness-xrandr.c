@@ -59,6 +59,7 @@ struct GpmBrightnessXRandRPrivate
 	guint			 shared_value;
 	gboolean		 has_extension;
 	gboolean		 hw_changed;
+	/* An cache of XRRScreenResources is used as XRRGetScreenResources is expensive */
 	GPtrArray		*resources;
 };
 

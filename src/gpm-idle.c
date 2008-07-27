@@ -309,7 +309,7 @@ session_idle_changed_cb (GpmScreensaver *screensaver,
 
 	gpm_debug ("Received GS session idle changed: %d", is_idle);
 
-	if (is_idle == TRUE) {
+	if (is_idle) {
 		mode = GPM_IDLE_MODE_SESSION;
 	} else {
 		mode = GPM_IDLE_MODE_NORMAL;
@@ -334,7 +334,7 @@ powersave_idle_changed_cb (GpmScreensaver *screensaver,
 
 	gpm_debug ("Received GS powesave idle changed: %d", is_idle);
 
-	if (is_idle == TRUE) {
+	if (is_idle) {
 		mode = GPM_IDLE_MODE_POWERSAVE;
 	} else {
 		mode = GPM_IDLE_MODE_NORMAL;

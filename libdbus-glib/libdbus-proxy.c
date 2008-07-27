@@ -157,10 +157,10 @@ dbus_noc_session_cb (DbusMonitorSession *monitor_session,
 	}
 
 	if (strcmp (name, dbus_proxy->priv->service) == 0) {
-		if (strlen (prev) != 0 && strlen (new) == 0 ) {
+		if (strlen (prev) != 0 && strlen (new) == 0) {
 			dbus_proxy_disconnect (dbus_proxy);
 		}
-		if (strlen (prev) == 0 && strlen (new) != 0 ) {
+		if (strlen (prev) == 0 && strlen (new) != 0) {
 			dbus_proxy_connect (dbus_proxy);
 		}
 	}
@@ -192,10 +192,10 @@ dbus_noc_system_cb (DbusMonitorSystem *monitor_system,
 	}
 
 	if (strcmp (name, dbus_proxy->priv->service) == 0) {
-		if (strlen (prev) != 0 && strlen (new) == 0 ) {
+		if (strlen (prev) != 0 && strlen (new) == 0) {
 			dbus_proxy_disconnect (dbus_proxy);
 		}
-		if (strlen (prev) == 0 && strlen (new) != 0 ) {
+		if (strlen (prev) == 0 && strlen (new) != 0) {
 			dbus_proxy_connect (dbus_proxy);
 		}
 	}
@@ -224,7 +224,7 @@ dbus_proxy_assign (DbusProxy	 *dbus_proxy,
 	g_return_val_if_fail (interface != NULL, NULL);
 	g_return_val_if_fail (path != NULL, NULL);
 
-	if (dbus_proxy->priv->assigned == TRUE) {
+	if (dbus_proxy->priv->assigned) {
 		g_warning ("already assigned proxy!");
 		return NULL;
 	}

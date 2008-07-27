@@ -174,7 +174,7 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 	/* We have to decide on whether this is a idle action or a user keypress */
 	gpm_inhibit_has_inhibit (manager->priv->inhibit, &has_inhibit, NULL);
 
-	if (has_inhibit == TRUE) {
+	if (has_inhibit) {
 		GString *message = g_string_new ("");
 		const char *msg;
 
@@ -233,7 +233,7 @@ gpm_manager_sync_policy_sleep (GpmManager *manager)
 
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
 
-	if (on_ac == TRUE) {
+	if (on_ac) {
 		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_TIMEOUT_SLEEP_COMPUTER_AC, &sleep_computer);
 		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_AC, &sleep_display);
 		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_AC, &power_save);
@@ -270,7 +270,7 @@ gpm_manager_blank_screen (GpmManager *manager,
 
 	do_lock = gpm_control_get_lock_policy (manager->priv->control,
 					       GPM_CONF_LOCK_ON_BLANK_SCREEN);
-	if (do_lock == TRUE) {
+	if (do_lock) {
 		if (!gpm_screensaver_lock (manager->priv->screensaver))
 			gpm_debug ("Could not lock screen via gnome-screensaver");
 	}
@@ -308,7 +308,7 @@ gpm_manager_unblank_screen (GpmManager *manager,
 	}
 
 	do_lock = gpm_control_get_lock_policy (manager->priv->control, GPM_CONF_LOCK_ON_BLANK_SCREEN);
-	if (do_lock == TRUE) {
+	if (do_lock) {
 		gpm_screensaver_poke (manager->priv->screensaver);
 	}
 	return ret;
@@ -694,7 +694,7 @@ gpm_manager_get_on_battery (GpmManager *manager,
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
-	if (on_ac == TRUE) {
+	if (on_ac) {
 		*on_battery = FALSE;
 	} else {
 		*on_battery = TRUE;
@@ -736,7 +736,7 @@ idle_do_sleep (GpmManager *manager)
 	/* find if we are on AC power */
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
 
-	if (on_ac == TRUE) {
+	if (on_ac) {
 		gpm_conf_get_string (manager->priv->conf, GPM_CONF_ACTIONS_SLEEP_TYPE_AC, &action);
 	} else {
 		gpm_conf_get_string (manager->priv->conf, GPM_CONF_ACTIONS_SLEEP_TYPE_BATT, &action);
@@ -754,12 +754,12 @@ idle_do_sleep (GpmManager *manager)
 		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
 					_("Suspending computer."), _("System idle."));
 		ret = gpm_control_suspend (manager->priv->control, &error);
-		if (ret == FALSE) {
+		if (!ret) {
 			gpm_warning ("cannot suspend (error: %s), so trying hibernate", error->message);
 			g_error_free (error);
 			error = NULL;
 			ret = gpm_control_hibernate (manager->priv->control, &error);
-			if (ret == FALSE) {
+			if (!ret) {
 				gpm_warning ("cannot suspend or hibernate: %s", error->message);
 				g_error_free (error);
 			}
@@ -769,12 +769,12 @@ idle_do_sleep (GpmManager *manager)
 		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_HIBERNATE,
 					_("Hibernating computer."), _("System idle."));
 		ret = gpm_control_hibernate (manager->priv->control, &error);
-		if (ret == FALSE) {
+		if (!ret) {
 			gpm_warning ("cannot hibernate (error: %s), so trying suspend", error->message);
 			g_error_free (error);
 			error = NULL;
 			ret = gpm_control_suspend (manager->priv->control, &error);
-			if (ret == FALSE) {
+			if (!ret) {
 				gpm_warning ("cannot suspend or hibernate: %s", error->message);
 				g_error_free (error);
 			}
@@ -804,7 +804,7 @@ idle_changed_cb (GpmIdle    *idle,
 	 * the screen when the user moves the mouse on systems that do not
 	 * support hardware blanking.
 	 * Details are here: https://launchpad.net/malone/bugs/22522 */
-	if (gpm_button_is_lid_closed (manager->priv->button) == TRUE) {
+	if (gpm_button_is_lid_closed (manager->priv->button)) {
 		gpm_debug ("lid is closed, so we are ignoring idle state changes");
 		return;
 	}
@@ -910,7 +910,7 @@ lid_button_pressed (GpmManager *manager,
 		return;
 	}
 
-	if (on_ac == TRUE) {
+	if (on_ac) {
 		gpm_debug ("Performing AC policy");
 		manager_policy_do (manager, GPM_CONF_BUTTON_LID_AC,
 				   _("The lid has been closed on ac power."));
@@ -924,7 +924,7 @@ lid_button_pressed (GpmManager *manager,
 	gpm_inhibit_has_inhibit (manager->priv->inhibit, &has_inhibit, NULL);
 
 	/* do not do lid close action if suspend (or hibernate) */
-	if (has_inhibit == TRUE) {
+	if (has_inhibit) {
 		/* get the policy action for battery */
 		gpm_conf_get_string (manager->priv->conf, GPM_CONF_BUTTON_LID_BATT, &action);
 
@@ -1004,14 +1004,14 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 	gpm_manager_sync_policy_sleep (manager);
 
 	gpm_debug ("emitting on-ac-changed : %i", on_ac);
-	if (on_ac == TRUE) {
+	if (on_ac) {
 		g_signal_emit (manager, signals [ON_BATTERY_CHANGED], 0, FALSE);
 	} else {
 		g_signal_emit (manager, signals [ON_BATTERY_CHANGED], 0, TRUE);
 	}
 
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
-	if (on_ac == TRUE) {
+	if (on_ac) {
 		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_AC, &power_save);
 	} else {
 		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_BATT, &power_save);
@@ -1028,7 +1028,7 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 	/* We keep track of the lid state so we can do the
 	   lid close on battery action if the ac_adapter is removed when the laptop
 	   is closed. Fixes #331655 */
-	if (event_when_closed == TRUE &&
+	if (event_when_closed &&
 	    on_ac == FALSE &&
 	    gpm_button_is_lid_closed (manager->priv->button)) {
 		manager_policy_do (manager, GPM_CONF_BUTTON_LID_BATT,
@@ -1174,10 +1174,10 @@ gpm_manager_check_sleep_errors (GpmManager *manager)
 	hal_gpower_has_suspend_error (manager->priv->hal_power, &suspend_error);
 	hal_gpower_has_hibernate_error (manager->priv->hal_power, &hibernate_error);
 
-	if (suspend_error == TRUE) {
+	if (suspend_error) {
 		gpm_notify_sleep_failed (manager->priv->notify, FALSE);
 	}
-	if (hibernate_error == TRUE) {
+	if (hibernate_error) {
 		gpm_notify_sleep_failed (manager->priv->notify, TRUE);
 	}
 }
@@ -1200,13 +1200,13 @@ screensaver_auth_request_cb (GpmScreensaver *screensaver,
 	if (auth_begin == FALSE) {
 		error = NULL;
 		ret = hal_gpower_clear_suspend_error (manager->priv->hal_power, &error);
-		if (ret == FALSE) {
+		if (!ret) {
 			gpm_debug ("Failed to clear suspend error; %s", error->message);
 			g_error_free (error);
 		}
 		error = NULL;
 		ret = hal_gpower_clear_hibernate_error (manager->priv->hal_power, &error);
-		if (ret == FALSE) {
+		if (!ret) {
 			gpm_debug ("Failed to clear hibernate error; %s", error->message);
 			g_error_free (error);
 		}
@@ -1340,7 +1340,7 @@ control_sleep_failure_cb (GpmControl      *control,
 	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_SLEEP_FAILED, &show_sleep_failed);
 
 	/* only emit if in GConf */
-	if (show_sleep_failed == TRUE) {
+	if (show_sleep_failed) {
 		if (action == GPM_CONTROL_ACTION_SUSPEND) {
 			gpm_syslog ("suspend failed");
 			gpm_notify_sleep_failed (manager->priv->notify, FALSE);
@@ -1674,7 +1674,7 @@ gpm_manager_init (GpmManager *manager)
 
 	/* check to see if the user has installed the schema properly */
 	ret = gpm_conf_get_uint (manager->priv->conf, GPM_CONF_SCHEMA_VERSION, &version);
-	if (ret == FALSE || version != GPM_CONF_SCHEMA_ID) {
+	if (!ret || version != GPM_CONF_SCHEMA_ID) {
 		gpm_notify_display (manager->priv->notify,
 				    _("Install problem!"),
 				    _("The configuration defaults for GNOME Power Manager have not been installed correctly.\n"
@@ -1692,7 +1692,7 @@ gpm_manager_init (GpmManager *manager)
 
 	/* coldplug so we are in the correct state at startup */
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
-	if (on_ac == TRUE) {
+	if (on_ac) {
 		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_AC, &manager->priv->low_power);
 	} else {
 		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_BATT, &manager->priv->low_power);

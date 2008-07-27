@@ -53,7 +53,7 @@ gpm_st_hal_devicestore (GpmSelfTest *test)
 	device = hal_gdevice_new ();
 	hal_gdevice_set_udi (device, HAL_ROOT_COMPUTER);
 	ret = hal_gdevicestore_present (devicestore, device);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_success (test, "could not get different device");
 	} else {
 		gpm_st_failed (test, "got computer in empty store");
@@ -62,7 +62,7 @@ gpm_st_hal_devicestore (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "insert device");
 	ret = hal_gdevicestore_insert (devicestore, device);
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "inserted device");
 	} else {
 		gpm_st_failed (test, "could not insert device");
@@ -71,7 +71,7 @@ gpm_st_hal_devicestore (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "insert duplicate device");
 	ret = hal_gdevicestore_insert (devicestore, device);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_success (test, "cannot insert duplicate device");
 	} else {
 		gpm_st_failed (test, "inserted duplicate device");
@@ -80,7 +80,7 @@ gpm_st_hal_devicestore (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "make sure device in store");
 	ret = hal_gdevicestore_present (devicestore, device);
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "found device");
 	} else {
 		gpm_st_failed (test, "could not find device");
@@ -109,7 +109,7 @@ gpm_st_hal_devicestore (GpmSelfTest *test)
 	device2 = hal_gdevice_new ();
 	hal_gdevice_set_udi (device2, HAL_ROOT_COMPUTER);
 	ret = hal_gdevicestore_present (devicestore, device2);
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "found device");
 	} else {
 		gpm_st_failed (test, "could not find device");
@@ -119,7 +119,7 @@ gpm_st_hal_devicestore (GpmSelfTest *test)
 	gpm_st_title (test, "remove device");
 	g_object_ref (device); /* so we can test it in a minute */
 	ret = hal_gdevicestore_remove (devicestore, device);
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "removed device");
 	} else {
 		gpm_st_failed (test, "could not remove device");
@@ -128,7 +128,7 @@ gpm_st_hal_devicestore (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "make sure device not in devicestore");
 	ret = hal_gdevicestore_present (devicestore, device);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_success (test, "could not get device from empty devicestore");
 	} else {
 		gpm_st_failed (test, "got computer in empty store");

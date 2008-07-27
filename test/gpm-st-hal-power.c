@@ -46,7 +46,7 @@ gpm_st_hal_power (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "make sure we have pm support");
 	ret = hal_gpower_has_support (power);
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "has pm support");
 	} else {
 		gpm_st_failed (test, "does not have pm support");

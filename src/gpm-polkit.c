@@ -90,7 +90,7 @@ gpm_polkit_is_user_privileged (GpmPolkit   *polkit,
 		gpm_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		gpm_warning ("IsUserPrivileged failed!");
 		return FALSE;

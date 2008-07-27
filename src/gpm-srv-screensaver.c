@@ -69,7 +69,7 @@ screensaver_auth_request_cb (GpmScreensaver *screensaver,
 			     GpmSrvScreensaver *srv_screensaver)
 {
 	/* only clear errors if we have finished the authentication */
-	if (auth_begin == TRUE) {
+	if (auth_begin) {
 		GError  *error;
 
 		/* TODO: This may be a bid of a bodge, as we will have multiple
@@ -118,7 +118,7 @@ update_ac_throttle (GpmSrvScreensaver *srv_screensaver,
 {
 	/* Throttle the srv_screensaver when we are not on AC power so we don't
 	   waste the battery */
-	if (on_ac == TRUE) {
+	if (on_ac) {
 		if (srv_screensaver->priv->ac_throttle_id != 0) {
 			gpm_screensaver_remove_throttle (srv_screensaver->priv->screensaver, srv_screensaver->priv->ac_throttle_id);
 			srv_screensaver->priv->ac_throttle_id = 0;

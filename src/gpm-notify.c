@@ -104,7 +104,7 @@ gpm_notify_create (GpmNotify 	 *notify,
 	}
 
 	if (notify->priv->status_icon != NULL &&
-	    gtk_status_icon_get_visible (notify->priv->status_icon) == TRUE) {
+	    gtk_status_icon_get_visible (notify->priv->status_icon)) {
 		notify->priv->libnotify = notify_notification_new_with_status_icon (title, content,
 										    msgicon,
 										    notify->priv->status_icon);
@@ -135,7 +135,7 @@ gpm_notify_show (GpmNotify *notify)
 {
 	gboolean ret;
 	ret = notify_notification_show (notify->priv->libnotify, NULL);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_warning ("failed to send notification");
 	}
 	return ret;
@@ -280,7 +280,7 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 {
 	/* for where we add back the ac_adapter before the "AC Power unplugged"
 	 * message times out. */
-	if (on_ac == TRUE) {
+	if (on_ac) {
 		gpm_debug ("clearing notify due ac being present");
 		gpm_notify_cancel (notify);
 	}
@@ -324,7 +324,7 @@ notify_general_clicked_cb (NotifyNotification *libnotify,
 		ret = gdk_spawn_command_line_on_screen (gscreen, cmdline, &error);
 		g_free (cmdline);
 
-		if (ret == TRUE)
+		if (ret)
 			return;
 
 		g_error_free (error);
@@ -334,7 +334,7 @@ notify_general_clicked_cb (NotifyNotification *libnotify,
 		ret = gdk_spawn_command_line_on_screen (gscreen, cmdline, &error);
 		g_free (cmdline);
 
-		if (ret == FALSE) {
+		if (!ret) {
 			error_dialog = gtk_message_dialog_new ( NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Failed to show url %s", error->message); 
 			gtk_dialog_run (GTK_DIALOG (error_dialog));
 			g_error_free (error);
@@ -580,7 +580,7 @@ gpm_notify_sleep_failed (GpmNotify *notify, gboolean hibernate)
 	const gchar *icon;
 
 	title = _("Sleep Problem");
-	if (hibernate == TRUE) {
+	if (hibernate) {
 		msg = _("Your computer failed to hibernate.\nCheck the help file for common problems.");
 		icon = GPM_STOCK_HIBERNATE;
 	} else {

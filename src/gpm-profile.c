@@ -122,7 +122,7 @@ gpm_profile_get_data_file (GpmProfile *profile, gboolean discharge)
 	}
 
 	/* use home directory */
-	if (discharge == TRUE) {
+	if (discharge) {
 		suffix = "discharging.csv";
 	} else {
 		suffix = "charging.csv";
@@ -150,7 +150,7 @@ gpm_profile_print (GpmProfile *profile)
 	g_return_if_fail (GPM_IS_PROFILE (profile));
 
 	/* get the correct data */
-	if (profile->priv->discharging == TRUE) {
+	if (profile->priv->discharging) {
 		array_data = profile->priv->float_data_discharge;
 		array_accuracy = profile->priv->float_accuracy_discharge;
 	} else {
@@ -184,7 +184,7 @@ gpm_profile_get_data_time_percent (GpmProfile *profile, gboolean discharge)
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), NULL);
 
 	/* get the correct data */
-	if (discharge == TRUE) {
+	if (discharge) {
 		array_data = profile->priv->float_data_discharge;
 		array_accuracy = profile->priv->float_accuracy_discharge;
 	} else {
@@ -228,7 +228,7 @@ gpm_profile_get_accuracy_average (GpmProfile *profile, gboolean discharge)
 	GArray *array;
 
 	/* get the correct data */
-	if (discharge == TRUE) {
+	if (discharge) {
 		array = profile->priv->float_accuracy_discharge;
 	} else {
 		array = profile->priv->float_accuracy_charge;
@@ -263,7 +263,7 @@ gpm_profile_get_data_accuracy_percent (GpmProfile *profile, gboolean discharge)
 	}
 
 	/* get the correct data */
-	if (discharge == TRUE) {
+	if (discharge) {
 		array = profile->priv->float_accuracy_discharge;
 	} else {
 		array = profile->priv->float_accuracy_charge;
@@ -312,7 +312,7 @@ gpm_profile_get_time (GpmProfile *profile, guint percentage, gboolean discharge)
 	}
 
 	/* compute correct area of integral */
-	if (discharge == TRUE) {
+	if (discharge) {
 		time = gpm_array_float_compute_integral (profile->priv->float_data_discharge, 0, percentage);
 	} else {
 		time = gpm_array_float_compute_integral (profile->priv->float_data_charge, percentage, 99);
@@ -405,7 +405,7 @@ gpm_profile_set_average_no_accuracy (GpmProfile *profile)
 	gfloat average;
 
 	/* get the correct data */
-	if (profile->priv->discharging == TRUE) {
+	if (profile->priv->discharging) {
 		array_data = profile->priv->float_data_discharge;
 		array_accuracy = profile->priv->float_accuracy_discharge;
 	} else {
@@ -444,7 +444,7 @@ gpm_profile_save_percentage (GpmProfile *profile,
 	gfloat accuracy;
 
 	/* get the correct data */
-	if (profile->priv->discharging == TRUE) {
+	if (profile->priv->discharging) {
 		array_data = profile->priv->float_data_discharge;
 		array_accuracy = profile->priv->float_accuracy_discharge;
 	} else {
@@ -474,7 +474,7 @@ gpm_profile_save_percentage (GpmProfile *profile,
 	gpm_array_float_set (array_accuracy, percentage, accuracy);
 
 	/* guess missing data between 5 and 95 */
-	if (profile->priv->use_guessing == TRUE) {
+	if (profile->priv->use_guessing) {
 		gpm_profile_set_average_no_accuracy (profile);
 	}
 
@@ -548,7 +548,7 @@ gpm_profile_register_percentage (GpmProfile *profile,
 
 	/* If we are discharging, 99-0 is valid, but when we are charging,
 	 * 1-100 is valid. Be careful how we index the arrays in this case */
-	if (profile->priv->discharging == TRUE) {
+	if (profile->priv->discharging) {
 		array_percentage = percentage;
 	} else {
 		if (percentage == 0) {
@@ -591,11 +591,11 @@ gpm_profile_register_charging (GpmProfile *profile,
 	g_return_val_if_fail (profile != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), FALSE);
 
-	if (is_charging == TRUE) {
+	if (is_charging) {
 		/* uninteresting case */
 		return FALSE;
 	}
-	if (profile->priv->discharging == TRUE) {
+	if (profile->priv->discharging) {
 		/* normal case, the ac_adapter has been removed half way
 		   through charging, and we really don't care */
 		return FALSE;
@@ -627,7 +627,7 @@ ac_adaptor_changed_cb (GpmAcAdapter *ac_adapter,
 	profile->priv->data_valid = FALSE;
 
 	/* check AC state */
-	if (on_ac == TRUE) {
+	if (on_ac) {
 		gpm_debug ("on AC");
 		profile->priv->discharging = FALSE;
 	} else {
@@ -720,7 +720,7 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 	gpm_array_set_fixed_size (array, 100);
 
 	/* get the correct data */
-	if (discharge == TRUE) {
+	if (discharge) {
 		array_data = profile->priv->float_data_discharge;
 		array_accuracy = profile->priv->float_accuracy_discharge;
 	} else {
@@ -734,7 +734,7 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 	ret = gpm_array_load_from_file (array, filename);
 
 	/* if not found, then generate a new one with a low propability */
-	if (ret == FALSE) {
+	if (!ret) {
 
 		/* directory might not exist */
 		path = g_build_filename (g_get_home_dir (), ".gnome2", "gnome-power-manager", NULL);
@@ -748,7 +748,7 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 		}
 
 		ret = gpm_array_save_to_file (array, filename);
-		if (ret == FALSE) {
+		if (!ret) {
 			gpm_warning ("saving state failed. You will not get accurate time remaining calculations");
 		}
 	}
@@ -790,14 +790,14 @@ gpm_profile_set_config_id (GpmProfile  *profile,
 		profile->priv->config_id = g_strdup (config_id);
 		reload = TRUE;
 	}
-	if (reload == TRUE) {
+	if (reload) {
 		/* get initial data */
 		gpm_profile_load_data (profile, TRUE);
 		gpm_profile_load_data (profile, FALSE);
 	}
 
 	/* do debugging self tests only if verbose */
-	if (gpm_debug_is_verbose () == TRUE) {
+	if (gpm_debug_is_verbose ()) {
 		gpm_debug ("Reference times");
 		time = gpm_profile_get_time (profile, 99, TRUE);
 		gpm_debug ("99-0\t%i minutes", time / 60);
@@ -848,7 +848,7 @@ gpm_profile_get_accuracy (GpmProfile *profile,
 	}
 
 	/* get the correct data */
-	if (profile->priv->discharging == TRUE) {
+	if (profile->priv->discharging) {
 		array = profile->priv->float_accuracy_discharge;
 	} else {
 		array = profile->priv->float_accuracy_charge;
@@ -926,7 +926,7 @@ gpm_profile_init (GpmProfile *profile)
 	on_ac = gpm_ac_adapter_is_present (profile->priv->ac_adapter);
 
 	/* check AC state */
-	if (on_ac == TRUE) {
+	if (on_ac) {
 		gpm_debug ("on AC");
 		profile->priv->discharging = FALSE;
 	} else {
@@ -1038,7 +1038,7 @@ gpm_st_profile (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "set config id");
 	ret = gpm_profile_set_config_id (profile, "test123");
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, "set type");
 	} else {
 		gpm_st_failed (test, "could not set type");
@@ -1102,7 +1102,7 @@ gpm_st_profile (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "ignore first point");
 	ret = gpm_profile_register_percentage (profile, 99);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_success (test, "ignored first");
 	} else {
 		gpm_st_failed (test, "ignored second");

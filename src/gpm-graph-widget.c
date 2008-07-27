@@ -1254,11 +1254,11 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	gpm_graph_widget_draw_labels (graph, cr);
 	gpm_graph_widget_draw_line (graph, cr);
 
-	if (graph->priv->use_events == TRUE) {
+	if (graph->priv->use_events) {
 		gpm_graph_widget_draw_event_dots (graph, cr);
 	}
 
-	if (graph->priv->use_legend == TRUE && legend_height > 0) {
+	if (graph->priv->use_legend && legend_height > 0) {
 		gpm_graph_widget_draw_legend (graph, legend_x, legend_y, legend_width, legend_height);
 	}
 
@@ -1456,7 +1456,7 @@ gpm_st_graph_widget (GpmSelfTest *test)
 					      GPM_COLOUR_WHITE,
 					      GPM_GRAPH_WIDGET_SHAPE_DIAMOND,
 					      "white diamond");
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_success (test, "refused duplicate id");
 	} else {
 		gpm_st_failed (test, "added duplicate ID!");
@@ -1484,7 +1484,7 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	gpm_graph_widget_data_clear (GPM_GRAPH_WIDGET (graph));
 	gpm_st_title (test, "add invalid data");
 	ret = gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_success (test, "ignored");
 	} else {
 		gpm_st_failed (test, "failed to ignore invalid data");
@@ -1496,7 +1496,7 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	gpm_st_title (test, "add zero data");
 	gpm_graph_widget_data_clear (GPM_GRAPH_WIDGET (graph));
 	ret = gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data);
-	if (ret == FALSE) {
+	if (!ret) {
 		gpm_st_success (test, "ignored");
 	} else {
 		gpm_st_failed (test, "failed to ignore zero data");
@@ -1509,7 +1509,7 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	gpm_array_append (data, 100, 100, GPM_COLOUR_RED);
 	gpm_st_title (test, "add valid data");
 	ret = gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data);
-	if (ret == TRUE) {
+	if (ret) {
 		gpm_st_success (test, NULL);
 	} else {
 		gpm_st_failed (test, "failed to add valid data");

@@ -1,3 +1,131 @@
+2008-07-27  Richard Hughes  <richard@hughsie.com>
+
+	* applets/brightness/brightness-applet.c:
+	(gpm_applet_get_brightness), (gpm_applet_set_brightness):
+	* applets/inhibit/inhibit-applet.c: (gpm_applet_inhibit),
+	(gpm_applet_uninhibit), (gpm_applet_has_inhibit):
+	* libdbus-glib/libdbus-proxy.c: (dbus_noc_session_cb),
+	(dbus_noc_system_cb), (dbus_proxy_assign):
+	* libdbus-glib/libdbus-watch.c: (dbus_noc_session_cb),
+	(dbus_noc_system_cb), (dbus_watch_assign):
+	* libhal-glib/libhal-gdevice.c: (hal_gdevice_get_bool),
+	(hal_gdevice_get_string), (hal_gdevice_get_int),
+	(hal_gdevice_query_capability),
+	(hal_gdevice_watch_property_modified),
+	(hal_gdevice_watch_condition), (proxy_status_cb),
+	(hal_gdevice_finalize):
+	* libhal-glib/libhal-gdevicestore.c: (hal_gdevicestore_insert):
+	* libhal-glib/libhal-gmanager.c: (hal_gmanager_find_capability),
+	(hal_gmanager_find_device_string_match),
+	(hal_gmanager_num_devices_of_capability),
+	(hal_gmanager_num_devices_of_capability_with_value),
+	(proxy_status_cb), (hal_gmanager_init):
+	* libhal-glib/libhal-gpower.c: (hal_gpower_suspend),
+	(hal_gpower_pm_method_void):
+	* libidletime/libidletime.c: (idletime_xsync_alarm_set):
+	* src/gpm-ac-adapter.c: (gpm_ac_adapter_is_present),
+	(gpm_ac_adapter_init):
+	* src/gpm-array.c: (gpm_array_append),
+	(gpm_array_append_from_file), (gpm_array_save_to_file),
+	(gpm_array_add), (gpm_st_array):
+	* src/gpm-backlight.c: (gpm_backlight_sync_policy),
+	(gpm_backlight_get_mode), (gpm_backlight_get_brightness),
+	(gpm_backlight_set_brightness),
+	(gpm_backlight_brightness_evaluate_and_set), (idle_changed_cb),
+	(gpm_backlight_init):
+	* src/gpm-brightness-hal.c: (gpm_brightness_hal_get_hw),
+	(gpm_brightness_hal_set_hw), (gpm_brightness_hal_dim_hw_step):
+	* src/gpm-brightness-kbd.c: (gpm_brightness_kbd_get_hw),
+	(gpm_brightness_kbd_set_hw), (gpm_brightness_kbd_set_dim),
+	(gpm_brightness_kbd_dim),
+	(adjust_kbd_brightness_according_to_ambient_light):
+	* src/gpm-brightness-xrandr.c:
+	* src/gpm-button.c: (gpm_button_xevent_key), (emit_button_pressed),
+	(hal_device_property_modified_cb), (coldplug_buttons),
+	(gpm_button_init):
+	* src/gpm-cell-array.c: (gpm_cell_array_get_time_until_action),
+	(gpm_cell_array_update), (gpm_cell_array_percent_changed),
+	(gpm_cell_charging_changed_cb), (gpm_cell_discharging_changed_cb),
+	(gpm_check_device_key), (gpm_cell_array_add_hal_udi),
+	(gpm_cell_array_coldplug), (gpm_cell_array_get_description),
+	(hal_device_added_cb), (gpm_st_cell_array):
+	* src/gpm-cell-unit.c: (gpm_cell_unit_get_icon),
+	(gpm_cell_unit_get_kind_localised), (gpm_st_cell_unit):
+	* src/gpm-cell.c: (gpm_cell_refresh_hal_all),
+	(hal_device_property_modified_cb), (gpm_cell_set_hal_udi),
+	(gpm_cell_get_description), (gpm_cell_get_battery), (gpm_st_cell):
+	* src/gpm-control.c: (gpm_control_check_foreground_console),
+	(gpm_control_allowed_suspend), (gpm_control_allowed_hibernate),
+	(gpm_control_shutdown), (gpm_control_reboot),
+	(gpm_control_suspend), (gpm_control_hibernate):
+	* src/gpm-debug.h:
+	* src/gpm-engine.c: (gpm_engine_get_summary),
+	(gpm_engine_get_icon), (gpm_cell_array_perhaps_recall_cb),
+	(gpm_cell_array_low_capacity_cb),
+	(gpm_engine_recalculate_state_icon),
+	(gpm_engine_recalculate_state_summary),
+	(gpm_engine_recalculate_state),
+	(gpm_cell_array_discharging_changed_cb),
+	(gpm_cell_array_fully_charged_cb):
+	* src/gpm-graph-widget.c: (gpm_graph_widget_draw_graph),
+	(gpm_st_graph_widget):
+	* src/gpm-idle.c: (session_idle_changed_cb),
+	(powersave_idle_changed_cb):
+	* src/gpm-info.c: (gpm_info_log_do_poll), (ac_adapter_changed_cb),
+	(gpm_info_init):
+	* src/gpm-inhibit.c: (gpm_inhibit_has_inhibit), (inhibit),
+	(has_inhibit), (gpm_st_inhibit):
+	* src/gpm-light-sensor.c: (gpm_light_sensor_get_hw),
+	(gpm_light_sensor_poll_cb), (gpm_light_sensor_init):
+	* src/gpm-load.c: (gpm_load_get_current):
+	* src/gpm-main.c: (gpm_object_register), (main):
+	* src/gpm-manager.c: (gpm_manager_is_inhibit_valid),
+	(gpm_manager_sync_policy_sleep), (gpm_manager_blank_screen),
+	(gpm_manager_unblank_screen), (gpm_manager_get_on_battery),
+	(idle_do_sleep), (idle_changed_cb), (lid_button_pressed),
+	(ac_adapter_changed_cb), (gpm_manager_check_sleep_errors),
+	(screensaver_auth_request_cb), (control_sleep_failure_cb),
+	(gpm_manager_init):
+	* src/gpm-notify.c: (gpm_notify_create), (gpm_notify_show),
+	(ac_adapter_changed_cb), (notify_general_clicked_cb),
+	(gpm_notify_sleep_failed):
+	* src/gpm-phone.c: (gpm_phone_get_num_batteries),
+	(gpm_phone_num_batteries_changed), (gpm_phone_dbus_disconnect),
+	(gpm_st_phone):
+	* src/gpm-polkit.c: (gpm_polkit_is_user_privileged):
+	* src/gpm-prefs-core.c: (gpm_dbus_method_bool),
+	(gpm_dbus_method_int), (prefs_setup_notification):
+	* src/gpm-profile.c: (gpm_profile_get_data_file),
+	(gpm_profile_print), (gpm_profile_get_data_time_percent),
+	(gpm_profile_get_accuracy_average),
+	(gpm_profile_get_data_accuracy_percent), (gpm_profile_get_time),
+	(gpm_profile_set_average_no_accuracy),
+	(gpm_profile_save_percentage), (gpm_profile_register_percentage),
+	(gpm_profile_register_charging), (ac_adaptor_changed_cb),
+	(gpm_profile_load_data), (gpm_profile_set_config_id),
+	(gpm_profile_get_accuracy), (gpm_profile_init), (gpm_st_profile):
+	* src/gpm-screensaver.c: (gpm_screensaver_add_throttle),
+	(gpm_screensaver_remove_throttle), (gpm_screensaver_get_idle):
+	* src/gpm-self-test.c: (gpm_st_start):
+	* src/gpm-srv-brightness-kbd.c: (conf_key_changed_cb),
+	(ac_adapter_changed_cb), (gpm_srv_brightness_kbd_new):
+	* src/gpm-srv-screensaver.c: (screensaver_auth_request_cb),
+	(update_ac_throttle):
+	* src/gpm-statistics-core.c: (gpm_statistics_get_events),
+	(gpm_statistics_find_types), (gpm_statistics_get_data_dbus),
+	(gpm_statistics_get_parameters_dbus),
+	(gpm_statistics_refresh_data),
+	(gpm_statistics_populate_graph_types):
+	* src/gpm-tray-icon.c: (gpm_tray_icon_activate_cb):
+	* src/gpm-warnings.c: (gpm_warnings_get_state),
+	(gpm_warnings_init):
+	* test/gpm-st-hal-device.c: (gpm_st_hal_device):
+	* test/gpm-st-hal-devicestore.c: (gpm_st_hal_devicestore):
+	* test/gpm-st-hal-manager.c: (gpm_st_hal_manager):
+	* test/gpm-st-hal-power.c: (gpm_st_hal_power):
+	* test/gpm-st-idletime.c: (gpm_st_idletime):
+	Trivial coding style changes to bring us up to 2008.
+
 2008-07-23  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-control.c: (gpm_control_check_foreground_console),

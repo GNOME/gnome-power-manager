@@ -61,7 +61,6 @@ void		gpm_error_real			(const gchar	*func,
 						 int		 line,
 						 const gchar	*format, ...);
 void		gpm_syslog			(const gchar	*format, ...);
-void		gpm_debug_add_option		(const gchar	*option);
 
 G_END_DECLS
 

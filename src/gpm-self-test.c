@@ -38,7 +38,7 @@ gpm_st_start (GpmSelfTest *test, const gchar *name, GpmSelfTestClass class)
 	if (class == CLASS_MANUAL && test->class == CLASS_AUTO) {
 		return FALSE;
 	}
-	if (test->started == TRUE) {
+	if (test->started) {
 		g_print ("Not ended test! Cannot start!\n");
 		exit (1);
 	}	

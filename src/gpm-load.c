@@ -213,7 +213,7 @@ gpm_load_get_current (GpmLoad *load)
 
 	/* work out the differences */
 	ret = gpm_load_get_cpu_values (&cpu_idle, &cpu_total);
-	if (ret == FALSE) {
+	if (!ret) {
 		return 0.0;
 	}
 

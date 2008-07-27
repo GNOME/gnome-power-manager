@@ -250,7 +250,7 @@ gpm_statistics_get_events (GpmStatistics *statistics)
 		gpm_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		gpm_warning ("GetEventLog failed!");
 		return FALSE;
@@ -387,7 +387,7 @@ gpm_statistics_find_types (GpmStatistics *statistics,
 		gpm_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		gpm_warning ("GetTypes failed!");
 		return FALSE;
@@ -457,7 +457,7 @@ gpm_statistics_get_data_dbus (GpmStatistics *statistics,
 		gpm_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		gpm_warning ("GetData failed!");
 		return FALSE;
@@ -539,7 +539,7 @@ gpm_statistics_get_parameters_dbus (GpmStatistics *statistics,
 		gpm_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
-	if (ret == FALSE) {
+	if (!ret) {
 		/* abort as the DBUS method failed */
 		gpm_warning ("GetAxisTypes failed!");
 		return FALSE;
@@ -618,7 +618,7 @@ gpm_statistics_refresh_data (GpmStatistics *statistics)
 	}
 
 	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STATS_SMOOTH_DATA, &smooth);
-	if (smooth == TRUE) {
+	if (smooth) {
 		GArray *arrayfloat;
 		GArray *kernel;
 		GArray *result;
@@ -705,7 +705,7 @@ gpm_statistics_populate_graph_types (GpmStatistics *statistics,
 	guint count, pos;
 
 	ret = gpm_statistics_find_types (statistics, &list);
-	if (ret == FALSE) {
+	if (!ret) {
 		return;
 	}
 
