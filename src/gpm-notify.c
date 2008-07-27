@@ -232,7 +232,7 @@ gpm_notify_display (GpmNotify 	 *notify,
 						     "<span size='larger'><b>%s</b></span>",
 						     GPM_NAME);
 
-	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog), content);
+	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog), "%s", content);
 
 	g_signal_connect_swapped (dialog,
 				  "response",
