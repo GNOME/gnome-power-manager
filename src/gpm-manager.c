@@ -1368,25 +1368,25 @@ gpm_engine_charge_low_cb (GpmEngine      *engine,
 	if (kind == GPM_CELL_UNIT_KIND_PRIMARY) {
 		title = _("Laptop battery low");
 		remaining_text = gpm_get_timestring (unit->time_discharge);
-		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%d%%)"),
+		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%.1f%%)"),
 					   remaining_text, unit->percentage);
 	} else if (kind == GPM_CELL_UNIT_KIND_UPS) {
 		title = _("UPS low");
 		remaining_text = gpm_get_timestring (unit->time_discharge);
-		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining UPS backup power (%d%%)"),
+		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"),
 					   remaining_text, unit->percentage);
 	} else if (kind == GPM_CELL_UNIT_KIND_MOUSE) {
 		title = _("Mouse battery low");
-		message = g_strdup_printf (_("The wireless mouse attached to this computer is low in power (%d%%)"), unit->percentage);
+		message = g_strdup_printf (_("The wireless mouse attached to this computer is low in power (%.1f%%)"), unit->percentage);
 	} else if (kind == GPM_CELL_UNIT_KIND_KEYBOARD) {
 		title = _("Keyboard battery low");
-		message = g_strdup_printf (_("The wireless keyboard attached to this computer is low in power (%d%%)"), unit->percentage);
+		message = g_strdup_printf (_("The wireless keyboard attached to this computer is low in power (%.1f%%)"), unit->percentage);
 	} else if (kind == GPM_CELL_UNIT_KIND_PDA) {
 		title = _("PDA battery low");
-		message = g_strdup_printf (_("The PDA attached to this computer is low in power (%d%%)"), unit->percentage);
+		message = g_strdup_printf (_("The PDA attached to this computer is low in power (%.1f%%)"), unit->percentage);
 	} else if (kind == GPM_CELL_UNIT_KIND_PHONE) {
 		title = _("Cell phone battery low");
-		message = g_strdup_printf (_("The cell phone attached to this computer is low in power (%d%%)"), unit->percentage);
+		message = g_strdup_printf (_("The cell phone attached to this computer is low in power (%.1f%%)"), unit->percentage);
 	}
 
 	/* get correct icon */
@@ -1461,7 +1461,7 @@ gpm_engine_charge_critical_cb (GpmEngine      *engine,
 			action_text = g_strdup_printf (_("This computer will shutdown in %s if the AC is not connected."), time_text);
 		}
 
-		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%d%%). %s"),
+		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%.1f%%). %s"),
 					   remaining_text, unit->percentage, action_text);
 
 		g_free (action);
@@ -1471,28 +1471,28 @@ gpm_engine_charge_critical_cb (GpmEngine      *engine,
 	} else if (kind == GPM_CELL_UNIT_KIND_UPS) {
 		title = _("UPS critically low");
 		remaining_text = gpm_get_timestring (unit->time_discharge);
-		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining UPS power (%d%%). "
+		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining UPS power (%.1f%%). "
 					     "Restore AC power to your computer to avoid losing data."),
 					   remaining_text, unit->percentage);
 		g_free (remaining_text);
 	} else if (kind == GPM_CELL_UNIT_KIND_MOUSE) {
 		title = _("Mouse battery low");
-		message = g_strdup_printf (_("The wireless mouse attached to this computer is very low in power (%d%%). "
+		message = g_strdup_printf (_("The wireless mouse attached to this computer is very low in power (%.1f%%). "
 					     "This device will soon stop functioning if not charged."),
 					   unit->percentage);
 	} else if (kind == GPM_CELL_UNIT_KIND_KEYBOARD) {
 		title = _("Keyboard battery low");
-		message = g_strdup_printf (_("The wireless keyboard attached to this computer is very low in power (%d%%). "
+		message = g_strdup_printf (_("The wireless keyboard attached to this computer is very low in power (%.1f%%). "
 					     "This device will soon stop functioning if not charged."),
 					   unit->percentage);
 	} else if (kind == GPM_CELL_UNIT_KIND_PDA) {
 		title = _("PDA battery low");
-		message = g_strdup_printf (_("The PDA attached to this computer is very low in power (%d%%). "
+		message = g_strdup_printf (_("The PDA attached to this computer is very low in power (%.1f%%). "
 					     "This device will soon stop functioning if not charged."),
 					   unit->percentage);
 	} else if (kind == GPM_CELL_UNIT_KIND_PHONE) {
 		title = _("Cell phone battery low");
-		message = g_strdup_printf (_("Your cell phone is very low in power (%d%%). "
+		message = g_strdup_printf (_("Your cell phone is very low in power (%.1f%%). "
 					     "This device will soon stop functioning if not charged."),
 					   unit->percentage);
 	}

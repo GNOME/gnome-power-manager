@@ -147,8 +147,9 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 	}
 
 	/* sanity check that charge_level.percentage exists (if it should) */
-	exists = hal_gdevice_get_uint (device, "battery.charge_level.percentage",
-					  &unit->percentage, NULL);
+	guint percentage;
+	exists = hal_gdevice_get_uint (device, "battery.charge_level.percentage", &percentage, NULL);
+	unit->percentage = (gfloat) percentage;
 	if (exists == FALSE) {
 		gpm_warning ("could not read your battery's percentage charge.");
 	}
@@ -309,7 +310,9 @@ hal_device_property_modified_cb (HalGDevice   *device,
 		}
 
 	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
-		hal_gdevice_get_uint (device, key, &unit->percentage, NULL);
+		guint percent;
+		hal_gdevice_get_uint (device, key, &percent, NULL);
+		unit->percentage = (gfloat) percent;
 		gpm_debug ("** EMIT: percent-changed: %i", unit->percentage);
 		g_signal_emit (cell, signals [PERCENT_CHANGED], 0, unit->percentage);
 
@@ -419,7 +422,7 @@ gpm_cell_set_phone_index (GpmCell *cell, guint index)
 
 	unit->is_discharging = TRUE;
 	unit->is_present = TRUE;
-	unit->percentage = gpm_phone_get_percentage (cell->priv->phone, 0);
+	unit->percentage = (gfloat) gpm_phone_get_percentage (cell->priv->phone, 0);
 	unit->is_charging = gpm_phone_get_on_ac (cell->priv->phone, 0);
 	unit->is_discharging = !unit->is_charging;
 	return TRUE;
@@ -528,20 +531,19 @@ gpm_cell_get_description (GpmCell *cell)
 
 	details = g_string_new ("");
 	if (cell->priv->product) {
-		g_string_append_printf (details, _("<b>Product:</b> %s\n"), cell->priv->product);
+		g_string_append_printf (details, "<b>%s:</b> %s\n", _("Product"), cell->priv->product);
 	}
 	if (unit->is_present == FALSE) {
-		g_string_append (details, _("<b>Status:</b> Missing\n"));
+		g_string_append_printf (details, "<b>%s:</b> %s\n", _("Status"), _("Missing"));
 	} else if (gpm_cell_unit_is_charged (unit)) {
-		g_string_append (details, _("<b>Status:</b> Charged\n"));
+		g_string_append_printf (details, "<b>%s:</b> %s\n", _("Status"), _("Charged"));
 	} else if (unit->is_charging) {
-		g_string_append (details, _("<b>Status:</b> Charging\n"));
+		g_string_append_printf (details, "<b>%s:</b> %s\n", _("Status"), _("Charging"));
 	} else if (unit->is_discharging) {
-		g_string_append (details, _("<b>Status:</b> Discharging\n"));
+		g_string_append_printf (details, "<b>%s:</b> %s\n", _("Status"), _("Discharging"));
 	}
 	if (unit->percentage >= 0) {
-		g_string_append_printf (details, _("<b>Percentage charge:</b> %i%%\n"),
-					unit->percentage);
+		g_string_append_printf (details, "<b>%s:</b> %.1f%%\n", _("Percentage charge"), unit->percentage);
 	}
 	if (cell->priv->vendor) {
 		g_string_append_printf (details, "<b>%s</b> %s\n",
@@ -562,29 +564,29 @@ gpm_cell_get_description (GpmCell *cell)
 				     cell->priv->technology);
 			technology = cell->priv->technology;
 		}
-		g_string_append_printf (details, "<b>%s</b> %s\n",
-					_("Technology:"), technology);
+		g_string_append_printf (details, "<b>%s:</b> %s\n",
+					_("Technology"), technology);
 	}
 	if (cell->priv->serial) {
-		g_string_append_printf (details, "<b>%s</b> %s\n",
-					_("Serial number:"), cell->priv->serial);
+		g_string_append_printf (details, "<b>%s:</b> %s\n",
+					_("Serial number"), cell->priv->serial);
 	}
 	if (cell->priv->model) {
-		g_string_append_printf (details, "<b>%s</b> %s\n",
-					_("Model:"), cell->priv->model);
+		g_string_append_printf (details, "<b>%s:</b> %s\n",
+					_("Model"), cell->priv->model);
 	}
 	if (unit->time_charge > 0) {
 		gchar *time_str;
 		time_str = gpm_get_timestring (unit->time_charge);
-		g_string_append_printf (details, "<b>%s</b> %s\n",
-					_("Charge time:"), time_str);
+		g_string_append_printf (details, "<b>%s:</b> %s\n",
+					_("Charge time"), time_str);
 		g_free (time_str);
 	}
 	if (unit->time_discharge > 0) {
 		gchar *time_str;
 		time_str = gpm_get_timestring (unit->time_discharge);
-		g_string_append_printf (details, "<b>%s</b> %s\n",
-					_("Discharge time:"), time_str);
+		g_string_append_printf (details, "<b>%s:</b> %s\n",
+					_("Discharge time"), time_str);
 		g_free (time_str);
 	}
 	if (unit->capacity > 0) {
@@ -598,42 +600,42 @@ gpm_cell_get_description (GpmCell *cell)
 		} else {
 			condition = _("Poor");
 		}
-		g_string_append_printf (details, "<b>%s</b> %i%% (%s)\n",
-					_("Capacity:"),
+		g_string_append_printf (details, "<b>%s:</b> %i%% (%s)\n",
+					_("Capacity"),
 					unit->capacity, condition);
 	}
 	if (unit->measure == GPM_CELL_UNIT_MWH) {
 		if (unit->charge_current > 0) {
 			g_string_append_printf (details, "<b>%s</b> %.1f Wh\n",
-						_("Current charge:"),
+						_("Current charge"),
 						unit->charge_current / 1000.0f);
 		}
 		if (unit->charge_last_full > 0 &&
 		    unit->charge_design != unit->charge_last_full) {
-			g_string_append_printf (details, "<b>%s</b> %.1f Wh\n",
-						_("Last full charge:"),
+			g_string_append_printf (details, "<b>%s:</b> %.1f Wh\n",
+						_("Last full charge"),
 						unit->charge_last_full / 1000.0f);
 		}
 		if (unit->charge_design > 0) {
-			g_string_append_printf (details, "<b>%s</b> %.1f Wh\n",
-						_("Design charge:"),
+			g_string_append_printf (details, "<b>%s:</b> %.1f Wh\n",
+						_("Design charge"),
 						unit->charge_design / 1000.0f);
 		}
 		if (unit->rate > 0) {
-			g_string_append_printf (details, "<b>%s</b> %.1f W\n",
-						_("Charge rate:"),
+			g_string_append_printf (details, "<b>%s:</b> %.1f W\n",
+						_("Charge rate"),
 						unit->rate / 1000.0f);
 		}
 	}
 	if (unit->measure == GPM_CELL_UNIT_CSR) {
 		if (unit->charge_current > 0) {
-			g_string_append_printf (details, "<b>%s</b> %i/7\n",
-						_("Current charge:"),
+			g_string_append_printf (details, "<b>%s:</b> %i/7\n",
+						_("Current charge"),
 						unit->charge_current);
 		}
 		if (unit->charge_design > 0) {
-			g_string_append_printf (details, "<b>%s</b> %i/7\n",
-						_("Design charge:"),
+			g_string_append_printf (details, "<b>%s:</b> %i/7\n",
+						_("Design charge"),
 						unit->charge_design);
 		}
 	}
@@ -676,9 +678,9 @@ phone_device_refresh_cb (GpmPhone     *phone,
 	}
 
 	if (percentage != unit->percentage) {
-		unit->percentage = percentage;
-		gpm_debug ("** EMIT: percent-changed: %i", percentage);
-		g_signal_emit (cell, signals [PERCENT_CHANGED], 0, percentage);
+		unit->percentage = (gfloat) percentage;
+		gpm_debug ("** EMIT: percent-changed: %.1f", unit->percentage);
+		g_signal_emit (cell, signals [PERCENT_CHANGED], 0, unit->percentage);
 	}
 }
 
@@ -700,8 +702,8 @@ gpm_cell_class_init (GpmCellClass *klass)
 			      G_STRUCT_OFFSET (GpmCellClass, percent_changed),
 			      NULL,
 			      NULL,
-			      g_cclosure_marshal_VOID__UINT,
-			      G_TYPE_NONE, 1, G_TYPE_UINT);
+			      g_cclosure_marshal_VOID__FLOAT,
+			      G_TYPE_NONE, 1, G_TYPE_FLOAT);
 	signals [DISCHARGING_CHANGED] =
 		g_signal_new ("discharging-changed",
 			      G_TYPE_FROM_CLASS (object_class),

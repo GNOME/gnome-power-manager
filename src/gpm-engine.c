@@ -730,7 +730,7 @@ gpm_cell_array_discharging_changed_cb (GpmCellArray *cell_array,
  */
 static void
 gpm_cell_array_percent_changed_cb (GpmCellArray *cell_array,
-				   guint         percent,
+				   gfloat        percent,
 				   GpmEngine    *engine)
 {
 	g_return_if_fail (engine != NULL);
@@ -789,7 +789,7 @@ gpm_cell_array_fully_charged_cb (GpmCellArray *cell_array,
  */
 static void
 gpm_cell_array_charge_low_cb (GpmCellArray *cell_array,
-			      guint         percent,
+			      gfloat        percent,
 			      GpmEngine    *engine)
 {
 	GpmCellUnitKind kind;
@@ -815,7 +815,7 @@ gpm_cell_array_charge_low_cb (GpmCellArray *cell_array,
  */
 static void
 gpm_cell_array_charge_critical_cb (GpmCellArray *cell_array,
-				   guint         percent,
+				   gfloat        percent,
 				   GpmEngine    *engine)
 {
 	GpmCellUnitKind kind;
@@ -841,7 +841,7 @@ gpm_cell_array_charge_critical_cb (GpmCellArray *cell_array,
  */
 static void
 gpm_cell_array_charge_action_cb (GpmCellArray *cell_array,
-				 guint         percent,
+				 gfloat        percent,
 				 GpmEngine    *engine)
 {
 	GpmCellUnitKind kind;

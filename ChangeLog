@@ -1,5 +1,28 @@
 2008-07-27  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-cell-array.c: (gpm_cell_array_update),
+	(gpm_cell_percent_changed_cb), (gpm_cell_array_get_description),
+	(gpm_cell_array_class_init):
+	* src/gpm-cell-array.h:
+	* src/gpm-cell-unit.c: (gpm_cell_unit_init), (gpm_cell_unit_print),
+	(gpm_st_cell_unit):
+	* src/gpm-cell-unit.h:
+	* src/gpm-cell.c: (gpm_cell_refresh_hal_all),
+	(hal_device_property_modified_cb), (gpm_cell_set_phone_index),
+	(gpm_cell_get_description), (phone_device_refresh_cb),
+	(gpm_cell_class_init):
+	* src/gpm-cell.h:
+	* src/gpm-engine.c: (gpm_cell_array_percent_changed_cb),
+	(gpm_cell_array_charge_low_cb),
+	(gpm_cell_array_charge_critical_cb),
+	(gpm_cell_array_charge_action_cb):
+	* src/gpm-manager.c: (gpm_engine_charge_low_cb),
+	(gpm_engine_charge_critical_cb):
+	* src/gpm-tray-icon.c: (gpm_tray_icon_add_device):
+	Convert the percentage charge to a gfloat type.
+
+2008-07-27  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-ac-adapter.c: (gpm_ac_adapter_class_init):
 	* src/gpm-brightness-kbd.c: (gpm_brightness_kbd_class_init):
 	* src/gpm-light-sensor.c: (gpm_light_sensor_class_init):

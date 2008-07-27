@@ -40,7 +40,7 @@ gpm_cell_unit_init (GpmCellUnit *unit)
 	unit->charge_last_full = 0;
 	unit->charge_current = 0;
 	unit->rate = 0;
-	unit->percentage = 0;
+	unit->percentage = 0.0f;
 	unit->time_charge = 0;
 	unit->time_discharge = 0;
 	unit->capacity = 0;
@@ -64,7 +64,7 @@ gpm_cell_unit_print (GpmCellUnit *unit)
 
 	gpm_debug ("device         %s", gpm_cell_unit_get_kind_localised (unit, FALSE));
 	gpm_debug ("present        %i", unit->is_present);
-	gpm_debug ("percent        %i", unit->percentage);
+	gpm_debug ("percent        %.1f", unit->percentage);
 	gpm_debug ("is charging    %i", unit->is_charging);
 	gpm_debug ("is discharging %i", unit->is_discharging);
 	if (unit->charge_current > 0) {
@@ -370,7 +370,7 @@ gpm_st_cell_unit (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "make sure full battery isn't charged");
-	unit->percentage = 100;
+	unit->percentage = 100.0f;
 	unit->is_charging = FALSE;
 	unit->is_discharging = TRUE;
 	ret = gpm_cell_unit_is_charged (unit);
@@ -409,7 +409,7 @@ gpm_st_cell_unit (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "make sure charging battery isn't charged");
-	unit->percentage = 99;
+	unit->percentage = 99.0f;
 	unit->is_charging = TRUE;
 	unit->is_discharging = FALSE;
 	ret = gpm_cell_unit_is_charged (unit);
@@ -421,7 +421,7 @@ gpm_st_cell_unit (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "make sure full battery is charged");
-	unit->percentage = 95;
+	unit->percentage = 95.0f;
 	unit->is_charging = FALSE;
 	unit->is_discharging = FALSE;
 	ret = gpm_cell_unit_is_charged (unit);
@@ -433,7 +433,7 @@ gpm_st_cell_unit (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "make sure broken battery isn't charged");
-	unit->percentage = 30;
+	unit->percentage = 30.0f;
 	unit->is_charging = FALSE;
 	unit->is_discharging = FALSE;
 	ret = gpm_cell_unit_is_charged (unit);
@@ -445,7 +445,7 @@ gpm_st_cell_unit (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "get missing icon");
-	unit->percentage = 30;
+	unit->percentage = 30.0f;
 	unit->is_present = FALSE;
 	value = gpm_cell_unit_get_icon (unit);
 	if (strcmp (value, "gpm-primary-missing") == 0) {
@@ -457,7 +457,7 @@ gpm_st_cell_unit (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "get middle icon");
-	unit->percentage = 30;
+	unit->percentage = 30.0f;
 	unit->is_present = TRUE;
 	value = gpm_cell_unit_get_icon (unit);
 	if (strcmp (value, "gpm-primary-040") == 0) {
@@ -471,7 +471,7 @@ gpm_st_cell_unit (GpmSelfTest *test)
 	gpm_st_title (test, "get charged icon");
 	unit->is_charging = FALSE;
 	unit->is_discharging = FALSE;
-	unit->percentage = 95;
+	unit->percentage = 95.0f;
 	unit->is_present = TRUE;
 	value = gpm_cell_unit_get_icon (unit);
 	if (strcmp (value, "gpm-primary-charged") == 0) {

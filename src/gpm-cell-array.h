@@ -47,7 +47,7 @@ typedef struct
 {
 	GObjectClass	parent_class;
 	void		(* percent_changed)	(GpmCellArray	*cell_array,
-						 guint		 percent);
+						 gfloat		 percent);
 	void		(* charging_changed)	(GpmCellArray	*cell_array,
 						 gboolean	 charging);
 	void		(* discharging_changed)	(GpmCellArray	*cell_array,
@@ -58,11 +58,11 @@ typedef struct
 	void		(* low_capacity)	(GpmCellArray	*cell_array,
 						 guint		 capacity);
 	void		(* charge_low)		(GpmCellArray	*cell_array,
-						 guint		 percent);
+						 gfloat		 percent);
 	void		(* charge_critical)	(GpmCellArray	*cell_array,
-						 guint		 percent);
+						 gfloat		 percent);
 	void		(* charge_action)	(GpmCellArray	*cell_array,
-						 guint		 percent);
+						 gfloat		 percent);
 	void		(* fully_charged)	(GpmCellArray	*cell_array);
 	void		(* collection_changed)	(GpmCellArray	*cell_array);
 	void		(* discharging)		(GpmCellArray	*cell_array);

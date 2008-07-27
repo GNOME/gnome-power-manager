@@ -514,7 +514,7 @@ gpm_tray_icon_add_device (GpmTrayIcon  *icon,
 
 		/* generate the label */
 		desc = gpm_cell_unit_get_kind_localised (unit, FALSE);
-		label = g_strdup_printf ("%s (%i%%)", desc, unit->percentage);
+		label = g_strdup_printf ("%s (%.1f%%)", desc, unit->percentage);
 		item = gtk_image_menu_item_new_with_label (label);
 		g_free (label);
 

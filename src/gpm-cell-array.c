@@ -354,14 +354,14 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 	 * a very high charge. Fixes bug #327471 */
 	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY &&
 	    unit->charge_current > 0 && unit->charge_last_full > 0) {
-		gint pc = 100 * ((gfloat)unit->charge_current /
+		gfloat pc = 100.0f * ((gfloat)unit->charge_current /
 				(gfloat)unit->charge_last_full);
-		if (pc < 0) {
+		if (pc < 0.0f) {
 			gpm_warning ("Corrected percentage charge (%i) and set to minimum", pc);
-			pc = 0;
-		} else if (pc > 100) {
+			pc = 0.0f;
+		} else if (pc > 100.0f) {
 			gpm_warning ("Corrected percentage charge (%i) and set to maximum", pc);
-			pc = 100;
+			pc = 100.0f;
 		}
 		unit->percentage = pc;
 	}
@@ -373,7 +373,7 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY &&
 	    unit->is_charging == FALSE &&
 	    unit->is_discharging == FALSE &&
-	    unit->percentage > 0 &&
+	    unit->percentage > 0.0f &&
 	    unit->percentage < GPM_CELL_UNIT_MIN_CHARGED_PERCENTAGE) {
 		gboolean on_ac;
 
@@ -394,7 +394,7 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 	 * Hopefully we can remove this in 2.19.x sometime. */
 	if (cell_array->priv->use_profile_calc &&
 	    unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
-		gpm_debug ("unit->percentage = %i", unit->percentage);
+		gpm_debug ("unit->percentage = %.1f", unit->percentage);
 		unit->time_discharge = gpm_profile_get_time (cell_array->priv->profile, unit->percentage, TRUE);
 		unit->time_charge = gpm_profile_get_time (cell_array->priv->profile, unit->percentage, FALSE);
 	} else {
@@ -598,7 +598,7 @@ gpm_cell_percent_changed_cb (GpmCell *cell, guint percent, GpmCellArray *cell_ar
 
 	/* provide data if we are primary. Will need profile if multibattery */
 	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
-		gpm_profile_register_percentage (cell_array->priv->profile, percent);
+		gpm_profile_register_percentage (cell_array->priv->profile, (guint) percent);
 	}
 
 	/* proxy to engine if different */
@@ -958,19 +958,19 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 	if (unit->kind == GPM_CELL_UNIT_KIND_MOUSE ||
 	    unit->kind == GPM_CELL_UNIT_KIND_KEYBOARD ||
 	    unit->kind == GPM_CELL_UNIT_KIND_PDA) {
-		return g_strdup_printf ("%s (%i%%)\n", type_desc, unit->percentage);
+		return g_strdup_printf ("%s (%.1f%%)\n", type_desc, unit->percentage);
 	}
 
 	/* we care if we are on AC */
 	if (unit->kind == GPM_CELL_UNIT_KIND_PHONE) {
 		if (unit->is_charging || unit->is_discharging == FALSE) {
-			return g_strdup_printf ("%s charging (%i%%)\n", type_desc, unit->percentage);
+			return g_strdup_printf ("%s charging (%.1f%%)\n", type_desc, unit->percentage);
 		}
-		return g_strdup_printf ("%s (%i%%)\n", type_desc, unit->percentage);
+		return g_strdup_printf ("%s (%.1f%%)\n", type_desc, unit->percentage);
 	}
 
 	/* don't display the text if we are low in accuracy */
-	accuracy = gpm_profile_get_accuracy (cell_array->priv->profile, unit->percentage);
+	accuracy = gpm_profile_get_accuracy (cell_array->priv->profile, (guint) unit->percentage);
 	gpm_debug ("accuracy = %i", accuracy);
 
 	/* precalculate so we don't get Unknown time remaining */
@@ -984,14 +984,14 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 
 		if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY &&
 		    accuracy > GPM_CELL_ARRAY_TEXT_MIN_ACCURACY) {
-			time = gpm_profile_get_time (cell_array->priv->profile, unit->percentage, TRUE);
+			time = gpm_profile_get_time (cell_array->priv->profile, (guint) unit->percentage, TRUE);
 			discharge_time_round = gpm_precision_round_down (time, GPM_UI_TIME_PRECISION);
 			discharge_timestring = gpm_get_timestring (discharge_time_round);
-			description = g_strdup_printf (_("%s fully charged (%i%%)\nProvides %s battery runtime\n"),
+			description = g_strdup_printf (_("%s fully charged (%.1f%%)\nProvides %s battery runtime\n"),
 							type_desc, unit->percentage, discharge_timestring);
 			g_free (discharge_timestring);
 		} else {
-			description = g_strdup_printf (_("%s fully charged (%i%%)\n"),
+			description = g_strdup_printf (_("%s fully charged (%.1f%%)\n"),
 							type_desc, unit->percentage);
 		}
 
@@ -999,12 +999,12 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 
 		if (discharge_time_round > GPM_CELL_ARRAY_TEXT_MIN_TIME) {
 			discharge_timestring = gpm_get_timestring (discharge_time_round);
-			description = g_strdup_printf (_("%s %s remaining (%i%%)\n"),
+			description = g_strdup_printf (_("%s %s remaining (%.1f%%)\n"),
 						type_desc, discharge_timestring, unit->percentage);
 			g_free (discharge_timestring);
 		} else {
 			/* don't display "Unknown remaining" */
-			description = g_strdup_printf (_("%s discharging (%i%%)\n"),
+			description = g_strdup_printf (_("%s discharging (%.1f%%)\n"),
 						type_desc, unit->percentage);
 		}
 
@@ -1016,19 +1016,19 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 			/* display both discharge and charge time */
 			charge_timestring = gpm_get_timestring (charge_time_round);
 			discharge_timestring = gpm_get_timestring (discharge_time_round);
-			description = g_strdup_printf (_("%s %s until charged (%i%%)\nProvides %s battery runtime\n"),
+			description = g_strdup_printf (_("%s %s until charged (%.1f%%)\nProvides %s battery runtime\n"),
 							type_desc, charge_timestring, unit->percentage, discharge_timestring);
 			g_free (charge_timestring);
 			g_free (discharge_timestring);
 		} else if (charge_time_round > GPM_CELL_ARRAY_TEXT_MIN_TIME) {
 			/* display only charge time */
 			charge_timestring = gpm_get_timestring (charge_time_round);
-			description = g_strdup_printf (_("%s %s until charged (%i%%)\n"),
+			description = g_strdup_printf (_("%s %s until charged (%.1f%%)\n"),
 						type_desc, charge_timestring, unit->percentage);
 			g_free (charge_timestring);
 		} else {
 			/* don't display "Unknown remaining" */
-			description = g_strdup_printf (_("%s charging (%i%%)\n"),
+			description = g_strdup_printf (_("%s charging (%.1f%%)\n"),
 						type_desc, unit->percentage);
 		}
 
@@ -1278,8 +1278,8 @@ gpm_cell_array_class_init (GpmCellArrayClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmCellArrayClass, percent_changed),
 			      NULL, NULL,
-			      g_cclosure_marshal_VOID__UINT,
-			      G_TYPE_NONE, 1, G_TYPE_UINT);
+			      g_cclosure_marshal_VOID__FLOAT,
+			      G_TYPE_NONE, 1, G_TYPE_FLOAT);
 	signals [CHARGING_CHANGED] =
 		g_signal_new ("charging-changed",
 			      G_TYPE_FROM_CLASS (object_class),

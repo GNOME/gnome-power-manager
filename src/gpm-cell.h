@@ -46,7 +46,7 @@ typedef struct
 {
 	GObjectClass	parent_class;
 	void		(* percent_changed)	(GpmCell	*cell,
-						 guint		 percent);
+						 gfloat		 percent);
 	void		(* charging_changed)	(GpmCell	*cell,
 						 gboolean	 charging);
 	void		(* discharging_changed)	(GpmCell	*cell,
