@@ -280,27 +280,6 @@ fi
 AC_SUBST(DBUS_SERVICES_DIR)
 
 dnl ---------------------------------------------------------------------------
-dnl - Get the dbus version
-dnl ---------------------------------------------------------------------------
-dbus_version=`pkg-config --modversion dbus-1`
-DBUS_VERSION_MAJOR=`echo $dbus_version | awk -F. '{print $1}'`
-DBUS_VERSION_MINOR=`echo $dbus_version | awk -F. '{print $2}'`
-DBUS_VERSION_MICRO=`echo $dbus_version | awk -F. '{print $3}'`
-if test "z$DBUS_VERSION_MAJOR" = "z"; then
-  DBUS_VERSION_MAJOR="0"
-fi
-if test "z$DBUS_VERSION_MINOR" = "z"; then
-  DBUS_VERSION_MINOR="0"
-fi
-if test "z$DBUS_VERSION_MICRO" = "z"; then
-  DBUS_VERSION_MICRO="0"
-fi
-echo "Your dbus version is $DBUS_VERSION_MAJOR,$DBUS_VERSION_MINOR,$DBUS_VERSION_MICRO."
-DBUS_CFLAGS="$DBUS_CFLAGS -DDBUS_VERSION_MAJOR=$DBUS_VERSION_MAJOR"
-DBUS_CFLAGS="$DBUS_CFLAGS -DDBUS_VERSION_MINOR=$DBUS_VERSION_MINOR"
-DBUS_CFLAGS="$DBUS_CFLAGS -DDBUS_VERSION_MICRO=$DBUS_VERSION_MICRO"
-
-dnl ---------------------------------------------------------------------------
 dnl - Is a new enough libnotify available?
 dnl ---------------------------------------------------------------------------
 if $PKG_CONFIG --atleast-version $LIBNOTIFY_REQUIRED libnotify; then
