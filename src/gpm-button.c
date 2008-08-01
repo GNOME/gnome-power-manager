@@ -166,11 +166,19 @@ gpm_button_grab_keystring (GpmButton *button, guint64 keycode)
  * Return value: TRUE if we parsed and grabbed okay
  **/
 static gboolean
-gpm_button_xevent_key (GpmButton *button, guint keycode, const gchar *hal_key)
+gpm_button_xevent_key (GpmButton *button, guint keysym, const gchar *hal_key)
 {
 	gchar *key = NULL;
 	gboolean ret;
 	gchar *keycode_str;
+	guint keycode;
+
+	/* convert from keysym to keycode */
+	keycode = XKeysymToKeycode (GDK_DISPLAY (), keysym);
+	if (keycode == 0) {
+		gpm_warning ("could not map keysym %x to keycode", keysym);
+		return FALSE;
+	}
 
 	/* is the key string already in our DB? */
 	keycode_str = g_strdup_printf ("0x%x", keycode);
