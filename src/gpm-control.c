@@ -107,7 +107,7 @@ gpm_control_is_user_privileged (GpmControl *control, const gchar *privilege)
 	pid = getpid ();
 	mask = polkit_check_auth (pid, privilege, NULL);
 	if (mask == 0) {
-		gpm_warning ("failed to authorise for privilege");
+		gpm_warning ("failed to authorise for privilege %s", privilege);
 		ret = FALSE;
 	}
 #endif
@@ -170,7 +170,7 @@ gpm_control_allowed_suspend (GpmControl *control,
 	*can = FALSE;
 	gpm_conf_get_bool (control->priv->conf, GPM_CONF_CAN_SUSPEND, &conf_ok);
 	hal_ok = hal_gpower_can_suspend (control->priv->hal_power);
-	polkit_ok = gpm_control_is_user_privileged (control, "hal-power-suspend");
+	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.hal.power-management.suspend");
 	fg = gpm_control_check_foreground_console (control);
 	if (conf_ok && hal_ok && polkit_ok && fg) {
 		*can = TRUE;
@@ -202,7 +202,7 @@ gpm_control_allowed_hibernate (GpmControl *control,
 	gpm_conf_get_bool (control->priv->conf, GPM_CONF_CAN_HIBERNATE, &conf_ok);
 	hal_ok = hal_gpower_can_hibernate (control->priv->hal_power);
 	fg = gpm_control_check_foreground_console (control);
-	polkit_ok = gpm_control_is_user_privileged (control, "hal-power-hibernate");
+	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.hal.power-management.hibernate");
 	if (conf_ok && hal_ok && polkit_ok && fg) {
 		*can = TRUE;
 	}

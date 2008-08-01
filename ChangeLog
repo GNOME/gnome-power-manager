@@ -1,5 +1,12 @@
 2008-08-01  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-control.c: (gpm_control_is_user_privileged),
+	(gpm_control_allowed_suspend), (gpm_control_allowed_hibernate):
+	Use the correct Policykit action names, we've not used hal-power-* in
+	a very long time.
+
+2008-08-01  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-button.c: (gpm_button_xevent_key):
 	Make sure we convert from a keysym to keycode.
 
