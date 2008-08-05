@@ -296,6 +296,7 @@ gnome_power_self_test_LDADD =				\
 	$(GLIB_LIBS)					\
 	$(GNOME_LIBS)					\
 	$(GSTREAMER_LIBS)				\
+	$(POLKIT_GNOME_LIBS)				\
 	$(DBUS_LIBS)					\
 	$(LIBNOTIFY_LIBS)				\
 	$(LOCAL_LIBDBUS_LIBS)				\
