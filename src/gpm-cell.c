@@ -144,6 +144,15 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 			gpm_warning ("sanity checking rate from %i to 0", unit->rate);
 			unit->rate = 0;
 		}
+		/* The ACPI spec only allows this for primary cells, but in the real
+		   world we also see it for rechargeables. Sigh */
+		if (unit->rate == 0) {
+			guint raw_last_charge;
+			hal_gdevice_get_uint (device, "battery.reporting.last_full",
+					      &raw_last_charge, NULL);
+			if (raw_last_charge == 100)
+				unit->reports_percentage = TRUE;
+		}
 	}
 
 	/* sanity check that charge_level.percentage exists (if it should) */
@@ -181,7 +190,7 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 						   "%i to 0", unit->capacity);
 					unit->capacity = 0;
 				}
-				if (unit->capacity < 50) {
+				if (unit->capacity < 50 && !unit->reports_percentage) {
 					gpm_warning ("battery has a low capacity");
 					gpm_debug ("** EMIT: low-capacity");
 					g_signal_emit (cell, signals [LOW_CAPACITY], 0, unit->capacity);

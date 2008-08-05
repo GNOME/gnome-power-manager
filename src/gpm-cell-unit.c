@@ -50,6 +50,7 @@ gpm_cell_unit_init (GpmCellUnit *unit)
 	unit->is_present = FALSE;
 	unit->is_charging = FALSE;
 	unit->is_discharging = FALSE;
+	unit->reports_percentage = FALSE;
 
 	return TRUE;
 }

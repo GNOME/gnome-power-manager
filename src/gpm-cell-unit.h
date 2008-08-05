@@ -57,6 +57,7 @@ typedef struct {
 	gboolean	 is_present;
 	gboolean	 is_charging;
 	gboolean	 is_discharging;
+	gboolean         reports_percentage;
 } GpmCellUnit;
 
 gboolean	 gpm_cell_unit_init		(GpmCellUnit	*unit);

@@ -1,3 +1,23 @@
+2008-08-05  atthew Garrett  <mjg59@redhat.com>
+
+	* src/gpm-cell-unit.c: (gpm_cell_unit_init):
+	* src/gpm-cell-unit.h:
+	* src/gpm-cell.c: (gpm_cell_refresh_hal_all):
+	The ACPI spec has the following:
+
+	'Notice that when the battery is a primary battery (a non-rechargeable
+	battery such as an Alkaline-Manganese battery) and cannot provide
+	accurate information about the battery to use in the calculation of the
+	remaining battery life, the Control Method Battery can report the
+	percentage directly to OS. It does so by reporting the Last Full
+	Charged Capacity = 100 and BatteryPresentRate=0xFFFFFFFF.
+	This means that Battery Remaining Capacity directly reports the
+	battery's remaining capacity [%] as a value in the range 0 through 100'
+
+	The Eee behaves like this despite the fact that its battery is
+	rechargeable, so ends up triggering the 'Broken battery' warning in
+	g-p-m. This patch adds support for avoiding this case.
+
 2008-08-01  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-control.c: (gpm_control_is_user_privileged),
