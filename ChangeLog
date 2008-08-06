@@ -1,3 +1,9 @@
+2008-08-06  simon.zheng  <simon.zheng@sun.com>
+
+	* src/gpm-brightness-xrandr.c: (gpm_brightness_xrandr_init):
+	Fix #546556. No longer call XRR-related functions if XRandr
+	is not available.
+
 2008-08-05  Richard Hughes  <richard@hughsie.com>
 
 	* src/Makefile.am:

@@ -676,6 +676,8 @@ gpm_brightness_xrandr_init (GpmBrightnessXRandR *brightness)
 
 	/* can we do this */
 	brightness->priv->has_extension = gpm_brightness_xrandr_setup_display (brightness);
+	if (brightness->priv->has_extension == FALSE)
+		return;
 
 	screen = gdk_screen_get_default ();
 	window = gdk_screen_get_root_window (screen);
