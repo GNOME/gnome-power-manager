@@ -1,4 +1,30 @@
 ==============
+Version 2.23.6
+==============
+
+- Fixed #544298, gpm 2.23.3 fails to compile (Richard Hughes)
+- Fixed #546556, g-p-m unable to startup on Solaris Sparc because of missing XRandr (Simon Zheng)
+- Supress low battery warning on Eee as it's reported as non-rechargeable (Matthew Garrett)
+- Use polkit-simple to simplify the optional PolicyKit bits (Richard Hughes)
+- Completely remove all traces of the skipping suppressed action warning (Richard Hughes)
+- Don't use a libnotify window for the battery information, use a GtkDialog instead (Richard Hughes)
+
+Translations:
+- Updated ar: Khaled Hosny
+- Updated cs: Pavel Šefránek, Pavel Sefranek
+- Updated es: Jorge González, Jorge Gonzalez
+- Updated gl: Ignacio Casal Quinteiro
+- Updated he: Yaniv Abir <yanivabir at gmail dot com>, Yair Hershkoviz
+- Updated nb: Kjartan Maraas
+- Updated oc: Yannig Marchegay, Yannig Marchegay (Kokoyaya)
+- Updated pt_BR: Vladimir Melo, Leonardo Ferreira Fontenelle
+- Updated sl: Matej Urbančič
+- Updated th: Theppitak Karoonboonyanan
+
+Help Manual Translations:
+- Updated sv: Daniel Nylander
+
+==============
 Version 2.23.3
 ==============
 
