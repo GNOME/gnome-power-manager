@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-09 21:33+0200\n"
-"PO-Revision-Date: 2008-08-09 21:55+0200\n"
+"PO-Revision-Date: 2008-08-11 21:02+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <icq@svn.gnome.org>\n"
 "Language-Team: Galego <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
@@ -615,13 +615,12 @@ msgstr ""
 "posibles son: \"hibernar\", \"suspender\", \"pechar\" e \"nada\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:83
-#, fuzzy
 msgid ""
 "The action to take when the UPS is low. Possible values are \"hibernate\", "
 "\"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
-"A acción que se realizará cando o SAI estea criticamente baixo. Os valores "
-"posibles son: \"hibernar\", \"suspender\", \"pechar\" e \"nada\"."
+"A acción que se realizará cando o SAI estea baixo. Os valores posibles son: "
+"\"hibernate\", \"suspend\", \"shutdown\" e \"nothing\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:84
 msgid ""
@@ -722,13 +721,12 @@ msgid "The amount the light sensors should contribute to the brightness."
 msgstr "A cantidade coa que os sensores de luz deben contribuír ao brillo."
 
 #: ../data/gnome-power-manager.schemas.in.h:96
-#, fuzzy
 msgid ""
 "The amount to dim the brightness of the display when on battery power. "
 "Possible values are between 0 and 100."
 msgstr ""
-"O brillo da pantalla cando está funcionando coa batería. Os valores posibles "
-"están entre 0 e 100."
+"A  brillo da pantalla cando está funcionando coa batería. Os valores "
+"posibles están entre 0 e 100."
 
 #: ../data/gnome-power-manager.schemas.in.h:97
 msgid ""
@@ -739,7 +737,6 @@ msgstr ""
 "entre 0 e 100."
 
 #: ../data/gnome-power-manager.schemas.in.h:98
-#, fuzzy
 msgid ""
 "The brightness of the keyboard when on AC power. Possible values are between "
 "0 and 100."
@@ -748,12 +745,11 @@ msgstr ""
 "entre 0 e 100."
 
 #: ../data/gnome-power-manager.schemas.in.h:99
-#, fuzzy
 msgid ""
 "The brightness of the keyboard when on battery power. Possible values are "
 "between 0 and 100."
 msgstr ""
-"O brillo da pantalla cando está funcionando coa batería. Os valores posibles "
+"O brillo do teclado cando está funcionando coa batería. Os valores posibles "
 "están entre 0 e 100."
 
 #: ../data/gnome-power-manager.schemas.in.h:100
@@ -961,7 +957,6 @@ msgstr ""
 "Isto significa que terá que desbloquear o anel ao reanudar."
 
 #: ../data/gnome-power-manager.schemas.in.h:134
-#, fuzzy
 msgid ""
 "Whether the screen is locked when the computer wakes up from a hibernate. "
 "Only used if lock_use_screensaver_settings is false."
@@ -970,7 +965,6 @@ msgstr ""
 "hibernación. Só se usa se lock_use_screensaver_settings é falso."
 
 #: ../data/gnome-power-manager.schemas.in.h:135
-#, fuzzy
 msgid ""
 "Whether the screen is locked when the computer wakes up from a suspend. Only "
 "used if lock_use_screensaver_settings is false."
@@ -979,7 +973,6 @@ msgstr ""
 "suspensión. Só se lock_use_screensaver_settings é falso."
 
 #: ../data/gnome-power-manager.schemas.in.h:136
-#, fuzzy
 msgid ""
 "Whether the screen is locked when the screen is turned off. Only used if "
 "lock_use_screensaver_settings is false."
@@ -994,7 +987,6 @@ msgstr ""
 "inactivo"
 
 #: ../data/gnome-power-manager.schemas.in.h:138
-#, fuzzy
 msgid ""
 "Whether to use the screen lock setting of gnome-screensaver to decide if the "
 "screen is locked after a hibernate, suspend or blank screen."
@@ -1577,7 +1569,7 @@ msgstr "%s impediu que o sistema se apague: %s."
 #: ../src/gpm-inhibit.c:398
 #, c-format
 msgid "%s has stopped the timeout action from taking place: %s."
-msgstr ""
+msgstr "%s impediu que se suspenda o sistema: %s."
 
 #: ../src/gpm-inhibit.c:407 ../src/gpm-inhibit.c:422
 msgid "Multiple applications have stopped the suspend from taking place."
@@ -1759,11 +1751,9 @@ msgid "UPS low"
 msgstr "SAI baixo"
 
 #: ../src/gpm-manager.c:1376
-#, fuzzy, c-format
+#, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"
-msgstr ""
-"Quédalle aproximadamente <b>%s</b> de batería (%d%%). Enchufe o seu "
-"adaptador de CA para evitar a perda de datos."
+msgstr "Quédalle aproximadamente <b>%s</b> de carga no SAI (%.1f%%)."
 
 #: ../src/gpm-manager.c:1379 ../src/gpm-manager.c:1479
 msgid "Mouse battery low"
@@ -1878,22 +1868,22 @@ msgstr ""
 "(%.1f%%). Este dispositivo deixará de funcionar en breve se non se carga."
 
 #: ../src/gpm-manager.c:1490
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The PDA attached to this computer is very low in power (%.1f%%). This device "
 "will soon stop functioning if not charged."
 msgstr ""
-"O dispositivo %s asociado a este computador ten o nivel de enerxía baixo (%d%"
-"%). Este dispositivo deixará de funcionar en breve se non se carga."
+"A PDA asociada a este computador ten o nivel de enerxía moi baixo (%.1f%%). "
+"Este dispositivo deixará de funcionar en breve se non se carga."
 
 #: ../src/gpm-manager.c:1495
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your cell phone is very low in power (%.1f%%). This device will soon stop "
 "functioning if not charged."
 msgstr ""
-"O dispositivo %s asociado a este computador ten o nivel de enerxía baixo (%d%"
-"%). Este dispositivo deixará de funcionar en breve se non se carga."
+"O teléfono móbil ten o nivel de enerxía moi baixo (%.1f%%). Este dispositivo "
+"deixará de funcionar en breve se non se carga."
 
 #: ../src/gpm-manager.c:1532
 msgid ""
