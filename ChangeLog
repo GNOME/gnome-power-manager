@@ -1,3 +1,14 @@
+2008-08-14  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-cell-array.c: (gpm_cell_array_index_device_id),
+	(gpm_cell_array_add_device_id), (gpm_cell_array_coldplug),
+	(hal_device_removed_cb), (hal_new_capability_cb),
+	(hal_device_added_cb):
+	* src/gpm-cell.c: (gpm_cell_set_device_id),
+	(gpm_cell_get_device_id), (gpm_st_cell):
+	* src/gpm-cell.h:
+	Change some internal funciton names to metion an ID, not a UDI.
+
 2008-08-14  Wouter Bolsterlee  <wbolster@svn.gnome.org>
 
 	* m4/: Added empty m4/ directory to fix

@@ -369,10 +369,10 @@ gpm_cell_set_type (GpmCell *cell, GpmCellUnitKind kind)
 }
 
 /**
- * gpm_cell_set_hal_udi:
+ * gpm_cell_set_device_id:
  **/
 gboolean
-gpm_cell_set_hal_udi (GpmCell *cell, const gchar *udi)
+gpm_cell_set_device_id (GpmCell *cell, const gchar *udi)
 {
 	gboolean ret;
 	HalGDevice *device;
@@ -438,10 +438,10 @@ gpm_cell_set_phone_index (GpmCell *cell, guint index)
 }
 
 /**
- * gpm_cell_get_udi:
+ * gpm_cell_get_device_id:
  **/
 const gchar *
-gpm_cell_get_udi (GpmCell *cell)
+gpm_cell_get_device_id (GpmCell *cell)
 {
 	g_return_val_if_fail (cell != NULL, NULL);
 	g_return_val_if_fail (GPM_IS_CELL (cell), NULL);
@@ -902,7 +902,7 @@ gpm_st_cell (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "can we assign device");
-	ret = gpm_cell_set_hal_udi (cell, udi);
+	ret = gpm_cell_set_device_id (cell, udi);
 	if (ret) {
 		gpm_st_success (test, "set type okay");
 	} else {
