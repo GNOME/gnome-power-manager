@@ -592,10 +592,10 @@ gpm_cell_array_percent_changed (GpmCellArray *cell_array)
  * gpm_cell_percent_changed_cb:
  */
 static void
-gpm_cell_percent_changed_cb (GpmCell *cell, guint percent, GpmCellArray *cell_array)
+gpm_cell_percent_changed_cb (GpmCell *cell, gfloat percent, GpmCellArray *cell_array)
 {
 	GpmCellUnit *unit;
-	guint old_percent;
+	gfloat old_percent;
 
 	g_return_if_fail (GPM_IS_CELL_ARRAY (cell_array));
 

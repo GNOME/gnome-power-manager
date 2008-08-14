@@ -1,5 +1,10 @@
 2008-08-14  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-cell-array.c: (gpm_cell_percent_changed_cb):
+	The callback passes a gfloat, not a guint. Fixes #547766
+
+2008-08-14  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-cell-array.c:
 	Add some g_return_val_if_fail()'s to try to debug #547766
 
