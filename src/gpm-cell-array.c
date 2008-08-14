@@ -96,7 +96,6 @@ gpm_cell_array_get_unit (GpmCellArray *cell_array)
 {
 	GpmCellUnit *unit;
 
-	g_return_val_if_fail (cell_array != NULL, NULL);
 	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), NULL);
 
 	unit = &(cell_array->priv->unit);
@@ -110,7 +109,6 @@ gpm_cell_array_get_unit (GpmCellArray *cell_array)
 guint
 gpm_cell_array_get_num_cells (GpmCellArray *cell_array)
 {
-	g_return_val_if_fail (cell_array != NULL, 0);
 	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), 0);
 
 	return cell_array->priv->array->len;
@@ -124,7 +122,6 @@ gpm_cell_array_get_icon (GpmCellArray *cell_array)
 {
 	GpmCellUnit *unit;
 
-	g_return_val_if_fail (cell_array != NULL, 0);
 	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), 0);
 
 	unit = &(cell_array->priv->unit);
@@ -139,7 +136,6 @@ gpm_cell_array_get_kind (GpmCellArray *cell_array)
 {
 	GpmCellUnit *unit;
 
-	g_return_val_if_fail (cell_array != NULL, 0);
 	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), 0);
 
 	unit = &(cell_array->priv->unit);
@@ -154,7 +150,6 @@ gpm_cell_array_get_cell (GpmCellArray *cell_array, guint id)
 {
 	GpmCell *cell;
 
-	g_return_val_if_fail (cell_array != NULL, NULL);
 	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), NULL);
 
 	if (id > cell_array->priv->array->len) {
@@ -177,6 +172,8 @@ gpm_cell_array_get_time_until_action (GpmCellArray *cell_array)
 	guint action_percentage;
 	guint action_time;
 	gint difference;
+
+	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), 0);
 
 	/* clear old values (except previous charge rate) */
 	unit = &(cell_array->priv->unit);
@@ -222,6 +219,8 @@ gpm_cell_array_get_time_until_action (GpmCellArray *cell_array)
 static void
 gpm_cell_perhaps_recall_cb (GpmCell *cell, gchar *oem_vendor, gchar *website, GpmCellArray *cell_array)
 {
+	g_return_if_fail (GPM_IS_CELL_ARRAY (cell_array));
+
 	/* only emit this once per startup */
 	if (cell_array->priv->done_recall == FALSE) {
 		/* just proxy it to the engine layer */
@@ -237,6 +236,8 @@ gpm_cell_perhaps_recall_cb (GpmCell *cell, gchar *oem_vendor, gchar *website, Gp
 static void
 gpm_cell_low_capacity_cb (GpmCell *cell, guint capacity, GpmCellArray *cell_array)
 {
+	g_return_if_fail (GPM_IS_CELL_ARRAY (cell_array));
+
 	/* only emit this once per startup */
 	if (cell_array->priv->done_capacity == FALSE) {
 		/* just proxy it to the GUI layer */
@@ -265,6 +266,8 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 	guint num_discharging = 0;
 	guint length;
 	guint i;
+
+	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), FALSE);
 
 	/* clear old values (except previous charge rate) */
 	unit = &(cell_array->priv->unit);
@@ -444,6 +447,8 @@ gpm_cell_array_get_config_id (GpmCellArray *cell_array)
 	guint length;
 	guint i;
 
+	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), NULL);
+
 	unit = &(cell_array->priv->unit);
 
 	/* invalid if not primary */
@@ -488,6 +493,8 @@ gpm_cell_array_emit_system_action (GpmCellArray	   *cell_array,
 	gfloat accuracy;
 	GpmCellUnit *unit;
 
+	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), FALSE);
+
 	/* do we trust the profile enough to make a decision? */
 	unit = &(cell_array->priv->unit);
 	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
@@ -524,6 +531,8 @@ gpm_cell_array_percent_changed (GpmCellArray *cell_array)
 {
 	GpmWarningsState warnings_state;
 	GpmCellUnit *unit;
+
+	g_return_if_fail (GPM_IS_CELL_ARRAY (cell_array));
 
 	unit = &(cell_array->priv->unit);
 
@@ -588,6 +597,8 @@ gpm_cell_percent_changed_cb (GpmCell *cell, guint percent, GpmCellArray *cell_ar
 	GpmCellUnit *unit;
 	guint old_percent;
 
+	g_return_if_fail (GPM_IS_CELL_ARRAY (cell_array));
+
 	unit = &(cell_array->priv->unit);
 
 	/* save the old percentage so we can compare it later */
@@ -616,6 +627,8 @@ static void
 gpm_cell_charging_changed_cb (GpmCell *cell, gboolean charging, GpmCellArray *cell_array)
 {
 	GpmCellUnit *unit;
+
+	g_return_if_fail (GPM_IS_CELL_ARRAY (cell_array));
 
 	unit = &(cell_array->priv->unit);
 
@@ -649,6 +662,8 @@ gpm_cell_discharging_changed_cb (GpmCell *cell, gboolean discharging, GpmCellArr
 {
 	GpmCellUnit *unit;
 
+	g_return_if_fail (GPM_IS_CELL_ARRAY (cell_array));
+
 	unit = &(cell_array->priv->unit);
 
 	/* recalculate */
@@ -680,6 +695,8 @@ gpm_cell_array_index_device_id (GpmCellArray *cell_array, const gchar *device_id
 	const gchar *cell_device_id;
 	GpmCell *cell;
 
+	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), 0);
+
 	length = cell_array->priv->array->len;
 	for (i=0;i<length;i++) {
 		cell = (GpmCell *) g_ptr_array_index (cell_array->priv->array, i);
@@ -703,6 +720,8 @@ gpm_check_device_key (GpmCellArray *cell_array, const gchar *udi, const gchar *k
 	gboolean ret;
 	gboolean matches = FALSE;
 	gchar *rettype;
+
+	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), FALSE);
 
 	device = hal_gdevice_new ();
 	ret = hal_gdevice_set_udi (device, udi);
@@ -737,6 +756,8 @@ gpm_cell_array_collection_changed (GpmCellArray *cell_array)
 	GpmCellUnit *unit;
 	gchar *config_id;
 	guint length;
+
+	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), FALSE);
 
 	length = cell_array->priv->array->len;
 	/* if we have no devices, don't try to get refresh anything */
@@ -778,6 +799,8 @@ gpm_cell_array_add_device_id (GpmCellArray *cell_array, const gchar *device_id)
 	gint index;
 	const gchar *kind_string;
 	gboolean ret;
+
+	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), FALSE);
 
 	unit = &(cell_array->priv->unit);
 
@@ -833,6 +856,8 @@ gpm_cell_array_coldplug (GpmCellArray *cell_array)
 	gboolean ret;
 	GpmCellUnit *unit;
 
+	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), FALSE);
+
 	unit = &(cell_array->priv->unit);
 
 	/* we treat phones as hotpluggable devices only */
@@ -867,7 +892,6 @@ gpm_cell_array_set_type (GpmCellArray *cell_array, GpmCellUnitKind kind)
 {
 	GpmCellUnit *unit;
 
-	g_return_val_if_fail (cell_array != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), FALSE);
 
 	unit = &(cell_array->priv->unit);
@@ -894,6 +918,8 @@ gpm_cell_array_free (GpmCellArray *cell_array)
 	guint length;
 	guint i;
 
+	g_return_if_fail (GPM_IS_CELL_ARRAY (cell_array));
+
 	length = cell_array->priv->array->len;
 	/* iterate thru all the devices to free */
 	for (i=0;i<length;i++) {
@@ -913,7 +939,6 @@ gpm_cell_array_free (GpmCellArray *cell_array)
 gboolean
 gpm_cell_array_refresh (GpmCellArray *cell_array)
 {
-	g_return_val_if_fail (cell_array != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), FALSE);
 
 	/* free all, then re-coldplug */
@@ -939,7 +964,6 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 	GpmCellUnit *unit;
 	gboolean plural = FALSE;
 
-	g_return_val_if_fail (cell_array != NULL, NULL);
 	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), NULL);
 
 	unit = &(cell_array->priv->unit);
@@ -1054,6 +1078,8 @@ hal_device_removed_cb (HalGManager  *hal_manager,
 {
 	gint index;
 	GpmCell *cell;
+
+	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), FALSE);
 
 	/* is this UDI in our array? */
 	index = gpm_cell_array_index_device_id (cell_array, udi);
