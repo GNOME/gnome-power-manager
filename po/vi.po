@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 2.23.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-02 10:10+0000\n"
-"PO-Revision-Date: 2008-06-03 23:29+0930\n"
+"POT-Creation-Date: 2008-07-27 10:13+0000\n"
+"PO-Revision-Date: 2008-08-24 14:56+0700\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -39,13 +39,13 @@ msgid "LCD brightness : %d%%"
 msgstr "Độ sáng LCD: %d%%"
 
 #: ../applets/brightness/brightness-applet.c:748
-#: ../applets/inhibit/inhibit-applet.c:418 ../src/gpm-tray-icon.c:310
+#: ../applets/inhibit/inhibit-applet.c:418 ../src/gpm-tray-icon.c:323
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr ""
 "Được phát hành với điều kiện của Quyền Công Chung GNU (GPL) phiên bản 2"
 
 #: ../applets/brightness/brightness-applet.c:749
-#: ../applets/inhibit/inhibit-applet.c:419 ../src/gpm-tray-icon.c:311
+#: ../applets/inhibit/inhibit-applet.c:419 ../src/gpm-tray-icon.c:324
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -58,7 +58,7 @@ msgstr ""
 "kỳ phiên bản sau nào."
 
 #: ../applets/brightness/brightness-applet.c:753
-#: ../applets/inhibit/inhibit-applet.c:423 ../src/gpm-tray-icon.c:315
+#: ../applets/inhibit/inhibit-applet.c:423 ../src/gpm-tray-icon.c:328
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -70,7 +70,7 @@ msgstr ""
 "LÀM ĐƯỢC VIỆC DỨT KHOÁT. Xem Giấy phép Công cộng GNU để biết thêm chi tiết."
 
 #: ../applets/brightness/brightness-applet.c:757
-#: ../applets/inhibit/inhibit-applet.c:427 ../src/gpm-tray-icon.c:319
+#: ../applets/inhibit/inhibit-applet.c:427 ../src/gpm-tray-icon.c:332
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -410,30 +410,18 @@ msgstr ""
 "có thể sửa chữa một số BIOS kiểu ACPI bị hỏng."
 
 #: ../data/gnome-power-manager.schemas.in.h:45
-msgid "If we should show the CPU frequency scaling in the UI"
-msgstr "Có nên hiện co dãn tần số CPU trên giao diện không"
-
-#: ../data/gnome-power-manager.schemas.in.h:46
-msgid ""
-"If we should show the CPU frequency scaling in the UI. Some people need to "
-"configure this for specific systems."
-msgstr ""
-"Có nên hiện co dãn tần số CPU trên giao diện không. Một số người cần cấu "
-"hình cho các hệ thống đặc biệt."
-
-#: ../data/gnome-power-manager.schemas.in.h:47
 msgid "If we should show the low capacity warning for a broken battery"
 msgstr "Có nên hiển thị cảnh báo pin yếu cho pin hỏng hóc hay không"
 
-#: ../data/gnome-power-manager.schemas.in.h:48
+#: ../data/gnome-power-manager.schemas.in.h:46
 msgid "If we should show the low capacity warning for a broken battery."
 msgstr "Có nên hiển thị cảnh báo yếu pin cho pin hỏng hóc hay không."
 
-#: ../data/gnome-power-manager.schemas.in.h:49
+#: ../data/gnome-power-manager.schemas.in.h:47
 msgid "If we should show the recalled battery warning for a broken battery"
 msgstr "Có nên hiển thị cảnh báo hủy bỏ pin cho pin hỏng hóc hay không"
 
-#: ../data/gnome-power-manager.schemas.in.h:50
+#: ../data/gnome-power-manager.schemas.in.h:48
 msgid ""
 "If we should show the recalled battery warning for a broken battery. Set "
 "this to false only if you know your battery is okay."
@@ -441,7 +429,7 @@ msgstr ""
 "Có nên hiển thị cảnh báo hủy bỏ pin cho pin hỏng hóc hay không. Đặt giá trị "
 "này thành SAI chỉ nếu bạn biết được pin là tốt."
 
-#: ../data/gnome-power-manager.schemas.in.h:51
+#: ../data/gnome-power-manager.schemas.in.h:49
 msgid ""
 "If we should show the warning when we have a valid inhibit and configured to "
 "sleep on lid close"
@@ -449,7 +437,7 @@ msgstr ""
 "Có nên hiển thị cảnh báo khi có giá trị thu hồi hợp lệ và được cấu hình để "
 "ngủ khi đóng nắp, hay không."
 
-#: ../data/gnome-power-manager.schemas.in.h:52
+#: ../data/gnome-power-manager.schemas.in.h:50
 msgid ""
 "If we should show the warning when we have a valid inhibit and configured to "
 "sleep on lid close."
@@ -457,123 +445,123 @@ msgstr ""
 "Có nên hiển thị cảnh báo khi có giá trị thu hồi hợp lệ và được cấu hình để "
 "ngủ khi đóng nắp, hay không."
 
-#: ../data/gnome-power-manager.schemas.in.h:53
+#: ../data/gnome-power-manager.schemas.in.h:51
 msgid "Keyboard brightness when on AC"
 msgstr "Độ sáng bàn phím khi chạy bằng điện chính"
 
-#: ../data/gnome-power-manager.schemas.in.h:54
+#: ../data/gnome-power-manager.schemas.in.h:52
 msgid "Keyboard brightness when on battery"
 msgstr "Độ sáng bàn phím khi chạy bằng pin"
 
-#: ../data/gnome-power-manager.schemas.in.h:55
+#: ../data/gnome-power-manager.schemas.in.h:53
 msgid "LCD brightness when on AC"
 msgstr "Độ sáng LCD khi chạy bằng điện chính"
 
-#: ../data/gnome-power-manager.schemas.in.h:56
-msgid "LCD brightness when on battery"
+#: ../data/gnome-power-manager.schemas.in.h:54
+msgid "LCD dimming amount when on battery"
 msgstr "Độ sáng LCD khi chạy bằng pin"
 
-#: ../data/gnome-power-manager.schemas.in.h:57
+#: ../data/gnome-power-manager.schemas.in.h:55
 msgid "Laptop lid close action on battery"
 msgstr "Hành động đóng nắp máy tính xách tây khi chạy bằng pin"
 
-#: ../data/gnome-power-manager.schemas.in.h:58
+#: ../data/gnome-power-manager.schemas.in.h:56
 msgid "Laptop lid close action when on AC"
 msgstr "Hành động đóng nắp máy tính xách tây khi chạy bằng điện chính"
 
-#: ../data/gnome-power-manager.schemas.in.h:59
+#: ../data/gnome-power-manager.schemas.in.h:57
 msgid "Lock GNOME keyring on sleep"
 msgstr "Khoá vòng chìa khoá GNOME khi ngủ"
 
-#: ../data/gnome-power-manager.schemas.in.h:60
+#: ../data/gnome-power-manager.schemas.in.h:58
 msgid "Lock screen on hibernate"
 msgstr "Khoá màn hình khi ngủ đông"
 
-#: ../data/gnome-power-manager.schemas.in.h:61
+#: ../data/gnome-power-manager.schemas.in.h:59
 msgid "Lock screen on suspend"
 msgstr "Khoá màn hình khi ngưng"
 
-#: ../data/gnome-power-manager.schemas.in.h:62
+#: ../data/gnome-power-manager.schemas.in.h:60
 msgid "Lock screen when blanked"
 msgstr "Khoá màn hình khi trắng"
 
-#: ../data/gnome-power-manager.schemas.in.h:63
+#: ../data/gnome-power-manager.schemas.in.h:61
 msgid "Method used to blank screen on AC"
 msgstr "Phương pháp dùng để làm màn hình trắng khi chạy bằng điện chính"
 
-#: ../data/gnome-power-manager.schemas.in.h:64
+#: ../data/gnome-power-manager.schemas.in.h:62
 msgid "Method used to blank screen on battery"
 msgstr "Phương pháp dùng để làm màn hình trắng khi chạy bằng pin"
 
-#: ../data/gnome-power-manager.schemas.in.h:65
+#: ../data/gnome-power-manager.schemas.in.h:63
 msgid "Notify on a low power"
 msgstr "Thông báo khi điện năng yếu"
 
-#: ../data/gnome-power-manager.schemas.in.h:66
+#: ../data/gnome-power-manager.schemas.in.h:64
 msgid "Notify on a sleep failure"
 msgstr "Thông báo khi không ngủ được"
 
-#: ../data/gnome-power-manager.schemas.in.h:67
+#: ../data/gnome-power-manager.schemas.in.h:65
 msgid "Notify when AC adapter is disconnected"
 msgstr "Thông báo khi bộ tiếp hợp điện chính bị tháo"
 
-#: ../data/gnome-power-manager.schemas.in.h:68
+#: ../data/gnome-power-manager.schemas.in.h:66
 msgid "Notify when fully charged"
 msgstr "Thông báo khi pin đã được tái sạc đầy"
 
-#: ../data/gnome-power-manager.schemas.in.h:69
+#: ../data/gnome-power-manager.schemas.in.h:67
 msgid "Notify when the profile data is guessed"
 msgstr "Thông báo khi dữ liệu hồ sơ được đoán"
 
-#: ../data/gnome-power-manager.schemas.in.h:70
+#: ../data/gnome-power-manager.schemas.in.h:68
 msgid "Number of seconds to suppress policy after resume"
 msgstr "Số giây cần thu hồi chính sách sau khi tiếp tục lại"
 
-#: ../data/gnome-power-manager.schemas.in.h:71
+#: ../data/gnome-power-manager.schemas.in.h:69
 msgid "Percentage action is taken"
 msgstr "Hành động phần trăm được làm"
 
-#: ../data/gnome-power-manager.schemas.in.h:72
+#: ../data/gnome-power-manager.schemas.in.h:70
 msgid "Percentage considered critical"
 msgstr "Phần trăm yếu tới hạn"
 
-#: ../data/gnome-power-manager.schemas.in.h:73
+#: ../data/gnome-power-manager.schemas.in.h:71
 msgid "Percentage considered low"
 msgstr "Phần trăm thấp"
 
-#: ../data/gnome-power-manager.schemas.in.h:74
+#: ../data/gnome-power-manager.schemas.in.h:72
 msgid "Power button action"
 msgstr "Hành động nút điện"
 
-#: ../data/gnome-power-manager.schemas.in.h:75
+#: ../data/gnome-power-manager.schemas.in.h:73
 msgid "Reduce the backlight brightness when on battery power"
 msgstr "Giảm độ sáng của đèn nền khi chạy bằng pin"
 
-#: ../data/gnome-power-manager.schemas.in.h:76
+#: ../data/gnome-power-manager.schemas.in.h:74
 msgid "Sleep timeout computer when on AC"
 msgstr "Thời hạn máy tính ngủ khi chạy bằng điện chính"
 
-#: ../data/gnome-power-manager.schemas.in.h:77
+#: ../data/gnome-power-manager.schemas.in.h:75
 msgid "Sleep timeout computer when on battery"
 msgstr "Thời hạn máy tính ngủ khi chạy bằng pin"
 
-#: ../data/gnome-power-manager.schemas.in.h:78
+#: ../data/gnome-power-manager.schemas.in.h:76
 msgid "Sleep timeout display when on AC"
 msgstr "Thời hạn bộ trình bày ngủ khi chạy bằng điện chính"
 
-#: ../data/gnome-power-manager.schemas.in.h:79
+#: ../data/gnome-power-manager.schemas.in.h:77
 msgid "Sleep timeout display when on battery"
 msgstr "Thời hạn bộ trình bày ngủ khi chạy bằng pin"
 
-#: ../data/gnome-power-manager.schemas.in.h:80
+#: ../data/gnome-power-manager.schemas.in.h:78
 msgid "Suspend button action"
 msgstr "Hành động nút ngưng"
 
-#: ../data/gnome-power-manager.schemas.in.h:81
+#: ../data/gnome-power-manager.schemas.in.h:79
 msgid "Suspend enabled"
 msgstr "Ngưng đã bật"
 
-#: ../data/gnome-power-manager.schemas.in.h:82
+#: ../data/gnome-power-manager.schemas.in.h:80
 msgid ""
 "The DPMS method used to blank the screen when on AC power. Possible values "
 "are \"default\", \"standby\", \"suspend\" and \"off\"."
@@ -585,7 +573,7 @@ msgstr ""
 " • suspend\tngưng\n"
 " • off\t tắt"
 
-#: ../data/gnome-power-manager.schemas.in.h:83
+#: ../data/gnome-power-manager.schemas.in.h:81
 msgid ""
 "The DPMS method used to blank the screen when on battery power. Possible "
 "values are \"default\", \"standby\", \"suspend\" and \"off\"."
@@ -597,7 +585,7 @@ msgstr ""
 " • suspend\tngưng\n"
 " • off\t tắt"
 
-#: ../data/gnome-power-manager.schemas.in.h:84
+#: ../data/gnome-power-manager.schemas.in.h:82
 msgid ""
 "The action to take when the UPS is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
@@ -608,7 +596,7 @@ msgstr ""
 " • shutdown\ttắt máy\n"
 " • nothing\tkhông gì"
 
-#: ../data/gnome-power-manager.schemas.in.h:85
+#: ../data/gnome-power-manager.schemas.in.h:83
 msgid ""
 "The action to take when the UPS is low. Possible values are \"hibernate\", "
 "\"suspend\", \"shutdown\" and \"nothing\"."
@@ -619,7 +607,7 @@ msgstr ""
 " • shutdown\ttắt máy\n"
 " • nothing\tkhông gì"
 
-#: ../data/gnome-power-manager.schemas.in.h:86
+#: ../data/gnome-power-manager.schemas.in.h:84
 msgid ""
 "The action to take when the battery is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
@@ -630,7 +618,7 @@ msgstr ""
 " • shutdown\ttắt máy\n"
 " • nothing\tkhông gì"
 
-#: ../data/gnome-power-manager.schemas.in.h:87
+#: ../data/gnome-power-manager.schemas.in.h:85
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on AC "
 "power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
@@ -642,7 +630,7 @@ msgstr ""
 " • suspend\tngưng\n"
 " • blank\t\tlàm trắng • nothing\tkhông gì"
 
-#: ../data/gnome-power-manager.schemas.in.h:88
+#: ../data/gnome-power-manager.schemas.in.h:86
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on "
 "battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
@@ -654,7 +642,7 @@ msgstr ""
 " • suspend\tngưng\n"
 " • blank\t\tlàm trắng • nothing\tkhông gì"
 
-#: ../data/gnome-power-manager.schemas.in.h:89
+#: ../data/gnome-power-manager.schemas.in.h:87
 msgid ""
 "The action to take when the system hibernate button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
@@ -668,7 +656,7 @@ msgstr ""
 " • shutdown\ttắt máy\n"
 " • nothing\tkhông gì"
 
-#: ../data/gnome-power-manager.schemas.in.h:90
+#: ../data/gnome-power-manager.schemas.in.h:88
 msgid ""
 "The action to take when the system power button is pressed. Possible values "
 "are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
@@ -681,7 +669,7 @@ msgstr ""
 " • shutdown\ttắt máy\n"
 " • nothing\tkhông gì"
 
-#: ../data/gnome-power-manager.schemas.in.h:91
+#: ../data/gnome-power-manager.schemas.in.h:89
 msgid ""
 "The action to take when the system suspend button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
@@ -694,7 +682,7 @@ msgstr ""
 " • shutdown\ttắt máy\n"
 " • nothing\tkhông gì"
 
-#: ../data/gnome-power-manager.schemas.in.h:92
+#: ../data/gnome-power-manager.schemas.in.h:90
 msgid ""
 "The amount of time in seconds before the display goes to sleep when the "
 "computer is on AC power."
@@ -702,7 +690,7 @@ msgstr ""
 "Thời gian nghỉ theo giây trước khi bộ trình bày đi ngủ khi chạy bằng điện "
 "chính."
 
-#: ../data/gnome-power-manager.schemas.in.h:93
+#: ../data/gnome-power-manager.schemas.in.h:91
 msgid ""
 "The amount of time in seconds the computer on AC power needs to be inactive "
 "before it goes to sleep."
@@ -710,14 +698,14 @@ msgstr ""
 "Số giây máy tính đang chạy bằng điện chính cần ngưng làm việc trước khi nó "
 "ngủ."
 
-#: ../data/gnome-power-manager.schemas.in.h:94
+#: ../data/gnome-power-manager.schemas.in.h:92
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before it goes to sleep."
 msgstr ""
 "Số giây máy tính đang chạy bằng pin cần ngưng làm việc trước khi nó ngủ."
 
-#: ../data/gnome-power-manager.schemas.in.h:95
+#: ../data/gnome-power-manager.schemas.in.h:93
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before the display goes to sleep."
@@ -725,15 +713,22 @@ msgstr ""
 "Số giây máy tính đang chạy bằng pin cần ngưng làm việc trước khi bộ trình "
 "bày ngủ."
 
-#: ../data/gnome-power-manager.schemas.in.h:96
+#: ../data/gnome-power-manager.schemas.in.h:94
 msgid "The amount the light sensors should contribute to the brightness"
 msgstr "Số lượng những máy nhạy ánh sáng nên đóng góp cùng độ sáng"
 
-#: ../data/gnome-power-manager.schemas.in.h:97
+#: ../data/gnome-power-manager.schemas.in.h:95
 msgid "The amount the light sensors should contribute to the brightness."
 msgstr "Số lượng những máy nhạy ánh sáng nên đóng góp cùng độ sáng."
 
-#: ../data/gnome-power-manager.schemas.in.h:98
+#: ../data/gnome-power-manager.schemas.in.h:96
+msgid ""
+"The amount to dim the brightness of the display when on battery power. "
+"Possible values are between 0 and 100."
+msgstr ""
+"Độ sáng của bộ trình bày khi chạy bằng pin. Giá trị hợp lệ nằm giữa 0 và 100."
+
+#: ../data/gnome-power-manager.schemas.in.h:97
 msgid ""
 "The brightness of the display when on AC power. Possible values are between "
 "0 and 100."
@@ -741,14 +736,7 @@ msgstr ""
 "Độ sáng của bộ trình bày khi chạy bằng điện chính. Giá trị hợp lệ nằm giữa 0 "
 "và 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:99
-msgid ""
-"The brightness of the display when on battery power. Possible values are "
-"between 0 and 100."
-msgstr ""
-"Độ sáng của bộ trình bày khi chạy bằng pin. Giá trị hợp lệ nằm giữa 0 và 100."
-
-#: ../data/gnome-power-manager.schemas.in.h:100
+#: ../data/gnome-power-manager.schemas.in.h:98
 msgid ""
 "The brightness of the keyboard when on AC power. Possible values are between "
 "0 and 100."
@@ -756,79 +744,65 @@ msgstr ""
 "Độ sáng của bàn phím khi chạy bằng điện chính. Giá trị hợp lệ nằm giữa 0 và "
 "100."
 
-#: ../data/gnome-power-manager.schemas.in.h:101
+#: ../data/gnome-power-manager.schemas.in.h:99
 msgid ""
 "The brightness of the keyboard when on battery power. Possible values are "
 "between 0 and 100."
 msgstr ""
 "Độ sáng của bàn phím khi chạy bằng pin. Giá trị hợp lệ nằm giữa 0 và 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:102
+#: ../data/gnome-power-manager.schemas.in.h:100
 msgid "The brightness of the screen when idle"
 msgstr "Độ sáng của màn hình khi nghỉ"
 
-#: ../data/gnome-power-manager.schemas.in.h:103
+#: ../data/gnome-power-manager.schemas.in.h:101
 msgid ""
 "The calibration of the light sensors so that the screen is bright enough"
 msgstr "Độ định chuẩn những máy nhạy ánh sáng để có màn hình đủ sáng"
 
-#: ../data/gnome-power-manager.schemas.in.h:104
+#: ../data/gnome-power-manager.schemas.in.h:102
 msgid ""
 "The calibration of the light sensors so that the screen is bright enough, in "
 "percent."
 msgstr ""
 "Độ định chuẩn những máy nhạy ánh sáng để có màn hình đủ sáng, theo phần trăm."
 
-#: ../data/gnome-power-manager.schemas.in.h:105
+#: ../data/gnome-power-manager.schemas.in.h:103
 msgid "The default amount of time to dim the screen after idle"
 msgstr "Thời gian nghỉ mặc định sau đó cần mờ đi màn hình"
 
-#: ../data/gnome-power-manager.schemas.in.h:106
+#: ../data/gnome-power-manager.schemas.in.h:104
 msgid "The default amount of time to dim the screen after idle."
 msgstr "Thời gian nghỉ mặc định sau đó cần mờ đi màn hình."
 
-#: ../data/gnome-power-manager.schemas.in.h:107
+#: ../data/gnome-power-manager.schemas.in.h:105
 msgid "The default configuration version."
 msgstr "Phiên bản cấu hình mặc định."
 
-#: ../data/gnome-power-manager.schemas.in.h:108
+#: ../data/gnome-power-manager.schemas.in.h:106
 msgid "The default graph type to show in the statistics window"
 msgstr "Kiểu đồ thị mặc định cần hiển thị trong cửa sổ thống kê"
 
-#: ../data/gnome-power-manager.schemas.in.h:109
+#: ../data/gnome-power-manager.schemas.in.h:107
 msgid "The default graph type to show in the statistics window."
 msgstr "Kiểu đồ thị mặc định cần hiển thị trong cửa sổ thống kê."
 
-#: ../data/gnome-power-manager.schemas.in.h:110
-msgid "The device name for the v4l device used as a brightness sensor backup"
-msgstr "Tên thiết bị cho thiết bị v4l được dùng để dự phòng máy nhạy độ sáng"
-
-#: ../data/gnome-power-manager.schemas.in.h:111
-msgid ""
-"The device name for the v4l device used as a brightness sensor backup. A "
-"value of 'default' uses the first discovered sensor, or devices can be "
-"specified, e.g. '/dev/video0'"
-msgstr ""
-"Tên thiết bị cho thiết bị v4l được dùng để dự phòng máy nhạy độ sáng. Giá "
-"trị « default » (mặc định) thì dùng máy nhạy được phát hiện thứ nhất, hoặc có "
-"thể xác định thiết bị riêng, v.d. « /dev/video0 »."
-
-#: ../data/gnome-power-manager.schemas.in.h:112
+#: ../data/gnome-power-manager.schemas.in.h:108
 msgid "The interval the ambient light sensors should be polled"
 msgstr ""
 "Khoảng thời gian trong đó cần thăm dò những máy nhạy ánh sáng chung quanh"
 
-#: ../data/gnome-power-manager.schemas.in.h:113
+#: ../data/gnome-power-manager.schemas.in.h:109
 msgid "The interval the ambient light sensors should be polled in seconds."
 msgstr ""
 "Khoảng thời gian trong đó cần thăm dò những máy nhạy ánh sáng chung quanh, "
 "theo giây."
 
-#: ../data/gnome-power-manager.schemas.in.h:114
+#: ../data/gnome-power-manager.schemas.in.h:110
 msgid "The invalid timeout for power actions"
 msgstr "Thời hạn không hợp lệ cho các hành động điện năng"
 
-#: ../data/gnome-power-manager.schemas.in.h:115
+#: ../data/gnome-power-manager.schemas.in.h:111
 msgid ""
 "The invalid timeout in ms for power actions. Set this longer if you get "
 "'battery critical' messages when you unplug."
@@ -837,15 +811,15 @@ msgstr ""
 "nó thành giá trị lớn hơn nếu bạn xem thông điệp « pin tới hạn » khi bạn tháo "
 "nút ra."
 
-#: ../data/gnome-power-manager.schemas.in.h:116
+#: ../data/gnome-power-manager.schemas.in.h:112
 msgid "The maximum duration of time displayed on the x-axis of the graph."
 msgstr "Thời gian tối đa được hiển thị trên trục X của đồ thị."
 
-#: ../data/gnome-power-manager.schemas.in.h:117
+#: ../data/gnome-power-manager.schemas.in.h:113
 msgid "The maximum time displayed on the graph"
 msgstr "Thời gian tối đa được hiển thị trên đồ thị"
 
-#: ../data/gnome-power-manager.schemas.in.h:118
+#: ../data/gnome-power-manager.schemas.in.h:114
 msgid ""
 "The percentage of the battery when it is considered critical. Only valid "
 "when use_time_for_policy is false."
@@ -853,7 +827,7 @@ msgstr ""
 "Phần trăm độ sạc pin được xem là « tới hạn ». Chỉ hợp lệ khi biến « "
 "use_time_for_policy » (dùng thời gian cho chính sách) là sai."
 
-#: ../data/gnome-power-manager.schemas.in.h:119
+#: ../data/gnome-power-manager.schemas.in.h:115
 msgid ""
 "The percentage of the battery when it is considered low. Only valid when "
 "use_time_for_policy is false."
@@ -861,7 +835,7 @@ msgstr ""
 "Phần trăm độ sạc pin được xem là « thấp ». Chỉ hợp lệ khi biến « "
 "use_time_for_policy » (dùng thời gian cho chính sách) là sai."
 
-#: ../data/gnome-power-manager.schemas.in.h:120
+#: ../data/gnome-power-manager.schemas.in.h:116
 msgid ""
 "The percentage of the battery when the critical action is performed. Only "
 "valid when use_time_for_policy is false."
@@ -869,7 +843,7 @@ msgstr ""
 "Phần trăm độ sạc pin khi hành động « tới hạn » được thực hiện. Chỉ hợp lệ khi "
 "biến « use_time_for_policy » (dùng thời gian cho chính sách) là sai."
 
-#: ../data/gnome-power-manager.schemas.in.h:121
+#: ../data/gnome-power-manager.schemas.in.h:117
 msgid ""
 "The time remaining in seconds of the battery when critical action is taken. "
 "Only valid when use_time_for_policy is true."
@@ -878,7 +852,7 @@ msgstr ""
 "hiện. Chỉ hợp lệ khi biến « use_time_for_policy » (dùng thời gian cho chính "
 "sách) là sai."
 
-#: ../data/gnome-power-manager.schemas.in.h:122
+#: ../data/gnome-power-manager.schemas.in.h:118
 msgid ""
 "The time remaining in seconds of the battery when it is considered critical. "
 "Only valid when use_time_for_policy is true."
@@ -887,7 +861,7 @@ msgstr ""
 "hợp lệ khi biến « use_time_for_policy » (dùng thời gian cho chính sách) là "
 "sai."
 
-#: ../data/gnome-power-manager.schemas.in.h:123
+#: ../data/gnome-power-manager.schemas.in.h:119
 msgid ""
 "The time remaining in seconds of the battery when it is considered low. Only "
 "valid when use_time_for_policy is true."
@@ -895,19 +869,19 @@ msgstr ""
 "Thời gian chạy bằng pin còn lại (theo giây) khi được xem là « thấp ». Chỉ hợp "
 "lệ khi biến « use_time_for_policy » (dùng thời gian cho chính sách) là sai."
 
-#: ../data/gnome-power-manager.schemas.in.h:124
+#: ../data/gnome-power-manager.schemas.in.h:120
 msgid "The time remaining when action is taken"
 msgstr "Thời hạn còn lại khi hành động được thực hiện"
 
-#: ../data/gnome-power-manager.schemas.in.h:125
+#: ../data/gnome-power-manager.schemas.in.h:121
 msgid "The time remaining when critical"
 msgstr "Thời hạn còn lại khi tới hạn"
 
-#: ../data/gnome-power-manager.schemas.in.h:126
+#: ../data/gnome-power-manager.schemas.in.h:122
 msgid "The time remaining when low"
 msgstr "Thời hạn còn lại khi thấp"
 
-#: ../data/gnome-power-manager.schemas.in.h:127
+#: ../data/gnome-power-manager.schemas.in.h:123
 msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
 "Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
@@ -917,7 +891,7 @@ msgstr ""
 " • suspend\tngưng\n"
 " • nothing\tkhông gì"
 
-#: ../data/gnome-power-manager.schemas.in.h:128
+#: ../data/gnome-power-manager.schemas.in.h:124
 msgid ""
 "The version of the installed version of the schema. Do not edit this value, "
 "it is used so that configure changes between versions can be detected."
@@ -925,7 +899,7 @@ msgstr ""
 "Phiên bản của giản đồ đã cài đặt. Đừng thay đổi giá trị này: nó dùng để khác "
 "biệt hai phiên bản."
 
-#: ../data/gnome-power-manager.schemas.in.h:129
+#: ../data/gnome-power-manager.schemas.in.h:125
 msgid ""
 "This is the laptop panel screen brightness used when the session is idle. "
 "Only valid when use_time_for_policy is true."
@@ -934,27 +908,27 @@ msgstr ""
 "nghỉ. Chỉ hợp lệ khi biến « use_time_for_policy » (dùng thời gian cho chính "
 "sách) là sai."
 
-#: ../data/gnome-power-manager.schemas.in.h:130
+#: ../data/gnome-power-manager.schemas.in.h:126
 msgid "UPS critical low action"
 msgstr "Hành động UPS yếu tới hạn"
 
-#: ../data/gnome-power-manager.schemas.in.h:131
+#: ../data/gnome-power-manager.schemas.in.h:127
 msgid "UPS low power action"
 msgstr "Hành động UPS yếu"
 
-#: ../data/gnome-power-manager.schemas.in.h:132
+#: ../data/gnome-power-manager.schemas.in.h:128
 msgid "Use gnome-screensaver lock setting"
 msgstr "Dùng thiết lập khoá của gnome-screensaver"
 
-#: ../data/gnome-power-manager.schemas.in.h:133
+#: ../data/gnome-power-manager.schemas.in.h:129
 msgid "When to show the notification icon"
 msgstr "Khi cần hiển thị biểu tượng thông báo"
 
-#: ../data/gnome-power-manager.schemas.in.h:134
+#: ../data/gnome-power-manager.schemas.in.h:130
 msgid "Whether NetworkManager should be connected and disconnected on sleep."
 msgstr "Có nên kết nối và ngắt kết nối trình NetworkManager khi ngủ."
 
-#: ../data/gnome-power-manager.schemas.in.h:135
+#: ../data/gnome-power-manager.schemas.in.h:131
 msgid ""
 "Whether NetworkManager should disconnect before suspending or hibernating "
 "and connect on resume."
@@ -962,7 +936,7 @@ msgstr ""
 "Có nên ngắt kết nối trình NetworkManager trước khi ngưng hay ngủ đông, và "
 "tái kết nối khi tiếp tục lại hay không. "
 
-#: ../data/gnome-power-manager.schemas.in.h:136
+#: ../data/gnome-power-manager.schemas.in.h:132
 msgid ""
 "Whether the GNOME keyring is locked before the computer enters hibernate. "
 "This means the keyring will have to be unlocked on resume."
@@ -970,7 +944,7 @@ msgstr ""
 "Có nên khoá vòng chìa khoá GNOME trước khi máy tính bắt đầu ngủ đông, hay "
 "không. Vì thế cần phải mở khoá vòng chìa khoá khi hệ thống tiếp tục lại."
 
-#: ../data/gnome-power-manager.schemas.in.h:137
+#: ../data/gnome-power-manager.schemas.in.h:133
 msgid ""
 "Whether the GNOME keyring is locked before the computer enters suspend. This "
 "means the keyring will have to be unlocked on resume."
@@ -978,7 +952,7 @@ msgstr ""
 "Có nên khoá vòng chìa khoá GNOME trước khi máy tính bắt đầu ngưng, hay "
 "không. Vì thế cần phải mở khoá vòng chìa khoá khi hệ thống tiếp tục lại."
 
-#: ../data/gnome-power-manager.schemas.in.h:138
+#: ../data/gnome-power-manager.schemas.in.h:134
 msgid ""
 "Whether the screen is locked when the computer wakes up from a hibernate. "
 "Only used if lock_use_screensaver_settings is false."
@@ -987,7 +961,7 @@ msgstr ""
 "nếu « lock_use_screensaver_settings » (thiết lập khoá dùng ảnh bảo vệ màn "
 "hình) được đặt là false (sai)."
 
-#: ../data/gnome-power-manager.schemas.in.h:139
+#: ../data/gnome-power-manager.schemas.in.h:135
 msgid ""
 "Whether the screen is locked when the computer wakes up from a suspend. Only "
 "used if lock_use_screensaver_settings is false."
@@ -996,7 +970,7 @@ msgstr ""
 "nếu « lock_use_screensaver_settings » (thiết lập khoá dùng ảnh bảo vệ màn "
 "hình) được đặt là false (sai)."
 
-#: ../data/gnome-power-manager.schemas.in.h:140
+#: ../data/gnome-power-manager.schemas.in.h:136
 msgid ""
 "Whether the screen is locked when the screen is turned off. Only used if "
 "lock_use_screensaver_settings is false."
@@ -1005,11 +979,11 @@ msgstr ""
 "lock_use_screensaver_settings » (thiết lập khoá dùng ảnh bảo vệ màn hình) "
 "được đặt là false (sai)."
 
-#: ../data/gnome-power-manager.schemas.in.h:141
+#: ../data/gnome-power-manager.schemas.in.h:137
 msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr "Khi không hoạt động, ngủ đông, ngưng hay không làm gì"
 
-#: ../data/gnome-power-manager.schemas.in.h:142
+#: ../data/gnome-power-manager.schemas.in.h:138
 msgid ""
 "Whether to use the screen lock setting of gnome-screensaver to decide if the "
 "screen is locked after a hibernate, suspend or blank screen."
@@ -1017,31 +991,31 @@ msgstr ""
 "Có nên dùng thiết lập khoá màn hình của gnome-screensaver để quyết định nên "
 "khoá màn hình hay không sau khi ngủ đông, bị ngưng hay làm trắng màn hình."
 
-#: ../data/gnome-power-manager.schemas.in.h:143
+#: ../data/gnome-power-manager.schemas.in.h:139
 msgid "Whether to use time-based notifications"
 msgstr "Bật/tắt thông báo dựa vào giờ"
 
-#: ../data/gnome-power-manager.schemas.in.h:144
+#: ../data/gnome-power-manager.schemas.in.h:140
 msgid "Whether we should show the axis labels in the statistics window"
 msgstr "Có nên hiển thị tên cột trong cửa sổ thống kê hay không"
 
-#: ../data/gnome-power-manager.schemas.in.h:145
+#: ../data/gnome-power-manager.schemas.in.h:141
 msgid "Whether we should show the axis labels in the statistics window."
 msgstr "Có nên hiển thị tên cột trong cửa sổ thống kê hay không."
 
-#: ../data/gnome-power-manager.schemas.in.h:146
+#: ../data/gnome-power-manager.schemas.in.h:142
 msgid "Whether we should show the events in the statistics window"
 msgstr "Có nên hiển thị các sự kiện trong cửa sổ thống kê hay không"
 
-#: ../data/gnome-power-manager.schemas.in.h:147
+#: ../data/gnome-power-manager.schemas.in.h:143
 msgid "Whether we should show the events in the statistics window."
 msgstr "Có nên hiển thị các sự kiện trong cửa sổ thống kê hay không."
 
-#: ../data/gnome-power-manager.schemas.in.h:148
+#: ../data/gnome-power-manager.schemas.in.h:144
 msgid "Whether we should smooth the data in the graph"
 msgstr "Có nên làm mịn dữ liệu trong đồ thị hay không"
 
-#: ../data/gnome-power-manager.schemas.in.h:149
+#: ../data/gnome-power-manager.schemas.in.h:145
 msgid "Whether we should smooth the data in the graph."
 msgstr "Có nên làm mịn dữ liệu trong đồ thị hay không."
 
@@ -1234,11 +1208,11 @@ msgstr "Hiện biểu tượng chỉ khi pin tới _hạn"
 msgid "_Reduce backlight brightness"
 msgstr "_Giảm độ sáng của đèn nền"
 
-#: ../src/gpm-control.c:279
+#: ../src/gpm-control.c:282
 msgid "The message was not sent due to DBUS security rules"
 msgstr "Thông điệp không được gửi do quy tắc bảo mật DBUS"
 
-#: ../src/gpm-control.c:282
+#: ../src/gpm-control.c:285
 msgid "General failure"
 msgstr "Lỗi chung"
 
@@ -1672,7 +1646,7 @@ msgid ""
 "details."
 msgstr "Khả năng ngưng bị tắt. Liên lạc với quản trị để tìm chi tiết."
 
-#: ../src/gpm-manager.c:344 ../src/gpm-manager.c:393 ../src/gpm-manager.c:433
+#: ../src/gpm-manager.c:344 ../src/gpm-manager.c:393
 msgid "Action forbidden"
 msgstr "Hành động bị cấm"
 
@@ -1680,7 +1654,7 @@ msgstr "Hành động bị cấm"
 msgid "Suspend is not available on this computer."
 msgstr "Khả năng ngưng không sẵn sàng trên máy tính này."
 
-#: ../src/gpm-manager.c:358 ../src/gpm-manager.c:766
+#: ../src/gpm-manager.c:358 ../src/gpm-manager.c:755
 msgid "Suspending computer."
 msgstr "Đang ngưng máy tính."
 
@@ -1694,213 +1668,200 @@ msgstr "Khả năng ngủ đông bị tắt. Liên lạc với quản trị đ�
 msgid "Hibernate is not available on this computer."
 msgstr "Khả năng ngủ đông không sẵn sàng trên máy tính này."
 
-#: ../src/gpm-manager.c:407 ../src/gpm-manager.c:781
+#: ../src/gpm-manager.c:407 ../src/gpm-manager.c:770
 msgid "Hibernating computer."
 msgstr "Đang ngủ đông máy tính."
 
-#: ../src/gpm-manager.c:434
-msgid "Policy timeout is not valid. Please wait a few seconds and try again."
-msgstr "Thời hạn chính sách không hợp lệ. Hãy đợi vài giây rồi thử lại."
-
-#: ../src/gpm-manager.c:455
+#: ../src/gpm-manager.c:444
 msgid "Doing nothing."
 msgstr "Không đang làm gì"
 
-#: ../src/gpm-manager.c:468
+#: ../src/gpm-manager.c:457
 msgid "Shutting down computer."
 msgstr "Đang tắt máy tính."
 
-#: ../src/gpm-manager.c:473
+#: ../src/gpm-manager.c:462
 msgid "GNOME interactive logout."
 msgstr "Đăng xuất tương tác GNOME."
 
-#: ../src/gpm-manager.c:766 ../src/gpm-manager.c:781
+#: ../src/gpm-manager.c:755 ../src/gpm-manager.c:770
 msgid "System idle."
 msgstr "Hệ thống nghỉ."
 
-#: ../src/gpm-manager.c:858
+#: ../src/gpm-manager.c:844
 msgid "Power Information"
 msgstr "Thông tin điện năng"
 
-#: ../src/gpm-manager.c:875
+#: ../src/gpm-manager.c:861
 msgid "The power button has been pressed."
 msgstr "Cái nút điện đã được bấm."
 
-#: ../src/gpm-manager.c:887
+#: ../src/gpm-manager.c:873
 msgid "The suspend button has been pressed."
 msgstr "Cái nút ngưng đã được bấm."
 
-#: ../src/gpm-manager.c:899
+#: ../src/gpm-manager.c:885
 msgid "The hibernate button has been pressed."
 msgstr "Cái nút ngủ đông đã được bấm."
 
-#: ../src/gpm-manager.c:930
+#: ../src/gpm-manager.c:916
 msgid "The lid has been closed on ac power."
 msgstr "Nắp đã được đóng khi chạy bằng điện chính."
 
-#: ../src/gpm-manager.c:960
+#: ../src/gpm-manager.c:946
 msgid "The lid has been closed on battery power."
 msgstr "Nắp đã được đóng khi chạy bằng pin."
 
-#: ../src/gpm-manager.c:1049
+#: ../src/gpm-manager.c:1035
 msgid ""
 "The lid has been closed, and the ac adapter removed (and gconf is okay)."
 msgstr ""
 "Nắp đã được đóng, và bộ tiếp hợp điện chính bị tháo (và GConf hoạt động được)"
 
-#: ../src/gpm-manager.c:1072
+#: ../src/gpm-manager.c:1054
 msgid "Battery is critically low."
 msgstr "Pin yếu tới hạn."
 
-#: ../src/gpm-manager.c:1162 ../src/gpm-manager.c:1177
+#: ../src/gpm-manager.c:1144 ../src/gpm-manager.c:1159
 msgid "User clicked on tray"
 msgstr "Người dùng đã nhấn vào khay"
 
-#: ../src/gpm-manager.c:1387
+#: ../src/gpm-manager.c:1369
 msgid "Laptop battery low"
 msgstr "Pin yếu trong máy tính xách tây"
 
-#: ../src/gpm-manager.c:1389
+#: ../src/gpm-manager.c:1371
 #, c-format
-msgid "You have approximately <b>%s</b> of remaining battery life (%d%%)"
-msgstr "Bạn có xấp xỉ <b>%s</b> thời gian pin còn lại (%d%%)"
+msgid "You have approximately <b>%s</b> of remaining battery life (%.1f%%)"
+msgstr "Bạn có xấp xỉ <b>%s</b> thời gian pin còn lại (%.1f%%)"
 
-#: ../src/gpm-manager.c:1392
+#: ../src/gpm-manager.c:1374
 msgid "UPS low"
 msgstr "UPS yếu"
 
-#: ../src/gpm-manager.c:1394
+#: ../src/gpm-manager.c:1376
 #, c-format
-msgid "You have approximately <b>%s</b> of remaining UPS backup power (%d%%)"
-msgstr "Bạn có xấp xỉ <b>%s</b> điện năng dự phòng UPS còn lại (%d%%)"
+msgid "You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"
+msgstr "Bạn có xấp xỉ <b>%s</b> điện năng dự phòng UPS còn lại (%.1f%%)"
 
-#: ../src/gpm-manager.c:1397 ../src/gpm-manager.c:1497
+#: ../src/gpm-manager.c:1379 ../src/gpm-manager.c:1479
 msgid "Mouse battery low"
 msgstr "Pin yếu trong con chuột"
 
-#: ../src/gpm-manager.c:1398
+#: ../src/gpm-manager.c:1380
 #, c-format
-msgid "The wireless mouse attached to this computer is low in power (%d%%)"
-msgstr "Con chuột vô tuyến được kết nối đến máy tính này có pin yếu (%d%%)"
+msgid "The wireless mouse attached to this computer is low in power (%.1f%%)"
+msgstr "Con chuột vô tuyến được kết nối đến máy tính này có pin yếu (%.1f%%)"
 
-#: ../src/gpm-manager.c:1400 ../src/gpm-manager.c:1502
+#: ../src/gpm-manager.c:1382 ../src/gpm-manager.c:1484
 msgid "Keyboard battery low"
 msgstr "Pin yếu trong bàn phím"
 
-#: ../src/gpm-manager.c:1401
+#: ../src/gpm-manager.c:1383
 #, c-format
-msgid "The wireless keyboard attached to this computer is low in power (%d%%)"
-msgstr "Bàn phím vô tuyến được kết nối đến máy tính này có pin yếu (%d%%)"
+msgid ""
+"The wireless keyboard attached to this computer is low in power (%.1f%%)"
+msgstr "Bàn phím vô tuyến được kết nối đến máy tính này có pin yếu (%.1f%%)"
 
-#: ../src/gpm-manager.c:1403 ../src/gpm-manager.c:1507
+#: ../src/gpm-manager.c:1385 ../src/gpm-manager.c:1489
 msgid "PDA battery low"
 msgstr "Pin yếu trong PDA"
 
-#: ../src/gpm-manager.c:1404
+#: ../src/gpm-manager.c:1386
 #, c-format
-msgid "The PDA attached to this computer is low in power (%d%%)"
-msgstr "PDA được kết nối đến máy tính này có pin yếu (%d%%)"
+msgid "The PDA attached to this computer is low in power (%.1f%%)"
+msgstr "PDA được kết nối đến máy tính này có pin yếu (%.1f%%)"
 
-#: ../src/gpm-manager.c:1406 ../src/gpm-manager.c:1512
+#: ../src/gpm-manager.c:1388 ../src/gpm-manager.c:1494
 msgid "Cell phone battery low"
 msgstr "Pin yếu trong điện thoại di động"
 
-#: ../src/gpm-manager.c:1407
+#: ../src/gpm-manager.c:1389
 #, c-format
-msgid "The cell phone attached to this computer is low in power (%d%%)"
-msgstr "Điện thoại di động được kết nối đến máy tính này có pin yếu (%d%%)"
+msgid "The cell phone attached to this computer is low in power (%.1f%%)"
+msgstr "Điện thoại di động được kết nối đến máy tính này có pin yếu (%.1f%%)"
 
-#: ../src/gpm-manager.c:1434
+#: ../src/gpm-manager.c:1416
 msgid "a short time"
 msgstr "một thời gian ngắn"
 
-#: ../src/gpm-manager.c:1457 ../src/gpm-manager.c:1543
+#: ../src/gpm-manager.c:1439 ../src/gpm-manager.c:1525
 msgid "Laptop battery critically low"
 msgstr "Pin yếu tới hạn trong máy tính xách tay"
 
-#: ../src/gpm-manager.c:1470
+#: ../src/gpm-manager.c:1452
 msgid "Plug in your AC adapter to avoid losing data."
 msgstr "Hãy cầm phít bộ tiếp hợp điện chính để tránh mất dữ liệu."
 
-#: ../src/gpm-manager.c:1473
+#: ../src/gpm-manager.c:1455
 #, c-format
 msgid "This computer will suspend in %s if the AC is not connected."
 msgstr "Máy tính này sẽ ngưng trong vòng %s nếu điện chính chưa được kết nối."
 
-#: ../src/gpm-manager.c:1476
+#: ../src/gpm-manager.c:1458
 #, c-format
 msgid "This computer will hibernate in %s if the AC is not connected."
 msgstr ""
 "Máy tính này sẽ ngủ đông trong vòng %s nếu điện chính chưa được kết nối."
 
-#: ../src/gpm-manager.c:1479
+#: ../src/gpm-manager.c:1461
 #, c-format
 msgid "This computer will shutdown in %s if the AC is not connected."
 msgstr ""
 "Máy tính này sẽ tắt máy trong vòng %s nếu điện chính chưa được kết nối."
 
-#: ../src/gpm-manager.c:1482
+#: ../src/gpm-manager.c:1464
 #, c-format
-msgid "You have approximately <b>%s</b> of remaining battery life (%d%%). %s"
-msgstr "Bạn có xấp xỉ <b>%s</b> thời gian pin còn lại (%d%%). %s"
+msgid "You have approximately <b>%s</b> of remaining battery life (%.1f%%). %s"
+msgstr "Bạn có xấp xỉ <b>%s</b> thời gian pin còn lại (%.1f%%). %s"
 
-#: ../src/gpm-manager.c:1490 ../src/gpm-manager.c:1575
+#: ../src/gpm-manager.c:1472 ../src/gpm-manager.c:1557
 msgid "UPS critically low"
 msgstr "UPS yếu tới hạn"
 
-#: ../src/gpm-manager.c:1492
+#: ../src/gpm-manager.c:1474
 #, c-format
 msgid ""
-"You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore AC "
+"You have approximately <b>%s</b> of remaining UPS power (%.1f%%). Restore AC "
 "power to your computer to avoid losing data."
-msgstr ""
-"Bạn có xấp xỉ <b>%s</b> điện năng UPS còn lại (%d%%). Hãy phục hồi điện năng "
-"chính cho máy tính để tránh mất dữ liệu."
+msgstr "Bạn có xấp xỉ <b>%s</b> điện năng UPS còn lại (%.1f%%). Hãy phục hồi điện năng chính cho máy tính để tránh mất dữ liệu."
 
-#: ../src/gpm-manager.c:1498
+#: ../src/gpm-manager.c:1480
 #, c-format
 msgid ""
-"The wireless mouse attached to this computer is very low in power (%d%%). "
+"The wireless mouse attached to this computer is very low in power (%.1f%%). "
 "This device will soon stop functioning if not charged."
-msgstr ""
-"Con chuột vô tuyến được kết nối đến máy tính này có pin rất yếu (%d%%). "
-"Thiết bị này sắp tắt, nếu bạn không sạc pin."
+msgstr "Con chuột vô tuyến được kết nối đến máy tính này có pin rất yếu (%.1f%%). Thiết bị này sắp tắt, nếu bạn không sạc pin."
 
-#: ../src/gpm-manager.c:1503
+#: ../src/gpm-manager.c:1485
 #, c-format
 msgid ""
-"The wireless keyboard attached to this computer is very low in power (%d%%). "
-"This device will soon stop functioning if not charged."
-msgstr ""
-"Bàn phím vô tuyến được kết nối đến máy tính này có pin rất yếu (%d%%). Thiết "
-"bị này sắp tắt, nếu bạn không sạc pin."
+"The wireless keyboard attached to this computer is very low in power (%.1f%"
+"%). This device will soon stop functioning if not charged."
+msgstr "Bàn phím vô tuyến được kết nối đến máy tính này có pin rất yếu (%.1f%%). Thiết bị này sắp tắt, nếu bạn không sạc pin."
 
-#: ../src/gpm-manager.c:1508
+#: ../src/gpm-manager.c:1490
 #, c-format
 msgid ""
-"The PDA attached to this computer is very low in power (%d%%). This device "
+"The PDA attached to this computer is very low in power (%.1f%%). This device "
 "will soon stop functioning if not charged."
-msgstr ""
-"PDA được kết nối đến máy tính này có pin rất yếu (%d%%). Thiết bị này sắp "
-"tắt, nếu bạn không sạc pin."
+msgstr "PDA được kết nối đến máy tính này có pin rất yếu (%.1f%%). Thiết bị này sắp tắt, nếu bạn không sạc pin."
 
-#: ../src/gpm-manager.c:1513
+#: ../src/gpm-manager.c:1495
 #, c-format
 msgid ""
-"Your cell phone is very low in power (%d%%). This device will soon stop "
+"Your cell phone is very low in power (%.1f%%). This device will soon stop "
 "functioning if not charged."
-msgstr ""
-"Điện thoại di động của bạn có pin rất yếu (%d%%). Thiết bị này sắp tắt, nếu "
-"bạn không sạc pin."
+msgstr "Điện thoại di động của bạn có pin rất yếu (%.1f%%). Thiết bị này sắp tắt, nếu bạn không sạc pin."
 
-#: ../src/gpm-manager.c:1550
+#: ../src/gpm-manager.c:1532
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
 msgstr ""
 "Pin đã quá hạn nên máy tính này sắp <b>tắt điện</b> khi pin trống hoàn toàn."
 
-#: ../src/gpm-manager.c:1555
+#: ../src/gpm-manager.c:1537
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1909,40 +1870,40 @@ msgstr ""
 "Pin đã quá hạn nên máy tính này sắp ngưng.<br><b>GHI CHÚ :</b> Cần thiết một "
 "ít điện năng để bảo trì tính trạng bị ngưng của máy tính."
 
-#: ../src/gpm-manager.c:1561
+#: ../src/gpm-manager.c:1543
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr "Pin đã quá hạn nên máy tính này sắp ngủ đông."
 
-#: ../src/gpm-manager.c:1565
+#: ../src/gpm-manager.c:1547
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr "Pin đã quá hạn nên máy tính này sắp tắt máy."
 
-#: ../src/gpm-manager.c:1582
+#: ../src/gpm-manager.c:1564
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
 msgstr ""
 "UPS đã quá hạn nên máy tính này sắp <b>tắt điện</b> khi UPS trống hoàn toàn."
 
-#: ../src/gpm-manager.c:1587
+#: ../src/gpm-manager.c:1569
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr "UPS đã quá hạn nên máy tính này sắp ngủ đông."
 
-#: ../src/gpm-manager.c:1591
+#: ../src/gpm-manager.c:1573
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr "UPS đã quá hạn nên máy tính này sắp tắt máy."
 
-#: ../src/gpm-manager.c:1697
+#: ../src/gpm-manager.c:1679
 msgid "Install problem!"
 msgstr "Vấn đề cài đặt !"
 
-#: ../src/gpm-manager.c:1698
+#: ../src/gpm-manager.c:1680
 msgid ""
 "The configuration defaults for GNOME Power Manager have not been installed "
 "correctly.\n"
@@ -2056,153 +2017,156 @@ msgstr "Thăm địa chỉ Web Quirk"
 #: ../src/gpm-cell-array.c:990
 #, c-format
 msgid ""
-"%s fully charged (%i%%)\n"
+"%s fully charged (%.1f%%)\n"
 "Provides %s battery runtime\n"
 msgstr ""
-"%s đã sạc đầy (%i%%)\n"
+"%s đã sạc đầy (%.1f%%)\n"
 "thì cung cấp %s thời gian chạy\n"
 
 #: ../src/gpm-cell-array.c:994
 #, c-format
-msgid "%s fully charged (%i%%)\n"
-msgstr "%s đã sạc đầy (%i%%)\n"
+msgid "%s fully charged (%.1f%%)\n"
+msgstr "%s đã sạc đầy (%.1f%%)\n"
 
 #: ../src/gpm-cell-array.c:1002
 #, c-format
-msgid "%s %s remaining (%i%%)\n"
-msgstr "%s %s còn lại (%i%%)\n"
+msgid "%s %s remaining (%.1f%%)\n"
+msgstr "%s %s còn lại (%.1f%%)\n"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-cell-array.c:1007
 #, c-format
-msgid "%s discharging (%i%%)\n"
-msgstr "%s đang xả (%i%%)\n"
+msgid "%s discharging (%.1f%%)\n"
+msgstr "%s đang xả (%.1f%%)\n"
 
 #: ../src/gpm-cell-array.c:1019
 #, c-format
 msgid ""
-"%s %s until charged (%i%%)\n"
+"%s %s until charged (%.1f%%)\n"
 "Provides %s battery runtime\n"
 msgstr ""
-"%s %s đến khi được sạc (%i%%)\n"
+"%s %s đến khi được sạc (%.1f%%)\n"
 "thì cung cấp %s thời gian chạy\n"
 
 #: ../src/gpm-cell-array.c:1026
 #, c-format
-msgid "%s %s until charged (%i%%)\n"
-msgstr "%s %s đến khi được sạc (%i%%)\n"
+msgid "%s %s until charged (%.1f%%)\n"
+msgstr "%s %s đến khi được sạc (%.1f%%)\n"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-cell-array.c:1031
 #, c-format
-msgid "%s charging (%i%%)\n"
-msgstr "%s đang sạc (%i%%)\n"
+msgid "%s charging (%.1f%%)\n"
+msgstr "%s đang sạc (%.1f%%)\n"
 
 #: ../src/gpm-cell-array.c:1038
 msgid "Battery state could not be read at this time\n"
 msgstr "Tình trạng pin không thể được đọc vào lúc này\n"
 
-#: ../src/gpm-cell.c:531
-#, c-format
-msgid "<b>Product:</b> %s\n"
-msgstr "<b>Sản xuất:</b> %s\n"
-
 #: ../src/gpm-cell.c:534
-msgid "<b>Status:</b> Missing\n"
-msgstr "<b>Tình trạng:</b> Thiếu\n"
+msgid "Product"
+msgstr "Sản phẩm"
 
-#: ../src/gpm-cell.c:536
-msgid "<b>Status:</b> Charged\n"
-msgstr "<b>Tình trạng:</b> Đã sạc\n"
+#: ../src/gpm-cell.c:537 ../src/gpm-cell.c:539 ../src/gpm-cell.c:541
+#: ../src/gpm-cell.c:543
+msgid "Status"
+msgstr "Tình trạng"
 
-#: ../src/gpm-cell.c:538
-msgid "<b>Status:</b> Charging\n"
-msgstr "<b>Tình trạng:</b> Đang sạc\n"
+#: ../src/gpm-cell.c:537
+msgid "Missing"
+msgstr "Thiếu"
 
-#: ../src/gpm-cell.c:540
-msgid "<b>Status:</b> Discharging\n"
-msgstr "<b>Tình trạng:</b> Đang xả\n"
+#: ../src/gpm-cell.c:539
+msgid "Charged"
+msgstr "Sạc đầy"
+
+#: ../src/gpm-cell.c:541
+msgid "Charging"
+msgstr "Đang sạc"
 
 #: ../src/gpm-cell.c:543
-#, c-format
-msgid "<b>Percentage charge:</b> %i%%\n"
-msgstr "<b>Phần trăm đầy:</b> %i%%\n"
+msgid "Discharging"
+msgstr "Đang xả"
 
-#: ../src/gpm-cell.c:548
+#: ../src/gpm-cell.c:546
+msgid "Percentage charge"
+msgstr "Phần trăm sạc"
+
+#: ../src/gpm-cell.c:550
 msgid "Vendor:"
 msgstr "Nhà sản xuất:"
 
-#: ../src/gpm-cell.c:553
+#: ../src/gpm-cell.c:555
 msgid "Lithium ion"
 msgstr "Lithi ion"
 
-#: ../src/gpm-cell.c:555
+#: ../src/gpm-cell.c:557
 msgid "Lead acid"
 msgstr "Axit chì"
 
-#: ../src/gpm-cell.c:557
+#: ../src/gpm-cell.c:559
 msgid "Lithium polymer"
 msgstr "Lithi polime (LiP)"
 
-#: ../src/gpm-cell.c:559
+#: ../src/gpm-cell.c:561
 msgid "Nickel metal hydride"
 msgstr "Mạ kền kim loại hyddrua (NMH)"
 
-#: ../src/gpm-cell.c:566
-msgid "Technology:"
-msgstr "Công nghệ:"
+#: ../src/gpm-cell.c:568
+msgid "Technology"
+msgstr "Công nghệ"
 
-#: ../src/gpm-cell.c:570
-msgid "Serial number:"
-msgstr "Số sản xuất:"
+#: ../src/gpm-cell.c:572
+msgid "Serial number"
+msgstr "Số sản xuất"
 
-#: ../src/gpm-cell.c:574
-msgid "Model:"
-msgstr "Mô hình:"
+#: ../src/gpm-cell.c:576
+msgid "Model"
+msgstr "Kiểu"
 
-#: ../src/gpm-cell.c:580
-msgid "Charge time:"
-msgstr "Thời gian sạc:"
+#: ../src/gpm-cell.c:582
+msgid "Charge time"
+msgstr "Thời gian sạc"
 
-#: ../src/gpm-cell.c:587
-msgid "Discharge time:"
-msgstr "Thời gian xả:"
+#: ../src/gpm-cell.c:589
+msgid "Discharge time"
+msgstr "Thời gian xả"
 
-#: ../src/gpm-cell.c:593
+#: ../src/gpm-cell.c:595
 msgid "Excellent"
 msgstr "Tốt lắm"
 
-#: ../src/gpm-cell.c:595
+#: ../src/gpm-cell.c:597
 msgid "Good"
 msgstr "Tốt"
 
-#: ../src/gpm-cell.c:597
+#: ../src/gpm-cell.c:599
 msgid "Fair"
 msgstr "Vừa"
 
-#: ../src/gpm-cell.c:599
+#: ../src/gpm-cell.c:601
 msgid "Poor"
 msgstr "Xấu"
 
-#: ../src/gpm-cell.c:602
-msgid "Capacity:"
-msgstr "Khả năng:"
+#: ../src/gpm-cell.c:604
+msgid "Capacity"
+msgstr "Dung tích"
 
-#: ../src/gpm-cell.c:608 ../src/gpm-cell.c:631
-msgid "Current charge:"
-msgstr "Điện hiện có :"
+#: ../src/gpm-cell.c:610 ../src/gpm-cell.c:633
+msgid "Current charge"
+msgstr "Điện hiện có"
 
-#: ../src/gpm-cell.c:614
-msgid "Last full charge:"
-msgstr "Sạc đầy cuối cùng:"
+#: ../src/gpm-cell.c:616
+msgid "Last full charge"
+msgstr "Lần sạc đầy cuối"
 
-#: ../src/gpm-cell.c:619 ../src/gpm-cell.c:636
-msgid "Design charge:"
-msgstr "Điện thiết kế:"
+#: ../src/gpm-cell.c:621 ../src/gpm-cell.c:638
+msgid "Design charge"
+msgstr "Điện thiết kế"
 
-#: ../src/gpm-cell.c:624
-msgid "Charge rate:"
-msgstr "Tần số sạc:"
+#: ../src/gpm-cell.c:626
+msgid "Charge rate"
+msgstr "Tần số sạc"
 
 #: ../src/gpm-cell-unit.c:247
 msgid "Laptop batteries"
@@ -2262,35 +2226,35 @@ msgid "GNOME Power Preferences"
 msgstr "Tùy thích Điện năng Gnome"
 
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs-core.c:87 ../src/gpm-statistics-core.c:95
+#: ../src/gpm-prefs-core.c:88 ../src/gpm-statistics-core.c:95
 msgid "Ask me"
 msgstr "Hỏi nhé"
 
-#: ../src/gpm-prefs-core.c:88 ../src/gpm-statistics-core.c:96
+#: ../src/gpm-prefs-core.c:89 ../src/gpm-statistics-core.c:96
 msgid "Suspend"
 msgstr "Ngưng"
 
-#: ../src/gpm-prefs-core.c:89 ../src/gpm-statistics-core.c:97
+#: ../src/gpm-prefs-core.c:90 ../src/gpm-statistics-core.c:97
 msgid "Shutdown"
 msgstr "Tắt máy"
 
-#: ../src/gpm-prefs-core.c:90 ../src/gpm-statistics-core.c:98
+#: ../src/gpm-prefs-core.c:91 ../src/gpm-statistics-core.c:98
 msgid "Hibernate"
 msgstr "Ngủ đông"
 
-#: ../src/gpm-prefs-core.c:91 ../src/gpm-statistics-core.c:99
+#: ../src/gpm-prefs-core.c:92 ../src/gpm-statistics-core.c:99
 msgid "Blank screen"
 msgstr "Làm trắng màn hình"
 
-#: ../src/gpm-prefs-core.c:92 ../src/gpm-statistics-core.c:100
+#: ../src/gpm-prefs-core.c:93 ../src/gpm-statistics-core.c:100
 msgid "Do nothing"
 msgstr "Đừng làm gì"
 
-#: ../src/gpm-prefs-core.c:285
+#: ../src/gpm-prefs-core.c:286
 msgid "Never"
 msgstr "Không bao giờ"
 
-#: ../src/gpm-prefs-core.c:1042
+#: ../src/gpm-prefs-core.c:1047
 msgid "Make Default"
 msgstr "Làm mặc định"
 
@@ -2346,46 +2310,92 @@ msgstr "Bằng pin"
 msgid "Laptop lid is closed"
 msgstr "Nắp máy tính xách tây đã được đóng"
 
-#: ../src/gpm-tray-icon.c:215
+#: ../src/gpm-tray-icon.c:220
 msgid "Device information"
 msgstr "Thông tin thiết bị"
 
-#: ../src/gpm-tray-icon.c:324
+#: ../src/gpm-tray-icon.c:337
 msgid "translator-credits"
 msgstr "Nhóm Việt hóa Gnome <gnomevi-list@lists.sourceforge.net>"
 
-#: ../src/gpm-tray-icon.c:340
+#: ../src/gpm-tray-icon.c:353
 msgid "GNOME Power Manager Website"
 msgstr "Nơi Mạng Bộ Quản lý Điện năng GNOME"
 
 #. Preferences
-#: ../src/gpm-tray-icon.c:445
+#: ../src/gpm-tray-icon.c:435
 msgid "_Preferences"
 msgstr "Tù_y thích"
 
 #. Statistics
-#: ../src/gpm-tray-icon.c:453
+#: ../src/gpm-tray-icon.c:443
 msgid "Power _History"
 msgstr "_Lược sử điện năng"
 
 #. Help
-#: ../src/gpm-tray-icon.c:465
+#: ../src/gpm-tray-icon.c:455
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:2
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:2
 msgid "_Help"
 msgstr "Trợ _giúp"
 
 #. About
-#: ../src/gpm-tray-icon.c:473
+#: ../src/gpm-tray-icon.c:463
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:1
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:1
 msgid "_About"
 msgstr "G_iới thiệu"
 
-#: ../src/gpm-tray-icon.c:587
+#: ../src/gpm-tray-icon.c:577
 msgid "_Suspend"
 msgstr "_Ngưng"
 
-#: ../src/gpm-tray-icon.c:597
+#: ../src/gpm-tray-icon.c:587
 msgid "Hi_bernate"
 msgstr "Ngủ _đông"
+
+#~ msgid "If we should show the CPU frequency scaling in the UI"
+#~ msgstr "Có nên hiện co dãn tần số CPU trên giao diện không"
+
+#~ msgid ""
+#~ "If we should show the CPU frequency scaling in the UI. Some people need "
+#~ "to configure this for specific systems."
+#~ msgstr ""
+#~ "Có nên hiện co dãn tần số CPU trên giao diện không. Một số người cần cấu "
+#~ "hình cho các hệ thống đặc biệt."
+
+#~ msgid ""
+#~ "The device name for the v4l device used as a brightness sensor backup"
+#~ msgstr ""
+#~ "Tên thiết bị cho thiết bị v4l được dùng để dự phòng máy nhạy độ sáng"
+
+#~ msgid ""
+#~ "The device name for the v4l device used as a brightness sensor backup. A "
+#~ "value of 'default' uses the first discovered sensor, or devices can be "
+#~ "specified, e.g. '/dev/video0'"
+#~ msgstr ""
+#~ "Tên thiết bị cho thiết bị v4l được dùng để dự phòng máy nhạy độ sáng. Giá "
+#~ "trị « default » (mặc định) thì dùng máy nhạy được phát hiện thứ nhất, hoặc "
+#~ "có thể xác định thiết bị riêng, v.d. « /dev/video0 »."
+
+#~ msgid ""
+#~ "Policy timeout is not valid. Please wait a few seconds and try again."
+#~ msgstr "Thời hạn chính sách không hợp lệ. Hãy đợi vài giây rồi thử lại."
+
+#~ msgid "<b>Product:</b> %s\n"
+#~ msgstr "<b>Sản xuất:</b> %s\n"
+
+#~ msgid "<b>Status:</b> Missing\n"
+#~ msgstr "<b>Tình trạng:</b> Thiếu\n"
+
+#~ msgid "<b>Status:</b> Charged\n"
+#~ msgstr "<b>Tình trạng:</b> Đã sạc\n"
+
+#~ msgid "<b>Status:</b> Charging\n"
+#~ msgstr "<b>Tình trạng:</b> Đang sạc\n"
+
+#~ msgid "<b>Status:</b> Discharging\n"
+#~ msgstr "<b>Tình trạng:</b> Đang xả\n"
+
+#~ msgid "<b>Percentage charge:</b> %i%%\n"
+#~ msgstr "<b>Phần trăm đầy:</b> %i%%\n"
