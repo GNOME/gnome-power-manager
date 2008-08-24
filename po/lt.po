@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-24 19:45-0400\n"
-"PO-Revision-Date: 2008-08-24 18:11-0400\n"
+"POT-Creation-Date: 2008-08-24 19:52-0400\n"
+"PO-Revision-Date: 2008-08-24 19:52-0400\n"
 "Last-Translator: Gintautas Miliauskas <gintas@akl.lt>\n"
 "Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
 "MIME-Version: 1.0\n"
@@ -468,9 +468,8 @@ msgid "LCD brightness when on AC"
 msgstr "LCD ryškumas naudojant kintančiosios srovės energiją"
 
 #: ../data/gnome-power-manager.schemas.in.h:54
-#, fuzzy
 msgid "LCD dimming amount when on battery"
-msgstr "LCD ryškumas naudojant baterijos energiją"
+msgstr "LCD tamsinimas naudojant baterijos energiją"
 
 #: ../data/gnome-power-manager.schemas.in.h:55
 msgid "Laptop lid close action on battery"
@@ -707,13 +706,12 @@ msgid "The amount the light sensors should contribute to the brightness."
 msgstr "Kiek šviesos sensoriai turėtų daryti įtakos šviesumui."
 
 #: ../data/gnome-power-manager.schemas.in.h:96
-#, fuzzy
 msgid ""
 "The amount to dim the brightness of the display when on battery power. "
 "Possible values are between 0 and 100."
 msgstr ""
-"Ekrano ryškumas, naudojant baterijos energiją. Tinkamos reikšmės yra tarp 0 "
-"ir 100."
+"Ekrano tamsinimas, kai naudojama baterijos energija. Tinkamos reikšmės yra "
+"tarp 0 ir 100."
 
 #: ../data/gnome-power-manager.schemas.in.h:97
 msgid ""
@@ -1190,9 +1188,8 @@ msgid "The message was not sent due to DBUS security rules"
 msgstr "Pranešimas nebuvo išsiųstas dėl DBUS apsaugos taisyklių"
 
 #: ../src/gpm-control.c:285
-#, fuzzy
 msgid "General failure"
-msgstr "Bendras trikis: %s"
+msgstr "Bendras trikis"
 
 #: ../src/gpm-common.c:240
 msgid "Unknown time"
@@ -1424,11 +1421,11 @@ msgstr "Duomenų tikslumas"
 
 #: ../src/gpm-info.c:334 ../src/gpm-info.c:343
 msgid "Trusted"
-msgstr ""
+msgstr "Patikimas"
 
 #: ../src/gpm-info.c:335 ../src/gpm-info.c:344
 msgid "Untrusted"
-msgstr ""
+msgstr "Nepatikimas"
 
 #: ../src/gpm-info.c:351 ../src/gpm-info.c:369
 msgid "Average time elapsed"
@@ -1717,58 +1714,58 @@ msgid "Laptop battery low"
 msgstr "Baigiasi nešiojamojo kompiuterio baterija"
 
 #: ../src/gpm-manager.c:1371
-#, fuzzy, c-format
+#, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%.1f%%)"
-msgstr "Liko maždaug <b>%s</b> iki baterijos išsikrovimo (%d%%)"
+msgstr "Liko maždaug <b>%s</b> iki baterijos išsikrovimo (%.1f%%)"
 
 #: ../src/gpm-manager.c:1374
 msgid "UPS low"
 msgstr "Baigiasi NSŠ baterija"
 
 #: ../src/gpm-manager.c:1376
-#, fuzzy, c-format
+#, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"
-msgstr "Liko maždaug <b>%s</b> iki NSŠ baterijos išsikrovimo (%d%%)"
+msgstr "Liko maždaug <b>%s</b> iki NSŠ baterijos išsikrovimo (%.1f%%)"
 
 #: ../src/gpm-manager.c:1379 ../src/gpm-manager.c:1479
 msgid "Mouse battery low"
 msgstr "Baigiasi pelės baterija"
 
 #: ../src/gpm-manager.c:1380
-#, fuzzy, c-format
+#, c-format
 msgid "The wireless mouse attached to this computer is low in power (%.1f%%)"
-msgstr ""
-"Mažas prie kompiuterio prijungtos belaidės pelės energijos lygis (%d%%)"
+msgstr "Mažas belaidės pelės energijos lygis (%.1f%%)"
 
 #: ../src/gpm-manager.c:1382 ../src/gpm-manager.c:1484
 msgid "Keyboard battery low"
 msgstr "Baigiasi klaviatūros baterija"
 
 #: ../src/gpm-manager.c:1383
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The wireless keyboard attached to this computer is low in power (%.1f%%)"
 msgstr ""
-"Mažas prie kompiuterio prijungtos belaidės klaviatūros energijos lygis (%d%%)"
+"Mažas prie kompiuterio prijungtos belaidės klaviatūros energijos lygis (%.1f%"
+"%)"
 
 #: ../src/gpm-manager.c:1385 ../src/gpm-manager.c:1489
 msgid "PDA battery low"
 msgstr "Baigiasi PDA baterija"
 
 #: ../src/gpm-manager.c:1386
-#, fuzzy, c-format
+#, c-format
 msgid "The PDA attached to this computer is low in power (%.1f%%)"
-msgstr "Prie kompiuterio prijungto PDA energijos lygis mažas (%d%%)"
+msgstr "Prie kompiuterio prijungto PDA energijos lygis mažas (%.1f%%)"
 
 #: ../src/gpm-manager.c:1388 ../src/gpm-manager.c:1494
 msgid "Cell phone battery low"
 msgstr "Baigiasi mobilaus telefono baterija"
 
 #: ../src/gpm-manager.c:1389
-#, fuzzy, c-format
+#, c-format
 msgid "The cell phone attached to this computer is low in power (%.1f%%)"
 msgstr ""
-"Mažas prie kompiuterio prijungto mobilaus telefono energijos lygis (%d%%)"
+"Mažas prie kompiuterio prijungto mobilaus telefono energijos lygis (%.1f%%)"
 
 #: ../src/gpm-manager.c:1416
 msgid "a short time"
@@ -1802,59 +1799,60 @@ msgstr ""
 "Kompiuteris išsijungs po %s, jei neprijungsite jo prie elektros tinklo."
 
 #: ../src/gpm-manager.c:1464
-#, fuzzy, c-format
+#, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%.1f%%). %s"
-msgstr "Liko maždaug <b>%s</b> iki baterijos išsikrovimo (%d%%). %s"
+msgstr "Liko maždaug <b>%s</b> iki baterijos išsikrovimo (%.1f%%). %s"
 
 #: ../src/gpm-manager.c:1472 ../src/gpm-manager.c:1557
 msgid "UPS critically low"
 msgstr "Kritiškai mažas NSŠ energijos lygis"
 
 #: ../src/gpm-manager.c:1474
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%.1f%%). Restore AC "
 "power to your computer to avoid losing data."
 msgstr ""
 "Liko maždaug <b>%s</b> iki nepertraukiamos srovės šaltinio (UPS) baterijos "
-"išsikrovimo (%d%%). Norėdami išvengti duomenų praradimo atnaujinkite "
+"išsikrovimo (%.1f%%). Norėdami išvengti duomenų praradimo atnaujinkite "
 "kompiuteriui energijos tiekimą."
 
 #: ../src/gpm-manager.c:1480
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The wireless mouse attached to this computer is very low in power (%.1f%%). "
 "This device will soon stop functioning if not charged."
 msgstr ""
-"Prie kompiuterio prijungtos belaidės pelės energijos lygis kritiškai mažas (%"
-"d%%). Šis įrenginys netrukus nustos funkcionuoti, jei jo neįkrausite."
+"Prie kompiuterio prijungtos belaidės pelės energijos lygis kritiškai mažas "
+"(%.1f%%). Šis įrenginys netrukus nustos funkcionuoti, jei jo neįkrausite."
 
 #: ../src/gpm-manager.c:1485
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The wireless keyboard attached to this computer is very low in power (%.1f%"
 "%). This device will soon stop functioning if not charged."
 msgstr ""
 "Prie kompiuterio prijungtos belaidės klaviatūros energijos lygis kritiškai "
-"mažas (%d%%). Šis įrenginys netrukus nustos funkcionuoti, jei jo neįkrausite."
+"mažas (%.1f%%). Šis įrenginys netrukus nustos funkcionuoti, jei jo "
+"neįkrausite."
 
 #: ../src/gpm-manager.c:1490
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The PDA attached to this computer is very low in power (%.1f%%). This device "
 "will soon stop functioning if not charged."
 msgstr ""
-"Prie kompiuterio prijungto PDA energijos lygis kritiškai mažas (%d%%). Šis "
+"Prie kompiuterio prijungto PDA energijos lygis kritiškai mažas (%.1f%%). Šis "
 "įrenginys netrukus nustos funkcionuoti, jei jo neįkrausite."
 
 #: ../src/gpm-manager.c:1495
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your cell phone is very low in power (%.1f%%). This device will soon stop "
 "functioning if not charged."
 msgstr ""
 "Prie kompiuterio prijungto mobilaus telefono energijos lygis kritiškai mažas "
-"(%d%%). Šis įrenginys netrukus nustos funkcionuoti, jei jo neįkrausite."
+"(%.1f%%). Šis įrenginys netrukus nustos funkcionuoti, jei jo neįkrausite."
 
 #: ../src/gpm-manager.c:1532
 msgid ""
@@ -2033,49 +2031,49 @@ msgid "Visit quirk website"
 msgstr "Aplankyti nesklandumų tinklalapį"
 
 #: ../src/gpm-cell-array.c:1014
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s fully charged (%.1f%%)\n"
 "Provides %s battery runtime\n"
 msgstr ""
-"%s pilnai įkrauta (%i%%)\n"
+"%s pilnai įkrauta (%.1f%%)\n"
 "Teikia %s baterijos veikimo laiko\n"
 
 #: ../src/gpm-cell-array.c:1018
-#, fuzzy, c-format
+#, c-format
 msgid "%s fully charged (%.1f%%)\n"
-msgstr "%s pilnai įkrauta (%i%%)\n"
+msgstr "%s pilnai įkrauta (%.1f%%)\n"
 
 #: ../src/gpm-cell-array.c:1026
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s remaining (%.1f%%)\n"
-msgstr "liko %s %s (%i%%)\n"
+msgstr "liko %s %s (%.1f%%)\n"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-cell-array.c:1031
-#, fuzzy, c-format
+#, c-format
 msgid "%s discharging (%.1f%%)\n"
-msgstr "%s iškraunama (%i%%)\n"
+msgstr "%s iškraunama (%.1f%%)\n"
 
 #: ../src/gpm-cell-array.c:1043
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s until charged (%.1f%%)\n"
 "Provides %s battery runtime\n"
 msgstr ""
-"%s %s iki įkrovimo (%i%%)\n"
+"%s %s iki įkrovimo (%.1f%%)\n"
 "Teikia %s baterijos veikimo laiko\n"
 
 #: ../src/gpm-cell-array.c:1050
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s until charged (%.1f%%)\n"
-msgstr "%s %s iki įkrovimo (%i%%)\n"
+msgstr "%s %s iki įkrovimo (%.1f%%)\n"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-cell-array.c:1055
-#, fuzzy, c-format
+#, c-format
 msgid "%s charging (%.1f%%)\n"
-msgstr "%s įkraunama (%i%%)\n"
+msgstr "%s įkraunama (%.1f%%)\n"
 
 #: ../src/gpm-cell-array.c:1062
 msgid "Battery state could not be read at this time\n"
@@ -2083,34 +2081,30 @@ msgstr "Nepavyko perskaityti baterijos būsenos\n"
 
 #: ../src/gpm-cell.c:543
 msgid "Product"
-msgstr ""
+msgstr "Produktas"
 
 #: ../src/gpm-cell.c:546 ../src/gpm-cell.c:548 ../src/gpm-cell.c:550
 #: ../src/gpm-cell.c:552
 msgid "Status"
-msgstr ""
+msgstr "Būsena"
 
 #: ../src/gpm-cell.c:546
 msgid "Missing"
-msgstr ""
+msgstr "Nerasta"
 
 #: ../src/gpm-cell.c:548
-#, fuzzy
 msgid "Charged"
-msgstr "Baterija įkrauta"
+msgstr "Įkrauta"
 
 #: ../src/gpm-cell.c:550
-#, fuzzy
 msgid "Charging"
-msgstr "UPS iškraunamas"
+msgstr "Kraunama"
 
 #: ../src/gpm-cell.c:552
-#, fuzzy
 msgid "Discharging"
-msgstr "UPS iškraunamas"
+msgstr "Iškraunama"
 
 #: ../src/gpm-cell.c:555
-#, fuzzy
 msgid "Percentage charge"
 msgstr "Įkrova procentais"
 
@@ -2135,29 +2129,24 @@ msgid "Nickel metal hydride"
 msgstr "Nikelio metalo hidrido"
 
 #: ../src/gpm-cell.c:577
-#, fuzzy
 msgid "Technology"
-msgstr "Technologija:"
+msgstr "Technologija"
 
 #: ../src/gpm-cell.c:581
-#, fuzzy
 msgid "Serial number"
-msgstr "Serijos numeris:"
+msgstr "Serijos numeris"
 
 #: ../src/gpm-cell.c:585
-#, fuzzy
 msgid "Model"
-msgstr "Modelis:"
+msgstr "Modelis"
 
 #: ../src/gpm-cell.c:591
-#, fuzzy
 msgid "Charge time"
-msgstr "Įkrovimo laikas:"
+msgstr "Įkrovimo laikas"
 
 #: ../src/gpm-cell.c:598
-#, fuzzy
 msgid "Discharge time"
-msgstr "Iškrovimo laikas:"
+msgstr "Iškrovimo laikas"
 
 #: ../src/gpm-cell.c:604
 msgid "Excellent"
@@ -2176,29 +2165,24 @@ msgid "Poor"
 msgstr "Prasta"
 
 #: ../src/gpm-cell.c:613
-#, fuzzy
 msgid "Capacity"
-msgstr "Talpa:"
+msgstr "Talpa"
 
 #: ../src/gpm-cell.c:619 ../src/gpm-cell.c:642
-#, fuzzy
 msgid "Current charge"
-msgstr "Esama įkrova:"
+msgstr "Esama įkrova"
 
 #: ../src/gpm-cell.c:625
-#, fuzzy
 msgid "Last full charge"
-msgstr "Paskutinioji pilna įkrova:"
+msgstr "Paskutinioji pilna įkrova"
 
 #: ../src/gpm-cell.c:630 ../src/gpm-cell.c:647
-#, fuzzy
 msgid "Design charge"
-msgstr "Suprojektuota įkrova:"
+msgstr "Suprojektuota įkrova"
 
 #: ../src/gpm-cell.c:635
-#, fuzzy
 msgid "Charge rate"
-msgstr "Įkrovos greitis:"
+msgstr "Įkrovos greitis"
 
 #: ../src/gpm-cell-unit.c:248
 msgid "Laptop batteries"
@@ -2287,9 +2271,8 @@ msgid "Never"
 msgstr "Niekada"
 
 #: ../src/gpm-prefs-core.c:1047
-#, fuzzy
 msgid "Make Default"
-msgstr "Padaryti _numatytaja"
+msgstr "Padaryti numatytąja"
 
 #: ../src/gpm-statistics.c:95
 msgid "GNOME Power Statistics"
