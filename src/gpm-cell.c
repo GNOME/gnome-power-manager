@@ -568,6 +568,8 @@ gpm_cell_get_description (GpmCell *cell)
 			technology = _("Lithium polymer");
 		} else if (strcasecmp (cell->priv->technology, "nickel-metal-hydride") == 0) {
 			technology = _("Nickel metal hydride");
+		} else if (strcasecmp (cell->priv->technology, "unknown") == 0) {
+			technology = _("Unknown");
 		} else {
 			gpm_warning ("Battery type %s not translated, please report!",
 				     cell->priv->technology);
