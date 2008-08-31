@@ -540,23 +540,22 @@ gpm_cell_get_description (GpmCell *cell)
 
 	details = g_string_new ("");
 	if (cell->priv->product) {
-		g_string_append_printf (details, "<b>%s:</b> %s\n", _("Product"), cell->priv->product);
+		g_string_append_printf (details, _("<b>Product:</b> %s\n"), cell->priv->product);
 	}
 	if (unit->is_present == FALSE) {
-		g_string_append_printf (details, "<b>%s:</b> %s\n", _("Status"), _("Missing"));
+		g_string_append_printf (details, _("<b>Status:</b> %s\n"), _("Missing"));
 	} else if (gpm_cell_unit_is_charged (unit)) {
-		g_string_append_printf (details, "<b>%s:</b> %s\n", _("Status"), _("Charged"));
+		g_string_append_printf (details, _("<b>Status:</b> %s\n"), _("Charged"));
 	} else if (unit->is_charging) {
-		g_string_append_printf (details, "<b>%s:</b> %s\n", _("Status"), _("Charging"));
+		g_string_append_printf (details, _("<b>Status:</b> %s\n"), _("Charging"));
 	} else if (unit->is_discharging) {
-		g_string_append_printf (details, "<b>%s:</b> %s\n", _("Status"), _("Discharging"));
+		g_string_append_printf (details, _("<b>Status:</b> %s\n"), _("Discharging"));
 	}
 	if (unit->percentage >= 0) {
-		g_string_append_printf (details, "<b>%s:</b> %.1f%%\n", _("Percentage charge"), unit->percentage);
+		g_string_append_printf (details, _("<b>Percentage charge:</b> %.1f%%\n"), unit->percentage);
 	}
 	if (cell->priv->vendor) {
-		g_string_append_printf (details, "<b>%s</b> %s\n",
-					_("Vendor:"), cell->priv->vendor);
+		g_string_append_printf (details, _("<b>Vendor:</b> %s\n"), cell->priv->vendor);
 	}
 	if (cell->priv->technology) {
 		const gchar *technology;
@@ -569,40 +568,37 @@ gpm_cell_get_description (GpmCell *cell)
 		} else if (strcasecmp (cell->priv->technology, "nickel-metal-hydride") == 0) {
 			technology = _("Nickel metal hydride");
 		} else if (strcasecmp (cell->priv->technology, "unknown") == 0) {
+			/* Translators: Unknown is related to the Technology of the battery */
 			technology = _("Unknown");
 		} else {
 			gpm_warning ("Battery type %s not translated, please report!",
 				     cell->priv->technology);
 			technology = cell->priv->technology;
 		}
-		g_string_append_printf (details, "<b>%s:</b> %s\n",
-					_("Technology"), technology);
+		g_string_append_printf (details, _("<b>Technology:</b> %s\n"), technology);
 	}
 	if (cell->priv->serial) {
-		g_string_append_printf (details, "<b>%s:</b> %s\n",
-					_("Serial number"), cell->priv->serial);
+		g_string_append_printf (details, _("<b>Serial number:</b> %s\n"), cell->priv->serial);
 	}
 	if (cell->priv->model) {
-		g_string_append_printf (details, "<b>%s:</b> %s\n",
-					_("Model"), cell->priv->model);
+		g_string_append_printf (details, _("<b>Model:</b> %s\n"), cell->priv->model);
 	}
 	if (unit->time_charge > 0) {
 		gchar *time_str;
 		time_str = gpm_get_timestring (unit->time_charge);
-		g_string_append_printf (details, "<b>%s:</b> %s\n",
-					_("Charge time"), time_str);
+		g_string_append_printf (details, _("<b>Charge time:</b> %s\n"), time_str);
 		g_free (time_str);
 	}
 	if (unit->time_discharge > 0) {
 		gchar *time_str;
 		time_str = gpm_get_timestring (unit->time_discharge);
-		g_string_append_printf (details, "<b>%s:</b> %s\n",
-					_("Discharge time"), time_str);
+		g_string_append_printf (details, _("<b>Discharge time:</b> %s\n"), time_str);
 		g_free (time_str);
 	}
 	if (unit->capacity > 0) {
 		const gchar *condition;
 		if (unit->capacity > 99) {
+			/* Translators: Excellent, Good, Fair and Poor are all related to battery Capacity */
 			condition = _("Excellent");
 		} else if (unit->capacity > 90) {
 			condition = _("Good");
@@ -611,42 +607,36 @@ gpm_cell_get_description (GpmCell *cell)
 		} else {
 			condition = _("Poor");
 		}
-		g_string_append_printf (details, "<b>%s:</b> %i%% (%s)\n",
-					_("Capacity"),
+		/* Translators: %i is a percentage and %s the condition (Excellent, Good, ...) */
+		g_string_append_printf (details, _("<b>Capacity:</b> %i%% (%s)\n"),
 					unit->capacity, condition);
 	}
 	if (unit->measure == GPM_CELL_UNIT_MWH) {
 		if (unit->charge_current > 0) {
-			g_string_append_printf (details, "<b>%s</b> %.1f Wh\n",
-						_("Current charge"),
+			g_string_append_printf (details, _("<b>Current charge:</b> %.1f Wh\n"),
 						unit->charge_current / 1000.0f);
 		}
 		if (unit->charge_last_full > 0 &&
 		    unit->charge_design != unit->charge_last_full) {
-			g_string_append_printf (details, "<b>%s:</b> %.1f Wh\n",
-						_("Last full charge"),
+			g_string_append_printf (details, _("<b>Last full charge:</b> %.1f Wh\n"),
 						unit->charge_last_full / 1000.0f);
 		}
 		if (unit->charge_design > 0) {
-			g_string_append_printf (details, "<b>%s:</b> %.1f Wh\n",
-						_("Design charge"),
+			g_string_append_printf (details, _("<b>Design charge:</b> %.1f Wh\n"),
 						unit->charge_design / 1000.0f);
 		}
 		if (unit->rate > 0) {
-			g_string_append_printf (details, "<b>%s:</b> %.1f W\n",
-						_("Charge rate"),
+			g_string_append_printf (details, _("<b>Charge rate:</b> %.1f W\n"),
 						unit->rate / 1000.0f);
 		}
 	}
 	if (unit->measure == GPM_CELL_UNIT_CSR) {
 		if (unit->charge_current > 0) {
-			g_string_append_printf (details, "<b>%s:</b> %i/7\n",
-						_("Current charge"),
+			g_string_append_printf (details, _("<b>Current charge:</b> %i/7\n"),
 						unit->charge_current);
 		}
 		if (unit->charge_design > 0) {
-			g_string_append_printf (details, "<b>%s:</b> %i/7\n",
-						_("Design charge"),
+			g_string_append_printf (details, _("<b>Design charge:</b> %i/7\n"),
 						unit->charge_design);
 		}
 	}
