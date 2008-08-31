@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-29 02:39-0400\n"
-"PO-Revision-Date: 2008-08-29 02:39-0500\n"
+"POT-Creation-Date: 2008-08-31 19:15-0400\n"
+"PO-Revision-Date: 2008-08-31 19:15-0500\n"
 "Last-Translator: Seán de Búrca <leftmostcat@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -846,11 +846,11 @@ msgstr ""
 
 #: ../data/gnome-power-preferences.desktop.in.in.h:1
 msgid "Configure power management"
-msgstr "Cumraigh bainisteoireacht na cumhachta"
+msgstr "Cumraigh bainistíocht na cumhachta"
 
 #: ../data/gnome-power-preferences.desktop.in.in.h:2
 msgid "Power Management"
-msgstr "Bainisteoireacht na Cumhachta"
+msgstr "Bainistíocht na Cumhachta"
 
 #: ../data/gnome-power-statistics.desktop.in.in.h:1
 msgid "Observe power management"
@@ -1191,15 +1191,15 @@ msgstr "Ar chadhnra"
 
 #: ../src/gpm-info.c:210
 msgid "Session powersave"
-msgstr ""
+msgstr "Seisiún sábháil na cumhachta"
 
 #: ../src/gpm-info.c:214
 msgid "Session idle"
-msgstr ""
+msgstr "Seisiún díomhaoin"
 
 #: ../src/gpm-info.c:218
 msgid "Session active"
-msgstr ""
+msgstr "Seisiún gníomhach"
 
 #. Translators: translate ONLY the string part after the |
 #: ../src/gpm-info.c:223
@@ -1218,15 +1218,15 @@ msgstr "Geihmriú"
 
 #: ../src/gpm-info.c:237
 msgid "Lid closed"
-msgstr ""
+msgstr "Claibín dúnta"
 
 #: ../src/gpm-info.c:241
 msgid "Lid opened"
-msgstr ""
+msgstr "Claibín oscailte"
 
 #: ../src/gpm-info.c:245
 msgid "Notification"
-msgstr ""
+msgstr "Fógairt"
 
 #: ../src/gpm-info.c:250
 msgid "DPMS On"
@@ -1275,7 +1275,7 @@ msgstr "Voltas"
 
 #: ../src/gpm-info.c:333 ../src/gpm-info.c:342
 msgid "Accuracy of reading"
-msgstr ""
+msgstr "Cruinneas an léimh"
 
 #: ../src/gpm-info.c:334 ../src/gpm-info.c:343
 msgid "Trusted"
@@ -1287,7 +1287,7 @@ msgstr "Neamhiontaofa"
 
 #: ../src/gpm-info.c:351 ../src/gpm-info.c:369
 msgid "Average time elapsed"
-msgstr ""
+msgstr "Meánam imithe"
 
 #: ../src/gpm-info.c:352 ../src/gpm-info.c:370
 msgid "Valid data"
@@ -1295,7 +1295,7 @@ msgstr "Sonraí bailí"
 
 #: ../src/gpm-info.c:353 ../src/gpm-info.c:371
 msgid "Extrapolated data"
-msgstr ""
+msgstr "Sonraí eachtarshuite"
 
 #: ../src/gpm-info.c:354 ../src/gpm-info.c:372
 msgid "No data"
@@ -1303,11 +1303,11 @@ msgstr "Gan sonraí"
 
 #: ../src/gpm-info.c:358 ../src/gpm-info.c:376
 msgid "Start point"
-msgstr ""
+msgstr "Pointe tosaithe"
 
 #: ../src/gpm-info.c:362 ../src/gpm-info.c:380
 msgid "Stop point"
-msgstr ""
+msgstr "Pointe stad"
 
 #: ../src/gpm-info.c:660
 msgid "AC adapter inserted"
@@ -1881,13 +1881,15 @@ msgid "Battery state could not be read at this time\n"
 msgstr ""
 
 #: ../src/gpm-cell.c:543
-msgid "Product"
-msgstr "Táirge"
+#, c-format
+msgid "<b>Product:</b> %s\n"
+msgstr "<b>Táirge:</b> %s\n"
 
 #: ../src/gpm-cell.c:546 ../src/gpm-cell.c:548 ../src/gpm-cell.c:550
 #: ../src/gpm-cell.c:552
-msgid "Status"
-msgstr "Stádas"
+#, c-format
+msgid "<b>Status:</b> %s\n"
+msgstr "<b>Stádas:</b> %s\n"
 
 #: ../src/gpm-cell.c:546
 msgid "Missing"
@@ -1906,84 +1908,114 @@ msgid "Discharging"
 msgstr "Á díluchtú"
 
 #: ../src/gpm-cell.c:555
-msgid "Percentage charge"
-msgstr "Céatadán luchta"
+#, c-format
+msgid "<b>Percentage charge:</b> %.1f%%\n"
+msgstr "<b>Céatadán luchta:</b> %.1f%%\n"
 
-#: ../src/gpm-cell.c:559
-msgid "Vendor:"
-msgstr "Díoltóir:"
+#: ../src/gpm-cell.c:558
+#, c-format
+msgid "<b>Vendor:</b> %s\n"
+msgstr "<b>Díoltóir:</b> %s\n"
 
-#: ../src/gpm-cell.c:564
+#: ../src/gpm-cell.c:563
 msgid "Lithium ion"
 msgstr "Ian litiam"
 
-#: ../src/gpm-cell.c:566
+#: ../src/gpm-cell.c:565
 msgid "Lead acid"
 msgstr "Luaidhe-aigéadach"
 
-#: ../src/gpm-cell.c:568
+#: ../src/gpm-cell.c:567
 msgid "Lithium polymer"
 msgstr "Polaiméir litiam"
 
-#: ../src/gpm-cell.c:570
+#: ../src/gpm-cell.c:569
 msgid "Nickel metal hydride"
 msgstr "Hidríd mhiotail nicile"
 
-#: ../src/gpm-cell.c:577
-msgid "Technology"
-msgstr "Teicneolaíocht"
+#. Translators: Unknown is related to the Technology of the battery
+#: ../src/gpm-cell.c:572 ../src/gpm-cell-unit.c:260 ../src/gpm-cell-unit.c:276
+#: ../src/gpm-statistics-core.c:739
+msgid "Unknown"
+msgstr "Anaithnid"
+
+#: ../src/gpm-cell.c:578
+#, c-format
+msgid "<b>Technology:</b> %s\n"
+msgstr "<b>Teicneolaíocht:</b> %s\n"
 
 #: ../src/gpm-cell.c:581
-msgid "Serial number"
-msgstr "Sraithuimhir"
+#, c-format
+msgid "<b>Serial number:</b> %s\n"
+msgstr "<b>Sraithuimhir:</b> %s\n"
 
-#: ../src/gpm-cell.c:585
-msgid "Model"
-msgstr "Samhail"
+#: ../src/gpm-cell.c:584
+#, c-format
+msgid "<b>Model:</b> %s\n"
+msgstr "<b>Samhail:</b> %s\n"
 
-#: ../src/gpm-cell.c:591
-msgid "Charge time"
-msgstr "Am luchta"
+#: ../src/gpm-cell.c:589
+#, c-format
+msgid "<b>Charge time:</b> %s\n"
+msgstr "<b>Am luchta:</b> %s\n"
 
-#: ../src/gpm-cell.c:598
-msgid "Discharge time"
-msgstr "Am díluchta"
+#: ../src/gpm-cell.c:595
+#, c-format
+msgid "<b>Discharge time:</b> %s\n"
+msgstr "<b>Am díluchta:</b> %s\n"
 
-#: ../src/gpm-cell.c:604
+#. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
+#: ../src/gpm-cell.c:602
 msgid "Excellent"
 msgstr "Sármhaith"
 
-#: ../src/gpm-cell.c:606
+#: ../src/gpm-cell.c:604
 msgid "Good"
 msgstr "Maith"
 
-#: ../src/gpm-cell.c:608
+#: ../src/gpm-cell.c:606
 msgid "Fair"
 msgstr "Cóir"
 
-#: ../src/gpm-cell.c:610
+#: ../src/gpm-cell.c:608
 msgid "Poor"
 msgstr "Bocht"
 
-#: ../src/gpm-cell.c:613
-msgid "Capacity"
-msgstr "Toilleadh"
+#. Translators: %i is a percentage and %s the condition (Excellent, Good, ...)
+#: ../src/gpm-cell.c:611
+#, c-format
+msgid "<b>Capacity:</b> %i%% (%s)\n"
+msgstr "<b>Toilleadh:</b> %i%% (%s)\n"
 
-#: ../src/gpm-cell.c:619 ../src/gpm-cell.c:642
-msgid "Current charge"
-msgstr "Lucht reatha"
+#: ../src/gpm-cell.c:616
+#, c-format
+msgid "<b>Current charge:</b> %.1f Wh\n"
+msgstr "<b>Lucht reatha:</b> %.1f Wh\n"
+
+#: ../src/gpm-cell.c:621
+#, c-format
+msgid "<b>Last full charge:</b> %.1f Wh\n"
+msgstr "<b>Lucht iomlán is déanaí:</b> %.1f Wh\n"
 
 #: ../src/gpm-cell.c:625
-msgid "Last full charge"
-msgstr "Lucht iomlán is déanaí"
+#, c-format
+msgid "<b>Design charge:</b> %.1f Wh\n"
+msgstr "<b>Lucht deartha:</b> %.1f Wh\n"
 
-#: ../src/gpm-cell.c:630 ../src/gpm-cell.c:647
-msgid "Design charge"
-msgstr "Lucht deartha"
+#: ../src/gpm-cell.c:629
+#, c-format
+msgid "<b>Charge rate:</b> %.1f W\n"
+msgstr "<b>Ráta luchta:</b> %.1f W\n"
 
 #: ../src/gpm-cell.c:635
-msgid "Charge rate"
-msgstr "Ráta luchta"
+#, c-format
+msgid "<b>Current charge:</b> %i/7\n"
+msgstr "<b>Lucht reatha:</b> %i/7\n"
+
+#: ../src/gpm-cell.c:639
+#, c-format
+msgid "<b>Design charge:</b> %i/7\n"
+msgstr "<b>Lucht deartha:</b> %i/7\n"
 
 #: ../src/gpm-cell-unit.c:248
 msgid "Laptop batteries"
@@ -2008,11 +2040,6 @@ msgstr "PDAanna"
 #: ../src/gpm-cell-unit.c:258
 msgid "Cell phones"
 msgstr ""
-
-#: ../src/gpm-cell-unit.c:260 ../src/gpm-cell-unit.c:276
-#: ../src/gpm-statistics-core.c:739
-msgid "Unknown"
-msgstr "Anaithnid"
 
 #: ../src/gpm-cell-unit.c:264
 msgid "Laptop battery"
@@ -2081,7 +2108,7 @@ msgstr "Staitisticí na Cumhacht GNOME"
 
 #: ../src/gpm-statistics-core.c:60
 msgid "Charge history"
-msgstr ""
+msgstr "Stair luchta"
 
 #: ../src/gpm-statistics-core.c:61
 msgid "Power history"
@@ -2097,19 +2124,19 @@ msgstr ""
 
 #: ../src/gpm-statistics-core.c:64
 msgid "Charge time profile"
-msgstr ""
+msgstr "Próifíl am luchta"
 
 #: ../src/gpm-statistics-core.c:65
 msgid "Discharge time profile"
-msgstr ""
+msgstr "Próifíl am díluchta"
 
 #: ../src/gpm-statistics-core.c:66
 msgid "Charge time accuracy profile"
-msgstr ""
+msgstr "Próifíl chruinneas am luchta"
 
 #: ../src/gpm-statistics-core.c:67
 msgid "Discharge time accuracy profile"
-msgstr ""
+msgstr "Próifíl chruinneas am díluchta"
 
 #: ../src/gpm-statistics-core.c:813
 msgid "Could not connect to GNOME Power Manager."
