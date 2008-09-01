@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-07 01:34+0200\n"
-"PO-Revision-Date: 2008-08-07 01:44+0100\n"
+"POT-Creation-Date: 2008-09-01 10:35+0200\n"
+"PO-Revision-Date: 2008-09-01 10:41+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -999,7 +999,7 @@ msgstr "Batteriurladdningstiden är för närvarande okänd\n"
 
 #: ../src/gpm-engine.c:309
 msgid "Battery charge time is currently unknown\n"
-msgstr "Batteriladdningstiden är för närvarande okänd\n"
+msgstr "Batteriuppladdningstiden är för närvarande okänd\n"
 
 #: ../src/gpm-engine.c:313
 msgid "Battery discharge time is estimated\n"
@@ -1007,7 +1007,7 @@ msgstr "Batteriurladdningstiden är uppskattad\n"
 
 #: ../src/gpm-engine.c:315
 msgid "Battery charge time is estimated\n"
-msgstr "Batteriladdningstiden är uppskattad\n"
+msgstr "Batteriuppladdningstiden är uppskattad\n"
 
 #. show a AC icon
 #: ../src/gpm-engine.c:610
@@ -1727,7 +1727,7 @@ msgstr ""
 msgid "Visit quirk website"
 msgstr "Besök \"quirk\"-webbsidan"
 
-#: ../src/gpm-cell-array.c:990
+#: ../src/gpm-cell-array.c:1014
 #, c-format
 msgid ""
 "%s fully charged (%.1f%%)\n"
@@ -1736,23 +1736,23 @@ msgstr ""
 "%s är fullständigt uppladdat (%.1f%%)\n"
 "Ger %s batteritid\n"
 
-#: ../src/gpm-cell-array.c:994
+#: ../src/gpm-cell-array.c:1018
 #, c-format
 msgid "%s fully charged (%.1f%%)\n"
 msgstr "%s är fullständigt uppladdat (%.1f%%)\n"
 
-#: ../src/gpm-cell-array.c:1002
+#: ../src/gpm-cell-array.c:1026
 #, c-format
 msgid "%s %s remaining (%.1f%%)\n"
 msgstr "%s %s återstår (%.1f%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:1007
+#: ../src/gpm-cell-array.c:1031
 #, c-format
 msgid "%s discharging (%.1f%%)\n"
 msgstr "%s laddar ur (%.1f%%)\n"
 
-#: ../src/gpm-cell-array.c:1019
+#: ../src/gpm-cell-array.c:1043
 #, c-format
 msgid ""
 "%s %s until charged (%.1f%%)\n"
@@ -1761,31 +1761,33 @@ msgstr ""
 "%s %s tills uppladdat (%.1f%%)\n"
 "Ger %s batteritid\n"
 
-#: ../src/gpm-cell-array.c:1026
+#: ../src/gpm-cell-array.c:1050
 #, c-format
 msgid "%s %s until charged (%.1f%%)\n"
 msgstr "%s %s tills uppladdat (%.1f%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:1031
+#: ../src/gpm-cell-array.c:1055
 #, c-format
 msgid "%s charging (%.1f%%)\n"
 msgstr "%s laddar (%.1f%%)\n"
 
-#: ../src/gpm-cell-array.c:1038
+#: ../src/gpm-cell-array.c:1062
 msgid "Battery state could not be read at this time\n"
 msgstr "Batteritillståndet kunde inte läsas av vid det här tillfället\n"
 
 #: ../src/gpm-cell.c:543
-msgid "Product"
-msgstr "Produkt"
+#, c-format
+msgid "<b>Product:</b> %s\n"
+msgstr "<b>Produkt:</b> %s\n"
 
 #: ../src/gpm-cell.c:546
 #: ../src/gpm-cell.c:548
 #: ../src/gpm-cell.c:550
 #: ../src/gpm-cell.c:552
-msgid "Status"
-msgstr "Status"
+#, c-format
+msgid "<b>Status:</b> %s\n"
+msgstr "<b>Status:</b> %s\n"
 
 #: ../src/gpm-cell.c:546
 msgid "Missing"
@@ -1804,86 +1806,116 @@ msgid "Discharging"
 msgstr "Laddar ur"
 
 #: ../src/gpm-cell.c:555
-msgid "Percentage charge"
-msgstr "Laddning i procent"
+#, c-format
+msgid "<b>Percentage charge:</b> %.1f%%\n"
+msgstr "<b>Procentuell laddning:</b> %.1f%%\n"
 
-#: ../src/gpm-cell.c:559
-msgid "Vendor:"
-msgstr "Tillverkare:"
+#: ../src/gpm-cell.c:558
+#, c-format
+msgid "<b>Vendor:</b> %s\n"
+msgstr "<b>Tillverkare:</b> %s\n"
 
-#: ../src/gpm-cell.c:564
+#: ../src/gpm-cell.c:563
 msgid "Lithium ion"
 msgstr "Litium-jon"
 
-#: ../src/gpm-cell.c:566
+#: ../src/gpm-cell.c:565
 msgid "Lead acid"
 msgstr "Blybatteri"
 
-#: ../src/gpm-cell.c:568
+#: ../src/gpm-cell.c:567
 msgid "Lithium polymer"
 msgstr "Lithium-polymer"
 
-#: ../src/gpm-cell.c:570
+#: ../src/gpm-cell.c:569
 msgid "Nickel metal hydride"
 msgstr "Nickelmetalhydrid"
 
-#: ../src/gpm-cell.c:577
-msgid "Technology"
-msgstr "Teknologi"
+#. Translators: Unknown is related to the Technology of the battery
+#: ../src/gpm-cell.c:572
+#: ../src/gpm-cell-unit.c:260
+#: ../src/gpm-cell-unit.c:276
+#: ../src/gpm-statistics-core.c:739
+msgid "Unknown"
+msgstr "Okänd"
+
+#: ../src/gpm-cell.c:578
+#, c-format
+msgid "<b>Technology:</b> %s\n"
+msgstr "<b>Teknologi:</b> %s\n"
 
 #: ../src/gpm-cell.c:581
-msgid "Serial number"
-msgstr "Serienummer"
+#, c-format
+msgid "<b>Serial number:</b> %s\n"
+msgstr "<b>Serienummer:</b> %s\n"
 
-#: ../src/gpm-cell.c:585
-msgid "Model"
-msgstr "Modell"
+#: ../src/gpm-cell.c:584
+#, c-format
+msgid "<b>Model:</b> %s\n"
+msgstr "<b>Modell:</b> %s\n"
 
-#: ../src/gpm-cell.c:591
-msgid "Charge time"
-msgstr "Laddningstid"
+#: ../src/gpm-cell.c:589
+#, c-format
+msgid "<b>Charge time:</b> %s\n"
+msgstr "<b>Uppladdningstid:</b> %s\n"
 
-#: ../src/gpm-cell.c:598
-msgid "Discharge time"
-msgstr "Urladdningstid"
+#: ../src/gpm-cell.c:595
+#, c-format
+msgid "<b>Discharge time:</b> %s\n"
+msgstr "<b>Urladdningstid:</b> %s\n"
 
-#: ../src/gpm-cell.c:604
+#. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
+#: ../src/gpm-cell.c:602
 msgid "Excellent"
 msgstr "Mycket bra"
 
-#: ../src/gpm-cell.c:606
+#: ../src/gpm-cell.c:604
 msgid "Good"
 msgstr "Bra"
 
-#: ../src/gpm-cell.c:608
+#: ../src/gpm-cell.c:606
 msgid "Fair"
 msgstr "OK"
 
-#: ../src/gpm-cell.c:610
+#: ../src/gpm-cell.c:608
 msgid "Poor"
 msgstr "Dålig"
 
-#: ../src/gpm-cell.c:613
-msgid "Capacity"
-msgstr "Kapacitet"
+#. Translators: %i is a percentage and %s the condition (Excellent, Good, ...)
+#: ../src/gpm-cell.c:611
+#, c-format
+msgid "<b>Capacity:</b> %i%% (%s)\n"
+msgstr "<b>Kapacitet:</b> %i%% (%s)\n"
 
-#: ../src/gpm-cell.c:619
-#: ../src/gpm-cell.c:642
-msgid "Current charge"
-msgstr "Aktuell laddning"
+#: ../src/gpm-cell.c:616
+#, c-format
+msgid "<b>Current charge:</b> %.1f Wh\n"
+msgstr "<b>Aktuell laddning:</b> %.1f Wh\n"
+
+#: ../src/gpm-cell.c:621
+#, c-format
+msgid "<b>Last full charge:</b> %.1f Wh\n"
+msgstr "<b>Senaste fullständiga laddning:</b> %.1f Wh\n"
 
 #: ../src/gpm-cell.c:625
-msgid "Last full charge"
-msgstr "Senaste fullständiga laddning"
+#, c-format
+msgid "<b>Design charge:</b> %.1f Wh\n"
+msgstr "<b>Anpassad uppladdning:</b> %.1f Wh\n"
 
-#: ../src/gpm-cell.c:630
-#: ../src/gpm-cell.c:647
-msgid "Design charge"
-msgstr "Anpassad laddning"
+#: ../src/gpm-cell.c:629
+#, c-format
+msgid "<b>Charge rate:</b> %.1f W\n"
+msgstr "<b>Uppladdningsfrekvens:</b> %.1f W\n"
 
 #: ../src/gpm-cell.c:635
-msgid "Charge rate"
-msgstr "Laddningsfrekvens"
+#, c-format
+msgid "<b>Current charge:</b> %i/7\n"
+msgstr "<b>Aktuell laddning:</b> %i/7\n"
+
+#: ../src/gpm-cell.c:639
+#, c-format
+msgid "<b>Design charge:</b> %i/7\n"
+msgstr "<b>Anpassad uppladdning:</b> %i/7\n"
 
 #: ../src/gpm-cell-unit.c:248
 msgid "Laptop batteries"
@@ -1908,12 +1940,6 @@ msgstr "Handdatorer"
 #: ../src/gpm-cell-unit.c:258
 msgid "Cell phones"
 msgstr "Mobiltelefoner"
-
-#: ../src/gpm-cell-unit.c:260
-#: ../src/gpm-cell-unit.c:276
-#: ../src/gpm-statistics-core.c:739
-msgid "Unknown"
-msgstr "Okänd"
 
 #: ../src/gpm-cell-unit.c:264
 msgid "Laptop battery"
@@ -1989,7 +2015,7 @@ msgstr "GNOME-strömstatistik"
 
 #: ../src/gpm-statistics-core.c:60
 msgid "Charge history"
-msgstr "Laddningshistorik"
+msgstr "Uppladdningshistorik"
 
 #: ../src/gpm-statistics-core.c:61
 msgid "Power history"
@@ -2005,7 +2031,7 @@ msgstr "Historik för beräknad tid"
 
 #: ../src/gpm-statistics-core.c:64
 msgid "Charge time profile"
-msgstr "Profil för laddningstid"
+msgstr "Profil för uppladdningstid"
 
 #: ../src/gpm-statistics-core.c:65
 msgid "Discharge time profile"
@@ -2013,11 +2039,11 @@ msgstr "Profil för urladdningstid"
 
 #: ../src/gpm-statistics-core.c:66
 msgid "Charge time accuracy profile"
-msgstr "Ändra tidsprecisionsprofil"
+msgstr "Precisionsprofil för uppladdningstid"
 
 #: ../src/gpm-statistics-core.c:67
 msgid "Discharge time accuracy profile"
-msgstr "Precisionsprofil för urladdningstid:"
+msgstr "Precisionsprofil för urladdningstid"
 
 #: ../src/gpm-statistics-core.c:813
 msgid "Could not connect to GNOME Power Manager."
@@ -2088,6 +2114,28 @@ msgstr "Vä_nteläge"
 msgid "Hi_bernate"
 msgstr "_Viloläge"
 
+#~ msgid "Product"
+#~ msgstr "Produkt"
+#~ msgid "Status"
+#~ msgstr "Status"
+#~ msgid "Percentage charge"
+#~ msgstr "Laddning i procent"
+#~ msgid "Vendor:"
+#~ msgstr "Tillverkare:"
+#~ msgid "Technology"
+#~ msgstr "Teknologi"
+#~ msgid "Model"
+#~ msgstr "Modell"
+#~ msgid "Charge time"
+#~ msgstr "Laddningstid"
+#~ msgid "Capacity"
+#~ msgstr "Kapacitet"
+#~ msgid "Current charge"
+#~ msgstr "Aktuell laddning"
+#~ msgid "Design charge"
+#~ msgstr "Anpassad laddning"
+#~ msgid "Charge rate"
+#~ msgstr "Laddningsfrekvens"
 #~ msgid ""
 #~ "The device name for the v4l device used as a brightness sensor backup"
 #~ msgstr ""
@@ -2105,18 +2153,12 @@ msgstr "_Viloläge"
 #~ "Policy timeout is not valid. Please wait a few seconds and try again."
 #~ msgstr ""
 #~ "Policytidsgränsen är inte giltig. Vänta ett par sekunder och försök igen."
-#~ msgid "<b>Product:</b> %s\n"
-#~ msgstr "<b>Produkt:</b> %s\n"
-#~ msgid "<b>Status:</b> Missing\n"
-#~ msgstr "<b>Status:</b> Saknas\n"
 #~ msgid "<b>Status:</b> Charged\n"
 #~ msgstr "<b>Status:</b> Fullt laddat\n"
 #~ msgid "<b>Status:</b> Charging\n"
 #~ msgstr "<b>Status:</b> Laddar\n"
 #~ msgid "<b>Status:</b> Discharging\n"
 #~ msgstr "<b>Status:</b> Laddar ur\n"
-#~ msgid "<b>Percentage charge:</b> %i%%\n"
-#~ msgstr "<b>Procentuell laddning:</b> %i%%\n"
 #~ msgid ""
 #~ "If niced processes are considered, they can cause a frequency increment "
 #~ "even though their absolute load percentage wouldn't trigger the scaling "
