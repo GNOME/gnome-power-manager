@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 2.19.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-15 11:29+0700\n"
-"PO-Revision-Date: 2008-08-15 11:39+0700\n"
+"POT-Creation-Date: 2008-09-01 11:15+0700\n"
+"PO-Revision-Date: 2008-09-01 11:16+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -1006,7 +1006,7 @@ msgstr "เลิกระงับ"
 
 #: data/gpm-inhibit-test.glade.h:7
 msgid "Vendor Acme Foo"
-msgstr "ผู้ผลิต Acme Foo"
+msgstr "ผู้จำหน่าย Acme Foo"
 
 #: data/gpm-prefs.glade.h:1
 msgid "<b>Actions</b>"
@@ -1749,8 +1749,8 @@ msgid ""
 "The wireless mouse attached to this computer is very low in power (%.1f%%). "
 "This device will soon stop functioning if not charged."
 msgstr ""
-"เมาส์ไร้สายที่ต่อกับเครื่องคอมพิวเตอร์นี้ เหลือพลังงานต่ำแล้ว (%.1f%%) อุปกรณ์นี้จะหยุดทำงานในไม่ช้า "
-"ถ้าไม่ประจุไฟเพิ่ม"
+"เมาส์ไร้สายที่ต่อกับเครื่องคอมพิวเตอร์นี้ เหลือพลังงานต่ำแล้ว (%.1f%%) "
+"อุปกรณ์นี้จะหยุดทำงานในไม่ช้า ถ้าไม่ประจุไฟเพิ่ม"
 
 #: src/gpm-manager.c:1485
 #, c-format
@@ -1983,13 +1983,15 @@ msgid "Battery state could not be read at this time\n"
 msgstr "ไม่สามารถอ่านสถานะแบตเตอรี่ได้ในขณะนี้\n"
 
 #: src/gpm-cell.c:543
-msgid "Product"
-msgstr "ผลิตภัณฑ์"
+#, c-format
+msgid "<b>Product:</b> %s\n"
+msgstr "<b>ผลิตภัณฑ์:</b> %s\n"
 
 #: src/gpm-cell.c:546 src/gpm-cell.c:548 src/gpm-cell.c:550
 #: src/gpm-cell.c:552
-msgid "Status"
-msgstr "สถานะ"
+#, c-format
+msgid "<b>Status:</b> %s\n"
+msgstr "<b>สถานะ:</b> %s\n"
 
 #: src/gpm-cell.c:546
 msgid "Missing"
@@ -2008,84 +2010,114 @@ msgid "Discharging"
 msgstr "กำลังจ่ายไฟ"
 
 #: src/gpm-cell.c:555
-msgid "Percentage charge"
-msgstr "เปอร์เซ็นต์ประจุ"
+#, c-format
+msgid "<b>Percentage charge:</b> %.1f%%\n"
+msgstr "<b>เปอร์เซ็นต์ประจุ:</b> %.1f%%\n"
 
-#: src/gpm-cell.c:559
-msgid "Vendor:"
-msgstr "ผู้จำหน่าย:"
+#: src/gpm-cell.c:558
+#, c-format
+msgid "<b>Vendor:</b> %s\n"
+msgstr "<b>ผู้จำหน่าย:</b> %s\n"
 
-#: src/gpm-cell.c:564
+#: src/gpm-cell.c:563
 msgid "Lithium ion"
 msgstr "ลิเทียมไอออน"
 
-#: src/gpm-cell.c:566
+#: src/gpm-cell.c:565
 msgid "Lead acid"
 msgstr "กรดตะกั่ว"
 
-#: src/gpm-cell.c:568
+#: src/gpm-cell.c:567
 msgid "Lithium polymer"
 msgstr "ลิเทียมโพลิเมอร์"
 
-#: src/gpm-cell.c:570
+#: src/gpm-cell.c:569
 msgid "Nickel metal hydride"
 msgstr "นิกเกิลเมทัลไฮไดรด์"
 
-#: src/gpm-cell.c:577
-msgid "Technology"
-msgstr "เทคโนโลยี"
+#. Translators: Unknown is related to the Technology of the battery
+#: src/gpm-cell.c:572 src/gpm-cell-unit.c:260 src/gpm-cell-unit.c:276
+#: src/gpm-statistics-core.c:739
+msgid "Unknown"
+msgstr "ไม่ทราบ"
+
+#: src/gpm-cell.c:578
+#, c-format
+msgid "<b>Technology:</b> %s\n"
+msgstr "<b>เทคโนโลยี:</b> %s\n"
 
 #: src/gpm-cell.c:581
-msgid "Serial number"
-msgstr "เลขลำดับผลิตภัณฑ์"
+#, c-format
+msgid "<b>Serial number:</b> %s\n"
+msgstr "<b>เลขลำดับผลิตภัณฑ์:</b> %s\n"
 
-#: src/gpm-cell.c:585
-msgid "Model"
-msgstr "รุ่น"
+#: src/gpm-cell.c:584
+#, c-format
+msgid "<b>Model:</b> %s\n"
+msgstr "<b>แบบ:</b> %s\n"
 
-#: src/gpm-cell.c:591
-msgid "Charge time"
-msgstr "เวลาประจุ"
+#: src/gpm-cell.c:589
+#, c-format
+msgid "<b>Charge time:</b> %s\n"
+msgstr "<b>เวลาประจุ:</b> %s\n"
 
-#: src/gpm-cell.c:598
-msgid "Discharge time"
-msgstr "เวลาจ่ายไฟ"
+#: src/gpm-cell.c:595
+#, c-format
+msgid "<b>Discharge time:</b> %s\n"
+msgstr "<b>เวลาจ่ายไฟ:</b> %s\n"
 
-#: src/gpm-cell.c:604
+#. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
+#: src/gpm-cell.c:602
 msgid "Excellent"
 msgstr "ดีมาก"
 
-#: src/gpm-cell.c:606
+#: src/gpm-cell.c:604
 msgid "Good"
 msgstr "สภาพดี"
 
-#: src/gpm-cell.c:608
+#: src/gpm-cell.c:606
 msgid "Fair"
 msgstr "ปานกลาง"
 
-#: src/gpm-cell.c:610
+#: src/gpm-cell.c:608
 msgid "Poor"
 msgstr "สภาพแย่"
 
-#: src/gpm-cell.c:613
-msgid "Capacity"
-msgstr "ความจุ"
+#. Translators: %i is a percentage and %s the condition (Excellent, Good, ...)
+#: src/gpm-cell.c:611
+#, c-format
+msgid "<b>Capacity:</b> %i%% (%s)\n"
+msgstr "<b>ความจุ:</b> %i%% (%s)\n"
 
-#: src/gpm-cell.c:619 src/gpm-cell.c:642
-msgid "Current charge"
-msgstr "ประจุปัจจุบัน"
+#: src/gpm-cell.c:616
+#, c-format
+msgid "<b>Current charge:</b> %.1f Wh\n"
+msgstr "<b>ประจุปัจจุบัน:</b> %.1f Wh\n"
+
+#: src/gpm-cell.c:621
+#, c-format
+msgid "<b>Last full charge:</b> %.1f Wh\n"
+msgstr "<b>ประจุเต็มครั้งล่าสุด:</b> %.1f Wh\n"
 
 #: src/gpm-cell.c:625
-msgid "Last full charge"
-msgstr "ประจุเต็มครั้งล่าสุด"
+#, c-format
+msgid "<b>Design charge:</b> %.1f Wh\n"
+msgstr "<b>ประจุที่ออกแบบไว้:</b> %.1f Wh\n"
 
-#: src/gpm-cell.c:630 src/gpm-cell.c:647
-msgid "Design charge"
-msgstr "ประจุที่ออกแบบไว้"
+#: src/gpm-cell.c:629
+#, c-format
+msgid "<b>Charge rate:</b> %.1f W\n"
+msgstr "<b>อัตราการประจุ:</b> %.1f W\n"
 
 #: src/gpm-cell.c:635
-msgid "Charge rate"
-msgstr "อัตราการประจุ"
+#, c-format
+msgid "<b>Current charge:</b> %i/7\n"
+msgstr "<b>ประจุปัจจุบัน:</b> %i/7\n"
+
+#: src/gpm-cell.c:639
+#, c-format
+msgid "<b>Design charge:</b> %i/7\n"
+msgstr "<b>ประจุที่ออกแบบไว้:</b> %i/7\n"
 
 #: src/gpm-cell-unit.c:248
 msgid "Laptop batteries"
@@ -2110,11 +2142,6 @@ msgstr "PDA"
 #: src/gpm-cell-unit.c:258
 msgid "Cell phones"
 msgstr "โทรศัพท์มือถือ"
-
-#: src/gpm-cell-unit.c:260 src/gpm-cell-unit.c:276
-#: src/gpm-statistics-core.c:739
-msgid "Unknown"
-msgstr "ไม่ทราบ"
 
 #: src/gpm-cell-unit.c:264
 msgid "Laptop battery"
@@ -2273,15 +2300,45 @@ msgstr "_พักเครื่อง"
 msgid "Hi_bernate"
 msgstr "_จำศีลเครื่อง"
 
+#~ msgid "Product"
+#~ msgstr "ผลิตภัณฑ์"
+
+#~ msgid "Status"
+#~ msgstr "สถานะ"
+
+#~ msgid "Percentage charge"
+#~ msgstr "เปอร์เซ็นต์ประจุ"
+
+#~ msgid "Vendor:"
+#~ msgstr "ผู้จำหน่าย:"
+
+#~ msgid "Technology"
+#~ msgstr "เทคโนโลยี"
+
+#~ msgid "Serial number"
+#~ msgstr "เลขลำดับผลิตภัณฑ์"
+
+#~ msgid "Model"
+#~ msgstr "รุ่น"
+
+#~ msgid "Charge time"
+#~ msgstr "เวลาประจุ"
+
+#~ msgid "Capacity"
+#~ msgstr "ความจุ"
+
+#~ msgid "Current charge"
+#~ msgstr "ประจุปัจจุบัน"
+
+#~ msgid "Design charge"
+#~ msgstr "ประจุที่ออกแบบไว้"
+
+#~ msgid "Charge rate"
+#~ msgstr "อัตราการประจุ"
+
 #~ msgid ""
 #~ "Policy timeout is not valid. Please wait a few seconds and try again."
 #~ msgstr "ยังไม่ถึงกำหนดเวลาตามนโยบาย กรุณาคอยสักสองสามวินาทีแล้วลองใหม่"
-
-#~ msgid "<b>Product:</b> %s\n"
-#~ msgstr "<b>ผลิตภัณฑ์:</b> %s\n"
-
-#~ msgid "<b>Status:</b> Missing\n"
-#~ msgstr "<b>สถานะ:</b> ไม่มี\n"
 
 #~ msgid "<b>Status:</b> Charged\n"
 #~ msgstr "<b>สถานะ:</b> ประจุเต็ม\n"
@@ -2291,9 +2348,6 @@ msgstr "_จำศีลเครื่อง"
 
 #~ msgid "<b>Status:</b> Discharging\n"
 #~ msgstr "<b>สถานะ:</b> กำลังจ่ายไฟ\n"
-
-#~ msgid "<b>Percentage charge:</b> %i%%\n"
-#~ msgstr "<b>เปอร์เซ็นต์ประจุ:</b> %i%%\n"
 
 #~ msgid ""
 #~ "The device name for the v4l device used as a brightness sensor backup"
@@ -2737,15 +2791,6 @@ msgstr "_จำศีลเครื่อง"
 
 #~ msgid "laptop lid re-opened"
 #~ msgstr "แล็ปท็อปถูกเปิดฝาออกใหม่"
-
-#~ msgid "<b>Vendor:</b> %s\n"
-#~ msgstr "<b>ผู้ผลิต:</b> %s\n"
-
-#~ msgid "<b>Model:</b> %s\n"
-#~ msgstr "<b>แบบ:</b> %s\n"
-
-#~ msgid "<b>Capacity:</b> %i%% (%s)\n"
-#~ msgstr "<b>ความจุ:</b> %i%% (%s)\n"
 
 #~ msgid "Make the computer go to sleep"
 #~ msgstr "ให้คอมพิวเตอร์หลับ"
