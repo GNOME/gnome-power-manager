@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-29 07:52+0000\n"
-"PO-Revision-Date: 2008-08-29 10:39+0200\n"
+"POT-Creation-Date: 2008-09-01 03:44+0000\n"
+"PO-Revision-Date: 2008-09-01 06:11+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -2136,13 +2136,15 @@ msgid "Battery state could not be read at this time\n"
 msgstr "No se pudo leer el estado de la batería en este momento\n"
 
 #: ../src/gpm-cell.c:543
-msgid "Product"
-msgstr "Producto"
+#, c-format
+msgid "<b>Product:</b> %s\n"
+msgstr "<b>Producto:</b> %s\n"
 
 #: ../src/gpm-cell.c:546 ../src/gpm-cell.c:548 ../src/gpm-cell.c:550
 #: ../src/gpm-cell.c:552
-msgid "Status"
-msgstr "Estado"
+#, c-format
+msgid "<b>Status:</b> %s\n"
+msgstr "<b>Estado:</b> %s\n"
 
 #: ../src/gpm-cell.c:546
 msgid "Missing"
@@ -2161,89 +2163,114 @@ msgid "Discharging"
 msgstr "Descargando"
 
 #: ../src/gpm-cell.c:555
-msgid "Percentage charge"
-msgstr "Porcentaje de carga"
+#, c-format
+msgid "<b>Percentage charge:</b> %.1f%%\n"
+msgstr "<b>Porcentaje de carga:</b> %.1f%%\n"
 
-#: ../src/gpm-cell.c:559
-msgid "Vendor:"
-msgstr "Fabricante:"
+#: ../src/gpm-cell.c:558
+#, c-format
+msgid "<b>Vendor:</b> %s\n"
+msgstr "<b>Fabricante:</b> %s\n"
 
-#: ../src/gpm-cell.c:564
+#: ../src/gpm-cell.c:563
 msgid "Lithium ion"
 msgstr "Ion litio"
 
-#: ../src/gpm-cell.c:566
+#: ../src/gpm-cell.c:565
 msgid "Lead acid"
 msgstr "Plomo y ácido"
 
-#: ../src/gpm-cell.c:568
+#: ../src/gpm-cell.c:567
 msgid "Lithium polymer"
 msgstr "Polímero de litio"
 
-#: ../src/gpm-cell.c:570
+#: ../src/gpm-cell.c:569
 msgid "Nickel metal hydride"
 msgstr "Híbrido de níquel metal"
 
+#. Translators: Unknown is related to the Technology of the battery
 #: ../src/gpm-cell.c:572 ../src/gpm-cell-unit.c:260 ../src/gpm-cell-unit.c:276
 #: ../src/gpm-statistics-core.c:739
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../src/gpm-cell.c:579
-msgid "Technology"
-msgstr "Tecnología"
+#: ../src/gpm-cell.c:578
+#, c-format
+msgid "<b>Technology:</b> %s\n"
+msgstr "<b>Tecnología:</b> %s\n"
 
-#: ../src/gpm-cell.c:583
-msgid "Serial number"
-msgstr "Número de serie"
+#: ../src/gpm-cell.c:581
+#, c-format
+msgid "<b>Serial number:</b> %s\n"
+msgstr "<b>Número de serie:</b> %s\n"
 
-#: ../src/gpm-cell.c:587
-msgid "Model"
-msgstr "Modelo"
+#: ../src/gpm-cell.c:584
+#, c-format
+msgid "<b>Model:</b> %s\n"
+msgstr "<b>Modelo:</b> %s\n"
 
-#: ../src/gpm-cell.c:593
-msgid "Charge time"
-msgstr "Tiempo de carga"
+#: ../src/gpm-cell.c:589
+#, c-format
+msgid "<b>Charge time:</b> %s\n"
+msgstr "<b>Tiempo de carga</b> %s\n"
 
-#: ../src/gpm-cell.c:600
-msgid "Discharge time"
-msgstr "Tiempo de descarga"
+#: ../src/gpm-cell.c:595
+#, c-format
+msgid "<b>Discharge time:</b> %s\n"
+msgstr "<b>Tiempo de descarga:</b> %s\n"
 
-#: ../src/gpm-cell.c:606
+#. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
+#: ../src/gpm-cell.c:602
 msgid "Excellent"
 msgstr "Excelente"
 
-#: ../src/gpm-cell.c:608
+#: ../src/gpm-cell.c:604
 msgid "Good"
 msgstr "Bueno"
 
-#: ../src/gpm-cell.c:610
+#: ../src/gpm-cell.c:606
 msgid "Fair"
 msgstr "Normal"
 
-#: ../src/gpm-cell.c:612
+#: ../src/gpm-cell.c:608
 msgid "Poor"
 msgstr "Pobre"
 
-#: ../src/gpm-cell.c:615
-msgid "Capacity"
-msgstr "Capacidad"
+#. Translators: %i is a percentage and %s the condition (Excellent, Good, ...)
+#: ../src/gpm-cell.c:611
+#, c-format
+msgid "<b>Capacity:</b> %i%% (%s)\n"
+msgstr "<b>Capacidad:</b> %i%% (%s)\n"
 
-#: ../src/gpm-cell.c:621 ../src/gpm-cell.c:644
-msgid "Current charge"
-msgstr "Carga actual"
+#: ../src/gpm-cell.c:616
+#, c-format
+msgid "<b>Current charge:</b> %.1f Wh\n"
+msgstr "<b>Carga actual:</b> %.1f Wh\n"
 
-#: ../src/gpm-cell.c:627
-msgid "Last full charge"
-msgstr "Última carga completa"
+#: ../src/gpm-cell.c:621
+#, c-format
+msgid "<b>Last full charge:</b> %.1f Wh\n"
+msgstr "<b>Última carga completa:</b> %.1f Wh\n"
 
-#: ../src/gpm-cell.c:632 ../src/gpm-cell.c:649
-msgid "Design charge"
-msgstr "Carga de diseño"
+#: ../src/gpm-cell.c:625
+#, c-format
+msgid "<b>Design charge:</b> %.1f Wh\n"
+msgstr "<b>Carga de diseño:</b> %.1f Wh\n"
 
-#: ../src/gpm-cell.c:637
-msgid "Charge rate"
-msgstr "Tasa de carga"
+#: ../src/gpm-cell.c:629
+#, c-format
+msgid "<b>Charge rate:</b> %.1f W\n"
+msgstr "<b>Tasa de carga:</b> %.1f W\n"
+
+#: ../src/gpm-cell.c:635
+#, c-format
+msgid "<b>Current charge:</b> %i/7\n"
+msgstr "<b>Carga actual:</b> %i/7\n"
+
+#: ../src/gpm-cell.c:639
+#, c-format
+msgid "<b>Design charge:</b> %i/7\n"
+msgstr "<b>Carga de diseño:</b> %i/7\n"
 
 #: ../src/gpm-cell-unit.c:248
 msgid "Laptop batteries"
@@ -2427,3 +2454,21 @@ msgstr "_Suspender"
 #: ../src/gpm-tray-icon.c:587
 msgid "Hi_bernate"
 msgstr "_Hibernar"
+
+#~ msgid "Product"
+#~ msgstr "Producto"
+
+#~ msgid "Status"
+#~ msgstr "Estado"
+
+#~ msgid "Vendor:"
+#~ msgstr "Fabricante:"
+
+#~ msgid "Model"
+#~ msgstr "Modelo"
+
+#~ msgid "Capacity"
+#~ msgstr "Capacidad"
+
+#~ msgid "Charge rate"
+#~ msgstr "Tasa de carga"
