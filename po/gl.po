@@ -5,16 +5,20 @@
 #
 # Ignacio Casal Quinteiro <nacho.resa@gmail.com>, 2005, 2006.
 # Ignacio Casal Quinteiro <icq@svn.gnome.org>, 2008.
+# Ignacio Casal Quinteiro <nacho.resa@gmail.com>, 2008.
+# Ignacio Casal Quinteiro <nacho.resa@gmail.com>, 2008.
+# Ignacio Casal Quinteiro <nacho.resa@gmail.com>, 2008.
+# Ignacio Casal Quinteiro <nacho.resa@gmail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-09 21:33+0200\n"
-"PO-Revision-Date: 2008-08-11 21:02+0200\n"
-"Last-Translator: Ignacio Casal Quinteiro <icq@svn.gnome.org>\n"
+"POT-Creation-Date: 2008-09-01 21:33+0200\n"
+"PO-Revision-Date: 2008-09-01 21:37+0200\n"
+"Last-Translator: Ignacio Casal Quinteiro <nacho.resa@gmail.com>\n"
 "Language-Team: Galego <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
-"Content-Type:  text/plain; charset=UTF-8\n"
+"Content-Type:  text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -2055,7 +2059,7 @@ msgstr ""
 msgid "Visit quirk website"
 msgstr "Visitar sitio web de peculiaridades"
 
-#: ../src/gpm-cell-array.c:990
+#: ../src/gpm-cell-array.c:1014
 #, c-format
 msgid ""
 "%s fully charged (%.1f%%)\n"
@@ -2064,23 +2068,23 @@ msgstr ""
 "%s totalmente cargada (%.1f%%)\n"
 "Proporciona %s de tempo de uso de batería\n"
 
-#: ../src/gpm-cell-array.c:994
+#: ../src/gpm-cell-array.c:1018
 #, c-format
 msgid "%s fully charged (%.1f%%)\n"
 msgstr "%s totalmente cargado (%.1f%%)\n"
 
-#: ../src/gpm-cell-array.c:1002
+#: ../src/gpm-cell-array.c:1026
 #, c-format
 msgid "%s %s remaining (%.1f%%)\n"
 msgstr "%s %s restante (%.1f%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:1007
+#: ../src/gpm-cell-array.c:1031
 #, c-format
 msgid "%s discharging (%.1f%%)\n"
 msgstr "%s descargando (%.1f%%)\n"
 
-#: ../src/gpm-cell-array.c:1019
+#: ../src/gpm-cell-array.c:1043
 #, c-format
 msgid ""
 "%s %s until charged (%.1f%%)\n"
@@ -2089,29 +2093,31 @@ msgstr ""
 "%s %s até a súa carga (%.1f%%)\n"
 "Proporciona %s de tempo de uso de batería\n"
 
-#: ../src/gpm-cell-array.c:1026
+#: ../src/gpm-cell-array.c:1050
 #, c-format
 msgid "%s %s until charged (%.1f%%)\n"
 msgstr "%s %s até a súa carga (%.1f%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:1031
+#: ../src/gpm-cell-array.c:1055
 #, c-format
 msgid "%s charging (%.1f%%)\n"
 msgstr "%s descargando (%.1f%%)\n"
 
-#: ../src/gpm-cell-array.c:1038
+#: ../src/gpm-cell-array.c:1062
 msgid "Battery state could not be read at this time\n"
 msgstr "Non se pode ler o estado da batería neste momento\n"
 
 #: ../src/gpm-cell.c:543
-msgid "Product"
-msgstr "Produto"
+#, c-format
+msgid "<b>Product:</b> %s\n"
+msgstr "<b>Produto:</b> %s\n"
 
 #: ../src/gpm-cell.c:546 ../src/gpm-cell.c:548 ../src/gpm-cell.c:550
 #: ../src/gpm-cell.c:552
-msgid "Status"
-msgstr "Estado"
+#, c-format
+msgid "<b>Status:</b> %s\n"
+msgstr "<b>Estado:</b> %s\n"
 
 #: ../src/gpm-cell.c:546
 msgid "Missing"
@@ -2130,84 +2136,114 @@ msgid "Discharging"
 msgstr "Descargando"
 
 #: ../src/gpm-cell.c:555
-msgid "Percentage charge"
-msgstr "Porcentaxe de carga"
+#, c-format
+msgid "<b>Percentage charge:</b> %.1f%%\n"
+msgstr "<b>Porcentaxe de carga:</b> %.1f%%\n"
 
-#: ../src/gpm-cell.c:559
-msgid "Vendor:"
-msgstr "Fabricante:"
+#: ../src/gpm-cell.c:558
+#, c-format
+msgid "<b>Vendor:</b> %s\n"
+msgstr "<b>Fabricante:</b> %s\n"
 
-#: ../src/gpm-cell.c:564
+#: ../src/gpm-cell.c:563
 msgid "Lithium ion"
 msgstr "Ión de litio"
 
-#: ../src/gpm-cell.c:566
+#: ../src/gpm-cell.c:565
 msgid "Lead acid"
 msgstr "Chumbo e ácido"
 
-#: ../src/gpm-cell.c:568
+#: ../src/gpm-cell.c:567
 msgid "Lithium polymer"
 msgstr "Polímero de litio"
 
-#: ../src/gpm-cell.c:570
+#: ../src/gpm-cell.c:569
 msgid "Nickel metal hydride"
 msgstr "Híbrido de níquel metal"
 
-#: ../src/gpm-cell.c:577
-msgid "Technology"
-msgstr "Tecnoloxía"
+#. Translators: Unknown is related to the Technology of the battery
+#: ../src/gpm-cell.c:572 ../src/gpm-cell-unit.c:260 ../src/gpm-cell-unit.c:276
+#: ../src/gpm-statistics-core.c:739
+msgid "Unknown"
+msgstr "Descoñecido"
+
+#: ../src/gpm-cell.c:578
+#, c-format
+msgid "<b>Technology:</b> %s\n"
+msgstr "<b>Tecnoloxía:</b> %s\n"
 
 #: ../src/gpm-cell.c:581
-msgid "Serial number"
-msgstr "Número de serie"
+#, c-format
+msgid "<b>Serial number:</b> %s\n"
+msgstr "<b>Número de serie:</b> %s\n"
 
-#: ../src/gpm-cell.c:585
-msgid "Model"
-msgstr "Modelo"
+#: ../src/gpm-cell.c:584
+#, c-format
+msgid "<b>Model:</b> %s\n"
+msgstr "<b>Modelo:</b> %s\n"
 
-#: ../src/gpm-cell.c:591
-msgid "Charge time"
-msgstr "Tempo de carga"
+#: ../src/gpm-cell.c:589
+#, c-format
+msgid "<b>Charge time:</b> %s\n"
+msgstr "<b>Tempo de carga:</b> %s\n"
 
-#: ../src/gpm-cell.c:598
-msgid "Discharge time"
-msgstr "Tempo de descarga"
+#: ../src/gpm-cell.c:595
+#, c-format
+msgid "<b>Discharge time:</b> %s\n"
+msgstr "<b>Tempo de descarga:</b> %s\n"
 
-#: ../src/gpm-cell.c:604
+#. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
+#: ../src/gpm-cell.c:602
 msgid "Excellent"
 msgstr "Excelente"
 
-#: ../src/gpm-cell.c:606
+#: ../src/gpm-cell.c:604
 msgid "Good"
 msgstr "Bo"
 
-#: ../src/gpm-cell.c:608
+#: ../src/gpm-cell.c:606
 msgid "Fair"
 msgstr "Aceptable"
 
-#: ../src/gpm-cell.c:610
+#: ../src/gpm-cell.c:608
 msgid "Poor"
 msgstr "Pobre"
 
-#: ../src/gpm-cell.c:613
-msgid "Capacity"
-msgstr "Capacidade"
+#. Translators: %i is a percentage and %s the condition (Excellent, Good, ...)
+#: ../src/gpm-cell.c:611
+#, c-format
+msgid "<b>Capacity:</b> %i%% (%s)\n"
+msgstr "<b>Capacidade:</b> %i%% (%s)\n"
 
-#: ../src/gpm-cell.c:619 ../src/gpm-cell.c:642
-msgid "Current charge"
-msgstr "Carga actual"
+#: ../src/gpm-cell.c:616
+#, c-format
+msgid "<b>Current charge:</b> %.1f Wh\n"
+msgstr "<b>Carga actual:</b> %.1f Wh\n"
+
+#: ../src/gpm-cell.c:621
+#, c-format
+msgid "<b>Last full charge:</b> %.1f Wh\n"
+msgstr "<b>Última carga completa:</b> %.1f Wh\n"
 
 #: ../src/gpm-cell.c:625
-msgid "Last full charge"
-msgstr "Última carga completa"
+#, c-format
+msgid "<b>Design charge:</b> %.1f Wh\n"
+msgstr "<b>Carga de deseño:</b> %.1f Wh\n"
 
-#: ../src/gpm-cell.c:630 ../src/gpm-cell.c:647
-msgid "Design charge"
-msgstr "Carga de deseño"
+#: ../src/gpm-cell.c:629
+#, c-format
+msgid "<b>Charge rate:</b> %.1f W\n"
+msgstr "<b>Taxa de carga:</b> %.1f W\n"
 
 #: ../src/gpm-cell.c:635
-msgid "Charge rate"
-msgstr "Taxa de carga"
+#, c-format
+msgid "<b>Current charge:</b> %i/7\n"
+msgstr "<b>Carga actual:</b> %i/7\n"
+
+#: ../src/gpm-cell.c:639
+#, c-format
+msgid "<b>Design charge:</b> %i/7\n"
+msgstr "<b>Carga de deseño:</b> %i/7\n"
 
 #: ../src/gpm-cell-unit.c:248
 msgid "Laptop batteries"
@@ -2232,11 +2268,6 @@ msgstr "PDAs"
 #: ../src/gpm-cell-unit.c:258
 msgid "Cell phones"
 msgstr "Teléfonos móbiles"
-
-#: ../src/gpm-cell-unit.c:260 ../src/gpm-cell-unit.c:276
-#: ../src/gpm-statistics-core.c:739
-msgid "Unknown"
-msgstr "Descoñecido"
 
 #: ../src/gpm-cell-unit.c:264
 msgid "Laptop battery"
@@ -2397,17 +2428,44 @@ msgstr "_Suspender"
 msgid "Hi_bernate"
 msgstr "Hi_bernar"
 
+#~ msgid "Product"
+#~ msgstr "Produto"
+
+#~ msgid "Status"
+#~ msgstr "Estado"
+
+#~ msgid "Percentage charge"
+#~ msgstr "Porcentaxe de carga"
+
+#~ msgid "Vendor:"
+#~ msgstr "Fabricante:"
+
+#~ msgid "Technology"
+#~ msgstr "Tecnoloxía"
+
+#~ msgid "Model"
+#~ msgstr "Modelo"
+
+#~ msgid "Charge time"
+#~ msgstr "Tempo de carga"
+
+#~ msgid "Capacity"
+#~ msgstr "Capacidade"
+
+#~ msgid "Current charge"
+#~ msgstr "Carga actual"
+
+#~ msgid "Design charge"
+#~ msgstr "Carga de deseño"
+
+#~ msgid "Charge rate"
+#~ msgstr "Taxa de carga"
+
 #~ msgid ""
 #~ "Policy timeout is not valid. Please wait a few seconds and try again."
 #~ msgstr ""
 #~ "Política de tempo de expiración non válida. Espere uns segundos e ténteo "
 #~ "de novo."
-
-#~ msgid "<b>Product:</b> %s\n"
-#~ msgstr "<b>Produto:</b> %s\n"
-
-#~ msgid "<b>Status:</b> Missing\n"
-#~ msgstr "<b>Estado:</b> Falta\n"
 
 #~ msgid "<b>Status:</b> Charged\n"
 #~ msgstr "<b>Estado:</b> Cargado\n"
@@ -2417,9 +2475,6 @@ msgstr "Hi_bernar"
 
 #~ msgid "<b>Status:</b> Discharging\n"
 #~ msgstr "<b>Estado:</b> Descargando\n"
-
-#~ msgid "<b>Percentage charge:</b> %i%%\n"
-#~ msgstr "<b>Porcentaxe de carga:</b> %i%%\n"
 
 #~ msgid "If we should show the CPU frequency scaling in the UI"
 #~ msgstr "Se debe mostrar o escalado de frecuencia de CPU na IU"
