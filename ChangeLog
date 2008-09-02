@@ -1,3 +1,13 @@
+2008-09-02  Richard Hughes  <richard@hughsie.com>
+
+	* libhal-glib/libhal-gpower.c: (hal_gpower_init),
+	(hal_gpower_filter_error), (hal_gpower_suspend),
+	(hal_gpower_pm_method_void), (hal_gpower_enable_power_save):
+	Check for suspend or hibernate actions that take longer than 6 hours,
+	as we cannot specify a longer timeout in the GLIB bindings and thus
+	sometimes 'fail' when we actually succeed. Patch reformated from an
+	original patch from Mario Limonciello, many thanks. Fixes #549844
+
 2008-09-01  Richard Hughes  <richard@hughsie.com>
 
 	==== Version 2.23.91 ====

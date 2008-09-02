@@ -28,6 +28,7 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 #include <libdbus-proxy.h>
+#include <time.h>
 
 #include "libhal-marshal.h"
 #include "libhal-gpower.h"
@@ -78,9 +79,8 @@ hal_gpower_init (HalGPower *power)
 			  HAL_DBUS_SERVICE,
 			  HAL_ROOT_COMPUTER,
 			  HAL_DBUS_INTERFACE_POWER);
-	if (power->priv->gproxy == NULL) {
+	if (power->priv->gproxy == NULL)
 		g_warning ("HAL does not support power management!");
-	}
 
 	power->priv->computer = hal_gdevice_new ();
 	hal_gdevice_set_udi (power->priv->computer, HAL_ROOT_COMPUTER);
@@ -204,9 +204,8 @@ static gboolean
 hal_gpower_filter_error (GError **error)
 {
 	/* short cut for speed, no error */
-	if (error == NULL || *error == NULL) {
+	if (error == NULL || *error == NULL)
 		return FALSE;
-	}
 
 	/* DBUS might time out, which is okay. We can remove this code
 	   when the dbus glib bindings are fixed. See #332888 */
@@ -232,6 +231,8 @@ hal_gpower_filter_error (GError **error)
 gboolean
 hal_gpower_suspend (HalGPower *power, guint wakeup, GError **error)
 {
+	time_t start;
+	time_t end;
 	gint retval = 0;
 	gboolean ret;
 	DBusGProxy *proxy;
@@ -244,18 +245,26 @@ hal_gpower_suspend (HalGPower *power, guint wakeup, GError **error)
 		return FALSE;
 	}
 
+	time (&start);
 	ret = dbus_g_proxy_call (proxy, "Suspend", error,
 				 G_TYPE_INT, wakeup,
 				 G_TYPE_INVALID,
 				 G_TYPE_INT, &retval,
 				 G_TYPE_INVALID);
 	/* we might have to ignore the error */
-	if (error != NULL && hal_gpower_filter_error (error)) {
+	if (error != NULL && hal_gpower_filter_error (error))
 		return TRUE;
+	if (retval != 0)
+		g_warning ("Suspend failed without error message");
+
+	/* compare the amount of time that has passed - if it's more than 6 hours
+	 * then the dbus call timed out (dbus-pending-call.c) */
+	if (ret != 0) {
+		time (&end);
+		if (difftime (start, end) >= 6*60*60*1000)
+			return TRUE;
 	}
-	if (retval != 0) {
-		g_warning ("Suspend failed in a horrible way!");
-	}
+
 	return ret;
 }
 
@@ -272,6 +281,8 @@ hal_gpower_suspend (HalGPower *power, guint wakeup, GError **error)
 static gboolean
 hal_gpower_pm_method_void (HalGPower *power, const gchar *method, GError **error)
 {
+	time_t start;
+	time_t end;
 	guint retval = 0;
 	gboolean ret;
 	DBusGProxy *proxy;
@@ -289,17 +300,25 @@ hal_gpower_pm_method_void (HalGPower *power, const gchar *method, GError **error
 		return FALSE;
 	}
 
+	time (&start);
 	ret = dbus_g_proxy_call (proxy, method, error,
 				 G_TYPE_INVALID,
 				 G_TYPE_INT, &retval,
 				 G_TYPE_INVALID);
 	/* we might have to ignore the error */
-	if (error != NULL && hal_gpower_filter_error (error)) {
+	if (error != NULL && hal_gpower_filter_error (error))
 		return TRUE;
-	}
-	if (retval != 0) {
+	if (retval != 0)
 		g_warning ("%s failed in a horrible way!", method);
+
+	/* compare the amount of time that has passed - if it's more than 6 hours
+	 * then the dbus call timed out (dbus-pending-call.c) */
+	if (ret != 0) {
+		time (&end);
+		if (difftime (start,end) >= 6*60*60*1000)
+			return TRUE;
 	}
+
 	return ret;
 }
 
@@ -384,9 +403,8 @@ hal_gpower_enable_power_save (HalGPower *power, gboolean enable)
 				 G_TYPE_INVALID,
 				 G_TYPE_INT, &retval,
 				 G_TYPE_INVALID);
-	if (retval != 0) {
+	if (retval != 0)
 		g_warning ("SetPowerSave failed in a horrible way!");
-	}
 	return ret;
 }
 
