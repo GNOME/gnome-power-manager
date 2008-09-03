@@ -937,7 +937,7 @@ gpm_st_array (GpmSelfTest *test)
 	gint svalue;
 	guint i;
 
-	if (gpm_st_start (test, "GpmArray", CLASS_AUTO) == FALSE) {
+	if (gpm_st_start (test, "GpmArray") == FALSE) {
 		return;
 	}
 

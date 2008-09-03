@@ -851,7 +851,7 @@ gpm_st_cell (GpmSelfTest *test)
 	gboolean ret;
 	gchar *udi;
 
-	if (gpm_st_start (test, "GpmCell", CLASS_AUTO) == FALSE) {
+	if (gpm_st_start (test, "GpmCell") == FALSE) {
 		return;
 	}
 

@@ -30,7 +30,7 @@ gpm_st_hal_manager (GpmSelfTest *test)
 	HalGManager *manager;
 	gboolean ret;
 
-	if (gpm_st_start (test, "HalGManager", CLASS_AUTO) == FALSE) {
+	if (gpm_st_start (test, "HalGManager") == FALSE) {
 		return;
 	}
 

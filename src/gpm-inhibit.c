@@ -625,7 +625,7 @@ gpm_st_inhibit (GpmSelfTest *test)
 	guint cookie2 = 0;
 	DbusProxy *gproxy;
 
-	if (gpm_st_start (test, "GpmInhibit", CLASS_AUTO) == FALSE) {
+	if (gpm_st_start (test, "GpmInhibit") == FALSE) {
 		return;
 	}
 

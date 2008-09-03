@@ -30,23 +30,15 @@
 #include "gpm-self-test.h"
 
 gboolean
-gpm_st_start (GpmSelfTest *test, const gchar *name, GpmSelfTestClass class)
+gpm_st_start (GpmSelfTest *test, const gchar *name)
 {
-	if (class == CLASS_AUTO && test->class == CLASS_MANUAL) {
-		return FALSE;
-	}
-	if (class == CLASS_MANUAL && test->class == CLASS_AUTO) {
-		return FALSE;
-	}
 	if (test->started) {
 		g_print ("Not ended test! Cannot start!\n");
 		exit (1);
 	}	
 	test->type = g_strdup (name);
 	test->started = TRUE;
-	if (test->level == LEVEL_NORMAL) {
-		g_print ("%s...", test->type);
-	}
+	g_print ("%s...", test->type);
 	return TRUE;
 }
 
@@ -57,9 +49,7 @@ gpm_st_end (GpmSelfTest *test)
 		g_print ("Not started test! Cannot finish!\n");
 		exit (1);
 	}	
-	if (test->level == LEVEL_NORMAL) {
-		g_print ("OK\n");
-	}
+	g_print ("OK\n");
 	test->started = FALSE;
 	g_free (test->type);
 }
@@ -69,12 +59,10 @@ gpm_st_title (GpmSelfTest *test, const gchar *format, ...)
 {
 	va_list args;
 	gchar va_args_buffer [1025];
-	if (test->level == LEVEL_ALL) {
-		va_start (args, format);
-		g_vsnprintf (va_args_buffer, 1024, format, args);
-		va_end (args);
-		g_print ("> check #%u\t%s: \t%s...", test->total+1, test->type, va_args_buffer);
-	}
+	va_start (args, format);
+	g_vsnprintf (va_args_buffer, 1024, format, args);
+	va_end (args);
+	g_print ("> check #%u\t%s: \t%s...", test->total+1, test->type, va_args_buffer);
 	test->total++;
 }
 
@@ -83,16 +71,14 @@ gpm_st_success (GpmSelfTest *test, const gchar *format, ...)
 {
 	va_list args;
 	gchar va_args_buffer [1025];
-	if (test->level == LEVEL_ALL) {
-		if (format == NULL) {
-			g_print ("...OK\n");
-			goto finish;
-		}
-		va_start (args, format);
-		g_vsnprintf (va_args_buffer, 1024, format, args);
-		va_end (args);
-		g_print ("...OK [%s]\n", va_args_buffer);
+	if (format == NULL) {
+		g_print ("...OK\n");
+		goto finish;
 	}
+	va_start (args, format);
+	g_vsnprintf (va_args_buffer, 1024, format, args);
+	va_end (args);
+	g_print ("...OK [%s]\n", va_args_buffer);
 finish:
 	test->succeeded++;
 }
@@ -102,16 +88,14 @@ gpm_st_failed (GpmSelfTest *test, const gchar *format, ...)
 {
 	va_list args;
 	gchar va_args_buffer [1025];
-	if (test->level == LEVEL_ALL || test->level == LEVEL_NORMAL) {
-		if (format == NULL) {
-			g_print ("FAILED\n");
-			goto failed;
-		}
-		va_start (args, format);
-		g_vsnprintf (va_args_buffer, 1024, format, args);
-		va_end (args);
-		g_print ("FAILED [%s]\n", va_args_buffer);
+	if (format == NULL) {
+		g_print ("FAILED\n");
+		goto failed;
 	}
+	va_start (args, format);
+	g_vsnprintf (va_args_buffer, 1024, format, args);
+	va_end (args);
+	g_print ("FAILED [%s]\n", va_args_buffer);
 failed:
 	exit (1);
 }
@@ -121,16 +105,14 @@ gpm_st_warning (GpmSelfTest *test, const gchar *format, ...)
 {
 	va_list args;
 	gchar va_args_buffer [1025];
-	if (test->level == LEVEL_ALL || test->level == LEVEL_NORMAL) {
-		if (format == NULL) {
-			g_print ("UNKNOWN WARNING\n");
-			goto out;
-		}
-		va_start (args, format);
-		g_vsnprintf (va_args_buffer, 1024, format, args);
-		va_end (args);
-		g_print ("WARNING [%s]\n", va_args_buffer);
+	if (format == NULL) {
+		g_print ("UNKNOWN WARNING\n");
+		goto out;
 	}
+	va_start (args, format);
+	g_vsnprintf (va_args_buffer, 1024, format, args);
+	va_end (args);
+	g_print ("WARNING [%s]\n", va_args_buffer);
 out:
 	;
 }
@@ -148,16 +130,12 @@ main (int argc, char **argv)
 	int retval;
 
 	gboolean verbose = FALSE;
-	char *class = NULL;
 	char *level = NULL;
 	char **tests = NULL;
 
 	const GOptionEntry options[] = {
-
 		{ "verbose", '\0', 0, G_OPTION_ARG_NONE, &verbose,
 		  "Show verbose debugging information", NULL },
-		{ "class", '\0', 0, G_OPTION_ARG_STRING, &class,
-		  "Debug class, [manual|auto|all]", NULL },
 		{ "level", '\0', 0, G_OPTION_ARG_STRING, &level,
 		  "Set the printing level, [quiet|normal|all]", NULL },
 		{ "tests", '\0', 0, G_OPTION_ARG_STRING_ARRAY, &tests,
@@ -179,34 +157,6 @@ main (int argc, char **argv)
 	test->succeeded = 0;
 	test->type = NULL;
 	test->started = FALSE;
-	test->class = CLASS_AUTO;
-	test->level = LEVEL_ALL;
-
-	if (class != NULL) {
-		if (strcmp (class, "auto") == 0) {
-			test->class = CLASS_AUTO;
-		} else if (strcmp (class, "all") == 0) {
-			test->class = CLASS_ALL;
-		} else if (strcmp (class, "manual") == 0) {
-			test->class = CLASS_MANUAL;
-		} else {
-			g_print ("Invalid class specified\n");
-			exit (1);
-		}
-	}
-
-	if (level != NULL) {
-		if (strcmp (level, "quiet") == 0) {
-			test->level = LEVEL_QUIET;
-		} else if (strcmp (level, "normal") == 0) {
-			test->level = LEVEL_NORMAL;
-		} else if (strcmp (level, "all") == 0) {
-			test->level = LEVEL_ALL;
-		} else {
-			g_print ("Invalid level specified\n");
-			exit (1);
-		}
-	}
 
 	/* auto */
 	gpm_st_run_test (test, gpm_st_common);

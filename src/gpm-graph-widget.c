@@ -1398,7 +1398,7 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	GpmArray *events;
 	gboolean ret;
 
-	if (gpm_st_start (test, "GpmGraphWidget", CLASS_MANUAL) == FALSE) {
+	if (gpm_st_start (test, "GpmGraphWidget") == FALSE) {
 		return;
 	}
 

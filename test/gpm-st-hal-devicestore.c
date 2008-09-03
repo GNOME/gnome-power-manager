@@ -35,7 +35,7 @@ gpm_st_hal_devicestore (GpmSelfTest *test)
 	HalGDevice *device3;
 	gboolean ret;
 
-	if (gpm_st_start (test, "HalGDevicestore", CLASS_AUTO) == FALSE) {
+	if (gpm_st_start (test, "HalGDevicestore") == FALSE) {
 		return;
 	}
 

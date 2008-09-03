@@ -63,7 +63,7 @@ egg_st_color (EggSelfTest *test)
 	guint8 r, g, b;
 	guint32 colour;
 
-	if (egg_st_start (test, "EggColor", CLASS_AUTO) == FALSE) {
+	if (egg_st_start (test, "EggColor") == FALSE) {
 		return;
 	}
 

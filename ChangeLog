@@ -1,5 +1,31 @@
 2008-09-03  Richard Hughes  <richard@hughsie.com>
 
+	* src/egg-color.c: (egg_st_color):
+	* src/gpm-array-float.c: (gpm_st_array_float):
+	* src/gpm-array.c: (gpm_st_array):
+	* src/gpm-cell-array.c: (gpm_st_cell_array):
+	* src/gpm-cell-unit.c: (gpm_st_cell_unit):
+	* src/gpm-cell.c: (gpm_st_cell):
+	* src/gpm-common.c: (gpm_st_common):
+	* src/gpm-graph-widget.c: (gpm_st_graph_widget):
+	* src/gpm-inhibit.c: (gpm_st_inhibit):
+	* src/gpm-phone.c: (gpm_st_phone):
+	* src/gpm-profile.c: (gpm_st_profile):
+	* src/gpm-self-test.c: (gpm_st_start), (gpm_st_end),
+	(gpm_st_title), (gpm_st_success), (gpm_st_failed),
+	(gpm_st_warning), (main):
+	* src/gpm-self-test.h:
+	* test/gpm-st-hal-device.c: (gpm_st_hal_device):
+	* test/gpm-st-hal-devicestore.c: (gpm_st_hal_devicestore):
+	* test/gpm-st-hal-manager.c: (gpm_st_hal_manager):
+	* test/gpm-st-hal-power.c: (gpm_st_hal_power):
+	* test/gpm-st-idletime.c: (gpm_st_idletime):
+	* test/gpm-st-proxy.c: (gpm_st_proxy):
+	Remove the class type from the self check code, we need to make
+	all the tests automatic.
+
+2008-09-03  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-common.c:
 	* src/gpm-common.h:
 	* src/egg-color.c:

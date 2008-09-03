@@ -345,7 +345,7 @@ gpm_st_common (GpmSelfTest *test)
 	guint value;
 	gfloat fvalue;
 
-	if (gpm_st_start (test, "GpmCommon", CLASS_AUTO) == FALSE) {
+	if (gpm_st_start (test, "GpmCommon") == FALSE) {
 		return;
 	}
 

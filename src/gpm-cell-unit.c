@@ -354,7 +354,7 @@ gpm_st_cell_unit (GpmSelfTest *test)
 	const gchar *cvalue;
 	gboolean ret;
 
-	if (gpm_st_start (test, "GpmCellUnit", CLASS_AUTO) == FALSE) {
+	if (gpm_st_start (test, "GpmCellUnit") == FALSE) {
 		return;
 	}
 

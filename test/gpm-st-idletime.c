@@ -79,7 +79,7 @@ gpm_st_idletime (GpmSelfTest *test)
 	guint alarm;
 	guint i;
 
-	if (gpm_st_start (test, "LibIdletime", CLASS_AUTO) == FALSE) {
+	if (gpm_st_start (test, "LibIdletime") == FALSE) {
 		return;
 	}
 

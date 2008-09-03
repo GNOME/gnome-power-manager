@@ -392,7 +392,7 @@ gpm_st_array_float (GpmSelfTest *test)
 	gfloat sigma;
 	guint size;
 
-	if (gpm_st_start (test, "GpmArrayFloat", CLASS_AUTO) == FALSE) {
+	if (gpm_st_start (test, "GpmArrayFloat") == FALSE) {
 		return;
 	}
 

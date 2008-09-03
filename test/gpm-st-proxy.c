@@ -31,7 +31,7 @@ gpm_st_proxy (GpmSelfTest *test)
 	DbusProxy *gproxy = NULL;
 	DBusGProxy *proxy = NULL;
 
-	if (gpm_st_start (test, "DbusProxy", CLASS_AUTO) == FALSE) {
+	if (gpm_st_start (test, "DbusProxy") == FALSE) {
 		return;
 	}
 

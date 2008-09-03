@@ -30,7 +30,7 @@ gpm_st_hal_power (GpmSelfTest *test)
 	HalGPower *power;
 	gboolean ret;
 
-	if (gpm_st_start (test, "HalGPower", CLASS_AUTO) == FALSE) {
+	if (gpm_st_start (test, "HalGPower") == FALSE) {
 		return;
 	}
 

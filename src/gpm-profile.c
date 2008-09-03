@@ -1014,7 +1014,7 @@ gpm_st_profile (GpmSelfTest *test)
 	guint value;
 	gfloat fvalue;
 
-	if (gpm_st_start (test, "GpmProfile", CLASS_AUTO) == FALSE) {
+	if (gpm_st_start (test, "GpmProfile") == FALSE) {
 		return;
 	}
 

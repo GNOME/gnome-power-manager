@@ -34,7 +34,7 @@ gpm_st_hal_device (GpmSelfTest *test)
 	char *retstr;
 	gboolean ret;
 
-	if (gpm_st_start (test, "HalGDevice", CLASS_AUTO) == FALSE) {
+	if (gpm_st_start (test, "HalGDevice") == FALSE) {
 		return;
 	}
 

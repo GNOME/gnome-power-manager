@@ -1503,7 +1503,7 @@ gpm_st_cell_array (GpmSelfTest *test)
 	gboolean ret;
 	guint count;
 
-	if (gpm_st_start (test, "GpmCellArray", CLASS_AUTO) == FALSE) {
+	if (gpm_st_start (test, "GpmCellArray") == FALSE) {
 		return;
 	}
 
