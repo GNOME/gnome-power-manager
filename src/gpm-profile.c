@@ -37,13 +37,14 @@
 #include <glib/gstdio.h>
 #include <libdbus-proxy.h>
 
+#include "egg-color.h"
 #include "gpm-common.h"
 #include "gpm-ac-adapter.h"
 #include "gpm-array.h"
 #include "gpm-array-float.h"
 #include "gpm-dpms.h"
 #include "gpm-load.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-control.h"
 
 #include "gpm-profile.h"
@@ -117,7 +118,7 @@ gpm_profile_get_data_file (GpmProfile *profile, gboolean discharge)
 
 	/* check we have a profile loaded */
 	if (profile->priv->config_id == NULL) {
-		gpm_warning ("no config id set!");
+		egg_warning ("no config id set!");
 		return NULL;
 	}
 
@@ -198,11 +199,11 @@ gpm_profile_get_data_time_percent (GpmProfile *profile, gboolean discharge)
 		value_accuracy = gpm_array_float_get (array_accuracy, i);
 		/* only set points that are not zero */
 		if (value_data == 0) {
-			gpm_array_set (profile->priv->present_array_data, i, i, value_data, GPM_COLOUR_DARK_GREY);
+			gpm_array_set (profile->priv->present_array_data, i, i, value_data, EGG_COLOR_DARK_GREY);
 		} else if (value_accuracy == 0) {
-			gpm_array_set (profile->priv->present_array_data, i, i, value_data, GPM_COLOUR_BLUE);
+			gpm_array_set (profile->priv->present_array_data, i, i, value_data, EGG_COLOR_BLUE);
 		} else if (value_data > 0) {
-			gpm_array_set (profile->priv->present_array_data, i, i, value_data, GPM_COLOUR_RED);
+			gpm_array_set (profile->priv->present_array_data, i, i, value_data, EGG_COLOR_RED);
 		}
 	}
 
@@ -255,11 +256,11 @@ gpm_profile_get_data_accuracy_percent (GpmProfile *profile, gboolean discharge)
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), NULL);
 
 	if (discharge) {
-		colour_active = GPM_COLOUR_BLUE;
-		colour_nonactive = GPM_COLOUR_DARK_BLUE;
+		colour_active = EGG_COLOR_BLUE;
+		colour_nonactive = EGG_COLOR_DARK_BLUE;
 	} else {
-		colour_active = GPM_COLOUR_RED;
-		colour_nonactive = GPM_COLOUR_DARK_RED;
+		colour_active = EGG_COLOR_RED;
+		colour_nonactive = EGG_COLOR_DARK_RED;
 	}
 
 	/* get the correct data */
@@ -301,13 +302,13 @@ gpm_profile_get_time (GpmProfile *profile, guint percentage, gboolean discharge)
 
 	/* check we have a profile loaded */
 	if (profile->priv->config_id == NULL) {
-		gpm_warning ("no config id set!");
+		egg_warning ("no config id set!");
 		return 0;
 	}
 
 	/* check we can give a decent reading */
 	if (percentage > 99) {
-		gpm_debug ("percentage = %i, correcting to 99%", percentage);
+		egg_debug ("percentage = %i, correcting to 99%%", percentage);
 		percentage = 99;
 	}
 
@@ -346,10 +347,10 @@ gpm_profile_get_nonzero_accuracy_percent (GArray *array_data, GArray *array_accu
 			length_average++;
 		}
 	}
-	gpm_debug ("average=%f, length_average=%i", average, length_average);
+	egg_debug ("average=%f, length_average=%i", average, length_average);
 	if (average == 0 || length_average == 0) {
 		/* no data with accuracy */
-		gpm_warning ("no data");
+		egg_warning ("no data");
 		return 0;
 	}
 	return average / (gfloat) length_average;
@@ -415,7 +416,7 @@ gpm_profile_set_average_no_accuracy (GpmProfile *profile)
 
 	/* find the data average of the non zero accuracy points */
 	average = gpm_profile_get_nonzero_accuracy_percent (array_data, array_accuracy);
-	gpm_debug ("estimated average = %f", average);
+	egg_debug ("estimated average = %f", average);
 
 	/* set the zero accuracy data to the average */
 	gpm_profile_set_zero_accuracy_average (array_data, array_accuracy, average, 5, 95);
@@ -527,22 +528,22 @@ gpm_profile_register_percentage (GpmProfile *profile,
 	/* reset timer for next time */
 	g_timer_start (profile->priv->timer);
 
-	gpm_debug ("elapsed is %f for %i at load %f (accuracy:%i)", elapsed, percentage, load, accuracy);
+	egg_debug ("elapsed is %f for %i at load %f (accuracy:%i)", elapsed, percentage, load, accuracy);
 
 	/* don't process the first point, we maybe in between percentage points */
 	if (profile->priv->data_valid == FALSE) {
-		gpm_debug ("data is not valid, will process next");
+		egg_debug ("data is not valid, will process next");
 		profile->priv->data_valid = TRUE;
 		return FALSE;
 	}
 
 	if (accuracy < 20) {
-		gpm_debug ("not accurate enough");
+		egg_debug ("not accurate enough");
 		return FALSE;
 	}
 
 	if (profile->priv->lcd_on == FALSE) {
-		gpm_debug ("screen blanked, so not representative - ignoring");
+		egg_debug ("screen blanked, so not representative - ignoring");
 		return FALSE;
 	}
 
@@ -552,7 +553,7 @@ gpm_profile_register_percentage (GpmProfile *profile,
 		array_percentage = percentage;
 	} else {
 		if (percentage == 0) {
-			gpm_debug ("ignoring percentage zero when charging");
+			egg_debug ("ignoring percentage zero when charging");
 			return FALSE;
 		}
 		array_percentage = percentage - 1;
@@ -607,7 +608,7 @@ gpm_profile_register_charging (GpmProfile *profile,
 		for (i=profile->priv->last_percentage; i<100; i++) {
 			/* set percentage i to zero with accuracy 100 */
 			gpm_profile_save_percentage (profile, i, 0, 100);
-			gpm_debug ("set percentage %i to zero", i);
+			egg_debug ("set percentage %i to zero", i);
 		}
 	}
 	return TRUE;
@@ -628,10 +629,10 @@ ac_adaptor_changed_cb (GpmAcAdapter *ac_adapter,
 
 	/* check AC state */
 	if (on_ac) {
-		gpm_debug ("on AC");
+		egg_debug ("on AC");
 		profile->priv->discharging = FALSE;
 	} else {
-		gpm_debug ("on battery");
+		egg_debug ("on battery");
 		profile->priv->discharging = TRUE;
 	}
 
@@ -651,7 +652,7 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
 		      GpmDpmsMode mode,
 		      GpmProfile *profile)
 {
-	gpm_debug ("DPMS mode changed: %d", mode);
+	egg_debug ("DPMS mode changed: %d", mode);
 
 	/* We have to monitor the screen as it's one of the biggest energy
 	 * users. If this goes off, then out battery usage is non-proportional
@@ -678,7 +679,7 @@ gpm_profile_delete_data (GpmProfile *profile, gboolean discharge)
 
 	/* check we have a profile loaded */
 	if (profile->priv->config_id == NULL) {
-		gpm_warning ("no config id set!");
+		egg_warning ("no config id set!");
 		goto out;
 	}
 
@@ -692,7 +693,7 @@ gpm_profile_delete_data (GpmProfile *profile, gboolean discharge)
 
 	/* try to delete file */
 	if (g_unlink (filename) != 0) {
-		gpm_warning ("could not delete '%s'", filename);
+		egg_warning ("could not delete '%s'", filename);
 		goto out;
 	}
 	ret = TRUE;
@@ -730,7 +731,7 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 
 	/* read in data profile from disk */
 	filename = gpm_profile_get_data_file (profile, discharge);
-	gpm_debug ("loading battery data from '%s'", filename);
+	egg_debug ("loading battery data from '%s'", filename);
 	ret = gpm_array_load_from_file (array, filename);
 
 	/* if not found, then generate a new one with a low propability */
@@ -741,7 +742,7 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 		g_mkdir_with_parents (path, 0770);
 		g_free (path);
 
-		gpm_debug ("no data found, generating initial (poor) data");
+		egg_debug ("no data found, generating initial (poor) data");
 		for (i=0;i<100;i++) {
 			/* just set data to zero as we have _no_ idea */
 			gpm_array_set (array, i, i, 0, 0);
@@ -749,7 +750,7 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 
 		ret = gpm_array_save_to_file (array, filename);
 		if (!ret) {
-			gpm_warning ("saving state failed. You will not get accurate time remaining calculations");
+			egg_warning ("saving state failed. You will not get accurate time remaining calculations");
 		}
 	}
 
@@ -779,7 +780,7 @@ gpm_profile_set_config_id (GpmProfile  *profile,
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), FALSE);
 	g_return_val_if_fail (config_id != NULL, FALSE);
 
-	gpm_debug ("config_id = %s", config_id);
+	egg_debug ("config_id = %s", config_id);
 	if (profile->priv->config_id == NULL) {
 		/* if new */
 		profile->priv->config_id = g_strdup (config_id);
@@ -797,17 +798,17 @@ gpm_profile_set_config_id (GpmProfile  *profile,
 	}
 
 	/* do debugging self tests only if verbose */
-	if (gpm_debug_is_verbose ()) {
-		gpm_debug ("Reference times");
+	if (egg_debug_enabled ()) {
+		egg_debug ("Reference times");
 		time = gpm_profile_get_time (profile, 99, TRUE);
-		gpm_debug ("99-0\t%i minutes", time / 60);
+		egg_debug ("99-0\t%i minutes", time / 60);
 		time = gpm_profile_get_time (profile, 50, TRUE);
-		gpm_debug ("50-0\t%i minutes", time / 60);
+		egg_debug ("50-0\t%i minutes", time / 60);
 
 		time = gpm_profile_get_time (profile, 0, FALSE);
-		gpm_debug ("0-99\t%i minutes", time / 60);
+		egg_debug ("0-99\t%i minutes", time / 60);
 		time = gpm_profile_get_time (profile, 50, FALSE);
-		gpm_debug ("50-99\t%i minutes", time / 60);
+		egg_debug ("50-99\t%i minutes", time / 60);
 	}
 
 	return TRUE;
@@ -838,13 +839,13 @@ gpm_profile_get_accuracy (GpmProfile *profile,
 
 	/* check we have a profile loaded */
 	if (profile->priv->config_id == NULL) {
-		gpm_warning ("no config id set!");
+		egg_warning ("no config id set!");
 		return 0;
 	}
 
 	if (percentage > 99) {
 		percentage = 99;
-		gpm_debug ("corrected percentage...");
+		egg_debug ("corrected percentage...");
 	}
 
 	/* get the correct data */
@@ -906,7 +907,7 @@ gpm_profile_init (GpmProfile *profile)
 
 	/* use the control object so we don't save new percentage points
 	 * after suspend or hibernate */
-	gpm_debug ("creating new control instance");
+	egg_debug ("creating new control instance");
 	profile->priv->control = gpm_control_new ();
 	g_signal_connect (profile->priv->control, "sleep",
 			  G_CALLBACK (control_sleep_action_cb), profile);
@@ -927,10 +928,10 @@ gpm_profile_init (GpmProfile *profile)
 
 	/* check AC state */
 	if (on_ac) {
-		gpm_debug ("on AC");
+		egg_debug ("on AC");
 		profile->priv->discharging = FALSE;
 	} else {
-		gpm_debug ("on battery");
+		egg_debug ("on battery");
 		profile->priv->discharging = TRUE;
 	}
 }

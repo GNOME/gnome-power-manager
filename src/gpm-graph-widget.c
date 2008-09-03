@@ -27,10 +27,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "egg-color.h"
 #include "gpm-common.h"
 #include "gpm-graph-widget.h"
 #include "gpm-array.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 
 G_DEFINE_TYPE (GpmGraphWidget, gpm_graph_widget, GTK_TYPE_DRAWING_AREA);
 #define GPM_GRAPH_WIDGET_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_GRAPH_WIDGET, GpmGraphWidgetPrivate))
@@ -121,11 +122,11 @@ gpm_graph_widget_key_event_add (GpmGraphWidget *graph,
 
 	keyitem = gpm_graph_widget_key_find_id (graph, id);
 	if (keyitem != NULL) {
-		gpm_warning ("keyitem %i already in use", id);
+		egg_warning ("keyitem %i already in use", id);
 		return FALSE;
 	}
 
-	gpm_debug ("add to hashtable '%s'", desc);
+	egg_debug ("add to hashtable '%s'", desc);
 	keyitem = g_new0 (GpmGraphWidgetKeyItem, 1);
 	keyitem->id = id;
 	keyitem->desc = g_strdup (desc);
@@ -195,7 +196,7 @@ gpm_graph_widget_key_data_add (GpmGraphWidget *graph, guint colour, const gchar 
 	g_return_val_if_fail (graph != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
 
-	gpm_debug ("add to list %s", desc);
+	egg_debug ("add to list %s", desc);
 	keyitem = g_new0 (GpmGraphWidgetKeyData, 1);
 
 	keyitem->colour = colour;
@@ -387,7 +388,7 @@ gpm_graph_widget_data_add (GpmGraphWidget *graph, GpmArray *array)
 	/* check size is not zero */
 	length = gpm_array_get_size (array);
 	if (length == 0) {
-		gpm_warning ("Trying to assign a zero length array");
+		egg_warning ("Trying to assign a zero length array");
 		return FALSE;
 	}
 
@@ -423,7 +424,7 @@ gpm_graph_widget_data_clear (GpmGraphWidget *graph)
 	/* remove all in list */
 	length = graph->priv->data_list->len;
 	for (i=0; i < length; i++) {
-		gpm_debug ("Removing dataset %i", i);
+		egg_debug ("Removing dataset %i", i);
 		g_ptr_array_remove_index_fast (graph->priv->data_list, 0);
 	}
 }
@@ -686,7 +687,7 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 	guint length;
 
 	if (graph->priv->data_list->len == 0) {
-		gpm_debug ("no data");
+		egg_debug ("no data");
 		graph->priv->start_x = 0;
 		graph->priv->start_y = 0;
 		graph->priv->stop_x = 10;
@@ -714,7 +715,7 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 			}
 		}
 	}
-	gpm_debug ("Data range is %i<x<%i, %i<y<%i", smallest_x, biggest_x, smallest_y, biggest_y);
+	egg_debug ("Data range is %i<x<%i, %i<y<%i", smallest_x, biggest_x, smallest_y, biggest_y);
 
 	if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
 		rounding_x = 10;
@@ -778,7 +779,7 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 		}
 	}
 
-	gpm_debug ("Processed range is %i<x<%i, %i<y<%i",
+	egg_debug ("Processed range is %i<x<%i, %i<y<%i",
 		   graph->priv->start_x, graph->priv->stop_x,
 		   graph->priv->start_y, graph->priv->stop_y);
 }
@@ -792,7 +793,7 @@ static void
 gpm_graph_widget_set_colour (cairo_t *cr, guint32 colour)
 {
 	guint8 r, g, b;
-	gpm_colour_to_rgb (colour, &r, &g, &b);
+	egg_color_to_rgb (colour, &r, &g, &b);
 	cairo_set_source_rgb (cr, ((gdouble) r)/256.0f, ((gdouble) g)/256.0f, ((gdouble) b)/256.0f);
 }
 
@@ -872,7 +873,7 @@ gpm_graph_widget_draw_dot (cairo_t             *cr,
 		cairo_set_line_width (cr, 1);
 		cairo_stroke (cr);
 	} else {
-		gpm_warning ("shape %i not recognised!", shape);
+		egg_warning ("shape %i not recognised!", shape);
 	}
 }
 
@@ -936,14 +937,14 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 	guint i;
 
 	if (graph->priv->data_list->len == 0) {
-		gpm_debug ("no data");
+		egg_debug ("no data");
 		return;
 	}
 	cairo_save (cr);
 
 	/* do all the lines on the graphs */
 	for (i=0; i<graph->priv->data_list->len; i++) {
-		gpm_debug ("drawing line %i", i);
+		egg_debug ("drawing line %i", i);
 		array = g_ptr_array_index (graph->priv->data_list, i);
 
 		/* we have no data */
@@ -1016,7 +1017,7 @@ gpm_graph_widget_draw_event_dots (GpmGraphWidget *graph, cairo_t *cr)
 		point = gpm_array_get (graph->priv->events, i);
 		if (point == NULL) {
 			/* this shouldn't ever happen */
-			gpm_warning ("point NULL!");
+			egg_warning ("point NULL!");
 			break;
 		}
 		/* try to position the point on the line, or at zero if there is no line */
@@ -1039,7 +1040,7 @@ gpm_graph_widget_draw_event_dots (GpmGraphWidget *graph, cairo_t *cr)
 		if (point->x > graph->priv->start_x && newy > graph->priv->box_y) {
 			keyitem = gpm_graph_widget_key_find_id (graph, point->y);
 			if (keyitem == NULL) {
-				gpm_warning ("did not find id %i", point->y);
+				egg_warning ("did not find id %i", point->y);
 			} else {
 				gpm_graph_widget_draw_dot (cr, newx, newy, keyitem->colour, keyitem->shape);
 			}
@@ -1105,7 +1106,7 @@ gpm_graph_widget_draw_legend (GpmGraphWidget *graph,
 		keydataitem = (GpmGraphWidgetKeyData *) g_slist_nth_data (graph->priv->key_data, a);
 		if (keydataitem == NULL) {
 			/* this shouldn't ever happen */
-			gpm_warning ("keydataitem NULL!");
+			egg_warning ("keydataitem NULL!");
 			break;
 		}
 		gpm_graph_widget_draw_legend_line (cr, x + 8, y_count, keydataitem->colour);
@@ -1121,7 +1122,7 @@ gpm_graph_widget_draw_legend (GpmGraphWidget *graph,
 		keyeventitem = (GpmGraphWidgetKeyItem *) g_slist_nth_data (graph->priv->key_event, a);
 		if (keyeventitem == NULL) {
 			/* this shouldn't ever happen */
-			gpm_warning ("keyeventitem NULL!");
+			egg_warning ("keyeventitem NULL!");
 			break;
 		}
 		gpm_graph_widget_draw_dot (cr, x + 8, y_count,
@@ -1416,9 +1417,9 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	wait_for_input (test);
 
 	/********** KEY DATA *************/
-	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), GPM_COLOUR_RED, "red data");
-	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), GPM_COLOUR_GREEN, "green data");
-	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), GPM_COLOUR_BLUE, "blue data");
+	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), EGG_COLOR_RED, "red data");
+	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), EGG_COLOR_GREEN, "green data");
+	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), EGG_COLOR_BLUE, "blue data");
 
 	gpm_st_title_graph (test, "red green blue key data added");
 	wait_for_input (test);
@@ -1430,19 +1431,19 @@ gpm_st_graph_widget (GpmSelfTest *test)
 
 	/********** KEY EVENT *************/
 	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (graph), 0,
-					GPM_COLOUR_RED,
+					EGG_COLOR_RED,
 					GPM_GRAPH_WIDGET_SHAPE_CIRCLE,
 					"red circle");
 	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (graph), 1,
-					GPM_COLOUR_GREEN,
+					EGG_COLOR_GREEN,
 					GPM_GRAPH_WIDGET_SHAPE_SQUARE,
 					"green square");
 	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (graph), 2,
-					GPM_COLOUR_BLUE,
+					EGG_COLOR_BLUE,
 					GPM_GRAPH_WIDGET_SHAPE_TRIANGLE,
 					"blue triangle");
 	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (graph), 3,
-					GPM_COLOUR_WHITE,
+					EGG_COLOR_WHITE,
 					GPM_GRAPH_WIDGET_SHAPE_DIAMOND,
 					"white diamond");
 
@@ -1453,7 +1454,7 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	/********** KEY EVENT duplicate test *************/
 	gpm_st_title (test, "duplicate key event test");
 	ret = gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (graph), 3,
-					      GPM_COLOUR_WHITE,
+					      EGG_COLOR_WHITE,
 					      GPM_GRAPH_WIDGET_SHAPE_DIAMOND,
 					      "white diamond");
 	if (!ret) {
@@ -1473,14 +1474,14 @@ gpm_st_graph_widget (GpmSelfTest *test)
 
 	gpm_graph_widget_key_data_clear (GPM_GRAPH_WIDGET (graph));
 	gpm_graph_widget_key_event_clear (GPM_GRAPH_WIDGET (graph));
-	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), GPM_COLOUR_RED, "red data");
-	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), GPM_COLOUR_BLUE, "blue data");
-	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (graph), 0, GPM_COLOUR_GREEN, GPM_GRAPH_WIDGET_SHAPE_SQUARE, "green square");
+	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), EGG_COLOR_RED, "red data");
+	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), EGG_COLOR_BLUE, "blue data");
+	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (graph), 0, EGG_COLOR_GREEN, GPM_GRAPH_WIDGET_SHAPE_SQUARE, "green square");
 	
 	/********** ADD INVALID DATA *************/
 	data = gpm_array_new ();
-	gpm_array_append (data, 50, 0, GPM_COLOUR_RED);
-	gpm_array_append (data, 40, 100, GPM_COLOUR_RED);
+	gpm_array_append (data, 50, 0, EGG_COLOR_RED);
+	gpm_array_append (data, 40, 100, EGG_COLOR_RED);
 	gpm_graph_widget_data_clear (GPM_GRAPH_WIDGET (graph));
 	gpm_st_title (test, "add invalid data");
 	ret = gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data);
@@ -1505,8 +1506,8 @@ gpm_st_graph_widget (GpmSelfTest *test)
 
 	/********** ADD VALID DATA *************/
 	data = gpm_array_new ();
-	gpm_array_append (data, 0, 0, GPM_COLOUR_RED);
-	gpm_array_append (data, 100, 100, GPM_COLOUR_RED);
+	gpm_array_append (data, 0, 0, EGG_COLOR_RED);
+	gpm_array_append (data, 100, 100, EGG_COLOR_RED);
 	gpm_st_title (test, "add valid data");
 	ret = gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data);
 	if (ret) {
@@ -1521,8 +1522,8 @@ gpm_st_graph_widget (GpmSelfTest *test)
 
 	/*********** second line **************/
 	data_more = gpm_array_new ();
-	gpm_array_append (data_more, 0, 100, GPM_COLOUR_BLUE);
-	gpm_array_append (data_more, 100, 0, GPM_COLOUR_BLUE);
+	gpm_array_append (data_more, 0, 100, EGG_COLOR_BLUE);
+	gpm_array_append (data_more, 100, 0, EGG_COLOR_BLUE);
 	gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data_more);
 
 	gpm_st_title_graph (test, "red line shown gradient up, blue gradient down");
@@ -1564,14 +1565,14 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	gpm_graph_widget_set_axis_type_x (GPM_GRAPH_WIDGET (graph), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
 	gpm_graph_widget_key_event_clear (GPM_GRAPH_WIDGET (graph));
 	gpm_graph_widget_key_data_clear (GPM_GRAPH_WIDGET (graph));
-	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), GPM_COLOUR_RED, "red data");
+	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), EGG_COLOR_RED, "red data");
 	data = gpm_array_new ();
-	gpm_array_append (data, 0, 75, GPM_COLOUR_RED);
-	gpm_array_append (data, 20, 78, GPM_COLOUR_RED);
-	gpm_array_append (data, 40, 74, GPM_COLOUR_RED);
-	gpm_array_append (data, 60, 72, GPM_COLOUR_RED);
-	gpm_array_append (data, 80, 78, GPM_COLOUR_RED);
-	gpm_array_append (data, 100, 79, GPM_COLOUR_RED);
+	gpm_array_append (data, 0, 75, EGG_COLOR_RED);
+	gpm_array_append (data, 20, 78, EGG_COLOR_RED);
+	gpm_array_append (data, 40, 74, EGG_COLOR_RED);
+	gpm_array_append (data, 60, 72, EGG_COLOR_RED);
+	gpm_array_append (data, 80, 78, EGG_COLOR_RED);
+	gpm_array_append (data, 100, 79, EGG_COLOR_RED);
 	gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data);
 	gpm_st_title_graph (test, "autorange y axis between 70 and 80");
 	wait_for_input (test);
@@ -1579,8 +1580,8 @@ gpm_st_graph_widget (GpmSelfTest *test)
 
 	/********** AUTORANGING PERCENT (extremes) *************/
 	data = gpm_array_new ();
-	gpm_array_append (data, 0, 6, GPM_COLOUR_RED);
-	gpm_array_append (data, 100, 85, GPM_COLOUR_RED);
+	gpm_array_append (data, 0, 6, EGG_COLOR_RED);
+	gpm_array_append (data, 100, 85, EGG_COLOR_RED);
 	gpm_graph_widget_data_clear (GPM_GRAPH_WIDGET (graph));
 	gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data);
 	gpm_st_title_graph (test, "autorange y axis between 0 and 100");

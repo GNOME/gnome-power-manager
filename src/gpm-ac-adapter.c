@@ -42,7 +42,7 @@
 #include <libhal-gmanager.h>
 
 #include "gpm-common.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-ac-adapter.h"
 
 #define GPM_AC_ADAPTER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_AC_ADAPTER, GpmAcAdapterPrivate))
@@ -87,7 +87,7 @@ gpm_ac_adapter_is_present (GpmAcAdapter *ac_adapter)
 	hal_gdevice_get_bool (ac_adapter->priv->hal_device,
 			      "ac_adapter.present", &is_on_ac, &error);
 	if (error != NULL) {
-		gpm_warning ("could not read ac_adapter.present");
+		egg_warning ("could not read ac_adapter.present");
 		g_error_free (error);
 	}
 
@@ -189,7 +189,7 @@ gpm_ac_adapter_init (GpmAcAdapter *ac_adapter)
 	error = NULL;
 	ret = hal_gmanager_find_capability (hal_manager, "ac_adapter", &device_names, &error);
 	if (!ret) {
-		gpm_warning ("Couldn't obtain list of AC adapters: %s", error->message);
+		egg_warning ("Couldn't obtain list of AC adapters: %s", error->message);
 		g_error_free (error);
 		return;
 	}
@@ -197,7 +197,7 @@ gpm_ac_adapter_init (GpmAcAdapter *ac_adapter)
 		/* we track this by hand as machines that have no ac_adapter object must
 		 * return that they are on ac power */
 		ac_adapter->priv->has_hardware = TRUE;
-		gpm_debug ("using %s", device_names[0]);
+		egg_debug ("using %s", device_names[0]);
 
 		/* We only want first ac_adapter object (should only be one) */
 		hal_gdevice_set_udi (ac_adapter->priv->hal_device, device_names[0]);
@@ -209,7 +209,7 @@ gpm_ac_adapter_init (GpmAcAdapter *ac_adapter)
 	} else {
 		/* no ac-adapter class support */
 		ac_adapter->priv->has_hardware = FALSE;
-		gpm_debug ("No devices of capability ac_adapter");
+		egg_debug ("No devices of capability ac_adapter");
 	}
 	hal_gmanager_free_capability (device_names);
 	g_object_unref (hal_manager);

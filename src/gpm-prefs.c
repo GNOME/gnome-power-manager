@@ -35,7 +35,7 @@
 
 #include "gpm-common.h"
 #include "gpm-prefs.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-prefs-core.h"
 
 /**
@@ -104,7 +104,7 @@ main (int argc, char **argv)
 	g_option_context_parse (context, &argc, &argv, NULL);
 
 	gtk_init (&argc, &argv);
-	gpm_debug_init (verbose);
+	egg_debug_init (verbose);
 
 	/* are we already activated? */
 	libunique = libunique_new ();
@@ -125,7 +125,6 @@ main (int argc, char **argv)
 	g_object_unref (prefs);
 
 unique_out:
-	gpm_debug_shutdown ();
 	g_object_unref (libunique);
 
 /* seems to not work...

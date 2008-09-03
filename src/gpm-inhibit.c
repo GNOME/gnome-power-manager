@@ -29,7 +29,7 @@
 #include <libdbus-monitor-session.h>
 
 #include "gpm-inhibit.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-conf.h"
 
 static void     gpm_inhibit_class_init (GpmInhibitClass *klass);
@@ -172,7 +172,7 @@ gpm_inhibit_inhibit (GpmInhibit  *inhibit,
 	if (connection == NULL ||
 	    application == NULL ||
 	    reason == NULL) {
-		gpm_warning ("Recieved Inhibit, but application "
+		egg_warning ("Recieved Inhibit, but application "
 			     "did not set the parameters correctly");
 		dbus_g_method_return (context, -1);
 		return;
@@ -187,7 +187,7 @@ gpm_inhibit_inhibit (GpmInhibit  *inhibit,
 
 	inhibit->priv->list = g_slist_append (inhibit->priv->list, (gpointer) data);
 
-	gpm_debug ("Recieved Inhibit from '%s' (%s) because '%s' saving as #%i",
+	egg_debug ("Recieved Inhibit from '%s' (%s) because '%s' saving as #%i",
 		   data->application, data->connection, data->reason, data->cookie);
 
 	/* only emit event on the first one */
@@ -231,7 +231,7 @@ gpm_inhibit_un_inhibit (GpmInhibit  *inhibit,
 				      "cannot do UnInhibit!", cookie);
 		return FALSE;
 	}
-	gpm_debug ("UnInhibit okay #%i", cookie);
+	egg_debug ("UnInhibit okay #%i", cookie);
 	gpm_inhibit_free_data_object (data);
 
 	/* remove it from the list */
@@ -255,7 +255,7 @@ gpm_inhibit_get_requests (GpmInhibit *inhibit,
 			  gchar	   ***requests,
 			  GError    **error)
 {
-	gpm_warning ("Not implimented");
+	egg_warning ("Not implimented");
 	return FALSE;
 }
 
@@ -278,7 +278,7 @@ gpm_inhibit_remove_dbus (GpmInhibit  *inhibit,
 	for (a=0; a<g_slist_length (inhibit->priv->list); a++) {
 		data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list, a);
 		if (strcmp (data->connection, connection) == 0) {
-			gpm_debug ("Auto-revoked idle inhibit on '%s'.",
+			egg_debug ("Auto-revoked idle inhibit on '%s'.",
 				   data->application);
 			gpm_inhibit_free_data_object (data);
 			/* remove it from the list */
@@ -327,17 +327,17 @@ gpm_inhibit_has_inhibit (GpmInhibit *inhibit,
 	length = g_slist_length (inhibit->priv->list);
 
 	if (inhibit->priv->ignore_inhibits) {
-		gpm_debug ("Inhibit ignored through gconf policy!");
+		egg_debug ("Inhibit ignored through gconf policy!");
 		*has_inihibit = FALSE;
 	}
 
 	/* An inhibit can stop the action */
 	if (length == 0) {
-		gpm_debug ("Valid as no inhibitors");
+		egg_debug ("Valid as no inhibitors");
 		*has_inihibit = FALSE;
 	} else {
 		/* we have at least one application blocking the action */
-		gpm_debug ("We have %i valid inhibitors", length);
+		egg_debug ("We have %i valid inhibitors", length);
 		*has_inihibit = TRUE;
 	}
 
@@ -580,7 +580,7 @@ uninhibit (DbusProxy *gproxy,
 				 G_TYPE_INVALID,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		egg_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	return ret;

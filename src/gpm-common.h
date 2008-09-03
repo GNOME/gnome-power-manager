@@ -48,23 +48,6 @@ G_BEGIN_DECLS
 #define GPM_BUGZILLA_URL		"http://bugzilla.gnome.org/buglist.cgi?product=gnome-power-manager"
 #define GPM_FAQ_URL			"http://live.gnome.org/GnomePowerManager/Faq"
 
-#define	GPM_COLOUR_WHITE		0xffffff
-#define	GPM_COLOUR_BLACK		0x000000
-#define	GPM_COLOUR_RED			0xff0000
-#define	GPM_COLOUR_GREEN		0x00ff00
-#define	GPM_COLOUR_BLUE			0x0000ff
-#define	GPM_COLOUR_CYAN			0x00ffff
-#define	GPM_COLOUR_MAGENTA		0xff00ff
-#define	GPM_COLOUR_YELLOW		0xffff00
-#define	GPM_COLOUR_GREY			0xcccccc
-#define	GPM_COLOUR_DARK_RED		0x600000
-#define	GPM_COLOUR_DARK_GREEN		0x006000
-#define	GPM_COLOUR_DARK_BLUE		0x000060
-#define	GPM_COLOUR_DARK_CYAN		0x006060
-#define	GPM_COLOUR_DARK_MAGENTA		0x600060
-#define	GPM_COLOUR_DARK_YELLOW		0x606000
-#define	GPM_COLOUR_DARK_GREY		0x606060
-
 typedef enum {
 	GPM_ICON_POLICY_ALWAYS,
 	GPM_ICON_POLICY_PRESENT,
@@ -87,16 +70,9 @@ guint		 gpm_discrete_to_percent	(guint		 discrete,
 						 guint		 levels);
 gfloat		 gpm_discrete_to_fraction	(guint		 discrete,
 						 guint		 levels);
-guint32		 gpm_rgb_to_colour		(guint8		 red,
-						 guint8		 green,
-						 guint8		 blue);
-void		 gpm_colour_to_rgb		(guint32	 colour,
-						 guint8		*red,
-						 guint8		*green,
-						 guint8		*blue);
 GpmIconPolicy	 gpm_tray_icon_mode_from_string	(const gchar	*mode);
 const gchar	*gpm_tray_icon_mode_to_string	(GpmIconPolicy	 mode);
-void 		 gpm_help_display (char *link_id);
+void 		 gpm_help_display		(char		*link_id);
 
 G_END_DECLS
 

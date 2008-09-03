@@ -26,7 +26,7 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-self-test.h"
 
 gboolean
@@ -171,7 +171,7 @@ main (int argc, char **argv)
 	g_option_context_parse (context, &argc, &argv, NULL);
 	gtk_init (&argc, &argv);
 
-	gpm_debug_init (verbose);
+	egg_debug_init (verbose);
 
 	GpmSelfTest ttest;
 	GpmSelfTest *test = &ttest;

@@ -28,6 +28,7 @@ INCLUDES =						\
 	-DLIBDIR=\""$(libdir)"\" 			\
 	-DVERSION="\"$(VERSION)\"" 			\
 	-DGPM_DATA=\"$(pkgdatadir)\"			\
+	-DEGG_LOG_FILE=\""$(PK_LOG_DIR)/gnome-power-manager"\"	\
 	-I$(top_srcdir)					\
 	-I$(top_srcdir)/libunique			\
 	-I$(top_srcdir)/libhal-glib			\
@@ -59,6 +60,10 @@ check_PROGRAMS =					\
 	gnome-power-self-test
 
 gnome_power_statistics_SOURCES =			\
+	egg-color.c					\
+	egg-color.h					\
+	egg-debug.h					\
+	egg-debug.c					\
 	gpm-statistics.c				\
 	gpm-statistics-core.h				\
 	gpm-statistics-core.c				\
@@ -74,8 +79,6 @@ gnome_power_statistics_SOURCES =			\
 	gpm-conf.c					\
 	gpm-common.h					\
 	gpm-common.c					\
-	gpm-debug.h					\
-	gpm-debug.c					\
 	$(NULL)
 
 gnome_power_statistics_LDADD =				\
@@ -92,12 +95,12 @@ gnome_power_statistics_LDADD +=				\
 endif
 
 gnome_power_preferences_SOURCES =			\
+	egg-debug.h					\
+	egg-debug.c					\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
 	gpm-conf.h					\
 	gpm-conf.c					\
-	gpm-debug.h					\
-	gpm-debug.c					\
 	gpm-idle.h					\
 	gpm-idle.c					\
 	gpm-load.h					\
@@ -132,10 +135,12 @@ gnome_power_preferences_LDADD +=			\
 endif
 
 gnome_power_manager_SOURCES =				\
+	egg-color.c					\
+	egg-color.h					\
+	egg-debug.h					\
+	egg-debug.c					\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
-	gpm-debug.h					\
-	gpm-debug.c					\
 	gpm-notify.h					\
 	gpm-notify.c					\
 	gpm-engine.h					\
@@ -234,6 +239,8 @@ gnome_power_manager_LDADD +=				\
 endif
 
 gnome_power_self_test_SOURCES =				\
+	egg-color.c					\
+	egg-color.h					\
 	gpm-ac-adapter.h				\
 	gpm-ac-adapter.c				\
 	gpm-prefs-server.h				\
@@ -248,8 +255,8 @@ gnome_power_self_test_SOURCES =				\
 	gpm-dpms.c					\
 	gpm-button.h					\
 	gpm-button.c					\
-	gpm-debug.h					\
-	gpm-debug.c					\
+	egg-debug.h					\
+	egg-debug.c					\
 	gpm-notify.h					\
 	gpm-notify.c					\
 	gpm-screensaver.h				\

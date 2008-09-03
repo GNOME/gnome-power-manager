@@ -29,7 +29,7 @@
 #include "gpm-conf.h"
 #include "gpm-screensaver.h"
 #include "gpm-srv-screensaver.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-button.h"
 #include "gpm-dpms.h"
 #include "gpm-ac-adapter.h"
@@ -75,7 +75,7 @@ screensaver_auth_request_cb (GpmScreensaver *screensaver,
 		/* TODO: This may be a bid of a bodge, as we will have multiple
 			 resume requests -- maybe this need a logic cleanup */
 		if (srv_screensaver->priv->brightness) {
-			gpm_debug ("undimming lcd due to auth begin");
+			egg_debug ("undimming lcd due to auth begin");
 //			gpm_brightness_undim (srv_screensaver->priv->brightness);
 		}
 
@@ -85,7 +85,7 @@ screensaver_auth_request_cb (GpmScreensaver *screensaver,
 		error = NULL;
 		gpm_dpms_set_mode_enum (srv_screensaver->priv->dpms, GPM_DPMS_MODE_ON, &error);
 		if (error != NULL) {
-			gpm_warning ("Failed to turn on DPMS: %s", error->message);
+			egg_warning ("Failed to turn on DPMS: %s", error->message);
 			g_error_free (error);
 		}
 	}
@@ -164,7 +164,7 @@ button_pressed_cb (GpmButton      *button,
 		   const gchar    *type,
 		   GpmSrvScreensaver *srv_screensaver)
 {
-	gpm_debug ("Button press event type=%s", type);
+	egg_debug ("Button press event type=%s", type);
 
 	/* really belongs in gnome-srv_screensaver */
 	if (strcmp (type, GPM_BUTTON_LOCK) == 0) {
@@ -193,7 +193,7 @@ dpms_mode_changed_cb (GpmDpms        *dpms,
 		      GpmDpmsMode     mode,
 		      GpmSrvScreensaver *srv_screensaver)
 {
-	gpm_debug ("DPMS mode changed: %d", mode);
+	egg_debug ("DPMS mode changed: %d", mode);
 
 	update_dpms_throttle (srv_screensaver);
 }

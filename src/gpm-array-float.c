@@ -29,7 +29,7 @@
 
 #include <glib.h>
 
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-array.h"
 #include "gpm-array-float.h"
 
@@ -301,7 +301,7 @@ gpm_array_float_print (GArray *array)
 	length = array->len;
 	/* debug out */
 	for (i=0; i<length; i++) {
-		gpm_debug ("[%i]\tval=%f", i, g_array_index (array, gfloat, i));
+		egg_debug ("[%i]\tval=%f", i, g_array_index (array, gfloat, i));
 	}
 	return TRUE;
 }

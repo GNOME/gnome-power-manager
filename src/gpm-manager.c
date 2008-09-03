@@ -48,7 +48,7 @@
 #include "gpm-conf.h"
 #include "gpm-control.h"
 #include "gpm-common.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-dpms.h"
 #include "gpm-idle.h"
 #include "gpm-info.h"
@@ -272,11 +272,11 @@ gpm_manager_blank_screen (GpmManager *manager,
 					       GPM_CONF_LOCK_ON_BLANK_SCREEN);
 	if (do_lock) {
 		if (!gpm_screensaver_lock (manager->priv->screensaver))
-			gpm_debug ("Could not lock screen via gnome-screensaver");
+			egg_debug ("Could not lock screen via gnome-screensaver");
 	}
 	gpm_dpms_set_mode_enum (manager->priv->dpms, GPM_DPMS_MODE_OFF, &error);
 	if (error) {
-		gpm_debug ("Unable to set DPMS mode: %s", error->message);
+		egg_debug ("Unable to set DPMS mode: %s", error->message);
 		g_error_free (error);
 		ret = FALSE;
 	}
@@ -302,7 +302,7 @@ gpm_manager_unblank_screen (GpmManager *manager,
 	error = NULL;
 	gpm_dpms_set_mode_enum (manager->priv->dpms, GPM_DPMS_MODE_ON, &error);
 	if (error) {
-		gpm_debug ("Unable to set DPMS mode: %s", error->message);
+		egg_debug ("Unable to set DPMS mode: %s", error->message);
 		g_error_free (error);
 		ret = FALSE;
 	}
@@ -432,7 +432,7 @@ manager_policy_do (GpmManager  *manager,
 		return FALSE;
 	}
 
-	gpm_debug ("policy: %s", policy);
+	egg_debug ("policy: %s", policy);
 	gpm_conf_get_string (manager->priv->conf, policy, &action);
 
 	if (action == NULL) {
@@ -464,7 +464,7 @@ manager_policy_do (GpmManager  *manager,
 					   GNOME_SAVE_GLOBAL,
 					   TRUE, GNOME_INTERACT_ANY, FALSE, TRUE);
 	} else {
-		gpm_warning ("unknown action %s", action);
+		egg_warning ("unknown action %s", action);
 	}
 
 	g_free (action);
@@ -743,24 +743,24 @@ idle_do_sleep (GpmManager *manager)
 	}
 
 	if (action == NULL) {
-		gpm_warning ("action NULL, gconf error");
+		egg_warning ("action NULL, gconf error");
 		return;
 	}
 
 	if (strcmp (action, ACTION_NOTHING) == 0) {
-		gpm_debug ("doing nothing as system idle action");
+		egg_debug ("doing nothing as system idle action");
 
 	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
 		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
 					_("Suspending computer."), _("System idle."));
 		ret = gpm_control_suspend (manager->priv->control, &error);
 		if (!ret) {
-			gpm_warning ("cannot suspend (error: %s), so trying hibernate", error->message);
+			egg_warning ("cannot suspend (error: %s), so trying hibernate", error->message);
 			g_error_free (error);
 			error = NULL;
 			ret = gpm_control_hibernate (manager->priv->control, &error);
 			if (!ret) {
-				gpm_warning ("cannot suspend or hibernate: %s", error->message);
+				egg_warning ("cannot suspend or hibernate: %s", error->message);
 				g_error_free (error);
 			}
 		}
@@ -770,12 +770,12 @@ idle_do_sleep (GpmManager *manager)
 					_("Hibernating computer."), _("System idle."));
 		ret = gpm_control_hibernate (manager->priv->control, &error);
 		if (!ret) {
-			gpm_warning ("cannot hibernate (error: %s), so trying suspend", error->message);
+			egg_warning ("cannot hibernate (error: %s), so trying suspend", error->message);
 			g_error_free (error);
 			error = NULL;
 			ret = gpm_control_suspend (manager->priv->control, &error);
 			if (!ret) {
-				gpm_warning ("cannot suspend or hibernate: %s", error->message);
+				egg_warning ("cannot suspend or hibernate: %s", error->message);
 				g_error_free (error);
 			}
 		}
@@ -805,20 +805,20 @@ idle_changed_cb (GpmIdle    *idle,
 	 * support hardware blanking.
 	 * Details are here: https://launchpad.net/malone/bugs/22522 */
 	if (gpm_button_is_lid_closed (manager->priv->button)) {
-		gpm_debug ("lid is closed, so we are ignoring idle state changes");
+		egg_debug ("lid is closed, so we are ignoring idle state changes");
 		return;
 	}
 
 	if (mode == GPM_IDLE_MODE_NORMAL) {
 
-		gpm_debug ("Idle state changed: NORMAL");
+		egg_debug ("Idle state changed: NORMAL");
 
 	} else if (mode == GPM_IDLE_MODE_SESSION) {
 
-		gpm_debug ("Idle state changed: SESSION");
+		egg_debug ("Idle state changed: SESSION");
 
 	} else if (mode == GPM_IDLE_MODE_SYSTEM) {
-		gpm_debug ("Idle state changed: SYSTEM");
+		egg_debug ("Idle state changed: SYSTEM");
 
 		if (gpm_manager_is_inhibit_valid (manager, FALSE, "timeout action") == FALSE) {
 			return;
@@ -911,7 +911,7 @@ lid_button_pressed (GpmManager *manager,
 	}
 
 	if (on_ac) {
-		gpm_debug ("Performing AC policy");
+		egg_debug ("Performing AC policy");
 		manager_policy_do (manager, GPM_CONF_BUTTON_LID_AC,
 				   _("The lid has been closed on ac power."));
 		return;
@@ -937,11 +937,11 @@ lid_button_pressed (GpmManager *manager,
 	}
 
 	if (do_policy == FALSE) {
-		gpm_debug ("Not doing lid policy action as inhibited as set to sleep");
+		egg_debug ("Not doing lid policy action as inhibited as set to sleep");
 		return;
 	}
 
-	gpm_debug ("Performing battery policy");
+	egg_debug ("Performing battery policy");
 	manager_policy_do (manager, GPM_CONF_BUTTON_LID_BATT,
 			   _("The lid has been closed on battery power."));
 }
@@ -958,7 +958,7 @@ button_pressed_cb (GpmButton   *button,
 		   const gchar *type,
 		   GpmManager  *manager)
 {
-	gpm_debug ("Button press event type=%s", type);
+	egg_debug ("Button press event type=%s", type);
 
 	if (strcmp (type, GPM_BUTTON_POWER) == 0) {
 		power_button_pressed (manager);
@@ -999,11 +999,11 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 	gboolean event_when_closed;
 	gboolean power_save;
 
-	gpm_debug ("Setting on-ac: %d", on_ac);
+	egg_debug ("Setting on-ac: %d", on_ac);
 
 	gpm_manager_sync_policy_sleep (manager);
 
-	gpm_debug ("emitting on-ac-changed : %i", on_ac);
+	egg_debug ("emitting on-ac-changed : %i", on_ac);
 	if (on_ac) {
 		g_signal_emit (manager, signals [ON_BATTERY_CHANGED], 0, FALSE);
 	} else {
@@ -1201,13 +1201,13 @@ screensaver_auth_request_cb (GpmScreensaver *screensaver,
 		error = NULL;
 		ret = hal_gpower_clear_suspend_error (manager->priv->hal_power, &error);
 		if (!ret) {
-			gpm_debug ("Failed to clear suspend error; %s", error->message);
+			egg_debug ("Failed to clear suspend error; %s", error->message);
 			g_error_free (error);
 		}
 		error = NULL;
 		ret = hal_gpower_clear_hibernate_error (manager->priv->hal_power, &error);
 		if (!ret) {
-			gpm_debug ("Failed to clear hibernate error; %s", error->message);
+			egg_debug ("Failed to clear hibernate error; %s", error->message);
 			g_error_free (error);
 		}
 	}
@@ -1342,10 +1342,10 @@ control_sleep_failure_cb (GpmControl      *control,
 	/* only emit if in GConf */
 	if (show_sleep_failed) {
 		if (action == GPM_CONTROL_ACTION_SUSPEND) {
-			gpm_syslog ("suspend failed");
+			egg_debug ("suspend failed");
 			gpm_notify_sleep_failed (manager->priv->notify, FALSE);
 		} else {
-			gpm_syslog ("hibernate failed");
+			egg_debug ("hibernate failed");
 			gpm_notify_sleep_failed (manager->priv->notify, TRUE);
 		}
 	}
@@ -1443,7 +1443,7 @@ gpm_engine_charge_critical_cb (GpmEngine      *engine,
 		/* we have to do different warnings depending on the policy */
 		gpm_conf_get_string (manager->priv->conf, GPM_CONF_ACTIONS_CRITICAL_BATT, &action);
 		if (action == NULL) {
-			gpm_warning ("schema invalid!");
+			egg_warning ("schema invalid!");
 			action = g_strdup (ACTION_NOTHING);
 		}
 
@@ -1682,7 +1682,7 @@ gpm_manager_init (GpmManager *manager)
 				    GPM_NOTIFY_TIMEOUT_LONG,
 				    GTK_STOCK_DIALOG_WARNING,
 				    GPM_NOTIFY_URGENCY_NORMAL);
-		gpm_error ("no gconf schema installed!");
+		egg_error ("no gconf schema installed!");
 	}
 
 	/* we use ac_adapter so we can poke the screensaver and throttle */
@@ -1734,7 +1734,7 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->dpms = gpm_dpms_new ();
 
 	/* use a class to handle the complex stuff */
-	gpm_debug ("creating new inhibit instance");
+	egg_debug ("creating new inhibit instance");
 	manager->priv->inhibit = gpm_inhibit_new ();
 	g_signal_connect (manager->priv->inhibit, "has-inhibit-changed",
 			  G_CALLBACK (has_inhibit_changed_cb), manager);
@@ -1744,12 +1744,12 @@ gpm_manager_init (GpmManager *manager)
 					     G_OBJECT (manager->priv->inhibit));
 
 	/* use the control object */
-	gpm_debug ("creating new control instance");
+	egg_debug ("creating new control instance");
 	manager->priv->control = gpm_control_new ();
 	g_signal_connect (manager->priv->control, "sleep-failure",
 			  G_CALLBACK (control_sleep_failure_cb), manager);
 
-	gpm_debug ("creating new tray icon");
+	egg_debug ("creating new tray icon");
 	manager->priv->tray_icon = gpm_tray_icon_new ();
 	g_signal_connect_object (G_OBJECT (manager->priv->tray_icon),
 				 "suspend", G_CALLBACK (gpm_manager_tray_icon_suspend),
@@ -1758,7 +1758,7 @@ gpm_manager_init (GpmManager *manager)
 				 "hibernate", G_CALLBACK (gpm_manager_tray_icon_hibernate),
 				 manager, G_CONNECT_SWAPPED);
 
-	gpm_debug ("initialising info infrastructure");
+	egg_debug ("initialising info infrastructure");
 	manager->priv->info = gpm_info_new ();
 
 	/* add the new statistics DBUS interface */

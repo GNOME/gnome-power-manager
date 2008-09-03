@@ -38,7 +38,7 @@
 #include "gpm-cell-unit.h"
 #include "gpm-cell-array.h"
 #include "gpm-cell.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-stock-icons.h"
 #include "gpm-warnings.h"
 #include "gpm-prefs-server.h"
@@ -346,7 +346,7 @@ gpm_engine_get_summary (GpmEngine *engine)
 	/* remove the last \n */
 	g_string_truncate (tooltip, tooltip->len-1);
 
-	gpm_debug ("tooltip: %s", tooltip->str);
+	egg_debug ("tooltip: %s", tooltip->str);
 
 	return g_string_free (tooltip, FALSE);
 }
@@ -375,7 +375,7 @@ gpm_engine_get_icon (GpmEngine *engine)
 	g_return_val_if_fail (GPM_IS_ENGINE (engine), NULL);
 
 	if (engine->priv->icon_policy == GPM_ICON_POLICY_NEVER) {
-		gpm_debug ("no icon allowed, so no icon will be displayed.");
+		egg_debug ("no icon allowed, so no icon will be displayed.");
 		return NULL;
 	}
 
@@ -388,7 +388,7 @@ gpm_engine_get_icon (GpmEngine *engine)
 	unit_phone = gpm_cell_array_get_unit (collection->phone);
 
 	/* we try CRITICAL: PRIMARY, UPS, MOUSE, KEYBOARD */
-	gpm_debug ("Trying CRITICAL icon: primary, ups, mouse, keyboard");
+	egg_debug ("Trying CRITICAL icon: primary, ups, mouse, keyboard");
 	if (unit_primary->is_present) {
 		state = gpm_warnings_get_state (engine->priv->warnings, unit_primary);
 		if (state == GPM_WARNINGS_CRITICAL) {
@@ -427,12 +427,12 @@ gpm_engine_get_icon (GpmEngine *engine)
 	}
 
 	if (engine->priv->icon_policy == GPM_ICON_POLICY_CRITICAL) {
-		gpm_debug ("no devices critical, so no icon will be displayed.");
+		egg_debug ("no devices critical, so no icon will be displayed.");
 		return NULL;
 	}
 
 	/* we try (DIS)CHARGING: PRIMARY, UPS */
-	gpm_debug ("Trying CHARGING icon: primary, ups");
+	egg_debug ("Trying CHARGING icon: primary, ups");
 	if (unit_primary->is_present &&
 	    (unit_primary->is_charging || unit_primary->is_discharging == TRUE)) {
 		return gpm_cell_array_get_icon (collection->primary);
@@ -444,12 +444,12 @@ gpm_engine_get_icon (GpmEngine *engine)
 
 	/* Check if we should just show the icon all the time */
 	if (engine->priv->icon_policy == GPM_ICON_POLICY_CHARGE) {
-		gpm_debug ("no devices (dis)charging, so no icon will be displayed.");
+		egg_debug ("no devices (dis)charging, so no icon will be displayed.");
 		return NULL;
 	}
 
 	/* we try PRESENT: PRIMARY, UPS */
-	gpm_debug ("Trying PRESENT icon: primary, ups");
+	egg_debug ("Trying PRESENT icon: primary, ups");
 	if (unit_primary->is_present) {
 		return gpm_cell_array_get_icon (collection->primary);
 
@@ -459,12 +459,12 @@ gpm_engine_get_icon (GpmEngine *engine)
 
 	/* Check if we should just fallback to the ac icon */
 	if (engine->priv->icon_policy == GPM_ICON_POLICY_PRESENT) {
-		gpm_debug ("no devices present, so no icon will be displayed.");
+		egg_debug ("no devices present, so no icon will be displayed.");
 		return NULL;
 	}
 
 	/* we fallback to the ac_adapter icon */
-	gpm_debug ("Using fallback");
+	egg_debug ("Using fallback");
 	return g_strdup_printf (GPM_STOCK_AC_ADAPTER);
 }
 
@@ -488,7 +488,7 @@ gpm_cell_array_perhaps_recall_cb (GpmCellArray *cell_array, gchar *oem_vendor, g
 
 	if (show_recall) {
 		/* just proxy it to the GUI layer */
-		gpm_debug ("** EMIT: perhaps-recall");
+		egg_debug ("** EMIT: perhaps-recall");
 		g_signal_emit (engine, signals [PERHAPS_RECALL], 0, kind, oem_vendor, website);
 	}
 }
@@ -514,7 +514,7 @@ gpm_cell_array_low_capacity_cb (GpmCellArray *cell_array, guint capacity, GpmEng
 	/* only emit this once per startup */
 	if (show_capacity) {
 		/* just proxy it to the GUI layer */
-		gpm_debug ("** EMIT: low-capacity");
+		egg_debug ("** EMIT: low-capacity");
 		g_signal_emit (engine, signals [LOW_CAPACITY], 0, kind, capacity);
 	}
 }
@@ -560,7 +560,7 @@ gpm_engine_recalculate_state_icon (GpmEngine *engine)
 			return FALSE;
 		}
 		/* icon before, now none */
-		gpm_debug ("** EMIT: icon-changed: none");
+		egg_debug ("** EMIT: icon-changed: none");
 
 		/* we let the icon stick around for a couple of seconds */
 		g_timeout_add (1000*2, (GSourceFunc) gpm_engine_icon_clear_delay, engine);
@@ -572,7 +572,7 @@ gpm_engine_recalculate_state_icon (GpmEngine *engine)
 
 	/* no icon before, now icon */
 	if (engine->priv->previous_icon == NULL) {
-		gpm_debug ("** EMIT: icon-changed: %s", icon);
+		egg_debug ("** EMIT: icon-changed: %s", icon);
 		g_signal_emit (engine, signals [ICON_CHANGED], 0, icon);
 		engine->priv->previous_icon = icon;
 		return TRUE;
@@ -582,12 +582,12 @@ gpm_engine_recalculate_state_icon (GpmEngine *engine)
 	if (strcmp (engine->priv->previous_icon, icon) != 0) {
 		g_free (engine->priv->previous_icon);
 		engine->priv->previous_icon = icon;
-		gpm_debug ("** EMIT: icon-changed: %s", icon);
+		egg_debug ("** EMIT: icon-changed: %s", icon);
 		g_signal_emit (engine, signals [ICON_CHANGED], 0, icon);
 		return TRUE;
 	}
 
-	gpm_debug ("no change");
+	egg_debug ("no change");
 	/* nothing to do... */
 	g_free (icon);
 	return FALSE;
@@ -612,7 +612,7 @@ gpm_engine_recalculate_state_summary (GpmEngine *engine)
 
 	if (engine->priv->previous_summary == NULL) {
 		engine->priv->previous_summary = summary;
-		gpm_debug ("** EMIT: summary-changed(1): %s", summary);
+		egg_debug ("** EMIT: summary-changed(1): %s", summary);
 		g_signal_emit (engine, signals [SUMMARY_CHANGED], 0, summary);
 		return TRUE;
 	}	
@@ -620,11 +620,11 @@ gpm_engine_recalculate_state_summary (GpmEngine *engine)
 	if (strcmp (engine->priv->previous_summary, summary) != 0) {
 		g_free (engine->priv->previous_summary);
 		engine->priv->previous_summary = summary;
-		gpm_debug ("** EMIT: summary-changed(2): %s", summary);
+		egg_debug ("** EMIT: summary-changed(2): %s", summary);
 		g_signal_emit (engine, signals [SUMMARY_CHANGED], 0, summary);
 		return TRUE;
 	}
-	gpm_debug ("no change");
+	egg_debug ("no change");
 	/* nothing to do... */
 	g_free (summary);
 	return FALSE;
@@ -641,7 +641,7 @@ gpm_engine_recalculate_state (GpmEngine *engine)
 
 	/* we want to make this quicker */
 	if (engine->priv->during_coldplug) {
-		gpm_debug ("ignoring due to coldplug");
+		egg_debug ("ignoring due to coldplug");
 		return;
 	}
 
@@ -720,7 +720,7 @@ gpm_cell_array_discharging_changed_cb (GpmCellArray *cell_array,
 		kind = gpm_cell_array_get_kind (cell_array);
 
 		/* just proxy it to the GUI layer */
-		gpm_debug ("** EMIT: discharging");
+		egg_debug ("** EMIT: discharging");
 		g_signal_emit (engine, signals [DISCHARGING], 0, kind);
 	}
 }
@@ -779,7 +779,7 @@ gpm_cell_array_fully_charged_cb (GpmCellArray *cell_array,
 		kind = gpm_cell_array_get_kind (cell_array);
 
 		/* just proxy it to the GUI layer */
-		gpm_debug ("** EMIT: fully-charged");
+		egg_debug ("** EMIT: fully-charged");
 		g_signal_emit (engine, signals [FULLY_CHARGED], 0, kind);
 	}
 }
@@ -806,7 +806,7 @@ gpm_cell_array_charge_low_cb (GpmCellArray *cell_array,
 	unit = gpm_cell_array_get_unit (cell_array);
 
 	/* just proxy it to the GUI layer */
-	gpm_debug ("** EMIT: charge-low");
+	egg_debug ("** EMIT: charge-low");
 	g_signal_emit (engine, signals [CHARGE_LOW], 0, kind, unit);
 }
 
@@ -832,7 +832,7 @@ gpm_cell_array_charge_critical_cb (GpmCellArray *cell_array,
 	unit = gpm_cell_array_get_unit (cell_array);
 
 	/* just proxy it to the GUI layer */
-	gpm_debug ("** EMIT: charge-critical");
+	egg_debug ("** EMIT: charge-critical");
 	g_signal_emit (engine, signals [CHARGE_CRITICAL], 0, kind, unit);
 }
 
@@ -858,7 +858,7 @@ gpm_cell_array_charge_action_cb (GpmCellArray *cell_array,
 	unit = gpm_cell_array_get_unit (cell_array);
 
 	/* just proxy it to the GUI layer */
-	gpm_debug ("** EMIT: charge-action");
+	egg_debug ("** EMIT: charge-action");
 	g_signal_emit (engine, signals [CHARGE_ACTION], 0, kind, unit);
 }
 

@@ -28,7 +28,7 @@
 
 #include "gpm-conf.h"
 #include "gpm-phone.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-marshal.h"
 
 #include <libdbus-watch.h>
@@ -76,14 +76,14 @@ gpm_phone_coldplug (GpmPhone *phone)
 	g_return_val_if_fail (GPM_IS_PHONE (phone), FALSE);
 
 	if (phone->priv->proxy == NULL) {
-		gpm_warning ("not connected\n");
+		egg_warning ("not connected\n");
 		return FALSE;
 	}
 
 	ret = dbus_g_proxy_call (phone->priv->proxy, "Coldplug", &error,
 				 G_TYPE_INVALID, G_TYPE_INVALID);
 	if (error != NULL) {
-		gpm_warning ("DEBUG: ERROR: %s", error->message);
+		egg_warning ("DEBUG: ERROR: %s", error->message);
 		g_error_free (error);
 	}
 
@@ -153,11 +153,11 @@ gpm_phone_battery_state_changed (DBusGProxy     *proxy,
 	g_return_if_fail (phone != NULL);
 	g_return_if_fail (GPM_IS_PHONE (phone));
 
-	gpm_debug ("got BatteryStateChanged %i = %i (%i)", index, percentage, on_ac);
+	egg_debug ("got BatteryStateChanged %i = %i (%i)", index, percentage, on_ac);
 	phone->priv->percentage = percentage;
 	phone->priv->onac = on_ac;
 	phone->priv->present = TRUE;
-	gpm_debug ("emitting device-refresh : (%i)", index);
+	egg_debug ("emitting device-refresh : (%i)", index);
 	g_signal_emit (phone, signals [DEVICE_REFRESH], 0, index);
 }
 
@@ -171,9 +171,9 @@ gpm_phone_num_batteries_changed (DBusGProxy     *proxy,
 	g_return_if_fail (phone != NULL);
 	g_return_if_fail (GPM_IS_PHONE (phone));
 
-	gpm_debug ("got NumberBatteriesChanged %i", number);
+	egg_debug ("got NumberBatteriesChanged %i", number);
 	if (number > 1) {
-		gpm_warning ("number not 0 or 1, not valid!");
+		egg_warning ("number not 0 or 1, not valid!");
 		return;
 	}
 
@@ -182,13 +182,13 @@ gpm_phone_num_batteries_changed (DBusGProxy     *proxy,
 		phone->priv->present = FALSE;
 		phone->priv->percentage = 0;
 		phone->priv->onac = FALSE;
-		gpm_debug ("emitting device-removed : (%i)", 0);
+		egg_debug ("emitting device-removed : (%i)", 0);
 		g_signal_emit (phone, signals [DEVICE_REMOVED], 0, 0);
 		return;
 	}
 
 	if (phone->priv->present) {
-		gpm_warning ("duplicate NumberBatteriesChanged with no change");
+		egg_warning ("duplicate NumberBatteriesChanged with no change");
 		return;
 	}
 
@@ -196,7 +196,7 @@ gpm_phone_num_batteries_changed (DBusGProxy     *proxy,
 	phone->priv->present = TRUE;
 	phone->priv->percentage = 0;
 	phone->priv->onac = FALSE;
-	gpm_debug ("emitting device-added : (%i)", 0);
+	egg_debug ("emitting device-added : (%i)", 0);
 	g_signal_emit (phone, signals [DEVICE_ADDED], 0, 0);
 }
 
@@ -264,18 +264,18 @@ gpm_phone_dbus_connect (GpmPhone *phone)
 	g_return_val_if_fail (GPM_IS_PHONE (phone), FALSE);
 
 	if (phone->priv->connection == NULL) {
-		gpm_debug ("get connection\n");
+		egg_debug ("get connection\n");
 		g_clear_error (&error);
 		phone->priv->connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 		if (error != NULL) {
-			gpm_warning ("Could not connect to DBUS daemon: %s", error->message);
+			egg_warning ("Could not connect to DBUS daemon: %s", error->message);
 			g_error_free (error);
 			phone->priv->connection = NULL;
 			return FALSE;
 		}
 	}
 	if (phone->priv->proxy == NULL) {
-		gpm_debug ("get proxy\n");
+		egg_debug ("get proxy\n");
 		g_clear_error (&error);
 		phone->priv->proxy = dbus_g_proxy_new_for_name_owner (phone->priv->connection,
 							 GNOME_PHONE_MANAGER_DBUS_SERVICE,
@@ -283,7 +283,7 @@ gpm_phone_dbus_connect (GpmPhone *phone)
 							 GNOME_PHONE_MANAGER_DBUS_INTERFACE,
 							 &error);
 		if (error != NULL) {
-			gpm_warning ("Cannot connect, maybe the daemon is not running: %s\n", error->message);
+			egg_warning ("Cannot connect, maybe the daemon is not running: %s\n", error->message);
 			g_error_free (error);
 			phone->priv->proxy = NULL;
 			return FALSE;
@@ -322,13 +322,13 @@ gpm_phone_dbus_disconnect (GpmPhone *phone)
 	g_return_val_if_fail (GPM_IS_PHONE (phone), FALSE);
 
 	if (phone->priv->proxy != NULL) {
-		gpm_debug ("removing proxy\n");
+		egg_debug ("removing proxy\n");
 		g_object_unref (phone->priv->proxy);
 		phone->priv->proxy = NULL;
 		if (phone->priv->present) {
 			phone->priv->present = FALSE;
 			phone->priv->percentage = 0;
-			gpm_debug ("emitting device-removed : (%i)", 0);
+			egg_debug ("emitting device-removed : (%i)", 0);
 			g_signal_emit (phone, signals [DEVICE_REMOVED], 0, 0);
 		}
 	}

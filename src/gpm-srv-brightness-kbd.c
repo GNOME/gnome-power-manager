@@ -45,7 +45,7 @@
 #include "gpm-srv-brightness-kbd.h"
 #include "gpm-conf.h"
 #include "gpm-common.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-feedback-widget.h"
 #include "gpm-idle.h"
 #include "gpm-light-sensor.h"
@@ -136,7 +136,7 @@ button_pressed_cb (GpmButton        *button,
 		   const gchar      *type,
 		   GpmSrvBrightnessKbd *srv_brightness)
 {
-	gpm_debug ("Button press event type=%s", type);
+	egg_debug ("Button press event type=%s", type);
 
 	if ((strcmp (type, GPM_BUTTON_KBD_BRIGHT_UP) == 0)) {
 		gpm_brightness_kbd_up (srv_brightness->priv->brightness);
@@ -238,7 +238,7 @@ brightness_changed_cb (GpmBrightnessKbd    *brightness,
 		       gint                 percentage,
 		       GpmSrvBrightnessKbd *srv_brightness)
 {
-	gpm_debug ("Need to display backlight feedback value %i", percentage);
+	egg_debug ("Need to display backlight feedback value %i", percentage);
 	gpm_feedback_display_value (srv_brightness->priv->feedback, (float) percentage / 100.0f);
 }
 

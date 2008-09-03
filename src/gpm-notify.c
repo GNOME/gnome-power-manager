@@ -42,7 +42,7 @@
 #include "gpm-ac-adapter.h"
 #include "gpm-common.h"
 #include "gpm-conf.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-notify.h"
 #include "gpm-stock-icons.h"
 
@@ -86,7 +86,7 @@ notify_closed_cb (NotifyNotification *libnotify,
 		  GpmNotify	     *notify)
 {
 	/* just invalidate the pointer */
-	gpm_debug ("caught notification closed signal");
+	egg_debug ("caught notification closed signal");
 //	notify->priv->libnotify = NULL;
 }
 
@@ -121,9 +121,9 @@ gpm_notify_create (GpmNotify 	 *notify,
 	}
 
 	if (urgency == GPM_NOTIFY_URGENCY_CRITICAL) {
-		gpm_warning ("libnotify: %s : %s", GPM_NAME, content);
+		egg_warning ("libnotify: %s : %s", GPM_NAME, content);
 	} else {
-		gpm_debug ("libnotify: %s : %s", GPM_NAME, content);
+		egg_debug ("libnotify: %s : %s", GPM_NAME, content);
 	}
 
 	g_signal_connect (notify->priv->libnotify, "closed", G_CALLBACK (notify_closed_cb), notify);
@@ -136,7 +136,7 @@ gpm_notify_show (GpmNotify *notify)
 	gboolean ret;
 	ret = notify_notification_show (notify->priv->libnotify, NULL);
 	if (!ret) {
-		gpm_warning ("failed to send notification");
+		egg_warning ("failed to send notification");
 	}
 	return ret;
 }
@@ -281,7 +281,7 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 	/* for where we add back the ac_adapter before the "AC Power unplugged"
 	 * message times out. */
 	if (on_ac) {
-		gpm_debug ("clearing notify due ac being present");
+		egg_debug ("clearing notify due ac being present");
 		gpm_notify_cancel (notify);
 	}
 }
@@ -311,13 +311,13 @@ notify_general_clicked_cb (NotifyNotification *libnotify,
 	gscreen = gdk_screen_get_default();
 
 	if (strcmp (action, "dont-show-again") == 0) {
-		gpm_debug ("not showing warning anymore for %s!", notify->priv->do_not_show_gconf);
+		egg_debug ("not showing warning anymore for %s!", notify->priv->do_not_show_gconf);
 		gpm_conf_set_bool (notify->priv->conf, notify->priv->do_not_show_gconf, FALSE);
 		notify->priv->do_not_show_gconf = NULL;
 		return;
 	}
 	if (strcmp (action, "visit-website") == 0) {
-		gpm_debug ("autovisit website %s", notify->priv->internet_url);
+		egg_debug ("autovisit website %s", notify->priv->internet_url);
 		error = NULL;
 
  		cmdline = g_strconcat ("gnome-open ", notify->priv->internet_url, NULL);
@@ -345,7 +345,7 @@ notify_general_clicked_cb (NotifyNotification *libnotify,
 		notify->priv->internet_url = NULL;
 		return;
 	}
-	gpm_debug ("action %s unknown", action);
+	egg_debug ("action %s unknown", action);
 }
 #endif
 
@@ -362,7 +362,7 @@ gpm_notify_perhaps_recall (GpmNotify   *notify,
 
 	/* don't show when running under GDM */
 	if (g_getenv ("RUNNING_UNDER_GDM") != NULL) {
-		gpm_debug ("running under gdm, so no notification");
+		egg_debug ("running under gdm, so no notification");
 		return FALSE;
 	}
 
@@ -411,7 +411,7 @@ gpm_notify_low_capacity (GpmNotify *notify,
 
 	/* don't show when running under GDM */
 	if (g_getenv ("RUNNING_UNDER_GDM") != NULL) {
-		gpm_debug ("running under gdm, so no notification");
+		egg_debug ("running under gdm, so no notification");
 		return FALSE;
 	}
 
@@ -450,7 +450,7 @@ gpm_notify_inhibit_lid (GpmNotify *notify)
 
 	/* don't show when running under GDM */
 	if (g_getenv ("RUNNING_UNDER_GDM") != NULL) {
-		gpm_debug ("running under gdm, so no notification");
+		egg_debug ("running under gdm, so no notification");
 		return FALSE;
 	}
 

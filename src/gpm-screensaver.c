@@ -28,7 +28,7 @@
 
 #include "gpm-conf.h"
 #include "gpm-screensaver.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include <libdbus-proxy.h>
 
 static void     gpm_screensaver_class_init (GpmScreensaverClass *klass);
@@ -65,7 +65,7 @@ static void
 gpm_screensaver_auth_begin (DBusGProxy     *proxy,
 			    GpmScreensaver *screensaver)
 {
-	gpm_debug ("emitting auth-request : (%i)", TRUE);
+	egg_debug ("emitting auth-request : (%i)", TRUE);
 	g_signal_emit (screensaver, signals [AUTH_REQUEST], 0, TRUE);
 }
 
@@ -76,7 +76,7 @@ static void
 gpm_screensaver_auth_end (DBusGProxy     *proxy,
 			  GpmScreensaver *screensaver)
 {
-	gpm_debug ("emitting auth-request : (%i)", FALSE);
+	egg_debug ("emitting auth-request : (%i)", FALSE);
 	g_signal_emit (screensaver, signals [AUTH_REQUEST], 0, FALSE);
 }
 
@@ -88,7 +88,7 @@ gpm_screensaver_session_idle_changed (DBusGProxy     *proxy,
 			      gboolean        is_idle,
 			      GpmScreensaver *screensaver)
 {
-	gpm_debug ("emitting session-idle-changed : (%i)", is_idle);
+	egg_debug ("emitting session-idle-changed : (%i)", is_idle);
 	g_signal_emit (screensaver, signals [SESSION_IDLE_CHANGED], 0, is_idle);
 }
 
@@ -99,7 +99,7 @@ gpm_screensaver_powersave_idle_changed (DBusGProxy     *proxy,
 			                gboolean        is_idle,
 			                GpmScreensaver *screensaver)
 {
-	gpm_debug ("emitting powersave-idle-changed : (%i)", is_idle);
+	egg_debug ("emitting powersave-idle-changed : (%i)", is_idle);
 	g_signal_emit (screensaver, signals [POWERSAVE_IDLE_CHANGED], 0, is_idle);
 }
 
@@ -116,7 +116,7 @@ gpm_screensaver_proxy_connect_more (GpmScreensaver *screensaver)
 
 	proxy = dbus_proxy_get_proxy (screensaver->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		egg_warning ("not connected");
 		return FALSE;
 	}
 
@@ -163,7 +163,7 @@ gpm_screensaver_proxy_disconnect_more (GpmScreensaver *screensaver)
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 
 	g_signal_emit (screensaver, signals [CONNECTION_CHANGED], 0, FALSE);
-	gpm_debug ("gnome-screensaver disconnected from the session DBUS");
+	egg_debug ("gnome-screensaver disconnected from the session DBUS");
 	return TRUE;
 }
 
@@ -178,11 +178,11 @@ gconf_key_changed_cb (GpmConf        *conf,
 		      GpmScreensaver *screensaver)
 {
 	g_return_if_fail (GPM_IS_SCREENSAVER (screensaver));
-	gpm_debug ("key : %s", key);
+	egg_debug ("key : %s", key);
 
 	if (strcmp (key, GS_PREF_IDLE_DELAY) == 0) {
 		gpm_conf_get_uint (screensaver->priv->conf, key, &screensaver->priv->idle_delay);
-		gpm_debug ("emitting gs-delay-changed : %i", screensaver->priv->idle_delay);
+		egg_debug ("emitting gs-delay-changed : %i", screensaver->priv->idle_delay);
 		g_signal_emit (screensaver, signals [GS_DELAY_CHANGED], 0, screensaver->priv->idle_delay);
 	}
 }
@@ -243,11 +243,11 @@ gpm_screensaver_lock (GpmScreensaver *screensaver)
 
 	proxy = dbus_proxy_get_proxy (screensaver->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		egg_warning ("not connected");
 		return FALSE;
 	}
 
-	gpm_debug ("doing gnome-screensaver lock");
+	egg_debug ("doing gnome-screensaver lock");
 	dbus_g_proxy_call_no_reply (proxy, "Lock", G_TYPE_INVALID);
 
 	/* When we send the Lock signal to g-ss it takes maybe a second
@@ -289,13 +289,13 @@ gpm_screensaver_add_throttle (GpmScreensaver *screensaver,
 
 	proxy = dbus_proxy_get_proxy (screensaver->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		egg_warning ("not connected");
 		return 0;
 	}
 
 	/* shouldn't be, but make sure proxy valid */
 	if (proxy == NULL) {
-		gpm_warning ("g-s proxy is NULL!");
+		egg_warning ("g-s proxy is NULL!");
 		return 0;
 	}
 
@@ -306,16 +306,16 @@ gpm_screensaver_add_throttle (GpmScreensaver *screensaver,
 				 G_TYPE_UINT, &cookie,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		egg_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (!ret) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("Throttle failed!");
+		egg_warning ("Throttle failed!");
 		return 0;
 	}
 
-	gpm_debug ("adding throttle reason: '%s': id %u", reason, cookie);
+	egg_debug ("adding throttle reason: '%s': id %u", reason, cookie);
 	return cookie;
 }
 
@@ -331,22 +331,22 @@ gpm_screensaver_remove_throttle (GpmScreensaver *screensaver,
 
 	proxy = dbus_proxy_get_proxy (screensaver->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		egg_warning ("not connected");
 		return FALSE;
 	}
 
-	gpm_debug ("removing throttle: id %u", cookie);
+	egg_debug ("removing throttle: id %u", cookie);
 	ret = dbus_g_proxy_call (proxy, "UnThrottle", &error,
 				 G_TYPE_UINT, cookie,
 				 G_TYPE_INVALID,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		egg_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (!ret) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("UnThrottle failed!");
+		egg_warning ("UnThrottle failed!");
 		return FALSE;
 	}
 
@@ -370,7 +370,7 @@ gpm_screensaver_check_running (GpmScreensaver *screensaver)
 
 	proxy = dbus_proxy_get_proxy (screensaver->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		egg_warning ("not connected");
 		return FALSE;
 	}
 
@@ -379,7 +379,7 @@ gpm_screensaver_check_running (GpmScreensaver *screensaver)
 				 G_TYPE_BOOLEAN, &temp,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		egg_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 
@@ -403,11 +403,11 @@ gpm_screensaver_poke (GpmScreensaver *screensaver)
 
 	proxy = dbus_proxy_get_proxy (screensaver->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		egg_warning ("not connected");
 		return FALSE;
 	}
 
-	gpm_debug ("poke");
+	egg_debug ("poke");
 	dbus_g_proxy_call_no_reply (proxy,
 				    "SimulateUserActivity",
 				    G_TYPE_INVALID);
@@ -432,7 +432,7 @@ gpm_screensaver_get_idle (GpmScreensaver *screensaver, gint *time_secs)
 
 	proxy = dbus_proxy_get_proxy (screensaver->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		egg_warning ("not connected");
 		return FALSE;
 	}
 
@@ -441,12 +441,12 @@ gpm_screensaver_get_idle (GpmScreensaver *screensaver, gint *time_secs)
 				 G_TYPE_UINT, time_secs,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		egg_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (!ret) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("GetActiveTime failed!");
+		egg_warning ("GetActiveTime failed!");
 		return FALSE;
 	}
 

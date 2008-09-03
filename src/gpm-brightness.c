@@ -39,7 +39,7 @@
 #include "gpm-brightness-hal.h"
 #include "gpm-brightness-xrandr.h"
 #include "gpm-common.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-marshal.h"
 
 #define GPM_BRIGHTNESS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_BRIGHTNESS, GpmBrightnessPrivate))
@@ -91,7 +91,7 @@ gpm_brightness_trust_cache (GpmBrightness *brightness)
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
 	/* only return the cached value if the cache is trusted and we have change events */
 	if (brightness->priv->cache_trusted && brightness->priv->has_changed_events) {
-		gpm_debug ("using cache for value %u (okay)", brightness->priv->cache_percentage);
+		egg_debug ("using cache for value %u (okay)", brightness->priv->cache_percentage);
 		return TRUE;
 	}
 
@@ -99,7 +99,7 @@ gpm_brightness_trust_cache (GpmBrightness *brightness)
 	 * if we have multiple things setting policy on the workstation, e.g. fast user switching
 	 * or kpowersave, then this will be invalid -- this logic may be insane */
 	if (GPM_SOLE_SETTER_USE_CACHE && brightness->priv->cache_trusted) {
-		gpm_warning ("using cache for value %u (probably okay)", brightness->priv->cache_percentage);
+		egg_warning ("using cache for value %u (probably okay)", brightness->priv->cache_percentage);
 		return TRUE;
 	}
 	return FALSE;
@@ -124,7 +124,7 @@ gpm_brightness_set (GpmBrightness *brightness, guint percentage, gboolean *hw_ch
 	/* can we check the new value with the cache? */
 	trust_cache = gpm_brightness_trust_cache (brightness);
 	if (trust_cache && percentage == brightness->priv->cache_percentage) {
-		gpm_debug ("not setting the same value %i", percentage);
+		egg_debug ("not setting the same value %i", percentage);
 		return TRUE;
 	}
 
@@ -137,7 +137,7 @@ gpm_brightness_set (GpmBrightness *brightness, guint percentage, gboolean *hw_ch
 		ret = gpm_brightness_hal_set (brightness->priv->hal, percentage, &hw_changed_local);
 		goto out;
 	}
-	gpm_debug ("no hardware support");
+	egg_debug ("no hardware support");
 	return FALSE;
 out:
 	/* we did something to the hardware, so untrusted */
@@ -185,12 +185,12 @@ gpm_brightness_get (GpmBrightness *brightness, guint *percentage)
 		ret = gpm_brightness_hal_get (brightness->priv->hal, &percentage_local);
 		goto out;
 	}
-	gpm_debug ("no hardware support");
+	egg_debug ("no hardware support");
 	return FALSE;
 out:
 	/* valid? */
 	if (percentage_local > 100) {
-		gpm_warning ("percentage value of %i will be ignored", percentage_local);
+		egg_warning ("percentage value of %i will be ignored", percentage_local);
 		ret = FALSE;
 	}
 	/* a new value is always trusted if the method and checks succeed */
@@ -228,7 +228,7 @@ gpm_brightness_up (GpmBrightness *brightness, gboolean *hw_changed)
 		ret = gpm_brightness_hal_up (brightness->priv->hal, &hw_changed_local);
 		goto out;
 	}
-	gpm_debug ("no hardware support");
+	egg_debug ("no hardware support");
 	return FALSE;
 out:
 	/* we did something to the hardware, so untrusted */
@@ -266,7 +266,7 @@ gpm_brightness_down (GpmBrightness *brightness, gboolean *hw_changed)
 		ret = gpm_brightness_hal_down (brightness->priv->hal, &hw_changed_local);
 		goto out;
 	}
-	gpm_debug ("no hardware support");
+	egg_debug ("no hardware support");
 	return FALSE;
 out:
 	/* we did something to the hardware, so untrusted */
@@ -336,7 +336,7 @@ gpm_brightness_changed (GpmBrightness *brightness, guint percentage)
 
 	/* valid? */
 	if (percentage > 100) {
-		gpm_warning ("percentage value of %i will be ignored", percentage);
+		egg_warning ("percentage value of %i will be ignored", percentage);
 		/* no longer trust the cache */
 		brightness->priv->has_changed_events = FALSE;
 		brightness->priv->cache_trusted = FALSE;
@@ -347,7 +347,7 @@ gpm_brightness_changed (GpmBrightness *brightness, guint percentage)
 	brightness->priv->cache_trusted = TRUE;
 	brightness->priv->cache_percentage = percentage;
 	/* ONLY EMIT THIS SIGNAL WHEN SOMETHING _ELSE_ HAS CHANGED THE BACKLIGHT */
-	gpm_debug ("emitting brightness-changed (%i)", percentage);
+	egg_debug ("emitting brightness-changed (%i)", percentage);
 	g_signal_emit (brightness, signals [BRIGHTNESS_CHANGED], 0, percentage);
 }
 

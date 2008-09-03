@@ -45,7 +45,7 @@
 #include "gpm-brightness.h"
 #include "gpm-brightness-hal.h"
 #include "gpm-common.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-marshal.h"
 
 #define GPM_BRIGHTNESS_HAL_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_BRIGHTNESS_HAL, GpmBrightnessHalPrivate))
@@ -92,7 +92,7 @@ gpm_brightness_hal_get_hw (GpmBrightnessHal *brightness, guint *value_hw)
 
 	proxy = dbus_proxy_get_proxy (brightness->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected to HAL");
+		egg_warning ("not connected to HAL");
 		return FALSE;
 	}
 
@@ -106,15 +106,15 @@ gpm_brightness_hal_get_hw (GpmBrightnessHal *brightness, guint *value_hw)
 	}
 
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		egg_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (!ret) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("GetBrightness failed!");
+		egg_warning ("GetBrightness failed!");
 		return FALSE;
 	}
-	gpm_debug ("GetBrightness returned level: %i", level);
+	egg_debug ("GetBrightness returned level: %i", level);
 
 	return TRUE;
 }
@@ -140,18 +140,18 @@ gpm_brightness_hal_set_hw (GpmBrightnessHal *brightness, guint value_hw)
 
 	proxy = dbus_proxy_get_proxy (brightness->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected to HAL");
+		egg_warning ("not connected to HAL");
 		return FALSE;
 	}
 
 	if (value_hw < 0 ||
 	    value_hw > brightness->priv->levels - 1) {
-		gpm_warning ("set outside range (%i of %i)",
+		egg_warning ("set outside range (%i of %i)",
 			     value_hw, brightness->priv->levels - 1);
 		return FALSE;
 	}
 
-	gpm_debug ("Setting %i of %i", value_hw, brightness->priv->levels - 1);
+	egg_debug ("Setting %i of %i", value_hw, brightness->priv->levels - 1);
 
 	ret = dbus_g_proxy_call (proxy, "SetBrightness", &error,
 				 G_TYPE_INT, (gint)value_hw,
@@ -161,12 +161,12 @@ gpm_brightness_hal_set_hw (GpmBrightnessHal *brightness, guint value_hw)
 	/* retval is ignored, the HAL API is broken... */
 
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		egg_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (!ret) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("SetBrightness failed!");
+		egg_warning ("SetBrightness failed!");
 		return FALSE;
 	}
 
@@ -196,7 +196,7 @@ gpm_brightness_hal_dim_hw_step (GpmBrightnessHal *brightness, guint new_level_hw
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_HAL (brightness), FALSE);
 
 	last_set_hw = brightness->priv->last_set_hw;
-	gpm_debug ("new_level_hw=%i, last_set_hw=%i", new_level_hw, last_set_hw);
+	egg_debug ("new_level_hw=%i, last_set_hw=%i", new_level_hw, last_set_hw);
 
 	/* we do the step interval as we can have insane levels of brightness */
 	if (new_level_hw == last_set_hw) {
@@ -239,7 +239,7 @@ gpm_brightness_hal_dim_hw (GpmBrightnessHal *brightness, guint new_level_hw)
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_HAL (brightness), FALSE);
 
-	gpm_debug ("new_level_hw=%i", new_level_hw);
+	egg_debug ("new_level_hw=%i", new_level_hw);
 
 	/* macbook pro has a bazzillion brightness levels, be a bit clever */
 	step = gpm_brightness_get_step (brightness->priv->levels);
@@ -455,7 +455,7 @@ gpm_brightness_hal_init (GpmBrightnessHal *brightness)
 	hal_gmanager_find_capability (manager, "laptop_panel", &names, NULL);
 	g_object_unref (manager);
 	if (names == NULL || names[0] == NULL) {
-		gpm_warning ("No devices of capability laptop_panel");
+		egg_warning ("No devices of capability laptop_panel");
 		return;
 	}
 
@@ -469,9 +469,9 @@ gpm_brightness_hal_init (GpmBrightnessHal *brightness)
 	/* get levels that the adapter supports -- this does not change ever */
 	hal_gdevice_get_uint (device, "laptop_panel.num_levels",
 			      &brightness->priv->levels, NULL);
-	gpm_debug ("Laptop panel levels: %i", brightness->priv->levels);
+	egg_debug ("Laptop panel levels: %i", brightness->priv->levels);
 	if (brightness->priv->levels == 0 || brightness->priv->levels > 256) {
-		gpm_warning ("Laptop panel levels are invalid!");
+		egg_warning ("Laptop panel levels are invalid!");
 	}
 
 	/* Check if hardware handles brightness changes automatically */
@@ -481,13 +481,13 @@ gpm_brightness_hal_init (GpmBrightnessHal *brightness)
 
 	if (!res) {
 		brightness->priv->does_own_updates = FALSE;
-		gpm_debug ("laptop_panel.brightness_in_hardware not found. "
+		egg_debug ("laptop_panel.brightness_in_hardware not found. "
 			   "Assuming false");
 	} else {
 		if (brightness->priv->does_own_updates) {
-			gpm_debug ("laptop_panel.brightness_in_hardware: True");
+			egg_debug ("laptop_panel.brightness_in_hardware: True");
 		} else {
-			gpm_debug ("laptop_panel.brightness_in_hardware: False");
+			egg_debug ("laptop_panel.brightness_in_hardware: False");
 		}
 	}
 
@@ -504,7 +504,7 @@ gpm_brightness_hal_init (GpmBrightnessHal *brightness)
 	/* set to known value */
 	brightness->priv->level_std_hw = 0;
 
-	gpm_debug ("Starting: (%i of %i)", brightness->priv->last_set_hw,
+	egg_debug ("Starting: (%i of %i)", brightness->priv->last_set_hw,
 		   brightness->priv->levels - 1);
 }
 

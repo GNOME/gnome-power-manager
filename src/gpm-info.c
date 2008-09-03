@@ -30,12 +30,13 @@
 
 #include <libhal-gmanager.h>
 
+#include "egg-color.h"
 #include "gpm-ac-adapter.h"
 #include "gpm-button.h"
 #include "gpm-conf.h"
 #include "gpm-control.h"
 #include "gpm-common.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-dpms.h"
 #include "gpm-info.h"
 #include "gpm-profile.h"
@@ -52,9 +53,9 @@ static void     gpm_info_finalize   (GObject      *object);
 #define GPM_INFO_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_INFO, GpmInfoPrivate))
 
 #define GPM_INFO_DATA_POLL		5	/* seconds */
-#define GPM_COLOUR_CHARGING			GPM_COLOUR_BLUE
-#define GPM_COLOUR_DISCHARGING			GPM_COLOUR_DARK_RED
-#define GPM_COLOUR_CHARGED			GPM_COLOUR_GREEN
+#define EGG_COLOR_CHARGING			EGG_COLOR_BLUE
+#define EGG_COLOR_DISCHARGING			EGG_COLOR_DARK_RED
+#define EGG_COLOR_CHARGED			EGG_COLOR_GREEN
 
 #define GPM_DBUS_STRUCT_INT_INT (dbus_g_type_get_struct ("GValueArray", \
 	G_TYPE_INT, G_TYPE_INT, G_TYPE_INVALID))
@@ -125,7 +126,7 @@ gpm_info_explain_reason (GpmInfo      *info,
 	} else {
 		message = g_strdup (pre);
 	}
-	gpm_syslog (message);
+	egg_debug ("%s", message);
 	gpm_info_event_log (info, event, message);
 	g_free (message);
 }
@@ -197,67 +198,67 @@ gpm_statistics_add_events_typical (GPtrArray *array)
 {
 	/* add the general key items, TODO specify which ones make sense */
 	gpm_statistics_add_event_type (array, GPM_EVENT_ON_AC,
-				       GPM_COLOUR_BLUE,
+				       EGG_COLOR_BLUE,
 				       GPM_GRAPH_WIDGET_SHAPE_CIRCLE,
 				       _("On AC"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_ON_BATTERY,
-				       GPM_COLOUR_RED,
+				       EGG_COLOR_RED,
 				       GPM_GRAPH_WIDGET_SHAPE_CIRCLE,
 				       _("On battery"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_SESSION_POWERSAVE,
-				       GPM_COLOUR_WHITE,
+				       EGG_COLOR_WHITE,
 				       GPM_GRAPH_WIDGET_SHAPE_SQUARE,
 				       _("Session powersave"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_SESSION_IDLE,
-				       GPM_COLOUR_YELLOW,
+				       EGG_COLOR_YELLOW,
 				       GPM_GRAPH_WIDGET_SHAPE_SQUARE,
 				       _("Session idle"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_SESSION_ACTIVE,
-				       GPM_COLOUR_DARK_YELLOW,
+				       EGG_COLOR_DARK_YELLOW,
 				       GPM_GRAPH_WIDGET_SHAPE_SQUARE,
 				       _("Session active"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_SUSPEND,
-				       GPM_COLOUR_RED,
+				       EGG_COLOR_RED,
 				       GPM_GRAPH_WIDGET_SHAPE_DIAMOND,
 				/* Translators: translate ONLY the string part after the |*/
 				       Q_("label shown on graph|Suspend"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_RESUME,
-				       GPM_COLOUR_DARK_RED,
+				       EGG_COLOR_DARK_RED,
 				       GPM_GRAPH_WIDGET_SHAPE_DIAMOND,
 				/* Translators: translate ONLY the string part after the |*/
 				       Q_("label shown on graph|Resume"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_HIBERNATE,
-				       GPM_COLOUR_MAGENTA,
+				       EGG_COLOR_MAGENTA,
 				       GPM_GRAPH_WIDGET_SHAPE_DIAMOND,
 				/* Translators: translate ONLY the string part after the |*/
 				       Q_("label shown on graph|Hibernate"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_LID_CLOSED,
-				       GPM_COLOUR_GREEN,
+				       EGG_COLOR_GREEN,
 				       GPM_GRAPH_WIDGET_SHAPE_TRIANGLE,
 				       _("Lid closed"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_LID_OPENED,
-				       GPM_COLOUR_DARK_GREEN,
+				       EGG_COLOR_DARK_GREEN,
 				       GPM_GRAPH_WIDGET_SHAPE_TRIANGLE,
 				       _("Lid opened"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_NOTIFICATION,
-				       GPM_COLOUR_GREY,
+				       EGG_COLOR_GREY,
 				       GPM_GRAPH_WIDGET_SHAPE_CIRCLE,
 				       _("Notification"));
 #ifdef HAVE_DPMS_EXTENSION
 	gpm_statistics_add_event_type (array, GPM_EVENT_DPMS_ON,
-				       GPM_COLOUR_CYAN,
+				       EGG_COLOR_CYAN,
 				       GPM_GRAPH_WIDGET_SHAPE_CIRCLE,
 				       _("DPMS On"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_DPMS_STANDBY,
-				       GPM_COLOUR_CYAN,
+				       EGG_COLOR_CYAN,
 				       GPM_GRAPH_WIDGET_SHAPE_TRIANGLE,
 				       _("DPMS Standby"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_DPMS_SUSPEND,
-				       GPM_COLOUR_CYAN,
+				       EGG_COLOR_CYAN,
 				       GPM_GRAPH_WIDGET_SHAPE_SQUARE,
 				       _("DPMS Suspend"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_DPMS_OFF,
-				       GPM_COLOUR_CYAN,
+				       EGG_COLOR_CYAN,
 				       GPM_GRAPH_WIDGET_SHAPE_DIAMOND,
 				       _("DPMS Off"));
 #endif
@@ -295,7 +296,7 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_y = g_strdup ("power");
 		*axis_desc_x = g_strdup (_("Time since startup"));
 		*axis_desc_y = g_strdup (_("Power"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_GREEN, _("Power"));
+		gpm_statistics_add_data_type (*key_data, EGG_COLOR_GREEN, _("Power"));
 		gpm_statistics_add_events_typical (*key_event);
 		return TRUE;
 	}
@@ -304,7 +305,7 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_y = g_strdup ("time");
 		*axis_desc_x = g_strdup (_("Time since startup"));
 		*axis_desc_y = g_strdup (_("Estimated time"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_GREEN, _("Time"));
+		gpm_statistics_add_data_type (*key_data, EGG_COLOR_GREEN, _("Time"));
 		gpm_statistics_add_events_typical (*key_event);
 		return TRUE;
 	}
@@ -313,7 +314,7 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_y = g_strdup ("percentage");
 		*axis_desc_x = g_strdup (_("Time since startup"));
 		*axis_desc_y = g_strdup (_("Battery percentage"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_GREEN, _("Percentage"));
+		gpm_statistics_add_data_type (*key_data, EGG_COLOR_GREEN, _("Percentage"));
 		gpm_statistics_add_events_typical (*key_event);
 		return TRUE;
 	}
@@ -322,7 +323,7 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_y = g_strdup ("voltage");
 		*axis_desc_x = g_strdup (_("Time since startup"));
 		*axis_desc_y = g_strdup (_("Battery Voltage"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_GREEN, _("Voltage"));
+		gpm_statistics_add_data_type (*key_data, EGG_COLOR_GREEN, _("Voltage"));
 		gpm_statistics_add_events_typical (*key_event);
 		return TRUE;
 	}
@@ -331,8 +332,8 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_y = g_strdup ("percentage");
 		*axis_desc_x = g_strdup (_("Battery percentage"));
 		*axis_desc_y = g_strdup (_("Accuracy of reading"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_RED, _("Trusted"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_DARK_RED, _("Untrusted"));
+		gpm_statistics_add_data_type (*key_data, EGG_COLOR_RED, _("Trusted"));
+		gpm_statistics_add_data_type (*key_data, EGG_COLOR_DARK_RED, _("Untrusted"));
 		return TRUE;
 	}
 	if (strcmp (type, "profile-discharge-accuracy") == 0) {
@@ -340,8 +341,8 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_y = g_strdup ("percentage");
 		*axis_desc_x = g_strdup (_("Battery percentage"));
 		*axis_desc_y = g_strdup (_("Accuracy of reading"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_BLUE, _("Trusted"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_DARK_BLUE, _("Untrusted"));
+		gpm_statistics_add_data_type (*key_data, EGG_COLOR_BLUE, _("Trusted"));
+		gpm_statistics_add_data_type (*key_data, EGG_COLOR_DARK_BLUE, _("Untrusted"));
 		return TRUE;
 	}
 	if (strcmp (type, "profile-charge-time") == 0) {
@@ -349,15 +350,15 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_y = g_strdup ("time");
 		*axis_desc_x = g_strdup (_("Battery percentage"));
 		*axis_desc_y = g_strdup (_("Average time elapsed"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_RED, _("Valid data"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_DARK_GREY, _("Extrapolated data"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_BLUE, _("No data"));
+		gpm_statistics_add_data_type (*key_data, EGG_COLOR_RED, _("Valid data"));
+		gpm_statistics_add_data_type (*key_data, EGG_COLOR_DARK_GREY, _("Extrapolated data"));
+		gpm_statistics_add_data_type (*key_data, EGG_COLOR_BLUE, _("No data"));
 		gpm_statistics_add_event_type (*key_event, GPM_EVENT_HIBERNATE,
-					       GPM_COLOUR_CYAN,
+					       EGG_COLOR_CYAN,
 					       GPM_GRAPH_WIDGET_SHAPE_SQUARE,
 				 	      _("Start point"));
 		gpm_statistics_add_event_type (*key_event, GPM_EVENT_SUSPEND,
-					       GPM_COLOUR_YELLOW,
+					       EGG_COLOR_YELLOW,
 					       GPM_GRAPH_WIDGET_SHAPE_TRIANGLE,
 				 	      _("Stop point"));
 		return TRUE;
@@ -367,15 +368,15 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_y = g_strdup ("time");
 		*axis_desc_x = g_strdup (_("Battery percentage"));
 		*axis_desc_y = g_strdup (_("Average time elapsed"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_RED, _("Valid data"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_DARK_GREY, _("Extrapolated data"));
-		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_BLUE, _("No data"));
+		gpm_statistics_add_data_type (*key_data, EGG_COLOR_RED, _("Valid data"));
+		gpm_statistics_add_data_type (*key_data, EGG_COLOR_DARK_GREY, _("Extrapolated data"));
+		gpm_statistics_add_data_type (*key_data, EGG_COLOR_BLUE, _("No data"));
 		gpm_statistics_add_event_type (*key_event, GPM_EVENT_HIBERNATE,
-					       GPM_COLOUR_CYAN,
+					       EGG_COLOR_CYAN,
 					       GPM_GRAPH_WIDGET_SHAPE_SQUARE,
 				 	      _("Start point"));
 		gpm_statistics_add_event_type (*key_event, GPM_EVENT_SUSPEND,
-					       GPM_COLOUR_YELLOW,
+					       EGG_COLOR_YELLOW,
 					       GPM_GRAPH_WIDGET_SHAPE_TRIANGLE,
 				 	      _("Stop point"));
 		return TRUE;
@@ -507,7 +508,7 @@ gpm_statistics_get_data (GpmInfo     *info,
 	g_return_val_if_fail (type != NULL, FALSE);
 
 	if (info->priv->is_laptop == FALSE) {
-		gpm_warning ("Data not available as not a laptop");
+		egg_warning ("Data not available as not a laptop");
 		*error = g_error_new (gpm_info_error_quark (),
 				      GPM_INFO_ERROR_DATA_NOT_AVAILABLE,
 				      "Data not available as not a laptop");
@@ -531,7 +532,7 @@ gpm_statistics_get_data (GpmInfo     *info,
 	} else if (strcmp (type, "profile-discharge-time") == 0) {
 		events = gpm_profile_get_data_time_percent (info->priv->profile, TRUE);
 	} else {
-		gpm_warning ("Data type %s not known!", type);
+		egg_warning ("Data type %s not known!", type);
 		*error = g_error_new (gpm_info_error_quark (),
 				      GPM_INFO_ERROR_INVALID_TYPE,
 				      "Data type %s not known!", type);
@@ -539,7 +540,7 @@ gpm_statistics_get_data (GpmInfo     *info,
 	}
 
 	if (events == NULL) {
-		gpm_warning ("Data not available");
+		egg_warning ("Data not available");
 		*error = g_error_new (gpm_info_error_quark (),
 				      GPM_INFO_ERROR_DATA_NOT_AVAILABLE,
 				      "Data not available");
@@ -575,7 +576,7 @@ gpm_info_event_log (GpmInfo	       *info,
 {
 	g_return_if_fail (info != NULL);
 	g_return_if_fail (GPM_IS_INFO (info));
-	gpm_debug ("Adding %i to the event log", event);
+	egg_debug ("Adding %i to the event log", event);
 
 	gpm_array_append (info->priv->events,
 			  g_timer_elapsed (info->priv->timer, NULL), event, 0);
@@ -622,11 +623,11 @@ gpm_info_log_do_poll (gpointer data)
 
 		/* set the correct colours */
 		if (unit->is_discharging) {
-			colour = GPM_COLOUR_DISCHARGING;
+			colour = EGG_COLOR_DISCHARGING;
 		} else if (unit->is_charging) {
-			colour = GPM_COLOUR_CHARGING;
+			colour = EGG_COLOR_CHARGING;
 		} else {
-			colour = GPM_COLOUR_CHARGED;
+			colour = EGG_COLOR_CHARGED;
 		}
 
 		if (unit->percentage > 0) {
@@ -675,19 +676,19 @@ button_pressed_cb (GpmButton   *button,
 		   const gchar *type,
 		   GpmInfo     *info)
 {
-	gpm_debug ("Button press event type=%s", type);
+	egg_debug ("Button press event type=%s", type);
 
 	if (strcmp (type, GPM_BUTTON_LID_CLOSED) == 0) {
 		gpm_info_event_log (info,
 				    GPM_EVENT_LID_CLOSED,
 				    _("The laptop lid has been closed"));
-		gpm_debug ("lid button CLOSED");
+		egg_debug ("lid button CLOSED");
 
 	} else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0) {
 		gpm_info_event_log (info,
 				    GPM_EVENT_LID_OPENED,
 				    _("The laptop lid has been re-opened"));
-		gpm_debug ("lid button OPENED");
+		egg_debug ("lid button OPENED");
 	}
 }
 
@@ -728,7 +729,7 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
 		      GpmDpmsMode mode,
 		      GpmInfo *info)
 {
-	gpm_debug ("DPMS mode changed: %d", mode);
+	egg_debug ("DPMS mode changed: %d", mode);
 
 	if (mode == GPM_DPMS_MODE_ON) {
 		gpm_info_event_log (info, GPM_EVENT_DPMS_ON, _("dpms on"));

@@ -26,7 +26,7 @@
 #include <glib/gi18n.h>
 
 #include "gpm-refcount.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 
 static void     gpm_refcount_class_init (GpmRefcountClass *klass);
 static void     gpm_refcount_init       (GpmRefcount      *refcount);
@@ -64,17 +64,17 @@ gpm_refcount_auto_decrement (gpointer data)
 	GpmRefcount *refcount = (GpmRefcount*) data;
 
 	if (refcount->priv->refcount == 0) {
-		gpm_warning ("no refcount to remove");
+		egg_warning ("no refcount to remove");
 		return FALSE;
 	}
 
 	refcount->priv->refcount--;
 
 	if (refcount->priv->refcount == 0) {
-		gpm_debug ("zero, so sending REFCOUNT_ZERO");
+		egg_debug ("zero, so sending REFCOUNT_ZERO");
 		g_signal_emit (refcount, signals [REFCOUNT_ZERO], 0);
 	} else {
-		gpm_debug ("refcount now: %i", refcount->priv->refcount);
+		egg_debug ("refcount now: %i", refcount->priv->refcount);
 	}
 
 	return FALSE;
@@ -92,13 +92,13 @@ gpm_refcount_add (GpmRefcount *refcount)
 	g_return_val_if_fail (GPM_IS_REFCOUNT (refcount), FALSE);
 
 	if (refcount->priv->timeout == 0) {
-		gpm_warning ("no timeout has been set");
+		egg_warning ("no timeout has been set");
 		return FALSE;
 	}
 
 	refcount->priv->refcount++;
-	gpm_debug ("refcount now: %i", refcount->priv->refcount);
-	gpm_debug ("non zero, so sending REFCOUNT_ADDED");
+	egg_debug ("refcount now: %i", refcount->priv->refcount);
+	egg_debug ("non zero, so sending REFCOUNT_ADDED");
 	g_signal_emit (refcount, signals [REFCOUNT_ADDED], 0);
 
 	/* remove the last timeout */
@@ -124,7 +124,7 @@ gpm_refcount_remove (GpmRefcount *refcount)
 	g_return_val_if_fail (GPM_IS_REFCOUNT (refcount), FALSE);
 
 	if (refcount->priv->refcount == 0) {
-		gpm_warning ("no refcount to remove");
+		egg_warning ("no refcount to remove");
 		return FALSE;
 	}
 
@@ -144,11 +144,11 @@ gpm_refcount_set_timeout (GpmRefcount *refcount, guint timeout)
 	g_return_val_if_fail (GPM_IS_REFCOUNT (refcount), FALSE);
 
 	if (timeout > 100000) {
-		gpm_warning ("refcount is not designed for long timeouts");
+		egg_warning ("refcount is not designed for long timeouts");
 		return FALSE;
 	}
 	if (timeout == 0) {
-		gpm_warning ("refcount cannot be zero");
+		egg_warning ("refcount cannot be zero");
 		timeout = 1000;
 	}
 

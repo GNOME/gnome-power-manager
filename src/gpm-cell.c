@@ -31,7 +31,7 @@
 #include "gpm-marshal.h"
 #include "gpm-cell.h"
 #include "gpm-cell-unit.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-phone.h"
 
 static void     gpm_cell_class_init (GpmCellClass *klass);
@@ -99,7 +99,7 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 	/* batteries might be missing */
 	hal_gdevice_get_bool (device, "battery.present", &unit->is_present, NULL);
 	if (unit->is_present == FALSE) {
-		gpm_debug ("Battery not present, so not filling up values");
+		egg_debug ("Battery not present, so not filling up values");
 		return FALSE;
 	}
 
@@ -137,11 +137,11 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 		exists = hal_gdevice_get_uint (device, "battery.charge_level.rate",
 						  &unit->rate, NULL);
 		if (exists == FALSE && (unit->is_discharging || unit->is_charging == TRUE)) {
-			gpm_warning ("could not read your battery's charge rate");
+			egg_warning ("could not read your battery's charge rate");
 		}
 		/* sanity check to less than 100W */
 		if (unit->rate > 100*1000) {
-			gpm_warning ("sanity checking rate from %i to 0", unit->rate);
+			egg_warning ("sanity checking rate from %i to 0", unit->rate);
 			unit->rate = 0;
 		}
 		/* The ACPI spec only allows this for primary cells, but in the real
@@ -160,7 +160,7 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 	exists = hal_gdevice_get_uint (device, "battery.charge_level.percentage", &percentage, NULL);
 	unit->percentage = (gfloat) percentage;
 	if (exists == FALSE) {
-		gpm_warning ("could not read your battery's percentage charge.");
+		egg_warning ("could not read your battery's percentage charge.");
 	}
 
 	/* sanity check that remaining time exists (if it should) */
@@ -169,7 +169,7 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 		exists = hal_gdevice_get_uint (device,"battery.remaining_time",
 						  &unit->time_charge, NULL);
 		if (exists == FALSE && (unit->is_discharging || unit->is_charging == TRUE)) {
-			gpm_warning ("could not read your battery's remaining time");
+			egg_warning ("could not read your battery's remaining time");
 		}
 	}
 
@@ -181,18 +181,18 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 				capacity = 100.0f / (float) unit->charge_design;
 				unit->capacity = capacity * (float) unit->charge_last_full;
 				if (unit->capacity > 100) {
-					gpm_debug ("rounding down capactity from "
+					egg_debug ("rounding down capactity from "
 						   "%i to 100", unit->capacity);
 					unit->capacity = 100;
 				}
 				if (unit->capacity < 0) {
-					gpm_debug ("rounding up capactity from "
+					egg_debug ("rounding up capactity from "
 						   "%i to 0", unit->capacity);
 					unit->capacity = 0;
 				}
 				if (unit->capacity < 50 && !unit->reports_percentage) {
-					gpm_warning ("battery has a low capacity");
-					gpm_debug ("** EMIT: low-capacity");
+					egg_warning ("battery has a low capacity");
+					egg_debug ("** EMIT: low-capacity");
 					g_signal_emit (cell, signals [LOW_CAPACITY], 0, unit->capacity);
 				}
 			}
@@ -214,8 +214,8 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 		gchar *website;
 		hal_gdevice_get_string (device, "info.recall.vendor", &oem_vendor, NULL);
 		hal_gdevice_get_string (device, "info.recall.website_url", &website, NULL);
-		gpm_warning ("battery is recalled");
-		gpm_debug ("** EMIT: perhaps-recall");
+		egg_warning ("battery is recalled");
+		egg_debug ("** EMIT: perhaps-recall");
 		g_signal_emit (cell, signals [PERHAPS_RECALL], 0, oem_vendor, website);
 		g_free (oem_vendor);
 		g_free (website);
@@ -269,12 +269,12 @@ hal_device_property_modified_cb (HalGDevice   *device,
 
 	unit = gpm_cell_get_unit (cell);
 
-	gpm_debug ("udi=%s, key=%s, added=%i, removed=%i, finally=%i",
+	egg_debug ("udi=%s, key=%s, added=%i, removed=%i, finally=%i",
 		   udi, key, is_added, is_removed, finally);
 
 	/* only match battery* values */
 	if (strncmp (key, "battery", 7) != 0) {
-		gpm_debug ("not battery key");
+		egg_debug ("not battery key");
 		return;
 	}
 
@@ -285,7 +285,7 @@ hal_device_property_modified_cb (HalGDevice   *device,
 
 	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
 		hal_gdevice_get_bool (device, key, &unit->is_charging, NULL);
-		gpm_debug ("** EMIT: charging-changed: %i", unit->is_charging);
+		egg_debug ("** EMIT: charging-changed: %i", unit->is_charging);
 		g_signal_emit (cell, signals [CHARGING_CHANGED], 0, unit->is_charging);
 		/* reset the time, as we really can't guess this without profiling */
 		if (unit->is_charging) {
@@ -294,7 +294,7 @@ hal_device_property_modified_cb (HalGDevice   *device,
 
 	} else if (strcmp (key, "battery.rechargeable.is_discharging") == 0) {
 		hal_gdevice_get_bool (device, key, &unit->is_discharging, NULL);
-		gpm_debug ("** EMIT: discharging-changed: %i", unit->is_discharging);
+		egg_debug ("** EMIT: discharging-changed: %i", unit->is_discharging);
 		g_signal_emit (cell, signals [DISCHARGING_CHANGED], 0, unit->is_discharging);
 		/* reset the time, as we really can't guess this without profiling */
 		if (unit->is_discharging) {
@@ -314,7 +314,7 @@ hal_device_property_modified_cb (HalGDevice   *device,
 		hal_gdevice_get_uint (device, key, &unit->rate, NULL);
 		/* sanity check to less than 100W */
 		if (unit->rate > 100*1000) {
-			gpm_warning ("sanity checking rate from %i to 0", unit->rate);
+			egg_warning ("sanity checking rate from %i to 0", unit->rate);
 			unit->rate = 0;
 		}
 
@@ -322,7 +322,7 @@ hal_device_property_modified_cb (HalGDevice   *device,
 		guint percent;
 		hal_gdevice_get_uint (device, key, &percent, NULL);
 		unit->percentage = (gfloat) percent;
-		gpm_debug ("** EMIT: percent-changed: %i", unit->percentage);
+		egg_debug ("** EMIT: percent-changed: %f", unit->percentage);
 		g_signal_emit (cell, signals [PERCENT_CHANGED], 0, unit->percentage);
 
 	} else if (strcmp (key, "battery.remaining_time") == 0) {
@@ -387,7 +387,7 @@ gpm_cell_set_device_id (GpmCell *cell, const gchar *udi)
 
 	ret = hal_gdevice_set_udi (device, udi);
 	if (!ret) {
-		gpm_warning ("cannot set udi");
+		egg_warning ("cannot set udi");
 		return FALSE;
 	}
 
@@ -398,13 +398,13 @@ gpm_cell_set_device_id (GpmCell *cell, const gchar *udi)
 
 	hal_gdevice_get_string (device, "battery.type", &battery_kind_str, NULL);
 	if (battery_kind_str == NULL) {
-		gpm_warning ("cannot obtain battery type");
+		egg_warning ("cannot obtain battery type");
 		return FALSE;
 	}
 
 	ret = gpm_cell_unit_set_kind (unit, battery_kind_str);
 	if (!ret) {
-		gpm_warning ("battery type %s unknown", battery_kind_str);
+		egg_warning ("battery type %s unknown", battery_kind_str);
 		g_free (battery_kind_str);
 		return FALSE;
 	}
@@ -571,7 +571,7 @@ gpm_cell_get_description (GpmCell *cell)
 			/* Translators: Unknown is related to the Technology of the battery */
 			technology = _("Unknown");
 		} else {
-			gpm_warning ("Battery type %s not translated, please report!",
+			egg_warning ("Battery type %s not translated, please report!",
 				     cell->priv->technology);
 			technology = cell->priv->technology;
 		}
@@ -674,13 +674,13 @@ phone_device_refresh_cb (GpmPhone     *phone,
 	if (unit->is_charging != is_charging) {
 		unit->is_charging = is_charging;
 		unit->is_discharging = !is_charging;
-		gpm_debug ("** EMIT: charging-changed: %i", is_charging);
+		egg_debug ("** EMIT: charging-changed: %i", is_charging);
 		g_signal_emit (cell, signals [CHARGING_CHANGED], 0, is_charging);
 	}
 
 	if (percentage != unit->percentage) {
 		unit->percentage = (gfloat) percentage;
-		gpm_debug ("** EMIT: percent-changed: %.1f", unit->percentage);
+		egg_debug ("** EMIT: percent-changed: %.1f", unit->percentage);
 		g_signal_emit (cell, signals [PERCENT_CHANGED], 0, unit->percentage);
 	}
 }

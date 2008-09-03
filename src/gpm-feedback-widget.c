@@ -30,7 +30,7 @@
 #include "gpm-feedback-widget.h"
 #include "gpm-stock-icons.h"
 #include "gpm-refcount.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 
 static void     gpm_feedback_class_init (GpmFeedbackClass *klass);
 static void     gpm_feedback_init       (GpmFeedback      *feedback);
@@ -70,7 +70,6 @@ gpm_feedback_class_init (GpmFeedbackClass *klass)
 static void
 gpm_feedback_show (GtkWidget *widget)
 {
-	
 	int orig_w, orig_h;
 	int screen_w, screen_h;
 	int x, y;
@@ -90,12 +89,10 @@ gpm_feedback_show (GtkWidget *widget)
 	gtk_window_get_default_size (GTK_WINDOW (widget), &orig_w, &orig_h);
 	gtk_widget_size_request (widget, &win_req);
 
-	if (win_req.width > orig_w) {
+	if (win_req.width > orig_w)
 		orig_w = win_req.width;
-	}
-	if (win_req.height > orig_h) {
+	if (win_req.height > orig_h)
 		orig_h = win_req.height;
-	}
 
 	pointer_screen = NULL;
 	gdk_display_get_pointer (gdk_screen_get_display (current_screen),
@@ -105,8 +102,7 @@ gpm_feedback_show (GtkWidget *widget)
 		 * assume the default monitor */
 		monitor = 0;
 	} else {
-		monitor = gdk_screen_get_monitor_at_point (current_screen,
-							   pointer_x, pointer_y);
+		monitor = gdk_screen_get_monitor_at_point (current_screen, pointer_x, pointer_y);
 	}
 
 	gdk_screen_get_monitor_geometry (current_screen, monitor, &geometry);
@@ -131,7 +127,7 @@ static void
 gpm_feedback_close_window (GpmRefcount *refcount,
 			   GpmFeedback *feedback)
 {
-	gpm_debug ("Closing feedback widget");
+	egg_debug ("Closing feedback widget");
 	gtk_widget_hide (feedback->priv->main_window);
 }
 
@@ -141,7 +137,7 @@ gpm_feedback_display_value (GpmFeedback *feedback, gfloat value)
 	g_return_val_if_fail (feedback != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_FEEDBACK (feedback), FALSE);
 
-	gpm_debug ("Displaying %f on feedback widget", value);
+	egg_debug ("Displaying %f on feedback widget", value);
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (feedback->priv->progress), value);
 	gpm_feedback_show (feedback->priv->main_window);
 
@@ -165,7 +161,7 @@ gpm_feedback_set_icon_name (GpmFeedback *feedback, const gchar *icon_name)
 		g_free (feedback->priv->icon_name);
 	}
 
-	gpm_debug ("Using icon name '%s'", icon_name);
+	egg_debug ("Using icon name '%s'", icon_name);
 	feedback->priv->icon_name = g_strdup (icon_name);
 
 	image = glade_xml_get_widget (feedback->priv->xml, "image");
@@ -194,9 +190,8 @@ gpm_feedback_init (GpmFeedback *feedback)
 
 	/* initialise the window */
 	feedback->priv->xml = glade_xml_new (GPM_DATA "/gpm-feedback-widget.glade", NULL, NULL);
-	if (feedback->priv->xml == NULL) {
-		gpm_error ("Can't find gpm-feedback-widget.glade");
-	}
+	if (feedback->priv->xml == NULL)
+		egg_error ("Can't find gpm-feedback-widget.glade");
 	feedback->priv->main_window = glade_xml_get_widget (feedback->priv->xml, "main_window");
 
 	feedback->priv->progress = glade_xml_get_widget (feedback->priv->xml, "progressbar");
@@ -221,14 +216,9 @@ gpm_feedback_finalize (GObject *object)
 	feedback = GPM_FEEDBACK (object);
 	feedback->priv = GPM_FEEDBACK_GET_PRIVATE (feedback);
 
-	if (feedback->priv->icon_name != NULL) {
-		g_free (feedback->priv->icon_name);
-	}
-	if (feedback->priv->refcount != NULL) {
+	g_free (feedback->priv->icon_name);
+	if (feedback->priv->refcount != NULL)
 		g_object_unref (feedback->priv->refcount);
-	}
-
-	/* FIXME: we should unref some stuff */
 
 	G_OBJECT_CLASS (gpm_feedback_parent_class)->finalize (object);
 }
@@ -244,3 +234,4 @@ gpm_feedback_new (void)
 	feedback = g_object_new (GPM_TYPE_FEEDBACK, NULL);
 	return GPM_FEEDBACK (feedback);
 }
+

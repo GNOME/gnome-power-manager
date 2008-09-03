@@ -1,3 +1,25 @@
+2008-09-03  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-common.c:
+	* src/gpm-common.h:
+	* src/egg-color.c:
+	* src/egg-color.h:
+	Move the color code to a shared file.
+
+	* src/gdb-efence.gdb:
+	* src/gdb-underfence.gdb:
+	Remove files I no longer use.
+
+	* src/egg-debug.c:
+	* src/egg-debug.h:
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/*.c:
+	Switch from using a homegrown gpm_debug to a shared egg_debug that
+	I use in all my other projects. Fix up all the build failures, as the
+	new egg_debug is much more strict on valid formatters.
+	No string changes.
+
 2008-09-02  Richard Hughes  <richard@hughsie.com>
 
 	* libhal-glib/libhal-gpower.c: (hal_gpower_init),

@@ -52,7 +52,7 @@
 #include "gpm-conf.h"
 #include "gpm-screensaver.h"
 #include "gpm-common.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-control.h"
 #include "gpm-networkmanager.h"
 
@@ -107,7 +107,7 @@ gpm_control_is_user_privileged (GpmControl *control, const gchar *privilege)
 	pid = getpid ();
 	mask = polkit_check_auth (pid, privilege, NULL);
 	if (mask == 0) {
-		gpm_warning ("failed to authorise for privilege %s", privilege);
+		egg_warning ("failed to authorise for privilege %s", privilege);
 		ret = FALSE;
 	}
 #endif
@@ -138,10 +138,10 @@ gpm_control_check_foreground_console (GpmControl *control)
 				 NULL, NULL, &retcode, NULL)  || ! WIFEXITED (retcode)) {
 		/* if check-foreground-console could not be executed,
 		 * assume active console */
-		gpm_debug ("could not execute check-foreground-console");
+		egg_debug ("could not execute check-foreground-console");
 		return TRUE;
 	}
-	gpm_debug ("check-foreground-console returned with %i", WEXITSTATUS (retcode));
+	egg_debug ("check-foreground-console returned with %i", WEXITSTATUS (retcode));
 	return WEXITSTATUS (retcode) == 0;
 #endif
 	/* no other checks failed, so return okay */
@@ -303,7 +303,7 @@ gpm_control_shutdown (GpmControl *control,
 
 	gpm_control_allowed_shutdown (control, &allowed, error);
 	if (allowed == FALSE) {
-		gpm_warning ("Cannot shutdown");
+		egg_warning ("Cannot shutdown");
 		g_set_error (error,
 			     GPM_CONTROL_ERROR,
 			     GPM_CONTROL_ERROR_GENERAL,
@@ -343,7 +343,7 @@ gpm_control_reboot (GpmControl *control,
 
 	gpm_control_allowed_reboot (control, &allowed, error);
 	if (allowed == FALSE) {
-		gpm_warning ("Cannot reboot");
+		egg_warning ("Cannot reboot");
 		g_set_error (error,
 			     GPM_CONTROL_ERROR,
 			     GPM_CONTROL_ERROR_GENERAL,
@@ -386,10 +386,10 @@ gpm_control_get_lock_policy (GpmControl  *control,
 	gpm_conf_get_bool (control->priv->conf, GPM_CONF_LOCK_USE_SCREENSAVER, &use_ss_setting);
 	if (use_ss_setting) {
 		gpm_conf_get_bool (control->priv->conf, GS_PREF_LOCK_ENABLED, &do_lock);
-		gpm_debug ("Using ScreenSaver settings (%i)", do_lock);
+		egg_debug ("Using ScreenSaver settings (%i)", do_lock);
 	} else {
 		gpm_conf_get_bool (control->priv->conf, policy, &do_lock);
-		gpm_debug ("Using custom locking settings (%i)", do_lock);
+		egg_debug ("Using custom locking settings (%i)", do_lock);
 	}
 	return do_lock;
 }
@@ -410,7 +410,7 @@ gpm_control_suspend (GpmControl *control,
 
 	gpm_control_allowed_suspend (control, &allowed, error);
 	if (allowed == FALSE) {
-		gpm_syslog ("cannot suspend as not allowed from policy");
+		egg_debug ("cannot suspend as not allowed from policy");
 		g_set_error (error,
 			     GPM_CONTROL_ERROR,
 			     GPM_CONTROL_ERROR_GENERAL,
@@ -424,7 +424,7 @@ gpm_control_suspend (GpmControl *control,
 	if (lock_gnome_keyring) {
 		keyres = gnome_keyring_lock_all_sync ();
 		if (keyres != GNOME_KEYRING_RESULT_OK) {
-			gpm_warning ("could not lock keyring");
+			egg_warning ("could not lock keyring");
 		}
 	}
 
@@ -439,7 +439,7 @@ gpm_control_suspend (GpmControl *control,
 	}
 
 	/* Do the suspend */
-	gpm_debug ("emitting sleep");
+	egg_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_SUSPEND);
 
 	ret = hal_gpower_suspend (control->priv->hal_power, 0, error);
@@ -447,11 +447,11 @@ gpm_control_suspend (GpmControl *control,
 		gpm_control_convert_hal_error (control, error);
 	}
 
-	gpm_debug ("emitting resume");
+	egg_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_SUSPEND);
 
 	if (!ret) {
-		gpm_debug ("emitting sleep-failure");
+		egg_debug ("emitting sleep-failure");
 		g_signal_emit (control, signals [SLEEP_FAILURE], 0, GPM_CONTROL_ACTION_SUSPEND);
 	}
 
@@ -486,7 +486,7 @@ gpm_control_hibernate (GpmControl *control,
 	gpm_control_allowed_hibernate (control, &allowed, error);
 
 	if (allowed == FALSE) {
-		gpm_syslog ("cannot hibernate as not allowed from policy");
+		egg_debug ("cannot hibernate as not allowed from policy");
 		g_set_error (error,
 			     GPM_CONTROL_ERROR,
 			     GPM_CONTROL_ERROR_GENERAL,
@@ -500,7 +500,7 @@ gpm_control_hibernate (GpmControl *control,
 	if (lock_gnome_keyring) {
 		keyres = gnome_keyring_lock_all_sync ();
 		if (keyres != GNOME_KEYRING_RESULT_OK) {
-			gpm_warning ("could not lock keyring");
+			egg_warning ("could not lock keyring");
 		}
 	}
 
@@ -514,7 +514,7 @@ gpm_control_hibernate (GpmControl *control,
 		gpm_networkmanager_sleep ();
 	}
 
-	gpm_debug ("emitting sleep");
+	egg_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_HIBERNATE);
 
 	ret = hal_gpower_hibernate (control->priv->hal_power, error);
@@ -522,11 +522,11 @@ gpm_control_hibernate (GpmControl *control,
 		gpm_control_convert_hal_error (control, error);
 	}
 
-	gpm_debug ("emitting resume");
+	egg_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_HIBERNATE);
 
 	if (!ret) {
-		gpm_debug ("emitting sleep-failure");
+		egg_debug ("emitting sleep-failure");
 		g_signal_emit (control, signals [SLEEP_FAILURE], 0, GPM_CONTROL_ACTION_HIBERNATE);
 	}
 

@@ -27,7 +27,7 @@
 #include <dbus/dbus-glib.h>
 
 #include "gpm-networkmanager.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 
 #define NM_LISTENER_SERVICE	"org.freedesktop.NetworkManager"
 #define NM_LISTENER_PATH	"/org/freedesktop/NetworkManager"
@@ -49,7 +49,7 @@ gpm_networkmanager_sleep (void)
 
 	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (error) {
-		gpm_warning ("%s", error->message);
+		egg_warning ("%s", error->message);
 		g_error_free (error);
 		return FALSE;
 	}
@@ -59,7 +59,7 @@ gpm_networkmanager_sleep (void)
 			NM_LISTENER_PATH,
 			NM_LISTENER_INTERFACE);
 	if (!nm_proxy) {
-		gpm_warning ("Failed to get name owner");
+		egg_warning ("Failed to get name owner");
 		return FALSE;
 	}
 	dbus_g_proxy_call_no_reply (nm_proxy, "sleep", G_TYPE_INVALID);
@@ -83,7 +83,7 @@ gpm_networkmanager_wake (void)
 
 	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (error) {
-		gpm_warning ("%s", error->message);
+		egg_warning ("%s", error->message);
 		g_error_free (error);
 		return FALSE;
 	}
@@ -93,7 +93,7 @@ gpm_networkmanager_wake (void)
 			NM_LISTENER_PATH,
 			NM_LISTENER_INTERFACE);
 	if (!nm_proxy) {
-		gpm_warning ("Failed to get name owner");
+		egg_warning ("Failed to get name owner");
 		return FALSE;
 	}
 	dbus_g_proxy_call_no_reply (nm_proxy, "wake", G_TYPE_INVALID);

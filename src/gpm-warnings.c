@@ -40,7 +40,7 @@
 
 #include "gpm-common.h"
 #include "gpm-conf.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-cell-unit.h"
 #include "gpm-warnings.h"
 
@@ -82,7 +82,7 @@ gpm_warnings_get_state_time (GpmWarnings  *warnings,
 {
 	if (unit->time_discharge == 0) {
 		/* this is probably an error condition */
-		gpm_warning ("time zero, something's gone wrong");
+		egg_warning ("time zero, something's gone wrong");
 		return GPM_WARNINGS_NONE;
 	}
 	if (unit->time_discharge <= warnings->priv->action_time) {
@@ -101,7 +101,7 @@ gpm_warnings_get_state_percentage (GpmWarnings  *warnings,
 {
 	if (unit->percentage == 0) {
 		/* this is probably an error condition */
-		gpm_warning ("percentage zero, something's gone wrong");
+		egg_warning ("percentage zero, something's gone wrong");
 		return GPM_WARNINGS_NONE;
 	}
 	if (unit->percentage <= warnings->priv->action_percentage) {
@@ -246,9 +246,9 @@ gpm_warnings_init (GpmWarnings *warnings)
 	   time_remaining is therefore inaccurate or just plain wrong. */
 	gpm_conf_get_bool (warnings->priv->conf, GPM_CONF_USE_TIME_POLICY, &warnings->priv->use_time_primary);
 	if (warnings->priv->use_time_primary) {
-		gpm_debug ("Using per-time notification policy");
+		egg_debug ("Using per-time notification policy");
 	} else {
-		gpm_debug ("Using percentage notification policy");
+		egg_debug ("Using percentage notification policy");
 	}
 }
 

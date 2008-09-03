@@ -36,7 +36,7 @@
 #include "gpm-prefs.h"
 #include "gpm-conf.h"
 #include "gpm-statistics-core.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-stock-icons.h"
 #include "gpm-info.h"
 #include <libdbus-proxy.h>
@@ -139,7 +139,7 @@ static void
 gpm_statistics_help_cb (GtkWidget *widget,
 		   GpmStatistics  *statistics)
 {
-	gpm_debug ("emitting action-help");
+	egg_debug ("emitting action-help");
 	g_signal_emit (statistics, signals [ACTION_HELP], 0);
 }
 
@@ -152,7 +152,7 @@ static void
 gpm_statistics_close_cb (GtkWidget	*widget,
 		    GpmStatistics	*statistics)
 {
-	gpm_debug ("emitting action-close");
+	egg_debug ("emitting action-close");
 	g_signal_emit (statistics, signals [ACTION_CLOSE], 0);
 }
 
@@ -185,7 +185,7 @@ conf_key_changed_cb (GpmConf       *conf,
 
 	if (strcmp (key, GPM_CONF_LOWPOWER_AC) == 0) {
 		gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_LOWPOWER_AC, &enabled);
-		gpm_debug ("need to enable checkbox");
+		egg_debug ("need to enable checkbox");
 	}
 }
 
@@ -232,7 +232,7 @@ gpm_statistics_get_events (GpmStatistics *statistics)
 
 	proxy = dbus_proxy_get_proxy (statistics->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		egg_warning ("not connected");
 		return FALSE;
 	}
 
@@ -247,16 +247,16 @@ gpm_statistics_get_events (GpmStatistics *statistics)
 				 g_type_ptrarray, &ptrarray,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		egg_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (!ret) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("GetEventLog failed!");
+		egg_warning ("GetEventLog failed!");
 		return FALSE;
 	}
 
-	gpm_debug ("events size=%i", ptrarray->len);
+	egg_debug ("events size=%i", ptrarray->len);
 
 	/* clear current events */
 	gpm_array_clear (statistics->priv->events);
@@ -296,7 +296,7 @@ gpm_statistics_checkbox_events_cb (GtkWidget     *widget,
 	gboolean checked;
 
 	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
-	gpm_debug ("Events enable %i", checked);
+	egg_debug ("Events enable %i", checked);
 
 	/* save to gconf so we open next time with the correct setting */
 	gpm_conf_set_bool (statistics->priv->conf, GPM_CONF_STATS_SHOW_EVENTS, checked);
@@ -375,7 +375,7 @@ gpm_statistics_find_types (GpmStatistics *statistics,
 
 	proxy = dbus_proxy_get_proxy (statistics->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		egg_warning ("not connected");
 		return FALSE;
 	}
 
@@ -384,12 +384,12 @@ gpm_statistics_find_types (GpmStatistics *statistics,
 			         G_TYPE_STRV, &strlist,
 			         G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		egg_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (!ret) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("GetTypes failed!");
+		egg_warning ("GetTypes failed!");
 		return FALSE;
 	}
 
@@ -437,7 +437,7 @@ gpm_statistics_get_data_dbus (GpmStatistics *statistics,
 
 	proxy = dbus_proxy_get_proxy (statistics->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		egg_warning ("not connected");
 		return FALSE;
 	}
 
@@ -454,16 +454,16 @@ gpm_statistics_get_data_dbus (GpmStatistics *statistics,
 				 g_type_ptrarray, &ptrarray,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		egg_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (!ret) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("GetData failed!");
+		egg_warning ("GetData failed!");
 		return FALSE;
 	}
 
-	gpm_debug ("size=%i", ptrarray->len);
+	egg_debug ("size=%i", ptrarray->len);
 
 	/* clear current events */
 	gpm_array_clear (statistics->priv->data);
@@ -521,7 +521,7 @@ gpm_statistics_get_parameters_dbus (GpmStatistics *statistics,
 
 	proxy = dbus_proxy_get_proxy (statistics->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		egg_warning ("not connected");
 		return FALSE;
 	}
 
@@ -536,12 +536,12 @@ gpm_statistics_get_parameters_dbus (GpmStatistics *statistics,
 				 g_type_ptr_event_array, &ptr_event_array,
 			         G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		egg_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (!ret) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("GetAxisTypes failed!");
+		egg_warning ("GetAxisTypes failed!");
 		return FALSE;
 	}
 
@@ -594,8 +594,8 @@ gpm_statistics_get_parameters_dbus (GpmStatistics *statistics,
 	}
 	g_ptr_array_free (ptr_event_array, TRUE);
 
-	gpm_debug ("graph type '%s' mapped to x-axis '%s'", type, axis_type_x_text);
-	gpm_debug ("graph type '%s' mapped to y-axis '%s'", type, axis_type_y_text);
+	egg_debug ("graph type '%s' mapped to x-axis '%s'", type, axis_type_x_text);
+	egg_debug ("graph type '%s' mapped to y-axis '%s'", type, axis_type_y_text);
 
 	/* convert the string types to enumerated values */
 	axis_type_x = gpm_graph_widget_string_to_axis_type (axis_type_x_text);
@@ -622,7 +622,7 @@ gpm_statistics_refresh_data (GpmStatistics *statistics)
 		GArray *arrayfloat;
 		GArray *kernel;
 		GArray *result;
-		gpm_debug ("smoothing data, slooooooow....");
+		egg_debug ("smoothing data, slooooooow....");
 
 		arrayfloat = gpm_array_float_new (gpm_array_get_size (statistics->priv->data));
 		gpm_array_float_from_array_y (arrayfloat, statistics->priv->data);
@@ -652,7 +652,7 @@ gpm_statistics_type_combo_changed_cb (GtkWidget      *widget,
 
 	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
 	if (value == NULL) {
-		gpm_debug ("no graph types available");
+		egg_debug ("no graph types available");
 		return;
 	}
 	if (strcmp (value, ACTION_CHARGE_TEXT) == 0) {
@@ -759,7 +759,7 @@ gpm_statistics_graph_refresh (gpointer data)
 {
 	GpmStatistics *statistics = GPM_STATISTICS (data);
 
-	gpm_debug ("refreshing graph type '%s'", statistics->priv->graph_type);
+	egg_debug ("refreshing graph type '%s'", statistics->priv->graph_type);
 	gpm_statistics_refresh_data (statistics);
 	gpm_statistics_refresh_events (statistics);
 	return TRUE;
@@ -810,7 +810,7 @@ gpm_statistics_init (GpmStatistics *statistics)
 
 	/* would happen if not using g-p-m or using an old version of g-p-m */
 	if (dbus_proxy_is_connected (statistics->priv->gproxy) == FALSE) {
-		gpm_error (_("Could not connect to GNOME Power Manager."));
+		egg_error (_("Could not connect to GNOME Power Manager."));
 	}
 
 	statistics->priv->graph_type = NULL;

@@ -31,7 +31,7 @@
 
 #include <glib.h>
 
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-common.h"
 #include "gpm-array.h"
 
@@ -69,7 +69,7 @@ gpm_array_get (GpmArray *array,
 
 	length = array->priv->array->len;
 	if (i + 1 > length) {
-		gpm_warning ("out of bounds %i of %i", i, length);
+		egg_warning ("out of bounds %i of %i", i, length);
 		return NULL;
 	}
 	point = g_ptr_array_index (array->priv->array, i);
@@ -138,7 +138,7 @@ gpm_array_append (GpmArray *array,
 	point->y = y;
 	point->data = data;
 	g_ptr_array_add (array->priv->array, (gpointer) point);
-	gpm_debug ("adding to %p, x=%i, y=%i, data=%i", array->priv->array, x, y, data);
+	egg_debug ("adding to %p, x=%i, y=%i, data=%i", array->priv->array, x, y, data);
 	return TRUE;
 }
 
@@ -188,7 +188,7 @@ gpm_array_print (GpmArray *array)
 	length = gpm_array_get_size (array);
 	for (i=0; i < length; i++) {
 		point = gpm_array_get (array, i);
-		gpm_debug ("(%u) x=%u,\ty=%u,\tdata=%u", i, point->x, point->y, point->data);
+		egg_debug ("(%u) x=%u,\ty=%u,\tdata=%u", i, point->x, point->y, point->data);
 	}
 	return TRUE;
 }
@@ -218,7 +218,7 @@ gpm_array_append_from_file (GpmArray *array, const gchar *filename)
 
 	g_file_get_contents (filename, &contents, &length, NULL);
 	if (contents == NULL) {
-		gpm_warning ("cannot open file %s", filename);
+		egg_warning ("cannot open file %s", filename);
 		return FALSE;
 	}
 
@@ -262,7 +262,7 @@ gpm_array_load_from_file (GpmArray *array, const gchar *filename)
 
 	g_file_get_contents (filename, &contents, &length, NULL);
 	if (contents == NULL) {
-		gpm_warning ("cannot open file %s", filename);
+		egg_warning ("cannot open file %s", filename);
 		return FALSE;
 	}
 
@@ -317,7 +317,7 @@ gpm_array_save_to_file (GpmArray *array, const gchar *filename)
 
 	ret = g_file_set_contents (filename, contents, -1, NULL);
 	if (!ret) {
-		gpm_warning ("cannot write file %s", filename);
+		egg_warning ("cannot write file %s", filename);
 		return FALSE;
 	}
 	g_free (contents);
@@ -452,7 +452,7 @@ gpm_array_copy (GpmArray *from, GpmArray *to)
 
 	/* check lengths are the same */
 	if (lengthfrom != lengthto) {
-		gpm_debug ("arrays are not the same length");
+		egg_debug ("arrays are not the same length");
 		return FALSE;
 	}
 
@@ -673,18 +673,18 @@ gpm_array_limit_x_size (GpmArray *array,
 	g_return_val_if_fail (GPM_IS_ARRAY (array), FALSE);
 
 	length = gpm_array_get_size (array);
-	gpm_debug ("length of array (before) %i", length);
+	egg_debug ("length of array (before) %i", length);
 
 	/* sanity check */
 	if (length < max_num) {
-		gpm_debug ("no limit possible as under limit");
+		egg_debug ("no limit possible as under limit");
 		return FALSE;
 	}
 
 	/* last element */
 	point = gpm_array_get (array, length-1);
 	div = (gfloat) point->x / (gfloat) max_num;
-	gpm_debug ("Using a x division of %f", div);
+	egg_debug ("Using a x division of %f", div);
 
 	/* Reduces the number of points to a pre-set level using a time
 	 * division algorithm so we don't keep diluting the previous
@@ -693,11 +693,11 @@ gpm_array_limit_x_size (GpmArray *array,
 		point = gpm_array_get (array, a);
 		if (point->x >= running_count) {
 			running_count = running_count + div;
-			gpm_debug ("keeping valid point %i", a);
+			egg_debug ("keeping valid point %i", a);
 			/* keep valid point */
 		} else {
 			/* remove point */
-			gpm_debug ("removing invalid point %i", a);
+			egg_debug ("removing invalid point %i", a);
 			gpm_array_free_point (point);
 			g_ptr_array_remove_index (array->priv->array, a);
 
@@ -710,7 +710,7 @@ gpm_array_limit_x_size (GpmArray *array,
 
 	/* check length */
 	length = gpm_array_get_size (array);
-	gpm_debug ("length of array (after) %i", length);
+	egg_debug ("length of array (after) %i", length);
 
 	return TRUE;
 }
@@ -750,7 +750,7 @@ gpm_array_limit_x_width (GpmArray *array,
 		}
 	}
 	if (a > 0) {
-		gpm_debug ("removing %i points from start of list", a);
+		egg_debug ("removing %i points from start of list", a);
 		g_ptr_array_remove_range (array->priv->array, 0, a);
 	}
 	return TRUE;
@@ -777,7 +777,7 @@ gpm_array_check_max_and_size (GpmArray *array)
 
 	if (length > array->priv->max_points) {
 		/* We have too much data, simplify */
-		gpm_debug ("Too many points (%i/%i)", length, array->priv->max_points);
+		egg_debug ("Too many points (%i/%i)", length, array->priv->max_points);
 		gpm_array_limit_x_size (array, array->priv->max_points / 2);
 	}
 
@@ -788,7 +788,7 @@ gpm_array_check_max_and_size (GpmArray *array)
 		point2 = gpm_array_get (array, length-1);
 		diff_time = point2->x - point1->x;
 		if (diff_time > array->priv->max_width) {
-			gpm_debug ("Too much time (%i/%i)", diff_time, array->priv->max_width);
+			egg_debug ("Too much time (%i/%i)", diff_time, array->priv->max_width);
 			gpm_array_limit_x_width (array, array->priv->max_width / 2);
 		}
 	}

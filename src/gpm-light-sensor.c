@@ -43,7 +43,7 @@
 #include <libdbus-proxy.h>
 
 #include "gpm-common.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-light-sensor.h"
 #include "gpm-conf.h"
 #include "gpm-marshal.h"
@@ -94,7 +94,7 @@ gpm_light_sensor_get_hw (GpmLightSensor *sensor)
 
 	proxy = dbus_proxy_get_proxy (sensor->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected to HAL");
+		egg_warning ("not connected to HAL");
 		return FALSE;
 	}
 
@@ -103,12 +103,12 @@ gpm_light_sensor_get_hw (GpmLightSensor *sensor)
 				 DBUS_TYPE_G_INT_ARRAY, &levels,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		egg_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (!ret) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("GetBrightness failed!");
+		egg_warning ("GetBrightness failed!");
 		return FALSE;
 	}
 
@@ -143,7 +143,7 @@ gpm_light_sensor_get_absolute (GpmLightSensor *sensor,
 	g_return_val_if_fail (GPM_IS_LIGHT_SENSOR (sensor), FALSE);
 
 	if (sensor->priv->has_sensor == FALSE) {
-		gpm_warning ("no hardware!");
+		egg_warning ("no hardware!");
 		return FALSE;
 	}
 
@@ -167,14 +167,14 @@ gpm_light_sensor_calibrate (GpmLightSensor *sensor)
 	g_return_val_if_fail (GPM_IS_LIGHT_SENSOR (sensor), FALSE);
 
 	if (sensor->priv->has_sensor == FALSE) {
-		gpm_warning ("no hardware!");
+		egg_warning ("no hardware!");
 		return FALSE;
 	}
 
 	fraction = gpm_discrete_to_fraction (sensor->priv->current_hw,
 					     sensor->priv->levels);
 	sensor->priv->calibration_abs = fraction;
-	gpm_debug ("calibrating to %f", fraction);
+	egg_debug ("calibrating to %f", fraction);
 	return TRUE;
 }
 
@@ -193,11 +193,11 @@ gpm_light_sensor_get_relative (GpmLightSensor *sensor,
 	g_return_val_if_fail (GPM_IS_LIGHT_SENSOR (sensor), FALSE);
 
 	if (sensor->priv->has_sensor == FALSE) {
-		gpm_warning ("no hardware!");
+		egg_warning ("no hardware!");
 		return FALSE;
 	}
 	if (sensor->priv->calibration_abs < 0.01 && sensor->priv->calibration_abs > -0.01) {
-		gpm_warning ("not calibrated!");
+		egg_warning ("not calibrated!");
 		return FALSE;
 	}
 
@@ -294,7 +294,7 @@ gpm_light_sensor_poll_cb (gpointer userdata)
 		/* this could fail if hal refuses us */
 		if (ret) {
 			gpm_light_sensor_get_absolute (sensor, &new);
-			gpm_debug ("brightness = %i, %i", sensor->priv->current_hw, new);
+			egg_debug ("brightness = %i, %i", sensor->priv->current_hw, new);
 			g_signal_emit (sensor, signals [SENSOR_CHANGED], 0, new);
 		}
 	}
@@ -356,7 +356,7 @@ gpm_light_sensor_init (GpmLightSensor *sensor)
 
 	/* connect to the devices */
 	if (sensor->priv->has_sensor) {
-		gpm_debug ("Using proper brightness sensor");
+		egg_debug ("Using proper brightness sensor");
 		/* get a managed proxy */
 		sensor->priv->gproxy = dbus_proxy_new ();
 		dbus_proxy_assign (sensor->priv->gproxy,
@@ -378,7 +378,7 @@ gpm_light_sensor_init (GpmLightSensor *sensor)
 
 	/* do we have a info source? */
 	if (sensor->priv->has_sensor) {
-		gpm_debug ("current brightness is %i%%", sensor->priv->current_hw);
+		egg_debug ("current brightness is %i%%", sensor->priv->current_hw);
 
 		/* get poll timeout */
 		gpm_conf_get_uint (sensor->priv->conf, GPM_CONF_AMBIENT_POLL, &timeout);

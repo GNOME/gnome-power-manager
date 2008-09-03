@@ -37,7 +37,7 @@
 
 #include "gpm-stock-icons.h"
 #include "gpm-common.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 
 #include "gpm-manager.h"
 #include "dbus/xdg-power-management-core.h"
@@ -75,12 +75,12 @@ gpm_object_register (DBusGConnection *connection,
 				 G_TYPE_UINT, &request_name_result,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		egg_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (!ret) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("RequestName failed!");
+		egg_warning ("RequestName failed!");
 		return FALSE;
 	}
 
@@ -106,7 +106,6 @@ gpm_object_register (DBusGConnection *connection,
 static void
 gpm_exit (GpmManager *manager)
 {
-	gpm_debug_shutdown ();
 	exit (0);
 }
 
@@ -197,21 +196,21 @@ main (int argc, char *argv[])
 		g_thread_init (NULL);
 	dbus_g_thread_init ();
 
-	gpm_debug_init (verbose);
+	egg_debug_init (verbose);
 
 	/* we need to daemonize before we get a system connection to fix #366057 */
 	if (no_daemon == FALSE && daemon (0, 0)) {
-		gpm_error ("Could not daemonize: %s", g_strerror (errno));
+		egg_error ("Could not daemonize: %s", g_strerror (errno));
 	}
 
-	gpm_debug ("GNOME %s %s", GPM_NAME, VERSION);
+	egg_debug ("GNOME %s %s", GPM_NAME, VERSION);
 
 	/* check dbus connections, exit if not valid */
 	system_connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (error) {
-		gpm_warning ("%s", error->message);
+		egg_warning ("%s", error->message);
 		g_error_free (error);
-		gpm_error ("This program cannot start until you start "
+		egg_error ("This program cannot start until you start "
 			   "the dbus system service.\n"
 			   "It is <b>strongly recommended</b> you reboot "
 			   "your computer after starting this service.");
@@ -219,9 +218,9 @@ main (int argc, char *argv[])
 
 	session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (error) {
-		gpm_warning ("%s", error->message);
+		egg_warning ("%s", error->message);
 		g_error_free (error);
-		gpm_error ("This program cannot start until you start the "
+		egg_error ("This program cannot start until you start the "
 			   "dbus session service.\n\n"
 			   "This is usually started automatically in X "
 			   "or gnome startup when you start a new session.");
@@ -238,7 +237,7 @@ main (int argc, char *argv[])
 	manager = gpm_manager_new ();
 
 	if (!gpm_object_register (session_connection, G_OBJECT (manager))) {
-		gpm_error ("%s is already running in this session.", GPM_NAME);
+		egg_error ("%s is already running in this session.", GPM_NAME);
 		return 0;
 	}
 
@@ -255,7 +254,6 @@ main (int argc, char *argv[])
 	}
 
 	g_main_loop_unref (loop);
-	gpm_debug_shutdown ();
 
 	/* rip down gstreamer */
 	gst_deinit ();

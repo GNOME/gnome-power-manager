@@ -36,7 +36,7 @@
 
 #include "gpm-common.h"
 #include "gpm-button.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-marshal.h"
 
 static void     gpm_button_class_init (GpmButtonClass *klass);
@@ -89,12 +89,12 @@ gpm_button_filter_x_events (GdkXEvent *xevent,
 
 	/* found anything? */
 	if (key == NULL) {
-		gpm_debug ("Key %p not found in hash", keycode);
+		egg_debug ("Key %i not found in hash", keycode);
 		/* pass normal keypresses on, which might help with accessibility access */
 		return GDK_FILTER_CONTINUE;
 	}
 
-	gpm_debug ("Key %p mapped to HAL key %s", keycode, key);
+	egg_debug ("Key %i mapped to HAL key %s", keycode, key);
 	g_signal_emit (button, signals [BUTTON_PRESSED], 0, key);
 
 	return GDK_FILTER_REMOVE;
@@ -130,8 +130,8 @@ gpm_button_grab_keystring (GpmButton *button, guint64 keycode)
 			GDK_WINDOW_XID (button->priv->window), True,
 			GrabModeAsync, GrabModeAsync);
 	if (ret == BadAccess) {
-		gpm_warning ("Failed to grab modmask=%u, keycode=%i",
-			     modmask, keycode);
+		egg_warning ("Failed to grab modmask=%u, keycode=%li",
+			     modmask, (long int) keycode);
 		return FALSE;
 	}
 
@@ -140,8 +140,8 @@ gpm_button_grab_keystring (GpmButton *button, guint64 keycode)
 			GDK_WINDOW_XID (button->priv->window), True,
 			GrabModeAsync, GrabModeAsync);
 	if (ret == BadAccess) {
-		gpm_warning ("Failed to grab modmask=%u, keycode=%i",
-			     LockMask | modmask, keycode);
+		egg_warning ("Failed to grab modmask=%u, keycode=%li",
+			     LockMask | modmask, (long int) keycode);
 		return FALSE;
 	}
 
@@ -149,7 +149,7 @@ gpm_button_grab_keystring (GpmButton *button, guint64 keycode)
 	gdk_flush ();
 	gdk_error_trap_pop ();
 
-	gpm_debug ("Grabbed modmask=%x, keycode=%p", modmask, keycode);
+	egg_debug ("Grabbed modmask=%x, keycode=%li", modmask, (long int) keycode);
 	return TRUE;
 }
 
@@ -176,7 +176,7 @@ gpm_button_xevent_key (GpmButton *button, guint keysym, const gchar *hal_key)
 	/* convert from keysym to keycode */
 	keycode = XKeysymToKeycode (GDK_DISPLAY (), keysym);
 	if (keycode == 0) {
-		gpm_warning ("could not map keysym %x to keycode", keysym);
+		egg_warning ("could not map keysym %x to keycode", keysym);
 		return FALSE;
 	}
 
@@ -184,7 +184,7 @@ gpm_button_xevent_key (GpmButton *button, guint keysym, const gchar *hal_key)
 	keycode_str = g_strdup_printf ("0x%x", keycode);
 	key = g_hash_table_lookup (button->priv->hash_to_hal, (gpointer) keycode_str);
 	if (key != NULL) {
-		gpm_warning ("found in hash %p", keycode);
+		egg_warning ("found in hash %i", keycode);
 		g_free (keycode_str);
 		return FALSE;
 	}
@@ -192,7 +192,7 @@ gpm_button_xevent_key (GpmButton *button, guint keysym, const gchar *hal_key)
 	/* try to register X event */
 	ret = gpm_button_grab_keystring (button, keycode);
 	if (!ret) {
-		gpm_warning ("Failed to grab %p", keycode);
+		egg_warning ("Failed to grab %i", keycode);
 		g_free (keycode_str);
 		return FALSE;
 	}
@@ -271,7 +271,7 @@ emit_button_pressed (GpmButton   *button,
 		hal_gdevice_get_string (device, "button.type", &type, NULL);
 		/* hal may no longer be there */
 		if (type == NULL) {
-			gpm_warning ("cannot get button type for %s", hal_gdevice_get_udi (device));
+			egg_warning ("cannot get button type for %s", hal_gdevice_get_udi (device));
 			return;
 		}
 	} else {
@@ -296,14 +296,14 @@ emit_button_pressed (GpmButton   *button,
 	/* filter out duplicate lid events */
 	if (strcmp (atype, GPM_BUTTON_LID_CLOSED) == 0) {
 		if (button->priv->lid_is_closed) {
-			gpm_debug ("ignoring duplicate lid event");
+			egg_debug ("ignoring duplicate lid event");
 			return;
 		}
 		button->priv->lid_is_closed = TRUE;
 	}
 	if (strcmp (atype, GPM_BUTTON_LID_OPEN) == 0) {
 		if (button->priv->lid_is_closed == FALSE) {
-			gpm_debug ("ignoring duplicate lid event");
+			egg_debug ("ignoring duplicate lid event");
 			return;
 		}
 		button->priv->lid_is_closed = FALSE;
@@ -317,7 +317,7 @@ emit_button_pressed (GpmButton   *button,
 	}
 
 	/* we now emit all buttons, even the ones we don't know */
-	gpm_debug ("emitting button-pressed : %s", atype);
+	egg_debug ("emitting button-pressed : %s", atype);
 	g_signal_emit (button, signals [BUTTON_PRESSED], 0, atype);
 
 	g_free (type);
@@ -342,7 +342,7 @@ hal_device_property_modified_cb (HalGDevice    *device,
 				 gboolean       finally,
 				 GpmButton     *button)
 {
-	gpm_debug ("key=%s, added=%i, removed=%i, finally=%i",
+	egg_debug ("key=%s, added=%i, removed=%i, finally=%i",
 		   key, is_added, is_removed, finally);
 
 	/* do not process keys that have been removed */
@@ -352,7 +352,7 @@ hal_device_property_modified_cb (HalGDevice    *device,
 
 	/* only match button* values */
 	if (strncmp (key, "button", 6) == 0) {
-		gpm_debug ("state of a button has changed : %s, %s", hal_gdevice_get_udi (device), key);
+		egg_debug ("state of a button has changed : %s, %s", hal_gdevice_get_udi (device), key);
 		emit_button_pressed (button, device, "");
 	}
 }
@@ -373,7 +373,7 @@ hal_device_condition_cb (HalGDevice    *device,
 			 const gchar   *details,
 			 GpmButton     *button)
 {
-	gpm_debug ("condition=%s, details=%s", condition, details);
+	egg_debug ("condition=%s, details=%s", condition, details);
 
 	if (strcmp (condition, "ButtonPressed") == 0) {
 		emit_button_pressed (button, device, details);
@@ -420,7 +420,7 @@ coldplug_buttons (GpmButton *button)
 	error = NULL;
 	ret = hal_gmanager_find_capability (button->priv->hal_manager, "button", &device_names, &error);
 	if (!ret) {
-		gpm_warning ("Couldn't obtain list of buttons: %s", error->message);
+		egg_warning ("Couldn't obtain list of buttons: %s", error->message);
 		g_error_free (error);
 		return;
 	}
@@ -428,10 +428,10 @@ coldplug_buttons (GpmButton *button)
 		/* we have found buttons */
 		for (i = 0; device_names[i]; i++) {
 			watch_add_button (button, device_names[i]);
-			gpm_debug ("Watching %s", device_names[i]);
+			egg_debug ("Watching %s", device_names[i]);
 		}
 	} else {
-		gpm_debug ("Couldn't obtain list of buttons");
+		egg_debug ("Couldn't obtain list of buttons");
 	}
 
 	hal_gmanager_free_capability (device_names);

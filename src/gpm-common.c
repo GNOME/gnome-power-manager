@@ -27,7 +27,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
 
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-common.h"
 
 /**
@@ -49,7 +49,7 @@ gpm_precision_round_up (guint value, guint smallest)
 		return smallest;
 	}
 	if (smallest == 0) {
-		gpm_warning ("divisor zero");
+		egg_warning ("divisor zero");
 		return 0;
 	}
 	division = value / smallest;
@@ -80,42 +80,12 @@ gpm_precision_round_down (guint value, guint smallest)
 		return 0;
 	}
 	if (smallest == 0) {
-		gpm_warning ("divisor zero");
+		egg_warning ("divisor zero");
 		return 0;
 	}
 	division = value / smallest;
 	division *= smallest;
 	return division;
-}
-
-/**
- * gpm_rgb_to_colour:
- * @red: The red value
- * @green: The green value
- * @blue: The blue value
- **/
-guint32
-gpm_rgb_to_colour (guint8 red, guint8 green, guint8 blue)
-{
-	guint32 colour = 0;
-	colour += (guint32) red * 0x10000;
-	colour += (guint32) green * 0x100;
-	colour += (guint32) blue;
-	return colour;
-}
-
-/**
- * gpm_colour_to_rgb:
- * @red: The red value
- * @green: The green value
- * @blue: The blue value
- **/
-void
-gpm_colour_to_rgb (guint32 colour, guint8 *red, guint8 *green, guint8 *blue)
-{
-	*red = (colour & 0xff0000) / 0x10000;
-	*green = (colour & 0x00ff00) / 0x100;
-	*blue = colour & 0x0000ff;
 }
 
 /**
@@ -136,7 +106,7 @@ gpm_exponential_average (gint previous, gint new, guint slew)
 	gfloat factor_inv = 1;
 	if (previous == 0 || slew == 0) {
 		/* startup, or re-initialization - we have no data */
-		gpm_debug ("Quoting output with only one value...");
+		egg_debug ("Quoting output with only one value...");
 		result = new;
 	} else {
 		factor = (gfloat) slew / 100.0f;
@@ -164,7 +134,7 @@ gpm_percent_to_discrete (guint percentage, guint levels)
 		return levels;
 	}
 	if (levels == 0) {
-		gpm_warning ("levels is 0!");
+		egg_warning ("levels is 0!");
 		return 0;
 	}
 	return ((gfloat) percentage * (gfloat) (levels - 1)) / 100.0f;
@@ -187,10 +157,10 @@ gpm_discrete_to_percent (guint discrete, guint levels)
 		return 100;
 	}
 	if (levels == 0) {
-		gpm_warning ("levels is 0!");
+		egg_warning ("levels is 0!");
 		return 0;
 	}
-	return (guint) ((float) discrete * (100.0f / (float) (levels - 1)));
+	return (guint) ((gfloat) discrete * (100.0f / (gfloat) (levels - 1)));
 }
 
 /**
@@ -211,10 +181,10 @@ gpm_discrete_to_fraction (guint discrete,
 		return 1.0;
 	}
 	if (levels == 0) {
-		gpm_warning ("levels is 0!");
+		egg_warning ("levels is 0!");
 		return 0.0;
 	}
-	return (guint) ((float) discrete / ((float) (levels - 1)));
+	return (guint) ((gfloat) discrete / ((gfloat) (levels - 1)));
 }
 
 /**
@@ -372,94 +342,11 @@ gpm_help_display (char * link_id)
 void
 gpm_st_common (GpmSelfTest *test)
 {
-	guint8 r, g, b;
-	guint32 colour;
 	guint value;
 	gfloat fvalue;
 
 	if (gpm_st_start (test, "GpmCommon", CLASS_AUTO) == FALSE) {
 		return;
-	}
-
-	/************************************************************/
-	gpm_st_title (test, "get red");
-	gpm_colour_to_rgb (0xff0000, &r, &g, &b);
-	if (r == 255 && g == 0 && b == 0) {
-		gpm_st_success (test, "got red");
-	} else {
-		gpm_st_failed (test, "could not get red (%i, %i, %i)", r, g, b);
-	}
-
-	/************************************************************/
-	gpm_st_title (test, "get green");
-	gpm_colour_to_rgb (0x00ff00, &r, &g, &b);
-	if (r == 0 && g == 255 && b == 0) {
-		gpm_st_success (test, "got green");
-	} else {
-		gpm_st_failed (test, "could not get green (%i, %i, %i)", r, g, b);
-	}
-
-	/************************************************************/
-	gpm_st_title (test, "get blue");
-	gpm_colour_to_rgb (0x0000ff, &r, &g, &b);
-	if (r == 0 && g == 0 && b == 255) {
-		gpm_st_success (test, "got blue");
-	} else {
-		gpm_st_failed (test, "could not get blue (%i, %i, %i)", r, g, b);
-	}
-
-	/************************************************************/
-	gpm_st_title (test, "get black");
-	gpm_colour_to_rgb (0x000000, &r, &g, &b);
-	if (r == 0 && g == 0 && b == 0) {
-		gpm_st_success (test, "got black");
-	} else {
-		gpm_st_failed (test, "could not get black (%i, %i, %i)", r, g, b);
-	}
-
-	/************************************************************/
-	gpm_st_title (test, "get white");
-	gpm_colour_to_rgb (0xffffff, &r, &g, &b);
-	if (r == 255 && g == 255 && b == 255) {
-		gpm_st_success (test, "got white");
-	} else {
-		gpm_st_failed (test, "could not get white (%i, %i, %i)", r, g, b);
-	}
-
-	/************************************************************/
-	gpm_st_title (test, "set red");
-	colour = gpm_rgb_to_colour (0xff, 0x00, 0x00);
-	if (colour == 0xff0000) {
-		gpm_st_success (test, "set red");
-	} else {
-		gpm_st_failed (test, "could not set red (%i)", colour);
-	}
-
-	/************************************************************/
-	gpm_st_title (test, "set green");
-	colour = gpm_rgb_to_colour (0x00, 0xff, 0x00);
-	if (colour == 0x00ff00) {
-		gpm_st_success (test, "set green");
-	} else {
-		gpm_st_failed (test, "could not set green (%i)", colour);
-	}
-
-	/************************************************************/
-	gpm_st_title (test, "set blue");
-	colour = gpm_rgb_to_colour (0x00, 0x00, 0xff);
-	if (colour == 0x0000ff) {
-		gpm_st_success (test, "set blue");
-	} else {
-		gpm_st_failed (test, "could not set blue (%i)", colour);
-	}
-
-	/************************************************************/
-	gpm_st_title (test, "set white");
-	colour = gpm_rgb_to_colour (0xff, 0xff, 0xff);
-	if (colour == 0xffffff) {
-		gpm_st_success (test, "set white");
-	} else {
-		gpm_st_failed (test, "could not set white (%i)", colour);
 	}
 
 	/************************************************************/

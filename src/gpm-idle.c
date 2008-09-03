@@ -38,7 +38,7 @@
 
 #include "gpm-idle.h"
 #include "gpm-load.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-screensaver.h"
 
 static void	gpm_idle_reset (GpmIdle *idle);
@@ -95,7 +95,7 @@ gpm_idle_set_mode (GpmIdle    *idle,
 
 		gpm_idle_reset (idle);
 
-		gpm_debug ("Doing a state transition: %d", mode);
+		egg_debug ("Doing a state transition: %d", mode);
 		g_signal_emit (idle,
 			       signals [IDLE_CHANGED],
 			       0,
@@ -122,7 +122,7 @@ gpm_idle_poll_system_timer (GpmIdle *idle)
 		/* FIXME: should this stay below this level for a certain time? */
 		if (load > IDLE_LIMIT) {
 			/* check if system is "idle" enough */
-			gpm_debug ("Detected that the CPU is busy");
+			egg_debug ("Detected that the CPU is busy");
 			do_action = FALSE;
 		}
 	}
@@ -168,7 +168,7 @@ gpm_idle_remove_gpm_idle_poll_system_timer (GpmIdle *idle)
 static gboolean
 system_timer (GpmIdle *idle)
 {
-	gpm_debug ("System idle timeout");
+	egg_debug ("System idle timeout");
 
 	gpm_idle_remove_gpm_idle_poll_system_timer (idle);
 	gpm_idle_add_gpm_idle_poll_system_timer (idle, POLL_FREQUENCY * 1000);
@@ -218,7 +218,7 @@ add_system_timer (GpmIdle *idle)
 		idle->priv->system_timer_id = g_timeout_add (msecs,
 							     (GSourceFunc)system_timer, idle);
 	} else {
-		gpm_debug ("System idle disabled");
+		egg_debug ("System idle disabled");
 	}
 }
 
@@ -233,7 +233,7 @@ gpm_idle_set_check_cpu (GpmIdle    *idle,
 			gboolean    check_type_cpu)
 {
 	g_return_if_fail (GPM_IS_IDLE (idle));
-	gpm_debug ("Setting the CPU load check to %i", check_type_cpu);
+	egg_debug ("Setting the CPU load check to %i", check_type_cpu);
 	idle->priv->check_type_cpu = check_type_cpu;
 }
 
@@ -284,7 +284,7 @@ gpm_idle_set_system_timeout (GpmIdle	*idle,
 {
 	g_return_if_fail (GPM_IS_IDLE (idle));
 
-	gpm_debug ("Setting system idle timeout: %d", timeout);
+	egg_debug ("Setting system idle timeout: %d", timeout);
 	if (idle->priv->system_timeout != timeout) {
 		idle->priv->system_timeout = timeout;
 
@@ -307,7 +307,7 @@ session_idle_changed_cb (GpmScreensaver *screensaver,
 {
 	GpmIdleMode mode;
 
-	gpm_debug ("Received GS session idle changed: %d", is_idle);
+	egg_debug ("Received GS session idle changed: %d", is_idle);
 
 	if (is_idle) {
 		mode = GPM_IDLE_MODE_SESSION;
@@ -332,7 +332,7 @@ powersave_idle_changed_cb (GpmScreensaver *screensaver,
 {
 	GpmIdleMode mode;
 
-	gpm_debug ("Received GS powesave idle changed: %d", is_idle);
+	egg_debug ("Received GS powesave idle changed: %d", is_idle);
 
 	if (is_idle) {
 		mode = GPM_IDLE_MODE_POWERSAVE;

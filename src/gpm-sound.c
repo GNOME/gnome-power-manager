@@ -42,7 +42,7 @@
 #include "gpm-ac-adapter.h"
 #include "gpm-common.h"
 #include "gpm-control.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-conf.h"
 #include "gpm-sound.h"
 
@@ -223,7 +223,7 @@ gpm_sound_gst_bus_cb (GstBus *bus, GstMessage *message, GpmSound *sound)
 		gst_element_set_state (sound->priv->playbin, GST_STATE_NULL);
 
 		gst_message_parse_error (message, &error, &debug);
-		gpm_warning ("%s (%s)", error->message, debug);
+		egg_warning ("%s (%s)", error->message, debug);
 
 		g_error_free (error);
 		g_free (debug);

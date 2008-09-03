@@ -39,7 +39,7 @@
 #include <dbus/dbus-glib.h>
 
 #include "gpm-prefs-server.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 
 #define GPM_PREFS_SERVER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_PREFS_SERVER, GpmPrefsServerPrivate))
 
@@ -81,7 +81,7 @@ gpm_prefs_server_set_capability (GpmPrefsServer *server,
 	g_return_val_if_fail (server != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_PREFS_SERVER (server), FALSE);
 	server->priv->capability = server->priv->capability + capability;
-	gpm_debug ("capability now %i", server->priv->capability);
+	egg_debug ("capability now %i", server->priv->capability);
 	return TRUE;
 }
 

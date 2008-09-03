@@ -47,7 +47,7 @@
 #include "gpm-common.h"
 #include "gpm-prefs.h"
 #include "gpm-marshal.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 
 #include "gpm-load.h"
 
@@ -102,18 +102,18 @@ gpm_load_get_cpu_values (long unsigned *cpu_idle, long unsigned *cpu_total)
 	   	
 	kc = kstat_open();
 	if (!kc){
-		gpm_warning ("Cannot open kstat!\n");
+		egg_warning ("Cannot open kstat!\n");
 		return FALSE;
 	}
 
 	ks = kstat_lookup(kc, "unix", 0, "system_misc");
   	if (kstat_read(kc, ks, NULL) == -1) {
-		gpm_warning ("Cannot read kstat on module unix!\n");
+		egg_warning ("Cannot read kstat on module unix!\n");
 		goto out;
 	}
 	kn = kstat_data_lookup (ks, "ncpus");
 	if (!kn) {
-		gpm_warning ("Cannot get number of cpus in current system!\n");
+		egg_warning ("Cannot get number of cpus in current system!\n");
 		goto out;
 	}
 	ncpus = kn->value.ui32;
@@ -126,16 +126,16 @@ gpm_load_get_cpu_values (long unsigned *cpu_idle, long unsigned *cpu_total)
 		
 		ks = kstat_lookup(kc, "cpu_stat", count, NULL);
 		if (ks == NULL) {
-			gpm_warning ("Null output for kstat on cpu%d\n", count);
+			egg_warning ("Null output for kstat on cpu%d\n", count);
 			goto out;
 		}
      
 		if (kstat_read(kc, ks, &data) == -1) {
-			gpm_warning ("Cannot read kstat entry on cpu%d\n", count);
+			egg_warning ("Cannot read kstat entry on cpu%d\n", count);
 			goto out;
 		}
 
-		gpm_debug ("cpu%d:\t%lu\t%lu\t%lu\t%lu\n", count,
+		egg_debug ("cpu%d:\t%lu\t%lu\t%lu\t%lu\n", count,
 					data.cpu_sysinfo.cpu[CPU_IDLE],
 					data.cpu_sysinfo.cpu[CPU_USER],
 					data.cpu_sysinfo.cpu[CPU_KERNEL],

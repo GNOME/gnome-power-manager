@@ -29,7 +29,7 @@
 
 #include "gpm-marshal.h"
 #include "gpm-conf.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 
 static void     gpm_conf_class_init (GpmConfClass *klass);
 static void     gpm_conf_init       (GpmConf      *conf);
@@ -74,7 +74,7 @@ gpm_conf_get_bool (GpmConf     *conf,
 
 	*value = gconf_client_get_bool (conf->priv->gconf_client, key, &error);
 	if (error) {
-		gpm_debug ("Error: %s", error->message);
+		egg_debug ("Error: %s", error->message);
 		g_error_free (error);
 		ret = FALSE;
 	}
@@ -106,7 +106,7 @@ gpm_conf_get_string (GpmConf     *conf,
 
 	*value = gconf_client_get_string (conf->priv->gconf_client, key, &error);
 	if (error) {
-		gpm_debug ("Error: %s", error->message);
+		egg_debug ("Error: %s", error->message);
 		g_error_free (error);
 		ret = FALSE;
 	}
@@ -136,7 +136,7 @@ gpm_conf_get_int (GpmConf     *conf,
 
 	*value = gconf_client_get_int (conf->priv->gconf_client, key, &error);
 	if (error) {
-		gpm_debug ("Error: %s", error->message);
+		egg_debug ("Error: %s", error->message);
 		g_error_free (error);
 		ret = FALSE;
 	}
@@ -191,12 +191,12 @@ gpm_conf_set_bool (GpmConf     *conf,
 
 	ret = gconf_client_key_is_writable (conf->priv->gconf_client, key, NULL);
 	if (!ret) {
-		gpm_debug ("%s not writable", key);
+		egg_debug ("%s not writable", key);
 		goto out;
 	}
 	gconf_client_set_bool (conf->priv->gconf_client, key, value, &error);
 	if (error) {
-		gpm_debug ("Error: %s", error->message);
+		egg_debug ("Error: %s", error->message);
 		g_error_free (error);
 		ret = FALSE;
 	}
@@ -228,12 +228,12 @@ gpm_conf_set_string (GpmConf     *conf,
 
 	ret = gconf_client_key_is_writable (conf->priv->gconf_client, key, NULL);
 	if (!ret) {
-		gpm_debug ("%s not writable", key);
+		egg_debug ("%s not writable", key);
 		goto out;
 	}
 	gconf_client_set_string (conf->priv->gconf_client, key, value, &error);
 	if (error) {
-		gpm_debug ("Error: %s", error->message);
+		egg_debug ("Error: %s", error->message);
 		g_error_free (error);
 		ret = FALSE;
 	}
@@ -262,12 +262,12 @@ gpm_conf_set_int (GpmConf     *conf,
 
 	ret = gconf_client_key_is_writable (conf->priv->gconf_client, key, NULL);
 	if (!ret) {
-		gpm_debug ("%s not writable", key);
+		egg_debug ("%s not writable", key);
 		goto out;
 	}
 	gconf_client_set_int (conf->priv->gconf_client, key, value, &error);
 	if (error) {
-		gpm_debug ("Error: %s", error->message);
+		egg_debug ("Error: %s", error->message);
 		g_error_free (error);
 		ret = FALSE;
 	}
@@ -320,7 +320,7 @@ gpm_conf_is_writable (GpmConf     *conf,
 
 	*writable = gconf_client_key_is_writable (conf->priv->gconf_client, key, &error);
 	if (error) {
-		gpm_debug ("Error: %s", error->message);
+		egg_debug ("Error: %s", error->message);
 		g_error_free (error);
 		ret = FALSE;
 	}
@@ -344,7 +344,7 @@ gconf_key_changed_cb (GConfClient *client,
 		return;
 	}
 
-	gpm_debug ("emitting value-changed : '%s'", entry->key);
+	egg_debug ("emitting value-changed : '%s'", entry->key);
 	g_signal_emit (conf, signals [VALUE_CHANGED], 0, entry->key);
 }
 

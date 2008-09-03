@@ -38,7 +38,7 @@
 #include "gpm-cell.h"
 #include "gpm-phone.h"
 #include "gpm-control.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-warnings.h"
 #include "gpm-profile.h"
 
@@ -153,7 +153,7 @@ gpm_cell_array_get_cell (GpmCellArray *cell_array, guint id)
 	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), NULL);
 
 	if (id > cell_array->priv->array->len) {
-		gpm_warning ("not valid cell id");
+		egg_warning ("not valid cell id");
 		return NULL;
 	}
 
@@ -207,7 +207,7 @@ gpm_cell_array_get_time_until_action (GpmCellArray *cell_array)
 
 	/* if invalid, don't return junk */
 	if (difference < 0) {
-		gpm_debug ("difference negative, now %i, action %i", unit->time_discharge, action_time);
+		egg_debug ("difference negative, now %i, action %i", unit->time_discharge, action_time);
 		return 0;
 	}
 	return difference;
@@ -224,7 +224,7 @@ gpm_cell_perhaps_recall_cb (GpmCell *cell, gchar *oem_vendor, gchar *website, Gp
 	/* only emit this once per startup */
 	if (cell_array->priv->done_recall == FALSE) {
 		/* just proxy it to the engine layer */
-		gpm_debug ("** EMIT: perhaps-recall");
+		egg_debug ("** EMIT: perhaps-recall");
 		g_signal_emit (cell_array, signals [PERHAPS_RECALL], 0, oem_vendor, website);
 		cell_array->priv->done_recall = TRUE;
 	}
@@ -241,7 +241,7 @@ gpm_cell_low_capacity_cb (GpmCell *cell, guint capacity, GpmCellArray *cell_arra
 	/* only emit this once per startup */
 	if (cell_array->priv->done_capacity == FALSE) {
 		/* just proxy it to the GUI layer */
-		gpm_debug ("** EMIT: low-capacity");
+		egg_debug ("** EMIT: low-capacity");
 		g_signal_emit (cell_array, signals [LOW_CAPACITY], 0, capacity);
 		cell_array->priv->done_capacity = TRUE;
 	}
@@ -277,7 +277,7 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 
 	/* if we have no devices, don't try to average */
 	if (length == 0) {
-		gpm_debug ("no devices of type %i", unit->kind);
+		egg_debug ("no devices of type %i", unit->kind);
 		return FALSE;
 	}
 
@@ -289,7 +289,7 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 		unit_temp = gpm_cell_get_unit (cell);
 
 		if (unit_temp->is_present == FALSE) {
-			gpm_debug ("ignoring device that is not present");
+			egg_debug ("ignoring device that is not present");
 			continue;
 		}
 
@@ -339,18 +339,18 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 
 	/* sanity check to less than 100W */
 	if (unit->rate > 100*1000) {
-		gpm_warning ("sanity checking rate from %i to 0", unit->rate);
+		egg_warning ("sanity checking rate from %i to 0", unit->rate);
 		unit->rate = 0;
 	}
 
 	/* sanity check */
 	if (unit->is_discharging && unit->is_charging == TRUE) {
-		gpm_warning ("Sanity check kicked in! "
+		egg_warning ("Sanity check kicked in! "
 			     "Multiple device object cannot be charging and discharging simultaneously!");
 		unit->is_charging = FALSE;
 	}
 
-	gpm_debug ("%i devices of type %s", num_present, gpm_cell_unit_get_kind_string (unit));
+	egg_debug ("%i devices of type %s", num_present, gpm_cell_unit_get_kind_string (unit));
 
 	/* Perform following calculations with floating point otherwise we might
 	 * get an with batteries which have a very small charge unit and consequently
@@ -360,10 +360,10 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 		gfloat pc = 100.0f * ((gfloat)unit->charge_current /
 				(gfloat)unit->charge_last_full);
 		if (pc < 0.0f) {
-			gpm_warning ("Corrected percentage charge (%i) and set to minimum", pc);
+			egg_warning ("Corrected percentage charge (%f) and set to minimum", pc);
 			pc = 0.0f;
 		} else if (pc > 100.0f) {
-			gpm_warning ("Corrected percentage charge (%i) and set to maximum", pc);
+			egg_warning ("Corrected percentage charge (%f) and set to maximum", pc);
 			pc = 100.0f;
 		}
 		unit->percentage = pc;
@@ -382,7 +382,7 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 
 		/* get the ac state */
 		on_ac = gpm_ac_adapter_is_present (cell_array->priv->ac_adapter);
-		gpm_debug ("Battery is neither charging nor discharging, "
+		egg_debug ("Battery is neither charging nor discharging, "
 			   "using ac_adaptor value %i", on_ac);
 		if (on_ac) {
 			unit->is_charging = TRUE;
@@ -397,7 +397,7 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 	 * Hopefully we can remove this in 2.19.x sometime. */
 	if (cell_array->priv->use_profile_calc &&
 	    unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
-		gpm_debug ("unit->percentage = %.1f", unit->percentage);
+		egg_debug ("unit->percentage = %.1f", unit->percentage);
 		unit->time_discharge = gpm_profile_get_time (cell_array->priv->profile, unit->percentage, TRUE);
 		unit->time_charge = gpm_profile_get_time (cell_array->priv->profile, unit->percentage, FALSE);
 	} else {
@@ -416,12 +416,12 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 		/* Check the remaining time is under a set limit, to deal with broken
 		   primary batteries rate. Fixes bug #328927 */
 		if (unit->time_charge > (100 * 60 * 60)) {
-			gpm_warning ("Another sanity check kicked in! "
+			egg_warning ("Another sanity check kicked in! "
 				     "Remaining time cannot be > 100 hours!");
 			unit->time_charge = 0;
 		}
 		if (unit->time_discharge > (100 * 60 * 60)) {
-			gpm_warning ("Another sanity check kicked in! "
+			egg_warning ("Another sanity check kicked in! "
 				     "Remaining time cannot be > 100 hours!");
 			unit->time_discharge = 0;
 		}
@@ -453,14 +453,14 @@ gpm_cell_array_get_config_id (GpmCellArray *cell_array)
 
 	/* invalid if not primary */
 	if (unit->kind != GPM_CELL_UNIT_KIND_PRIMARY) {
-		gpm_warning ("only valid for primary");
+		egg_warning ("only valid for primary");
 		return NULL;
 	}
 
 	length = cell_array->priv->array->len;
 	/* if we have no devices, don't try to get id */
 	if (length == 0) {
-		gpm_debug ("no devices of type primary");
+		egg_debug ("no devices of type primary");
 		return NULL;
 	}
 
@@ -501,20 +501,20 @@ gpm_cell_array_emit_system_action (GpmCellArray	   *cell_array,
 		accuracy = gpm_profile_get_accuracy_average (cell_array->priv->profile,
 							     unit->is_discharging);
 		if (accuracy < GPM_PROFILE_GOOD_TRUST) {
-			gpm_debug ("profile is not accurate. Not doing policy action");
+			egg_debug ("profile is not accurate. Not doing policy action");
 			return FALSE;
 		}
 	}
 
 	/* we are not primary, or we are primary with a trusted profile */
 	if (warnings_state == GPM_WARNINGS_ACTION) {
-		gpm_debug ("** EMIT: charge-action");
+		egg_debug ("** EMIT: charge-action");
 		g_signal_emit (cell_array, signals [CHARGE_ACTION], 0, unit->percentage);
 	} else if (warnings_state == GPM_WARNINGS_CRITICAL) {
-		gpm_debug ("** EMIT: charge-critical");
+		egg_debug ("** EMIT: charge-critical");
 		g_signal_emit (cell_array, signals [CHARGE_CRITICAL], 0, unit->percentage);
 	} else if (warnings_state == GPM_WARNINGS_LOW) {
-		gpm_debug ("** EMIT: charge-low");
+		egg_debug ("** EMIT: charge-low");
 		g_signal_emit (cell_array, signals [CHARGE_LOW], 0, unit->percentage);
 	}
 	return TRUE;
@@ -536,13 +536,13 @@ gpm_cell_array_percent_changed (GpmCellArray *cell_array)
 
 	unit = &(cell_array->priv->unit);
 
-	gpm_debug ("printing combined new device:");
+	egg_debug ("printing combined new device:");
 	gpm_cell_unit_print (unit);
 
 	/* only emit if all devices are fully charged */
 	if (cell_array->priv->done_fully_charged == FALSE &&
 	    gpm_cell_unit_is_charged (unit)) {
-		gpm_debug ("** EMIT: fully-charged");
+		egg_debug ("** EMIT: fully-charged");
 		g_signal_emit (cell_array, signals [FULLY_CHARGED], 0);
 		cell_array->priv->done_fully_charged = TRUE;
 	}
@@ -553,7 +553,7 @@ gpm_cell_array_percent_changed (GpmCellArray *cell_array)
 	if (cell_array->priv->done_fully_charged &&
 	    unit->percentage < GPM_CELL_UNIT_MIN_CHARGED_PERCENTAGE &&
 	    gpm_cell_unit_is_charged (unit) == FALSE) {
-		gpm_debug ("enabled fully charged");
+		egg_debug ("enabled fully charged");
 		cell_array->priv->done_fully_charged = FALSE;
 	}
 
@@ -566,20 +566,20 @@ gpm_cell_array_percent_changed (GpmCellArray *cell_array)
 
 	/* see if we need to issue a warning */
 	if (warnings_state == GPM_WARNINGS_NONE) {
-		gpm_debug ("No warning");
+		egg_debug ("No warning");
 	} else {
 		/* Always check if we already notified the user */
 		if (warnings_state <= cell_array->priv->warnings_state) {
-			gpm_debug ("Already notified %i", warnings_state);
+			egg_debug ("Already notified %i", warnings_state);
 		} else {
 
 			/* As the level is more critical than the last warning, save it */
 			cell_array->priv->warnings_state = warnings_state;
 
-			gpm_debug ("warning state = %i", warnings_state);
+			egg_debug ("warning state = %i", warnings_state);
 			if (warnings_state == GPM_WARNINGS_DISCHARGING) {
 				/* we emit this, even if the profile is crap */
-				gpm_debug ("** EMIT: discharging");
+				egg_debug ("** EMIT: discharging");
 				g_signal_emit (cell_array, signals [DISCHARGING], 0, unit->percentage);
 			} else {
 				gpm_cell_array_emit_system_action (cell_array, warnings_state);
@@ -614,7 +614,7 @@ gpm_cell_percent_changed_cb (GpmCell *cell, gfloat percent, GpmCellArray *cell_a
 
 	/* proxy to engine if different */
 	if (old_percent != unit->percentage) {
-		gpm_debug ("** EMIT: percent-changed");
+		egg_debug ("** EMIT: percent-changed");
 		g_signal_emit (cell_array, signals [PERCENT_CHANGED], 0, unit->percentage);
 		gpm_cell_array_percent_changed (cell_array);
 	}
@@ -635,12 +635,12 @@ gpm_cell_charging_changed_cb (GpmCell *cell, gboolean charging, GpmCellArray *ce
 	/* recalculate */
 	gpm_cell_array_update (cell_array);
 
-	gpm_debug ("printing combined new device:");
+	egg_debug ("printing combined new device:");
 	gpm_cell_unit_print (unit);
 
 	/* invalidate warning */
 	if (unit->is_discharging == FALSE || unit->is_charging) {
-		gpm_debug ("warning state invalidated");
+		egg_debug ("warning state invalidated");
 		cell_array->priv->warnings_state = GPM_WARNINGS_NONE;
 	}
 
@@ -650,7 +650,7 @@ gpm_cell_charging_changed_cb (GpmCell *cell, gboolean charging, GpmCellArray *ce
 	}
 
 	/* proxy to engine */
-	gpm_debug ("** EMIT: charging-changed");
+	egg_debug ("** EMIT: charging-changed");
 	g_signal_emit (cell_array, signals [CHARGING_CHANGED], 0, charging);
 }
 
@@ -669,7 +669,7 @@ gpm_cell_discharging_changed_cb (GpmCell *cell, gboolean discharging, GpmCellArr
 	/* recalculate */
 	gpm_cell_array_update (cell_array);
 
-	gpm_debug ("printing combined new device:");
+	egg_debug ("printing combined new device:");
 	gpm_cell_unit_print (unit);
 
 	/* invalidate warning */
@@ -678,7 +678,7 @@ gpm_cell_discharging_changed_cb (GpmCell *cell, gboolean discharging, GpmCellArr
 	}
 
 	/* proxy to engine */
-	gpm_debug ("** EMIT: discharging-changed");
+	egg_debug ("** EMIT: discharging-changed");
 	g_signal_emit (cell_array, signals [DISCHARGING_CHANGED], 0, discharging);
 }
 
@@ -702,7 +702,7 @@ gpm_cell_array_index_device_id (GpmCellArray *cell_array, const gchar *device_id
 		cell = (GpmCell *) g_ptr_array_index (cell_array->priv->array, i);
 		cell_device_id = gpm_cell_get_device_id (cell);
 		if (cell_device_id != NULL && strcmp (cell_device_id, device_id) == 0) {
-			gpm_debug ("Found %s with device id check", device_id);
+			egg_debug ("Found %s with device id check", device_id);
 			return i;
 		}
 	}
@@ -726,17 +726,17 @@ gpm_check_device_key (GpmCellArray *cell_array, const gchar *udi, const gchar *k
 	device = hal_gdevice_new ();
 	ret = hal_gdevice_set_udi (device, udi);
 	if (!ret) {
-		gpm_warning ("failed to set UDI %s", udi);
+		egg_warning ("failed to set UDI %s", udi);
 		return FALSE;
 	}
 
 	/* check type */
 	ret = hal_gdevice_get_string (device, key, &rettype, NULL);
 	if (!ret || rettype == NULL) {
-		gpm_warning ("failed to get %s", key);
+		egg_warning ("failed to get %s", key);
 		return FALSE;
 	}
-	gpm_debug ("checking %s against %s", rettype, value);
+	egg_debug ("checking %s against %s", rettype, value);
 	if (strcmp (rettype, value) == 0) {
 		matches = TRUE;
 	}
@@ -762,7 +762,7 @@ gpm_cell_array_collection_changed (GpmCellArray *cell_array)
 	length = cell_array->priv->array->len;
 	/* if we have no devices, don't try to get refresh anything */
 	if (length == 0) {
-		gpm_debug ("no devices of type");
+		egg_debug ("no devices of type");
 		return FALSE;
 	}
 
@@ -780,7 +780,7 @@ gpm_cell_array_collection_changed (GpmCellArray *cell_array)
 	gpm_cell_array_update (cell_array);
 
 	/* emit */
-	gpm_debug ("** EMIT: collection-changed");
+	egg_debug ("** EMIT: collection-changed");
 	g_signal_emit (cell_array, signals [COLLECTION_CHANGED], 0, unit->percentage);
 
 	/* make sure */
@@ -808,7 +808,7 @@ gpm_cell_array_add_device_id (GpmCellArray *cell_array, const gchar *device_id)
 	kind_string = gpm_cell_unit_get_kind_string (unit);
 	ret = gpm_check_device_key (cell_array, device_id, "battery.type", kind_string);
 	if (!ret) {
-		gpm_debug ("not adding %s for %s", device_id, kind_string);
+		egg_debug ("not adding %s for %s", device_id, kind_string);
 		return FALSE;
 	}
 
@@ -816,11 +816,11 @@ gpm_cell_array_add_device_id (GpmCellArray *cell_array, const gchar *device_id)
 	index = gpm_cell_array_index_device_id (cell_array, device_id);
 	if (index != -1) {
 		/* already added */
-		gpm_debug ("already added %s", device_id);
+		egg_debug ("already added %s", device_id);
 		return FALSE;
 	}
 
-	gpm_debug ("adding the right kind of battery: %s", kind_string);
+	egg_debug ("adding the right kind of battery: %s", kind_string);
 
 	cell = gpm_cell_new ();
 	g_signal_connect (cell, "perhaps-recall",
@@ -870,7 +870,7 @@ gpm_cell_array_coldplug (GpmCellArray *cell_array)
 	error = NULL;
 	ret = hal_gmanager_find_capability (cell_array->priv->hal_manager, "battery", &device_names, &error);
 	if (!ret) {
-		gpm_warning ("Couldn't obtain list of batteries: %s", error->message);
+		egg_warning ("Couldn't obtain list of batteries: %s", error->message);
 		g_error_free (error);
 		return FALSE;
 	}
@@ -995,7 +995,7 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 
 	/* don't display the text if we are low in accuracy */
 	accuracy = gpm_profile_get_accuracy (cell_array->priv->profile, (guint) unit->percentage);
-	gpm_debug ("accuracy = %i", accuracy);
+	egg_debug ("accuracy = %i", accuracy);
 
 	/* precalculate so we don't get Unknown time remaining */
 	charge_time_round = gpm_precision_round_down (unit->time_charge, GPM_UI_TIME_PRECISION);
@@ -1057,7 +1057,7 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 		}
 
 	} else {
-		gpm_warning ("in an undefined state we are not charging or "
+		egg_warning ("in an undefined state we are not charging or "
 			     "discharging and the batteries are also not charged");
 		description = g_strdup (_("Battery state could not be read at this time\n"));
 	}
@@ -1088,7 +1088,7 @@ hal_device_removed_cb (HalGManager  *hal_manager,
 		return FALSE;
 	}
 
-	gpm_debug ("Removing udi=%s", udi);
+	egg_debug ("Removing udi=%s", udi);
 
 	/* we unref as the device has gone away */
 	cell = (GpmCell *) g_ptr_array_index (cell_array->priv->array, index);
@@ -1117,7 +1117,7 @@ hal_new_capability_cb (HalGManager  *hal_manager,
 		       const gchar  *capability,
 		       GpmCellArray *cell_array)
 {
-	gpm_debug ("udi=%s, capability=%s", udi, capability);
+	egg_debug ("udi=%s, capability=%s", udi, capability);
 
 	if (strcmp (capability, "battery") == 0) {
 		gpm_cell_array_add_device_id (cell_array, udi);
@@ -1174,7 +1174,7 @@ conf_key_changed_cb (GpmConf      *conf,
 		gpm_cell_array_update (cell_array);
 
 		/* emit signal to get everything up from here to update */
-		gpm_debug ("** EMIT: percent-changed");
+		egg_debug ("** EMIT: percent-changed");
 		unit = &(cell_array->priv->unit);
 		g_signal_emit (cell_array, signals [PERCENT_CHANGED], 0, unit->percentage);
 	}
@@ -1228,7 +1228,7 @@ phone_device_removed_cb (GpmPhone     *phone,
 
 	unit = &(cell_array->priv->unit);
 	if (unit == NULL) {
-		gpm_warning ("unit was NULL!");
+		egg_warning ("unit was NULL!");
 		return;
 	}
 
@@ -1240,7 +1240,7 @@ phone_device_removed_cb (GpmPhone     *phone,
 	/* we unref as the device has gone away (only support one phone) */
 	cell = (GpmCell *) g_ptr_array_index (cell_array->priv->array, 0);
 	if (cell == NULL) {
-		gpm_warning ("cell was NULL - gnome-phone-manager is playing with us!");
+		egg_warning ("cell was NULL - gnome-phone-manager is playing with us!");
 		return;
 	}
 	g_object_unref (cell);

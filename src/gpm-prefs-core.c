@@ -40,7 +40,7 @@
 #include "gpm-prefs.h"
 #include "gpm-conf.h"
 #include "gpm-prefs-core.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-stock-icons.h"
 #include "gpm-screensaver.h"
 #include "gpm-prefs-server.h"
@@ -156,7 +156,7 @@ gpm_dbus_method_bool (const gchar *method)
 	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (connection == NULL) {
 		if (error) {
-			gpm_warning ("Couldn't connect to PowerManager %s",
+			egg_warning ("Couldn't connect to PowerManager %s",
 				     error->message);
 			g_error_free (error);
 		}
@@ -172,12 +172,12 @@ gpm_dbus_method_bool (const gchar *method)
 				 G_TYPE_BOOLEAN, &value,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		egg_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (!ret) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("%s failed!", method);
+		egg_warning ("%s failed!", method);
 		return FALSE;
 	}
 	g_object_unref (proxy);
@@ -200,7 +200,7 @@ gpm_dbus_method_int (const gchar *method)
 	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (connection == NULL) {
 		if (error) {
-			gpm_warning ("Couldn't connect to PowerManager %s",
+			egg_warning ("Couldn't connect to PowerManager %s",
 				     error->message);
 			g_error_free (error);
 		}
@@ -216,12 +216,12 @@ gpm_dbus_method_int (const gchar *method)
 				 G_TYPE_INT, &value,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		egg_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (!ret) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("%s failed!", method);
+		egg_warning ("%s failed!", method);
 		return FALSE;
 	}
 	g_object_unref (proxy);
@@ -237,7 +237,7 @@ static void
 gpm_prefs_help_cb (GtkWidget *widget,
 		   GpmPrefs  *prefs)
 {
-	gpm_debug ("emitting action-help");
+	egg_debug ("emitting action-help");
 	g_signal_emit (prefs, signals [ACTION_HELP], 0);
 }
 
@@ -254,7 +254,7 @@ gpm_prefs_icon_radio_cb (GtkWidget *widget,
 
 	policy = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "policy"));
 	str = gpm_tray_icon_mode_to_string (policy);
-	gpm_debug ("Changing %s to %s", GPM_CONF_UI_ICON_POLICY, str);
+	egg_debug ("Changing %s to %s", GPM_CONF_UI_ICON_POLICY, str);
 	gpm_conf_set_string (prefs->priv->conf, GPM_CONF_UI_ICON_POLICY, str);
 }
 
@@ -320,7 +320,7 @@ gpm_prefs_sleep_slider_changed_cb (GtkRange *range,
 	}
 
 	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (range), "conf_key");
-	gpm_debug ("Changing %s to %i", gpm_pref_key, value);
+	egg_debug ("Changing %s to %i", gpm_pref_key, value);
 	gpm_conf_set_int (prefs->priv->conf, gpm_pref_key, value);
 }
 
@@ -385,7 +385,7 @@ gpm_prefs_brightness_slider_changed_cb (GtkRange *range,
 	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (range), "conf_key");
 
 	g_object_set_data (G_OBJECT (range), "conf_key", (gpointer) gpm_pref_key);
-	gpm_debug ("Changing %s to %i", gpm_pref_key, (int) value);
+	egg_debug ("Changing %s to %i", gpm_pref_key, (int) value);
 	gpm_conf_set_int (prefs->priv->conf, gpm_pref_key, (gint) value);
 }
 
@@ -458,7 +458,7 @@ gpm_prefs_action_combo_changed_cb (GtkWidget *widget,
 
 	g_free (value);
 	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (widget), "conf_key");
-	gpm_debug ("Changing %s to %s", gpm_pref_key, action);
+	egg_debug ("Changing %s to %s", gpm_pref_key, action);
 	gpm_conf_set_string (prefs->priv->conf, gpm_pref_key, action);
 }
 
@@ -494,21 +494,21 @@ gpm_prefs_setup_action_combo (GpmPrefs     *prefs,
 			  G_CALLBACK (gpm_prefs_action_combo_changed_cb), prefs);
 
 	if (value == NULL) {
-		gpm_warning ("invalid schema, please re-install");
+		egg_warning ("invalid schema, please re-install");
 		value = g_strdup ("nothing");
 	}
 
 	while (actions[i] != NULL) {
 		if ((strcmp (actions[i], ACTION_SHUTDOWN) == 0) && !prefs->priv->can_shutdown) {
-			gpm_debug ("Cannot add option, as cannot shutdown.");
+			egg_debug ("Cannot add option, as cannot shutdown.");
 		} else if (strcmp (actions[i], ACTION_SHUTDOWN) == 0 && prefs->priv->can_shutdown) {
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
 						   ACTION_SHUTDOWN_TEXT);
 			n_added++;
 		} else if ((strcmp (actions[i], ACTION_SUSPEND) == 0) && !prefs->priv->can_suspend) {
-			gpm_debug ("Cannot add option, as cannot suspend.");
+			egg_debug ("Cannot add option, as cannot suspend.");
 		} else if ((strcmp (actions[i], ACTION_HIBERNATE) == 0) && !prefs->priv->can_hibernate) {
-			gpm_debug ("Cannot add option, as cannot hibernate.");
+			egg_debug ("Cannot add option, as cannot hibernate.");
 		} else if ((strcmp (actions[i], ACTION_SUSPEND) == 0) && prefs->priv->can_suspend) {
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
 						   ACTION_SUSPEND_TEXT);
@@ -530,7 +530,7 @@ gpm_prefs_setup_action_combo (GpmPrefs     *prefs,
 						   ACTION_NOTHING_TEXT);
 			n_added++;
 		} else {
-			gpm_error ("Unknown action read from conf: %s", actions[i]);
+			egg_error ("Unknown action read from conf: %s", actions[i]);
 		}
 
 		if (strcmp (value, actions[i]) == 0)
@@ -558,7 +558,7 @@ gpm_prefs_checkbox_lock_cb (GtkWidget *widget,
 
 	widget_name = gtk_widget_get_name (widget);
 	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (widget), "conf_key");
-	gpm_debug ("Changing %s to %i", gpm_pref_key, checked);
+	egg_debug ("Changing %s to %i", gpm_pref_key, checked);
 	gpm_conf_set_bool (prefs->priv->conf, gpm_pref_key, checked);
 }
 
@@ -578,7 +578,7 @@ gpm_prefs_setup_checkbox (GpmPrefs    *prefs,
 	gboolean checked;
 	GtkWidget *widget;
 
-	gpm_debug ("Setting up %s", gpm_pref_key);
+	egg_debug ("Setting up %s", gpm_pref_key);
 
 	widget = glade_xml_get_widget (xml, widget_name);
 
@@ -604,7 +604,7 @@ static void
 gpm_prefs_close_cb (GtkWidget	*widget,
 		    GpmPrefs	*prefs)
 {
-	gpm_debug ("emitting action-close");
+	egg_debug ("emitting action-close");
 	g_signal_emit (prefs, signals [ACTION_CLOSE], 0);
 }
 
@@ -639,7 +639,7 @@ set_idle_hscale_stops (GpmPrefs    *prefs,
 	GtkWidget *widget;
 	widget = glade_xml_get_widget (prefs->priv->glade_xml, widget_name);
 	if (gs_idle_time + 1 > NEVER_TIME_ON_SLIDER) {
-		gpm_warning ("gnome-screensaver timeout is really big. "
+		egg_warning ("gnome-screensaver timeout is really big. "
 			     "Not sure what to do");
 		return;
 	}
@@ -685,15 +685,15 @@ conf_key_changed_cb (GpmConf     *conf,
 
 	if (strcmp (key, GPM_CONF_LOWPOWER_AC) == 0) {
 		gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_LOWPOWER_AC, &enabled);
-		gpm_debug ("need to enable checkbox");
+		egg_debug ("need to enable checkbox");
 
 	} else if (strcmp (key, GPM_CONF_LOWPOWER_UPS) == 0) {
 		gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_LOWPOWER_UPS, &enabled);
-		gpm_debug ("need to enable checkbox");
+		egg_debug ("need to enable checkbox");
 
 	} else if (strcmp (key, GPM_CONF_LOWPOWER_BATT) == 0) {
 		gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_LOWPOWER_BATT, &enabled);
-		gpm_debug ("need to enable checkbox");
+		egg_debug ("need to enable checkbox");
 	}
 }
 
@@ -1024,7 +1024,7 @@ gpk_prefs_create_custom_widget (GladeXML *xml, gchar *func_name, gchar *name,
 	if (strcmp (name, "button_default") == 0) {
 		return polkit_gnome_action_create_button (prefs->priv->default_action);
 	}
-	gpm_warning ("name unknown=%s", name);
+	egg_warning ("name unknown=%s", name);
 	return NULL;
 }
 
@@ -1086,7 +1086,7 @@ gpm_prefs_init (GpmPrefs *prefs)
 	prefs->priv->can_shutdown = gpm_dbus_method_bool ("CanShutdown");
 	prefs->priv->can_suspend = gpm_dbus_method_bool ("CanSuspend");
 	prefs->priv->can_hibernate = gpm_dbus_method_bool ("CanHibernate");
-	gpm_debug ("caps=%i", caps);
+	egg_debug ("caps=%i", caps);
 
 #ifdef HAVE_GCONF_DEFAULTS
 	/* use custom widgets */

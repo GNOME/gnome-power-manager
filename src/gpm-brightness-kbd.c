@@ -46,7 +46,7 @@
 #include "gpm-brightness-kbd.h"
 #include "gpm-conf.h"
 #include "gpm-common.h"
-#include "gpm-debug.h"
+#include "egg-debug.h"
 #include "gpm-light-sensor.h"
 #include "gpm-marshal.h"
 
@@ -100,7 +100,7 @@ gpm_brightness_kbd_get_hw (GpmBrightnessKbd *brightness,
 
 	proxy = dbus_proxy_get_proxy (brightness->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected to HAL");
+		egg_warning ("not connected to HAL");
 		return FALSE;
 	}
 
@@ -109,12 +109,12 @@ gpm_brightness_kbd_get_hw (GpmBrightnessKbd *brightness,
 				 G_TYPE_INT, &brightness_level,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		egg_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (!ret) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("GetBrightness failed!");
+		egg_warning ("GetBrightness failed!");
 		return FALSE;
 	} 
 
@@ -144,30 +144,30 @@ gpm_brightness_kbd_set_hw (GpmBrightnessKbd *brightness,
 
 	proxy = dbus_proxy_get_proxy (brightness->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected to HAL");
+		egg_warning ("not connected to HAL");
 		return FALSE;
 	}
 
 	if (brightness_level_hw < 0 ||
 	    brightness_level_hw > brightness->priv->levels - 1) {
-		gpm_warning ("set outside range (%i of %i)",
+		egg_warning ("set outside range (%i of %i)",
 			     brightness_level_hw, brightness->priv->levels - 1);
 		return FALSE;
 	}
 
-	gpm_debug ("Setting %i of %i", brightness_level_hw, brightness->priv->levels - 1);
+	egg_debug ("Setting %i of %i", brightness_level_hw, brightness->priv->levels - 1);
 
 	ret = dbus_g_proxy_call (proxy, "SetBrightness", &error,
 				 G_TYPE_INT, brightness_level_hw,
 				 G_TYPE_INVALID,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		egg_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (!ret) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("SetBrightness failed!");
+		egg_warning ("SetBrightness failed!");
 		return FALSE;
 	}
 	brightness->priv->current_hw = brightness_level_hw;
@@ -193,7 +193,7 @@ gpm_brightness_kbd_dim_hw_step (GpmBrightnessKbd *brightness,
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
 	current_hw = brightness->priv->current_hw;
-	gpm_debug ("new_level_hw=%i, current_hw=%i", new_level_hw, current_hw);
+	egg_debug ("new_level_hw=%i, current_hw=%i", new_level_hw, current_hw);
 
 	/* we do the step interval as we can have insane levels of brightness_kbd */
 	if (new_level_hw == current_hw) {
@@ -254,7 +254,7 @@ gpm_brightness_kbd_dim_hw (GpmBrightnessKbd *brightness,
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
-	gpm_debug ("new_level_hw=%i", new_level_hw);
+	egg_debug ("new_level_hw=%i", new_level_hw);
 
 	/* some machines don't take kindly to auto-dimming */
 	if (brightness->priv->does_own_dimming) {
@@ -291,7 +291,7 @@ gpm_brightness_kbd_set_dim (GpmBrightnessKbd *brightness,
 	if (brightness->priv->level_std_hw > level_hw) {
 		brightness->priv->level_dim_hw = level_hw;
 	} else {
-		gpm_warning ("Current brightness_kbd is %i, dim brightness_kbd is %i.",
+		egg_warning ("Current brightness_kbd is %i, dim brightness_kbd is %i.",
 			     brightness->priv->level_std_hw, level_hw);
 		brightness->priv->level_dim_hw = brightness->priv->level_std_hw;
 	}
@@ -341,7 +341,7 @@ gpm_brightness_kbd_dim (GpmBrightnessKbd *brightness)
 
 	/* check to see if we are already dimmed */
 	if (brightness->priv->is_dimmed) {
-		gpm_warning ("already dim'ed");
+		egg_warning ("already dim'ed");
 		return FALSE;
 	}
 	brightness->priv->is_dimmed = TRUE;
@@ -363,7 +363,7 @@ gpm_brightness_kbd_undim (GpmBrightnessKbd *brightness)
 
 	/* check to see if we are already dimmed */
 	if (brightness->priv->is_dimmed == FALSE) {
-		gpm_warning ("already undim'ed");
+		egg_warning ("already undim'ed");
 		return FALSE;
 	}
 	brightness->priv->is_dimmed = FALSE;
@@ -424,7 +424,7 @@ gpm_brightness_kbd_up (GpmBrightnessKbd *brightness)
 
 	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
 					      brightness->priv->levels);
-	gpm_debug ("emitting brightness-changed (%i)", percentage);
+	egg_debug ("emitting brightness-changed (%i)", percentage);
 	g_signal_emit (brightness, signals [BRIGHTNESS_CHANGED], 0, percentage);
 
 	return TRUE;
@@ -460,7 +460,7 @@ gpm_brightness_kbd_down (GpmBrightnessKbd *brightness)
 
 	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
 					      brightness->priv->levels);
-	gpm_debug ("emitting brightness-changed (%i)", percentage);
+	egg_debug ("emitting brightness-changed (%i)", percentage);
 	g_signal_emit (brightness, signals [BRIGHTNESS_CHANGED], 0, percentage);
 
 	return TRUE;
@@ -563,7 +563,7 @@ adjust_kbd_brightness_according_to_ambient_light (GpmBrightnessKbd *brightness,
 		state = STATE_FORCED_UNKNOWN;
 	}
 
- 	gpm_debug ("ambient light percent = %d", ambient_light);
+ 	egg_debug ("ambient light percent = %d", ambient_light);
 
 	if (state == STATE_FORCED_UNKNOWN) {
 		/* if this is the first time we're launched with ambient light data... */
@@ -692,7 +692,7 @@ gpm_brightness_kbd_init (GpmBrightnessKbd *brightness)
 	hal_gmanager_find_capability (manager, "keyboard_backlight", &names, NULL);
 	g_object_unref (manager);
 	if (names == NULL || names[0] == NULL) {
-		gpm_warning ("No devices of capability keyboard_backlight");
+		egg_warning ("No devices of capability keyboard_backlight");
 		return;
 	}
 
@@ -726,7 +726,7 @@ gpm_brightness_kbd_init (GpmBrightnessKbd *brightness)
 	brightness->priv->level_dim_hw = 1;
 	brightness->priv->level_std_hw = 1;
 
-	gpm_debug ("Starting: (%i of %i)",
+	egg_debug ("Starting: (%i of %i)",
 		   brightness->priv->current_hw,
 		   brightness->priv->levels - 1);
 
