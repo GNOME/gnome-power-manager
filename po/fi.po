@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the gnome-power-manager 
 # package.
 # Ilkka Tuohela <hile@iki.fi>, 2005-2008.
+# Timo Jyrinki <timo.jyrinki@iki.fi>, 2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-13 14:55+0300\n"
-"PO-Revision-Date: 2008-08-13 14:05+0300\n"
-"Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
+"POT-Creation-Date: 2008-09-03 17:41+0300\n"
+"PO-Revision-Date: 2008-09-03 17:41+0300\n"
+"Last-Translator: Timo Jyrinki <timo.jyrinki@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -53,7 +54,7 @@ msgid ""
 "of the License, or (at your option) any later version."
 msgstr ""
 "Gnomen virransäästön hallinta on vapaa ohjelma; sitä on sallittu \n"
-"levittää edelleen ja muuttaa GNU yleisen lisenssin (GPL lisenssin)\n"
+"levittää edelleen ja muuttaa GNU yleisen lisenssin (GPL-lisenssin)\n"
 "ehtojen mukaan sellaisina kuin Free Software Foundation on ne \n"
 "julkaissut; joko Lisenssin version 2, tai (valinnan mukaan) minkä\n"
 "tahansa myöhemmän version mukaisesti."
@@ -69,7 +70,7 @@ msgstr ""
 "Gnomen virransäästön hallintaa levitetään siinä toivossa, että se \n"
 "olisi hyödyllinen, mutta ilman mitään takuuta; ilman edes hiljaista \n"
 "takuuta kaupallisesti hyväksyttävästä laadusta tai soveltuvuudesta\n"
-" tiettyyn tarkoitukseen.  Katso GPL lisenssistä lisää yksityiskohtia."
+" tiettyyn tarkoitukseen.  Katso GPL-lisenssistä lisää yksityiskohtia."
 
 #: ../applets/brightness/brightness-applet.c:757
 #: ../applets/inhibit/inhibit-applet.c:427 ../src/gpm-tray-icon.c:332
@@ -1548,7 +1549,7 @@ msgstr "Älä käynnistä taustaprosessina"
 
 #: ../src/gpm-main.c:153 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:91
 msgid "Show extra debugging information"
-msgstr "Näytä ylimääräisiä debug-tietoja"
+msgstr "Näytä ylimääräisiä virheenjäljitystietoja"
 
 #: ../src/gpm-main.c:155
 msgid "Show version of installed program and exit"
@@ -1990,9 +1991,9 @@ msgstr ""
 
 #: ../src/gpm-notify.c:612
 msgid "Visit quirk website"
-msgstr "Käy quircin www-sivuilla"
+msgstr "Käy quirkin WWW-sivuilla"
 
-#: ../src/gpm-cell-array.c:990
+#: ../src/gpm-cell-array.c:1014
 #, c-format
 msgid ""
 "%s fully charged (%.1f%%)\n"
@@ -2001,23 +2002,23 @@ msgstr ""
 "%s on täysin ladattu (%.1f %%)\n"
 "Akku riittää %s\n"
 
-#: ../src/gpm-cell-array.c:994
+#: ../src/gpm-cell-array.c:1018
 #, c-format
 msgid "%s fully charged (%.1f%%)\n"
 msgstr "%s täysin ladattu (%.1f %%)\n"
 
-#: ../src/gpm-cell-array.c:1002
+#: ../src/gpm-cell-array.c:1026
 #, c-format
 msgid "%s %s remaining (%.1f%%)\n"
 msgstr "%s %s jäljellä (%.1f %%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:1007
+#: ../src/gpm-cell-array.c:1031
 #, c-format
 msgid "%s discharging (%.1f%%)\n"
 msgstr "%s purkautuu (%.1f %%)\n"
 
-#: ../src/gpm-cell-array.c:1019
+#: ../src/gpm-cell-array.c:1043
 #, c-format
 msgid ""
 "%s %s until charged (%.1f%%)\n"
@@ -2026,29 +2027,31 @@ msgstr ""
 "%s %s kunnes ladattu (%.1f %%)\n"
 "Akku riittää %s\n"
 
-#: ../src/gpm-cell-array.c:1026
+#: ../src/gpm-cell-array.c:1050
 #, c-format
 msgid "%s %s until charged (%.1f%%)\n"
 msgstr "%s %s kunnes ladattu (%.1f %%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:1031
+#: ../src/gpm-cell-array.c:1055
 #, c-format
 msgid "%s charging (%.1f%%)\n"
 msgstr "%s latautuu (%.1f %%)\n"
 
-#: ../src/gpm-cell-array.c:1038
+#: ../src/gpm-cell-array.c:1062
 msgid "Battery state could not be read at this time\n"
 msgstr "Akun tilaa ei voitu lukea\n"
 
 #: ../src/gpm-cell.c:543
-msgid "Product"
-msgstr "Tuote"
+#, c-format
+msgid "<b>Product:</b> %s\n"
+msgstr "<b>Tuote:</b> %s\n"
 
 #: ../src/gpm-cell.c:546 ../src/gpm-cell.c:548 ../src/gpm-cell.c:550
 #: ../src/gpm-cell.c:552
-msgid "Status"
-msgstr "Tila"
+#, c-format
+msgid "<b>Status:</b> %s\n"
+msgstr "<b>Tila:</b> %s\n"
 
 #: ../src/gpm-cell.c:546
 msgid "Missing"
@@ -2067,84 +2070,114 @@ msgid "Discharging"
 msgstr "Purkautuu"
 
 #: ../src/gpm-cell.c:555
-msgid "Percentage charge"
-msgstr "Lataus prosentteina"
+#, c-format
+msgid "<b>Percentage charge:</b> %.1f%%\n"
+msgstr "<b>Lataus prosentteina:</b> %.1f%%\n"
 
-#: ../src/gpm-cell.c:559
-msgid "Vendor:"
-msgstr "Valmistaja:"
+#: ../src/gpm-cell.c:558
+#, c-format
+msgid "<b>Vendor:</b> %s\n"
+msgstr "<b>Valmistaja:</b> %s\n"
 
-#: ../src/gpm-cell.c:564
+#: ../src/gpm-cell.c:563
 msgid "Lithium ion"
 msgstr "Li-Ion"
 
-#: ../src/gpm-cell.c:566
+#: ../src/gpm-cell.c:565
 msgid "Lead acid"
 msgstr "Lyijyhappo"
 
-#: ../src/gpm-cell.c:568
+#: ../src/gpm-cell.c:567
 msgid "Lithium polymer"
 msgstr "Li-Po"
 
-#: ../src/gpm-cell.c:570
+#: ../src/gpm-cell.c:569
 msgid "Nickel metal hydride"
 msgstr "NiMh"
 
-#: ../src/gpm-cell.c:577
-msgid "Technology"
-msgstr "Tekniikka"
+#. Translators: Unknown is related to the Technology of the battery
+#: ../src/gpm-cell.c:572 ../src/gpm-cell-unit.c:260 ../src/gpm-cell-unit.c:276
+#: ../src/gpm-statistics-core.c:739
+msgid "Unknown"
+msgstr "Tuntematon"
+
+#: ../src/gpm-cell.c:578
+#, c-format
+msgid "<b>Technology:</b> %s\n"
+msgstr "<b>Tekniikka:</b> %s\n"
 
 #: ../src/gpm-cell.c:581
-msgid "Serial number"
-msgstr "Sarjanumero"
+#, c-format
+msgid "<b>Serial number:</b> %s\n"
+msgstr "<b>Sarjanumero:</b> %s\n"
 
-#: ../src/gpm-cell.c:585
-msgid "Model"
-msgstr "Malli"
+#: ../src/gpm-cell.c:584
+#, c-format
+msgid "<b>Model:</b> %s\n"
+msgstr "<b>Malli:</b> %s\n"
 
-#: ../src/gpm-cell.c:591
-msgid "Charge time"
-msgstr "Latausaika"
+#: ../src/gpm-cell.c:589
+#, c-format
+msgid "<b>Charge time:</b> %s\n"
+msgstr "<b>Latausaika:</b> %s\n"
 
-#: ../src/gpm-cell.c:598
-msgid "Discharge time"
-msgstr "Purkautumisaika"
+#: ../src/gpm-cell.c:595
+#, c-format
+msgid "<b>Discharge time:</b> %s\n"
+msgstr "<b>Purkautumisaika:</b> %s\n"
 
-#: ../src/gpm-cell.c:604
+#. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
+#: ../src/gpm-cell.c:602
 msgid "Excellent"
 msgstr "Mainio"
 
-#: ../src/gpm-cell.c:606
+#: ../src/gpm-cell.c:604
 msgid "Good"
 msgstr "Hyvä"
 
-#: ../src/gpm-cell.c:608
+#: ../src/gpm-cell.c:606
 msgid "Fair"
 msgstr "Kelvollinen"
 
-#: ../src/gpm-cell.c:610
+#: ../src/gpm-cell.c:608
 msgid "Poor"
 msgstr "Huono"
 
-#: ../src/gpm-cell.c:613
-msgid "Capacity"
-msgstr "Kapasiteetti"
+#. Translators: %i is a percentage and %s the condition (Excellent, Good, ...)
+#: ../src/gpm-cell.c:611
+#, c-format
+msgid "<b>Capacity:</b> %i%% (%s)\n"
+msgstr "<b>Kapasiteetti:</b> %i%% (%s)\n"
 
-#: ../src/gpm-cell.c:619 ../src/gpm-cell.c:642
-msgid "Current charge"
-msgstr "Nykyinen lataus"
+#: ../src/gpm-cell.c:616
+#, c-format
+msgid "<b>Current charge:</b> %.1f Wh\n"
+msgstr "<b>Nykyinen lataus:</b> %.1f Wh\n"
+
+#: ../src/gpm-cell.c:621
+#, c-format
+msgid "<b>Last full charge:</b> %.1f Wh\n"
+msgstr "<b>Viimeisin täysi lataus:</b> %.1f Wh\n"
 
 #: ../src/gpm-cell.c:625
-msgid "Last full charge"
-msgstr "Viimeisin täysi lataus"
+#, c-format
+msgid "<b>Design charge:</b> %.1f Wh\n"
+msgstr "<b>Suunniteltu lataus:</b> %.1f Wh\n"
 
-#: ../src/gpm-cell.c:630 ../src/gpm-cell.c:647
-msgid "Design charge"
-msgstr "Suunniteltu lataus"
+#: ../src/gpm-cell.c:629
+#, c-format
+msgid "<b>Charge rate:</b> %.1f W\n"
+msgstr "<b>Latausnopeus:</b> %.1f W\n"
 
 #: ../src/gpm-cell.c:635
-msgid "Charge rate"
-msgstr "Latausnopeus"
+#, c-format
+msgid "<b>Current charge:</b> %i/7\n"
+msgstr "<b>Nykyinen lataus:</b> %i/7\n"
+
+#: ../src/gpm-cell.c:639
+#, c-format
+msgid "<b>Design charge:</b> %i/7\n"
+msgstr "<b>Suunniteltu lataus:</b> %i/7\n"
 
 #: ../src/gpm-cell-unit.c:248
 msgid "Laptop batteries"
@@ -2169,11 +2202,6 @@ msgstr "Kämmentietokoneet"
 #: ../src/gpm-cell-unit.c:258
 msgid "Cell phones"
 msgstr "Matkapuhelimet"
-
-#: ../src/gpm-cell-unit.c:260 ../src/gpm-cell-unit.c:276
-#: ../src/gpm-statistics-core.c:739
-msgid "Unknown"
-msgstr "Tuntematon"
 
 #: ../src/gpm-cell-unit.c:264
 msgid "Laptop battery"
@@ -2301,7 +2329,7 @@ msgstr ""
 
 #: ../src/gpm-tray-icon.c:353
 msgid "GNOME Power Manager Website"
-msgstr "Gnomen virranhallinnan www-sivut"
+msgstr "Gnomen virranhallinnan WWW-sivut"
 
 #. Preferences
 #: ../src/gpm-tray-icon.c:435
@@ -2334,6 +2362,39 @@ msgstr "_Keskeytystila"
 #: ../src/gpm-tray-icon.c:587
 msgid "Hi_bernate"
 msgstr "_Lepotila"
+
+#~ msgid "Product"
+#~ msgstr "Tuote"
+
+#~ msgid "Status"
+#~ msgstr "Tila"
+
+#~ msgid "Percentage charge"
+#~ msgstr "Lataus prosentteina"
+
+#~ msgid "Vendor:"
+#~ msgstr "Valmistaja:"
+
+#~ msgid "Technology"
+#~ msgstr "Tekniikka"
+
+#~ msgid "Model"
+#~ msgstr "Malli"
+
+#~ msgid "Charge time"
+#~ msgstr "Latausaika"
+
+#~ msgid "Capacity"
+#~ msgstr "Kapasiteetti"
+
+#~ msgid "Current charge"
+#~ msgstr "Nykyinen lataus"
+
+#~ msgid "Design charge"
+#~ msgstr "Suunniteltu lataus"
+
+#~ msgid "Charge rate"
+#~ msgstr "Latausnopeus"
 
 #~ msgid ""
 #~ "If niced processes are considered, they can cause a frequency increment "
@@ -2431,12 +2492,6 @@ msgstr "_Lepotila"
 #~ "Toiminnon aikaviive ei ole kelvollinen. Odota muutama sekunti ja yritä "
 #~ "uudestaan."
 
-#~ msgid "<b>Product:</b> %s\n"
-#~ msgstr "<b>Tuote:</B> %s\n"
-
-#~ msgid "<b>Status:</b> Missing\n"
-#~ msgstr "<b>Tila:</b> Puuttuu\n"
-
 #~ msgid "<b>Status:</b> Charged\n"
 #~ msgstr "<b>Tila:</b> Ladattu\n"
 
@@ -2445,9 +2500,6 @@ msgstr "_Lepotila"
 
 #~ msgid "<b>Status:</b> Discharging\n"
 #~ msgstr "<b>Tila:</b> Puretaan\n"
-
-#~ msgid "<b>Percentage charge:</b> %i%%\n"
-#~ msgstr "<b>Lataus prosentteina:</b> %i %%\n"
 
 #~ msgid "Based on processor load"
 #~ msgstr "Prosessorikuormasta riippuva"
