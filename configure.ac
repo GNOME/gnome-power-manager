@@ -590,7 +590,6 @@ applets/brightness/Makefile
 applets/inhibit/Makefile
 libhal-glib/Makefile
 libdbus-glib/Makefile
-libidletime/Makefile
 docs/Makefile
 man/Makefile
 help/Makefile

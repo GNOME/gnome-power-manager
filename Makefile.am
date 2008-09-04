@@ -4,7 +4,6 @@ ACLOCAL_AMFLAGS = -I m4
 SUBDIRS =						\
 	libdbus-glib					\
 	libhal-glib					\
-	libidletime					\
 	src						\
 	po						\
 	docs						\

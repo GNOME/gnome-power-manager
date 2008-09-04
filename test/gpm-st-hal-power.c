@@ -25,35 +25,35 @@
 #include <libhal-gpower.h>
 
 void
-gpm_st_hal_power (GpmSelfTest *test)
+egg_test_hal_power (GpmSelfTest *test)
 {
 	HalGPower *power;
 	gboolean ret;
 
-	if (gpm_st_start (test, "HalGPower") == FALSE) {
+	if (egg_test_start (test, "HalGPower") == FALSE) {
 		return;
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a non null device");
+	egg_test_title (test, "make sure we get a non null device");
 	power = hal_gpower_new ();
 	if (power != NULL) {
-		gpm_st_success (test, "got HalGPower");
+		egg_test_success (test, "got HalGPower");
 	} else {
-		gpm_st_failed (test, "could not get HalGPower");
+		egg_test_failed (test, "could not get HalGPower");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we have pm support");
+	egg_test_title (test, "make sure we have pm support");
 	ret = hal_gpower_has_support (power);
 	if (ret) {
-		gpm_st_success (test, "has pm support");
+		egg_test_success (test, "has pm support");
 	} else {
-		gpm_st_failed (test, "does not have pm support");
+		egg_test_failed (test, "does not have pm support");
 	}
 
 	g_object_unref (power);
 
-	gpm_st_end (test);
+	egg_test_end (test);
 }
 

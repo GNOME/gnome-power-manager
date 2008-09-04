@@ -16,7 +16,6 @@ INCLUDES =						\
 	-DVERSION="\"$(VERSION)\"" 			\
 	-DGPM_DATA=\""$(datadir)/gnome-power-manager/"\"\
 	-I$(top_srcdir)					\
-	-I$(top_srcdir)/libidletime			\
 	-I$(top_srcdir)/libhal-glib			\
 	-I$(top_srcdir)/libdbus-glib			\
 	$(NULL)

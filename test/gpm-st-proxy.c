@@ -26,57 +26,57 @@
 #include "../src/gpm-common.h"
 
 void
-gpm_st_proxy (GpmSelfTest *test)
+egg_test_proxy (GpmSelfTest *test)
 {
 	DbusProxy *gproxy = NULL;
 	DBusGProxy *proxy = NULL;
 
-	if (gpm_st_start (test, "DbusProxy") == FALSE) {
+	if (egg_test_start (test, "DbusProxy") == FALSE) {
 		return;
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we can get a new gproxy");
+	egg_test_title (test, "make sure we can get a new gproxy");
 	gproxy = dbus_proxy_new ();
 	if (gproxy != NULL) {
-		gpm_st_success (test, "got gproxy");
+		egg_test_success (test, "got gproxy");
 	} else {
-		gpm_st_failed (test, "could not get gproxy");
+		egg_test_failed (test, "could not get gproxy");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure proxy if NULL when no assign");
+	egg_test_title (test, "make sure proxy if NULL when no assign");
 	proxy = dbus_proxy_get_proxy (gproxy);
 	if (proxy == NULL) {
-		gpm_st_success (test, "got NULL proxy");
+		egg_test_success (test, "got NULL proxy");
 	} else {
-		gpm_st_failed (test, "did not get NULL proxy");
+		egg_test_failed (test, "did not get NULL proxy");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we can assign and connect");
+	egg_test_title (test, "make sure we can assign and connect");
 	proxy = dbus_proxy_assign (gproxy,
 				  DBUS_PROXY_SESSION,
 				  GPM_DBUS_SERVICE,
 				  GPM_DBUS_PATH_INHIBIT,
 				  GPM_DBUS_INTERFACE_INHIBIT);
 	if (proxy != NULL) {
-		gpm_st_success (test, "got proxy (init)");
+		egg_test_success (test, "got proxy (init)");
 	} else {
-		gpm_st_failed (test, "could not get proxy (init)");
+		egg_test_failed (test, "could not get proxy (init)");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure proxy non NULL when assigned");
+	egg_test_title (test, "make sure proxy non NULL when assigned");
 	proxy = dbus_proxy_get_proxy (gproxy);
 	if (proxy != NULL) {
-		gpm_st_success (test, "got valid proxy");
+		egg_test_success (test, "got valid proxy");
 	} else {
-		gpm_st_failed (test, "did not get valid proxy");
+		egg_test_failed (test, "did not get valid proxy");
 	}
 
 	g_object_unref (gproxy);
 
-	gpm_st_end (test);
+	egg_test_end (test);
 }
 

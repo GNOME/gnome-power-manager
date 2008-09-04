@@ -1,5 +1,23 @@
 2008-09-04  Richard Hughes  <richard@hughsie.com>
 
+	* Makefile.am:
+	* configure.ac:
+	* libidletime/Makefile.am:
+	* libidletime/libidletime.c:
+	* libidletime/libidletime.h:
+	Nuke this, nothing uses it.
+
+	* test/Makefile.am:
+	* test/gpm-st-hal-device.c: (egg_test_hal_device):
+	* test/gpm-st-hal-devicestore.c: (egg_test_hal_devicestore):
+	* test/gpm-st-hal-manager.c: (egg_test_hal_manager):
+	* test/gpm-st-hal-power.c: (egg_test_hal_power):
+	* test/gpm-st-idletime.c:
+	* test/gpm-st-proxy.c: (egg_test_proxy):
+	Rename some of the gpm self test function to egg names.
+
+2008-09-04  Richard Hughes  <richard@hughsie.com>
+
 	* applets/brightness/Makefile.am:
 	* applets/brightness/brightness-applet.c:
 	(gpm_applet_get_brightness), (gpm_applet_set_brightness),
@@ -101,26 +119,26 @@
 2008-09-03  Richard Hughes  <richard@hughsie.com>
 
 	* src/egg-color.c: (egg_st_color):
-	* src/gpm-array-float.c: (gpm_st_array_float):
-	* src/gpm-array.c: (gpm_st_array):
-	* src/gpm-cell-array.c: (gpm_st_cell_array):
-	* src/gpm-cell-unit.c: (gpm_st_cell_unit):
-	* src/gpm-cell.c: (gpm_st_cell):
-	* src/gpm-common.c: (gpm_st_common):
-	* src/gpm-graph-widget.c: (gpm_st_graph_widget):
-	* src/gpm-inhibit.c: (gpm_st_inhibit):
-	* src/gpm-phone.c: (gpm_st_phone):
-	* src/gpm-profile.c: (gpm_st_profile):
-	* src/gpm-self-test.c: (gpm_st_start), (gpm_st_end),
-	(gpm_st_title), (gpm_st_success), (gpm_st_failed),
-	(gpm_st_warning), (main):
+	* src/gpm-array-float.c: (egg_test_array_float):
+	* src/gpm-array.c: (egg_test_array):
+	* src/gpm-cell-array.c: (egg_test_cell_array):
+	* src/gpm-cell-unit.c: (egg_test_cell_unit):
+	* src/gpm-cell.c: (egg_test_cell):
+	* src/gpm-common.c: (egg_test_common):
+	* src/gpm-graph-widget.c: (egg_test_graph_widget):
+	* src/gpm-inhibit.c: (egg_test_inhibit):
+	* src/gpm-phone.c: (egg_test_phone):
+	* src/gpm-profile.c: (egg_test_profile):
+	* src/gpm-self-test.c: (egg_test_start), (egg_test_end),
+	(egg_test_title), (egg_test_success), (gpm_st_failed),
+	(egg_test_warning), (main):
 	* src/gpm-self-test.h:
-	* test/gpm-st-hal-device.c: (gpm_st_hal_device):
-	* test/gpm-st-hal-devicestore.c: (gpm_st_hal_devicestore):
-	* test/gpm-st-hal-manager.c: (gpm_st_hal_manager):
-	* test/gpm-st-hal-power.c: (gpm_st_hal_power):
-	* test/gpm-st-idletime.c: (gpm_st_idletime):
-	* test/gpm-st-proxy.c: (gpm_st_proxy):
+	* test/gpm-st-hal-device.c: (egg_test_hal_device):
+	* test/gpm-st-hal-devicestore.c: (egg_test_hal_devicestore):
+	* test/gpm-st-hal-manager.c: (egg_test_hal_manager):
+	* test/gpm-st-hal-power.c: (egg_test_hal_power):
+	* test/gpm-st-idletime.c: (egg_test_idletime):
+	* test/gpm-st-proxy.c: (egg_test_proxy):
 	Remove the class type from the self check code, we need to make
 	all the tests automatic.
 
@@ -187,7 +205,7 @@
 	(hal_device_removed_cb), (hal_new_capability_cb),
 	(hal_device_added_cb):
 	* src/gpm-cell.c: (gpm_cell_set_device_id),
-	(gpm_cell_get_device_id), (gpm_st_cell):
+	(gpm_cell_get_device_id), (egg_test_cell):
 	* src/gpm-cell.h:
 	Change some internal funciton names to metion an ID, not a UDI.
 
@@ -261,7 +279,7 @@
 	(gpm_cell_array_class_init):
 	* src/gpm-cell-array.h:
 	* src/gpm-cell-unit.c: (gpm_cell_unit_init), (gpm_cell_unit_print),
-	(gpm_st_cell_unit):
+	(egg_test_cell_unit):
 	* src/gpm-cell-unit.h:
 	* src/gpm-cell.c: (gpm_cell_refresh_hal_all),
 	(hal_device_property_modified_cb), (gpm_cell_set_phone_index),
@@ -337,7 +355,7 @@
 	(gpm_ac_adapter_init):
 	* src/gpm-array.c: (gpm_array_append),
 	(gpm_array_append_from_file), (gpm_array_save_to_file),
-	(gpm_array_add), (gpm_st_array):
+	(gpm_array_add), (egg_test_array):
 	* src/gpm-backlight.c: (gpm_backlight_sync_policy),
 	(gpm_backlight_get_mode), (gpm_backlight_get_brightness),
 	(gpm_backlight_set_brightness),
@@ -358,12 +376,12 @@
 	(gpm_cell_charging_changed_cb), (gpm_cell_discharging_changed_cb),
 	(gpm_check_device_key), (gpm_cell_array_add_hal_udi),
 	(gpm_cell_array_coldplug), (gpm_cell_array_get_description),
-	(hal_device_added_cb), (gpm_st_cell_array):
+	(hal_device_added_cb), (egg_test_cell_array):
 	* src/gpm-cell-unit.c: (gpm_cell_unit_get_icon),
-	(gpm_cell_unit_get_kind_localised), (gpm_st_cell_unit):
+	(gpm_cell_unit_get_kind_localised), (egg_test_cell_unit):
 	* src/gpm-cell.c: (gpm_cell_refresh_hal_all),
 	(hal_device_property_modified_cb), (gpm_cell_set_hal_udi),
-	(gpm_cell_get_description), (gpm_cell_get_battery), (gpm_st_cell):
+	(gpm_cell_get_description), (gpm_cell_get_battery), (egg_test_cell):
 	* src/gpm-control.c: (gpm_control_check_foreground_console),
 	(gpm_control_allowed_suspend), (gpm_control_allowed_hibernate),
 	(gpm_control_shutdown), (gpm_control_reboot),
@@ -378,13 +396,13 @@
 	(gpm_cell_array_discharging_changed_cb),
 	(gpm_cell_array_fully_charged_cb):
 	* src/gpm-graph-widget.c: (gpm_graph_widget_draw_graph),
-	(gpm_st_graph_widget):
+	(egg_test_graph_widget):
 	* src/gpm-idle.c: (session_idle_changed_cb),
 	(powersave_idle_changed_cb):
 	* src/gpm-info.c: (gpm_info_log_do_poll), (ac_adapter_changed_cb),
 	(gpm_info_init):
 	* src/gpm-inhibit.c: (gpm_inhibit_has_inhibit), (inhibit),
-	(has_inhibit), (gpm_st_inhibit):
+	(has_inhibit), (egg_test_inhibit):
 	* src/gpm-light-sensor.c: (gpm_light_sensor_get_hw),
 	(gpm_light_sensor_poll_cb), (gpm_light_sensor_init):
 	* src/gpm-load.c: (gpm_load_get_current):
@@ -401,7 +419,7 @@
 	(gpm_notify_sleep_failed):
 	* src/gpm-phone.c: (gpm_phone_get_num_batteries),
 	(gpm_phone_num_batteries_changed), (gpm_phone_dbus_disconnect),
-	(gpm_st_phone):
+	(egg_test_phone):
 	* src/gpm-polkit.c: (gpm_polkit_is_user_privileged):
 	* src/gpm-prefs-core.c: (gpm_dbus_method_bool),
 	(gpm_dbus_method_int), (prefs_setup_notification):
@@ -413,10 +431,10 @@
 	(gpm_profile_save_percentage), (gpm_profile_register_percentage),
 	(gpm_profile_register_charging), (ac_adaptor_changed_cb),
 	(gpm_profile_load_data), (gpm_profile_set_config_id),
-	(gpm_profile_get_accuracy), (gpm_profile_init), (gpm_st_profile):
+	(gpm_profile_get_accuracy), (gpm_profile_init), (egg_test_profile):
 	* src/gpm-screensaver.c: (gpm_screensaver_add_throttle),
 	(gpm_screensaver_remove_throttle), (gpm_screensaver_get_idle):
-	* src/gpm-self-test.c: (gpm_st_start):
+	* src/gpm-self-test.c: (egg_test_start):
 	* src/gpm-srv-brightness-kbd.c: (conf_key_changed_cb),
 	(ac_adapter_changed_cb), (gpm_srv_brightness_kbd_new):
 	* src/gpm-srv-screensaver.c: (screensaver_auth_request_cb),
@@ -429,11 +447,11 @@
 	* src/gpm-tray-icon.c: (gpm_tray_icon_activate_cb):
 	* src/gpm-warnings.c: (gpm_warnings_get_state),
 	(gpm_warnings_init):
-	* test/gpm-st-hal-device.c: (gpm_st_hal_device):
-	* test/gpm-st-hal-devicestore.c: (gpm_st_hal_devicestore):
-	* test/gpm-st-hal-manager.c: (gpm_st_hal_manager):
-	* test/gpm-st-hal-power.c: (gpm_st_hal_power):
-	* test/gpm-st-idletime.c: (gpm_st_idletime):
+	* test/gpm-st-hal-device.c: (egg_test_hal_device):
+	* test/gpm-st-hal-devicestore.c: (egg_test_hal_devicestore):
+	* test/gpm-st-hal-manager.c: (egg_test_hal_manager):
+	* test/gpm-st-hal-power.c: (egg_test_hal_power):
+	* test/gpm-st-idletime.c: (egg_test_idletime):
 	Trivial coding style changes to bring us up to 2008.
 
 2008-07-23  Richard Hughes  <richard@hughsie.com>
@@ -1272,9 +1290,9 @@ also do GOption parsing via gtk and drop gnome_program_init()
 
 2007-11-18  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-cell-array.c: (gpm_st_cell_array):
-	* src/gpm-cell.c: (gpm_st_cell):
-	* src/gpm-self-test.c: (gpm_st_warning):
+	* src/gpm-cell-array.c: (egg_test_cell_array):
+	* src/gpm-cell.c: (egg_test_cell):
+	* src/gpm-self-test.c: (egg_test_warning):
 	* src/gpm-self-test.h:
 	Try to pass make distcheck on a desktop machine.
 
@@ -1541,7 +1559,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 
 2007-07-31  Jaap Haitsma  <jaap@haitsma.org>
 
-	* src/gpm-cell-array.c: (gpm_st_cell_array): make "make distcheck" work
+	* src/gpm-cell-array.c: (egg_test_cell_array): make "make distcheck" work
 	on laptop with multiple batteries. Fixes bug #462109
 
 2007-07-31  Jaap Haitsma  <jaap@haitsma.org>
@@ -1623,7 +1641,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 
 2007-07-29  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-phone.c: (gpm_st_phone):
+	* src/gpm-phone.c: (egg_test_phone):
 	Connecting the phone for the self test requires manual intervention,
 	it's not automatic.
 
@@ -1693,7 +1711,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	(gpm_phone_get_num_batteries), (gpm_phone_battery_state_changed),
 	(gpm_phone_num_batteries_changed), (gpm_phone_dbus_connect),
 	(gpm_phone_dbus_disconnect), (phone_device_refresh_cb),
-	(gpm_st_phone):
+	(egg_test_phone):
 	Add in checks for the object type, and also remember to disconnect the
 	signal when GpmCell is unref'ed, else we segfault on phone connect,
 	disconnect, connect.
@@ -1748,7 +1766,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	(gpm_phone_battery_state_changed),
 	(gpm_phone_num_batteries_changed), (gpm_phone_class_init),
 	(gpm_phone_dbus_connect), (gpm_phone_dbus_disconnect),
-	(gpm_st_mainloop_wait), (gpm_st_phone):
+	(egg_test_mainloop_wait), (egg_test_phone):
 	Listen for the correct signals, and add the correct GpmCell device.
 
 	* src/gpm-self-test.c: (main):
@@ -1763,14 +1781,14 @@ also do GOption parsing via gtk and drop gnome_program_init()
 
 2007-07-24  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-cell.c: (gpm_st_cell):
+	* src/gpm-cell.c: (egg_test_cell):
 	Fix a memory leak. 14 bytes.
 
 	* src/gpm-main.c: (main):
 	Don't unref the context, it makes valgrind unhappy.
 
 	* src/gpm-profile.c: (gpm_profile_delete_data),
-	(gpm_profile_load_data), (gpm_st_profile):
+	(gpm_profile_load_data), (egg_test_profile):
 	Add some more tests.
 
 2007-07-24  Richard Hughes  <richard@hughsie.com>
@@ -1778,7 +1796,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	* src/gpm-profile.c: (gpm_profile_get_nonzero_accuracy_percent),
 	(gpm_profile_save_percentage), (gpm_profile_delete_data),
 	(gpm_profile_use_guessing), (gpm_profile_init), (reset_profile),
-	(gpm_st_profile):
+	(egg_test_profile):
 	* src/gpm-profile.h:
 	* src/gpm-self-test.c: (main):
 	Fix the profile test. Also default to estimating the 5-95% data for
@@ -1812,7 +1830,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	(gpm_cell_array_coldplug), (hal_new_capability_cb),
 	(hal_device_added_cb):
 	* src/gpm-cell.c: (gpm_cell_set_type), (gpm_cell_set_hal_udi),
-	(gpm_st_cell):
+	(egg_test_cell):
 	* src/gpm-cell.h:
 	Rename some methods to allow gnome-phone-manager integration.
 
@@ -1820,21 +1838,21 @@ also do GOption parsing via gtk and drop gnome_program_init()
 
 	* po/POTFILES.in:
 	* src/Makefile.am:
-	* src/gpm-array-float.c: (gpm_st_array_float):
-	* src/gpm-array.c: (gpm_st_array):
+	* src/gpm-array-float.c: (egg_test_array_float):
+	* src/gpm-array.c: (egg_test_array):
 	* src/gpm-cell-array.c: (gpm_cell_array_perhaps_recall_cb),
-	(gpm_st_cell_array):
-	* src/gpm-cell-unit.c: (gpm_st_cell_unit):
+	(egg_test_cell_array):
+	* src/gpm-cell-unit.c: (egg_test_cell_unit):
 	* src/gpm-cell.c: (gpm_cell_perhaps_recall_cb),
-	(gpm_cell_get_battery), (gpm_st_cell):
-	* src/gpm-common.c: (gpm_st_common):
+	(gpm_cell_get_battery), (egg_test_cell):
+	* src/gpm-common.c: (egg_test_common):
 	* src/gpm-graph-widget.c: (close_handler), (clicked_passed_cb),
 	(clicked_failed_cb), (create_graph_window), (wait_for_input),
-	(gpm_st_title_graph), (gpm_st_graph_widget):
+	(egg_test_title_graph), (egg_test_graph_widget):
 	* src/gpm-inhibit.c: (inhibit), (uninhibit), (has_inhibit),
-	(gpm_st_inhibit):
-	* src/gpm-profile.c: (gpm_st_profile):
-	* src/gpm-webcam.c: (gpm_st_webcam):
+	(egg_test_inhibit):
+	* src/gpm-profile.c: (egg_test_profile):
+	* src/gpm-webcam.c: (egg_test_webcam):
 	* test/Makefile.am:
 	* test/gpm-selftest-hal-devices.fdi:
 	* test/gpm-st-array-float.c:
@@ -1899,7 +1917,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	Remove a broken string that we don't ever use. Fixes #459099
 
 	* src/gpm-profile.c: (gpm_profile_save_percentage):
-	* test/gpm-st-profile.c: (gpm_st_profile):
+	* test/gpm-st-profile.c: (egg_test_profile):
 	Add some more tests.
 
 2007-07-20  Gabor Kelemen  <kelemeng@gnome.hu>
@@ -1925,7 +1943,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	OOps. Don't recurse.
 
 	* test/gpm-st-main.c: (main):
-	* test/gpm-st-profile.c: (gpm_st_profile):
+	* test/gpm-st-profile.c: (egg_test_profile):
 	Correct test, and make more specific. Test now passes.
 
 2007-07-19  Richard Hughes  <richard@hughsie.com>
@@ -2060,7 +2078,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	(gpm_engine_charge_critical_cb):
 	* src/gpm-tray-icon.c: (gpm_tray_icon_activate_cb):
 	* src/gpm-warnings.c: (gpm_warnings_get_state):
-	* test/gpm-st-idletime.c: (gpm_st_idletime):
+	* test/gpm-st-idletime.c: (egg_test_idletime):
 	* test/gpm-st-main.c: (main):
 	Add the initial phone code for mobile phone support.
 	No backend stuff yet, I need to write the backend stuff before it will
@@ -2100,7 +2118,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	* libidletime/libidletime.h:
 	* test/Makefile.am:
 	* test/gpm-st-idletime.c:
-	* test/gpm-st-main.c: (gpm_st_success), (main):
+	* test/gpm-st-main.c: (egg_test_success), (main):
 	* test/gpm-st-main.h:
 	Add libidletime for querying IDLETIME.
 
@@ -2170,10 +2188,10 @@ also do GOption parsing via gtk and drop gnome_program_init()
 
 	* src/gpm-array-float.c: (gpm_array_float_free):
 	* src/gpm-main.c: (main):
-	* test/gpm-st-array-float.c: (gpm_st_array_float):
-	* test/gpm-st-cell-array.c: (gpm_st_cell_array):
-	* test/gpm-st-cell.c: (gpm_st_cell):
-	* test/gpm-st-hal-device.c: (gpm_st_hal_device):
+	* test/gpm-st-array-float.c: (egg_test_array_float):
+	* test/gpm-st-cell-array.c: (egg_test_cell_array):
+	* test/gpm-st-cell.c: (egg_test_cell):
+	* test/gpm-st-hal-device.c: (egg_test_hal_device):
 	Fix some memory leaks.
 
 2007-07-01  Richard Hughes  <richard@hughsie.com>
@@ -2189,25 +2207,25 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	* src/gpm-inhibit.h:
 	Set an error when we return false for the UnInhibit.
 
-	* test/gpm-st-array-float.c: (gpm_st_array_float):
-	* test/gpm-st-array.c: (gpm_st_array):
-	* test/gpm-st-cell-array.c: (gpm_st_cell_array):
-	* test/gpm-st-cell-unit.c: (gpm_st_cell_unit):
-	* test/gpm-st-cell.c: (gpm_st_cell):
-	* test/gpm-st-common.c: (gpm_st_common):
+	* test/gpm-st-array-float.c: (egg_test_array_float):
+	* test/gpm-st-array.c: (egg_test_array):
+	* test/gpm-st-cell-array.c: (egg_test_cell_array):
+	* test/gpm-st-cell-unit.c: (egg_test_cell_unit):
+	* test/gpm-st-cell.c: (egg_test_cell):
+	* test/gpm-st-common.c: (egg_test_common):
 	* test/gpm-st-graph-widget.c: (clicked_passed_cb),
-	(clicked_failed_cb), (gpm_st_title_graph), (gpm_st_graph_widget):
-	* test/gpm-st-hal-device.c: (gpm_st_hal_device):
-	* test/gpm-st-hal-devicestore.c: (gpm_st_hal_devicestore):
-	* test/gpm-st-hal-manager.c: (gpm_st_hal_manager):
-	* test/gpm-st-hal-power.c: (gpm_st_hal_power):
-	* test/gpm-st-inhibit.c: (uninhibit), (gpm_st_inhibit):
-	* test/gpm-st-main.c: (gpm_st_start), (gpm_st_end), (gpm_st_title),
-	(gpm_st_success), (gpm_st_failed), (gpm_st_run_test), (main):
+	(clicked_failed_cb), (egg_test_title_graph), (egg_test_graph_widget):
+	* test/gpm-st-hal-device.c: (egg_test_hal_device):
+	* test/gpm-st-hal-devicestore.c: (egg_test_hal_devicestore):
+	* test/gpm-st-hal-manager.c: (egg_test_hal_manager):
+	* test/gpm-st-hal-power.c: (egg_test_hal_power):
+	* test/gpm-st-inhibit.c: (uninhibit), (egg_test_inhibit):
+	* test/gpm-st-main.c: (egg_test_start), (egg_test_end), (gpm_st_title),
+	(egg_test_success), (egg_test_failed), (gpm_st_run_test), (main):
 	* test/gpm-st-main.h:
-	* test/gpm-st-profile.c: (gpm_st_profile):
-	* test/gpm-st-proxy.c: (gpm_st_proxy):
-	* test/gpm-st-webcam.c: (gpm_st_webcam):
+	* test/gpm-st-profile.c: (egg_test_profile):
+	* test/gpm-st-proxy.c: (egg_test_proxy):
+	* test/gpm-st-webcam.c: (egg_test_webcam):
 	Try a better infrastructure for the self tests. It's better. Trust me.
 
 2007-06-29  Richard Hughes  <richard@hughsie.com>
@@ -2246,7 +2264,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	* src/gpm-statistics-core.c: (gpm_statistics_refresh_data):
 	Increase the size of the gaussian array to further smooth the data.
 
-	* test/gpm-st-array.c: (gpm_st_array):
+	* test/gpm-st-array.c: (egg_test_array):
 	Correct a typo. We should never not add, even when zero.
 
 2007-06-25  Richard Hughes  <richard@hughsie.com>
@@ -2263,7 +2281,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 
 2007-06-24  Richard Hughes  <richard@hughsie.com>
 
-	* test/gpm-st-graph-widget.c: (gpm_st_graph_widget):
+	* test/gpm-st-graph-widget.c: (egg_test_graph_widget):
 	* test/gpm-st-main.c: (main):
 	Don't stop running the interactive test after the graph check.
 
@@ -2278,7 +2296,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 
 	* src/gpm-graph-widget.h:
 	* src/gpm-statistics-core.c: (gpm_statistics_refresh_events):
-	* test/gpm-st-graph-widget.c: (gpm_st_graph_widget):
+	* test/gpm-st-graph-widget.c: (egg_test_graph_widget):
 	Allow clearing of the event data.
 
 2007-06-24  Richard Hughes  <richard@hughsie.com>
@@ -2301,8 +2319,8 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	* src/gpm-graph-widget.h:
 	Allow the graph data to be cleared, so rename the function to create.
 
-	* test/gpm-st-graph-widget.c: (gpm_st_graph_widget):
-	* test/gpm-st-main.c: (gpm_st_failed):
+	* test/gpm-st-graph-widget.c: (egg_test_graph_widget):
+	* test/gpm-st-main.c: (egg_test_failed):
 	Add lots more tests.
 
 	* src/gpm-graph-widget.c:
@@ -2443,14 +2461,14 @@ also do GOption parsing via gtk and drop gnome_program_init()
 
 	* src/gpm-array-float.c: (gpm_array_float_get_average):
 	* src/gpm-array-float.h:
-	* test/gpm-st-array-float.c: (gpm_st_array_float):
+	* test/gpm-st-array-float.c: (egg_test_array_float):
 	Add code to compute the average of a float list.
 
 	* test/gpm-selftest-hal-devices.fdi:
 	Use BAT0.
 
-	* test/gpm-st-cell.c: (gpm_cell_get_battery), (gpm_st_cell):
-	* test/gpm-st-main.c: (gpm_st_failed), (main):
+	* test/gpm-st-cell.c: (gpm_cell_get_battery), (egg_test_cell):
+	* test/gpm-st-main.c: (egg_test_failed), (main):
 	Stop the checks when an error happens.
 
 	* test/install-fdi.sh:
@@ -2489,7 +2507,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 
 	* src/gpm-common.c: (gpm_discrete_to_fraction):
 	* src/gpm-common.h:
-	* test/gpm-st-common.c: (gpm_st_common):
+	* test/gpm-st-common.c: (egg_test_common):
 	Add a new function and test it.
 
 	* src/gpm-backlight.c: (gpm_backlight_init):
@@ -2601,7 +2619,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	(gpm_statistics_populate_graph_types), (gpm_statistics_init):
 	* src/gpm-tray-icon.c: (conf_key_changed_cb), (gpm_tray_icon_init):
 	* src/gpm-warning.c: (gpm_warning_init):
-	* test/gpm-st-webcam.c: (gpm_st_webcam):
+	* test/gpm-st-webcam.c: (egg_test_webcam):
 	Rework the brightness interactions, and rename a large part of the
 	gconf schemas. Currently unfinished.
 
@@ -2732,7 +2750,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	* src/gpm-tray-icon.c:
 	* test/Makefile.am:
 	* test/gpm-st-inhibit.c: (inhibit), (uninhibit), (has_inhibit),
-	(gpm_st_inhibit):
+	(egg_test_inhibit):
 	* test/gpm-st-proxy.c:
 	Remove libgpm, it's only used properly in one place. Also lets us solve
 	the brghtness bug easily (to follow).
@@ -2742,7 +2760,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	* src/gpm-profile.c: (gpm_profile_load_data):
 	Create the data directory with the correct permissions.
 
-	* test/gpm-st-webcam.c: (gpm_st_webcam):
+	* test/gpm-st-webcam.c: (egg_test_webcam):
 	Oops. Actually add this file.
 
 2007-05-14  Richard Hughes  <richard@hughsie.com>
@@ -3001,10 +3019,10 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	the graph program much less CPU intensive, which is good.
 	Startup time is measurably improved.
 
-	* test/gpm-st-array-float.c: (gpm_st_array_float):
-	* test/gpm-st-array.c: (gpm_st_array):
+	* test/gpm-st-array-float.c: (egg_test_array_float):
+	* test/gpm-st-array.c: (egg_test_array):
 	* test/gpm-st-main.c: (main):
-	* test/gpm-st-profile.c: (gpm_st_profile):
+	* test/gpm-st-profile.c: (egg_test_profile):
 	Fix all of the tests - now all work!
 
 2007-04-24  Richard Hughes  <richard@hughsie.com>
@@ -3027,8 +3045,8 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	Don't smooth here, we only do the processor insive bits in the
 	presentation application.
 
-	* test/gpm-st-array-float.c: (gpm_st_array_float):
-	* test/gpm-st-array.c: (gpm_st_array):
+	* test/gpm-st-array-float.c: (egg_test_array_float):
+	* test/gpm-st-array.c: (egg_test_array):
 	* test/gpm-st-main.c: (main):
 	Remove obsolete tests. Now we pass everything again.
 
@@ -3036,7 +3054,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 
 	* src/gpm-array-float.c:
 	* src/gpm-array-float.h:
-	* test/gpm-st-array-float.c: (gpm_st_array_float):
+	* test/gpm-st-array-float.c: (egg_test_array_float):
 	* test/gpm-st-main.c: (main):
 	Make the tests work. Gaussian smoothing is sssmmmooootttthhhhh....
 
@@ -3055,17 +3073,17 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	* src/gpm-array-float.c:
 	* src/gpm-array-float.h:
 	* test/Makefile.am:
-	* test/gpm-st-array-float.c: (gpm_st_array_float):
+	* test/gpm-st-array-float.c: (egg_test_array_float):
 	* test/gpm-st-main.c: (main):
 	* test/gpm-st-main.h:
 	Write a new float class. Cool new stuff to come. Really untested.
 
 2007-04-22  Richard Hughes  <richard@hughsie.com>
 
-	* test/gpm-st-array.c: (gpm_st_array):
+	* test/gpm-st-array.c: (egg_test_array):
 	Add some more tests. They fail.
 
-	* test/gpm-st-profile.c: (gpm_st_profile):
+	* test/gpm-st-profile.c: (egg_test_profile):
 	Remove the error.
 
 2007-04-16  Richard Hughes  <richard@hughsie.com>
@@ -3172,7 +3190,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	* test/Makefile.am:
 	* test/gpm-st-main.c: (main):
 	* test/gpm-st-main.h:
-	* test/gpm-st-profile.c: (gpm_st_profile):
+	* test/gpm-st-profile.c: (egg_test_profile):
 	Add a test suite for the GpmProfile code.
 
 2007-04-03  Richard Hughes  <richard@hughsie.com>
@@ -3181,7 +3199,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	* src/gpm-common.c: (gpm_precision_round_up), (gpm_precision_round_down):
 	Create two helper functions to do base rounding in a sane way.
 
-	* test/gpm-st-common.c: (gpm_st_common):
+	* test/gpm-st-common.c: (egg_test_common):
 	Test the new round up and round down code.
 
 	* src/gpm-cell-array.c: (gpm_cell_array_get_description):
@@ -3216,7 +3234,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	* src/gpm-manager.h:
 	* test/gpm-inhibit-test.c: (dbus_inhibit_gpm), (widget_inhibit_cb),
 	(main):
-	* test/gpm-st-inhibit.c: (gpm_st_inhibit):
+	* test/gpm-st-inhibit.c: (egg_test_inhibit):
 	Update to conform to the session power management spec version 0.2
 
 2007-04-02  Matthias Clasen <mclasen@redhat.com>
@@ -3272,7 +3290,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	* src/gpm-statistics-core.c: (gpm_statistics_get_events),
 	* src/gpm-tray-icon.c:
 	* test/Makefile.am:
-	* test/gpm-st-proxy.c: (gpm_st_proxy):
+	* test/gpm-st-proxy.c: (egg_test_proxy):
 	Don't make gpm-proxy multiple times, use dbus_proxy.
 
 2007-03-29  Richard Hughes  <richard@hughsie.com>
@@ -3418,7 +3436,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	(gpm_cell_array_set_type), (gpm_cell_array_get_description):
 	* src/gpm-cell.c: (gpm_cell_get_id):
 	* src/gpm-cell.h:
-	* test/gpm-st-cell.c: (gpm_st_cell):
+	* test/gpm-st-cell.c: (egg_test_cell):
 	Get a profile string, which represents the connection of different
 	batteries in a system. Only useful for primary battery profiling code.
 
@@ -3787,14 +3805,14 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	Correctly profile batteries that stop charging before they get to
 	100%.
 
-	* test/gpm-st-cell.c: (gpm_cell_perhaps_recall_cb), (gpm_st_cell):
+	* test/gpm-st-cell.c: (gpm_cell_perhaps_recall_cb), (egg_test_cell):
 	Test to see if the recall notifier was called.
 
 2007-03-13  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-cell-unit.c (gpm_cell_unit_get_kind_localised):
 	* src/gpm-cell-unit.h:
-	* test/gpm-st-cell-unit.c (gpm_st_cell_unit):
+	* test/gpm-st-cell-unit.c (egg_test_cell_unit):
 	Allow pluralised descriptions.
 
 2007-03-13  Richard Hughes  <richard@hughsie.com>
@@ -3809,7 +3827,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 
 2007-03-12  Richard Hughes  <richard@hughsie.com>
 
-	* test/gpm-st-cell-unit.c: (gpm_st_cell_unit):
+	* test/gpm-st-cell-unit.c: (egg_test_cell_unit):
 	* src/gpm-cell-unit.c: (gpm_cell_unit_set_measure):
 	* src/gpm-cell-unit.h:
 	Create a new function to set the measurement unit.
@@ -3821,7 +3839,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	* src/gpm-cell.h:
 	* src/gpm-marshal.list:
 	* test/Makefile.am:
-	* test/gpm-st-cell.c: (gpm_st_cell):
+	* test/gpm-st-cell.c: (egg_test_cell):
 	* test/gpm-st-main.c: (main):
 	* test/gpm-st-main.h:
 	Add GpmCell, a generic class for a single battery object.
@@ -3829,7 +3847,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 2007-03-12  Richard Hughes  <richard@hughsie.com>
 
 	* test/Makefile.am:
-	* test/gpm-st-cell-unit.c: (gpm_st_cell_unit):
+	* test/gpm-st-cell-unit.c: (egg_test_cell_unit):
 	* test/gpm-st-main.c: (main):
 	* test/gpm-st-main.h:
 	* src/gpm-cell-unit.c:
@@ -3860,7 +3878,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 
 2007-03-10  Richard Hughes  <richard@hughsie.com>
 
-	* test/gpm-st-array.c: (gpm_st_array):
+	* test/gpm-st-array.c: (egg_test_array):
 	Add some self tests for the integration.
 
 	* src/gpm-array.c: (gpm_array_compute_integral):
@@ -3882,16 +3900,16 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	* src/gpm-array.c:
 	* test/Makefile.am:
 	* test/gpm-self-test.c:
-	* test/gpm-st-array.c: (gpm_st_array):
-	* test/gpm-st-common.c: (gpm_st_common):
-	* test/gpm-st-hal-device.c: (gpm_st_hal_device):
-	* test/gpm-st-hal-devicestore.c: (gpm_st_hal_devicestore):
-	* test/gpm-st-hal-manager.c: (gpm_st_hal_manager):
-	* test/gpm-st-hal-power.c: (gpm_st_hal_power):
-	* test/gpm-st-inhibit.c: (gpm_st_inhibit):
+	* test/gpm-st-array.c: (egg_test_array):
+	* test/gpm-st-common.c: (egg_test_common):
+	* test/gpm-st-hal-device.c: (egg_test_hal_device):
+	* test/gpm-st-hal-devicestore.c: (egg_test_hal_devicestore):
+	* test/gpm-st-hal-manager.c: (egg_test_hal_manager):
+	* test/gpm-st-hal-power.c: (egg_test_hal_power):
+	* test/gpm-st-inhibit.c: (egg_test_inhibit):
 	* test/gpm-st-main.c:
 	* test/gpm-st-main.h:
-	* test/gpm-st-proxy.c: (gpm_st_proxy):
+	* test/gpm-st-proxy.c: (egg_test_proxy):
 	Modulalize the test program.
 
 2007-03-10  Richard Hughes  <richard@hughsie.com>
