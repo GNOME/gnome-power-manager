@@ -1,5 +1,29 @@
 2008-09-04  Richard Hughes  <richard@hughsie.com>
 
+	* applets/brightness/Makefile.am:
+	* applets/brightness/brightness-applet.c: (gpm_applet_destroy_cb),
+	(monitor_connection_cb), (gpm_brightness_applet_init):
+	* applets/inhibit/Makefile.am:
+	* applets/inhibit/inhibit-applet.c: (gpm_applet_destroy_cb),
+	(monitor_connection_cb), (gpm_inhibit_applet_init):
+	* libdbus-glib/Makefile.am:
+	* libdbus-glib/libdbus-proxy.c: (dbus_proxy_assign),
+	(dbus_proxy_get_proxy), (dbus_proxy_is_connected),
+	(dbus_proxy_finalize):
+	* libdbus-glib/libdbus-watch.c:
+	* libdbus-glib/libdbus-watch.h:
+	* src/Makefile.am:
+	* src/egg-dbus-monitor.c: (egg_dbus_monitor_name_owner_changed_cb),
+	(egg_dbus_monitor_assign), (egg_dbus_monitor_is_connected),
+	(egg_dbus_monitor_class_init), (egg_dbus_monitor_init),
+	(egg_dbus_monitor_finalize), (egg_dbus_monitor_new):
+	* src/egg-dbus-monitor.h:
+	* src/gpm-phone.c: (monitor_connection_cb), (gpm_phone_init),
+	(gpm_phone_finalize):
+	Remove use of DbusWatch and use the standard EggDbusMonitor instead.
+
+2008-09-04  Richard Hughes  <richard@hughsie.com>
+
 	* src/Makefile.am:
 	* src/egg-test.c: (egg_test_init), (egg_test_loop_quit),
 	(egg_test_hang_check), (egg_test_loop_wait), (egg_test_loop_check),
@@ -260,7 +284,7 @@
 	* libdbus-glib/libdbus-proxy.c: (dbus_noc_session_cb),
 	(dbus_noc_system_cb), (dbus_proxy_assign):
 	* libdbus-glib/libdbus-watch.c: (dbus_noc_session_cb),
-	(dbus_noc_system_cb), (dbus_watch_assign):
+	(dbus_noc_system_cb), (egg_dbus_monitor_assign):
 	* libhal-glib/libhal-gdevice.c: (hal_gdevice_get_bool),
 	(hal_gdevice_get_string), (hal_gdevice_get_int),
 	(hal_gdevice_query_capability),
@@ -992,7 +1016,7 @@
 2008-02-19  Richard Hughes  <richard@hughsie.com>
 
 	* libdbus-glib/libdbus-proxy.c: (dbus_proxy_finalize):
-	* libdbus-glib/libdbus-watch.c: (dbus_watch_finalize):
+	* libdbus-glib/libdbus-watch.c: (egg_dbus_monitor_finalize):
 	* src/gpm-cell-array.c: (gpm_cell_array_finalize):
 	* src/gpm-cell.c: (gpm_cell_finalize):
 	* src/gpm-engine.c: (gpm_engine_finalize):
@@ -2618,7 +2642,7 @@ also do GOption parsing via gtk and drop gnome_program_init()
 	* applets/brightness/Makefile.am:
 	* applets/brightness/brightness-applet.c:
 	* applets/brightness/brightness-applet.h:
-	Use DbusWatch.
+	Use EggDbusMonitor.
 
 	* libdbus-glib/Makefile.am:
 	* libdbus-glib/libdbus-proxy.c: (dbus_proxy_disconnect):

@@ -14,6 +14,7 @@ INCLUDES =							\
 	-DLIBDIR=\""$(libdir)"\" 				\
 	-DVERSION="\"$(VERSION)\"" 				\
 	-DGPM_DATA=\"$(pkgdatadir)\"				\
+	-DEGG_LOG_FILE=\""$(PK_LOG_DIR)/gnome-power-manager"\"	\
 	-I$(top_srcdir)/libdbus-glib				\
 	$(NULL)
 
@@ -24,7 +25,7 @@ LOCAL_LIBDBUS_LIBS =						\
 
 libexec_PROGRAMS=gnome-inhibit-applet
 
-gnome_inhibit_applet_SOURCES = inhibit-applet.c
+gnome_inhibit_applet_SOURCES = inhibit-applet.c ../../src/egg-dbus-monitor.c ../../src/egg-debug.c
 gnome_inhibit_applet_LDADD =					\
 	$(LOCAL_LIBDBUS_LIBS)					\
 	$(DBUS_LIBS)						\

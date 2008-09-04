@@ -31,7 +31,7 @@
 #include "egg-debug.h"
 #include "gpm-marshal.h"
 
-#include <libdbus-watch.h>
+#include "egg-dbus-monitor.h"
 
 static void     gpm_phone_class_init (GpmPhoneClass *klass);
 static void     gpm_phone_init       (GpmPhone      *phone);
@@ -43,7 +43,7 @@ struct GpmPhonePrivate
 {
 	DBusGProxy		*proxy;
 	DBusGConnection		*connection;
-	DbusWatch		*watch;
+	EggDbusMonitor		*monitor;
 	gboolean		 present;
 	guint			 percentage;
 	gboolean		 onac;	 
@@ -336,13 +336,13 @@ gpm_phone_dbus_disconnect (GpmPhone *phone)
 }
 
 /**
- * watch_connection_cb:
+ * monitor_connection_cb:
  * @proxy: The dbus raw proxy
  * @status: The status of the service, where TRUE is connected
  * @screensaver: This class instance
  **/
 static void
-watch_connection_cb (DbusWatch *watch,
+monitor_connection_cb (EggDbusMonitor *monitor,
 		     gboolean   status,
 		     GpmPhone  *phone)
 {
@@ -368,10 +368,10 @@ gpm_phone_init (GpmPhone *phone)
 	phone->priv->percentage = 0;
 	phone->priv->onac = FALSE;
 
-	phone->priv->watch = dbus_watch_new ();
-	g_signal_connect (phone->priv->watch, "connection-changed",
-			  G_CALLBACK (watch_connection_cb), phone);
-	dbus_watch_assign (phone->priv->watch, DBUS_WATCH_SESSION, GNOME_PHONE_MANAGER_DBUS_SERVICE);
+	phone->priv->monitor = egg_dbus_monitor_new ();
+	g_signal_connect (phone->priv->monitor, "connection-changed",
+			  G_CALLBACK (monitor_connection_cb), phone);
+	egg_dbus_monitor_assign (phone->priv->monitor, EGG_DBUS_MONITOR_SESSION, GNOME_PHONE_MANAGER_DBUS_SERVICE);
 	gpm_phone_dbus_connect (phone);
 }
 
@@ -390,9 +390,8 @@ gpm_phone_finalize (GObject *object)
 	phone->priv = GPM_PHONE_GET_PRIVATE (phone);
 
 	gpm_phone_dbus_disconnect (phone);
-	if (phone->priv->watch != NULL) {
-		g_object_unref (phone->priv->watch);
-	}
+	if (phone->priv->monitor != NULL)
+		g_object_unref (phone->priv->monitor);
 
 	G_OBJECT_CLASS (gpm_phone_parent_class)->finalize (object);
 }

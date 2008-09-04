@@ -230,11 +230,10 @@ dbus_proxy_assign (DbusProxy	 *dbus_proxy,
 	}
 
 	/* get the DBUS connection */
-	if (bus_type == DBUS_PROXY_SESSION) {
+	if (bus_type == DBUS_PROXY_SESSION)
 		dbus_proxy->priv->connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
-	} else {
+	else
 		dbus_proxy->priv->connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
-	}
 
 	if (error) {
 		g_warning ("Could not connect to DBUS daemon: %s", error->message);
@@ -285,9 +284,8 @@ DBusGProxy *
 dbus_proxy_get_proxy (DbusProxy *dbus_proxy)
 {
 	g_return_val_if_fail (DBUS_IS_PROXY (dbus_proxy), NULL);
-	if (dbus_proxy->priv->assigned == FALSE) {
+	if (dbus_proxy->priv->assigned == FALSE)
 		return NULL;
-	}
 	return dbus_proxy->priv->proxy;
 }
 
@@ -364,12 +362,10 @@ gboolean
 dbus_proxy_is_connected (DbusProxy *dbus_proxy)
 {
 	g_return_val_if_fail (DBUS_IS_PROXY (dbus_proxy), FALSE);
-	if (dbus_proxy->priv->assigned == FALSE) {
+	if (dbus_proxy->priv->assigned == FALSE)
 		return FALSE;
-	}
-	if (dbus_proxy->priv->proxy == NULL) {
+	if (dbus_proxy->priv->proxy == NULL)
 		return FALSE;
-	}
 	return TRUE;
 }
 
@@ -431,12 +427,10 @@ dbus_proxy_finalize (GObject *object)
 	dbus_proxy = DBUS_PROXY (object);
 	dbus_proxy->priv = DBUS_PROXY_GET_PRIVATE (dbus_proxy);
 
-	if (dbus_proxy->priv->ses_sig_id != 0) {
+	if (dbus_proxy->priv->ses_sig_id != 0)
 		g_signal_handler_disconnect (dbus_proxy->priv->monitor_session, dbus_proxy->priv->ses_sig_id);
-	}
-	if (dbus_proxy->priv->sys_sig_id != 0) {
+	if (dbus_proxy->priv->sys_sig_id != 0)
 		g_signal_handler_disconnect (dbus_proxy->priv->monitor_system, dbus_proxy->priv->sys_sig_id);
-	}
 
 	dbus_proxy_disconnect (dbus_proxy);
 
@@ -449,15 +443,9 @@ dbus_proxy_finalize (GObject *object)
 	if (dbus_proxy->priv->monitor_system != NULL) {
 		g_object_unref (dbus_proxy->priv->monitor_system);
 	}
-	if (dbus_proxy->priv->service != NULL) {
-		g_free (dbus_proxy->priv->service);
-	}
-	if (dbus_proxy->priv->interface != NULL) {
-		g_free (dbus_proxy->priv->interface);
-	}
-	if (dbus_proxy->priv->path != NULL) {
-		g_free (dbus_proxy->priv->path);
-	}
+	g_free (dbus_proxy->priv->service);
+	g_free (dbus_proxy->priv->interface);
+	g_free (dbus_proxy->priv->path);
 	G_OBJECT_CLASS (dbus_proxy_parent_class)->finalize (object);
 }
 

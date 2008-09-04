@@ -14,6 +14,7 @@ INCLUDES =							\
 	-DLIBDIR=\""$(libdir)"\" 				\
 	-DVERSION="\"$(VERSION)\"" 				\
 	-DGPM_DATA=\"$(pkgdatadir)\"				\
+	-DEGG_LOG_FILE=\""$(PK_LOG_DIR)/gnome-power-manager"\"	\
 	-I$(top_srcdir)/libdbus-glib				\
 	$(NULL)
 
@@ -24,7 +25,7 @@ LOCAL_LIBDBUS_LIBS =						\
 
 libexec_PROGRAMS=gnome-brightness-applet
 
-gnome_brightness_applet_SOURCES = brightness-applet.c
+gnome_brightness_applet_SOURCES = brightness-applet.c ../../src/egg-dbus-monitor.c ../../src/egg-debug.c
 gnome_brightness_applet_LDADD =					\
 	$(LOCAL_LIBDBUS_LIBS)					\
 	$(DBUS_LIBS)						\

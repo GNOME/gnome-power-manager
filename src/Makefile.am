@@ -44,7 +44,6 @@ LOCAL_LIBHAL_LIBS =					\
 LOCAL_LIBDBUS_LIBS =						\
 	$(top_builddir)/libdbus-glib/libdbus-monitor-session.la	\
 	$(top_builddir)/libdbus-glib/libdbus-monitor-system.la	\
-	$(top_builddir)/libdbus-glib/libdbus-watch.la		\
 	$(top_builddir)/libdbus-glib/libdbus-proxy.la
 
 bin_PROGRAMS =						\
@@ -138,6 +137,8 @@ gnome_power_manager_SOURCES =				\
 	egg-color.h					\
 	egg-debug.h					\
 	egg-debug.c					\
+	egg-dbus-monitor.h				\
+	egg-dbus-monitor.c				\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
 	gpm-notify.h					\
@@ -244,6 +245,8 @@ gnome_power_self_test_SOURCES =				\
 	egg-test.c					\
 	egg-debug.h					\
 	egg-debug.c					\
+	egg-dbus-monitor.h				\
+	egg-dbus-monitor.c				\
 	gpm-ac-adapter.h				\
 	gpm-ac-adapter.c				\
 	gpm-prefs-server.h				\

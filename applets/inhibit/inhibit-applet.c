@@ -31,10 +31,10 @@
 #include <gtk/gtk.h>
 #include <gtk/gtkbox.h>
 #include <libgnomeui/gnome-help.h>
-#include <libdbus-watch.h>
 #include <glib-object.h>
 #include <dbus/dbus-glib.h>
 
+#include "../src/egg-dbus-monitor.h"
 #include "../src/gpm-common.h"
 
 #define GPM_TYPE_INHIBIT_APPLET		(gpm_inhibit_applet_get_type ())
@@ -54,7 +54,7 @@ typedef struct{
 	/* connection to g-p-m */
 	DBusGProxy *proxy;
 	DBusGConnection *connection;
-	DbusWatch *watch;
+	EggDbusMonitor *monitor;
 	guint level;
 	/* a cache for panel size */
 	gint size;
@@ -493,8 +493,8 @@ gpm_applet_destroy_cb (GtkObject *object)
 {
 	GpmInhibitApplet *applet = GPM_INHIBIT_APPLET(object);
 
-	if (applet->watch != NULL) {
-		g_object_unref (applet->watch);
+	if (applet->monitor != NULL) {
+		g_object_unref (applet->monitor);
 	}
 	if (applet->icon != NULL) {
 		gdk_pixbuf_unref (applet->icon);
@@ -566,13 +566,13 @@ gpm_inhibit_applet_dbus_disconnect (GpmInhibitApplet *applet)
 }
 
 /**
- * watch_connection_cb:
+ * monitor_connection_cb:
  * @proxy: The dbus raw proxy
  * @status: The status of the service, where TRUE is connected
  * @screensaver: This class instance
  **/
 static void
-watch_connection_cb (DbusWatch           *watch,
+monitor_connection_cb (EggDbusMonitor           *monitor,
 		     gboolean	          status,
 		     GpmInhibitApplet *applet)
 {
@@ -607,10 +607,10 @@ gpm_inhibit_applet_init (GpmInhibitApplet *applet)
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
                                            GPM_DATA G_DIR_SEPARATOR_S "icons");
 
-	applet->watch = dbus_watch_new ();
-	g_signal_connect (applet->watch, "connection-changed",
-			  G_CALLBACK (watch_connection_cb), applet);
-	dbus_watch_assign (applet->watch, DBUS_WATCH_SESSION, GPM_DBUS_SERVICE);
+	applet->monitor = egg_dbus_monitor_new ();
+	g_signal_connect (applet->monitor, "connection-changed",
+			  G_CALLBACK (monitor_connection_cb), applet);
+	egg_dbus_monitor_assign (applet->monitor, EGG_DBUS_MONITOR_SESSION, GPM_DBUS_SERVICE);
 	gpm_inhibit_applet_dbus_connect (applet);
 
 	/* prepare */
