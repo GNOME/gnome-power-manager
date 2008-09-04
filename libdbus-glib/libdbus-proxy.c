@@ -26,9 +26,8 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 
+#include "egg-dbus-monitor.h"
 #include <libdbus-proxy.h>
-#include <libdbus-monitor-session.h>
-#include <libdbus-monitor-system.h>
 
 static void     dbus_proxy_class_init (DbusProxyClass *klass);
 static void     dbus_proxy_init       (DbusProxy      *proxy);
@@ -44,12 +43,10 @@ struct DbusProxyPrivate
 	gchar			*interface;
 	gchar			*path;
 	DBusGProxy		*proxy;
-	DbusMonitorSession	*monitor_session;
-	DbusMonitorSystem	*monitor_system;
+	EggDbusMonitor		*monitor;
 	gboolean		 assigned;
 	DBusGConnection		*connection;
-	gulong			 ses_sig_id;
-	gulong			 sys_sig_id;
+	gulong			 monitor_callback_id;
 };
 
 enum {
@@ -130,75 +127,22 @@ dbus_proxy_disconnect (DbusProxy *dbus_proxy)
 	return TRUE;
 }
 
-
 /**
- * dbus_noc_session_cb:
- * @power: The power class instance
- * @name: The DBUS name, e.g. hal.freedesktop.org
- * @prev: The previous name, e.g. :0.13
- * @new: The new name, e.g. :0.14
- * @inhibit: This inhibit class instance
- *
- * The noc session DBUS callback.
+ * dbus_monitor_connection_cb:
+ * @proxy: The dbus raw proxy
+ * @status: The status of the service, where TRUE is connected
+ * @screensaver: This class instance
  **/
 static void
-dbus_noc_session_cb (DbusMonitorSession *monitor_session,
-		     const gchar    *name,
-		     const gchar    *prev,
-		     const gchar    *new,
-		     DbusProxy	    *dbus_proxy)
+dbus_monitor_connection_cb (EggDbusMonitor *monitor, gboolean status, DbusProxy	*dbus_proxy)
 {
 	g_return_if_fail (DBUS_IS_PROXY (dbus_proxy));
-	if (dbus_proxy->priv->assigned == FALSE) {
+	if (dbus_proxy->priv->assigned == FALSE)
 		return;
-	}
-	if (dbus_proxy->priv->bus_type == DBUS_PROXY_SYSTEM) {
-		return;
-	}
-
-	if (strcmp (name, dbus_proxy->priv->service) == 0) {
-		if (strlen (prev) != 0 && strlen (new) == 0) {
-			dbus_proxy_disconnect (dbus_proxy);
-		}
-		if (strlen (prev) == 0 && strlen (new) != 0) {
-			dbus_proxy_connect (dbus_proxy);
-		}
-	}
-}
-
-/**
- * dbus_noc_system_cb:
- * @power: The power class instance
- * @name: The DBUS name, e.g. hal.freedesktop.org
- * @prev: The previous name, e.g. :0.13
- * @new: The new name, e.g. :0.14
- * @inhibit: This inhibit class instance
- *
- * The noc session DBUS callback.
- **/
-static void
-dbus_noc_system_cb (DbusMonitorSystem *monitor_system,
-		    const gchar	   *name,
-		    const gchar    *prev,
-		    const gchar    *new,
-		    DbusProxy	   *dbus_proxy)
-{
-	g_return_if_fail (DBUS_IS_PROXY (dbus_proxy));
-	if (dbus_proxy->priv->assigned == FALSE) {
-		return;
-	}
-	if (dbus_proxy->priv->bus_type == DBUS_PROXY_SESSION) {
-		return;
-	}
-
-	if (strcmp (name, dbus_proxy->priv->service) == 0) {
-		if (strlen (prev) != 0 && strlen (new) == 0) {
-			dbus_proxy_disconnect (dbus_proxy);
-		}
-		if (strlen (prev) == 0 && strlen (new) != 0) {
-			dbus_proxy_connect (dbus_proxy);
-		}
-	}
+	if (status)
+		dbus_proxy_connect (dbus_proxy);
+	else
+		dbus_proxy_disconnect (dbus_proxy);
 }
 
 /**
@@ -255,19 +199,10 @@ dbus_proxy_assign (DbusProxy	 *dbus_proxy,
 	/* We have to save the connection and remove the signal id later as
 	   instances of this object are likely to be registering with a
 	   singleton object many times */
-	if (bus_type == DBUS_PROXY_SESSION) {
-		dbus_proxy->priv->monitor_session = dbus_monitor_session_new ();
-		dbus_proxy->priv->ses_sig_id = g_signal_connect (dbus_proxy->priv->monitor_session,
-								 "name-owner-changed",
-								 G_CALLBACK (dbus_noc_session_cb),
-								 dbus_proxy);
-	} else {
-		dbus_proxy->priv->monitor_system = dbus_monitor_system_new ();
-		dbus_proxy->priv->sys_sig_id = g_signal_connect (dbus_proxy->priv->monitor_system,
-								 "name-owner-changed",
-								 G_CALLBACK (dbus_noc_system_cb),
-								 dbus_proxy);
-	}
+	if (bus_type == DBUS_PROXY_SESSION)
+		egg_dbus_monitor_assign (dbus_proxy->priv->monitor, EGG_DBUS_MONITOR_SESSION, service);
+	else
+		egg_dbus_monitor_assign (dbus_proxy->priv->monitor, EGG_DBUS_MONITOR_SYSTEM, service);
 
 	/* try to connect and return proxy (or NULL if invalid) */
 	dbus_proxy_connect (dbus_proxy);
@@ -407,10 +342,11 @@ dbus_proxy_init (DbusProxy *dbus_proxy)
 	dbus_proxy->priv->path = NULL;
 	dbus_proxy->priv->bus_type = DBUS_PROXY_UNKNOWN;
 	dbus_proxy->priv->assigned = FALSE;
-	dbus_proxy->priv->monitor_session = NULL;
-	dbus_proxy->priv->monitor_system = NULL;
-	dbus_proxy->priv->ses_sig_id = 0;
-	dbus_proxy->priv->sys_sig_id = 0;
+	dbus_proxy->priv->monitor = egg_dbus_monitor_new ();
+	dbus_proxy->priv->monitor_callback_id =
+		g_signal_connect (dbus_proxy->priv->monitor, "connection-changed",
+				  G_CALLBACK (dbus_monitor_connection_cb), dbus_proxy);
+	dbus_proxy->priv->monitor_callback_id = 0;
 }
 
 /**
@@ -427,25 +363,19 @@ dbus_proxy_finalize (GObject *object)
 	dbus_proxy = DBUS_PROXY (object);
 	dbus_proxy->priv = DBUS_PROXY_GET_PRIVATE (dbus_proxy);
 
-	if (dbus_proxy->priv->ses_sig_id != 0)
-		g_signal_handler_disconnect (dbus_proxy->priv->monitor_session, dbus_proxy->priv->ses_sig_id);
-	if (dbus_proxy->priv->sys_sig_id != 0)
-		g_signal_handler_disconnect (dbus_proxy->priv->monitor_system, dbus_proxy->priv->sys_sig_id);
+	if (dbus_proxy->priv->monitor_callback_id != 0)
+		g_signal_handler_disconnect (dbus_proxy->priv->monitor,
+					     dbus_proxy->priv->monitor_callback_id);
 
 	dbus_proxy_disconnect (dbus_proxy);
 
-	if (dbus_proxy->priv->proxy != NULL) {
+	if (dbus_proxy->priv->proxy != NULL)
 		g_object_unref (dbus_proxy->priv->proxy);
-	}
-	if (dbus_proxy->priv->monitor_session != NULL) {
-		g_object_unref (dbus_proxy->priv->monitor_session);
-	}
-	if (dbus_proxy->priv->monitor_system != NULL) {
-		g_object_unref (dbus_proxy->priv->monitor_system);
-	}
+	g_object_unref (dbus_proxy->priv->monitor);
 	g_free (dbus_proxy->priv->service);
 	g_free (dbus_proxy->priv->interface);
 	g_free (dbus_proxy->priv->path);
+
 	G_OBJECT_CLASS (dbus_proxy_parent_class)->finalize (object);
 }
 

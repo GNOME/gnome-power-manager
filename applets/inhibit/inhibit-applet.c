@@ -34,6 +34,7 @@
 #include <glib-object.h>
 #include <dbus/dbus-glib.h>
 
+#include "../src/egg-debug.h"
 #include "../src/egg-dbus-monitor.h"
 #include "../src/gpm-common.h"
 
@@ -105,7 +106,7 @@ gpm_applet_inhibit (GpmInhibitApplet *applet,
 	g_return_val_if_fail (cookie != NULL, FALSE);
 
 	if (applet->proxy == NULL) {
-		printf ("WARNING: not connected\n");
+		egg_warning ("not connected\n");
 		return FALSE;
 	}
 
@@ -136,7 +137,7 @@ gpm_applet_uninhibit (GpmInhibitApplet *applet,
 	gboolean ret;
 
 	if (applet->proxy == NULL) {
-		printf ("WARNING: not connected");
+		egg_warning ("not connected");
 		return FALSE;
 	}
 
@@ -521,18 +522,18 @@ gpm_inhibit_applet_dbus_connect (GpmInhibitApplet *applet)
 	GError *error = NULL;
 
 	if (applet->connection == NULL) {
-		printf ("DEBUG: get connection\n");
+		egg_debug ("get connection\n");
 		g_clear_error (&error);
 		applet->connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 		if (error != NULL) {
-			printf ("WARNING: Could not connect to DBUS daemon: %s", error->message);
+			egg_warning ("Could not connect to DBUS daemon: %s", error->message);
 			g_error_free (error);
 			applet->connection = NULL;
 			return FALSE;
 		}
 	}
 	if (applet->proxy == NULL) {
-		printf ("DEBUG: get proxy\n");
+		egg_debug ("get proxy\n");
 		g_clear_error (&error);
 		applet->proxy = dbus_g_proxy_new_for_name_owner (applet->connection,
 							 GPM_DBUS_SERVICE,
@@ -540,7 +541,7 @@ gpm_inhibit_applet_dbus_connect (GpmInhibitApplet *applet)
 							 GPM_DBUS_INTERFACE_INHIBIT,
 							 &error);
 		if (error != NULL) {
-			printf ("WARNING: Cannot connect, maybe the daemon is not running: %s\n", error->message);
+			egg_warning ("Cannot connect, maybe the daemon is not running: %s\n", error->message);
 			g_error_free (error);
 			applet->proxy = NULL;
 			return FALSE;
@@ -556,7 +557,7 @@ gboolean
 gpm_inhibit_applet_dbus_disconnect (GpmInhibitApplet *applet)
 {
 	if (applet->proxy != NULL) {
-		printf ("DEBUG: removing proxy\n");
+		egg_debug ("removing proxy\n");
 		g_object_unref (applet->proxy);
 		applet->proxy = NULL;
 		/* we have no inhibit, these are not persistant across reboots */

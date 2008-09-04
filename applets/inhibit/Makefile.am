@@ -18,16 +18,10 @@ INCLUDES =							\
 	-I$(top_srcdir)/libdbus-glib				\
 	$(NULL)
 
-LOCAL_LIBDBUS_LIBS =						\
-	$(top_builddir)/libdbus-glib/libdbus-monitor-session.la	\
-	$(top_builddir)/libdbus-glib/libdbus-monitor-system.la	\
-	$(top_builddir)/libdbus-glib/libdbus-watch.la
-
 libexec_PROGRAMS=gnome-inhibit-applet
 
 gnome_inhibit_applet_SOURCES = inhibit-applet.c ../../src/egg-dbus-monitor.c ../../src/egg-debug.c
 gnome_inhibit_applet_LDADD =					\
-	$(LOCAL_LIBDBUS_LIBS)					\
 	$(DBUS_LIBS)						\
 	$(GNOME_LIBS)
 

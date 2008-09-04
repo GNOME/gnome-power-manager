@@ -6,8 +6,6 @@ INCLUDES = \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"
 
 LOCAL_LIBDBUS_LIBS =						\
-	$(top_builddir)/libdbus-glib/libdbus-monitor-session.la	\
-	$(top_builddir)/libdbus-glib/libdbus-monitor-system.la	\
 	$(top_builddir)/libdbus-glib/libdbus-proxy.la
 
 noinst_LTLIBRARIES =						\

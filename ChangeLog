@@ -1,6 +1,39 @@
 2008-09-04  Richard Hughes  <richard@hughsie.com>
 
 	* applets/brightness/Makefile.am:
+	* applets/brightness/brightness-applet.c:
+	(gpm_applet_get_brightness), (gpm_applet_set_brightness),
+	(gpm_applet_get_icon), (brightness_changed_cb),
+	(gpm_brightness_applet_dbus_connect),
+	(gpm_brightness_applet_dbus_disconnect):
+	* applets/inhibit/Makefile.am:
+	* applets/inhibit/inhibit-applet.c: (gpm_applet_inhibit),
+	(gpm_applet_uninhibit), (gpm_inhibit_applet_dbus_connect),
+	(gpm_inhibit_applet_dbus_disconnect):
+	* libdbus-glib/Makefile.am:
+	* libdbus-glib/egg-dbus-monitor.c:
+	* libdbus-glib/egg-dbus-monitor.h:
+	* libdbus-glib/egg-debug.c:
+	* libdbus-glib/egg-debug.h:
+	* libdbus-glib/libdbus-marshal.list:
+	* libdbus-glib/libdbus-monitor-session.c:
+	* libdbus-glib/libdbus-monitor-session.h:
+	* libdbus-glib/libdbus-monitor-system.c:
+	* libdbus-glib/libdbus-monitor-system.h:
+	* libdbus-glib/libdbus-proxy.c: (dbus_monitor_connection_cb),
+	(dbus_proxy_assign), (dbus_proxy_init), (dbus_proxy_finalize):
+	* libhal-glib/Makefile.am:
+	* src/Makefile.am:
+	Don't use DbusMonitorSystem or DbusMonitorSession, we can use
+	EggDbusMonitor and be much nicer.
+
+	* src/gpm-inhibit.c: (gpm_inhibit_name_owner_changed_cb),
+	(gpm_inhibit_init), (gpm_inhibit_finalize):
+	Convert to using plain dbus-glib
+
+2008-09-04  Richard Hughes  <richard@hughsie.com>
+
+	* applets/brightness/Makefile.am:
 	* applets/brightness/brightness-applet.c: (gpm_applet_destroy_cb),
 	(monitor_connection_cb), (gpm_brightness_applet_init):
 	* applets/inhibit/Makefile.am:

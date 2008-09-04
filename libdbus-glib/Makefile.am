@@ -2,65 +2,24 @@ INCLUDES = \
 	$(GLIB_CFLAGS)						\
 	$(DBUS_CFLAGS)						\
 	-I$(top_srcdir)/libdbus-glib				\
+	-DEGG_LOG_FILE=\""$(PK_LOG_DIR)/gnome-power-manager"\"	\
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\"			\
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"
 
 noinst_LTLIBRARIES =						\
-	libdbus-proxy.la					\
-	libdbus-monitor-session.la				\
-	libdbus-monitor-system.la
-
-libegg_dbus_monitor_la_SOURCES =				\
-	libdbus-marshal.h					\
-	libdbus-marshal.c					\
-	libdbus-monitor-session.c				\
-	libdbus-monitor-session.h				\
-	libdbus-monitor-system.c				\
-	libdbus-monitor-system.h				\
-libegg_dbus_monitor_la_LIBADD = @DBUS_LIBS@ $(INTLLIBS) $(GLIB_LIBS)
+	libdbus-proxy.la
 
 libdbus_proxy_la_SOURCES =					\
-	libdbus-marshal.h					\
-	libdbus-marshal.c					\
-	libdbus-monitor-session.c				\
-	libdbus-monitor-session.h				\
-	libdbus-monitor-system.c				\
-	libdbus-monitor-system.h				\
+	egg-debug.h						\
+	egg-debug.c						\
+	egg-dbus-monitor.h					\
+	egg-dbus-monitor.c					\
 	libdbus-proxy.c						\
 	libdbus-proxy.h
 libdbus_proxy_la_LIBADD = @DBUS_LIBS@ $(INTLLIBS) $(GLIB_LIBS)
 
-libdbus_monitor_system_la_SOURCES =				\
-	libdbus-marshal.h					\
-	libdbus-marshal.c					\
-	libdbus-monitor-system.c				\
-	libdbus-monitor-system.h
-libdbus_monitor_system_la_LIBADD = @DBUS_LIBS@ $(INTLLIBS) $(GLIB_LIBS)
-
-libdbus_monitor_session_la_SOURCES =				\
-	libdbus-marshal.h					\
-	libdbus-marshal.c					\
-	libdbus-monitor-session.c				\
-	libdbus-monitor-session.h
-libdbus_monitor_session_la_LIBADD = @DBUS_LIBS@ $(INTLLIBS) $(GLIB_LIBS)
-
-EXTRA_DIST =							\
-	libdbus-marshal.list
-
-BUILT_SOURCES = 						\
-	libdbus-marshal.c					\
-	libdbus-marshal.h
-
-libdbus-marshal.c: libdbus-marshal.list
-	echo "#include \"libdbus-marshal.h\"" > $@ && \
-	@GLIB_GENMARSHAL@ $< --prefix=libdbus_marshal --body >> $@
-
-libdbus-marshal.h: libdbus-marshal.list
-	@GLIB_GENMARSHAL@ $< --prefix=libdbus_marshal --header > $@
-
 clean-local:
 	rm -f *~
-	rm -f libdbus-marshal.c libdbus-marshal.h
 
 CLEANFILES = $(BUILT_SOURCES)
 

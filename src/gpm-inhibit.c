@@ -26,10 +26,9 @@
 #include <dbus/dbus-glib-lowlevel.h>
 #include <glib/gi18n.h>
 #include <string.h>
-#include <libdbus-monitor-session.h>
 
-#include "gpm-inhibit.h"
 #include "egg-debug.h"
+#include "gpm-inhibit.h"
 #include "gpm-conf.h"
 
 static void     gpm_inhibit_class_init (GpmInhibitClass *klass);
@@ -49,7 +48,7 @@ typedef struct
 struct GpmInhibitPrivate
 {
 	GSList			*list;
-	DbusMonitorSession	*dbus_monitor;
+	DBusGProxy		*proxy;
 	GpmConf			*conf;
 	gboolean		 ignore_inhibits;
 };
@@ -289,25 +288,15 @@ gpm_inhibit_remove_dbus (GpmInhibit  *inhibit,
 }
 
 /**
- * dbus_noc_session_cb:
- * @power: The power class instance
- * @name: The DBUS name, e.g. hal.freedesktop.org
- * @prev: The previous name, e.g. :0.13
- * @new: The new name, e.g. :0.14
- * @inhibit: This inhibit class instance
- *
- * The noc session DBUS callback.
+ * gpm_inhibit_name_owner_changed_cb:
  **/
 static void
-dbus_noc_session_cb (DbusMonitorSession *dbus_monitor,
-		     const gchar    *name,
-		     const gchar    *prev,
-		     const gchar    *new,
-		     GpmInhibit	    *inhibit)
+gpm_inhibit_name_owner_changed_cb (DBusGProxy *proxy, const gchar *name,
+				   const gchar *prev, const gchar *new,
+				   GpmInhibit *inhibit)
 {
-	if (strlen (new) == 0) {
+	if (strlen (new) == 0)
 		gpm_inhibit_remove_dbus (inhibit, name);
-	}
 }
 
 /**
@@ -467,15 +456,28 @@ gpm_inhibit_class_init (GpmInhibitClass *klass)
 static void
 gpm_inhibit_init (GpmInhibit *inhibit)
 {
+	DBusGConnection *connection;
+	GError *error = NULL;
+
 	inhibit->priv = GPM_INHIBIT_GET_PRIVATE (inhibit);
 	inhibit->priv->list = NULL;
-	inhibit->priv->dbus_monitor = dbus_monitor_session_new ();
-	g_signal_connect (inhibit->priv->dbus_monitor, "name-owner-changed",
-			  G_CALLBACK (dbus_noc_session_cb), inhibit);
-
 	inhibit->priv->conf = gpm_conf_new ();
 	g_signal_connect (inhibit->priv->conf, "value-changed",
 			  G_CALLBACK (conf_key_changed_cb), inhibit);
+
+	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+	if (error != NULL) {
+		egg_warning ("Cannot connect to bus: %s", error->message);
+		g_error_free (error);
+	}
+	inhibit->priv->proxy = dbus_g_proxy_new_for_name_owner (connection,
+								DBUS_SERVICE_DBUS, DBUS_PATH_DBUS,
+						 		DBUS_INTERFACE_DBUS, NULL);
+	dbus_g_proxy_add_signal (inhibit->priv->proxy, "NameOwnerChanged",
+				 G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal (inhibit->priv->proxy, "NameOwnerChanged",
+				     G_CALLBACK (gpm_inhibit_name_owner_changed_cb),
+				     inhibit, NULL);
 
 	/* Do we ignore inhibit requests? */
 	gpm_conf_get_bool (inhibit->priv->conf, GPM_CONF_IGNORE_INHIBITS, &inhibit->priv->ignore_inhibits);
@@ -502,7 +504,7 @@ gpm_inhibit_finalize (GObject *object)
 	g_slist_free (inhibit->priv->list);
 
 	g_object_unref (inhibit->priv->conf);
-	g_object_unref (inhibit->priv->dbus_monitor);
+	g_object_unref (inhibit->priv->proxy);
 	G_OBJECT_CLASS (gpm_inhibit_parent_class)->finalize (object);
 }
 
