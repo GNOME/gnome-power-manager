@@ -238,8 +238,12 @@ gnome_power_manager_LDADD +=				\
 endif
 
 gnome_power_self_test_SOURCES =				\
-	egg-color.c					\
 	egg-color.h					\
+	egg-color.c					\
+	egg-test.h					\
+	egg-test.c					\
+	egg-debug.h					\
+	egg-debug.c					\
 	gpm-ac-adapter.h				\
 	gpm-ac-adapter.c				\
 	gpm-prefs-server.h				\
@@ -247,15 +251,12 @@ gnome_power_self_test_SOURCES =				\
 	gpm-control.h					\
 	gpm-control.c					\
 	gpm-self-test.c					\
-	gpm-self-test.h					\
 	gpm-networkmanager.h				\
 	gpm-networkmanager.c				\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
 	gpm-button.h					\
 	gpm-button.c					\
-	egg-debug.h					\
-	egg-debug.c					\
 	gpm-notify.h					\
 	gpm-notify.c					\
 	gpm-screensaver.h				\
@@ -310,8 +311,7 @@ gnome_power_self_test_LDADD =				\
 	$(GPM_EXTRA_LIBS)				\
 	$(NULL)
 
-gnome_power_self_test_CPPFLAGS=	\
-	-DGPM_BUILD_TESTS
+gnome_power_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS)
 
 BUILT_SOURCES = 					\
 	gpm-marshal.c					\

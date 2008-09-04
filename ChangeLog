@@ -1,5 +1,31 @@
 2008-09-04  Richard Hughes  <richard@hughsie.com>
 
+	* src/Makefile.am:
+	* src/egg-test.c: (egg_test_init), (egg_test_loop_quit),
+	(egg_test_hang_check), (egg_test_loop_wait), (egg_test_loop_check),
+	(egg_test_set_user_data), (egg_test_get_user_data),
+	(egg_test_finish), (egg_test_elapsed), (egg_test_start),
+	(egg_test_end), (egg_test_title), (egg_test_success),
+	(egg_test_failed), (egg_test_get_data_file):
+	* src/egg-test.h:
+	* src/gpm-array-float.c: (gpm_array_float_test):
+	* src/gpm-array.c: (gpm_array_test):
+	* src/gpm-cell-array.c: (gpm_cell_test_array):
+	* src/gpm-cell-unit.c: (gpm_cell_unit_test):
+	* src/gpm-cell.c: (gpm_cell_test):
+	* src/gpm-common.c: (gpm_common_test):
+	* src/gpm-graph-widget.c: (clicked_passed_cb), (clicked_failed_cb),
+	(create_graph_window), (wait_for_input), (egg_test_title_graph),
+	(gpm_graph_widget_test):
+	* src/gpm-inhibit.c: (gpm_inhibit_test):
+	* src/gpm-phone.c: (egg_test_mainloop_wait), (gpm_phone_test):
+	* src/gpm-profile.c: (gpm_profile_test):
+	* src/gpm-self-test.c: (main):
+	* src/gpm-self-test.h:
+	Use EggTest rather than the obsolete self-made function.
+
+2008-09-04  Richard Hughes  <richard@hughsie.com>
+
 	* Makefile.am:
 	* RELEASE:
 	* configure.ac:

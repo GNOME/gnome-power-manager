@@ -810,8 +810,8 @@ gpm_cell_new (void)
 /***************************************************************************
  ***                          MAKE CHECK TESTS                           ***
  ***************************************************************************/
-#ifdef GPM_BUILD_TESTS
-#include "gpm-self-test.h"
+#ifdef EGG_TEST
+#include "egg-test.h"
 #include <libhal-gmanager.h>
 
 guint recall_count = 0;
@@ -843,7 +843,7 @@ gpm_cell_get_battery (void)
 
 
 void
-gpm_st_cell (GpmSelfTest *test)
+gpm_cell_test (EggTest *test)
 {
 	GpmCell *cell;
 	GpmCellUnit *unit;
@@ -851,97 +851,97 @@ gpm_st_cell (GpmSelfTest *test)
 	gboolean ret;
 	gchar *udi;
 
-	if (gpm_st_start (test, "GpmCell") == FALSE) {
+	if (egg_test_start (test, "GpmCell") == FALSE) {
 		return;
 	}
 
 	/* get battery */
 	udi = gpm_cell_get_battery ();
 	if (udi == NULL) {
-		gpm_st_failed (test, "did not find battery device");
-		gpm_st_end (test);
+		egg_test_failed (test, "did not find battery device");
+		egg_test_end (test);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a non null cell");
+	egg_test_title (test, "make sure we get a non null cell");
 	cell = gpm_cell_new ();
 	g_signal_connect (cell, "perhaps-recall",
 			  G_CALLBACK (gpm_cell_perhaps_recall_cb), NULL);
 	if (cell != NULL) {
-		gpm_st_success (test, "got GpmCell");
+		egg_test_success (test, "got GpmCell");
 	} else {
-		gpm_st_failed (test, "could not get GpmCell");
+		egg_test_failed (test, "could not get GpmCell");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a non null unit");
+	egg_test_title (test, "make sure we get a non null unit");
 	unit = gpm_cell_get_unit (cell);
 	if (unit != NULL) {
-		gpm_st_success (test, "got GpmCellUnit");
+		egg_test_success (test, "got GpmCellUnit");
 	} else {
-		gpm_st_failed (test, "could not get GpmCellUnit");
+		egg_test_failed (test, "could not get GpmCellUnit");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a null description for nonassigned cell");
+	egg_test_title (test, "make sure we get a null description for nonassigned cell");
 	desc = gpm_cell_get_description (cell);
 	if (desc != NULL) {
-		gpm_st_success (test, "got description %s", desc);
+		egg_test_success (test, "got description %s", desc);
 		g_free (desc);
 	} else {
-		gpm_st_failed (test, "could not get description");
+		egg_test_failed (test, "could not get description");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "can we assign device");
+	egg_test_title (test, "can we assign device");
 	ret = gpm_cell_set_device_id (cell, udi);
 	if (ret) {
-		gpm_st_success (test, "set type okay");
+		egg_test_success (test, "set type okay");
 	} else {
-		gpm_st_failed (test, "could not set type");
+		egg_test_failed (test, "could not set type");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we got a single recall notice");
+	egg_test_title (test, "make sure we got a single recall notice");
 	if (recall_count == 1) {
-		gpm_st_success (test, "got recall");
+		egg_test_success (test, "got recall");
 	} else {
-		gpm_st_failed (test, "did not get recall (install fdi?)");
+		egg_test_failed (test, "did not get recall (install fdi?)");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a full description for set cell");
+	egg_test_title (test, "make sure we get a full description for set cell");
 	desc = gpm_cell_get_description (cell);
 	if (desc != NULL) {
-		gpm_st_success (test, "got description %s", desc);
+		egg_test_success (test, "got description %s", desc);
 		g_free (desc);
 	} else {
-		gpm_st_failed (test, "could not get description");
+		egg_test_failed (test, "could not get description");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a valid unit");
+	egg_test_title (test, "make sure we get a valid unit");
 	unit = gpm_cell_get_unit (cell);
 	if (unit->voltage > 1000 && unit->voltage < 20000) {
-		gpm_st_success (test, "got correct voltage");
+		egg_test_success (test, "got correct voltage");
 	} else {
-		gpm_st_failed (test, "could not get correct voltage %i", unit->voltage);
+		egg_test_failed (test, "could not get correct voltage %i", unit->voltage);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a id");
+	egg_test_title (test, "make sure we get a id");
 	desc = gpm_cell_get_id (cell);
 	if (desc != NULL) {
-		gpm_st_success (test, "got valid id %s", desc);
+		egg_test_success (test, "got valid id %s", desc);
 	} else {
-		gpm_st_failed (test, "could not get valid id");
+		egg_test_failed (test, "could not get valid id");
 	}
 
 	g_free (udi);
 	g_free (desc);
 	g_object_unref (cell);
 
-	gpm_st_end (test);
+	egg_test_end (test);
 }
 
 #endif

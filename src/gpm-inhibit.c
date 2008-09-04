@@ -518,8 +518,8 @@ gpm_inhibit_new (void)
 /***************************************************************************
  ***                          MAKE CHECK TESTS                           ***
  ***************************************************************************/
-#ifdef GPM_BUILD_TESTS
-#include "gpm-self-test.h"
+#ifdef EGG_TEST
+#include "egg-test.h"
 #include <libdbus-proxy.h>
 #include "gpm-common.h"
 
@@ -617,7 +617,7 @@ has_inhibit (DbusProxy *gproxy,
 }
 
 void
-gpm_st_inhibit (GpmSelfTest *test)
+gpm_inhibit_test (EggTest *test)
 {
 	gboolean ret;
 	gboolean valid;
@@ -625,7 +625,7 @@ gpm_st_inhibit (GpmSelfTest *test)
 	guint cookie2 = 0;
 	DbusProxy *gproxy;
 
-	if (gpm_st_start (test, "GpmInhibit") == FALSE) {
+	if (egg_test_start (test, "GpmInhibit") == FALSE) {
 		return;
 	}
 
@@ -641,96 +641,96 @@ gpm_st_inhibit (GpmSelfTest *test)
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we are not inhibited");
+	egg_test_title (test, "make sure we are not inhibited");
 	ret = has_inhibit (gproxy, &valid);
 	if (!ret) {
-		gpm_st_failed (test, "Unable to test validity");
+		egg_test_failed (test, "Unable to test validity");
 	} else if (valid) {
-		gpm_st_failed (test, "Already inhibited");
+		egg_test_failed (test, "Already inhibited");
 	} else {
-		gpm_st_success (test, NULL);
+		egg_test_success (test, NULL);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "clear an invalid cookie");
+	egg_test_title (test, "clear an invalid cookie");
 	ret = uninhibit (gproxy, 123456);
 	if (!ret) {
-		gpm_st_success (test, "invalid cookie failed as expected");
+		egg_test_success (test, "invalid cookie failed as expected");
 	} else {
-		gpm_st_failed (test, "should have rejected invalid cookie");
+		egg_test_failed (test, "should have rejected invalid cookie");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "get auto cookie 1");
+	egg_test_title (test, "get auto cookie 1");
 	ret = inhibit (gproxy,
 				  "gnome-power-self-test",
 				  "test inhibit",
 				  &cookie1);
 	if (!ret) {
-		gpm_st_failed (test, "Unable to inhibit");
+		egg_test_failed (test, "Unable to inhibit");
 	} else if (cookie1 == 0) {
-		gpm_st_failed (test, "Cookie invalid (cookie: %u)", cookie1);
+		egg_test_failed (test, "Cookie invalid (cookie: %u)", cookie1);
 	} else {
-		gpm_st_success (test, "cookie: %u", cookie1);
+		egg_test_success (test, "cookie: %u", cookie1);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we are auto inhibited");
+	egg_test_title (test, "make sure we are auto inhibited");
 	ret = has_inhibit (gproxy, &valid);
 	if (!ret) {
-		gpm_st_failed (test, "Unable to test validity");
+		egg_test_failed (test, "Unable to test validity");
 	} else if (valid) {
-		gpm_st_success (test, "inhibited");
+		egg_test_success (test, "inhibited");
 	} else {
-		gpm_st_failed (test, "inhibit failed");
+		egg_test_failed (test, "inhibit failed");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "get cookie 2");
+	egg_test_title (test, "get cookie 2");
 	ret = inhibit (gproxy,
 				  "gnome-power-self-test",
 				  "test inhibit",
 				  &cookie2);
 	if (!ret) {
-		gpm_st_failed (test, "Unable to inhibit");
+		egg_test_failed (test, "Unable to inhibit");
 	} else if (cookie2 == 0) {
-		gpm_st_failed (test, "Cookie invalid (cookie: %u)", cookie2);
+		egg_test_failed (test, "Cookie invalid (cookie: %u)", cookie2);
 	} else {
-		gpm_st_success (test, "cookie: %u", cookie2);
+		egg_test_success (test, "cookie: %u", cookie2);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "clear cookie 1");
+	egg_test_title (test, "clear cookie 1");
 	ret = uninhibit (gproxy, cookie1);
 	if (!ret) {
-		gpm_st_failed (test, "cookie failed to clear");
+		egg_test_failed (test, "cookie failed to clear");
 	} else {
-		gpm_st_success (test, NULL);
+		egg_test_success (test, NULL);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we are still inhibited");
+	egg_test_title (test, "make sure we are still inhibited");
 	ret = has_inhibit (gproxy, &valid);
 	if (!ret) {
-		gpm_st_failed (test, "Unable to test validity");
+		egg_test_failed (test, "Unable to test validity");
 	} else if (valid) {
-		gpm_st_success (test, "inhibited");
+		egg_test_success (test, "inhibited");
 	} else {
-		gpm_st_failed (test, "inhibit failed");
+		egg_test_failed (test, "inhibit failed");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "clear cookie 2");
+	egg_test_title (test, "clear cookie 2");
 	ret = uninhibit (gproxy, cookie2);
 	if (!ret) {
-		gpm_st_failed (test, "cookie failed to clear");
+		egg_test_failed (test, "cookie failed to clear");
 	} else {
-		gpm_st_success (test, NULL);
+		egg_test_success (test, NULL);
 	}
 
 	g_object_unref (gproxy);
 
-	gpm_st_end (test);
+	egg_test_end (test);
 }
 
 #endif

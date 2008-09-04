@@ -27,32 +27,32 @@ typedef struct
 	guint		 succeeded;
 	gboolean	 started;
 	gchar		*type;
-} GpmSelfTest;
+} EggTest;
 
-typedef void (*GpmSelfTestFunc) (GpmSelfTest *test);
+typedef void (*EggTestFunc) (EggTest *test);
 
-gboolean gpm_st_start (GpmSelfTest *test, const gchar *name);
-void gpm_st_end (GpmSelfTest *test);
-void gpm_st_title (GpmSelfTest *test, const gchar *format, ...);
-void gpm_st_success (GpmSelfTest *test, const gchar *format, ...);
-void gpm_st_failed (GpmSelfTest *test, const gchar *format, ...);
-void gpm_st_warning (GpmSelfTest *test, const gchar *format, ...);
+gboolean egg_test_start (EggTest *test, const gchar *name);
+void egg_test_end (EggTest *test);
+void egg_test_title (EggTest *test, const gchar *format, ...);
+void egg_test_success (EggTest *test, const gchar *format, ...);
+void egg_test_failed (EggTest *test, const gchar *format, ...);
+void egg_test_warning (EggTest *test, const gchar *format, ...);
 
-void gpm_st_common (GpmSelfTest *test);
-void gpm_st_profile (GpmSelfTest *test);
-void gpm_st_webcam (GpmSelfTest *test);
-void gpm_st_array (GpmSelfTest *test);
-void gpm_st_idletime (GpmSelfTest *test);
-void gpm_st_array_float (GpmSelfTest *test);
-void gpm_st_cell (GpmSelfTest *test);
-void gpm_st_cell_unit (GpmSelfTest *test);
-void gpm_st_cell_array (GpmSelfTest *test);
-void gpm_st_proxy (GpmSelfTest *test);
-void gpm_st_phone (GpmSelfTest *test);
-void gpm_st_inhibit (GpmSelfTest *test);
-void gpm_st_hal_device (GpmSelfTest *test);
-void gpm_st_hal_devicestore (GpmSelfTest *test);
-void gpm_st_hal_power (GpmSelfTest *test);
-void gpm_st_hal_manager (GpmSelfTest *test);
-void gpm_st_graph_widget (GpmSelfTest *test);
+void gpm_common_test (EggTest *test);
+void gpm_profile_test (EggTest *test);
+void egg_test_webcam (EggTest *test);
+void gpm_array_test (EggTest *test);
+void gpm_idletime_test (EggTest *test);
+void gpm_array_float_test (EggTest *test);
+void gpm_cell_test (EggTest *test);
+void gpm_cell_unit_test (EggTest *test);
+void gpm_cell_test_array (EggTest *test);
+void gpm_proxy_test (EggTest *test);
+void gpm_phone_test (EggTest *test);
+void gpm_inhibit_test (EggTest *test);
+void gpm_device_test (EggTest *test);
+void gpm_device_teststore (EggTest *test);
+void gpm_hal_power_test (EggTest *test);
+void gpm_hal_manager_test (EggTest *test);
+void gpm_graph_widget_test (EggTest *test);
 

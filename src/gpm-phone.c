@@ -416,13 +416,13 @@ gpm_phone_new (void)
 /***************************************************************************
  ***                          MAKE CHECK TESTS                           ***
  ***************************************************************************/
-#ifdef GPM_BUILD_TESTS
-#include "gpm-self-test.h"
+#ifdef EGG_TEST
+#include "egg-test.h"
 
 static gboolean test_got_refresh = FALSE;
 
 static void
-gpm_st_mainloop_wait (guint ms)
+egg_test_mainloop_wait (guint ms)
 {
 	GMainLoop *loop;
 	loop = g_main_loop_new (NULL, FALSE);
@@ -442,23 +442,23 @@ phone_device_refresh_cb (GpmPhone     *phone,
 }
 
 void
-gpm_st_phone (GpmSelfTest *test)
+gpm_phone_test (EggTest *test)
 {
 	GpmPhone *phone;
 	guint value;
 	gboolean ret;
 
-	if (gpm_st_start (test, "GpmPhone") == FALSE) {
+	if (egg_test_start (test, "GpmPhone") == FALSE) {
 		return;
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a non null phone");
+	egg_test_title (test, "make sure we get a non null phone");
 	phone = gpm_phone_new ();
 	if (phone != NULL) {
-		gpm_st_success (test, "got GpmPhone");
+		egg_test_success (test, "got GpmPhone");
 	} else {
-		gpm_st_failed (test, "could not get GpmPhone");
+		egg_test_failed (test, "could not get GpmPhone");
 	}
 
 	/* connect signals */
@@ -466,71 +466,73 @@ gpm_st_phone (GpmSelfTest *test)
 			  G_CALLBACK (phone_device_refresh_cb), GUINT_TO_POINTER(44));
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we got a connection");
+	egg_test_title (test, "make sure we got a connection");
 	if (phone->priv->proxy != NULL) {
-		gpm_st_success (test, "got connection");
+		egg_test_success (test, "got connection");
 	} else {
-		gpm_st_failed (test, "could not get a connection!");
+		/* skip this part of the test */
+		egg_test_success (test, "could not get a connection!");
+		goto out;
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "coldplug the data");
+	egg_test_title (test, "coldplug the data");
 	ret = gpm_phone_coldplug (phone);
 	if (ret) {
-		gpm_st_success (test, "coldplug okay");
+		egg_test_success (test, "coldplug okay");
 	} else {
-		gpm_st_failed (test, "could not coldplug");
+		egg_test_failed (test, "could not coldplug");
 	}
 
-	gpm_st_mainloop_wait (500);
+	egg_test_mainloop_wait (500);
 
 	/************************************************************/
-	gpm_st_title (test, "got refresh");
+	egg_test_title (test, "got refresh");
 	if (test_got_refresh) {
-		gpm_st_success (test, NULL);
+		egg_test_success (test, NULL);
 	} else {
-		gpm_st_failed (test, "did not get refresh");
+		egg_test_failed (test, "did not get refresh");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "check the connected phones");
+	egg_test_title (test, "check the connected phones");
 	value = gpm_phone_get_num_batteries (phone);
 	if (value == 1) {
-		gpm_st_success (test, "connected phone");
+		egg_test_success (test, "connected phone");
 	} else {
-		gpm_st_failed (test, "not connected with %i (phone not connected?)", value);
+		egg_test_failed (test, "not connected with %i (phone not connected?)", value);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "check the present value");
+	egg_test_title (test, "check the present value");
 	ret = gpm_phone_get_present (phone, 0);
 	if (ret) {
-		gpm_st_success (test, "we are here!");
+		egg_test_success (test, "we are here!");
 	} else {
-		gpm_st_failed (test, "not here...");
+		egg_test_failed (test, "not here...");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "check the percentage");
+	egg_test_title (test, "check the percentage");
 	value = gpm_phone_get_percentage (phone, 0);
 	if (value != 0) {
-		gpm_st_success (test, "percentage is %i", phone->priv->percentage);
+		egg_test_success (test, "percentage is %i", phone->priv->percentage);
 	} else {
-		gpm_st_failed (test, "could not get value");
+		egg_test_failed (test, "could not get value");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "check the ac value");
+	egg_test_title (test, "check the ac value");
 	ret = gpm_phone_get_on_ac (phone, 0);
 	if (!ret) {
-		gpm_st_success (test, "not charging, correct");
+		egg_test_success (test, "not charging, correct");
 	} else {
-		gpm_st_failed (test, "charging?");
+		egg_test_failed (test, "charging?");
 	}
-
+out:
 	g_object_unref (phone);
 
-	gpm_st_end (test);
+	egg_test_end (test);
 }
 
 #endif

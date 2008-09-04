@@ -922,11 +922,11 @@ gpm_array_new (void)
 /***************************************************************************
  ***                          MAKE CHECK TESTS                           ***
  ***************************************************************************/
-#ifdef GPM_BUILD_TESTS
-#include "gpm-self-test.h"
+#ifdef EGG_TEST
+#include "egg-test.h"
 
 void
-gpm_st_array (GpmSelfTest *test)
+gpm_array_test (EggTest *test)
 {
 	GpmArray *array;
 	GpmArray *array2;
@@ -937,157 +937,157 @@ gpm_st_array (GpmSelfTest *test)
 	gint svalue;
 	guint i;
 
-	if (gpm_st_start (test, "GpmArray") == FALSE) {
+	if (egg_test_start (test, "GpmArray") == FALSE) {
 		return;
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a non null array");
+	egg_test_title (test, "make sure we get a non null array");
 	array = gpm_array_new ();
 	if (array != NULL) {
-		gpm_st_success (test, "got GpmArray");
+		egg_test_success (test, "got GpmArray");
 	} else {
-		gpm_st_failed (test, "could not get GpmArray");
+		egg_test_failed (test, "could not get GpmArray");
 	}
 
 	/************** FIXED SIZE TESTS ****************************/
-	gpm_st_title (test, "set fixed size of 10");
+	egg_test_title (test, "set fixed size of 10");
 	ret = gpm_array_set_fixed_size (array, 10);
 	if (ret) {
-		gpm_st_success (test, "set size");
+		egg_test_success (test, "set size");
 	} else {
-		gpm_st_failed (test, "set size failed");
+		egg_test_failed (test, "set size failed");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "get fixed size");
+	egg_test_title (test, "get fixed size");
 	size = gpm_array_get_size (array);
 	if (size == 10) {
-		gpm_st_success (test, "get size passed");
+		egg_test_success (test, "get size passed");
 	} else {
-		gpm_st_failed (test, "get size failed");
+		egg_test_failed (test, "get size failed");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "add some data (should fail as fixed size)");
+	egg_test_title (test, "add some data (should fail as fixed size)");
 	ret = gpm_array_add (array, 1, 2, 3);
 	if (!ret) {
-		gpm_st_success (test, "could not append to fixed size");
+		egg_test_success (test, "could not append to fixed size");
 	} else {
-		gpm_st_failed (test, "appended to fixed size array");
+		egg_test_failed (test, "appended to fixed size array");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "get valid element (should be zero)");
+	egg_test_title (test, "get valid element (should be zero)");
 	point = gpm_array_get (array, 0);
 	if (point != NULL && point->x == 0 && point->y == 0 && point->data == 0) {
-		gpm_st_success (test, "got blank data");
+		egg_test_success (test, "got blank data");
 	} else {
-		gpm_st_failed (test, "did not get blank data");
+		egg_test_failed (test, "did not get blank data");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "get out of range element (should fail)");
+	egg_test_title (test, "get out of range element (should fail)");
 	point = gpm_array_get (array, 10);
 	if (point == NULL) {
-		gpm_st_success (test, "got NULL as OOB");
+		egg_test_success (test, "got NULL as OOB");
 	} else {
-		gpm_st_failed (test, "did not NULL for OOB");
+		egg_test_failed (test, "did not NULL for OOB");
 	}
 
 	g_object_unref (array);
 	array = gpm_array_new ();
 
 	/************* VARIABLE SIZED TESTS *************************/
-	gpm_st_title (test, "add some data (should pass as variable size)");
+	egg_test_title (test, "add some data (should pass as variable size)");
 	ret = gpm_array_add (array, 1, 2, 3);
 	if (ret) {
-		gpm_st_success (test, "appended to variable size");
+		egg_test_success (test, "appended to variable size");
 	} else {
-		gpm_st_failed (test, "did not append to variable size array");
+		egg_test_failed (test, "did not append to variable size array");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "get variable size");
+	egg_test_title (test, "get variable size");
 	size = gpm_array_get_size (array);
 	if (size == 1) {
-		gpm_st_success (test, "get size passed");
+		egg_test_success (test, "get size passed");
 	} else {
-		gpm_st_failed (test, "get size failed");
+		egg_test_failed (test, "get size failed");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "get out of range element (should fail)");
+	egg_test_title (test, "get out of range element (should fail)");
 	point = gpm_array_get (array, 1);
 	if (point == NULL) {
-		gpm_st_success (test, "got NULL as OOB");
+		egg_test_success (test, "got NULL as OOB");
 	} else {
-		gpm_st_failed (test, "did not NULL for OOB");
+		egg_test_failed (test, "did not NULL for OOB");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "clear array");
+	egg_test_title (test, "clear array");
 	ret = gpm_array_clear (array);
 	if (ret) {
-		gpm_st_success (test, "cleared");
+		egg_test_success (test, "cleared");
 	} else {
-		gpm_st_failed (test, "did not clear");
+		egg_test_failed (test, "did not clear");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "get cleared size");
+	egg_test_title (test, "get cleared size");
 	size = gpm_array_get_size (array);
 	if (size == 0) {
-		gpm_st_success (test, "get size passed");
+		egg_test_success (test, "get size passed");
 	} else {
-		gpm_st_failed (test, "get size failed");
+		egg_test_failed (test, "get size failed");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "save to disk");
+	egg_test_title (test, "save to disk");
 	for (i=0;i<100;i++) {
 		gpm_array_add (array, i, i, i);
 	}
 	ret = gpm_array_save_to_file (array, "/tmp/gpm-self-test.txt");
 	if (ret) {
-		gpm_st_success (test, "saved to disk");
+		egg_test_success (test, "saved to disk");
 	} else {
-		gpm_st_failed (test, "could not save to disk");
+		egg_test_failed (test, "could not save to disk");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "load from disk");
+	egg_test_title (test, "load from disk");
 	gpm_array_clear (array);
 	ret = gpm_array_append_from_file (array, "/tmp/gpm-self-test.txt");
 	if (ret) {
-		gpm_st_success (test, "loaded from disk");
+		egg_test_success (test, "loaded from disk");
 	} else {
-		gpm_st_failed (test, "could not load from disk");
+		egg_test_failed (test, "could not load from disk");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "get file appended size");
+	egg_test_title (test, "get file appended size");
 	size = gpm_array_get_size (array);
 	if (size == 100) {
-		gpm_st_success (test, "get size passed");
+		egg_test_success (test, "get size passed");
 	} else {
-		gpm_st_failed (test, "get size failed: %i", size);
+		egg_test_failed (test, "get size failed: %i", size);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "interpolate data");
+	egg_test_title (test, "interpolate data");
 	gpm_array_clear (array);
 	gpm_array_add (array, 1, 2, 0);
 	gpm_array_add (array, 3, 9, 0);
 	svalue = gpm_array_interpolate (array, 2);
 	if (svalue == 6) {
-		gpm_st_success (test, "interpolated");
+		egg_test_success (test, "interpolated");
 	} else {
-		gpm_st_failed (test, "interpolated incorrect: %i", svalue);
+		egg_test_failed (test, "interpolated incorrect: %i", svalue);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "limit x size");
+	egg_test_title (test, "limit x size");
 	gpm_array_clear (array);
 	for (i=0;i<100;i++) {
 		gpm_array_add (array, i, i, i);
@@ -1095,13 +1095,13 @@ gpm_st_array (GpmSelfTest *test)
 	gpm_array_limit_x_size (array, 10);
 	size = gpm_array_get_size (array);
 	if (size == 10) {
-		gpm_st_success (test, "limited size X");
+		egg_test_success (test, "limited size X");
 	} else {
-		gpm_st_failed (test, "did not limit size X, size: %i", size);
+		egg_test_failed (test, "did not limit size X, size: %i", size);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "limit x width");
+	egg_test_title (test, "limit x width");
 	gpm_array_clear (array);
 	for (i=0;i<100;i++) {
 		gpm_array_add (array, i, i, i);
@@ -1109,14 +1109,14 @@ gpm_st_array (GpmSelfTest *test)
 	gpm_array_limit_x_width (array, 10);
 	size = gpm_array_get_size (array);
 	if (size == 11) {
-		gpm_st_success (test, "limited width X");
+		egg_test_success (test, "limited width X");
 	} else {
-		gpm_st_failed (test, "did not limit width X, size: %i", size);
+		egg_test_failed (test, "did not limit width X, size: %i", size);
 	}
 	gpm_array_print (array);
 
 	/*************** COPY TEST **********************************/
-	gpm_st_title (test, "test copy");
+	egg_test_title (test, "test copy");
 	array2 = gpm_array_new ();
 	gpm_array_clear (array);
 	gpm_array_set_fixed_size (array, 10);
@@ -1130,9 +1130,9 @@ gpm_st_array (GpmSelfTest *test)
 	y = gpm_array_get(array2,9)->y;
 	data = gpm_array_get(array2,5)->data;
 	if (size == 10 && x == 2 && y == 2 && gpm_array_get(array2,5)->data == 2) {
-		gpm_st_success (test, "limited width X");
+		egg_test_success (test, "limited width X");
 	} else {
-		gpm_st_failed (test, "did not limit width X, size: %i (%i,%i,%i)", size, x, y, data);
+		egg_test_failed (test, "did not limit width X, size: %i (%i,%i,%i)", size, x, y, data);
 	}
 
 	/************************************************************/
@@ -1140,7 +1140,7 @@ gpm_st_array (GpmSelfTest *test)
 	g_object_unref (array);
 	g_object_unref (array2);
 
-	gpm_st_end (test);
+	egg_test_end (test);
 }
 
 #endif

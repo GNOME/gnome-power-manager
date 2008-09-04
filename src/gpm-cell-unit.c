@@ -342,11 +342,11 @@ gpm_cell_unit_set_kind (GpmCellUnit *unit, const gchar *kind)
 /***************************************************************************
  ***                          MAKE CHECK TESTS                           ***
  ***************************************************************************/
-#ifdef GPM_BUILD_TESTS
-#include "gpm-self-test.h"
+#ifdef EGG_TEST
+#include "egg-test.h"
 
 void
-gpm_st_cell_unit (GpmSelfTest *test)
+gpm_cell_unit_test (EggTest *test)
 {
 	GpmCellUnit unit_d;
 	GpmCellUnit *unit = &unit_d;
@@ -354,144 +354,144 @@ gpm_st_cell_unit (GpmSelfTest *test)
 	const gchar *cvalue;
 	gboolean ret;
 
-	if (gpm_st_start (test, "GpmCellUnit") == FALSE) {
+	if (egg_test_start (test, "GpmCellUnit") == FALSE) {
 		return;
 	}
 
 	gpm_cell_unit_init (unit);
 
 	/************************************************************/
-	gpm_st_title (test, "make sure hal type set correct");
+	egg_test_title (test, "make sure hal type set correct");
 	gpm_cell_unit_set_kind (unit, "primary");
 	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
-		gpm_st_success (test, "type correct");
+		egg_test_success (test, "type correct");
 	} else {
-		gpm_st_failed (test, "type incorrect");
+		egg_test_failed (test, "type incorrect");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure full battery isn't charged");
+	egg_test_title (test, "make sure full battery isn't charged");
 	unit->percentage = 100.0f;
 	unit->is_charging = FALSE;
 	unit->is_discharging = TRUE;
 	ret = gpm_cell_unit_is_charged (unit);
 	if (!ret) {
-		gpm_st_success (test, "not charged");
+		egg_test_success (test, "not charged");
 	} else {
-		gpm_st_failed (test, "declaring charged");
+		egg_test_failed (test, "declaring charged");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure string type is okay");
+	egg_test_title (test, "make sure string type is okay");
 	cvalue = gpm_cell_unit_get_kind_string (unit);
 	if (strcmp (cvalue, "primary") == 0) {
-		gpm_st_success (test, "string type okay");
+		egg_test_success (test, "string type okay");
 	} else {
-		gpm_st_failed (test, "string type not okay: %s", cvalue);
+		egg_test_failed (test, "string type not okay: %s", cvalue);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure single localised type is okay");
+	egg_test_title (test, "make sure single localised type is okay");
 	cvalue = gpm_cell_unit_get_kind_localised (unit, FALSE);
 	if (strcmp (cvalue, "Laptop battery") == 0) {
-		gpm_st_success (test, "localised type okay");
+		egg_test_success (test, "localised type okay");
 	} else {
-		gpm_st_failed (test, "localised type not okay: %s", cvalue);
+		egg_test_failed (test, "localised type not okay: %s", cvalue);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure plural localised type is okay");
+	egg_test_title (test, "make sure plural localised type is okay");
 	cvalue = gpm_cell_unit_get_kind_localised (unit, TRUE);
 	if (strcmp (cvalue, "Laptop batteries") == 0) {
-		gpm_st_success (test, "localised type okay");
+		egg_test_success (test, "localised type okay");
 	} else {
-		gpm_st_failed (test, "localised type not okay: %s", cvalue);
+		egg_test_failed (test, "localised type not okay: %s", cvalue);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure charging battery isn't charged");
+	egg_test_title (test, "make sure charging battery isn't charged");
 	unit->percentage = 99.0f;
 	unit->is_charging = TRUE;
 	unit->is_discharging = FALSE;
 	ret = gpm_cell_unit_is_charged (unit);
 	if (!ret) {
-		gpm_st_success (test, "not charged");
+		egg_test_success (test, "not charged");
 	} else {
-		gpm_st_failed (test, "declaring charged");
+		egg_test_failed (test, "declaring charged");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure full battery is charged");
+	egg_test_title (test, "make sure full battery is charged");
 	unit->percentage = 95.0f;
 	unit->is_charging = FALSE;
 	unit->is_discharging = FALSE;
 	ret = gpm_cell_unit_is_charged (unit);
 	if (ret) {
-		gpm_st_success (test, "charged");
+		egg_test_success (test, "charged");
 	} else {
-		gpm_st_failed (test, "declaring non-charged");
+		egg_test_failed (test, "declaring non-charged");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure broken battery isn't charged");
+	egg_test_title (test, "make sure broken battery isn't charged");
 	unit->percentage = 30.0f;
 	unit->is_charging = FALSE;
 	unit->is_discharging = FALSE;
 	ret = gpm_cell_unit_is_charged (unit);
 	if (!ret) {
-		gpm_st_success (test, "not charged");
+		egg_test_success (test, "not charged");
 	} else {
-		gpm_st_failed (test, "declaring charged");
+		egg_test_failed (test, "declaring charged");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "get missing icon");
+	egg_test_title (test, "get missing icon");
 	unit->percentage = 30.0f;
 	unit->is_present = FALSE;
 	value = gpm_cell_unit_get_icon (unit);
 	if (strcmp (value, "gpm-primary-missing") == 0) {
-		gpm_st_success (test, "icon correct");
+		egg_test_success (test, "icon correct");
 	} else {
-		gpm_st_failed (test, "icon not correct: %s", value);
+		egg_test_failed (test, "icon not correct: %s", value);
 	}
 	g_free (value);
 
 	/************************************************************/
-	gpm_st_title (test, "get middle icon");
+	egg_test_title (test, "get middle icon");
 	unit->percentage = 30.0f;
 	unit->is_present = TRUE;
 	value = gpm_cell_unit_get_icon (unit);
 	if (strcmp (value, "gpm-primary-040") == 0) {
-		gpm_st_success (test, "icon correct");
+		egg_test_success (test, "icon correct");
 	} else {
-		gpm_st_failed (test, "icon not correct: %s", value);
+		egg_test_failed (test, "icon not correct: %s", value);
 	}
 	g_free (value);
 
 	/************************************************************/
-	gpm_st_title (test, "get charged icon");
+	egg_test_title (test, "get charged icon");
 	unit->is_charging = FALSE;
 	unit->is_discharging = FALSE;
 	unit->percentage = 95.0f;
 	unit->is_present = TRUE;
 	value = gpm_cell_unit_get_icon (unit);
 	if (strcmp (value, "gpm-primary-charged") == 0) {
-		gpm_st_success (test, "icon correct");
+		egg_test_success (test, "icon correct");
 	} else {
-		gpm_st_failed (test, "icon not correct: %s", value);
+		egg_test_failed (test, "icon not correct: %s", value);
 	}
 	g_free (value);
 	
 	/************************************************************/
-	gpm_st_title (test, "setting measure");
+	egg_test_title (test, "setting measure");
 	gpm_cell_unit_set_measure (unit);
 	if (unit->measure == GPM_CELL_UNIT_MWH) {
-		gpm_st_success (test, "measure correct");
+		egg_test_success (test, "measure correct");
 	} else {
-		gpm_st_failed (test, "measre not correct: %s", unit->measure);
+		egg_test_failed (test, "measre not correct: %s", unit->measure);
 	}
 
-	gpm_st_end (test);
+	egg_test_end (test);
 }
 #endif
 

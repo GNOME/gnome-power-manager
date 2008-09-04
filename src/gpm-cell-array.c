@@ -1482,8 +1482,8 @@ gpm_cell_array_new (void)
 /***************************************************************************
  ***                          MAKE CHECK TESTS                           ***
  ***************************************************************************/
-#ifdef GPM_BUILD_TESTS
-#include "gpm-self-test.h"
+#ifdef EGG_TEST
+#include "egg-test.h"
 
 guint recall_count2 = 0;
 
@@ -1494,7 +1494,7 @@ gpm_cell_array_perhaps_recall_cb (GpmCellArray *cell_array, gchar *oem_vendor, g
 }
 
 void
-gpm_st_cell_array (GpmSelfTest *test)
+gpm_cell_test_array (EggTest *test)
 {
 	GpmCell *cell;
 	GpmCellArray *cell_array;
@@ -1503,74 +1503,74 @@ gpm_st_cell_array (GpmSelfTest *test)
 	gboolean ret;
 	guint count;
 
-	if (gpm_st_start (test, "GpmCellArray") == FALSE) {
+	if (egg_test_start (test, "GpmCellArray") == FALSE) {
 		return;
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a non null cell array");
+	egg_test_title (test, "make sure we get a non null cell array");
 	cell_array = gpm_cell_array_new ();
 	g_signal_connect (cell_array, "perhaps-recall",
 			  G_CALLBACK (gpm_cell_array_perhaps_recall_cb), NULL);
 	if (cell_array != NULL) {
-		gpm_st_success (test, "got GpmCellArray");
+		egg_test_success (test, "got GpmCellArray");
 	} else {
-		gpm_st_failed (test, "could not get GpmCellArray");
+		egg_test_failed (test, "could not get GpmCellArray");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get set type");
+	egg_test_title (test, "make sure we get set type");
 	ret = gpm_cell_array_set_type (cell_array, GPM_CELL_UNIT_KIND_PRIMARY);
 	if (ret) {
-		gpm_st_success (test, "set type");
+		egg_test_success (test, "set type");
 	} else {
-		gpm_st_failed (test, "could not set type");
+		egg_test_failed (test, "could not set type");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we got a single recall notice");
+	egg_test_title (test, "make sure we got a single recall notice");
 	if (recall_count2 == 0) {
-		gpm_st_warning (test, "did not get recall - install fdi!");
+		egg_test_success (test, "did not get recall - install fdi!");
 		goto out;
 	}
 	if (recall_count2 == 1) {
-		gpm_st_success (test, "got recall");
+		egg_test_success (test, "got recall");
 	} else {
-		gpm_st_failed (test, "got duplicate recall");
+		egg_test_failed (test, "got duplicate recall");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we got at least 1 cell");
+	egg_test_title (test, "make sure we got at least 1 cell");
 	count = gpm_cell_array_get_num_cells (cell_array);
 	if (count >= 1) {
-		gpm_st_success (test, "got %d cell(s)", count);
+		egg_test_success (test, "got %d cell(s)", count);
 	} else {
-		gpm_st_failed (test, "got %i cells", count);
+		egg_test_failed (test, "got %i cells", count);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a full description for cell array");
+	egg_test_title (test, "make sure we get a full description for cell array");
 	desc = gpm_cell_array_get_description (cell_array);
 	if (desc != NULL) {
-		gpm_st_success (test, "got description %s", desc);
+		egg_test_success (test, "got description %s", desc);
 		g_free (desc);
 	} else {
-		gpm_st_failed (test, "could not get description");
+		egg_test_failed (test, "could not get description");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a valid cell");
+	egg_test_title (test, "make sure we get a valid cell");
 	cell = gpm_cell_array_get_cell (cell_array, 0);
 	if (cell != NULL) {
-		gpm_st_success (test, "got correct cell");
+		egg_test_success (test, "got correct cell");
 	} else {
-		gpm_st_failed (test, "could not get correct cell");
+		egg_test_failed (test, "could not get correct cell");
 	}
 
 out:
 	g_object_unref (cell_array);
 
-	gpm_st_end (test);
+	egg_test_end (test);
 }
 
 #endif

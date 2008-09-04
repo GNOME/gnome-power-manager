@@ -379,11 +379,11 @@ gpm_array_float_compute_integral (GArray *array, guint x1, guint x2)
 /***************************************************************************
  ***                          MAKE CHECK TESTS                           ***
  ***************************************************************************/
-#ifdef GPM_BUILD_TESTS
-#include "gpm-self-test.h"
+#ifdef EGG_TEST
+#include "egg-test.h"
 
 void
-gpm_st_array_float (GpmSelfTest *test)
+gpm_array_float_test (EggTest *test)
 {
 	GArray *array;
 	GArray *kernel;
@@ -392,101 +392,101 @@ gpm_st_array_float (GpmSelfTest *test)
 	gfloat sigma;
 	guint size;
 
-	if (gpm_st_start (test, "GpmArrayFloat") == FALSE) {
+	if (egg_test_start (test, "GpmArrayFloat") == FALSE) {
 		return;
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a non null array");
+	egg_test_title (test, "make sure we get a non null array");
 	array = gpm_array_float_new (10);
 	if (array != NULL) {
-		gpm_st_success (test, "got GArray");
+		egg_test_success (test, "got GArray");
 	} else {
-		gpm_st_failed (test, "could not get GArray");
+		egg_test_failed (test, "could not get GArray");
 	}
 	gpm_array_float_print (array);
 	gpm_array_float_free (array);
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get the correct length array");
+	egg_test_title (test, "make sure we get the correct length array");
 	array = gpm_array_float_new (10);
 	if (array->len == 10) {
-		gpm_st_success (test, "got correct size");
+		egg_test_success (test, "got correct size");
 	} else {
-		gpm_st_failed (test, "got wrong size");
+		egg_test_failed (test, "got wrong size");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get the correct array sum");
+	egg_test_title (test, "make sure we get the correct array sum");
 	value = gpm_array_float_sum (array);
 	if (value == 0.0) {
-		gpm_st_success (test, "got correct sum");
+		egg_test_success (test, "got correct sum");
 	} else {
-		gpm_st_failed (test, "got wrong sum (%f)", value);
+		egg_test_failed (test, "got wrong sum (%f)", value);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "get gaussian 0.0, sigma 1.0");
+	egg_test_title (test, "get gaussian 0.0, sigma 1.0");
 	value = gpm_array_float_guassian_value (0.0, 1.0);
 	if (value - 0.398942 < 0.0001) {
-		gpm_st_success (test, "got correct gaussian");
+		egg_test_success (test, "got correct gaussian");
 	} else {
-		gpm_st_failed (test, "got wrong gaussian (%f)", value);
+		egg_test_failed (test, "got wrong gaussian (%f)", value);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "get gaussian 1.0, sigma 1.0");
+	egg_test_title (test, "get gaussian 1.0, sigma 1.0");
 	value = gpm_array_float_guassian_value (1.0, 1.0);
 	if (value - 0.241971 < 0.0001) {
-		gpm_st_success (test, "got correct gaussian");
+		egg_test_success (test, "got correct gaussian");
 	} else {
-		gpm_st_failed (test, "got wrong gaussian (%f)", value);
+		egg_test_failed (test, "got wrong gaussian (%f)", value);
 	}
 
 	/************************************************************/
 	size = 9;
 	sigma = 1.1;
-	gpm_st_title (test, "get gaussian array (%i), sigma %f", size, sigma);
+	egg_test_title (test, "get gaussian array (%i), sigma %f", size, sigma);
 	kernel = gpm_array_float_compute_gaussian (size, sigma);
 	if (kernel != NULL && kernel->len == size) {
-		gpm_st_success (test, "got correct length gaussian array");
+		egg_test_success (test, "got correct length gaussian array");
 	} else {
-		gpm_st_failed (test, "got gaussian array length (%i)", array->len);
+		egg_test_failed (test, "got gaussian array length (%i)", array->len);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get an accurate gaussian");
+	egg_test_title (test, "make sure we get an accurate gaussian");
 	value = gpm_array_float_sum (kernel);
 	if (fabs(value - 1.0) < 0.01) {
-		gpm_st_success (test, "got sum (%f)", value);
+		egg_test_success (test, "got sum (%f)", value);
 	} else {
-		gpm_st_failed (test, "got wrong sum (%f)", value);
+		egg_test_failed (test, "got wrong sum (%f)", value);
 	}
 	gpm_array_float_print (kernel);
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get get and set");
+	egg_test_title (test, "make sure we get get and set");
 	gpm_array_float_set (array, 4, 100.0);
 	value = gpm_array_float_get (array, 4);
 	if (value == 100.0) {
-		gpm_st_success (test, "got value okay", value);
+		egg_test_success (test, "got value okay", value);
 	} else {
-		gpm_st_failed (test, "got wrong value (%f)", value);
+		egg_test_failed (test, "got wrong value (%f)", value);
 	}
 	gpm_array_float_print (array);
 
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get the correct array sum (2)");
+	egg_test_title (test, "make sure we get the correct array sum (2)");
 	value = gpm_array_float_sum (array);
 	if (value == 100.0) {
-		gpm_st_success (test, "got correct sum");
+		egg_test_success (test, "got correct sum");
 	} else {
-		gpm_st_failed (test, "got wrong sum (%f)", value);
+		egg_test_failed (test, "got wrong sum (%f)", value);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "test convolving with kernel #1");
+	egg_test_title (test, "test convolving with kernel #1");
 	gpm_array_float_set (array, 0, 0.0);
 	gpm_array_float_set (array, 1, 0.0);
 	gpm_array_float_set (array, 2, 0.0);
@@ -499,24 +499,24 @@ gpm_st_array_float (GpmSelfTest *test)
 	gpm_array_float_set (array, 9, 0.0);
 	result = gpm_array_float_convolve (array, kernel);
 	if (result->len == 10) {
-		gpm_st_success (test, "got correct size convolve product");
+		egg_test_success (test, "got correct size convolve product");
 	} else {
-		gpm_st_failed (test, "got correct size convolve product (%f)", result->len);
+		egg_test_failed (test, "got correct size convolve product (%f)", result->len);
 	}
 	gpm_array_float_print (result);
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get the correct array sum of convolve #1");
+	egg_test_title (test, "make sure we get the correct array sum of convolve #1");
 	value = gpm_array_float_sum (result);
 	if (fabs(value - 100.0) < 5.0) {
-		gpm_st_success (test, "got correct (enough) sum (%f)", value);
+		egg_test_success (test, "got correct (enough) sum (%f)", value);
 	} else {
-		gpm_st_failed (test, "got wrong sum (%f)", value);
+		egg_test_failed (test, "got wrong sum (%f)", value);
 	}
 	gpm_array_float_free (result);
 
 	/************************************************************/
-	gpm_st_title (test, "test convolving with kernel #2");
+	egg_test_title (test, "test convolving with kernel #2");
 	gpm_array_float_set (array, 0, 100.0);
 	gpm_array_float_set (array, 1, 0.0);
 	gpm_array_float_set (array, 2, 0.0);
@@ -529,26 +529,26 @@ gpm_st_array_float (GpmSelfTest *test)
 	gpm_array_float_set (array, 9, 0.0);
 	result = gpm_array_float_convolve (array, kernel);
 	if (result->len == 10) {
-		gpm_st_success (test, "got correct size convolve product");
+		egg_test_success (test, "got correct size convolve product");
 	} else {
-		gpm_st_failed (test, "got correct size convolve product (%f)", result->len);
+		egg_test_failed (test, "got correct size convolve product (%f)", result->len);
 	}
 	gpm_array_float_print (array);
 	gpm_array_float_print (result);
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get the correct array sum of convolve #2");
+	egg_test_title (test, "make sure we get the correct array sum of convolve #2");
 	value = gpm_array_float_sum (result);
 	if (fabs(value - 100.0) < 10.0) {
-		gpm_st_success (test, "got correct (enough) sum (%f)", value);
+		egg_test_success (test, "got correct (enough) sum (%f)", value);
 	} else {
-		gpm_st_failed (test, "got wrong sum (%f)", value);
+		egg_test_failed (test, "got wrong sum (%f)", value);
 	}
 
 	gpm_array_float_free (result);
 
 	/************************************************************/
-	gpm_st_title (test, "test convolving with kernel #3");
+	egg_test_title (test, "test convolving with kernel #3");
 	gpm_array_float_set (array, 0, 0.0);
 	gpm_array_float_set (array, 1, 0.0);
 	gpm_array_float_set (array, 2, 0.0);
@@ -561,25 +561,25 @@ gpm_st_array_float (GpmSelfTest *test)
 	gpm_array_float_set (array, 9, 100.0);
 	result = gpm_array_float_convolve (array, kernel);
 	if (result->len == 10) {
-		gpm_st_success (test, "got correct size convolve product");
+		egg_test_success (test, "got correct size convolve product");
 	} else {
-		gpm_st_failed (test, "got correct size convolve product (%f)", result->len);
+		egg_test_failed (test, "got correct size convolve product (%f)", result->len);
 	}
 	gpm_array_float_print (array);
 	gpm_array_float_print (result);
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get the correct array sum of convolve #3");
+	egg_test_title (test, "make sure we get the correct array sum of convolve #3");
 	value = gpm_array_float_sum (result);
 	if (fabs(value - 100.0) < 10.0) {
-		gpm_st_success (test, "got correct (enough) sum (%f)", value);
+		egg_test_success (test, "got correct (enough) sum (%f)", value);
 	} else {
-		gpm_st_failed (test, "got wrong sum (%f)", value);
+		egg_test_failed (test, "got wrong sum (%f)", value);
 	}
 	gpm_array_float_free (result);
 
 	/************************************************************/
-	gpm_st_title (test, "test convolving with kernel #4");
+	egg_test_title (test, "test convolving with kernel #4");
 	gpm_array_float_set (array, 0, 10.0);
 	gpm_array_float_set (array, 1, 10.0);
 	gpm_array_float_set (array, 2, 10.0);
@@ -592,24 +592,24 @@ gpm_st_array_float (GpmSelfTest *test)
 	gpm_array_float_set (array, 9, 10.0);
 	result = gpm_array_float_convolve (array, kernel);
 	if (result->len == 10) {
-		gpm_st_success (test, "got correct size convolve product");
+		egg_test_success (test, "got correct size convolve product");
 	} else {
-		gpm_st_failed (test, "got incorrect size convolve product (%f)", result->len);
+		egg_test_failed (test, "got incorrect size convolve product (%f)", result->len);
 	}
 	gpm_array_float_print (array);
 	gpm_array_float_print (result);
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get the correct array sum of convolve #4");
+	egg_test_title (test, "make sure we get the correct array sum of convolve #4");
 	value = gpm_array_float_sum (result);
 	if (fabs(value - 100.0) < 1.0) {
-		gpm_st_success (test, "got correct (enough) sum (%f)", value);
+		egg_test_success (test, "got correct (enough) sum (%f)", value);
 	} else {
-		gpm_st_failed (test, "got wrong sum (%f)", value);
+		egg_test_failed (test, "got wrong sum (%f)", value);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "test convolving with kernel #5");
+	egg_test_title (test, "test convolving with kernel #5");
 	gpm_array_float_set (array, 0, 10.0);
 	gpm_array_float_set (array, 1, 10.0);
 	gpm_array_float_set (array, 2, 10.0);
@@ -622,24 +622,24 @@ gpm_st_array_float (GpmSelfTest *test)
 	gpm_array_float_set (array, 9, 10.0);
 	result = gpm_array_float_convolve (array, kernel);
 	if (result->len == 10) {
-		gpm_st_success (test, "got correct size convolve product");
+		egg_test_success (test, "got correct size convolve product");
 	} else {
-		gpm_st_failed (test, "got incorrect size convolve product (%f)", result->len);
+		egg_test_failed (test, "got incorrect size convolve product (%f)", result->len);
 	}
 	gpm_array_float_print (array);
 	gpm_array_float_print (result);
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get the correct array sum of convolve #5");
+	egg_test_title (test, "make sure we get the correct array sum of convolve #5");
 	value = gpm_array_float_sum (result);
 	if (fabs(value - 90.0) < 1.0) {
-		gpm_st_success (test, "got correct (enough) sum (%f)", value);
+		egg_test_success (test, "got correct (enough) sum (%f)", value);
 	} else {
-		gpm_st_failed (test, "got wrong sum (%f)", value);
+		egg_test_failed (test, "got wrong sum (%f)", value);
 	}
 
 	/*************** INTEGRATION TEST ************************/
-	gpm_st_title (test, "integration down");
+	egg_test_title (test, "integration down");
 	gpm_array_float_set (array, 0, 0.0);
 	gpm_array_float_set (array, 1, 1.0);
 	gpm_array_float_set (array, 2, 2.0);
@@ -652,27 +652,27 @@ gpm_st_array_float (GpmSelfTest *test)
 	gpm_array_float_set (array, 9, 9.0);
 	size = gpm_array_float_compute_integral (array, 0, 4);
 	if (size == 0+1+2+3+4) {
-		gpm_st_success (test, "intergrated okay");
+		egg_test_success (test, "intergrated okay");
 	} else {
-		gpm_st_failed (test, "did not intergrated okay (%i)", size);
+		egg_test_failed (test, "did not intergrated okay (%i)", size);
 	}
-	gpm_st_title (test, "integration up");
+	egg_test_title (test, "integration up");
 	size = gpm_array_float_compute_integral (array, 5, 9);
 	if (size == 5+6+7+8+9) {
-		gpm_st_success (test, "intergrated okay");
+		egg_test_success (test, "intergrated okay");
 	} else {
-		gpm_st_failed (test, "did not intergrated okay (%i)", size);
+		egg_test_failed (test, "did not intergrated okay (%i)", size);
 	}
-	gpm_st_title (test, "integration all");
+	egg_test_title (test, "integration all");
 	size = gpm_array_float_compute_integral (array, 0, 9);
 	if (size == 0+1+2+3+4+5+6+7+8+9) {
-		gpm_st_success (test, "intergrated okay");
+		egg_test_success (test, "intergrated okay");
 	} else {
-		gpm_st_failed (test, "did not intergrated okay (%i)", size);
+		egg_test_failed (test, "did not intergrated okay (%i)", size);
 	}
 
 	/*************** AVERAGE TEST ************************/
-	gpm_st_title (test, "average");
+	egg_test_title (test, "average");
 	gpm_array_float_set (array, 0, 0.0);
 	gpm_array_float_set (array, 1, 1.0);
 	gpm_array_float_set (array, 2, 2.0);
@@ -685,16 +685,16 @@ gpm_st_array_float (GpmSelfTest *test)
 	gpm_array_float_set (array, 9, 9.0);
 	value = gpm_array_float_get_average (array);
 	if (value == 4.5) {
-		gpm_st_success (test, "averaged okay");
+		egg_test_success (test, "averaged okay");
 	} else {
-		gpm_st_failed (test, "did not average okay (%i)", value);
+		egg_test_failed (test, "did not average okay (%i)", value);
 	}
 
 	gpm_array_float_free (result);
 	gpm_array_float_free (array);
 	gpm_array_float_free (kernel);
 
-	gpm_st_end (test);
+	egg_test_end (test);
 }
 
 #endif

@@ -992,8 +992,8 @@ gpm_profile_new (void)
 /***************************************************************************
  ***                          MAKE CHECK TESTS                           ***
  ***************************************************************************/
-#ifdef GPM_BUILD_TESTS
-#include "gpm-self-test.h"
+#ifdef EGG_TEST
+#include "egg-test.h"
 
 static void
 reset_profile (GpmProfile *profile)
@@ -1005,7 +1005,7 @@ reset_profile (GpmProfile *profile)
 }
 
 void
-gpm_st_profile (GpmSelfTest *test)
+gpm_profile_test (EggTest *test)
 {
 	GpmProfile *profile;
 	gboolean ret;
@@ -1014,35 +1014,35 @@ gpm_st_profile (GpmSelfTest *test)
 	guint value;
 	gfloat fvalue;
 
-	if (gpm_st_start (test, "GpmProfile") == FALSE) {
+	if (egg_test_start (test, "GpmProfile") == FALSE) {
 		return;
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a non null profile");
+	egg_test_title (test, "make sure we get a non null profile");
 	profile = gpm_profile_new ();
 	if (profile != NULL) {
-		gpm_st_success (test, "got GpmProfile");
+		egg_test_success (test, "got GpmProfile");
 	} else {
-		gpm_st_failed (test, "could not get GpmProfile");
+		egg_test_failed (test, "could not get GpmProfile");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a zero accuracy when no-id");
+	egg_test_title (test, "make sure we get a zero accuracy when no-id");
 	value = gpm_profile_get_accuracy (profile, 50);
 	if (value == 0) {
-		gpm_st_success (test, "got zero");
+		egg_test_success (test, "got zero");
 	} else {
-		gpm_st_failed (test, "got %i", value);
+		egg_test_failed (test, "got %i", value);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "set config id");
+	egg_test_title (test, "set config id");
 	ret = gpm_profile_set_config_id (profile, "test123");
 	if (ret) {
-		gpm_st_success (test, "set type");
+		egg_test_success (test, "set type");
 	} else {
-		gpm_st_failed (test, "could not set type");
+		egg_test_failed (test, "could not set type");
 	}
 
 
@@ -1051,22 +1051,22 @@ gpm_st_profile (GpmSelfTest *test)
 	 ************************************************************/
 
 	/************************************************************/
-	gpm_st_title (test, "get correct charging filename");
+	egg_test_title (test, "get correct charging filename");
 	filename = gpm_profile_get_data_file (profile, FALSE);
 	if (strstr (filename, "/.gnome2/gnome-power-manager/profile-test123-charging.csv") != NULL) {
-		gpm_st_success (test, "got correct filename");
+		egg_test_success (test, "got correct filename");
 	} else {
-		gpm_st_failed (test, "got incorrect filename: %s", filename);
+		egg_test_failed (test, "got incorrect filename: %s", filename);
 	}
 	g_free (filename);
 
 	/************************************************************/
-	gpm_st_title (test, "get correct discharging filename");
+	egg_test_title (test, "get correct discharging filename");
 	filename = gpm_profile_get_data_file (profile, TRUE);
 	if (strstr (filename, "/.gnome2/gnome-power-manager/profile-test123-discharging.csv") != NULL) {
-		gpm_st_success (test, "got correct filename");
+		egg_test_success (test, "got correct filename");
 	} else {
-		gpm_st_failed (test, "got incorrect filename: %s", filename);
+		egg_test_failed (test, "got incorrect filename: %s", filename);
 	}
 	g_free (filename);
 
@@ -1074,21 +1074,21 @@ gpm_st_profile (GpmSelfTest *test)
 	reset_profile (profile);
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a zero accuracy with a new dataset");
+	egg_test_title (test, "make sure we get a zero accuracy with a new dataset");
 	value = gpm_profile_get_accuracy (profile, 50);
 	if (value == 0) {
-		gpm_st_success (test, "got zero");
+		egg_test_success (test, "got zero");
 	} else {
-		gpm_st_failed (test, "got %i (not zero!)", value);
+		egg_test_failed (test, "got %i (not zero!)", value);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a zero time with a new dataset");
+	egg_test_title (test, "make sure we get a zero time with a new dataset");
 	value = gpm_profile_get_time (profile, 50, TRUE);
 	if (value == 0) {
-		gpm_st_success (test, "got zero");
+		egg_test_success (test, "got zero");
 	} else {
-		gpm_st_failed (test, "got %i", value);
+		egg_test_failed (test, "got %i", value);
 	}
 
 	/************************************************************
@@ -1096,42 +1096,42 @@ gpm_st_profile (GpmSelfTest *test)
 	 ************************************************************/
 
 	/************************************************************/
-	gpm_st_title (test, "force discharging");
+	egg_test_title (test, "force discharging");
 	gpm_profile_test_force_discharging (profile, TRUE);
-	gpm_st_success (test, NULL);
+	egg_test_success (test, NULL);
 
 	/************************************************************/
-	gpm_st_title (test, "ignore first point");
+	egg_test_title (test, "ignore first point");
 	ret = gpm_profile_register_percentage (profile, 99);
 	if (!ret) {
-		gpm_st_success (test, "ignored first");
+		egg_test_success (test, "ignored first");
 	} else {
-		gpm_st_failed (test, "ignored second");
+		egg_test_failed (test, "ignored second");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make up discharging dataset 98-0 (perfect accuracy)");
+	egg_test_title (test, "make up discharging dataset 98-0 (perfect accuracy)");
 	for (i=98; i>=0; i--) {
 		gpm_profile_save_percentage (profile, i, 120, 100);
 	}
-	gpm_st_success (test, "put dataset");
+	egg_test_success (test, "put dataset");
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a correct accuracy when a complete dataset");
+	egg_test_title (test, "make sure we get a correct accuracy when a complete dataset");
 	value = gpm_profile_get_accuracy (profile, 50);
 	if (value == 20) {
-		gpm_st_success (test, "got correct average %i", value);
+		egg_test_success (test, "got correct average %i", value);
 	} else {
-		gpm_st_failed (test, "got incorrect average %i", value);
+		egg_test_failed (test, "got incorrect average %i", value);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a correct discharge time when set");
+	egg_test_title (test, "make sure we get a correct discharge time when set");
 	value = gpm_profile_get_time (profile, 50, TRUE);
 	if (value == 6120) {
-		gpm_st_success (test, "got correct time %i", value);
+		egg_test_success (test, "got correct time %i", value);
 	} else {
-		gpm_st_failed (test, "got incorrect time %i", value);
+		egg_test_failed (test, "got incorrect time %i", value);
 	}
 
 	/************************************************************
@@ -1142,36 +1142,36 @@ gpm_st_profile (GpmSelfTest *test)
 	reset_profile (profile);
 
 	/************************************************************/
-	gpm_st_title (test, "single point of accuracy with no guessing (new profile)");
+	egg_test_title (test, "single point of accuracy with no guessing (new profile)");
 	gpm_profile_use_guessing (profile, FALSE);
 	gpm_profile_save_percentage (profile, 45, 120, 100);
-	gpm_st_success (test, "put single point");
+	egg_test_success (test, "put single point");
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a correct accuracy when a single point dataset");
+	egg_test_title (test, "make sure we get a correct accuracy when a single point dataset");
 	value = gpm_profile_get_accuracy (profile, 45);
 	if (value == 20) {
-		gpm_st_success (test, "got correct average %i", value);
+		egg_test_success (test, "got correct average %i", value);
 	} else {
-		gpm_st_failed (test, "got incorrect average %i", value);
+		egg_test_failed (test, "got incorrect average %i", value);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a correct time when set");
+	egg_test_title (test, "make sure we get a correct time when set");
 	value = gpm_profile_get_time (profile, 50, TRUE);
 	if (value == 120) {
-		gpm_st_success (test, "got correct time %i", value);
+		egg_test_success (test, "got correct time %i", value);
 	} else {
-		gpm_st_failed (test, "got incorrect time %i", value);
+		egg_test_failed (test, "got incorrect time %i", value);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a non-zero average accuracy when some data present");
+	egg_test_title (test, "make sure we get a non-zero average accuracy when some data present");
 	fvalue = gpm_profile_get_accuracy_average (profile, TRUE);
 	if (fvalue < 0.21 && fvalue > 0.19) {
-		gpm_st_success (test, "got non zero %f", fvalue);
+		egg_test_success (test, "got non zero %f", fvalue);
 	} else {
-		gpm_st_failed (test, "got %f", fvalue);
+		egg_test_failed (test, "got %f", fvalue);
 	}
 
 	/************************************************************
@@ -1182,36 +1182,36 @@ gpm_st_profile (GpmSelfTest *test)
 	reset_profile (profile);
 
 	/************************************************************/
-	gpm_st_title (test, "single point of accuracy with guessing (new profile)");
+	egg_test_title (test, "single point of accuracy with guessing (new profile)");
 	gpm_profile_use_guessing (profile, TRUE);
 	gpm_profile_save_percentage (profile, 45, 120, 100);
-	gpm_st_success (test, "put single point");
+	egg_test_success (test, "put single point");
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a correct accuracy when a single point dataset");
+	egg_test_title (test, "make sure we get a correct accuracy when a single point dataset");
 	value = gpm_profile_get_accuracy (profile, 45);
 	if (value == 20) {
-		gpm_st_success (test, "got correct average %i", value);
+		egg_test_success (test, "got correct average %i", value);
 	} else {
-		gpm_st_failed (test, "got incorrect average %i", value);
+		egg_test_failed (test, "got incorrect average %i", value);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure the point after the guessed point isn't guessed");
+	egg_test_title (test, "make sure the point after the guessed point isn't guessed");
 	value = gpm_profile_get_accuracy (profile, 46);
 	if (value == 0) {
-		gpm_st_success (test, "didn't try to guess point after set", value);
+		egg_test_success (test, "didn't try to guess point after set", value);
 	} else {
-		gpm_st_failed (test, "got accuracy average %i", value);
+		egg_test_failed (test, "got accuracy average %i", value);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a correct time when set");
+	egg_test_title (test, "make sure we get a correct time when set");
 	value = gpm_profile_get_time (profile, 50, TRUE);
 	if (value == 5280) {
-		gpm_st_success (test, "got correct time %i", value);
+		egg_test_success (test, "got correct time %i", value);
 	} else {
-		gpm_st_failed (test, "got incorrect time!!! %i", value);
+		egg_test_failed (test, "got incorrect time!!! %i", value);
 	}
 
 	/************************************************************/
@@ -1220,7 +1220,7 @@ gpm_st_profile (GpmSelfTest *test)
 
 	g_object_unref (profile);
 
-	gpm_st_end (test);
+	egg_test_end (test);
 }
 
 #endif

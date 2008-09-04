@@ -1305,8 +1305,8 @@ gpm_graph_widget_new (void)
 /***************************************************************************
  ***                          MAKE CHECK TESTS                           ***
  ***************************************************************************/
-#ifdef GPM_BUILD_TESTS
-#include "gpm-self-test.h"
+#ifdef EGG_TEST
+#include "egg-test.h"
 
 GtkWidget *window;
 GtkWidget *graph;
@@ -1322,21 +1322,21 @@ close_handler (GtkWidget *widget, gpointer gdata)
 static void
 clicked_passed_cb (GtkWidget *widget, gpointer gdata)
 {
-	GpmSelfTest *test = (GpmSelfTest *) gdata;
-	gpm_st_success (test, NULL);
+	EggTest *test = (EggTest *) gdata;
+	egg_test_success (test, NULL);
 	gtk_main_quit ();
 }
 
 static void
 clicked_failed_cb (GtkWidget *widget, gpointer gdata)
 {
-	GpmSelfTest *test = (GpmSelfTest *) gdata;
-	gpm_st_failed (test, NULL);
+	EggTest *test = (EggTest *) gdata;
+	egg_test_failed (test, NULL);
 	gtk_main_quit ();
 }
 
 static void
-create_graph_window (GpmSelfTest *test)
+create_graph_window (EggTest *test)
 {
 	GtkWidget *button_passed;
 	GtkWidget *button_failed;
@@ -1369,7 +1369,7 @@ create_graph_window (GpmSelfTest *test)
 }
 
 static void
-wait_for_input (GpmSelfTest *test)
+wait_for_input (EggTest *test)
 {
 	gtk_widget_hide_all (window);
 	gtk_widget_show_all (window);
@@ -1377,28 +1377,28 @@ wait_for_input (GpmSelfTest *test)
 }
 
 void
-gpm_st_title_graph (GpmSelfTest *test, const gchar *format, ...)
+egg_test_title_graph (EggTest *test, const gchar *format, ...)
 {
 	va_list args;
 	gchar va_args_buffer [1025];
 	va_start (args, format);
 	g_vsnprintf (va_args_buffer, 1024, format, args);
 	va_end (args);
-	gpm_st_title (test, va_args_buffer);
+	egg_test_title (test, va_args_buffer);
 	gtk_label_set_label (GTK_LABEL (label), va_args_buffer);
 //	g_print ("> check #%u\t%s: \t%s...", test->total+1, test->type, va_args_buffer);
 //	test->total++;
 }
 
 void
-gpm_st_graph_widget (GpmSelfTest *test)
+gpm_graph_widget_test (EggTest *test)
 {
 	GpmArray *data;
 	GpmArray *data_more;
 	GpmArray *events;
 	gboolean ret;
 
-	if (gpm_st_start (test, "GpmGraphWidget") == FALSE) {
+	if (egg_test_start (test, "GpmGraphWidget") == FALSE) {
 		return;
 	}
 
@@ -1407,13 +1407,13 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	gpm_graph_widget_enable_events (GPM_GRAPH_WIDGET (graph), TRUE);
 
 	/********** TYPES *************/
-	gpm_st_title_graph (test, "graph loaded, visible, no key, and set to y=percent x=time");
+	egg_test_title_graph (test, "graph loaded, visible, no key, and set to y=percent x=time");
 	wait_for_input (test);
 
 	gpm_graph_widget_set_axis_type_x (GPM_GRAPH_WIDGET (graph), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
 	gpm_graph_widget_set_axis_type_y (GPM_GRAPH_WIDGET (graph), GPM_GRAPH_WIDGET_TYPE_TIME);
 
-	gpm_st_title_graph (test, "now set to y=time x=percent");
+	egg_test_title_graph (test, "now set to y=time x=percent");
 	wait_for_input (test);
 
 	/********** KEY DATA *************/
@@ -1421,12 +1421,12 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), EGG_COLOR_GREEN, "green data");
 	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), EGG_COLOR_BLUE, "blue data");
 
-	gpm_st_title_graph (test, "red green blue key data added");
+	egg_test_title_graph (test, "red green blue key data added");
 	wait_for_input (test);
 
 	gpm_graph_widget_key_data_clear (GPM_GRAPH_WIDGET (graph));
 
-	gpm_st_title_graph (test, "data items cleared, no key remains");
+	egg_test_title_graph (test, "data items cleared, no key remains");
 	wait_for_input (test);
 
 	/********** KEY EVENT *************/
@@ -1447,25 +1447,25 @@ gpm_st_graph_widget (GpmSelfTest *test)
 					GPM_GRAPH_WIDGET_SHAPE_DIAMOND,
 					"white diamond");
 
-	gpm_st_title_graph (test, "red green blue white key events added");
+	egg_test_title_graph (test, "red green blue white key events added");
 	wait_for_input (test);
 
 
 	/********** KEY EVENT duplicate test *************/
-	gpm_st_title (test, "duplicate key event test");
+	egg_test_title (test, "duplicate key event test");
 	ret = gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (graph), 3,
 					      EGG_COLOR_WHITE,
 					      GPM_GRAPH_WIDGET_SHAPE_DIAMOND,
 					      "white diamond");
 	if (!ret) {
-		gpm_st_success (test, "refused duplicate id");
+		egg_test_success (test, "refused duplicate id");
 	} else {
-		gpm_st_failed (test, "added duplicate ID!");
+		egg_test_failed (test, "added duplicate ID!");
 	}
 
 	gpm_graph_widget_key_event_clear (GPM_GRAPH_WIDGET (graph));
 
-	gpm_st_title_graph (test, "event items cleared, no key remains");
+	egg_test_title_graph (test, "event items cleared, no key remains");
 	wait_for_input (test);
 
 	/********** DATA *************/
@@ -1483,24 +1483,24 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	gpm_array_append (data, 50, 0, EGG_COLOR_RED);
 	gpm_array_append (data, 40, 100, EGG_COLOR_RED);
 	gpm_graph_widget_data_clear (GPM_GRAPH_WIDGET (graph));
-	gpm_st_title (test, "add invalid data");
+	egg_test_title (test, "add invalid data");
 	ret = gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data);
 	if (!ret) {
-		gpm_st_success (test, "ignored");
+		egg_test_success (test, "ignored");
 	} else {
-		gpm_st_failed (test, "failed to ignore invalid data");
+		egg_test_failed (test, "failed to ignore invalid data");
 	}
 	g_object_unref (data);
 
 	/********** ADD NO DATA *************/
 	data = gpm_array_new ();
-	gpm_st_title (test, "add zero data");
+	egg_test_title (test, "add zero data");
 	gpm_graph_widget_data_clear (GPM_GRAPH_WIDGET (graph));
 	ret = gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data);
 	if (!ret) {
-		gpm_st_success (test, "ignored");
+		egg_test_success (test, "ignored");
 	} else {
-		gpm_st_failed (test, "failed to ignore zero data");
+		egg_test_failed (test, "failed to ignore zero data");
 	}
 	g_object_unref (data);
 
@@ -1508,16 +1508,16 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	data = gpm_array_new ();
 	gpm_array_append (data, 0, 0, EGG_COLOR_RED);
 	gpm_array_append (data, 100, 100, EGG_COLOR_RED);
-	gpm_st_title (test, "add valid data");
+	egg_test_title (test, "add valid data");
 	ret = gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data);
 	if (ret) {
-		gpm_st_success (test, NULL);
+		egg_test_success (test, NULL);
 	} else {
-		gpm_st_failed (test, "failed to add valid data");
+		egg_test_failed (test, "failed to add valid data");
 	}
 
 	/********** SHOW VALID DATA *************/
-	gpm_st_title_graph (test, "red line shown gradient up");
+	egg_test_title_graph (test, "red line shown gradient up");
 	wait_for_input (test);
 
 	/*********** second line **************/
@@ -1526,7 +1526,7 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	gpm_array_append (data_more, 100, 0, EGG_COLOR_BLUE);
 	gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data_more);
 
-	gpm_st_title_graph (test, "red line shown gradient up, blue gradient down");
+	egg_test_title_graph (test, "red line shown gradient up, blue gradient down");
 	wait_for_input (test);
 
 	/*********** dots **************/
@@ -1536,7 +1536,7 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	gpm_array_append (events, 75, 0, 0);
 	gpm_graph_widget_events_add (GPM_GRAPH_WIDGET (graph), events);
 
-	gpm_st_title_graph (test, "events follow red line (primary)");
+	egg_test_title_graph (test, "events follow red line (primary)");
 	wait_for_input (test);
 
 	/*********** stacked dots **************/
@@ -1544,17 +1544,17 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	gpm_array_append (events, 77, 0, 0);
 	gpm_graph_widget_events_add (GPM_GRAPH_WIDGET (graph), events);
 
-	gpm_st_title_graph (test, "three events stacked at ~75");
+	egg_test_title_graph (test, "three events stacked at ~75");
 	wait_for_input (test);
 
 	/*********** events removed **************/
 	gpm_graph_widget_events_clear (GPM_GRAPH_WIDGET (graph));
-	gpm_st_title_graph (test, "events removed");
+	egg_test_title_graph (test, "events removed");
 	wait_for_input (test);
 
 	/*********** data lines removed **************/
 	gpm_graph_widget_data_clear (GPM_GRAPH_WIDGET (graph));
-	gpm_st_title_graph (test, "all lines and event removed");
+	egg_test_title_graph (test, "all lines and event removed");
 	wait_for_input (test);
 
 	g_object_unref (events);
@@ -1574,7 +1574,7 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	gpm_array_append (data, 80, 78, EGG_COLOR_RED);
 	gpm_array_append (data, 100, 79, EGG_COLOR_RED);
 	gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data);
-	gpm_st_title_graph (test, "autorange y axis between 70 and 80");
+	egg_test_title_graph (test, "autorange y axis between 70 and 80");
 	wait_for_input (test);
 	g_object_unref (data);
 
@@ -1584,14 +1584,14 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	gpm_array_append (data, 100, 85, EGG_COLOR_RED);
 	gpm_graph_widget_data_clear (GPM_GRAPH_WIDGET (graph));
 	gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data);
-	gpm_st_title_graph (test, "autorange y axis between 0 and 100");
+	egg_test_title_graph (test, "autorange y axis between 0 and 100");
 	wait_for_input (test);
 	g_object_unref (data);
 
 	/* hide window */
 	gtk_widget_hide_all (window);
 
-	gpm_st_end (test);
+	egg_test_end (test);
 }
 
 #endif
