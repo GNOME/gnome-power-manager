@@ -28,6 +28,10 @@
 #include "egg-debug.h"
 
 /* prototypes */
+void egg_precision_test (EggTest *test);
+void egg_discrete_test (EggTest *test);
+void egg_color_test (EggTest *test);
+
 void gpm_common_test (EggTest *test);
 void gpm_array_float_test (EggTest *test);
 void gpm_array_test (EggTest *test);
@@ -58,6 +62,10 @@ main (int argc, char **argv)
 	gtk_init (&argc, &argv);
 
 	/* tests go here */
+	egg_precision_test (test);
+	egg_discrete_test (test);
+	egg_color_test (test);
+
 	gpm_common_test (test);
 	gpm_array_float_test (test);
 	gpm_array_test (test);

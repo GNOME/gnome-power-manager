@@ -60,6 +60,10 @@ gnome_power_statistics_SOURCES =			\
 	egg-debug.c					\
 	egg-unique.h					\
 	egg-unique.c					\
+	egg-precision.h					\
+	egg-precision.c					\
+	egg-discrete.h					\
+	egg-discrete.c					\
 	gpm-statistics.c				\
 	gpm-statistics-core.h				\
 	gpm-statistics-core.c				\
@@ -137,6 +141,10 @@ gnome_power_manager_SOURCES =				\
 	egg-debug.c					\
 	egg-dbus-monitor.h				\
 	egg-dbus-monitor.c				\
+	egg-precision.h					\
+	egg-precision.c					\
+	egg-discrete.h					\
+	egg-discrete.c					\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
 	gpm-notify.h					\
@@ -245,6 +253,10 @@ gnome_power_self_test_SOURCES =				\
 	egg-debug.c					\
 	egg-dbus-monitor.h				\
 	egg-dbus-monitor.c				\
+	egg-precision.h					\
+	egg-precision.c					\
+	egg-discrete.h					\
+	egg-discrete.c					\
 	gpm-ac-adapter.h				\
 	gpm-ac-adapter.c				\
 	gpm-prefs-server.h				\

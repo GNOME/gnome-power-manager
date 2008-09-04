@@ -43,10 +43,12 @@
 #include <libhal-gmanager.h>
 #include <libdbus-proxy.h>
 
+#include "egg-debug.h"
+#include "egg-discrete.h"
+
 #include "gpm-brightness-kbd.h"
 #include "gpm-conf.h"
 #include "gpm-common.h"
-#include "egg-debug.h"
 #include "gpm-light-sensor.h"
 #include "gpm-marshal.h"
 
@@ -283,7 +285,7 @@ gpm_brightness_kbd_set_dim (GpmBrightnessKbd *brightness,
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
-	level_hw = gpm_percent_to_discrete (brightness_level, brightness->priv->levels);
+	level_hw = egg_discrete_from_percent (brightness_level, brightness->priv->levels);
 
 	/* If the current brightness_kbd is less than the dim brightness_kbd then just
 	 * use the current brightness_kbd so that we don't *increase* in brightness_kbd
@@ -316,7 +318,7 @@ gpm_brightness_kbd_set_std (GpmBrightnessKbd *brightness,
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
-	level_hw = gpm_percent_to_discrete (brightness_level,
+	level_hw = egg_discrete_from_percent (brightness_level,
 						 brightness->priv->levels);
 	brightness->priv->level_std_hw = level_hw;
 
@@ -388,7 +390,7 @@ gpm_brightness_kbd_get (GpmBrightnessKbd *brightness,
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
-	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
+	percentage = egg_discrete_to_percent (brightness->priv->current_hw,
 						       brightness->priv->levels);
 	*brightness_level = percentage;
 	return TRUE;
@@ -422,7 +424,7 @@ gpm_brightness_kbd_up (GpmBrightnessKbd *brightness)
 		gpm_brightness_kbd_set_hw (brightness, brightness->priv->current_hw + step);
 	}
 
-	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
+	percentage = egg_discrete_to_percent (brightness->priv->current_hw,
 					      brightness->priv->levels);
 	egg_debug ("emitting brightness-changed (%i)", percentage);
 	g_signal_emit (brightness, signals [BRIGHTNESS_CHANGED], 0, percentage);
@@ -458,7 +460,7 @@ gpm_brightness_kbd_down (GpmBrightnessKbd *brightness)
 		gpm_brightness_kbd_set_hw (brightness, brightness->priv->current_hw - step);
 	}
 
-	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
+	percentage = egg_discrete_to_percent (brightness->priv->current_hw,
 					      brightness->priv->levels);
 	egg_debug ("emitting brightness-changed (%i)", percentage);
 	g_signal_emit (brightness, signals [BRIGHTNESS_CHANGED], 0, percentage);

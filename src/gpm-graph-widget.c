@@ -27,11 +27,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "egg-debug.h"
+#include "egg-precision.h"
 #include "egg-color.h"
+#include "egg-debug.h"
+
 #include "gpm-common.h"
 #include "gpm-graph-widget.h"
 #include "gpm-array.h"
-#include "egg-debug.h"
 
 G_DEFINE_TYPE (GpmGraphWidget, gpm_graph_widget, GTK_TYPE_DRAWING_AREA);
 #define GPM_GRAPH_WIDGET_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_GRAPH_WIDGET, GpmGraphWidgetPrivate))
@@ -748,10 +751,10 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 		}
 	}
 
-	graph->priv->start_x = gpm_precision_round_down (smallest_x, rounding_x);
-	graph->priv->start_y = gpm_precision_round_down (smallest_y, rounding_y);
-	graph->priv->stop_x = gpm_precision_round_up (biggest_x, rounding_x);
-	graph->priv->stop_y = gpm_precision_round_up (biggest_y, rounding_y);
+	graph->priv->start_x = egg_precision_round_down (smallest_x, rounding_x);
+	graph->priv->start_y = egg_precision_round_down (smallest_y, rounding_y);
+	graph->priv->stop_x = egg_precision_round_up (biggest_x, rounding_x);
+	graph->priv->stop_y = egg_precision_round_up (biggest_y, rounding_y);
 
 	/* if percentage, and close to the end points, then extend */
 	if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {

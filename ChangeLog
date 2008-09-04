@@ -1,5 +1,35 @@
 2008-09-04  Richard Hughes  <richard@hughsie.com>
 
+	* src/Makefile.am:
+	* src/egg-color.c: (egg_color_test):
+	* src/egg-color.h:
+	* src/egg-discrete.c: (egg_discrete_from_percent),
+	(egg_discrete_to_percent), (egg_discrete_to_fraction),
+	(egg_discrete_test):
+	* src/egg-discrete.h:
+	* src/egg-precision.c: (egg_precision_round_up),
+	(egg_precision_round_down), (egg_precision_test):
+	* src/egg-precision.h:
+	* src/egg-test.c: (egg_test_start):
+	* src/gpm-brightness-hal.c: (gpm_brightness_hal_set),
+	(gpm_brightness_hal_get):
+	* src/gpm-brightness-kbd.c: (gpm_brightness_kbd_set_dim),
+	(gpm_brightness_kbd_set_std), (gpm_brightness_kbd_get),
+	(gpm_brightness_kbd_up), (gpm_brightness_kbd_down):
+	* src/gpm-brightness-xrandr.c:
+	(gpm_brightness_xrandr_output_get_percentage),
+	(gpm_brightness_xrandr_output_set):
+	* src/gpm-cell-array.c: (gpm_cell_array_get_description):
+	* src/gpm-common.c: (gpm_common_test):
+	* src/gpm-common.h:
+	* src/gpm-graph-widget.c: (gpm_graph_widget_auto_range):
+	* src/gpm-light-sensor.c: (gpm_light_sensor_get_absolute),
+	(gpm_light_sensor_calibrate), (gpm_light_sensor_get_relative):
+	* src/gpm-self-test.c: (main):
+	Use and generate more egg code.
+
+2008-09-04  Richard Hughes  <richard@hughsie.com>
+
 	* Makefile.am:
 	* configure.ac:
 	* libidletime/Makefile.am:

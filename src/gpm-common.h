@@ -57,19 +57,9 @@ typedef enum {
 } GpmIconPolicy;
 
 gchar		*gpm_get_timestring		(guint		 time);
-guint		 gpm_precision_round_up		(guint		 value,
-						 guint		 smallest);
-guint		 gpm_precision_round_down	(guint		 value,
-						 guint		 smallest);
-guint		 gpm_percent_to_discrete	(guint		 percentage,
-						 guint		 levels);
 gint		 gpm_exponential_average	(gint		 previous,
 						 gint		 new,
 						 guint		 slew);
-guint		 gpm_discrete_to_percent	(guint		 discrete,
-						 guint		 levels);
-gfloat		 gpm_discrete_to_fraction	(guint		 discrete,
-						 guint		 levels);
 GpmIconPolicy	 gpm_tray_icon_mode_from_string	(const gchar	*mode);
 const gchar	*gpm_tray_icon_mode_to_string	(GpmIconPolicy	 mode);
 void 		 gpm_help_display		(char		*link_id);

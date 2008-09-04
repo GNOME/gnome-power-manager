@@ -29,6 +29,9 @@
 #include <libhal-gdevice.h>
 #include <libhal-gmanager.h>
 
+#include "egg-debug.h"
+#include "egg-precision.h"
+
 #include "gpm-marshal.h"
 #include "gpm-ac-adapter.h"
 #include "gpm-common.h"
@@ -38,7 +41,6 @@
 #include "gpm-cell.h"
 #include "gpm-phone.h"
 #include "gpm-control.h"
-#include "egg-debug.h"
 #include "gpm-warnings.h"
 #include "gpm-profile.h"
 
@@ -998,8 +1000,8 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 	egg_debug ("accuracy = %i", accuracy);
 
 	/* precalculate so we don't get Unknown time remaining */
-	charge_time_round = gpm_precision_round_down (unit->time_charge, GPM_UI_TIME_PRECISION);
-	discharge_time_round = gpm_precision_round_down (unit->time_discharge, GPM_UI_TIME_PRECISION);
+	charge_time_round = egg_precision_round_down (unit->time_charge, GPM_UI_TIME_PRECISION);
+	discharge_time_round = egg_precision_round_down (unit->time_discharge, GPM_UI_TIME_PRECISION);
 
 	/* We always display "Laptop battery 16 minutes remaining" as we need
 	   to clarify what device we are refering to. For details see :
@@ -1009,7 +1011,7 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 		if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY &&
 		    accuracy > GPM_CELL_ARRAY_TEXT_MIN_ACCURACY) {
 			time = gpm_profile_get_time (cell_array->priv->profile, (guint) unit->percentage, TRUE);
-			discharge_time_round = gpm_precision_round_down (time, GPM_UI_TIME_PRECISION);
+			discharge_time_round = egg_precision_round_down (time, GPM_UI_TIME_PRECISION);
 			discharge_timestring = gpm_get_timestring (discharge_time_round);
 			description = g_strdup_printf (_("%s fully charged (%.1f%%)\nProvides %s battery runtime\n"),
 							type_desc, unit->percentage, discharge_timestring);

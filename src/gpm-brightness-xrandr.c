@@ -43,10 +43,12 @@
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 
+#include "egg-debug.h"
+#include "egg-discrete.h"
+
 #include "gpm-brightness.h"
 #include "gpm-brightness-xrandr.h"
 #include "gpm-common.h"
-#include "egg-debug.h"
 #include "gpm-marshal.h"
 
 #define GPM_BRIGHTNESS_XRANDR_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_BRIGHTNESS_XRANDR, GpmBrightnessXRandRPrivate))
@@ -221,7 +223,7 @@ gpm_brightness_xrandr_output_get_percentage (GpmBrightnessXRandR *brightness, RR
 		return FALSE;
 	}
 	egg_debug ("hard value=%i, min=%i, max=%i", cur, min, max);
-	percentage = gpm_discrete_to_percent (cur, (max-min)+1);
+	percentage = egg_discrete_to_percent (cur, (max-min)+1);
 	egg_debug ("percentage %i", percentage);
 	brightness->priv->shared_value = percentage;
 	return TRUE;
@@ -318,7 +320,7 @@ gpm_brightness_xrandr_output_set (GpmBrightnessXRandR *brightness, RROutput outp
 		return FALSE;
 	}
 
-	shared_value_abs = gpm_percent_to_discrete (brightness->priv->shared_value, (max-min)+1);
+	shared_value_abs = egg_discrete_from_percent (brightness->priv->shared_value, (max-min)+1);
 	egg_debug ("percent=%i, absolute=%i", brightness->priv->shared_value, shared_value_abs);
 
 	egg_debug ("hard value=%i, min=%i, max=%i", cur, min, max);

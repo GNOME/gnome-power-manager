@@ -42,8 +42,10 @@
 #include <libhal-gmanager.h>
 #include <libdbus-proxy.h>
 
-#include "gpm-common.h"
 #include "egg-debug.h"
+#include "egg-discrete.h"
+
+#include "gpm-common.h"
 #include "gpm-light-sensor.h"
 #include "gpm-conf.h"
 #include "gpm-marshal.h"
@@ -147,7 +149,7 @@ gpm_light_sensor_get_absolute (GpmLightSensor *sensor,
 		return FALSE;
 	}
 
-	*sensor_level = gpm_discrete_to_percent (sensor->priv->current_hw,
+	*sensor_level = egg_discrete_to_percent (sensor->priv->current_hw,
 					         sensor->priv->levels);
 	return TRUE;
 }
@@ -171,7 +173,7 @@ gpm_light_sensor_calibrate (GpmLightSensor *sensor)
 		return FALSE;
 	}
 
-	fraction = gpm_discrete_to_fraction (sensor->priv->current_hw,
+	fraction = egg_discrete_to_fraction (sensor->priv->current_hw,
 					     sensor->priv->levels);
 	sensor->priv->calibration_abs = fraction;
 	egg_debug ("calibrating to %f", fraction);
@@ -201,7 +203,7 @@ gpm_light_sensor_get_relative (GpmLightSensor *sensor,
 		return FALSE;
 	}
 
-	absolute = gpm_discrete_to_percent (sensor->priv->current_hw,
+	absolute = egg_discrete_to_percent (sensor->priv->current_hw,
 					    sensor->priv->levels);
 	*difference = (absolute - sensor->priv->calibration_abs) + 1.0;
 	return TRUE;

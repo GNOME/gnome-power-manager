@@ -42,10 +42,12 @@
 #include <libhal-gmanager.h>
 #include <libdbus-proxy.h>
 
+#include "egg-debug.h"
+#include "egg-discrete.h"
+
 #include "gpm-brightness.h"
 #include "gpm-brightness-hal.h"
 #include "gpm-common.h"
-#include "egg-debug.h"
 #include "gpm-marshal.h"
 
 #define GPM_BRIGHTNESS_HAL_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_BRIGHTNESS_HAL, GpmBrightnessHalPrivate))
@@ -265,7 +267,7 @@ gpm_brightness_hal_set (GpmBrightnessHal *brightness, guint percentage, gboolean
 	/* reset to not-changed */
 	brightness->priv->hw_changed = FALSE;
 
-	level_hw = gpm_percent_to_discrete (percentage, brightness->priv->levels);
+	level_hw = egg_discrete_from_percent (percentage, brightness->priv->levels);
 	brightness->priv->level_std_hw = level_hw;
 
 	/* update */
@@ -289,7 +291,7 @@ gpm_brightness_hal_get (GpmBrightnessHal *brightness, guint *percentage)
 {
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_HAL (brightness), FALSE);
 
-	*percentage = gpm_discrete_to_percent (brightness->priv->last_set_hw,
+	*percentage = egg_discrete_to_percent (brightness->priv->last_set_hw,
 					       brightness->priv->levels);
 	return TRUE;
 }
