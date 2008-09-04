@@ -31,7 +31,7 @@
 #include <gtk/gtk.h>
 
 /* local .la */
-#include <libunique.h>
+#include <egg-unique.h>
 
 #include "gpm-common.h"
 #include "gpm-conf.h"
@@ -69,7 +69,7 @@ gpm_statistics_close_cb (GpmStatistics *statistics)
  * We have been asked to show the window
  **/
 static void
-gpm_statistics_activated_cb (LibUnique *libunique, GpmStatistics *statistics)
+gpm_statistics_activated_cb (EggUnique *egg_unique, GpmStatistics *statistics)
 {
 	gpm_statistics_activate_window (statistics);
 }
@@ -84,7 +84,7 @@ main (int argc, char **argv)
 	GOptionContext *context;
 	GpmStatistics *statistics = NULL;
 	gboolean ret;
-	LibUnique *libunique;
+	EggUnique *egg_unique;
 
 	const GOptionEntry options[] = {
 		{ "verbose", '\0', 0, G_OPTION_ARG_NONE, &verbose,
@@ -107,14 +107,14 @@ main (int argc, char **argv)
 	egg_debug_init (verbose);
 
 	/* are we already activated? */
-	libunique = libunique_new ();
-	ret = libunique_assign (libunique, "org.freedesktop.PowerManagement.Statistics");
+	egg_unique = egg_unique_new ();
+	ret = egg_unique_assign (egg_unique, "org.freedesktop.PowerManagement.Statistics");
 	if (!ret) {
 		goto unique_out;
 	}
 
 	statistics = gpm_statistics_new ();
-	g_signal_connect (libunique, "activated",
+	g_signal_connect (egg_unique, "activated",
 			  G_CALLBACK (gpm_statistics_activated_cb), statistics);
 	g_signal_connect (statistics, "action-help",
 			  G_CALLBACK (gpm_statistics_help_cb), statistics);
@@ -124,7 +124,7 @@ main (int argc, char **argv)
 	g_object_unref (statistics);
 
 unique_out:
-	g_object_unref (libunique);
+	g_object_unref (egg_unique);
 
 /* seems to not work...
 	g_option_context_free (context); */

@@ -14,6 +14,7 @@ INCLUDES =						\
 	$(HAL_CFLAGS)					\
 	$(DBUS_CFLAGS)					\
 	$(GNOME_CFLAGS)					\
+	$(UNIQUE_CFLAGS)				\
 	$(XRANDR_CFLAGS)				\
 	$(LIBNOTIFY_CFLAGS)				\
 	$(UNIQUE_CFLAGS)				\
@@ -30,7 +31,6 @@ INCLUDES =						\
 	-DGPM_DATA=\"$(pkgdatadir)\"			\
 	-DEGG_LOG_FILE=\""$(PK_LOG_DIR)/gnome-power-manager"\"	\
 	-I$(top_srcdir)					\
-	-I$(top_srcdir)/libunique			\
 	-I$(top_srcdir)/libhal-glib			\
 	-I$(top_srcdir)/libdbus-glib			\
 	$(NULL)
@@ -47,9 +47,6 @@ LOCAL_LIBDBUS_LIBS =						\
 	$(top_builddir)/libdbus-glib/libdbus-watch.la		\
 	$(top_builddir)/libdbus-glib/libdbus-proxy.la
 
-LOCAL_LIBUNIQUE_LIBS =						\
-	$(top_builddir)/libunique/libunique.la
-
 bin_PROGRAMS =						\
 	gnome-power-manager				\
 	gnome-power-preferences				\
@@ -64,6 +61,8 @@ gnome_power_statistics_SOURCES =			\
 	egg-color.h					\
 	egg-debug.h					\
 	egg-debug.c					\
+	egg-unique.h					\
+	egg-unique.c					\
 	gpm-statistics.c				\
 	gpm-statistics-core.h				\
 	gpm-statistics-core.c				\
@@ -86,7 +85,6 @@ gnome_power_statistics_LDADD =				\
 	$(GNOME_LIBS)					\
 	$(DBUS_LIBS)					\
 	$(LOCAL_LIBDBUS_LIBS)				\
-	$(LOCAL_LIBUNIQUE_LIBS)				\
 	$(NULL)
 
 if HAVE_UNIQUE
@@ -97,6 +95,8 @@ endif
 gnome_power_preferences_SOURCES =			\
 	egg-debug.h					\
 	egg-debug.c					\
+	egg-unique.h					\
+	egg-unique.c					\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
 	gpm-conf.h					\
@@ -126,7 +126,6 @@ gnome_power_preferences_LDADD =				\
 	$(GPM_EXTRA_LIBS)				\
 	$(LOCAL_LIBHAL_LIBS)				\
 	$(LOCAL_LIBDBUS_LIBS)				\
-	$(LOCAL_LIBUNIQUE_LIBS)				\
 	$(NULL)
 
 if HAVE_UNIQUE

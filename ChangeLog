@@ -1,3 +1,20 @@
+2008-09-04  Richard Hughes  <richard@hughsie.com>
+
+	* Makefile.am:
+	* RELEASE:
+	* configure.ac:
+	* libunique/Makefile.am:
+	* libunique/libunique.c:
+	* libunique/libunique.h:
+	* src/Makefile.am:
+	* src/egg-unique.c: (egg_unique_message_cb), (egg_unique_assign),
+	(egg_unique_class_init), (egg_unique_init), (egg_unique_finalize),
+	(egg_unique_new):
+	* src/egg-unique.h:
+	* src/gpm-prefs.c: (gpm_prefs_activated_cb), (main):
+	* src/gpm-statistics.c: (gpm_statistics_activated_cb), (main):
+	Move from LibUnique to EggUnique
+
 2008-09-03  Richard Hughes  <richard@hughsie.com>
 
 	* src/egg-color.c: (egg_st_color):

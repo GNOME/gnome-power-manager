@@ -31,7 +31,7 @@
 #include <gtk/gtk.h>
 
 /* local .la */
-#include <libunique.h>
+#include <egg-unique.h>
 
 #include "gpm-common.h"
 #include "gpm-prefs.h"
@@ -69,7 +69,7 @@ gpm_prefs_close_cb (GpmPrefs *prefs)
  * We have been asked to show the window
  **/
 static void
-gpm_prefs_activated_cb (LibUnique *libunique, GpmPrefs *prefs)
+gpm_prefs_activated_cb (EggUnique *egg_unique, GpmPrefs *prefs)
 {
 	gpm_prefs_activate_window (prefs);
 }
@@ -84,7 +84,7 @@ main (int argc, char **argv)
 	GOptionContext *context;
 	GpmPrefs *prefs = NULL;
 	gboolean ret;
-	LibUnique *libunique;
+	EggUnique *egg_unique;
 
 	const GOptionEntry options[] = {
 		{ "verbose", '\0', 0, G_OPTION_ARG_NONE, &verbose,
@@ -107,15 +107,15 @@ main (int argc, char **argv)
 	egg_debug_init (verbose);
 
 	/* are we already activated? */
-	libunique = libunique_new ();
-	ret = libunique_assign (libunique, "org.freedesktop.PowerManagement.Preferences");
+	egg_unique = egg_unique_new ();
+	ret = egg_unique_assign (egg_unique, "org.freedesktop.PowerManagement.Preferences");
 	if (!ret) {
 		goto unique_out;
 	}
 
 	prefs = gpm_prefs_new ();
 
-	g_signal_connect (libunique, "activated",
+	g_signal_connect (egg_unique, "activated",
 			  G_CALLBACK (gpm_prefs_activated_cb), prefs);
 	g_signal_connect (prefs, "action-help",
 			  G_CALLBACK (gpm_prefs_help_cb), prefs);
@@ -125,7 +125,7 @@ main (int argc, char **argv)
 	g_object_unref (prefs);
 
 unique_out:
-	g_object_unref (libunique);
+	g_object_unref (egg_unique);
 
 /* seems to not work...
 	g_option_context_free (context); */

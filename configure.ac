@@ -591,7 +591,6 @@ applets/inhibit/Makefile
 libhal-glib/Makefile
 libdbus-glib/Makefile
 libidletime/Makefile
-libunique/Makefile
 docs/Makefile
 man/Makefile
 help/Makefile
