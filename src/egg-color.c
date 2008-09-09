@@ -30,11 +30,11 @@
 guint32
 egg_color_from_rgb (guint8 red, guint8 green, guint8 blue)
 {
-	guint32 colour = 0;
-	colour += (guint32) red * 0x10000;
-	colour += (guint32) green * 0x100;
-	colour += (guint32) blue;
-	return colour;
+	guint32 color = 0;
+	color += (guint32) red * 0x10000;
+	color += (guint32) green * 0x100;
+	color += (guint32) blue;
+	return color;
 }
 
 /**
@@ -44,109 +44,111 @@ egg_color_from_rgb (guint8 red, guint8 green, guint8 blue)
  * @blue: The blue value
  **/
 void
-egg_color_to_rgb (guint32 colour, guint8 *red, guint8 *green, guint8 *blue)
+egg_color_to_rgb (guint32 color, guint8 *red, guint8 *green, guint8 *blue)
 {
-	*red = (colour & 0xff0000) / 0x10000;
-	*green = (colour & 0x00ff00) / 0x100;
-	*blue = colour & 0x0000ff;
+	*red = (color & 0xff0000) / 0x10000;
+	*green = (color & 0x00ff00) / 0x100;
+	*blue = color & 0x0000ff;
 }
 
 /***************************************************************************
  ***                          MAKE CHECK TESTS                           ***
  ***************************************************************************/
-#ifdef EGG_BUILD_TESTS
-#include "egg-self-test.h"
+#ifdef EGG_TEST
+#include "egg-test.h"
 
 void
-egg_st_color (EggSelfTest *test)
+egg_color_test (EggTest *test)
 {
 	guint8 r, g, b;
-	guint32 colour;
+	guint32 color;
 
-	if (egg_st_start (test, "EggColor") == FALSE) {
+	if (egg_test_start (test, "EggColor") == FALSE) {
 		return;
 	}
 
 	/************************************************************/
-	egg_st_title (test, "get red");
+	egg_test_title (test, "get red");
 	egg_color_to_rgb (0xff0000, &r, &g, &b);
 	if (r == 255 && g == 0 && b == 0) {
-		egg_st_success (test, "got red");
+		egg_test_success (test, "got red");
 	} else {
-		egg_st_failed (test, "could not get red (%i, %i, %i)", r, g, b);
+		egg_test_failed (test, "could not get red (%i, %i, %i)", r, g, b);
 	}
 
 	/************************************************************/
-	egg_st_title (test, "get green");
+	egg_test_title (test, "get green");
 	egg_color_to_rgb (0x00ff00, &r, &g, &b);
 	if (r == 0 && g == 255 && b == 0) {
-		egg_st_success (test, "got green");
+		egg_test_success (test, "got green");
 	} else {
-		egg_st_failed (test, "could not get green (%i, %i, %i)", r, g, b);
+		egg_test_failed (test, "could not get green (%i, %i, %i)", r, g, b);
 	}
 
 	/************************************************************/
-	egg_st_title (test, "get blue");
+	egg_test_title (test, "get blue");
 	egg_color_to_rgb (0x0000ff, &r, &g, &b);
 	if (r == 0 && g == 0 && b == 255) {
-		egg_st_success (test, "got blue");
+		egg_test_success (test, "got blue");
 	} else {
-		egg_st_failed (test, "could not get blue (%i, %i, %i)", r, g, b);
+		egg_test_failed (test, "could not get blue (%i, %i, %i)", r, g, b);
 	}
 
 	/************************************************************/
-	egg_st_title (test, "get black");
+	egg_test_title (test, "get black");
 	egg_color_to_rgb (0x000000, &r, &g, &b);
 	if (r == 0 && g == 0 && b == 0) {
-		egg_st_success (test, "got black");
+		egg_test_success (test, "got black");
 	} else {
-		egg_st_failed (test, "could not get black (%i, %i, %i)", r, g, b);
+		egg_test_failed (test, "could not get black (%i, %i, %i)", r, g, b);
 	}
 
 	/************************************************************/
-	egg_st_title (test, "get white");
+	egg_test_title (test, "get white");
 	egg_color_to_rgb (0xffffff, &r, &g, &b);
 	if (r == 255 && g == 255 && b == 255) {
-		egg_st_success (test, "got white");
+		egg_test_success (test, "got white");
 	} else {
-		egg_st_failed (test, "could not get white (%i, %i, %i)", r, g, b);
+		egg_test_failed (test, "could not get white (%i, %i, %i)", r, g, b);
 	}
 
 	/************************************************************/
-	egg_st_title (test, "set red");
-	colour = egg_color_from_rgb (0xff, 0x00, 0x00);
-	if (colour == 0xff0000) {
-		egg_st_success (test, "set red");
+	egg_test_title (test, "set red");
+	color = egg_color_from_rgb (0xff, 0x00, 0x00);
+	if (color == 0xff0000) {
+		egg_test_success (test, "set red");
 	} else {
-		egg_st_failed (test, "could not set red (%i)", colour);
+		egg_test_failed (test, "could not set red (%i)", color);
 	}
 
 	/************************************************************/
-	egg_st_title (test, "set green");
-	colour = egg_color_from_rgb (0x00, 0xff, 0x00);
-	if (colour == 0x00ff00) {
-		egg_st_success (test, "set green");
+	egg_test_title (test, "set green");
+	color = egg_color_from_rgb (0x00, 0xff, 0x00);
+	if (color == 0x00ff00) {
+		egg_test_success (test, "set green");
 	} else {
-		egg_st_failed (test, "could not set green (%i)", colour);
+		egg_test_failed (test, "could not set green (%i)", color);
 	}
 
 	/************************************************************/
-	egg_st_title (test, "set blue");
-	colour = egg_color_from_rgb (0x00, 0x00, 0xff);
-	if (colour == 0x0000ff) {
-		egg_st_success (test, "set blue");
+	egg_test_title (test, "set blue");
+	color = egg_color_from_rgb (0x00, 0x00, 0xff);
+	if (color == 0x0000ff) {
+		egg_test_success (test, "set blue");
 	} else {
-		egg_st_failed (test, "could not set blue (%i)", colour);
+		egg_test_failed (test, "could not set blue (%i)", color);
 	}
 
 	/************************************************************/
-	egg_st_title (test, "set white");
-	colour = egg_color_from_rgb (0xff, 0xff, 0xff);
-	if (colour == 0xffffff) {
-		egg_st_success (test, "set white");
+	egg_test_title (test, "set white");
+	color = egg_color_from_rgb (0xff, 0xff, 0xff);
+	if (color == 0xffffff) {
+		egg_test_success (test, "set white");
 	} else {
-		egg_st_failed (test, "could not set white (%i)", colour);
+		egg_test_failed (test, "could not set white (%i)", color);
 	}
+
+	egg_test_end (test);
 }
 
 #endif

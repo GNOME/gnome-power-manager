@@ -175,9 +175,8 @@ gpm_cell_array_get_time_until_action (GpmCellArray *cell_array)
 
 	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), 0);
 
-	/* clear old values (except previous charge rate) */
+	/* array */
 	unit = &(cell_array->priv->unit);
-	gpm_cell_unit_init (unit);
 
 	/* not valid */
 	if (unit->is_charging || unit->is_discharging == FALSE) {
