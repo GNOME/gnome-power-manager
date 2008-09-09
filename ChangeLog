@@ -1,5 +1,11 @@
 2008-09-09  Richard Hughes  <richard@hughsie.com>
 
+	* data/icons/Makefile.am:
+	Use pkgdatadir rather than datadir for generating the icon cache.
+	Patch from Ted Gould <ted@ubuntu.com>, many thanks.
+
+2008-09-09  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-cell-array.c: (gpm_cell_array_get_time_until_action):
 	Don't clear the array when attempt to get the time.
 	Fix from Joakim Andersson, many thanks.
