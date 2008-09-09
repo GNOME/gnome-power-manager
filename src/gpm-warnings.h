@@ -56,11 +56,13 @@ typedef struct
 	GObjectClass	parent_class;
 } GpmWarningsClass;
 
-GType		 gpm_warnings_get_type	(void);
-GpmWarnings	*gpm_warnings_new	(void);
+GType		 gpm_warnings_get_type		(void);
+GpmWarnings	*gpm_warnings_new		(void);
 
-GpmWarningsState	 gpm_warnings_get_state	(GpmWarnings		*warnings,
-					 GpmCellUnit		*unit);
+GpmWarningsState gpm_warnings_get_state		(GpmWarnings		*warnings,
+						 GpmCellUnit		*unit);
+void		 gpm_warnings_time_is_accurate	(GpmWarnings		*warnings,
+						 gboolean		 time_accurate);
 
 G_END_DECLS
 

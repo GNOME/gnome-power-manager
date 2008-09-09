@@ -491,21 +491,12 @@ static gboolean
 gpm_cell_array_emit_system_action (GpmCellArray	   *cell_array,
 				   GpmWarningsState warnings_state)
 {
-	gfloat accuracy;
 	GpmCellUnit *unit;
 
 	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), FALSE);
 
-	/* do we trust the profile enough to make a decision? */
+	/* array */
 	unit = &(cell_array->priv->unit);
-	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
-		accuracy = gpm_profile_get_accuracy_average (cell_array->priv->profile,
-							     unit->is_discharging);
-		if (accuracy < GPM_PROFILE_GOOD_TRUST) {
-			egg_debug ("profile is not accurate. Not doing policy action");
-			return FALSE;
-		}
-	}
 
 	/* we are not primary, or we are primary with a trusted profile */
 	if (warnings_state == GPM_WARNINGS_ACTION) {
@@ -532,6 +523,7 @@ gpm_cell_array_percent_changed (GpmCellArray *cell_array)
 {
 	GpmWarningsState warnings_state;
 	GpmCellUnit *unit;
+	gfloat accuracy;
 
 	g_return_if_fail (GPM_IS_CELL_ARRAY (cell_array));
 
@@ -556,6 +548,12 @@ gpm_cell_array_percent_changed (GpmCellArray *cell_array)
 	    gpm_cell_unit_is_charged (unit) == FALSE) {
 		egg_debug ("enabled fully charged");
 		cell_array->priv->done_fully_charged = FALSE;
+	}
+
+	/* do we trust the profile enough to make a decision based on time? */
+	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+		accuracy = gpm_profile_get_accuracy_average (cell_array->priv->profile, unit->is_discharging);
+		gpm_warnings_time_is_accurate (warning, (accuracy > GPM_PROFILE_GOOD_TRUST));
 	}
 
 	/* only get a warning state if we are discharging */

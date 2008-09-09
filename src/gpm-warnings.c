@@ -50,6 +50,7 @@ struct GpmWarningsPrivate
 {
 	GpmConf			*conf;
 	gboolean		 use_time_primary;
+	gboolean		 time_is_accurate;
 
 	guint			 low_percentage;
 	guint			 critical_percentage;
@@ -63,6 +64,21 @@ struct GpmWarningsPrivate
 G_DEFINE_TYPE (GpmWarnings, gpm_warnings, G_TYPE_OBJECT)
 
 static gpointer gpm_warnings_object = NULL;
+
+/**
+ * gpm_warnings_time_is_accurate:
+ * @warnings: This class instance
+ * @time_accurate: If the time remaining is accurate, and should be used for a policy action
+ *
+ * Return value: %TRUE if set
+ **/
+void
+gpm_warnings_time_is_accurate (GpmWarnings *warnings, gboolean time_accurate)
+{
+	g_return_if_fail (GPM_IS_WARNINGS (warnings));
+	egg_debug ("time accurate is %i", time_accurate);
+	warnings->priv->time_is_accurate = time_accurate;
+}
 
 static GpmWarningsState
 gpm_warnings_get_state_csr (GpmWarnings  *warnings,
@@ -150,15 +166,13 @@ gpm_warnings_get_state (GpmWarnings  *warnings,
 
 		type = gpm_warnings_get_state_percentage (warnings, unit);
 
-	} else if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY &&
-		   warnings->priv->use_time_primary) {
-
-		type = gpm_warnings_get_state_time (warnings, unit);
-
-	} else if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY &&
-		   warnings->priv->use_time_primary == FALSE) {
-
-		type = gpm_warnings_get_state_percentage (warnings, unit);
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+		/* only use the time when it is accurate, and GConf is not disabled */
+		if (warnings->priv->time_is_accurate &&
+		    warnings->priv->use_time_primary)
+			type = gpm_warnings_get_state_time (warnings, unit);
+		else
+			type = gpm_warnings_get_state_percentage (warnings, unit);
 	}
 
 	/* If we have no important warningss, we should test for discharging */
@@ -228,6 +242,7 @@ gpm_warnings_init (GpmWarnings *warnings)
 {
 	warnings->priv = GPM_WARNINGS_GET_PRIVATE (warnings);
 
+	warnings->priv->time_is_accurate = TRUE;
 	warnings->priv->conf = gpm_conf_new ();
 	g_signal_connect (warnings->priv->conf, "value-changed",
 			  G_CALLBACK (gconf_key_changed_cb), warnings);

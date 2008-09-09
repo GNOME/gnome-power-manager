@@ -1,5 +1,19 @@
 2008-09-09  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-cell-array.c: (gpm_cell_array_emit_system_action),
+	(gpm_cell_array_percent_changed):
+	* src/gpm-warnings.c: (gpm_warnings_time_is_accurate),
+	(gpm_warnings_get_state), (gpm_warnings_init):
+	* src/gpm-warnings.h:
+	Only use the time for policy decisions when it is accurate, and GConf
+	is not disabled.
+	The bug is that critical battery actions are blocked while GPM doesn't
+	have a good profile for the battery.
+	This means that the first time you try on a new system, it fails.
+	Based on a patch from Joakim Andersson, many thanks.
+
+2008-09-09  Richard Hughes  <richard@hughsie.com>
+
 	* data/icons/Makefile.am:
 	Use pkgdatadir rather than datadir for generating the icon cache.
 	Patch from Ted Gould <ted@ubuntu.com>, many thanks.
