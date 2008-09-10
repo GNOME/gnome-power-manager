@@ -553,7 +553,7 @@ gpm_cell_array_percent_changed (GpmCellArray *cell_array)
 	/* do we trust the profile enough to make a decision based on time? */
 	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
 		accuracy = gpm_profile_get_accuracy_average (cell_array->priv->profile, unit->is_discharging);
-		gpm_warnings_time_is_accurate (warning, (accuracy > GPM_PROFILE_GOOD_TRUST));
+		gpm_warnings_time_is_accurate (cell_array->priv->warnings, (accuracy > GPM_PROFILE_GOOD_TRUST));
 	}
 
 	/* only get a warning state if we are discharging */
