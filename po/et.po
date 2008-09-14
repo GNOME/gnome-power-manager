@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Gnome Power Manager HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-31 20:19+0000\n"
-"PO-Revision-Date: 2008-09-02 08:09+0300\n"
+"PO-Revision-Date: 2008-09-13 12:20+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -253,9 +253,8 @@ msgid ""
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:20
-#, fuzzy
 msgid "If preferences should be shown"
-msgstr "Kas helisid peab kasutama"
+msgstr "Kas eelistusi tuleb näidata"
 
 #: ../data/gnome-power-manager.schemas.in.h:21
 msgid "If sounds should be used"
@@ -337,20 +336,20 @@ msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on AC power."
 msgstr ""
+"Kas võrgutoite korral peab voolu säästmise eesmärgil ekraani heledust muutma."
 
 #: ../data/gnome-power-manager.schemas.in.h:36
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on battery power."
 msgstr ""
+"Kas akutoite korral peab voolu säästmise eesmärgil ekraani heledust muutma."
 
 #: ../data/gnome-power-manager.schemas.in.h:37
-#, fuzzy
 msgid ""
 "If the screen should be reduced in brightness when the computer is on "
 "battery power."
-msgstr ""
-"Kas süsteemne madala täituvuse režiim peab akutoite korral olema lubatud"
+msgstr "Kas akutoite korral tuleb ekraani heledust vähendada."
 
 #: ../data/gnome-power-manager.schemas.in.h:38
 msgid "If the system low-power mode should be enabled when on AC power."
@@ -434,9 +433,8 @@ msgid "LCD brightness when on AC"
 msgstr "LCD heledus võrgutoite korral"
 
 #: ../data/gnome-power-manager.schemas.in.h:54
-#, fuzzy
 msgid "LCD dimming amount when on battery"
-msgstr "LCD heledus akutoite korral"
+msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:55
 msgid "Laptop lid close action on battery"
@@ -511,9 +509,8 @@ msgid "Power button action"
 msgstr "Voolunupu tegevus"
 
 #: ../data/gnome-power-manager.schemas.in.h:73
-#, fuzzy
 msgid "Reduce the backlight brightness when on battery power"
-msgstr "Klaviatuuri heledus akutoite korral"
+msgstr "Taustavalguse heleduse vähendamine akutoite korral"
 
 #: ../data/gnome-power-manager.schemas.in.h:74
 msgid "Sleep timeout computer when on AC"
@@ -649,7 +646,6 @@ msgid "The amount the light sensors should contribute to the brightness."
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:96
-#, fuzzy
 msgid ""
 "The amount to dim the brightness of the display when on battery power. "
 "Possible values are between 0 and 100."
@@ -1088,9 +1084,8 @@ msgid "_Only display an icon when battery power is critically low"
 msgstr "_Kuvatakse ainult juhul, kui aku täituvus on alla kriitilise piiri"
 
 #: ../data/gpm-prefs.glade.h:30
-#, fuzzy
 msgid "_Reduce backlight brightness"
-msgstr "Taustavalguse heleduse sättimise lubamine"
+msgstr ""
 
 #: ../src/gpm-control.c:282
 msgid "The message was not sent due to DBUS security rules"
@@ -1493,14 +1488,12 @@ msgid "GNOME Power Manager"
 msgstr "GNOME vooluhaldur"
 
 #: ../src/gpm-manager.c:183
-#, fuzzy
 msgid "Request to suspend"
-msgstr "Ekraani lukustamine passiivse oleku korral"
+msgstr ""
 
 #: ../src/gpm-manager.c:186
-#, fuzzy
 msgid "Request to hibernate"
-msgstr "Ekraani lukustamine hiberneerimisel"
+msgstr ""
 
 #: ../src/gpm-manager.c:189
 msgid "Request to do policy action"
@@ -1584,9 +1577,8 @@ msgid "The power button has been pressed."
 msgstr "Vajutati voolunuppu."
 
 #: ../src/gpm-manager.c:873
-#, fuzzy
 msgid "The suspend button has been pressed."
-msgstr "vajutati voolunuppu"
+msgstr ""
 
 #: ../src/gpm-manager.c:885
 msgid "The hibernate button has been pressed."
@@ -1611,9 +1603,8 @@ msgid "Battery is critically low."
 msgstr "Aku on kriitiliselt tühi."
 
 #: ../src/gpm-manager.c:1144 ../src/gpm-manager.c:1159
-#, fuzzy
 msgid "User clicked on tray"
-msgstr "kasutaja valis salveikooni menüüst hiberneerimise"
+msgstr "Kasutaja klõpsas salveikoonil"
 
 #: ../src/gpm-manager.c:1369
 msgid "Laptop battery low"
@@ -1895,23 +1886,23 @@ msgid "Visit quirk website"
 msgstr ""
 
 #: ../src/gpm-cell-array.c:1014
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s fully charged (%.1f%%)\n"
 "Provides %s battery runtime\n"
 msgstr ""
-"%s on täis laetud (%i%%)\n"
+"%s on täis laetud (%.1f%%)\n"
 "Aku suudab nüüd toita %s\n"
 
 #: ../src/gpm-cell-array.c:1018
-#, fuzzy, c-format
+#, c-format
 msgid "%s fully charged (%.1f%%)\n"
-msgstr "%s on täis laetud (%i%%)\n"
+msgstr "%s on täis laetud (%.1f%%)\n"
 
 #: ../src/gpm-cell-array.c:1026
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s remaining (%.1f%%)\n"
-msgstr "%s %s lõpuni (%i%%)\n"
+msgstr "%s %s lõpuni (%.1f%%)\n"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-cell-array.c:1031
@@ -2051,19 +2042,19 @@ msgid "<b>Capacity:</b> %i%% (%s)\n"
 msgstr "<b>Mahtuvus:</b> %i%% (%s)\n"
 
 #: ../src/gpm-cell.c:616
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Current charge:</b> %.1f Wh\n"
-msgstr "<b>Viimane täislaadimine:</b> %.1f %s\n"
+msgstr "<b>Praegune täituvus:</b> %.1f Wh\n"
 
 #: ../src/gpm-cell.c:621
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Last full charge:</b> %.1f Wh\n"
-msgstr "<b>Viimane täislaadimine:</b> %.1f %s\n"
+msgstr "<b>Viimane täislaadimine:</b> %.1f Wh\n"
 
 #: ../src/gpm-cell.c:625
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Design charge:</b> %.1f Wh\n"
-msgstr "<b>Viimane täislaadimine:</b> %.1f %s\n"
+msgstr "<b>Tehasetäituvus:</b> %.1f Wh\n"
 
 #: ../src/gpm-cell.c:629
 #, fuzzy, c-format
