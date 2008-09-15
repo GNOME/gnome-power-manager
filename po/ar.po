@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-18 15:04+0100\n"
+"POT-Creation-Date: 2008-09-15 10:40+0100\n"
 "PO-Revision-Date: 2008-05-26 15:22+0300\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -1006,8 +1006,8 @@ msgstr "نوع الرسم البياني:"
 msgid "Power History"
 msgstr "تأريخ الطاقة"
 
-#: ../data/gpm-graph.glade.h:5 ../src/gpm-info.c:296 ../src/gpm-info.c:305
-#: ../src/gpm-info.c:314 ../src/gpm-info.c:323
+#: ../data/gpm-graph.glade.h:5 ../src/gpm-info.c:297 ../src/gpm-info.c:306
+#: ../src/gpm-info.c:315 ../src/gpm-info.c:324
 msgid "Time since startup"
 msgstr "الوقت منذ البداية"
 
@@ -1167,11 +1167,11 @@ msgstr "لم ترسَل الرسالة بسبب قواعد أمن DBUS"
 msgid "General failure"
 msgstr "فشل عام"
 
-#: ../src/gpm-common.c:240
+#: ../src/gpm-common.c:210
 msgid "Unknown time"
 msgstr "وقت غير معروف"
 
-#: ../src/gpm-common.c:245
+#: ../src/gpm-common.c:215
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
@@ -1182,7 +1182,7 @@ msgstr[3] "%Ii دقائق"
 msgstr[4] "%Ii دقيقة"
 msgstr[5] "%Ii دقيقة"
 
-#: ../src/gpm-common.c:256
+#: ../src/gpm-common.c:226
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -1195,12 +1195,12 @@ msgstr[5] "%Ii ساعة"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:262
+#: ../src/gpm-common.c:232
 #, c-format
 msgid "%i %s %i %s"
 msgstr "%Ii %s %Ii %s"
 
-#: ../src/gpm-common.c:263
+#: ../src/gpm-common.c:233
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "ساعة"
@@ -1210,7 +1210,7 @@ msgstr[3] "ساعات"
 msgstr[4] "ساعة"
 msgstr[5] "ساعة"
 
-#: ../src/gpm-common.c:264
+#: ../src/gpm-common.c:234
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "دقيقة"
@@ -1259,239 +1259,239 @@ msgid "Unable to get data..."
 msgstr "تعذر الحصول على البيانات..."
 
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:485
+#: ../src/gpm-graph-widget.c:486
 #, c-format
 msgid "%ih"
 msgstr "%Iiه"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:488
+#: ../src/gpm-graph-widget.c:489
 #, c-format
 msgid "%ih%02i"
 msgstr "%Iiه%I02i"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:493
+#: ../src/gpm-graph-widget.c:494
 #, c-format
 msgid "%2im"
 msgstr "%I2iد"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:496
+#: ../src/gpm-graph-widget.c:497
 #, c-format
 msgid "%2im%02i"
 msgstr "%I2iد%02i"
 
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:500
+#: ../src/gpm-graph-widget.c:501
 #, c-format
 msgid "%2is"
 msgstr "%I2iث"
 
 #. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:504
+#: ../src/gpm-graph-widget.c:505
 #, c-format
 msgid "%i%%"
 msgstr "%Ii%%"
 
 #. Translators: This is %.1f Watts
-#: ../src/gpm-graph-widget.c:507
+#: ../src/gpm-graph-widget.c:508
 #, c-format
 msgid "%.1fW"
 msgstr "%I.1fو"
 
 #. Translators: This is %.1f Volts
-#: ../src/gpm-graph-widget.c:510
+#: ../src/gpm-graph-widget.c:511
 #, c-format
 msgid "%.1fV"
 msgstr "%I.1fف"
 
-#: ../src/gpm-info.c:122
+#: ../src/gpm-info.c:123
 #, c-format
 msgid "Reason: %s"
 msgstr "السبب: %s"
 
-#: ../src/gpm-info.c:202
+#: ../src/gpm-info.c:203
 msgid "On AC"
 msgstr "على التيار"
 
-#: ../src/gpm-info.c:206
+#: ../src/gpm-info.c:207
 msgid "On battery"
 msgstr "على البطارية"
 
-#: ../src/gpm-info.c:210
+#: ../src/gpm-info.c:211
 msgid "Session powersave"
 msgstr "الجلسة في جفظ الطاقة"
 
-#: ../src/gpm-info.c:214
+#: ../src/gpm-info.c:215
 msgid "Session idle"
 msgstr "الجلسة خاملة"
 
-#: ../src/gpm-info.c:218
+#: ../src/gpm-info.c:219
 msgid "Session active"
 msgstr "الجلسة نشطة"
 
 #. Translators: translate ONLY the string part after the |
-#: ../src/gpm-info.c:223
+#: ../src/gpm-info.c:224
 msgid "label shown on graph|Suspend"
 msgstr "تعليق"
 
 #. Translators: translate ONLY the string part after the |
-#: ../src/gpm-info.c:228
+#: ../src/gpm-info.c:229
 msgid "label shown on graph|Resume"
 msgstr "استئناف"
 
 #. Translators: translate ONLY the string part after the |
-#: ../src/gpm-info.c:233
+#: ../src/gpm-info.c:234
 msgid "label shown on graph|Hibernate"
 msgstr "إسبت"
 
-#: ../src/gpm-info.c:237
+#: ../src/gpm-info.c:238
 msgid "Lid closed"
 msgstr "الغطاء مغلق"
 
-#: ../src/gpm-info.c:241
+#: ../src/gpm-info.c:242
 msgid "Lid opened"
 msgstr "الغطاء مفتوح"
 
-#: ../src/gpm-info.c:245
+#: ../src/gpm-info.c:246
 msgid "Notification"
 msgstr "إشعار"
 
-#: ../src/gpm-info.c:250
+#: ../src/gpm-info.c:251
 msgid "DPMS On"
 msgstr "DPMS مشغلة"
 
-#: ../src/gpm-info.c:254
+#: ../src/gpm-info.c:255
 msgid "DPMS Standby"
 msgstr "DPMS مستعدة"
 
-#: ../src/gpm-info.c:258
+#: ../src/gpm-info.c:259
 msgid "DPMS Suspend"
 msgstr "DPMS معلقة"
 
-#: ../src/gpm-info.c:262
+#: ../src/gpm-info.c:263
 msgid "DPMS Off"
 msgstr "DPMS مطفأة"
 
-#: ../src/gpm-info.c:297 ../src/gpm-info.c:298
+#: ../src/gpm-info.c:298 ../src/gpm-info.c:299
 msgid "Power"
 msgstr "الطاقة"
 
-#: ../src/gpm-info.c:306
+#: ../src/gpm-info.c:307
 msgid "Estimated time"
 msgstr "الزمن المقدر"
 
-#: ../src/gpm-info.c:307
+#: ../src/gpm-info.c:308
 msgid "Time"
 msgstr "الوقت"
 
-#: ../src/gpm-info.c:315 ../src/gpm-info.c:332 ../src/gpm-info.c:341
-#: ../src/gpm-info.c:350 ../src/gpm-info.c:368
+#: ../src/gpm-info.c:316 ../src/gpm-info.c:333 ../src/gpm-info.c:342
+#: ../src/gpm-info.c:351 ../src/gpm-info.c:369
 msgid "Battery percentage"
 msgstr "نسبة الشحن"
 
-#: ../src/gpm-info.c:316
+#: ../src/gpm-info.c:317
 msgid "Percentage"
 msgstr "النسبة المئوية"
 
-#: ../src/gpm-info.c:324
+#: ../src/gpm-info.c:325
 msgid "Battery Voltage"
 msgstr "فلطية البطارية"
 
-#: ../src/gpm-info.c:325
+#: ../src/gpm-info.c:326
 msgid "Voltage"
 msgstr "الفلطية"
 
-#: ../src/gpm-info.c:333 ../src/gpm-info.c:342
+#: ../src/gpm-info.c:334 ../src/gpm-info.c:343
 msgid "Accuracy of reading"
 msgstr "دقة القراءة"
 
-#: ../src/gpm-info.c:334 ../src/gpm-info.c:343
+#: ../src/gpm-info.c:335 ../src/gpm-info.c:344
 msgid "Trusted"
 msgstr ""
 
-#: ../src/gpm-info.c:335 ../src/gpm-info.c:344
+#: ../src/gpm-info.c:336 ../src/gpm-info.c:345
 msgid "Untrusted"
 msgstr ""
 
-#: ../src/gpm-info.c:351 ../src/gpm-info.c:369
+#: ../src/gpm-info.c:352 ../src/gpm-info.c:370
 msgid "Average time elapsed"
 msgstr "متوسط الوقت المنقضي"
 
-#: ../src/gpm-info.c:352 ../src/gpm-info.c:370
+#: ../src/gpm-info.c:353 ../src/gpm-info.c:371
 msgid "Valid data"
 msgstr "بيانات صالحة"
 
-#: ../src/gpm-info.c:353 ../src/gpm-info.c:371
+#: ../src/gpm-info.c:354 ../src/gpm-info.c:372
 msgid "Extrapolated data"
 msgstr "البيانات المستنبطة"
 
-#: ../src/gpm-info.c:354 ../src/gpm-info.c:372
+#: ../src/gpm-info.c:355 ../src/gpm-info.c:373
 msgid "No data"
 msgstr "لا بيانات"
 
-#: ../src/gpm-info.c:358 ../src/gpm-info.c:376
+#: ../src/gpm-info.c:359 ../src/gpm-info.c:377
 msgid "Start point"
 msgstr "نقطة البدء"
 
-#: ../src/gpm-info.c:362 ../src/gpm-info.c:380
+#: ../src/gpm-info.c:363 ../src/gpm-info.c:381
 msgid "Stop point"
 msgstr "نقطة التوقف"
 
-#: ../src/gpm-info.c:660
+#: ../src/gpm-info.c:661
 msgid "AC adapter inserted"
 msgstr "وُضِع مقبس الطاقة"
 
-#: ../src/gpm-info.c:663
+#: ../src/gpm-info.c:664
 msgid "AC adapter removed"
 msgstr "نُزِع مقبس الطاقة"
 
-#: ../src/gpm-info.c:683
+#: ../src/gpm-info.c:684
 msgid "The laptop lid has been closed"
 msgstr "أُغلق غطاء الحاسوب المحمول"
 
-#: ../src/gpm-info.c:689
+#: ../src/gpm-info.c:690
 msgid "The laptop lid has been re-opened"
 msgstr "أُعيد فتح غطاء الحاسوب المحمول"
 
-#: ../src/gpm-info.c:711
+#: ../src/gpm-info.c:712
 msgid "idle mode ended"
 msgstr "انتهى وضع الخمول"
 
-#: ../src/gpm-info.c:713
+#: ../src/gpm-info.c:714
 msgid "idle mode started"
 msgstr "بدأ وضع الخمول"
 
-#: ../src/gpm-info.c:715
+#: ../src/gpm-info.c:716
 msgid "powersave mode started"
 msgstr "بدأ وضع حفظ الطاقة"
 
-#: ../src/gpm-info.c:734
+#: ../src/gpm-info.c:735
 msgid "dpms on"
 msgstr "dpms تعمل"
 
-#: ../src/gpm-info.c:736
+#: ../src/gpm-info.c:737
 msgid "dpms standby"
 msgstr "dpms مستعدة"
 
-#: ../src/gpm-info.c:738
+#: ../src/gpm-info.c:739
 msgid "dpms suspend"
 msgstr "dpms تعليق"
 
-#: ../src/gpm-info.c:740
+#: ../src/gpm-info.c:741
 msgid "dpms off"
 msgstr "dpms لاتعمل"
 
-#: ../src/gpm-info.c:757
+#: ../src/gpm-info.c:758
 msgid "Resuming computer"
 msgstr "استئناف الحاسوب"
 
-#: ../src/gpm-info.c:773
+#: ../src/gpm-info.c:774
 msgid "Hibernate Problem"
 msgstr "مشكلة في الإسبات"
 
-#: ../src/gpm-info.c:775
+#: ../src/gpm-info.c:776
 msgid "Suspend Problem"
 msgstr "مشكلة في تعليق"
 
@@ -1551,27 +1551,27 @@ msgstr "تطبيقات عديدة منعت إعادة الإقلاع من الح
 msgid "Multiple applications have stopped the shutdown from taking place."
 msgstr "تطبيقات عديدة منعت إيقاف التشغيل من الحدوث."
 
-#: ../src/gpm-main.c:151
+#: ../src/gpm-main.c:150
 msgid "Do not daemonize"
 msgstr "لا تجعله جنيا"
 
-#: ../src/gpm-main.c:153 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:91
+#: ../src/gpm-main.c:152 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:91
 msgid "Show extra debugging information"
 msgstr "اعرض معلومات تنقيح أكثر"
 
-#: ../src/gpm-main.c:155
+#: ../src/gpm-main.c:154
 msgid "Show version of installed program and exit"
 msgstr "أظهر رقم إصدارة البرنامج ثم اخرج"
 
-#: ../src/gpm-main.c:157
+#: ../src/gpm-main.c:156
 msgid "Exit after a small delay (for debugging)"
 msgstr "اخرج بعد تأخير قليل (للتنقيح)"
 
-#: ../src/gpm-main.c:159
+#: ../src/gpm-main.c:158
 msgid "Exit after the manager has loaded (for debugging)"
 msgstr "اخرج بعد تحميل المدير (للتنقيح)"
 
-#: ../src/gpm-main.c:163
+#: ../src/gpm-main.c:162
 msgid "GNOME Power Manager"
 msgstr "مدير طاقة جنوم"
 
@@ -1986,7 +1986,7 @@ msgstr ""
 msgid "Visit quirk website"
 msgstr "زُر موقع quirk"
 
-#: ../src/gpm-cell-array.c:1014
+#: ../src/gpm-cell-array.c:1013
 #, fuzzy, c-format
 msgid ""
 "%s fully charged (%.1f%%)\n"
@@ -1995,23 +1995,23 @@ msgstr ""
 "%s مشحونة بالكامل (%Ii%%)\n"
 "يعطي %s من تشغيل البطارية\n"
 
-#: ../src/gpm-cell-array.c:1018
+#: ../src/gpm-cell-array.c:1017
 #, fuzzy, c-format
 msgid "%s fully charged (%.1f%%)\n"
 msgstr "%s مشحونة بالكامل (%Ii%%)\n"
 
-#: ../src/gpm-cell-array.c:1026
+#: ../src/gpm-cell-array.c:1025
 #, fuzzy, c-format
 msgid "%s %s remaining (%.1f%%)\n"
 msgstr "%s باقي %s (%Ii%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:1031
+#: ../src/gpm-cell-array.c:1030
 #, fuzzy, c-format
 msgid "%s discharging (%.1f%%)\n"
 msgstr "%s تُفرّغ (%Ii%%)\n"
 
-#: ../src/gpm-cell-array.c:1043
+#: ../src/gpm-cell-array.c:1042
 #, fuzzy, c-format
 msgid ""
 "%s %s until charged (%.1f%%)\n"
@@ -2020,29 +2020,31 @@ msgstr ""
 "%s %s حتى تشحن (%Ii%%)\n"
 "يعطي %s من تشغيل البطارية\n"
 
-#: ../src/gpm-cell-array.c:1050
+#: ../src/gpm-cell-array.c:1049
 #, fuzzy, c-format
 msgid "%s %s until charged (%.1f%%)\n"
 msgstr "%s %s حتى تشحن (%Ii%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:1055
+#: ../src/gpm-cell-array.c:1054
 #, fuzzy, c-format
 msgid "%s charging (%.1f%%)\n"
 msgstr "%s يجري الشحن (%Ii%%)\n"
 
-#: ../src/gpm-cell-array.c:1062
+#: ../src/gpm-cell-array.c:1061
 msgid "Battery state could not be read at this time\n"
 msgstr "تعذّر قراءة حالة البطارية في هذا الوقت\n"
 
 #: ../src/gpm-cell.c:543
-msgid "Product"
-msgstr ""
+#, c-format
+msgid "<b>Product:</b> %s\n"
+msgstr "<b>المنتَج:</b> %s\n"
 
 #: ../src/gpm-cell.c:546 ../src/gpm-cell.c:548 ../src/gpm-cell.c:550
 #: ../src/gpm-cell.c:552
-msgid "Status"
-msgstr ""
+#, fuzzy, c-format
+msgid "<b>Status:</b> %s\n"
+msgstr "<b>الحالة:</b> مفقود\n"
 
 #: ../src/gpm-cell.c:546
 msgid "Missing"
@@ -2064,95 +2066,114 @@ msgid "Discharging"
 msgstr "يُفرّغ ال UPS"
 
 #: ../src/gpm-cell.c:555
-#, fuzzy
-msgid "Percentage charge"
-msgstr "النسبة المئوية"
+#, fuzzy, c-format
+msgid "<b>Percentage charge:</b> %.1f%%\n"
+msgstr "<b>نسبة الشحن:</b> %Ii%%\n"
 
-#: ../src/gpm-cell.c:559
-msgid "Vendor:"
-msgstr "المُنتِج:"
+#: ../src/gpm-cell.c:558
+#, fuzzy, c-format
+msgid "<b>Vendor:</b> %s\n"
+msgstr "<b>المنتَج:</b> %s\n"
 
-#: ../src/gpm-cell.c:564
+#: ../src/gpm-cell.c:563
 msgid "Lithium ion"
 msgstr "أيونات ليثيوم"
 
-#: ../src/gpm-cell.c:566
+#: ../src/gpm-cell.c:565
 msgid "Lead acid"
 msgstr "حامض الرصاص"
 
-#: ../src/gpm-cell.c:568
+#: ../src/gpm-cell.c:567
 msgid "Lithium polymer"
 msgstr "بوليمرات ليثيوم"
 
-#: ../src/gpm-cell.c:570
+#: ../src/gpm-cell.c:569
 msgid "Nickel metal hydride"
 msgstr "هيدريد فلز النيكل"
 
-#: ../src/gpm-cell.c:577
-#, fuzzy
-msgid "Technology"
-msgstr "التقنية:"
+#. Translators: Unknown is related to the Technology of the battery
+#: ../src/gpm-cell.c:572 ../src/gpm-cell-unit.c:260 ../src/gpm-cell-unit.c:276
+#: ../src/gpm-statistics-core.c:739
+msgid "Unknown"
+msgstr "مجهول"
+
+#: ../src/gpm-cell.c:578
+#, fuzzy, c-format
+msgid "<b>Technology:</b> %s\n"
+msgstr "<b>المنتَج:</b> %s\n"
 
 #: ../src/gpm-cell.c:581
-#, fuzzy
-msgid "Serial number"
+#, fuzzy, c-format
+msgid "<b>Serial number:</b> %s\n"
 msgstr "الرقم المسلسل:"
 
-#: ../src/gpm-cell.c:585
-#, fuzzy
-msgid "Model"
-msgstr "الطراز:"
+#: ../src/gpm-cell.c:584
+#, fuzzy, c-format
+msgid "<b>Model:</b> %s\n"
+msgstr "<b>المنتَج:</b> %s\n"
 
-#: ../src/gpm-cell.c:591
-#, fuzzy
-msgid "Charge time"
-msgstr "وقت الشحن:"
+#: ../src/gpm-cell.c:589
+#, fuzzy, c-format
+msgid "<b>Charge time:</b> %s\n"
+msgstr "<b>المنتَج:</b> %s\n"
 
-#: ../src/gpm-cell.c:598
-#, fuzzy
-msgid "Discharge time"
+#: ../src/gpm-cell.c:595
+#, fuzzy, c-format
+msgid "<b>Discharge time:</b> %s\n"
 msgstr "وقت التفريغ:"
 
-#: ../src/gpm-cell.c:604
+#. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
+#: ../src/gpm-cell.c:602
 msgid "Excellent"
 msgstr "ممتاز"
 
-#: ../src/gpm-cell.c:606
+#: ../src/gpm-cell.c:604
 msgid "Good"
 msgstr "جيّد"
 
-#: ../src/gpm-cell.c:608
+#: ../src/gpm-cell.c:606
 msgid "Fair"
 msgstr "معقول"
 
-#: ../src/gpm-cell.c:610
+#: ../src/gpm-cell.c:608
 msgid "Poor"
 msgstr "فقير"
 
-#: ../src/gpm-cell.c:613
-#, fuzzy
-msgid "Capacity"
-msgstr "السعة:"
+#. Translators: %i is a percentage and %s the condition (Excellent, Good, ...)
+#: ../src/gpm-cell.c:611
+#, fuzzy, c-format
+msgid "<b>Capacity:</b> %i%% (%s)\n"
+msgstr "<b>المنتَج:</b> %s\n"
 
-#: ../src/gpm-cell.c:619 ../src/gpm-cell.c:642
-#, fuzzy
-msgid "Current charge"
-msgstr "الشحنة الحالية:"
+#: ../src/gpm-cell.c:616
+#, fuzzy, c-format
+msgid "<b>Current charge:</b> %.1f Wh\n"
+msgstr "<b>نسبة الشحن:</b> %Ii%%\n"
 
-#: ../src/gpm-cell.c:625
-#, fuzzy
-msgid "Last full charge"
+#: ../src/gpm-cell.c:621
+#, fuzzy, c-format
+msgid "<b>Last full charge:</b> %.1f Wh\n"
 msgstr "آخر شحنة كاملة:"
 
-#: ../src/gpm-cell.c:630 ../src/gpm-cell.c:647
-#, fuzzy
-msgid "Design charge"
-msgstr "شحنة التصميم:"
+#: ../src/gpm-cell.c:625
+#, fuzzy, c-format
+msgid "<b>Design charge:</b> %.1f Wh\n"
+msgstr "<b>نسبة الشحن:</b> %Ii%%\n"
+
+#: ../src/gpm-cell.c:629
+#, c-format
+msgid "<b>Charge rate:</b> %.1f W\n"
+msgstr ""
 
 #: ../src/gpm-cell.c:635
-#, fuzzy
-msgid "Charge rate"
-msgstr "معدل الشحن:"
+#, fuzzy, c-format
+msgid "<b>Current charge:</b> %i/7\n"
+msgstr "<b>نسبة الشحن:</b> %Ii%%\n"
+
+#: ../src/gpm-cell.c:639
+#, fuzzy, c-format
+msgid "<b>Design charge:</b> %i/7\n"
+msgstr "<b>نسبة الشحن:</b> %Ii%%\n"
 
 #: ../src/gpm-cell-unit.c:248
 msgid "Laptop batteries"
@@ -2177,11 +2198,6 @@ msgstr "مساعد رقمي"
 #: ../src/gpm-cell-unit.c:258
 msgid "Cell phones"
 msgstr "هواتف محمولة"
-
-#: ../src/gpm-cell-unit.c:260 ../src/gpm-cell-unit.c:276
-#: ../src/gpm-statistics-core.c:739
-msgid "Unknown"
-msgstr "مجهول"
 
 #: ../src/gpm-cell-unit.c:264
 msgid "Laptop battery"
@@ -2345,6 +2361,41 @@ msgstr "_علّق"
 msgid "Hi_bernate"
 msgstr "أ_سبِت"
 
+#, fuzzy
+#~ msgid "Percentage charge"
+#~ msgstr "النسبة المئوية"
+
+#~ msgid "Vendor:"
+#~ msgstr "المُنتِج:"
+
+#, fuzzy
+#~ msgid "Technology"
+#~ msgstr "التقنية:"
+
+#, fuzzy
+#~ msgid "Model"
+#~ msgstr "الطراز:"
+
+#, fuzzy
+#~ msgid "Charge time"
+#~ msgstr "وقت الشحن:"
+
+#, fuzzy
+#~ msgid "Capacity"
+#~ msgstr "السعة:"
+
+#, fuzzy
+#~ msgid "Current charge"
+#~ msgstr "الشحنة الحالية:"
+
+#, fuzzy
+#~ msgid "Design charge"
+#~ msgstr "شحنة التصميم:"
+
+#, fuzzy
+#~ msgid "Charge rate"
+#~ msgstr "معدل الشحن:"
+
 #~ msgid ""
 #~ "The device name for the v4l device used as a brightness sensor backup"
 #~ msgstr "اسم جهاز ال v4l المستخدم كمستشعر ضوئي احتياطي"
@@ -2361,12 +2412,6 @@ msgstr "أ_سبِت"
 #~ "Policy timeout is not valid. Please wait a few seconds and try again."
 #~ msgstr "وقت انتهاء السياسة غير صالح. انتظر بضع ثوان رجاءً ثمّ حاول ثانية."
 
-#~ msgid "<b>Product:</b> %s\n"
-#~ msgstr "<b>المنتَج:</b> %s\n"
-
-#~ msgid "<b>Status:</b> Missing\n"
-#~ msgstr "<b>الحالة:</b> مفقود\n"
-
 #~ msgid "<b>Status:</b> Charged\n"
 #~ msgstr "<b>الحالة:</b> مشحونة\n"
 
@@ -2375,9 +2420,6 @@ msgstr "أ_سبِت"
 
 #~ msgid "<b>Status:</b> Discharging\n"
 #~ msgstr "<b>الحالة:</b> تفرّغ\n"
-
-#~ msgid "<b>Percentage charge:</b> %i%%\n"
-#~ msgstr "<b>نسبة الشحن:</b> %Ii%%\n"
 
 #~ msgid "If we should show the CPU frequency scaling in the UI"
 #~ msgstr "اذا توجب اظهار مقايسة تردد المعالج في واجهة المستخدم "
