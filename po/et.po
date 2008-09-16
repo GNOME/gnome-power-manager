@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Gnome Power Manager HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-31 20:19+0000\n"
-"PO-Revision-Date: 2008-09-13 12:20+0300\n"
+"PO-Revision-Date: 2008-09-14 15:09+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -187,11 +187,11 @@ msgstr "Enne puhkerežiimi siirdumist kontrollitakse protsessori koormust"
 
 #: ../data/gnome-power-manager.schemas.in.h:7
 msgid "Dim the screen after a period of inactivity when on AC power"
-msgstr ""
+msgstr "Ekraani tuhmistamine teatud jõudeaja järel, kui ollakse võrgutoitel"
 
 #: ../data/gnome-power-manager.schemas.in.h:8
 msgid "Dim the screen after a period of inactivity when on battery power"
-msgstr ""
+msgstr "Ekraani tuhmistamine teatud jõudeaja järel, kui ollakse akutoitel"
 
 #: ../data/gnome-power-manager.schemas.in.h:9
 msgid ""
@@ -336,14 +336,16 @@ msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on AC power."
 msgstr ""
-"Kas võrgutoite korral peab voolu säästmise eesmärgil ekraani heledust muutma."
+"Kas võrgutoite korral peab voolu säästmise eesmärgil ekraani tuhmistama või "
+"mitte."
 
 #: ../data/gnome-power-manager.schemas.in.h:36
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on battery power."
 msgstr ""
-"Kas akutoite korral peab voolu säästmise eesmärgil ekraani heledust muutma."
+"Kas akutoite korral peab voolu säästmise eesmärgil ekraani tuhmistama või "
+"mitte."
 
 #: ../data/gnome-power-manager.schemas.in.h:37
 msgid ""
@@ -434,7 +436,7 @@ msgstr "LCD heledus võrgutoite korral"
 
 #: ../data/gnome-power-manager.schemas.in.h:54
 msgid "LCD dimming amount when on battery"
-msgstr ""
+msgstr "Ekraani tuhmistamise aste akutoite korral"
 
 #: ../data/gnome-power-manager.schemas.in.h:55
 msgid "Laptop lid close action on battery"
@@ -650,8 +652,8 @@ msgid ""
 "The amount to dim the brightness of the display when on battery power. "
 "Possible values are between 0 and 100."
 msgstr ""
-"Kuva heledusaste akutoite korral. Võimalikud väärtused on arvud nullist "
-"sajani."
+"Akutoite korral kuva tuhmistamiseks kasutatav heledusaste. Võimalikud "
+"väärtused on arvud nullist sajani."
 
 #: ../data/gnome-power-manager.schemas.in.h:97
 msgid ""
@@ -694,11 +696,12 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:103
 msgid "The default amount of time to dim the screen after idle"
-msgstr ""
+msgstr "Ekraani tuhmistamiseks vajalik jõudeoleku vaikimisi aeg"
 
 #: ../data/gnome-power-manager.schemas.in.h:104
 msgid "The default amount of time to dim the screen after idle."
 msgstr ""
+"Vaikimisi aeg, kui kaua peab arvuti ekraani tuhmistamiseks jõude olema."
 
 #: ../data/gnome-power-manager.schemas.in.h:105
 msgid "The default configuration version."
@@ -1629,9 +1632,9 @@ msgid "Mouse battery low"
 msgstr "Hiire patarei on peaaegu tühi"
 
 #: ../src/gpm-manager.c:1380
-#, fuzzy, c-format
+#, c-format
 msgid "The wireless mouse attached to this computer is low in power (%.1f%%)"
-msgstr "Arvuti külge ühendatud mobiiltelefoni aku on peaaegu tühi (%d%%)"
+msgstr "Arvuti külge ühendatud juhtmeta hiire aku on peaaegu tühi (%.1f%%)"
 
 #: ../src/gpm-manager.c:1382 ../src/gpm-manager.c:1484
 msgid "Keyboard battery low"
@@ -2253,194 +2256,3 @@ msgstr "_Peata"
 #: ../src/gpm-tray-icon.c:587
 msgid "Hi_bernate"
 msgstr "_Talveuni"
-
-#~ msgid "The cpufreq performance value to use when on AC power"
-#~ msgstr "Cpufreq jõudluse väärtus võrgutoite korral kasutamiseks"
-
-#~ msgid "The cpufreq performance value to use when on battery power"
-#~ msgstr "Cpufreq jõudluse väärtus akutoite korral kasutamiseks"
-
-#~ msgid ""
-#~ "The cpufreq performance value used to scale the processor when on AC "
-#~ "power."
-#~ msgstr ""
-#~ "Võrgutoite korral protsessori skaleerimiseks kasutatav cpufreq jõudluse "
-#~ "väärtus."
-
-#~ msgid ""
-#~ "The cpufreq performance value used to scale the processor when on battery "
-#~ "power."
-#~ msgstr ""
-#~ "Akutoite korral protsessori skaleerimiseks kasutatav cpufreq jõudluse "
-#~ "väärtus."
-
-#~ msgid "The cpufreq policy to use when on AC power"
-#~ msgstr "Võrgutoite korral kehtivad cpufreq reeglid"
-
-#~ msgid "The cpufreq policy to use when on battery power"
-#~ msgstr "Akutoite korral kehtivad cpufreq reeglid"
-
-#~ msgid ""
-#~ "The cpufreq policy used to scale the processor when on AC power. Possible "
-#~ "values are ondemand, conservative, powersave, userspace, performance, "
-#~ "nothing."
-#~ msgstr ""
-#~ "Võrgutoite korral protsessori skaleerimiseks kasutatav cpufreq jõudluse "
-#~ "väärtus. Võimalikud väärtused on \"ondemand\", \"conservative\", "
-#~ "\"powersave\", \"userspace\", \"performance\" ja \"nothing\"."
-
-#~ msgid ""
-#~ "The cpufreq policy used to scale the processor when on battery power. "
-#~ "Possible values are ondemand, conservative, powersave, userspace, "
-#~ "performance, nothing."
-#~ msgstr ""
-#~ "Akutoite korral protsessori skaleerimiseks kasutatav cpufreq jõudluse "
-#~ "väärtus. Võimalikud väärtused on \"ondemand\", \"conservative\", "
-#~ "\"powersave\", \"userspace\", \"performance\" ja \"nothing\"."
-
-#~ msgid "%s because %s"
-#~ msgstr "%s kuna %s"
-
-#~ msgid "Inhibit warning!"
-#~ msgstr "Piiranguhoiatus!"
-
-#~ msgid "<b>Status:</b> Charged\n"
-#~ msgstr "<b>Olek:</b> Laetud\n"
-
-#~ msgid "<b>Status:</b> Charging\n"
-#~ msgstr "<b>Olek:</b> Laadimine\n"
-
-#~ msgid "<b>Status:</b> Discharging\n"
-#~ msgstr "<b>Olek:</b> Tühjenemine\n"
-
-#~ msgid "Vendor:"
-#~ msgstr "Tootja:"
-
-#~ msgid "Technology:"
-#~ msgstr "Tehnoloogia:"
-
-#~ msgid "Model:"
-#~ msgstr "Mudel:"
-
-#~ msgid "Capacity:"
-#~ msgstr "Mahtuvus:"
-
-#~ msgid "Current charge:"
-#~ msgstr "Praegune täituvus:"
-
-#~ msgid "Last full charge:"
-#~ msgstr "Viimati täis laetud:"
-
-#~ msgid "Design charge:"
-#~ msgstr "Disainijärgne mahtuvus:"
-
-#~ msgid "Charge rate:"
-#~ msgstr "Täituvusprotsent:"
-
-#~ msgid "Based on processor load"
-#~ msgstr "Põhineb protsessori koormusel"
-
-#~ msgid "Automatic power saving"
-#~ msgstr "Automaatne voolusäästmine"
-
-#~ msgid "Maximum power saving"
-#~ msgstr "Suurim voolusäästmine"
-
-#~ msgid "Always maximum speed"
-#~ msgstr "Alati täiskiirusel"
-
-#~ msgid "Notify on a HAL error"
-#~ msgstr "Teavitamine HAL-i vea korral"
-
-#~ msgid "Percentage considered very low"
-#~ msgstr "Väga madala taseme protsent"
-
-#~ msgid "Device:"
-#~ msgstr "Seade:"
-
-#~ msgid "Time remaining"
-#~ msgstr "Aega jäänud"
-
-#~ msgid "%iW"
-#~ msgstr "%iW"
-
-#~ msgid "%iV"
-#~ msgstr "%iV"
-
-#~ msgid "the DBUS method Suspend() was invoked"
-#~ msgstr "käivitati DBUS-i meetod Suspend()"
-
-#~ msgid "the DBUS method Hibernate() was invoked"
-#~ msgstr "käivitati DBUS-i meetod Hibernate()"
-
-#~ msgid "the DBUS method Shutdown() was invoked"
-#~ msgstr "käivitati DBUS-i meetod Shutdown()"
-
-#~ msgid "Rebooting computer"
-#~ msgstr "Arvuti alglaadimine"
-
-#~ msgid "the DBUS method Reboot() was invoked"
-#~ msgstr "käivitati DBUS-i meetod Reboot()"
-
-#~ msgid "Your system is running on backup power!"
-#~ msgstr "Sinu süsteem töötab varutoitel!"
-
-#~ msgid "Remaining time:"
-#~ msgstr "Aega jäänud:"
-
-#~ msgid "Recalculating information..."
-#~ msgstr "Andmete ümberarvutamine..."
-
-#~ msgid "Power Preferences"
-#~ msgstr "Voolueelistused"
-
-#~ msgid "Check network utilization before sleeping"
-#~ msgstr "Enne puhkerežiimi siirdumist kontrollitakse võrgu koormust"
-
-#~ msgid "<b>Event log</b>"
-#~ msgstr "<b>Sündmustelogi</b>"
-
-#~ msgid "<b>Laptop batteries</b>"
-#~ msgstr "<b>Sülearvuti akud</b>"
-
-#~ msgid "Event Log"
-#~ msgstr "Sündmuste logi"
-
-#~ msgid "Last full: 22022mWh"
-#~ msgstr "Viimane täislaadimine: 22022mWh"
-
-#~ msgid "<b>Brightness</b>"
-#~ msgstr "<b>Heledus</b>"
-
-#~ msgid "Prefer power savings over performance"
-#~ msgstr "Voolusäästmise eelistamine jõudlusele"
-
-#~ msgid "Running on AC"
-#~ msgstr "Võrgutoitelt töötamine"
-
-#~ msgid "Running on Battery"
-#~ msgstr "Akutoitelt töötamine"
-
-#~ msgid "Running on UPS"
-#~ msgstr "UPS'itoitelt töötamine"
-
-#~ msgid "Orientation"
-#~ msgstr "Suund"
-
-#~ msgid "The orientation of the tray."
-#~ msgstr "Salve suund."
-
-#~ msgid "Unknown event!"
-#~ msgstr "Tundmatu sündmus!"
-
-#~ msgid "Event"
-#~ msgstr "Sündmus"
-
-#~ msgid "Description"
-#~ msgstr "Kirjeldus"
-
-#~ msgid "DPMS blanking screen"
-#~ msgstr "DPMS ekraanipuhastus"
-
-#~ msgid "the system state is idle"
-#~ msgstr "süsteem on jõudeolekus"
