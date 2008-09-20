@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Gnome Power Manager HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-31 20:19+0000\n"
-"PO-Revision-Date: 2008-09-14 15:09+0300\n"
+"PO-Revision-Date: 2008-09-18 21:03+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -111,19 +111,19 @@ msgstr "Factory heleduse rakendile"
 
 #: ../applets/inhibit/inhibit-applet.c:89
 msgid "Power Manager Inhibit Applet"
-msgstr ""
+msgstr "Vooluhalduri piirangute rakend"
 
 #: ../applets/inhibit/inhibit-applet.c:90
 msgid "Allows user to inhibit automatic power saving."
-msgstr ""
+msgstr "Voolusäästmisele kasutajapoolsete piirangute seadmine."
 
 #: ../applets/inhibit/inhibit-applet.c:352
 msgid "Automatic sleep inhibited"
-msgstr ""
+msgstr "Automaatne uinumine on keelatud"
 
 #: ../applets/inhibit/inhibit-applet.c:354
 msgid "Automatic sleep enabled"
-msgstr ""
+msgstr "Automaatne uinumine on lubatud"
 
 #: ../applets/inhibit/inhibit-applet.c:382
 msgid "Manual inhibit"
@@ -135,7 +135,7 @@ msgstr "Autoriõigused © 2006-2007 Richard Hughes"
 
 #: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:1
 msgid "Allows user to inhibit automatic power saving"
-msgstr ""
+msgstr "Voolusäästmisele kasutajapoolsete piirangute seadmine"
 
 #: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:2
 msgid "Factory for Inhibit Applet"
@@ -992,7 +992,7 @@ msgstr ""
 
 #: ../data/gpm-prefs.glade.h:6
 msgid "Di_m display when idle"
-msgstr ""
+msgstr "_Jõudeolekus kuva tuhmistatakse"
 
 #: ../data/gpm-prefs.glade.h:7
 msgid "Enable UPS discharge _alarm"
@@ -1036,11 +1036,11 @@ msgstr "A_rvuti viiakse puhkerežiimi kui ollakse tegevuseta:"
 
 #: ../data/gpm-prefs.glade.h:17
 msgid "Set display _brightness to:"
-msgstr "Kuva _heleduse seadmine:"
+msgstr "Kuva _heledustase:"
 
 #: ../data/gpm-prefs.glade.h:18
 msgid "Turn on keyboard light when light level is low"
-msgstr ""
+msgstr "Puuduliku valguse korral lülitatakse klaviatuuri tuled sisse"
 
 #: ../data/gpm-prefs.glade.h:19
 msgid "Use _ambient light to adjust LCD brightness"
@@ -1060,19 +1060,19 @@ msgstr "Kui UPS-itoide on _madal:"
 
 #: ../data/gpm-prefs.glade.h:23
 msgid "When battery po_wer is critically low:"
-msgstr "Kui aku täituvus on k_riitiline:"
+msgstr "Kr_iitiliselt madala akutäituvuse korral:"
 
 #: ../data/gpm-prefs.glade.h:24
 msgid "When laptop lid is cl_osed:"
-msgstr "Kui sülearvuti kaas _suletakse:"
+msgstr "Sülearvuti kaane _sulgemise korral:"
 
 #: ../data/gpm-prefs.glade.h:25
 msgid "When the _suspend button is pressed:"
-msgstr ""
+msgstr "S_eiskamise nupu vajutamise korral:"
 
 #: ../data/gpm-prefs.glade.h:26
 msgid "When the power _button is pressed:"
-msgstr "Kui vajutatakse _voolunuppu:"
+msgstr "_Voolunupu vajutamise korral:"
 
 #: ../data/gpm-prefs.glade.h:27
 msgid "_Always display an icon"
@@ -1088,7 +1088,7 @@ msgstr "_Kuvatakse ainult juhul, kui aku täituvus on alla kriitilise piiri"
 
 #: ../data/gpm-prefs.glade.h:30
 msgid "_Reduce backlight brightness"
-msgstr ""
+msgstr "_Taustavalgustuse heledust vähendatakse"
 
 #: ../src/gpm-control.c:282
 msgid "The message was not sent due to DBUS security rules"
@@ -1154,7 +1154,7 @@ msgstr "Arvuti töötab akutoitel\n"
 
 #: ../src/gpm-engine.c:307
 msgid "Battery discharge time is currently unknown\n"
-msgstr ""
+msgstr "Aku tühjenemise aeg on hetkel teadmata\n"
 
 #: ../src/gpm-engine.c:309
 msgid "Battery charge time is currently unknown\n"
@@ -1162,11 +1162,11 @@ msgstr "Aku laadimise kestus on hetkel teadmata\n"
 
 #: ../src/gpm-engine.c:313
 msgid "Battery discharge time is estimated\n"
-msgstr "Aku tühjenemise kestus on hetkel teadmata\n"
+msgstr "Aku tühjenemise aeg on hinnanguline\n"
 
 #: ../src/gpm-engine.c:315
 msgid "Battery charge time is estimated\n"
-msgstr ""
+msgstr "Aku laadimise aeg on hinnanguline\n"
 
 #. show a AC icon
 #: ../src/gpm-engine.c:610
@@ -1236,15 +1236,15 @@ msgstr "Akutoitel"
 
 #: ../src/gpm-info.c:210
 msgid "Session powersave"
-msgstr ""
+msgstr "Seanss voolusäästul"
 
 #: ../src/gpm-info.c:214
 msgid "Session idle"
-msgstr ""
+msgstr "Seanss jõude"
 
 #: ../src/gpm-info.c:218
 msgid "Session active"
-msgstr ""
+msgstr "Seanss aktiivne"
 
 #. Translators: translate ONLY the string part after the |
 #: ../src/gpm-info.c:223
@@ -1283,7 +1283,7 @@ msgstr "DPMS-ooterežiim"
 
 #: ../src/gpm-info.c:258
 msgid "DPMS Suspend"
-msgstr ""
+msgstr "DPMS-seiskamine"
 
 #: ../src/gpm-info.c:262
 msgid "DPMS Off"
@@ -1291,11 +1291,11 @@ msgstr "DPMS väljas"
 
 #: ../src/gpm-info.c:297 ../src/gpm-info.c:298
 msgid "Power"
-msgstr ""
+msgstr "Toide"
 
 #: ../src/gpm-info.c:306
 msgid "Estimated time"
-msgstr ""
+msgstr "Hinnanguline kestus"
 
 #: ../src/gpm-info.c:307
 msgid "Time"
@@ -1320,15 +1320,15 @@ msgstr "Pinge"
 
 #: ../src/gpm-info.c:333 ../src/gpm-info.c:342
 msgid "Accuracy of reading"
-msgstr ""
+msgstr "Lugemise täpsus"
 
 #: ../src/gpm-info.c:334 ../src/gpm-info.c:343
 msgid "Trusted"
-msgstr ""
+msgstr "Usaldatav"
 
 #: ../src/gpm-info.c:335 ../src/gpm-info.c:344
 msgid "Untrusted"
-msgstr ""
+msgstr "Kahtlane"
 
 #: ../src/gpm-info.c:351 ../src/gpm-info.c:369
 msgid "Average time elapsed"
@@ -1557,7 +1557,7 @@ msgstr "Arvuti hiberneerimine."
 
 #: ../src/gpm-manager.c:444
 msgid "Doing nothing."
-msgstr "Midagi ei tehta."
+msgstr "Ei tehta."
 
 #: ../src/gpm-manager.c:457
 msgid "Shutting down computer."
@@ -1596,10 +1596,9 @@ msgid "The lid has been closed on battery power."
 msgstr "Kaas suleti ajal, mil arvuti oli akutoitel."
 
 #: ../src/gpm-manager.c:1035
-#, fuzzy
 msgid ""
 "The lid has been closed, and the ac adapter removed (and gconf is okay)."
-msgstr "kaas on suletud ja vooluadapter eemaldatud (ja gconf on töökorras)"
+msgstr "Kaas on suletud ja vooluadapter eemaldatud (ja gconf on töökorras)"
 
 #: ../src/gpm-manager.c:1054
 msgid "Battery is critically low."
@@ -1693,21 +1692,21 @@ msgid "This computer will shutdown in %s if the AC is not connected."
 msgstr ""
 
 #: ../src/gpm-manager.c:1464
-#, fuzzy, c-format
+#, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%.1f%%). %s"
-msgstr "UPS suudab arvutit toita veel ligikaudu <b>%s</b> (%d%%). %s"
+msgstr "Aku suudab arvutit toita veel ligikaudu <b>%s</b> (%.1f%%). %s"
 
 #: ../src/gpm-manager.c:1472 ../src/gpm-manager.c:1557
 msgid "UPS critically low"
 msgstr "UPS on kriitiliselt tühi"
 
 #: ../src/gpm-manager.c:1474
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%.1f%%). Restore AC "
 "power to your computer to avoid losing data."
 msgstr ""
-"UPS suudab arvutit toita veel ligikaudu <b>%s</b> (%d%%). Andmete "
+"UPS suudab arvutit toita veel ligikaudu <b>%s</b> (%.1f%%). Andmete "
 "kaotsimineku vältimiseks püüa võrgutoide taastada."
 
 #: ../src/gpm-manager.c:1480
@@ -1925,7 +1924,7 @@ msgstr ""
 #: ../src/gpm-cell-array.c:1050
 #, c-format
 msgid "%s %s until charged (%.1f%%)\n"
-msgstr "%s %s täislaadimiseni (%.1f%%)\n"
+msgstr "%s täislaadimiseni kulub %s (%.1f%%)\n"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-cell-array.c:1055
@@ -2060,9 +2059,9 @@ msgid "<b>Design charge:</b> %.1f Wh\n"
 msgstr "<b>Tehasetäituvus:</b> %.1f Wh\n"
 
 #: ../src/gpm-cell.c:629
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Charge rate:</b> %.1f W\n"
-msgstr "<b>Viimane täislaadimine:</b> %.1f %s\n"
+msgstr ""
 
 #: ../src/gpm-cell.c:635
 #, c-format
@@ -2133,23 +2132,23 @@ msgstr "Küsitakse kasutajalt"
 
 #: ../src/gpm-prefs-core.c:89 ../src/gpm-statistics-core.c:96
 msgid "Suspend"
-msgstr ""
+msgstr "Arvuti seisatakse"
 
 #: ../src/gpm-prefs-core.c:90 ../src/gpm-statistics-core.c:97
 msgid "Shutdown"
-msgstr "Lülitatakse välja"
+msgstr "Lülitatakse arvuti välja"
 
 #: ../src/gpm-prefs-core.c:91 ../src/gpm-statistics-core.c:98
 msgid "Hibernate"
-msgstr "Uinumine"
+msgstr "Arvuti uinutatakse"
 
 #: ../src/gpm-prefs-core.c:92 ../src/gpm-statistics-core.c:99
 msgid "Blank screen"
-msgstr "Ekraan tühjendatakse"
+msgstr "Tühjendatakse ekraan"
 
 #: ../src/gpm-prefs-core.c:93 ../src/gpm-statistics-core.c:100
 msgid "Do nothing"
-msgstr "Midagi ei tehta"
+msgstr "Ei tehta midagi"
 
 #: ../src/gpm-prefs-core.c:286
 msgid "Never"
