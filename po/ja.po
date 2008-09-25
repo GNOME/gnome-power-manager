@@ -1,4 +1,4 @@
-# Ja.po for gnome-power-manager.
+# ja.po for gnome-power-manager.
 # Copyright (C) 2005-2008 Richard Hughes <richard @ hughsie.com>
 # This file is distributed under the same license as the 'gnome-power-manager' package.
 # Satoru SATOH <ss @ gnome.gr.jp>, 2005-2006.
@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-power-manager trunk\n"
+"Project-Id-Version: gnome-power-manager gnome-2-24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-20 22:22+0900\n"
-"PO-Revision-Date: 2008-08-20 22:12+0900\n"
+"POT-Creation-Date: 2008-09-25 21:57+0900\n"
+"PO-Revision-Date: 2008-09-25 21:56+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -1012,8 +1012,8 @@ msgstr "グラフの種類:"
 msgid "Power History"
 msgstr "充電率の履歴"
 
-#: ../data/gpm-graph.glade.h:5 ../src/gpm-info.c:296 ../src/gpm-info.c:305
-#: ../src/gpm-info.c:314 ../src/gpm-info.c:323
+#: ../data/gpm-graph.glade.h:5 ../src/gpm-info.c:297 ../src/gpm-info.c:306
+#: ../src/gpm-info.c:315 ../src/gpm-info.c:324
 msgid "Time since startup"
 msgstr "起動時間"
 
@@ -1104,13 +1104,13 @@ msgstr "電源管理の設定"
 #: ../data/gpm-prefs.glade.h:15
 msgid "Put _display to sleep when inactive for:"
 msgstr ""
-"次の時間アイドル状態が続いたら\n"
+"次の時間、アイドル状態が続いたら\n"
 "画面をスリープする(_D):"
 
 #: ../data/gpm-prefs.glade.h:16
 msgid "Put computer to _sleep when inactive for:"
 msgstr ""
-"次の時間アイドル状態が続いたら\n"
+"次の時間、アイドル状態が続いたら\n"
 "システムをスリープする(_S):"
 
 #: ../data/gpm-prefs.glade.h:17
@@ -1177,18 +1177,18 @@ msgstr "D-BUS のセキュリティ・ルールに従いメッセージが送信
 msgid "General failure"
 msgstr "一般的な問題"
 
-#: ../src/gpm-common.c:240
+#: ../src/gpm-common.c:210
 msgid "Unknown time"
 msgstr "不明"
 
-#: ../src/gpm-common.c:245
+#: ../src/gpm-common.c:215
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i分"
 msgstr[1] "%i分"
 
-#: ../src/gpm-common.c:256
+#: ../src/gpm-common.c:226
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -1197,18 +1197,18 @@ msgstr[1] "%i時間"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:262
+#: ../src/gpm-common.c:232
 #, c-format
 msgid "%i %s %i %s"
 msgstr "%i%s %i%s"
 
-#: ../src/gpm-common.c:263
+#: ../src/gpm-common.c:233
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "時間"
 msgstr[1] "時間"
 
-#: ../src/gpm-common.c:264
+#: ../src/gpm-common.c:234
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "分"
@@ -1253,239 +1253,239 @@ msgid "Unable to get data..."
 msgstr "データを取得できません..."
 
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:485
+#: ../src/gpm-graph-widget.c:486
 #, c-format
 msgid "%ih"
 msgstr "%i時間"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:488
+#: ../src/gpm-graph-widget.c:489
 #, c-format
 msgid "%ih%02i"
 msgstr "%i時間%02i分"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:493
+#: ../src/gpm-graph-widget.c:494
 #, c-format
 msgid "%2im"
 msgstr "%2i分"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:496
+#: ../src/gpm-graph-widget.c:497
 #, c-format
 msgid "%2im%02i"
 msgstr "%2i分%02i秒"
 
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:500
+#: ../src/gpm-graph-widget.c:501
 #, c-format
 msgid "%2is"
 msgstr "%2i秒"
 
 #. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:504
+#: ../src/gpm-graph-widget.c:505
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. Translators: This is %.1f Watts
-#: ../src/gpm-graph-widget.c:507
+#: ../src/gpm-graph-widget.c:508
 #, c-format
 msgid "%.1fW"
 msgstr "%.1fW"
 
 #. Translators: This is %.1f Volts
-#: ../src/gpm-graph-widget.c:510
+#: ../src/gpm-graph-widget.c:511
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fV"
 
-#: ../src/gpm-info.c:122
+#: ../src/gpm-info.c:123
 #, c-format
 msgid "Reason: %s"
 msgstr "原因: %s"
 
-#: ../src/gpm-info.c:202
+#: ../src/gpm-info.c:203
 msgid "On AC"
 msgstr "AC 電源を使用している"
 
-#: ../src/gpm-info.c:206
+#: ../src/gpm-info.c:207
 msgid "On battery"
 msgstr "バッテリーを使用している"
 
-#: ../src/gpm-info.c:210
+#: ../src/gpm-info.c:211
 msgid "Session powersave"
 msgstr "セッションが省電力モード"
 
-#: ../src/gpm-info.c:214
+#: ../src/gpm-info.c:215
 msgid "Session idle"
 msgstr "セッションがアイドル中"
 
-#: ../src/gpm-info.c:218
+#: ../src/gpm-info.c:219
 msgid "Session active"
 msgstr "セッションが動作中"
 
 #. Translators: translate ONLY the string part after the |
-#: ../src/gpm-info.c:223
+#: ../src/gpm-info.c:224
 msgid "label shown on graph|Suspend"
 msgstr "サスペンド"
 
 #. Translators: translate ONLY the string part after the |
-#: ../src/gpm-info.c:228
+#: ../src/gpm-info.c:229
 msgid "label shown on graph|Resume"
 msgstr "レジューム"
 
 #. Translators: translate ONLY the string part after the |
-#: ../src/gpm-info.c:233
+#: ../src/gpm-info.c:234
 msgid "label shown on graph|Hibernate"
 msgstr "ハイバーネート"
 
-#: ../src/gpm-info.c:237
+#: ../src/gpm-info.c:238
 msgid "Lid closed"
 msgstr "ノート PC を閉じた"
 
-#: ../src/gpm-info.c:241
+#: ../src/gpm-info.c:242
 msgid "Lid opened"
 msgstr "ノート PC を開いた"
 
-#: ../src/gpm-info.c:245
+#: ../src/gpm-info.c:246
 msgid "Notification"
 msgstr "通知"
 
-#: ../src/gpm-info.c:250
+#: ../src/gpm-info.c:251
 msgid "DPMS On"
 msgstr "DPMS が ON"
 
-#: ../src/gpm-info.c:254
+#: ../src/gpm-info.c:255
 msgid "DPMS Standby"
 msgstr "DPMS がスタンバイ"
 
-#: ../src/gpm-info.c:258
+#: ../src/gpm-info.c:259
 msgid "DPMS Suspend"
 msgstr "DPMS がサスペンド"
 
-#: ../src/gpm-info.c:262
+#: ../src/gpm-info.c:263
 msgid "DPMS Off"
 msgstr "DPMS が OFF"
 
-#: ../src/gpm-info.c:297 ../src/gpm-info.c:298
+#: ../src/gpm-info.c:298 ../src/gpm-info.c:299
 msgid "Power"
 msgstr "電力"
 
-#: ../src/gpm-info.c:306
+#: ../src/gpm-info.c:307
 msgid "Estimated time"
 msgstr "見積もった時間"
 
-#: ../src/gpm-info.c:307
+#: ../src/gpm-info.c:308
 msgid "Time"
 msgstr "時間"
 
-#: ../src/gpm-info.c:315 ../src/gpm-info.c:332 ../src/gpm-info.c:341
-#: ../src/gpm-info.c:350 ../src/gpm-info.c:368
+#: ../src/gpm-info.c:316 ../src/gpm-info.c:333 ../src/gpm-info.c:342
+#: ../src/gpm-info.c:351 ../src/gpm-info.c:369
 msgid "Battery percentage"
 msgstr "バッテリーの充電/放電率"
 
-#: ../src/gpm-info.c:316
+#: ../src/gpm-info.c:317
 msgid "Percentage"
 msgstr "充電/放電率"
 
-#: ../src/gpm-info.c:324
+#: ../src/gpm-info.c:325
 msgid "Battery Voltage"
 msgstr "バッテリーの電圧"
 
-#: ../src/gpm-info.c:325
+#: ../src/gpm-info.c:326
 msgid "Voltage"
 msgstr "電圧"
 
-#: ../src/gpm-info.c:333 ../src/gpm-info.c:342
+#: ../src/gpm-info.c:334 ../src/gpm-info.c:343
 msgid "Accuracy of reading"
 msgstr "読み取りの精度"
 
-#: ../src/gpm-info.c:334 ../src/gpm-info.c:343
+#: ../src/gpm-info.c:335 ../src/gpm-info.c:344
 msgid "Trusted"
 msgstr "正確"
 
-#: ../src/gpm-info.c:335 ../src/gpm-info.c:344
+#: ../src/gpm-info.c:336 ../src/gpm-info.c:345
 msgid "Untrusted"
 msgstr "不正確"
 
-#: ../src/gpm-info.c:351 ../src/gpm-info.c:369
+#: ../src/gpm-info.c:352 ../src/gpm-info.c:370
 msgid "Average time elapsed"
 msgstr "経過した平均時間"
 
-#: ../src/gpm-info.c:352 ../src/gpm-info.c:370
+#: ../src/gpm-info.c:353 ../src/gpm-info.c:371
 msgid "Valid data"
 msgstr "妥当なデータ"
 
-#: ../src/gpm-info.c:353 ../src/gpm-info.c:371
+#: ../src/gpm-info.c:354 ../src/gpm-info.c:372
 msgid "Extrapolated data"
 msgstr "推測したデータ"
 
-#: ../src/gpm-info.c:354 ../src/gpm-info.c:372
+#: ../src/gpm-info.c:355 ../src/gpm-info.c:373
 msgid "No data"
 msgstr "データなし"
 
-#: ../src/gpm-info.c:358 ../src/gpm-info.c:376
+#: ../src/gpm-info.c:359 ../src/gpm-info.c:377
 msgid "Start point"
 msgstr "開始"
 
-#: ../src/gpm-info.c:362 ../src/gpm-info.c:380
+#: ../src/gpm-info.c:363 ../src/gpm-info.c:381
 msgid "Stop point"
 msgstr "終了"
 
-#: ../src/gpm-info.c:660
+#: ../src/gpm-info.c:661
 msgid "AC adapter inserted"
 msgstr "AC アダプタを挿入しました"
 
-#: ../src/gpm-info.c:663
+#: ../src/gpm-info.c:664
 msgid "AC adapter removed"
 msgstr "AC アダプタを外しました"
 
-#: ../src/gpm-info.c:683
+#: ../src/gpm-info.c:684
 msgid "The laptop lid has been closed"
 msgstr "ノート PC を閉じました"
 
-#: ../src/gpm-info.c:689
+#: ../src/gpm-info.c:690
 msgid "The laptop lid has been re-opened"
 msgstr "ノート PC をもう一度開きました"
 
-#: ../src/gpm-info.c:711
+#: ../src/gpm-info.c:712
 msgid "idle mode ended"
 msgstr "アイドル状態を終了しました"
 
-#: ../src/gpm-info.c:713
+#: ../src/gpm-info.c:714
 msgid "idle mode started"
 msgstr "アイドル状態を開始しました"
 
-#: ../src/gpm-info.c:715
+#: ../src/gpm-info.c:716
 msgid "powersave mode started"
 msgstr "省電力モードを開始しました"
 
-#: ../src/gpm-info.c:734
+#: ../src/gpm-info.c:735
 msgid "dpms on"
 msgstr "DPMS が有効です"
 
-#: ../src/gpm-info.c:736
+#: ../src/gpm-info.c:737
 msgid "dpms standby"
 msgstr "DPMS がスタンバイです"
 
-#: ../src/gpm-info.c:738
+#: ../src/gpm-info.c:739
 msgid "dpms suspend"
 msgstr "DPMS がサスペンドです"
 
-#: ../src/gpm-info.c:740
+#: ../src/gpm-info.c:741
 msgid "dpms off"
 msgstr "DPMS が無効です"
 
-#: ../src/gpm-info.c:757
+#: ../src/gpm-info.c:758
 msgid "Resuming computer"
 msgstr "システムを復帰しています"
 
-#: ../src/gpm-info.c:773
+#: ../src/gpm-info.c:774
 msgid "Hibernate Problem"
 msgstr "ハイバーネートの問題"
 
-#: ../src/gpm-info.c:775
+#: ../src/gpm-info.c:776
 msgid "Suspend Problem"
 msgstr "サスペンドの問題"
 
@@ -1545,27 +1545,27 @@ msgstr "複数のアプリケーションが進行中の再起動を停止しま
 msgid "Multiple applications have stopped the shutdown from taking place."
 msgstr "複数のアプリケーションが進行中のシャットダウンを停止しました。"
 
-#: ../src/gpm-main.c:151
+#: ../src/gpm-main.c:150
 msgid "Do not daemonize"
 msgstr "デーモン化しない"
 
-#: ../src/gpm-main.c:153 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:91
+#: ../src/gpm-main.c:152 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:91
 msgid "Show extra debugging information"
 msgstr "デバッグ情報を表示する"
 
-#: ../src/gpm-main.c:155
+#: ../src/gpm-main.c:154
 msgid "Show version of installed program and exit"
 msgstr "バージョンを表示して終了する"
 
-#: ../src/gpm-main.c:157
+#: ../src/gpm-main.c:156
 msgid "Exit after a small delay (for debugging)"
 msgstr "少し遅延して終了する (デバッグ用)"
 
-#: ../src/gpm-main.c:159
+#: ../src/gpm-main.c:158
 msgid "Exit after the manager has loaded (for debugging)"
 msgstr "デーモンを起動した後に終了する (デバッグ用)"
 
-#: ../src/gpm-main.c:163
+#: ../src/gpm-main.c:162
 msgid "GNOME Power Manager"
 msgstr "GNOME 電源管理"
 
@@ -2008,7 +2008,7 @@ msgstr ""
 msgid "Visit quirk website"
 msgstr "回収サイトを開く"
 
-#: ../src/gpm-cell-array.c:1014
+#: ../src/gpm-cell-array.c:1013
 #, c-format
 msgid ""
 "%s fully charged (%.1f%%)\n"
@@ -2017,23 +2017,23 @@ msgstr ""
 "%sの充電が完了しました (現在 %.1f%%)\n"
 "バッテリによる動作時間は %s です\n"
 
-#: ../src/gpm-cell-array.c:1018
+#: ../src/gpm-cell-array.c:1017
 #, c-format
 msgid "%s fully charged (%.1f%%)\n"
 msgstr "%sの充電が %.1f%% 完了しました\n"
 
-#: ../src/gpm-cell-array.c:1026
+#: ../src/gpm-cell-array.c:1025
 #, c-format
 msgid "%s %s remaining (%.1f%%)\n"
 msgstr "%s の残量は %s (%.1f%%) です\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:1031
+#: ../src/gpm-cell-array.c:1030
 #, c-format
 msgid "%s discharging (%.1f%%)\n"
 msgstr "%sは放電中で残り %.1f%% です\n"
 
-#: ../src/gpm-cell-array.c:1043
+#: ../src/gpm-cell-array.c:1042
 #, c-format
 msgid ""
 "%s %s until charged (%.1f%%)\n"
@@ -2042,29 +2042,31 @@ msgstr ""
 "%sは充電完了まで %s あります (現在 %.1f%% 完了)\n"
 "バッテリによる動作時間は %s です\n"
 
-#: ../src/gpm-cell-array.c:1050
+#: ../src/gpm-cell-array.c:1049
 #, c-format
 msgid "%s %s until charged (%.1f%%)\n"
 msgstr "%sは充電完了まで %s あります (現在 %.1f%% 完了)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:1055
+#: ../src/gpm-cell-array.c:1054
 #, c-format
 msgid "%s charging (%.1f%%)\n"
 msgstr "%sの充電が %.1f%% 完了しました\n"
 
-#: ../src/gpm-cell-array.c:1062
+#: ../src/gpm-cell-array.c:1061
 msgid "Battery state could not be read at this time\n"
 msgstr "バッテリーの状態を読み取れませんでした\n"
 
 #: ../src/gpm-cell.c:543
-msgid "Product"
-msgstr "製品"
+#, c-format
+msgid "<b>Product:</b> %s\n"
+msgstr "<b>製品:</b> %s\n"
 
 #: ../src/gpm-cell.c:546 ../src/gpm-cell.c:548 ../src/gpm-cell.c:550
 #: ../src/gpm-cell.c:552
-msgid "Status"
-msgstr "状態"
+#, c-format
+msgid "<b>Status:</b> %s\n"
+msgstr "<b>状態:</b> %s\n"
 
 #: ../src/gpm-cell.c:546
 msgid "Missing"
@@ -2083,113 +2085,138 @@ msgid "Discharging"
 msgstr "放電中"
 
 #: ../src/gpm-cell.c:555
-msgid "Percentage charge"
-msgstr "充電率"
+#, c-format
+msgid "<b>Percentage charge:</b> %.1f%%\n"
+msgstr "<b>充電率:</b> %.1f%%\n"
 
-#: ../src/gpm-cell.c:559
-msgid "Vendor:"
-msgstr "製造元:"
+#: ../src/gpm-cell.c:558
+#, c-format
+msgid "<b>Vendor:</b> %s\n"
+msgstr "<b>製造元:</b> %s\n"
 
-#: ../src/gpm-cell.c:564
+#: ../src/gpm-cell.c:563
 msgid "Lithium ion"
 msgstr "リチウム・イオン"
 
-#: ../src/gpm-cell.c:566
+#: ../src/gpm-cell.c:565
 msgid "Lead acid"
 msgstr "鉛蓄電池"
 
-#: ../src/gpm-cell.c:568
+#: ../src/gpm-cell.c:567
 msgid "Lithium polymer"
 msgstr "リチウム・ポリマー"
 
-#: ../src/gpm-cell.c:570
+#: ../src/gpm-cell.c:569
 msgid "Nickel metal hydride"
 msgstr "ニッケル金属ハイブリッド"
 
-#: ../src/gpm-cell.c:577
-msgid "Technology"
-msgstr "技術"
-
-#: ../src/gpm-cell.c:581
-msgid "Serial number"
-msgstr "シリアル番号"
-
-#: ../src/gpm-cell.c:585
-msgid "Model"
-msgstr "型式"
-
-#: ../src/gpm-cell.c:591
-msgid "Charge time"
-msgstr "充電時間"
-
-#: ../src/gpm-cell.c:598
-msgid "Discharge time"
-msgstr "放電時間"
-
-#: ../src/gpm-cell.c:604
-msgid "Excellent"
-msgstr "良好"
-
-#: ../src/gpm-cell.c:606
-msgid "Good"
-msgstr "良い"
-
-#: ../src/gpm-cell.c:608
-msgid "Fair"
-msgstr "充分"
-
-#: ../src/gpm-cell.c:610
-msgid "Poor"
-msgstr "わずか"
-
-#: ../src/gpm-cell.c:613
-msgid "Capacity"
-msgstr "充電容量"
-
-#: ../src/gpm-cell.c:619 ../src/gpm-cell.c:642
-msgid "Current charge"
-msgstr "現在の充電量"
-
-#: ../src/gpm-cell.c:625
-msgid "Last full charge"
-msgstr "最終完全充電量"
-
-#: ../src/gpm-cell.c:630 ../src/gpm-cell.c:647
-msgid "Design charge"
-msgstr "工場出荷時の充電量"
-
-#: ../src/gpm-cell.c:635
-msgid "Charge rate"
-msgstr "充電レート"
-
-#: ../src/gpm-cell-unit.c:248
-msgid "Laptop batteries"
-msgstr "ノート PC のバッテリー (複数個)"
-
-#: ../src/gpm-cell-unit.c:250
-msgid "UPSs"
-msgstr "UPS (複数個)"
-
-#: ../src/gpm-cell-unit.c:252
-msgid "Wireless mice"
-msgstr "無線式マウス"
-
-#: ../src/gpm-cell-unit.c:254
-msgid "Wireless keyboards"
-msgstr "無線式キーボード"
-
-#: ../src/gpm-cell-unit.c:256
-msgid "PDAs"
-msgstr "PDA"
-
-#: ../src/gpm-cell-unit.c:258
-msgid "Cell phones"
-msgstr "携帯電話機"
-
-#: ../src/gpm-cell-unit.c:260 ../src/gpm-cell-unit.c:276
+#. Translators: Unknown is related to the Technology of the battery
+#: ../src/gpm-cell.c:572 ../src/gpm-cell-unit.c:260 ../src/gpm-cell-unit.c:276
 #: ../src/gpm-statistics-core.c:739
 msgid "Unknown"
 msgstr "不明"
+
+#: ../src/gpm-cell.c:578
+#, c-format
+msgid "<b>Technology:</b> %s\n"
+msgstr "<b>技術:</b> %s\n"
+
+#: ../src/gpm-cell.c:581
+#, c-format
+msgid "<b>Serial number:</b> %s\n"
+msgstr "<b>シリアル番号:</b> %s\n"
+
+#: ../src/gpm-cell.c:584
+#, c-format
+msgid "<b>Model:</b> %s\n"
+msgstr "<b>型式:</b> %s\n"
+
+#: ../src/gpm-cell.c:589
+#, c-format
+msgid "<b>Charge time:</b> %s\n"
+msgstr "<b>充電時間:</b> %s\n"
+
+#: ../src/gpm-cell.c:595
+#, c-format
+msgid "<b>Discharge time:</b> %s\n"
+msgstr "<b>放電時間:</b> %s\n"
+
+#. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
+#: ../src/gpm-cell.c:602
+msgid "Excellent"
+msgstr "良好"
+
+#: ../src/gpm-cell.c:604
+msgid "Good"
+msgstr "良い"
+
+#: ../src/gpm-cell.c:606
+msgid "Fair"
+msgstr "充分"
+
+#: ../src/gpm-cell.c:608
+msgid "Poor"
+msgstr "わずか"
+
+#. Translators: %i is a percentage and %s the condition (Excellent, Good, ...)
+#: ../src/gpm-cell.c:611
+#, c-format
+msgid "<b>Capacity:</b> %i%% (%s)\n"
+msgstr "<b>容量:</b> %i%% (%s)\n"
+
+#: ../src/gpm-cell.c:616
+#, c-format
+msgid "<b>Current charge:</b> %.1f Wh\n"
+msgstr "<b>現在の充電量:</b> %.1f Wh\n"
+
+#: ../src/gpm-cell.c:621
+#, c-format
+msgid "<b>Last full charge:</b> %.1f Wh\n"
+msgstr "<b>最終完全充電量:</b> %.1f Wh\n"
+
+#: ../src/gpm-cell.c:625
+#, c-format
+msgid "<b>Design charge:</b> %.1f Wh\n"
+msgstr "<b>工場出荷時の充電量:</b> %.1f Wh\n"
+
+#: ../src/gpm-cell.c:629
+#, c-format
+msgid "<b>Charge rate:</b> %.1f W\n"
+msgstr "<b>供給量:</b> %.1f W\n"
+
+#: ../src/gpm-cell.c:635
+#, c-format
+msgid "<b>Current charge:</b> %i/7\n"
+msgstr "<b>現在の充電量:</b> %i/7\n"
+
+#: ../src/gpm-cell.c:639
+#, c-format
+msgid "<b>Design charge:</b> %i/7\n"
+msgstr "<b>工場出荷時の充電量:</b> %i/7\n"
+
+#: ../src/gpm-cell-unit.c:248
+msgid "Laptop batteries"
+msgstr "ノート PC のバッテリー (複数台)"
+
+#: ../src/gpm-cell-unit.c:250
+msgid "UPSs"
+msgstr "UPS (複数台)"
+
+#: ../src/gpm-cell-unit.c:252
+msgid "Wireless mice"
+msgstr "無線式マウス (複数台)"
+
+#: ../src/gpm-cell-unit.c:254
+msgid "Wireless keyboards"
+msgstr "無線式キーボード (複数台)"
+
+#: ../src/gpm-cell-unit.c:256
+msgid "PDAs"
+msgstr "PDA (複数台)"
+
+#: ../src/gpm-cell-unit.c:258
+msgid "Cell phones"
+msgstr "携帯電話機 (複数台)"
 
 #: ../src/gpm-cell-unit.c:264
 msgid "Laptop battery"
@@ -2201,11 +2228,11 @@ msgstr "UPS"
 
 #: ../src/gpm-cell-unit.c:268
 msgid "Wireless mouse"
-msgstr "無線マウス"
+msgstr "無線式マウス"
 
 #: ../src/gpm-cell-unit.c:270
 msgid "Wireless keyboard"
-msgstr "無線キーボード"
+msgstr "無線式キーボード"
 
 #: ../src/gpm-cell-unit.c:272
 msgid "PDA"
