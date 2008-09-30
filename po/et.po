@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Gnome Power Manager HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-31 20:19+0000\n"
-"PO-Revision-Date: 2008-09-22 20:18+0300\n"
+"PO-Revision-Date: 2008-09-29 07:41+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -324,7 +324,7 @@ msgid ""
 "If the screen brightness should be changed automatically using the ambient "
 "light sensors."
 msgstr ""
-"Kas ekraani taustavalgust võib valgussensorite andmete põhjal automaatselt "
+"Kas ekraani taustavalgust tuleb valgussensorite andmete põhjal automaatselt "
 "muuta."
 
 #: ../data/gnome-power-manager.schemas.in.h:34
@@ -721,11 +721,11 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:108
 msgid "The interval the ambient light sensors should be polled"
-msgstr "Valgussensorite andmete lugemise intervall"
+msgstr "Valgussensorite andmete hankimise intervall"
 
 #: ../data/gnome-power-manager.schemas.in.h:109
 msgid "The interval the ambient light sensors should be polled in seconds."
-msgstr ""
+msgstr "Mitme sekundilise vahega hangitakse valgussensoritelt andmeid"
 "Sekunditest määratud intervall, mille järel tuleb valgussensorite andmeid "
 "lugeda."
 
@@ -800,6 +800,9 @@ msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
 "Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
 msgstr ""
+"Mismoodi arvuti jõudeoleku korral uinutatakse. Võimalikud väärtused on "
+"\"hibernate\" (hiberneerimine), \"suspend\" (peatamine) ja \"nothing\" "
+"(midagi ei tehta)."
 
 #: ../data/gnome-power-manager.schemas.in.h:124
 msgid ""
@@ -872,6 +875,8 @@ msgstr ""
 #: ../data/gnome-power-manager.schemas.in.h:137
 msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr ""
+"Kas jõudeoleku korral tuleb arvuti hiberneerida, peatada või ei pea midagi "
+"tegema"
 
 #: ../data/gnome-power-manager.schemas.in.h:138
 msgid ""
