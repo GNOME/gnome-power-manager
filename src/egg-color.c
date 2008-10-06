@@ -30,11 +30,11 @@
 guint32
 egg_color_from_rgb (guint8 red, guint8 green, guint8 blue)
 {
-	guint32 colour = 0;
-	colour += (guint32) red * 0x10000;
-	colour += (guint32) green * 0x100;
-	colour += (guint32) blue;
-	return colour;
+	guint32 color = 0;
+	color += (guint32) red * 0x10000;
+	color += (guint32) green * 0x100;
+	color += (guint32) blue;
+	return color;
 }
 
 /**
@@ -44,11 +44,11 @@ egg_color_from_rgb (guint8 red, guint8 green, guint8 blue)
  * @blue: The blue value
  **/
 void
-egg_color_to_rgb (guint32 colour, guint8 *red, guint8 *green, guint8 *blue)
+egg_color_to_rgb (guint32 color, guint8 *red, guint8 *green, guint8 *blue)
 {
-	*red = (colour & 0xff0000) / 0x10000;
-	*green = (colour & 0x00ff00) / 0x100;
-	*blue = colour & 0x0000ff;
+	*red = (color & 0xff0000) / 0x10000;
+	*green = (color & 0x00ff00) / 0x100;
+	*blue = color & 0x0000ff;
 }
 
 /***************************************************************************
@@ -61,7 +61,7 @@ void
 egg_color_test (EggTest *test)
 {
 	guint8 r, g, b;
-	guint32 colour;
+	guint32 color;
 
 	if (egg_test_start (test, "EggColor") == FALSE) {
 		return;
@@ -114,38 +114,38 @@ egg_color_test (EggTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "set red");
-	colour = egg_color_from_rgb (0xff, 0x00, 0x00);
-	if (colour == 0xff0000) {
+	color = egg_color_from_rgb (0xff, 0x00, 0x00);
+	if (color == 0xff0000) {
 		egg_test_success (test, "set red");
 	} else {
-		egg_test_failed (test, "could not set red (%i)", colour);
+		egg_test_failed (test, "could not set red (%i)", color);
 	}
 
 	/************************************************************/
 	egg_test_title (test, "set green");
-	colour = egg_color_from_rgb (0x00, 0xff, 0x00);
-	if (colour == 0x00ff00) {
+	color = egg_color_from_rgb (0x00, 0xff, 0x00);
+	if (color == 0x00ff00) {
 		egg_test_success (test, "set green");
 	} else {
-		egg_test_failed (test, "could not set green (%i)", colour);
+		egg_test_failed (test, "could not set green (%i)", color);
 	}
 
 	/************************************************************/
 	egg_test_title (test, "set blue");
-	colour = egg_color_from_rgb (0x00, 0x00, 0xff);
-	if (colour == 0x0000ff) {
+	color = egg_color_from_rgb (0x00, 0x00, 0xff);
+	if (color == 0x0000ff) {
 		egg_test_success (test, "set blue");
 	} else {
-		egg_test_failed (test, "could not set blue (%i)", colour);
+		egg_test_failed (test, "could not set blue (%i)", color);
 	}
 
 	/************************************************************/
 	egg_test_title (test, "set white");
-	colour = egg_color_from_rgb (0xff, 0xff, 0xff);
-	if (colour == 0xffffff) {
+	color = egg_color_from_rgb (0xff, 0xff, 0xff);
+	if (color == 0xffffff) {
 		egg_test_success (test, "set white");
 	} else {
-		egg_test_failed (test, "could not set white (%i)", colour);
+		egg_test_failed (test, "could not set white (%i)", color);
 	}
 
 	egg_test_end (test);

@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2007 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2007-2008 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -260,6 +260,31 @@ egg_test_failed (EggTest *test, const gchar *format, ...)
 	g_free(va_args_buffer);
 failed:
 	exit (1);
+}
+
+/**
+ * egg_test_assert:
+ **/
+void
+egg_test_assert (EggTest *test, gboolean value)
+{
+	if (value)
+		egg_test_success (test, NULL);
+	else
+		egg_test_failed (test, NULL);
+}
+
+/**
+ * egg_test_title_assert:
+ **/
+void
+egg_test_title_assert (EggTest *test, const gchar *text, gboolean value)
+{
+	egg_test_title (test, "%s", text);
+	if (value)
+		egg_test_success (test, NULL);
+	else
+		egg_test_failed (test, NULL);
 }
 
 /**
