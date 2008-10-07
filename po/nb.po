@@ -7,10 +7,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-power-manager 2.20.x\n"
+"Project-Id-Version: gnome-power-manager 2.24.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-12 01:31+0200\n"
-"PO-Revision-Date: 2008-08-12 01:36+0200\n"
+"POT-Creation-Date: 2008-10-07 12:57+0200\n"
+"PO-Revision-Date: 2008-10-07 12:29+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -338,27 +338,24 @@ msgstr ""
 "bruk."
 
 #: ../data/gnome-power-manager.schemas.in.h:36
-#, fuzzy
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on battery power."
 msgstr ""
 "Hvorvidt skjermen skal dempes for å spare strøm når datamaskinen ikke er i "
-"bruk."
+"bruk og på batteristrøm."
 
 #: ../data/gnome-power-manager.schemas.in.h:37
-#, fuzzy
 msgid ""
 "If the screen should be reduced in brightness when the computer is on "
 "battery power."
 msgstr ""
-"Hvorvidt skjermen skal dempes for å spare strøm når datamaskinen ikke er i "
-"bruk."
+"Hvorvidt skjermen skal dempes for å spare strøm når datamaskinen kjører på "
+"batteristrøm."
 
 #: ../data/gnome-power-manager.schemas.in.h:38
-#, fuzzy
 msgid "If the system low-power mode should be enabled when on AC power."
-msgstr "Hvorvidt strømsparingsmodus skal brukes ved bruk av nettstrøm"
+msgstr "Hvorvidt strømsparingsmodus skal brukes ved bruk av nettstrøm."
 
 #: ../data/gnome-power-manager.schemas.in.h:39
 msgid "If the system low-power mode should be enabled when on UPS power."
@@ -431,9 +428,8 @@ msgid "LCD brightness when on AC"
 msgstr "Skjermens lysstyrke ved tilkoblet nettstrøm"
 
 #: ../data/gnome-power-manager.schemas.in.h:54
-#, fuzzy
 msgid "LCD dimming amount when on battery"
-msgstr "Skjermens lysstyrke ved bruk av batteri"
+msgstr "Mengde demping av lysstyrke ved bruk av batteri"
 
 #: ../data/gnome-power-manager.schemas.in.h:55
 msgid "Laptop lid close action on battery"
@@ -514,19 +510,19 @@ msgstr "Reduser skjermens lysstyrke ved bruk av batteri"
 
 #: ../data/gnome-power-manager.schemas.in.h:74
 msgid "Sleep timeout computer when on AC"
-msgstr ""
+msgstr "Tidsavbrudd for hvilemodus ved nettstrøm"
 
 #: ../data/gnome-power-manager.schemas.in.h:75
 msgid "Sleep timeout computer when on battery"
-msgstr ""
+msgstr "Tidsavbrudd for hvilemodus på batteri"
 
 #: ../data/gnome-power-manager.schemas.in.h:76
 msgid "Sleep timeout display when on AC"
-msgstr ""
+msgstr "Tidsavbrudd for skjermblanking på nettstrøm"
 
 #: ../data/gnome-power-manager.schemas.in.h:77
 msgid "Sleep timeout display when on battery"
-msgstr ""
+msgstr "Tidsavbrudd for skjermblanking på batteri"
 
 #: ../data/gnome-power-manager.schemas.in.h:78
 msgid "Suspend button action"
@@ -596,53 +592,62 @@ msgid ""
 msgstr "Handling ved bruk av dvalemodus-knapp"
 
 #: ../data/gnome-power-manager.schemas.in.h:88
-#, fuzzy
 msgid ""
 "The action to take when the system power button is pressed. Possible values "
 "are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
 "\"."
-msgstr "Handling ved bruk av dvalemodus-knapp"
+msgstr ""
+"Handling ved bruk av strømknappen på systemet. Mulige verdier er «suspend», "
+"«hibernate», «interactive», «shutdown» og «nothing»."
 
 #: ../data/gnome-power-manager.schemas.in.h:89
-#, fuzzy
 msgid ""
 "The action to take when the system suspend button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
 "\"nothing\"."
-msgstr "Handling ved bruk av dvalemodus-knapp"
+msgstr ""
+"Handling ved bruk av knapp for hvilemodus. Mulige verdier er «suspend», "
+"«hibernate», «interactive», «shutdown» og «nothing»."
 
 #: ../data/gnome-power-manager.schemas.in.h:90
-#, fuzzy
 msgid ""
 "The amount of time in seconds before the display goes to sleep when the "
 "computer is on AC power."
-msgstr "Inaktiv tid i sekunder før skjermen går i dvalemodus (på nettstrøm)"
+msgstr ""
+"Tid i sekunder før skjermen går i dvalemodus når datamaskinen går på "
+"nettstrøm"
 
 #: ../data/gnome-power-manager.schemas.in.h:91
 msgid ""
 "The amount of time in seconds the computer on AC power needs to be inactive "
 "before it goes to sleep."
 msgstr ""
+"Tid i sekunder datamaskinen må være inaktiv før den går i hvilemodus når den "
+"går på nettstrøm."
 
 #: ../data/gnome-power-manager.schemas.in.h:92
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before it goes to sleep."
 msgstr ""
+"Tid datamaskinen må være inaktiv i sekunder før den går i hvilemodus på "
+"batteristrøm."
 
 #: ../data/gnome-power-manager.schemas.in.h:93
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before the display goes to sleep."
 msgstr ""
+"Tid datamaskinen må være inaktiv i sekunder før skjermen blankes når "
+"maskinen går på batteristrøm."
 
 #: ../data/gnome-power-manager.schemas.in.h:94
 msgid "The amount the light sensors should contribute to the brightness"
-msgstr ""
+msgstr "Mengde lys sensorene skal bidra med til lysstyrken"
 
 #: ../data/gnome-power-manager.schemas.in.h:95
 msgid "The amount the light sensors should contribute to the brightness."
-msgstr ""
+msgstr "Mengde lys sensorene  skal bidra med til lysstyrken."
 
 #: ../data/gnome-power-manager.schemas.in.h:96
 #, fuzzy
@@ -685,21 +690,21 @@ msgstr "Skjermens lysstyrke ved inaktiv sesjon"
 #: ../data/gnome-power-manager.schemas.in.h:101
 msgid ""
 "The calibration of the light sensors so that the screen is bright enough"
-msgstr ""
+msgstr "Kalibrering av lyssensorene slik at skjermen blir lys nok"
 
 #: ../data/gnome-power-manager.schemas.in.h:102
 msgid ""
 "The calibration of the light sensors so that the screen is bright enough, in "
 "percent."
-msgstr ""
+msgstr "Kalibrering av lyssensorene slik at skjermen blir lys nok. I prosent."
 
 #: ../data/gnome-power-manager.schemas.in.h:103
 msgid "The default amount of time to dim the screen after idle"
-msgstr ""
+msgstr "Forvalgt mengde tid før skjermen blankes ved inaktivitet"
 
 #: ../data/gnome-power-manager.schemas.in.h:104
 msgid "The default amount of time to dim the screen after idle."
-msgstr ""
+msgstr "Forvalgt mengde tid før skjermen blankes ved inaktivitet."
 
 #: ../data/gnome-power-manager.schemas.in.h:105
 msgid "The default configuration version."
@@ -707,23 +712,23 @@ msgstr "Forvalgt konfigurasjonsversjon."
 
 #: ../data/gnome-power-manager.schemas.in.h:106
 msgid "The default graph type to show in the statistics window"
-msgstr ""
+msgstr "Forvalgt type graf som skal vises i statistikkvinduet"
 
 #: ../data/gnome-power-manager.schemas.in.h:107
 msgid "The default graph type to show in the statistics window."
-msgstr ""
+msgstr "Forvalgt type graf som skal vises i statistikkvinduet."
 
 #: ../data/gnome-power-manager.schemas.in.h:108
 msgid "The interval the ambient light sensors should be polled"
-msgstr ""
+msgstr "Intervall for henting av data fra lyssensorene"
 
 #: ../data/gnome-power-manager.schemas.in.h:109
 msgid "The interval the ambient light sensors should be polled in seconds."
-msgstr ""
+msgstr "Intervall for henting av data fra lyssensorene i sekunder."
 
 #: ../data/gnome-power-manager.schemas.in.h:110
 msgid "The invalid timeout for power actions"
-msgstr ""
+msgstr "Ugyldig tidsavbrudd for handlinger for strømstyring"
 
 #: ../data/gnome-power-manager.schemas.in.h:111
 msgid ""
@@ -737,7 +742,7 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:113
 msgid "The maximum time displayed on the graph"
-msgstr ""
+msgstr "Maksimumstid som vises på grafen"
 
 #: ../data/gnome-power-manager.schemas.in.h:114
 msgid ""
@@ -826,7 +831,7 @@ msgstr "Når skal ikonet skal vises i varslingsområdet"
 
 #: ../data/gnome-power-manager.schemas.in.h:130
 msgid "Whether NetworkManager should be connected and disconnected on sleep."
-msgstr ""
+msgstr "Om NetworkManager skal kobles til/fra ved hvilemodus."
 
 #: ../data/gnome-power-manager.schemas.in.h:131
 msgid ""
@@ -940,8 +945,8 @@ msgstr "Type graf:"
 msgid "Power History"
 msgstr "Strømhistorikk"
 
-#: ../data/gpm-graph.glade.h:5 ../src/gpm-info.c:296 ../src/gpm-info.c:305
-#: ../src/gpm-info.c:314 ../src/gpm-info.c:323
+#: ../data/gpm-graph.glade.h:5 ../src/gpm-info.c:297 ../src/gpm-info.c:306
+#: ../src/gpm-info.c:315 ../src/gpm-info.c:324
 msgid "Time since startup"
 msgstr "Tid siden oppstart"
 
@@ -1101,18 +1106,18 @@ msgstr "Meldingen ble ikke sendt pga DBUS-sikkerhetsregler"
 msgid "General failure"
 msgstr "Generell feil"
 
-#: ../src/gpm-common.c:240
+#: ../src/gpm-common.c:210
 msgid "Unknown time"
 msgstr "Ukjent tid"
 
-#: ../src/gpm-common.c:245
+#: ../src/gpm-common.c:215
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i minutt"
 msgstr[1] "%i minutter"
 
-#: ../src/gpm-common.c:256
+#: ../src/gpm-common.c:226
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -1121,18 +1126,18 @@ msgstr[1] "%i timer"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:262
+#: ../src/gpm-common.c:232
 #, c-format
 msgid "%i %s %i %s"
 msgstr "%i %s %i %s"
 
-#: ../src/gpm-common.c:263
+#: ../src/gpm-common.c:233
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "time"
 msgstr[1] "timer"
 
-#: ../src/gpm-common.c:264
+#: ../src/gpm-common.c:234
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minutt"
@@ -1177,239 +1182,239 @@ msgid "Unable to get data..."
 msgstr "Kunne ikke hente data..."
 
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:485
+#: ../src/gpm-graph-widget.c:486
 #, c-format
 msgid "%ih"
 msgstr "%i time"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:488
+#: ../src/gpm-graph-widget.c:489
 #, c-format
 msgid "%ih%02i"
 msgstr "%it%02i"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:493
+#: ../src/gpm-graph-widget.c:494
 #, c-format
 msgid "%2im"
 msgstr "%2im"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:496
+#: ../src/gpm-graph-widget.c:497
 #, c-format
 msgid "%2im%02i"
 msgstr "%2im%02i"
 
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:500
+#: ../src/gpm-graph-widget.c:501
 #, c-format
 msgid "%2is"
 msgstr "%2is"
 
 #. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:504
+#: ../src/gpm-graph-widget.c:505
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. Translators: This is %.1f Watts
-#: ../src/gpm-graph-widget.c:507
+#: ../src/gpm-graph-widget.c:508
 #, c-format
 msgid "%.1fW"
 msgstr "%.1fW"
 
 #. Translators: This is %.1f Volts
-#: ../src/gpm-graph-widget.c:510
+#: ../src/gpm-graph-widget.c:511
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fV"
 
-#: ../src/gpm-info.c:122
+#: ../src/gpm-info.c:123
 #, c-format
 msgid "Reason: %s"
 msgstr "Årsak: %s"
 
-#: ../src/gpm-info.c:202
+#: ../src/gpm-info.c:203
 msgid "On AC"
 msgstr "På nettstrøm"
 
-#: ../src/gpm-info.c:206
+#: ../src/gpm-info.c:207
 msgid "On battery"
 msgstr "På batteri"
 
-#: ../src/gpm-info.c:210
+#: ../src/gpm-info.c:211
 msgid "Session powersave"
 msgstr "Sesjonen i strømsparingsmodus"
 
-#: ../src/gpm-info.c:214
+#: ../src/gpm-info.c:215
 msgid "Session idle"
 msgstr "Sesjonen er ledig"
 
-#: ../src/gpm-info.c:218
+#: ../src/gpm-info.c:219
 msgid "Session active"
 msgstr "Sesjonen er aktiv"
 
 #. Translators: translate ONLY the string part after the |
-#: ../src/gpm-info.c:223
+#: ../src/gpm-info.c:224
 msgid "label shown on graph|Suspend"
 msgstr "Hvilemodus"
 
 #. Translators: translate ONLY the string part after the |
-#: ../src/gpm-info.c:228
+#: ../src/gpm-info.c:229
 msgid "label shown on graph|Resume"
 msgstr "Gjenoppta"
 
 #. Translators: translate ONLY the string part after the |
-#: ../src/gpm-info.c:233
+#: ../src/gpm-info.c:234
 msgid "label shown on graph|Hibernate"
 msgstr "Dvalemodus"
 
-#: ../src/gpm-info.c:237
+#: ../src/gpm-info.c:238
 msgid "Lid closed"
 msgstr "Lokk lukket"
 
-#: ../src/gpm-info.c:241
+#: ../src/gpm-info.c:242
 msgid "Lid opened"
 msgstr "Lokk åpnet"
 
-#: ../src/gpm-info.c:245
+#: ../src/gpm-info.c:246
 msgid "Notification"
 msgstr "Varsling"
 
-#: ../src/gpm-info.c:250
+#: ../src/gpm-info.c:251
 msgid "DPMS On"
 msgstr "DPMS på"
 
-#: ../src/gpm-info.c:254
+#: ../src/gpm-info.c:255
 msgid "DPMS Standby"
 msgstr "DPMS ventemodus"
 
-#: ../src/gpm-info.c:258
+#: ../src/gpm-info.c:259
 msgid "DPMS Suspend"
 msgstr "DPMS hvilemodus"
 
-#: ../src/gpm-info.c:262
+#: ../src/gpm-info.c:263
 msgid "DPMS Off"
 msgstr "DPMS av"
 
-#: ../src/gpm-info.c:297 ../src/gpm-info.c:298
+#: ../src/gpm-info.c:298 ../src/gpm-info.c:299
 msgid "Power"
 msgstr "Strøm"
 
-#: ../src/gpm-info.c:306
+#: ../src/gpm-info.c:307
 msgid "Estimated time"
 msgstr "Estimert tid"
 
-#: ../src/gpm-info.c:307
+#: ../src/gpm-info.c:308
 msgid "Time"
 msgstr "Tid"
 
-#: ../src/gpm-info.c:315 ../src/gpm-info.c:332 ../src/gpm-info.c:341
-#: ../src/gpm-info.c:350 ../src/gpm-info.c:368
+#: ../src/gpm-info.c:316 ../src/gpm-info.c:333 ../src/gpm-info.c:342
+#: ../src/gpm-info.c:351 ../src/gpm-info.c:369
 msgid "Battery percentage"
 msgstr "Batteriprosent"
 
-#: ../src/gpm-info.c:316
+#: ../src/gpm-info.c:317
 msgid "Percentage"
 msgstr "Prosent"
 
-#: ../src/gpm-info.c:324
+#: ../src/gpm-info.c:325
 msgid "Battery Voltage"
 msgstr "Batterispenning"
 
-#: ../src/gpm-info.c:325
+#: ../src/gpm-info.c:326
 msgid "Voltage"
 msgstr "Spenning"
 
-#: ../src/gpm-info.c:333 ../src/gpm-info.c:342
+#: ../src/gpm-info.c:334 ../src/gpm-info.c:343
 msgid "Accuracy of reading"
 msgstr "Nøyaktighet ved avlesing"
 
-#: ../src/gpm-info.c:334 ../src/gpm-info.c:343
+#: ../src/gpm-info.c:335 ../src/gpm-info.c:344
 msgid "Trusted"
 msgstr "Har tillit"
 
-#: ../src/gpm-info.c:335 ../src/gpm-info.c:344
+#: ../src/gpm-info.c:336 ../src/gpm-info.c:345
 msgid "Untrusted"
 msgstr "Har ikke tillit"
 
-#: ../src/gpm-info.c:351 ../src/gpm-info.c:369
+#: ../src/gpm-info.c:352 ../src/gpm-info.c:370
 msgid "Average time elapsed"
 msgstr "Gjennomsnittlig medgått tid"
 
-#: ../src/gpm-info.c:352 ../src/gpm-info.c:370
+#: ../src/gpm-info.c:353 ../src/gpm-info.c:371
 msgid "Valid data"
 msgstr "Gydlige data"
 
-#: ../src/gpm-info.c:353 ../src/gpm-info.c:371
+#: ../src/gpm-info.c:354 ../src/gpm-info.c:372
 msgid "Extrapolated data"
 msgstr "Uthentede data"
 
-#: ../src/gpm-info.c:354 ../src/gpm-info.c:372
+#: ../src/gpm-info.c:355 ../src/gpm-info.c:373
 msgid "No data"
 msgstr "Ingen data"
 
-#: ../src/gpm-info.c:358 ../src/gpm-info.c:376
+#: ../src/gpm-info.c:359 ../src/gpm-info.c:377
 msgid "Start point"
 msgstr "Startpunkt"
 
-#: ../src/gpm-info.c:362 ../src/gpm-info.c:380
+#: ../src/gpm-info.c:363 ../src/gpm-info.c:381
 msgid "Stop point"
 msgstr "Stoppunkt"
 
-#: ../src/gpm-info.c:660
+#: ../src/gpm-info.c:661
 msgid "AC adapter inserted"
 msgstr "AC-adapter satt inn"
 
-#: ../src/gpm-info.c:663
+#: ../src/gpm-info.c:664
 msgid "AC adapter removed"
 msgstr "AC-adapter fjernet"
 
-#: ../src/gpm-info.c:683
+#: ../src/gpm-info.c:684
 msgid "The laptop lid has been closed"
 msgstr "Lokket på datamaskinen har blitt lukket"
 
-#: ../src/gpm-info.c:689
+#: ../src/gpm-info.c:690
 msgid "The laptop lid has been re-opened"
 msgstr "Lokket på bærbar maskin er åpnet igjen"
 
-#: ../src/gpm-info.c:711
+#: ../src/gpm-info.c:712
 msgid "idle mode ended"
 msgstr "pausemodus avsluttet"
 
-#: ../src/gpm-info.c:713
+#: ../src/gpm-info.c:714
 msgid "idle mode started"
 msgstr "inaktiv modus startet"
 
-#: ../src/gpm-info.c:715
+#: ../src/gpm-info.c:716
 msgid "powersave mode started"
 msgstr "strømsparingsmodus startet"
 
-#: ../src/gpm-info.c:734
+#: ../src/gpm-info.c:735
 msgid "dpms on"
 msgstr "dpms på"
 
-#: ../src/gpm-info.c:736
+#: ../src/gpm-info.c:737
 msgid "dpms standby"
 msgstr "dpms ventemodus"
 
-#: ../src/gpm-info.c:738
+#: ../src/gpm-info.c:739
 msgid "dpms suspend"
 msgstr "dpms hvilemodus"
 
-#: ../src/gpm-info.c:740
+#: ../src/gpm-info.c:741
 msgid "dpms off"
 msgstr "dpms av"
 
-#: ../src/gpm-info.c:757
+#: ../src/gpm-info.c:758
 msgid "Resuming computer"
 msgstr "Fortsetter bruk av datamaskin"
 
-#: ../src/gpm-info.c:773
+#: ../src/gpm-info.c:774
 msgid "Hibernate Problem"
 msgstr "Problem med dvalemodus"
 
-#: ../src/gpm-info.c:775
+#: ../src/gpm-info.c:776
 msgid "Suspend Problem"
 msgstr "Problem med hvilemodus"
 
@@ -1469,27 +1474,27 @@ msgstr "Flere programmer har hindret omstart."
 msgid "Multiple applications have stopped the shutdown from taking place."
 msgstr "Flere programmer har hindret nedstenging av maskinen."
 
-#: ../src/gpm-main.c:151
+#: ../src/gpm-main.c:150
 msgid "Do not daemonize"
 msgstr "Ikke kjør som tjeneste"
 
-#: ../src/gpm-main.c:153 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:91
+#: ../src/gpm-main.c:152 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:91
 msgid "Show extra debugging information"
 msgstr "Vis ekstra feilsøkingsinformasjon"
 
-#: ../src/gpm-main.c:155
+#: ../src/gpm-main.c:154
 msgid "Show version of installed program and exit"
 msgstr "Vis versjon for installert program og avslutt"
 
-#: ../src/gpm-main.c:157
+#: ../src/gpm-main.c:156
 msgid "Exit after a small delay (for debugging)"
 msgstr "Avslutt etter en liten pause (for feilsøking)"
 
-#: ../src/gpm-main.c:159
+#: ../src/gpm-main.c:158
 msgid "Exit after the manager has loaded (for debugging)"
 msgstr "Avslutt når tjenesten har startet (for feilsøking)"
 
-#: ../src/gpm-main.c:163
+#: ../src/gpm-main.c:162
 msgid "GNOME Power Manager"
 msgstr "GNOME strømstyring"
 
@@ -1641,7 +1646,9 @@ msgstr "Batteri i mus har lav strømstyrke"
 #: ../src/gpm-manager.c:1380
 #, c-format
 msgid "The wireless mouse attached to this computer is low in power (%.1f%%)"
-msgstr "Den trådløse musen som er koblet til denne datamaskinen har lite strøm (%.1f%%)"
+msgstr ""
+"Den trådløse musen som er koblet til denne datamaskinen har lite strøm (%.1f%"
+"%)"
 
 #: ../src/gpm-manager.c:1382 ../src/gpm-manager.c:1484
 msgid "Keyboard battery low"
@@ -1651,7 +1658,9 @@ msgstr "Batteriet i tastaturet har lav strømstyrke"
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is low in power (%.1f%%)"
-msgstr "Det trådløse tastaturet som er koblet til denne datamaskinen har lav strømstyrke (%.1f%%)"
+msgstr ""
+"Det trådløse tastaturet som er koblet til denne datamaskinen har lav "
+"strømstyrke (%.1f%%)"
 
 #: ../src/gpm-manager.c:1385 ../src/gpm-manager.c:1489
 msgid "PDA battery low"
@@ -1669,7 +1678,8 @@ msgstr "Batteri på mobiltelefon har lav strømstyrke"
 #: ../src/gpm-manager.c:1389
 #, c-format
 msgid "The cell phone attached to this computer is low in power (%.1f%%)"
-msgstr "Mobiltelefonen som er koblet til denne datamaskinen har lite strøm (%.1f%%)"
+msgstr ""
+"Mobiltelefonen som er koblet til denne datamaskinen har lite strøm (%.1f%%)"
 
 #: ../src/gpm-manager.c:1416
 msgid "a short time"
@@ -1717,35 +1727,45 @@ msgstr "UPS-kapasitet kritisk lav"
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%.1f%%). Restore AC "
 "power to your computer to avoid losing data."
-msgstr "Du har omtrent <b>%s</b> batteritid igjen på UPS-strøm (%.1f%%). Gjenopprett strømtilførsel for datamaskinen for å unngå å tape data."
+msgstr ""
+"Du har omtrent <b>%s</b> batteritid igjen på UPS-strøm (%.1f%%). Gjenopprett "
+"strømtilførsel for datamaskinen for å unngå å tape data."
 
 #: ../src/gpm-manager.c:1480
 #, c-format
 msgid ""
 "The wireless mouse attached to this computer is very low in power (%.1f%%). "
 "This device will soon stop functioning if not charged."
-msgstr "Den trådløse musen som er koblet til denne datamaskinen har lite strøm (%.1f%%). Denne enheten vil snart slutte å fungere hvis den ikke blir ladet."
+msgstr ""
+"Den trådløse musen som er koblet til denne datamaskinen har lite strøm (%.1f%"
+"%). Denne enheten vil snart slutte å fungere hvis den ikke blir ladet."
 
 #: ../src/gpm-manager.c:1485
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is very low in power (%.1f%"
 "%). This device will soon stop functioning if not charged."
-msgstr "Det trådløse tastaturet som er koblet til denne datamaskinen har lite strøm (%.1f%%). Denne enheten vil snart slutte å fungere hvis den ikke blir ladet."
+msgstr ""
+"Det trådløse tastaturet som er koblet til denne datamaskinen har lite strøm "
+"(%.1f%%). Denne enheten vil snart slutte å fungere hvis den ikke blir ladet."
 
 #: ../src/gpm-manager.c:1490
 #, c-format
 msgid ""
 "The PDA attached to this computer is very low in power (%.1f%%). This device "
 "will soon stop functioning if not charged."
-msgstr "PDAen som er koblet til denne datamaskinen har lite strøm (%.1f%%). Denne enheten vil snart slutte å fungere hvis den ikke blir ladet."
+msgstr ""
+"PDAen som er koblet til denne datamaskinen har lite strøm (%.1f%%). Denne "
+"enheten vil snart slutte å fungere hvis den ikke blir ladet."
 
 #: ../src/gpm-manager.c:1495
 #, c-format
 msgid ""
 "Your cell phone is very low in power (%.1f%%). This device will soon stop "
 "functioning if not charged."
-msgstr "Mobiltelefonen som er koblet til denne datamaskinen har lite strøm (%.1f%%). Denne enheten vil snart slutte å fungere hvis den ikke blir ladet."
+msgstr ""
+"Mobiltelefonen som er koblet til denne datamaskinen har lite strøm (%.1f%%). "
+"Denne enheten vil snart slutte å fungere hvis den ikke blir ladet."
 
 #: ../src/gpm-manager.c:1532
 msgid ""
@@ -1914,7 +1934,7 @@ msgstr ""
 msgid "Visit quirk website"
 msgstr "Gå til nettsiden"
 
-#: ../src/gpm-cell-array.c:990
+#: ../src/gpm-cell-array.c:1013
 #, c-format
 msgid ""
 "%s fully charged (%.1f%%)\n"
@@ -1923,23 +1943,23 @@ msgstr ""
 "%s fullt ladet (%.1f%%)\n"
 "Gir %s kjøringstid\n"
 
-#: ../src/gpm-cell-array.c:994
+#: ../src/gpm-cell-array.c:1017
 #, c-format
 msgid "%s fully charged (%.1f%%)\n"
 msgstr "%s fullt ladet (%.1f%%)\n"
 
-#: ../src/gpm-cell-array.c:1002
+#: ../src/gpm-cell-array.c:1025
 #, c-format
 msgid "%s %s remaining (%.1f%%)\n"
 msgstr "%s %s gjenstår (%.1f%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:1007
+#: ../src/gpm-cell-array.c:1030
 #, c-format
 msgid "%s discharging (%.1f%%)\n"
 msgstr "%s lader ut (%.1f%%)\n"
 
-#: ../src/gpm-cell-array.c:1019
+#: ../src/gpm-cell-array.c:1042
 #, c-format
 msgid ""
 "%s %s until charged (%.1f%%)\n"
@@ -1948,29 +1968,31 @@ msgstr ""
 "%s %s til batteriet er ladet (%.1f%%)\n"
 "Gir %s kjøretid\n"
 
-#: ../src/gpm-cell-array.c:1026
+#: ../src/gpm-cell-array.c:1049
 #, c-format
 msgid "%s %s until charged (%.1f%%)\n"
 msgstr "%s %s til batteriet er ladet (%.1f%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:1031
+#: ../src/gpm-cell-array.c:1054
 #, c-format
 msgid "%s charging (%.1f%%)\n"
 msgstr "%s lader (%.1f%%)\n"
 
-#: ../src/gpm-cell-array.c:1038
+#: ../src/gpm-cell-array.c:1061
 msgid "Battery state could not be read at this time\n"
 msgstr "Batteriets tilstand kunne ikke leses nå\n"
 
 #: ../src/gpm-cell.c:543
-msgid "Product"
-msgstr "Produkt"
+#, c-format
+msgid "<b>Product:</b> %s\n"
+msgstr "<b>Produkt:</b> %s\n"
 
 #: ../src/gpm-cell.c:546 ../src/gpm-cell.c:548 ../src/gpm-cell.c:550
 #: ../src/gpm-cell.c:552
-msgid "Status"
-msgstr "Status"
+#, c-format
+msgid "<b>Status:</b> %s\n"
+msgstr "<b>Status:</b> %s\n"
 
 #: ../src/gpm-cell.c:546
 msgid "Missing"
@@ -1989,84 +2011,114 @@ msgid "Discharging"
 msgstr "Lader ut"
 
 #: ../src/gpm-cell.c:555
-msgid "Percentage charge"
-msgstr "Prosent ladet"
+#, c-format
+msgid "<b>Percentage charge:</b> %.1f%%\n"
+msgstr "<b>Ladeprosent:</b> %.1f%%\n"
 
-#: ../src/gpm-cell.c:559
-msgid "Vendor:"
-msgstr "Leverandør:"
+#: ../src/gpm-cell.c:558
+#, c-format
+msgid "<b>Vendor:</b> %s\n"
+msgstr "<b>Produsent:</b> %s\n"
 
-#: ../src/gpm-cell.c:564
+#: ../src/gpm-cell.c:563
 msgid "Lithium ion"
 msgstr "Lithium ion"
 
-#: ../src/gpm-cell.c:566
+#: ../src/gpm-cell.c:565
 msgid "Lead acid"
 msgstr "Lead acid"
 
-#: ../src/gpm-cell.c:568
+#: ../src/gpm-cell.c:567
 msgid "Lithium polymer"
 msgstr "Lithium polymer"
 
-#: ../src/gpm-cell.c:570
+#: ../src/gpm-cell.c:569
 msgid "Nickel metal hydride"
 msgstr "Nikkel/metall hybrid"
 
-#: ../src/gpm-cell.c:577
-msgid "Technology"
-msgstr "Teknologi"
+#. Translators: Unknown is related to the Technology of the battery
+#: ../src/gpm-cell.c:572 ../src/gpm-cell-unit.c:260 ../src/gpm-cell-unit.c:276
+#: ../src/gpm-statistics-core.c:739
+msgid "Unknown"
+msgstr "Ukjent"
+
+#: ../src/gpm-cell.c:578
+#, c-format
+msgid "<b>Technology:</b> %s\n"
+msgstr "<b>Teknologi:</b> %s\n"
 
 #: ../src/gpm-cell.c:581
-msgid "Serial number"
-msgstr "Serienummer"
+#, c-format
+msgid "<b>Serial number:</b> %s\n"
+msgstr "<b>Serienummer:</b> %s\n"
 
-#: ../src/gpm-cell.c:585
-msgid "Model"
-msgstr "Modell"
+#: ../src/gpm-cell.c:584
+#, c-format
+msgid "<b>Model:</b> %s\n"
+msgstr "<b>Modell:</b> %s\n"
 
-#: ../src/gpm-cell.c:591
-msgid "Charge time"
-msgstr "Ladetid"
+#: ../src/gpm-cell.c:589
+#, c-format
+msgid "<b>Charge time:</b> %s\n"
+msgstr "<b>Ladetid:</b> %s\n"
 
-#: ../src/gpm-cell.c:598
-msgid "Discharge time"
-msgstr "Utladingstid"
+#: ../src/gpm-cell.c:595
+#, c-format
+msgid "<b>Discharge time:</b> %s\n"
+msgstr "<b>Utladingstid:</b> %s\n"
 
-#: ../src/gpm-cell.c:604
+#. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
+#: ../src/gpm-cell.c:602
 msgid "Excellent"
 msgstr "Utmerket"
 
-#: ../src/gpm-cell.c:606
+#: ../src/gpm-cell.c:604
 msgid "Good"
 msgstr "God"
 
-#: ../src/gpm-cell.c:608
+#: ../src/gpm-cell.c:606
 msgid "Fair"
 msgstr "Akseptabel"
 
-#: ../src/gpm-cell.c:610
+#: ../src/gpm-cell.c:608
 msgid "Poor"
 msgstr "Dårlig"
 
-#: ../src/gpm-cell.c:613
-msgid "Capacity"
-msgstr "Kapasitet"
+#. Translators: %i is a percentage and %s the condition (Excellent, Good, ...)
+#: ../src/gpm-cell.c:611
+#, c-format
+msgid "<b>Capacity:</b> %i%% (%s)\n"
+msgstr "<b>Kapasitet:</b> %i%% (%s)\n"
 
-#: ../src/gpm-cell.c:619 ../src/gpm-cell.c:642
-msgid "Current charge"
-msgstr "Nåværende nivå"
+#: ../src/gpm-cell.c:616
+#, c-format
+msgid "<b>Current charge:</b> %.1f Wh\n"
+msgstr "<b>Nåværende nivå:</b> %.1f Wh\n"
+
+#: ../src/gpm-cell.c:621
+#, c-format
+msgid "<b>Last full charge:</b> %.1f Wh\n"
+msgstr "<b>Siste fulle lading:</b> %.1f Wh\n"
 
 #: ../src/gpm-cell.c:625
-msgid "Last full charge"
-msgstr "Sist gang fullt ladet"
+#, c-format
+msgid "<b>Design charge:</b> %.1f Wh\n"
+msgstr "<b>Ladekapasitet fra fabrikk:</b> %.1f Wh\n"
 
-#: ../src/gpm-cell.c:630 ../src/gpm-cell.c:647
-msgid "Design charge"
-msgstr "Ladekapasitet fra fabrikk"
+#: ../src/gpm-cell.c:629
+#, c-format
+msgid "<b>Charge rate:</b> %.1f W\n"
+msgstr "<b>Laderate:</b> %.1f W\n"
 
 #: ../src/gpm-cell.c:635
-msgid "Charge rate"
-msgstr "Laderate"
+#, c-format
+msgid "<b>Current charge:</b> %i/7\n"
+msgstr "<b>Nåværende ladenivå:</b> %i/7\n"
+
+#: ../src/gpm-cell.c:639
+#, c-format
+msgid "<b>Design charge:</b> %i/7\n"
+msgstr "<b>Ladekapasitet fra fabrikk:</b> %i/7\n"
 
 #: ../src/gpm-cell-unit.c:248
 msgid "Laptop batteries"
@@ -2091,11 +2143,6 @@ msgstr "PDAer"
 #: ../src/gpm-cell-unit.c:258
 msgid "Cell phones"
 msgstr "Mobiltelefoner"
-
-#: ../src/gpm-cell-unit.c:260 ../src/gpm-cell-unit.c:276
-#: ../src/gpm-statistics-core.c:739
-msgid "Unknown"
-msgstr "Ukjent"
 
 #: ../src/gpm-cell-unit.c:264
 msgid "Laptop battery"
