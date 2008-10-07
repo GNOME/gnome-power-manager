@@ -7,10 +7,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-power-manager 2.20.x\n"
+"Project-Id-Version: gnome-power-manager 2.24.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-09 10:04+0200\n"
-"PO-Revision-Date: 2008-09-09 10:10+0200\n"
+"POT-Creation-Date: 2008-10-07 12:20+0200\n"
+"PO-Revision-Date: 2008-10-07 12:29+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -341,13 +341,17 @@ msgstr ""
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on battery power."
-msgstr "Hvorvidt skjermen skal dempes for å spare strøm når datamaskinen ikke er i bruk og på batteristrøm."
+msgstr ""
+"Hvorvidt skjermen skal dempes for å spare strøm når datamaskinen ikke er i "
+"bruk og på batteristrøm."
 
 #: ../data/gnome-power-manager.schemas.in.h:37
 msgid ""
 "If the screen should be reduced in brightness when the computer is on "
 "battery power."
-msgstr "Hvorvidt skjermen skal dempes for å spare strøm når datamaskinen kjører på batteristrøm."
+msgstr ""
+"Hvorvidt skjermen skal dempes for å spare strøm når datamaskinen kjører på "
+"batteristrøm."
 
 #: ../data/gnome-power-manager.schemas.in.h:38
 msgid "If the system low-power mode should be enabled when on AC power."
@@ -506,19 +510,19 @@ msgstr "Reduser skjermens lysstyrke ved bruk av batteri"
 
 #: ../data/gnome-power-manager.schemas.in.h:74
 msgid "Sleep timeout computer when on AC"
-msgstr ""
+msgstr "Tidsavbrudd for hvilemodus ved nettstrøm"
 
 #: ../data/gnome-power-manager.schemas.in.h:75
 msgid "Sleep timeout computer when on battery"
-msgstr ""
+msgstr "Tidsavbrudd for hvilemodus på batteri"
 
 #: ../data/gnome-power-manager.schemas.in.h:76
 msgid "Sleep timeout display when on AC"
-msgstr ""
+msgstr "Tidsavbrudd for skjermblanking på nettstrøm"
 
 #: ../data/gnome-power-manager.schemas.in.h:77
 msgid "Sleep timeout display when on battery"
-msgstr ""
+msgstr "Tidsavbrudd for skjermblanking på batteri"
 
 #: ../data/gnome-power-manager.schemas.in.h:78
 msgid "Suspend button action"
@@ -588,53 +592,50 @@ msgid ""
 msgstr "Handling ved bruk av dvalemodus-knapp"
 
 #: ../data/gnome-power-manager.schemas.in.h:88
-#, fuzzy
 msgid ""
 "The action to take when the system power button is pressed. Possible values "
 "are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
 "\"."
-msgstr "Handling ved bruk av dvalemodus-knapp"
+msgstr "Handling ved bruk av strømknappen på systemet. Mulige verdier er «suspend», «hibernate», «interactive», «shutdown» og «nothing»."
 
 #: ../data/gnome-power-manager.schemas.in.h:89
-#, fuzzy
 msgid ""
 "The action to take when the system suspend button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
 "\"nothing\"."
-msgstr "Handling ved bruk av dvalemodus-knapp"
+msgstr "Handling ved bruk av knapp for hvilemodus. Mulige verdier er «suspend», «hibernate», «interactive», «shutdown» og «nothing»."
 
 #: ../data/gnome-power-manager.schemas.in.h:90
-#, fuzzy
 msgid ""
 "The amount of time in seconds before the display goes to sleep when the "
 "computer is on AC power."
-msgstr "Inaktiv tid i sekunder før skjermen går i dvalemodus (på nettstrøm)"
+msgstr "Tid i sekunder før skjermen går i dvalemodus når datamaskinen går på nettstrøm"
 
 #: ../data/gnome-power-manager.schemas.in.h:91
 msgid ""
 "The amount of time in seconds the computer on AC power needs to be inactive "
 "before it goes to sleep."
-msgstr ""
+msgstr "Tid i sekunder datamaskinen må være inaktiv før den går i hvilemodus når den går på nettstrøm."
 
 #: ../data/gnome-power-manager.schemas.in.h:92
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before it goes to sleep."
-msgstr ""
+msgstr "Tid datamaskinen må være inaktiv i sekunder før den går i hvilemodus på batteristrøm."
 
 #: ../data/gnome-power-manager.schemas.in.h:93
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before the display goes to sleep."
-msgstr ""
+msgstr "Tid datamaskinen må være inaktiv i sekunder før skjermen blankes når maskinen går på batteristrøm."
 
 #: ../data/gnome-power-manager.schemas.in.h:94
 msgid "The amount the light sensors should contribute to the brightness"
-msgstr ""
+msgstr "Mengde lys sensorene skal bidra med til lysstyrken"
 
 #: ../data/gnome-power-manager.schemas.in.h:95
 msgid "The amount the light sensors should contribute to the brightness."
-msgstr ""
+msgstr "Mengde lys sensorene  skal bidra med til lysstyrken."
 
 #: ../data/gnome-power-manager.schemas.in.h:96
 #, fuzzy
@@ -677,21 +678,21 @@ msgstr "Skjermens lysstyrke ved inaktiv sesjon"
 #: ../data/gnome-power-manager.schemas.in.h:101
 msgid ""
 "The calibration of the light sensors so that the screen is bright enough"
-msgstr ""
+msgstr "Kalibrering av lyssensorene slik at skjermen blir lys nok"
 
 #: ../data/gnome-power-manager.schemas.in.h:102
 msgid ""
 "The calibration of the light sensors so that the screen is bright enough, in "
 "percent."
-msgstr ""
+msgstr "Kalibrering av lyssensorene slik at skjermen blir lys nok. I prosent."
 
 #: ../data/gnome-power-manager.schemas.in.h:103
 msgid "The default amount of time to dim the screen after idle"
-msgstr ""
+msgstr "Forvalgt mengde tid før skjermen blankes ved inaktivitet"
 
 #: ../data/gnome-power-manager.schemas.in.h:104
 msgid "The default amount of time to dim the screen after idle."
-msgstr ""
+msgstr "Forvalgt mengde tid før skjermen blankes ved inaktivitet."
 
 #: ../data/gnome-power-manager.schemas.in.h:105
 msgid "The default configuration version."
@@ -699,23 +700,23 @@ msgstr "Forvalgt konfigurasjonsversjon."
 
 #: ../data/gnome-power-manager.schemas.in.h:106
 msgid "The default graph type to show in the statistics window"
-msgstr ""
+msgstr "Forvalgt type graf som skal vises i statistikkvinduet"
 
 #: ../data/gnome-power-manager.schemas.in.h:107
 msgid "The default graph type to show in the statistics window."
-msgstr ""
+msgstr "Forvalgt type graf som skal vises i statistikkvinduet."
 
 #: ../data/gnome-power-manager.schemas.in.h:108
 msgid "The interval the ambient light sensors should be polled"
-msgstr ""
+msgstr "Intervall for henting av data fra lyssensorene"
 
 #: ../data/gnome-power-manager.schemas.in.h:109
 msgid "The interval the ambient light sensors should be polled in seconds."
-msgstr ""
+msgstr "Intervall for henting av data fra lyssensorene i sekunder."
 
 #: ../data/gnome-power-manager.schemas.in.h:110
 msgid "The invalid timeout for power actions"
-msgstr ""
+msgstr "Ugyldig tidsavbrudd for handlinger for strømstyring"
 
 #: ../data/gnome-power-manager.schemas.in.h:111
 msgid ""
@@ -729,7 +730,7 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:113
 msgid "The maximum time displayed on the graph"
-msgstr ""
+msgstr "Maksimumstid som vises på grafen"
 
 #: ../data/gnome-power-manager.schemas.in.h:114
 msgid ""
@@ -818,7 +819,7 @@ msgstr "Når skal ikonet skal vises i varslingsområdet"
 
 #: ../data/gnome-power-manager.schemas.in.h:130
 msgid "Whether NetworkManager should be connected and disconnected on sleep."
-msgstr ""
+msgstr "Om NetworkManager skal kobles til/fra ved hvilemodus."
 
 #: ../data/gnome-power-manager.schemas.in.h:131
 msgid ""
@@ -1921,7 +1922,7 @@ msgstr ""
 msgid "Visit quirk website"
 msgstr "Gå til nettsiden"
 
-#: ../src/gpm-cell-array.c:1015
+#: ../src/gpm-cell-array.c:1013
 #, c-format
 msgid ""
 "%s fully charged (%.1f%%)\n"
@@ -1930,23 +1931,23 @@ msgstr ""
 "%s fullt ladet (%.1f%%)\n"
 "Gir %s kjøringstid\n"
 
-#: ../src/gpm-cell-array.c:1019
+#: ../src/gpm-cell-array.c:1017
 #, c-format
 msgid "%s fully charged (%.1f%%)\n"
 msgstr "%s fullt ladet (%.1f%%)\n"
 
-#: ../src/gpm-cell-array.c:1027
+#: ../src/gpm-cell-array.c:1025
 #, c-format
 msgid "%s %s remaining (%.1f%%)\n"
 msgstr "%s %s gjenstår (%.1f%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:1032
+#: ../src/gpm-cell-array.c:1030
 #, c-format
 msgid "%s discharging (%.1f%%)\n"
 msgstr "%s lader ut (%.1f%%)\n"
 
-#: ../src/gpm-cell-array.c:1044
+#: ../src/gpm-cell-array.c:1042
 #, c-format
 msgid ""
 "%s %s until charged (%.1f%%)\n"
@@ -1955,18 +1956,18 @@ msgstr ""
 "%s %s til batteriet er ladet (%.1f%%)\n"
 "Gir %s kjøretid\n"
 
-#: ../src/gpm-cell-array.c:1051
+#: ../src/gpm-cell-array.c:1049
 #, c-format
 msgid "%s %s until charged (%.1f%%)\n"
 msgstr "%s %s til batteriet er ladet (%.1f%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:1056
+#: ../src/gpm-cell-array.c:1054
 #, c-format
 msgid "%s charging (%.1f%%)\n"
 msgstr "%s lader (%.1f%%)\n"
 
-#: ../src/gpm-cell-array.c:1063
+#: ../src/gpm-cell-array.c:1061
 msgid "Battery state could not be read at this time\n"
 msgstr "Batteriets tilstand kunne ikke leses nå\n"
 
