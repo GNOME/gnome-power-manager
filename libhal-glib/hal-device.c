@@ -31,18 +31,18 @@
 #include "egg-debug.h"
 #include "egg-dbus-proxy.h"
 
-#include "libhal-marshal.h"
-#include "libhal-gpower.h"
-#include "libhal-gdevice.h"
-#include "libhal-gmanager.h"
+#include "hal-marshal.h"
+#include "hal-device-power.h"
+#include "hal-device.h"
+#include "hal-manager.h"
 
-static void     hal_gdevice_class_init (HalGDeviceClass *klass);
-static void     hal_gdevice_init       (HalGDevice      *device);
-static void     hal_gdevice_finalize   (GObject	     *object);
+static void     hal_device_class_init (HalDeviceClass *klass);
+static void     hal_device_init       (HalDevice      *device);
+static void     hal_device_finalize   (GObject	     *object);
 
-#define LIBHAL_GDEVICE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), LIBHAL_TYPE_GDEVICE, HalGDevicePrivate))
+#define HAL_DEVICE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), HAL_TYPE_DEVICE, HalDevicePrivate))
 
-struct HalGDevicePrivate
+struct HalDevicePrivate
 {
 	DBusGConnection		*connection;
 	gboolean		 use_property_modified;
@@ -51,7 +51,7 @@ struct HalGDevicePrivate
 	gchar			*udi;
 };
 
-/* Signals emitted from HalGDevice are:
+/* Signals emitted from HalDevice are:
  *
  * device-added
  * device-removed
@@ -70,20 +70,20 @@ enum {
 
 static guint	     signals [LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (HalGDevice, hal_gdevice, G_TYPE_OBJECT)
+G_DEFINE_TYPE (HalDevice, hal_device, G_TYPE_OBJECT)
 
 /**
- * hal_gdevice_set_udi:
+ * hal_device_set_udi:
  *
  * Return value: TRUE for success, FALSE for failure
  **/
 gboolean
-hal_gdevice_set_udi (HalGDevice  *device, const gchar *udi)
+hal_device_set_udi (HalDevice  *device, const gchar *udi)
 {
 	DBusGProxy *proxy;
 	DBusGConnection *connection;
 
-	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
+	g_return_val_if_fail (HAL_IS_DEVICE (device), FALSE);
 	g_return_val_if_fail (udi != NULL, FALSE);
 
 	if (device->priv->udi != NULL) {
@@ -104,28 +104,28 @@ hal_gdevice_set_udi (HalGDevice  *device, const gchar *udi)
 }
 
 /**
- * hal_gdevice_get_udi:
+ * hal_device_get_udi:
  *
  * Return value: UDI
  **/
 const gchar *
-hal_gdevice_get_udi (HalGDevice *device)
+hal_device_get_udi (HalDevice *device)
 {
-	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), NULL);
+	g_return_val_if_fail (HAL_IS_DEVICE (device), NULL);
 
 	return device->priv->udi;
 }
 
 /**
- * hal_gdevice_get_bool:
+ * hal_device_get_bool:
  *
- * @hal_gdevice: This class instance
+ * @hal_device: This class instance
  * @key: The key to query
  * @value: return value, passed by ref
  * Return value: TRUE for success, FALSE for failure
  **/
 gboolean
-hal_gdevice_get_bool (HalGDevice  *device,
+hal_device_get_bool (HalDevice  *device,
 		      const gchar *key,
 		      gboolean    *value,
 		      GError     **error)
@@ -133,7 +133,7 @@ hal_gdevice_get_bool (HalGDevice  *device,
 	gboolean ret;
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
+	g_return_val_if_fail (HAL_IS_DEVICE (device), FALSE);
 	g_return_val_if_fail (key != NULL, FALSE);
 	g_return_val_if_fail (value != NULL, FALSE);
 	g_return_val_if_fail (device->priv->udi != NULL, FALSE);
@@ -155,9 +155,9 @@ hal_gdevice_get_bool (HalGDevice  *device,
 }
 
 /**
- * hal_gdevice_get_string:
+ * hal_device_get_string:
  *
- * @hal_gdevice: This class instance
+ * @hal_device: This class instance
  * @key: The key to query
  * @value: return value, passed by ref
  * Return value: TRUE for success, FALSE for failure
@@ -165,7 +165,7 @@ hal_gdevice_get_bool (HalGDevice  *device,
  * You must g_free () the return value.
  **/
 gboolean
-hal_gdevice_get_string (HalGDevice   *device,
+hal_device_get_string (HalDevice   *device,
 			const gchar  *key,
 			gchar       **value,
 			GError      **error)
@@ -173,7 +173,7 @@ hal_gdevice_get_string (HalGDevice   *device,
 	gboolean ret;
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
+	g_return_val_if_fail (HAL_IS_DEVICE (device), FALSE);
 	g_return_val_if_fail (key != NULL, FALSE);
 	g_return_val_if_fail (value != NULL, FALSE);
 	g_return_val_if_fail (device->priv->udi != NULL, FALSE);
@@ -195,15 +195,15 @@ hal_gdevice_get_string (HalGDevice   *device,
 }
 
 /**
- * hal_gdevice_get_int:
+ * hal_device_get_int:
  *
- * @hal_gdevice: This class instance
+ * @hal_device: This class instance
  * @key: The key to query
  * @value: return value, passed by ref
  * Return value: TRUE for success, FALSE for failure
  **/
 gboolean
-hal_gdevice_get_int (HalGDevice   *device,
+hal_device_get_int (HalDevice   *device,
 		     const gchar  *key,
 		     gint         *value,
 		     GError      **error)
@@ -211,7 +211,7 @@ hal_gdevice_get_int (HalGDevice   *device,
 	gboolean ret;
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
+	g_return_val_if_fail (HAL_IS_DEVICE (device), FALSE);
 	g_return_val_if_fail (key != NULL, FALSE);
 	g_return_val_if_fail (value != NULL, FALSE);
 	g_return_val_if_fail (device->priv->udi != NULL, FALSE);
@@ -233,12 +233,12 @@ hal_gdevice_get_int (HalGDevice   *device,
 }
 
 /**
- * hal_gdevice_get_uint:
+ * hal_device_get_uint:
  *
  * HAL has no concept of a UINT, only INT
  **/
 gboolean
-hal_gdevice_get_uint (HalGDevice   *device,
+hal_device_get_uint (HalDevice   *device,
 		      const gchar  *key,
 		      guint        *value,
 		      GError      **error)
@@ -247,21 +247,21 @@ hal_gdevice_get_uint (HalGDevice   *device,
 	gboolean ret;
 
 	/* bodge */
-	ret = hal_gdevice_get_int (device, key, &tvalue, error);
+	ret = hal_device_get_int (device, key, &tvalue, error);
 	*value = (guint) tvalue;
 	return ret;
 }
 
 /**
- * hal_gdevice_query_capability:
+ * hal_device_query_capability:
  *
- * @hal_gdevice: This class instance
+ * @hal_device: This class instance
  * @capability: The capability, e.g. "battery"
  * @value: return value, passed by ref
  * Return value: TRUE for success, FALSE for failure
  **/
 gboolean
-hal_gdevice_query_capability (HalGDevice  *device,
+hal_device_query_capability (HalDevice  *device,
 			      const gchar *capability,
 			      gboolean    *has_capability,
 			      GError     **error)
@@ -269,7 +269,7 @@ hal_gdevice_query_capability (HalGDevice  *device,
 	gboolean ret;
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
+	g_return_val_if_fail (HAL_IS_DEVICE (device), FALSE);
 	g_return_val_if_fail (capability != NULL, FALSE);
 	g_return_val_if_fail (has_capability != NULL, FALSE);
 	g_return_val_if_fail (device->priv->udi != NULL, FALSE);
@@ -306,7 +306,7 @@ watch_device_property_modified (DBusGProxy  *proxy,
 				gboolean     is_added,
 				gboolean     is_removed,
 				gboolean     finally,
-				HalGDevice  *device)
+				HalDevice  *device)
 {
 	g_signal_emit (device, signals [DEVICE_PROPERTY_MODIFIED], 0,
 		       key, is_added, is_removed, finally);
@@ -324,7 +324,7 @@ static void
 watch_device_properties_modified_cb (DBusGProxy *proxy,
 				     gint	 type,
 				     GPtrArray  *properties,
-				     HalGDevice *device)
+				     HalDevice *device)
 {
 	GValueArray *array;
 	const gchar *udi;
@@ -361,18 +361,18 @@ watch_device_properties_modified_cb (DBusGProxy *proxy,
 }
 
 /**
- * hal_gdevice_watch_property_modified:
+ * hal_device_watch_property_modified:
  *
  * Watch the specified device, so it emits device-property-modified and
  * adds to the gpm cache so we don't get asked to add it again.
  */
 gboolean
-hal_gdevice_watch_property_modified (HalGDevice *device)
+hal_device_watch_property_modified (HalDevice *device)
 {
 	DBusGProxy *proxy;
 	GType struct_array_type, struct_type;
 
-	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
+	g_return_val_if_fail (HAL_IS_DEVICE (device), FALSE);
 	g_return_val_if_fail (device->priv->udi != NULL, FALSE);
 
 	if (device->priv->use_property_modified) {
@@ -390,7 +390,7 @@ hal_gdevice_watch_property_modified (HalGDevice *device)
 
 	struct_array_type = dbus_g_type_get_collection ("GPtrArray", struct_type);
 
-	dbus_g_object_register_marshaller (libhal_marshal_VOID__INT_BOXED,
+	dbus_g_object_register_marshaller (hal_marshal_VOID__INT_BOXED,
 					   G_TYPE_NONE, G_TYPE_INT,
 					   struct_array_type, G_TYPE_INVALID);
 
@@ -420,22 +420,22 @@ static void
 watch_device_condition_cb (DBusGProxy  *proxy,
 			   const gchar *condition,
 			   const gchar *details,
-			   HalGDevice  *device)
+			   HalDevice  *device)
 {
 	g_signal_emit (device, signals [DEVICE_CONDITION], 0, condition, details);
 }
 
 /**
- * hal_gdevice_watch_condition:
+ * hal_device_watch_condition:
  *
  * Watch the specified device, so it emits a device-condition
  */
 gboolean
-hal_gdevice_watch_condition (HalGDevice *device)
+hal_device_watch_condition (HalDevice *device)
 {
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
+	g_return_val_if_fail (HAL_IS_DEVICE (device), FALSE);
 	g_return_val_if_fail (device->priv->udi != NULL, FALSE);
 
 	if (device->priv->use_condition) {
@@ -445,7 +445,7 @@ hal_gdevice_watch_condition (HalGDevice *device)
 
 	device->priv->use_condition = TRUE;
 
-	dbus_g_object_register_marshaller (libhal_marshal_VOID__STRING_STRING,
+	dbus_g_object_register_marshaller (hal_marshal_VOID__STRING_STRING,
 					   G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING,
 					   G_TYPE_INVALID);
 
@@ -462,16 +462,16 @@ hal_gdevice_watch_condition (HalGDevice *device)
 }
 
 /**
- * hal_gdevice_remove_condition:
+ * hal_device_remove_condition:
  *
  * Remove the specified device, so it does not emit device-condition signals.
  */
 gboolean
-hal_gdevice_remove_condition (HalGDevice *device)
+hal_device_remove_condition (HalDevice *device)
 {
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
+	g_return_val_if_fail (HAL_IS_DEVICE (device), FALSE);
 
 	if (device->priv->use_condition == FALSE) {
 		/* already connected */
@@ -491,16 +491,16 @@ hal_gdevice_remove_condition (HalGDevice *device)
 }
 
 /**
- * hal_gdevice_remove_property_modified:
+ * hal_device_remove_property_modified:
  *
  * Remove the specified device, so it does not emit device-propery-modified.
  */
 gboolean
-hal_gdevice_remove_property_modified (HalGDevice *device)
+hal_device_remove_property_modified (HalDevice *device)
 {
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
+	g_return_val_if_fail (HAL_IS_DEVICE (device), FALSE);
 
 	if (device->priv->use_property_modified == FALSE) {
 		/* already disconnected */
@@ -528,9 +528,9 @@ hal_gdevice_remove_property_modified (HalGDevice *device)
 static void
 proxy_status_cb (DBusGProxy *proxy,
 		 gboolean    status,
-		 HalGDevice *device)
+		 HalDevice *device)
 {
-	g_return_if_fail (LIBHAL_IS_GDEVICE (device));
+	g_return_if_fail (HAL_IS_DEVICE (device));
 	if (status) {
 		/* should join */
 	} else {
@@ -539,48 +539,48 @@ proxy_status_cb (DBusGProxy *proxy,
 }
 
 /**
- * hal_gdevice_class_init:
+ * hal_device_class_init:
  * @klass: This class instance
  **/
 static void
-hal_gdevice_class_init (HalGDeviceClass *klass)
+hal_device_class_init (HalDeviceClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	object_class->finalize = hal_gdevice_finalize;
-	g_type_class_add_private (klass, sizeof (HalGDevicePrivate));
+	object_class->finalize = hal_device_finalize;
+	g_type_class_add_private (klass, sizeof (HalDevicePrivate));
 
 	signals [DEVICE_PROPERTY_MODIFIED] =
 		g_signal_new ("property-modified",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (HalGDeviceClass, device_property_modified),
+			      G_STRUCT_OFFSET (HalDeviceClass, device_property_modified),
 			      NULL,
 			      NULL,
-			      libhal_marshal_VOID__STRING_BOOLEAN_BOOLEAN_BOOLEAN,
+			      hal_marshal_VOID__STRING_BOOLEAN_BOOLEAN_BOOLEAN,
 			      G_TYPE_NONE, 4, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
 	signals [DEVICE_CONDITION] =
 		g_signal_new ("device-condition",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (HalGDeviceClass, device_condition),
+			      G_STRUCT_OFFSET (HalDeviceClass, device_condition),
 			      NULL,
 			      NULL,
-			      libhal_marshal_VOID__STRING_STRING,
+			      hal_marshal_VOID__STRING_STRING,
 			      G_TYPE_NONE,
 			      2, G_TYPE_STRING, G_TYPE_STRING);
 }
 
 /**
- * hal_gdevice_init:
+ * hal_device_init:
  *
- * @hal_gdevice: This class instance
+ * @hal_device: This class instance
  **/
 static void
-hal_gdevice_init (HalGDevice *device)
+hal_device_init (HalDevice *device)
 {
 	GError *error = NULL;
 
-	device->priv = LIBHAL_GDEVICE_GET_PRIVATE (device);
+	device->priv = HAL_DEVICE_GET_PRIVATE (device);
 
 	device->priv->connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (error != NULL) {
@@ -598,39 +598,39 @@ hal_gdevice_init (HalGDevice *device)
 }
 
 /**
- * hal_gdevice_finalize:
+ * hal_device_finalize:
  * @object: This class instance
  **/
 static void
-hal_gdevice_finalize (GObject *object)
+hal_device_finalize (GObject *object)
 {
-	HalGDevice *device;
+	HalDevice *device;
 	g_return_if_fail (object != NULL);
-	g_return_if_fail (LIBHAL_IS_GDEVICE (object));
+	g_return_if_fail (HAL_IS_DEVICE (object));
 
-	device = LIBHAL_GDEVICE (object);
-	device->priv = LIBHAL_GDEVICE_GET_PRIVATE (device);
+	device = HAL_DEVICE (object);
+	device->priv = HAL_DEVICE_GET_PRIVATE (device);
 
 	if (device->priv->use_property_modified) {
-		hal_gdevice_remove_property_modified (device);
+		hal_device_remove_property_modified (device);
 	}
 	if (device->priv->use_condition) {
-		hal_gdevice_remove_condition (device);
+		hal_device_remove_condition (device);
 	}
 
 	g_object_unref (device->priv->gproxy);
 	g_free (device->priv->udi);
 
-	G_OBJECT_CLASS (hal_gdevice_parent_class)->finalize (object);
+	G_OBJECT_CLASS (hal_device_parent_class)->finalize (object);
 }
 
 /**
- * hal_gdevice_new:
- * Return value: new HalGDevice instance.
+ * hal_device_new:
+ * Return value: new HalDevice instance.
  **/
-HalGDevice *
-hal_gdevice_new (void)
+HalDevice *
+hal_device_new (void)
 {
-	HalGDevice *device = g_object_new (LIBHAL_TYPE_GDEVICE, NULL);
-	return LIBHAL_GDEVICE (device);
+	HalDevice *device = g_object_new (HAL_TYPE_DEVICE, NULL);
+	return HAL_DEVICE (device);
 }

@@ -39,10 +39,10 @@
 
 #include <glib/gi18n.h>
 
-#include <libhal-gpower.h>
-#include <libhal-gdevice.h>
-#include <libhal-gdevicestore.h>
-#include <libhal-gmanager.h>
+#include <hal-device-power.h>
+#include <hal-device.h>
+#include <hal-device-store.h>
+#include <hal-manager.h>
 
 #include "gpm-common.h"
 #include "gpm-prefs.h"

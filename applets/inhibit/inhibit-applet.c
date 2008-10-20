@@ -34,9 +34,9 @@
 #include <glib-object.h>
 #include <dbus/dbus-glib.h>
 
-#include "../src/egg-debug.h"
-#include "../src/egg-dbus-monitor.h"
-#include "../src/gpm-common.h"
+#include "egg-debug.h"
+#include "egg-dbus-monitor.h"
+#include "gpm-common.h"
 
 #define GPM_TYPE_INHIBIT_APPLET		(gpm_inhibit_applet_get_type ())
 #define GPM_INHIBIT_APPLET(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_INHIBIT_APPLET, GpmInhibitApplet))

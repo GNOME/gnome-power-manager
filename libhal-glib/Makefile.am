@@ -6,89 +6,48 @@ INCLUDES = \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"
 
 noinst_LTLIBRARIES =						\
-	libhal-gmanager.la					\
-	libhal-gdevice.la					\
-	libhal-gdevicestore.la					\
-	libhal-gpower.la
+	libhal.la
 
-libhal_gmanager_la_SOURCES =					\
+libhal_la_SOURCES =						\
 	egg-dbus-proxy.h					\
 	egg-dbus-proxy.c					\
 	egg-dbus-monitor.h					\
 	egg-dbus-monitor.c					\
 	egg-debug.h						\
 	egg-debug.c						\
-	libhal-marshal.h					\
-	libhal-marshal.c					\
-	libhal-gdevice.c					\
-	libhal-gdevice.h					\
-	libhal-gmanager.c					\
-	libhal-gmanager.h
-libhal_gmanager_la_LIBADD =					\
-	$(DBUS_LIBS)						\
-	$(INTLLIBS)						\
-	$(GLIB_LIBS)
+	hal-marshal.h						\
+	hal-marshal.c						\
+	hal-device.c						\
+	hal-device.h						\
+	hal-manager.c						\
+	hal-manager.h						\
+	hal-device-store.c					\
+	hal-device-store.h					\
+	hal-device-power.c					\
+	hal-device-power.h
 
-libhal_gdevice_la_SOURCES =					\
-	egg-dbus-proxy.h					\
-	egg-dbus-proxy.c					\
-	egg-dbus-monitor.h					\
-	egg-dbus-monitor.c					\
-	egg-debug.h						\
-	egg-debug.c						\
-	libhal-marshal.h					\
-	libhal-marshal.c					\
-	libhal-gdevice.c					\
-	libhal-gdevice.h
-libhal_gdevice_la_LIBADD =					\
-	$(DBUS_LIBS)						\
-	$(INTLLIBS)						\
-	$(GLIB_LIBS)
-
-libhal_gdevicestore_la_SOURCES =				\
-	libhal-marshal.h					\
-	libhal-marshal.c					\
-	libhal-gdevice.c					\
-	libhal-gdevice.h					\
-	libhal-gdevicestore.c					\
-	libhal-gdevicestore.h
-libhal_gdevicestore_la_LIBADD =					\
-	$(DBUS_LIBS)						\
-	$(INTLLIBS)						\
-	$(GLIB_LIBS)
-
-libhal_gpower_la_SOURCES =					\
-	egg-dbus-proxy.h					\
-	egg-dbus-proxy.c					\
-	egg-dbus-monitor.h					\
-	egg-dbus-monitor.c					\
-	egg-debug.h						\
-	egg-debug.c						\
-	libhal-marshal.h					\
-	libhal-marshal.c					\
-	libhal-gpower.c						\
-	libhal-gpower.h
-libhal_gpower_la_LIBADD =					\
+libhal_la_LIBADD =						\
 	$(DBUS_LIBS)						\
 	$(INTLLIBS)						\
 	$(GLIB_LIBS)
 
 EXTRA_DIST =							\
-	libhal-marshal.list
+	hal-marshal.list
 
 BUILT_SOURCES = 						\
-	libhal-marshal.c					\
-	libhal-marshal.h
+	hal-marshal.c						\
+	hal-marshal.h
 
-libhal-marshal.c: libhal-marshal.list
-	echo "#include \"libhal-marshal.h\"" > $@ && \
-	@GLIB_GENMARSHAL@ $< --prefix=libhal_marshal --body >> $@
+hal-marshal.c: hal-marshal.list
+	echo "#include \"hal-marshal.h\"" > $@ && \
+	@GLIB_GENMARSHAL@ $< --prefix=hal_marshal --body >> $@
 
-libhal-marshal.h: libhal-marshal.list
-	@GLIB_GENMARSHAL@ $< --prefix=libhal_marshal --header > $@
+hal-marshal.h: hal-marshal.list
+	@GLIB_GENMARSHAL@ $< --prefix=hal_marshal --header > $@
 
 clean-local:
 	rm -f *~
-	rm -f libhal-marshal.c libhal-marshal.h
+	rm -f hal-marshal.c hal-marshal.h
 
 CLEANFILES = $(BUILT_SOURCES)
+

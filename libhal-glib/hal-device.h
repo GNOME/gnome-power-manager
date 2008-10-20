@@ -19,29 +19,29 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef __LIBHAL_GDEVICE_H
-#define __LIBHAL_GDEVICE_H
+#ifndef __HAL_DEVICE_H
+#define __HAL_DEVICE_H
 
 #include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define LIBHAL_TYPE_GDEVICE		(hal_gdevice_get_type ())
-#define LIBHAL_GDEVICE(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), LIBHAL_TYPE_GDEVICE, HalGDevice))
-#define LIBHAL_GDEVICE_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), LIBHAL_TYPE_GDEVICE, HalGDeviceClass))
-#define LIBHAL_IS_GDEVICE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), LIBHAL_TYPE_GDEVICE))
-#define LIBHAL_IS_GDEVICE_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), LIBHAL_TYPE_GDEVICE))
-#define LIBHAL_GDEVICE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), LIBHAL_TYPE_GDEVICE, HalGDeviceClass))
+#define HAL_TYPE_DEVICE		(hal_device_get_type ())
+#define HAL_DEVICE(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), HAL_TYPE_DEVICE, HalDevice))
+#define HAL_DEVICE_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), HAL_TYPE_DEVICE, HalDeviceClass))
+#define HAL_IS_DEVICE(o)	(G_TYPE_CHECK_INSTANCE_TYPE ((o), HAL_TYPE_DEVICE))
+#define HAL_IS_DEVICE_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), HAL_TYPE_DEVICE))
+#define HAL_DEVICE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), HAL_TYPE_DEVICE, HalDeviceClass))
 
-typedef struct HalGDevicePrivate HalGDevicePrivate;
+typedef struct HalDevicePrivate HalDevicePrivate;
 
 typedef struct
 {
 	GObject		     parent;
-	HalGDevicePrivate *priv;
-} HalGDevice;
+	HalDevicePrivate *priv;
+} HalDevice;
 
-/* Signals emitted from HalGDevice are:
+/* Signals emitted from HalDevice are:
  *
  * device-property-modified
  * device-condition
@@ -50,47 +50,47 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
-	void		(* device_property_modified)	(HalGDevice	*device,
+	void		(* device_property_modified)	(HalDevice	*device,
 							 const gchar	*key,
 							 gboolean	 is_added,
 							 gboolean	 is_removed,
 							 gboolean	 finally);
-	void		(* device_condition)		(HalGDevice	*device,
+	void		(* device_condition)		(HalDevice	*device,
 							 const gchar	*condition,
 							 const gchar	*details);
-} HalGDeviceClass;
+} HalDeviceClass;
 
-GType		 hal_gdevice_get_type			(void);
-HalGDevice	*hal_gdevice_new			(void);
+GType		 hal_device_get_type			(void);
+HalDevice	*hal_device_new				(void);
 
-gboolean	 hal_gdevice_set_udi			(HalGDevice	*device,
+gboolean	 hal_device_set_udi			(HalDevice	*device,
 							 const gchar	*udi);
-const gchar	*hal_gdevice_get_udi			(HalGDevice	*device);
-gboolean	 hal_gdevice_get_bool			(HalGDevice	*device,
+const gchar	*hal_device_get_udi			(HalDevice	*device);
+gboolean	 hal_device_get_bool			(HalDevice	*device,
 							 const gchar	*key,
 							 gboolean	*value,
 							 GError		**error);
-gboolean	 hal_gdevice_get_string			(HalGDevice	*device,
+gboolean	 hal_device_get_string			(HalDevice	*device,
 							 const gchar	*key,
 							 gchar		**value,
 							 GError		**error);
-gboolean	 hal_gdevice_get_int			(HalGDevice	*device,
+gboolean	 hal_device_get_int			(HalDevice	*device,
 							 const gchar	*key,
 							 gint		*value,
 							 GError		**error);
-gboolean	 hal_gdevice_get_uint			(HalGDevice	*device,
+gboolean	 hal_device_get_uint			(HalDevice	*device,
 							 const gchar	*key,
 							 guint		*value,
 							 GError		**error);
-gboolean	 hal_gdevice_query_capability		(HalGDevice	*device,
+gboolean	 hal_device_query_capability		(HalDevice	*device,
 							 const gchar	*capability,
 							 gboolean	*has_capability,
 							 GError		**error);
-gboolean	 hal_gdevice_watch_condition		(HalGDevice	*device);
-gboolean	 hal_gdevice_watch_property_modified	(HalGDevice	*device);
-gboolean	 hal_gdevice_remove_condition		(HalGDevice	*device);
-gboolean	 hal_gdevice_remove_property_modified	(HalGDevice	*device);
+gboolean	 hal_device_watch_condition		(HalDevice	*device);
+gboolean	 hal_device_watch_property_modified	(HalDevice	*device);
+gboolean	 hal_device_remove_condition		(HalDevice	*device);
+gboolean	 hal_device_remove_property_modified	(HalDevice	*device);
 
 G_END_DECLS
 
-#endif	/* __LIBHAL_GDEVICE_H */
+#endif	/* __HAL_DEVICE_H */

@@ -22,37 +22,37 @@
 #include <glib.h>
 #include "gpm-st-main.h"
 
-#include <libhal-gdevice.h>
-#include <libhal-gmanager.h>
-#include <libhal-gdevicestore.h>
+#include <hal-device.h>
+#include <hal-manager.h>
+#include <hal-device-store.h>
 
 void
 egg_test_hal_devicestore (GpmSelfTest *test)
 {
-	HalGDevicestore *devicestore;
-	HalGDevice *device;
-	HalGDevice *device2;
-	HalGDevice *device3;
+	HalDevicestore *devicestore;
+	HalDevice *device;
+	HalDevice *device2;
+	HalDevice *device3;
 	gboolean ret;
 
-	if (egg_test_start (test, "HalGDevicestore") == FALSE) {
+	if (egg_test_start (test, "HalDevicestore") == FALSE) {
 		return;
 	}
 
 	/************************************************************/
 	egg_test_title (test, "make sure we get a non null devicestore");
-	devicestore = hal_gdevicestore_new ();
+	devicestore = hal_device_store_new ();
 	if (devicestore != NULL) {
-		egg_test_success (test, "got HalGDevicestore");
+		egg_test_success (test, "got HalDevicestore");
 	} else {
-		egg_test_failed (test, "could not get HalGDevicestore");
+		egg_test_failed (test, "could not get HalDevicestore");
 	}
 
 	/************************************************************/
 	egg_test_title (test, "make sure device not in devicestore");
-	device = hal_gdevice_new ();
-	hal_gdevice_set_udi (device, HAL_ROOT_COMPUTER);
-	ret = hal_gdevicestore_present (devicestore, device);
+	device = hal_device_new ();
+	hal_device_set_udi (device, HAL_ROOT_COMPUTER);
+	ret = hal_device_store_present (devicestore, device);
 	if (!ret) {
 		egg_test_success (test, "could not get different device");
 	} else {
@@ -61,7 +61,7 @@ egg_test_hal_devicestore (GpmSelfTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "insert device");
-	ret = hal_gdevicestore_insert (devicestore, device);
+	ret = hal_device_store_insert (devicestore, device);
 	if (ret) {
 		egg_test_success (test, "inserted device");
 	} else {
@@ -70,7 +70,7 @@ egg_test_hal_devicestore (GpmSelfTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "insert duplicate device");
-	ret = hal_gdevicestore_insert (devicestore, device);
+	ret = hal_device_store_insert (devicestore, device);
 	if (!ret) {
 		egg_test_success (test, "cannot insert duplicate device");
 	} else {
@@ -79,7 +79,7 @@ egg_test_hal_devicestore (GpmSelfTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "make sure device in store");
-	ret = hal_gdevicestore_present (devicestore, device);
+	ret = hal_device_store_present (devicestore, device);
 	if (ret) {
 		egg_test_success (test, "found device");
 	} else {
@@ -88,7 +88,7 @@ egg_test_hal_devicestore (GpmSelfTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "find device by UDI");
-	device3 = hal_gdevicestore_find_udi (devicestore, HAL_ROOT_COMPUTER);
+	device3 = hal_device_store_find_udi (devicestore, HAL_ROOT_COMPUTER);
 	if (device3 == device) {
 		egg_test_success (test, "found device");
 	} else {
@@ -97,7 +97,7 @@ egg_test_hal_devicestore (GpmSelfTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "find missing device by UDI");
-	device3 = hal_gdevicestore_find_udi (devicestore, "/foo");
+	device3 = hal_device_store_find_udi (devicestore, "/foo");
 	if (device3 == NULL) {
 		egg_test_success (test, "not found invalid device");
 	} else {
@@ -106,9 +106,9 @@ egg_test_hal_devicestore (GpmSelfTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "make sure we can match on UDI");
-	device2 = hal_gdevice_new ();
-	hal_gdevice_set_udi (device2, HAL_ROOT_COMPUTER);
-	ret = hal_gdevicestore_present (devicestore, device2);
+	device2 = hal_device_new ();
+	hal_device_set_udi (device2, HAL_ROOT_COMPUTER);
+	ret = hal_device_store_present (devicestore, device2);
 	if (ret) {
 		egg_test_success (test, "found device");
 	} else {
@@ -118,7 +118,7 @@ egg_test_hal_devicestore (GpmSelfTest *test)
 	/************************************************************/
 	egg_test_title (test, "remove device");
 	g_object_ref (device); /* so we can test it in a minute */
-	ret = hal_gdevicestore_remove (devicestore, device);
+	ret = hal_device_store_remove (devicestore, device);
 	if (ret) {
 		egg_test_success (test, "removed device");
 	} else {
@@ -127,7 +127,7 @@ egg_test_hal_devicestore (GpmSelfTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "make sure device not in devicestore");
-	ret = hal_gdevicestore_present (devicestore, device);
+	ret = hal_device_store_present (devicestore, device);
 	if (!ret) {
 		egg_test_success (test, "could not get device from empty devicestore");
 	} else {

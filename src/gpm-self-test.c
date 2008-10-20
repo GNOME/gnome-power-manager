@@ -43,7 +43,7 @@ void gpm_profile_test (EggTest *test);
 void gpm_phone_test (EggTest *test);
 void gpm_graph_widget_test (EggTest *test);
 void gpm_proxy_test (EggTest *test);
-void gpm_hal_power_test (EggTest *test);
+void gpm_hal_device_power_test (EggTest *test);
 void gpm_hal_manager_test (EggTest *test);
 void gpm_device_test (EggTest *test);
 void gpm_device_teststore (EggTest *test);
@@ -79,7 +79,7 @@ main (int argc, char **argv)
 
 #if 0
 	gpm_proxy_test (test);
-	gpm_hal_power_test (test);
+	gpm_hal_device_power_test (test);
 	gpm_hal_manager_test (test);
 	gpm_device_test (test);
 	gpm_device_teststore (test);

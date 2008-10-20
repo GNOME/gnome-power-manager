@@ -25,8 +25,8 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 
-#include <libhal-gdevice.h>
-#include <libhal-gmanager.h>
+#include <hal-device.h>
+#include <hal-manager.h>
 
 #include "gpm-ac-adapter.h"
 #include "gpm-common.h"
@@ -61,7 +61,7 @@ struct GpmEnginePrivate
 	GpmControl		*control;
 	GpmAcAdapter		*ac_adapter;
 	GpmEngineCollection	 collection;
-	HalGManager		*hal_manager;
+	HalManager		*hal_manager;
 	gboolean		 hal_connected;
 	gboolean		 during_coldplug;
 	gchar			*previous_icon;
@@ -653,7 +653,7 @@ gpm_engine_recalculate_state (GpmEngine *engine)
  * hal_daemon_start_cb:
  **/
 static void
-hal_daemon_start_cb (HalGManager *hal_manager,
+hal_daemon_start_cb (HalManager *hal_manager,
 		     GpmEngine   *engine)
 {
 	/* change icon or summary */
@@ -665,7 +665,7 @@ hal_daemon_start_cb (HalGManager *hal_manager,
  * hal_daemon_stop_cb:
  **/
 static void
-hal_daemon_stop_cb (HalGManager *hal_manager,
+hal_daemon_stop_cb (HalManager *hal_manager,
 		    GpmEngine   *engine)
 {
 	/* change icon or summary */
@@ -916,7 +916,7 @@ gpm_engine_init (GpmEngine *engine)
 	g_signal_connect (engine->priv->ac_adapter, "ac-adapter-changed",
 			  G_CALLBACK (ac_adaptor_changed_cb), engine);
 
-	engine->priv->hal_manager = hal_gmanager_new ();
+	engine->priv->hal_manager = hal_manager_new ();
 	g_signal_connect (engine->priv->hal_manager, "daemon-start",
 			  G_CALLBACK (hal_daemon_start_cb), engine);
 	g_signal_connect (engine->priv->hal_manager, "daemon-stop",

@@ -28,7 +28,7 @@
 #include <string.h>
 #include <dbus/dbus-gtype-specialized.h>
 
-#include <libhal-gmanager.h>
+#include <hal-manager.h>
 
 #include "egg-color.h"
 #include "gpm-ac-adapter.h"
@@ -796,7 +796,7 @@ gpm_info_class_init (GpmInfoClass *klass)
 static void
 gpm_info_init (GpmInfo *info)
 {
-	HalGManager *hal_manager;
+	HalManager *hal_manager;
 	info->priv = GPM_INFO_GET_PRIVATE (info);
 
 	/* record our start time */
@@ -809,8 +809,8 @@ gpm_info_init (GpmInfo *info)
 			  G_CALLBACK (control_sleep_failure_cb), info);
 
 	/* find out if we should log and display the extra graphs */
-	hal_manager = hal_gmanager_new ();
-	info->priv->is_laptop = hal_gmanager_is_laptop (hal_manager);
+	hal_manager = hal_manager_new ();
+	info->priv->is_laptop = hal_manager_is_laptop (hal_manager);
 	g_object_unref (hal_manager);
 
 	/* set default, we have to set these from the manager */

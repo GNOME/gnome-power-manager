@@ -19,8 +19,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef __LIBHAL_GMANAGER_H
-#define __LIBHAL_GMANAGER_H
+#ifndef __HAL_MANAGER_H
+#define __HAL_MANAGER_H
 
 #include <glib-object.h>
 
@@ -37,22 +37,22 @@ G_BEGIN_DECLS
 #define	HAL_DBUS_INTERFACE_LIGHT_SENSOR	 	"org.freedesktop.Hal.Device.LightSensor"
 #define HAL_ROOT_COMPUTER		 	"/org/freedesktop/Hal/devices/computer"
 
-#define LIBHAL_TYPE_GMANAGER		(hal_gmanager_get_type ())
-#define LIBHAL_GMANAGER(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), LIBHAL_TYPE_GMANAGER, HalGManager))
-#define LIBHAL_GMANAGER_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), LIBHAL_TYPE_GMANAGER, HalGManagerClass))
-#define LIBHAL_IS_GMANAGER(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), LIBHAL_TYPE_GMANAGER))
-#define LIBHAL_IS_GMANAGER_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), LIBHAL_TYPE_GMANAGER))
-#define LIBHAL_GMANAGER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), LIBHAL_TYPE_GMANAGER, HalGManagerClass))
+#define HAL_TYPE_MANAGER		(hal_manager_get_type ())
+#define HAL_MANAGER(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), HAL_TYPE_MANAGER, HalManager))
+#define HAL_MANAGER_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), HAL_TYPE_MANAGER, HalManagerClass))
+#define HAL_IS_MANAGER(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), HAL_TYPE_MANAGER))
+#define HAL_IS_MANAGER_CLASS(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), HAL_TYPE_MANAGER))
+#define HAL_MANAGER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), HAL_TYPE_MANAGER, HalManagerClass))
 
-typedef struct HalGManagerPrivate HalGManagerPrivate;
+typedef struct HalManagerPrivate HalManagerPrivate;
 
 typedef struct
 {
-	GObject		 parent;
-	HalGManagerPrivate	*priv;
-} HalGManager;
+	GObject			 parent;
+	HalManagerPrivate	*priv;
+} HalManager;
 
-/* Signals emitted from HalGManager are:
+/* Signals emitted from HalManager are:
  *
  * device-added
  * device-removed
@@ -65,42 +65,42 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
-	void		(* device_added)		(HalGManager	*manager,
+	void		(* device_added)		(HalManager	*manager,
 							 const gchar	*udi);
-	void		(* device_removed)		(HalGManager	*manager,
+	void		(* device_removed)		(HalManager	*manager,
 							 const gchar	*udi);
-	void		(* new_capability)		(HalGManager	*manager,
+	void		(* new_capability)		(HalManager	*manager,
 							 const gchar	*udi,
 							 const gchar	*capability);
-	void		(* lost_capability)		(HalGManager	*manager,
+	void		(* lost_capability)		(HalManager	*manager,
 							 const gchar	*udi,
 							 const gchar	*capability);
-	void		(* daemon_start)		(HalGManager	*manager);
-	void		(* daemon_stop)			(HalGManager	*manager);
-} HalGManagerClass;
+	void		(* daemon_start)		(HalManager	*manager);
+	void		(* daemon_stop)			(HalManager	*manager);
+} HalManagerClass;
 
-GType		 hal_gmanager_get_type			(void);
-HalGManager	*hal_gmanager_new			(void);
+GType		 hal_manager_get_type			(void);
+HalManager	*hal_manager_new			(void);
 
-gboolean	 hal_gmanager_is_running		(HalGManager	*manager);
-gint		 hal_gmanager_num_devices_of_capability (HalGManager	*manager,
+gboolean	 hal_manager_is_running			(HalManager	*manager);
+gint		 hal_manager_num_devices_of_capability	(HalManager	*manager,
 							 const gchar	*capability);
-gint		 hal_gmanager_num_devices_of_capability_with_value (HalGManager *manager,
+gint		 hal_manager_num_devices_of_capability_with_value (HalManager *manager,
 							 const gchar	*capability,
 							 const gchar	*key,
 							 const gchar	*value);
-gboolean	 hal_gmanager_find_capability		(HalGManager	*manager,
+gboolean	 hal_manager_find_capability		(HalManager	*manager,
 							 const gchar	*capability,
 							 gchar     	***value,
 							 GError		**error);
-gboolean	 hal_gmanager_find_device_string_match	(HalGManager	*manager,
+gboolean	 hal_manager_find_device_string_match	(HalManager	*manager,
 							 const gchar	*key,
 							 const gchar	*value,
 							 gchar		***devices,
 							 GError		**error);
-void		 hal_gmanager_free_capability		(gchar		**value);
-gboolean	 hal_gmanager_is_laptop			(HalGManager	*manager);
+void		 hal_manager_free_capability		(gchar		**value);
+gboolean	 hal_manager_is_laptop			(HalManager	*manager);
 
 G_END_DECLS
 
-#endif	/* __LIBHAL_GMANAGER_H */
+#endif	/* __HAL_MANAGER_H */

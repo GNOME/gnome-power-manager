@@ -22,30 +22,30 @@
 #include <glib.h>
 #include "gpm-st-main.h"
 
-#include <libhal-gpower.h>
+#include <hal-device-power.h>
 
 void
-egg_test_hal_power (GpmSelfTest *test)
+egg_test_hal_device_power (GpmSelfTest *test)
 {
-	HalGPower *power;
+	HalDevicePower *power;
 	gboolean ret;
 
-	if (egg_test_start (test, "HalGPower") == FALSE) {
+	if (egg_test_start (test, "HalDevicePower") == FALSE) {
 		return;
 	}
 
 	/************************************************************/
 	egg_test_title (test, "make sure we get a non null device");
-	power = hal_gpower_new ();
+	power = hal_device_power_new ();
 	if (power != NULL) {
-		egg_test_success (test, "got HalGPower");
+		egg_test_success (test, "got HalDevicePower");
 	} else {
-		egg_test_failed (test, "could not get HalGPower");
+		egg_test_failed (test, "could not get HalDevicePower");
 	}
 
 	/************************************************************/
 	egg_test_title (test, "make sure we have pm support");
-	ret = hal_gpower_has_support (power);
+	ret = hal_device_power_has_support (power);
 	if (ret) {
 		egg_test_success (test, "has pm support");
 	} else {

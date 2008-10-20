@@ -23,33 +23,33 @@
 #include <string.h>
 #include "gpm-st-main.h"
 
-#include <libhal-gmanager.h>
-#include <libhal-gdevice.h>
+#include <hal-manager.h>
+#include <hal-device.h>
 
 void
 egg_test_hal_device (GpmSelfTest *test)
 {
-	HalGDevice *device;
+	HalDevice *device;
 	const char *udi;
 	char *retstr;
 	gboolean ret;
 
-	if (egg_test_start (test, "HalGDevice") == FALSE) {
+	if (egg_test_start (test, "HalDevice") == FALSE) {
 		return;
 	}
 
 	/************************************************************/
 	egg_test_title (test, "make sure we get a non null device");
-	device = hal_gdevice_new ();
+	device = hal_device_new ();
 	if (device != NULL) {
-		egg_test_success (test, "got HalGDevice");
+		egg_test_success (test, "got HalDevice");
 	} else {
-		egg_test_failed (test, "could not get HalGDevice");
+		egg_test_failed (test, "could not get HalDevice");
 	}
 
 	/************************************************************/
 	egg_test_title (test, "make sure we get a null UDI");
-	udi = hal_gdevice_get_udi (device);
+	udi = hal_device_get_udi (device);
 	if (udi == NULL) {
 		egg_test_success (test, "got NULL UDI");
 	} else {
@@ -58,7 +58,7 @@ egg_test_hal_device (GpmSelfTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "make sure we can set a UDI");
-	ret = hal_gdevice_set_udi (device, HAL_ROOT_COMPUTER);
+	ret = hal_device_set_udi (device, HAL_ROOT_COMPUTER);
 	if (ret) {
 		egg_test_success (test, "set UDI");
 	} else {
@@ -67,7 +67,7 @@ egg_test_hal_device (GpmSelfTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "make sure we can get the UDI");
-	udi = hal_gdevice_get_udi (device);
+	udi = hal_device_get_udi (device);
 	if (udi && strcmp (udi, HAL_ROOT_COMPUTER) == 0) {
 		egg_test_success (test, "got correct UDI: %s", udi);
 	} else {
@@ -76,7 +76,7 @@ egg_test_hal_device (GpmSelfTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "make sure we cannot set another UDI");
-	ret = hal_gdevice_set_udi (device, "foo");
+	ret = hal_device_set_udi (device, "foo");
 	if (!ret) {
 		egg_test_success (test, "Cannot set another UDI");
 	} else {
@@ -85,7 +85,7 @@ egg_test_hal_device (GpmSelfTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "make sure we can get a string key");
-	ret = hal_gdevice_get_string (device, "info.product", &retstr, NULL);
+	ret = hal_device_get_string (device, "info.product", &retstr, NULL);
 	if (ret && retstr && strcmp (retstr, "Computer") == 0) {
 		egg_test_success (test, "got correct key");
 	} else {
@@ -95,7 +95,7 @@ egg_test_hal_device (GpmSelfTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "try to get property modified events");
-	ret = hal_gdevice_watch_property_modified (device);
+	ret = hal_device_watch_property_modified (device);
 	if (ret) {
 		egg_test_success (test, "got notification");
 	} else {
@@ -104,7 +104,7 @@ egg_test_hal_device (GpmSelfTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "try to get duplicate property modified events");
-	ret = hal_gdevice_watch_property_modified (device);
+	ret = hal_device_watch_property_modified (device);
 	if (!ret) {
 		egg_test_success (test, "duplicate notification refused");
 	} else {
@@ -113,7 +113,7 @@ egg_test_hal_device (GpmSelfTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "try to cancel property modified events");
-	ret = hal_gdevice_remove_property_modified (device);
+	ret = hal_device_remove_property_modified (device);
 	if (ret) {
 		egg_test_success (test, "cancel notification");
 	} else {
@@ -122,7 +122,7 @@ egg_test_hal_device (GpmSelfTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "try to get duplicate property modified cancel");
-	ret = hal_gdevice_remove_property_modified (device);
+	ret = hal_device_remove_property_modified (device);
 	if (!ret) {
 		egg_test_success (test, "duplicate cancel refused");
 	} else {

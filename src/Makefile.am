@@ -36,10 +36,7 @@ INCLUDES =						\
 	$(NULL)
 
 LOCAL_LIBHAL_LIBS =					\
-	$(top_builddir)/libhal-glib/libhal-gdevice.la	\
-	$(top_builddir)/libhal-glib/libhal-gdevicestore.la	\
-	$(top_builddir)/libhal-glib/libhal-gmanager.la	\
-	$(top_builddir)/libhal-glib/libhal-gpower.la
+	$(top_builddir)/libhal-glib/libhal.la
 
 bin_PROGRAMS =						\
 	gnome-power-manager				\

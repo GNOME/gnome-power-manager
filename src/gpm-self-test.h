@@ -52,7 +52,7 @@ void gpm_phone_test (EggTest *test);
 void gpm_inhibit_test (EggTest *test);
 void gpm_device_test (EggTest *test);
 void gpm_device_teststore (EggTest *test);
-void gpm_hal_power_test (EggTest *test);
+void gpm_hal_device_power_test (EggTest *test);
 void gpm_hal_manager_test (EggTest *test);
 void gpm_graph_widget_test (EggTest *test);
 

@@ -38,8 +38,8 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 
-#include <libhal-gdevice.h>
-#include <libhal-gmanager.h>
+#include <hal-device.h>
+#include <hal-manager.h>
 #include "egg-dbus-proxy.h"
 
 #include "egg-debug.h"
@@ -329,8 +329,8 @@ static void
 gpm_light_sensor_init (GpmLightSensor *sensor)
 {
 	gchar **names;
-	HalGManager *manager;
-	HalGDevice *device;
+	HalManager *manager;
+	HalDevice *device;
 	guint timeout;
 	DBusGConnection *connection;
 
@@ -345,8 +345,8 @@ gpm_light_sensor_init (GpmLightSensor *sensor)
 			  G_CALLBACK (conf_key_changed_cb), sensor);
 
 	/* see if we can find  */
-	manager = hal_gmanager_new ();
-	hal_gmanager_find_capability (manager, "light_sensor", &names, NULL);
+	manager = hal_manager_new ();
+	hal_manager_find_capability (manager, "light_sensor", &names, NULL);
 	g_object_unref (manager);
 
 	/* Significant found */
@@ -355,7 +355,7 @@ gpm_light_sensor_init (GpmLightSensor *sensor)
 		sensor->priv->udi = g_strdup (names[0]);
 		sensor->priv->has_sensor = TRUE;
 	}
-	hal_gmanager_free_capability (names);
+	hal_manager_free_capability (names);
 
 	/* connect to the devices */
 	if (sensor->priv->has_sensor) {
@@ -368,9 +368,9 @@ gpm_light_sensor_init (GpmLightSensor *sensor)
 				  sensor->priv->udi, HAL_DBUS_INTERFACE_LIGHT_SENSOR);
 
 		/* get levels that the adapter supports -- this does not change ever */
-		device = hal_gdevice_new ();
-		hal_gdevice_set_udi (device, sensor->priv->udi);
-		hal_gdevice_get_uint (device, "light_sensor.num_levels",
+		device = hal_device_new ();
+		hal_device_set_udi (device, sensor->priv->udi);
+		hal_device_get_uint (device, "light_sensor.num_levels",
 				      &sensor->priv->levels, NULL);
 		g_object_unref (device);
 

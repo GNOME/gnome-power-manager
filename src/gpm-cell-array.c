@@ -26,8 +26,8 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 
-#include <libhal-gdevice.h>
-#include <libhal-gmanager.h>
+#include <hal-device.h>
+#include <hal-manager.h>
 
 #include "egg-debug.h"
 #include "egg-precision.h"
@@ -55,7 +55,7 @@ static void     gpm_cell_array_finalize   (GObject	     *object);
 
 struct GpmCellArrayPrivate
 {
-	HalGManager		*hal_manager;
+	HalManager		*hal_manager;
 	GpmCellUnit		 unit;
 	GpmAcAdapter		*ac_adapter;
 	GpmProfile		*profile;
@@ -715,22 +715,22 @@ gpm_cell_array_index_device_id (GpmCellArray *cell_array, const gchar *device_id
 static gboolean
 gpm_check_device_key (GpmCellArray *cell_array, const gchar *udi, const gchar *key, const gchar *value)
 {
-	HalGDevice *device;
+	HalDevice *device;
 	gboolean ret;
 	gboolean matches = FALSE;
 	gchar *rettype;
 
 	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), FALSE);
 
-	device = hal_gdevice_new ();
-	ret = hal_gdevice_set_udi (device, udi);
+	device = hal_device_new ();
+	ret = hal_device_set_udi (device, udi);
 	if (!ret) {
 		egg_warning ("failed to set UDI %s", udi);
 		return FALSE;
 	}
 
 	/* check type */
-	ret = hal_gdevice_get_string (device, key, &rettype, NULL);
+	ret = hal_device_get_string (device, key, &rettype, NULL);
 	if (!ret || rettype == NULL) {
 		egg_warning ("failed to get %s", key);
 		return FALSE;
@@ -867,7 +867,7 @@ gpm_cell_array_coldplug (GpmCellArray *cell_array)
 
 	/* get all the hal devices of this type */
 	error = NULL;
-	ret = hal_gmanager_find_capability (cell_array->priv->hal_manager, "battery", &device_names, &error);
+	ret = hal_manager_find_capability (cell_array->priv->hal_manager, "battery", &device_names, &error);
 	if (!ret) {
 		egg_warning ("Couldn't obtain list of batteries: %s", error->message);
 		g_error_free (error);
@@ -879,7 +879,7 @@ gpm_cell_array_coldplug (GpmCellArray *cell_array)
 		gpm_cell_array_add_device_id (cell_array, device_names[i]);
 	}
 
-	hal_gmanager_free_capability (device_names);
+	hal_manager_free_capability (device_names);
 	return TRUE;
 }
 
@@ -1071,7 +1071,7 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
  * @cell_array: This cell_array instance
  */
 static gboolean
-hal_device_removed_cb (HalGManager  *hal_manager,
+hal_device_removed_cb (HalManager  *hal_manager,
 		       const gchar  *udi,
 		       GpmCellArray *cell_array)
 {
@@ -1111,7 +1111,7 @@ hal_device_removed_cb (HalGManager  *hal_manager,
  * @cell_array: This cell_array instance
  */
 static void
-hal_new_capability_cb (HalGManager  *hal_manager,
+hal_new_capability_cb (HalManager  *hal_manager,
 		       const gchar  *udi,
 		       const gchar  *capability,
 		       GpmCellArray *cell_array)
@@ -1131,23 +1131,23 @@ hal_new_capability_cb (HalGManager  *hal_manager,
  * @cell_array: This cell_array instance
  */
 static void
-hal_device_added_cb (HalGManager  *hal_manager,
+hal_device_added_cb (HalManager  *hal_manager,
 		     const gchar  *udi,
 		     GpmCellArray *cell_array)
 {
 	gboolean is_battery;
 	gboolean dummy;
-	HalGDevice *device;
+	HalDevice *device;
 
 	/* find out if the new device has capability battery
 	   this might fail for CSR as the addon is weird */
-	device = hal_gdevice_new ();
-	hal_gdevice_set_udi (device, udi);
-	hal_gdevice_query_capability (device, "battery", &is_battery, NULL);
+	device = hal_device_new ();
+	hal_device_set_udi (device, udi);
+	hal_device_query_capability (device, "battery", &is_battery, NULL);
 
 	/* try harder */
 	if (is_battery == FALSE) {
-		is_battery = hal_gdevice_get_bool (device, "battery.present", &dummy, NULL);
+		is_battery = hal_device_get_bool (device, "battery.present", &dummy, NULL);
 	}
 
 	/* if a battery, then add */
@@ -1255,7 +1255,7 @@ phone_device_removed_cb (GpmPhone     *phone,
  * hal_daemon_start_cb:
  **/
 static void
-hal_daemon_start_cb (HalGManager  *hal_manager,
+hal_daemon_start_cb (HalManager  *hal_manager,
 		     GpmCellArray *cell_array)
 {
 	/* coldplug all batteries back again */
@@ -1266,7 +1266,7 @@ hal_daemon_start_cb (HalGManager  *hal_manager,
  * hal_daemon_stop_cb:
  **/
 static void
-hal_daemon_stop_cb (HalGManager  *hal_manager,
+hal_daemon_stop_cb (HalManager  *hal_manager,
 		    GpmCellArray *cell_array)
 {
 	/* remove old devices */
@@ -1412,7 +1412,7 @@ gpm_cell_array_init (GpmCellArray *cell_array)
 
 	cell_array->priv->ac_adapter = gpm_ac_adapter_new ();
 	cell_array->priv->warnings = gpm_warnings_new ();
-	cell_array->priv->hal_manager = hal_gmanager_new ();
+	cell_array->priv->hal_manager = hal_manager_new ();
 	g_signal_connect (cell_array->priv->hal_manager, "device-added",
 			  G_CALLBACK (hal_device_added_cb), cell_array);
 	g_signal_connect (cell_array->priv->hal_manager, "device-removed",

@@ -1,5 +1,84 @@
 2008-10-20  Richard Hughes  <richard@hughsie.com>
 
+	* applets/brightness/Makefile.am:
+	* applets/brightness/brightness-applet.c:
+	* applets/brightness/egg-dbus-monitor.c:
+	* applets/brightness/egg-dbus-monitor.h:
+	* applets/brightness/egg-debug.c:
+	* applets/brightness/egg-debug.h:
+	* applets/brightness/gpm-common.h:
+	* applets/inhibit/Makefile.am:
+	* applets/inhibit/egg-dbus-monitor.c:
+	* applets/inhibit/egg-dbus-monitor.h:
+	* applets/inhibit/egg-debug.c:
+	* applets/inhibit/egg-debug.h:
+	* applets/inhibit/gpm-common.h:
+	* applets/inhibit/inhibit-applet.c:
+	* libhal-glib/Makefile.am:
+	* libhal-glib/hal-device-power.c:
+	* libhal-glib/hal-device-power.h:
+	* libhal-glib/hal-device-store.c:
+	* libhal-glib/hal-device-store.h:
+	* libhal-glib/hal-device.c:
+	* libhal-glib/hal-device.h:
+	* libhal-glib/hal-manager.c:
+	* libhal-glib/hal-manager.h:
+	* libhal-glib/libhal-gdevice.c:
+	* libhal-glib/libhal-gdevice.h:
+	* libhal-glib/libhal-gdevicestore.c:
+	* libhal-glib/libhal-gdevicestore.h:
+	* libhal-glib/libhal-gmanager.c:
+	* libhal-glib/libhal-gmanager.h:
+	* libhal-glib/libhal-gpower.c:
+	* libhal-glib/libhal-gpower.h:
+	* libhal-glib/libhal-marshal.list:
+	* src/Makefile.am:
+	* src/gpm-ac-adapter.c: (gpm_ac_adapter_is_present),
+	(hal_device_property_modified_cb), (gpm_ac_adapter_init):
+	* src/gpm-backlight.c: (gpm_backlight_init):
+	* src/gpm-brightness-hal.c: (gpm_brightness_hal_init):
+	* src/gpm-brightness-kbd.c: (gpm_brightness_kbd_init),
+	(gpm_brightness_kbd_has_hw):
+	* src/gpm-button.c: (emit_button_pressed),
+	(hal_device_property_modified_cb), (hal_device_condition_cb),
+	(watch_add_button), (coldplug_buttons), (hal_daemon_start_cb),
+	(hal_daemon_stop_cb), (gpm_button_init):
+	* src/gpm-cell-array.c: (gpm_check_device_key),
+	(gpm_cell_array_coldplug), (hal_device_removed_cb),
+	(hal_new_capability_cb), (hal_device_added_cb),
+	(hal_daemon_start_cb), (hal_daemon_stop_cb), (gpm_cell_array_init):
+	* src/gpm-cell.c: (gpm_cell_refresh_hal_all),
+	(battery_key_changed), (hal_device_property_modified_cb),
+	(gpm_cell_set_device_id), (gpm_cell_get_device_id),
+	(gpm_cell_init), (gpm_cell_get_battery):
+	* src/gpm-control.c: (gpm_control_allowed_suspend),
+	(gpm_control_allowed_hibernate), (gpm_control_shutdown),
+	(gpm_control_reboot), (gpm_control_suspend),
+	(gpm_control_hibernate), (gpm_control_finalize),
+	(gpm_control_init):
+	* src/gpm-engine.c: (hal_daemon_start_cb), (hal_daemon_stop_cb),
+	(gpm_engine_init):
+	* src/gpm-info.c: (gpm_info_init):
+	* src/gpm-light-sensor.c: (gpm_light_sensor_init):
+	* src/gpm-load.c:
+	* src/gpm-manager.c: (gpm_manager_sync_policy_sleep),
+	(gpm_manager_action_suspend), (gpm_manager_action_hibernate),
+	(gpm_manager_suspend), (gpm_manager_hibernate),
+	(gpm_manager_check_sleep_errors), (screensaver_auth_request_cb),
+	(gpm_manager_at_exit), (has_inhibit_changed_cb),
+	(gpm_manager_init), (gpm_manager_finalize):
+	* src/gpm-prefs-core.c:
+	* src/gpm-self-test.c: (main):
+	* src/gpm-self-test.h:
+	* test/gpm-st-hal-device.c: (egg_test_hal_device):
+	* test/gpm-st-hal-devicestore.c: (egg_test_hal_devicestore):
+	* test/gpm-st-hal-manager.c: (egg_test_hal_manager):
+	* test/gpm-st-hal-power.c: (egg_test_hal_device_power):
+	Rename the libhal-glib files to be a single library with a proper
+	prefix. Cleanup, no real code changes.
+
+2008-10-20  Richard Hughes  <richard@hughsie.com>
+
 	* Makefile.am:
 	* applets/brightness/brightness-applet.c:
 	(gpm_brightness_applet_init):

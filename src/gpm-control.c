@@ -42,7 +42,7 @@
 #include <dbus/dbus-glib-lowlevel.h>
 #include <gnome-keyring.h>
 
-#include <libhal-gpower.h>
+#include <hal-device-power.h>
 
 #ifdef HAVE_POLKIT
 #include <polkit/polkit.h>
@@ -61,7 +61,7 @@
 struct GpmControlPrivate
 {
 	GpmConf			*conf;
-	HalGPower		*hal_power;
+	HalDevicePower		*hal_device_power;
 };
 
 enum {
@@ -169,7 +169,7 @@ gpm_control_allowed_suspend (GpmControl *control,
 
 	*can = FALSE;
 	gpm_conf_get_bool (control->priv->conf, GPM_CONF_CAN_SUSPEND, &conf_ok);
-	hal_ok = hal_gpower_can_suspend (control->priv->hal_power);
+	hal_ok = hal_device_power_can_suspend (control->priv->hal_device_power);
 	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.hal.power-management.suspend");
 	fg = gpm_control_check_foreground_console (control);
 	if (conf_ok && hal_ok && polkit_ok && fg) {
@@ -200,7 +200,7 @@ gpm_control_allowed_hibernate (GpmControl *control,
 
 	*can = FALSE;
 	gpm_conf_get_bool (control->priv->conf, GPM_CONF_CAN_HIBERNATE, &conf_ok);
-	hal_ok = hal_gpower_can_hibernate (control->priv->hal_power);
+	hal_ok = hal_device_power_can_hibernate (control->priv->hal_device_power);
 	fg = gpm_control_check_foreground_console (control);
 	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.hal.power-management.hibernate");
 	if (conf_ok && hal_ok && polkit_ok && fg) {
@@ -320,7 +320,7 @@ gpm_control_shutdown (GpmControl *control,
 					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
 	}
 
-	ret = hal_gpower_shutdown (control->priv->hal_power, error);
+	ret = hal_device_power_shutdown (control->priv->hal_device_power, error);
 	if (!ret) {
 		gpm_control_convert_hal_error (control, error);
 	}
@@ -360,7 +360,7 @@ gpm_control_reboot (GpmControl *control,
 					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
 	}
 
-	return hal_gpower_reboot (control->priv->hal_power, error);
+	return hal_device_power_reboot (control->priv->hal_device_power, error);
 }
 
 /**
@@ -442,7 +442,7 @@ gpm_control_suspend (GpmControl *control,
 	egg_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_SUSPEND);
 
-	ret = hal_gpower_suspend (control->priv->hal_power, 0, error);
+	ret = hal_device_power_suspend (control->priv->hal_device_power, 0, error);
 	if (!ret) {
 		gpm_control_convert_hal_error (control, error);
 	}
@@ -517,7 +517,7 @@ gpm_control_hibernate (GpmControl *control,
 	egg_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_HIBERNATE);
 
-	ret = hal_gpower_hibernate (control->priv->hal_power, error);
+	ret = hal_device_power_hibernate (control->priv->hal_device_power, error);
 	if (!ret) {
 		gpm_control_convert_hal_error (control, error);
 	}
@@ -557,7 +557,7 @@ gpm_control_finalize (GObject *object)
 	control = GPM_CONTROL (object);
 
 	g_object_unref (control->priv->conf);
-	g_object_unref (control->priv->hal_power);
+	g_object_unref (control->priv->hal_device_power);
 
 	g_return_if_fail (control->priv != NULL);
 	G_OBJECT_CLASS (gpm_control_parent_class)->finalize (object);
@@ -621,7 +621,7 @@ gpm_control_init (GpmControl *control)
 {
 	control->priv = GPM_CONTROL_GET_PRIVATE (control);
 
-	control->priv->hal_power = hal_gpower_new ();
+	control->priv->hal_device_power = hal_device_power_new ();
 	control->priv->conf = gpm_conf_new ();
 }
 

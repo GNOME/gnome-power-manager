@@ -22,30 +22,30 @@
 #include <glib.h>
 #include "gpm-st-main.h"
 
-#include <libhal-gmanager.h>
+#include <hal-manager.h>
 
 void
 egg_test_hal_manager (GpmSelfTest *test)
 {
-	HalGManager *manager;
+	HalManager *manager;
 	gboolean ret;
 
-	if (egg_test_start (test, "HalGManager") == FALSE) {
+	if (egg_test_start (test, "HalManager") == FALSE) {
 		return;
 	}
 
 	/************************************************************/
 	egg_test_title (test, "make sure we get a non null device");
-	manager = hal_gmanager_new ();
+	manager = hal_manager_new ();
 	if (manager != NULL) {
-		egg_test_success (test, "got HalGManager");
+		egg_test_success (test, "got HalManager");
 	} else {
-		egg_test_failed (test, "could not get HalGManager");
+		egg_test_failed (test, "could not get HalManager");
 	}
 
 	/************************************************************/
 	egg_test_title (test, "check if we are a laptop");
-	ret = hal_gmanager_is_laptop (manager);
+	ret = hal_manager_is_laptop (manager);
 	if (ret) {
 		egg_test_success (test, "identified as a laptop");
 	} else {
@@ -56,13 +56,13 @@ egg_test_hal_manager (GpmSelfTest *test)
 	/************************************************************/
 	gchar **value;
 	egg_test_title (test, "search for battery devices");
-	ret = hal_gmanager_find_capability (manager, "battery", &value, NULL);
+	ret = hal_manager_find_capability (manager, "battery", &value, NULL);
 	if (ret && value != NULL && value[0] != NULL) {
 		egg_test_success (test, "found battery device");
 	} else {
 		egg_test_failed (test, "did not find battery device");
 	}
-	hal_gmanager_free_capability (value);
+	hal_manager_free_capability (value);
 
 	g_object_unref (manager);
 

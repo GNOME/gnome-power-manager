@@ -38,8 +38,8 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 
-#include <libhal-gdevice.h>
-#include <libhal-gmanager.h>
+#include <hal-device.h>
+#include <hal-manager.h>
 #include "egg-dbus-proxy.h"
 
 #include "egg-debug.h"
@@ -444,8 +444,8 @@ static void
 gpm_brightness_hal_init (GpmBrightnessHal *brightness)
 {
 	gchar **names;
-	HalGManager *manager;
-	HalGDevice *device;
+	HalManager *manager;
+	HalDevice *device;
 	gboolean res;
 	DBusGConnection *connection;
 
@@ -454,8 +454,8 @@ gpm_brightness_hal_init (GpmBrightnessHal *brightness)
 	brightness->priv->hw_changed = FALSE;
 
 	/* save udi of lcd adapter */
-	manager = hal_gmanager_new ();
-	hal_gmanager_find_capability (manager, "laptop_panel", &names, NULL);
+	manager = hal_manager_new ();
+	hal_manager_find_capability (manager, "laptop_panel", &names, NULL);
 	g_object_unref (manager);
 	if (names == NULL || names[0] == NULL) {
 		egg_warning ("No devices of capability laptop_panel");
@@ -464,13 +464,13 @@ gpm_brightness_hal_init (GpmBrightnessHal *brightness)
 
 	/* We only want first laptop_panel object (should only be one) */
 	brightness->priv->udi = g_strdup (names[0]);
-	hal_gmanager_free_capability (names);
+	hal_manager_free_capability (names);
 
-	device = hal_gdevice_new ();
-	hal_gdevice_set_udi (device, brightness->priv->udi);
+	device = hal_device_new ();
+	hal_device_set_udi (device, brightness->priv->udi);
 
 	/* get levels that the adapter supports -- this does not change ever */
-	hal_gdevice_get_uint (device, "laptop_panel.num_levels",
+	hal_device_get_uint (device, "laptop_panel.num_levels",
 			      &brightness->priv->levels, NULL);
 	egg_debug ("Laptop panel levels: %i", brightness->priv->levels);
 	if (brightness->priv->levels == 0 || brightness->priv->levels > 256) {
@@ -478,7 +478,7 @@ gpm_brightness_hal_init (GpmBrightnessHal *brightness)
 	}
 
 	/* Check if hardware handles brightness changes automatically */
-	res = hal_gdevice_get_bool (device, 
+	res = hal_device_get_bool (device, 
 				    "laptop_panel.brightness_in_hardware",
 			            &brightness->priv->does_own_updates, NULL);
 

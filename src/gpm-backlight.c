@@ -40,7 +40,7 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 
-#include <libhal-gmanager.h>
+#include <hal-manager.h>
 
 #include "gpm-ac-adapter.h"
 #include "gpm-button.h"
@@ -853,7 +853,7 @@ gpm_backlight_class_init (GpmBacklightClass *klass)
 static void
 gpm_backlight_init (GpmBacklight *backlight)
 {
-	HalGManager *hal_manager;
+	HalManager *hal_manager;
 	guint value;
 	GpmPrefsServer *prefs_server;
 
@@ -878,8 +878,8 @@ gpm_backlight_init (GpmBacklight *backlight)
 	backlight->priv->can_sense = gpm_light_sensor_has_hw (backlight->priv->light_sensor);
 
 	/* we use hal to see if we are a laptop */
-	hal_manager = hal_gmanager_new ();
-	backlight->priv->is_laptop = hal_gmanager_is_laptop (hal_manager);
+	hal_manager = hal_manager_new ();
+	backlight->priv->is_laptop = hal_manager_is_laptop (hal_manager);
 	g_object_unref (hal_manager);
 
 	/* expose ui in prefs program */

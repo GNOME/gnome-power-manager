@@ -32,25 +32,25 @@
 #include "egg-debug.h"
 #include "egg-dbus-proxy.h"
 
-#include "libhal-marshal.h"
-#include "libhal-gpower.h"
-#include "libhal-gdevice.h"
-#include "libhal-gmanager.h"
+#include "hal-marshal.h"
+#include "hal-device-power.h"
+#include "hal-device.h"
+#include "hal-manager.h"
 
-static void     hal_gmanager_class_init (HalGManagerClass *klass);
-static void     hal_gmanager_init       (HalGManager      *hal_gmanager);
-static void     hal_gmanager_finalize   (GObject	  *object);
+static void     hal_manager_class_init (HalManagerClass *klass);
+static void     hal_manager_init       (HalManager      *hal_manager);
+static void     hal_manager_finalize   (GObject	  *object);
 
-#define LIBHAL_GMANAGER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), LIBHAL_TYPE_GMANAGER, HalGManagerPrivate))
+#define HAL_MANAGER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), HAL_TYPE_MANAGER, HalManagerPrivate))
 
-struct HalGManagerPrivate
+struct HalManagerPrivate
 {
 	DBusGConnection		*connection;
-	HalGDevice		*computer;
+	HalDevice		*computer;
 	EggDbusProxy		*gproxy;
 };
 
-/* Signals emitted from HalGManager are:
+/* Signals emitted from HalManager are:
  *
  * device-added
  * device-removed
@@ -70,41 +70,41 @@ enum {
 };
 
 static guint signals [LAST_SIGNAL] = { 0 };
-static gpointer hal_gmanager_object = NULL;
+static gpointer hal_manager_object = NULL;
 
-G_DEFINE_TYPE (HalGManager, hal_gmanager, G_TYPE_OBJECT)
+G_DEFINE_TYPE (HalManager, hal_manager, G_TYPE_OBJECT)
 
 /**
- * hal_gmanager_is_running:
+ * hal_manager_is_running:
  *
- * @hal_gmanager: This class instance
- * Return value: TRUE if hal_gmanagerdaemon is running
+ * @hal_manager: This class instance
+ * Return value: TRUE if hal_managerdaemon is running
  *
- * Finds out if hal_gmanager is running
+ * Finds out if hal_manager is running
  **/
 gboolean
-hal_gmanager_is_running (HalGManager *manager)
+hal_manager_is_running (HalManager *manager)
 {
 	gchar *udi = NULL;
 	gboolean running;
 
-	g_return_val_if_fail (LIBHAL_IS_GMANAGER (manager), FALSE);
+	g_return_val_if_fail (HAL_IS_MANAGER (manager), FALSE);
 
-	running = hal_gdevice_get_string (manager->priv->computer, "info.udi", &udi, NULL);
+	running = hal_device_get_string (manager->priv->computer, "info.udi", &udi, NULL);
 	g_free (udi);
 	return running;
 }
 
 /**
- * hal_gmanager_find_capability:
+ * hal_manager_find_capability:
  *
- * @hal_gmanager: This class instance
+ * @hal_manager: This class instance
  * @capability: The capability, e.g. "battery"
  * @value: return value, passed by ref
  * Return value: TRUE for success, FALSE for failure
  **/
 gboolean
-hal_gmanager_find_capability (HalGManager *manager,
+hal_manager_find_capability (HalManager *manager,
 			      const gchar *capability,
 			      gchar     ***value,
 			      GError     **error)
@@ -112,7 +112,7 @@ hal_gmanager_find_capability (HalGManager *manager,
 	DBusGProxy *proxy = NULL;
 	gboolean ret;
 
-	g_return_val_if_fail (LIBHAL_IS_GMANAGER (manager), FALSE);
+	g_return_val_if_fail (HAL_IS_MANAGER (manager), FALSE);
 	g_return_val_if_fail (capability != NULL, FALSE);
 	g_return_val_if_fail (value != NULL, FALSE);
 
@@ -132,16 +132,16 @@ hal_gmanager_find_capability (HalGManager *manager,
 }
 
 /**
- * hal_gmanager_find_device_string_match:
+ * hal_manager_find_device_string_match:
  *
- * @hal_gmanager: This class instance
+ * @hal_manager: This class instance
  * @key: The key, e.g. "battery.type"
  * @value: The value, e.g. "primary"
  * @devices: return value, passed by ref
  * Return value: TRUE for success, FALSE for failure
  **/
 gboolean
-hal_gmanager_find_device_string_match (HalGManager *manager,
+hal_manager_find_device_string_match (HalManager *manager,
 			               const gchar *key,
 			               const gchar *value,
 			               gchar     ***devices,
@@ -150,7 +150,7 @@ hal_gmanager_find_device_string_match (HalGManager *manager,
 	DBusGProxy *proxy = NULL;
 	gboolean ret;
 
-	g_return_val_if_fail (LIBHAL_IS_GMANAGER (manager), FALSE);
+	g_return_val_if_fail (HAL_IS_MANAGER (manager), FALSE);
 	g_return_val_if_fail (key != NULL, FALSE);
 	g_return_val_if_fail (value != NULL, FALSE);
 	g_return_val_if_fail (devices != NULL, FALSE);
@@ -172,14 +172,14 @@ hal_gmanager_find_device_string_match (HalGManager *manager,
 }
 
 /**
- * hal_gmanager_free_capability:
+ * hal_manager_free_capability:
  *
  * @value: The list of strings to free
  *
- * Frees value result of hal_gmanager_find_capability. Safe to call with NULL.
+ * Frees value result of hal_manager_find_capability. Safe to call with NULL.
  **/
 void
-hal_gmanager_free_capability (gchar **value)
+hal_manager_free_capability (gchar **value)
 {
 	gint i;
 
@@ -193,7 +193,7 @@ hal_gmanager_free_capability (gchar **value)
 }
 
 /**
- * hal_gmanager_num_devices_of_capability:
+ * hal_manager_num_devices_of_capability:
  *
  * @manager: This class instance
  * @capability: The capability, e.g. "battery"
@@ -202,28 +202,28 @@ hal_gmanager_free_capability (gchar **value)
  * Get the number of devices on system with a specific capability
  **/
 gint
-hal_gmanager_num_devices_of_capability (HalGManager *manager,
+hal_manager_num_devices_of_capability (HalManager *manager,
 					const gchar *capability)
 {
 	gint i;
 	gchar **names;
 	gboolean ret;
 
-	g_return_val_if_fail (LIBHAL_IS_GMANAGER (manager), 0);
+	g_return_val_if_fail (HAL_IS_MANAGER (manager), 0);
 	g_return_val_if_fail (capability != NULL, 0);
 
-	ret = hal_gmanager_find_capability (manager, capability, &names, NULL);
+	ret = hal_manager_find_capability (manager, capability, &names, NULL);
 	if (!ret) {
 		return 0;
 	}
 	/* iterate to find number of items */
 	for (i = 0; names[i]; i++) {};
-	hal_gmanager_free_capability (names);
+	hal_manager_free_capability (names);
 	return i;
 }
 
 /**
- * hal_gmanager_num_devices_of_capability_with_value:
+ * hal_manager_num_devices_of_capability_with_value:
  *
  * @manager: This class instance
  * @capability: The capability, e.g. "battery"
@@ -234,7 +234,7 @@ hal_gmanager_num_devices_of_capability (HalGManager *manager,
  * Get the number of devices on system with a specific capability and key value
  **/
 gint
-hal_gmanager_num_devices_of_capability_with_value (HalGManager *manager,
+hal_manager_num_devices_of_capability_with_value (HalManager *manager,
 					      const gchar *capability,
 					      const gchar *key,
 					      const gchar *value)
@@ -243,22 +243,22 @@ hal_gmanager_num_devices_of_capability_with_value (HalGManager *manager,
 	gint valid = 0;
 	gchar **names;
 	gboolean ret;
-	HalGDevice *hal_device;
+	HalDevice *hal_device;
 
-	g_return_val_if_fail (LIBHAL_IS_GMANAGER (manager), 0);
+	g_return_val_if_fail (HAL_IS_MANAGER (manager), 0);
 	g_return_val_if_fail (capability != NULL, 0);
 	g_return_val_if_fail (key != NULL, 0);
 	g_return_val_if_fail (value != NULL, 0);
 
-	ret = hal_gmanager_find_capability (manager, capability, &names, NULL);
+	ret = hal_manager_find_capability (manager, capability, &names, NULL);
 	if (!ret) {
 		return 0;
 	}
 	for (i = 0; names[i]; i++) {
 		gchar *type = NULL;
-		hal_device = hal_gdevice_new ();
-		hal_gdevice_set_udi (hal_device, names[i]);
-		hal_gdevice_get_string (hal_device, key, &type, NULL);
+		hal_device = hal_device_new ();
+		hal_device_set_udi (hal_device, names[i]);
+		hal_device_get_string (hal_device, key, &type, NULL);
 		g_object_unref (hal_device);
 		if (type != NULL) {
 			if (strcmp (type, value) == 0)
@@ -266,29 +266,29 @@ hal_gmanager_num_devices_of_capability_with_value (HalGManager *manager,
 			g_free (type);
 		}
 	}
-	hal_gmanager_free_capability (names);
+	hal_manager_free_capability (names);
 	return valid;
 }
 
 /**
- * hal_gmanager_class_init:
+ * hal_manager_class_init:
  * @klass: This class instance
  **/
 static void
-hal_gmanager_class_init (HalGManagerClass *klass)
+hal_manager_class_init (HalManagerClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	object_class->finalize = hal_gmanager_finalize;
-	g_type_class_add_private (klass, sizeof (HalGManagerPrivate));
+	object_class->finalize = hal_manager_finalize;
+	g_type_class_add_private (klass, sizeof (HalManagerPrivate));
 
 	signals [DEVICE_ADDED] =
 		g_signal_new ("device-added",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (HalGManagerClass, device_added),
+			      G_STRUCT_OFFSET (HalManagerClass, device_added),
 			      NULL,
 			      NULL,
-			      libhal_marshal_VOID__STRING,
+			      hal_marshal_VOID__STRING,
 			      G_TYPE_NONE,
 			      1, G_TYPE_STRING);
 
@@ -296,10 +296,10 @@ hal_gmanager_class_init (HalGManagerClass *klass)
 		g_signal_new ("device-removed",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (HalGManagerClass, device_removed),
+			      G_STRUCT_OFFSET (HalManagerClass, device_removed),
 			      NULL,
 			      NULL,
-			      libhal_marshal_VOID__STRING,
+			      hal_marshal_VOID__STRING,
 			      G_TYPE_NONE,
 			      1, G_TYPE_STRING);
 
@@ -307,10 +307,10 @@ hal_gmanager_class_init (HalGManagerClass *klass)
 		g_signal_new ("new-capability",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (HalGManagerClass, new_capability),
+			      G_STRUCT_OFFSET (HalManagerClass, new_capability),
 			      NULL,
 			      NULL,
-			      libhal_marshal_VOID__STRING_STRING,
+			      hal_marshal_VOID__STRING_STRING,
 			      G_TYPE_NONE,
 			      2, G_TYPE_STRING, G_TYPE_STRING);
 
@@ -318,10 +318,10 @@ hal_gmanager_class_init (HalGManagerClass *klass)
 		g_signal_new ("lost-capability",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (HalGManagerClass, lost_capability),
+			      G_STRUCT_OFFSET (HalManagerClass, lost_capability),
 			      NULL,
 			      NULL,
-			      libhal_marshal_VOID__STRING_STRING,
+			      hal_marshal_VOID__STRING_STRING,
 			      G_TYPE_NONE,
 			      2, G_TYPE_STRING, G_TYPE_STRING);
 
@@ -329,7 +329,7 @@ hal_gmanager_class_init (HalGManagerClass *klass)
 		g_signal_new ("daemon-start",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (HalGManagerClass, daemon_start),
+			      G_STRUCT_OFFSET (HalManagerClass, daemon_start),
 			      NULL,
 			      NULL,
 			      g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
@@ -338,14 +338,14 @@ hal_gmanager_class_init (HalGManagerClass *klass)
 		g_signal_new ("daemon-stop",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (HalGManagerClass, daemon_stop),
+			      G_STRUCT_OFFSET (HalManagerClass, daemon_stop),
 			      NULL,
 			      NULL,
 			      g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 }
 
 /**
- * hal_gmanager_device_added_cb:
+ * hal_manager_device_added_cb:
  *
  * @proxy: The org.freedesktop.Hal.Manager proxy
  * @udi: Univerisal Device Id
@@ -354,15 +354,15 @@ hal_gmanager_class_init (HalGManagerClass *klass)
  * Invoked when a device is added.
  */
 static void
-hal_gmanager_device_added_cb (DBusGProxy  *proxy,
+hal_manager_device_added_cb (DBusGProxy  *proxy,
 		              const gchar *udi,
-		              HalGManager *manager)
+		              HalManager *manager)
 {
 	g_signal_emit (manager, signals [DEVICE_ADDED], 0, udi);
 }
 
 /**
- * hal_gmanager_device_removed_cb:
+ * hal_manager_device_removed_cb:
  *
  * @proxy: The org.freedesktop.Hal.Manager proxy
  * @udi: Univerisal Device Id
@@ -371,15 +371,15 @@ hal_gmanager_device_added_cb (DBusGProxy  *proxy,
  * Invoked when a device is removed.
  */
 static void
-hal_gmanager_device_removed_cb (DBusGProxy  *proxy,
+hal_manager_device_removed_cb (DBusGProxy  *proxy,
 		                const gchar *udi,
-		                HalGManager *manager)
+		                HalManager *manager)
 {
 	g_signal_emit (manager, signals [DEVICE_REMOVED], 0, udi);
 }
 
 /**
- * hal_gmanager_new_capability_cb:
+ * hal_manager_new_capability_cb:
  *
  * @proxy: The org.freedesktop.Hal.Manager proxy
  * @udi: Univerisal Device Id
@@ -389,16 +389,16 @@ hal_gmanager_device_removed_cb (DBusGProxy  *proxy,
  * Invoked when a device gets a new condition.
  */
 static void
-hal_gmanager_new_capability_cb (DBusGProxy  *proxy,
+hal_manager_new_capability_cb (DBusGProxy  *proxy,
 		                const gchar *udi,
 		                const gchar *capability,
-		                HalGManager *manager)
+		                HalManager *manager)
 {
 	g_signal_emit (manager, signals [NEW_CAPABILITY], 0, udi, capability);
 }
 
 /**
- * hal_gmanager_proxy_connect_more:
+ * hal_manager_proxy_connect_more:
  *
  * @manager: This class instance
  * Return value: Success
@@ -406,11 +406,11 @@ hal_gmanager_new_capability_cb (DBusGProxy  *proxy,
  * Connect the manager proxy to HAL and register some basic callbacks
  */
 static gboolean
-hal_gmanager_proxy_connect_more (HalGManager *manager)
+hal_manager_proxy_connect_more (HalManager *manager)
 {
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (LIBHAL_IS_GMANAGER (manager), FALSE);
+	g_return_val_if_fail (HAL_IS_MANAGER (manager), FALSE);
 
 	proxy = egg_dbus_proxy_get_proxy (manager->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
@@ -422,37 +422,37 @@ hal_gmanager_proxy_connect_more (HalGManager *manager)
 	dbus_g_proxy_add_signal (proxy, "DeviceAdded",
 				 G_TYPE_STRING, G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (proxy, "DeviceAdded",
-				     G_CALLBACK (hal_gmanager_device_added_cb), manager, NULL);
+				     G_CALLBACK (hal_manager_device_added_cb), manager, NULL);
 
 	dbus_g_proxy_add_signal (proxy, "DeviceRemoved",
 				 G_TYPE_STRING, G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (proxy, "DeviceRemoved",
-				     G_CALLBACK (hal_gmanager_device_removed_cb), manager, NULL);
+				     G_CALLBACK (hal_manager_device_removed_cb), manager, NULL);
 
-	dbus_g_object_register_marshaller (libhal_marshal_VOID__STRING_STRING,
+	dbus_g_object_register_marshaller (hal_marshal_VOID__STRING_STRING,
 					   G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
 	dbus_g_proxy_add_signal (proxy, "NewCapability",
 				 G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (proxy, "NewCapability",
-				     G_CALLBACK (hal_gmanager_new_capability_cb), manager, NULL);
+				     G_CALLBACK (hal_manager_new_capability_cb), manager, NULL);
 
 	return TRUE;
 }
 
 /**
- * hal_gmanager_proxy_disconnect_more:
+ * hal_manager_proxy_disconnect_more:
  *
  * @manager: This class instance
  * Return value: Success
  *
- * Disconnect the manager proxy to HAL_GMANAGER and disconnect some basic callbacks
+ * Disconnect the manager proxy to HAL_MANAGER and disconnect some basic callbacks
  */
 static gboolean
-hal_gmanager_proxy_disconnect_more (HalGManager *manager)
+hal_manager_proxy_disconnect_more (HalManager *manager)
 {
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (LIBHAL_IS_GMANAGER (manager), FALSE);
+	g_return_val_if_fail (HAL_IS_MANAGER (manager), FALSE);
 
 	proxy = egg_dbus_proxy_get_proxy (manager->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
@@ -461,9 +461,9 @@ hal_gmanager_proxy_disconnect_more (HalGManager *manager)
 	}
 
 	dbus_g_proxy_disconnect_signal (proxy, "DeviceRemoved",
-					G_CALLBACK (hal_gmanager_device_removed_cb), manager);
+					G_CALLBACK (hal_manager_device_removed_cb), manager);
 	dbus_g_proxy_disconnect_signal (proxy, "NewCapability",
-					G_CALLBACK (hal_gmanager_new_capability_cb), manager);
+					G_CALLBACK (hal_manager_new_capability_cb), manager);
 
 	return TRUE;
 }
@@ -477,32 +477,32 @@ hal_gmanager_proxy_disconnect_more (HalGManager *manager)
 static void
 proxy_status_cb (DBusGProxy    *proxy,
 		 gboolean       status,
-		 HalGManager *manager)
+		 HalManager *manager)
 {
-	g_return_if_fail (LIBHAL_IS_GMANAGER (manager));
+	g_return_if_fail (HAL_IS_MANAGER (manager));
 	if (status) {
 		g_signal_emit (manager, signals [DAEMON_START], 0);
-		hal_gmanager_proxy_connect_more (manager);
+		hal_manager_proxy_connect_more (manager);
 	} else {
 		g_signal_emit (manager, signals [DAEMON_STOP], 0);
-		hal_gmanager_proxy_disconnect_more (manager);
+		hal_manager_proxy_disconnect_more (manager);
 	}
 }
 
 /**
- * hal_gmanager_init:
+ * hal_manager_init:
  *
  * @manager: This class instance
  **/
 static void
-hal_gmanager_init (HalGManager *manager)
+hal_manager_init (HalManager *manager)
 {
 	GError *error = NULL;
 	DBusGProxy *proxy;
 	DBusGConnection *connection;
 	gboolean ret;
 
-	manager->priv = LIBHAL_GMANAGER_GET_PRIVATE (manager);
+	manager->priv = HAL_MANAGER_GET_PRIVATE (manager);
 
 	manager->priv->connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (error) {
@@ -525,18 +525,18 @@ hal_gmanager_init (HalGManager *manager)
 			  G_CALLBACK (proxy_status_cb), manager);
 
 	/* use the computer object */
-	manager->priv->computer = hal_gdevice_new();
-	ret = hal_gdevice_set_udi (manager->priv->computer, HAL_ROOT_COMPUTER);
+	manager->priv->computer = hal_device_new();
+	ret = hal_device_set_udi (manager->priv->computer, HAL_ROOT_COMPUTER);
 	if (!ret) {
 		egg_warning ("failed to get Computer root object");
 	}
 
 	/* blindly try to connect, assuming HAL is alive */
-	hal_gmanager_proxy_connect_more (manager);
+	hal_manager_proxy_connect_more (manager);
 }
 
 /**
- * hal_gmanager_is_laptop:
+ * hal_manager_is_laptop:
  *
  * @manager: This class instance
  * Return value: TRUE is computer is identified as a laptop
@@ -544,15 +544,15 @@ hal_gmanager_init (HalGManager *manager)
  * Returns true if system.formfactor is "laptop"
  **/
 gboolean
-hal_gmanager_is_laptop (HalGManager *manager)
+hal_manager_is_laptop (HalManager *manager)
 {
 	gboolean ret = TRUE;
 	gchar *formfactor = NULL;
 
-	g_return_val_if_fail (LIBHAL_IS_GMANAGER (manager), FALSE);
+	g_return_val_if_fail (HAL_IS_MANAGER (manager), FALSE);
 
 	/* always present */
-	hal_gdevice_get_string (manager->priv->computer, "system.formfactor", &formfactor, NULL);
+	hal_device_get_string (manager->priv->computer, "system.formfactor", &formfactor, NULL);
 	if (formfactor == NULL) {
 		/* no need to free */
 		return FALSE;
@@ -567,38 +567,38 @@ hal_gmanager_is_laptop (HalGManager *manager)
 }
 
 /**
- * hal_gmanager_finalize:
+ * hal_manager_finalize:
  * @object: This class instance
  **/
 static void
-hal_gmanager_finalize (GObject *object)
+hal_manager_finalize (GObject *object)
 {
-	HalGManager *manager;
+	HalManager *manager;
 	g_return_if_fail (object != NULL);
-	g_return_if_fail (LIBHAL_IS_GMANAGER (object));
+	g_return_if_fail (HAL_IS_MANAGER (object));
 
-	manager = LIBHAL_GMANAGER (object);
-	manager->priv = LIBHAL_GMANAGER_GET_PRIVATE (manager);
+	manager = HAL_MANAGER (object);
+	manager->priv = HAL_MANAGER_GET_PRIVATE (manager);
 
 	g_object_unref (manager->priv->gproxy);
 	g_object_unref (manager->priv->computer);
 
-	G_OBJECT_CLASS (hal_gmanager_parent_class)->finalize (object);
+	G_OBJECT_CLASS (hal_manager_parent_class)->finalize (object);
 }
 
 /**
- * hal_gmanager_new:
- * Return value: new HalGManager instance.
+ * hal_manager_new:
+ * Return value: new HalManager instance.
  **/
-HalGManager *
-hal_gmanager_new (void)
+HalManager *
+hal_manager_new (void)
 {
-	if (hal_gmanager_object != NULL) {
-		g_object_ref (hal_gmanager_object);
+	if (hal_manager_object != NULL) {
+		g_object_ref (hal_manager_object);
 	} else {
-		hal_gmanager_object = g_object_new (LIBHAL_TYPE_GMANAGER, NULL);
-		g_object_add_weak_pointer (hal_gmanager_object, &hal_gmanager_object);
+		hal_manager_object = g_object_new (HAL_TYPE_MANAGER, NULL);
+		g_object_add_weak_pointer (hal_manager_object, &hal_manager_object);
 	}
-	return LIBHAL_GMANAGER (hal_gmanager_object);
+	return HAL_MANAGER (hal_manager_object);
 }
 

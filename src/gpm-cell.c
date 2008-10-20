@@ -25,7 +25,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 
-#include <libhal-gdevice.h>
+#include <hal-device.h>
 
 #include "gpm-common.h"
 #include "gpm-marshal.h"
@@ -42,7 +42,7 @@ static void     gpm_cell_finalize   (GObject	  *object);
 
 struct GpmCellPrivate
 {
-	HalGDevice	*hal_device;
+	HalDevice	*hal_device;
 	GpmCellUnit	 unit;
 	GpmPhone	*phone;
 	gchar		*product;
@@ -88,7 +88,7 @@ gpm_cell_get_unit (GpmCell *cell)
 static gboolean
 gpm_cell_refresh_hal_all (GpmCell *cell)
 {
-	HalGDevice *device;
+	HalDevice *device;
 	GpmCellUnit *unit;
 	gboolean exists;
 	gboolean is_recalled;
@@ -97,29 +97,29 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 	unit = gpm_cell_get_unit (cell);
 
 	/* batteries might be missing */
-	hal_gdevice_get_bool (device, "battery.present", &unit->is_present, NULL);
+	hal_device_get_bool (device, "battery.present", &unit->is_present, NULL);
 	if (unit->is_present == FALSE) {
 		egg_debug ("Battery not present, so not filling up values");
 		return FALSE;
 	}
 
-	hal_gdevice_get_uint (device, "battery.charge_level.design",
+	hal_device_get_uint (device, "battery.charge_level.design",
 				 &unit->charge_design, NULL);
-	hal_gdevice_get_uint (device, "battery.charge_level.last_full",
+	hal_device_get_uint (device, "battery.charge_level.last_full",
 				 &unit->charge_last_full, NULL);
-	hal_gdevice_get_uint (device, "battery.charge_level.current",
+	hal_device_get_uint (device, "battery.charge_level.current",
 				 &unit->charge_current, NULL);
 
 	/* battery might not be rechargeable, have to check */
-	hal_gdevice_get_bool (device, "battery.is_rechargeable",
+	hal_device_get_bool (device, "battery.is_rechargeable",
 				&unit->is_rechargeable, NULL);
 
 	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY ||
 	    unit->kind == GPM_CELL_UNIT_KIND_UPS) {
 		if (unit->is_rechargeable) {
-			hal_gdevice_get_bool (device, "battery.rechargeable.is_charging",
+			hal_device_get_bool (device, "battery.rechargeable.is_charging",
 						&unit->is_charging, NULL);
-			hal_gdevice_get_bool (device, "battery.rechargeable.is_discharging",
+			hal_device_get_bool (device, "battery.rechargeable.is_discharging",
 						&unit->is_discharging, NULL);
 		} else {
 			/* HAL isn't being helpful here... */
@@ -134,7 +134,7 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 
 	/* sanity check that charge_level.rate exists (if it should) */
 	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
-		exists = hal_gdevice_get_uint (device, "battery.charge_level.rate",
+		exists = hal_device_get_uint (device, "battery.charge_level.rate",
 						  &unit->rate, NULL);
 		if (exists == FALSE && (unit->is_discharging || unit->is_charging == TRUE)) {
 			egg_warning ("could not read your battery's charge rate");
@@ -148,7 +148,7 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 		   world we also see it for rechargeables. Sigh */
 		if (unit->rate == 0) {
 			guint raw_last_charge;
-			hal_gdevice_get_uint (device, "battery.reporting.last_full",
+			hal_device_get_uint (device, "battery.reporting.last_full",
 					      &raw_last_charge, NULL);
 			if (raw_last_charge == 100)
 				unit->reports_percentage = TRUE;
@@ -157,7 +157,7 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 
 	/* sanity check that charge_level.percentage exists (if it should) */
 	guint percentage;
-	exists = hal_gdevice_get_uint (device, "battery.charge_level.percentage", &percentage, NULL);
+	exists = hal_device_get_uint (device, "battery.charge_level.percentage", &percentage, NULL);
 	unit->percentage = (gfloat) percentage;
 	if (exists == FALSE) {
 		egg_warning ("could not read your battery's percentage charge.");
@@ -166,7 +166,7 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 	/* sanity check that remaining time exists (if it should) */
 	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY ||
 	    unit->kind == GPM_CELL_UNIT_KIND_UPS) {
-		exists = hal_gdevice_get_uint (device,"battery.remaining_time",
+		exists = hal_device_get_uint (device,"battery.remaining_time",
 						  &unit->time_charge, NULL);
 		if (exists == FALSE && (unit->is_discharging || unit->is_charging == TRUE)) {
 			egg_warning ("could not read your battery's remaining time");
@@ -200,20 +200,20 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 	}
 
 	/* get other stuff we might need to know */
-	hal_gdevice_get_string (device, "info.product", &cell->priv->product, NULL);
-	hal_gdevice_get_string (device, "battery.vendor", &cell->priv->vendor, NULL);
-	hal_gdevice_get_string (device, "battery.technology", &cell->priv->technology, NULL);
-	hal_gdevice_get_string (device, "battery.serial", &cell->priv->serial, NULL);
-	hal_gdevice_get_string (device, "battery.model", &cell->priv->model, NULL);
-	hal_gdevice_get_uint (device, "battery.voltage.current", &unit->voltage, NULL);
+	hal_device_get_string (device, "info.product", &cell->priv->product, NULL);
+	hal_device_get_string (device, "battery.vendor", &cell->priv->vendor, NULL);
+	hal_device_get_string (device, "battery.technology", &cell->priv->technology, NULL);
+	hal_device_get_string (device, "battery.serial", &cell->priv->serial, NULL);
+	hal_device_get_string (device, "battery.model", &cell->priv->model, NULL);
+	hal_device_get_uint (device, "battery.voltage.current", &unit->voltage, NULL);
 
 	/* this is more common than you might expect: hardware that might blow up */
-	hal_gdevice_get_bool (device, "info.is_recalled", &is_recalled, NULL);
+	hal_device_get_bool (device, "info.is_recalled", &is_recalled, NULL);
 	if (is_recalled) {
 		gchar *oem_vendor;
 		gchar *website;
-		hal_gdevice_get_string (device, "info.recall.vendor", &oem_vendor, NULL);
-		hal_gdevice_get_string (device, "info.recall.website_url", &website, NULL);
+		hal_device_get_string (device, "info.recall.vendor", &oem_vendor, NULL);
+		hal_device_get_string (device, "info.recall.website_url", &website, NULL);
 		egg_warning ("battery is recalled");
 		egg_debug ("** EMIT: perhaps-recall");
 		g_signal_emit (cell, signals [PERHAPS_RECALL], 0, oem_vendor, website);
@@ -228,7 +228,7 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
  * battery_key_changed:
  **/
 static gboolean
-battery_key_changed (HalGDevice  *device,
+battery_key_changed (HalDevice  *device,
 		     const gchar *key,
 		     const gchar *oldval)
 {
@@ -240,7 +240,7 @@ battery_key_changed (HalGDevice  *device,
 	}
 
 	/* get the new value */
-	hal_gdevice_get_string (device, key, &newval, NULL);
+	hal_device_get_string (device, key, &newval, NULL);
 
 	if (newval == NULL) {
 		return FALSE;
@@ -256,7 +256,7 @@ battery_key_changed (HalGDevice  *device,
  * hal_device_property_modified_cb:
  */
 static void
-hal_device_property_modified_cb (HalGDevice   *device,
+hal_device_property_modified_cb (HalDevice   *device,
 				 const gchar  *key,
 				 gboolean      is_added,
 				 gboolean      is_removed,
@@ -264,7 +264,7 @@ hal_device_property_modified_cb (HalGDevice   *device,
 				 GpmCell      *cell)
 {
 	GpmCellUnit *unit;
-	const gchar *udi = hal_gdevice_get_udi (device);
+	const gchar *udi = hal_device_get_udi (device);
 	guint time_hal;
 
 	unit = gpm_cell_get_unit (cell);
@@ -280,11 +280,11 @@ hal_device_property_modified_cb (HalGDevice   *device,
 
 	/* update values in the struct */
 	if (strcmp (key, "battery.present") == 0) {
-		hal_gdevice_get_bool (device, key, &unit->is_present, NULL);
+		hal_device_get_bool (device, key, &unit->is_present, NULL);
 		gpm_cell_refresh_hal_all (cell);
 
 	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
-		hal_gdevice_get_bool (device, key, &unit->is_charging, NULL);
+		hal_device_get_bool (device, key, &unit->is_charging, NULL);
 		egg_debug ("** EMIT: charging-changed: %i", unit->is_charging);
 		g_signal_emit (cell, signals [CHARGING_CHANGED], 0, unit->is_charging);
 		/* reset the time, as we really can't guess this without profiling */
@@ -293,7 +293,7 @@ hal_device_property_modified_cb (HalGDevice   *device,
 		}
 
 	} else if (strcmp (key, "battery.rechargeable.is_discharging") == 0) {
-		hal_gdevice_get_bool (device, key, &unit->is_discharging, NULL);
+		hal_device_get_bool (device, key, &unit->is_discharging, NULL);
 		egg_debug ("** EMIT: discharging-changed: %i", unit->is_discharging);
 		g_signal_emit (cell, signals [DISCHARGING_CHANGED], 0, unit->is_discharging);
 		/* reset the time, as we really can't guess this without profiling */
@@ -302,16 +302,16 @@ hal_device_property_modified_cb (HalGDevice   *device,
 		}
 
 	} else if (strcmp (key, "battery.charge_level.design") == 0) {
-		hal_gdevice_get_uint (device, key, &unit->charge_design, NULL);
+		hal_device_get_uint (device, key, &unit->charge_design, NULL);
 
 	} else if (strcmp (key, "battery.charge_level.last_full") == 0) {
-		hal_gdevice_get_uint (device, key, &unit->charge_last_full, NULL);
+		hal_device_get_uint (device, key, &unit->charge_last_full, NULL);
 
 	} else if (strcmp (key, "battery.charge_level.current") == 0) {
-		hal_gdevice_get_uint (device, key, &unit->charge_current, NULL);
+		hal_device_get_uint (device, key, &unit->charge_current, NULL);
 
 	} else if (strcmp (key, "battery.charge_level.rate") == 0) {
-		hal_gdevice_get_uint (device, key, &unit->rate, NULL);
+		hal_device_get_uint (device, key, &unit->rate, NULL);
 		/* sanity check to less than 100W */
 		if (unit->rate > 100*1000) {
 			egg_warning ("sanity checking rate from %i to 0", unit->rate);
@@ -320,13 +320,13 @@ hal_device_property_modified_cb (HalGDevice   *device,
 
 	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
 		guint percent;
-		hal_gdevice_get_uint (device, key, &percent, NULL);
+		hal_device_get_uint (device, key, &percent, NULL);
 		unit->percentage = (gfloat) percent;
 		egg_debug ("** EMIT: percent-changed: %f", unit->percentage);
 		g_signal_emit (cell, signals [PERCENT_CHANGED], 0, unit->percentage);
 
 	} else if (strcmp (key, "battery.remaining_time") == 0) {
-		hal_gdevice_get_uint (device, key, &time_hal, NULL);
+		hal_device_get_uint (device, key, &time_hal, NULL);
 		/* Gahh. We have to multiplex the time as HAL shares a key. */
 		if (unit->is_charging) {
 			unit->time_charge = time_hal;
@@ -336,7 +336,7 @@ hal_device_property_modified_cb (HalGDevice   *device,
 		}
 
 	} else if (strcmp (key, "battery.voltage.current") == 0) {
-		hal_gdevice_get_uint (device, key, &unit->voltage, NULL);
+		hal_device_get_uint (device, key, &unit->voltage, NULL);
 
 	} else if (strcmp (key, "battery.model") == 0 ||
 		   strcmp (key, "battery.serial") == 0 ||
@@ -375,7 +375,7 @@ gboolean
 gpm_cell_set_device_id (GpmCell *cell, const gchar *udi)
 {
 	gboolean ret;
-	HalGDevice *device;
+	HalDevice *device;
 	gchar *battery_kind_str;
 	GpmCellUnit *unit;
 
@@ -385,18 +385,18 @@ gpm_cell_set_device_id (GpmCell *cell, const gchar *udi)
 	unit = gpm_cell_get_unit (cell);
 	device = cell->priv->hal_device;
 
-	ret = hal_gdevice_set_udi (device, udi);
+	ret = hal_device_set_udi (device, udi);
 	if (!ret) {
 		egg_warning ("cannot set udi");
 		return FALSE;
 	}
 
 	/* watch for changes */
-	hal_gdevice_watch_property_modified (device);
+	hal_device_watch_property_modified (device);
 	g_signal_connect (device, "property-modified",
 			  G_CALLBACK (hal_device_property_modified_cb), cell);
 
-	hal_gdevice_get_string (device, "battery.type", &battery_kind_str, NULL);
+	hal_device_get_string (device, "battery.type", &battery_kind_str, NULL);
 	if (battery_kind_str == NULL) {
 		egg_warning ("cannot obtain battery type");
 		return FALSE;
@@ -446,7 +446,7 @@ gpm_cell_get_device_id (GpmCell *cell)
 	g_return_val_if_fail (cell != NULL, NULL);
 	g_return_val_if_fail (GPM_IS_CELL (cell), NULL);
 
-	return hal_gdevice_get_udi (cell->priv->hal_device);
+	return hal_device_get_udi (cell->priv->hal_device);
 }
 
 /**
@@ -753,7 +753,7 @@ gpm_cell_init (GpmCell *cell)
 {
 	cell->priv = GPM_CELL_GET_PRIVATE (cell);
 
-	cell->priv->hal_device = hal_gdevice_new ();
+	cell->priv->hal_device = hal_device_new ();
 	cell->priv->product = NULL;
 	cell->priv->vendor = NULL;
 	cell->priv->technology = NULL;
@@ -812,7 +812,7 @@ gpm_cell_new (void)
  ***************************************************************************/
 #ifdef EGG_TEST
 #include "egg-test.h"
-#include <libhal-gmanager.h>
+#include <hal-manager.h>
 
 guint recall_count = 0;
 
@@ -828,14 +828,14 @@ gpm_cell_get_battery (void)
 	gchar **value;
 	gchar *udi = NULL;
 	gboolean ret;
-	HalGManager *manager;
+	HalManager *manager;
 
-	manager = hal_gmanager_new ();
-	ret = hal_gmanager_find_capability (manager, "battery", &value, NULL);
+	manager = hal_manager_new ();
+	ret = hal_manager_find_capability (manager, "battery", &value, NULL);
 	if (ret && value != NULL && value[0] != NULL) {
 		udi = g_strdup (value[0]);
 	}
-	hal_gmanager_free_capability (value);
+	hal_manager_free_capability (value);
 	g_object_unref (manager);
 
 	return udi;
