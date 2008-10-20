@@ -60,7 +60,6 @@ gboolean	 gpm_sound_force		(GpmSound	*sound,
 						 GpmSoundAction	 action);
 gboolean	 gpm_sound_event		(GpmSound	*sound,
 						 GpmSoundAction	 action);
-void		 gpm_sound_beep			(void);
 
 G_END_DECLS
 

@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2006-2007 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2006-2008 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -35,38 +35,31 @@
 #include <unistd.h>
 #endif /* HAVE_UNISTD_H */
 
-#include <glib/gi18n.h>
-#include <dbus/dbus-glib.h>
+#include <glib.h>
 #include <gst/gst.h>
+#include <gconf/gconf-client.h>
 
-#include "gpm-ac-adapter.h"
-#include "gpm-common.h"
-#include "gpm-control.h"
-#include "egg-debug.h"
 #include "gpm-conf.h"
+#include "gpm-common.h"
 #include "gpm-sound.h"
+#include "egg-debug.h"
 
 #define GPM_SOUND_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_SOUND, GpmSoundPrivate))
 
 struct GpmSoundPrivate
 {
-	gboolean		 enable_beeping;
-	GpmAcAdapter		*ac_adapter;
-	GpmConf			*conf;
-	GpmControl		*control;
+	GConfClient		*gconf_client;
 	GstElement		*playbin;
 };
 
 G_DEFINE_TYPE (GpmSound, gpm_sound, G_TYPE_OBJECT)
-static gpointer gpm_sound_object = NULL;
 
 /**
  * gpm_sound_force:
  * @sound: This class instance
  **/
 static gboolean
-gpm_sound_play (GpmSound   *sound,
-		const char *filename)
+gpm_sound_play (GpmSound *sound, const char *filename)
 {
 	char *uri, *fname;
 
@@ -93,20 +86,18 @@ gpm_sound_play (GpmSound   *sound,
  * @sound: This class instance
  **/
 gboolean
-gpm_sound_force (GpmSound       *sound,
-		 GpmSoundAction  action)
+gpm_sound_force (GpmSound *sound, GpmSoundAction action)
 {
 	const char *filename = NULL;
 
-	if (action == GPM_SOUND_AC_UNPLUGGED) {
+	if (action == GPM_SOUND_AC_UNPLUGGED)
 		filename = "gpm-unplugged.wav";
-	} else if (action == GPM_SOUND_POWER_LOW) {
+	else if (action == GPM_SOUND_POWER_LOW)
 		filename = "gpm-critical-power.wav";
-	} else if (action == GPM_SOUND_SUSPEND_FAILURE) {
+	else if (action == GPM_SOUND_SUSPEND_FAILURE)
 		filename = "gpm-suspend-failure.wav";
-	} else {
-		g_error ("enum %i not known", action);
-	}
+	else
+		egg_error ("enum %i not known", action);
 
 	gpm_sound_play (sound, filename);
 	return TRUE;
@@ -117,60 +108,13 @@ gpm_sound_force (GpmSound       *sound,
  * @sound: This class instance
  **/
 gboolean
-gpm_sound_event (GpmSound       *sound,
-		 GpmSoundAction  action)
+gpm_sound_event (GpmSound *sound, GpmSoundAction action)
 {
-	if (sound->priv->enable_beeping) {
+	gboolean ret;
+	ret = gconf_client_get_bool (sound->priv->gconf_client, GPM_CONF_UI_ENABLE_BEEPING, NULL);
+	if (ret)
 		gpm_sound_force (sound, action);
-	}
-	return TRUE;
-}
-
-/**
- * conf_key_changed_cb:
- *
- * We might have to do things when the gconf keys change; do them here.
- **/
-static void
-conf_key_changed_cb (GpmConf     *conf,
-		     const gchar *key,
-		     GpmSound    *sound)
-{
-	if (strcmp (key, GPM_CONF_UI_ENABLE_BEEPING) == 0) {
-		gpm_conf_get_bool (sound->priv->conf, GPM_CONF_UI_ENABLE_BEEPING,
-				   &sound->priv->enable_beeping);
-	}
-}
-
-/**
- * ac_adapter_changed_cb:
- * @ac_adapter: The ac_adapter class instance
- * @on_ac: if we are on AC ac_adapter
- * @sound: This class instance
- *
- * Does the actions when the ac power source is inserted/removed.
- **/
-static void
-ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
-		       gboolean      on_ac,
-		       GpmSound     *sound)
-{
-	if (on_ac == FALSE) {
-		gpm_sound_event (sound, GPM_SOUND_AC_UNPLUGGED);
-	}
-}
-
-/**
- * control_sleep_failure_cb:
- *
- * Sleep failed for some reason, alert the user.
- **/
-static void
-control_sleep_failure_cb (GpmControl      *control,
-			  GpmControlAction action,
-			  GpmSound	  *sound)
-{
-	gpm_sound_event (sound, GPM_SOUND_SUSPEND_FAILURE);
+	return ret;
 }
 
 /**
@@ -184,9 +128,7 @@ gpm_sound_finalize (GObject *object)
 	g_return_if_fail (GPM_IS_SOUND (object));
 	sound = GPM_SOUND (object);
 
-	g_object_unref (sound->priv->conf);
-	g_object_unref (sound->priv->ac_adapter);
-	g_object_unref (sound->priv->control);
+	g_object_unref (sound->priv->gconf_client);
 
 	/* stop and close */
 	gst_element_set_state (sound->priv->playbin, GST_STATE_NULL);
@@ -254,18 +196,7 @@ gpm_sound_init (GpmSound *sound)
 
 	sound->priv = GPM_SOUND_GET_PRIVATE (sound);
 
-	sound->priv->conf = gpm_conf_new ();
-	g_signal_connect (sound->priv->conf, "value-changed",
-			  G_CALLBACK (conf_key_changed_cb), sound);
-
-	sound->priv->control = gpm_control_new ();
-	g_signal_connect (sound->priv->control, "sleep-failure",
-			  G_CALLBACK (control_sleep_failure_cb), sound);
-
-	/* we use ac_adapter so we can make the right sound */
-	sound->priv->ac_adapter = gpm_ac_adapter_new ();
-	g_signal_connect (sound->priv->ac_adapter, "ac-adapter-changed",
-			  G_CALLBACK (ac_adapter_changed_cb), sound);
+	sound->priv->gconf_client = gconf_client_get_default ();
 
 	/* Instatiate the audio sink ourselves, and set the profile
 	 * so the right output is used */
@@ -283,9 +214,6 @@ gpm_sound_init (GpmSound *sound)
 	gst_bus_add_signal_watch (bus);
 	g_signal_connect (bus, "message", G_CALLBACK (gpm_sound_gst_bus_cb), sound);
 	gst_object_unref (bus);
-
-	/* do we beep? */
-	gpm_conf_get_bool (sound->priv->conf, GPM_CONF_UI_ENABLE_BEEPING, &sound->priv->enable_beeping);
 }
 
 /**
@@ -295,11 +223,7 @@ gpm_sound_init (GpmSound *sound)
 GpmSound *
 gpm_sound_new (void)
 {
-	if (gpm_sound_object != NULL) {
-		g_object_ref (gpm_sound_object);
-	} else {
-		gpm_sound_object = g_object_new (GPM_TYPE_SOUND, NULL);
-		g_object_add_weak_pointer (gpm_sound_object, &gpm_sound_object);
-	}
-	return GPM_SOUND (gpm_sound_object);
+	GpmSound *sound;
+	sound = g_object_new (GPM_TYPE_SOUND, NULL);
+	return GPM_SOUND (sound);
 }

@@ -1003,6 +1003,9 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 
 	gpm_manager_sync_policy_sleep (manager);
 
+	if (on_ac == FALSE)
+		gpm_sound_event (manager->priv->sound, GPM_SOUND_AC_UNPLUGGED);
+
 	egg_debug ("emitting on-ac-changed : %i", on_ac);
 	if (on_ac) {
 		g_signal_emit (manager, signals [ON_BATTERY_CHANGED], 0, FALSE);
@@ -1338,6 +1341,8 @@ control_sleep_failure_cb (GpmControl      *control,
 
 	/* only show this if specified in gconf */
 	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_SLEEP_FAILED, &show_sleep_failed);
+
+	gpm_sound_event (manager->priv->sound, GPM_SOUND_SUSPEND_FAILURE);
 
 	/* only emit if in GConf */
 	if (show_sleep_failed) {

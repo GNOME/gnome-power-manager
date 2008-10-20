@@ -1,5 +1,15 @@
 2008-10-20  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c: (ac_adapter_changed_cb),
+	(control_sleep_failure_cb):
+	* src/gpm-sound.c: (gpm_sound_play), (gpm_sound_force),
+	(gpm_sound_event), (gpm_sound_finalize), (gpm_sound_init),
+	(gpm_sound_new):
+	* src/gpm-sound.h:
+	Make the GpmSound logic less tangled.
+
+2008-10-20  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-button.c: (emit_button_pressed):
 	* src/gpm-button.h:
 	Remove some depricated code that can never be run.
