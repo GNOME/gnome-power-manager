@@ -165,7 +165,7 @@ gpm_applet_has_inhibit (GpmInhibitApplet *applet,
 	gboolean ret;
 	DBusGProxy *proxy;
 
-	proxy = dbus_proxy_get_proxy (applet->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (applet->gproxy);
 	if (proxy == NULL) {
 		g_warning ("not connected");
 		return FALSE;
@@ -597,6 +597,8 @@ monitor_connection_cb (EggDbusMonitor           *monitor,
 static void
 gpm_inhibit_applet_init (GpmInhibitApplet *applet)
 {
+	DBusGConnection *connection;
+
 	/* initialize fields */
 	applet->size = 0;
 	applet->icon = NULL;
@@ -611,7 +613,8 @@ gpm_inhibit_applet_init (GpmInhibitApplet *applet)
 	applet->monitor = egg_dbus_monitor_new ();
 	g_signal_connect (applet->monitor, "connection-changed",
 			  G_CALLBACK (monitor_connection_cb), applet);
-	egg_dbus_monitor_assign (applet->monitor, EGG_DBUS_MONITOR_SESSION, GPM_DBUS_SERVICE);
+	connection = dbus_g_bus_get (DBUS_BUS_SESSION, NULL);
+	egg_dbus_monitor_assign (applet->monitor, connection, GPM_DBUS_SERVICE);
 	gpm_inhibit_applet_dbus_connect (applet);
 
 	/* prepare */

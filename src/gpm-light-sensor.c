@@ -40,7 +40,7 @@
 
 #include <libhal-gdevice.h>
 #include <libhal-gmanager.h>
-#include <libdbus-proxy.h>
+#include "egg-dbus-proxy.h"
 
 #include "egg-debug.h"
 #include "egg-discrete.h"
@@ -60,7 +60,7 @@ struct GpmLightSensorPrivate
 	gfloat			 calibration_abs;
 	gchar			*udi;
 	gboolean		 has_sensor;
-	DbusProxy		*gproxy;
+	EggDbusProxy		*gproxy;
 };
 
 enum {
@@ -94,7 +94,7 @@ gpm_light_sensor_get_hw (GpmLightSensor *sensor)
 	g_return_val_if_fail (sensor != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_LIGHT_SENSOR (sensor), FALSE);
 
-	proxy = dbus_proxy_get_proxy (sensor->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (sensor->priv->gproxy);
 	if (proxy == NULL) {
 		egg_warning ("not connected to HAL");
 		return FALSE;
@@ -332,6 +332,7 @@ gpm_light_sensor_init (GpmLightSensor *sensor)
 	HalGManager *manager;
 	HalGDevice *device;
 	guint timeout;
+	DBusGConnection *connection;
 
 	sensor->priv = GPM_LIGHT_SENSOR_GET_PRIVATE (sensor);
 	sensor->priv->udi = NULL;
@@ -360,12 +361,11 @@ gpm_light_sensor_init (GpmLightSensor *sensor)
 	if (sensor->priv->has_sensor) {
 		egg_debug ("Using proper brightness sensor");
 		/* get a managed proxy */
-		sensor->priv->gproxy = dbus_proxy_new ();
-		dbus_proxy_assign (sensor->priv->gproxy,
-				  DBUS_PROXY_SYSTEM,
-				  HAL_DBUS_SERVICE,
-				  sensor->priv->udi,
-				  HAL_DBUS_INTERFACE_LIGHT_SENSOR);
+		sensor->priv->gproxy = egg_dbus_proxy_new ();
+		connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, NULL);
+		egg_dbus_proxy_assign (sensor->priv->gproxy,
+				  connection, HAL_DBUS_SERVICE,
+				  sensor->priv->udi, HAL_DBUS_INTERFACE_LIGHT_SENSOR);
 
 		/* get levels that the adapter supports -- this does not change ever */
 		device = hal_gdevice_new ();

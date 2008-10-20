@@ -28,7 +28,9 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
-#include <libdbus-proxy.h>
+
+#include "egg-debug.h"
+#include "egg-dbus-proxy.h"
 
 #include "libhal-marshal.h"
 #include "libhal-gpower.h"
@@ -45,7 +47,7 @@ struct HalGManagerPrivate
 {
 	DBusGConnection		*connection;
 	HalGDevice		*computer;
-	DbusProxy		*gproxy;
+	EggDbusProxy		*gproxy;
 };
 
 /* Signals emitted from HalGManager are:
@@ -410,9 +412,9 @@ hal_gmanager_proxy_connect_more (HalGManager *manager)
 
 	g_return_val_if_fail (LIBHAL_IS_GMANAGER (manager), FALSE);
 
-	proxy = dbus_proxy_get_proxy (manager->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (manager->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		g_warning ("proxy NULL!!");
+		egg_warning ("proxy NULL!!");
 		return FALSE;
 	}
 
@@ -452,9 +454,9 @@ hal_gmanager_proxy_disconnect_more (HalGManager *manager)
 
 	g_return_val_if_fail (LIBHAL_IS_GMANAGER (manager), FALSE);
 
-	proxy = dbus_proxy_get_proxy (manager->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (manager->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		g_warning ("proxy NULL!!");
+		egg_warning ("proxy NULL!!");
 		return FALSE;
 	}
 
@@ -497,25 +499,25 @@ hal_gmanager_init (HalGManager *manager)
 {
 	GError *error = NULL;
 	DBusGProxy *proxy;
+	DBusGConnection *connection;
 	gboolean ret;
 
 	manager->priv = LIBHAL_GMANAGER_GET_PRIVATE (manager);
 
 	manager->priv->connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (error) {
-		g_warning ("%s", error->message);
+		egg_warning ("%s", error->message);
 		g_error_free (error);
 	}
 
 	/* get the manager connection */
-	manager->priv->gproxy = dbus_proxy_new ();
-	proxy = dbus_proxy_assign (manager->priv->gproxy,
-				  DBUS_PROXY_SYSTEM,
-				  HAL_DBUS_SERVICE,
-				  HAL_DBUS_PATH_MANAGER,
-				  HAL_DBUS_INTERFACE_MANAGER);
+	manager->priv->gproxy = egg_dbus_proxy_new ();
+	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, NULL);
+	proxy = egg_dbus_proxy_assign (manager->priv->gproxy, connection,
+				       HAL_DBUS_SERVICE, HAL_DBUS_PATH_MANAGER,
+				       HAL_DBUS_INTERFACE_MANAGER);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		g_warning ("Either HAL or DBUS are not working!");
+		egg_warning ("Either HAL or DBUS are not working!");
 		exit (0);
 	}
 
@@ -526,7 +528,7 @@ hal_gmanager_init (HalGManager *manager)
 	manager->priv->computer = hal_gdevice_new();
 	ret = hal_gdevice_set_udi (manager->priv->computer, HAL_ROOT_COMPUTER);
 	if (!ret) {
-		g_warning ("failed to get Computer root object");
+		egg_warning ("failed to get Computer root object");
 	}
 
 	/* blindly try to connect, assuming HAL is alive */
@@ -556,7 +558,7 @@ hal_gmanager_is_laptop (HalGManager *manager)
 		return FALSE;
 	}
 	if (strcmp (formfactor, "laptop") != 0) {
-		g_warning ("This machine is not identified as a laptop."
+		egg_warning ("This machine is not identified as a laptop."
 			   "system.formfactor is %s.", formfactor);
 		ret = FALSE;
 	}

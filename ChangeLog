@@ -1,5 +1,77 @@
 2008-10-20  Richard Hughes  <richard@hughsie.com>
 
+	* Makefile.am:
+	* applets/brightness/brightness-applet.c:
+	(gpm_brightness_applet_init):
+	* applets/inhibit/inhibit-applet.c: (gpm_applet_has_inhibit),
+	(gpm_inhibit_applet_init):
+	* configure.ac:
+	* docs/dbus-interface.html:
+	* libdbus-glib/Makefile.am:
+	* libdbus-glib/egg-dbus-monitor.c:
+	* libdbus-glib/egg-dbus-monitor.h:
+	* libdbus-glib/egg-debug.c:
+	* libdbus-glib/egg-debug.h:
+	* libdbus-glib/libdbus-proxy.c:
+	* libdbus-glib/libdbus-proxy.h:
+	* libhal-glib/Makefile.am:
+	* libhal-glib/egg-dbus-monitor.c:
+	* libhal-glib/egg-dbus-monitor.h:
+	* libhal-glib/egg-dbus-proxy.c:
+	* libhal-glib/egg-dbus-proxy.h:
+	* libhal-glib/egg-debug.c:
+	* libhal-glib/egg-debug.h:
+	* libhal-glib/libhal-gdevice.c: (hal_gdevice_set_udi),
+	(hal_gdevice_get_bool), (hal_gdevice_get_string),
+	(hal_gdevice_get_int), (hal_gdevice_query_capability),
+	(watch_device_properties_modified_cb),
+	(hal_gdevice_watch_property_modified),
+	(hal_gdevice_watch_condition), (hal_gdevice_remove_condition),
+	(hal_gdevice_remove_property_modified), (hal_gdevice_init):
+	* libhal-glib/libhal-gdevicestore.c:
+	* libhal-glib/libhal-gmanager.c: (hal_gmanager_proxy_connect_more),
+	(hal_gmanager_proxy_disconnect_more), (hal_gmanager_init),
+	(hal_gmanager_is_laptop):
+	* libhal-glib/libhal-gpower.c: (hal_gpower_init),
+	(hal_gpower_is_laptop), (hal_gpower_can_suspend),
+	(hal_gpower_can_hibernate), (hal_gpower_filter_error),
+	(hal_gpower_suspend), (hal_gpower_pm_method_void),
+	(hal_gpower_enable_power_save), (hal_gpower_clear_suspend_error),
+	(hal_gpower_clear_hibernate_error):
+	* src/Makefile.am:
+	* src/egg-dbus-monitor.c: (egg_dbus_monitor_assign),
+	(egg_dbus_monitor_init):
+	* src/egg-dbus-monitor.h:
+	* src/egg-dbus-proxy.c: (egg_dbus_proxy_connect),
+	(egg_dbus_proxy_disconnect), (dbus_monitor_connection_cb),
+	(egg_dbus_proxy_assign), (egg_dbus_proxy_get_proxy),
+	(egg_dbus_proxy_is_connected), (egg_dbus_proxy_class_init),
+	(egg_dbus_proxy_init), (egg_dbus_proxy_finalize),
+	(egg_dbus_proxy_new):
+	* src/egg-dbus-proxy.h:
+	* src/gpm-brightness-hal.c: (gpm_brightness_hal_get_hw),
+	(gpm_brightness_hal_set_hw), (gpm_brightness_hal_init):
+	* src/gpm-brightness-kbd.c: (gpm_brightness_kbd_get_hw),
+	(gpm_brightness_kbd_set_hw), (gpm_brightness_kbd_init):
+	* src/gpm-inhibit.c: (inhibit), (uninhibit), (has_inhibit),
+	(gpm_inhibit_test):
+	* src/gpm-light-sensor.c: (gpm_light_sensor_get_hw),
+	(gpm_light_sensor_init):
+	* src/gpm-phone.c: (gpm_phone_init):
+	* src/gpm-profile.c:
+	* src/gpm-screensaver.c: (gpm_screensaver_proxy_connect_more),
+	(gpm_screensaver_lock), (gpm_screensaver_add_throttle),
+	(gpm_screensaver_remove_throttle), (gpm_screensaver_check_running),
+	(gpm_screensaver_poke), (gpm_screensaver_get_idle),
+	(gpm_screensaver_init):
+	* src/gpm-statistics-core.c: (gpm_statistics_get_events),
+	(gpm_statistics_find_types), (gpm_statistics_get_data_dbus),
+	(gpm_statistics_get_parameters_dbus), (gpm_statistics_init):
+	* test/gpm-st-proxy.c: (egg_test_proxy):
+	Get rid of the ridiculous libdbus-glib DbusGProxy superclass.
+
+2008-10-20  Richard Hughes  <richard@hughsie.com>
+
 	* configure.ac:
 	* data/Makefile.am:
 	* data/sounds/Makefile.am:

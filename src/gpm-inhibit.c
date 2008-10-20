@@ -522,12 +522,12 @@ gpm_inhibit_new (void)
  ***************************************************************************/
 #ifdef EGG_TEST
 #include "egg-test.h"
-#include <libdbus-proxy.h>
+#include "egg-dbus-proxy.h"
 #include "gpm-common.h"
 
 /** cookie is returned as an unsigned integer */
 static gboolean
-inhibit (DbusProxy       *gproxy,
+inhibit (EggDbusProxy       *gproxy,
 	 const gchar     *appname,
 	 const gchar     *reason,
 	 guint           *cookie)
@@ -538,7 +538,7 @@ inhibit (DbusProxy       *gproxy,
 
 	g_return_val_if_fail (cookie != NULL, FALSE);
 
-	proxy = dbus_proxy_get_proxy (gproxy);
+	proxy = egg_dbus_proxy_get_proxy (gproxy);
 	if (proxy == NULL) {
 		g_warning ("not connected");
 		return FALSE;
@@ -564,14 +564,14 @@ inhibit (DbusProxy       *gproxy,
 }
 
 static gboolean
-uninhibit (DbusProxy *gproxy,
+uninhibit (EggDbusProxy *gproxy,
 	   guint      cookie)
 {
 	GError *error = NULL;
 	gboolean ret;
 	DBusGProxy *proxy;
 
-	proxy = dbus_proxy_get_proxy (gproxy);
+	proxy = egg_dbus_proxy_get_proxy (gproxy);
 	if (proxy == NULL) {
 		g_warning ("not connected");
 		return FALSE;
@@ -589,14 +589,14 @@ uninhibit (DbusProxy *gproxy,
 }
 
 static gboolean
-has_inhibit (DbusProxy *gproxy,
+has_inhibit (EggDbusProxy *gproxy,
 			      gboolean        *has_inhibit)
 {
 	GError  *error = NULL;
 	gboolean ret;
 	DBusGProxy *proxy;
 
-	proxy = dbus_proxy_get_proxy (gproxy);
+	proxy = egg_dbus_proxy_get_proxy (gproxy);
 	if (proxy == NULL) {
 		g_warning ("not connected");
 		return FALSE;
@@ -625,17 +625,17 @@ gpm_inhibit_test (EggTest *test)
 	gboolean valid;
 	guint cookie1 = 0;
 	guint cookie2 = 0;
-	DbusProxy *gproxy;
+	DBusGConnection *connection;
+	EggDbusProxy *gproxy;
 
 	if (egg_test_start (test, "GpmInhibit") == FALSE) {
 		return;
 	}
 
-	gproxy = dbus_proxy_new ();
-	dbus_proxy_assign (gproxy, DBUS_PROXY_SESSION,
-				   GPM_DBUS_SERVICE,
-				   GPM_DBUS_PATH_INHIBIT,
-				   GPM_DBUS_INTERFACE_INHIBIT);
+	gproxy = egg_dbus_proxy_new ();
+	connection = dbus_g_bus_get (DBUS_BUS_SESSION, NULL);
+	egg_dbus_proxy_assign (gproxy, connection, GPM_DBUS_SERVICE,
+			       GPM_DBUS_PATH_INHIBIT, GPM_DBUS_INTERFACE_INHIBIT);
 
 	if (gproxy == NULL) {
 		g_warning ("Unable to get connection to power manager");

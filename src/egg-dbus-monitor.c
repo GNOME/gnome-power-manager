@@ -40,7 +40,6 @@ static void     egg_dbus_monitor_finalize	(GObject		*object);
 
 struct EggDbusMonitorPrivate
 {
-	EggDbusMonitorType	 bus_type;
 	gchar			*service;
 	DBusGProxy		*proxy;
 	DBusGConnection		*connection;
@@ -105,7 +104,7 @@ egg_dbus_monitor_name_owner_changed_cb (DBusGProxy *proxy, const gchar *name,
 /**
  * egg_dbus_monitor_assign:
  * @monitor: This class instance
- * @bus_type: The bus type, either EGG_DBUS_MONITOR_SESSION or EGG_DBUS_MONITOR_SYSTEM
+ * @connection: The bus connection
  * @service: The EGG_DBUS_MONITOR service name
  * Return value: success
  *
@@ -113,7 +112,7 @@ egg_dbus_monitor_name_owner_changed_cb (DBusGProxy *proxy, const gchar *name,
  * have to connect up the callback before this function is called.
  **/
 gboolean
-egg_dbus_monitor_assign (EggDbusMonitor *monitor, EggDbusMonitorType bus_type, const gchar *service)
+egg_dbus_monitor_assign (EggDbusMonitor *monitor, DBusGConnection *connection, const gchar *service)
 {
 	GError *error = NULL;
 	gboolean connected;
@@ -121,6 +120,7 @@ egg_dbus_monitor_assign (EggDbusMonitor *monitor, EggDbusMonitorType bus_type, c
 
 	g_return_val_if_fail (EGG_IS_DBUS_MONITOR (monitor), FALSE);
 	g_return_val_if_fail (service != NULL, FALSE);
+	g_return_val_if_fail (connection != NULL, FALSE);
 
 	if (monitor->priv->proxy != NULL) {
 		egg_warning ("already assigned!");
@@ -128,18 +128,7 @@ egg_dbus_monitor_assign (EggDbusMonitor *monitor, EggDbusMonitorType bus_type, c
 	}
 
 	monitor->priv->service = g_strdup (service);
-	monitor->priv->bus_type = bus_type;
-
-	/* connect to correct bus */
-	if (bus_type == EGG_DBUS_MONITOR_SESSION)
-		monitor->priv->connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
-	else
-		monitor->priv->connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
-	if (error != NULL) {
-		egg_warning ("Cannot connect to bus: %s", error->message);
-		g_error_free (error);
-		return FALSE;
-	}
+	monitor->priv->connection = connection;
 	monitor->priv->proxy = dbus_g_proxy_new_for_name_owner (monitor->priv->connection,
 								DBUS_SERVICE_DBUS,
 								DBUS_PATH_DBUS,
@@ -225,7 +214,7 @@ egg_dbus_monitor_init (EggDbusMonitor *monitor)
 {
 	monitor->priv = EGG_DBUS_MONITOR_GET_PRIVATE (monitor);
 	monitor->priv->service = NULL;
-	monitor->priv->bus_type = EGG_DBUS_MONITOR_SESSION;
+	monitor->priv->connection = NULL;
 	monitor->priv->proxy = NULL;
 }
 

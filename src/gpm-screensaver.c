@@ -29,7 +29,7 @@
 #include "gpm-conf.h"
 #include "gpm-screensaver.h"
 #include "egg-debug.h"
-#include <libdbus-proxy.h>
+#include "egg-dbus-proxy.h"
 
 static void     gpm_screensaver_class_init (GpmScreensaverClass *klass);
 static void     gpm_screensaver_init       (GpmScreensaver      *screensaver);
@@ -39,7 +39,7 @@ static void     gpm_screensaver_finalize   (GObject		*object);
 
 struct GpmScreensaverPrivate
 {
-	DbusProxy		*gproxy;
+	EggDbusProxy		*gproxy;
 	GpmConf			*conf;
 	guint			 idle_delay;	/* the setting in g-s-p, cached */
 };
@@ -114,7 +114,7 @@ gpm_screensaver_proxy_connect_more (GpmScreensaver *screensaver)
 
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 
-	proxy = dbus_proxy_get_proxy (screensaver->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (screensaver->priv->gproxy);
 	if (proxy == NULL) {
 		egg_warning ("not connected");
 		return FALSE;
@@ -241,7 +241,7 @@ gpm_screensaver_lock (GpmScreensaver *screensaver)
 
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 
-	proxy = dbus_proxy_get_proxy (screensaver->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (screensaver->priv->gproxy);
 	if (proxy == NULL) {
 		egg_warning ("not connected");
 		return FALSE;
@@ -287,7 +287,7 @@ gpm_screensaver_add_throttle (GpmScreensaver *screensaver,
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), 0);
 	g_return_val_if_fail (reason != NULL, 0);
 
-	proxy = dbus_proxy_get_proxy (screensaver->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (screensaver->priv->gproxy);
 	if (proxy == NULL) {
 		egg_warning ("not connected");
 		return 0;
@@ -329,7 +329,7 @@ gpm_screensaver_remove_throttle (GpmScreensaver *screensaver,
 
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 
-	proxy = dbus_proxy_get_proxy (screensaver->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (screensaver->priv->gproxy);
 	if (proxy == NULL) {
 		egg_warning ("not connected");
 		return FALSE;
@@ -368,7 +368,7 @@ gpm_screensaver_check_running (GpmScreensaver *screensaver)
 
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 
-	proxy = dbus_proxy_get_proxy (screensaver->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (screensaver->priv->gproxy);
 	if (proxy == NULL) {
 		egg_warning ("not connected");
 		return FALSE;
@@ -401,7 +401,7 @@ gpm_screensaver_poke (GpmScreensaver *screensaver)
 
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 
-	proxy = dbus_proxy_get_proxy (screensaver->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (screensaver->priv->gproxy);
 	if (proxy == NULL) {
 		egg_warning ("not connected");
 		return FALSE;
@@ -430,7 +430,7 @@ gpm_screensaver_get_idle (GpmScreensaver *screensaver, gint *time_secs)
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 	g_return_val_if_fail (time != NULL, FALSE);
 
-	proxy = dbus_proxy_get_proxy (screensaver->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (screensaver->priv->gproxy);
 	if (proxy == NULL) {
 		egg_warning ("not connected");
 		return FALSE;
@@ -542,15 +542,14 @@ static void
 gpm_screensaver_init (GpmScreensaver *screensaver)
 {
 	DBusGProxy *proxy;
+	DBusGConnection *connection;
 
 	screensaver->priv = GPM_SCREENSAVER_GET_PRIVATE (screensaver);
 
-	screensaver->priv->gproxy = dbus_proxy_new ();
-	proxy = dbus_proxy_assign (screensaver->priv->gproxy,
-				  DBUS_PROXY_SESSION,
-				  GS_LISTENER_SERVICE,
-				  GS_LISTENER_PATH,
-				  GS_LISTENER_INTERFACE);
+	screensaver->priv->gproxy = egg_dbus_proxy_new ();
+	connection = dbus_g_bus_get (DBUS_BUS_SESSION, NULL);
+	proxy = egg_dbus_proxy_assign (screensaver->priv->gproxy, connection, GS_LISTENER_SERVICE,
+				       GS_LISTENER_PATH, GS_LISTENER_INTERFACE);
 
 	g_signal_connect (screensaver->priv->gproxy, "proxy-status",
 			  G_CALLBACK (proxy_status_cb),

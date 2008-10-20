@@ -23,6 +23,7 @@
 #define __EGG_DBUS_MONITOR_H
 
 #include <glib-object.h>
+#include <dbus/dbus-glib.h>
 
 G_BEGIN_DECLS
 
@@ -51,15 +52,10 @@ typedef struct
 	void		(* connection_replaced)		(EggDbusMonitor	*watch);
 } EggDbusMonitorClass;
 
-typedef enum {
-        EGG_DBUS_MONITOR_SESSION,
-        EGG_DBUS_MONITOR_SYSTEM
-} EggDbusMonitorType;
-
 GType		 egg_dbus_monitor_get_type	  	(void) G_GNUC_CONST;
 EggDbusMonitor	*egg_dbus_monitor_new			(void);
 gboolean	 egg_dbus_monitor_assign		(EggDbusMonitor	*monitor,
-							 EggDbusMonitorType bus_type,
+							 DBusGConnection *connection,
 							 const gchar	*service);
 gboolean	 egg_dbus_monitor_is_connected		(EggDbusMonitor	*monitor);
 

@@ -40,7 +40,7 @@
 
 #include <libhal-gdevice.h>
 #include <libhal-gmanager.h>
-#include <libdbus-proxy.h>
+#include "egg-dbus-proxy.h"
 
 #include "egg-debug.h"
 #include "egg-discrete.h"
@@ -59,7 +59,7 @@ struct GpmBrightnessHalPrivate
 	guint			 levels;
 	gchar			*udi;
 	gboolean		 hw_changed;
-	DbusProxy		*gproxy;
+	EggDbusProxy		*gproxy;
 
  	/* true if hardware automatically sets brightness in response to
  	 * key press events */
@@ -92,7 +92,7 @@ gpm_brightness_hal_get_hw (GpmBrightnessHal *brightness, guint *value_hw)
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_HAL (brightness), FALSE);
 
-	proxy = dbus_proxy_get_proxy (brightness->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (brightness->priv->gproxy);
 	if (proxy == NULL) {
 		egg_warning ("not connected to HAL");
 		return FALSE;
@@ -140,7 +140,7 @@ gpm_brightness_hal_set_hw (GpmBrightnessHal *brightness, guint value_hw)
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_HAL (brightness), FALSE);
 
-	proxy = dbus_proxy_get_proxy (brightness->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (brightness->priv->gproxy);
 	if (proxy == NULL) {
 		egg_warning ("not connected to HAL");
 		return FALSE;
@@ -447,6 +447,7 @@ gpm_brightness_hal_init (GpmBrightnessHal *brightness)
 	HalGManager *manager;
 	HalGDevice *device;
 	gboolean res;
+	DBusGConnection *connection;
 
 	brightness->priv = GPM_BRIGHTNESS_HAL_GET_PRIVATE (brightness);
 	brightness->priv->gproxy = NULL;
@@ -496,9 +497,10 @@ gpm_brightness_hal_init (GpmBrightnessHal *brightness)
 	g_object_unref (device);
 
 	/* get a managed proxy */
-	brightness->priv->gproxy = dbus_proxy_new ();
-	dbus_proxy_assign (brightness->priv->gproxy, DBUS_PROXY_SYSTEM, HAL_DBUS_SERVICE,
-			   brightness->priv->udi, HAL_DBUS_INTERFACE_LAPTOP_PANEL);
+	brightness->priv->gproxy = egg_dbus_proxy_new ();
+	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, NULL);
+	egg_dbus_proxy_assign (brightness->priv->gproxy, connection, HAL_DBUS_SERVICE,
+			       brightness->priv->udi, HAL_DBUS_INTERFACE_LAPTOP_PANEL);
 
 	/* this changes under our feet */
 	gpm_brightness_hal_get_hw (brightness, &brightness->priv->last_set_hw);

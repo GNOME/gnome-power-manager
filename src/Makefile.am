@@ -33,7 +33,6 @@ INCLUDES =						\
 	-DEGG_LOG_FILE=\""$(PK_LOG_DIR)/gnome-power-manager"\"	\
 	-I$(top_srcdir)					\
 	-I$(top_srcdir)/libhal-glib			\
-	-I$(top_srcdir)/libdbus-glib			\
 	$(NULL)
 
 LOCAL_LIBHAL_LIBS =					\
@@ -41,9 +40,6 @@ LOCAL_LIBHAL_LIBS =					\
 	$(top_builddir)/libhal-glib/libhal-gdevicestore.la	\
 	$(top_builddir)/libhal-glib/libhal-gmanager.la	\
 	$(top_builddir)/libhal-glib/libhal-gpower.la
-
-LOCAL_LIBDBUS_LIBS =						\
-	$(top_builddir)/libdbus-glib/libdbus-proxy.la
 
 bin_PROGRAMS =						\
 	gnome-power-manager				\
@@ -65,6 +61,10 @@ gnome_power_statistics_SOURCES =			\
 	egg-precision.c					\
 	egg-discrete.h					\
 	egg-discrete.c					\
+	egg-dbus-proxy.h				\
+	egg-dbus-proxy.c				\
+	egg-dbus-monitor.h				\
+	egg-dbus-monitor.c				\
 	gpm-statistics.c				\
 	gpm-statistics-core.h				\
 	gpm-statistics-core.c				\
@@ -86,7 +86,6 @@ gnome_power_statistics_LDADD =				\
 	$(GLIB_LIBS)					\
 	$(GNOME_LIBS)					\
 	$(DBUS_LIBS)					\
-	$(LOCAL_LIBDBUS_LIBS)				\
 	$(NULL)
 
 if HAVE_UNIQUE
@@ -99,6 +98,10 @@ gnome_power_preferences_SOURCES =			\
 	egg-debug.c					\
 	egg-unique.h					\
 	egg-unique.c					\
+	egg-dbus-proxy.h				\
+	egg-dbus-proxy.c				\
+	egg-dbus-monitor.h				\
+	egg-dbus-monitor.c				\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
 	gpm-conf.h					\
@@ -127,7 +130,6 @@ gnome_power_preferences_LDADD =				\
 	$(POLKIT_GNOME_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
 	$(LOCAL_LIBHAL_LIBS)				\
-	$(LOCAL_LIBDBUS_LIBS)				\
 	$(NULL)
 
 if HAVE_UNIQUE
@@ -142,6 +144,8 @@ gnome_power_manager_SOURCES =				\
 	egg-debug.c					\
 	egg-dbus-monitor.h				\
 	egg-dbus-monitor.c				\
+	egg-dbus-proxy.h				\
+	egg-dbus-proxy.c				\
 	egg-precision.h					\
 	egg-precision.c					\
 	egg-discrete.h					\
@@ -235,7 +239,6 @@ gnome_power_manager_LDADD =				\
 	$(CANBERRA_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
 	$(LOCAL_LIBHAL_LIBS)				\
-	$(LOCAL_LIBDBUS_LIBS)				\
 	$(NULL)
 
 if HAVE_LIBNOTIFY
@@ -253,6 +256,8 @@ gnome_power_self_test_SOURCES =				\
 	egg-debug.c					\
 	egg-dbus-monitor.h				\
 	egg-dbus-monitor.c				\
+	egg-dbus-proxy.h				\
+	egg-dbus-proxy.c				\
 	egg-precision.h					\
 	egg-precision.c					\
 	egg-discrete.h					\
@@ -317,7 +322,6 @@ gnome_power_self_test_LDADD =				\
 	$(POLKIT_GNOME_LIBS)				\
 	$(DBUS_LIBS)					\
 	$(LIBNOTIFY_LIBS)				\
-	$(LOCAL_LIBDBUS_LIBS)				\
 	$(LOCAL_LIBHAL_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
 	$(NULL)

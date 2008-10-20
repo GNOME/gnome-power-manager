@@ -2,7 +2,6 @@
 ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS =						\
-	libdbus-glib					\
 	libhal-glib					\
 	src						\
 	po						\

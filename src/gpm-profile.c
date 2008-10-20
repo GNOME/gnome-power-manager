@@ -35,7 +35,7 @@
 
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
-#include <libdbus-proxy.h>
+#include "egg-dbus-proxy.h"
 
 #include "egg-color.h"
 #include "gpm-common.h"

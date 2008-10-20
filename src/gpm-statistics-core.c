@@ -39,7 +39,7 @@
 #include "egg-debug.h"
 #include "gpm-stock-icons.h"
 #include "gpm-info.h"
-#include <libdbus-proxy.h>
+#include "egg-dbus-proxy.h"
 
 static void     gpm_statistics_class_init (GpmStatisticsClass *klass);
 static void     gpm_statistics_init       (GpmStatistics      *statistics);
@@ -73,7 +73,7 @@ struct GpmStatisticsPrivate
 	GladeXML		*glade_xml;
 	GtkWidget		*graph_widget;
 	GpmConf			*conf;
-	DbusProxy		*gproxy;
+	EggDbusProxy		*gproxy;
 	GpmArray		*events;
 	GpmArray		*data;
 	const gchar		*graph_type;
@@ -230,7 +230,7 @@ gpm_statistics_get_events (GpmStatistics *statistics)
 	g_return_val_if_fail (statistics != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_STATISTICS (statistics), FALSE);
 
-	proxy = dbus_proxy_get_proxy (statistics->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (statistics->priv->gproxy);
 	if (proxy == NULL) {
 		egg_warning ("not connected");
 		return FALSE;
@@ -373,7 +373,7 @@ gpm_statistics_find_types (GpmStatistics *statistics,
 	gchar **strlist;
 	DBusGProxy *proxy;
 
-	proxy = dbus_proxy_get_proxy (statistics->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (statistics->priv->gproxy);
 	if (proxy == NULL) {
 		egg_warning ("not connected");
 		return FALSE;
@@ -435,7 +435,7 @@ gpm_statistics_get_data_dbus (GpmStatistics *statistics,
 	g_return_val_if_fail (GPM_IS_STATISTICS (statistics), FALSE);
 	g_return_val_if_fail (type != NULL, FALSE);
 
-	proxy = dbus_proxy_get_proxy (statistics->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (statistics->priv->gproxy);
 	if (proxy == NULL) {
 		egg_warning ("not connected");
 		return FALSE;
@@ -519,7 +519,7 @@ gpm_statistics_get_parameters_dbus (GpmStatistics *statistics,
 						G_TYPE_STRING,
 						G_TYPE_INVALID));
 
-	proxy = dbus_proxy_get_proxy (statistics->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (statistics->priv->gproxy);
 	if (proxy == NULL) {
 		egg_warning ("not connected");
 		return FALSE;
@@ -791,7 +791,8 @@ gpm_statistics_init (GpmStatistics *statistics)
 {
 	GtkWidget *main_window;
 	GtkWidget *widget;
-	gboolean   checked;
+	gboolean  checked;
+	DBusGConnection *connection;
 
 	statistics->priv = GPM_STATISTICS_GET_PRIVATE (statistics);
 
@@ -801,15 +802,13 @@ gpm_statistics_init (GpmStatistics *statistics)
 
 	glade_set_custom_handler (gpm_graph_widget_custom_handler, statistics);
 
-	statistics->priv->gproxy = dbus_proxy_new ();
-	dbus_proxy_assign (statistics->priv->gproxy,
-			  DBUS_PROXY_SESSION,
-			  GPM_DBUS_SERVICE,
-			  GPM_DBUS_PATH_STATS,
-			  GPM_DBUS_INTERFACE_STATS);
+	statistics->priv->gproxy = egg_dbus_proxy_new ();
+	connection = dbus_g_bus_get (DBUS_BUS_SESSION, NULL);
+	egg_dbus_proxy_assign (statistics->priv->gproxy, connection, GPM_DBUS_SERVICE,
+			       GPM_DBUS_PATH_STATS, GPM_DBUS_INTERFACE_STATS);
 
 	/* would happen if not using g-p-m or using an old version of g-p-m */
-	if (dbus_proxy_is_connected (statistics->priv->gproxy) == FALSE) {
+	if (egg_dbus_proxy_is_connected (statistics->priv->gproxy) == FALSE) {
 		egg_error (_("Could not connect to GNOME Power Manager."));
 	}
 

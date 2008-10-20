@@ -27,8 +27,10 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
-#include <libdbus-proxy.h>
 #include <time.h>
+
+#include "egg-debug.h"
+#include "egg-dbus-proxy.h"
 
 #include "libhal-marshal.h"
 #include "libhal-gpower.h"
@@ -44,7 +46,7 @@ static void     hal_gpower_finalize   (GObject	      *object);
 struct HalGPowerPrivate
 {
 	HalGDevice		*computer;
-	DbusProxy		*gproxy;
+	EggDbusProxy		*gproxy;
 };
 
 static gpointer hal_gpower_object = NULL;
@@ -70,17 +72,16 @@ hal_gpower_class_init (HalGPowerClass *klass)
 static void
 hal_gpower_init (HalGPower *power)
 {
+	DBusGConnection *connection;
 	power->priv = LIBHAL_GPOWER_GET_PRIVATE (power);
 
 	/* get the power connection */
-	power->priv->gproxy = dbus_proxy_new ();
-	dbus_proxy_assign (power->priv->gproxy,
-			  DBUS_PROXY_SYSTEM,
-			  HAL_DBUS_SERVICE,
-			  HAL_ROOT_COMPUTER,
-			  HAL_DBUS_INTERFACE_POWER);
+	power->priv->gproxy = egg_dbus_proxy_new ();
+	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, NULL);
+	egg_dbus_proxy_assign (power->priv->gproxy, connection, HAL_DBUS_SERVICE,
+			       HAL_ROOT_COMPUTER, HAL_DBUS_INTERFACE_POWER);
 	if (power->priv->gproxy == NULL)
-		g_warning ("HAL does not support power management!");
+		egg_warning ("HAL does not support power management!");
 
 	power->priv->computer = hal_gdevice_new ();
 	hal_gdevice_set_udi (power->priv->computer, HAL_ROOT_COMPUTER);
@@ -109,7 +110,7 @@ hal_gpower_is_laptop (HalGPower *power)
 		return FALSE;
 	}
 	if (strcmp (formfactor, "laptop") != 0) {
-		g_debug ("This machine is not identified as a laptop."
+		egg_debug ("This machine is not identified as a laptop."
 			   "system.formfactor is %s.", formfactor);
 		ret = FALSE;
 	}
@@ -162,7 +163,7 @@ hal_gpower_can_suspend (HalGPower *power)
 					  "power_management.can_suspend",
 					  &can_suspend, NULL);
 	if (exists == FALSE) {
-		g_warning ("Key can_suspend missing");
+		egg_warning ("Key can_suspend missing");
 		return FALSE;
 	}
 	return can_suspend;
@@ -189,7 +190,7 @@ hal_gpower_can_hibernate (HalGPower *power)
 					  "power_management.can_hibernate",
 					  &can_hibernate, NULL);
 	if (exists == FALSE) {
-		g_warning ("Key can_hibernate missing");
+		egg_warning ("Key can_hibernate missing");
 		return FALSE;
 	}
 	return can_hibernate;
@@ -210,12 +211,12 @@ hal_gpower_filter_error (GError **error)
 	/* DBUS might time out, which is okay. We can remove this code
 	   when the dbus glib bindings are fixed. See #332888 */
 	if (g_error_matches (*error, DBUS_GERROR, DBUS_GERROR_NO_REPLY)) {
-		g_warning ("DBUS timed out, but recovering");
+		egg_warning ("DBUS timed out, but recovering");
 		g_error_free (*error);
 		*error = NULL;
 		return TRUE;
 	}
-	g_warning ("Method failed\n(%s)",  (*error)->message);
+	egg_warning ("Method failed\n(%s)",  (*error)->message);
 	return FALSE;
 }
 
@@ -239,9 +240,9 @@ hal_gpower_suspend (HalGPower *power, guint wakeup, GError **error)
 
 	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 
-	proxy = dbus_proxy_get_proxy (power->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (power->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		g_warning ("proxy NULL!!");
+		egg_warning ("proxy NULL!!");
 		return FALSE;
 	}
 
@@ -255,7 +256,7 @@ hal_gpower_suspend (HalGPower *power, guint wakeup, GError **error)
 	if (error != NULL && hal_gpower_filter_error (error))
 		return TRUE;
 	if (retval != 0)
-		g_warning ("Suspend failed without error message");
+		egg_warning ("Suspend failed without error message");
 
 	/* compare the amount of time that has passed - if it's more than 6 hours
 	 * then the dbus call timed out (dbus-pending-call.c) */
@@ -290,13 +291,13 @@ hal_gpower_pm_method_void (HalGPower *power, const gchar *method, GError **error
 	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 	g_return_val_if_fail (method != NULL, FALSE);
 
-	proxy = dbus_proxy_get_proxy (power->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (power->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		g_warning ("proxy NULL!!");
+		egg_warning ("proxy NULL!!");
 		return FALSE;
 	}
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		g_warning ("not connected");
+		egg_warning ("not connected");
 		return FALSE;
 	}
 
@@ -309,7 +310,7 @@ hal_gpower_pm_method_void (HalGPower *power, const gchar *method, GError **error
 	if (error != NULL && hal_gpower_filter_error (error))
 		return TRUE;
 	if (retval != 0)
-		g_warning ("%s failed in a horrible way!", method);
+		egg_warning ("%s failed in a horrible way!", method);
 
 	/* compare the amount of time that has passed - if it's more than 6 hours
 	 * then the dbus call timed out (dbus-pending-call.c) */
@@ -386,15 +387,15 @@ hal_gpower_enable_power_save (HalGPower *power, gboolean enable)
 	g_return_val_if_fail (power != NULL, FALSE);
 	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 
-	proxy = dbus_proxy_get_proxy (power->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (power->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		g_warning ("proxy NULL!!");
+		egg_warning ("proxy NULL!!");
 		return FALSE;
 	}
 
 	/* abort if we are not a "qualified" laptop */
 	if (hal_gpower_is_laptop (power) == FALSE) {
-		g_debug ("We are not a laptop, so not even trying");
+		egg_debug ("We are not a laptop, so not even trying");
 		return FALSE;
 	}
 
@@ -404,7 +405,7 @@ hal_gpower_enable_power_save (HalGPower *power, gboolean enable)
 				 G_TYPE_INT, &retval,
 				 G_TYPE_INVALID);
 	if (retval != 0)
-		g_warning ("SetPowerSave failed in a horrible way!");
+		egg_warning ("SetPowerSave failed in a horrible way!");
 	return ret;
 }
 
@@ -463,9 +464,9 @@ hal_gpower_clear_suspend_error (HalGPower *power, GError **error)
 	g_return_val_if_fail (power != NULL, FALSE);
 	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 
-	proxy = dbus_proxy_get_proxy (power->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (power->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		g_warning ("proxy NULL!!");
+		egg_warning ("proxy NULL!!");
 		return FALSE;
 	}
 
@@ -491,9 +492,9 @@ hal_gpower_clear_hibernate_error (HalGPower *power, GError **error)
 	g_return_val_if_fail (power != NULL, FALSE);
 	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 
-	proxy = dbus_proxy_get_proxy (power->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (power->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		g_warning ("proxy NULL!!");
+		egg_warning ("proxy NULL!!");
 		return FALSE;
 	}
 

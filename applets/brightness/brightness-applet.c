@@ -938,6 +938,8 @@ monitor_connection_cb (EggDbusMonitor           *monitor,
 static void
 gpm_brightness_applet_init (GpmBrightnessApplet *applet)
 {
+	DBusGConnection *connection;
+
 	/* initialize fields */
 	applet->size = 0;
 	applet->call_worked = TRUE;
@@ -955,7 +957,8 @@ gpm_brightness_applet_init (GpmBrightnessApplet *applet)
 	applet->monitor = egg_dbus_monitor_new ();
 	g_signal_connect (applet->monitor, "connection-changed",
 			  G_CALLBACK (monitor_connection_cb), applet);
-	egg_dbus_monitor_assign (applet->monitor, EGG_DBUS_MONITOR_SESSION, GPM_DBUS_SERVICE);
+	connection = dbus_g_bus_get (DBUS_BUS_SESSION, NULL);
+	egg_dbus_monitor_assign (applet->monitor, connection, GPM_DBUS_SERVICE);
 	gpm_brightness_applet_dbus_connect (applet);
 
 	/* coldplug */

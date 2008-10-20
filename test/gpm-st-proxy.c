@@ -21,23 +21,24 @@
 
 #include <glib.h>
 #include <dbus/dbus-glib.h>
-#include <libdbus-proxy.h>
+#include <egg-dbus-proxy.h>
 #include "gpm-st-main.h"
 #include "../src/gpm-common.h"
 
 void
 egg_test_proxy (GpmSelfTest *test)
 {
-	DbusProxy *gproxy = NULL;
+	EggDbusProxy *gproxy = NULL;
 	DBusGProxy *proxy = NULL;
+	DBusGConnection *connection;
 
-	if (egg_test_start (test, "DbusProxy") == FALSE) {
+	if (egg_test_start (test, "EggDbusProxy") == FALSE) {
 		return;
 	}
 
 	/************************************************************/
 	egg_test_title (test, "make sure we can get a new gproxy");
-	gproxy = dbus_proxy_new ();
+	gproxy = egg_dbus_proxy_new ();
 	if (gproxy != NULL) {
 		egg_test_success (test, "got gproxy");
 	} else {
@@ -46,7 +47,7 @@ egg_test_proxy (GpmSelfTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "make sure proxy if NULL when no assign");
-	proxy = dbus_proxy_get_proxy (gproxy);
+	proxy = egg_dbus_proxy_get_proxy (gproxy);
 	if (proxy == NULL) {
 		egg_test_success (test, "got NULL proxy");
 	} else {
@@ -55,11 +56,9 @@ egg_test_proxy (GpmSelfTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "make sure we can assign and connect");
-	proxy = dbus_proxy_assign (gproxy,
-				  DBUS_PROXY_SESSION,
-				  GPM_DBUS_SERVICE,
-				  GPM_DBUS_PATH_INHIBIT,
-				  GPM_DBUS_INTERFACE_INHIBIT);
+	connection = dbus_g_bus_get (DBUS_BUS_SESSION, NULL);
+	proxy = egg_dbus_proxy_assign (gproxy, connection, GPM_DBUS_SERVICE,
+				       GPM_DBUS_PATH_INHIBIT, GPM_DBUS_INTERFACE_INHIBIT);
 	if (proxy != NULL) {
 		egg_test_success (test, "got proxy (init)");
 	} else {
@@ -68,7 +67,7 @@ egg_test_proxy (GpmSelfTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "make sure proxy non NULL when assigned");
-	proxy = dbus_proxy_get_proxy (gproxy);
+	proxy = egg_dbus_proxy_get_proxy (gproxy);
 	if (proxy != NULL) {
 		egg_test_success (test, "got valid proxy");
 	} else {

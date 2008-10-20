@@ -27,6 +27,8 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 
+#include "egg-debug.h"
+
 #include "libhal-marshal.h"
 #include "libhal-gdevice.h"
 #include "libhal-gdevicestore.h"

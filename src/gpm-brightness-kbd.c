@@ -41,7 +41,7 @@
 
 #include <libhal-gdevice.h>
 #include <libhal-gmanager.h>
-#include <libdbus-proxy.h>
+#include "egg-dbus-proxy.h"
 
 #include "egg-debug.h"
 #include "egg-discrete.h"
@@ -69,7 +69,7 @@ struct GpmBrightnessKbdPrivate
 	gchar			*udi;
 	GpmConf			*conf;
 	GpmLightSensor		*sensor;
-	DbusProxy		*gproxy;
+	EggDbusProxy		*gproxy;
 };
 
 enum {
@@ -100,7 +100,7 @@ gpm_brightness_kbd_get_hw (GpmBrightnessKbd *brightness,
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
-	proxy = dbus_proxy_get_proxy (brightness->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (brightness->priv->gproxy);
 	if (proxy == NULL) {
 		egg_warning ("not connected to HAL");
 		return FALSE;
@@ -144,7 +144,7 @@ gpm_brightness_kbd_set_hw (GpmBrightnessKbd *brightness,
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
-	proxy = dbus_proxy_get_proxy (brightness->priv->gproxy);
+	proxy = egg_dbus_proxy_get_proxy (brightness->priv->gproxy);
 	if (proxy == NULL) {
 		egg_warning ("not connected to HAL");
 		return FALSE;
@@ -677,6 +677,7 @@ gpm_brightness_kbd_init (GpmBrightnessKbd *brightness)
 	gchar **names;
 	HalGManager *manager;
 	HalGDevice *device;
+	DBusGConnection *connection;
 
 	brightness->priv = GPM_BRIGHTNESS_KBD_GET_PRIVATE (brightness);
 
@@ -707,12 +708,10 @@ gpm_brightness_kbd_init (GpmBrightnessKbd *brightness)
 	brightness->priv->is_disabled = FALSE;
 
 	/* get a managed proxy */
-	brightness->priv->gproxy = dbus_proxy_new ();
-	dbus_proxy_assign (brightness->priv->gproxy,
-			  DBUS_PROXY_SYSTEM,
-			  HAL_DBUS_SERVICE,
-			  brightness->priv->udi,
-			  HAL_DBUS_INTERFACE_KBD_BACKLIGHT);
+	brightness->priv->gproxy = egg_dbus_proxy_new ();
+	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, NULL);
+	egg_dbus_proxy_assign (brightness->priv->gproxy, connection, HAL_DBUS_SERVICE,
+			       brightness->priv->udi, HAL_DBUS_INTERFACE_KBD_BACKLIGHT);
 
 	/* get levels that the adapter supports -- this does not change ever */
 	device = hal_gdevice_new ();

@@ -360,6 +360,7 @@ monitor_connection_cb (EggDbusMonitor *monitor,
 static void
 gpm_phone_init (GpmPhone *phone)
 {
+	DBusGConnection *connection;
 	phone->priv = GPM_PHONE_GET_PRIVATE (phone);
 
 	phone->priv->connection = NULL;
@@ -371,7 +372,8 @@ gpm_phone_init (GpmPhone *phone)
 	phone->priv->monitor = egg_dbus_monitor_new ();
 	g_signal_connect (phone->priv->monitor, "connection-changed",
 			  G_CALLBACK (monitor_connection_cb), phone);
-	egg_dbus_monitor_assign (phone->priv->monitor, EGG_DBUS_MONITOR_SESSION, GNOME_PHONE_MANAGER_DBUS_SERVICE);
+	connection = dbus_g_bus_get (DBUS_BUS_SESSION, NULL);
+	egg_dbus_monitor_assign (phone->priv->monitor, connection, GNOME_PHONE_MANAGER_DBUS_SERVICE);
 	gpm_phone_dbus_connect (phone);
 }
 
