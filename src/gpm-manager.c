@@ -39,6 +39,8 @@
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
 #include <libgnomeui/gnome-client.h>
+#include <gconf/gconf-client.h>
+#include <canberra-gtk.h>
 
 #include <libhal-gpower.h>
 #include <libhal-gmanager.h>
@@ -62,7 +64,6 @@
 #include "gpm-srv-screensaver.h"
 #include "gpm-stock-icons.h"
 #include "gpm-prefs-server.h"
-#include "gpm-sound.h"
 #include "gpm-tray-icon.h"
 #include "gpm-engine.h"
 
@@ -90,11 +91,11 @@ struct GpmManagerPrivate
 	GpmNotify		*notify;
 	GpmControl		*control;
 	GpmScreensaver 		*screensaver;
-	GpmSound 		*sound;
 	GpmTrayIcon		*tray_icon;
 	GpmEngine		*engine;
 	HalGPower		*hal_power;
 	gboolean		 low_power;
+	GConfClient		*gconf_client;
 
 	/* interactive services */
 	GpmBacklight		*backlight;
@@ -112,6 +113,20 @@ enum {
 	CAN_REBOOT_CHANGED,
 	LAST_SIGNAL
 };
+
+typedef enum {
+	GPM_MANAGER_SOUND_POWER_PLUG,
+	GPM_MANAGER_SOUND_POWER_UNPLUG,
+	GPM_MANAGER_SOUND_LID_OPEN,
+	GPM_MANAGER_SOUND_LID_CLOSE,
+	GPM_MANAGER_SOUND_BATTERY_CAUTION,
+	GPM_MANAGER_SOUND_BATTERY_LOW,
+	GPM_MANAGER_SOUND_BATTERY_FULL,
+	GPM_MANAGER_SOUND_SUSPEND_START,
+	GPM_MANAGER_SOUND_SUSPEND_RESUME,
+	GPM_MANAGER_SOUND_SUSPEND_ERROR,
+	GPM_MANAGER_SOUND_LAST
+} GpmManagerSound;
 
 static guint	     signals [LAST_SIGNAL] = { 0 };
 
@@ -150,6 +165,77 @@ gpm_manager_error_get_type (void)
 		etype = g_enum_register_static ("GpmManagerError", values);
 	}
 	return etype;
+}
+
+/**
+ * gpm_manager_play:
+ **/
+static gboolean
+gpm_manager_play (GpmManager *manager, GpmManagerSound action, gboolean force)
+{
+	const gchar *id = NULL;
+	const gchar *desc = NULL;
+	gboolean ret;
+
+	ret = gconf_client_get_bool (manager->priv->gconf_client, GPM_CONF_UI_ENABLE_BEEPING, NULL);
+	if (!ret && !force) {
+		egg_debug ("ignoring sound due to policy");
+		return FALSE;
+	}
+
+	if (action == GPM_MANAGER_SOUND_POWER_PLUG) {
+		id = "power-plug";
+		/* TRANSLATORS: this is the sound description */
+		desc = _("Power plugged in");
+	} else if (action == GPM_MANAGER_SOUND_POWER_UNPLUG) {
+		id = "power-unplug";
+		/* TRANSLATORS: this is the sound description */
+		desc = _("Power unplugged");
+	} else if (action == GPM_MANAGER_SOUND_LID_OPEN) {
+		id = "lid-open";
+		/* TRANSLATORS: this is the sound description */
+		desc = _("Lid has opened");
+	} else if (action == GPM_MANAGER_SOUND_LID_CLOSE) {
+		id = "lid-close";
+		/* TRANSLATORS: this is the sound description */
+		desc = _("Lid has closed");
+	} else if (action == GPM_MANAGER_SOUND_BATTERY_CAUTION) {
+		id = "battery-caution";
+		/* TRANSLATORS: this is the sound description */
+		desc = _("Battery is low");
+	} else if (action == GPM_MANAGER_SOUND_BATTERY_LOW) {
+		id = "battery-low";
+		/* TRANSLATORS: this is the sound description */
+		desc = _("Battery is very low");
+	} else if (action == GPM_MANAGER_SOUND_BATTERY_FULL) {
+		id = "battery-full";
+		/* TRANSLATORS: this is the sound description */
+		desc = _("Battery is full");
+	} else if (action == GPM_MANAGER_SOUND_SUSPEND_START) {
+		id = "suspend-start";
+		/* TRANSLATORS: this is the sound description */
+		desc = _("Suspend started");
+	} else if (action == GPM_MANAGER_SOUND_SUSPEND_RESUME) {
+		id = "suspend-resume";
+		/* TRANSLATORS: this is the sound description */
+		desc = _("Resumed");
+	} else if (action == GPM_MANAGER_SOUND_SUSPEND_ERROR) {
+		id = "suspend-error";
+		/* TRANSLATORS: this is the sound description */
+		desc = _("Suspend failed");
+	}
+
+	/* no match */
+	if (id == NULL) {
+		egg_warning ("no match");
+		return FALSE;
+	}
+
+	/* play the sound, using sounds from the naming spec */
+	ca_context_play (ca_gtk_context_get (), 0,
+			 CA_PROP_EVENT_ID, id,
+			 CA_PROP_EVENT_DESCRIPTION, desc, NULL);
+	return TRUE;
 }
 
 /**
@@ -1004,7 +1090,7 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 	gpm_manager_sync_policy_sleep (manager);
 
 	if (on_ac == FALSE)
-		gpm_sound_event (manager->priv->sound, GPM_SOUND_AC_UNPLUGGED);
+		gpm_manager_play (manager, GPM_MANAGER_SOUND_POWER_UNPLUG, FALSE);
 
 	egg_debug ("emitting on-ac-changed : %i", on_ac);
 	if (on_ac) {
@@ -1342,7 +1428,7 @@ control_sleep_failure_cb (GpmControl      *control,
 	/* only show this if specified in gconf */
 	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_SLEEP_FAILED, &show_sleep_failed);
 
-	gpm_sound_event (manager->priv->sound, GPM_SOUND_SUSPEND_FAILURE);
+	gpm_manager_play (manager, GPM_MANAGER_SOUND_SUSPEND_ERROR, TRUE);
 
 	/* only emit if in GConf */
 	if (show_sleep_failed) {
@@ -1399,7 +1485,7 @@ gpm_engine_charge_low_cb (GpmEngine      *engine,
 	gpm_notify_display (manager->priv->notify,
 			    title, message, GPM_NOTIFY_TIMEOUT_LONG,
 			    icon, GPM_NOTIFY_URGENCY_NORMAL);
-	gpm_sound_event (manager->priv->sound, GPM_SOUND_POWER_LOW);
+	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
 	g_free (icon);
 	g_free (message);
 }
@@ -1507,7 +1593,7 @@ gpm_engine_charge_critical_cb (GpmEngine      *engine,
 	gpm_notify_display (manager->priv->notify,
 			    title, message, GPM_NOTIFY_TIMEOUT_LONG,
 			    icon, GPM_NOTIFY_URGENCY_CRITICAL);
-	gpm_sound_event (manager->priv->sound, GPM_SOUND_POWER_LOW);
+	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
 	g_free (icon);
 	g_free (message);
 }
@@ -1592,7 +1678,7 @@ gpm_engine_charge_action_cb (GpmEngine      *engine,
 	gpm_notify_display (manager->priv->notify,
 			    title, message, GPM_NOTIFY_TIMEOUT_LONG,
 			    icon, GPM_NOTIFY_URGENCY_CRITICAL);
-	gpm_sound_event (manager->priv->sound, GPM_SOUND_POWER_LOW);
+	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
 	g_free (icon);
 	g_free (message);
 }
@@ -1673,6 +1759,7 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->prefs_server = gpm_prefs_server_new ();
 
 	manager->priv->notify = gpm_notify_new ();
+	manager->priv->gconf_client = gconf_client_get_default ();
 	manager->priv->conf = gpm_conf_new ();
 	g_signal_connect (manager->priv->conf, "value-changed",
 			  G_CALLBACK (conf_key_changed_cb), manager);
@@ -1708,7 +1795,6 @@ gpm_manager_init (GpmManager *manager)
 			  G_CALLBACK (button_pressed_cb), manager);
 
 	manager->priv->hal_power = hal_gpower_new ();
-	manager->priv->sound = gpm_sound_new ();
 
 	/* try and start an interactive service */
 	manager->priv->screensaver = gpm_screensaver_new ();
@@ -1824,7 +1910,6 @@ gpm_manager_finalize (GObject *object)
 	/* compulsory gobjects */
 	g_object_unref (manager->priv->conf);
 	g_object_unref (manager->priv->hal_power);
-	g_object_unref (manager->priv->sound);
 	g_object_unref (manager->priv->dpms);
 	g_object_unref (manager->priv->idle);
 	g_object_unref (manager->priv->info);
@@ -1836,6 +1921,7 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->srv_screensaver);
 	g_object_unref (manager->priv->prefs_server);
 	g_object_unref (manager->priv->control);
+	g_object_unref (manager->priv->gconf_client);
 
 	/* optional gobjects */
 	if (manager->priv->button) {

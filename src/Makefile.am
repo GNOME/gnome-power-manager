@@ -17,6 +17,7 @@ INCLUDES =						\
 	$(UNIQUE_CFLAGS)				\
 	$(XRANDR_CFLAGS)				\
 	$(LIBNOTIFY_CFLAGS)				\
+	$(CANBERRA_CFLAGS)				\
 	$(UNIQUE_CFLAGS)				\
 	$(GSTREAMER_CFLAGS)				\
 	$(POLKIT_CFLAGS)				\
@@ -206,8 +207,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-common.c					\
 	gpm-screensaver.h				\
 	gpm-screensaver.c				\
-	gpm-sound.h					\
-	gpm-sound.c					\
 	gpm-networkmanager.h				\
 	gpm-networkmanager.c				\
 	gpm-stock-icons.h				\
@@ -233,6 +232,7 @@ gnome_power_manager_LDADD =				\
 	$(POLKIT_LIBS)					\
 	$(DBUS_LIBS)					\
 	$(XRANDR_LIBS)					\
+	$(CANBERRA_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
 	$(LOCAL_LIBHAL_LIBS)				\
 	$(LOCAL_LIBDBUS_LIBS)				\
@@ -298,8 +298,6 @@ gnome_power_self_test_SOURCES =				\
 	gpm-marshal.c					\
 	gpm-common.h					\
 	gpm-common.c					\
-	gpm-sound.h					\
-	gpm-sound.c					\
 	gpm-info.h					\
 	gpm-info.c					\
 	gpm-array.h					\

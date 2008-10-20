@@ -33,7 +33,6 @@
 #include <dbus/dbus-glib-lowlevel.h>
 #include <libgnomeui/libgnomeui.h>
 #include <glade/glade.h>
-#include <gst/gst.h>
 
 #include "gpm-stock-icons.h"
 #include "gpm-common.h"
@@ -230,9 +229,6 @@ main (int argc, char *argv[])
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
                                            GPM_DATA G_DIR_SEPARATOR_S "icons");
 
-	/* initialise gstreamer */
-	gst_init (&argc, &argv);
-
 	/* create a new gui object */
 	manager = gpm_manager_new ();
 
@@ -255,8 +251,6 @@ main (int argc, char *argv[])
 
 	g_main_loop_unref (loop);
 
-	/* rip down gstreamer */
-	gst_deinit ();
 	g_object_unref (manager);
 unref_program:
 	g_object_unref (program);

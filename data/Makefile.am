@@ -1,4 +1,4 @@
-SUBDIRS = icons sounds
+SUBDIRS = icons
 
 @INTLTOOL_SCHEMAS_RULE@
 schemadir = $(sysconfdir)/gconf/schemas

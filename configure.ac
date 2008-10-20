@@ -64,9 +64,9 @@ LIBWNCK_REQUIRED=2.10.0
 CAIRO_REQUIRED=1.0.0
 UNIQUE_REQUIRED=0.9.4
 LIBPANEL_REQUIRED=2.0.0
-GSTREAMER_REQUIRED=0.10
 XRANDR_REQUIRED=1.2.0
 POLKIT_GNOME_REQUIRED=0.8
+CANBERRA_REQUIRED=0.10
 
 dnl ---------------------------------------------------------------------------
 dnl - Make above strings available for packaging files (e.g. rpm spec files)
@@ -84,7 +84,6 @@ AC_SUBST(LIBWNCK_REQUIRED)
 AC_SUBST(CAIRO_REQUIRED)
 AC_SUBST(UNIQUE_REQUIRED)
 AC_SUBST(LIBPANEL_REQUIRED)
-AC_SUBST(GSTREAMER_REQUIRED)
 AC_SUBST(XRANDR_REQUIRED)
 AC_SUBST(POLKIT_GNOME_REQUIRED)
 
@@ -99,9 +98,9 @@ PKG_CHECK_MODULES(HAL, hal >= $HAL_REQUIRED)
 AC_SUBST(HAL_CFLAGS)
 AC_SUBST(HAL_LIBS)
 
-PKG_CHECK_MODULES(GSTREAMER, gstreamer-0.10 >= $GSTREAMER_REQUIRED)
-AC_SUBST(GSTREAMER_CFLAGS)
-AC_SUBST(GSTREAMER_LIBS)
+PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk >= $CANBERRA_REQUIRED)
+AC_SUBST(CANBERRA_CFLAGS)
+AC_SUBST(CANBERRA_LIBS)
 
 PKG_CHECK_MODULES(DBUS,[
  dbus-glib-1 >= $DBUS_REQUIRED
@@ -600,7 +599,6 @@ data/Makefile
 data/gnome-power-manager.desktop.in
 data/gnome-power-preferences.desktop.in
 data/gnome-power-statistics.desktop.in
-data/sounds/Makefile
 data/icons/Makefile
 data/icons/16x16/Makefile
 data/icons/16x16/actions/Makefile

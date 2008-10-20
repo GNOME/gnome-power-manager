@@ -1,5 +1,34 @@
 2008-10-20  Richard Hughes  <richard@hughsie.com>
 
+	* configure.ac:
+	* data/Makefile.am:
+	* data/sounds/Makefile.am:
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-main.c: (main):
+	* src/gpm-manager.c: (gpm_manager_play), (ac_adapter_changed_cb),
+	(control_sleep_failure_cb), (gpm_engine_charge_low_cb),
+	(gpm_engine_charge_critical_cb), (gpm_engine_charge_action_cb),
+	(gpm_manager_init), (gpm_manager_finalize):
+	* src/gpm-sound.c:
+	* src/gpm-sound.h:
+	Use libcanberra and the sound theme rather than shipping our own
+	sounds and using gstreamer directly.
+
+2008-10-20  Richard Hughes  <richard@hughsie.com>
+
+	* configure.ac:
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-manager.c: (gpm_manager_play), (ac_adapter_changed_cb),
+	(control_sleep_failure_cb), (gpm_engine_charge_low_cb),
+	(gpm_engine_charge_critical_cb), (gpm_engine_charge_action_cb),
+	(gpm_manager_init), (gpm_manager_finalize):
+	* src/gpm-sound.c:
+	* src/gpm-sound.h:
+
+2008-10-20  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c: (ac_adapter_changed_cb),
 	(control_sleep_failure_cb):
 	* src/gpm-sound.c: (gpm_sound_play), (gpm_sound_force),
