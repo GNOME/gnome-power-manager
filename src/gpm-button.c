@@ -309,13 +309,6 @@ emit_button_pressed (GpmButton   *button,
 		button->priv->lid_is_closed = FALSE;
 	}
 
-	/* the names changed in 0.5.8 */
-	if (strcmp (type, GPM_BUTTON_BRIGHT_UP_DEP) == 0) {
-		atype = GPM_BUTTON_BRIGHT_UP;
-	} else if (strcmp (type, GPM_BUTTON_BRIGHT_DOWN_DEP) == 0) {
-		atype = GPM_BUTTON_BRIGHT_DOWN;
-	}
-
 	/* we now emit all buttons, even the ones we don't know */
 	egg_debug ("emitting button-pressed : %s", atype);
 	g_signal_emit (button, signals [BUTTON_PRESSED], 0, atype);

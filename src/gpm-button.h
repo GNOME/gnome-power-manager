@@ -44,8 +44,6 @@ typedef struct GpmButtonPrivate GpmButtonPrivate;
 #define GPM_BUTTON_LID_CLOSED		"lid-down"
 #define GPM_BUTTON_BRIGHT_UP		"brightness-up"
 #define GPM_BUTTON_BRIGHT_DOWN		"brightness-down"
-#define GPM_BUTTON_BRIGHT_UP_DEP	"brightnessup"	 /* Remove when we depend on HAL 0.5.8 */
-#define GPM_BUTTON_BRIGHT_DOWN_DEP	"brightnessdown" /* as these are the old names */
 #define GPM_BUTTON_KBD_BRIGHT_UP	"kbd-illum-up"
 #define GPM_BUTTON_KBD_BRIGHT_DOWN	"kbd-illum-down"
 #define GPM_BUTTON_KBD_BRIGHT_TOGGLE	"kbd-illum-toggle"
