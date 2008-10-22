@@ -1,5 +1,27 @@
 2008-10-22  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-engine.c: (gpm_engine_class_init),
+	(gpm_engine_get_summary), (gpm_engine_get_icon),
+	(gpm_engine_recalculate_state_icon),
+	(gpm_cell_array_discharging_changed_cb), (gpm_engine_start):
+	* src/gpm-inhibit.c: (gpm_inhibit_find_cookie),
+	(gpm_inhibit_inhibit), (gpm_inhibit_un_inhibit):
+	* src/gpm-manager.c: (gpm_manager_error_quark),
+	(gpm_manager_is_inhibit_valid), (gpm_manager_unblank_screen),
+	(gpm_manager_action_suspend), (gpm_manager_action_hibernate),
+	(manager_policy_do), (gpm_manager_suspend),
+	(gpm_manager_hibernate), (gpm_manager_reboot),
+	(gpm_manager_shutdown), (gpm_manager_get_power_save_status),
+	(gpm_manager_get_on_battery), (idle_changed_cb),
+	(lid_button_pressed), (button_pressed_cb), (ac_adapter_changed_cb),
+	(gpm_manager_check_sleep_errors), (gpm_engine_fully_charged_cb),
+	(gpm_engine_discharging_cb),
+	(gpm_manager_get_time_until_action_text),
+	(gpm_engine_charge_critical_cb), (gpm_engine_charge_action_cb):
+	Whitespace cleanup, and add a couple of sound actions.
+
+2008-10-22  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-info.c: (gpm_statistics_add_data_type),
 	(gpm_statistics_add_event_type), (gpm_info_event_log),
 	(gpm_info_set_collection_data), (gpm_info_log_do_poll),

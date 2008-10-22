@@ -138,9 +138,8 @@ GQuark
 gpm_manager_error_quark (void)
 {
 	static GQuark quark = 0;
-	if (!quark) {
+	if (!quark)
 		quark = g_quark_from_static_string ("gpm_manager_error");
-	}
 	return quark;
 }
 
@@ -263,24 +262,18 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 		const char *msg;
 
 		/*Compose message for each possible action*/
-		if (strcmp (action, "suspend") == 0) {
+		if (strcmp (action, "suspend") == 0)
 				title = g_strdup (_("Request to suspend")); 
-
-		} else if (strcmp (action, "hibernate") == 0) {
+		else if (strcmp (action, "hibernate") == 0)
 				title = g_strdup (_("Request to hibernate")); 
-
-		} else if (strcmp (action, "policy action") == 0) {
+		else if (strcmp (action, "policy action") == 0)
 				title = g_strdup (_("Request to do policy action")); 
-
-		} else if (strcmp (action, "reboot") == 0) {
+		else if (strcmp (action, "reboot") == 0)
 				title = g_strdup (_("Request to reboot")); 
-
-		} else if (strcmp (action, "shutdown") == 0) {
+		else if (strcmp (action, "shutdown") == 0)
 				title = g_strdup (_("Request to shutdown")); 
-
-		} else if (strcmp (action, "timeout action") == 0) {
+		else if (strcmp (action, "timeout action") == 0)
 				title = g_strdup (_("Request to do timeout action"));
-		}
 		
 		gpm_inhibit_get_message (manager->priv->inhibit, message, action);
 		gpm_notify_display (manager->priv->notify,
@@ -392,9 +385,8 @@ gpm_manager_unblank_screen (GpmManager *manager,
 	}
 
 	do_lock = gpm_control_get_lock_policy (manager->priv->control, GPM_CONF_LOCK_ON_BLANK_SCREEN);
-	if (do_lock) {
+	if (do_lock)
 		gpm_screensaver_poke (manager->priv->screensaver);
-	}
 	return ret;
 }
 
@@ -434,16 +426,14 @@ gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 	}
 
 	/* check to see if we are inhibited */
-	if (gpm_manager_is_inhibit_valid (manager, FALSE, "suspend") == FALSE) {
+	if (gpm_manager_is_inhibit_valid (manager, FALSE, "suspend") == FALSE)
 		return FALSE;
-	}
 
 	gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
 				_("Suspending computer."), reason);
 	gpm_control_suspend (manager->priv->control, &error);
-	if (error != NULL) {
+	if (error != NULL)
 		g_error_free (error);
-	}
 	return TRUE;
 }
 
@@ -483,16 +473,14 @@ gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 	}
 
 	/* check to see if we are inhibited */
-	if (gpm_manager_is_inhibit_valid (manager, FALSE, "hibernate") == FALSE) {
+	if (gpm_manager_is_inhibit_valid (manager, FALSE, "hibernate") == FALSE)
 		return FALSE;
-	}
 
 	gpm_info_explain_reason (manager->priv->info, GPM_EVENT_HIBERNATE,
 				_("Hibernating computer."), reason);
 	gpm_control_hibernate (manager->priv->control, &error);
-	if (error != NULL) {
+	if (error != NULL)
 		g_error_free (error);
-	}
 	return TRUE;
 }
 
@@ -512,16 +500,13 @@ manager_policy_do (GpmManager  *manager,
 	gchar *action = NULL;
 
 	/* are we inhibited? */
-	if (gpm_manager_is_inhibit_valid (manager, FALSE, "policy action") == FALSE) {
+	if (gpm_manager_is_inhibit_valid (manager, FALSE, "policy action") == FALSE)
 		return FALSE;
-	}
 
 	egg_debug ("policy: %s", policy);
 	action = gconf_client_get_string (manager->priv->conf, policy, NULL);
-
-	if (action == NULL) {
+	if (action == NULL)
 		return FALSE;
-	}
 
 	if (strcmp (action, ACTION_NOTHING) == 0) {
 		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_NOTIFICATION,
@@ -584,9 +569,8 @@ gpm_manager_suspend (GpmManager *manager,
 	}
 
 	/* check to see if we are inhibited */
-	if (gpm_manager_is_inhibit_valid (manager, FALSE, "hibernate") == FALSE) {
+	if (gpm_manager_is_inhibit_valid (manager, FALSE, "hibernate") == FALSE)
 		return FALSE;
-	}
 
 	return gpm_control_suspend (manager->priv->control, error);
 }
@@ -620,9 +604,8 @@ gpm_manager_hibernate (GpmManager *manager,
 	}
 
 	/* check to see if we are inhibited */
-	if (gpm_manager_is_inhibit_valid (manager, FALSE, "hibernate") == FALSE) {
+	if (gpm_manager_is_inhibit_valid (manager, FALSE, "hibernate") == FALSE)
 		return FALSE;
-	}
 
 	return gpm_control_hibernate (manager->priv->control, error);
 }
@@ -640,9 +623,8 @@ gpm_manager_reboot (GpmManager *manager,
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 
 	/* check to see if we are inhibited */
-	if (gpm_manager_is_inhibit_valid (manager, FALSE, "reboot") == FALSE) {
+	if (gpm_manager_is_inhibit_valid (manager, FALSE, "reboot") == FALSE)
 		return FALSE;
-	}
 
 	return gpm_control_reboot (manager->priv->control, error);
 }
@@ -660,9 +642,8 @@ gpm_manager_shutdown (GpmManager *manager,
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 
 	/* check to see if we are inhibited */
-	if (gpm_manager_is_inhibit_valid (manager, FALSE, "shutdown") == FALSE) {
+	if (gpm_manager_is_inhibit_valid (manager, FALSE, "shutdown") == FALSE)
 		return FALSE;
-	}
 
 	return gpm_control_shutdown (manager->priv->control, error);
 }
@@ -757,7 +738,6 @@ gpm_manager_get_power_save_status (GpmManager *manager,
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 	*low_power = manager->priv->low_power;
-
 	return TRUE;
 }
 
@@ -778,11 +758,7 @@ gpm_manager_get_on_battery (GpmManager *manager,
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
-	if (on_ac) {
-		*on_battery = FALSE;
-	} else {
-		*on_battery = TRUE;
-	}
+	*on_battery = !on_ac;
 	return TRUE;
 }
 
@@ -908,9 +884,8 @@ idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmManager *manager)
 	} else if (mode == GPM_IDLE_MODE_SYSTEM) {
 		egg_debug ("Idle state changed: SYSTEM");
 
-		if (gpm_manager_is_inhibit_valid (manager, FALSE, "timeout action") == FALSE) {
+		if (gpm_manager_is_inhibit_valid (manager, FALSE, "timeout action") == FALSE)
 			return;
-		}
 		idle_do_sleep (manager);
 	}
 }
@@ -982,8 +957,7 @@ hibernate_button_pressed (GpmManager *manager)
  * battery power.
  **/
 static void
-lid_button_pressed (GpmManager *manager,
-		    gboolean    pressed)
+lid_button_pressed (GpmManager *manager, gboolean pressed)
 {
 	gboolean on_ac;
 	gboolean has_inhibit;
@@ -991,6 +965,11 @@ lid_button_pressed (GpmManager *manager,
 	gchar *action;
 
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
+
+	if (pressed)
+		gpm_manager_play (manager, GPM_MANAGER_SOUND_LID_CLOSE, FALSE);
+	else
+		gpm_manager_play (manager, GPM_MANAGER_SOUND_LID_OPEN, FALSE);
 
 	if (pressed == FALSE) {
 		/* we turn the lid dpms back on unconditionally */
@@ -1018,9 +997,8 @@ lid_button_pressed (GpmManager *manager,
 
 		/* if we are trying to suspend or hibernate then don't do action */
 		if ((strcmp (action, ACTION_SUSPEND) == 0) ||
-		    (strcmp (action, ACTION_HIBERNATE) == 0)) {
+		    (strcmp (action, ACTION_HIBERNATE) == 0))
 			do_policy = FALSE;
-		}
 		g_free (action);
 	}
 
@@ -1042,9 +1020,7 @@ lid_button_pressed (GpmManager *manager,
  * @manager: This class instance
  **/
 static void
-button_pressed_cb (GpmButton   *button,
-		   const gchar *type,
-		   GpmManager  *manager)
+button_pressed_cb (GpmButton *button, const gchar *type, GpmManager *manager)
 {
 	egg_debug ("Button press event type=%s", type);
 
@@ -1053,27 +1029,20 @@ button_pressed_cb (GpmButton   *button,
 	else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0)
 		gpm_info_event_log (manager->priv->info, GPM_EVENT_LID_OPENED, _("The laptop lid has been re-opened"));
 
-	if (strcmp (type, GPM_BUTTON_POWER) == 0) {
+	if (strcmp (type, GPM_BUTTON_POWER) == 0)
 		power_button_pressed (manager);
-
-	} else if (strcmp (type, GPM_BUTTON_SLEEP) == 0) {
+	else if (strcmp (type, GPM_BUTTON_SLEEP) == 0)
 		suspend_button_pressed (manager);
-
-	} else if (strcmp (type, GPM_BUTTON_SUSPEND) == 0) {
+	else if (strcmp (type, GPM_BUTTON_SUSPEND) == 0)
 		suspend_button_pressed (manager);
-
-	} else if (strcmp (type, GPM_BUTTON_HIBERNATE) == 0) {
+	else if (strcmp (type, GPM_BUTTON_HIBERNATE) == 0)
 		hibernate_button_pressed (manager);
-
-	} else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0) {
+	else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0)
 		lid_button_pressed (manager, FALSE);
-
-	} else if (strcmp (type, GPM_BUTTON_LID_CLOSED) == 0) {
+	else if (strcmp (type, GPM_BUTTON_LID_CLOSED) == 0)
 		lid_button_pressed (manager, TRUE);
-
-	} else if (strcmp (type, GPM_BUTTON_BATTERY) == 0) {
+	else if (strcmp (type, GPM_BUTTON_BATTERY) == 0)
 		battery_button_pressed (manager);
-	}
 }
 
 /**
@@ -1123,8 +1092,7 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter, gboolean on_ac, GpmManager *man
 	/* We keep track of the lid state so we can do the
 	   lid close on battery action if the ac_adapter is removed when the laptop
 	   is closed. Fixes #331655 */
-	if (event_when_closed && on_ac == FALSE &&
-	    gpm_button_is_lid_closed (manager->priv->button)) {
+	if (event_when_closed && on_ac == FALSE && gpm_button_is_lid_closed (manager->priv->button)) {
 		manager_policy_do (manager, GPM_CONF_BUTTON_LID_BATT,
 				   _("The lid has been closed, and the ac adapter "
 				     "removed (and gconf is okay)."));
@@ -1269,12 +1237,10 @@ gpm_manager_check_sleep_errors (GpmManager *manager)
 	hal_device_power_has_suspend_error (manager->priv->hal_device_power, &suspend_error);
 	hal_device_power_has_hibernate_error (manager->priv->hal_device_power, &hibernate_error);
 
-	if (suspend_error) {
+	if (suspend_error)
 		gpm_notify_sleep_failed (manager->priv->notify, FALSE);
-	}
-	if (hibernate_error) {
+	if (hibernate_error)
 		gpm_notify_sleep_failed (manager->priv->notify, TRUE);
-	}
 }
 
 /**
@@ -1401,9 +1367,8 @@ gpm_engine_fully_charged_cb (GpmEngine      *engine,
 			     GpmCellUnitKind kind,
 			     GpmManager     *manager)
 {
-	if (kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+	if (kind == GPM_CELL_UNIT_KIND_PRIMARY)
 		gpm_notify_fully_charged_primary (manager->priv->notify);
-	}
 }
 
 /**
@@ -1414,11 +1379,10 @@ gpm_engine_discharging_cb (GpmEngine      *engine,
 			   GpmCellUnitKind kind,
 			   GpmManager     *manager)
 {
-	if (kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+	if (kind == GPM_CELL_UNIT_KIND_PRIMARY)
 		gpm_notify_discharging_primary (manager->priv->notify);
-	} else if (kind == GPM_CELL_UNIT_KIND_UPS) {
+	else if (kind == GPM_CELL_UNIT_KIND_UPS)
 		gpm_notify_discharging_ups (manager->priv->notify);
-	}
 }
 
 /**
@@ -1514,9 +1478,8 @@ gpm_manager_get_time_until_action_text (GpmManager *manager)
 
 	/* we should tell the user how much time they have */
 	time = gpm_cell_array_get_time_until_action (collection->primary);
-	if (time == 0) {
+	if (time == 0)
 		return g_strdup (_("a short time"));
-	}
 	return gpm_get_timestring (time);
 }
 
@@ -1550,18 +1513,14 @@ gpm_engine_charge_critical_cb (GpmEngine      *engine,
 		}
 
 		/* use different text for different actions */
-		if (strcmp (action, ACTION_NOTHING) == 0) {
+		if (strcmp (action, ACTION_NOTHING) == 0)
 			action_text = g_strdup (_("Plug in your AC adapter to avoid losing data."));
-
-		} else if (strcmp (action, ACTION_SUSPEND) == 0) {
+		else if (strcmp (action, ACTION_SUSPEND) == 0)
 			action_text = g_strdup_printf (_("This computer will suspend in %s if the AC is not connected."), time_text);
-
-		} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
+		else if (strcmp (action, ACTION_HIBERNATE) == 0)
 			action_text = g_strdup_printf (_("This computer will hibernate in %s if the AC is not connected."), time_text);
-
-		} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
+		else if (strcmp (action, ACTION_SHUTDOWN) == 0)
 			action_text = g_strdup_printf (_("This computer will shutdown in %s if the AC is not connected."), time_text);
-		}
 
 		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%.1f%%). %s"),
 					   remaining_text, unit->percentage, action_text);
@@ -1613,10 +1572,7 @@ gpm_engine_charge_critical_cb (GpmEngine      *engine,
  * gpm_engine_charge_action_cb:
  */
 static void
-gpm_engine_charge_action_cb (GpmEngine      *engine,
-			     GpmCellUnitKind kind,
-			     GpmCellUnit    *unit,
-			     GpmManager     *manager)
+gpm_engine_charge_action_cb (GpmEngine *engine, GpmCellUnitKind kind, GpmCellUnit *unit, GpmManager *manager)
 {
 	const gchar *title = NULL;
 	gchar *action;
@@ -1680,9 +1636,8 @@ gpm_engine_charge_action_cb (GpmEngine      *engine,
 	}
 
 	/* not all types have actions */
-	if (title == NULL) {
+	if (title == NULL)
 		return;
-	}
 
 	/* get correct icon */
 	icon = gpm_cell_unit_get_icon (unit);

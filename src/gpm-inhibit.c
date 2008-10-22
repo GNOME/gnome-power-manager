@@ -115,9 +115,8 @@ gpm_inhibit_find_cookie (GpmInhibit *inhibit, guint32 cookie)
 	/* search list */
 	ret = g_slist_find_custom (inhibit->priv->list, &cookie,
 				   gpm_inhibit_cookie_compare_func);
-	if (ret == NULL) {
+	if (ret == NULL)
 		return NULL;
-	}
 	data = (GpmInhibitData *) ret->data;
 	return data;
 }
@@ -169,9 +168,7 @@ gpm_inhibit_inhibit (GpmInhibit  *inhibit,
 	connection = dbus_g_method_get_sender (context);
 
 	/* handle where the application does not add required data */
-	if (connection == NULL ||
-	    application == NULL ||
-	    reason == NULL) {
+	if (connection == NULL || application == NULL || reason == NULL) {
 		egg_warning ("Recieved Inhibit, but application "
 			     "did not set the parameters correctly");
 		dbus_g_method_return (context, -1);
@@ -191,9 +188,8 @@ gpm_inhibit_inhibit (GpmInhibit  *inhibit,
 		   data->application, data->connection, data->reason, data->cookie);
 
 	/* only emit event on the first one */
-	if (g_slist_length (inhibit->priv->list) == 1) {
+	if (g_slist_length (inhibit->priv->list) == 1)
 		g_signal_emit (inhibit, signals [HAS_INHIBIT_CHANGED], 0, TRUE);
-	}
 
 	dbus_g_method_return (context, data->cookie);
 }
@@ -238,9 +234,8 @@ gpm_inhibit_un_inhibit (GpmInhibit  *inhibit,
 	inhibit->priv->list = g_slist_remove (inhibit->priv->list, (gconstpointer) data);
 
 	/* only emit event on the last one */
-	if (g_slist_length (inhibit->priv->list) == 0) {
+	if (g_slist_length (inhibit->priv->list) == 0)
 		g_signal_emit (inhibit, signals [HAS_INHIBIT_CHANGED], 0, FALSE);
-	}
 
 	return TRUE;
 }

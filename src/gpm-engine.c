@@ -155,8 +155,7 @@ gpm_engine_class_init (GpmEngineClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmEngineClass, icon_changed),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      g_cclosure_marshal_VOID__STRING,
 			      G_TYPE_NONE, 1, G_TYPE_STRING);
 	signals [SUMMARY_CHANGED] =
@@ -164,8 +163,7 @@ gpm_engine_class_init (GpmEngineClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmEngineClass, summary_changed),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      g_cclosure_marshal_VOID__STRING,
 			      G_TYPE_NONE, 1, G_TYPE_STRING);
 	signals [LOW_CAPACITY] =
@@ -173,8 +171,7 @@ gpm_engine_class_init (GpmEngineClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmEngineClass, low_capacity),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      gpm_marshal_VOID__UINT_UINT,
 			      G_TYPE_NONE, 2, G_TYPE_UINT, G_TYPE_UINT);
 	signals [PERHAPS_RECALL] =
@@ -182,8 +179,7 @@ gpm_engine_class_init (GpmEngineClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmEngineClass, perhaps_recall),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      gpm_marshal_VOID__UINT_STRING_STRING,
 			      G_TYPE_NONE,
 			      3, G_TYPE_UINT, G_TYPE_STRING, G_TYPE_STRING);
@@ -192,8 +188,7 @@ gpm_engine_class_init (GpmEngineClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmEngineClass, fully_charged),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      g_cclosure_marshal_VOID__UINT,
 			      G_TYPE_NONE, 1, G_TYPE_UINT);
 	signals [DISCHARGING] =
@@ -201,8 +196,7 @@ gpm_engine_class_init (GpmEngineClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmEngineClass, discharging),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      g_cclosure_marshal_VOID__UINT,
 			      G_TYPE_NONE, 1, G_TYPE_UINT);
 	signals [CHARGE_ACTION] =
@@ -210,8 +204,7 @@ gpm_engine_class_init (GpmEngineClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmEngineClass, charge_action),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      gpm_marshal_VOID__UINT_UINT,
 			      G_TYPE_NONE, 2, G_TYPE_UINT, G_TYPE_POINTER);
 	signals [CHARGE_LOW] =
@@ -219,8 +212,7 @@ gpm_engine_class_init (GpmEngineClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmEngineClass, charge_low),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      gpm_marshal_VOID__UINT_POINTER,
 			      G_TYPE_NONE, 2, G_TYPE_UINT, G_TYPE_POINTER);
 	signals [CHARGE_CRITICAL] =
@@ -228,8 +220,7 @@ gpm_engine_class_init (GpmEngineClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmEngineClass, charge_critical),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      gpm_marshal_VOID__UINT_POINTER,
 			      G_TYPE_NONE, 2, G_TYPE_UINT, G_TYPE_POINTER);
 }
@@ -303,44 +294,37 @@ gpm_engine_get_summary (GpmEngine *engine)
 
 	if (unit->is_present) {
 		if (accuracy == 0) {
-			if (unit->is_discharging) {
+			if (unit->is_discharging)
 				tooltip = g_string_append (tooltip, _("Battery discharge time is currently unknown\n"));
-			} else {
+			else
 				tooltip = g_string_append (tooltip, _("Battery charge time is currently unknown\n"));
-			}
 		} else if (accuracy < GPM_PROFILE_GOOD_TRUST) {
-			if (unit->is_discharging) {
+			if (unit->is_discharging)
 				tooltip = g_string_append (tooltip, _("Battery discharge time is estimated\n"));
-			} else {
+			else
 				tooltip = g_string_append (tooltip, _("Battery charge time is estimated\n"));
-			}
 		}
 	}
 
 	part = gpm_cell_array_get_description (collection->ups);
-	if (part != NULL) {
+	if (part != NULL)
 		tooltip = g_string_append (tooltip, part);
-	}
 	g_free (part);
 	part = gpm_cell_array_get_description (collection->mouse);
-	if (part != NULL) {
+	if (part != NULL)
 		tooltip = g_string_append (tooltip, part);
-	}
 	g_free (part);
 	part = gpm_cell_array_get_description (collection->keyboard);
-	if (part != NULL) {
+	if (part != NULL)
 		tooltip = g_string_append (tooltip, part);
-	}
 	g_free (part);
 	part = gpm_cell_array_get_description (collection->phone);
-	if (part != NULL) {
+	if (part != NULL)
 		tooltip = g_string_append (tooltip, part);
-	}
 	g_free (part);
 	part = gpm_cell_array_get_description (collection->pda);
-	if (part != NULL) {
+	if (part != NULL)
 		tooltip = g_string_append (tooltip, part);
-	}
 	g_free (part);
 
 	/* remove the last \n */
@@ -391,39 +375,33 @@ gpm_engine_get_icon (GpmEngine *engine)
 	egg_debug ("Trying CRITICAL icon: primary, ups, mouse, keyboard");
 	if (unit_primary->is_present) {
 		state = gpm_warnings_get_state (engine->priv->warnings, unit_primary);
-		if (state == GPM_WARNINGS_CRITICAL) {
+		if (state == GPM_WARNINGS_CRITICAL)
 			return gpm_cell_array_get_icon (collection->primary);
-		}
 	}
 	if (unit_ups->is_present) {
 		state = gpm_warnings_get_state (engine->priv->warnings, unit_ups); 
-		if (state == GPM_WARNINGS_CRITICAL) {
+		if (state == GPM_WARNINGS_CRITICAL)
 			return gpm_cell_array_get_icon (collection->ups);
-		}
 	}
 	if (unit_keyboard->is_present) {
 		state = gpm_warnings_get_state (engine->priv->warnings, unit_phone);
-		if (state == GPM_WARNINGS_CRITICAL) {
+		if (state == GPM_WARNINGS_CRITICAL)
 			return gpm_cell_array_get_icon (collection->phone);
-		}
 	}
 	if (unit_mouse->is_present) {
 		state = gpm_warnings_get_state (engine->priv->warnings, unit_mouse);
-		if (state == GPM_WARNINGS_CRITICAL) {
+		if (state == GPM_WARNINGS_CRITICAL)
 			return gpm_cell_array_get_icon (collection->mouse);
-		}
 	}
 	if (unit_keyboard->is_present) {
 		state = gpm_warnings_get_state (engine->priv->warnings, unit_keyboard);
-		if (state == GPM_WARNINGS_CRITICAL) {
+		if (state == GPM_WARNINGS_CRITICAL)
 			return gpm_cell_array_get_icon (collection->keyboard);
-		}
 	}
 	if (unit_keyboard->is_present) {
 		state = gpm_warnings_get_state (engine->priv->warnings, unit_pda);
-		if (state == GPM_WARNINGS_CRITICAL) {
+		if (state == GPM_WARNINGS_CRITICAL)
 			return gpm_cell_array_get_icon (collection->pda);
-		}
 	}
 
 	if (engine->priv->icon_policy == GPM_ICON_POLICY_CRITICAL) {
@@ -450,12 +428,10 @@ gpm_engine_get_icon (GpmEngine *engine)
 
 	/* we try PRESENT: PRIMARY, UPS */
 	egg_debug ("Trying PRESENT icon: primary, ups");
-	if (unit_primary->is_present) {
+	if (unit_primary->is_present)
 		return gpm_cell_array_get_icon (collection->primary);
-
-	} else if (unit_ups->is_present) {
+	else if (unit_ups->is_present)
 		return gpm_cell_array_get_icon (collection->ups);
-	}
 
 	/* Check if we should just fallback to the ac icon */
 	if (engine->priv->icon_policy == GPM_ICON_POLICY_PRESENT) {
@@ -556,9 +532,8 @@ gpm_engine_recalculate_state_icon (GpmEngine *engine)
 
 	if (icon == NULL) {
 		/* none before, now none */
-		if (engine->priv->previous_icon == NULL) {
+		if (engine->priv->previous_icon == NULL)
 			return FALSE;
-		}
 		/* icon before, now none */
 		egg_debug ("** EMIT: icon-changed: none");
 
@@ -712,9 +687,8 @@ gpm_cell_array_discharging_changed_cb (GpmCellArray *cell_array,
 		show_discharging = gconf_client_get_bool (engine->priv->conf, GPM_CONF_NOTIFY_DISCHARGING, NULL);
 
 		/* don't show warning */
-		if (show_discharging == FALSE) {
+		if (show_discharging == FALSE)
 			return;
-		}
 
 		/* find the kind for easy multiplexing */
 		kind = gpm_cell_array_get_kind (cell_array);
@@ -1033,12 +1007,10 @@ gpm_engine_start (GpmEngine *engine)
 
 	/* only show the battery prefs section if we have batteries */
 	prefs_server = gpm_prefs_server_new ();
-	if (gpm_cell_array_get_num_cells (collection->primary) > 0) {
+	if (gpm_cell_array_get_num_cells (collection->primary) > 0)
 		gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_BATTERY);
-	}
-	if (gpm_cell_array_get_num_cells (collection->ups) > 0) {
+	if (gpm_cell_array_get_num_cells (collection->ups) > 0)
 		gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_UPS);
-	}
 	g_object_unref (prefs_server);
 
 	/* we're done */
