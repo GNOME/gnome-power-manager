@@ -34,7 +34,6 @@
 #include "gpm-control.h"
 #include "gpm-common.h"
 #include "egg-debug.h"
-#include "gpm-dpms.h"
 #include "gpm-info.h"
 #include "gpm-profile.h"
 #include "gpm-array.h"
@@ -65,7 +64,6 @@ static void     gpm_info_finalize   (GObject      *object);
 struct GpmInfoPrivate
 {
 	GpmControl		*control;
-	GpmDpms			*dpms;
 	GpmProfile		*profile;
 	GpmEngineCollection	*collection;
 
@@ -624,28 +622,6 @@ gpm_info_log_do_poll (gpointer data)
 }
 
 /**
- * dpms_mode_changed_cb:
- * @mode: The DPMS mode, e.g. GPM_DPMS_MODE_OFF
- * @info: This class instance
- *
- * Log when the DPMS mode is changed.
- **/
-static void
-dpms_mode_changed_cb (GpmDpms *dpms, GpmDpmsMode mode, GpmInfo *info)
-{
-	egg_debug ("DPMS mode changed: %d", mode);
-
-	if (mode == GPM_DPMS_MODE_ON)
-		gpm_info_event_log (info, GPM_EVENT_DPMS_ON, _("dpms on"));
-	else if (mode == GPM_DPMS_MODE_STANDBY)
-		gpm_info_event_log (info, GPM_EVENT_DPMS_STANDBY, _("dpms standby"));
-	else if (mode == GPM_DPMS_MODE_SUSPEND)
-		gpm_info_event_log (info, GPM_EVENT_DPMS_SUSPEND, _("dpms suspend"));
-	else if (mode == GPM_DPMS_MODE_OFF)
-		gpm_info_event_log (info, GPM_EVENT_DPMS_OFF, _("dpms off"));
-}
-
-/**
  * control_resume_cb:
  * @control: The control class instance
  * @info: This class instance
@@ -693,10 +669,6 @@ gpm_info_init (GpmInfo *info)
 
 	/* set default, we have to set these from the manager */
 	info->priv->profile = gpm_profile_new ();
-
-	/* watch for dpms mode changes */
-	info->priv->dpms = gpm_dpms_new ();
-	g_signal_connect (info->priv->dpms, "mode-changed", G_CALLBACK (dpms_mode_changed_cb), info);
 
 	/* set to a blank list */
 	info->priv->events = gpm_array_new ();
@@ -753,8 +725,6 @@ gpm_info_finalize (GObject *object)
 		g_object_unref (info->priv->time_data);
 	if (info->priv->voltage_data)
 		g_object_unref (info->priv->voltage_data);
-	if (info->priv->dpms != NULL)
-		g_object_unref (info->priv->dpms);
 	if (info->priv->control != NULL)
 		g_object_unref (info->priv->control);
 	g_object_unref (info->priv->events);

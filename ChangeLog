@@ -1,6 +1,18 @@
 2008-10-22  Richard Hughes  <richard@hughsie.com>
 
 	* src/Makefile.am:
+	* src/gpm-info.c: (gpm_info_init), (gpm_info_finalize):
+	* src/gpm-manager.c: (update_dpms_throttle), (update_ac_throttle),
+	(update_lid_throttle), (button_pressed_cb),
+	(ac_adapter_changed_cb), (screensaver_auth_request_cb),
+	(dpms_mode_changed_cb), (gpm_manager_init), (gpm_manager_finalize):
+	* src/gpm-srv-screensaver.c:
+	* src/gpm-srv-screensaver.h:
+	Remove the state setting parts of GpmScreensaver into GpmManager.
+
+2008-10-22  Richard Hughes  <richard@hughsie.com>
+
+	* src/Makefile.am:
 	* src/gpm-brightness-kbd.c: (gpm_brightness_kbd_set_dim),
 	(gpm_brightness_kbd_set_std), (gpm_brightness_kbd_dim),
 	(gpm_brightness_kbd_undim), (gpm_brightness_kbd_get),

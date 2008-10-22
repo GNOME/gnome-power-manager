@@ -163,8 +163,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-backlight.c					\
 	gpm-prefs-server.h				\
 	gpm-prefs-server.c				\
-	gpm-srv-screensaver.h				\
-	gpm-srv-screensaver.c				\
 	gpm-idle.h					\
 	gpm-idle.c					\
 	gpm-load.h					\
