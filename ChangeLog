@@ -1,5 +1,26 @@
 2008-10-22  Richard Hughes  <richard@hughsie.com>
 
+	* src/Makefile.am:
+	* src/gpm-brightness-kbd.c: (gpm_brightness_kbd_set_dim),
+	(gpm_brightness_kbd_set_std), (gpm_brightness_kbd_dim),
+	(gpm_brightness_kbd_undim), (gpm_brightness_kbd_get),
+	(gpm_brightness_kbd_up), (gpm_brightness_kbd_down),
+	(gpm_brightness_kbd_class_init), (gpm_brightness_kbd_toggle),
+	(gpm_brightness_kbd_init), (gpm_brightness_kbd_new):
+	* src/gpm-brightness-kbd.h:
+	* src/gpm-manager.c: (idle_changed_cb), (button_pressed_cb),
+	(ac_adapter_changed_cb), (gpm_conf_gconf_key_changed_cb),
+	(brightness_kbd_changed_cb), (gpm_manager_init),
+	(gpm_manager_finalize):
+	* src/gpm-srv-brightness-kbd.c:
+	* src/gpm-srv-brightness-kbd.h:
+	* src/gpm-warnings.c: (gpm_warnings_get_state_percentage),
+	(gpm_warnings_get_state), (gconf_key_changed_cb),
+	(gpm_warnings_init):
+	Remove the state setting parts of GpmBrightnessKbd into GpmManager.
+
+2008-10-22  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-engine.c: (gpm_engine_class_init),
 	(gpm_engine_get_summary), (gpm_engine_get_icon),
 	(gpm_engine_recalculate_state_icon),

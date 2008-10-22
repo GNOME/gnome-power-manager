@@ -59,12 +59,13 @@
 #include "gpm-prefs.h"
 #include "gpm-screensaver.h"
 #include "gpm-backlight.h"
-#include "gpm-srv-brightness-kbd.h"
+#include "gpm-brightness-kbd.h"
 #include "gpm-srv-screensaver.h"
 #include "gpm-stock-icons.h"
 #include "gpm-prefs-server.h"
 #include "gpm-tray-icon.h"
 #include "gpm-engine.h"
+#include "gpm-feedback-widget.h"
 
 #include "dbus/xdg-power-management-stats.h"
 #include "dbus/xdg-power-management-inhibit.h"
@@ -94,10 +95,11 @@ struct GpmManagerPrivate
 	GpmEngine		*engine;
 	HalDevicePower		*hal_device_power;
 	gboolean		 low_power;
+	GpmBrightnessKbd	*brightness_kbd;
+	GpmFeedback		*feedback_kbd;
 
 	/* interactive services */
 	GpmBacklight		*backlight;
-	GpmSrvBrightnessKbd	*srv_brightness_kbd;
 	GpmSrvScreensaver 	*srv_screensaver;
 };
 
@@ -874,16 +876,13 @@ idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmManager *manager)
 	}
 
 	if (mode == GPM_IDLE_MODE_NORMAL) {
-
 		egg_debug ("Idle state changed: NORMAL");
-
+		gpm_brightness_kbd_undim (manager->priv->brightness_kbd);
 	} else if (mode == GPM_IDLE_MODE_SESSION) {
-
 		egg_debug ("Idle state changed: SESSION");
-
+		gpm_brightness_kbd_dim (manager->priv->brightness_kbd);
 	} else if (mode == GPM_IDLE_MODE_SYSTEM) {
 		egg_debug ("Idle state changed: SYSTEM");
-
 		if (gpm_manager_is_inhibit_valid (manager, FALSE, "timeout action") == FALSE)
 			return;
 		idle_do_sleep (manager);
@@ -1043,6 +1042,13 @@ button_pressed_cb (GpmButton *button, const gchar *type, GpmManager *manager)
 		lid_button_pressed (manager, TRUE);
 	else if (strcmp (type, GPM_BUTTON_BATTERY) == 0)
 		battery_button_pressed (manager);
+
+	if ((strcmp (type, GPM_BUTTON_KBD_BRIGHT_UP) == 0))
+		gpm_brightness_kbd_up (manager->priv->brightness_kbd);
+	else if ((strcmp (type, GPM_BUTTON_KBD_BRIGHT_DOWN) == 0))
+		gpm_brightness_kbd_down (manager->priv->brightness_kbd);
+	else if (strcmp (type, GPM_BUTTON_KBD_BRIGHT_TOGGLE) == 0)
+		gpm_brightness_kbd_toggle (manager->priv->brightness_kbd);
 }
 
 /**
@@ -1058,6 +1064,7 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter, gboolean on_ac, GpmManager *man
 {
 	gboolean event_when_closed;
 	gboolean power_save;
+	guint brightness;
 
 	egg_debug ("Setting on-ac: %d", on_ac);
 
@@ -1065,6 +1072,12 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter, gboolean on_ac, GpmManager *man
 		gpm_info_event_log (manager->priv->info, GPM_EVENT_ON_AC, _("AC adapter inserted"));
 	else
 		gpm_info_event_log (manager->priv->info, GPM_EVENT_ON_BATTERY, _("AC adapter removed"));
+
+	if (on_ac)
+		brightness = gconf_client_get_int (manager->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_AC, NULL);
+	else
+		brightness = gconf_client_get_int (manager->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_BATT, NULL);
+	gpm_brightness_kbd_set_std (manager->priv->brightness_kbd, brightness);
 
 	gpm_manager_sync_policy_sleep (manager);
 
@@ -1183,6 +1196,8 @@ static void
 gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *entry, GpmManager *manager)
 {
 	GConfValue *value;
+	gint brightness;
+	gboolean on_ac;
 
 	value = gconf_entry_get_value (entry);
 	if (value == NULL)
@@ -1191,6 +1206,22 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 	if (strcmp (entry->key, GPM_CONF_TIMEOUT_SLEEP_COMPUTER_BATT) == 0 ||
 	    strcmp (entry->key, GPM_CONF_TIMEOUT_SLEEP_COMPUTER_AC) == 0)
 		gpm_manager_sync_policy_sleep (manager);
+
+	/* set keyboard brightness */
+	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
+	if (strcmp (entry->key, GPM_CONF_KEYBOARD_BRIGHTNESS_AC) == 0) {
+
+		brightness = gconf_value_get_int (value);
+		if (on_ac)
+			gpm_brightness_kbd_set_std (manager->priv->brightness_kbd, brightness);
+
+	} else if (strcmp (entry->key, GPM_CONF_KEYBOARD_BRIGHTNESS_BATT) == 0) {
+
+		brightness = gconf_client_get_int (manager->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_AC, NULL);
+		if (on_ac == FALSE)
+			gpm_brightness_kbd_set_std (manager->priv->brightness_kbd, brightness);
+
+	}
 }
 
 /**
@@ -1696,6 +1727,21 @@ has_inhibit_changed_cb (GpmInhibit *inhibit,
 }
 
 /**
+ * brightness_kbd_changed_cb:
+ * @brightness: The GpmBrightnessKbd class instance
+ * @percentage: The new percentage brightness
+ * @brightness: This class instance
+ *
+ * This callback is called when the brightness value changes.
+ **/
+static void
+brightness_kbd_changed_cb (GpmBrightnessKbd *brightness, gint percentage, GpmManager *manager)
+{
+	egg_debug ("Need to display backlight feedback value %i", percentage);
+	gpm_feedback_display_value (manager->priv->feedback_kbd, (float) percentage / 100.0f);
+}
+
+/**
  * gpm_manager_init:
  * @manager: This class instance
  **/
@@ -1775,7 +1821,13 @@ gpm_manager_init (GpmManager *manager)
 						     G_OBJECT (manager->priv->backlight));
 	}
 
-	manager->priv->srv_brightness_kbd = gpm_srv_brightness_kbd_new ();
+	/* use a visual widget */
+	manager->priv->feedback_kbd = gpm_feedback_new ();
+	gpm_feedback_set_icon_name (manager->priv->feedback_kbd, GPM_STOCK_BRIGHTNESS_KBD);
+
+	manager->priv->brightness_kbd = gpm_brightness_kbd_new ();
+	g_signal_connect (manager->priv->brightness_kbd, "brightness-changed",
+			  G_CALLBACK (brightness_kbd_changed_cb), manager);
 
 	manager->priv->idle = gpm_idle_new ();
 	g_signal_connect (manager->priv->idle, "idle-changed",
@@ -1884,14 +1936,13 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->srv_screensaver);
 	g_object_unref (manager->priv->prefs_server);
 	g_object_unref (manager->priv->control);
+	g_object_unref (manager->priv->feedback_kbd);
+	g_object_unref (manager->priv->button);
+	g_object_unref (manager->priv->brightness_kbd);
 
 	/* optional gobjects */
-	if (manager->priv->button)
-		g_object_unref (manager->priv->button);
 	if (manager->priv->backlight)
 		g_object_unref (manager->priv->backlight);
-	if (manager->priv->srv_brightness_kbd)
-		g_object_unref (manager->priv->srv_brightness_kbd);
 
 	G_OBJECT_CLASS (gpm_manager_parent_class)->finalize (object);
 }

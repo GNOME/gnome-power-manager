@@ -52,7 +52,6 @@ typedef struct
 
 GType		 gpm_brightness_kbd_get_type	(void);
 GpmBrightnessKbd *gpm_brightness_kbd_new	(void);
-gboolean	 gpm_brightness_kbd_has_hw	(void);
 
 gboolean	 gpm_brightness_kbd_up		(GpmBrightnessKbd	*brightness);
 gboolean	 gpm_brightness_kbd_down	(GpmBrightnessKbd	*brightness);

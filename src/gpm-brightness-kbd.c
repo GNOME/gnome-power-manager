@@ -42,8 +42,8 @@
 
 #include <hal-device.h>
 #include <hal-manager.h>
-#include "egg-dbus-proxy.h"
 
+#include "egg-dbus-proxy.h"
 #include "egg-debug.h"
 #include "egg-discrete.h"
 
@@ -58,6 +58,7 @@
 
 struct GpmBrightnessKbdPrivate
 {
+	gboolean		 has_hw;
 	gboolean		 does_own_updates;	/* keys are hardwired */
 	gboolean		 does_own_dimming;	/* hardware auto-fades */
 	gboolean		 is_dimmed;
@@ -67,7 +68,7 @@ struct GpmBrightnessKbdPrivate
 	guint			 level_std_hw;
 	guint			 levels;
 	gchar			*udi;
-	GConfClient			*conf;
+	GConfClient		*conf;
 	GpmLightSensor		*sensor;
 	EggDbusProxy		*gproxy;
 };
@@ -285,6 +286,11 @@ gpm_brightness_kbd_set_dim (GpmBrightnessKbd *brightness,
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
+	if (!brightness->priv->has_hw) {
+		egg_debug ("no hardware");
+		return FALSE;
+	}
+
 	level_hw = egg_discrete_from_percent (brightness_level, brightness->priv->levels);
 
 	/* If the current brightness_kbd is less than the dim brightness_kbd then just
@@ -318,6 +324,11 @@ gpm_brightness_kbd_set_std (GpmBrightnessKbd *brightness,
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
+	if (!brightness->priv->has_hw) {
+		egg_debug ("no hardware");
+		return FALSE;
+	}
+
 	level_hw = egg_discrete_from_percent (brightness_level,
 						 brightness->priv->levels);
 	brightness->priv->level_std_hw = level_hw;
@@ -341,6 +352,11 @@ gpm_brightness_kbd_dim (GpmBrightnessKbd *brightness)
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
+	if (!brightness->priv->has_hw) {
+		egg_debug ("no hardware");
+		return FALSE;
+	}
+
 	/* check to see if we are already dimmed */
 	if (brightness->priv->is_dimmed) {
 		egg_warning ("already dim'ed");
@@ -362,6 +378,11 @@ gpm_brightness_kbd_undim (GpmBrightnessKbd *brightness)
 {
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
+
+	if (!brightness->priv->has_hw) {
+		egg_debug ("no hardware");
+		return FALSE;
+	}
 
 	/* check to see if we are already dimmed */
 	if (brightness->priv->is_dimmed == FALSE) {
@@ -387,6 +408,11 @@ gpm_brightness_kbd_get (GpmBrightnessKbd *brightness,
 {
 	guint percentage;
 
+	if (!brightness->priv->has_hw) {
+		egg_debug ("no hardware");
+		return FALSE;
+	}
+
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
@@ -410,6 +436,11 @@ gpm_brightness_kbd_up (GpmBrightnessKbd *brightness)
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
+
+	if (!brightness->priv->has_hw) {
+		egg_debug ("no hardware");
+		return FALSE;
+	}
 
 	/* Do we find the new value, or set the new value */
 	if (brightness->priv->does_own_updates) {
@@ -446,6 +477,11 @@ gpm_brightness_kbd_down (GpmBrightnessKbd *brightness)
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
+
+	if (!brightness->priv->has_hw) {
+		egg_debug ("no hardware");
+		return FALSE;
+	}
 
 	/* Do we find the new value, or set the new value */
 	if (brightness->priv->does_own_updates) {
@@ -497,19 +533,16 @@ static void
 gpm_brightness_kbd_class_init (GpmBrightnessKbdClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	object_class->finalize	   = gpm_brightness_kbd_finalize;
+	object_class->finalize = gpm_brightness_kbd_finalize;
 
 	signals [BRIGHTNESS_CHANGED] =
 		g_signal_new ("brightness-changed",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmBrightnessKbdClass, brightness_changed),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      g_cclosure_marshal_VOID__UINT,
-			      G_TYPE_NONE,
-			      1,
-			      G_TYPE_UINT);
+			      G_TYPE_NONE, 1, G_TYPE_UINT);
 
 	g_type_class_add_private (klass, sizeof (GpmBrightnessKbdPrivate));
 }
@@ -644,6 +677,11 @@ gpm_brightness_kbd_toggle (GpmBrightnessKbd *brightness)
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
+	if (!brightness->priv->has_hw) {
+		egg_debug ("no hardware");
+		return FALSE;
+	}
+
 	if (brightness->priv->is_disabled == FALSE) {
 		/* go dark, that's what the user wants */
 		gpm_brightness_kbd_set_std (brightness, 0);
@@ -675,6 +713,16 @@ gpm_brightness_kbd_init (GpmBrightnessKbd *brightness)
 
 	brightness->priv = GPM_BRIGHTNESS_KBD_GET_PRIVATE (brightness);
 
+	manager = hal_manager_new ();
+
+	/* save udi of kbd adapter */
+	hal_manager_find_capability (manager, "keyboard_backlight", &names, NULL);
+	if (names == NULL || names[0] == NULL) {
+		egg_warning ("No devices of capability keyboard_backlight");
+		brightness->priv->has_hw = FALSE;
+		goto out;
+	}
+
 	/* listen for ambient light changes.. if we have an ambient light sensor */
 	brightness->priv->sensor = gpm_light_sensor_new ();
 	if (brightness->priv->sensor != NULL) {
@@ -682,22 +730,12 @@ gpm_brightness_kbd_init (GpmBrightnessKbd *brightness)
 				  G_CALLBACK (sensor_changed_cb), brightness);
 	}
 
-	/* save udi of kbd adapter */
-	manager = hal_manager_new ();
-	hal_manager_find_capability (manager, "keyboard_backlight", &names, NULL);
-	g_object_unref (manager);
-	if (names == NULL || names[0] == NULL) {
-		egg_warning ("No devices of capability keyboard_backlight");
-		return;
-	}
-
 	/* We only want first keyboard_backlight object (should only be one) */
 	brightness->priv->udi = g_strdup (names[0]);
-	hal_manager_free_capability (names);
-
 	brightness->priv->does_own_dimming = FALSE;
 	brightness->priv->does_own_updates = FALSE;
 	brightness->priv->is_disabled = FALSE;
+	brightness->priv->has_hw = TRUE;
 
 	/* get a managed proxy */
 	brightness->priv->gproxy = egg_dbus_proxy_new ();
@@ -725,33 +763,9 @@ gpm_brightness_kbd_init (GpmBrightnessKbd *brightness)
 
 	/* choose a start value */
 	adjust_kbd_brightness_according_to_ambient_light (brightness, TRUE);
-}
-
-/**
- * gpm_brightness_kbd_has_hw:
- *
- * Self contained function that works out if we have the hardware.
- * If not, we return FALSE and the module is unloaded.
- **/
-gboolean
-gpm_brightness_kbd_has_hw (void)
-{
-	HalManager *manager;
-	gchar **names;
-	gboolean ret = TRUE;
-
-	/* okay, as singleton - so we don't allocate more memory */
-	manager = hal_manager_new ();
-	hal_manager_find_capability (manager, "keyboard_backlight", &names, NULL);
-	g_object_unref (manager);
-
-	/* nothing found */
-	if (names == NULL || names[0] == NULL) {
-		ret = FALSE;
-	}
-
+out:
 	hal_manager_free_capability (names);
-	return ret;
+	g_object_unref (manager);
 }
 
 /**
@@ -762,12 +776,6 @@ GpmBrightnessKbd *
 gpm_brightness_kbd_new (void)
 {
 	GpmBrightnessKbd *brightness;
-
-	/* only load an instance of this module if we have the hardware */
-	if (gpm_brightness_kbd_has_hw () == FALSE) {
-		return NULL;
-	}
-
 	brightness = g_object_new (GPM_TYPE_BRIGHTNESS_KBD, NULL);
 	return GPM_BRIGHTNESS_KBD (brightness);
 }

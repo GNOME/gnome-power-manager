@@ -112,8 +112,7 @@ gpm_warnings_get_state_time (GpmWarnings  *warnings,
 }
 
 static GpmWarningsState
-gpm_warnings_get_state_percentage (GpmWarnings  *warnings,
-		                  GpmCellUnit *unit)
+gpm_warnings_get_state_percentage (GpmWarnings *warnings, GpmCellUnit *unit)
 {
 	if (unit->percentage == 0) {
 		/* this is probably an error condition */
@@ -142,8 +141,7 @@ gpm_warnings_get_state_percentage (GpmWarnings  *warnings,
  * Return value: A GpmWarnings state, e.g. GPM_WARNINGS_VERY_LOW
  **/
 GpmWarningsState
-gpm_warnings_get_state (GpmWarnings  *warnings,
-		       GpmCellUnit *unit)
+gpm_warnings_get_state (GpmWarnings  *warnings, GpmCellUnit *unit)
 {
 	GpmWarningsState type;
 
@@ -202,19 +200,20 @@ gpm_warnings_finalize (GObject *object)
 
 /**
  * gconf_key_changed_cb:
+ *
+ * We might have to do things when the gconf keys change; do them here.
  **/
 static void
-gconf_key_changed_cb (GConfClient     *conf,
-		      const gchar *key,
-		      GpmWarnings  *warnings)
+gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *entry, GpmWarnings *warnings)
 {
-	g_return_if_fail (GPM_IS_WARNINGS (warnings));
+	GConfValue *value;
 
-	if (strcmp (key, GPM_CONF_USE_TIME_POLICY) == 0) {
-		warnings->priv->use_time_primary =
-			gconf_client_get_bool (warnings->priv->conf,
-					       GPM_CONF_USE_TIME_POLICY, NULL);
-	}
+	value = gconf_entry_get_value (entry);
+	if (value == NULL)
+		return;
+
+	if (strcmp (entry->key, GPM_CONF_USE_TIME_POLICY) == 0)
+		warnings->priv->use_time_primary = gconf_value_get_bool (value);
 }
 
 /**
@@ -244,8 +243,11 @@ gpm_warnings_init (GpmWarnings *warnings)
 
 	warnings->priv->time_is_accurate = TRUE;
 	warnings->priv->conf = gconf_client_get_default ();
-	g_signal_connect (warnings->priv->conf, "value-changed",
-			  G_CALLBACK (gconf_key_changed_cb), warnings);
+	gconf_client_add_dir (warnings->priv->conf, GPM_CONF_DIR,
+			      GCONF_CLIENT_PRELOAD_NONE, NULL);
+	gconf_client_notify_add (warnings->priv->conf, GPM_CONF_DIR,
+				 (GConfClientNotifyFunc) gconf_key_changed_cb,
+				 warnings, NULL, NULL);
 
 	/* get percentage policy */
 	warnings->priv->low_percentage = gconf_client_get_int (warnings->priv->conf, GPM_CONF_THRESH_PERCENTAGE_LOW, NULL);
@@ -260,11 +262,10 @@ gpm_warnings_init (GpmWarnings *warnings)
 	/* We can disable this if the ACPI BIOS is broken, and the
 	   time_remaining is therefore inaccurate or just plain wrong. */
 	warnings->priv->use_time_primary = gconf_client_get_bool (warnings->priv->conf, GPM_CONF_USE_TIME_POLICY, NULL);
-	if (warnings->priv->use_time_primary) {
+	if (warnings->priv->use_time_primary)
 		egg_debug ("Using per-time notification policy");
-	} else {
+	else
 		egg_debug ("Using percentage notification policy");
-	}
 }
 
 /**
