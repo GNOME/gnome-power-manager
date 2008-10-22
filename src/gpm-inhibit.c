@@ -26,10 +26,11 @@
 #include <dbus/dbus-glib-lowlevel.h>
 #include <glib/gi18n.h>
 #include <string.h>
+#include <gconf/gconf-client.h>
 
 #include "egg-debug.h"
+#include "gpm-common.h"
 #include "gpm-inhibit.h"
-#include "gpm-conf.h"
 
 static void     gpm_inhibit_class_init (GpmInhibitClass *klass);
 static void     gpm_inhibit_init       (GpmInhibit      *inhibit);
@@ -49,7 +50,7 @@ struct GpmInhibitPrivate
 {
 	GSList			*list;
 	DBusGProxy		*proxy;
-	GpmConf			*conf;
+	GConfClient			*conf;
 	gboolean		 ignore_inhibits;
 };
 
@@ -345,9 +346,7 @@ gpm_inhibit_has_inhibit (GpmInhibit *inhibit,
  *
  **/
 void
-gpm_inhibit_get_message (GpmInhibit  *inhibit,
-			 GString     *message,
-			 const gchar *action)
+gpm_inhibit_get_message (GpmInhibit *inhibit, GString *message, const gchar *action)
 {
 	guint a;
 	GpmInhibitData *data;
@@ -421,19 +420,21 @@ gpm_inhibit_get_message (GpmInhibit  *inhibit,
 }
 
 /**
- * conf_key_changed_cb:
+ * gpm_conf_gconf_key_changed_cb:
  *
  * We might have to do things when the gconf keys change; do them here.
  **/
 static void
-conf_key_changed_cb (GpmConf       *conf,
-		     const gchar   *key,
-		     GpmInhibit    *inhibit)
+gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *entry, GpmInhibit *inhibit)
 {
-	if (strcmp (key, GPM_CONF_IGNORE_INHIBITS) == 0) {
-		gpm_conf_get_bool (inhibit->priv->conf, GPM_CONF_IGNORE_INHIBITS,
-				   &inhibit->priv->ignore_inhibits);
-	}
+	GConfValue *value;
+
+	value = gconf_entry_get_value (entry);
+	if (value == NULL)
+		return;
+
+	if (strcmp (entry->key, GPM_CONF_IGNORE_INHIBITS) == 0)
+		inhibit->priv->ignore_inhibits = gconf_value_get_bool (value);
 }
 
 /** intialise the class */
@@ -461,9 +462,14 @@ gpm_inhibit_init (GpmInhibit *inhibit)
 
 	inhibit->priv = GPM_INHIBIT_GET_PRIVATE (inhibit);
 	inhibit->priv->list = NULL;
-	inhibit->priv->conf = gpm_conf_new ();
-	g_signal_connect (inhibit->priv->conf, "value-changed",
-			  G_CALLBACK (conf_key_changed_cb), inhibit);
+	inhibit->priv->conf = gconf_client_get_default ();
+
+	/* watch gnome-power-manager keys */
+	gconf_client_add_dir (inhibit->priv->conf, GPM_CONF_DIR,
+			      GCONF_CLIENT_PRELOAD_NONE, NULL);
+	gconf_client_notify_add (inhibit->priv->conf, GPM_CONF_DIR,
+				 (GConfClientNotifyFunc) gpm_conf_gconf_key_changed_cb,
+				 inhibit, NULL, NULL);
 
 	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (error != NULL) {
@@ -480,7 +486,7 @@ gpm_inhibit_init (GpmInhibit *inhibit)
 				     inhibit, NULL);
 
 	/* Do we ignore inhibit requests? */
-	gpm_conf_get_bool (inhibit->priv->conf, GPM_CONF_IGNORE_INHIBITS, &inhibit->priv->ignore_inhibits);
+	inhibit->priv->ignore_inhibits = gconf_client_get_bool (inhibit->priv->conf, GPM_CONF_IGNORE_INHIBITS, NULL);
 }
 
 /** finalise the object */

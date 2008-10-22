@@ -38,6 +38,7 @@
 
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
+#include <gconf/gconf-client.h>
 
 #include <hal-device.h>
 #include <hal-manager.h>
@@ -47,7 +48,6 @@
 #include "egg-discrete.h"
 
 #include "gpm-brightness-kbd.h"
-#include "gpm-conf.h"
 #include "gpm-common.h"
 #include "gpm-light-sensor.h"
 #include "gpm-marshal.h"
@@ -67,7 +67,7 @@ struct GpmBrightnessKbdPrivate
 	guint			 level_std_hw;
 	guint			 levels;
 	gchar			*udi;
-	GpmConf			*conf;
+	GConfClient			*conf;
 	GpmLightSensor		*sensor;
 	EggDbusProxy		*gproxy;
 };
@@ -479,18 +479,12 @@ gpm_brightness_kbd_finalize (GObject *object)
 	g_return_if_fail (GPM_IS_BRIGHTNESS_KBD (object));
 	brightness = GPM_BRIGHTNESS_KBD (object);
 
-	if (brightness->priv->udi != NULL) {
+	if (brightness->priv->udi != NULL)
 		g_free (brightness->priv->udi);
-	}
-	if (brightness->priv->gproxy != NULL) {
+	if (brightness->priv->gproxy != NULL)
 		g_object_unref (brightness->priv->gproxy);
-	}
-	if (brightness->priv->conf != NULL) {
-		g_object_unref (brightness->priv->conf);
-	}
-	if (brightness->priv->sensor != NULL) {
+	if (brightness->priv->sensor != NULL)
 		g_object_unref (brightness->priv->sensor);
-	}
 
 	g_return_if_fail (brightness->priv != NULL);
 	G_OBJECT_CLASS (gpm_brightness_kbd_parent_class)->finalize (object);
@@ -680,8 +674,6 @@ gpm_brightness_kbd_init (GpmBrightnessKbd *brightness)
 	DBusGConnection *connection;
 
 	brightness->priv = GPM_BRIGHTNESS_KBD_GET_PRIVATE (brightness);
-
-	brightness->priv->conf = gpm_conf_new ();
 
 	/* listen for ambient light changes.. if we have an ambient light sensor */
 	brightness->priv->sensor = gpm_light_sensor_new ();

@@ -39,7 +39,7 @@
 #include <dbus/dbus-glib.h>
 
 #include "gpm-common.h"
-#include "gpm-conf.h"
+#include <gconf/gconf-client.h>
 #include "egg-debug.h"
 #include "gpm-cell-unit.h"
 #include "gpm-warnings.h"
@@ -48,7 +48,7 @@
 
 struct GpmWarningsPrivate
 {
-	GpmConf			*conf;
+	GConfClient			*conf;
 	gboolean		 use_time_primary;
 	gboolean		 time_is_accurate;
 
@@ -204,16 +204,16 @@ gpm_warnings_finalize (GObject *object)
  * gconf_key_changed_cb:
  **/
 static void
-gconf_key_changed_cb (GpmConf     *conf,
+gconf_key_changed_cb (GConfClient     *conf,
 		      const gchar *key,
 		      GpmWarnings  *warnings)
 {
 	g_return_if_fail (GPM_IS_WARNINGS (warnings));
 
 	if (strcmp (key, GPM_CONF_USE_TIME_POLICY) == 0) {
-		gpm_conf_get_bool (warnings->priv->conf,
-				   GPM_CONF_USE_TIME_POLICY,
-				   &warnings->priv->use_time_primary);
+		warnings->priv->use_time_primary =
+			gconf_client_get_bool (warnings->priv->conf,
+					       GPM_CONF_USE_TIME_POLICY, NULL);
 	}
 }
 
@@ -243,23 +243,23 @@ gpm_warnings_init (GpmWarnings *warnings)
 	warnings->priv = GPM_WARNINGS_GET_PRIVATE (warnings);
 
 	warnings->priv->time_is_accurate = TRUE;
-	warnings->priv->conf = gpm_conf_new ();
+	warnings->priv->conf = gconf_client_get_default ();
 	g_signal_connect (warnings->priv->conf, "value-changed",
 			  G_CALLBACK (gconf_key_changed_cb), warnings);
 
 	/* get percentage policy */
-	gpm_conf_get_uint (warnings->priv->conf, GPM_CONF_THRESH_PERCENTAGE_LOW, &warnings->priv->low_percentage);
-	gpm_conf_get_uint (warnings->priv->conf, GPM_CONF_THRESH_PERCENTAGE_CRITICAL, &warnings->priv->critical_percentage);
-	gpm_conf_get_uint (warnings->priv->conf, GPM_CONF_THRESH_PERCENTAGE_ACTION, &warnings->priv->action_percentage);
+	warnings->priv->low_percentage = gconf_client_get_int (warnings->priv->conf, GPM_CONF_THRESH_PERCENTAGE_LOW, NULL);
+	warnings->priv->critical_percentage = gconf_client_get_int (warnings->priv->conf, GPM_CONF_THRESH_PERCENTAGE_CRITICAL, NULL);
+	warnings->priv->action_percentage = gconf_client_get_int (warnings->priv->conf, GPM_CONF_THRESH_PERCENTAGE_ACTION, NULL);
 
 	/* get time policy */
-	gpm_conf_get_uint (warnings->priv->conf, GPM_CONF_THRESH_TIME_LOW, &warnings->priv->low_time);
-	gpm_conf_get_uint (warnings->priv->conf, GPM_CONF_THRESH_TIME_CRITICAL, &warnings->priv->critical_time);
-	gpm_conf_get_uint (warnings->priv->conf, GPM_CONF_THRESH_TIME_ACTION, &warnings->priv->action_time);
+	warnings->priv->low_time = gconf_client_get_int (warnings->priv->conf, GPM_CONF_THRESH_TIME_LOW, NULL);
+	warnings->priv->critical_time = gconf_client_get_int (warnings->priv->conf, GPM_CONF_THRESH_TIME_CRITICAL, NULL);
+	warnings->priv->action_time = gconf_client_get_int (warnings->priv->conf, GPM_CONF_THRESH_TIME_ACTION, NULL);
 
 	/* We can disable this if the ACPI BIOS is broken, and the
 	   time_remaining is therefore inaccurate or just plain wrong. */
-	gpm_conf_get_bool (warnings->priv->conf, GPM_CONF_USE_TIME_POLICY, &warnings->priv->use_time_primary);
+	warnings->priv->use_time_primary = gconf_client_get_bool (warnings->priv->conf, GPM_CONF_USE_TIME_POLICY, NULL);
 	if (warnings->priv->use_time_primary) {
 		egg_debug ("Using per-time notification policy");
 	} else {

@@ -29,12 +29,12 @@
 #include <dbus/dbus-glib.h>
 #include <math.h>
 #include <string.h>
+#include <gconf/gconf-client.h>
 
 #include "gpm-array.h"
 #include "gpm-array-float.h"
 #include "gpm-common.h"
 #include "gpm-prefs.h"
-#include "gpm-conf.h"
 #include "gpm-statistics-core.h"
 #include "egg-debug.h"
 #include "gpm-stock-icons.h"
@@ -72,7 +72,7 @@ struct GpmStatisticsPrivate
 {
 	GladeXML		*glade_xml;
 	GtkWidget		*graph_widget;
-	GpmConf			*conf;
+	GConfClient			*conf;
 	EggDbusProxy		*gproxy;
 	GpmArray		*events;
 	GpmArray		*data;
@@ -163,28 +163,29 @@ gpm_statistics_close_cb (GtkWidget	*widget,
  * @graph: This graph class instance
  **/
 static gboolean
-gpm_statistics_delete_event_cb (GtkWidget	*widget,
-			  GdkEvent	*event,
-			  GpmStatistics	*statistics)
+gpm_statistics_delete_event_cb (GtkWidget *widget, GdkEvent *event, GpmStatistics *statistics)
 {
 	gpm_statistics_close_cb (widget, statistics);
 	return FALSE;
 }
 
 /**
- * conf_key_changed_cb:
+ * gpm_conf_gconf_key_changed_cb:
  *
  * We might have to do things when the gconf keys change; do them here.
  **/
 static void
-conf_key_changed_cb (GpmConf       *conf,
-		     const gchar   *key,
-		     GpmStatistics *statistics)
+gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *entry, GpmStatistics *statistics)
 {
-	gboolean  enabled;
+	GConfValue *value;
+	gboolean enabled;
 
-	if (strcmp (key, GPM_CONF_LOWPOWER_AC) == 0) {
-		gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_LOWPOWER_AC, &enabled);
+	value = gconf_entry_get_value (entry);
+	if (value == NULL)
+		return;
+
+	if (strcmp (entry->key, GPM_CONF_LOWPOWER_AC) == 0) {
+		enabled = gconf_value_get_bool (value);
 		egg_debug ("need to enable checkbox");
 	}
 }
@@ -299,7 +300,7 @@ gpm_statistics_checkbox_events_cb (GtkWidget     *widget,
 	egg_debug ("Events enable %i", checked);
 
 	/* save to gconf so we open next time with the correct setting */
-	gpm_conf_set_bool (statistics->priv->conf, GPM_CONF_STATS_SHOW_EVENTS, checked);
+	gconf_client_set_bool (statistics->priv->conf, GPM_CONF_STATS_SHOW_EVENTS, checked, NULL);
 
 	if (checked == FALSE) {
 		/* remove the dots from the graph */
@@ -330,7 +331,7 @@ gpm_statistics_refresh_axis_labels (GpmStatistics *statistics)
 	GtkWidget *widget2;
 
 	/* save to gconf so we open next time with the correct setting */
-	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STATS_SHOW_AXIS_LABELS, &show);
+	show = gconf_client_get_bool (statistics->priv->conf, GPM_CONF_STATS_SHOW_AXIS_LABELS, NULL);
 
 	widget1 = glade_xml_get_widget (statistics->priv->glade_xml, "label_x_axis");
 	widget2 = glade_xml_get_widget (statistics->priv->glade_xml, "label_y_axis");
@@ -617,7 +618,7 @@ gpm_statistics_refresh_data (GpmStatistics *statistics)
 		gpm_statistics_get_data_dbus (statistics, statistics->priv->graph_type);
 	}
 
-	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STATS_SMOOTH_DATA, &smooth);
+	smooth = gconf_client_get_bool (statistics->priv->conf, GPM_CONF_STATS_SMOOTH_DATA, NULL);
 	if (smooth) {
 		GArray *arrayfloat;
 		GArray *kernel;
@@ -683,7 +684,7 @@ gpm_statistics_type_combo_changed_cb (GtkWidget      *widget,
 	statistics->priv->graph_type = type;
 
 	/* save in gconf so we choose the correct graph type on next startup */
-	gpm_conf_set_string (statistics->priv->conf, GPM_CONF_STATS_GRAPH_TYPE, type);
+	gconf_client_set_string (statistics->priv->conf, GPM_CONF_STATS_GRAPH_TYPE, type, NULL);
 
 	/* refresh data automatically */
 	gpm_statistics_refresh_data (statistics);
@@ -709,11 +710,10 @@ gpm_statistics_populate_graph_types (GpmStatistics *statistics,
 		return;
 	}
 
-	gpm_conf_get_string (statistics->priv->conf, GPM_CONF_STATS_GRAPH_TYPE, &saved);
+	saved = gconf_client_get_string (statistics->priv->conf, GPM_CONF_STATS_GRAPH_TYPE, NULL);
 	/* gconf error, bahh */
-	if (saved == NULL) {
+	if (saved == NULL)
 		saved = g_strdup ("power");
-	}
 
 	count = 0;
 	pos = 0;
@@ -739,9 +739,8 @@ gpm_statistics_populate_graph_types (GpmStatistics *statistics,
 			type_localized = _("Unknown");
 		}
 		/* is this the same value as we have stored in gconf? */
-		if (strcmp (type, saved) == 0) {
+		if (strcmp (type, saved) == 0)
 			pos = count;
-		}
 		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), type_localized);
 		count++;
 	}
@@ -796,9 +795,13 @@ gpm_statistics_init (GpmStatistics *statistics)
 
 	statistics->priv = GPM_STATISTICS_GET_PRIVATE (statistics);
 
-	statistics->priv->conf = gpm_conf_new ();
-	g_signal_connect (statistics->priv->conf, "value-changed",
-			  G_CALLBACK (conf_key_changed_cb), statistics);
+	statistics->priv->conf = gconf_client_get_default ();
+	/* watch gnome-power-manager keys */
+	gconf_client_add_dir (statistics->priv->conf, GPM_CONF_DIR,
+			      GCONF_CLIENT_PRELOAD_NONE, NULL);
+	gconf_client_notify_add (statistics->priv->conf, GPM_CONF_DIR,
+				 (GConfClientNotifyFunc) gpm_conf_gconf_key_changed_cb,
+				 statistics, NULL, NULL);
 
 	glade_set_custom_handler (gpm_graph_widget_custom_handler, statistics);
 
@@ -851,7 +854,7 @@ gpm_statistics_init (GpmStatistics *statistics)
 	gpm_statistics_populate_graph_types (statistics, widget);
 
 	widget = glade_xml_get_widget (statistics->priv->glade_xml, "checkbutton_events");
-	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STATS_SHOW_EVENTS, &checked);
+	checked = gconf_client_get_bool (statistics->priv->conf, GPM_CONF_STATS_SHOW_EVENTS, NULL);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_statistics_checkbox_events_cb), statistics);

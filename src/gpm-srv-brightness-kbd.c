@@ -38,12 +38,12 @@
 
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
+#include <gconf/gconf-client.h>
 
 #include "gpm-ac-adapter.h"
 #include "gpm-button.h"
 #include "gpm-brightness-kbd.h"
 #include "gpm-srv-brightness-kbd.h"
-#include "gpm-conf.h"
 #include "gpm-common.h"
 #include "egg-debug.h"
 #include "gpm-feedback-widget.h"
@@ -60,7 +60,7 @@ struct GpmSrvBrightnessKbdPrivate
 	GpmAcAdapter		*ac_adapter;
 	GpmButton		*button;
 	GpmBrightnessKbd	*brightness;
-	GpmConf			*conf;
+	GConfClient		*conf;
 	GpmFeedback		*feedback;
 	GpmIdle			*idle;
 	GpmLightSensor		*sensor;
@@ -74,7 +74,7 @@ G_DEFINE_TYPE (GpmSrvBrightnessKbd, gpm_srv_brightness_kbd, G_TYPE_OBJECT)
  * We might have to do things when the gconf keys change; do them here.
  **/
 static void
-conf_key_changed_cb (GpmConf          *conf,
+conf_key_changed_cb (GConfClient          *conf,
 		     const gchar      *key,
 		     GpmSrvBrightnessKbd *srv_brightness)
 {
@@ -85,17 +85,15 @@ conf_key_changed_cb (GpmConf          *conf,
 
 	if (strcmp (key, GPM_CONF_KEYBOARD_BRIGHTNESS_AC) == 0) {
 
-		gpm_conf_get_int (srv_brightness->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_AC, &value);
-		if (on_ac) {
+		value = gconf_client_get_int (srv_brightness->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_AC, NULL);
+		if (on_ac)
 			gpm_brightness_kbd_set_std (srv_brightness->priv->brightness, value);
-		}
 
 	} else if (strcmp (key, GPM_CONF_KEYBOARD_BRIGHTNESS_BATT) == 0) {
 
-		gpm_conf_get_int (srv_brightness->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_AC, &value);
-		if (on_ac == FALSE) {
+		value = gconf_client_get_int (srv_brightness->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_AC, NULL);
+		if (on_ac == FALSE)
 			gpm_brightness_kbd_set_std (srv_brightness->priv->brightness, value);
-		}
 
 	}
 }
@@ -115,11 +113,10 @@ ac_adapter_changed_cb (GpmAcAdapter      *ac_adapter,
 {
 	guint value;
 
-	if (on_ac) {
-		gpm_conf_get_uint (srv_brightness->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_AC, &value);
-	} else {
-		gpm_conf_get_uint (srv_brightness->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_BATT, &value);
-	}
+	if (on_ac)
+		value = gconf_client_get_int (srv_brightness->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_AC, NULL);
+	else
+		value = gconf_client_get_int (srv_brightness->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_BATT, NULL);
 
 	gpm_brightness_kbd_set_std (srv_brightness->priv->brightness, value);
 }
@@ -256,7 +253,7 @@ gpm_srv_brightness_kbd_init (GpmSrvBrightnessKbd *srv_brightness)
 {
 	srv_brightness->priv = GPM_SRV_BRIGHTNESS_KBD_GET_PRIVATE (srv_brightness);
 
-	srv_brightness->priv->conf = gpm_conf_new ();
+	srv_brightness->priv->conf = gconf_client_get_default ();
 
 	/* watch for dim value changes */
 	g_signal_connect (srv_brightness->priv->conf, "value-changed",

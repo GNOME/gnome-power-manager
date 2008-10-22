@@ -73,8 +73,6 @@ gnome_power_statistics_SOURCES =			\
 	gpm-graph-widget.c				\
 	gpm-marshal.h					\
 	gpm-marshal.c					\
-	gpm-conf.h					\
-	gpm-conf.c					\
 	gpm-common.h					\
 	gpm-common.c					\
 	$(NULL)
@@ -101,8 +99,6 @@ gnome_power_preferences_SOURCES =			\
 	egg-dbus-monitor.c				\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
-	gpm-conf.h					\
-	gpm-conf.c					\
 	gpm-idle.h					\
 	gpm-idle.c					\
 	gpm-load.h					\
@@ -171,8 +167,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-srv-brightness-kbd.c			\
 	gpm-srv-screensaver.h				\
 	gpm-srv-screensaver.c				\
-	gpm-conf.h					\
-	gpm-conf.c					\
 	gpm-idle.h					\
 	gpm-idle.c					\
 	gpm-load.h					\
@@ -288,8 +282,6 @@ gnome_power_self_test_SOURCES =				\
 	gpm-cell-array.c				\
 	gpm-warnings.h					\
 	gpm-warnings.c					\
-	gpm-conf.h					\
-	gpm-conf.c					\
 	gpm-idle.h					\
 	gpm-idle.c					\
 	gpm-load.h					\

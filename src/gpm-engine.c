@@ -24,13 +24,13 @@
 #include <string.h>
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <gconf/gconf-client.h>
 
 #include <hal-device.h>
 #include <hal-manager.h>
 
 #include "gpm-ac-adapter.h"
 #include "gpm-common.h"
-#include "gpm-conf.h"
 #include "gpm-control.h"
 #include "gpm-profile.h"
 #include "gpm-marshal.h"
@@ -54,7 +54,7 @@ static void     gpm_engine_finalize   (GObject	  *object);
 
 struct GpmEnginePrivate
 {
-	GpmConf			*conf;
+	GConfClient		*conf;
 	GpmWarnings		*warnings;
 	GpmIconPolicy		 icon_policy;
 	GpmProfile		*profile;
@@ -484,7 +484,7 @@ gpm_cell_array_perhaps_recall_cb (GpmCellArray *cell_array, gchar *oem_vendor, g
 	kind = gpm_cell_array_get_kind (cell_array);
 
 	/* only emit this if specified in gconf */
-	gpm_conf_get_bool (engine->priv->conf, GPM_CONF_NOTIFY_PERHAPS_RECALL, &show_recall);
+	show_recall = gconf_client_get_bool (engine->priv->conf, GPM_CONF_NOTIFY_PERHAPS_RECALL, NULL);
 
 	if (show_recall) {
 		/* just proxy it to the GUI layer */
@@ -509,7 +509,7 @@ gpm_cell_array_low_capacity_cb (GpmCellArray *cell_array, guint capacity, GpmEng
 	kind = gpm_cell_array_get_kind (cell_array);
 
 	/* only emit this if specified in gconf */
-	gpm_conf_get_bool (engine->priv->conf, GPM_CONF_NOTIFY_LOW_CAPACITY, &show_capacity);
+	show_capacity = gconf_client_get_bool (engine->priv->conf, GPM_CONF_NOTIFY_LOW_CAPACITY, NULL);
 
 	/* only emit this once per startup */
 	if (show_capacity) {
@@ -709,7 +709,7 @@ gpm_cell_array_discharging_changed_cb (GpmCellArray *cell_array,
 	if (discharging) {
 
 		/* only emit this if specified in gconf */
-		gpm_conf_get_bool (engine->priv->conf, GPM_CONF_NOTIFY_DISCHARGING, &show_discharging);
+		show_discharging = gconf_client_get_bool (engine->priv->conf, GPM_CONF_NOTIFY_DISCHARGING, NULL);
 
 		/* don't show warning */
 		if (show_discharging == FALSE) {
@@ -771,7 +771,7 @@ gpm_cell_array_fully_charged_cb (GpmCellArray *cell_array,
 	gpm_engine_recalculate_state (engine);
 
 	/* only emit this if specified in gconf */
-	gpm_conf_get_bool (engine->priv->conf, GPM_CONF_NOTIFY_FULLY_CHARGED, &show_fully_charged);
+	show_fully_charged = gconf_client_get_bool (engine->priv->conf, GPM_CONF_NOTIFY_FULLY_CHARGED, NULL);
 
 	/* only emit if in GConf */
 	if (show_fully_charged) {
@@ -866,7 +866,7 @@ gpm_cell_array_charge_action_cb (GpmCellArray *cell_array,
  * conf_key_changed_cb:
  **/
 static void
-conf_key_changed_cb (GpmConf     *conf,
+conf_key_changed_cb (GConfClient     *conf,
 		     const gchar *key,
 		     GpmEngine   *engine)
 {
@@ -874,7 +874,7 @@ conf_key_changed_cb (GpmConf     *conf,
 	if (strcmp (key, GPM_CONF_UI_ICON_POLICY) == 0) {
 
 		/* do we want to display the icon in the tray */
-		gpm_conf_get_string (conf, GPM_CONF_UI_ICON_POLICY, &icon_policy);
+		icon_policy = gconf_client_get_string (conf, GPM_CONF_UI_ICON_POLICY, NULL);
 		engine->priv->icon_policy = gpm_tray_icon_mode_from_string (icon_policy);
 		g_free (icon_policy);
 
@@ -895,7 +895,7 @@ gpm_engine_init (GpmEngine *engine)
 
 	engine->priv = GPM_ENGINE_GET_PRIVATE (engine);
 
-	engine->priv->conf = gpm_conf_new ();
+	engine->priv->conf = gconf_client_get_default ();
 	g_signal_connect (engine->priv->conf, "value-changed",
 			  G_CALLBACK (conf_key_changed_cb), engine);
 
@@ -908,7 +908,7 @@ gpm_engine_init (GpmEngine *engine)
 	engine->priv->during_coldplug = TRUE;
 
 	/* do we want to display the icon in the tray */
-	gpm_conf_get_string (engine->priv->conf, GPM_CONF_UI_ICON_POLICY, &icon_policy);
+	icon_policy = gconf_client_get_string (engine->priv->conf, GPM_CONF_UI_ICON_POLICY, NULL);
 	engine->priv->icon_policy = gpm_tray_icon_mode_from_string (icon_policy);
 	g_free (icon_policy);
 

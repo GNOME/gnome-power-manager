@@ -47,14 +47,14 @@
 
 #include "gpm-common.h"
 #include "gpm-light-sensor.h"
-#include "gpm-conf.h"
+#include <gconf/gconf-client.h>
 #include "gpm-marshal.h"
 
 #define GPM_LIGHT_SENSOR_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_LIGHT_SENSOR, GpmLightSensorPrivate))
 
 struct GpmLightSensorPrivate
 {
-	GpmConf			*conf;
+	GConfClient			*conf;
 	guint			 current_hw;		/* hardware */
 	guint			 levels;
 	gfloat			 calibration_abs;
@@ -243,8 +243,7 @@ gpm_light_sensor_class_init (GpmLightSensorClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmLightSensorClass, sensor_changed),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      g_cclosure_marshal_VOID__UINT,
 			      G_TYPE_NONE,
 			      1,
@@ -260,9 +259,8 @@ gboolean
 gpm_light_sensor_has_hw (GpmLightSensor *sensor)
 {
 	g_return_val_if_fail (sensor != NULL, FALSE);
-	if (sensor->priv->has_sensor) {
+	if (sensor->priv->has_sensor)
 		return TRUE;
-	}
 	return FALSE;
 }
 
@@ -283,11 +281,9 @@ gpm_light_sensor_poll_cb (gpointer userdata)
 	sensor = GPM_LIGHT_SENSOR (userdata);
 
 	/* check if we should poll the h/w */
-	gpm_conf_get_bool (sensor->priv->conf, GPM_CONF_AMBIENT_ENABLE, &enable);
-	if (enable == FALSE) {
-		/* don't bother polling */
+	enable = gconf_client_get_bool (sensor->priv->conf, GPM_CONF_AMBIENT_ENABLE, NULL);
+	if (enable == FALSE)
 		return TRUE;
-	}
 
 	if (sensor->priv->has_sensor) {
 		/* fairly slow */
@@ -302,19 +298,6 @@ gpm_light_sensor_poll_cb (gpointer userdata)
 	}
 
 	return TRUE;
-}
-
-/**
- * conf_key_changed_cb:
- *
- * We might have to do things when the gconf keys change; do them here.
- **/
-static void
-conf_key_changed_cb (GpmConf     *conf,
-		     const gchar *key,
-		     GpmLightSensor *sensor)
-{
-	//
 }
 
 /**
@@ -339,10 +322,7 @@ gpm_light_sensor_init (GpmLightSensor *sensor)
 	sensor->priv->gproxy = NULL;
 	sensor->priv->udi = NULL;
 	sensor->priv->calibration_abs = 0.0f;
-
-	sensor->priv->conf = gpm_conf_new ();
-	g_signal_connect (sensor->priv->conf, "value-changed",
-			  G_CALLBACK (conf_key_changed_cb), sensor);
+	sensor->priv->conf = gconf_client_get_default ();
 
 	/* see if we can find  */
 	manager = hal_manager_new ();
@@ -383,7 +363,7 @@ gpm_light_sensor_init (GpmLightSensor *sensor)
 		egg_debug ("current brightness is %i%%", sensor->priv->current_hw);
 
 		/* get poll timeout */
-		gpm_conf_get_uint (sensor->priv->conf, GPM_CONF_AMBIENT_POLL, &timeout);
+		timeout = gconf_client_get_int (sensor->priv->conf, GPM_CONF_AMBIENT_POLL, NULL);
 		g_timeout_add (timeout * 1000, gpm_light_sensor_poll_cb, sensor);
 	}
 }

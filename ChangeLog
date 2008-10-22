@@ -1,3 +1,74 @@
+2008-10-22  Richard Hughes  <richard@hughsie.com>
+
+	* src/Makefile.am:
+	* src/gpm-backlight.c: (gpm_backlight_sync_policy),
+	(gpm_backlight_brightness_evaluate_and_set),
+	(gpm_conf_gconf_key_changed_cb),
+	(gpm_backlight_notify_system_idle_changed), (gpm_backlight_init):
+	* src/gpm-brightness-kbd.c: (gpm_brightness_kbd_finalize),
+	(gpm_brightness_kbd_init):
+	* src/gpm-cell-array.c: (gpm_cell_array_get_time_until_action),
+	(conf_key_changed_cb), (gpm_cell_array_init):
+	* src/gpm-common.h:
+	* src/gpm-conf.c:
+	* src/gpm-conf.h:
+	* src/gpm-control.c: (gpm_control_error_quark),
+	(gpm_control_allowed_suspend), (gpm_control_allowed_hibernate),
+	(gpm_control_allowed_shutdown), (gpm_control_allowed_reboot),
+	(gpm_control_shutdown), (gpm_control_reboot),
+	(gpm_control_get_lock_policy), (gpm_control_suspend),
+	(gpm_control_hibernate), (gpm_control_init):
+	* src/gpm-dpms.c:
+	* src/gpm-engine.c: (gpm_cell_array_perhaps_recall_cb),
+	(gpm_cell_array_low_capacity_cb),
+	(gpm_cell_array_discharging_changed_cb),
+	(gpm_cell_array_fully_charged_cb), (conf_key_changed_cb),
+	(gpm_engine_init):
+	* src/gpm-info.c: (control_sleep_failure_cb), (gpm_info_init):
+	* src/gpm-inhibit.c: (gpm_inhibit_get_message),
+	(gpm_conf_gconf_key_changed_cb), (gpm_inhibit_init):
+	* src/gpm-light-sensor.c: (gpm_light_sensor_class_init),
+	(gpm_light_sensor_has_hw), (gpm_light_sensor_poll_cb),
+	(gpm_light_sensor_init):
+	* src/gpm-manager.c: (gpm_manager_play),
+	(gpm_manager_sync_policy_sleep), (gpm_manager_action_suspend),
+	(gpm_manager_action_hibernate), (manager_policy_do),
+	(gpm_manager_suspend), (gpm_manager_hibernate), (idle_do_sleep),
+	(lid_button_pressed), (ac_adapter_changed_cb),
+	(gpm_conf_gconf_key_changed_cb), (gpm_manager_tray_icon_hibernate),
+	(control_sleep_failure_cb), (gpm_engine_charge_critical_cb),
+	(gpm_engine_charge_action_cb), (has_inhibit_changed_cb),
+	(gpm_manager_init), (gpm_manager_finalize):
+	* src/gpm-notify.c: (notify_general_clicked_cb), (gpm_notify_init):
+	* src/gpm-phone.c:
+	* src/gpm-prefs-core.c: (gpm_prefs_icon_radio_cb),
+	(gpm_prefs_sleep_slider_changed_cb),
+	(gpm_prefs_setup_sleep_slider),
+	(gpm_prefs_brightness_slider_changed_cb),
+	(gpm_prefs_setup_brightness_slider),
+	(gpm_prefs_action_combo_changed_cb),
+	(gpm_prefs_setup_action_combo), (gpm_prefs_checkbox_lock_cb),
+	(gpm_prefs_setup_checkbox), (gpm_conf_gconf_key_changed_cb),
+	(prefs_setup_notification), (gpm_prefs_init):
+	* src/gpm-screensaver.c: (gpm_conf_gconf_key_changed_cb),
+	(gpm_screensaver_lock_enabled), (gpm_screensaver_lock_set),
+	(gpm_screensaver_init):
+	* src/gpm-srv-brightness-kbd.c: (conf_key_changed_cb),
+	(ac_adapter_changed_cb), (gpm_srv_brightness_kbd_init):
+	* src/gpm-srv-screensaver.c: (gpm_srv_screensaver_init):
+	* src/gpm-statistics-core.c: (gpm_statistics_delete_event_cb),
+	(gpm_conf_gconf_key_changed_cb),
+	(gpm_statistics_checkbox_events_cb),
+	(gpm_statistics_refresh_axis_labels),
+	(gpm_statistics_refresh_data),
+	(gpm_statistics_type_combo_changed_cb),
+	(gpm_statistics_populate_graph_types), (gpm_statistics_init):
+	* src/gpm-statistics.c:
+	* src/gpm-tray-icon.c: (gpm_conf_gconf_key_changed_cb),
+	(gpm_tray_icon_init), (gpm_tray_icon_finalize):
+	* src/gpm-warnings.c: (gconf_key_changed_cb), (gpm_warnings_init):
+	Remove GpmConf and use gconf_client directly.
+
 2008-10-20  Richard Hughes  <richard@hughsie.com>
 
 	* applets/brightness/Makefile.am:

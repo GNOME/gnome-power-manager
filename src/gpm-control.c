@@ -41,6 +41,7 @@
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
 #include <gnome-keyring.h>
+#include <gconf/gconf-client.h>
 
 #include <hal-device-power.h>
 
@@ -49,7 +50,6 @@
 #include <polkit-dbus/polkit-dbus.h>
 #endif
 
-#include "gpm-conf.h"
 #include "gpm-screensaver.h"
 #include "gpm-common.h"
 #include "egg-debug.h"
@@ -60,7 +60,7 @@
 
 struct GpmControlPrivate
 {
-	GpmConf			*conf;
+	GConfClient		*conf;
 	HalDevicePower		*hal_device_power;
 };
 
@@ -85,9 +85,8 @@ GQuark
 gpm_control_error_quark (void)
 {
 	static GQuark quark = 0;
-	if (!quark) {
+	if (!quark)
 		quark = g_quark_from_static_string ("gpm_control_error");
-	}
 	return quark;
 }
 
@@ -168,14 +167,12 @@ gpm_control_allowed_suspend (GpmControl *control,
 	g_return_val_if_fail (can, FALSE);
 
 	*can = FALSE;
-	gpm_conf_get_bool (control->priv->conf, GPM_CONF_CAN_SUSPEND, &conf_ok);
+	conf_ok = gconf_client_get_bool (control->priv->conf, GPM_CONF_CAN_SUSPEND, NULL);
 	hal_ok = hal_device_power_can_suspend (control->priv->hal_device_power);
 	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.hal.power-management.suspend");
 	fg = gpm_control_check_foreground_console (control);
-	if (conf_ok && hal_ok && polkit_ok && fg) {
+	if (conf_ok && hal_ok && polkit_ok && fg)
 		*can = TRUE;
-	}
-
 	return TRUE;
 }
 
@@ -199,13 +196,12 @@ gpm_control_allowed_hibernate (GpmControl *control,
 	g_return_val_if_fail (can, FALSE);
 
 	*can = FALSE;
-	gpm_conf_get_bool (control->priv->conf, GPM_CONF_CAN_HIBERNATE, &conf_ok);
+	conf_ok = gconf_client_get_bool (control->priv->conf, GPM_CONF_CAN_HIBERNATE, NULL);
 	hal_ok = hal_device_power_can_hibernate (control->priv->hal_device_power);
 	fg = gpm_control_check_foreground_console (control);
 	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.hal.power-management.hibernate");
-	if (conf_ok && hal_ok && polkit_ok && fg) {
+	if (conf_ok && hal_ok && polkit_ok && fg)
 		*can = TRUE;
-	}
 	return TRUE;
 }
 
@@ -226,9 +222,8 @@ gpm_control_allowed_shutdown (GpmControl *control,
 	*can = FALSE;
 	fg = gpm_control_check_foreground_console (control);
 	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.hal.power-management.shutdown");
-	if (polkit_ok && fg) {
+	if (polkit_ok && fg)
 		*can = TRUE;
-	}
 	return TRUE;
 }
 
@@ -250,9 +245,8 @@ gpm_control_allowed_reboot (GpmControl *control,
 	*can = FALSE;
 	fg = gpm_control_check_foreground_console (control);
 	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.hal.power-management.reboot");
-	if (polkit_ok && fg) {
+	if (polkit_ok && fg)
 		*can = TRUE;
-	}
 	return TRUE;
 }
 
@@ -311,7 +305,7 @@ gpm_control_shutdown (GpmControl *control,
 		return FALSE;
 	}
 
-	gpm_conf_get_bool (control->priv->conf, GPM_CONF_SESSION_REQUEST_SAVE, &save_session);
+	save_session = gconf_client_get_bool (control->priv->conf, GPM_CONF_SESSION_REQUEST_SAVE, NULL);
 	/* We can set g-p-m to not save the session to avoid confusing new
 	   users. By default we save the session to preserve data. */
 	if (save_session) {
@@ -321,9 +315,8 @@ gpm_control_shutdown (GpmControl *control,
 	}
 
 	ret = hal_device_power_shutdown (control->priv->hal_device_power, error);
-	if (!ret) {
+	if (!ret)
 		gpm_control_convert_hal_error (control, error);
-	}
 
 	return ret;
 }
@@ -351,7 +344,7 @@ gpm_control_reboot (GpmControl *control,
 		return FALSE;
 	}
 
-	gpm_conf_get_bool (control->priv->conf, GPM_CONF_SESSION_REQUEST_SAVE, &save_session);
+	save_session = gconf_client_get_bool (control->priv->conf, GPM_CONF_SESSION_REQUEST_SAVE, NULL);
 	/* We can set g-p-m to not save the session to avoid confusing new
 	   users. By default we save the session to preserve data. */
 	if (save_session) {
@@ -383,12 +376,12 @@ gpm_control_get_lock_policy (GpmControl  *control,
 	/* This allows us to over-ride the custom lock settings set in gconf
 	   with a system default set in gnome-screensaver.
 	   See bug #331164 for all the juicy details. :-) */
-	gpm_conf_get_bool (control->priv->conf, GPM_CONF_LOCK_USE_SCREENSAVER, &use_ss_setting);
+	use_ss_setting = gconf_client_get_bool (control->priv->conf, GPM_CONF_LOCK_USE_SCREENSAVER, NULL);
 	if (use_ss_setting) {
-		gpm_conf_get_bool (control->priv->conf, GS_PREF_LOCK_ENABLED, &do_lock);
+		do_lock = gconf_client_get_bool (control->priv->conf, GS_PREF_LOCK_ENABLED, NULL);
 		egg_debug ("Using ScreenSaver settings (%i)", do_lock);
 	} else {
-		gpm_conf_get_bool (control->priv->conf, policy, &do_lock);
+		do_lock = gconf_client_get_bool (control->priv->conf, policy, NULL);
 		egg_debug ("Using custom locking settings (%i)", do_lock);
 	}
 	return do_lock;
@@ -420,32 +413,28 @@ gpm_control_suspend (GpmControl *control,
 	}
 
 	/* we should perhaps lock keyrings when sleeping #375681 */
-	gpm_conf_get_bool (control->priv->conf, GPM_CONF_LOCK_GNOME_KEYRING_SUSPEND, &lock_gnome_keyring);
+	lock_gnome_keyring = gconf_client_get_bool (control->priv->conf, GPM_CONF_LOCK_GNOME_KEYRING_SUSPEND, NULL);
 	if (lock_gnome_keyring) {
 		keyres = gnome_keyring_lock_all_sync ();
-		if (keyres != GNOME_KEYRING_RESULT_OK) {
+		if (keyres != GNOME_KEYRING_RESULT_OK)
 			egg_warning ("could not lock keyring");
-		}
 	}
 
 	do_lock = gpm_control_get_lock_policy (control, GPM_CONF_LOCK_ON_SUSPEND);
-	if (do_lock) {
+	if (do_lock)
 		gpm_screensaver_lock (screensaver);
-	}
 
-	gpm_conf_get_bool (control->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
-	if (nm_sleep) {
+	nm_sleep = gconf_client_get_bool (control->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, NULL);
+	if (nm_sleep)
 		gpm_networkmanager_sleep ();
-	}
 
 	/* Do the suspend */
 	egg_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_SUSPEND);
 
 	ret = hal_device_power_suspend (control->priv->hal_device_power, 0, error);
-	if (!ret) {
+	if (!ret)
 		gpm_control_convert_hal_error (control, error);
-	}
 
 	egg_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_SUSPEND);
@@ -455,14 +444,12 @@ gpm_control_suspend (GpmControl *control,
 		g_signal_emit (control, signals [SLEEP_FAILURE], 0, GPM_CONTROL_ACTION_SUSPEND);
 	}
 
-	if (do_lock) {
+	if (do_lock)
 		gpm_screensaver_poke (screensaver);
-	}
 
-	gpm_conf_get_bool (control->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
-	if (nm_sleep) {
+	nm_sleep = gconf_client_get_bool (control->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, NULL);
+	if (nm_sleep)
 		gpm_networkmanager_wake ();
-	}
 
 	g_object_unref (screensaver);
 
@@ -496,7 +483,7 @@ gpm_control_hibernate (GpmControl *control,
 	}
 
 	/* we should perhaps lock keyrings when sleeping #375681 */
-	gpm_conf_get_bool (control->priv->conf, GPM_CONF_LOCK_GNOME_KEYRING_HIBERNATE, &lock_gnome_keyring);
+	lock_gnome_keyring = gconf_client_get_bool (control->priv->conf, GPM_CONF_LOCK_GNOME_KEYRING_HIBERNATE, NULL);
 	if (lock_gnome_keyring) {
 		keyres = gnome_keyring_lock_all_sync ();
 		if (keyres != GNOME_KEYRING_RESULT_OK) {
@@ -505,22 +492,19 @@ gpm_control_hibernate (GpmControl *control,
 	}
 
 	do_lock = gpm_control_get_lock_policy (control, GPM_CONF_LOCK_ON_HIBERNATE);
-	if (do_lock) {
+	if (do_lock)
 		gpm_screensaver_lock (screensaver);
-	}
 
-	gpm_conf_get_bool (control->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
-	if (nm_sleep) {
+	nm_sleep = gconf_client_get_bool (control->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, NULL);
+	if (nm_sleep)
 		gpm_networkmanager_sleep ();
-	}
 
 	egg_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_HIBERNATE);
 
 	ret = hal_device_power_hibernate (control->priv->hal_device_power, error);
-	if (!ret) {
+	if (!ret)
 		gpm_control_convert_hal_error (control, error);
-	}
 
 	egg_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_HIBERNATE);
@@ -530,14 +514,12 @@ gpm_control_hibernate (GpmControl *control,
 		g_signal_emit (control, signals [SLEEP_FAILURE], 0, GPM_CONTROL_ACTION_HIBERNATE);
 	}
 
-	if (do_lock) {
+	if (do_lock)
 		gpm_screensaver_poke (screensaver);
-	}
 
-	gpm_conf_get_bool (control->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
-	if (nm_sleep) {
+	nm_sleep = gconf_client_get_bool (control->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, NULL);
+	if (nm_sleep)
 		gpm_networkmanager_wake ();
-	}
 
 	g_object_unref (screensaver);
 
@@ -622,7 +604,7 @@ gpm_control_init (GpmControl *control)
 	control->priv = GPM_CONTROL_GET_PRIVATE (control);
 
 	control->priv->hal_device_power = hal_device_power_new ();
-	control->priv->conf = gpm_conf_new ();
+	control->priv->conf = gconf_client_get_default ();
 }
 
 /**

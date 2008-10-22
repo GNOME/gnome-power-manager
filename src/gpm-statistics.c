@@ -34,7 +34,7 @@
 #include <egg-unique.h>
 
 #include "gpm-common.h"
-#include "gpm-conf.h"
+#include <gconf/gconf-client.h>
 #include "egg-debug.h"
 #include "gpm-statistics-core.h"
 

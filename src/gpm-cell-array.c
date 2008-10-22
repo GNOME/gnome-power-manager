@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <gconf/gconf-client.h>
 
 #include <hal-device.h>
 #include <hal-manager.h>
@@ -36,7 +37,6 @@
 #include "gpm-ac-adapter.h"
 #include "gpm-common.h"
 #include "gpm-cell-array.h"
-#include "gpm-conf.h"
 #include "gpm-cell-unit.h"
 #include "gpm-cell.h"
 #include "gpm-phone.h"
@@ -59,7 +59,7 @@ struct GpmCellArrayPrivate
 	GpmCellUnit		 unit;
 	GpmAcAdapter		*ac_adapter;
 	GpmProfile		*profile;
-	GpmConf			*conf;
+	GConfClient			*conf;
 	GpmPhone		*phone;
 	GpmControl		*control;
 	GpmWarnings		*warnings;
@@ -191,14 +191,14 @@ gpm_cell_array_get_time_until_action (GpmCellArray *cell_array)
 	}
 
 	/* calculate! */
-	gpm_conf_get_bool (cell_array->priv->conf, GPM_CONF_USE_TIME_POLICY, &use_time_primary);
+	use_time_primary = gconf_client_get_bool (cell_array->priv->conf, GPM_CONF_USE_TIME_POLICY, NULL);
 	if (use_time_primary) {
 		/* simple subtraction */
-		gpm_conf_get_uint (cell_array->priv->conf, GPM_CONF_THRESH_TIME_ACTION, &action_time);
+		action_time = gconf_client_get_int (cell_array->priv->conf, GPM_CONF_THRESH_TIME_ACTION, NULL);
 		difference = (gint) unit->time_discharge - (gint) action_time;
 	} else {
 		/* we have to work out the time for this percentage */
-		gpm_conf_get_uint (cell_array->priv->conf, GPM_CONF_THRESH_PERCENTAGE_ACTION, &action_percentage);
+		action_percentage = gconf_client_get_int (cell_array->priv->conf, GPM_CONF_THRESH_PERCENTAGE_ACTION, NULL);
 		action_time = gpm_profile_get_time (cell_array->priv->profile, action_percentage, TRUE);
 		if (action_time == 0) {
 			return 0;
@@ -1161,14 +1161,14 @@ hal_device_added_cb (HalManager  *hal_manager,
  * conf_key_changed_cb:
  **/
 static void
-conf_key_changed_cb (GpmConf      *conf,
+conf_key_changed_cb (GConfClient      *conf,
 		     const gchar  *key,
 		     GpmCellArray *cell_array)
 {
 	GpmCellUnit *unit;
 
 	if (strcmp (key, GPM_CONF_USE_PROFILE_TIME) == 0) {
-		gpm_conf_get_bool (conf, GPM_CONF_USE_PROFILE_TIME, &cell_array->priv->use_profile_calc);
+		cell_array->priv->use_profile_calc = gconf_client_get_bool (conf, GPM_CONF_USE_PROFILE_TIME, NULL);
 		/* recalculate */
 		gpm_cell_array_update (cell_array);
 
@@ -1399,10 +1399,10 @@ gpm_cell_array_init (GpmCellArray *cell_array)
 
 	cell_array->priv->array = g_ptr_array_new ();
 	cell_array->priv->profile = gpm_profile_new ();
-	cell_array->priv->conf = gpm_conf_new ();
+	cell_array->priv->conf = gconf_client_get_default ();
 	g_signal_connect (cell_array->priv->conf, "value-changed",
 			  G_CALLBACK (conf_key_changed_cb), cell_array);
-	gpm_conf_get_bool (cell_array->priv->conf, GPM_CONF_USE_PROFILE_TIME, &cell_array->priv->use_profile_calc);
+	cell_array->priv->use_profile_calc = gconf_client_get_bool (cell_array->priv->conf, GPM_CONF_USE_PROFILE_TIME, NULL);
 
 	cell_array->priv->done_recall = FALSE;
 	cell_array->priv->done_capacity = FALSE;

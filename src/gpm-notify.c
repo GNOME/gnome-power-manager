@@ -38,10 +38,10 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 #include <gtk/gtk.h>
+#include <gconf/gconf-client.h>
 
 #include "gpm-ac-adapter.h"
 #include "gpm-common.h"
-#include "gpm-conf.h"
 #include "egg-debug.h"
 #include "gpm-notify.h"
 #include "gpm-stock-icons.h"
@@ -56,7 +56,7 @@
 struct GpmNotifyPrivate
 {
 	GpmAcAdapter		*ac_adapter;
-	GpmConf			*conf;
+	GConfClient			*conf;
 	GtkStatusIcon		*status_icon;
 	gchar			*internet_url;
 	const gchar		*do_not_show_gconf;
@@ -312,7 +312,7 @@ notify_general_clicked_cb (NotifyNotification *libnotify,
 
 	if (strcmp (action, "dont-show-again") == 0) {
 		egg_debug ("not showing warning anymore for %s!", notify->priv->do_not_show_gconf);
-		gpm_conf_set_bool (notify->priv->conf, notify->priv->do_not_show_gconf, FALSE);
+		gconf_client_set_bool (notify->priv->conf, notify->priv->do_not_show_gconf, FALSE, NULL);
 		notify->priv->do_not_show_gconf = NULL;
 		return;
 	}
@@ -668,7 +668,7 @@ gpm_notify_init (GpmNotify *notify)
 {
 	notify->priv = GPM_NOTIFY_GET_PRIVATE (notify);
 
-	notify->priv->conf = gpm_conf_new ();
+	notify->priv->conf = gconf_client_get_default ();
 	notify->priv->do_not_show_gconf = NULL;
 
 	/* we use ac_adapter so we can log the event */

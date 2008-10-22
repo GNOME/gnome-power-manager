@@ -39,8 +39,8 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <gtk/gtkstatusicon.h>
+#include <gconf/gconf-client.h>
 
-#include "gpm-conf.h"
 #include "gpm-control.h"
 #include "gpm-common.h"
 #include "egg-debug.h"
@@ -59,7 +59,7 @@ static void     gpm_tray_icon_finalize   (GObject	   *object);
 
 struct GpmTrayIconPrivate
 {
-	GpmConf			*conf;
+	GConfClient		*conf;
 	GpmControl		*control;
 	GpmNotify		*notify;
 	GpmEngineCollection	*collection;
@@ -603,36 +603,39 @@ gpm_tray_icon_activate_cb (GtkStatusIcon *status_icon,
 }
 
 /**
- * conf_key_changed_cb:
+ * gpm_conf_gconf_key_changed_cb:
  *
  * We might have to do things when the gconf keys change; do them here.
  **/
 static void
-conf_key_changed_cb (GpmConf     *conf,
-		     const gchar *key,
-		     GpmTrayIcon *icon)
+gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *entry, GpmTrayIcon *icon)
 {
-	gboolean    enabled;
-	gboolean    allowed_in_menu;
+	GConfValue *value;
+	gboolean enabled;
+	gboolean allowed_in_menu;
 
-	if (strcmp (key, GPM_CONF_CAN_SUSPEND) == 0) {
+	value = gconf_entry_get_value (entry);
+	if (value == NULL)
+		return;
+
+	if (strcmp (entry->key, GPM_CONF_CAN_SUSPEND) == 0) {
 		gpm_control_allowed_suspend (icon->priv->control, &enabled, NULL);
-		gpm_conf_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
+		allowed_in_menu = gconf_client_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_ACTIONS_IN_MENU, NULL);
 		gpm_tray_icon_enable_suspend (icon, allowed_in_menu && enabled);
 
-	} else if (strcmp (key, GPM_CONF_CAN_HIBERNATE) == 0) {
+	} else if (strcmp (entry->key, GPM_CONF_CAN_HIBERNATE) == 0) {
 		gpm_control_allowed_hibernate (icon->priv->control, &enabled, NULL);
-		gpm_conf_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
+		allowed_in_menu = gconf_client_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_ACTIONS_IN_MENU, NULL);
 		gpm_tray_icon_enable_hibernate (icon, allowed_in_menu && enabled);
 
-	} else if (strcmp (key, GPM_CONF_UI_SHOW_ACTIONS_IN_MENU) == 0) {
-		gpm_conf_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
+	} else if (strcmp (entry->key, GPM_CONF_UI_SHOW_ACTIONS_IN_MENU) == 0) {
+		allowed_in_menu = gconf_value_get_bool (value);
 		gpm_control_allowed_suspend (icon->priv->control, &enabled, NULL);
 		gpm_tray_icon_enable_suspend (icon, allowed_in_menu && enabled);
 		gpm_control_allowed_hibernate (icon->priv->control, &enabled, NULL);
 		gpm_tray_icon_enable_hibernate (icon, allowed_in_menu && enabled);
-	} else if (strcmp (key, GPM_CONF_UI_SHOW_CONTEXT_MENU) == 0) {
-		gpm_conf_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_CONTEXT_MENU, &allowed_in_menu);
+	} else if (strcmp (entry->key, GPM_CONF_UI_SHOW_CONTEXT_MENU) == 0) {
+		allowed_in_menu = gconf_value_get_bool (value);
 		gpm_tray_icon_enable_context_menu (icon, allowed_in_menu);
 	}
 }
@@ -659,9 +662,13 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 	/* use the policy object */
 	icon->priv->control = gpm_control_new ();
 
-	icon->priv->conf = gpm_conf_new ();
-	g_signal_connect (icon->priv->conf, "value-changed",
-			  G_CALLBACK (conf_key_changed_cb), icon);
+	icon->priv->conf = gconf_client_get_default ();
+	/* watch gnome-power-manager keys */
+	gconf_client_add_dir (icon->priv->conf, GPM_CONF_DIR,
+			      GCONF_CLIENT_PRELOAD_NONE, NULL);
+	gconf_client_notify_add (icon->priv->conf, GPM_CONF_DIR,
+				 (GConfClientNotifyFunc) gpm_conf_gconf_key_changed_cb,
+				 icon, NULL, NULL);
 
 	icon->priv->status_icon = gtk_status_icon_new ();
 	g_signal_connect_object (G_OBJECT (icon->priv->status_icon),
@@ -676,13 +683,13 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 
 	/* only show the suspend and hibernate icons if we can do the action,
 	   and the policy allows the actions in the menu */
-	gpm_conf_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
+	allowed_in_menu = gconf_client_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_ACTIONS_IN_MENU, NULL);
 	gpm_control_allowed_suspend (icon->priv->control, &enabled, NULL);
 	gpm_tray_icon_enable_suspend (icon, enabled && allowed_in_menu);
 	gpm_control_allowed_hibernate (icon->priv->control, &enabled, NULL);
 	gpm_tray_icon_enable_hibernate (icon, enabled && allowed_in_menu);
 
-	gpm_conf_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_CONTEXT_MENU, &allowed_in_menu);
+	allowed_in_menu = gconf_client_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_CONTEXT_MENU, NULL);
 	gpm_tray_icon_enable_context_menu (icon, allowed_in_menu);
 
 	gpm_tray_icon_show (GPM_TRAY_ICON (icon), FALSE);
@@ -702,9 +709,8 @@ gpm_tray_icon_finalize (GObject *object)
 
 	tray_icon = GPM_TRAY_ICON (object);
 
-	if (tray_icon->priv->notify != NULL) {
+	if (tray_icon->priv->notify != NULL)
 		g_object_unref (tray_icon->priv->notify);
-	}
 	g_object_unref (tray_icon->priv->control);
 	g_object_unref (tray_icon->priv->status_icon);
 

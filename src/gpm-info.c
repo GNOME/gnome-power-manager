@@ -27,13 +27,13 @@
 
 #include <string.h>
 #include <dbus/dbus-gtype-specialized.h>
+#include <gconf/gconf-client.h>
 
 #include <hal-manager.h>
 
 #include "egg-color.h"
 #include "gpm-ac-adapter.h"
 #include "gpm-button.h"
-#include "gpm-conf.h"
 #include "gpm-control.h"
 #include "gpm-common.h"
 #include "egg-debug.h"
@@ -770,11 +770,10 @@ control_sleep_failure_cb (GpmControl  *control,
 			  GpmControlAction action,
 		          GpmInfo *info)
 {
-	if (action == GPM_CONTROL_ACTION_HIBERNATE) {
+	if (action == GPM_CONTROL_ACTION_HIBERNATE)
 		gpm_info_event_log (info, GPM_EVENT_NOTIFICATION, _("Hibernate Problem"));
-	} else {
+	else
 		gpm_info_event_log (info, GPM_EVENT_NOTIFICATION, _("Suspend Problem"));
-	}
 }
 
 /**
@@ -856,9 +855,9 @@ gpm_info_init (GpmInfo *info)
 
 	if (info->priv->is_laptop) {
 		/* get the maximum x-axis size from gconf */
-		GpmConf *conf = gpm_conf_new ();
+		GConfClient *conf = gconf_client_get_default ();
 		guint max_time;
-		gpm_conf_get_uint (conf, GPM_CONF_STATS_MAX_TIME, &max_time);
+		max_time = gconf_client_get_int (conf, GPM_CONF_STATS_MAX_TIME, NULL);
 		g_object_unref (conf);
 
 		gpm_array_set_max_width (info->priv->events, max_time);

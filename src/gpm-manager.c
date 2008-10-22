@@ -47,7 +47,6 @@
 
 #include "gpm-ac-adapter.h"
 #include "gpm-button.h"
-#include "gpm-conf.h"
 #include "gpm-control.h"
 #include "gpm-common.h"
 #include "egg-debug.h"
@@ -82,7 +81,7 @@ struct GpmManagerPrivate
 {
 	GpmAcAdapter		*ac_adapter;
 	GpmButton		*button;
-	GpmConf			*conf;
+	GConfClient		*conf;
 	GpmDpms			*dpms;
 	GpmIdle			*idle;
 	GpmInfo			*info;
@@ -95,7 +94,6 @@ struct GpmManagerPrivate
 	GpmEngine		*engine;
 	HalDevicePower		*hal_device_power;
 	gboolean		 low_power;
-	GConfClient		*gconf_client;
 
 	/* interactive services */
 	GpmBacklight		*backlight;
@@ -177,7 +175,7 @@ gpm_manager_play (GpmManager *manager, GpmManagerSound action, gboolean force)
 	const gchar *desc = NULL;
 	gboolean ret;
 
-	ret = gconf_client_get_bool (manager->priv->gconf_client, GPM_CONF_UI_ENABLE_BEEPING, NULL);
+	ret = gconf_client_get_bool (manager->priv->conf, GPM_CONF_UI_ENABLE_BEEPING, NULL);
 	if (!ret && !force) {
 		egg_debug ("ignoring sound due to policy");
 		return FALSE;
@@ -320,13 +318,13 @@ gpm_manager_sync_policy_sleep (GpmManager *manager)
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
 
 	if (on_ac) {
-		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_TIMEOUT_SLEEP_COMPUTER_AC, &sleep_computer);
-		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_AC, &sleep_display);
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_AC, &power_save);
+		sleep_computer = gconf_client_get_int (manager->priv->conf, GPM_CONF_TIMEOUT_SLEEP_COMPUTER_AC, NULL);
+		sleep_display = gconf_client_get_int (manager->priv->conf, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_AC, NULL);
+		power_save = gconf_client_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_AC, NULL);
 	} else {
-		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_TIMEOUT_SLEEP_COMPUTER_BATT, &sleep_computer);
-		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_BATT, &sleep_display);
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_BATT, &power_save);
+		sleep_computer = gconf_client_get_int (manager->priv->conf, GPM_CONF_TIMEOUT_SLEEP_COMPUTER_BATT, NULL);
+		sleep_display = gconf_client_get_int (manager->priv->conf, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_BATT, NULL);
+		power_save = gconf_client_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_BATT, NULL);
 	}
 
 	hal_device_power_enable_power_save (manager->priv->hal_device_power, power_save);
@@ -410,7 +408,7 @@ gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 	GError *error = NULL;
 
 	/* check if the admin has disabled */
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_CAN_SUSPEND, &allowed);
+	allowed = gconf_client_get_bool (manager->priv->conf, GPM_CONF_CAN_SUSPEND, NULL);
 	if (allowed == FALSE) {
 		/* error msg as disabled in gconf */
 		gpm_notify_display (manager->priv->notify,
@@ -459,7 +457,7 @@ gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 	GError *error = NULL;
 
 	/* check if the admin has disabled */
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_CAN_HIBERNATE, &allowed);
+	allowed = gconf_client_get_bool (manager->priv->conf, GPM_CONF_CAN_HIBERNATE, NULL);
 	if (allowed == FALSE) {
 		/* error msg as disabled in gconf */
 		gpm_notify_display (manager->priv->notify,
@@ -519,7 +517,7 @@ manager_policy_do (GpmManager  *manager,
 	}
 
 	egg_debug ("policy: %s", policy);
-	gpm_conf_get_string (manager->priv->conf, policy, &action);
+	action = gconf_client_get_string (manager->priv->conf, policy, NULL);
 
 	if (action == NULL) {
 		return FALSE;
@@ -572,7 +570,7 @@ gpm_manager_suspend (GpmManager *manager,
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 
 	/* check if the admin has disabled */
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_CAN_SUSPEND, &allowed);
+	allowed = gconf_client_get_bool (manager->priv->conf, GPM_CONF_CAN_SUSPEND, NULL);
 	if (allowed == FALSE) {
 		g_set_error (error, GPM_MANAGER_ERROR, GPM_MANAGER_ERROR_DENIED, "Suspend denied by gconf policy");
 		return FALSE;
@@ -608,7 +606,7 @@ gpm_manager_hibernate (GpmManager *manager,
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 
 	/* check if the admin has disabled */
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_CAN_HIBERNATE, &allowed);
+	allowed = gconf_client_get_bool (manager->priv->conf, GPM_CONF_CAN_HIBERNATE, NULL);
 	if (allowed == FALSE) {
 		g_set_error (error, GPM_MANAGER_ERROR, GPM_MANAGER_ERROR_DENIED, "Hibernate denied by gconf policy");
 		return FALSE;
@@ -822,11 +820,10 @@ idle_do_sleep (GpmManager *manager)
 	/* find if we are on AC power */
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
 
-	if (on_ac) {
-		gpm_conf_get_string (manager->priv->conf, GPM_CONF_ACTIONS_SLEEP_TYPE_AC, &action);
-	} else {
-		gpm_conf_get_string (manager->priv->conf, GPM_CONF_ACTIONS_SLEEP_TYPE_BATT, &action);
-	}
+	if (on_ac)
+		action = gconf_client_get_string (manager->priv->conf, GPM_CONF_ACTIONS_SLEEP_TYPE_AC, NULL);
+	else
+		action = gconf_client_get_string (manager->priv->conf, GPM_CONF_ACTIONS_SLEEP_TYPE_BATT, NULL);
 
 	if (action == NULL) {
 		egg_warning ("action NULL, gconf error");
@@ -1012,7 +1009,7 @@ lid_button_pressed (GpmManager *manager,
 	/* do not do lid close action if suspend (or hibernate) */
 	if (has_inhibit) {
 		/* get the policy action for battery */
-		gpm_conf_get_string (manager->priv->conf, GPM_CONF_BUTTON_LID_BATT, &action);
+		action = gconf_client_get_string (manager->priv->conf, GPM_CONF_BUTTON_LID_BATT, NULL);
 
 		/* if we are trying to suspend or hibernate then don't do action */
 		if ((strcmp (action, ACTION_SUSPEND) == 0) ||
@@ -1100,19 +1097,17 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 	}
 
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
-	if (on_ac) {
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_AC, &power_save);
-	} else {
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_BATT, &power_save);
-	}
-	if (manager->priv->low_power != power_save) {
+	if (on_ac)
+		power_save = gconf_client_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_AC, NULL);
+	else
+		power_save = gconf_client_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_BATT, NULL);
+	if (manager->priv->low_power != power_save)
 		g_signal_emit (manager, signals [POWER_SAVE_STATUS_CHANGED], 0, power_save);
-	}
 	manager->priv->low_power = power_save;
 
 	/* We do the lid close on battery action if the ac_adapter is removed
 	   when the laptop is closed and on battery. Fixes #331655 */
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_ACTIONS_SLEEP_WHEN_CLOSED, &event_when_closed);
+	event_when_closed = gconf_client_get_bool (manager->priv->conf, GPM_CONF_ACTIONS_SLEEP_WHEN_CLOSED, NULL);
 
 	/* We keep track of the lid state so we can do the
 	   lid close on battery action if the ac_adapter is removed when the laptop
@@ -1202,20 +1197,22 @@ gpm_manager_class_init (GpmManagerClass *klass)
 }
 
 /**
- * conf_key_changed_cb:
+ * gpm_conf_gconf_key_changed_cb:
  *
  * We might have to do things when the gconf keys change; do them here.
  **/
 static void
-conf_key_changed_cb (GpmConf     *conf,
-		     const gchar *key,
-		     GpmManager  *manager)
+gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *entry, GpmManager *manager)
 {
-	if (strcmp (key, GPM_CONF_TIMEOUT_SLEEP_COMPUTER_BATT) == 0 ||
-		   strcmp (key, GPM_CONF_TIMEOUT_SLEEP_COMPUTER_AC) == 0) {
+	GConfValue *value;
 
+	value = gconf_entry_get_value (entry);
+	if (value == NULL)
+		return;
+
+	if (strcmp (entry->key, GPM_CONF_TIMEOUT_SLEEP_COMPUTER_BATT) == 0 ||
+	    strcmp (entry->key, GPM_CONF_TIMEOUT_SLEEP_COMPUTER_AC) == 0)
 		gpm_manager_sync_policy_sleep (manager);
-	}
 }
 
 /**
@@ -1227,8 +1224,7 @@ conf_key_changed_cb (GpmConf     *conf,
  * the inhibit states are valid.
  **/
 static void
-gpm_manager_tray_icon_hibernate (GpmManager  *manager,
-				 GpmTrayIcon *tray)
+gpm_manager_tray_icon_hibernate (GpmManager *manager, GpmTrayIcon *tray)
 {
 	gpm_manager_action_hibernate (manager, _("User clicked on tray"));
 }
@@ -1426,7 +1422,7 @@ control_sleep_failure_cb (GpmControl      *control,
 	gboolean show_sleep_failed;
 
 	/* only show this if specified in gconf */
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_SLEEP_FAILED, &show_sleep_failed);
+	show_sleep_failed = gconf_client_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_SLEEP_FAILED, NULL);
 
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_SUSPEND_ERROR, TRUE);
 
@@ -1532,7 +1528,7 @@ gpm_engine_charge_critical_cb (GpmEngine      *engine,
 		time_text = gpm_manager_get_time_until_action_text (manager);
 
 		/* we have to do different warnings depending on the policy */
-		gpm_conf_get_string (manager->priv->conf, GPM_CONF_ACTIONS_CRITICAL_BATT, &action);
+		action = gconf_client_get_string (manager->priv->conf, GPM_CONF_ACTIONS_CRITICAL_BATT, NULL);
 		if (action == NULL) {
 			egg_warning ("schema invalid!");
 			action = g_strdup (ACTION_NOTHING);
@@ -1616,7 +1612,7 @@ gpm_engine_charge_action_cb (GpmEngine      *engine,
 		title = _("Laptop battery critically low");
 
 		/* we have to do different warnings depending on the policy */
-		gpm_conf_get_string (manager->priv->conf, GPM_CONF_ACTIONS_CRITICAL_BATT, &action);
+		action = gconf_client_get_string (manager->priv->conf, GPM_CONF_ACTIONS_CRITICAL_BATT, NULL);
 
 		/* use different text for different actions */
 		if (strcmp (action, ACTION_NOTHING) == 0) {
@@ -1648,7 +1644,7 @@ gpm_engine_charge_action_cb (GpmEngine      *engine,
 		title = _("UPS critically low");
 
 		/* we have to do different warnings depending on the policy */
-		gpm_conf_get_string (manager->priv->conf, GPM_CONF_ACTIONS_CRITICAL_UPS, &action);
+		action = gconf_client_get_string (manager->priv->conf, GPM_CONF_ACTIONS_CRITICAL_UPS, NULL);
 
 		/* use different text for different actions */
 		if (strcmp (action, ACTION_NOTHING) == 0) {
@@ -1697,39 +1693,34 @@ has_inhibit_changed_cb (GpmInhibit *inhibit,
 	gchar *action = NULL;
 
 	/* we don't care about uninhibits */
-	if (has_inhibit == FALSE) {
+	if (has_inhibit == FALSE)
 		return;
-	}
 
 	/* only show this if specified in gconf */
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_INHIBIT_LID, &show_inhibit_lid);
+	show_inhibit_lid = gconf_client_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_INHIBIT_LID, NULL);
 
 	/* we've already shown the UI and been clicked */
-	if (show_inhibit_lid == FALSE) {
+	if (show_inhibit_lid == FALSE)
 		return;
-	}
 
 	hal_manager = hal_manager_new ();
 	is_laptop = hal_manager_is_laptop (hal_manager);
 	g_object_unref (hal_manager);
 
 	/* we don't warn for desktops, as they do not have a lid... */
-	if (is_laptop == FALSE) {
+	if (is_laptop == FALSE)
 		return;
-	}
 
 	/* get the policy action for battery */
-	gpm_conf_get_string (manager->priv->conf, GPM_CONF_BUTTON_LID_BATT, &action);
+	action = gconf_client_get_string (manager->priv->conf, GPM_CONF_BUTTON_LID_BATT, NULL);
 
-	if (action == NULL) {
+	if (action == NULL)
 		return;
-	}
 
 	/* if the policy on lid close is sleep then show a warning */
 	if ((strcmp (action, ACTION_SUSPEND) == 0) ||
-	    (strcmp (action, ACTION_HIBERNATE) == 0)) {
+	    (strcmp (action, ACTION_HIBERNATE) == 0))
 		gpm_notify_inhibit_lid (manager->priv->notify);
-	}
 
 	g_free (action);
 }
@@ -1746,7 +1737,6 @@ gpm_manager_init (GpmManager *manager)
 	GpmEngineCollection *collection;
 	GError *error = NULL;
 	gboolean on_ac;
-	gboolean ret;
 	guint version;
 
 	manager->priv = GPM_MANAGER_GET_PRIVATE (manager);
@@ -1759,14 +1749,18 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->prefs_server = gpm_prefs_server_new ();
 
 	manager->priv->notify = gpm_notify_new ();
-	manager->priv->gconf_client = gconf_client_get_default ();
-	manager->priv->conf = gpm_conf_new ();
-	g_signal_connect (manager->priv->conf, "value-changed",
-			  G_CALLBACK (conf_key_changed_cb), manager);
+	manager->priv->conf = gconf_client_get_default ();
+
+	/* watch gnome-power-manager keys */
+	gconf_client_add_dir (manager->priv->conf, GPM_CONF_DIR,
+			      GCONF_CLIENT_PRELOAD_NONE, NULL);
+	gconf_client_notify_add (manager->priv->conf, GPM_CONF_DIR,
+				 (GConfClientNotifyFunc) gpm_conf_gconf_key_changed_cb,
+				 manager, NULL, NULL);
 
 	/* check to see if the user has installed the schema properly */
-	ret = gpm_conf_get_uint (manager->priv->conf, GPM_CONF_SCHEMA_VERSION, &version);
-	if (!ret || version != GPM_CONF_SCHEMA_ID) {
+	version = gconf_client_get_int (manager->priv->conf, GPM_CONF_SCHEMA_VERSION, NULL);
+	if (version != GPM_CONF_SCHEMA_ID) {
 		gpm_notify_display (manager->priv->notify,
 				    _("Install problem!"),
 				    _("The configuration defaults for GNOME Power Manager have not been installed correctly.\n"
@@ -1784,11 +1778,10 @@ gpm_manager_init (GpmManager *manager)
 
 	/* coldplug so we are in the correct state at startup */
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
-	if (on_ac) {
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_AC, &manager->priv->low_power);
-	} else {
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_BATT, &manager->priv->low_power);
-	}
+	if (on_ac)
+		manager->priv->low_power = gconf_client_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_AC, NULL);
+	else
+		manager->priv->low_power = gconf_client_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_BATT, NULL);
 
 	manager->priv->button = gpm_button_new ();
 	g_signal_connect (manager->priv->button, "button-pressed",
@@ -1819,7 +1812,7 @@ gpm_manager_init (GpmManager *manager)
 			  G_CALLBACK (idle_changed_cb), manager);
 
 	/* set up the check_type_cpu, so we can disable the CPU load check */
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_IDLE_CHECK_CPU, &check_type_cpu);
+	check_type_cpu = gconf_client_get_bool (manager->priv->conf, GPM_CONF_IDLE_CHECK_CPU, NULL);
 	gpm_idle_set_check_cpu (manager->priv->idle, check_type_cpu);
 
 	manager->priv->dpms = gpm_dpms_new ();
@@ -1921,18 +1914,14 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->srv_screensaver);
 	g_object_unref (manager->priv->prefs_server);
 	g_object_unref (manager->priv->control);
-	g_object_unref (manager->priv->gconf_client);
 
 	/* optional gobjects */
-	if (manager->priv->button) {
+	if (manager->priv->button)
 		g_object_unref (manager->priv->button);
-	}
-	if (manager->priv->backlight) {
+	if (manager->priv->backlight)
 		g_object_unref (manager->priv->backlight);
-	}
-	if (manager->priv->srv_brightness_kbd) {
+	if (manager->priv->srv_brightness_kbd)
 		g_object_unref (manager->priv->srv_brightness_kbd);
-	}
 
 	G_OBJECT_CLASS (gpm_manager_parent_class)->finalize (object);
 }

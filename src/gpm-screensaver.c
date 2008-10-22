@@ -25,9 +25,10 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
+#include <gconf/gconf-client.h>
 
-#include "gpm-conf.h"
 #include "gpm-screensaver.h"
+#include "gpm-common.h"
 #include "egg-debug.h"
 #include "egg-dbus-proxy.h"
 
@@ -40,7 +41,7 @@ static void     gpm_screensaver_finalize   (GObject		*object);
 struct GpmScreensaverPrivate
 {
 	EggDbusProxy		*gproxy;
-	GpmConf			*conf;
+	GConfClient		*conf;
 	guint			 idle_delay;	/* the setting in g-s-p, cached */
 };
 
@@ -168,20 +169,21 @@ gpm_screensaver_proxy_disconnect_more (GpmScreensaver *screensaver)
 }
 
 /**
- * gconf_key_changed_cb:
+ * gpm_conf_gconf_key_changed_cb:
  *
- * Turn a gconf key change into a signal
+ * We might have to do things when the gconf keys change; do them here.
  **/
 static void
-gconf_key_changed_cb (GpmConf        *conf,
-		      const gchar    *key,
-		      GpmScreensaver *screensaver)
+gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *entry, GpmScreensaver *screensaver)
 {
-	g_return_if_fail (GPM_IS_SCREENSAVER (screensaver));
-	egg_debug ("key : %s", key);
+	GConfValue *value;
 
-	if (strcmp (key, GS_PREF_IDLE_DELAY) == 0) {
-		gpm_conf_get_uint (screensaver->priv->conf, key, &screensaver->priv->idle_delay);
+	value = gconf_entry_get_value (entry);
+	if (value == NULL)
+		return;
+
+	if (strcmp (entry->key, GS_PREF_IDLE_DELAY) == 0) {
+		screensaver->priv->idle_delay = gconf_value_get_int (value);
 		egg_debug ("emitting gs-delay-changed : %i", screensaver->priv->idle_delay);
 		g_signal_emit (screensaver, signals [GS_DELAY_CHANGED], 0, screensaver->priv->idle_delay);
 	}
@@ -198,7 +200,7 @@ gpm_screensaver_lock_enabled (GpmScreensaver *screensaver)
 	gboolean enabled;
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 
-	gpm_conf_get_bool (screensaver->priv->conf, GS_PREF_LOCK_ENABLED, &enabled);
+	enabled = gconf_client_get_bool (screensaver->priv->conf, GS_PREF_LOCK_ENABLED, NULL);
 
 	return enabled;
 }
@@ -212,7 +214,7 @@ gboolean
 gpm_screensaver_lock_set (GpmScreensaver *screensaver, gboolean lock)
 {
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
-	gpm_conf_set_bool (screensaver->priv->conf, GS_PREF_LOCK_ENABLED, lock);
+	gconf_client_set_bool (screensaver->priv->conf, GS_PREF_LOCK_ENABLED, lock, NULL);
 	return TRUE;
 }
 
@@ -557,13 +559,17 @@ gpm_screensaver_init (GpmScreensaver *screensaver)
 
 	gpm_screensaver_proxy_connect_more (screensaver);
 
-	screensaver->priv->conf = gpm_conf_new ();
-	g_signal_connect (screensaver->priv->conf, "value-changed",
-			  G_CALLBACK (gconf_key_changed_cb), screensaver);
+	screensaver->priv->conf = gconf_client_get_default ();
+
+	/* watch gnome-screensaver keys */
+	gconf_client_add_dir (screensaver->priv->conf, GS_CONF_DIR,
+			      GCONF_CLIENT_PRELOAD_NONE, NULL);
+	gconf_client_notify_add (screensaver->priv->conf, GS_CONF_DIR,
+				 (GConfClientNotifyFunc) gpm_conf_gconf_key_changed_cb,
+				 screensaver, NULL, NULL);
 
 	/* get value of delay in g-s-p */
-	gpm_conf_get_uint (screensaver->priv->conf, GS_PREF_IDLE_DELAY,
-			   &screensaver->priv->idle_delay);
+	screensaver->priv->idle_delay = gconf_client_get_int (screensaver->priv->conf, GS_PREF_IDLE_DELAY, NULL);
 }
 
 /**

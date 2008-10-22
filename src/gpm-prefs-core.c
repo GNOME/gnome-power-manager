@@ -38,7 +38,6 @@
 #include "gpm-tray-icon.h"
 #include "gpm-common.h"
 #include "gpm-prefs.h"
-#include "gpm-conf.h"
 #include "gpm-prefs-core.h"
 #include "egg-debug.h"
 #include "gpm-stock-icons.h"
@@ -67,7 +66,7 @@ struct GpmPrefsPrivate
 	gboolean		 can_shutdown;
 	gboolean		 can_suspend;
 	gboolean		 can_hibernate;
-	GpmConf			*conf;
+	GConfClient			*conf;
 	GpmScreensaver		*screensaver;
 #ifdef HAVE_GCONF_DEFAULTS
 	PolKitGnomeAction	*default_action;
@@ -255,7 +254,7 @@ gpm_prefs_icon_radio_cb (GtkWidget *widget,
 	policy = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "policy"));
 	str = gpm_tray_icon_mode_to_string (policy);
 	egg_debug ("Changing %s to %s", GPM_CONF_UI_ICON_POLICY, str);
-	gpm_conf_set_string (prefs->priv->conf, GPM_CONF_UI_ICON_POLICY, str);
+	gconf_client_set_string (prefs->priv->conf, GPM_CONF_UI_ICON_POLICY, str, NULL);
 }
 
 /**
@@ -321,7 +320,7 @@ gpm_prefs_sleep_slider_changed_cb (GtkRange *range,
 
 	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (range), "conf_key");
 	egg_debug ("Changing %s to %i", gpm_pref_key, value);
-	gpm_conf_set_int (prefs->priv->conf, gpm_pref_key, value);
+	gconf_client_set_int (prefs->priv->conf, gpm_pref_key, value, NULL);
 }
 
 /**
@@ -344,8 +343,8 @@ gpm_prefs_setup_sleep_slider (GpmPrefs    *prefs,
 	g_signal_connect (G_OBJECT (widget), "format-value",
 			  G_CALLBACK (gpm_prefs_format_time_cb), prefs);
 
-	gpm_conf_get_int (prefs->priv->conf, gpm_pref_key, &value);
-	gpm_conf_is_writable (prefs->priv->conf, gpm_pref_key, &is_writable);
+	value = gconf_client_get_int (prefs->priv->conf, gpm_pref_key, NULL);
+	is_writable = gconf_client_key_is_writable (prefs->priv->conf, gpm_pref_key, NULL);
 
 	gtk_widget_set_sensitive (widget, is_writable);
 
@@ -386,7 +385,7 @@ gpm_prefs_brightness_slider_changed_cb (GtkRange *range,
 
 	g_object_set_data (G_OBJECT (range), "conf_key", (gpointer) gpm_pref_key);
 	egg_debug ("Changing %s to %i", gpm_pref_key, (int) value);
-	gpm_conf_set_int (prefs->priv->conf, gpm_pref_key, (gint) value);
+	gconf_client_set_int (prefs->priv->conf, gpm_pref_key, (gint) value, NULL);
 }
 
 /**
@@ -410,8 +409,8 @@ gpm_prefs_setup_brightness_slider (GpmPrefs    *prefs,
 	g_signal_connect (G_OBJECT (widget), "format-value",
 			  G_CALLBACK (gpm_prefs_format_percentage_cb), NULL);
 
-	gpm_conf_get_int (prefs->priv->conf, gpm_pref_key, &value);
-	gpm_conf_is_writable (prefs->priv->conf, gpm_pref_key, &is_writable);
+	value = gconf_client_get_int (prefs->priv->conf, gpm_pref_key, NULL);
+	is_writable = gconf_client_key_is_writable (prefs->priv->conf, gpm_pref_key, NULL);
 
 	gtk_widget_set_sensitive (widget, is_writable);
 
@@ -459,7 +458,7 @@ gpm_prefs_action_combo_changed_cb (GtkWidget *widget,
 	g_free (value);
 	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (widget), "conf_key");
 	egg_debug ("Changing %s to %s", gpm_pref_key, action);
-	gpm_conf_set_string (prefs->priv->conf, gpm_pref_key, action);
+	gconf_client_set_string (prefs->priv->conf, gpm_pref_key, action, NULL);
 }
 
 /**
@@ -484,8 +483,8 @@ gpm_prefs_setup_action_combo (GpmPrefs     *prefs,
 
 	widget = glade_xml_get_widget (xml, widget_name);
 
-	gpm_conf_get_string (prefs->priv->conf, gpm_pref_key, &value);
-	gpm_conf_is_writable (prefs->priv->conf, gpm_pref_key, &is_writable);
+	value = gconf_client_get_string (prefs->priv->conf, gpm_pref_key, NULL);
+	is_writable = gconf_client_key_is_writable (prefs->priv->conf, gpm_pref_key, NULL);
 
 	gtk_widget_set_sensitive (widget, is_writable);
 
@@ -559,7 +558,7 @@ gpm_prefs_checkbox_lock_cb (GtkWidget *widget,
 	widget_name = gtk_widget_get_name (widget);
 	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (widget), "conf_key");
 	egg_debug ("Changing %s to %i", gpm_pref_key, checked);
-	gpm_conf_set_bool (prefs->priv->conf, gpm_pref_key, checked);
+	gconf_client_set_bool (prefs->priv->conf, gpm_pref_key, checked, NULL);
 }
 
 /**
@@ -582,7 +581,7 @@ gpm_prefs_setup_checkbox (GpmPrefs    *prefs,
 
 	widget = glade_xml_get_widget (xml, widget_name);
 
-	gpm_conf_get_bool (prefs->priv->conf, gpm_pref_key, &checked);
+	checked = gconf_client_get_bool (prefs->priv->conf, gpm_pref_key, NULL);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
 
 	g_object_set_data (G_OBJECT (widget), "conf_key", (gpointer) gpm_pref_key);
@@ -664,35 +663,38 @@ gs_delay_changed_cb (GpmScreensaver *screensaver,
 }
 
 /**
- * conf_key_changed_cb:
+ * gpm_conf_gconf_key_changed_cb:
  *
- * We might have to do things when the conf keys change; do them here.
+ * We might have to do things when the gconf keys change; do them here.
  **/
 static void
-conf_key_changed_cb (GpmConf     *conf,
-		     const gchar *key,
-		     GpmPrefs    *prefs)
+gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *entry, GpmPrefs *prefs)
 {
-	int value;
+	GConfValue *value;
+	gint brightness;
 	GtkWidget *widget;
-	gboolean  enabled;
+	gboolean enabled;
 
-	if (strcmp (key, GPM_CONF_BACKLIGHT_BRIGHTNESS_AC) == 0) {
+	value = gconf_entry_get_value (entry);
+	if (value == NULL)
+		return;
+
+	if (strcmp (entry->key, GPM_CONF_BACKLIGHT_BRIGHTNESS_AC) == 0) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hscale_ac_brightness");
-		gpm_conf_get_int (conf, key, &value);
-		gtk_range_set_value (GTK_RANGE (widget), value);
+		brightness = gconf_value_get_int (value);
+		gtk_range_set_value (GTK_RANGE (widget), brightness);
 	}
 
-	if (strcmp (key, GPM_CONF_LOWPOWER_AC) == 0) {
-		gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_LOWPOWER_AC, &enabled);
+	if (strcmp (entry->key, GPM_CONF_LOWPOWER_AC) == 0) {
+		enabled = gconf_value_get_bool (value);
 		egg_debug ("need to enable checkbox");
 
-	} else if (strcmp (key, GPM_CONF_LOWPOWER_UPS) == 0) {
-		gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_LOWPOWER_UPS, &enabled);
+	} else if (strcmp (entry->key, GPM_CONF_LOWPOWER_UPS) == 0) {
+		enabled = gconf_value_get_bool (value);
 		egg_debug ("need to enable checkbox");
 
-	} else if (strcmp (key, GPM_CONF_LOWPOWER_BATT) == 0) {
-		gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_LOWPOWER_BATT, &enabled);
+	} else if (strcmp (entry->key, GPM_CONF_LOWPOWER_BATT) == 0) {
+		enabled = gconf_value_get_bool (value);
 		egg_debug ("need to enable checkbox");
 	}
 }
@@ -710,7 +712,7 @@ prefs_setup_notification (GpmPrefs *prefs)
 	GtkWidget   *radiobutton_icon_never;
 	gboolean     is_writable;
 
-	gpm_conf_get_string (prefs->priv->conf, GPM_CONF_UI_ICON_POLICY, &icon_policy_str);
+	icon_policy_str = gconf_client_get_string (prefs->priv->conf, GPM_CONF_UI_ICON_POLICY, NULL);
 	icon_policy = gpm_tray_icon_mode_from_string (icon_policy_str);
 	g_free (icon_policy_str);
 
@@ -725,7 +727,7 @@ prefs_setup_notification (GpmPrefs *prefs)
 	radiobutton_icon_never = glade_xml_get_widget (prefs->priv->glade_xml,
 							"radiobutton_notification_never");
 
-	gpm_conf_is_writable (prefs->priv->conf, GPM_CONF_UI_ICON_POLICY, &is_writable);
+	is_writable = gconf_client_key_is_writable (prefs->priv->conf, GPM_CONF_UI_ICON_POLICY, NULL);
 	gtk_widget_set_sensitive (radiobutton_icon_always, is_writable);
 	gtk_widget_set_sensitive (radiobutton_icon_present, is_writable);
 	gtk_widget_set_sensitive (radiobutton_icon_charge, is_writable);
@@ -1072,9 +1074,13 @@ gpm_prefs_init (GpmPrefs *prefs)
 	g_signal_connect (prefs->priv->screensaver, "gs-delay-changed",
 			  G_CALLBACK (gs_delay_changed_cb), prefs);
 
-	prefs->priv->conf = gpm_conf_new ();
-	g_signal_connect (prefs->priv->conf, "value-changed",
-			  G_CALLBACK (conf_key_changed_cb), prefs);
+	prefs->priv->conf = gconf_client_get_default ();
+	/* watch gnome-power-manager keys */
+	gconf_client_add_dir (prefs->priv->conf, GPM_CONF_DIR,
+			      GCONF_CLIENT_PRELOAD_NONE, NULL);
+	gconf_client_notify_add (prefs->priv->conf, GPM_CONF_DIR,
+				 (GConfClientNotifyFunc) gpm_conf_gconf_key_changed_cb,
+				 prefs, NULL, NULL);
 
 	caps = gpm_dbus_method_int ("GetPreferencesOptions");
 	prefs->priv->has_batteries = ((caps & GPM_PREFS_SERVER_BATTERY) > 0);

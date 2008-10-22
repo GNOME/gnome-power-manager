@@ -26,7 +26,7 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 
-#include "gpm-conf.h"
+#include <gconf/gconf-client.h>
 #include "gpm-screensaver.h"
 #include "gpm-srv-screensaver.h"
 #include "egg-debug.h"
@@ -46,7 +46,7 @@ struct GpmSrvScreensaverPrivate
 	GpmAcAdapter		*ac_adapter;
 	GpmButton		*button;
 	GpmBrightness		*brightness;
-	GpmConf			*conf;
+	GConfClient			*conf;
 	GpmDpms			*dpms;
 	GpmScreensaver		*screensaver;
 	guint32         	 ac_throttle_id;
@@ -243,7 +243,7 @@ gpm_srv_screensaver_init (GpmSrvScreensaver *srv_screensaver)
 
 	srv_screensaver->priv = GPM_SRV_SCREENSAVER_GET_PRIVATE (srv_screensaver);
 
-	srv_screensaver->priv->conf = gpm_conf_new ();
+	srv_screensaver->priv->conf = gconf_client_get_default ();
 
 	/* we use screensaver as the master class */
 	srv_screensaver->priv->screensaver = gpm_screensaver_new ();

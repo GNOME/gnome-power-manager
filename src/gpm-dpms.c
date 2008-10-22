@@ -42,7 +42,7 @@
 #include <X11/extensions/dpmsstr.h>
 #endif
 
-#include "gpm-conf.h"
+#include <gconf/gconf-client.h>
 #include "egg-debug.h"
 #include "gpm-dpms.h"
 
@@ -65,7 +65,7 @@ struct GpmDpmsPrivate
 	guint			 suspend_timeout;
 	guint			 off_timeout;
 
-	GpmConf			*conf;
+	GConfClient			*conf;
 	GpmDpmsMode		 mode;
 
 	guint			 timer_id;
