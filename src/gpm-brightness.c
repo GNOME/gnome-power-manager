@@ -73,10 +73,9 @@ static gpointer gpm_brightness_object = NULL;
 guint
 gpm_brightness_get_step (guint levels)
 {
-	if (levels > 20) {
-		/* macbook pro has a bazzillion brightness levels, do in 5% steps */
+	/* macbook pro has a bazzillion brightness levels, do in 5% steps */
+	if (levels > 20)
 		return levels / 20;
-	}
 	return 1;
 }
 
@@ -141,13 +140,13 @@ gpm_brightness_set (GpmBrightness *brightness, guint percentage, gboolean *hw_ch
 	return FALSE;
 out:
 	/* we did something to the hardware, so untrusted */
-	if (ret) {
+	if (ret)
 		brightness->priv->cache_trusted = FALSE;
-	}
+
 	/* is the caller interested? */
-	if (ret && hw_changed != NULL) {
+	if (ret && hw_changed != NULL)
 		*hw_changed = hw_changed_local;
-	}
+
 	return ret;
 }
 
@@ -232,9 +231,8 @@ gpm_brightness_up (GpmBrightness *brightness, gboolean *hw_changed)
 	return FALSE;
 out:
 	/* we did something to the hardware, so untrusted */
-	if (ret) {
+	if (ret)
 		brightness->priv->cache_trusted = FALSE;
-	}
 	/* is the caller interested? */
 	if (ret && hw_changed != NULL) {
 		*hw_changed = hw_changed_local;
@@ -270,13 +268,12 @@ gpm_brightness_down (GpmBrightness *brightness, gboolean *hw_changed)
 	return FALSE;
 out:
 	/* we did something to the hardware, so untrusted */
-	if (ret) {
+	if (ret)
 		brightness->priv->cache_trusted = FALSE;
-	}
+
 	/* is the caller interested? */
-	if (ret && hw_changed != NULL) {
+	if (ret && hw_changed != NULL)
 		*hw_changed = hw_changed_local;
-	}
 	return ret;
 }
 
@@ -359,9 +356,8 @@ static void
 gpm_brightness_xrandr_changed_cb (GpmBrightnessXRandR *xrandr, guint percentage, GpmBrightness *brightness)
 {
 	g_return_if_fail (GPM_IS_BRIGHTNESS (brightness));
-	if (brightness->priv->use_xrandr) {
+	if (brightness->priv->use_xrandr)
 		gpm_brightness_changed (brightness, percentage);
-	}
 }
 
 /**
@@ -372,9 +368,8 @@ static void
 gpm_brightness_hal_changed_cb (GpmBrightnessHal *hal, guint percentage, GpmBrightness *brightness)
 {
 	g_return_if_fail (GPM_IS_BRIGHTNESS (brightness));
-	if (brightness->priv->use_hal) {
+	if (brightness->priv->use_hal)
 		gpm_brightness_changed (brightness, percentage);
-	}
 }
 
 /**
@@ -397,13 +392,11 @@ gpm_brightness_init (GpmBrightness *brightness)
 		brightness->priv->use_xrandr = TRUE;
 	}
 	brightness->priv->hal = gpm_brightness_hal_new ();
-	if (gpm_brightness_hal_has_hw (brightness->priv->hal)) {
+	if (gpm_brightness_hal_has_hw (brightness->priv->hal))
 		brightness->priv->use_hal = TRUE;
-	}
 	/* we want to default to only use XRANDR if available, as some hardware can use either */
-	if (brightness->priv->use_xrandr) {
+	if (brightness->priv->use_xrandr)
 		brightness->priv->use_hal = FALSE;
-	}
 	g_signal_connect (brightness->priv->hal, "brightness-changed",
 			  G_CALLBACK (gpm_brightness_hal_changed_cb), brightness);
 	g_signal_connect (brightness->priv->xrandr, "brightness-changed",

@@ -269,22 +269,17 @@ gpm_engine_get_summary (GpmEngine *engine)
 
 	unit = gpm_cell_array_get_unit (collection->ups);
 
-	if (unit->is_present && unit->is_discharging == TRUE) {
-		/* only enable this if discharging on UPS  */
+	if (unit->is_present && unit->is_discharging)
 		tooltip = g_string_new (_("Computer is running on backup power\n"));
-
-	} else if (on_ac) {
+	else if (on_ac)
 		tooltip = g_string_new (_("Computer is running on AC power\n"));
-
-	} else {
+	else
 		tooltip = g_string_new (_("Computer is running on battery power\n"));
-	}
 
 	/* do each device type we know about, in the correct visual order */
 	part = gpm_cell_array_get_description (collection->primary);
-	if (part != NULL) {
+	if (part != NULL)
 		tooltip = g_string_append (tooltip, part);
-	}
 	g_free (part);
 
 	/* if we have limited accuracy, add this to the tooltip */
@@ -412,11 +407,11 @@ gpm_engine_get_icon (GpmEngine *engine)
 	/* we try (DIS)CHARGING: PRIMARY, UPS */
 	egg_debug ("Trying CHARGING icon: primary, ups");
 	if (unit_primary->is_present &&
-	    (unit_primary->is_charging || unit_primary->is_discharging == TRUE)) {
+	    (unit_primary->is_charging || unit_primary->is_discharging)) {
 		return gpm_cell_array_get_icon (collection->primary);
 
 	} else if (unit_ups->is_present &&
-		   (unit_ups->is_charging || unit_ups->is_discharging == TRUE)) {
+		   (unit_ups->is_charging || unit_ups->is_discharging)) {
 		return gpm_cell_array_get_icon (collection->ups);
 	}
 
@@ -522,13 +517,10 @@ gpm_engine_recalculate_state_icon (GpmEngine *engine)
 	g_return_val_if_fail (GPM_IS_ENGINE (engine), FALSE);
 
 	/* show a different icon if we are disconnected */
-	if (engine->priv->hal_connected) {
-		/* check the icon */
+	if (engine->priv->hal_connected)
 		icon = gpm_engine_get_icon (engine);
-	} else {
-		/* show a AC icon */
+	else
 		icon = g_strdup (GPM_STOCK_AC_ADAPTER);
-	}
 
 	if (icon == NULL) {
 		/* none before, now none */
@@ -576,14 +568,11 @@ gpm_engine_recalculate_state_summary (GpmEngine *engine)
 {
 	gchar *summary;
 
-	/* show a different icon if we are disconnected */
-	if (engine->priv->hal_connected) {
-		/* check the summary */
+	/* show a different summary if we are disconnected */
+	if (engine->priv->hal_connected)
 		summary = gpm_engine_get_summary (engine);
-	} else {
-		/* show a AC icon */
+	else
 		summary = g_strdup (_("Unable to get data..."));
-	}
 
 	if (engine->priv->previous_summary == NULL) {
 		engine->priv->previous_summary = summary;

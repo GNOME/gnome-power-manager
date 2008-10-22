@@ -567,7 +567,7 @@ gpm_tray_icon_activate_cb (GtkStatusIcon *status_icon,
 	}
 
 	/* only do the seporator if we have at least one device and can do an action */
-	if (dev_cnt != 0 && (icon->priv->show_suspend || icon->priv->show_hibernate == TRUE)) {
+	if (dev_cnt != 0 && (icon->priv->show_suspend || icon->priv->show_hibernate)) {
 		item = gtk_separator_menu_item_new ();
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	}

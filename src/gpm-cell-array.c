@@ -345,7 +345,7 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 	}
 
 	/* sanity check */
-	if (unit->is_discharging && unit->is_charging == TRUE) {
+	if (unit->is_discharging && unit->is_charging) {
 		egg_warning ("Sanity check kicked in! "
 			     "Multiple device object cannot be charging and discharging simultaneously!");
 		unit->is_charging = FALSE;

@@ -402,7 +402,7 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	} else {
 		enable_action = gconf_client_get_bool (backlight->priv->conf, GPM_CONF_BACKLIGHT_IDLE_DIM_BATT, NULL);
 	}
-	if (enable_action && backlight->priv->system_is_idle == TRUE) {
+	if (enable_action && backlight->priv->system_is_idle) {
 		value = gconf_client_get_int (backlight->priv->conf, GPM_CONF_BACKLIGHT_IDLE_BRIGHTNESS, NULL);
 		if (value > 100) {
 			egg_warning ("cannot use idle brightness value %i, correcting to 50", value);
@@ -417,7 +417,7 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 
 	/* reduce if ambient is low */
 	enable_action = gconf_client_get_bool (backlight->priv->conf, GPM_CONF_AMBIENT_ENABLE, NULL);
-	if (backlight->priv->can_sense && enable_action == TRUE) {
+	if (backlight->priv->can_sense && enable_action) {
 		value = gconf_client_get_int (backlight->priv->conf, GPM_CONF_AMBIENT_SCALE, NULL);
 		scale = backlight->priv->ambient_sensor_value * (value / 100.0f);
 		value = gconf_client_get_int (backlight->priv->conf, GPM_CONF_AMBIENT_FACTOR, NULL);

@@ -136,7 +136,7 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
 		exists = hal_device_get_uint (device, "battery.charge_level.rate",
 						  &unit->rate, NULL);
-		if (exists == FALSE && (unit->is_discharging || unit->is_charging == TRUE)) {
+		if (exists == FALSE && (unit->is_discharging || unit->is_charging)) {
 			egg_warning ("could not read your battery's charge rate");
 		}
 		/* sanity check to less than 100W */
@@ -168,7 +168,7 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 	    unit->kind == GPM_CELL_UNIT_KIND_UPS) {
 		exists = hal_device_get_uint (device,"battery.remaining_time",
 						  &unit->time_charge, NULL);
-		if (exists == FALSE && (unit->is_discharging || unit->is_charging == TRUE)) {
+		if (exists == FALSE && (unit->is_discharging || unit->is_charging)) {
 			egg_warning ("could not read your battery's remaining time");
 		}
 	}

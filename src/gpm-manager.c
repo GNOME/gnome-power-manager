@@ -1,7 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
  * Copyright (C) 2005 William Jon McCann <mccann@jhu.edu>
- * Copyright (C) 2005-2007 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2005-2008 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -249,9 +249,7 @@ gpm_manager_play (GpmManager *manager, GpmManagerSound action, gboolean force)
  * Return value: TRUE if we can perform the action.
  **/
 static gboolean
-gpm_manager_is_inhibit_valid (GpmManager *manager,
-			      gboolean	  user_action,
-			      const char *action)
+gpm_manager_is_inhibit_valid (GpmManager *manager, gboolean user_action, const char *action)
 {
 	gboolean has_inhibit;
 	gchar *title = NULL;
@@ -340,8 +338,7 @@ gpm_manager_sync_policy_sleep (GpmManager *manager)
  * Return value: Success.
  **/
 static gboolean
-gpm_manager_blank_screen (GpmManager *manager,
-			  GError    **noerror)
+gpm_manager_blank_screen (GpmManager *manager, GError **noerror)
 {
 	gboolean do_lock;
 	gboolean ret = TRUE;
@@ -371,8 +368,7 @@ gpm_manager_blank_screen (GpmManager *manager,
  * Return value: Success.
  **/
 static gboolean
-gpm_manager_unblank_screen (GpmManager *manager,
-			    GError    **noerror)
+gpm_manager_unblank_screen (GpmManager *manager, GError **noerror)
 {
 	gboolean  do_lock;
 	gboolean  ret = TRUE;
@@ -495,9 +491,7 @@ gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
  * Does one of the policy actions specified in gconf.
  **/
 static gboolean
-manager_policy_do (GpmManager  *manager,
-		   const gchar *policy,
-		   const gchar *reason)
+manager_policy_do (GpmManager  *manager, const gchar *policy, const gchar *reason)
 {
 	gchar *action = NULL;
 
@@ -548,8 +542,7 @@ manager_policy_do (GpmManager  *manager,
  * Attempt to suspend the system.
  **/
 gboolean
-gpm_manager_suspend (GpmManager *manager,
-		     GError    **error)
+gpm_manager_suspend (GpmManager *manager, GError **error)
 {
 	gboolean allowed;
 
@@ -583,8 +576,7 @@ gpm_manager_suspend (GpmManager *manager,
  * Attempt to hibernate the system.
  **/
 gboolean
-gpm_manager_hibernate (GpmManager *manager,
-		       GError    **error)
+gpm_manager_hibernate (GpmManager *manager, GError **error)
 {
 	gboolean allowed;
 
@@ -618,8 +610,7 @@ gpm_manager_hibernate (GpmManager *manager,
  * Attempt to restart the system.
  **/
 gboolean
-gpm_manager_reboot (GpmManager *manager,
-		    GError    **error)
+gpm_manager_reboot (GpmManager *manager, GError **error)
 {
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
@@ -656,9 +647,7 @@ gpm_manager_shutdown (GpmManager *manager,
  * If the current session user is able to suspend.
  **/
 gboolean
-gpm_manager_can_suspend (GpmManager *manager,
-			 gboolean   *can_suspend,
-			 GError    **error)
+gpm_manager_can_suspend (GpmManager *manager, gboolean *can_suspend, GError **error)
 {
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
@@ -671,9 +660,7 @@ gpm_manager_can_suspend (GpmManager *manager,
  * If the current session user is able to hibernate.
  **/
 gboolean
-gpm_manager_can_hibernate (GpmManager *manager,
-			   gboolean   *can_hibernate,
-			   GError    **error)
+gpm_manager_can_hibernate (GpmManager *manager, gboolean *can_hibernate, GError **error)
 {
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
@@ -686,9 +673,7 @@ gpm_manager_can_hibernate (GpmManager *manager,
  * If the current session user is able to reboot.
  **/
 gboolean
-gpm_manager_can_reboot (GpmManager *manager,
-			gboolean   *can_reboot,
-			GError    **error)
+gpm_manager_can_reboot (GpmManager *manager, gboolean *can_reboot, GError **error)
 {
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
@@ -701,9 +686,7 @@ gpm_manager_can_reboot (GpmManager *manager,
  * If the current session user is able to shutdown.
  **/
 gboolean
-gpm_manager_can_shutdown (GpmManager *manager,
-			  gboolean   *can_shutdown,
-			  GError    **error)
+gpm_manager_can_shutdown (GpmManager *manager, gboolean *can_shutdown, GError **error)
 {
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
@@ -714,9 +697,7 @@ gpm_manager_can_shutdown (GpmManager *manager,
  * gpm_manager_get_preferences_options:
  **/
 gboolean
-gpm_manager_get_preferences_options (GpmManager *manager,
-				     gint       *capability,
-				     GError    **error)
+gpm_manager_get_preferences_options (GpmManager *manager, gint *capability, GError **error)
 {
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
@@ -733,9 +714,7 @@ gpm_manager_get_preferences_options (GpmManager *manager,
  * Programs should respect this value for the session.
  **/
 gboolean
-gpm_manager_get_power_save_status (GpmManager *manager,
-				   gboolean   *low_power,
-				   GError    **error)
+gpm_manager_get_power_save_status (GpmManager *manager, gboolean *low_power, GError **error)
 {
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
@@ -752,9 +731,7 @@ gpm_manager_get_power_save_status (GpmManager *manager,
  * if the computer is using backup power from a monitored UPS.
  **/
 gboolean
-gpm_manager_get_on_battery (GpmManager *manager,
-			       gboolean   *on_battery,
-			       GError    **error)
+gpm_manager_get_on_battery (GpmManager *manager, gboolean *on_battery, GError **error)
 {
 	gboolean on_ac;
 	g_return_val_if_fail (manager != NULL, FALSE);
@@ -768,9 +745,7 @@ gpm_manager_get_on_battery (GpmManager *manager,
  * gpm_manager_get_low_battery:
  **/
 gboolean
-gpm_manager_get_low_battery (GpmManager *manager,
-			     gboolean   *low_battery,
-			     GError    **error)
+gpm_manager_get_low_battery (GpmManager *manager, gboolean *low_battery, GError **error)
 {
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
@@ -887,64 +862,6 @@ idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmManager *manager)
 			return;
 		idle_do_sleep (manager);
 	}
-}
-
-/**
- * battery_button_pressed:
- * @manager: This class instance
- *
- * What to do when the battery button is pressed.
- **/
-static void
-battery_button_pressed (GpmManager *manager)
-{
-	gchar *message;
-
-	message = gpm_engine_get_summary (manager->priv->engine);
-
-	gpm_notify_display (manager->priv->notify,
-			      _("Power Information"),
-			      message,
-			      GPM_NOTIFY_TIMEOUT_LONG,
-			      GTK_STOCK_DIALOG_INFO,
-			      GPM_NOTIFY_URGENCY_NORMAL);
-	g_free (message);
-}
-
-/**
- * power_button_pressed:
- * @manager: This class instance
- *
- * What to do when the power button is pressed.
- **/
-static void
-power_button_pressed (GpmManager *manager)
-{
-	manager_policy_do (manager, GPM_CONF_BUTTON_POWER, _("The power button has been pressed."));
-}
-
-/**
- * suspend_button_pressed:
- * @manager: This class instance
- *
- * What to do when the suspend button is pressed.
- **/
-static void
-suspend_button_pressed (GpmManager *manager)
-{
-	manager_policy_do (manager, GPM_CONF_BUTTON_SUSPEND, _("The suspend button has been pressed."));
-}
-
-/**
- * hibernate_button_pressed:
- * @manager: This class instance
- *
- * What to do when the hibernate button is pressed.
- **/
-static void
-hibernate_button_pressed (GpmManager *manager)
-{
-	manager_policy_do (manager, GPM_CONF_BUTTON_HIBERNATE, _("The hibernate button has been pressed."));
 }
 
 /**
@@ -1078,6 +995,7 @@ update_lid_throttle (GpmManager *manager, gboolean lid_is_closed)
 static void
 button_pressed_cb (GpmButton *button, const gchar *type, GpmManager *manager)
 {
+	gchar *message;
 	egg_debug ("Button press event type=%s", type);
 
 	if (strcmp (type, GPM_BUTTON_LID_CLOSED) == 0)
@@ -1086,19 +1004,27 @@ button_pressed_cb (GpmButton *button, const gchar *type, GpmManager *manager)
 		gpm_info_event_log (manager->priv->info, GPM_EVENT_LID_OPENED, _("The laptop lid has been re-opened"));
 
 	if (strcmp (type, GPM_BUTTON_POWER) == 0)
-		power_button_pressed (manager);
+		manager_policy_do (manager, GPM_CONF_BUTTON_POWER, _("The power button has been pressed."));
 	else if (strcmp (type, GPM_BUTTON_SLEEP) == 0)
-		suspend_button_pressed (manager);
+		manager_policy_do (manager, GPM_CONF_BUTTON_SUSPEND, _("The suspend button has been pressed."));
 	else if (strcmp (type, GPM_BUTTON_SUSPEND) == 0)
-		suspend_button_pressed (manager);
+		manager_policy_do (manager, GPM_CONF_BUTTON_SUSPEND, _("The suspend button has been pressed."));
 	else if (strcmp (type, GPM_BUTTON_HIBERNATE) == 0)
-		hibernate_button_pressed (manager);
+		manager_policy_do (manager, GPM_CONF_BUTTON_HIBERNATE, _("The hibernate button has been pressed."));
 	else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0)
 		lid_button_pressed (manager, FALSE);
 	else if (strcmp (type, GPM_BUTTON_LID_CLOSED) == 0)
 		lid_button_pressed (manager, TRUE);
-	else if (strcmp (type, GPM_BUTTON_BATTERY) == 0)
-		battery_button_pressed (manager);
+	else if (strcmp (type, GPM_BUTTON_BATTERY) == 0) {
+		message = gpm_engine_get_summary (manager->priv->engine);
+		gpm_notify_display (manager->priv->notify,
+				      _("Power Information"),
+				      message,
+				      GPM_NOTIFY_TIMEOUT_LONG,
+				      GTK_STOCK_DIALOG_INFO,
+				      GPM_NOTIFY_URGENCY_NORMAL);
+		g_free (message);
+	}
 
 	/* really belongs in gnome-manager */
 	if (strcmp (type, GPM_BUTTON_LOCK) == 0)
@@ -1197,9 +1123,7 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter, gboolean on_ac, GpmManager *man
 static gboolean
 manager_critical_action_do (GpmManager *manager)
 {
-	manager_policy_do (manager,
-			   GPM_CONF_ACTIONS_CRITICAL_BATT,
-			   _("Battery is critically low."));
+	manager_policy_do (manager, GPM_CONF_ACTIONS_CRITICAL_BATT, _("Battery is critically low."));
 	return FALSE;
 }
 
@@ -1320,8 +1244,7 @@ gpm_manager_tray_icon_hibernate (GpmManager *manager, GpmTrayIcon *tray)
  * the inhibit states are valid.
  **/
 static void
-gpm_manager_tray_icon_suspend (GpmManager   *manager,
-			       GpmTrayIcon  *tray)
+gpm_manager_tray_icon_suspend (GpmManager *manager, GpmTrayIcon *tray)
 {
 	gpm_manager_action_suspend (manager, _("User clicked on tray"));
 }
@@ -1355,31 +1278,28 @@ gpm_manager_check_sleep_errors (GpmManager *manager)
  * Called when the user is trying or has authenticated
  **/
 static void
-screensaver_auth_request_cb (GpmScreensaver *screensaver,
-			     gboolean        auth_begin,
-			     GpmManager     *manager)
+screensaver_auth_request_cb (GpmScreensaver *screensaver, gboolean auth_begin, GpmManager *manager)
 {
-	GError *error;
+	GError *error = NULL;
 	gboolean ret;
 	/* only clear errors if we have finished the authentication */
 	if (!auth_begin) {
-		error = NULL;
 		ret = hal_device_power_clear_suspend_error (manager->priv->hal_device_power, &error);
 		if (!ret) {
 			egg_debug ("Failed to clear suspend error; %s", error->message);
 			g_error_free (error);
+			error = NULL;
 		}
 		error = NULL;
 		ret = hal_device_power_clear_hibernate_error (manager->priv->hal_device_power, &error);
 		if (!ret) {
 			egg_debug ("Failed to clear hibernate error; %s", error->message);
 			g_error_free (error);
+			error = NULL;
 		}
 	}
 
 	if (auth_begin) {
-		GError  *error = NULL;
-
 		/* TODO: This may be a bid of a bodge, as we will have multiple
 			 resume requests -- maybe this need a logic cleanup */
 		gpm_brightness_kbd_undim (manager->priv->brightness_kbd);
@@ -1391,6 +1311,7 @@ screensaver_auth_request_cb (GpmScreensaver *screensaver,
 		if (error != NULL) {
 			egg_warning ("Failed to turn on DPMS: %s", error->message);
 			g_error_free (error);
+			error = NULL;
 		}
 	}
 }
@@ -2046,7 +1967,6 @@ gpm_manager_finalize (GObject *object)
 
 	g_return_if_fail (manager->priv != NULL);
 
-	/* compulsory gobjects */
 	g_object_unref (manager->priv->conf);
 	g_object_unref (manager->priv->hal_device_power);
 	g_object_unref (manager->priv->dpms);
@@ -2062,10 +1982,7 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->feedback_kbd);
 	g_object_unref (manager->priv->button);
 	g_object_unref (manager->priv->brightness_kbd);
-
-	/* optional gobjects */
-	if (manager->priv->backlight)
-		g_object_unref (manager->priv->backlight);
+	g_object_unref (manager->priv->backlight);
 
 	G_OBJECT_CLASS (gpm_manager_parent_class)->finalize (object);
 }

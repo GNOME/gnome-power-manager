@@ -1,5 +1,32 @@
 2008-10-22  Richard Hughes  <richard@hughsie.com>
 
+	* src/egg-test.c: (egg_test_start):
+	* src/gpm-backlight.c: (gpm_backlight_brightness_evaluate_and_set):
+	* src/gpm-brightness.c: (gpm_brightness_get_step),
+	(gpm_brightness_set), (gpm_brightness_up), (gpm_brightness_down),
+	(gpm_brightness_xrandr_changed_cb),
+	(gpm_brightness_hal_changed_cb), (gpm_brightness_init):
+	* src/gpm-cell-array.c: (gpm_cell_array_update):
+	* src/gpm-cell.c: (gpm_cell_refresh_hal_all):
+	* src/gpm-engine.c: (gpm_engine_get_summary),
+	(gpm_engine_get_icon), (gpm_engine_recalculate_state_icon),
+	(gpm_engine_recalculate_state_summary):
+	* src/gpm-manager.c: (gpm_manager_is_inhibit_valid),
+	(gpm_manager_blank_screen), (gpm_manager_unblank_screen),
+	(manager_policy_do), (gpm_manager_suspend),
+	(gpm_manager_hibernate), (gpm_manager_reboot),
+	(gpm_manager_can_suspend), (gpm_manager_can_hibernate),
+	(gpm_manager_can_reboot), (gpm_manager_can_shutdown),
+	(gpm_manager_get_preferences_options),
+	(gpm_manager_get_power_save_status), (gpm_manager_get_on_battery),
+	(gpm_manager_get_low_battery), (button_pressed_cb),
+	(manager_critical_action_do), (gpm_manager_tray_icon_suspend),
+	(screensaver_auth_request_cb), (gpm_manager_finalize):
+	* src/gpm-tray-icon.c: (gpm_tray_icon_activate_cb):
+	Whitespace and refactoring changes.
+
+2008-10-22  Richard Hughes  <richard@hughsie.com>
+
 	* src/Makefile.am:
 	* src/gpm-info.c: (gpm_info_init), (gpm_info_finalize):
 	* src/gpm-manager.c: (update_dpms_throttle), (update_ac_throttle),
