@@ -878,10 +878,15 @@ idle_do_sleep (GpmManager *manager)
  * session timeout has elapsed for the idle action.
  **/
 static void
-idle_changed_cb (GpmIdle    *idle,
-		 GpmIdleMode mode,
-		 GpmManager *manager)
+idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmManager *manager)
 {
+	if (mode == GPM_IDLE_MODE_NORMAL)
+		gpm_info_event_log (manager->priv->info, GPM_EVENT_SESSION_ACTIVE, _("idle mode ended"));
+	else if (mode == GPM_IDLE_MODE_SESSION)
+		gpm_info_event_log (manager->priv->info, GPM_EVENT_SESSION_IDLE, _("idle mode started"));
+	else if (mode == GPM_IDLE_MODE_POWERSAVE)
+		gpm_info_event_log (manager->priv->info, GPM_EVENT_SESSION_POWERSAVE, _("powersave mode started"));
+
 	/* Ignore timeout events when the lid is closed, as the DPMS is
 	 * already off, and we don't want to perform policy actions or re-enable
 	 * the screen when the user moves the mouse on systems that do not
@@ -1043,6 +1048,11 @@ button_pressed_cb (GpmButton   *button,
 {
 	egg_debug ("Button press event type=%s", type);
 
+	if (strcmp (type, GPM_BUTTON_LID_CLOSED) == 0)
+		gpm_info_event_log (manager->priv->info, GPM_EVENT_LID_CLOSED, _("The laptop lid has been closed"));
+	else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0)
+		gpm_info_event_log (manager->priv->info, GPM_EVENT_LID_OPENED, _("The laptop lid has been re-opened"));
+
 	if (strcmp (type, GPM_BUTTON_POWER) == 0) {
 		power_button_pressed (manager);
 
@@ -1075,26 +1085,27 @@ button_pressed_cb (GpmButton   *button,
  * Does the actions when the ac power source is inserted/removed.
  **/
 static void
-ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
-		       gboolean	     on_ac,
-		       GpmManager   *manager)
+ac_adapter_changed_cb (GpmAcAdapter *ac_adapter, gboolean on_ac, GpmManager *manager)
 {
 	gboolean event_when_closed;
 	gboolean power_save;
 
 	egg_debug ("Setting on-ac: %d", on_ac);
 
+	if (on_ac)
+		gpm_info_event_log (manager->priv->info, GPM_EVENT_ON_AC, _("AC adapter inserted"));
+	else
+		gpm_info_event_log (manager->priv->info, GPM_EVENT_ON_BATTERY, _("AC adapter removed"));
+
 	gpm_manager_sync_policy_sleep (manager);
 
-	if (on_ac == FALSE)
+	if (on_ac)
+		gpm_manager_play (manager, GPM_MANAGER_SOUND_POWER_PLUG, FALSE);
+	else
 		gpm_manager_play (manager, GPM_MANAGER_SOUND_POWER_UNPLUG, FALSE);
 
 	egg_debug ("emitting on-ac-changed : %i", on_ac);
-	if (on_ac) {
-		g_signal_emit (manager, signals [ON_BATTERY_CHANGED], 0, FALSE);
-	} else {
-		g_signal_emit (manager, signals [ON_BATTERY_CHANGED], 0, TRUE);
-	}
+	g_signal_emit (manager, signals [ON_BATTERY_CHANGED], 0, !on_ac);
 
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
 	if (on_ac)
@@ -1112,8 +1123,7 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 	/* We keep track of the lid state so we can do the
 	   lid close on battery action if the ac_adapter is removed when the laptop
 	   is closed. Fixes #331655 */
-	if (event_when_closed &&
-	    on_ac == FALSE &&
+	if (event_when_closed && on_ac == FALSE &&
 	    gpm_button_is_lid_closed (manager->priv->button)) {
 		manager_policy_do (manager, GPM_CONF_BUTTON_LID_BATT,
 				   _("The lid has been closed, and the ac adapter "
@@ -1420,6 +1430,11 @@ control_sleep_failure_cb (GpmControl      *control,
 		          GpmManager      *manager)
 {
 	gboolean show_sleep_failed;
+
+	if (action == GPM_CONTROL_ACTION_HIBERNATE)
+		gpm_info_event_log (manager->priv->info, GPM_EVENT_NOTIFICATION, _("Hibernate Problem"));
+	else
+		gpm_info_event_log (manager->priv->info, GPM_EVENT_NOTIFICATION, _("Suspend Problem"));
 
 	/* only show this if specified in gconf */
 	show_sleep_failed = gconf_client_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_SLEEP_FAILED, NULL);

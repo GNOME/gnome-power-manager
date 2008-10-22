@@ -28,12 +28,9 @@
 #include <string.h>
 #include <dbus/dbus-gtype-specialized.h>
 #include <gconf/gconf-client.h>
-
 #include <hal-manager.h>
 
 #include "egg-color.h"
-#include "gpm-ac-adapter.h"
-#include "gpm-button.h"
 #include "gpm-control.h"
 #include "gpm-common.h"
 #include "egg-debug.h"
@@ -43,7 +40,6 @@
 #include "gpm-array.h"
 #include "gpm-engine.h"
 #include "gpm-stock-icons.h"
-#include "gpm-idle.h"
 #include "gpm-graph-widget.h"
 
 static void     gpm_info_class_init (GpmInfoClass *klass);
@@ -68,11 +64,8 @@ static void     gpm_info_finalize   (GObject      *object);
 
 struct GpmInfoPrivate
 {
-	GpmAcAdapter		*ac_adapter;
-	GpmButton		*button;
 	GpmControl		*control;
 	GpmDpms			*dpms;
-	GpmIdle			*idle;
 	GpmProfile		*profile;
 	GpmEngineCollection	*collection;
 
@@ -112,10 +105,10 @@ gpm_info_error_quark (void)
  * Helper function
  **/
 void
-gpm_info_explain_reason (GpmInfo      *info,
+gpm_info_explain_reason (GpmInfo   *info,
 			 GpmGraphWidgetEvent event,
-			 const gchar  *pre,
-			 const gchar  *post)
+			 const gchar *pre,
+			 const gchar *post)
 {
 	gchar *message;
 	if (post) {
@@ -156,9 +149,7 @@ device_list_to_strv (GList *list)
  * gpm_statistics_add_data_type:
  **/
 static void
-gpm_statistics_add_data_type (GPtrArray *array,
-			      guint colour,
-			      const gchar *description)
+gpm_statistics_add_data_type (GPtrArray *array, guint colour, const gchar *description)
 {
 	GValue *value;
 
@@ -174,11 +165,7 @@ gpm_statistics_add_data_type (GPtrArray *array,
  * gpm_statistics_add_event_type:
  **/
 static void
-gpm_statistics_add_event_type (GPtrArray *array,
-			       guint id,
-			       guint colour,
-			       guint shape,
-			       const gchar *description)
+gpm_statistics_add_event_type (GPtrArray *array, guint id, guint colour, guint shape, const gchar *description)
 {
 	GValue *value;
 
@@ -198,7 +185,7 @@ gpm_statistics_add_events_typical (GPtrArray *array)
 {
 	/* add the general key items, TODO specify which ones make sense */
 	gpm_statistics_add_event_type (array, GPM_EVENT_ON_AC,
-				       EGG_COLOR_BLUE,
+				      EGG_COLOR_BLUE,
 				       GPM_GRAPH_WIDGET_SHAPE_CIRCLE,
 				       _("On AC"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_ON_BATTERY,
@@ -570,9 +557,7 @@ gpm_statistics_get_data (GpmInfo     *info,
  * Adds an point to the event log
  **/
 void
-gpm_info_event_log (GpmInfo	       *info,
-		    GpmGraphWidgetEvent event,
-		    const gchar        *desc)
+gpm_info_event_log (GpmInfo *info, GpmGraphWidgetEvent event, const gchar *desc)
 {
 	g_return_if_fail (info != NULL);
 	g_return_if_fail (GPM_IS_INFO (info));
@@ -586,8 +571,7 @@ gpm_info_event_log (GpmInfo	       *info,
  * gpm_info_set_collection_data:
  **/
 gboolean
-gpm_info_set_collection_data (GpmInfo             *info,
-			      GpmEngineCollection *collection)
+gpm_info_set_collection_data (GpmInfo *info, GpmEngineCollection *collection)
 {
 	g_return_val_if_fail (info != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_INFO (info), FALSE);
@@ -622,99 +606,21 @@ gpm_info_log_do_poll (gpointer data)
 		value_x = g_timer_elapsed (info->priv->timer, NULL) - GPM_INFO_DATA_POLL;
 
 		/* set the correct colours */
-		if (unit->is_discharging) {
+		if (unit->is_discharging)
 			colour = EGG_COLOR_DISCHARGING;
-		} else if (unit->is_charging) {
+		else if (unit->is_charging)
 			colour = EGG_COLOR_CHARGING;
-		} else {
+		else
 			colour = EGG_COLOR_CHARGED;
-		}
 
-		if (unit->percentage > 0) {
-			gpm_array_add (info->priv->percentage_data, value_x,
-				       unit->percentage, colour);
-		}
-		if (unit->rate > 0) {
-			gpm_array_add (info->priv->rate_data, value_x,
-				       unit->rate, colour);
-		}
-		if (unit->voltage > 0) {
-			gpm_array_add (info->priv->voltage_data, value_x,
-				       unit->voltage, colour);
-		}
+		if (unit->percentage > 0)
+			gpm_array_add (info->priv->percentage_data, value_x, unit->percentage, colour);
+		if (unit->rate > 0)
+			gpm_array_add (info->priv->rate_data, value_x, unit->rate, colour);
+		if (unit->voltage > 0)
+			gpm_array_add (info->priv->voltage_data, value_x, unit->voltage, colour);
 	}
 	return TRUE;
-}
-
-/**
- * ac_adapter_changed_cb:
- *
- * Does the actions when the ac source is inserted/removed.
- **/
-static void
-ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
-		       gboolean      on_ac,
-		       GpmInfo      *info)
-{
-	if (on_ac) {
-		gpm_info_event_log (info, GPM_EVENT_ON_AC,
-				    _("AC adapter inserted"));
-	} else {
-		gpm_info_event_log (info, GPM_EVENT_ON_BATTERY,
-				    _("AC adapter removed"));
-	}
-}
-
-/**
- * button_pressed_cb:
- * @type: The button type, e.g. "power"
- * @state: The state, where TRUE is depressed or closed
- * @brightness: This class instance
- **/
-static void
-button_pressed_cb (GpmButton   *button,
-		   const gchar *type,
-		   GpmInfo     *info)
-{
-	egg_debug ("Button press event type=%s", type);
-
-	if (strcmp (type, GPM_BUTTON_LID_CLOSED) == 0) {
-		gpm_info_event_log (info,
-				    GPM_EVENT_LID_CLOSED,
-				    _("The laptop lid has been closed"));
-		egg_debug ("lid button CLOSED");
-
-	} else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0) {
-		gpm_info_event_log (info,
-				    GPM_EVENT_LID_OPENED,
-				    _("The laptop lid has been re-opened"));
-		egg_debug ("lid button OPENED");
-	}
-}
-
-/**
- * idle_changed_cb:
- * @idle: The idle class instance
- * @mode: The idle mode, e.g. GPM_IDLE_MODE_SESSION
- * @manager: This class instance
- *
- * This callback is called when gnome-screensaver detects that the idle state
- * has changed. GPM_IDLE_MODE_SESSION is when the session has become inactive,
- * and GPM_IDLE_MODE_SYSTEM is where the session has become inactive, AND the
- * session timeout has elapsed for the idle action.
- **/
-static void
-idle_changed_cb (GpmIdle     *idle,
-		 GpmIdleMode  mode,
-		 GpmInfo     *info)
-{
-	if (mode == GPM_IDLE_MODE_NORMAL) {
-		gpm_info_event_log (info, GPM_EVENT_SESSION_ACTIVE, _("idle mode ended"));
-	} else if (mode == GPM_IDLE_MODE_SESSION) {
-		gpm_info_event_log (info, GPM_EVENT_SESSION_IDLE, _("idle mode started"));
-	} else if (mode == GPM_IDLE_MODE_POWERSAVE) {
-		gpm_info_event_log (info, GPM_EVENT_SESSION_POWERSAVE, _("powersave mode started"));
-	}
 }
 
 /**
@@ -725,21 +631,18 @@ idle_changed_cb (GpmIdle     *idle,
  * Log when the DPMS mode is changed.
  **/
 static void
-dpms_mode_changed_cb (GpmDpms    *dpms,
-		      GpmDpmsMode mode,
-		      GpmInfo *info)
+dpms_mode_changed_cb (GpmDpms *dpms, GpmDpmsMode mode, GpmInfo *info)
 {
 	egg_debug ("DPMS mode changed: %d", mode);
 
-	if (mode == GPM_DPMS_MODE_ON) {
+	if (mode == GPM_DPMS_MODE_ON)
 		gpm_info_event_log (info, GPM_EVENT_DPMS_ON, _("dpms on"));
-	} else if (mode == GPM_DPMS_MODE_STANDBY) {
+	else if (mode == GPM_DPMS_MODE_STANDBY)
 		gpm_info_event_log (info, GPM_EVENT_DPMS_STANDBY, _("dpms standby"));
-	} else if (mode == GPM_DPMS_MODE_SUSPEND) {
+	else if (mode == GPM_DPMS_MODE_SUSPEND)
 		gpm_info_event_log (info, GPM_EVENT_DPMS_SUSPEND, _("dpms suspend"));
-	} else if (mode == GPM_DPMS_MODE_OFF) {
+	else if (mode == GPM_DPMS_MODE_OFF)
 		gpm_info_event_log (info, GPM_EVENT_DPMS_OFF, _("dpms off"));
-	}
 }
 
 /**
@@ -750,30 +653,9 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
  * We have to update the caches on resume
  **/
 static void
-control_resume_cb (GpmControl *control,
-		   GpmControlAction action,
-		   GpmInfo    *info)
+control_resume_cb (GpmControl *control, GpmControlAction action, GpmInfo *info)
 {
-	gpm_info_explain_reason (info, GPM_EVENT_RESUME,
-				_("Resuming computer"), NULL);
-}
-
-/**
- * control_sleep_failure_cb:
- * @control: The control class instance
- * @info: This class instance
- *
- * We have to log if suspend failed
- **/
-static void
-control_sleep_failure_cb (GpmControl  *control,
-			  GpmControlAction action,
-		          GpmInfo *info)
-{
-	if (action == GPM_CONTROL_ACTION_HIBERNATE)
-		gpm_info_event_log (info, GPM_EVENT_NOTIFICATION, _("Hibernate Problem"));
-	else
-		gpm_info_event_log (info, GPM_EVENT_NOTIFICATION, _("Suspend Problem"));
+	gpm_info_explain_reason (info, GPM_EVENT_RESUME, _("Resuming computer"), NULL);
 }
 
 /**
@@ -802,10 +684,7 @@ gpm_info_init (GpmInfo *info)
 	info->priv->timer = g_timer_new ();
 
 	info->priv->control = gpm_control_new ();
-	g_signal_connect (info->priv->control, "resume",
-			  G_CALLBACK (control_resume_cb), info);
-	g_signal_connect (info->priv->control, "sleep-failure",
-			  G_CALLBACK (control_sleep_failure_cb), info);
+	g_signal_connect (info->priv->control, "resume", G_CALLBACK (control_resume_cb), info);
 
 	/* find out if we should log and display the extra graphs */
 	hal_manager = hal_manager_new ();
@@ -815,25 +694,9 @@ gpm_info_init (GpmInfo *info)
 	/* set default, we have to set these from the manager */
 	info->priv->profile = gpm_profile_new ();
 
-	/* we use ac_adapter so we can log the event */
-	info->priv->ac_adapter = gpm_ac_adapter_new ();
-	g_signal_connect (info->priv->ac_adapter, "ac-adapter-changed",
-			  G_CALLBACK (ac_adapter_changed_cb), info);
-
-	/* watch for lid open/close */
-	info->priv->button = gpm_button_new ();
-	g_signal_connect (info->priv->button, "button-pressed",
-			  G_CALLBACK (button_pressed_cb), info);
-
-	/* watch for idle mode changes */
-	info->priv->idle = gpm_idle_new ();
-	g_signal_connect (info->priv->idle, "idle-changed",
-			  G_CALLBACK (idle_changed_cb), info);
-
 	/* watch for dpms mode changes */
 	info->priv->dpms = gpm_dpms_new ();
-	g_signal_connect (info->priv->dpms, "mode-changed",
-			  G_CALLBACK (dpms_mode_changed_cb), info);
+	g_signal_connect (info->priv->dpms, "mode-changed", G_CALLBACK (dpms_mode_changed_cb), info);
 
 	/* set to a blank list */
 	info->priv->events = gpm_array_new ();
@@ -882,26 +745,18 @@ gpm_info_finalize (GObject *object)
 	info = GPM_INFO (object);
 	info->priv = GPM_INFO_GET_PRIVATE (info);
 
-	if (info->priv->rate_data) {
+	if (info->priv->rate_data)
 		g_object_unref (info->priv->rate_data);
-	}
-	if (info->priv->percentage_data) {
+	if (info->priv->percentage_data)
 		g_object_unref (info->priv->percentage_data);
-	}
-	if (info->priv->time_data) {
+	if (info->priv->time_data)
 		g_object_unref (info->priv->time_data);
-	}
-	if (info->priv->voltage_data) {
+	if (info->priv->voltage_data)
 		g_object_unref (info->priv->voltage_data);
-	}
-	if (info->priv->dpms != NULL) {
+	if (info->priv->dpms != NULL)
 		g_object_unref (info->priv->dpms);
-	}
-	if (info->priv->control != NULL) {
+	if (info->priv->control != NULL)
 		g_object_unref (info->priv->control);
-	}
-	g_object_unref (info->priv->ac_adapter);
-	g_object_unref (info->priv->idle);
 	g_object_unref (info->priv->events);
 	g_object_unref (info->priv->profile);
 

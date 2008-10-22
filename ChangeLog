@@ -1,5 +1,16 @@
 2008-10-22  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-info.c: (gpm_statistics_add_data_type),
+	(gpm_statistics_add_event_type), (gpm_info_event_log),
+	(gpm_info_set_collection_data), (gpm_info_log_do_poll),
+	(dpms_mode_changed_cb), (control_resume_cb), (gpm_info_init),
+	(gpm_info_finalize):
+	* src/gpm-manager.c: (idle_changed_cb), (button_pressed_cb),
+	(ac_adapter_changed_cb), (control_sleep_failure_cb):
+	Move some of the GpmInfo logic down into GpmManager.
+
+2008-10-22  Richard Hughes  <richard@hughsie.com>
+
 	* src/Makefile.am:
 	* src/gpm-backlight.c: (gpm_backlight_sync_policy),
 	(gpm_backlight_brightness_evaluate_and_set),
