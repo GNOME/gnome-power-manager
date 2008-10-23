@@ -143,6 +143,8 @@ gnome_power_manager_SOURCES =				\
 	egg-precision.c					\
 	egg-discrete.h					\
 	egg-discrete.c					\
+	egg-console-kit.h				\
+	egg-console-kit.c				\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
 	gpm-notify.h					\

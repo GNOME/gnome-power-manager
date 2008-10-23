@@ -45,11 +45,13 @@
 #include <hal-device-power.h>
 #include <hal-manager.h>
 
+#include "egg-debug.h"
+#include "egg-console-kit.h"
+
 #include "gpm-ac-adapter.h"
 #include "gpm-button.h"
 #include "gpm-control.h"
 #include "gpm-common.h"
-#include "egg-debug.h"
 #include "gpm-dpms.h"
 #include "gpm-idle.h"
 #include "gpm-info.h"
@@ -98,6 +100,7 @@ struct GpmManagerPrivate
 	GpmBrightnessKbd	*brightness_kbd;
 	GpmFeedback		*feedback_kbd;
 	GpmBacklight		*backlight;
+	EggConsoleKit		*console;
 	guint32         	 screensaver_ac_throttle_id;
 	guint32         	 screensaver_dpms_throttle_id;
 	guint32         	 screensaver_lid_throttle_id;
@@ -833,6 +836,12 @@ idle_do_sleep (GpmManager *manager)
 static void
 idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmManager *manager)
 {
+	/* ConsoleKit says we are not on active console */
+	if (!egg_console_kit_is_active (manager->priv->console)) {
+		egg_debug ("ignoring as not on active console");
+		return;
+	}
+
 	if (mode == GPM_IDLE_MODE_NORMAL)
 		gpm_info_event_log (manager->priv->info, GPM_EVENT_SESSION_ACTIVE, _("idle mode ended"));
 	else if (mode == GPM_IDLE_MODE_SESSION)
@@ -998,6 +1007,12 @@ button_pressed_cb (GpmButton *button, const gchar *type, GpmManager *manager)
 	gchar *message;
 	egg_debug ("Button press event type=%s", type);
 
+	/* ConsoleKit says we are not on active console */
+	if (!egg_console_kit_is_active (manager->priv->console)) {
+		egg_debug ("ignoring as not on active console");
+		return;
+	}
+
 	if (strcmp (type, GPM_BUTTON_LID_CLOSED) == 0)
 		gpm_info_event_log (manager->priv->info, GPM_EVENT_LID_CLOSED, _("The laptop lid has been closed"));
 	else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0)
@@ -1058,6 +1073,12 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter, gboolean on_ac, GpmManager *man
 	gboolean event_when_closed;
 	gboolean power_save;
 	guint brightness;
+
+	/* ConsoleKit says we are not on active console */
+	if (!egg_console_kit_is_active (manager->priv->console)) {
+		egg_debug ("ignoring as not on active console");
+		return;
+	}
 
 	egg_debug ("Setting on-ac: %d", on_ac);
 
@@ -1777,6 +1798,16 @@ dpms_mode_changed_cb (GpmDpms *dpms, GpmDpmsMode mode, GpmManager *manager)
 }
 
 /**
+ * gpm_manager_console_kit_active_changed_cb:
+ **/
+static void
+gpm_manager_console_kit_active_changed_cb (EggConsoleKit *console, gboolean active, GpmManager *manager)
+{
+	egg_debug ("console now %s", active ? "active" : "inactive");
+	/* FIXME: do we need to do policy actions when we switch? */
+}
+
+/**
  * gpm_manager_init:
  * @manager: This class instance
  **/
@@ -1800,6 +1831,11 @@ gpm_manager_init (GpmManager *manager)
 
 	/* do some actions even when killed */
 	g_atexit (gpm_manager_at_exit);
+
+	/* don't apply policy when not active */
+	manager->priv->console = egg_console_kit_new ();
+	g_signal_connect (manager->priv->console, "active-changed",
+			  G_CALLBACK (gpm_manager_console_kit_active_changed_cb), manager);
 
 	/* this is a singleton, so we keep a master copy open here */
 	manager->priv->prefs_server = gpm_prefs_server_new ();
@@ -1983,6 +2019,7 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->button);
 	g_object_unref (manager->priv->brightness_kbd);
 	g_object_unref (manager->priv->backlight);
+	g_object_unref (manager->priv->console);
 
 	G_OBJECT_CLASS (gpm_manager_parent_class)->finalize (object);
 }
