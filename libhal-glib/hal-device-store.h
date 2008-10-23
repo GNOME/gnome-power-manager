@@ -28,39 +28,39 @@
 G_BEGIN_DECLS
 
 #define HAL_TYPE_DEVICE_STORE		(hal_device_store_get_type ())
-#define HAL_DEVICE_STORE(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), HAL_TYPE_DEVICE_STORE, HalDevicestore))
-#define HAL_DEVICE_STORE_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), HAL_TYPE_DEVICE_STORE, HalDevicestoreClass))
+#define HAL_DEVICE_STORE(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), HAL_TYPE_DEVICE_STORE, HalDeviceStore))
+#define HAL_DEVICE_STORE_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), HAL_TYPE_DEVICE_STORE, HalDeviceStoreClass))
 #define HAL_IS_DEVICE_STORE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), HAL_TYPE_DEVICE_STORE))
 #define HAL_IS_DEVICE_STORE_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), HAL_TYPE_DEVICE_STORE))
-#define HAL_DEVICE_STORE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), HAL_TYPE_DEVICE_STORE, HalDevicestoreClass))
+#define HAL_DEVICE_STORE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), HAL_TYPE_DEVICE_STORE, HalDeviceStoreClass))
 
-typedef struct HalDevicestorePrivate HalDevicestorePrivate;
+typedef struct HalDeviceStorePrivate HalDeviceStorePrivate;
 
 typedef struct
 {
 	GObject		     parent;
-	HalDevicestorePrivate *priv;
-} HalDevicestore;
+	HalDeviceStorePrivate *priv;
+} HalDeviceStore;
 
 typedef struct
 {
 	GObjectClass	parent_class;
-	void		(* device_removed)	(HalDevicestore *device_store,
+	void		(* device_removed)	(HalDeviceStore *device_store,
 						 HalDevice	 *device);
-} HalDevicestoreClass;
+} HalDeviceStoreClass;
 
 GType		 hal_device_store_get_type	(void);
-HalDevicestore	*hal_device_store_new		(void);
+HalDeviceStore	*hal_device_store_new		(void);
 
-HalDevice	*hal_device_store_find_udi	(HalDevicestore *device_store,
+HalDevice	*hal_device_store_find_udi	(HalDeviceStore *device_store,
 						 const gchar	 *udi);
-gboolean	 hal_device_store_insert	(HalDevicestore *device_store,
+gboolean	 hal_device_store_insert	(HalDeviceStore *device_store,
 						 HalDevice	 *device);
-gboolean	 hal_device_store_present	(HalDevicestore *device_store,
+gboolean	 hal_device_store_present	(HalDeviceStore *device_store,
 						 HalDevice	 *device);
-gboolean	 hal_device_store_remove	(HalDevicestore *device_store,
+gboolean	 hal_device_store_remove	(HalDeviceStore *device_store,
 						 HalDevice	 *device);
-gboolean	 hal_device_store_print		(HalDevicestore *device_store);
+gboolean	 hal_device_store_print		(HalDeviceStore *device_store);
 
 G_END_DECLS
 

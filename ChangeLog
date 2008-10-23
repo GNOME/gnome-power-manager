@@ -1,5 +1,25 @@
 2008-10-23  Richard Hughes  <richard@hughsie.com>
 
+	* libhal-glib/hal-device-store.c: (hal_device_store_index_udi),
+	(hal_device_store_index), (hal_device_store_find_udi),
+	(hal_device_store_present), (hal_device_store_insert),
+	(hal_device_store_remove), (hal_device_store_print),
+	(hal_device_store_class_init), (hal_device_store_init),
+	(hal_device_store_finalize), (hal_device_store_new):
+	* libhal-glib/hal-device-store.h:
+	* src/gpm-button.c: (gpm_button_filter_x_events),
+	(gpm_button_xevent_key), (gpm_button_class_init),
+	(emit_button_pressed), (hal_device_property_modified_cb),
+	(hal_device_condition_cb), (watch_add_button),
+	(hal_daemon_start_cb), (hal_daemon_stop_cb), (gpm_button_init),
+	(gpm_button_finalize):
+	* test/gpm-st-hal-devicestore.c: (egg_test_hal_device_store):
+	Don't do policy actions twice when we get an event with HAL and
+	and event from X. Prefer the event from X and blacklist that key from
+	the HAL code.
+
+2008-10-23  Richard Hughes  <richard@hughsie.com>
+
 	* src/Makefile.am:
 	* src/egg-console-kit.c: (egg_console_kit_is_local),
 	(egg_console_kit_is_active), (egg_console_kit_active_changed_cb),

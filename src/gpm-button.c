@@ -49,10 +49,11 @@ struct GpmButtonPrivate
 {
 	GdkScreen		*screen;
 	GdkWindow		*window;
-	GHashTable		*hash_to_hal;
+	GHashTable		*keysym_to_name_hash;
+	GHashTable		*emit_x_hash;
 	gboolean		 lid_is_closed;
 	HalManager		*hal_manager; /* remove when input events is in the kernel */
-	HalDevicestore		*hal_devicestore;
+	HalDeviceStore		*hal_device_store;
 };
 
 enum {
@@ -65,26 +66,27 @@ static gpointer gpm_button_object = NULL;
 
 G_DEFINE_TYPE (GpmButton, gpm_button, G_TYPE_OBJECT)
 
+/**
+ * gpm_button_filter_x_events:
+ **/
 static GdkFilterReturn
-gpm_button_filter_x_events (GdkXEvent *xevent,
-			    GdkEvent  *event,
-			    gpointer   data)
+gpm_button_filter_x_events (GdkXEvent *xevent, GdkEvent *event, gpointer data)
 {
 	GpmButton *button = (GpmButton *) data;
 	XEvent *xev = (XEvent *) xevent;
 	guint keycode;
 	gchar *key;
 	gchar *keycode_str;
+	gpointer value;
 
-	if (xev->type != KeyPress) {
+	if (xev->type != KeyPress)
 		return GDK_FILTER_CONTINUE;
-	}
 
 	keycode = xev->xkey.keycode;
 
 	/* is the key string already in our DB? */
 	keycode_str = g_strdup_printf ("0x%x", keycode);
-	key = g_hash_table_lookup (button->priv->hash_to_hal, (gpointer) keycode_str);
+	key = g_hash_table_lookup (button->priv->keysym_to_name_hash, (gpointer) keycode_str);
 	g_free (keycode_str);
 
 	/* found anything? */
@@ -94,8 +96,16 @@ gpm_button_filter_x_events (GdkXEvent *xevent,
 		return GDK_FILTER_CONTINUE;
 	}
 
-	egg_debug ("Key %i mapped to HAL key %s", keycode, key);
+	egg_debug ("Key %i mapped to key %s", keycode, key);
 	g_signal_emit (button, signals [BUTTON_PRESSED], 0, key);
+
+	/* As we are watching HAL and X, potentially we could get notified about
+	 * the same button press twice.
+	 * Keep a list of buttons seen in X, so we can filter then from the
+	 * HAL signal emission */
+	value = g_hash_table_lookup (button->priv->emit_x_hash, (gpointer) key);
+	if (value == NULL)
+		g_hash_table_insert (button->priv->emit_x_hash, (gpointer) g_strdup (key), GINT_TO_POINTER(1));
 
 	return GDK_FILTER_REMOVE;
 }
@@ -182,7 +192,7 @@ gpm_button_xevent_key (GpmButton *button, guint keysym, const gchar *hal_key)
 
 	/* is the key string already in our DB? */
 	keycode_str = g_strdup_printf ("0x%x", keycode);
-	key = g_hash_table_lookup (button->priv->hash_to_hal, (gpointer) keycode_str);
+	key = g_hash_table_lookup (button->priv->keysym_to_name_hash, (gpointer) keycode_str);
 	if (key != NULL) {
 		egg_warning ("found in hash %i", keycode);
 		g_free (keycode_str);
@@ -198,7 +208,7 @@ gpm_button_xevent_key (GpmButton *button, guint keysym, const gchar *hal_key)
 	}
 
 	/* add to hash table */
-	g_hash_table_insert (button->priv->hash_to_hal, (gpointer) keycode_str, (gpointer) g_strdup (hal_key));
+	g_hash_table_insert (button->priv->keysym_to_name_hash, (gpointer) keycode_str, (gpointer) g_strdup (hal_key));
 
 	/* the key is freed in the hash function unref */
 	return TRUE;
@@ -220,8 +230,7 @@ gpm_button_class_init (GpmButtonClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmButtonClass, button_pressed),
-			      NULL,
-			      NULL,
+			      NULL,NULL,
 			      gpm_marshal_VOID__STRING,
 			      G_TYPE_NONE, 1, G_TYPE_STRING);
 }
@@ -254,13 +263,12 @@ gpm_button_is_lid_closed (GpmButton *button)
  *      button.type=""
  */
 static void
-emit_button_pressed (GpmButton   *button,
-		     HalDevice  *device,
-		     const gchar *details)
+emit_button_pressed (GpmButton *button, HalDevice *device, const gchar *details)
 {
 	gchar *type = NULL;
 	gboolean state;
 	const char *atype;
+	gpointer value;
 
 	g_return_if_fail (device != NULL);
 	g_return_if_fail (details != NULL);
@@ -272,7 +280,7 @@ emit_button_pressed (GpmButton   *button,
 		/* hal may no longer be there */
 		if (type == NULL) {
 			egg_warning ("cannot get button type for %s", hal_device_get_udi (device));
-			return;
+			goto out;
 		}
 	} else {
 		type = g_strdup (details);
@@ -282,16 +290,14 @@ emit_button_pressed (GpmButton   *button,
 	/* Buttons without state should default to true. */
 	state = TRUE;
 	/* we need to get the button state for lid buttons */
-	if (strcmp (type, "lid") == 0) {
+	if (strcmp (type, "lid") == 0)
 		hal_device_get_bool (device, "button.state.value", &state, NULL);
-	}
 
 	/* abstact away that HAL has an extra parameter */
-	if (strcmp (type, GPM_BUTTON_LID_DEP) == 0 && state == FALSE) {
+	if (strcmp (type, GPM_BUTTON_LID_DEP) == 0 && state == FALSE)
 		atype = GPM_BUTTON_LID_OPEN;
-	} else if (strcmp (type, GPM_BUTTON_LID_DEP) == 0 && state) {
+	else if (strcmp (type, GPM_BUTTON_LID_DEP) == 0 && state)
 		atype = GPM_BUTTON_LID_CLOSED;
-	}
 
 	/* filter out duplicate lid events */
 	if (strcmp (atype, GPM_BUTTON_LID_CLOSED) == 0) {
@@ -309,10 +315,17 @@ emit_button_pressed (GpmButton   *button,
 		button->priv->lid_is_closed = FALSE;
 	}
 
+	/* have we already got this from X? */
+	value = g_hash_table_lookup (button->priv->emit_x_hash, (gpointer) atype);
+	if (value != NULL) {
+		egg_debug ("avoiding duplicate key, as already shown in X");
+		goto out;
+	}
+
 	/* we now emit all buttons, even the ones we don't know */
 	egg_debug ("emitting button-pressed : %s", atype);
 	g_signal_emit (button, signals [BUTTON_PRESSED], 0, atype);
-
+out:
 	g_free (type);
 }
 
@@ -339,9 +352,8 @@ hal_device_property_modified_cb (HalDevice    *device,
 		   key, is_added, is_removed, finally);
 
 	/* do not process keys that have been removed */
-	if (is_removed) {
+	if (is_removed)
 		return;
-	}
 
 	/* only match button* values */
 	if (strncmp (key, "button", 6) == 0) {
@@ -368,9 +380,8 @@ hal_device_condition_cb (HalDevice    *device,
 {
 	egg_debug ("condition=%s, details=%s", condition, details);
 
-	if (strcmp (condition, "ButtonPressed") == 0) {
+	if (strcmp (condition, "ButtonPressed") == 0)
 		emit_button_pressed (button, device, details);
-	}
 }
 
 /**
@@ -394,8 +405,8 @@ watch_add_button (GpmButton *button,
 	g_signal_connect (device, "device-condition",
 			  G_CALLBACK (hal_device_condition_cb), button);
 
-	/* when added to the devicestore, devices are automatically unref'ed */
-	hal_device_store_insert (button->priv->hal_devicestore, device);
+	/* when added to the device_store, devices are automatically unref'ed */
+	hal_device_store_insert (button->priv->hal_device_store, device);
 }
 
 /**
@@ -438,8 +449,8 @@ hal_daemon_start_cb (HalManager *hal_manager,
 		     GpmButton   *button)
 {
 	/* get new devices, hal has come back up */
-	if (button->priv->hal_devicestore == NULL) {
-		button->priv->hal_devicestore = hal_device_store_new ();
+	if (button->priv->hal_device_store == NULL) {
+		button->priv->hal_device_store = hal_device_store_new ();
 		coldplug_buttons (button);
 	}
 }
@@ -452,9 +463,9 @@ hal_daemon_stop_cb (HalManager *hal_manager,
 		    GpmButton   *button)
 {
 	/* clear devices, HAL is going down */
-	if (button->priv->hal_devicestore != NULL) {
-		g_object_unref (button->priv->hal_devicestore);
-		button->priv->hal_devicestore = NULL;
+	if (button->priv->hal_device_store != NULL) {
+		g_object_unref (button->priv->hal_device_store);
+		button->priv->hal_device_store = NULL;
 	}
 }
 
@@ -472,7 +483,8 @@ gpm_button_init (GpmButton *button)
 	button->priv->screen = gdk_screen_get_default ();
 	button->priv->window = gdk_screen_get_root_window (button->priv->screen);
 
-	button->priv->hash_to_hal = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+	button->priv->keysym_to_name_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+	button->priv->emit_x_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
 	button->priv->lid_is_closed = FALSE;
 
@@ -507,7 +519,7 @@ gpm_button_init (GpmButton *button)
 	g_signal_connect (button->priv->hal_manager, "daemon-stop",
 			  G_CALLBACK (hal_daemon_stop_cb), button);
 
-	button->priv->hal_devicestore = hal_device_store_new ();
+	button->priv->hal_device_store = hal_device_store_new ();
 
 	coldplug_buttons (button);
 }
@@ -527,9 +539,10 @@ gpm_button_finalize (GObject *object)
 	button->priv = GPM_BUTTON_GET_PRIVATE (button);
 
 	g_object_unref (button->priv->hal_manager);
-	g_object_unref (button->priv->hal_devicestore);
+	g_object_unref (button->priv->hal_device_store);
 
-	g_hash_table_unref (button->priv->hash_to_hal);
+	g_hash_table_unref (button->priv->keysym_to_name_hash);
+	g_hash_table_unref (button->priv->emit_x_hash);
 
 	G_OBJECT_CLASS (gpm_button_parent_class)->finalize (object);
 }

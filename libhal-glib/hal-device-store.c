@@ -33,13 +33,13 @@
 #include "hal-device.h"
 #include "hal-device-store.h"
 
-static void     hal_device_store_class_init (HalDevicestoreClass *klass);
-static void     hal_device_store_init       (HalDevicestore      *device_store);
+static void     hal_device_store_class_init (HalDeviceStoreClass *klass);
+static void     hal_device_store_init       (HalDeviceStore      *device_store);
 static void     hal_device_store_finalize   (GObject	          *object);
 
-#define HAL_DEVICE_STORE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), HAL_TYPE_DEVICE_STORE, HalDevicestorePrivate))
+#define HAL_DEVICE_STORE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), HAL_TYPE_DEVICE_STORE, HalDeviceStorePrivate))
 
-struct HalDevicestorePrivate
+struct HalDeviceStorePrivate
 {
 	GPtrArray		*array;		/* the device array */
 };
@@ -51,7 +51,7 @@ enum {
 
 static guint	     signals [LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (HalDevicestore, hal_device_store, G_TYPE_OBJECT)
+G_DEFINE_TYPE (HalDeviceStore, hal_device_store, G_TYPE_OBJECT)
 
 /**
  * hal_device_store_index_udi:
@@ -62,7 +62,7 @@ G_DEFINE_TYPE (HalDevicestore, hal_device_store, G_TYPE_OBJECT)
  * @device: The device
  */
 static gint
-hal_device_store_index_udi (HalDevicestore *device_store, const gchar *udi)
+hal_device_store_index_udi (HalDeviceStore *device_store, const gchar *udi)
 {
 	gint i;
 	guint length;
@@ -87,7 +87,7 @@ hal_device_store_index_udi (HalDevicestore *device_store, const gchar *udi)
  * @device: The device
  */
 static gint
-hal_device_store_index (HalDevicestore *device_store, HalDevice *device)
+hal_device_store_index (HalDeviceStore *device_store, HalDevice *device)
 {
 	HalDevice *d;
 	gint i;
@@ -121,7 +121,7 @@ hal_device_store_index (HalDevicestore *device_store, HalDevice *device)
  * @device: The device
  */
 HalDevice *
-hal_device_store_find_udi (HalDevicestore *device_store, const gchar *udi)
+hal_device_store_find_udi (HalDeviceStore *device_store, const gchar *udi)
 {
 	gint index;
 
@@ -144,7 +144,7 @@ hal_device_store_find_udi (HalDevicestore *device_store, const gchar *udi)
  * @device: The device
  */
 gboolean
-hal_device_store_present (HalDevicestore *device_store, HalDevice *device)
+hal_device_store_present (HalDeviceStore *device_store, HalDevice *device)
 {
 	g_return_val_if_fail (HAL_IS_DEVICE_STORE (device_store), FALSE);
 	g_return_val_if_fail (HAL_IS_DEVICE (device), FALSE);
@@ -163,7 +163,7 @@ hal_device_store_present (HalDevicestore *device_store, HalDevice *device)
  * @device: The device
  */
 gboolean
-hal_device_store_insert (HalDevicestore *device_store, HalDevice *device)
+hal_device_store_insert (HalDeviceStore *device_store, HalDevice *device)
 {
 	g_return_val_if_fail (HAL_IS_DEVICE_STORE (device_store), FALSE);
 	g_return_val_if_fail (HAL_IS_DEVICE (device), FALSE);
@@ -183,7 +183,7 @@ hal_device_store_insert (HalDevicestore *device_store, HalDevice *device)
  * @device: The device
  */
 gboolean
-hal_device_store_remove (HalDevicestore *device_store, HalDevice *device)
+hal_device_store_remove (HalDeviceStore *device_store, HalDevice *device)
 {
 	gint index;
 	HalDevice *d;
@@ -212,7 +212,7 @@ hal_device_store_remove (HalDevicestore *device_store, HalDevice *device)
  * @device_store: This store instance
  */
 gboolean
-hal_device_store_print (HalDevicestore *device_store)
+hal_device_store_print (HalDeviceStore *device_store)
 {
 	HalDevice *d;
 	guint i;
@@ -235,17 +235,17 @@ hal_device_store_print (HalDevicestore *device_store)
  * @klass: This class instance
  **/
 static void
-hal_device_store_class_init (HalDevicestoreClass *klass)
+hal_device_store_class_init (HalDeviceStoreClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	object_class->finalize = hal_device_store_finalize;
-	g_type_class_add_private (klass, sizeof (HalDevicestorePrivate));
+	g_type_class_add_private (klass, sizeof (HalDeviceStorePrivate));
 
 	signals [DEVICE_REMOVED] =
 		g_signal_new ("device-removed",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (HalDevicestoreClass, device_removed),
+			      G_STRUCT_OFFSET (HalDeviceStoreClass, device_removed),
 			      NULL,
 			      NULL,
 			      hal_marshal_VOID__STRING_STRING,
@@ -259,7 +259,7 @@ hal_device_store_class_init (HalDevicestoreClass *klass)
  * @hal_device_store: This class instance
  **/
 static void
-hal_device_store_init (HalDevicestore *device_store)
+hal_device_store_init (HalDeviceStore *device_store)
 {
 	device_store->priv = HAL_DEVICE_STORE_GET_PRIVATE (device_store);
 
@@ -273,7 +273,7 @@ hal_device_store_init (HalDevicestore *device_store)
 static void
 hal_device_store_finalize (GObject *object)
 {
-	HalDevicestore *device_store;
+	HalDeviceStore *device_store;
 	HalDevice *d;
 	gint i;
 	guint length;
@@ -298,12 +298,12 @@ hal_device_store_finalize (GObject *object)
 
 /**
  * hal_device_store_new:
- * Return value: new HalDevicestore instance.
+ * Return value: new HalDeviceStore instance.
  **/
-HalDevicestore *
+HalDeviceStore *
 hal_device_store_new (void)
 {
-	HalDevicestore *device_store = g_object_new (HAL_TYPE_DEVICE_STORE, NULL);
+	HalDeviceStore *device_store = g_object_new (HAL_TYPE_DEVICE_STORE, NULL);
 	return HAL_DEVICE_STORE (device_store);
 }
 
