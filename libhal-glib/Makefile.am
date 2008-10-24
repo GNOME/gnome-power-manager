@@ -1,7 +1,10 @@
 INCLUDES = \
 	$(GLIB_CFLAGS)						\
 	$(DBUS_CFLAGS)						\
-	-DEGG_LOG_FILE=\""$(PK_LOG_DIR)/gnome-power-manager"\"	\
+	-DEGG_LOG_FILE=\""~/gnome-power-manager.log"\"		\
+	-DEGG_VERBOSE="\"GPM_VERBOSE\""				\
+	-DEGG_LOGGING="\"GPM_LOGGING\""				\
+	-DEGG_CONSOLE="\"GPM_CONSOLE\""				\
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\"			\
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"
 

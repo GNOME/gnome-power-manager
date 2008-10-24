@@ -1,3 +1,14 @@
+2008-10-24  Richard Hughes  <richard@hughsie.com>
+
+	* libhal-glib/Makefile.am:
+	* src/Makefile.am:
+	* src/egg-debug.c: (pk_set_console_mode), (pk_log_line),
+	(pk_print_line), (egg_debug_real), (egg_warning_real),
+	(egg_error_real), (egg_debug_enabled), (egg_debug_is_logging),
+	(egg_debug_is_console), (egg_debug_set_logging), (egg_debug_init):
+	* src/egg-debug.h:
+	Egg updates to allow us to log to a file using a environment var.
+
 2008-10-23  Richard Hughes  <richard@hughsie.com>
 
 	* libhal-glib/hal-device-store.c: (hal_device_store_index_udi),
