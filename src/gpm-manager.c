@@ -80,6 +80,10 @@ static void     gpm_manager_finalize	(GObject	 *object);
 #define GPM_MANAGER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_MANAGER, GpmManagerPrivate))
 #define GPM_MANAGER_RECALL_DELAY		1000*10
 
+#define GPM_SESSION_MANAGER_SERVICE	"org.gnome.SessionManager"
+#define GPM_SESSION_MANAGER_INTERFACE	"org.gnome.SessionManager"
+#define GPM_SESSION_MANAGER_PATH	"/org/gnome/SessionManager"
+
 struct GpmManagerPrivate
 {
 	GpmAcAdapter		*ac_adapter;
@@ -486,6 +490,34 @@ gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 }
 
 /**
+ * gpm_manager_logout_interactive:
+ **/
+static gboolean
+gpm_manager_logout_interactive (GpmManager *manager)
+{
+	GError *error = NULL;
+	DBusGProxy *proxy;
+	DBusGConnection *connection;
+
+	/* get session connection */
+	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+	if (connection == NULL) {
+		egg_warning ("failed to do interactive shutdown: %s", error->message);
+		g_error_free (error);
+		return FALSE;
+	}
+
+	/* contact the session manager */
+	proxy = dbus_g_proxy_new_for_name (connection, GPM_SESSION_MANAGER_SERVICE,
+					   GPM_SESSION_MANAGER_PATH, GPM_SESSION_MANAGER_INTERFACE);
+
+	/* we have to use no reply, as the SM calls into g-p-m to get the can_suspend property */
+	dbus_g_proxy_call_no_reply (proxy, "Shutdown", G_TYPE_INVALID);
+	g_object_unref (proxy);
+	return TRUE;
+}
+
+/**
  * manager_policy_do:
  * @manager: This class instance
  * @policy: The policy that we should do, e.g. "suspend"
@@ -528,9 +560,7 @@ manager_policy_do (GpmManager  *manager, const gchar *policy, const gchar *reaso
 	} else if (strcmp (action, ACTION_INTERACTIVE) == 0) {
 		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_NOTIFICATION,
 					_("GNOME interactive logout."), reason);
-		gnome_client_request_save (gnome_master_client (),
-					   GNOME_SAVE_GLOBAL,
-					   TRUE, GNOME_INTERACT_ANY, FALSE, TRUE);
+		gpm_manager_logout_interactive (manager);
 	} else {
 		egg_warning ("unknown action %s", action);
 	}

@@ -1,5 +1,12 @@
 2008-10-24  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c: (gpm_manager_logout_interactive),
+	(manager_policy_do):
+	Use the session manager to request an interactive logout rather than
+	using the obsolete gnome_client_request_save.
+
+2008-10-24  Richard Hughes  <richard@hughsie.com>
+
 	* libhal-glib/Makefile.am:
 	* src/Makefile.am:
 	* src/egg-debug.c: (pk_set_console_mode), (pk_log_line),
