@@ -50,7 +50,8 @@ struct GpmButtonPrivate
 	GdkScreen		*screen;
 	GdkWindow		*window;
 	GHashTable		*keysym_to_name_hash;
-	GHashTable		*emit_x_hash;
+	gchar			*last_button;
+	GTimer			*timer;
 	gboolean		 lid_is_closed;
 	HalManager		*hal_manager; /* remove when input events is in the kernel */
 	HalDeviceStore		*hal_device_store;
@@ -66,6 +67,35 @@ static gpointer gpm_button_object = NULL;
 
 G_DEFINE_TYPE (GpmButton, gpm_button, G_TYPE_OBJECT)
 
+#define GPM_BUTTON_DUPLICATE_TIMEOUT	0.25f
+
+/**
+ * gpm_button_emit_type:
+ **/
+gboolean
+gpm_button_emit_type (GpmButton *button, const gchar *type)
+{
+	g_return_val_if_fail (button != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_BUTTON (button), FALSE);
+
+	/* did we just have this button before the timeout? */
+	if (g_strcmp0 (type, button->priv->last_button) == 0 &&
+	    g_timer_elapsed (button->priv->timer, NULL) < GPM_BUTTON_DUPLICATE_TIMEOUT) {
+		egg_debug ("ignoring duplicate button %s", type);
+		return FALSE;
+	}
+
+	egg_debug ("emitting button-pressed : %s", type);
+	g_signal_emit (button, signals [BUTTON_PRESSED], 0, type);
+
+	/* save type and last size */
+	g_free (button->priv->last_button);
+	button->priv->last_button = g_strdup (type);
+	g_timer_reset (button->priv->timer);
+
+	return TRUE;
+}
+
 /**
  * gpm_button_filter_x_events:
  **/
@@ -75,9 +105,8 @@ gpm_button_filter_x_events (GdkXEvent *xevent, GdkEvent *event, gpointer data)
 	GpmButton *button = (GpmButton *) data;
 	XEvent *xev = (XEvent *) xevent;
 	guint keycode;
-	gchar *key;
+	const gchar *key;
 	gchar *keycode_str;
-	gpointer value;
 
 	if (xev->type != KeyPress)
 		return GDK_FILTER_CONTINUE;
@@ -97,15 +126,7 @@ gpm_button_filter_x_events (GdkXEvent *xevent, GdkEvent *event, gpointer data)
 	}
 
 	egg_debug ("Key %i mapped to key %s", keycode, key);
-	g_signal_emit (button, signals [BUTTON_PRESSED], 0, key);
-
-	/* As we are watching HAL and X, potentially we could get notified about
-	 * the same button press twice.
-	 * Keep a list of buttons seen in X, so we can filter then from the
-	 * HAL signal emission */
-	value = g_hash_table_lookup (button->priv->emit_x_hash, (gpointer) key);
-	if (value == NULL)
-		g_hash_table_insert (button->priv->emit_x_hash, (gpointer) g_strdup (key), GINT_TO_POINTER(1));
+	gpm_button_emit_type (button, key);
 
 	return GDK_FILTER_REMOVE;
 }
@@ -267,15 +288,13 @@ emit_button_pressed (GpmButton *button, HalDevice *device, const gchar *details)
 {
 	gchar *type = NULL;
 	gboolean state;
-	const char *atype;
-	gpointer value;
+	const gchar *atype;
 
 	g_return_if_fail (device != NULL);
 	g_return_if_fail (details != NULL);
 
 	if (strcmp (details, "") == 0) {
-		/* no details about the event, so we get more info
-		   for type 1 buttons */
+		/* no details about the event, so we get more info for type 1 buttons */
 		hal_device_get_string (device, "button.type", &type, NULL);
 		/* hal may no longer be there */
 		if (type == NULL) {
@@ -315,16 +334,8 @@ emit_button_pressed (GpmButton *button, HalDevice *device, const gchar *details)
 		button->priv->lid_is_closed = FALSE;
 	}
 
-	/* have we already got this from X? */
-	value = g_hash_table_lookup (button->priv->emit_x_hash, (gpointer) atype);
-	if (value != NULL) {
-		egg_debug ("avoiding duplicate key, as already shown in X");
-		goto out;
-	}
-
-	/* we now emit all buttons, even the ones we don't know */
-	egg_debug ("emitting button-pressed : %s", atype);
-	g_signal_emit (button, signals [BUTTON_PRESSED], 0, atype);
+	/* we emit all buttons, even the ones we don't know */
+	gpm_button_emit_type (button, atype);
 out:
 	g_free (type);
 }
@@ -484,7 +495,8 @@ gpm_button_init (GpmButton *button)
 	button->priv->window = gdk_screen_get_root_window (button->priv->screen);
 
 	button->priv->keysym_to_name_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
-	button->priv->emit_x_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+	button->priv->last_button = NULL;
+	button->priv->timer = g_timer_new ();
 
 	button->priv->lid_is_closed = FALSE;
 
@@ -494,7 +506,6 @@ gpm_button_init (GpmButton *button)
 
 	if (have_xevents) {
 		/* register the brightness keys */
-//		gpm_button_xevent_key (button, XF86XK_Execute, GPM_BUTTON_POWER);
 		gpm_button_xevent_key (button, XF86XK_PowerOff, GPM_BUTTON_POWER);
 //		gpm_button_xevent_key (button, XF86XK_Suspend, GPM_BUTTON_SUSPEND);
 		gpm_button_xevent_key (button, XF86XK_Sleep, GPM_BUTTON_SUSPEND); /* should be configurable */
@@ -502,7 +513,7 @@ gpm_button_init (GpmButton *button)
 		gpm_button_xevent_key (button, XF86XK_MonBrightnessUp, GPM_BUTTON_BRIGHT_UP);
 		gpm_button_xevent_key (button, XF86XK_MonBrightnessDown, GPM_BUTTON_BRIGHT_DOWN);
 		gpm_button_xevent_key (button, XF86XK_ScreenSaver, GPM_BUTTON_LOCK);
-//		gpm_button_xevent_key (button, XF86XK_Battery, GPM_BUTTON_BATTERY);
+		gpm_button_xevent_key (button, XF86XK_Battery, GPM_BUTTON_BATTERY);
 		gpm_button_xevent_key (button, XF86XK_KbdBrightnessUp, GPM_BUTTON_KBD_BRIGHT_UP);
 		gpm_button_xevent_key (button, XF86XK_KbdBrightnessDown, GPM_BUTTON_KBD_BRIGHT_DOWN);
 		gpm_button_xevent_key (button, XF86XK_KbdLightOnOff, GPM_BUTTON_KBD_BRIGHT_TOGGLE);
@@ -540,9 +551,10 @@ gpm_button_finalize (GObject *object)
 
 	g_object_unref (button->priv->hal_manager);
 	g_object_unref (button->priv->hal_device_store);
+	g_free (button->priv->last_button);
+	g_timer_destroy (button->priv->timer);
 
 	g_hash_table_unref (button->priv->keysym_to_name_hash);
-	g_hash_table_unref (button->priv->emit_x_hash);
 
 	G_OBJECT_CLASS (gpm_button_parent_class)->finalize (object);
 }

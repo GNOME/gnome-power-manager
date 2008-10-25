@@ -1,3 +1,13 @@
+2008-10-25  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-brightness-xrandr.c:
+	(gpm_brightness_xrandr_filter_xevents):
+	* src/gpm-button.c: (gpm_button_emit_type),
+	(gpm_button_filter_x_events), (emit_button_pressed),
+	(gpm_button_init), (gpm_button_finalize):
+	Make the duplicate key detection more robust to handle when we get
+	the HAL event before the X event.
+
 2008-10-24  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c: (gpm_manager_logout_interactive),
