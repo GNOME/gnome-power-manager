@@ -205,18 +205,15 @@ gpm_statistics_add_events_typical (GPtrArray *array)
 	gpm_statistics_add_event_type (array, GPM_EVENT_SUSPEND,
 				       EGG_COLOR_RED,
 				       GPM_GRAPH_WIDGET_SHAPE_DIAMOND,
-				/* Translators: translate ONLY the string part after the |*/
-				       Q_("label shown on graph|Suspend"));
+				       C_("label shown on graph", "Suspend"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_RESUME,
 				       EGG_COLOR_DARK_RED,
 				       GPM_GRAPH_WIDGET_SHAPE_DIAMOND,
-				/* Translators: translate ONLY the string part after the |*/
-				       Q_("label shown on graph|Resume"));
+				       C_("label shown on graph", "Resume"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_HIBERNATE,
 				       EGG_COLOR_MAGENTA,
 				       GPM_GRAPH_WIDGET_SHAPE_DIAMOND,
-				/* Translators: translate ONLY the string part after the |*/
-				       Q_("label shown on graph|Hibernate"));
+				       C_("label shown on graph", "Hibernate"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_LID_CLOSED,
 				       EGG_COLOR_GREEN,
 				       GPM_GRAPH_WIDGET_SHAPE_TRIANGLE,
