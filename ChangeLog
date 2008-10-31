@@ -1,3 +1,10 @@
+2008-10-31  Vincent Untz  <vuntz@gnome.org>
+
+	* src/gpm-prefs-core.c: (gpk_prefs_setup_policykit): use the right
+	PolicyKit action to setup the "Make defaults" button. The button was
+	always insensitive.
+	Fix bug #558670.
+
 2008-10-29  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 558341 – use C_() instead of Q_() for context in translations
