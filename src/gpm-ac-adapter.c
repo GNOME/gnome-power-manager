@@ -38,8 +38,13 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 
-#include <hal-device.h>
-#include <hal-manager.h>
+#ifdef HAVE_DK_POWER
+ #include <dkp-client.h>
+ #include <dkp-client-device.h>
+#else
+ #include <hal-device.h>
+ #include <hal-manager.h>
+#endif
 
 #include "gpm-common.h"
 #include "egg-debug.h"
@@ -50,7 +55,11 @@
 struct GpmAcAdapterPrivate
 {
 	gboolean		 has_hardware;
-	HalDevice		*hal_device;
+#ifdef HAVE_DK_POWER
+	DkpClientDevice		*device;
+#else
+	HalDevice		*device;
+#endif
 };
 
 enum {
@@ -72,6 +81,7 @@ G_DEFINE_TYPE (GpmAcAdapter, gpm_ac_adapter, G_TYPE_OBJECT)
 gboolean
 gpm_ac_adapter_is_present (GpmAcAdapter *ac_adapter)
 {
+#ifndef HAVE_DK_POWER
 	gboolean is_on_ac;
 	GError *error;
 
@@ -84,7 +94,7 @@ gpm_ac_adapter_is_present (GpmAcAdapter *ac_adapter)
 	}
 
 	error = NULL;
-	hal_device_get_bool (ac_adapter->priv->hal_device,
+	hal_device_get_bool (ac_adapter->priv->device,
 			      "ac_adapter.present", &is_on_ac, &error);
 	if (error != NULL) {
 		egg_warning ("could not read ac_adapter.present");
@@ -94,9 +104,11 @@ gpm_ac_adapter_is_present (GpmAcAdapter *ac_adapter)
 	if (is_on_ac) {
 		return TRUE;
 	}
+#endif
 	return FALSE;
 }
 
+#ifndef HAVE_DK_POWER
 /**
  * hal_device_property_modified_cb:
  *
@@ -109,7 +121,7 @@ gpm_ac_adapter_is_present (GpmAcAdapter *ac_adapter)
  * changed, and we have we have subscribed to changes for that device.
  */
 static void
-hal_device_property_modified_cb (HalDevice   *hal_device,
+hal_device_property_modified_cb (HalDevice   *device,
 				 const gchar  *key,
 				 gboolean      is_added,
 				 gboolean      is_removed,
@@ -123,6 +135,7 @@ hal_device_property_modified_cb (HalDevice   *hal_device,
 		return;
 	}
 }
+#endif
 
 /**
  * gpm_ac_adapter_finalize:
@@ -136,7 +149,7 @@ gpm_ac_adapter_finalize (GObject *object)
 	ac_adapter = GPM_AC_ADAPTER (object);
 	g_return_if_fail (ac_adapter->priv != NULL);
 
-	g_object_unref (ac_adapter->priv->hal_device);
+	g_object_unref (ac_adapter->priv->device);
 
 	G_OBJECT_CLASS (gpm_ac_adapter_parent_class)->finalize (object);
 }
@@ -155,12 +168,9 @@ gpm_ac_adapter_class_init (GpmAcAdapterClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmAcAdapterClass, ac_adapter_changed),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__INT,
-			      G_TYPE_NONE,
-			      1,
-			      G_TYPE_INT);
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 
 	g_type_class_add_private (klass, sizeof (GpmAcAdapterPrivate));
 }
@@ -176,13 +186,16 @@ gpm_ac_adapter_class_init (GpmAcAdapterClass *klass)
 static void
 gpm_ac_adapter_init (GpmAcAdapter *ac_adapter)
 {
+	ac_adapter->priv = GPM_AC_ADAPTER_GET_PRIVATE (ac_adapter);
+#ifdef HAVE_DK_POWER
+	egg_debug ("TODO");
+#else
 	gchar **device_names;
 	gboolean ret;
 	GError *error;
 	HalManager *hal_manager;
 
-	ac_adapter->priv = GPM_AC_ADAPTER_GET_PRIVATE (ac_adapter);
-	ac_adapter->priv->hal_device = hal_device_new ();
+	ac_adapter->priv->device = hal_device_new ();
 	hal_manager = hal_manager_new ();
 
 	/* save udi of lcd adapter */
@@ -200,11 +213,11 @@ gpm_ac_adapter_init (GpmAcAdapter *ac_adapter)
 		egg_debug ("using %s", device_names[0]);
 
 		/* We only want first ac_adapter object (should only be one) */
-		hal_device_set_udi (ac_adapter->priv->hal_device, device_names[0]);
-		hal_device_watch_property_modified (ac_adapter->priv->hal_device);
+		hal_device_set_udi (ac_adapter->priv->device, device_names[0]);
+		hal_device_watch_property_modified (ac_adapter->priv->device);
 
 		/* we want state changes */
-		g_signal_connect (ac_adapter->priv->hal_device, "property-modified",
+		g_signal_connect (ac_adapter->priv->device, "property-modified",
 				  G_CALLBACK (hal_device_property_modified_cb), ac_adapter);
 	} else {
 		/* no ac-adapter class support */
@@ -213,6 +226,7 @@ gpm_ac_adapter_init (GpmAcAdapter *ac_adapter)
 	}
 	hal_manager_free_capability (device_names);
 	g_object_unref (hal_manager);
+#endif
 }
 
 /**

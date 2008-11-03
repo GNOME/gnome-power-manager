@@ -1,5 +1,14 @@
 2008-11-03  Richard Hughes  <richard@hughsie.com>
 
+	* src/Makefile.am:
+	* src/gpm-ac-adapter.c: (gpm_ac_adapter_is_present),
+	(hal_device_property_modified_cb), (gpm_ac_adapter_finalize),
+	(gpm_ac_adapter_class_init), (gpm_ac_adapter_init):
+	Use DeviceKit-power in GpmAcAdaptor when configured with
+	--enable-devicekit-power
+
+2008-11-03  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c: (gpm_manager_action_suspend),
 	(gpm_manager_action_hibernate), (manager_policy_do),
 	(idle_do_sleep), (idle_changed_cb), (button_pressed_cb),

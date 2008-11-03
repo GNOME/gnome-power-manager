@@ -37,11 +37,15 @@ INCLUDES =						\
 	-DEGG_LOGGING="\"GPM_LOGGING\""			\
 	-DEGG_CONSOLE="\"GPM_CONSOLE\""			\
 	-I$(top_srcdir)					\
+	-I$(top_srcdir)/libdevkit-power			\
 	-I$(top_srcdir)/libhal-glib			\
 	$(NULL)
 
 LOCAL_LIBHAL_LIBS =					\
 	$(top_builddir)/libhal-glib/libhal.la
+
+DEVKIT_POWER_LIBS =					\
+	$(top_builddir)/libdevkit-power/libdevkit-power.la
 
 bin_PROGRAMS =						\
 	gnome-power-manager				\
@@ -91,6 +95,11 @@ gnome_power_statistics_LDADD =				\
 if HAVE_UNIQUE
 gnome_power_statistics_LDADD +=				\
 	$(UNIQUE_LIBS)
+endif
+
+if HAVE_DK_POWER
+gnome_power_statistics_LDADD +=				\
+	$(DEVKIT_POWER_LIBS)
 endif
 
 gnome_power_preferences_SOURCES =			\
@@ -239,6 +248,11 @@ if HAVE_LIBNOTIFY
 gnome_power_manager_LDADD +=				\
 	$(LIBNOTIFY_LIBS)				\
 	$(NULL)
+endif
+
+if HAVE_DK_POWER
+gnome_power_manager_LDADD +=				\
+	$(DEVKIT_POWER_LIBS)
 endif
 
 gnome_power_self_test_SOURCES =				\
