@@ -1,5 +1,26 @@
 2008-11-03  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-graph-widget.c: (gpm_graph_widget_key_data_clear),
+	(gpm_graph_widget_key_data_add), (gpm_graph_widget_set_type_x),
+	(gpm_graph_widget_set_type_y), (gpm_graph_widget_enable_legend),
+	(gpm_graph_widget_class_init), (gpm_graph_widget_init),
+	(gpm_graph_widget_finalize), (gpm_graph_widget_data_assign),
+	(gpm_get_axis_label), (gpm_graph_widget_draw_grid),
+	(gpm_graph_widget_draw_labels),
+	(gpm_graph_widget_get_y_label_max_width),
+	(gpm_graph_widget_auto_range), (gpm_graph_widget_set_color),
+	(gpm_graph_widget_draw_legend_line),
+	(gpm_graph_widget_get_pos_on_graph), (gpm_graph_widget_draw_dot),
+	(gpm_graph_widget_draw_line), (gpm_graph_widget_draw_bounding_box),
+	(gpm_graph_widget_draw_legend),
+	(gpm_graph_widget_legend_calculate_size),
+	(gpm_graph_widget_draw_graph), (gpm_graph_widget_expose),
+	(gpm_graph_widget_new):
+	* src/gpm-graph-widget.h:
+	Add the new graph widget from DeviceKit-power-gnome.
+
+2008-11-03  Richard Hughes  <richard@hughsie.com>
+
 	* data/gpm-graph.glade:
 	* src/gpm-statistics-core.c: (gpm_statistics_init):
 	Rename gpm-graph.glade to gpm-statistic.glade.
