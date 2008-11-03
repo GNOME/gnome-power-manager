@@ -1,8 +1,13 @@
 
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS =						\
-	libhal-glib					\
+SUBDIRS = libhal-glib
+
+if HAVE_DK_POWER
+SUBDIRS += libdevkit-power
+endif
+
+SUBDIRS += 						\
 	src						\
 	po						\
 	docs						\

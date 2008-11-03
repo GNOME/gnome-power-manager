@@ -1,5 +1,62 @@
 2008-11-03  Richard Hughes  <richard@hughsie.com>
 
+	* Makefile.am:
+	* configure.ac:
+	* libdevkit-power/Makefile.am:
+	* libdevkit-power/dkp-client-device.c:
+	(dkp_client_device_get_device_properties),
+	(dkp_client_device_refresh_internal),
+	(dkp_client_device_changed_cb),
+	(dkp_client_device_set_object_path),
+	(dkp_client_device_get_object_path),
+	(dkp_client_device_get_object), (dkp_client_device_print_history),
+	(dkp_client_device_print), (dkp_client_device_refresh),
+	(dkp_client_device_get_history),
+	(dkp_client_device_get_statistics), (dkp_client_device_class_init),
+	(dkp_client_device_init), (dkp_client_device_finalize),
+	(dkp_client_device_new):
+	* libdevkit-power/dkp-client-device.h:
+	* libdevkit-power/dkp-client.c: (dkp_client_get_device),
+	(dkp_client_enumerate_devices), (dkp_client_add),
+	(dkp_client_remove), (dkp_client_added_cb),
+	(dkp_client_changed_cb), (dkp_client_removed_cb),
+	(dkp_client_class_init), (dkp_client_init), (dkp_client_finalize),
+	(dkp_client_new):
+	* libdevkit-power/dkp-client.h:
+	* libdevkit-power/dkp-enum.c: (dkp_device_type_to_text),
+	(dkp_device_type_from_text), (dkp_device_state_to_text),
+	(dkp_device_state_from_text), (dkp_device_technology_to_text),
+	(dkp_device_technology_from_text):
+	* libdevkit-power/dkp-enum.h:
+	* libdevkit-power/dkp-history-obj.c:
+	(dkp_history_obj_clear_internal), (dkp_history_obj_copy),
+	(dkp_history_obj_equal), (dkp_history_obj_print),
+	(dkp_history_obj_new), (dkp_history_obj_clear),
+	(dkp_history_obj_free), (dkp_history_obj_create),
+	(dkp_history_obj_from_string), (dkp_history_obj_to_string):
+	* libdevkit-power/dkp-history-obj.h:
+	* libdevkit-power/dkp-object.c: (dkp_object_clear_internal),
+	(dkp_object_collect_props), (dkp_object_set_from_map),
+	(dkp_object_copy), (dkp_object_equal), (dkp_object_time_to_text),
+	(dkp_object_bool_to_text), (dkp_object_print), (dkp_object_diff),
+	(dkp_object_new), (dkp_object_free_internal), (dkp_object_free),
+	(dkp_object_clear), (dkp_object_get_id):
+	* libdevkit-power/dkp-object.h:
+	* libdevkit-power/dkp-stats-obj.c: (dkp_stats_obj_copy),
+	(dkp_stats_obj_new), (dkp_stats_obj_free), (dkp_stats_obj_create),
+	(dkp_stats_obj_from_string), (dkp_stats_obj_to_string):
+	* libdevkit-power/dkp-stats-obj.h:
+	* libdevkit-power/egg-debug.c:
+	* libdevkit-power/egg-debug.h:
+	* libdevkit-power/egg-obj-list.c:
+	* libdevkit-power/egg-obj-list.h:
+	* libdevkit-power/egg-string.c:
+	* libdevkit-power/egg-string.h:
+	Add libdevkit-power, a client access library for DeviceKit-power.
+	This is only compiled when configured with --enable-devicekit-power
+
+2008-11-03  Richard Hughes  <richard@hughsie.com>
+
 	* src/egg-obj-list.c: (egg_obj_list_set_new),
 	(egg_obj_list_set_copy), (egg_obj_list_set_free),
 	(egg_obj_list_set_compare), (egg_obj_list_set_to_string),

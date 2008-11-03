@@ -607,6 +607,7 @@ applets/Makefile
 applets/brightness/Makefile
 applets/inhibit/Makefile
 libhal-glib/Makefile
+libdevkit-power/Makefile
 docs/Makefile
 man/Makefile
 help/Makefile
