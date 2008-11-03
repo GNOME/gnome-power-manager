@@ -14,7 +14,10 @@ INCLUDES =							\
 	-DLIBDIR=\""$(libdir)"\" 				\
 	-DVERSION="\"$(VERSION)\"" 				\
 	-DGPM_DATA=\"$(pkgdatadir)\"				\
-	-DEGG_LOG_FILE=\""$(PK_LOG_DIR)/gnome-power-manager"\"	\
+	-DEGG_LOG_FILE=\""~/gnome-power-manager.log"\"	\
+	-DEGG_VERBOSE="\"GPM_VERBOSE\""			\
+	-DEGG_LOGGING="\"GPM_LOGGING\""			\
+	-DEGG_CONSOLE="\"GPM_CONSOLE\""			\
 	-I$(top_srcdir)/libdbus-glib				\
 	$(NULL)
 
