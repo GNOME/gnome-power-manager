@@ -185,6 +185,25 @@ else
 fi
 
 dnl ---------------------------------------------------------------------------
+dnl - Enable DeviceKit-power support
+dnl ---------------------------------------------------------------------------
+AC_ARG_ENABLE(dk_power,
+              AS_HELP_STRING([--enable-devicekit-power],
+                             [Use DeviceKit-power for data sources]),
+              enable_dk_power=$enableval,enable_dk_power=yes)
+
+AC_MSG_CHECKING([whether to use DeviceKit-power])
+have_dk_power=no
+if test x$enable_dk_power = xyes ; then
+    have_dk_power=yes
+    AC_DEFINE(HAVE_DK_POWER, 1, [Define if we want to use DeviceKit-power])
+    AC_MSG_RESULT(yes)
+else
+    AC_MSG_RESULT(no)
+fi
+AM_CONDITIONAL([HAVE_DK_POWER], [test $have_dk_power = yes])
+
+dnl ---------------------------------------------------------------------------
 dnl - Use check-foreground-console (Ubuntu specific) support?
 dnl ---------------------------------------------------------------------------
 AC_ARG_ENABLE(checkfg,
@@ -636,6 +655,7 @@ echo "
         unique support:            ${have_unique}
         Building extra applets:    ${enable_applets}
         DPMS support:              ${have_dpms}
+        DeviceKit-power support:   ${have_dk_power}
         PolicyKit support:         ${have_polkit}
         XEVENTS support:           ${have_xevents}
         Self test support:         ${have_tests}
