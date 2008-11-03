@@ -1,5 +1,17 @@
 2008-11-03  Richard Hughes  <richard@hughsie.com>
 
+	* src/egg-array-float.c: (egg_array_float_guassian_value),
+	(egg_array_float_new), (egg_array_float_get),
+	(egg_array_float_set), (egg_array_float_free),
+	(egg_array_float_get_average), (egg_array_float_compute_gaussian),
+	(egg_array_float_sum), (egg_array_float_print),
+	(egg_array_float_convolve), (egg_array_float_compute_integral),
+	(egg_array_float_test):
+	* src/egg-array-float.h:
+	Add a version of GpmArrayFloat that does not depend on GpmArray.
+
+2008-11-03  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-point-obj.c: (dkp_point_obj_copy), (dkp_point_obj_new),
 	(dkp_point_obj_free):
 	* src/gpm-point-obj.h:
