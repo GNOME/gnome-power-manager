@@ -1,5 +1,15 @@
 2008-11-03  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c: (gpm_manager_action_suspend),
+	(gpm_manager_action_hibernate), (manager_policy_do),
+	(idle_do_sleep), (idle_changed_cb), (button_pressed_cb),
+	(ac_adapter_changed_cb), (control_sleep_failure_cb),
+	(dpms_mode_changed_cb), (gpm_manager_init), (gpm_manager_finalize):
+	Don't use org.freedesktop.PowerManagement.Statistics when we are
+	building with DeviceKit-power support.
+
+2008-11-03  Richard Hughes  <richard@hughsie.com>
+
 	* src/Makefile.am:
 	* src/org.freedesktop.PowerManagement.Ui.xml:
 	Remove methods that do not exist.
