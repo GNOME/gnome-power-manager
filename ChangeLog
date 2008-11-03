@@ -1,5 +1,22 @@
 2008-11-03  Richard Hughes  <richard@hughsie.com>
 
+	* src/egg-obj-list.c: (egg_obj_list_set_new),
+	(egg_obj_list_set_copy), (egg_obj_list_set_free),
+	(egg_obj_list_set_compare), (egg_obj_list_set_to_string),
+	(egg_obj_list_set_from_string), (egg_obj_list_clear),
+	(egg_obj_list_print), (egg_obj_list_to_string), (egg_obj_list_add),
+	(egg_obj_list_add_list), (egg_obj_list_remove_list),
+	(egg_obj_list_obj_equal), (egg_obj_list_remove_duplicate),
+	(egg_obj_list_find_obj), (egg_obj_list_remove),
+	(egg_obj_list_remove_index), (egg_obj_list_to_file),
+	(egg_obj_list_from_file), (egg_obj_list_index),
+	(egg_obj_list_finalize), (egg_obj_list_class_init),
+	(egg_obj_list_init), (egg_obj_list_new), (egg_obj_list_test):
+	* src/egg-obj-list.h:
+	Add some collection object I use in other projects.
+
+2008-11-03  Richard Hughes  <richard@hughsie.com>
+
 	* src/egg-string.c: (egg_strnumber), (egg_strtoint),
 	(egg_strtouint), (egg_strzero), (egg_strlen), (egg_strequal),
 	(egg_strvequal), (egg_strreplace), (egg_string_test):
