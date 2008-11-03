@@ -33,7 +33,7 @@
 #include "egg-debug.h"
 
 #include "gpm-common.h"
-#include "gpm-graph-widget.h"
+#include "gpm-graph-widget-old.h"
 #include "gpm-array.h"
 
 G_DEFINE_TYPE (GpmGraphWidget, gpm_graph_widget, GTK_TYPE_DRAWING_AREA);

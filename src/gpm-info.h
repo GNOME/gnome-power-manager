@@ -23,7 +23,7 @@
 #define __GPMINFO_H
 
 #include <glib-object.h>
-#include "gpm-graph-widget.h"
+#include "gpm-graph-widget-old.h"
 #include "gpm-engine.h"
 
 G_BEGIN_DECLS

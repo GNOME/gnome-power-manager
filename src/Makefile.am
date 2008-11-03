@@ -78,8 +78,8 @@ gnome_power_statistics_SOURCES =			\
 	gpm-array.c					\
 	gpm-array-float.h				\
 	gpm-array-float.c				\
-	gpm-graph-widget.h				\
-	gpm-graph-widget.c				\
+	gpm-graph-widget-old.h				\
+	gpm-graph-widget-old.c				\
 	gpm-marshal.h					\
 	gpm-marshal.c					\
 	gpm-common.h					\
@@ -225,8 +225,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-array-float.c				\
 	gpm-inhibit.h					\
 	gpm-inhibit.c					\
-	gpm-graph-widget.h				\
-	gpm-graph-widget.c				\
+	gpm-graph-widget-old.h				\
+	gpm-graph-widget-old.c				\
 	gpm-feedback-widget.h				\
 	gpm-feedback-widget.c				\
 	$(NULL)
@@ -317,8 +317,8 @@ gnome_power_self_test_SOURCES =				\
 	gpm-array-float.c				\
 	gpm-inhibit.h					\
 	gpm-inhibit.c					\
-	gpm-graph-widget.h				\
-	gpm-graph-widget.c				\
+	gpm-graph-widget-old.h				\
+	gpm-graph-widget-old.c				\
 	$(NULL)
 
 gnome_power_self_test_LDADD =				\

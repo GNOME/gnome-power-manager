@@ -1,6 +1,17 @@
 2008-11-03  Richard Hughes  <richard@hughsie.com>
 
 	* src/Makefile.am:
+	* src/gpm-graph-widget-old.c:
+	* src/gpm-graph-widget.c:
+	* src/gpm-graph-widget.h:
+	* src/gpm-info.c:
+	* src/gpm-info.h:
+	Rename gpm-graph-widget to gpm-graph-widget-old as they'll soon be a
+	new kid in town.
+
+2008-11-03  Richard Hughes  <richard@hughsie.com>
+
+	* src/Makefile.am:
 	* src/gpm-ac-adapter.c: (gpm_ac_adapter_is_present),
 	(hal_device_property_modified_cb), (gpm_ac_adapter_finalize),
 	(gpm_ac_adapter_class_init), (gpm_ac_adapter_init):
