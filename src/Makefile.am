@@ -1,11 +1,14 @@
-SUBDIRS = dbus
-
 ## We require new-style dependency handling.
 AUTOMAKE_OPTIONS = 1.7
 
 NULL =
 
 EXTRA_DIST =						\
+	org.freedesktop.PowerManagement.xml		\
+	org.freedesktop.PowerManagement.Ui.xml		\
+	org.freedesktop.PowerManagement.Inhibit.xml	\
+	org.freedesktop.PowerManagement.Backlight.xml	\
+	org.freedesktop.PowerManagement.Statistics.xml	\
 	gpm-marshal.list				\
 	$(NULL)
 
@@ -319,6 +322,11 @@ gnome_power_self_test_LDADD =				\
 gnome_power_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS)
 
 BUILT_SOURCES = 					\
+	org.freedesktop.PowerManagement.h		\
+	org.freedesktop.PowerManagement.Ui.h		\
+	org.freedesktop.PowerManagement.Inhibit.h	\
+	org.freedesktop.PowerManagement.Backlight.h	\
+	org.freedesktop.PowerManagement.Statistics.h	\
 	gpm-marshal.c					\
 	gpm-marshal.h					\
 	$(NULL)
@@ -329,6 +337,41 @@ gpm-marshal.c: gpm-marshal.list
 
 gpm-marshal.h: gpm-marshal.list
 	@GLIB_GENMARSHAL@ $< --prefix=gpm_marshal --header > $@
+
+org.freedesktop.PowerManagement.h: org.freedesktop.PowerManagement.xml
+	libtool --mode=execute dbus-binding-tool	\
+		--prefix=gpm_manager			\
+		--mode=glib-server			\
+		--output=org.freedesktop.PowerManagement.h		\
+		$(srcdir)/org.freedesktop.PowerManagement.xml
+
+org.freedesktop.PowerManagement.Inhibit.h: org.freedesktop.PowerManagement.Inhibit.xml
+	libtool --mode=execute dbus-binding-tool	\
+		--prefix=gpm_inhibit			\
+		--mode=glib-server			\
+		--output=org.freedesktop.PowerManagement.Inhibit.h	\
+		$(srcdir)/org.freedesktop.PowerManagement.Inhibit.xml
+
+org.freedesktop.PowerManagement.Ui.h: org.freedesktop.PowerManagement.Ui.xml
+	libtool --mode=execute dbus-binding-tool	\
+		--prefix=gpm_widget				\
+		--mode=glib-server			\
+		--output=org.freedesktop.PowerManagement.Ui.h	\
+		$(srcdir)/org.freedesktop.PowerManagement.Ui.xml
+
+org.freedesktop.PowerManagement.Statistics.h: org.freedesktop.PowerManagement.Statistics.xml
+	libtool --mode=execute dbus-binding-tool	\
+		--prefix=gpm_statistics			\
+		--mode=glib-server			\
+		--output=org.freedesktop.PowerManagement.Statistics.h	\
+		$(srcdir)/org.freedesktop.PowerManagement.Statistics.xml
+
+org.freedesktop.PowerManagement.Backlight.h: org.freedesktop.PowerManagement.Backlight.xml
+	libtool --mode=execute dbus-binding-tool	\
+		--prefix=gpm_backlight			\
+		--mode=glib-server			\
+		--output=org.freedesktop.PowerManagement.Backlight.h	\
+		$(srcdir)/org.freedesktop.PowerManagement.Backlight.xml
 
 clean-local:
 	rm -f *~

@@ -1,5 +1,20 @@
 2008-11-03  Richard Hughes  <richard@hughsie.com>
 
+	* configure.ac:
+	* src/Makefile.am:
+	* src/dbus/Makefile.am:
+	* src/dbus/xdg-power-management-backlight.xml:
+	* src/dbus/xdg-power-management-core.xml:
+	* src/dbus/xdg-power-management-inhibit.xml:
+	* src/dbus/xdg-power-management-stats.xml:
+	* src/dbus/xdg-power-management-widget.xml:
+	* src/gpm-main.c:
+	* src/gpm-manager.c:
+	Rename the DBUS interfaces to the more familiar format:
+	org.freedesktop.PowerManagement.Foo.xml
+
+2008-11-03  Richard Hughes  <richard@hughsie.com>
+
 	* applets/brightness/Makefile.am:
 	* applets/inhibit/Makefile.am:
 	Fix the compile by defining debugging environment.

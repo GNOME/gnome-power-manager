@@ -602,7 +602,6 @@ dnl ---------------------------------------------------------------------------
 AC_CONFIG_FILES([
 Makefile
 src/Makefile
-src/dbus/Makefile
 applets/Makefile
 applets/brightness/Makefile
 applets/inhibit/Makefile

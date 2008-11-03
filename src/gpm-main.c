@@ -39,7 +39,7 @@
 #include "egg-debug.h"
 
 #include "gpm-manager.h"
-#include "dbus/xdg-power-management-core.h"
+#include "org.freedesktop.PowerManagement.h"
 
 static void gpm_exit (GpmManager *manager);
 

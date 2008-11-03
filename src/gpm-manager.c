@@ -69,9 +69,9 @@
 #include "gpm-engine.h"
 #include "gpm-feedback-widget.h"
 
-#include "dbus/xdg-power-management-stats.h"
-#include "dbus/xdg-power-management-inhibit.h"
-#include "dbus/xdg-power-management-backlight.h"
+#include "org.freedesktop.PowerManagement.Statistics.h"
+#include "org.freedesktop.PowerManagement.Inhibit.h"
+#include "org.freedesktop.PowerManagement.Backlight.h"
 
 static void     gpm_manager_class_init	(GpmManagerClass *klass);
 static void     gpm_manager_init	(GpmManager      *manager);
