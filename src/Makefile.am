@@ -5,7 +5,6 @@ NULL =
 
 EXTRA_DIST =						\
 	org.freedesktop.PowerManagement.xml		\
-	org.freedesktop.PowerManagement.Ui.xml		\
 	org.freedesktop.PowerManagement.Inhibit.xml	\
 	org.freedesktop.PowerManagement.Backlight.xml	\
 	org.freedesktop.PowerManagement.Statistics.xml	\
@@ -323,7 +322,6 @@ gnome_power_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS)
 
 BUILT_SOURCES = 					\
 	org.freedesktop.PowerManagement.h		\
-	org.freedesktop.PowerManagement.Ui.h		\
 	org.freedesktop.PowerManagement.Inhibit.h	\
 	org.freedesktop.PowerManagement.Backlight.h	\
 	org.freedesktop.PowerManagement.Statistics.h	\
@@ -351,13 +349,6 @@ org.freedesktop.PowerManagement.Inhibit.h: org.freedesktop.PowerManagement.Inhib
 		--mode=glib-server			\
 		--output=org.freedesktop.PowerManagement.Inhibit.h	\
 		$(srcdir)/org.freedesktop.PowerManagement.Inhibit.xml
-
-org.freedesktop.PowerManagement.Ui.h: org.freedesktop.PowerManagement.Ui.xml
-	libtool --mode=execute dbus-binding-tool	\
-		--prefix=gpm_widget				\
-		--mode=glib-server			\
-		--output=org.freedesktop.PowerManagement.Ui.h	\
-		$(srcdir)/org.freedesktop.PowerManagement.Ui.xml
 
 org.freedesktop.PowerManagement.Statistics.h: org.freedesktop.PowerManagement.Statistics.xml
 	libtool --mode=execute dbus-binding-tool	\
