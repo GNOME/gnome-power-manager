@@ -819,7 +819,7 @@ gpm_statistics_init (GpmStatistics *statistics)
 	statistics->priv->events = gpm_array_new ();
 	statistics->priv->data = gpm_array_new ();
 
-	statistics->priv->glade_xml = glade_xml_new (GPM_DATA "/gpm-graph.glade", NULL, NULL);
+	statistics->priv->glade_xml = glade_xml_new (GPM_DATA "/gpm-statistics.glade", NULL, NULL);
 
 	main_window = glade_xml_get_widget (statistics->priv->glade_xml, "window_graph");
 
