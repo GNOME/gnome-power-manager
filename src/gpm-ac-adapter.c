@@ -56,7 +56,7 @@ struct GpmAcAdapterPrivate
 {
 	gboolean		 has_hardware;
 #ifdef HAVE_DK_POWER
-	DkpClientDevice		*device;
+	DkpClient		*device;
 #else
 	HalDevice		*device;
 #endif
@@ -81,31 +81,29 @@ G_DEFINE_TYPE (GpmAcAdapter, gpm_ac_adapter, G_TYPE_OBJECT)
 gboolean
 gpm_ac_adapter_is_present (GpmAcAdapter *ac_adapter)
 {
-#ifndef HAVE_DK_POWER
 	gboolean is_on_ac;
+#ifndef HAVE_DK_POWER
 	GError *error;
 
 	g_return_val_if_fail (ac_adapter != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_AC_ADAPTER (ac_adapter), FALSE);
 
 	/* bodge for now, PC's are considered on AC power */
-	if (ac_adapter->priv->has_hardware == FALSE) {
+	if (!ac_adapter->priv->has_hardware)
 		return TRUE;
-	}
 
 	error = NULL;
-	hal_device_get_bool (ac_adapter->priv->device,
-			      "ac_adapter.present", &is_on_ac, &error);
+	hal_device_get_bool (ac_adapter->priv->device, "ac_adapter.present", &is_on_ac, &error);
 	if (error != NULL) {
 		egg_warning ("could not read ac_adapter.present");
 		g_error_free (error);
 	}
-
-	if (is_on_ac) {
-		return TRUE;
-	}
+#else
+	dkp_client_get_on_battery (ac_adapter->priv->device, &is_on_ac, NULL);
+	/* battery -> not AC */
+	is_on_ac = !is_on_ac;
 #endif
-	return FALSE;
+	return is_on_ac;
 }
 
 #ifndef HAVE_DK_POWER
@@ -134,6 +132,15 @@ hal_device_property_modified_cb (HalDevice   *device,
 		g_signal_emit (ac_adapter, signals [AC_ADAPTER_CHANGED], 0, on_ac);
 		return;
 	}
+}
+#else
+/**
+ * gpm_ac_adapter_on_battery_changed_cb:
+ */
+static void
+gpm_ac_adapter_on_battery_changed_cb (DkpClientDevice *device, gboolean on_battery, GpmAcAdapter *ac_adapter)
+{
+	g_signal_emit (ac_adapter, signals [AC_ADAPTER_CHANGED], 0, !on_battery);
 }
 #endif
 
@@ -188,7 +195,9 @@ gpm_ac_adapter_init (GpmAcAdapter *ac_adapter)
 {
 	ac_adapter->priv = GPM_AC_ADAPTER_GET_PRIVATE (ac_adapter);
 #ifdef HAVE_DK_POWER
-	egg_debug ("TODO");
+	ac_adapter->priv->device = dkp_client_new ();
+	g_signal_connect (ac_adapter->priv->device, "on-battery-changed",
+			  G_CALLBACK (gpm_ac_adapter_on_battery_changed_cb), ac_adapter);
 #else
 	gchar **device_names;
 	gboolean ret;

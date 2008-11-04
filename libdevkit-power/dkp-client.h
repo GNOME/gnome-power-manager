@@ -54,11 +54,30 @@ typedef struct
 							 const DkpClientDevice	*device);
 	void			(*removed)		(DkpClient		*client,
 							 const DkpClientDevice	*device);
+	void			(*on_battery_changed)	(DkpClient		*client,
+							 gboolean		 on_battery);
+	void			(*low_battery_changed)	(DkpClient		*client,
+							 gboolean		 low_battery);
 } DkpClientClass;
 
 GType		 dkp_client_get_type			(void) G_GNUC_CONST;
 DkpClient	*dkp_client_new				(void);
-GPtrArray	*dkp_client_enumerate_devices		(const DkpClient	*client);
+GPtrArray	*dkp_client_enumerate_devices		(DkpClient		*client,
+							 GError			**error);
+gboolean	 dkp_client_get_on_battery		(DkpClient		*client,
+							 gboolean		*on_battery,
+							 GError			**error);
+gboolean	 dkp_client_get_low_battery		(DkpClient		*client,
+							 gboolean		*low_battery,
+							 GError			**error);
+gboolean	 dkp_client_can_suspend			(DkpClient		*client,
+							 gboolean		 interactive,
+							 gboolean		*can_suspend,
+							 GError			**error);
+gboolean	 dkp_client_can_hibernate		(DkpClient		*client,
+							 gboolean		 interactive,
+							 gboolean		*can_hibernate,
+							 GError			**error);
 
 G_END_DECLS
 

@@ -1024,7 +1024,7 @@ main (int argc, char *argv[])
 	g_signal_connect (client, "changed", G_CALLBACK (gpm_tool_device_changed_cb), NULL);
 
 	/* coldplug */
-	devices = dkp_client_enumerate_devices (client);
+	devices = dkp_client_enumerate_devices (client, NULL);
 	if (devices == NULL)
 		goto out;
 	for (i=0; i < devices->len; i++) {

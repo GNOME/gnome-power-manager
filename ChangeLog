@@ -1,5 +1,19 @@
 2008-11-04  Richard Hughes  <richard@hughsie.com>
 
+	* libdevkit-power/dkp-client.c: (dkp_client_enumerate_devices),
+	(dkp_client_get_on_battery), (dkp_client_get_low_battery),
+	(dkp_client_can_suspend), (dkp_client_can_hibernate),
+	(dkp_client_on_battery_changed_cb),
+	(dkp_client_low_battery_changed_cb), (dkp_client_class_init),
+	(dkp_client_init):
+	* libdevkit-power/dkp-client.h:
+	* src/gpm-ac-adapter.c: (gpm_ac_adapter_is_present),
+	(gpm_ac_adapter_on_battery_changed_cb), (gpm_ac_adapter_init):
+	* src/gpm-statistics.c: (main):
+	Switch GpmAcAdapter to using DeviceKit-power if configured to do so.
+
+2008-11-04  Richard Hughes  <richard@hughsie.com>
+
 	* src/Makefile.am:
 	* src/gpm-common.h:
 	* src/gpm-devicekit.c: (gpm_devicekit_get_object_icon_index),

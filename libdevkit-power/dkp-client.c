@@ -48,6 +48,8 @@ enum {
 	DKP_CLIENT_ADDED,
 	DKP_CLIENT_CHANGED,
 	DKP_CLIENT_REMOVED,
+	DKP_CLIENT_ON_BATTERY_CHANGED,
+	DKP_CLIENT_LOW_BATTERY_CHANGED,
 	DKP_CLIENT_LAST_SIGNAL
 };
 
@@ -70,23 +72,113 @@ dkp_client_get_device (DkpClient *client, const gchar *object_path)
  * dkp_client_enumerate_devices:
  **/
 GPtrArray *
-dkp_client_enumerate_devices (const DkpClient *client)
+dkp_client_enumerate_devices (DkpClient *client, GError **error)
 {
 	gboolean ret;
-	GError *error = NULL;
+	GError *error_local = NULL;
 	GPtrArray *devices = NULL;
 	GType g_type_array;
 
 	g_type_array = dbus_g_type_get_collection ("GPtrArray", DBUS_TYPE_G_OBJECT_PATH);
-	ret = dbus_g_proxy_call (client->priv->proxy, "EnumerateDevices", &error,
+	ret = dbus_g_proxy_call (client->priv->proxy, "EnumerateDevices", &error_local,
 				 G_TYPE_INVALID,
 				 g_type_array, &devices,
 				 G_TYPE_INVALID);
 	if (!ret) {
-		egg_warning ("Couldn't enumerate devices: %s", error->message);
-		g_error_free (error);
+		egg_warning ("Couldn't enumerate devices: %s", error_local->message);
+		if (error != NULL)
+			*error = g_error_new (1, 0, "%s", error_local->message);
+		g_error_free (error_local);
 	}
 	return devices;
+}
+
+/**
+ * dkp_client_get_on_battery
+ **/
+gboolean
+dkp_client_get_on_battery (DkpClient *client, gboolean *on_battery, GError **error)
+{
+	gboolean ret;
+	GError *error_local = NULL;
+
+	ret = dbus_g_proxy_call (client->priv->proxy, "GetOnBattery", &error_local,
+				 G_TYPE_INVALID,
+				 G_TYPE_BOOLEAN, &on_battery,
+				 G_TYPE_INVALID);
+	if (!ret) {
+		egg_warning ("Couldn't get battery status: %s", error_local->message);
+		if (error != NULL)
+			*error = g_error_new (1, 0, "%s", error_local->message);
+		g_error_free (error_local);
+	}
+	return ret;
+}
+
+/**
+ * dkp_client_get_low_battery
+ **/
+gboolean
+dkp_client_get_low_battery (DkpClient *client, gboolean *low_battery, GError **error)
+{
+	gboolean ret;
+	GError *error_local = NULL;
+
+	ret = dbus_g_proxy_call (client->priv->proxy, "GetLowBattery", &error_local,
+				 G_TYPE_INVALID,
+				 G_TYPE_BOOLEAN, &low_battery,
+				 G_TYPE_INVALID);
+	if (!ret) {
+		egg_warning ("Couldn't get low battery status: %s", error_local->message);
+		if (error != NULL)
+			*error = g_error_new (1, 0, "%s", error_local->message);
+		g_error_free (error_local);
+	}
+	return ret;
+}
+
+/**
+ * dkp_client_can_suspend
+ **/
+gboolean
+dkp_client_can_suspend (DkpClient *client, gboolean interactive, gboolean *can_suspend, GError **error)
+{
+	gboolean ret;
+	GError *error_local = NULL;
+
+	ret = dbus_g_proxy_call (client->priv->proxy, "CanSuspend", &error_local,
+				 G_TYPE_INVALID,
+				 G_TYPE_BOOLEAN, &can_suspend,
+				 G_TYPE_INVALID);
+	if (!ret) {
+		egg_warning ("Couldn't get suspend status: %s", error_local->message);
+		if (error != NULL)
+			*error = g_error_new (1, 0, "%s", error_local->message);
+		g_error_free (error_local);
+	}
+	return ret;
+}
+
+/**
+ * dkp_client_can_hibernate
+ **/
+gboolean
+dkp_client_can_hibernate (DkpClient *client, gboolean interactive, gboolean *can_hibernate, GError **error)
+{
+	gboolean ret;
+	GError *error_local = NULL;
+
+	ret = dbus_g_proxy_call (client->priv->proxy, "CanHibernate", &error_local,
+				 G_TYPE_INVALID,
+				 G_TYPE_BOOLEAN, &can_hibernate,
+				 G_TYPE_INVALID);
+	if (!ret) {
+		egg_warning ("Couldn't get hibernate status: %s", error_local->message);
+		if (error != NULL)
+			*error = g_error_new (1, 0, "%s", error_local->message);
+		g_error_free (error_local);
+	}
+	return ret;
 }
 
 /**
@@ -159,6 +251,24 @@ dkp_client_removed_cb (DBusGProxy *proxy, const gchar *object_path, DkpClient *c
 }
 
 /**
+ * dkp_client_on_battery_changed_cb:
+ **/
+static void
+dkp_client_on_battery_changed_cb (DBusGProxy *proxy, gboolean on_battery, DkpClient *client)
+{
+	g_signal_emit (client, signals [DKP_CLIENT_ON_BATTERY_CHANGED], 0, on_battery);
+}
+
+/**
+ * dkp_client_low_battery_changed_cb:
+ **/
+static void
+dkp_client_low_battery_changed_cb (DBusGProxy *proxy, gboolean low_battery, DkpClient *client)
+{
+	g_signal_emit (client, signals [DKP_CLIENT_LOW_BATTERY_CHANGED], 0, low_battery);
+}
+
+/**
  * dkp_client_class_init:
  * @klass: The DkpClientClass
  **/
@@ -186,6 +296,18 @@ dkp_client_class_init (DkpClientClass *klass)
 			      G_STRUCT_OFFSET (DkpClientClass, changed),
 			      NULL, NULL, g_cclosure_marshal_VOID__POINTER,
 			      G_TYPE_NONE, 1, G_TYPE_POINTER);
+	signals [DKP_CLIENT_ON_BATTERY_CHANGED] =
+		g_signal_new ("on-battery-changed",
+			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (DkpClientClass, changed),
+			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+	signals [DKP_CLIENT_LOW_BATTERY_CHANGED] =
+		g_signal_new ("low-battery-changed",
+			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (DkpClientClass, changed),
+			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 
 	g_type_class_add_private (klass, sizeof (DkpClientPrivate));
 }
@@ -225,6 +347,8 @@ dkp_client_init (DkpClient *client)
 	dbus_g_proxy_add_signal (client->priv->proxy, "DeviceAdded", G_TYPE_STRING, G_TYPE_INVALID);
 	dbus_g_proxy_add_signal (client->priv->proxy, "DeviceRemoved", G_TYPE_STRING, G_TYPE_INVALID);
 	dbus_g_proxy_add_signal (client->priv->proxy, "DeviceChanged", G_TYPE_STRING, G_TYPE_INVALID);
+	dbus_g_proxy_add_signal (client->priv->proxy, "OnBatteryChanged", G_TYPE_BOOLEAN, G_TYPE_INVALID);
+	dbus_g_proxy_add_signal (client->priv->proxy, "LowBatteryChanged", G_TYPE_BOOLEAN, G_TYPE_INVALID);
 
 	/* all callbacks */
 	dbus_g_proxy_connect_signal (client->priv->proxy, "DeviceAdded",
@@ -233,9 +357,13 @@ dkp_client_init (DkpClient *client)
 				     G_CALLBACK (dkp_client_removed_cb), client, NULL);
 	dbus_g_proxy_connect_signal (client->priv->proxy, "DeviceChanged",
 				     G_CALLBACK (dkp_client_changed_cb), client, NULL);
+	dbus_g_proxy_connect_signal (client->priv->proxy, "OnBatteryChanged",
+				     G_CALLBACK (dkp_client_on_battery_changed_cb), client, NULL);
+	dbus_g_proxy_connect_signal (client->priv->proxy, "LowBatteryChanged",
+				     G_CALLBACK (dkp_client_low_battery_changed_cb), client, NULL);
 
 	/* coldplug */
-	devices = dkp_client_enumerate_devices (client);
+	devices = dkp_client_enumerate_devices (client, NULL);
 	if (devices == NULL)
 		goto out;
 	for (i=0; i<devices->len; i++) {
