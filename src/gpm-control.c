@@ -27,7 +27,6 @@
 #include <stdio.h>
 #include <time.h>
 #include <errno.h>
-#include <libgnomeui/gnome-client.h>
 
 #include <string.h>
 #include <sys/time.h>
@@ -309,9 +308,11 @@ gpm_control_shutdown (GpmControl *control,
 	/* We can set g-p-m to not save the session to avoid confusing new
 	   users. By default we save the session to preserve data. */
 	if (save_session) {
+#if 0
 		gnome_client_request_save (gnome_master_client (),
 					   GNOME_SAVE_GLOBAL,
 					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
+#endif
 	}
 
 	ret = hal_device_power_shutdown (control->priv->hal_device_power, error);
@@ -348,9 +349,11 @@ gpm_control_reboot (GpmControl *control,
 	/* We can set g-p-m to not save the session to avoid confusing new
 	   users. By default we save the session to preserve data. */
 	if (save_session) {
+#if 0
 		gnome_client_request_save (gnome_master_client (),
 					   GNOME_SAVE_GLOBAL,
 					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
+#endif
 	}
 
 	return hal_device_power_reboot (control->priv->hal_device_power, error);

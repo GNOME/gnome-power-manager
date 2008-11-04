@@ -38,7 +38,6 @@
 #include <gtk/gtk.h>
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
-#include <libgnomeui/gnome-client.h>
 #include <gconf/gconf-client.h>
 #include <canberra-gtk.h>
 

@@ -27,11 +27,13 @@
 
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <errno.h>
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <gtk/gtk.h>
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
-#include <libgnomeui/libgnomeui.h>
 #include <glade/glade.h>
 
 #include "gpm-stock-icons.h"
@@ -40,8 +42,6 @@
 
 #include "gpm-manager.h"
 #include "org.freedesktop.PowerManagement.h"
-
-static void gpm_exit (GpmManager *manager);
 
 /**
  * gpm_object_register:
@@ -99,16 +99,6 @@ gpm_object_register (DBusGConnection *connection,
 }
 
 /**
- * gpm_exit:
- * @manager: This manager class instance
- **/
-static void
-gpm_exit (GpmManager *manager)
-{
-	exit (0);
-}
-
-/**
  * timed_exit_cb:
  * @loop: The main loop
  *
@@ -130,8 +120,6 @@ int
 main (int argc, char *argv[])
 {
 	GMainLoop *loop;
-	GnomeClient *master;
-	GnomeClientFlags flags;
 	DBusGConnection *system_connection;
 	DBusGConnection *session_connection;
 	gboolean verbose = FALSE;
@@ -142,7 +130,6 @@ main (int argc, char *argv[])
 	GpmManager *manager = NULL;
 	GError *error = NULL;
 	GOptionContext *context;
- 	GnomeProgram *program;
 
 	const GOptionEntry options[] = {
 		{ "no-daemon", '\0', 0, G_OPTION_ARG_NONE, &no_daemon,
@@ -158,49 +145,39 @@ main (int argc, char *argv[])
 		{ NULL}
 	};
 
-	context = g_option_context_new (N_("GNOME Power Manager"));
-
+	setlocale (LC_ALL, "");
 	bindtextdomain (GETTEXT_PACKAGE, GNOMELOCALEDIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
 
+	if (! g_thread_supported ())
+		g_thread_init (NULL);
+	dbus_g_thread_init ();
+	g_type_init ();
+
+	context = g_option_context_new (N_("GNOME Power Manager"));
+	/* TRANSLATORS: program name, a simple app to view pending updates */
 	g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
 	g_option_context_set_translation_domain(context, GETTEXT_PACKAGE);
-
-	program = gnome_program_init (argv[0], VERSION,
-			   	      LIBGNOMEUI_MODULE, argc, argv,
-			    	      GNOME_PROGRAM_STANDARD_PROPERTIES,
-			    	      GNOME_PARAM_GOPTION_CONTEXT, context,
-			    	      GNOME_PARAM_HUMAN_READABLE_NAME, GPM_NAME,
-			    	      NULL);
-	g_set_application_name (GPM_NAME);
-
-	master = gnome_master_client ();
-	flags = gnome_client_get_flags (master);
+	g_option_context_set_summary (context, _("GNOME Power Manager"));
+	g_option_context_parse (context, &argc, &argv, NULL);
+	g_option_context_free (context);
 
 	if (version) {
 		g_print ("Version %s\n", VERSION);
 		goto unref_program;
 	}
 
-	if (flags & GNOME_CLIENT_IS_CONNECTED) {
-		/* We'll disable this as users are getting constant crashes */
-		/* gnome_client_set_restart_style (master, GNOME_RESTART_IMMEDIATELY);*/
-		gnome_client_flush (master);
-	}
-
-	g_signal_connect (GTK_OBJECT (master), "die", G_CALLBACK (gpm_exit), manager);
-
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
 	dbus_g_thread_init ();
 
+	gtk_init (&argc, &argv);
 	egg_debug_init (verbose);
 
 	/* we need to daemonize before we get a system connection to fix #366057 */
-	if (no_daemon == FALSE && daemon (0, 0)) {
+	if (no_daemon == FALSE && daemon (0, 0))
 		egg_error ("Could not daemonize: %s", g_strerror (errno));
-	}
 
 	egg_debug ("GNOME %s %s", GPM_NAME, VERSION);
 
@@ -253,10 +230,6 @@ main (int argc, char *argv[])
 
 	g_object_unref (manager);
 unref_program:
-	g_object_unref (program);
-/*
 	g_option_context_free (context);
-*/
-
 	return 0;
 }
