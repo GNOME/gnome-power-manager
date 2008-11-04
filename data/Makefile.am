@@ -24,7 +24,7 @@ $(service_DATA): $(service_in_files) Makefile
 	@sed -e "s|\@servicedir\@|$(bindir)|" $< > $@
 
 pkgdata_DATA =						\
-	gpm-graph.glade					\
+	gpm-statistics.glade				\
 	gpm-feedback-widget.glade			\
 	gpm-inhibit-test.glade				\
 	gpm-prefs.glade
