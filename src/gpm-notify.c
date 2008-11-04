@@ -56,7 +56,7 @@
 struct GpmNotifyPrivate
 {
 	GpmAcAdapter		*ac_adapter;
-	GConfClient			*conf;
+	GConfClient		*conf;
 	GtkStatusIcon		*status_icon;
 	gchar			*internet_url;
 	const gchar		*do_not_show_gconf;

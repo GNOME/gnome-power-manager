@@ -437,7 +437,7 @@ gpm_applet_dialog_about_cb (BonoboUIComponent *uic, gpointer data, const gchar *
 				     _(license[2]), "\n\n", _(license[3]), "\n", NULL);
 
 	about = (GtkAboutDialog*) gtk_about_dialog_new ();
-	gtk_about_dialog_set_name (about, GPM_INHIBIT_APPLET_NAME);
+	gtk_about_dialog_set_program_name (about, GPM_INHIBIT_APPLET_NAME);
 	gtk_about_dialog_set_version (about, VERSION);
 	gtk_about_dialog_set_copyright (about, _("Copyright \xc2\xa9 2006-2007 Richard Hughes"));
 	gtk_about_dialog_set_comments (about, GPM_INHIBIT_APPLET_DESC);
@@ -454,7 +454,7 @@ gpm_applet_dialog_about_cb (BonoboUIComponent *uic, gpointer data, const gchar *
 	gtk_widget_show (GTK_WIDGET(about));
 
 	g_free (license_trans);
-	gdk_pixbuf_unref (logo);
+	g_object_unref (logo);
 }
 
 /**
@@ -498,7 +498,7 @@ gpm_applet_destroy_cb (GtkObject *object)
 		g_object_unref (applet->monitor);
 	}
 	if (applet->icon != NULL) {
-		gdk_pixbuf_unref (applet->icon);
+		g_object_unref (applet->icon);
 	}
 }
 
