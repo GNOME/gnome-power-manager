@@ -39,6 +39,13 @@ dnl ---------------------------------------------------------------------------
 #LDFLAGS="$LDFLAGS -pg"
 
 dnl ---------------------------------------------------------------------------
+dnl - Code checks
+dnl ---------------------------------------------------------------------------
+#CPPFLAGS="$CPPFLAGS -DG_DISABLE_SINGLE_INCLUDES -DGDK_PIXBUF_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_SINGLE_INCLUDES"
+CPPFLAGS="$CPPFLAGS -DGDK_PIXBUF_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
+CPPFLAGS="$CPPFLAGS -DG_DISABLE_DEPRECATED"
+
+dnl ---------------------------------------------------------------------------
 dnl - gettext stuff
 dnl ---------------------------------------------------------------------------
 GETTEXT_PACKAGE=AC_PACKAGE_NAME
