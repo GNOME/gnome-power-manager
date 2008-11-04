@@ -71,7 +71,7 @@ gnome_power_statistics_SOURCES =			\
 	egg-dbus-proxy.c				\
 	egg-dbus-monitor.h				\
 	egg-dbus-monitor.c				\
-	gpm-statistics.c				\
+	gpm-statistics-old.c				\
 	gpm-statistics-core.h				\
 	gpm-statistics-core.c				\
 	gpm-array.h					\
