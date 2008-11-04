@@ -162,6 +162,15 @@ G_BEGIN_DECLS
 /* okay to change at runtime */
 #define GPM_CONF_GNOME_SS_PM_DELAY		"/apps/gnome-screensaver/power_management_delay"
 
+/* new info binary */
+#define GPM_CONF_INFO_HISTORY_TIME		"/apps/gnome-power-manager/info/history_time"
+#define GPM_CONF_INFO_HISTORY_TYPE		"/apps/gnome-power-manager/info/history_type"
+#define GPM_CONF_INFO_HISTORY_GRAPH_SMOOTH	"/apps/gnome-power-manager/info/history_graph_smooth"
+#define GPM_CONF_INFO_STATS_TYPE		"/apps/gnome-power-manager/info/stats_type"
+#define GPM_CONF_INFO_STATS_GRAPH_SMOOTH	"/apps/gnome-power-manager/info/stats_graph_smooth"
+#define GPM_CONF_INFO_PAGE_NUMBER		"/apps/gnome-power-manager/info/page_number"
+#define GPM_CONF_INFO_LAST_DEVICE		"/apps/gnome-power-manager/info/last_device"
+
 /* gnome-screensaver */
 #define GS_CONF_DIR				"/apps/gnome-screensaver"
 #define GS_PREF_LOCK_ENABLED			GS_CONF_DIR "/lock_enabled"

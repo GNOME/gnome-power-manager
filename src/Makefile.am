@@ -65,6 +65,26 @@ gnome_power_statistics_SOURCES =			\
 	egg-unique.c					\
 	egg-precision.h					\
 	egg-precision.c					\
+	gpm-common.h					\
+	gpm-common.c					\
+	$(NULL)
+
+if HAVE_DK_POWER
+gnome_power_statistics_SOURCES +=			\
+	egg-obj-list.c					\
+	egg-obj-list.h					\
+	egg-array-float.c				\
+	egg-array-float.h				\
+	gpm-statistics.c				\
+	gpm-devicekit.c					\
+	gpm-devicekit.h					\
+	gpm-point-obj.c					\
+	gpm-point-obj.h					\
+	gpm-graph-widget.h				\
+	gpm-graph-widget.c				\
+	$(NULL)
+else
+gnome_power_statistics_SOURCES +=			\
 	egg-discrete.h					\
 	egg-discrete.c					\
 	egg-dbus-proxy.h				\
@@ -74,17 +94,16 @@ gnome_power_statistics_SOURCES =			\
 	gpm-statistics-old.c				\
 	gpm-statistics-core.h				\
 	gpm-statistics-core.c				\
+	gpm-marshal.h					\
+	gpm-marshal.c					\
 	gpm-array.h					\
 	gpm-array.c					\
 	gpm-array-float.h				\
 	gpm-array-float.c				\
 	gpm-graph-widget-old.h				\
 	gpm-graph-widget-old.c				\
-	gpm-marshal.h					\
-	gpm-marshal.c					\
-	gpm-common.h					\
-	gpm-common.c					\
 	$(NULL)
+endif
 
 gnome_power_statistics_LDADD =				\
 	$(GLIB_LIBS)					\
