@@ -270,7 +270,7 @@ AC_ARG_ENABLE(gconf-defaults,
 
 AC_MSG_CHECKING([whether to support gconf defaults])
 have_gconfdefaults=no
-if test x$enable_gconfdefaults = xyes ; then
+if test x$enable_gconfdefaults = xyes && test $have_polkit = yes ; then
     PKG_CHECK_MODULES(POLKIT_GNOME, [
                       polkit-gnome >= $POLKIT_GNOME_REQUIRED])
     AC_SUBST(POLKIT_GNOME_CFLAGS)
