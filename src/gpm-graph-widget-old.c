@@ -1351,19 +1351,19 @@ create_graph_window (EggTest *test)
 	label = gtk_label_new("Title");
 
 	button_passed = gtk_button_new_with_label("Passed");
-	gtk_signal_connect(GTK_OBJECT(button_passed), "clicked", GTK_SIGNAL_FUNC(clicked_passed_cb), test);
+	g_signal_connect (G_OBJECT(button_passed), "clicked", G_CALLBACK(clicked_passed_cb), test);
 	button_failed = gtk_button_new_with_label("Failed");
-	gtk_signal_connect(GTK_OBJECT(button_failed), "clicked", GTK_SIGNAL_FUNC(clicked_failed_cb), test);
+	g_signal_connect (G_OBJECT(button_failed), "clicked", G_CALLBACK(clicked_failed_cb), test);
 
 	gtk_widget_set_size_request (graph, 600, 300);
-	gtk_signal_connect (GTK_OBJECT(window), "delete_event", GTK_SIGNAL_FUNC(close_handler), test);
+	g_signal_connect (G_OBJECT(window), "delete_event", G_CALLBACK(close_handler), test);
 
 	gtk_container_add (GTK_CONTAINER (window), vbox);
 	gtk_box_pack_start (GTK_BOX (vbox), graph, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (vbox), button_passed, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (vbox), button_failed, FALSE, FALSE, 0);
-	gtk_container_border_width (GTK_CONTAINER (window), 0);
+	gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
 	gtk_widget_show (vbox);
 	gtk_widget_show (label);
