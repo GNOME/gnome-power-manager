@@ -24,7 +24,7 @@
 #define __GPM_NOTIFY_H
 
 #include <glib-object.h>
-#include <gtk/gtkstatusicon.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
