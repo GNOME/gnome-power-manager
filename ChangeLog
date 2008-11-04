@@ -1,5 +1,16 @@
 2008-11-04  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-engine.c: (gpm_engine_class_init),
+	(gpm_cell_array_charge_low_cb),
+	(gpm_cell_array_charge_critical_cb),
+	(gpm_cell_array_charge_action_cb):
+	* src/gpm-manager.c: (gpm_engine_charge_low_cb),
+	(gpm_engine_charge_critical_cb), (gpm_engine_charge_action_cb),
+	(has_inhibit_changed_cb):
+	Don't proxy down the kind, just send the unit from the engine.
+
+2008-11-04  Richard Hughes  <richard@hughsie.com>
+
 	* libdevkit-power/dkp-client.c: (dkp_client_enumerate_devices),
 	(dkp_client_get_on_battery), (dkp_client_get_low_battery),
 	(dkp_client_can_suspend), (dkp_client_can_hibernate),

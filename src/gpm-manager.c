@@ -1541,7 +1541,6 @@ control_sleep_failure_cb (GpmControl      *control,
  */
 static void
 gpm_engine_charge_low_cb (GpmEngine      *engine,
-			  GpmCellUnitKind kind,
 			  GpmCellUnit    *unit,
 			  GpmManager     *manager)
 {
@@ -1550,26 +1549,26 @@ gpm_engine_charge_low_cb (GpmEngine      *engine,
 	gchar *remaining_text;
 	gchar *icon;
 
-	if (kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
 		title = _("Laptop battery low");
 		remaining_text = gpm_get_timestring (unit->time_discharge);
 		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%.1f%%)"),
 					   remaining_text, unit->percentage);
-	} else if (kind == GPM_CELL_UNIT_KIND_UPS) {
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_UPS) {
 		title = _("UPS low");
 		remaining_text = gpm_get_timestring (unit->time_discharge);
 		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"),
 					   remaining_text, unit->percentage);
-	} else if (kind == GPM_CELL_UNIT_KIND_MOUSE) {
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_MOUSE) {
 		title = _("Mouse battery low");
 		message = g_strdup_printf (_("The wireless mouse attached to this computer is low in power (%.1f%%)"), unit->percentage);
-	} else if (kind == GPM_CELL_UNIT_KIND_KEYBOARD) {
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_KEYBOARD) {
 		title = _("Keyboard battery low");
 		message = g_strdup_printf (_("The wireless keyboard attached to this computer is low in power (%.1f%%)"), unit->percentage);
-	} else if (kind == GPM_CELL_UNIT_KIND_PDA) {
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_PDA) {
 		title = _("PDA battery low");
 		message = g_strdup_printf (_("The PDA attached to this computer is low in power (%.1f%%)"), unit->percentage);
-	} else if (kind == GPM_CELL_UNIT_KIND_PHONE) {
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_PHONE) {
 		title = _("Cell phone battery low");
 		message = g_strdup_printf (_("The cell phone attached to this computer is low in power (%.1f%%)"), unit->percentage);
 	}
@@ -1607,7 +1606,6 @@ gpm_manager_get_time_until_action_text (GpmManager *manager)
  */
 static void
 gpm_engine_charge_critical_cb (GpmEngine      *engine,
-			       GpmCellUnitKind kind,
 			       GpmCellUnit    *unit,
 			       GpmManager     *manager)
 {
@@ -1619,7 +1617,7 @@ gpm_engine_charge_critical_cb (GpmEngine      *engine,
 	gchar *icon;
 	gchar *time_text;
 
-	if (kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
 		title = _("Laptop battery critically low");
 		remaining_text = gpm_get_timestring (unit->time_discharge);
 		time_text = gpm_manager_get_time_until_action_text (manager);
@@ -1648,29 +1646,29 @@ gpm_engine_charge_critical_cb (GpmEngine      *engine,
 		g_free (action_text);
 		g_free (remaining_text);
 		g_free (time_text);
-	} else if (kind == GPM_CELL_UNIT_KIND_UPS) {
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_UPS) {
 		title = _("UPS critically low");
 		remaining_text = gpm_get_timestring (unit->time_discharge);
 		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining UPS power (%.1f%%). "
 					     "Restore AC power to your computer to avoid losing data."),
 					   remaining_text, unit->percentage);
 		g_free (remaining_text);
-	} else if (kind == GPM_CELL_UNIT_KIND_MOUSE) {
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_MOUSE) {
 		title = _("Mouse battery low");
 		message = g_strdup_printf (_("The wireless mouse attached to this computer is very low in power (%.1f%%). "
 					     "This device will soon stop functioning if not charged."),
 					   unit->percentage);
-	} else if (kind == GPM_CELL_UNIT_KIND_KEYBOARD) {
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_KEYBOARD) {
 		title = _("Keyboard battery low");
 		message = g_strdup_printf (_("The wireless keyboard attached to this computer is very low in power (%.1f%%). "
 					     "This device will soon stop functioning if not charged."),
 					   unit->percentage);
-	} else if (kind == GPM_CELL_UNIT_KIND_PDA) {
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_PDA) {
 		title = _("PDA battery low");
 		message = g_strdup_printf (_("The PDA attached to this computer is very low in power (%.1f%%). "
 					     "This device will soon stop functioning if not charged."),
 					   unit->percentage);
-	} else if (kind == GPM_CELL_UNIT_KIND_PHONE) {
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_PHONE) {
 		title = _("Cell phone battery low");
 		message = g_strdup_printf (_("Your cell phone is very low in power (%.1f%%). "
 					     "This device will soon stop functioning if not charged."),
@@ -1691,14 +1689,14 @@ gpm_engine_charge_critical_cb (GpmEngine      *engine,
  * gpm_engine_charge_action_cb:
  */
 static void
-gpm_engine_charge_action_cb (GpmEngine *engine, GpmCellUnitKind kind, GpmCellUnit *unit, GpmManager *manager)
+gpm_engine_charge_action_cb (GpmEngine *engine, GpmCellUnit *unit, GpmManager *manager)
 {
 	const gchar *title = NULL;
 	gchar *action;
 	gchar *message = NULL;
 	gchar *icon;
 
-	if (kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
 		title = _("Laptop battery critically low");
 
 		/* we have to do different warnings depending on the policy */
@@ -1730,7 +1728,7 @@ gpm_engine_charge_action_cb (GpmEngine *engine, GpmCellUnitKind kind, GpmCellUni
 		/* wait 10 seconds for user-panic */
 		g_timeout_add (1000*10, (GSourceFunc) manager_critical_action_do, manager);
 
-	} else if (kind == GPM_CELL_UNIT_KIND_UPS) {
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_UPS) {
 		title = _("UPS critically low");
 
 		/* we have to do different warnings depending on the policy */
@@ -1772,9 +1770,7 @@ gpm_engine_charge_action_cb (GpmEngine *engine, GpmCellUnitKind kind, GpmCellUni
  * has_inhibit_changed_cb:
  **/
 static void
-has_inhibit_changed_cb (GpmInhibit *inhibit,
-			gboolean    has_inhibit,
-		        GpmManager *manager)
+has_inhibit_changed_cb (GpmInhibit *inhibit, gboolean has_inhibit, GpmManager *manager)
 {
 	HalManager *hal_manager;
 	gboolean is_laptop;

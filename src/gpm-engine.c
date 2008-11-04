@@ -205,28 +205,28 @@ gpm_engine_class_init (GpmEngineClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmEngineClass, charge_action),
 			      NULL, NULL,
-			      gpm_marshal_VOID__UINT_UINT,
-			      G_TYPE_NONE, 2, G_TYPE_UINT, G_TYPE_POINTER);
+			      g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE, 1, G_TYPE_POINTER);
 	signals [CHARGE_LOW] =
 		g_signal_new ("charge-low",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmEngineClass, charge_low),
 			      NULL, NULL,
-			      gpm_marshal_VOID__UINT_POINTER,
-			      G_TYPE_NONE, 2, G_TYPE_UINT, G_TYPE_POINTER);
+			      g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE, 1, G_TYPE_POINTER);
 	signals [CHARGE_CRITICAL] =
 		g_signal_new ("charge-critical",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmEngineClass, charge_critical),
 			      NULL, NULL,
-			      gpm_marshal_VOID__UINT_POINTER,
-			      G_TYPE_NONE, 2, G_TYPE_UINT, G_TYPE_POINTER);
+			      g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE, 1, G_TYPE_POINTER);
 }
 
 /**
- * gpm_engine_get_summary:
+ * gpm_engine_get_collection:
  * @engine: This engine class instance
  * @string: The returned string
  *
@@ -755,7 +755,6 @@ gpm_cell_array_charge_low_cb (GpmCellArray *cell_array,
 			      gfloat        percent,
 			      GpmEngine    *engine)
 {
-	GpmCellUnitKind kind;
 	GpmCellUnit *unit;
 
 	g_return_if_fail (engine != NULL);
@@ -765,12 +764,11 @@ gpm_cell_array_charge_low_cb (GpmCellArray *cell_array,
 	gpm_engine_recalculate_state (engine);
 
 	/* find the kind for easy multiplexing */
-	kind = gpm_cell_array_get_kind (cell_array);
 	unit = gpm_cell_array_get_unit (cell_array);
 
 	/* just proxy it to the GUI layer */
 	egg_debug ("** EMIT: charge-low");
-	g_signal_emit (engine, signals [CHARGE_LOW], 0, kind, unit);
+	g_signal_emit (engine, signals [CHARGE_LOW], 0, unit);
 }
 
 /**
@@ -781,7 +779,6 @@ gpm_cell_array_charge_critical_cb (GpmCellArray *cell_array,
 				   gfloat        percent,
 				   GpmEngine    *engine)
 {
-	GpmCellUnitKind kind;
 	GpmCellUnit *unit;
 
 	g_return_if_fail (engine != NULL);
@@ -791,12 +788,11 @@ gpm_cell_array_charge_critical_cb (GpmCellArray *cell_array,
 	gpm_engine_recalculate_state (engine);
 
 	/* find the kind for easy multiplexing */
-	kind = gpm_cell_array_get_kind (cell_array);
 	unit = gpm_cell_array_get_unit (cell_array);
 
 	/* just proxy it to the GUI layer */
 	egg_debug ("** EMIT: charge-critical");
-	g_signal_emit (engine, signals [CHARGE_CRITICAL], 0, kind, unit);
+	g_signal_emit (engine, signals [CHARGE_CRITICAL], 0, unit);
 }
 
 /**
@@ -807,7 +803,6 @@ gpm_cell_array_charge_action_cb (GpmCellArray *cell_array,
 				 gfloat        percent,
 				 GpmEngine    *engine)
 {
-	GpmCellUnitKind kind;
 	GpmCellUnit *unit;
 
 	g_return_if_fail (engine != NULL);
@@ -817,12 +812,11 @@ gpm_cell_array_charge_action_cb (GpmCellArray *cell_array,
 	gpm_engine_recalculate_state (engine);
 
 	/* find the kind for easy multiplexing */
-	kind = gpm_cell_array_get_kind (cell_array);
 	unit = gpm_cell_array_get_unit (cell_array);
 
 	/* just proxy it to the GUI layer */
 	egg_debug ("** EMIT: charge-action");
-	g_signal_emit (engine, signals [CHARGE_ACTION], 0, kind, unit);
+	g_signal_emit (engine, signals [CHARGE_ACTION], 0, unit);
 }
 
 /**
