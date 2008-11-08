@@ -46,7 +46,7 @@ G_BEGIN_DECLS
 guint32		 egg_color_from_rgb			(guint8		 red,
 							 guint8		 green,
 							 guint8		 blue);
-void		 egg_color_to_rgb			(guint32	 colour,
+void		 egg_color_to_rgb			(guint32	 color,
 							 guint8		*red,
 							 guint8		*green,
 							 guint8		*blue);
