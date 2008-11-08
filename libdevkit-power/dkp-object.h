@@ -47,6 +47,7 @@ typedef struct {
 	gdouble			 energy_full;		/* Watt Hours */
 	gdouble			 energy_full_design;	/* Watt Hours */
 	gdouble			 energy_rate;		/* Watts */
+	gdouble			 voltage;		/* Volts */
 	gint64			 time_to_empty;		/* seconds */
 	gint64			 time_to_full;		/* seconds */
 	gdouble			 percentage;		/* percent */

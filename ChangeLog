@@ -1,5 +1,18 @@
 2008-11-08  Richard Hughes  <richard@hughsie.com>
 
+	* libdevkit-power/dkp-client-device.c:
+	(dkp_client_device_print_history), (dkp_client_device_get_history),
+	(dkp_client_device_get_statistics):
+	* libdevkit-power/dkp-client-device.h:
+	* libdevkit-power/dkp-object.c: (dkp_object_clear_internal),
+	(dkp_object_collect_props), (dkp_object_copy), (dkp_object_equal),
+	(dkp_object_print), (dkp_object_diff), (dkp_object_get_id):
+	* libdevkit-power/dkp-object.h:
+	* src/gpm-statistics.c: (gpm_update_info_page_history):
+	Update to the latest DeviceKit-power client library.
+
+2008-11-08  Richard Hughes  <richard@hughsie.com>
+
 	* src/egg-color.h:
 	* src/egg-debug.c: (pk_print_line):
 	* src/egg-obj-list.c: (egg_obj_list_clear):

@@ -67,7 +67,7 @@ struct GpmBacklightPrivate
 	GpmAcAdapter		*ac_adapter;
 	GpmBrightness		*brightness;
 	GpmButton		*button;
-	GConfClient			*conf;
+	GConfClient		*conf;
 	GpmFeedback		*feedback;
 	GpmControl		*control;
 	GpmDpms			*dpms;

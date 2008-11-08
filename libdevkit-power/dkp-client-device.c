@@ -206,7 +206,7 @@ dkp_client_device_print_history (const DkpClientDevice *device, const gchar *typ
 	gboolean ret = FALSE;
 
 	/* get a fair chunk of data */
-	array = dkp_client_device_get_history (device, type, 120);
+	array = dkp_client_device_get_history (device, type, 120, 10);
 	if (array == NULL)
 		goto out;
 
@@ -270,7 +270,7 @@ out:
  * Returns an array of %DkpHistoryObj's
  **/
 EggObjList *
-dkp_client_device_get_history (const DkpClientDevice *device, const gchar *type, guint timespec)
+dkp_client_device_get_history (const DkpClientDevice *device, const gchar *type, guint timespec, guint resolution)
 {
 	GError *error = NULL;
 	GType g_type_gvalue_array;
@@ -283,6 +283,7 @@ dkp_client_device_get_history (const DkpClientDevice *device, const gchar *type,
 	gboolean ret;
 
 	g_return_val_if_fail (DKP_IS_CLIENT_DEVICE (device), FALSE);
+	g_return_val_if_fail (device->priv->proxy_device != NULL, FALSE);
 
 	g_type_gvalue_array = dbus_g_type_get_collection ("GPtrArray",
 					dbus_g_type_get_struct("GValueArray",
@@ -295,6 +296,7 @@ dkp_client_device_get_history (const DkpClientDevice *device, const gchar *type,
 	ret = dbus_g_proxy_call (device->priv->proxy_device, "GetHistory", &error,
 				 G_TYPE_STRING, type,
 				 G_TYPE_UINT, timespec,
+				 G_TYPE_UINT, resolution,
 				 G_TYPE_INVALID,
 				 g_type_gvalue_array, &gvalue_ptr_array,
 				 G_TYPE_INVALID);
@@ -359,6 +361,7 @@ dkp_client_device_get_statistics (const DkpClientDevice *device, const gchar *ty
 	gboolean ret;
 
 	g_return_val_if_fail (DKP_IS_CLIENT_DEVICE (device), FALSE);
+	g_return_val_if_fail (device->priv->proxy_device != NULL, FALSE);
 
 	g_type_gvalue_array = dbus_g_type_get_collection ("GPtrArray",
 					dbus_g_type_get_struct("GValueArray",

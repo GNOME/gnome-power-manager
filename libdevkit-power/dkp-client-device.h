@@ -65,7 +65,8 @@ gboolean	 dkp_client_device_print		(const DkpClientDevice	*device);
 gboolean	 dkp_client_device_refresh		(DkpClientDevice	*device);
 EggObjList	*dkp_client_device_get_history		(const DkpClientDevice	*device,
 							 const gchar		*type,
-							 guint			 timespec);
+							 guint			 timespec,
+							 guint			 resolution);
 EggObjList	*dkp_client_device_get_statistics	(const DkpClientDevice	*device,
 							 const gchar		*type);
 

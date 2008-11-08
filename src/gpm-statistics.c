@@ -365,7 +365,7 @@ gpm_update_info_page_history (const DkpClientDevice *device)
 	else
 		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_TIME);
 
-	array = dkp_client_device_get_history (device, history_type, history_time);
+	array = dkp_client_device_get_history (device, history_type, history_time, 150);
 	if (array == NULL) {
 		gtk_widget_hide (widget);
 		goto out;
