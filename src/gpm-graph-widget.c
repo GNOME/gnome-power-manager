@@ -559,7 +559,7 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 	if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
 		if (graph->priv->stop_x >= 90)
 			graph->priv->stop_x = 100;
-		if (graph->priv->start_x <= 10)
+		if (graph->priv->start_x > 0 && graph->priv->start_x <= 10)
 			graph->priv->start_x = 0;
 	} else if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_TIME) {
 		if (graph->priv->start_x > 0 && graph->priv->start_x <= 60*10)
@@ -568,7 +568,7 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 	if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
 		if (graph->priv->stop_y >= 90)
 			graph->priv->stop_y = 100;
-		if (graph->priv->start_y <= 10)
+		if (graph->priv->start_y > 0 && graph->priv->start_y <= 10)
 			graph->priv->start_y = 0;
 	} else if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_TIME) {
 		if (graph->priv->start_y <= 60*10)
@@ -668,9 +668,10 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 	GpmPointObj *point;
 	guint i;
 
-	if (graph->priv->data_list->len == 0)
+	if (graph->priv->data_list->len == 0) {
 		egg_debug ("no data");
 		return;
+	}
 	cairo_save (cr);
 
 	/* do all the line on the graph */
@@ -839,7 +840,6 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
 
 	gpm_graph_widget_legend_calculate_size (graph, cr, &legend_width, &legend_height);
-
 	cairo_save (cr);
 
 	/* we need this so we know the y text */
@@ -864,10 +864,8 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	/* graph background */
 	gpm_graph_widget_draw_bounding_box (cr, graph->priv->box_x, graph->priv->box_y,
 				     graph->priv->box_width, graph->priv->box_height);
-
-	if (graph->priv->use_grid) {
+	if (graph->priv->use_grid)
 		gpm_graph_widget_draw_grid (graph, cr);
-	}
 
 	/* -3 is so we can keep the lines inside the box at both extremes */
 	data_x = graph->priv->stop_x - graph->priv->start_x;
