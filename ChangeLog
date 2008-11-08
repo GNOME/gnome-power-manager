@@ -1,5 +1,11 @@
 2008-11-08  Richard Hughes  <richard@hughsie.com>
 
+	* src/egg-console-kit.c: (egg_console_kit_is_local),
+	(egg_console_kit_is_active):
+	Don't crash if we start up not on active session.
+
+2008-11-08  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-graph-widget.c: (gpm_graph_widget_auto_range),
 	(gpm_graph_widget_draw_line), (gpm_graph_widget_draw_graph):
 	Fix the graph autoranging when the values are negative.

@@ -70,12 +70,17 @@ G_DEFINE_TYPE (EggConsoleKit, egg_console_kit, G_TYPE_OBJECT)
 gboolean
 egg_console_kit_is_local (EggConsoleKit *console)
 {
-	gboolean ret;
+	gboolean ret = FALSE;
 	gboolean value = FALSE;
 	GError *error = NULL;
 
 	g_return_val_if_fail (EGG_IS_CONSOLE_KIT (console), FALSE);
-	g_return_val_if_fail (console->priv->proxy_session != NULL, FALSE);
+
+	/* maybe console kit does not know about our session */
+	if (console->priv->proxy_session == NULL) {
+		egg_warning ("no ConsoleKit session");
+		goto out;
+	}
 
 	/* is our session local */
 	ret = dbus_g_proxy_call (console->priv->proxy_session, "IsLocal", &error, G_TYPE_INVALID,
@@ -105,7 +110,12 @@ egg_console_kit_is_active (EggConsoleKit *console)
 	GError *error = NULL;
 
 	g_return_val_if_fail (EGG_IS_CONSOLE_KIT (console), FALSE);
-	g_return_val_if_fail (console->priv->proxy_session != NULL, FALSE);
+
+	/* maybe console kit does not know about our session */
+	if (console->priv->proxy_session == NULL) {
+		egg_warning ("no ConsoleKit session");
+		goto out;
+	}
 
 	/* is our session active */
 	ret = dbus_g_proxy_call (console->priv->proxy_session, "IsActive", &error, G_TYPE_INVALID,
