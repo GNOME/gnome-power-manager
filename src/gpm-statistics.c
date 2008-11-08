@@ -118,7 +118,6 @@ gpm_add_info_columns (GtkTreeView *treeview)
 	column = gtk_tree_view_column_new_with_attributes (_("Attribute"), renderer,
 							   "markup", GPM_INFO_COLUMN_TEXT, NULL);
 	gtk_tree_view_column_set_sort_column_id (column, GPM_INFO_COLUMN_TEXT);
-	gtk_tree_view_column_set_expand (column, TRUE);
 	gtk_tree_view_append_column (treeview, column);
 
 	/* column for text */
@@ -252,7 +251,6 @@ gpm_update_info_page_details (const DkpClientDevice *device)
 	strftime (time_buf, sizeof time_buf, "%c", time_tm);
 
 	gpm_add_info_data (_("Device"), dkp_client_device_get_object_path (device));
-	gpm_add_info_data (_("Path"), obj->native_path);
 	gpm_add_info_data (_("Type"), gpm_device_type_to_localised_text (obj->type, 1));
 	if (!egg_strzero (obj->vendor))
 		gpm_add_info_data (_("Vendor"), obj->vendor);
@@ -280,23 +278,30 @@ gpm_update_info_page_details (const DkpClientDevice *device)
 	    obj->type == DKP_DEVICE_TYPE_KEYBOARD)
 		gpm_add_info_data (_("State"), dkp_device_state_to_text (obj->state));
 	if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
-		text = g_strdup_printf ("%g Wh", obj->energy);
+		text = g_strdup_printf ("%.1f Wh", obj->energy);
 		gpm_add_info_data (_("Energy"), text);
 		g_free (text);
-		text = g_strdup_printf ("%g Wh", obj->energy_empty);
+		text = g_strdup_printf ("%.1f Wh", obj->energy_empty);
 		gpm_add_info_data (_("Energy when empty"), text);
 		g_free (text);
-		text = g_strdup_printf ("%g Wh", obj->energy_full);
+		text = g_strdup_printf ("%.1f Wh", obj->energy_full);
 		gpm_add_info_data (_("Energy when full"), text);
 		g_free (text);
-		text = g_strdup_printf ("%g Wh", obj->energy_full_design);
+		text = g_strdup_printf ("%.1f Wh", obj->energy_full_design);
 		gpm_add_info_data (_("Energy (design)"), text);
 		g_free (text);
 	}
 	if (obj->type == DKP_DEVICE_TYPE_BATTERY ||
 	    obj->type == DKP_DEVICE_TYPE_MONITOR) {
-		text = g_strdup_printf ("%g W", obj->energy_rate);
+		text = g_strdup_printf ("%.1f W", obj->energy_rate);
 		gpm_add_info_data (_("Rate"), text);
+		g_free (text);
+	}
+	if (obj->type == DKP_DEVICE_TYPE_UPS ||
+	    obj->type == DKP_DEVICE_TYPE_BATTERY ||
+	    obj->type == DKP_DEVICE_TYPE_MONITOR) {
+		text = g_strdup_printf ("%.1f V", obj->voltage);
+		gpm_add_info_data (_("Voltage"), text);
 		g_free (text);
 	}
 	if (obj->type == DKP_DEVICE_TYPE_BATTERY ||
@@ -316,12 +321,12 @@ gpm_update_info_page_details (const DkpClientDevice *device)
 	    obj->type == DKP_DEVICE_TYPE_MOUSE ||
 	    obj->type == DKP_DEVICE_TYPE_KEYBOARD ||
 	    obj->type == DKP_DEVICE_TYPE_UPS) {
-		text = g_strdup_printf ("%g%%", obj->percentage);
+		text = g_strdup_printf ("%.1f%%", obj->percentage);
 		gpm_add_info_data (_("Percentage"), text);
 		g_free (text);
 	}
 	if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
-		text = g_strdup_printf ("%g%%", obj->capacity);
+		text = g_strdup_printf ("%.1f%%", obj->capacity);
 		gpm_add_info_data (_("Capacity"), text);
 		g_free (text);
 	}
@@ -551,6 +556,9 @@ gpm_notebook_changed_cb (GtkNotebook *notebook, GtkNotebookPage *page, gint page
 	/* save page in gconf */
 	gconf_client_set_int (gconf_client, GPM_CONF_INFO_PAGE_NUMBER, page_num, NULL);
 
+	if (current_device == NULL)
+		return;
+
 	device = dkp_client_device_new ();
 	dkp_client_device_set_object_path (device, current_device);
 	gpm_update_info_data_page (device, page_num);
@@ -688,10 +696,11 @@ gpm_tool_device_changed_cb (DkpClient *client, const DkpClientDevice *device, gp
 {
 	const gchar *object_path;
 	object_path = dkp_client_device_get_object_path (device);
+	if (object_path == NULL || current_device == NULL)
+		return;
 	egg_debug ("changed:   %s", object_path);
-	if (strcmp (current_device, object_path) == 0) {
+	if (strcmp (current_device, object_path) == 0)
 		gpm_update_info_data (device);
-	}
 }
 
 /**
