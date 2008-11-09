@@ -29,6 +29,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <locale.h>
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
