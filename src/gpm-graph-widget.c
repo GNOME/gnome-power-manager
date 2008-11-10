@@ -500,10 +500,14 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 	}
 	egg_debug ("Data range is %f<x<%f, %f<y<%f", smallest_x, biggest_x, smallest_y, biggest_y);
 	/* don't allow no difference */
-	if (biggest_x - smallest_x < 0.0001)
-		biggest_x = smallest_x + 1;
-	if (biggest_y - smallest_y < 0.0001)
-		biggest_y = smallest_y + 1;
+	if (biggest_x - smallest_x < 0.0001) {
+		biggest_x++;
+		smallest_x--;
+	}
+	if (biggest_y - smallest_y < 0.0001) {
+		biggest_y++;
+		smallest_y--;
+	}
 
 	if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
 		rounding_x = 10;

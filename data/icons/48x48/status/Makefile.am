@@ -13,6 +13,7 @@ icons_DATA = 			        \
 	gpm-brightness-kbd-disabled.png	\
 	gpm-brightness-lcd-invalid.png	\
 	gpm-brightness-kbd-invalid.png	\
+	gpm-monitor.png			\
 	gpm-inhibit.png			\
 	gpm-inhibit-invalid.png		\
 	gpm-keyboard-000.png		\

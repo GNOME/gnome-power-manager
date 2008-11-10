@@ -39,6 +39,7 @@
 #include "egg-unique.h"
 
 #include "gpm-common.h"
+#include "gpm-stock-icons.h"
 #include "gpm-devicekit.h"
 #include "gpm-graph-widget.h"
 #include "dkp-client.h"
@@ -669,7 +670,7 @@ gpm_add_device (const DkpClientDevice *device)
 	obj = dkp_client_device_get_object (device);
 	id = dkp_client_device_get_object_path (device);
 	text = gpm_device_type_to_localised_text (obj->type, 1);
-	icon = gpm_device_type_to_icon (obj->type);
+	icon = gpm_devicekit_get_object_icon (obj);
 
 	gtk_list_store_append (list_store_devices, &iter);
 	gtk_list_store_set (list_store_devices, &iter,
@@ -742,17 +743,43 @@ static void
 gpm_history_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 {
 	gchar *value;
+	const gchar *axis_x = NULL;
+	const gchar *axis_y = NULL;
 	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
-	if (strcmp (value, GPM_HISTORY_RATE_TEXT) == 0)
+	if (strcmp (value, GPM_HISTORY_RATE_TEXT) == 0) {
 		history_type = GPM_HISTORY_RATE_VALUE;
-	else if (strcmp (value, GPM_HISTORY_CHARGE_TEXT) == 0)
+		/* TRANSLATORS: this is the X axis on the graph */
+		axis_x = _("Time elapsed");
+		/* TRANSLATORS: this is the Y axis on the graph */
+		axis_y = _("Power");
+	} else if (strcmp (value, GPM_HISTORY_CHARGE_TEXT) == 0) {
 		history_type = GPM_HISTORY_CHARGE_VALUE;
-	else if (strcmp (value, GPM_HISTORY_TIME_FULL_TEXT) == 0)
+		/* TRANSLATORS: this is the X axis on the graph */
+		axis_x = _("Time elapsed");
+		/* TRANSLATORS: this is the Y axis on the graph */
+		axis_y = _("Cell charge");
+	} else if (strcmp (value, GPM_HISTORY_TIME_FULL_TEXT) == 0) {
 		history_type = GPM_HISTORY_TIME_FULL_VALUE;
-	else if (strcmp (value, GPM_HISTORY_TIME_EMPTY_TEXT) == 0)
+		/* TRANSLATORS: this is the X axis on the graph */
+		axis_x = _("Time elapsed");
+		/* TRANSLATORS: this is the Y axis on the graph */
+		axis_y = _("Predicted time");
+	} else if (strcmp (value, GPM_HISTORY_TIME_EMPTY_TEXT) == 0) {
 		history_type = GPM_HISTORY_TIME_EMPTY_VALUE;
-	else
+		/* TRANSLATORS: this is the X axis on the graph */
+		axis_x = _("Time elapsed");
+		/* TRANSLATORS: this is the Y axis on the graph */
+		axis_y = _("Predicted time");
+	} else {
 		g_assert (FALSE);
+	}
+
+	/* set axis */
+	widget = glade_xml_get_widget (glade_xml, "label_axis_history_x");
+	gtk_label_set_label (GTK_LABEL(widget), axis_x);
+	widget = glade_xml_get_widget (glade_xml, "label_axis_history_y");
+	gtk_label_set_label (GTK_LABEL(widget), axis_y);
+
 	gpm_button_update_ui ();
 	g_free (value);
 
@@ -767,17 +794,43 @@ static void
 gpm_stats_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 {
 	gchar *value;
+	const gchar *axis_x = NULL;
+	const gchar *axis_y = NULL;
 	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
-	if (strcmp (value, GPM_STATS_CHARGE_DATA_TEXT) == 0)
+	if (strcmp (value, GPM_STATS_CHARGE_DATA_TEXT) == 0) {
 		stats_type = GPM_STATS_CHARGE_DATA_VALUE;
-	else if (strcmp (value, GPM_STATS_CHARGE_ACCURACY_TEXT) == 0)
+		/* TRANSLATORS: this is the X axis on the graph */
+		axis_x = _("Cell charge");
+		/* TRANSLATORS: this is the Y axis on the graph */
+		axis_y = _("Correction factor");
+	} else if (strcmp (value, GPM_STATS_CHARGE_ACCURACY_TEXT) == 0) {
 		stats_type = GPM_STATS_CHARGE_ACCURACY_VALUE;
-	else if (strcmp (value, GPM_STATS_DISCHARGE_DATA_TEXT) == 0)
+		/* TRANSLATORS: this is the X axis on the graph */
+		axis_x = _("Cell charge");
+		/* TRANSLATORS: this is the Y axis on the graph */
+		axis_y = _("Prediction accuracy");
+	} else if (strcmp (value, GPM_STATS_DISCHARGE_DATA_TEXT) == 0) {
 		stats_type = GPM_STATS_DISCHARGE_DATA_VALUE;
-	else if (strcmp (value, GPM_STATS_DISCHARGE_ACCURACY_TEXT) == 0)
+		/* TRANSLATORS: this is the X axis on the graph */
+		axis_x = _("Cell charge");
+		/* TRANSLATORS: this is the Y axis on the graph */
+		axis_y = _("Correction factor");
+	} else if (strcmp (value, GPM_STATS_DISCHARGE_ACCURACY_TEXT) == 0) {
 		stats_type = GPM_STATS_DISCHARGE_ACCURACY_VALUE;
-	else
+		/* TRANSLATORS: this is the X axis on the graph */
+		axis_x = _("Cell charge");
+		/* TRANSLATORS: this is the Y axis on the graph */
+		axis_y = _("Prediction accuracy");
+	} else {
 		g_assert (FALSE);
+	}
+
+	/* set axis */
+	widget = glade_xml_get_widget (glade_xml, "label_axis_stats_x");
+	gtk_label_set_label (GTK_LABEL(widget), axis_x);
+	widget = glade_xml_get_widget (glade_xml, "label_axis_stats_y");
+	gtk_label_set_label (GTK_LABEL(widget), axis_y);
+
 	gpm_button_update_ui ();
 	g_free (value);
 
@@ -867,9 +920,8 @@ main (int argc, char *argv[])
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
 
-	if (! g_thread_supported ()) {
+	if (! g_thread_supported ())
 		g_thread_init (NULL);
-	}
 	dbus_g_thread_init ();
 	g_type_init ();
 
@@ -890,6 +942,10 @@ main (int argc, char *argv[])
 	g_signal_connect (egg_unique, "activated",
 			  G_CALLBACK (gpm_gnome_activated_cb), NULL);
 
+	/* add application specific icons to search path */
+	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
+                                           GPM_DATA G_DIR_SEPARATOR_S "icons");
+
 	/* get data from gconf */
 	gconf_client = gconf_client_get_default ();
 
@@ -907,6 +963,7 @@ main (int argc, char *argv[])
 	widget = glade_xml_get_widget (glade_xml, "window_dkp");
 	gtk_window_set_icon_name (GTK_WINDOW (widget), "gtk-help");
 	gtk_widget_set_size_request (widget, 800, 500);
+	gtk_window_set_icon_name (GTK_WINDOW (widget), GPM_STOCK_APP_ICON);
 
 	/* Get the main window quit */
 	g_signal_connect_swapped (widget, "delete_event", G_CALLBACK (gtk_main_quit), NULL);
@@ -1073,6 +1130,12 @@ main (int argc, char *argv[])
 
 	g_ptr_array_foreach (devices, (GFunc) g_free, NULL);
 	g_ptr_array_free (devices, TRUE);
+
+	/* set axis */
+	widget = glade_xml_get_widget (glade_xml, "combobox_history_type");
+	gpm_history_type_combo_changed_cb (widget, NULL);
+	widget = glade_xml_get_widget (glade_xml, "combobox_stats_type");
+	gpm_stats_type_combo_changed_cb (widget, NULL);
 
 	widget = glade_xml_get_widget (glade_xml, "window_dkp");
 	gtk_widget_show (widget);

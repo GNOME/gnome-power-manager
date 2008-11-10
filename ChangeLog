@@ -1,5 +1,28 @@
 2008-11-10  Richard Hughes  <richard@hughsie.com>
 
+	* data/gpm-statistics.glade:
+	* src/gpm-main.c: (main):
+	* src/gpm-statistics.c: (gpm_add_device),
+	(gpm_history_type_combo_changed_cb),
+	(gpm_stats_type_combo_changed_cb), (main):
+	Add axis labels.
+
+	* data/icons/48x48/status/Makefile.am:
+	* data/icons/scalable/status/Makefile.am:
+	* data/icons/scalable/status/gpm-monitor.svg:
+	Add a new icon to be used for a device monitor.
+
+	* src/gpm-devicekit.c: (gpm_devicekit_get_object_icon_index),
+	(gpm_devicekit_get_object_icon),
+	(gpm_devicekit_get_object_description), (gpm_device_type_to_icon):
+	* src/gpm-devicekit.h:
+	Return the correct themed icon for monitor and line power.
+
+	* src/gpm-graph-widget.c: (gpm_graph_widget_auto_range):
+	Autorange both up and down when the range values are the same.
+
+2008-11-10  Richard Hughes  <richard@hughsie.com>
+
 	* data/Makefile.am:
 	* data/gpm-statistics.glade:
 	* src/gpm-statistics-core.c: (gpm_statistics_init):

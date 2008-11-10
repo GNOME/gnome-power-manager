@@ -203,7 +203,7 @@ main (int argc, char *argv[])
 			   "or gnome startup when you start a new session.");
 	}
 
-	/* Add application specific icons to search path */
+	/* add application specific icons to search path */
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
                                            GPM_DATA G_DIR_SEPARATOR_S "icons");
 

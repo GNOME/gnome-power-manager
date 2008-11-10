@@ -45,7 +45,7 @@
  * Return value: The character string for the filename suffix.
  **/
 static const gchar *
-gpm_devicekit_get_object_icon_index (DkpObject *obj)
+gpm_devicekit_get_object_icon_index (const DkpObject *obj)
 {
 	if (obj->percentage < 10)
 		return "000";
@@ -67,7 +67,7 @@ gpm_devicekit_get_object_icon_index (DkpObject *obj)
  *
  **/
 gchar *
-gpm_devicekit_get_object_icon (DkpObject *obj)
+gpm_devicekit_get_object_icon (const DkpObject *obj)
 {
 	gchar *filename = NULL;
 	const gchar *prefix = NULL;
@@ -78,9 +78,17 @@ gpm_devicekit_get_object_icon (DkpObject *obj)
 	/* get correct icon prefix */
 	prefix = dkp_device_type_to_text (obj->type);
 
+	/* TODO: rename icons when we remove HAL backend */
+	if (obj->type == DKP_DEVICE_TYPE_BATTERY)
+		prefix = "primary";
+
 	/* get the icon from some simple rules */
-	if (obj->type == DKP_DEVICE_TYPE_BATTERY ||
-	    obj->type == DKP_DEVICE_TYPE_UPS) {
+	if (obj->type == DKP_DEVICE_TYPE_LINE_POWER) {
+		filename = g_strdup ("gpm-ac-adapter");
+	} else if (obj->type == DKP_DEVICE_TYPE_MONITOR) {
+		filename = g_strdup ("gpm-monitor");
+	} else if (obj->type == DKP_DEVICE_TYPE_BATTERY ||
+		   obj->type == DKP_DEVICE_TYPE_UPS) {
 		if (!obj->is_present) {
 			/* battery missing */
 			filename = g_strdup_printf ("gpm-%s-missing", prefix);
@@ -117,7 +125,7 @@ gpm_devicekit_get_object_icon (DkpObject *obj)
  * gpm_devicekit_get_object_description:
  **/
 gchar *
-gpm_devicekit_get_object_description (DkpObject *obj)
+gpm_devicekit_get_object_description (const DkpObject *obj)
 {
 	GString	*details;
 	const gchar *text;
@@ -252,7 +260,7 @@ gpm_device_type_to_icon (DkpDeviceType type)
 	const gchar *icon = NULL;
 	switch (type) {
 	case DKP_DEVICE_TYPE_LINE_POWER:
-		icon = "computer";
+		icon = "gpm-ac-adapter";
 		break;
 	case DKP_DEVICE_TYPE_BATTERY:
 		icon = "battery";
