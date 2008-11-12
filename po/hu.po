@@ -835,7 +835,7 @@ msgid ""
 "The time remaining in seconds of the battery when critical action is taken. "
 "Only valid when use_time_for_policy is true."
 msgstr ""
-"Az akkumulátor élettartamából hátralévő idő másodpercben, amikor a kritikus "
+"Az akkumulátor töltöttségéből hátralévő idő másodpercben, amikor a kritikus "
 "művelet végrehajtandó. Csak a use_time_for_policy kulcs igaz értéke esetén "
 "érvényes."
 
@@ -844,7 +844,7 @@ msgid ""
 "The time remaining in seconds of the battery when it is considered critical. "
 "Only valid when use_time_for_policy is true."
 msgstr ""
-"Az akkumulátor élettartamából hátralévő idő másodpercben annak kritikusként "
+"Az akkumulátor töltöttségéből hátralévő idő másodpercben annak kritikusként "
 "kezeléséhez. Csak a use_time_for_policy kulcs igaz értéke esetén érvényes."
 
 #: ../data/gnome-power-manager.schemas.in.h:119
@@ -852,7 +852,7 @@ msgid ""
 "The time remaining in seconds of the battery when it is considered low. Only "
 "valid when use_time_for_policy is true."
 msgstr ""
-"Az akkumulátor élettartamából hátralévő idő másodpercben annak alacsonyként "
+"Az akkumulátor töltöttségéből hátralévő idő másodpercben annak alacsonyként "
 "kezeléséhez. Csak a use_time_for_policy kulcs igaz értéke esetén érvényes."
 
 #: ../data/gnome-power-manager.schemas.in.h:120
@@ -1723,7 +1723,7 @@ msgstr "A noteszgép akkumulátora gyenge"
 #: ../src/gpm-manager.c:1371
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%.1f%%)"
-msgstr "Az akkumulátorok élettartamából még megközelítőleg <b>%s</b> van hátra (%.1lf%%)"
+msgstr "Az akkumulátorok töltöttségéből még megközelítőleg <b>%s</b> van hátra (%.1lf%%)"
 
 #: ../src/gpm-manager.c:1374
 msgid "UPS low"
@@ -1806,7 +1806,7 @@ msgstr ""
 #: ../src/gpm-manager.c:1464
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%.1f%%). %s"
-msgstr "Az akkumulátorok élettartamából még megközelítőleg <b>%s</b> van hátra (%.1f%%). %s"
+msgstr "Az akkumulátorok töltöttségéből még megközelítőleg <b>%s</b> van hátra (%.1f%%). %s"
 
 #: ../src/gpm-manager.c:1472 ../src/gpm-manager.c:1557
 msgid "UPS critically low"
@@ -1965,7 +1965,7 @@ msgstr ""
 
 #: ../src/gpm-notify.c:457
 msgid "Sleep warning"
-msgstr "Alvási figyelmeztetés"
+msgstr "Energiagazdálkodási figyelmeztetés"
 
 #: ../src/gpm-notify.c:458
 msgid ""
