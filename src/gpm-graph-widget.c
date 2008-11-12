@@ -272,14 +272,24 @@ gpm_get_axis_label (GpmGraphWidgetType axis, gfloat value)
 		gint minutes = time / 60;
 		gint seconds = time - (minutes * 60);
 		gint hours = minutes / 60;
-		minutes =  minutes - (hours * 60);
-		if (hours > 0) {
+		gint days = hours / 24;
+		minutes = minutes - (hours * 60);
+		hours = hours - (days * 24);
+		if (days > 0) {
+			if (hours == 0) {
+				/*Translators: This is %i days*/
+				text = g_strdup_printf (_("%id"), days);
+			} else {
+				/*Translators: This is %i days %02i hours*/
+				text = g_strdup_printf (_("%id%02ih"), days, hours);
+			}
+		} else if (hours > 0) {
 			if (minutes == 0) {
 				/*Translators: This is %i hours*/
 				text = g_strdup_printf (_("%ih"), hours);
 			} else {
 				/*Translators: This is %i hours %02i minutes*/
-				text = g_strdup_printf (_("%ih%02i"), hours, minutes);
+				text = g_strdup_printf (_("%ih%02im"), hours, minutes);
 			}
 		} else if (minutes > 0) {
 			if (seconds == 0) {

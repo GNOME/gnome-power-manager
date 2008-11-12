@@ -48,36 +48,26 @@ typedef struct
 typedef struct
 {
 	GObjectClass		 parent_class;
-	void			(*added)		(DkpClient		*client,
+	void			(*device_added)		(DkpClient		*client,
 							 const DkpClientDevice	*device);
-	void			(*changed)		(DkpClient		*client,
+	void			(*device_changed)      	(DkpClient		*client,
 							 const DkpClientDevice	*device);
-	void			(*removed)		(DkpClient		*client,
+	void			(*device_removed)      	(DkpClient		*client,
 							 const DkpClientDevice	*device);
-	void			(*on_battery_changed)	(DkpClient		*client,
+	void			(*changed)              (DkpClient		*client,
 							 gboolean		 on_battery);
-	void			(*low_battery_changed)	(DkpClient		*client,
-							 gboolean		 low_battery);
 } DkpClientClass;
 
 GType		 dkp_client_get_type			(void) G_GNUC_CONST;
 DkpClient	*dkp_client_new				(void);
 GPtrArray	*dkp_client_enumerate_devices		(DkpClient		*client,
 							 GError			**error);
-gboolean	 dkp_client_get_on_battery		(DkpClient		*client,
-							 gboolean		*on_battery,
-							 GError			**error);
-gboolean	 dkp_client_get_low_battery		(DkpClient		*client,
-							 gboolean		*low_battery,
-							 GError			**error);
-gboolean	 dkp_client_can_suspend			(DkpClient		*client,
-							 gboolean		 interactive,
-							 gboolean		*can_suspend,
-							 GError			**error);
-gboolean	 dkp_client_can_hibernate		(DkpClient		*client,
-							 gboolean		 interactive,
-							 gboolean		*can_hibernate,
-							 GError			**error);
+
+const gchar *dkp_client_get_daemon_version (DkpClient *client);
+gboolean dkp_client_can_hibernate (DkpClient *client);
+gboolean dkp_client_can_suspend (DkpClient *client);
+gboolean dkp_client_on_battery (DkpClient *client);
+gboolean dkp_client_on_low_battery (DkpClient *client);
 
 G_END_DECLS
 

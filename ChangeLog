@@ -1,3 +1,24 @@
+2008-11-12  Richard Hughes  <richard@hughsie.com>
+
+	* libdevkit-power/dkp-client.c: (dkp_client_ensure_properties),
+	(dkp_client_get_daemon_version), (dkp_client_can_hibernate),
+	(dkp_client_can_suspend), (dkp_client_on_battery),
+	(dkp_client_on_low_battery), (dkp_client_device_added_cb),
+	(dkp_client_device_changed_cb), (dkp_client_device_removed_cb),
+	(dkp_client_changed_cb), (dkp_client_class_init),
+	(dkp_client_init), (dkp_client_finalize):
+	* libdevkit-power/dkp-client.h:
+	* libdevkit-power/dkp-enum.c:
+	* libdevkit-power/dkp-enum.h:
+	* src/gpm-ac-adapter.c: (gpm_ac_adapter_is_present):
+	Use new DeviceKit-power 002 API.
+
+	* src/gpm-graph-widget.c: (gpm_get_axis_label):
+	Allow days as a graph widget entry.
+
+	* src/gpm-statistics.c: (gpm_update_range_combo_changed), (main):
+	Allow '1 Week' as a time value.
+
 2008-11-10  Richard Hughes  <richard@hughsie.com>
 
 	* data/gpm-statistics.glade:

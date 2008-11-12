@@ -83,10 +83,12 @@ enum {
 #define GPM_HISTORY_MINUTE_TEXT			_("10 minutes")
 #define GPM_HISTORY_HOUR_TEXT			_("2 hours")
 #define GPM_HISTORY_DAY_TEXT			_("1 day")
+#define GPM_HISTORY_WEEK_TEXT			_("1 week")
 
 #define GPM_HISTORY_MINUTE_VALUE		10*60
 #define GPM_HISTORY_HOUR_VALUE			2*60*60
 #define GPM_HISTORY_DAY_VALUE			24*60*60
+#define GPM_HISTORY_WEEK_VALUE			7*24*60*60
 
 #define GPM_STATS_CHARGE_DATA_TEXT		_("Charge profile")
 #define GPM_STATS_CHARGE_ACCURACY_TEXT		_("Charge accuracy")
@@ -852,6 +854,8 @@ gpm_update_range_combo_changed (GtkWidget *widget, gpointer data)
 		history_time = GPM_HISTORY_HOUR_VALUE;
 	else if (strcmp (value, GPM_HISTORY_DAY_TEXT) == 0)
 		history_time = GPM_HISTORY_DAY_VALUE;
+	else if (strcmp (value, GPM_HISTORY_WEEK_TEXT) == 0)
+		history_time = GPM_HISTORY_WEEK_VALUE;
 	else
 		g_assert (FALSE);
 
@@ -1069,6 +1073,7 @@ main (int argc, char *argv[])
 	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_MINUTE_TEXT);
 	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_HOUR_TEXT);
 	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_DAY_TEXT);
+	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_WEEK_TEXT);
 	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 1);
 	if (history_time == GPM_HISTORY_MINUTE_VALUE)
 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);

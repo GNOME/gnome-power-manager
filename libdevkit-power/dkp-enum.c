@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2008 David Zeuthen <david@fubar.dk>
+ * Copyright (C) 2008 David Zeuthen <davidz@redhat.com>
  * Copyright (C) 2008 Richard Hughes <richard@hughsie.com>
  *
  * This program is free software; you can redistribute it and/or modify

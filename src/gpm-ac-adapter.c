@@ -99,9 +99,10 @@ gpm_ac_adapter_is_present (GpmAcAdapter *ac_adapter)
 		g_error_free (error);
 	}
 #else
-	dkp_client_get_on_battery (ac_adapter->priv->device, &is_on_ac, NULL);
+	gboolean on_battery;
+	on_battery = dkp_client_on_battery (ac_adapter->priv->device);
 	/* battery -> not AC */
-	is_on_ac = !is_on_ac;
+	is_on_ac = !on_battery;
 #endif
 	return is_on_ac;
 }
