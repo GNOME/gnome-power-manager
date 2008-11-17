@@ -251,7 +251,7 @@ gpm_button_class_init (GpmButtonClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmButtonClass, button_pressed),
-			      NULL,NULL,
+			      NULL, NULL,
 			      gpm_marshal_VOID__STRING,
 			      G_TYPE_NONE, 1, G_TYPE_STRING);
 }

@@ -653,7 +653,7 @@ static void
 gpm_gnome_activated_cb (EggUnique *egg_unique, gpointer data)
 {
 	GtkWidget *widget;
-	widget = glade_xml_get_widget (glade_xml, "window_dkp");
+	widget = glade_xml_get_widget (glade_xml, "dialog_stats");
 	gtk_window_present (GTK_WINDOW (widget));
 }
 
@@ -964,7 +964,7 @@ main (int argc, char *argv[])
 	glade_set_custom_handler (gpm_info_create_custom_widget, NULL);
 
 	glade_xml = glade_xml_new (GPM_DATA "/gpm-statistics.glade", NULL, NULL);
-	widget = glade_xml_get_widget (glade_xml, "window_dkp");
+	widget = glade_xml_get_widget (glade_xml, "dialog_stats");
 	gtk_window_set_icon_name (GTK_WINDOW (widget), "gtk-help");
 	gtk_widget_set_size_request (widget, 800, 500);
 	gtk_window_set_icon_name (GTK_WINDOW (widget), GPM_STOCK_APP_ICON);
@@ -1092,9 +1092,9 @@ main (int argc, char *argv[])
 	gtk_widget_show (widget);
 
 	client = dkp_client_new ();
-	g_signal_connect (client, "added", G_CALLBACK (gpm_tool_device_added_cb), NULL);
-	g_signal_connect (client, "removed", G_CALLBACK (gpm_tool_device_removed_cb), NULL);
-	g_signal_connect (client, "changed", G_CALLBACK (gpm_tool_device_changed_cb), NULL);
+	g_signal_connect (client, "device-added", G_CALLBACK (gpm_tool_device_added_cb), NULL);
+	g_signal_connect (client, "device-removed", G_CALLBACK (gpm_tool_device_removed_cb), NULL);
+	g_signal_connect (client, "device-changed", G_CALLBACK (gpm_tool_device_changed_cb), NULL);
 
 	/* coldplug */
 	devices = dkp_client_enumerate_devices (client, NULL);
@@ -1142,7 +1142,7 @@ main (int argc, char *argv[])
 	widget = glade_xml_get_widget (glade_xml, "combobox_stats_type");
 	gpm_stats_type_combo_changed_cb (widget, NULL);
 
-	widget = glade_xml_get_widget (glade_xml, "window_dkp");
+	widget = glade_xml_get_widget (glade_xml, "dialog_stats");
 	gtk_widget_show (widget);
 
 	gtk_main ();

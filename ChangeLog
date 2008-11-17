@@ -1,3 +1,20 @@
+2008-11-17  Richard Hughes  <richard@hughsie.com>
+
+	* data/gpm-inhibit-test.glade:
+	* data/gpm-prefs.glade:
+	* data/gpm-statistics-old.glade:
+	* data/gpm-statistics.glade:
+	* src/gpm-prefs-core.c: (gpm_prefs_activate_window),
+	(gpm_prefs_init):
+	* src/gpm-statistics-core.c: (gpm_statistics_activate_window),
+	(gpm_statistics_init):
+	* src/gpm-statistics.c: (gpm_gnome_activated_cb), (main):
+	Change the dialog windows to be a GtkDialog, not a GtkWindow.
+	Fixes #561114
+
+	* src/gpm-button.c: (gpm_button_class_init):
+	Trivial whitespace change.
+
 2008-11-12  Richard Hughes  <richard@hughsie.com>
 
 	* libdevkit-power/dkp-client.c: (dkp_client_ensure_properties),

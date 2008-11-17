@@ -2,20 +2,22 @@
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
 <!--*- mode: xml -*-->
 <glade-interface>
-  <widget class="GtkWindow" id="window_preferences">
-    <property name="border_width">12</property>
+  <widget class="GtkDialog" id="dialog_preferences">
+    <property name="border_width">5</property>
     <property name="title" translatable="yes">Power Management Preferences</property>
     <property name="resizable">False</property>
-    <property name="window_position">GTK_WIN_POS_CENTER</property>
+    <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
-    <child>
-      <widget class="GtkVBox" id="vbox_preferences">
+    <property name="has_separator">False</property>
+    <child internal-child="vbox">
+      <widget class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
-        <property name="spacing">12</property>
+        <property name="spacing">2</property>
         <child>
           <widget class="GtkNotebook" id="notebook_preferences">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="border_width">6</property>
             <child>
               <widget class="GtkVBox" id="vbox_ac">
                 <property name="visible">True</property>
@@ -1075,12 +1077,12 @@
           </widget>
           <packing>
             <property name="fill">False</property>
+            <property name="position">1</property>
           </packing>
         </child>
-        <child>
-          <widget class="GtkHButtonBox" id="hbuttonbox_main">
+        <child internal-child="action_area">
+          <widget class="GtkHButtonBox" id="dialog-action_area1">
             <property name="visible">True</property>
-            <property name="spacing">12</property>
             <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
               <widget class="GtkButton" id="button_help">
@@ -1118,7 +1120,8 @@
             </child>
           </widget>
           <packing>
-            <property name="position">1</property>
+            <property name="expand">False</property>
+            <property name="pack_type">GTK_PACK_END</property>
           </packing>
         </child>
       </widget>

@@ -777,7 +777,7 @@ gpm_statistics_activate_window (GpmStatistics *statistics)
 
 	g_return_if_fail (GPM_IS_STATISTICS (statistics));
 
-	widget = glade_xml_get_widget (statistics->priv->glade_xml, "window_graph");
+	widget = glade_xml_get_widget (statistics->priv->glade_xml, "dialog_graph");
 	gtk_window_present (GTK_WINDOW (widget));
 }
 
@@ -821,7 +821,7 @@ gpm_statistics_init (GpmStatistics *statistics)
 
 	statistics->priv->glade_xml = glade_xml_new (GPM_DATA "/gpm-statistics-old.glade", NULL, NULL);
 
-	main_window = glade_xml_get_widget (statistics->priv->glade_xml, "window_graph");
+	main_window = glade_xml_get_widget (statistics->priv->glade_xml, "dialog_graph");
 
 	/* Hide window first so that the dialogue resizes itself without redrawing */
 	gtk_widget_hide (main_window);

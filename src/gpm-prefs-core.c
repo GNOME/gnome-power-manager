@@ -135,7 +135,7 @@ void
 gpm_prefs_activate_window (GpmPrefs *prefs)
 {
 	GtkWidget *widget;
-	widget = glade_xml_get_widget (prefs->priv->glade_xml, "window_preferences");
+	widget = glade_xml_get_widget (prefs->priv->glade_xml, "dialog_preferences");
 	gtk_window_present (GTK_WINDOW (widget));
 }
 
@@ -1107,7 +1107,7 @@ gpm_prefs_init (GpmPrefs *prefs)
 		g_error ("Cannot find 'gpm-prefs.glade'");
 	}
 
-	main_window = glade_xml_get_widget (prefs->priv->glade_xml, "window_preferences");
+	main_window = glade_xml_get_widget (prefs->priv->glade_xml, "dialog_preferences");
 
 	/* Hide window first so that the dialogue resizes itself without redrawing */
 	gtk_widget_hide (main_window);
