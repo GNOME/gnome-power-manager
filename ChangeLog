@@ -1,5 +1,15 @@
 2008-11-17  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-button.c: (gpm_button_emit_type),
+	(gpm_button_filter_x_events), (gpm_button_xevent_key),
+	(gpm_button_class_init), (emit_button_pressed),
+	(hal_device_property_modified_cb), (hal_device_condition_cb),
+	(gpm_button_init), (gpm_button_finalize):
+	Backport the duplicate button handling from trunk.
+	This should fix where the HAL button comes before the X button.
+
+2008-11-17  Richard Hughes  <richard@hughsie.com>
+
 	* src/Makefile.am:
 	* src/gpm-manager.c: (idle_changed_cb), (button_pressed_cb),
 	(ac_adapter_changed_cb),
