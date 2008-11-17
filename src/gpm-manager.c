@@ -43,6 +43,8 @@
 #include <libhal-gpower.h>
 #include <libhal-gmanager.h>
 
+#include "egg-console-kit.h"
+
 #include "gpm-ac-adapter.h"
 #include "gpm-button.h"
 #include "gpm-conf.h"
@@ -98,6 +100,7 @@ struct GpmManagerPrivate
 
 	/* interactive services */
 	GpmBacklight		*backlight;
+	EggConsoleKit		*console;
 	GpmSrvBrightnessKbd	*srv_brightness_kbd;
 	GpmSrvScreensaver 	*srv_screensaver;
 };
@@ -799,6 +802,12 @@ idle_changed_cb (GpmIdle    *idle,
 		 GpmIdleMode mode,
 		 GpmManager *manager)
 {
+	/* ConsoleKit says we are not on active console */
+	if (!egg_console_kit_is_active (manager->priv->console)) {
+		egg_debug ("ignoring as not on active console");
+		return;
+	}
+
 	/* Ignore timeout events when the lid is closed, as the DPMS is
 	 * already off, and we don't want to perform policy actions or re-enable
 	 * the screen when the user moves the mouse on systems that do not
@@ -960,6 +969,12 @@ button_pressed_cb (GpmButton   *button,
 {
 	egg_debug ("Button press event type=%s", type);
 
+	/* ConsoleKit says we are not on active console */
+	if (!egg_console_kit_is_active (manager->priv->console)) {
+		egg_debug ("ignoring as not on active console");
+		return;
+	}
+
 	if (strcmp (type, GPM_BUTTON_POWER) == 0) {
 		power_button_pressed (manager);
 
@@ -998,6 +1013,12 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 {
 	gboolean event_when_closed;
 	gboolean power_save;
+
+	/* ConsoleKit says we are not on active console */
+	if (!egg_console_kit_is_active (manager->priv->console)) {
+		egg_debug ("ignoring as not on active console");
+		return;
+	}
 
 	egg_debug ("Setting on-ac: %d", on_ac);
 
@@ -1644,6 +1665,16 @@ has_inhibit_changed_cb (GpmInhibit *inhibit,
 }
 
 /**
+ * gpm_manager_console_kit_active_changed_cb:
+ **/
+static void
+gpm_manager_console_kit_active_changed_cb (EggConsoleKit *console, gboolean active, GpmManager *manager)
+{
+	egg_debug ("console now %s", active ? "active" : "inactive");
+	/* FIXME: do we need to do policy actions when we switch? */
+}
+
+/**
  * gpm_manager_init:
  * @manager: This class instance
  **/
@@ -1663,6 +1694,11 @@ gpm_manager_init (GpmManager *manager)
 
 	/* do some actions even when killed */
 	g_atexit (gpm_manager_at_exit);
+
+	/* don't apply policy when not active */
+	manager->priv->console = egg_console_kit_new ();
+	g_signal_connect (manager->priv->console, "active-changed",
+			  G_CALLBACK (gpm_manager_console_kit_active_changed_cb), manager);
 
 	/* this is a singleton, so we keep a master copy open here */
 	manager->priv->prefs_server = gpm_prefs_server_new ();
@@ -1831,6 +1867,7 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->srv_screensaver);
 	g_object_unref (manager->priv->prefs_server);
 	g_object_unref (manager->priv->control);
+	g_object_unref (manager->priv->console);
 
 	/* optional gobjects */
 	if (manager->priv->button) {

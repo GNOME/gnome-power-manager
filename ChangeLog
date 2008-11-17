@@ -1,5 +1,15 @@
 2008-11-17  Richard Hughes  <richard@hughsie.com>
 
+	* src/Makefile.am:
+	* src/gpm-manager.c: (idle_changed_cb), (button_pressed_cb),
+	(ac_adapter_changed_cb),
+	(gpm_manager_console_kit_active_changed_cb), (gpm_manager_init),
+	(gpm_manager_finalize):
+	Don't apply policy when not active. This is needed when multiple
+	instances of g-p-m are present in multiple sessions.
+
+2008-11-17  Richard Hughes  <richard@hughsie.com>
+
 	* src/egg-console-kit.c: (egg_console_kit_is_local),
 	(egg_console_kit_is_active), (egg_console_kit_active_changed_cb),
 	(egg_console_kit_class_init), (egg_console_kit_init),

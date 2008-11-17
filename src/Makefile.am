@@ -139,6 +139,8 @@ gnome_power_manager_SOURCES =				\
 	egg-color.h					\
 	egg-debug.h					\
 	egg-debug.c					\
+	egg-console-kit.h				\
+	egg-console-kit.c				\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
 	gpm-notify.h					\
