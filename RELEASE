@@ -1,15 +1,15 @@
 Follow http://developer.gnome.org/dotplan/for_maintainers.html and http://live.gnome.org/TwoPointThirteen
 
 • update configure.ac, NEWS, ChangeLog (the "==== <version> ====") to the right release
-• Add translators to NEWS: maintainer.py -w -r GNOME_POWER_MANAGER_2_24_1
+• Add translators to NEWS: maintainer.py -w -r GNOME_POWER_MANAGER_2_24_2
 • Run "make distcheck", correct any problems encountered (don't forget to update the ChangeLog if you make any changes)
 • Commit all the changes
 • Create a tag:
 
 svn copy \
 svn+ssh://rhughes@svn.gnome.org/svn/gnome-power-manager/branches/gnome-2-24 \
-svn+ssh://rhughes@svn.gnome.org/svn/gnome-power-manager/tags/GNOME_POWER_MANAGER_2_24_2 \
--m "Tagged for release 2.24.2"
+svn+ssh://rhughes@svn.gnome.org/svn/gnome-power-manager/tags/GNOME_POWER_MANAGER_2_24_3 \
+-m "Tagged for release 2.24.3"
 
 • Copy the resulting tarball to master.gnome.org (scp)
 scp gnome-power-manager-*.tar.gz  rhughes@master.gnome.org:
@@ -28,17 +28,5 @@ install-module gnome-power-manager-*.tar.gz
 GNOME Power Manager is a session daemon that makes it easy to manage the
 power on your laptop or desktop system.
 
-This _unstable_ release contains lots of crazy new code since 2.21.1 was released. WARNING, this code may impregnate your cat called Dave and steal all of the magazines from the bathroom.
+This stable release contains important fixes since 2.22.2 was released. Distributions should consider upgrading gnome-power-manager via errata packages if possible.
 
-This stable release contains important fixes since 2.22.1 was released. Distributions should consider upgrading gnome-power-manager via errata packages if possible.
-
-There are a few fixes focused on polishing for the new release.
-
-- Done!
-
-Making a Branch
-===============
-
-svn cp svn+ssh://rhughes@svn.gnome.org/svn/gnome-power-manager/trunk svn+ssh://rhughes@svn.gnome.org/svn/gnome-power-manager/branches/gnome-2-22  -m "Branched for gnome-2-22"
-
-Additionally, gnome-power-manager has branched, with future development work being done in trunk.
