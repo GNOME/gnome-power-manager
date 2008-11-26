@@ -1,3 +1,76 @@
+2008-11-26  Richard Hughes  <richard@hughsie.com>
+
+	* configure.ac:
+	* libdevkit-power/Makefile.am:
+	* libdevkit-power/dkp-client-device.c:
+	* libdevkit-power/dkp-client-device.h:
+	* libdevkit-power/dkp-client.c: (dkp_client_get_device),
+	(dkp_client_enumerate_devices),
+	(dkp_client_enumerate_devices_private), (dkp_client_add),
+	(dkp_client_remove), (dkp_device_added_cb),
+	(dkp_device_changed_cb), (dkp_device_removed_cb),
+	(dkp_client_class_init), (dkp_client_init), (dkp_client_finalize):
+	* libdevkit-power/dkp-client.h:
+	* libdevkit-power/dkp-device.c: (dkp_device_get_device_properties),
+	(dkp_device_refresh_internal), (dkp_device_changed_cb),
+	(dkp_device_set_object_path), (dkp_device_get_object_path),
+	(dkp_device_get_object), (dkp_device_print_history),
+	(dkp_device_print), (dkp_device_refresh), (dkp_device_get_history),
+	(dkp_device_get_statistics), (dkp_device_class_init),
+	(dkp_device_init), (dkp_device_finalize), (dkp_device_new):
+	* libdevkit-power/dkp-device.h:
+	Rename DkpClientDevice to DkpDevice.
+
+	* src/Makefile.am:
+	* src/gpm-ac-adapter.c: (gpm_ac_adapter_is_present),
+	(gpm_ac_adapter_changed_cb), (gpm_ac_adapter_finalize),
+	(gpm_ac_adapter_init):
+	* src/gpm-devicekit.c: (gpm_devicekit_get_object_summary):
+	* src/gpm-devicekit.h:
+	* src/gpm-engine-old.c: (ac_adaptor_changed_cb),
+	(control_resume_cb), (gpm_engine_conf_key_changed_cb),
+	(gpm_engine_coldplug_idle_cb), (gpm_engine_init),
+	(gpm_engine_class_init):
+	* src/gpm-engine-old.h:
+	* src/gpm-engine.c:
+	* src/gpm-engine.h:
+	* src/gpm-info.c:
+	* src/gpm-info.h:
+	* src/gpm-manager.c: (gpm_engine_perhaps_recall_cb),
+	(gpm_engine_low_capacity_cb), (gpm_engine_icon_changed_cb),
+	(gpm_engine_summary_changed_cb), (gpm_engine_fully_charged_cb),
+	(gpm_engine_discharging_cb), (control_sleep_failure_cb),
+	(gpm_engine_charge_low_cb),
+	(gpm_manager_get_time_until_action_text),
+	(gpm_engine_charge_critical_cb):
+	* src/gpm-statistics.c: (gpm_stats_button_help_cb),
+	(gpm_stats_add_info_columns), (gpm_stats_add_devices_columns),
+	(gpm_stats_add_info_data), (gpm_stats_update_smooth_data),
+	(gpm_stats_time_to_text), (gpm_stats_bool_to_text),
+	(gpm_stats_update_info_page_details),
+	(gpm_stats_update_info_page_history),
+	(gpm_stats_update_info_page_stats),
+	(gpm_stats_update_info_data_page), (gpm_stats_update_info_data),
+	(gpm_stats_notebook_changed_cb), (gpm_stats_button_refresh_cb),
+	(gpm_stats_button_update_ui),
+	(gpm_stats_devices_treeview_clicked_cb),
+	(gpm_stats_create_custom_widget), (gpm_stats_window_activated_cb),
+	(gpm_stats_add_device), (gpm_stats_device_added_cb),
+	(gpm_stats_device_changed_cb), (gpm_stats_device_removed_cb),
+	(gpm_stats_history_type_combo_changed_cb),
+	(gpm_stats_type_combo_changed_cb), (gpm_stats_range_combo_changed),
+	(gpm_stats_smooth_checkbox_history_cb),
+	(gpm_stats_smooth_checkbox_stats_cb), (main):
+	* src/gpm-tray-icon.c: (gpm_tray_icon_set_collection_data),
+	(gpm_tray_icon_show_info_cb), (gpm_tray_icon_popup_cleared_cd),
+	(gpm_tray_icon_class_init), (gpm_tray_icon_popup_menu_cb),
+	(gpm_tray_icon_add_device), (gpm_tray_icon_activate_cb),
+	(gpm_tray_icon_init), (gpm_tray_icon_finalize):
+	* src/gpm-tray-icon.h:
+	* src/gpm-warnings.c: (gpm_warnings_get_state_csr),
+	(gpm_warnings_get_state_time):
+	Add a new engine that uses DeviceKit, not HAL.
+
 2008-11-17  Richard Hughes  <richard@hughsie.com>
 
 	* data/gpm-inhibit-test.glade:
@@ -20,8 +93,8 @@
 	* libdevkit-power/dkp-client.c: (dkp_client_ensure_properties),
 	(dkp_client_get_daemon_version), (dkp_client_can_hibernate),
 	(dkp_client_can_suspend), (dkp_client_on_battery),
-	(dkp_client_on_low_battery), (dkp_client_device_added_cb),
-	(dkp_client_device_changed_cb), (dkp_client_device_removed_cb),
+	(dkp_client_on_low_battery), (dkp_device_added_cb),
+	(dkp_device_changed_cb), (dkp_device_removed_cb),
 	(dkp_client_changed_cb), (dkp_client_class_init),
 	(dkp_client_init), (dkp_client_finalize):
 	* libdevkit-power/dkp-client.h:
@@ -73,10 +146,10 @@
 
 2008-11-08  Richard Hughes  <richard@hughsie.com>
 
-	* libdevkit-power/dkp-client-device.c:
-	(dkp_client_device_print_history), (dkp_client_device_get_history),
-	(dkp_client_device_get_statistics):
-	* libdevkit-power/dkp-client-device.h:
+	* libdevkit-power/dkp-device.c:
+	(dkp_device_print_history), (dkp_device_get_history),
+	(dkp_device_get_statistics):
+	* libdevkit-power/dkp-device.h:
 	* libdevkit-power/dkp-object.c: (dkp_object_clear_internal),
 	(dkp_object_collect_props), (dkp_object_copy), (dkp_object_equal),
 	(dkp_object_print), (dkp_object_diff), (dkp_object_get_id):
@@ -305,19 +378,19 @@
 	* Makefile.am:
 	* configure.ac:
 	* libdevkit-power/Makefile.am:
-	* libdevkit-power/dkp-client-device.c:
-	(dkp_client_device_get_device_properties),
-	(dkp_client_device_refresh_internal),
-	(dkp_client_device_changed_cb),
-	(dkp_client_device_set_object_path),
-	(dkp_client_device_get_object_path),
-	(dkp_client_device_get_object), (dkp_client_device_print_history),
-	(dkp_client_device_print), (dkp_client_device_refresh),
-	(dkp_client_device_get_history),
-	(dkp_client_device_get_statistics), (dkp_client_device_class_init),
-	(dkp_client_device_init), (dkp_client_device_finalize),
-	(dkp_client_device_new):
-	* libdevkit-power/dkp-client-device.h:
+	* libdevkit-power/dkp-device.c:
+	(dkp_device_get_device_properties),
+	(dkp_device_refresh_internal),
+	(dkp_device_changed_cb),
+	(dkp_device_set_object_path),
+	(dkp_device_get_object_path),
+	(dkp_device_get_object), (dkp_device_print_history),
+	(dkp_device_print), (dkp_device_refresh),
+	(dkp_device_get_history),
+	(dkp_device_get_statistics), (dkp_device_class_init),
+	(dkp_device_init), (dkp_device_finalize),
+	(dkp_device_new):
+	* libdevkit-power/dkp-device.h:
 	* libdevkit-power/dkp-client.c: (dkp_client_get_device),
 	(dkp_client_enumerate_devices), (dkp_client_add),
 	(dkp_client_remove), (dkp_client_added_cb),

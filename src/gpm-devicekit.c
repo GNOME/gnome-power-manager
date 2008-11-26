@@ -24,6 +24,8 @@
 #include <glib/gi18n.h>
 
 #include "egg-debug.h"
+#include "egg-precision.h"
+
 #include "dkp-enum.h"
 #include "dkp-object.h"
 
@@ -119,6 +121,106 @@ gpm_devicekit_get_object_icon (const DkpObject *obj)
 	}
 	egg_debug ("got filename: %s", filename);
 	return filename;
+}
+
+
+#define GPM_DKP_TIME_PRECISION			5*60
+#define GPM_DKP_TEXT_MIN_TIME			120
+
+/**
+ * gpm_devicekit_get_object_summary:
+ **/
+gchar *
+gpm_devicekit_get_object_summary (const DkpObject *obj)
+{
+	const gchar *type_desc = NULL;
+	gchar *description = NULL;
+	guint time_to_full_round;
+	guint time_to_empty_round;
+	gchar *time_to_full_str;
+	gchar *time_to_empty_str;
+
+	if (!obj->is_present)
+		return NULL;
+
+	type_desc = gpm_device_type_to_localised_text (obj->type, 1);
+
+	/* don't display all the extra stuff for keyboards and mice */
+	if (obj->type == DKP_DEVICE_TYPE_MOUSE ||
+	    obj->type == DKP_DEVICE_TYPE_KEYBOARD ||
+	    obj->type == DKP_DEVICE_TYPE_PDA)
+		return g_strdup_printf ("%s (%.1f%%)", type_desc, obj->percentage);
+
+	/* we care if we are on AC */
+	if (obj->type == DKP_DEVICE_TYPE_PHONE) {
+		if (obj->state == DKP_DEVICE_STATE_CHARGING || !obj->state == DKP_DEVICE_STATE_DISCHARGING)
+			return g_strdup_printf ("%s charging (%.1f%%)", type_desc, obj->percentage);
+		return g_strdup_printf ("%s (%.1f%%)", type_desc, obj->percentage);
+	}
+
+	/* precalculate so we don't get Unknown time remaining */
+	time_to_full_round = egg_precision_round_down (obj->time_to_full, GPM_DKP_TIME_PRECISION);
+	time_to_empty_round = egg_precision_round_down (obj->time_to_empty, GPM_DKP_TIME_PRECISION);
+
+	/* we always display "Laptop battery 16 minutes remaining" as we need to clarify what device we are refering to */
+	if (obj->state == DKP_DEVICE_STATE_FULLY_CHARGED) {
+
+		if (obj->type == DKP_DEVICE_TYPE_BATTERY && time_to_empty_round > GPM_DKP_TEXT_MIN_TIME) {
+			time_to_empty_str = gpm_get_timestring (time_to_empty_round);
+			description = g_strdup_printf (_("%s fully charged (%.1f%%)\nProvides %s battery runtime"),
+							type_desc, obj->percentage, time_to_empty_str);
+			g_free (time_to_empty_str);
+		} else {
+			description = g_strdup_printf (_("%s fully charged (%.1f%%)"),
+							type_desc, obj->percentage);
+		}
+
+	} else if (obj->state == DKP_DEVICE_STATE_DISCHARGING) {
+
+		if (time_to_empty_round > GPM_DKP_TEXT_MIN_TIME) {
+			time_to_empty_str = gpm_get_timestring (time_to_empty_round);
+			description = g_strdup_printf (_("%s %s remaining (%.1f%%)"),
+							type_desc, time_to_empty_str, obj->percentage);
+			g_free (time_to_empty_str);
+		} else {
+			/* don't display "Unknown remaining" */
+			description = g_strdup_printf (_("%s discharging (%.1f%%)"),
+							type_desc, obj->percentage);
+		}
+
+	} else if (obj->state == DKP_DEVICE_STATE_CHARGING) {
+
+		if (time_to_full_round > GPM_DKP_TEXT_MIN_TIME &&
+		    time_to_empty_round > GPM_DKP_TEXT_MIN_TIME) {
+
+			/* display both discharge and charge time */
+			time_to_full_str = gpm_get_timestring (time_to_full_round);
+			time_to_empty_str = gpm_get_timestring (time_to_empty_round);
+			description = g_strdup_printf (_("%s %s until charged (%.1f%%)\nProvides %s battery runtime"),
+							type_desc, time_to_full_str, obj->percentage, time_to_empty_str);
+			g_free (time_to_full_str);
+			g_free (time_to_empty_str);
+
+		} else if (time_to_full_round > GPM_DKP_TEXT_MIN_TIME) {
+
+			/* display only charge time */
+			time_to_full_str = gpm_get_timestring (time_to_full_round);
+			description = g_strdup_printf (_("%s %s until charged (%.1f%%)"),
+						type_desc, time_to_full_str, obj->percentage);
+			g_free (time_to_full_str);
+		} else {
+
+			/* don't display "Unknown remaining" */
+			description = g_strdup_printf (_("%s charging (%.1f%%)"),
+						type_desc, obj->percentage);
+		}
+
+	} else {
+		egg_warning ("in an undefined state we are not charging or "
+			     "discharging and the batteries are also not charged");
+		description = g_strdup (_("Device state could not be read at this time"));
+	}
+	return description;
 }
 
 /**

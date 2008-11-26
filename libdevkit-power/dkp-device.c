@@ -29,18 +29,18 @@
 #include "egg-debug.h"
 #include "egg-obj-list.h"
 
-#include "dkp-client-device.h"
+#include "dkp-device.h"
 #include "dkp-object.h"
 #include "dkp-stats-obj.h"
 #include "dkp-history-obj.h"
 
-static void	dkp_client_device_class_init	(DkpClientDeviceClass	*klass);
-static void	dkp_client_device_init		(DkpClientDevice	*device);
-static void	dkp_client_device_finalize	(GObject		*object);
+static void	dkp_device_class_init	(DkpDeviceClass	*klass);
+static void	dkp_device_init		(DkpDevice	*device);
+static void	dkp_device_finalize	(GObject		*object);
 
-#define DKP_CLIENT_DEVICE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), DKP_TYPE_CLIENT_DEVICE, DkpClientDevicePrivate))
+#define DKP_DEVICE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), DKP_TYPE_DEVICE, DkpDevicePrivate))
 
-struct DkpClientDevicePrivate
+struct DkpDevicePrivate
 {
 	gchar			*object_path;
 	DkpObject		*obj;
@@ -50,19 +50,19 @@ struct DkpClientDevicePrivate
 };
 
 enum {
-	DKP_CLIENT_DEVICE_CHANGED,
-	DKP_CLIENT_DEVICE_LAST_SIGNAL
+	DKP_DEVICE_CHANGED,
+	DKP_DEVICE_LAST_SIGNAL
 };
 
-static guint signals [DKP_CLIENT_DEVICE_LAST_SIGNAL] = { 0 };
+static guint signals [DKP_DEVICE_LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (DkpClientDevice, dkp_client_device, G_TYPE_OBJECT)
+G_DEFINE_TYPE (DkpDevice, dkp_device, G_TYPE_OBJECT)
 
 /**
- * dkp_client_device_get_device_properties:
+ * dkp_device_get_device_properties:
  **/
 static GHashTable *
-dkp_client_device_get_device_properties (DkpClientDevice *device)
+dkp_device_get_device_properties (DkpDevice *device)
 {
 	gboolean ret;
 	GError *error = NULL;
@@ -84,15 +84,15 @@ out:
 }
 
 /**
- * dkp_client_device_refresh_internal:
+ * dkp_device_refresh_internal:
  **/
 static gboolean
-dkp_client_device_refresh_internal (DkpClientDevice *device)
+dkp_device_refresh_internal (DkpDevice *device)
 {
 	GHashTable *hash;
 
 	/* get all the properties */
-	hash = dkp_client_device_get_device_properties (device);
+	hash = dkp_device_get_device_properties (device);
 	if (hash == NULL) {
 		egg_warning ("Cannot get device properties for %s", device->priv->object_path);
 		return FALSE;
@@ -103,28 +103,28 @@ dkp_client_device_refresh_internal (DkpClientDevice *device)
 }
 
 /**
- * dkp_client_device_changed_cb:
+ * dkp_device_changed_cb:
  **/
 static void
-dkp_client_device_changed_cb (DBusGProxy *proxy, DkpClientDevice *device)
+dkp_device_changed_cb (DBusGProxy *proxy, DkpDevice *device)
 {
-	g_return_if_fail (DKP_IS_CLIENT_DEVICE (device));
-	dkp_client_device_refresh_internal (device);
-	g_signal_emit (device, signals [DKP_CLIENT_DEVICE_CHANGED], 0, device->priv->obj);
+	g_return_if_fail (DKP_IS_DEVICE (device));
+	dkp_device_refresh_internal (device);
+	g_signal_emit (device, signals [DKP_DEVICE_CHANGED], 0, device->priv->obj);
 }
 
 /**
- * dkp_client_device_set_object_path:
+ * dkp_device_set_object_path:
  **/
 gboolean
-dkp_client_device_set_object_path (DkpClientDevice *device, const gchar *object_path)
+dkp_device_set_object_path (DkpDevice *device, const gchar *object_path)
 {
 	GError *error = NULL;
 	gboolean ret = FALSE;
 	DBusGProxy *proxy_device;
 	DBusGProxy *proxy_props;
 
-	g_return_val_if_fail (DKP_IS_CLIENT_DEVICE (device), FALSE);
+	g_return_val_if_fail (DKP_IS_DEVICE (device), FALSE);
 
 	if (device->priv->object_path != NULL)
 		return FALSE;
@@ -158,7 +158,7 @@ dkp_client_device_set_object_path (DkpClientDevice *device, const gchar *object_
 	/* listen to Changed */
 	dbus_g_proxy_add_signal (proxy_device, "Changed", G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (proxy_device, "Changed",
-				     G_CALLBACK (dkp_client_device_changed_cb), device, NULL);
+				     G_CALLBACK (dkp_device_changed_cb), device, NULL);
 
 	/* yay */
 	egg_debug ("using object_path: %s", object_path);
@@ -167,7 +167,7 @@ dkp_client_device_set_object_path (DkpClientDevice *device, const gchar *object_
 	device->priv->object_path = g_strdup (object_path);
 
 	/* coldplug */
-	ret = dkp_client_device_refresh_internal (device);
+	ret = dkp_device_refresh_internal (device);
 	if (!ret)
 		egg_warning ("cannot refresh");
 out:
@@ -175,30 +175,30 @@ out:
 }
 
 /**
- * dkp_client_device_get_object_path:
+ * dkp_device_get_object_path:
  **/
 const gchar *
-dkp_client_device_get_object_path (const DkpClientDevice *device)
+dkp_device_get_object_path (const DkpDevice *device)
 {
-	g_return_val_if_fail (DKP_IS_CLIENT_DEVICE (device), NULL);
+	g_return_val_if_fail (DKP_IS_DEVICE (device), NULL);
 	return device->priv->object_path;
 }
 
 /**
- * dkp_client_device_get_object:
+ * dkp_device_get_object:
  **/
 const DkpObject *
-dkp_client_device_get_object (const DkpClientDevice *device)
+dkp_device_get_object (const DkpDevice *device)
 {
-	g_return_val_if_fail (DKP_IS_CLIENT_DEVICE (device), NULL);
+	g_return_val_if_fail (DKP_IS_DEVICE (device), NULL);
 	return device->priv->obj;
 }
 
 /**
- * dkp_client_device_print_history:
+ * dkp_device_print_history:
  **/
 static gboolean
-dkp_client_device_print_history (const DkpClientDevice *device, const gchar *type)
+dkp_device_print_history (const DkpDevice *device, const gchar *type)
 {
 	guint i;
 	EggObjList *array;
@@ -206,7 +206,7 @@ dkp_client_device_print_history (const DkpClientDevice *device, const gchar *typ
 	gboolean ret = FALSE;
 
 	/* get a fair chunk of data */
-	array = dkp_client_device_get_history (device, type, 120, 10);
+	array = dkp_device_get_history (device, type, 120, 10);
 	if (array == NULL)
 		goto out;
 
@@ -223,33 +223,33 @@ out:
 }
 
 /**
- * dkp_client_device_print:
+ * dkp_device_print:
  **/
 gboolean
-dkp_client_device_print (const DkpClientDevice *device)
+dkp_device_print (const DkpDevice *device)
 {
-	g_return_val_if_fail (DKP_IS_CLIENT_DEVICE (device), FALSE);
+	g_return_val_if_fail (DKP_IS_DEVICE (device), FALSE);
 
 	/* print to screen */
 	dkp_object_print (device->priv->obj);
 
 	/* if we can, get history */
-	dkp_client_device_print_history (device, "charge");
-	dkp_client_device_print_history (device, "rate");
+	dkp_device_print_history (device, "charge");
+	dkp_device_print_history (device, "rate");
 
 	return TRUE;
 }
 
 /**
- * dkp_client_device_refresh:
+ * dkp_device_refresh:
  **/
 gboolean
-dkp_client_device_refresh (DkpClientDevice *device)
+dkp_device_refresh (DkpDevice *device)
 {
 	GError *error = NULL;
 	gboolean ret;
 
-	g_return_val_if_fail (DKP_IS_CLIENT_DEVICE (device), FALSE);
+	g_return_val_if_fail (DKP_IS_DEVICE (device), FALSE);
 	g_return_val_if_fail (device->priv->proxy_device != NULL, FALSE);
 
 	/* just refresh the device */
@@ -265,12 +265,12 @@ out:
 }
 
 /**
- * dkp_client_device_get_history:
+ * dkp_device_get_history:
  *
  * Returns an array of %DkpHistoryObj's
  **/
 EggObjList *
-dkp_client_device_get_history (const DkpClientDevice *device, const gchar *type, guint timespec, guint resolution)
+dkp_device_get_history (const DkpDevice *device, const gchar *type, guint timespec, guint resolution)
 {
 	GError *error = NULL;
 	GType g_type_gvalue_array;
@@ -282,7 +282,7 @@ dkp_client_device_get_history (const DkpClientDevice *device, const gchar *type,
 	EggObjList *array = NULL;
 	gboolean ret;
 
-	g_return_val_if_fail (DKP_IS_CLIENT_DEVICE (device), FALSE);
+	g_return_val_if_fail (DKP_IS_DEVICE (device), FALSE);
 	g_return_val_if_fail (device->priv->proxy_device != NULL, FALSE);
 
 	g_type_gvalue_array = dbus_g_type_get_collection ("GPtrArray",
@@ -343,12 +343,12 @@ out:
 }
 
 /**
- * dkp_client_device_get_statistics:
+ * dkp_device_get_statistics:
  *
  * Returns an array of %DkpStatsObj's
  **/
 EggObjList *
-dkp_client_device_get_statistics (const DkpClientDevice *device, const gchar *type)
+dkp_device_get_statistics (const DkpDevice *device, const gchar *type)
 {
 	GError *error = NULL;
 	GType g_type_gvalue_array;
@@ -360,7 +360,7 @@ dkp_client_device_get_statistics (const DkpClientDevice *device, const gchar *ty
 	EggObjList *array = NULL;
 	gboolean ret;
 
-	g_return_val_if_fail (DKP_IS_CLIENT_DEVICE (device), FALSE);
+	g_return_val_if_fail (DKP_IS_DEVICE (device), FALSE);
 	g_return_val_if_fail (device->priv->proxy_device != NULL, FALSE);
 
 	g_type_gvalue_array = dbus_g_type_get_collection ("GPtrArray",
@@ -416,40 +416,40 @@ out:
 }
 
 /**
- * dkp_client_device_class_init:
- * @klass: The DkpClientDeviceClass
+ * dkp_device_class_init:
+ * @klass: The DkpDeviceClass
  **/
 static void
-dkp_client_device_class_init (DkpClientDeviceClass *klass)
+dkp_device_class_init (DkpDeviceClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	object_class->finalize = dkp_client_device_finalize;
+	object_class->finalize = dkp_device_finalize;
 
 	/**
 	 * PkClient::changed:
-	 * @device: the #DkpClientDevice instance that emitted the signal
+	 * @device: the #DkpDevice instance that emitted the signal
 	 * @obj: the #DkpObject that has changed
 	 *
 	 * The ::changed signal is emitted when the device data has changed.
 	 **/
-	signals [DKP_CLIENT_DEVICE_CHANGED] =
+	signals [DKP_DEVICE_CHANGED] =
 		g_signal_new ("changed",
 			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (DkpClientDeviceClass, changed),
+			      G_STRUCT_OFFSET (DkpDeviceClass, changed),
 			      NULL, NULL, g_cclosure_marshal_VOID__POINTER,
 			      G_TYPE_NONE, 1, G_TYPE_POINTER);
 
-	g_type_class_add_private (klass, sizeof (DkpClientDevicePrivate));
+	g_type_class_add_private (klass, sizeof (DkpDevicePrivate));
 }
 
 /**
- * dkp_client_device_init:
- * @client_device: This class instance
+ * dkp_device_init:
+ * @device: This class instance
  **/
 static void
-dkp_client_device_init (DkpClientDevice *device)
+dkp_device_init (DkpDevice *device)
 {
-	device->priv = DKP_CLIENT_DEVICE_GET_PRIVATE (device);
+	device->priv = DKP_DEVICE_GET_PRIVATE (device);
 	device->priv->object_path = NULL;
 	device->priv->proxy_device = NULL;
 	device->priv->proxy_props = NULL;
@@ -457,17 +457,17 @@ dkp_client_device_init (DkpClientDevice *device)
 }
 
 /**
- * dkp_client_device_finalize:
+ * dkp_device_finalize:
  * @object: The object to finalize
  **/
 static void
-dkp_client_device_finalize (GObject *object)
+dkp_device_finalize (GObject *object)
 {
-	DkpClientDevice *device;
+	DkpDevice *device;
 
-	g_return_if_fail (DKP_IS_CLIENT_DEVICE (object));
+	g_return_if_fail (DKP_IS_DEVICE (object));
 
-	device = DKP_CLIENT_DEVICE (object);
+	device = DKP_DEVICE (object);
 
 	g_free (device->priv->object_path);
 	dkp_object_free (device->priv->obj);
@@ -477,19 +477,19 @@ dkp_client_device_finalize (GObject *object)
 		g_object_unref (device->priv->proxy_props);
 	dbus_g_connection_unref (device->priv->bus);
 
-	G_OBJECT_CLASS (dkp_client_device_parent_class)->finalize (object);
+	G_OBJECT_CLASS (dkp_device_parent_class)->finalize (object);
 }
 
 /**
- * dkp_client_device_new:
+ * dkp_device_new:
  *
- * Return value: a new DkpClientDevice object.
+ * Return value: a new DkpDevice object.
  **/
-DkpClientDevice *
-dkp_client_device_new (void)
+DkpDevice *
+dkp_device_new (void)
 {
-	DkpClientDevice *device;
-	device = g_object_new (DKP_TYPE_CLIENT_DEVICE, NULL);
-	return DKP_CLIENT_DEVICE (device);
+	DkpDevice *device;
+	device = g_object_new (DKP_TYPE_DEVICE, NULL);
+	return DKP_DEVICE (device);
 }
 

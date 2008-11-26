@@ -24,7 +24,7 @@
 
 #include <glib-object.h>
 #include <dkp-enum.h>
-#include "dkp-client-device.h"
+#include "dkp-device.h"
 
 G_BEGIN_DECLS
 
@@ -49,25 +49,22 @@ typedef struct
 {
 	GObjectClass		 parent_class;
 	void			(*device_added)		(DkpClient		*client,
-							 const DkpClientDevice	*device);
+							 const DkpDevice	*device);
 	void			(*device_changed)      	(DkpClient		*client,
-							 const DkpClientDevice	*device);
+							 const DkpDevice	*device);
 	void			(*device_removed)      	(DkpClient		*client,
-							 const DkpClientDevice	*device);
-	void			(*changed)              (DkpClient		*client,
-							 gboolean		 on_battery);
+							 const DkpDevice	*device);
+	void			(*changed)              (DkpClient		*client);
 } DkpClientClass;
 
 GType		 dkp_client_get_type			(void) G_GNUC_CONST;
 DkpClient	*dkp_client_new				(void);
-GPtrArray	*dkp_client_enumerate_devices		(DkpClient		*client,
-							 GError			**error);
-
-const gchar *dkp_client_get_daemon_version (DkpClient *client);
-gboolean dkp_client_can_hibernate (DkpClient *client);
-gboolean dkp_client_can_suspend (DkpClient *client);
-gboolean dkp_client_on_battery (DkpClient *client);
-gboolean dkp_client_on_low_battery (DkpClient *client);
+GPtrArray	*dkp_client_enumerate_devices		(DkpClient		*client);
+const gchar	*dkp_client_get_daemon_version		(DkpClient		*client);
+gboolean	 dkp_client_can_hibernate		(DkpClient		*client);
+gboolean	 dkp_client_can_suspend			(DkpClient		*client);
+gboolean	 dkp_client_on_battery			(DkpClient		*client);
+gboolean	 dkp_client_on_low_battery		(DkpClient		*client);
 
 G_END_DECLS
 

@@ -33,6 +33,7 @@ const gchar	*gpm_device_type_to_localised_text	(DkpDeviceType	 type,
 const gchar	*gpm_device_type_to_icon		(DkpDeviceType	 type);
 const gchar	*gpm_device_technology_to_localised_text (DkpDeviceTechnology technology_enum);
 gchar		*gpm_devicekit_get_object_icon		(const DkpObject *obj);
+gchar		*gpm_devicekit_get_object_summary	(const DkpObject *obj);
 gchar		*gpm_devicekit_get_object_description	(const DkpObject *obj);
 
 G_END_DECLS

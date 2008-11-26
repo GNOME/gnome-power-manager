@@ -59,7 +59,7 @@ struct GpmCellArrayPrivate
 	GpmCellUnit		 unit;
 	GpmAcAdapter		*ac_adapter;
 	GpmProfile		*profile;
-	GConfClient			*conf;
+	GConfClient		*conf;
 	GpmPhone		*phone;
 	GpmControl		*control;
 	GpmWarnings		*warnings;

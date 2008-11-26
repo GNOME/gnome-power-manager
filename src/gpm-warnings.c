@@ -48,7 +48,7 @@
 
 struct GpmWarningsPrivate
 {
-	GConfClient			*conf;
+	GConfClient		*conf;
 	gboolean		 use_time_primary;
 	gboolean		 time_is_accurate;
 
@@ -81,8 +81,7 @@ gpm_warnings_time_is_accurate (GpmWarnings *warnings, gboolean time_accurate)
 }
 
 static GpmWarningsState
-gpm_warnings_get_state_csr (GpmWarnings  *warnings,
-		           GpmCellUnit *unit)
+gpm_warnings_get_state_csr (GpmWarnings *warnings, GpmCellUnit *unit)
 {
 	if (unit->charge_current == 2) {
 		return GPM_WARNINGS_LOW;
@@ -93,8 +92,7 @@ gpm_warnings_get_state_csr (GpmWarnings  *warnings,
 }
 
 static GpmWarningsState
-gpm_warnings_get_state_time (GpmWarnings  *warnings,
-		            GpmCellUnit *unit)
+gpm_warnings_get_state_time (GpmWarnings *warnings, GpmCellUnit *unit)
 {
 	if (unit->time_discharge == 0) {
 		/* this is probably an error condition */
@@ -141,7 +139,7 @@ gpm_warnings_get_state_percentage (GpmWarnings *warnings, GpmCellUnit *unit)
  * Return value: A GpmWarnings state, e.g. GPM_WARNINGS_VERY_LOW
  **/
 GpmWarningsState
-gpm_warnings_get_state (GpmWarnings  *warnings, GpmCellUnit *unit)
+gpm_warnings_get_state (GpmWarnings *warnings, GpmCellUnit *unit)
 {
 	GpmWarningsState type;
 

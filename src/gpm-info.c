@@ -31,13 +31,14 @@
 #include <hal-manager.h>
 
 #include "egg-color.h"
+#include "egg-debug.h"
+
 #include "gpm-control.h"
 #include "gpm-common.h"
-#include "egg-debug.h"
 #include "gpm-info.h"
 #include "gpm-profile.h"
 #include "gpm-array.h"
-#include "gpm-engine.h"
+#include "gpm-engine-old.h"
 #include "gpm-stock-icons.h"
 #include "gpm-graph-widget-old.h"
 

@@ -24,7 +24,7 @@
 
 #include <glib-object.h>
 #include "gpm-graph-widget-old.h"
-#include "gpm-engine.h"
+#include "gpm-engine-old.h"
 
 G_BEGIN_DECLS
 

@@ -40,7 +40,7 @@
 
 #ifdef HAVE_DK_POWER
  #include <dkp-client.h>
- #include <dkp-client-device.h>
+ #include <dkp-device.h>
 #else
  #include <hal-device.h>
  #include <hal-manager.h>
@@ -56,7 +56,7 @@ struct GpmAcAdapterPrivate
 {
 	gboolean		 has_hardware;
 #ifdef HAVE_DK_POWER
-	DkpClient		*device;
+	DkpClient		*client;
 #else
 	HalDevice		*device;
 #endif
@@ -100,7 +100,7 @@ gpm_ac_adapter_is_present (GpmAcAdapter *ac_adapter)
 	}
 #else
 	gboolean on_battery;
-	on_battery = dkp_client_on_battery (ac_adapter->priv->device);
+	on_battery = dkp_client_on_battery (ac_adapter->priv->client);
 	/* battery -> not AC */
 	is_on_ac = !on_battery;
 #endif
@@ -136,11 +136,13 @@ hal_device_property_modified_cb (HalDevice   *device,
 }
 #else
 /**
- * gpm_ac_adapter_on_battery_changed_cb:
+ * gpm_ac_adapter_changed_cb:
  */
 static void
-gpm_ac_adapter_on_battery_changed_cb (DkpClientDevice *device, gboolean on_battery, GpmAcAdapter *ac_adapter)
+gpm_ac_adapter_changed_cb (DkpClient *client, GpmAcAdapter *ac_adapter)
 {
+	gboolean on_battery;
+	on_battery = dkp_client_on_battery (client);
 	g_signal_emit (ac_adapter, signals [AC_ADAPTER_CHANGED], 0, !on_battery);
 }
 #endif
@@ -157,7 +159,7 @@ gpm_ac_adapter_finalize (GObject *object)
 	ac_adapter = GPM_AC_ADAPTER (object);
 	g_return_if_fail (ac_adapter->priv != NULL);
 
-	g_object_unref (ac_adapter->priv->device);
+	g_object_unref (ac_adapter->priv->client);
 
 	G_OBJECT_CLASS (gpm_ac_adapter_parent_class)->finalize (object);
 }
@@ -196,9 +198,9 @@ gpm_ac_adapter_init (GpmAcAdapter *ac_adapter)
 {
 	ac_adapter->priv = GPM_AC_ADAPTER_GET_PRIVATE (ac_adapter);
 #ifdef HAVE_DK_POWER
-	ac_adapter->priv->device = dkp_client_new ();
-	g_signal_connect (ac_adapter->priv->device, "on-battery-changed",
-			  G_CALLBACK (gpm_ac_adapter_on_battery_changed_cb), ac_adapter);
+	ac_adapter->priv->client = dkp_client_new ();
+	g_signal_connect (ac_adapter->priv->client, "changed",
+			  G_CALLBACK (gpm_ac_adapter_changed_cb), ac_adapter);
 #else
 	gchar **device_names;
 	gboolean ret;

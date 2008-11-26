@@ -164,8 +164,6 @@ gnome_power_preferences_LDADD +=			\
 endif
 
 gnome_power_manager_SOURCES =				\
-	egg-color.c					\
-	egg-color.h					\
 	egg-debug.h					\
 	egg-debug.c					\
 	egg-dbus-monitor.h				\
@@ -182,18 +180,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-dpms.c					\
 	gpm-notify.h					\
 	gpm-notify.c					\
-	gpm-engine.h					\
-	gpm-engine.c					\
 	gpm-phone.h					\
 	gpm-phone.c					\
-	gpm-cell.h					\
-	gpm-cell.c					\
-	gpm-cell-unit.h					\
-	gpm-cell-unit.c					\
-	gpm-cell-array.h				\
-	gpm-cell-array.c				\
-	gpm-warnings.h					\
-	gpm-warnings.c					\
 	gpm-backlight.h					\
 	gpm-backlight.c					\
 	gpm-prefs-server.h				\
@@ -202,8 +190,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-idle.c					\
 	gpm-load.h					\
 	gpm-load.c					\
-	gpm-profile.h					\
-	gpm-profile.c					\
 	gpm-control.h					\
 	gpm-control.c					\
 	gpm-refcount.h					\
@@ -236,19 +222,44 @@ gnome_power_manager_SOURCES =				\
 	gpm-networkmanager.h				\
 	gpm-networkmanager.c				\
 	gpm-stock-icons.h				\
+	gpm-inhibit.h					\
+	gpm-inhibit.c					\
+	gpm-feedback-widget.h				\
+	gpm-feedback-widget.c				\
+	$(NULL)
+
+if HAVE_DK_POWER
+gnome_power_manager_SOURCES +=				\
+	gpm-engine.h					\
+	gpm-engine.c					\
+	gpm-devicekit.h					\
+	gpm-devicekit.c					\
+	$(NULL)
+else
+	egg-color.c					\
+	egg-color.h					\
 	gpm-info.h					\
 	gpm-info.c					\
+	gpm-graph-widget-old.h				\
+	gpm-graph-widget-old.c				\
+	gpm-profile.h					\
+	gpm-profile.c					\
 	gpm-array.h					\
 	gpm-array.c					\
 	gpm-array-float.h				\
 	gpm-array-float.c				\
-	gpm-inhibit.h					\
-	gpm-inhibit.c					\
-	gpm-graph-widget-old.h				\
-	gpm-graph-widget-old.c				\
-	gpm-feedback-widget.h				\
-	gpm-feedback-widget.c				\
+	gpm-engine-old.h				\
+	gpm-engine-old.c				\
+	gpm-cell.h					\
+	gpm-cell.c					\
+	gpm-cell-unit.h					\
+	gpm-cell-unit.c					\
+	gpm-cell-array.h				\
+	gpm-cell-array.c				\
+	gpm-warnings.h					\
+	gpm-warnings.c					\
 	$(NULL)
+endif
 
 gnome_power_manager_LDADD =				\
 	$(GLIB_LIBS)					\

@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2007 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2007-2008 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -34,7 +34,7 @@
 #include "gpm-control.h"
 #include "gpm-profile.h"
 #include "gpm-marshal.h"
-#include "gpm-engine.h"
+#include "gpm-engine-old.h"
 #include "gpm-cell-unit.h"
 #include "gpm-cell-array.h"
 #include "gpm-cell.h"
@@ -89,9 +89,7 @@ G_DEFINE_TYPE (GpmEngine, gpm_engine, G_TYPE_OBJECT)
  * ac_adaptor_changed_cb:
  **/
 static void
-ac_adaptor_changed_cb (GpmAcAdapter *ac_adapter,
-		       gboolean      on_ac,
-		       GpmEngine    *engine)
+ac_adaptor_changed_cb (GpmAcAdapter *ac_adapter, gboolean on_ac, GpmEngine *engine)
 {
 	GpmEngineCollection *collection;
 
@@ -131,98 +129,10 @@ gpm_engine_delayed_refresh (GpmEngine *engine)
  * We have to update the caches on resume
  **/
 static void
-control_resume_cb (GpmControl *control,
-		   GpmControlAction action,
-		   GpmEngine   *engine)
+control_resume_cb (GpmControl *control, GpmControlAction action, GpmEngine *engine)
 {
 	/* we have to delay this at resume to counteract races */
 	g_timeout_add (GPM_ENGINE_RESUME_DELAY, (GSourceFunc) gpm_engine_delayed_refresh, engine);
-}
-
-/**
- * gpm_engine_class_init:
- * @engine: This class instance
- **/
-static void
-gpm_engine_class_init (GpmEngineClass *klass)
-{
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	object_class->finalize = gpm_engine_finalize;
-	g_type_class_add_private (klass, sizeof (GpmEnginePrivate));
-
-	signals [ICON_CHANGED] =
-		g_signal_new ("icon-changed",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmEngineClass, icon_changed),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__STRING,
-			      G_TYPE_NONE, 1, G_TYPE_STRING);
-	signals [SUMMARY_CHANGED] =
-		g_signal_new ("summary-changed",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmEngineClass, summary_changed),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__STRING,
-			      G_TYPE_NONE, 1, G_TYPE_STRING);
-	signals [LOW_CAPACITY] =
-		g_signal_new ("low-capacity",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmEngineClass, low_capacity),
-			      NULL, NULL,
-			      gpm_marshal_VOID__UINT_UINT,
-			      G_TYPE_NONE, 2, G_TYPE_UINT, G_TYPE_UINT);
-	signals [PERHAPS_RECALL] =
-		g_signal_new ("perhaps-recall",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmEngineClass, perhaps_recall),
-			      NULL, NULL,
-			      gpm_marshal_VOID__UINT_STRING_STRING,
-			      G_TYPE_NONE,
-			      3, G_TYPE_UINT, G_TYPE_STRING, G_TYPE_STRING);
-	signals [FULLY_CHARGED] =
-		g_signal_new ("fully-charged",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmEngineClass, fully_charged),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__UINT,
-			      G_TYPE_NONE, 1, G_TYPE_UINT);
-	signals [DISCHARGING] =
-		g_signal_new ("discharging",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmEngineClass, discharging),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__UINT,
-			      G_TYPE_NONE, 1, G_TYPE_UINT);
-	signals [CHARGE_ACTION] =
-		g_signal_new ("charge-action",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmEngineClass, charge_action),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__POINTER,
-			      G_TYPE_NONE, 1, G_TYPE_POINTER);
-	signals [CHARGE_LOW] =
-		g_signal_new ("charge-low",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmEngineClass, charge_low),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__POINTER,
-			      G_TYPE_NONE, 1, G_TYPE_POINTER);
-	signals [CHARGE_CRITICAL] =
-		g_signal_new ("charge-critical",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmEngineClass, charge_critical),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__POINTER,
-			      G_TYPE_NONE, 1, G_TYPE_POINTER);
 }
 
 /**
@@ -820,12 +730,10 @@ gpm_cell_array_charge_action_cb (GpmCellArray *cell_array,
 }
 
 /**
- * conf_key_changed_cb:
+ * gpm_engine_conf_key_changed_cb:
  **/
 static void
-conf_key_changed_cb (GConfClient     *conf,
-		     const gchar *key,
-		     GpmEngine   *engine)
+gpm_engine_conf_key_changed_cb (GConfClient *conf, const gchar *key, GpmEngine *engine)
 {
 	gchar *icon_policy;
 	if (strcmp (key, GPM_CONF_UI_ICON_POLICY) == 0) {
@@ -838,6 +746,44 @@ conf_key_changed_cb (GConfClient     *conf,
 		/* perhaps change icon */
 		gpm_engine_recalculate_state_icon (engine);
 	}
+}
+
+/**
+ * gpm_engine_coldplug_idle_cb:
+ **/
+static gboolean
+gpm_engine_coldplug_idle_cb (GpmEngine *engine)
+{
+	GpmEngineCollection *collection;
+	GpmPrefsServer *prefs_server;
+
+	g_return_val_if_fail (engine != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_ENGINE (engine), FALSE);
+
+	/* grab a reference to the collection */
+	collection = &engine->priv->collection;
+	gpm_cell_array_set_type (collection->primary, GPM_CELL_UNIT_KIND_PRIMARY);
+	gpm_cell_array_set_type (collection->ups, GPM_CELL_UNIT_KIND_UPS);
+	gpm_cell_array_set_type (collection->mouse, GPM_CELL_UNIT_KIND_MOUSE);
+	gpm_cell_array_set_type (collection->keyboard, GPM_CELL_UNIT_KIND_KEYBOARD);
+	gpm_cell_array_set_type (collection->pda, GPM_CELL_UNIT_KIND_PDA);
+	gpm_cell_array_set_type (collection->phone, GPM_CELL_UNIT_KIND_PHONE);
+
+	/* only show the battery prefs section if we have batteries */
+	prefs_server = gpm_prefs_server_new ();
+	if (gpm_cell_array_get_num_cells (collection->primary) > 0)
+		gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_BATTERY);
+	if (gpm_cell_array_get_num_cells (collection->ups) > 0)
+		gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_UPS);
+	g_object_unref (prefs_server);
+
+	/* we're done */
+	engine->priv->during_coldplug = FALSE;
+
+	gpm_engine_recalculate_state (engine);
+
+	/* never repeat */
+	return FALSE;
 }
 
 /**
@@ -854,7 +800,7 @@ gpm_engine_init (GpmEngine *engine)
 
 	engine->priv->conf = gconf_client_get_default ();
 	g_signal_connect (engine->priv->conf, "value-changed",
-			  G_CALLBACK (conf_key_changed_cb), engine);
+			  G_CALLBACK (gpm_engine_conf_key_changed_cb), engine);
 
 	engine->priv->warnings = gpm_warnings_new ();
 	engine->priv->profile = gpm_profile_new ();
@@ -965,42 +911,85 @@ gpm_engine_init (GpmEngine *engine)
 			  G_CALLBACK (gpm_cell_array_charge_critical_cb), engine);
 	g_signal_connect (collection->ups, "charge-action",
 			  G_CALLBACK (gpm_cell_array_charge_action_cb), engine);
+
+	g_idle_add ((GSourceFunc) gpm_engine_coldplug_idle_cb, engine);
 }
 
 /**
- * gpm_engine_start:
+ * gpm_engine_class_init:
+ * @engine: This class instance
  **/
-gboolean
-gpm_engine_start (GpmEngine *engine)
+static void
+gpm_engine_class_init (GpmEngineClass *klass)
 {
-	GpmEngineCollection *collection;
-	GpmPrefsServer *prefs_server;
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	object_class->finalize = gpm_engine_finalize;
+	g_type_class_add_private (klass, sizeof (GpmEnginePrivate));
 
-	g_return_val_if_fail (engine != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_ENGINE (engine), FALSE);
-
-	/* grab a reference to the collection */
-	collection = &engine->priv->collection;
-	gpm_cell_array_set_type (collection->primary, GPM_CELL_UNIT_KIND_PRIMARY);
-	gpm_cell_array_set_type (collection->ups, GPM_CELL_UNIT_KIND_UPS);
-	gpm_cell_array_set_type (collection->mouse, GPM_CELL_UNIT_KIND_MOUSE);
-	gpm_cell_array_set_type (collection->keyboard, GPM_CELL_UNIT_KIND_KEYBOARD);
-	gpm_cell_array_set_type (collection->pda, GPM_CELL_UNIT_KIND_PDA);
-	gpm_cell_array_set_type (collection->phone, GPM_CELL_UNIT_KIND_PHONE);
-
-	/* only show the battery prefs section if we have batteries */
-	prefs_server = gpm_prefs_server_new ();
-	if (gpm_cell_array_get_num_cells (collection->primary) > 0)
-		gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_BATTERY);
-	if (gpm_cell_array_get_num_cells (collection->ups) > 0)
-		gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_UPS);
-	g_object_unref (prefs_server);
-
-	/* we're done */
-	engine->priv->during_coldplug = FALSE;
-
-	gpm_engine_recalculate_state (engine);
-	return TRUE;
+	signals [ICON_CHANGED] =
+		g_signal_new ("icon-changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmEngineClass, icon_changed),
+			      NULL, NULL, g_cclosure_marshal_VOID__STRING,
+			      G_TYPE_NONE, 1, G_TYPE_STRING);
+	signals [SUMMARY_CHANGED] =
+		g_signal_new ("summary-changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmEngineClass, summary_changed),
+			      NULL, NULL, g_cclosure_marshal_VOID__STRING,
+			      G_TYPE_NONE, 1, G_TYPE_STRING);
+	signals [LOW_CAPACITY] =
+		g_signal_new ("low-capacity",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmEngineClass, low_capacity),
+			      NULL, NULL, gpm_marshal_VOID__UINT_UINT,
+			      G_TYPE_NONE, 2, G_TYPE_UINT, G_TYPE_UINT);
+	signals [PERHAPS_RECALL] =
+		g_signal_new ("perhaps-recall",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmEngineClass, perhaps_recall),
+			      NULL, NULL, gpm_marshal_VOID__UINT_STRING_STRING,
+			      G_TYPE_NONE,
+			      3, G_TYPE_UINT, G_TYPE_STRING, G_TYPE_STRING);
+	signals [FULLY_CHARGED] =
+		g_signal_new ("fully-charged",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmEngineClass, fully_charged),
+			      NULL, NULL, g_cclosure_marshal_VOID__UINT,
+			      G_TYPE_NONE, 1, G_TYPE_UINT);
+	signals [DISCHARGING] =
+		g_signal_new ("discharging",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmEngineClass, discharging),
+			      NULL, NULL, g_cclosure_marshal_VOID__UINT,
+			      G_TYPE_NONE, 1, G_TYPE_UINT);
+	signals [CHARGE_ACTION] =
+		g_signal_new ("charge-action",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmEngineClass, charge_action),
+			      NULL, NULL, g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE, 1, G_TYPE_POINTER);
+	signals [CHARGE_LOW] =
+		g_signal_new ("charge-low",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmEngineClass, charge_low),
+			      NULL, NULL, g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE, 1, G_TYPE_POINTER);
+	signals [CHARGE_CRITICAL] =
+		g_signal_new ("charge-critical",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmEngineClass, charge_critical),
+			      NULL, NULL, g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE, 1, G_TYPE_POINTER);
 }
 
 /**
