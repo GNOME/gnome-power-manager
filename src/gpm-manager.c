@@ -71,7 +71,11 @@
 #include "gpm-stock-icons.h"
 #include "gpm-prefs-server.h"
 #include "gpm-tray-icon.h"
-#include "gpm-engine-old.h"
+#ifdef HAVE_DK_POWER
+ #include "gpm-engine.h"
+#else
+ #include "gpm-engine-old.h"
+#endif
 #include "gpm-feedback-widget.h"
 
 #ifdef HAVE_DK_POWER
@@ -1598,29 +1602,29 @@ gpm_engine_charge_low_cb (GpmEngine *engine, GpmCellUnit *unit, GpmManager *mana
 		message = g_strdup_printf (_("The cell phone attached to this computer is low in power (%.1f%%)"), unit->percentage);
 	}
 #else
-	if (obj->type == GPM_CELL_UNIT_KIND_PRIMARY) {
+	if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
 		title = _("Laptop battery low");
 		remaining_text = gpm_get_timestring (obj->time_to_empty);
 		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%.1f%%)"),
 					   remaining_text, obj->percentage);
-	} else if (obj->type == GPM_CELL_UNIT_KIND_UPS) {
+	} else if (obj->type == DKP_DEVICE_TYPE_UPS) {
 		title = _("UPS low");
 		remaining_text = gpm_get_timestring (obj->time_to_empty);
 		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"),
 					   remaining_text, obj->percentage);
-	} else if (obj->type == GPM_CELL_UNIT_KIND_MOUSE) {
+	} else if (obj->type == DKP_DEVICE_TYPE_MOUSE) {
 		title = _("Mouse battery low");
 		message = g_strdup_printf (_("The wireless mouse attached to this computer is low in power (%.1f%%)"), obj->percentage);
 
-	} else if (obj->type == GPM_CELL_UNIT_KIND_KEYBOARD) {
+	} else if (obj->type == DKP_DEVICE_TYPE_KEYBOARD) {
 		title = _("Keyboard battery low");
 		message = g_strdup_printf (_("The wireless keyboard attached to this computer is low in power (%.1f%%)"), obj->percentage);
 
-	} else if (obj->type == GPM_CELL_UNIT_KIND_PDA) {
+	} else if (obj->type == DKP_DEVICE_TYPE_PDA) {
 		title = _("PDA battery low");
 		message = g_strdup_printf (_("The PDA attached to this computer is low in power (%.1f%%)"), obj->percentage);
 
-	} else if (obj->type == GPM_CELL_UNIT_KIND_PHONE) {
+	} else if (obj->type == DKP_DEVICE_TYPE_PHONE) {
 		title = _("Cell phone battery low");
 		message = g_strdup_printf (_("The cell phone attached to this computer is low in power (%.1f%%)"), obj->percentage);
 	}
