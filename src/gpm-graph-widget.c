@@ -63,7 +63,8 @@ struct GpmGraphWidgetPrivate
 	cairo_t			*cr;
 	PangoLayout 		*layout;
 
-	EggObjList		*data_list;
+	GPtrArray		*data_list;
+	GPtrArray		*plot_list;
 };
 
 static gboolean gpm_graph_widget_expose (GtkWidget *graph, GdkEventExpose *event);
@@ -78,7 +79,6 @@ gpm_graph_widget_key_data_clear (GpmGraphWidget *graph)
 	GpmGraphWidgetKeyData *keyitem;
 	guint a;
 
-	g_return_val_if_fail (graph != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
 
 	/* remove items in list and free */
@@ -101,7 +101,6 @@ gpm_graph_widget_key_data_add (GpmGraphWidget *graph, guint32 color, const gchar
 {
 	GpmGraphWidgetKeyData *keyitem;
 
-	g_return_val_if_fail (graph != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
 
 	egg_debug ("add to list %s", desc);
@@ -190,7 +189,8 @@ gpm_graph_widget_init (GpmGraphWidget *graph)
 	graph->priv->stop_y = 100;
 	graph->priv->use_grid = TRUE;
 	graph->priv->use_legend = FALSE;
-	graph->priv->data_list = egg_obj_list_new ();
+	graph->priv->data_list = g_ptr_array_new ();
+	graph->priv->plot_list = g_ptr_array_new ();
 	graph->priv->key_data = NULL;
 	graph->priv->axis_type_x = GPM_GRAPH_WIDGET_TYPE_TIME;
 	graph->priv->axis_type_y = GPM_GRAPH_WIDGET_TYPE_PERCENTAGE;
@@ -220,7 +220,9 @@ gpm_graph_widget_finalize (GObject *object)
 	gpm_graph_widget_key_data_clear (graph);
 
 	/* free data */
-	g_object_unref (graph->priv->data_list);
+	g_ptr_array_foreach (graph->priv->data_list, (GFunc) g_object_unref, NULL);
+	g_ptr_array_free (graph->priv->data_list, TRUE);
+	g_ptr_array_free (graph->priv->plot_list, TRUE);
 
 	context = pango_layout_get_context (graph->priv->layout);
 	g_object_unref (graph->priv->layout);
@@ -229,21 +231,35 @@ gpm_graph_widget_finalize (GObject *object)
 }
 
 /**
+ * gpm_graph_widget_data_clear:
+ **/
+gboolean
+gpm_graph_widget_data_clear (GpmGraphWidget *graph)
+{
+	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
+
+	g_ptr_array_foreach (graph->priv->data_list, (GFunc) g_object_unref, NULL);
+	g_ptr_array_set_size (graph->priv->data_list, 0);
+	g_ptr_array_set_size (graph->priv->plot_list, 0);
+
+	return TRUE;
+}
+
+/**
  * gpm_graph_widget_data_assign:
  * @graph: This class instance
  *
- * Sets the data for the graph. You MUST NOT free the list before the widget.
+ * Sets the data for the graph
  **/
 gboolean
-gpm_graph_widget_data_assign (GpmGraphWidget *graph, EggObjList *array)
+gpm_graph_widget_data_assign (GpmGraphWidget *graph, GpmGraphWidgetPlot plot, EggObjList *data)
 {
-	g_return_val_if_fail (array != NULL, FALSE);
-	g_return_val_if_fail (graph != NULL, FALSE);
+	g_return_val_if_fail (data != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
 
 	/* get the new data */
-	g_object_unref (graph->priv->data_list);
-	graph->priv->data_list = g_object_ref (array);
+	g_ptr_array_add (graph->priv->data_list, g_object_ref (data));
+	g_ptr_array_add (graph->priv->plot_list, GUINT_TO_POINTER(plot));
 
 	/* refresh */
 	gtk_widget_queue_draw (GTK_WIDGET (graph));
@@ -482,11 +498,24 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 	gfloat smallest_y = G_MAXFLOAT;
 	guint rounding_x = 1;
 	guint rounding_y = 1;
-	EggObjList *array;
+	EggObjList *data;
 	GpmPointObj *point;
-	guint i;
+	guint i, j;
+	guint len = 0;
+	GPtrArray *array;
 
-	if (graph->priv->data_list->len == 0) {
+	array = graph->priv->data_list;
+
+	/* find out if we have no data */
+	for (j=0; j<array->len; j++) {
+		data = g_ptr_array_index (array, j);
+		len = data->len;
+		if (len > 0)
+			break;
+	}
+
+	/* no data in any array */
+	if (len == 0) {
 		egg_debug ("no data");
 		graph->priv->start_x = 0;
 		graph->priv->start_y = 0;
@@ -496,17 +525,19 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 	}
 
 	/* get the range for the graph */
-	array = graph->priv->data_list;
-	for (i=0; i < array->len; i++) {
-		point = (GpmPointObj *) egg_obj_list_index (array, i);
-		if (point->x > biggest_x)
-			biggest_x = point->x;
-		if (point->y > biggest_y)
-			biggest_y = point->y;
-		if (point->x < smallest_x)
-			smallest_x = point->x;
-		if (point->y < smallest_y)
-			smallest_y = point->y;
+	for (j=0; j<array->len; j++) {
+		data = g_ptr_array_index (array, j);
+		for (i=0; i < data->len; i++) {
+			point = (GpmPointObj *) egg_obj_list_index (data, i);
+			if (point->x > biggest_x)
+				biggest_x = point->x;
+			if (point->y > biggest_y)
+				biggest_y = point->y;
+			if (point->x < smallest_x)
+				smallest_x = point->x;
+			if (point->y < smallest_y)
+				smallest_y = point->y;
+		}
 	}
 	egg_debug ("Data range is %f<x<%f, %f<y<%f", smallest_x, biggest_x, smallest_y, biggest_y);
 	/* don't allow no difference */
@@ -678,9 +709,11 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 {
 	gfloat oldx, oldy;
 	gfloat newx, newy;
-	EggObjList *array;
+	EggObjList *data;
+	GPtrArray *array;
+	GpmGraphWidgetPlot plot;
 	GpmPointObj *point;
-	guint i;
+	guint i, j;
 
 	if (graph->priv->data_list->len == 0) {
 		egg_debug ("no data");
@@ -688,41 +721,51 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 	}
 	cairo_save (cr);
 
-	/* do all the line on the graph */
 	array = graph->priv->data_list;
 
-	/* get the very first point so we can work out the old */
-	point = (GpmPointObj *) egg_obj_list_index (array, 0);
-	oldx = 0;
-	oldy = 0;
-	gpm_graph_widget_get_pos_on_graph (graph, point->x, point->y, &oldx, &oldy);
-	gpm_graph_widget_draw_dot (cr, oldx, oldy, point->color);
+	/* do each line */
+	for (j=0; j<array->len; j++) {
+		data = g_ptr_array_index (array, j);
+		if (data->len == 0)
+			continue;
+		plot = GPOINTER_TO_UINT (g_ptr_array_index (graph->priv->plot_list, j));
 
-	for (i=1; i < array->len; i++) {
-		point = (GpmPointObj *) egg_obj_list_index (array, i);
+		/* get the very first point so we can work out the old */
+		point = (GpmPointObj *) egg_obj_list_index (data, 0);
+		oldx = 0;
+		oldy = 0;
+		gpm_graph_widget_get_pos_on_graph (graph, point->x, point->y, &oldx, &oldy);
+		gpm_graph_widget_draw_dot (cr, oldx, oldy, point->color);
 
-		gpm_graph_widget_get_pos_on_graph (graph, point->x, point->y, &newx, &newy);
+		for (i=1; i < data->len; i++) {
+			point = (GpmPointObj *) egg_obj_list_index (data, i);
 
-		/* ignore white lines */
-		if (point->color == 0xffffff) {
+			gpm_graph_widget_get_pos_on_graph (graph, point->x, point->y, &newx, &newy);
+
+			/* ignore white lines */
+			if (point->color == 0xffffff) {
+				oldx = newx;
+				oldy = newy;
+				continue;
+			}
+
+			/* draw line */
+			if (plot == GPM_GRAPH_WIDGET_PLOT_LINE || plot == GPM_GRAPH_WIDGET_PLOT_BOTH) {
+				cairo_move_to (cr, oldx, oldy);
+				cairo_line_to (cr, newx, newy);
+				cairo_set_line_width (cr, 1.5);
+				gpm_graph_widget_set_color (cr, point->color);
+				cairo_stroke (cr);
+			}
+
+			/* draw data dot */
+			if (plot == GPM_GRAPH_WIDGET_PLOT_POINTS || plot == GPM_GRAPH_WIDGET_PLOT_BOTH)
+				gpm_graph_widget_draw_dot (cr, newx, newy, point->color);
+
+			/* save old */
 			oldx = newx;
 			oldy = newy;
-			continue;
 		}
-
-		/* draw line */
-		cairo_move_to (cr, oldx, oldy);
-		cairo_line_to (cr, newx, newy);
-		cairo_set_line_width (cr, 1.5);
-		gpm_graph_widget_set_color (cr, point->color);
-		cairo_stroke (cr);
-
-		/* draw data dot */
-		gpm_graph_widget_draw_dot (cr, newx, newy, point->color);
-
-		/* save old */
-		oldx = newx;
-		oldy = newy;
 	}
 
 	cairo_restore (cr);
@@ -804,7 +847,6 @@ gpm_graph_widget_legend_calculate_size (GpmGraphWidget *graph, cairo_t *cr,
 	PangoRectangle ink_rect, logical_rect;
 	GpmGraphWidgetKeyData *keydataitem;
 
-	g_return_val_if_fail (graph != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
 
 	/* set defaults */

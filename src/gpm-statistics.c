@@ -173,11 +173,13 @@ gpm_stats_add_info_data (const gchar *attr, const gchar *text)
 /**
  * gpm_stats_update_smooth_data:
  **/
-static void
+static EggObjList *
 gpm_stats_update_smooth_data (EggObjList *list)
 {
 	guint i;
 	GpmPointObj *point;
+	GpmPointObj point_new;
+	EggObjList *new;
 	EggArrayFloat *raw;
 	EggArrayFloat *convolved;
 
@@ -192,15 +194,23 @@ gpm_stats_update_smooth_data (EggObjList *list)
 	/* convolve with gaussian */
 	convolved = egg_array_float_convolve (raw, gaussian);
 
-	/* push the smoothed data back into y data */
+	/* add the smoothed data back into a new array */
+	new = egg_obj_list_new ();
+	egg_obj_list_set_copy (new, (EggObjListCopyFunc) dkp_point_obj_copy);
+	egg_obj_list_set_free (new, (EggObjListFreeFunc) dkp_point_obj_free);
 	for (i=0; i<list->len; i++) {
 		point = (GpmPointObj *) egg_obj_list_index (list, i);
-		point->y = egg_array_float_get (convolved, i);
+		point_new.color = point->color;
+		point_new.x = point->x;
+		point_new.y = egg_array_float_get (convolved, i);
+		egg_obj_list_add (new, &point_new);
 	}
 
 	/* free data */
 	egg_array_float_free (raw);
 	egg_array_float_free (convolved);
+
+	return new;
 }
 
 /**
@@ -342,6 +352,34 @@ gpm_stats_update_info_page_details (const DkpDevice *device)
 }
 
 /**
+ * gpm_stats_set_graph_data:
+ **/
+static void
+gpm_stats_set_graph_data (GtkWidget *widget, EggObjList *data, gboolean use_smoothed, gboolean use_points)
+{
+	EggObjList *smoothed;
+
+	gpm_graph_widget_data_clear (GPM_GRAPH_WIDGET (widget));
+
+	/* add correct data */
+	if (!use_smoothed) {
+		if (use_points)
+			gpm_graph_widget_data_assign (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_PLOT_BOTH, data);
+		else
+			gpm_graph_widget_data_assign (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_PLOT_LINE, data);
+	} else {
+		smoothed = gpm_stats_update_smooth_data (data);
+		if (use_points)
+			gpm_graph_widget_data_assign (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_PLOT_POINTS, data);
+		gpm_graph_widget_data_assign (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_PLOT_LINE, smoothed);
+		g_object_unref (smoothed);
+	}
+
+	/* show */
+	gtk_widget_show (widget);
+}
+
+/**
  * gpm_stats_update_info_page_history:
  **/
 static void
@@ -352,6 +390,7 @@ gpm_stats_update_info_page_history (const DkpDevice *device)
 	DkpHistoryObj *hobj;
 	GtkWidget *widget;
 	gboolean checked;
+	gboolean points;
 	GpmPointObj *point;
 	EggObjList *new;
 	gint32 offset = 0;
@@ -406,13 +445,12 @@ gpm_stats_update_info_page_history (const DkpDevice *device)
 
 	widget = glade_xml_get_widget (glade_xml, "checkbutton_smooth_history");
 	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+	widget = glade_xml_get_widget (glade_xml, "checkbutton_points_history");
+	points = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 
-	/* smooth */
-	if (checked)
-		gpm_stats_update_smooth_data (new);
-
+	/* present data to graph */
 	widget = glade_xml_get_widget (glade_xml, "custom_graph_history");
-	gpm_graph_widget_data_assign (GPM_GRAPH_WIDGET (widget), new);
+	gpm_stats_set_graph_data (widget, new, checked, points);
 
 	g_object_unref (array);
 	g_object_unref (new);
@@ -431,6 +469,7 @@ gpm_stats_update_info_page_stats (const DkpDevice *device)
 	DkpStatsObj *sobj;
 	GtkWidget *widget;
 	gboolean checked;
+	gboolean points;
 	GpmPointObj *point;
 	EggObjList *new;
 	gboolean use_data = FALSE;
@@ -485,14 +524,12 @@ gpm_stats_update_info_page_stats (const DkpDevice *device)
 	/* render */
 	widget = glade_xml_get_widget (glade_xml, "checkbutton_smooth_stats");
 	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+	widget = glade_xml_get_widget (glade_xml, "checkbutton_points_stats");
+	points = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 
-	/* smooth */
-	if (checked)
-		gpm_stats_update_smooth_data (new);
-
+	/* present data to graph */
 	widget = glade_xml_get_widget (glade_xml, "custom_graph_stats");
-	gpm_graph_widget_data_assign (GPM_GRAPH_WIDGET (widget), new);
-	gtk_widget_show (widget);
+	gpm_stats_set_graph_data (widget, new, checked, points);
 
 	g_object_unref (array);
 	g_object_unref (new);
@@ -890,6 +927,32 @@ gpm_stats_smooth_checkbox_stats_cb (GtkWidget *widget, gpointer data)
 }
 
 /**
+ * gpm_stats_points_checkbox_history_cb:
+ * @widget: The GtkWidget object
+ **/
+static void
+gpm_stats_points_checkbox_history_cb (GtkWidget *widget, gpointer data)
+{
+	gboolean checked;
+	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+	gconf_client_set_bool (gconf_client, GPM_CONF_INFO_HISTORY_GRAPH_POINTS, checked, NULL);
+	gpm_stats_button_update_ui ();
+}
+
+/**
+ * gpm_stats_points_checkbox_stats_cb:
+ * @widget: The GtkWidget object
+ **/
+static void
+gpm_stats_points_checkbox_stats_cb (GtkWidget *widget, gpointer data)
+{
+	gboolean checked;
+	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+	gconf_client_set_bool (gconf_client, GPM_CONF_INFO_STATS_GRAPH_POINTS, checked, NULL);
+	gpm_stats_button_update_ui ();
+}
+
+/**
  * main:
  **/
 int
@@ -992,6 +1055,18 @@ main (int argc, char *argv[])
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_stats_smooth_checkbox_stats_cb), NULL);
+
+	widget = glade_xml_get_widget (glade_xml, "checkbutton_points_history");
+	checked = gconf_client_get_bool (gconf_client, GPM_CONF_INFO_HISTORY_GRAPH_POINTS, NULL);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
+	g_signal_connect (widget, "clicked",
+			  G_CALLBACK (gpm_stats_points_checkbox_history_cb), NULL);
+
+	widget = glade_xml_get_widget (glade_xml, "checkbutton_points_stats");
+	checked = gconf_client_get_bool (gconf_client, GPM_CONF_INFO_STATS_GRAPH_POINTS, NULL);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
+	g_signal_connect (widget, "clicked",
+			  G_CALLBACK (gpm_stats_points_checkbox_stats_cb), NULL);
 
 	widget = glade_xml_get_widget (glade_xml, "notebook1");
 	page = gconf_client_get_int (gconf_client, GPM_CONF_INFO_PAGE_NUMBER, NULL);

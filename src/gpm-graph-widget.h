@@ -51,6 +51,12 @@ typedef enum {
 	GPM_GRAPH_WIDGET_TYPE_UNKNOWN
 } GpmGraphWidgetType;
 
+typedef enum {
+	GPM_GRAPH_WIDGET_PLOT_LINE,
+	GPM_GRAPH_WIDGET_PLOT_POINTS,
+	GPM_GRAPH_WIDGET_PLOT_BOTH
+} GpmGraphWidgetPlot;
+
 /* the different kinds of lines in the key */
 typedef struct {
 	guint32			 color;
@@ -75,6 +81,7 @@ void		 gpm_graph_widget_enable_legend		(GpmGraphWidget		*graph,
 							 gboolean		 enable);
 gboolean	 gpm_graph_widget_data_clear		(GpmGraphWidget		*graph);
 gboolean	 gpm_graph_widget_data_assign		(GpmGraphWidget		*graph,
+							 GpmGraphWidgetPlot	 plot,
 							 EggObjList		*array);
 void		 gpm_graph_widget_set_type_x		(GpmGraphWidget		*graph,
 							 GpmGraphWidgetType	 axis);

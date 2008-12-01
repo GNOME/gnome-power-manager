@@ -1,3 +1,23 @@
+2008-12-01  Richard Hughes  <richard@hughsie.com>
+
+	* data/gpm-statistics.glade:
+	* src/gpm-common.h:
+	* src/gpm-statistics.c: (gpm_stats_update_smooth_data),
+	(gpm_stats_set_graph_data), (gpm_stats_update_info_page_history),
+	(gpm_stats_update_info_page_stats),
+	(gpm_stats_points_checkbox_history_cb),
+	(gpm_stats_points_checkbox_stats_cb), (main):
+	Show the smoothed graph seporately to the data points.
+
+	* src/gpm-graph-widget.c: (gpm_graph_widget_key_data_clear),
+	(gpm_graph_widget_key_data_add), (gpm_graph_widget_init),
+	(gpm_graph_widget_finalize), (gpm_graph_widget_data_clear),
+	(gpm_graph_widget_data_assign), (gpm_graph_widget_auto_range),
+	(gpm_graph_widget_draw_line),
+	(gpm_graph_widget_legend_calculate_size):
+	* src/gpm-graph-widget.h:
+	Allow more than one graph to be displayed on the widget.
+
 2008-11-27  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-engine.c: (gpm_engine_get_warning_csr),

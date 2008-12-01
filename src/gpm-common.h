@@ -166,8 +166,10 @@ G_BEGIN_DECLS
 #define GPM_CONF_INFO_HISTORY_TIME		"/apps/gnome-power-manager/info/history_time"
 #define GPM_CONF_INFO_HISTORY_TYPE		"/apps/gnome-power-manager/info/history_type"
 #define GPM_CONF_INFO_HISTORY_GRAPH_SMOOTH	"/apps/gnome-power-manager/info/history_graph_smooth"
+#define GPM_CONF_INFO_HISTORY_GRAPH_POINTS	"/apps/gnome-power-manager/info/history_graph_points"
 #define GPM_CONF_INFO_STATS_TYPE		"/apps/gnome-power-manager/info/stats_type"
 #define GPM_CONF_INFO_STATS_GRAPH_SMOOTH	"/apps/gnome-power-manager/info/stats_graph_smooth"
+#define GPM_CONF_INFO_STATS_GRAPH_POINTS	"/apps/gnome-power-manager/info/stats_graph_points"
 #define GPM_CONF_INFO_PAGE_NUMBER		"/apps/gnome-power-manager/info/page_number"
 #define GPM_CONF_INFO_LAST_DEVICE		"/apps/gnome-power-manager/info/last_device"
 
