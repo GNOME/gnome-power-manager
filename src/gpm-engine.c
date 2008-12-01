@@ -665,7 +665,7 @@ gpm_engine_device_changed_cb (DkpClient *client, DkpDevice *device, GpmEngine *e
 		}
 
 		/* save new state */
-		g_object_set_data (G_OBJECT(device), "engine-state-old", GUINT_TO_POINTER(state));
+		g_object_set_data (G_OBJECT(device), "engine-state-old", GUINT_TO_POINTER(obj->state));
 	}
 
 	gpm_engine_recalculate_state (engine);

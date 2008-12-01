@@ -1,5 +1,10 @@
 2008-12-01  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-engine.c: (gpm_engine_device_changed_cb):
+	Don't keep repeating "battery is discharging" signal
+
+2008-12-01  Richard Hughes  <richard@hughsie.com>
+
 	* data/gpm-statistics.glade:
 	* src/gpm-common.h:
 	* src/gpm-statistics.c: (gpm_stats_update_smooth_data),
