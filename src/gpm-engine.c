@@ -387,7 +387,7 @@ gpm_engine_recalculate_state_icon (GpmEngine *engine)
 		egg_debug ("** EMIT: icon-changed: none");
 
 		/* we let the icon stick around for a couple of seconds */
-		g_timeout_add (1000*2, (GSourceFunc) gpm_engine_icon_clear_delay, engine);
+		g_timeout_add_seconds (2, (GSourceFunc) gpm_engine_icon_clear_delay, engine);
 
 		g_free (engine->priv->previous_icon);
 		engine->priv->previous_icon = NULL;

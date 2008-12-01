@@ -66,7 +66,7 @@ static void	gpm_statistics_refresh_data (GpmStatistics *statistics);
 #define ACTION_PROFILE_CHARGE_ACCURACY_TEXT	_("Charge time accuracy profile")
 #define ACTION_PROFILE_DISCHARGE_ACCURACY_TEXT	_("Discharge time accuracy profile")
 
-#define GPM_STATISTICS_POLL_INTERVAL	15000 /* ms */
+#define GPM_STATISTICS_POLL_INTERVAL	15 /* s */
 
 struct GpmStatisticsPrivate
 {
@@ -864,7 +864,7 @@ gpm_statistics_init (GpmStatistics *statistics)
 	gpm_statistics_refresh_axis_labels (statistics);
 
 	gtk_widget_show (main_window);
-	g_timeout_add (GPM_STATISTICS_POLL_INTERVAL,
+	g_timeout_add_seconds (GPM_STATISTICS_POLL_INTERVAL,
 		       gpm_statistics_graph_refresh, statistics);
 }
 

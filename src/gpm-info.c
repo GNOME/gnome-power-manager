@@ -677,7 +677,7 @@ gpm_info_init (GpmInfo *info)
 		info->priv->voltage_data = gpm_array_new ();
 
 		/* set up the timer callback so we can log data */
-		g_timeout_add (GPM_INFO_DATA_POLL * 1000, gpm_info_log_do_poll, info);
+		g_timeout_add_seconds (GPM_INFO_DATA_POLL, gpm_info_log_do_poll, info);
 
 	} else {
 		info->priv->percentage_data = NULL;

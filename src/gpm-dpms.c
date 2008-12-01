@@ -53,7 +53,7 @@ static void     gpm_dpms_finalize   (GObject      *object);
 #define GPM_DPMS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_DPMS, GpmDpmsPrivate))
 
 /* until we get a nice event-emitting DPMS extension, we have to poll... */
-#define GPM_DPMS_POLL_TIME	10*1000
+#define GPM_DPMS_POLL_TIME	10
 
 struct GpmDpmsPrivate
 {
@@ -778,7 +778,7 @@ static void
 add_poll_timer (GpmDpms *dpms,
 		glong	 timeout)
 {
-	dpms->priv->timer_id = g_timeout_add (timeout, (GSourceFunc)poll_dpms_mode, dpms);
+	dpms->priv->timer_id = g_timeout_add_seconds (timeout, (GSourceFunc)poll_dpms_mode, dpms);
 }
 
 static void

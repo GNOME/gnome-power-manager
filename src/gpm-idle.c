@@ -143,7 +143,7 @@ static void
 gpm_idle_add_gpm_idle_poll_system_timer (GpmIdle *idle,
 		       glong	timeout)
 {
-	idle->priv->system_idle_timer_id = g_timeout_add (timeout, (GSourceFunc)gpm_idle_poll_system_timer, idle);
+	idle->priv->system_idle_timer_id = g_timeout_add_seconds (timeout, (GSourceFunc)gpm_idle_poll_system_timer, idle);
 }
 
 /**
@@ -171,7 +171,7 @@ system_timer (GpmIdle *idle)
 	egg_debug ("System idle timeout");
 
 	gpm_idle_remove_gpm_idle_poll_system_timer (idle);
-	gpm_idle_add_gpm_idle_poll_system_timer (idle, POLL_FREQUENCY * 1000);
+	gpm_idle_add_gpm_idle_poll_system_timer (idle, POLL_FREQUENCY);
 
 	idle->priv->system_timer_id = 0;
 	return FALSE;
@@ -210,12 +210,12 @@ gpm_idle_remove_all_timers (GpmIdle *idle)
 static void
 add_system_timer (GpmIdle *idle)
 {
-	guint64 msecs;
+	guint64 secs;
 
-	msecs = idle->priv->system_timeout * 1000;
+	secs = idle->priv->system_timeout;
 
 	if (idle->priv->system_timeout > 0) {
-		idle->priv->system_timer_id = g_timeout_add (msecs,
+		idle->priv->system_timer_id = g_timeout_add_seconds (secs,
 							     (GSourceFunc)system_timer, idle);
 	} else {
 		egg_debug ("System idle disabled");

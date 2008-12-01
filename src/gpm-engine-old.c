@@ -48,7 +48,7 @@ static void     gpm_engine_init       (GpmEngine      *engine);
 static void     gpm_engine_finalize   (GObject	  *object);
 
 #define GPM_ENGINE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_ENGINE, GpmEnginePrivate))
-#define GPM_ENGINE_RESUME_DELAY		2*1000
+#define GPM_ENGINE_RESUME_DELAY		2
 #define GPM_ENGINE_WARN_ACCURACY	20
 
 
@@ -132,7 +132,7 @@ static void
 control_resume_cb (GpmControl *control, GpmControlAction action, GpmEngine *engine)
 {
 	/* we have to delay this at resume to counteract races */
-	g_timeout_add (GPM_ENGINE_RESUME_DELAY, (GSourceFunc) gpm_engine_delayed_refresh, engine);
+	g_timeout_add_seconds (GPM_ENGINE_RESUME_DELAY, (GSourceFunc) gpm_engine_delayed_refresh, engine);
 }
 
 /**
@@ -440,7 +440,7 @@ gpm_engine_recalculate_state_icon (GpmEngine *engine)
 		egg_debug ("** EMIT: icon-changed: none");
 
 		/* we let the icon stick around for a couple of seconds */
-		g_timeout_add (1000*2, (GSourceFunc) gpm_engine_icon_clear_delay, engine);
+		g_timeout_add_seconds (2, (GSourceFunc) gpm_engine_icon_clear_delay, engine);
 
 		g_free (engine->priv->previous_icon);
 		engine->priv->previous_icon = NULL;

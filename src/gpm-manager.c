@@ -93,7 +93,7 @@ static void     gpm_manager_init	(GpmManager      *manager);
 static void     gpm_manager_finalize	(GObject	 *object);
 
 #define GPM_MANAGER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_MANAGER, GpmManagerPrivate))
-#define GPM_MANAGER_RECALL_DELAY		1000*10
+#define GPM_MANAGER_RECALL_DELAY		10
 
 #define GPM_SESSION_MANAGER_SERVICE	"org.gnome.SessionManager"
 #define GPM_SESSION_MANAGER_INTERFACE	"org.gnome.SessionManager"
@@ -1448,7 +1448,7 @@ gpm_engine_perhaps_recall_cb (GpmEngine *engine, GpmCellUnitKind kind, gchar *oe
 	g_object_set_data (G_OBJECT (manager), "recall-oem-vendor", (gpointer) g_strdup (oem_vendor));
 	g_object_set_data (G_OBJECT (manager), "recall-oem-website", (gpointer) g_strdup (website));
 	/* delay by a few seconds so the panel can load */
-	g_timeout_add (GPM_MANAGER_RECALL_DELAY, (GSourceFunc) gpm_manager_perhaps_recall, manager);
+	g_timeout_add_seconds (GPM_MANAGER_RECALL_DELAY, (GSourceFunc) gpm_manager_perhaps_recall, manager);
 }
 
 /**
@@ -1859,7 +1859,7 @@ gpm_engine_charge_action_cb (GpmEngine *engine, GpmCellUnit *unit, GpmManager *m
 		g_free (action);
 
 		/* wait 10 seconds for user-panic */
-		g_timeout_add (1000*10, (GSourceFunc) manager_critical_action_do, manager);
+		g_timeout_add_seconds (10, (GSourceFunc) manager_critical_action_do, manager);
 
 #ifndef HAVE_DK_POWER
 	} else if (unit->kind == GPM_CELL_UNIT_KIND_UPS) {

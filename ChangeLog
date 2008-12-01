@@ -1,5 +1,21 @@
 2008-12-01  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-dpms.c: (add_poll_timer):
+	* src/gpm-engine-old.c: (control_resume_cb),
+	(gpm_engine_recalculate_state_icon):
+	* src/gpm-engine.c: (gpm_engine_recalculate_state_icon):
+	* src/gpm-idle.c: (gpm_idle_add_gpm_idle_poll_system_timer),
+	(system_timer), (add_system_timer):
+	* src/gpm-info.c: (gpm_info_init):
+	* src/gpm-light-sensor.c: (gpm_light_sensor_init):
+	* src/gpm-main.c: (main):
+	* src/gpm-manager.c: (gpm_engine_perhaps_recall_cb):
+	* src/gpm-statistics-core.c: (gpm_statistics_init):
+	Use g_timeout_add_seconds instead of g_timeout_add.
+	Patch from Jan <jan-gnome@kantert.net>, many thanks.
+
+2008-12-01  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-engine.c: (gpm_engine_device_changed_cb):
 	Don't keep repeating "battery is discharging" signal
 

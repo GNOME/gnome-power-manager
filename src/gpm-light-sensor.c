@@ -364,7 +364,7 @@ gpm_light_sensor_init (GpmLightSensor *sensor)
 
 		/* get poll timeout */
 		timeout = gconf_client_get_int (sensor->priv->conf, GPM_CONF_AMBIENT_POLL, NULL);
-		g_timeout_add (timeout * 1000, gpm_light_sensor_poll_cb, sensor);
+		g_timeout_add_seconds (timeout, gpm_light_sensor_poll_cb, sensor);
 	}
 }
 

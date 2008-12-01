@@ -220,7 +220,7 @@ main (int argc, char *argv[])
 	/* Only timeout and close the mainloop if we have specified it
 	 * on the command line */
 	if (timed_exit) {
-		g_timeout_add (1000 * 20, (GSourceFunc) timed_exit_cb, loop);
+		g_timeout_add_seconds (20, (GSourceFunc) timed_exit_cb, loop);
 	}
 
 	if (immediate_exit == FALSE) {
