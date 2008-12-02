@@ -219,10 +219,6 @@ else
 	egg-color.h					\
 	gpm-profile.h					\
 	gpm-profile.c					\
-	gpm-array.h					\
-	gpm-array.c					\
-	gpm-array-float.h				\
-	gpm-array-float.c				\
 	gpm-engine-old.h				\
 	gpm-engine-old.c				\
 	gpm-cell.h					\

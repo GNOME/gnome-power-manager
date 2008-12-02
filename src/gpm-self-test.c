@@ -33,8 +33,6 @@ void egg_discrete_test (EggTest *test);
 void egg_color_test (EggTest *test);
 
 void gpm_common_test (EggTest *test);
-void gpm_array_float_test (EggTest *test);
-void gpm_array_test (EggTest *test);
 void gpm_cell_unit_test (EggTest *test);
 void gpm_cell_test (EggTest *test);
 void gpm_cell_test_array (EggTest *test);
@@ -66,8 +64,6 @@ main (int argc, char **argv)
 	egg_color_test (test);
 
 	gpm_common_test (test);
-	gpm_array_float_test (test);
-	gpm_array_test (test);
 	gpm_cell_unit_test (test);
 	gpm_cell_test (test);
 	gpm_cell_test_array (test);
