@@ -322,6 +322,7 @@ gpm_brightness_hal_up (GpmBrightnessHal *brightness, gboolean *hw_changed)
 	if (current_hw != brightness->priv->last_set_hw || 
             brightness->priv->does_own_updates) {
 		brightness->priv->last_set_hw = current_hw;
+		ret = TRUE;
 	} else {
 		/* macbook pro has a bazzillion brightness levels, be a bit clever */
 		step = gpm_brightness_get_step (brightness->priv->levels);
@@ -364,7 +365,8 @@ gpm_brightness_hal_down (GpmBrightnessHal *brightness, gboolean *hw_changed)
 	/* the panel has been updated in firmware */
  	if (current_hw != brightness->priv->last_set_hw ||
               brightness->priv->does_own_updates) {
-		gpm_brightness_hal_get_hw (brightness, &brightness->priv->last_set_hw);
+		brightness->priv->last_set_hw = current_hw;
+		ret = TRUE;
 	} else {
 		/* macbook pro has a bazzillion brightness levels, be a bit clever */
 		step = gpm_brightness_get_step (brightness->priv->levels);
