@@ -1,5 +1,25 @@
 2008-12-02  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-brightness-xrandr.c:
+	(gpm_brightness_xrandr_output_get_percentage),
+	(gpm_brightness_xrandr_output_down),
+	(gpm_brightness_xrandr_output_up),
+	(gpm_brightness_xrandr_output_set):
+	* src/gpm-brightness.c: (gpm_brightness_set), (gpm_brightness_get),
+	(gpm_brightness_up), (gpm_brightness_down), (gpm_brightness_init):
+	Currently, several Dell laptops contain Intel graphics cards.
+	The Intel driver reports that it is able to change the display
+	brightness, however it also reports the number of levels supported
+	as zero.
+	In cases such as these, gnome power manager should fallback to the
+	functional HAL Backend if it's available for the laptop.
+	Fixes #562900
+
+	Patch from Mario Limonciello <mario_limonciello@dell.com>, and slightly
+	modified by me. Many thanks.
+
+2008-12-02  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness-hal.c: (gpm_brightness_hal_up),
 	(gpm_brightness_hal_down):
 	The Dell Studio 1535 and 1537 both support reading the brightness via

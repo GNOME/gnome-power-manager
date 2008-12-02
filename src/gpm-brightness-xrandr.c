@@ -217,7 +217,7 @@ gpm_brightness_xrandr_output_get_percentage (GpmBrightnessXRandR *brightness, RR
 		return FALSE;
 	}
 	ret = gpm_brightness_xrandr_output_get_limits (brightness, output, &min, &max);
-	if (!ret) {
+	if (!ret || min == max) {
 		return FALSE;
 	}
 	egg_debug ("hard value=%i, min=%i, max=%i", cur, min, max);
@@ -244,7 +244,7 @@ gpm_brightness_xrandr_output_down (GpmBrightnessXRandR *brightness, RROutput out
 		return FALSE;
 	}
 	ret = gpm_brightness_xrandr_output_get_limits (brightness, output, &min, &max);
-	if (!ret) {
+	if (!ret || min == max) {
 		return FALSE;
 	}
 	egg_debug ("hard value=%i, min=%i, max=%i", cur, min, max);
@@ -278,7 +278,7 @@ gpm_brightness_xrandr_output_up (GpmBrightnessXRandR *brightness, RROutput outpu
 		return FALSE;
 	}
 	ret = gpm_brightness_xrandr_output_get_limits (brightness, output, &min, &max);
-	if (!ret) {
+	if (!ret || min == max) {
 		return FALSE;
 	}
 	egg_debug ("hard value=%i, min=%i, max=%i", cur, min, max);
@@ -314,7 +314,7 @@ gpm_brightness_xrandr_output_set (GpmBrightnessXRandR *brightness, RROutput outp
 		return FALSE;
 	}
 	ret = gpm_brightness_xrandr_output_get_limits (brightness, output, &min, &max);
-	if (!ret) {
+	if (!ret || min == max) {
 		return FALSE;
 	}
 
