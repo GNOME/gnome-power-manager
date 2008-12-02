@@ -125,7 +125,6 @@ main (int argc, char *argv[])
 	DBusGConnection *session_connection;
 	gboolean verbose = FALSE;
 	gboolean version = FALSE;
-	gboolean no_daemon = FALSE;
 	gboolean timed_exit = FALSE;
 	gboolean immediate_exit = FALSE;
 	GpmManager *manager = NULL;
@@ -133,8 +132,6 @@ main (int argc, char *argv[])
 	GOptionContext *context;
 
 	const GOptionEntry options[] = {
-		{ "no-daemon", '\0', 0, G_OPTION_ARG_NONE, &no_daemon,
-		  N_("Do not daemonize"), NULL },
 		{ "verbose", '\0', 0, G_OPTION_ARG_NONE, &verbose,
 		  N_("Show extra debugging information"), NULL },
 		{ "version", '\0', 0, G_OPTION_ARG_NONE, &version,
@@ -175,10 +172,6 @@ main (int argc, char *argv[])
 
 	gtk_init (&argc, &argv);
 	egg_debug_init (verbose);
-
-	/* we need to daemonize before we get a system connection to fix #366057 */
-	if (no_daemon == FALSE && daemon (0, 0))
-		egg_error ("Could not daemonize: %s", g_strerror (errno));
 
 	egg_debug ("GNOME %s %s", GPM_NAME, VERSION);
 
