@@ -31,7 +31,6 @@
 #include "egg-debug.h"
 
 #include "gpm-common.h"
-#include "gpm-profile.h"
 #include "gpm-devicekit.h"
 #include "gpm-marshal.h"
 #include "gpm-engine.h"
@@ -48,7 +47,6 @@ static void     gpm_engine_finalize   (GObject	  *object);
 
 /* Left to convert:
  * 1. Recall data
- * 2. GConf key fixes
  */
 
 struct GpmEnginePrivate

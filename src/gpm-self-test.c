@@ -39,7 +39,6 @@ void gpm_cell_unit_test (EggTest *test);
 void gpm_cell_test (EggTest *test);
 void gpm_cell_test_array (EggTest *test);
 void gpm_inhibit_test (EggTest *test);
-void gpm_profile_test (EggTest *test);
 void gpm_phone_test (EggTest *test);
 void gpm_graph_widget_test (EggTest *test);
 void gpm_proxy_test (EggTest *test);
@@ -73,7 +72,6 @@ main (int argc, char **argv)
 	gpm_cell_test (test);
 	gpm_cell_test_array (test);
 	gpm_inhibit_test (test);
-	gpm_profile_test (test);
 	gpm_phone_test (test);
 //	gpm_graph_widget_test (test);
 

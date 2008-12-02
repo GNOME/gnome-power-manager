@@ -42,7 +42,6 @@
 #include "gpm-phone.h"
 #include "gpm-control.h"
 #include "gpm-warnings.h"
-#include "gpm-profile.h"
 
 static void     gpm_cell_array_class_init (GpmCellArrayClass *klass);
 static void     gpm_cell_array_init       (GpmCellArray      *cell_array);
@@ -58,7 +57,6 @@ struct GpmCellArrayPrivate
 	HalManager		*hal_manager;
 	GpmCellUnit		 unit;
 	GpmAcAdapter		*ac_adapter;
-	GpmProfile		*profile;
 	GConfClient		*conf;
 	GpmPhone		*phone;
 	GpmControl		*control;
@@ -197,13 +195,8 @@ gpm_cell_array_get_time_until_action (GpmCellArray *cell_array)
 		action_time = gconf_client_get_int (cell_array->priv->conf, GPM_CONF_THRESH_TIME_ACTION, NULL);
 		difference = (gint) unit->time_discharge - (gint) action_time;
 	} else {
-		/* we have to work out the time for this percentage */
-		action_percentage = gconf_client_get_int (cell_array->priv->conf, GPM_CONF_THRESH_PERCENTAGE_ACTION, NULL);
-		action_time = gpm_profile_get_time (cell_array->priv->profile, action_percentage, TRUE);
-		if (action_time == 0) {
-			return 0;
-		}
-		difference = (gint) unit->time_discharge - (gint) action_time;
+		/* we can't convert percentage -> time */
+		return 0;
 	}
 
 	/* if invalid, don't return junk */
@@ -394,39 +387,31 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 		}
 	}
 
-	/* We may want to use the old time remaining code.
-	 * Hopefully we can remove this in 2.19.x sometime. */
-	if (cell_array->priv->use_profile_calc &&
-	    unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
-		egg_debug ("unit->percentage = %.1f", unit->percentage);
-		unit->time_discharge = gpm_profile_get_time (cell_array->priv->profile, unit->percentage, TRUE);
-		unit->time_charge = gpm_profile_get_time (cell_array->priv->profile, unit->percentage, FALSE);
-	} else {
-		/* We only do the "better" remaining time algorithm if the battery has rate,
-		 * i.e not a UPS, which gives it's own battery.time_charge but has no rate */
-		if (unit->rate > 0) {
-			if (unit->is_discharging) {
-				unit->time_discharge = 3600 * ((float)unit->charge_current /
-								      (float)unit->rate);
-			} else if (unit->is_charging) {
-				unit->time_charge = 3600 *
-					((float)(unit->charge_last_full - unit->charge_current) /
-					(float)unit->rate);
-			}
-		}
-		/* Check the remaining time is under a set limit, to deal with broken
-		   primary batteries rate. Fixes bug #328927 */
-		if (unit->time_charge > (100 * 60 * 60)) {
-			egg_warning ("Another sanity check kicked in! "
-				     "Remaining time cannot be > 100 hours!");
-			unit->time_charge = 0;
-		}
-		if (unit->time_discharge > (100 * 60 * 60)) {
-			egg_warning ("Another sanity check kicked in! "
-				     "Remaining time cannot be > 100 hours!");
-			unit->time_discharge = 0;
+	/* We only do the "better" remaining time algorithm if the battery has rate,
+	 * i.e not a UPS, which gives it's own battery.time_charge but has no rate */
+	if (unit->rate > 0) {
+		if (unit->is_discharging) {
+			unit->time_discharge = 3600 * ((float)unit->charge_current /
+							      (float)unit->rate);
+		} else if (unit->is_charging) {
+			unit->time_charge = 3600 *
+				((float)(unit->charge_last_full - unit->charge_current) /
+				(float)unit->rate);
 		}
 	}
+	/* Check the remaining time is under a set limit, to deal with broken
+	   primary batteries rate. Fixes bug #328927 */
+	if (unit->time_charge > (100 * 60 * 60)) {
+		egg_warning ("Another sanity check kicked in! "
+			     "Remaining time cannot be > 100 hours!");
+		unit->time_charge = 0;
+	}
+	if (unit->time_discharge > (100 * 60 * 60)) {
+		egg_warning ("Another sanity check kicked in! "
+			     "Remaining time cannot be > 100 hours!");
+		unit->time_discharge = 0;
+	}
+
 	return TRUE;
 }
 
@@ -550,12 +535,6 @@ gpm_cell_array_percent_changed (GpmCellArray *cell_array)
 		cell_array->priv->done_fully_charged = FALSE;
 	}
 
-	/* do we trust the profile enough to make a decision based on time? */
-	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
-		accuracy = gpm_profile_get_accuracy_average (cell_array->priv->profile, unit->is_discharging);
-		gpm_warnings_time_is_accurate (cell_array->priv->warnings, (accuracy > GPM_PROFILE_GOOD_TRUST));
-	}
-
 	/* only get a warning state if we are discharging */
 	if (unit->is_discharging) {
 		warnings_state = gpm_warnings_get_state (cell_array->priv->warnings, unit);
@@ -606,11 +585,6 @@ gpm_cell_percent_changed_cb (GpmCell *cell, gfloat percent, GpmCellArray *cell_a
 	/* recalculate */
 	gpm_cell_array_update (cell_array);
 
-	/* provide data if we are primary. Will need profile if multibattery */
-	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
-		gpm_profile_register_percentage (cell_array->priv->profile, (guint) percent);
-	}
-
 	/* proxy to engine if different */
 	if (old_percent != unit->percentage) {
 		egg_debug ("** EMIT: percent-changed");
@@ -641,11 +615,6 @@ gpm_cell_charging_changed_cb (GpmCell *cell, gboolean charging, GpmCellArray *ce
 	if (unit->is_discharging == FALSE || unit->is_charging) {
 		egg_debug ("warning state invalidated");
 		cell_array->priv->warnings_state = GPM_WARNINGS_NONE;
-	}
-
-	/* provide data if we are primary. */
-	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
-		gpm_profile_register_charging (cell_array->priv->profile, charging);
 	}
 
 	/* proxy to engine */
@@ -766,14 +735,6 @@ gpm_cell_array_collection_changed (GpmCellArray *cell_array)
 	}
 
 	unit = &(cell_array->priv->unit);
-
-	/* reset the profile config id if primary */
-	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
-		/* we have to use a profile ID for hot-swapping batteries */
-		config_id = gpm_cell_array_get_config_id (cell_array);
-		gpm_profile_set_config_id (cell_array->priv->profile, config_id);
-		g_free (config_id);
-	}
 
 	/* recalculate */
 	gpm_cell_array_update (cell_array);
@@ -992,10 +953,6 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 		return g_strdup_printf ("%s (%.1f%%)\n", type_desc, unit->percentage);
 	}
 
-	/* don't display the text if we are low in accuracy */
-	accuracy = gpm_profile_get_accuracy (cell_array->priv->profile, (guint) unit->percentage);
-	egg_debug ("accuracy = %i", accuracy);
-
 	/* precalculate so we don't get Unknown time remaining */
 	charge_time_round = egg_precision_round_down (unit->time_charge, GPM_UI_TIME_PRECISION);
 	discharge_time_round = egg_precision_round_down (unit->time_discharge, GPM_UI_TIME_PRECISION);
@@ -1005,18 +962,8 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 	   http://bugzilla.gnome.org/show_bug.cgi?id=329027 */
 	if (gpm_cell_unit_is_charged (unit)) {
 
-		if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY &&
-		    accuracy > GPM_CELL_ARRAY_TEXT_MIN_ACCURACY) {
-			time = gpm_profile_get_time (cell_array->priv->profile, (guint) unit->percentage, TRUE);
-			discharge_time_round = egg_precision_round_down (time, GPM_UI_TIME_PRECISION);
-			discharge_timestring = gpm_get_timestring (discharge_time_round);
-			description = g_strdup_printf (_("%s fully charged (%.1f%%)\nProvides %s battery runtime\n"),
-							type_desc, unit->percentage, discharge_timestring);
-			g_free (discharge_timestring);
-		} else {
-			description = g_strdup_printf (_("%s fully charged (%.1f%%)\n"),
-							type_desc, unit->percentage);
-		}
+		description = g_strdup_printf (_("%s fully charged (%.1f%%)\n"),
+						type_desc, unit->percentage);
 
 	} else if (unit->is_discharging) {
 
@@ -1398,7 +1345,6 @@ gpm_cell_array_init (GpmCellArray *cell_array)
 	cell_array->priv = GPM_CELL_ARRAY_GET_PRIVATE (cell_array);
 
 	cell_array->priv->array = g_ptr_array_new ();
-	cell_array->priv->profile = gpm_profile_new ();
 	cell_array->priv->conf = gconf_client_get_default ();
 	g_signal_connect (cell_array->priv->conf, "value-changed",
 			  G_CALLBACK (conf_key_changed_cb), cell_array);
@@ -1460,7 +1406,6 @@ gpm_cell_array_finalize (GObject *object)
 	g_object_unref (cell_array->priv->ac_adapter);
 	g_object_unref (cell_array->priv->warnings);
 	g_object_unref (cell_array->priv->hal_manager);
-	g_object_unref (cell_array->priv->profile);
 	g_object_unref (cell_array->priv->conf);
 	g_object_unref (cell_array->priv->control);
 	G_OBJECT_CLASS (gpm_cell_array_parent_class)->finalize (object);

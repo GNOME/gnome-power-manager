@@ -7,7 +7,6 @@ EXTRA_DIST =						\
 	org.freedesktop.PowerManagement.xml		\
 	org.freedesktop.PowerManagement.Inhibit.xml	\
 	org.freedesktop.PowerManagement.Backlight.xml	\
-	org.freedesktop.PowerManagement.Statistics.xml	\
 	gpm-marshal.list				\
 	$(NULL)
 
@@ -372,15 +371,6 @@ org.freedesktop.PowerManagement.Inhibit.h: org.freedesktop.PowerManagement.Inhib
 		--mode=glib-server			\
 		--output=org.freedesktop.PowerManagement.Inhibit.h	\
 		$(srcdir)/org.freedesktop.PowerManagement.Inhibit.xml
-
-if !HAVE_DK_POWER
-org.freedesktop.PowerManagement.Statistics.h: org.freedesktop.PowerManagement.Statistics.xml
-	libtool --mode=execute dbus-binding-tool	\
-		--prefix=gpm_statistics			\
-		--mode=glib-server			\
-		--output=org.freedesktop.PowerManagement.Statistics.h	\
-		$(srcdir)/org.freedesktop.PowerManagement.Statistics.xml
-endif
 
 org.freedesktop.PowerManagement.Backlight.h: org.freedesktop.PowerManagement.Backlight.xml
 	libtool --mode=execute dbus-binding-tool	\

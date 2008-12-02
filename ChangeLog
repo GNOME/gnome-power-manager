@@ -1,5 +1,25 @@
 2008-12-02  Richard Hughes  <richard@hughsie.com>
 
+	* src/Makefile.am:
+	* src/gpm-cell-array.c: (gpm_cell_array_get_time_until_action),
+	(gpm_cell_array_update), (gpm_cell_array_percent_changed),
+	(gpm_cell_percent_changed_cb), (gpm_cell_charging_changed_cb),
+	(gpm_cell_array_collection_changed),
+	(gpm_cell_array_get_description), (gpm_cell_array_init),
+	(gpm_cell_array_finalize):
+	* src/gpm-engine-old.c: (gpm_engine_get_summary),
+	(gpm_engine_init), (gpm_engine_finalize):
+	* src/gpm-engine.c:
+	* src/gpm-manager.c:
+	* src/gpm-profile.c:
+	* src/gpm-profile.h:
+	* src/gpm-self-test.c: (main):
+	* src/org.freedesktop.PowerManagement.Statistics.xml:
+	Remove the profiling code from the session, this is now done more
+	effectively in DeviceKit-power.
+
+2008-12-02  Richard Hughes  <richard@hughsie.com>
+
 	* data/Makefile.am:
 	* data/gpm-statistics-old.glade:
 	* po/POTFILES.in:

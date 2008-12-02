@@ -32,7 +32,6 @@
 #include "gpm-ac-adapter.h"
 #include "gpm-common.h"
 #include "gpm-control.h"
-#include "gpm-profile.h"
 #include "gpm-marshal.h"
 #include "gpm-engine-old.h"
 #include "gpm-cell-unit.h"
@@ -57,7 +56,6 @@ struct GpmEnginePrivate
 	GConfClient		*conf;
 	GpmWarnings		*warnings;
 	GpmIconPolicy		 icon_policy;
-	GpmProfile		*profile;
 	GpmControl		*control;
 	GpmAcAdapter		*ac_adapter;
 	GpmEngineCollection	 collection;
@@ -164,7 +162,6 @@ gpm_engine_get_summary (GpmEngine *engine)
 	GString *tooltip = NULL;
 	GpmCellUnit *unit;
 	GpmEngineCollection *collection;
-	guint accuracy;
 	gboolean on_ac;
 	gchar *part;
 
@@ -193,24 +190,6 @@ gpm_engine_get_summary (GpmEngine *engine)
 	g_free (part);
 
 	/* if we have limited accuracy, add this to the tooltip */
-	unit = gpm_cell_array_get_unit (collection->primary);
-	accuracy = gpm_profile_get_accuracy_average (engine->priv->profile,
-						     unit->is_discharging);
-
-	if (unit->is_present) {
-		if (accuracy == 0) {
-			if (unit->is_discharging)
-				tooltip = g_string_append (tooltip, _("Battery discharge time is currently unknown\n"));
-			else
-				tooltip = g_string_append (tooltip, _("Battery charge time is currently unknown\n"));
-		} else if (accuracy < GPM_PROFILE_GOOD_TRUST) {
-			if (unit->is_discharging)
-				tooltip = g_string_append (tooltip, _("Battery discharge time is estimated\n"));
-			else
-				tooltip = g_string_append (tooltip, _("Battery charge time is estimated\n"));
-		}
-	}
-
 	part = gpm_cell_array_get_description (collection->ups);
 	if (part != NULL)
 		tooltip = g_string_append (tooltip, part);
@@ -803,7 +782,6 @@ gpm_engine_init (GpmEngine *engine)
 			  G_CALLBACK (gpm_engine_conf_key_changed_cb), engine);
 
 	engine->priv->warnings = gpm_warnings_new ();
-	engine->priv->profile = gpm_profile_new ();
 
 	engine->priv->previous_icon = NULL;
 	engine->priv->previous_summary = NULL;
@@ -1022,7 +1000,6 @@ gpm_engine_finalize (GObject *object)
 	g_free (engine->priv->previous_summary);
 
 	g_object_unref (engine->priv->hal_manager);
-	g_object_unref (engine->priv->profile);
 	g_object_unref (engine->priv->warnings);
 	g_object_unref (engine->priv->ac_adapter);
 	g_object_unref (engine->priv->control);

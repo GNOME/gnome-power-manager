@@ -70,20 +70,14 @@
 #include "gpm-tray-icon.h"
 #ifdef HAVE_DK_POWER
  #include "gpm-engine.h"
+ #include "gpm-devicekit.h"
 #else
  #include "gpm-engine-old.h"
 #endif
 #include "gpm-feedback-widget.h"
 
-#ifdef HAVE_DK_POWER
- #include "gpm-devicekit.h"
-#endif
-
 #include "org.freedesktop.PowerManagement.Inhibit.h"
 #include "org.freedesktop.PowerManagement.Backlight.h"
-#ifndef HAVE_DK_POWER
- #include "org.freedesktop.PowerManagement.Statistics.h"
-#endif
 
 static void     gpm_manager_class_init	(GpmManagerClass *klass);
 static void     gpm_manager_init	(GpmManager      *manager);
