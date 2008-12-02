@@ -218,10 +218,6 @@ gnome_power_manager_SOURCES +=				\
 else
 	egg-color.c					\
 	egg-color.h					\
-	gpm-info.h					\
-	gpm-info.c					\
-	gpm-graph-widget-old.h				\
-	gpm-graph-widget-old.c				\
 	gpm-profile.h					\
 	gpm-profile.c					\
 	gpm-array.h					\

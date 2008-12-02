@@ -1,5 +1,20 @@
 2008-12-02  Richard Hughes  <richard@hughsie.com>
 
+	* data/Makefile.am:
+	* data/gpm-statistics-old.glade:
+	* po/POTFILES.in:
+	* po/POTFILES.skip:
+	* src/Makefile.am:
+	* src/gpm-info.c:
+	* src/gpm-info.h:
+	* src/gpm-manager.c: (gpm_manager_action_suspend),
+	(gpm_manager_action_hibernate), (manager_policy_do),
+	(idle_do_sleep), (idle_changed_cb), (button_pressed_cb),
+	(ac_adapter_changed_cb), (control_sleep_failure_cb):
+	Don't log to GpmInfo even without DeviceKit.
+
+2008-12-02  Richard Hughes  <richard@hughsie.com>
+
 	* src/Makefile.am:
 	* src/gpm-graph-widget-old.c:
 	* src/gpm-graph-widget-old.h:

@@ -57,9 +57,6 @@
 #include "gpm-common.h"
 #include "gpm-dpms.h"
 #include "gpm-idle.h"
-#ifndef HAVE_DK_POWER
- #include "gpm-info.h"
-#endif
 #include "gpm-inhibit.h"
 #include "gpm-manager.h"
 #include "gpm-notify.h"
@@ -106,9 +103,6 @@ struct GpmManagerPrivate
 	GConfClient		*conf;
 	GpmDpms			*dpms;
 	GpmIdle			*idle;
-#ifndef HAVE_DK_POWER
-	GpmInfo			*info;
-#endif
 	GpmPrefsServer		*prefs_server;
 	GpmInhibit		*inhibit;
 	GpmNotify		*notify;
@@ -443,10 +437,7 @@ gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 	if (gpm_manager_is_inhibit_valid (manager, FALSE, "suspend") == FALSE)
 		return FALSE;
 
-#ifndef HAVE_DK_POWER
-	gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
-				_("Suspending computer."), reason);
-#endif
+	egg_debug ("suspending, reason: %s", reason);
 	gpm_control_suspend (manager->priv->control, &error);
 	gpm_button_reset_time (manager->priv->button);
 	if (error != NULL)
@@ -493,10 +484,7 @@ gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 	if (gpm_manager_is_inhibit_valid (manager, FALSE, "hibernate") == FALSE)
 		return FALSE;
 
-#ifndef HAVE_DK_POWER
-	gpm_info_explain_reason (manager->priv->info, GPM_EVENT_HIBERNATE,
-				_("Hibernating computer."), reason);
-#endif
+	egg_debug ("hibernating, reason: %s", reason);
 	gpm_control_hibernate (manager->priv->control, &error);
 	gpm_button_reset_time (manager->priv->button);
 	if (error != NULL)
@@ -555,10 +543,7 @@ manager_policy_do (GpmManager  *manager, const gchar *policy, const gchar *reaso
 		return FALSE;
 
 	if (strcmp (action, ACTION_NOTHING) == 0) {
-#ifndef HAVE_DK_POWER
-		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_NOTIFICATION,
-					_("Doing nothing."), reason);
-#endif
+		egg_debug ("doing nothing, reason: %s", reason);
 	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
 		gpm_manager_action_suspend (manager, reason);
 
@@ -569,17 +554,11 @@ manager_policy_do (GpmManager  *manager, const gchar *policy, const gchar *reaso
 		gpm_manager_blank_screen (manager, NULL);
 
 	} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
-#ifndef HAVE_DK_POWER
-		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_NOTIFICATION,
-					_("Shutting down computer."), reason);
-#endif
+		egg_debug ("shutting down, reason: %s", reason);
 		gpm_control_shutdown (manager->priv->control, NULL);
 
 	} else if (strcmp (action, ACTION_INTERACTIVE) == 0) {
-#ifndef HAVE_DK_POWER
-		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_NOTIFICATION,
-					_("GNOME interactive logout."), reason);
-#endif
+		egg_debug ("logout, reason: %s", reason);
 		gpm_manager_logout_interactive (manager);
 	} else {
 		egg_warning ("unknown action %s", action);
@@ -777,10 +756,7 @@ idle_do_sleep (GpmManager *manager)
 		egg_debug ("doing nothing as system idle action");
 
 	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
-#ifndef HAVE_DK_POWER
-		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
-					_("Suspending computer."), _("System idle."));
-#endif
+		egg_debug ("suspending, reason: System idle");
 		ret = gpm_control_suspend (manager->priv->control, &error);
 		if (!ret) {
 			egg_warning ("cannot suspend (error: %s), so trying hibernate", error->message);
@@ -794,10 +770,7 @@ idle_do_sleep (GpmManager *manager)
 		}
 
 	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
-#ifndef HAVE_DK_POWER
-		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_HIBERNATE,
-					_("Hibernating computer."), _("System idle."));
-#endif
+		egg_debug ("hibernating, reason: System idle");
 		ret = gpm_control_hibernate (manager->priv->control, &error);
 		if (!ret) {
 			egg_warning ("cannot hibernate (error: %s), so trying suspend", error->message);
@@ -832,15 +805,6 @@ idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmManager *manager)
 		egg_debug ("ignoring as not on active console");
 		return;
 	}
-
-#ifndef HAVE_DK_POWER
-	if (mode == GPM_IDLE_MODE_NORMAL)
-		gpm_info_event_log (manager->priv->info, GPM_EVENT_SESSION_ACTIVE, _("idle mode ended"));
-	else if (mode == GPM_IDLE_MODE_SESSION)
-		gpm_info_event_log (manager->priv->info, GPM_EVENT_SESSION_IDLE, _("idle mode started"));
-	else if (mode == GPM_IDLE_MODE_POWERSAVE)
-		gpm_info_event_log (manager->priv->info, GPM_EVENT_SESSION_POWERSAVE, _("powersave mode started"));
-#endif
 
 	/* Ignore timeout events when the lid is closed, as the DPMS is
 	 * already off, and we don't want to perform policy actions or re-enable
@@ -1006,13 +970,6 @@ button_pressed_cb (GpmButton *button, const gchar *type, GpmManager *manager)
 		return;
 	}
 
-#ifndef HAVE_DK_POWER
-	if (strcmp (type, GPM_BUTTON_LID_CLOSED) == 0)
-		gpm_info_event_log (manager->priv->info, GPM_EVENT_LID_CLOSED, _("The laptop lid has been closed"));
-	else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0)
-		gpm_info_event_log (manager->priv->info, GPM_EVENT_LID_OPENED, _("The laptop lid has been re-opened"));
-#endif
-
 	if (strcmp (type, GPM_BUTTON_POWER) == 0)
 		manager_policy_do (manager, GPM_CONF_BUTTON_POWER, _("The power button has been pressed."));
 	else if (strcmp (type, GPM_BUTTON_SLEEP) == 0)
@@ -1076,13 +1033,6 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter, gboolean on_ac, GpmManager *man
 	}
 
 	egg_debug ("Setting on-ac: %d", on_ac);
-
-#ifndef HAVE_DK_POWER
-	if (on_ac)
-		gpm_info_event_log (manager->priv->info, GPM_EVENT_ON_AC, _("AC adapter inserted"));
-	else
-		gpm_info_event_log (manager->priv->info, GPM_EVENT_ON_BATTERY, _("AC adapter removed"));
-#endif
 
 	if (on_ac)
 		brightness = gconf_client_get_int (manager->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_AC, NULL);
@@ -1442,16 +1392,10 @@ control_sleep_failure_cb (GpmControl *control, GpmControlAction action, GpmManag
 {
 	gboolean show_sleep_failed;
 
-#ifndef HAVE_DK_POWER
-	if (action == GPM_CONTROL_ACTION_HIBERNATE)
-		gpm_info_event_log (manager->priv->info, GPM_EVENT_NOTIFICATION, _("Hibernate Problem"));
-	else
-		gpm_info_event_log (manager->priv->info, GPM_EVENT_NOTIFICATION, _("Suspend Problem"));
-#endif
-
 	/* only show this if specified in gconf */
 	show_sleep_failed = gconf_client_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_SLEEP_FAILED, NULL);
 
+	egg_debug ("sleep failed");
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_SUSPEND_ERROR, TRUE);
 
 	/* only emit if in GConf */
@@ -1885,16 +1829,14 @@ dpms_mode_changed_cb (GpmDpms *dpms, GpmDpmsMode mode, GpmManager *manager)
 {
 	egg_debug ("DPMS mode changed: %d", mode);
 
-#ifndef HAVE_DK_POWER
 	if (mode == GPM_DPMS_MODE_ON)
-		gpm_info_event_log (manager->priv->info, GPM_EVENT_DPMS_ON, _("dpms on"));
+		egg_debug ("dpms on");
 	else if (mode == GPM_DPMS_MODE_STANDBY)
-		gpm_info_event_log (manager->priv->info, GPM_EVENT_DPMS_STANDBY, _("dpms standby"));
+		egg_debug ("dpms standby");
 	else if (mode == GPM_DPMS_MODE_SUSPEND)
-		gpm_info_event_log (manager->priv->info, GPM_EVENT_DPMS_SUSPEND, _("dpms suspend"));
+		egg_debug ("suspend");
 	else if (mode == GPM_DPMS_MODE_OFF)
-		gpm_info_event_log (manager->priv->info, GPM_EVENT_DPMS_OFF, _("dpms off"));
-#endif
+		egg_debug ("dpms off");
 
 	update_dpms_throttle (manager);
 }
@@ -2045,16 +1987,6 @@ gpm_manager_init (GpmManager *manager)
 				 "hibernate", G_CALLBACK (gpm_manager_tray_icon_hibernate),
 				 manager, G_CONNECT_SWAPPED);
 
-#ifndef HAVE_DK_POWER
-	egg_debug ("initialising info infrastructure");
-	manager->priv->info = gpm_info_new ();
-
-	/* add the new statistics DBUS interface */
-	dbus_g_object_type_install_info (GPM_TYPE_INFO, &dbus_glib_gpm_statistics_object_info);
-	dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH_STATS,
-					     G_OBJECT (manager->priv->info));
-#endif
-
 	gpm_manager_sync_policy_sleep (manager);
 
 	/* on startup, check if there are suspend errors left */
@@ -2088,10 +2020,6 @@ gpm_manager_init (GpmManager *manager)
 	collection = gpm_engine_get_collection (manager->priv->engine);
 	gpm_tray_icon_set_collection_data (manager->priv->tray_icon, collection);
 #endif
-
-#ifndef HAVE_DK_POWER
-	gpm_info_set_collection_data (manager->priv->info, collection);
-#endif
 }
 
 /**
@@ -2116,9 +2044,6 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->hal_device_power);
 	g_object_unref (manager->priv->dpms);
 	g_object_unref (manager->priv->idle);
-#ifndef HAVE_DK_POWER
-	g_object_unref (manager->priv->info);
-#endif
 	g_object_unref (manager->priv->engine);
 	g_object_unref (manager->priv->tray_icon);
 	g_object_unref (manager->priv->inhibit);
