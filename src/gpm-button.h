@@ -66,6 +66,7 @@ typedef struct
 GType		 gpm_button_get_type		(void);
 GpmButton	*gpm_button_new			(void);
 gboolean	 gpm_button_is_lid_closed	(GpmButton *button);
+gboolean	 gpm_button_reset_time		(GpmButton *button);
 
 G_END_DECLS
 

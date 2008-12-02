@@ -1,3 +1,21 @@
+2008-12-02  Richard Hughes  <richard@hughsie.com>
+
+	* src/egg-string.c: (egg_strequal):
+	* src/egg-test.c: (egg_test_init), (egg_test_title),
+	(egg_test_success), (egg_test_failed):
+	Trivial egg updates.
+
+	* src/gpm-control.h:
+	Remove unused code.
+
+	* src/gpm-button.c: (gpm_button_emit_type),
+	(gpm_button_is_lid_closed), (gpm_button_reset_time):
+	* src/gpm-button.h:
+	* src/gpm-manager.c: (gpm_manager_action_suspend),
+	(gpm_manager_action_hibernate):
+	Ensure we reset the event time after resume to properly filter
+	duplicate keypresses.
+
 2008-12-02  Wang Xin  <jedy.wang@sun.com>
 
 	* src/gpm-main.c: (main): Remove daemon code.

@@ -75,7 +75,6 @@ G_DEFINE_TYPE (GpmButton, gpm_button, G_TYPE_OBJECT)
 gboolean
 gpm_button_emit_type (GpmButton *button, const gchar *type)
 {
-	g_return_val_if_fail (button != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BUTTON (button), FALSE);
 
 	/* did we just have this button before the timeout? */
@@ -262,9 +261,22 @@ gpm_button_class_init (GpmButtonClass *klass)
 gboolean
 gpm_button_is_lid_closed (GpmButton *button)
 {
-	g_return_val_if_fail (button != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BUTTON (button), FALSE);
 	return button->priv->lid_is_closed;
+}
+
+/**
+ * gpm_button_reset_time:
+ *
+ * We have to refresh the event time on resume to handle duplicate buttons
+ * properly when the time is significant when we suspend.
+ **/
+gboolean
+gpm_button_reset_time (GpmButton *button)
+{
+	g_return_val_if_fail (GPM_IS_BUTTON (button), FALSE);
+	g_timer_reset (button->priv->timer);
+	return TRUE;
 }
 
 /**

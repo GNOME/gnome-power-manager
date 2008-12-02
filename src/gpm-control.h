@@ -94,18 +94,6 @@ gboolean	 gpm_control_shutdown			(GpmControl	*control,
 						 	 GError		**error);
 gboolean	 gpm_control_reboot			(GpmControl	*control,
 						 	 GError		**error);
-
-void		 gpm_control_register			(GpmControl	*control,
-							 const gchar	*application,
-							 DBusGMethodInvocation *context,
-							 GError		**error);
-gboolean	 gpm_control_un_register		(GpmControl	*control,
-							 guint32	 cookie,
-							 GError		**error);
-gboolean	 gpm_control_policy			(GpmControl	*control,
-							 guint32	 cookie,
-							 gboolean	 allowed,
-							 GError		**error);
 gboolean	 gpm_control_get_lock_policy		(GpmControl	*control,
 							 const gchar	*policy);
 

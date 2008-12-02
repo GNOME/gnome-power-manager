@@ -456,6 +456,7 @@ gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 				_("Suspending computer."), reason);
 #endif
 	gpm_control_suspend (manager->priv->control, &error);
+	gpm_button_reset_time (manager->priv->button);
 	if (error != NULL)
 		g_error_free (error);
 	return TRUE;
@@ -505,6 +506,7 @@ gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 				_("Hibernating computer."), reason);
 #endif
 	gpm_control_hibernate (manager->priv->control, &error);
+	gpm_button_reset_time (manager->priv->button);
 	if (error != NULL)
 		g_error_free (error);
 	return TRUE;
