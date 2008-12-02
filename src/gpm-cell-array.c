@@ -48,7 +48,6 @@ static void     gpm_cell_array_init       (GpmCellArray      *cell_array);
 static void     gpm_cell_array_finalize   (GObject	     *object);
 
 #define GPM_CELL_ARRAY_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_CELL_ARRAY, GpmCellArrayPrivate))
-#define GPM_CELL_ARRAY_TEXT_MIN_ACCURACY	30
 #define GPM_CELL_ARRAY_TEXT_MIN_TIME		120
 #define GPM_UI_TIME_PRECISION			5*60
 
@@ -169,7 +168,6 @@ gpm_cell_array_get_time_until_action (GpmCellArray *cell_array)
 {
 	GpmCellUnit *unit;
 	gboolean use_time_primary;
-	guint action_percentage;
 	guint action_time;
 	gint difference;
 
@@ -416,58 +414,6 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 }
 
 /**
- * gpm_cell_array_get_config_id:
- *
- * Gets an ID that represents the battery state of the system, typically
- * which will consist of all the serial numbers of primary batteries in the
- * system joined together.
- */
-static gchar *
-gpm_cell_array_get_config_id (GpmCellArray *cell_array)
-{
-	GpmCellUnit *unit;
-	GpmCell *cell;
-	gchar *id;
-	gchar *array_id = NULL;
-	gchar *new;
-	guint length;
-	guint i;
-
-	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), NULL);
-
-	unit = &(cell_array->priv->unit);
-
-	/* invalid if not primary */
-	if (unit->kind != GPM_CELL_UNIT_KIND_PRIMARY) {
-		egg_warning ("only valid for primary");
-		return NULL;
-	}
-
-	length = cell_array->priv->array->len;
-	/* if we have no devices, don't try to get id */
-	if (length == 0) {
-		egg_debug ("no devices of type primary");
-		return NULL;
-	}
-
-	/* iterate thru all the devices */
-	for (i=0;i<length;i++) {
-		/* get the correct cell */
-		cell = gpm_cell_array_get_cell (cell_array, i);
-		id = gpm_cell_get_id (cell);
-		if (array_id == NULL) {
-			array_id = id;
-		} else {
-			new = g_strjoin ("-", array_id, id, NULL);
-			g_free (array_id);
-			g_free (id);
-			array_id = new;
-		}
-	}
-	return array_id;
-}
-
-/**
  * gpm_cell_array_emit_system_action:
  *
  * Do the emits here. Probably.
@@ -508,7 +454,6 @@ gpm_cell_array_percent_changed (GpmCellArray *cell_array)
 {
 	GpmWarningsState warnings_state;
 	GpmCellUnit *unit;
-	gfloat accuracy;
 
 	g_return_if_fail (GPM_IS_CELL_ARRAY (cell_array));
 
@@ -722,7 +667,6 @@ static gboolean
 gpm_cell_array_collection_changed (GpmCellArray *cell_array)
 {
 	GpmCellUnit *unit;
-	gchar *config_id;
 	guint length;
 
 	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), FALSE);
@@ -917,8 +861,6 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 	gchar *charge_timestring;
 	gchar *discharge_timestring;
 	gchar *description = NULL;
-	guint accuracy;
-	guint time;
 	guint charge_time_round;
 	guint discharge_time_round;
 	GpmCellUnit *unit;
@@ -981,8 +923,7 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 	} else if (unit->is_charging) {
 
 		if (charge_time_round > GPM_CELL_ARRAY_TEXT_MIN_TIME &&
-		    discharge_time_round > GPM_CELL_ARRAY_TEXT_MIN_TIME &&
-		    accuracy > GPM_CELL_ARRAY_TEXT_MIN_ACCURACY) {
+		    discharge_time_round > GPM_CELL_ARRAY_TEXT_MIN_TIME) {
 			/* display both discharge and charge time */
 			charge_timestring = gpm_get_timestring (charge_time_round);
 			discharge_timestring = gpm_get_timestring (discharge_time_round);

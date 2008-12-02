@@ -217,8 +217,6 @@ gnome_power_manager_SOURCES +=				\
 else
 	egg-color.c					\
 	egg-color.h					\
-	gpm-profile.h					\
-	gpm-profile.c					\
 	gpm-engine-old.h				\
 	gpm-engine-old.c				\
 	gpm-cell.h					\
@@ -292,41 +290,42 @@ gnome_power_self_test_SOURCES =				\
 	gpm-engine.c					\
 	gpm-phone.h					\
 	gpm-phone.c					\
+	gpm-idle.h					\
+	gpm-idle.c					\
+	gpm-load.h					\
+	gpm-load.c					\
+	gpm-marshal.h					\
+	gpm-marshal.c					\
+	gpm-common.h					\
+	gpm-common.c					\
+	gpm-inhibit.h					\
+	gpm-inhibit.c					\
+	$(NULL)
+
+if HAVE_DK_POWER
+gnome_power_self_test_SOURCES +=			\
+	gpm-devicekit.h					\
+	gpm-devicekit.c					\
+	$(NULL)
+else
+gnome_power_self_test_SOURCES +=			\
+	gpm-warnings.h					\
+	gpm-warnings.c					\
 	gpm-cell.h					\
 	gpm-cell.c					\
 	gpm-cell-unit.h					\
 	gpm-cell-unit.c					\
 	gpm-cell-array.h				\
 	gpm-cell-array.c				\
-	gpm-warnings.h					\
-	gpm-warnings.c					\
-	gpm-idle.h					\
-	gpm-idle.c					\
-	gpm-load.h					\
-	gpm-load.c					\
-	gpm-profile.h					\
-	gpm-profile.c					\
-	gpm-marshal.h					\
-	gpm-marshal.c					\
-	gpm-common.h					\
-	gpm-common.c					\
-	gpm-info.h					\
-	gpm-info.c					\
-	gpm-array.h					\
-	gpm-array.c					\
-	gpm-array-float.h				\
-	gpm-array-float.c				\
-	gpm-inhibit.h					\
-	gpm-inhibit.c					\
-	gpm-graph-widget-old.h				\
-	gpm-graph-widget-old.c				\
 	$(NULL)
+endif
 
 gnome_power_self_test_LDADD =				\
 	$(GLIB_LIBS)					\
 	$(GNOME_LIBS)					\
 	$(GSTREAMER_LIBS)				\
 	$(POLKIT_GNOME_LIBS)				\
+	$(DEVKIT_POWER_LIBS)				\
 	$(DBUS_LIBS)					\
 	$(LIBNOTIFY_LIBS)				\
 	$(LOCAL_LIBHAL_LIBS)				\

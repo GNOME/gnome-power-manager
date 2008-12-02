@@ -1,5 +1,16 @@
 2008-12-02  Richard Hughes  <richard@hughsie.com>
 
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-cell-array.c: (gpm_cell_array_get_time_until_action),
+	(gpm_cell_array_percent_changed),
+	(gpm_cell_array_collection_changed),
+	(gpm_cell_array_get_description):
+	* src/gpm-self-test.c: (main):
+	Fix make distcheck. Nearly good to release.
+
+2008-12-02  Richard Hughes  <richard@hughsie.com>
+
 	* src/Makefile.am:
 	* src/gpm-array-float.c:
 	* src/gpm-array-float.h:
