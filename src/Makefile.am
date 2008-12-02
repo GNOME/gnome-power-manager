@@ -50,12 +50,18 @@ DEVKIT_POWER_LIBS =					\
 bin_PROGRAMS =						\
 	gnome-power-manager				\
 	gnome-power-preferences				\
+	$(NULL)
+
+if HAVE_DK_POWER
+bin_PROGRAMS +=						\
 	gnome-power-statistics				\
 	$(NULL)
+endif
 
 check_PROGRAMS =					\
 	gnome-power-self-test
 
+if HAVE_DK_POWER
 gnome_power_statistics_SOURCES =			\
 	egg-color.c					\
 	egg-color.h					\
@@ -65,16 +71,12 @@ gnome_power_statistics_SOURCES =			\
 	egg-unique.c					\
 	egg-precision.h					\
 	egg-precision.c					\
-	gpm-common.h					\
-	gpm-common.c					\
-	$(NULL)
-
-if HAVE_DK_POWER
-gnome_power_statistics_SOURCES +=			\
 	egg-obj-list.c					\
 	egg-obj-list.h					\
 	egg-array-float.c				\
 	egg-array-float.h				\
+	gpm-common.h					\
+	gpm-common.c					\
 	gpm-statistics.c				\
 	gpm-devicekit.c					\
 	gpm-devicekit.h					\
@@ -83,30 +85,10 @@ gnome_power_statistics_SOURCES +=			\
 	gpm-graph-widget.h				\
 	gpm-graph-widget.c				\
 	$(NULL)
-else
-gnome_power_statistics_SOURCES +=			\
-	egg-discrete.h					\
-	egg-discrete.c					\
-	egg-dbus-proxy.h				\
-	egg-dbus-proxy.c				\
-	egg-dbus-monitor.h				\
-	egg-dbus-monitor.c				\
-	gpm-statistics-old.c				\
-	gpm-statistics-core.h				\
-	gpm-statistics-core.c				\
-	gpm-marshal.h					\
-	gpm-marshal.c					\
-	gpm-array.h					\
-	gpm-array.c					\
-	gpm-array-float.h				\
-	gpm-array-float.c				\
-	gpm-graph-widget-old.h				\
-	gpm-graph-widget-old.c				\
-	$(NULL)
-endif
 
 gnome_power_statistics_LDADD =				\
 	$(GLIB_LIBS)					\
+	$(DEVKIT_POWER_LIBS)				\
 	$(GNOME_LIBS)					\
 	$(DBUS_LIBS)					\
 	$(NULL)
@@ -114,11 +96,9 @@ gnome_power_statistics_LDADD =				\
 if HAVE_UNIQUE
 gnome_power_statistics_LDADD +=				\
 	$(UNIQUE_LIBS)
+	$(NULL)
 endif
 
-if HAVE_DK_POWER
-gnome_power_statistics_LDADD +=				\
-	$(DEVKIT_POWER_LIBS)
 endif
 
 gnome_power_preferences_SOURCES =			\
@@ -368,10 +348,13 @@ BUILT_SOURCES = 					\
 	org.freedesktop.PowerManagement.h		\
 	org.freedesktop.PowerManagement.Inhibit.h	\
 	org.freedesktop.PowerManagement.Backlight.h	\
-	org.freedesktop.PowerManagement.Statistics.h	\
 	gpm-marshal.c					\
 	gpm-marshal.h					\
 	$(NULL)
+
+if !HAVE_DK_POWER
+BUILT_SOURCES += org.freedesktop.PowerManagement.Statistics.h
+endif
 
 gpm-marshal.c: gpm-marshal.list
 	echo "#include \"gpm-marshal.h\"" > $@ && \
@@ -394,12 +377,14 @@ org.freedesktop.PowerManagement.Inhibit.h: org.freedesktop.PowerManagement.Inhib
 		--output=org.freedesktop.PowerManagement.Inhibit.h	\
 		$(srcdir)/org.freedesktop.PowerManagement.Inhibit.xml
 
+if !HAVE_DK_POWER
 org.freedesktop.PowerManagement.Statistics.h: org.freedesktop.PowerManagement.Statistics.xml
 	libtool --mode=execute dbus-binding-tool	\
 		--prefix=gpm_statistics			\
 		--mode=glib-server			\
 		--output=org.freedesktop.PowerManagement.Statistics.h	\
 		$(srcdir)/org.freedesktop.PowerManagement.Statistics.xml
+endif
 
 org.freedesktop.PowerManagement.Backlight.h: org.freedesktop.PowerManagement.Backlight.xml
 	libtool --mode=execute dbus-binding-tool	\
