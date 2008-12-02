@@ -83,16 +83,11 @@ gboolean	 gpm_control_allowed_hibernate		(GpmControl	*control,
 gboolean	 gpm_control_allowed_shutdown		(GpmControl	*control,
 							 gboolean	*can,
 							 GError		**error);
-gboolean	 gpm_control_allowed_reboot		(GpmControl	*control,
-							 gboolean	*can,
-							 GError		**error);
 gboolean	 gpm_control_suspend			(GpmControl	*control,
 							 GError		**error);
 gboolean	 gpm_control_hibernate			(GpmControl	*control,
 							 GError		**error);
 gboolean	 gpm_control_shutdown			(GpmControl	*control,
-						 	 GError		**error);
-gboolean	 gpm_control_reboot			(GpmControl	*control,
 						 	 GError		**error);
 gboolean	 gpm_control_get_lock_policy		(GpmControl	*control,
 							 const gchar	*policy);

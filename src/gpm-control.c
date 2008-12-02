@@ -204,51 +204,6 @@ gpm_control_allowed_hibernate (GpmControl *control,
 	return TRUE;
 }
 
-/**
- * gpm_control_allowed_shutdown:
- * @control: This class instance
- * @can: If we can shutdown
- *
- **/
-gboolean
-gpm_control_allowed_shutdown (GpmControl *control,
-			      gboolean   *can,
-			      GError    **error)
-{
-	gboolean polkit_ok = TRUE;
-	gboolean fg;
-	g_return_val_if_fail (can, FALSE);
-	*can = FALSE;
-	fg = gpm_control_check_foreground_console (control);
-	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.hal.power-management.shutdown");
-	if (polkit_ok && fg)
-		*can = TRUE;
-	return TRUE;
-}
-
-/**
- * gpm_control_allowed_reboot:
- * @control: This class instance
- * @can: If we can reboot
- *
- * Stub function -- TODO.
- **/
-gboolean
-gpm_control_allowed_reboot (GpmControl *control,
-			    gboolean   *can,
-			    GError    **error)
-{
-	gboolean polkit_ok = TRUE;
-	gboolean fg;
-	g_return_val_if_fail (can, FALSE);
-	*can = FALSE;
-	fg = gpm_control_check_foreground_console (control);
-	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.hal.power-management.reboot");
-	if (polkit_ok && fg)
-		*can = TRUE;
-	return TRUE;
-}
-
 /* convert the HAL error to a local error */
 static void
 gpm_control_convert_hal_error (GpmControl *control,
@@ -287,22 +242,10 @@ gpm_control_convert_hal_error (GpmControl *control,
  * Shuts down the computer, saving the session if possible.
  **/
 gboolean
-gpm_control_shutdown (GpmControl *control,
-		      GError    **error)
+gpm_control_shutdown (GpmControl *control, GError **error)
 {
-	gboolean allowed;
 	gboolean ret;
 	gboolean save_session;
-
-	gpm_control_allowed_shutdown (control, &allowed, error);
-	if (allowed == FALSE) {
-		egg_warning ("Cannot shutdown");
-		g_set_error (error,
-			     GPM_CONTROL_ERROR,
-			     GPM_CONTROL_ERROR_GENERAL,
-			     "Cannot shutdown");
-		return FALSE;
-	}
 
 	save_session = gconf_client_get_bool (control->priv->conf, GPM_CONF_SESSION_REQUEST_SAVE, NULL);
 	/* We can set g-p-m to not save the session to avoid confusing new
@@ -320,43 +263,6 @@ gpm_control_shutdown (GpmControl *control,
 		gpm_control_convert_hal_error (control, error);
 
 	return ret;
-}
-
-/**
- * gpm_control_reboot:
- * @control: This class instance
- *
- * Reboots the computer, saving the session if possible.
- **/
-gboolean
-gpm_control_reboot (GpmControl *control,
-		    GError    **error)
-{
-	gboolean allowed;
-	gboolean save_session;
-
-	gpm_control_allowed_reboot (control, &allowed, error);
-	if (allowed == FALSE) {
-		egg_warning ("Cannot reboot");
-		g_set_error (error,
-			     GPM_CONTROL_ERROR,
-			     GPM_CONTROL_ERROR_GENERAL,
-			     "Cannot reboot");
-		return FALSE;
-	}
-
-	save_session = gconf_client_get_bool (control->priv->conf, GPM_CONF_SESSION_REQUEST_SAVE, NULL);
-	/* We can set g-p-m to not save the session to avoid confusing new
-	   users. By default we save the session to preserve data. */
-	if (save_session) {
-#if 0
-		gnome_client_request_save (gnome_master_client (),
-					   GNOME_SAVE_GLOBAL,
-					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
-#endif
-	}
-
-	return hal_device_power_reboot (control->priv->hal_device_power, error);
 }
 
 /**

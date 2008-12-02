@@ -1,5 +1,16 @@
 2008-12-02  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-control.c: (gpm_control_shutdown):
+	* src/gpm-control.h:
+	* src/gpm-manager.c: (gpm_manager_is_inhibit_valid),
+	(gpm_manager_class_init):
+	* src/gpm-manager.h:
+	* src/org.freedesktop.PowerManagement.xml:
+	Rip out shutdown and reboot from public API (use ConsoleKit) and remove
+	reboot internally. Shutdown remains as we need it for low power.
+
+2008-12-02  Richard Hughes  <richard@hughsie.com>
+
 	* src/egg-string.c: (egg_strequal):
 	* src/egg-test.c: (egg_test_init), (egg_test_title),
 	(egg_test_success), (egg_test_failed):

@@ -133,8 +133,6 @@ enum {
 	POWER_SAVE_STATUS_CHANGED,
 	CAN_SUSPEND_CHANGED,
 	CAN_HIBERNATE_CHANGED,
-	CAN_SHUTDOWN_CHANGED,
-	CAN_REBOOT_CHANGED,
 	LAST_SIGNAL
 };
 
@@ -292,10 +290,6 @@ gpm_manager_is_inhibit_valid (GpmManager *manager, gboolean user_action, const c
 				title = g_strdup (_("Request to hibernate")); 
 		else if (strcmp (action, "policy action") == 0)
 				title = g_strdup (_("Request to do policy action")); 
-		else if (strcmp (action, "reboot") == 0)
-				title = g_strdup (_("Request to reboot")); 
-		else if (strcmp (action, "shutdown") == 0)
-				title = g_strdup (_("Request to shutdown")); 
 		else if (strcmp (action, "timeout action") == 0)
 				title = g_strdup (_("Request to do timeout action"));
 		
@@ -666,43 +660,6 @@ gpm_manager_hibernate (GpmManager *manager, GError **error)
 }
 
 /**
- * gpm_manager_reboot:
- *
- * Attempt to restart the system.
- **/
-gboolean
-gpm_manager_reboot (GpmManager *manager, GError **error)
-{
-	g_return_val_if_fail (manager != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
-
-	/* check to see if we are inhibited */
-	if (gpm_manager_is_inhibit_valid (manager, FALSE, "reboot") == FALSE)
-		return FALSE;
-
-	return gpm_control_reboot (manager->priv->control, error);
-}
-
-/**
- * gpm_manager_shutdown:
- *
- * Attempt to shutdown the system.
- **/
-gboolean
-gpm_manager_shutdown (GpmManager *manager,
-		      GError    **error)
-{
-	g_return_val_if_fail (manager != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
-
-	/* check to see if we are inhibited */
-	if (gpm_manager_is_inhibit_valid (manager, FALSE, "shutdown") == FALSE)
-		return FALSE;
-
-	return gpm_control_shutdown (manager->priv->control, error);
-}
-
-/**
  * gpm_manager_can_suspend:
  *
  * If the current session user is able to suspend.
@@ -726,32 +683,6 @@ gpm_manager_can_hibernate (GpmManager *manager, gboolean *can_hibernate, GError 
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 	return gpm_control_allowed_hibernate (manager->priv->control, can_hibernate, error);
-}
-
-/**
- * gpm_manager_can_reboot:
- *
- * If the current session user is able to reboot.
- **/
-gboolean
-gpm_manager_can_reboot (GpmManager *manager, gboolean *can_reboot, GError **error)
-{
-	g_return_val_if_fail (manager != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
-	return gpm_control_allowed_reboot (manager->priv->control, can_reboot, error);
-}
-
-/**
- * gpm_manager_can_shutdown:
- *
- * If the current session user is able to shutdown.
- **/
-gboolean
-gpm_manager_can_shutdown (GpmManager *manager, gboolean *can_shutdown, GError **error)
-{
-	g_return_val_if_fail (manager != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
-	return gpm_control_allowed_shutdown (manager->priv->control, can_shutdown, error);
 }
 
 /**
@@ -1255,18 +1186,6 @@ gpm_manager_class_init (GpmManagerClass *klass)
 		g_signal_new ("can-hibernate-changed",
 			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmManagerClass, can_hibernate_changed),
-			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
-	signals [CAN_SHUTDOWN_CHANGED] =
-		g_signal_new ("can-shutdown-changed",
-			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmManagerClass, can_shutdown_changed),
-			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
-	signals [CAN_REBOOT_CHANGED] =
-		g_signal_new ("can-reboot-changed",
-			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmManagerClass, can_reboot_changed),
 			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
 			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 

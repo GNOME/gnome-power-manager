@@ -62,10 +62,6 @@ typedef struct
 							 gboolean	 can_suspend);
 	void		(* can_hibernate_changed)	(GpmManager	*manager,
 							 gboolean	 can_hibernate);
-	void		(* can_shutdown_changed)	(GpmManager	*manager,
-							 gboolean	 can_shutdown);
-	void		(* can_reboot_changed)		(GpmManager	*manager,
-							 gboolean	 can_reboot);
 } GpmManagerClass;
 
 typedef enum
@@ -93,10 +89,6 @@ gboolean	 gpm_manager_get_low_battery		(GpmManager	*manager,
 gboolean	 gpm_manager_suspend			(GpmManager	*manager,
 							 GError		**error);
 gboolean	 gpm_manager_hibernate			(GpmManager	*manager,
-							 GError		**error);
-gboolean	 gpm_manager_reboot			(GpmManager	*manager,
-							 GError		**error);
-gboolean	 gpm_manager_shutdown			(GpmManager	*manager,
 							 GError		**error);
 gboolean	 gpm_manager_can_suspend		(GpmManager	*manager,
 							 gboolean	*can_suspend,

@@ -3,19 +3,11 @@
   <interface name="org.freedesktop.PowerManagement">
     <method name="Suspend"></method>
     <method name="Hibernate"></method>
-    <method name="Reboot"></method>
-    <method name="Shutdown"></method>
     <method name="CanSuspend">
       <arg type="b" name="can_suspend" direction="out"/>
     </method>
     <method name="CanHibernate">
       <arg type="b" name="can_hibernate" direction="out"/>
-    </method>
-    <method name="CanReboot">
-      <arg type="b" name="can_reboot" direction="out"/>
-    </method>
-    <method name="CanShutdown">
-      <arg type="b" name="can_shutdown" direction="out"/>
     </method>
     <!-- G-P-M SPECIFIC -->
     <method name="GetPreferencesOptions">
@@ -35,12 +27,6 @@
     </signal>
     <signal name="CanHibernateChanged">
       <arg type="b" name="can_hibernate" direction="out"/>
-    </signal>
-    <signal name="CanShutdownChanged">
-      <arg type="b" name="can_shutdown" direction="out"/>
-    </signal>
-    <signal name="CanRebootChanged">
-      <arg type="b" name="can_reboot" direction="out"/>
     </signal>
     <signal name="OnBatteryChanged">
       <arg type="b" name="on_battery" direction="out"/>
