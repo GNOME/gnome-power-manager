@@ -131,8 +131,6 @@ enum {
 	ON_BATTERY_CHANGED,
 	LOW_BATTERY_CHANGED,
 	POWER_SAVE_STATUS_CHANGED,
-	CAN_SUSPEND_CHANGED,
-	CAN_HIBERNATE_CHANGED,
 	LAST_SIGNAL
 };
 
@@ -1174,18 +1172,6 @@ gpm_manager_class_init (GpmManagerClass *klass)
 		g_signal_new ("power-save-status-changed",
 			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmManagerClass, power_save_status_changed),
-			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
-	signals [CAN_SUSPEND_CHANGED] =
-		g_signal_new ("can-suspend-changed",
-			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmManagerClass, can_suspend_changed),
-			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
-	signals [CAN_HIBERNATE_CHANGED] =
-		g_signal_new ("can-hibernate-changed",
-			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmManagerClass, can_hibernate_changed),
 			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
 			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 

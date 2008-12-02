@@ -58,10 +58,6 @@ typedef struct
 							 gboolean	 low_battery);
 	void		(* power_save_status_changed)	(GpmManager	*manager,
 							 gboolean	 save_power);
-	void		(* can_suspend_changed)		(GpmManager	*manager,
-							 gboolean	 can_suspend);
-	void		(* can_hibernate_changed)	(GpmManager	*manager,
-							 gboolean	 can_hibernate);
 } GpmManagerClass;
 
 typedef enum
