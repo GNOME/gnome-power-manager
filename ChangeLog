@@ -1,3 +1,14 @@
+2008-12-02  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-brightness-hal.c: (gpm_brightness_hal_up),
+	(gpm_brightness_hal_down):
+	The Dell Studio 1535 and 1537 both support reading the brightness via
+	HAL and setting via HAL, but handles the keypress in firmware.
+	There is a lack in the logic for handling the OSD in this case.
+	Fixes #562836
+
+	Patch from Mario Limonciello <mario_limonciello@dell.com>, many thanks.
+
 2008-12-01  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-dpms.c: (add_poll_timer):
