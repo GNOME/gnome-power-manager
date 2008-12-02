@@ -1,3 +1,14 @@
+2008-12-02  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-button.c: (gpm_button_reset_time):
+	* src/gpm-button.h:
+	* src/gpm-manager.c: (gpm_manager_action_suspend),
+	(gpm_manager_action_hibernate):
+	Reset the event time after we resume so the duplicate key detection
+	code works correctly.
+	Many thanks to Adel Gadllah <drago01@gmail.com> for debugging and
+	testing.
+
 2008-12-02  Wang Xin  <jedy.wang@sun.com>
 
 	* src/gpm-main.c: (main): Remove daemon code.

@@ -268,6 +268,20 @@ gpm_button_is_lid_closed (GpmButton *button)
 }
 
 /**
+ * gpm_button_reset_time:
+ *
+ * We have to refresh the event time on resume to handle duplicate buttons
+ * properly when the time is significant when we suspend.
+ **/
+gboolean
+gpm_button_reset_time (GpmButton *button)
+{
+	g_return_val_if_fail (GPM_IS_BUTTON (button), FALSE);
+	g_timer_reset (button->priv->timer);
+	return TRUE;
+}
+
+/**
  * emit_button_pressed:
  *
  * @udi: The HAL UDI
