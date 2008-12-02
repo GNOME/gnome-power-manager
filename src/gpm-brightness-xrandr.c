@@ -132,9 +132,8 @@ gpm_brightness_xrandr_output_set_internal (GpmBrightnessXRandR *brightness, RROu
 		ret = FALSE;
 	}
 	/* we changed the hardware */
-	if (ret) {
+	if (ret)
 		brightness->priv->hw_changed = TRUE;
-	}
 	return ret;
 }
 
@@ -215,13 +214,11 @@ gpm_brightness_xrandr_output_get_percentage (GpmBrightnessXRandR *brightness, RR
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness), FALSE);
 
 	ret = gpm_brightness_xrandr_output_get_internal (brightness, output, &cur);
-	if (!ret) {
+	if (!ret)
 		return FALSE;
-	}
 	ret = gpm_brightness_xrandr_output_get_limits (brightness, output, &min, &max);
-	if (!ret) {
+	if (!ret || min == max)
 		return FALSE;
-	}
 	egg_debug ("hard value=%i, min=%i, max=%i", cur, min, max);
 	percentage = egg_discrete_to_percent (cur, (max-min)+1);
 	egg_debug ("percentage %i", percentage);
@@ -242,13 +239,11 @@ gpm_brightness_xrandr_output_down (GpmBrightnessXRandR *brightness, RROutput out
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness), FALSE);
 
 	ret = gpm_brightness_xrandr_output_get_internal (brightness, output, &cur);
-	if (!ret) {
+	if (!ret)
 		return FALSE;
-	}
 	ret = gpm_brightness_xrandr_output_get_limits (brightness, output, &min, &max);
-	if (!ret) {
+	if (!ret || min == max)
 		return FALSE;
-	}
 	egg_debug ("hard value=%i, min=%i, max=%i", cur, min, max);
 	if (cur == min) {
 		egg_debug ("already min");
@@ -276,13 +271,11 @@ gpm_brightness_xrandr_output_up (GpmBrightnessXRandR *brightness, RROutput outpu
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness), FALSE);
 
 	ret = gpm_brightness_xrandr_output_get_internal (brightness, output, &cur);
-	if (!ret) {
+	if (!ret)
 		return FALSE;
-	}
 	ret = gpm_brightness_xrandr_output_get_limits (brightness, output, &min, &max);
-	if (!ret) {
+	if (!ret || min == max)
 		return FALSE;
-	}
 	egg_debug ("hard value=%i, min=%i, max=%i", cur, min, max);
 	if (cur == max) {
 		egg_debug ("already max");
@@ -312,13 +305,11 @@ gpm_brightness_xrandr_output_set (GpmBrightnessXRandR *brightness, RROutput outp
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness), FALSE);
 
 	ret = gpm_brightness_xrandr_output_get_internal (brightness, output, &cur);
-	if (!ret) {
+	if (!ret)
 		return FALSE;
-	}
 	ret = gpm_brightness_xrandr_output_get_limits (brightness, output, &min, &max);
-	if (!ret) {
+	if (!ret || min == max)
 		return FALSE;
-	}
 
 	shared_value_abs = egg_discrete_from_percent (brightness->priv->shared_value, (max-min)+1);
 	egg_debug ("percent=%i, absolute=%i", brightness->priv->shared_value, shared_value_abs);
@@ -338,23 +329,19 @@ gpm_brightness_xrandr_output_set (GpmBrightnessXRandR *brightness, RROutput outp
 		/* going up */
 		for (i=cur; i<=shared_value_abs; i++) {
 			ret = gpm_brightness_xrandr_output_set_internal (brightness, output, i);
-			if (!ret) {
+			if (!ret)
 				break;
-			}
-			if (cur != shared_value_abs) {
+			if (cur != shared_value_abs)
 				g_usleep (1000 * GPM_BRIGHTNESS_DIM_INTERVAL);
-			}
 		}
 	} else {
 		/* going down */
 		for (i=cur; i>=shared_value_abs; i--) {
 			ret = gpm_brightness_xrandr_output_set_internal (brightness, output, i);
-			if (!ret) {
+			if (!ret)
 				break;
-			}
-			if (cur != shared_value_abs) {
+			if (cur != shared_value_abs)
 				g_usleep (1000 * GPM_BRIGHTNESS_DIM_INTERVAL);
-			}
 		}
 	}
 	return TRUE;
@@ -415,9 +402,8 @@ gpm_brightness_xrandr_foreach_screen (GpmBrightnessXRandR *brightness, GpmXRandR
 		resource = (XRRScreenResources *) g_ptr_array_index (brightness->priv->resources, i);
 		egg_debug ("using resource %p", resource);
 		ret = gpm_brightness_xrandr_foreach_resource (brightness, op, resource);
-		if (ret) {
+		if (ret)
 			success_any = TRUE;
-		}
 	}
 	XSync (brightness->priv->dpy, False);
 	return success_any;
@@ -554,9 +540,8 @@ gpm_brightness_xrandr_filter_xevents (GdkXEvent *xevent, GdkEvent *event, gpoint
 	if (event->type == GDK_NOTHING)
 		return GDK_FILTER_CONTINUE;
 	egg_warning ("Type %i", event->type);
-	if (FALSE) {
+	if (FALSE)
 		gpm_brightness_xrandr_may_have_changed (brightness);
-	}
 	return GDK_FILTER_CONTINUE;
 }
 
@@ -596,9 +581,8 @@ gpm_brightness_xrandr_update_cache (GpmBrightnessXRandR *brightness)
 		egg_debug ("freeing resource %p", resource);
 		XRRFreeScreenResources (resource);
 	}
-	if (length > 0) {
+	if (length > 0)
 		g_ptr_array_remove_range (brightness->priv->resources, 0, length);
-	}
 
 	/* do for each screen */
 	display = gdk_display_get_default ();
@@ -700,9 +684,8 @@ gpm_brightness_xrandr_init (GpmBrightnessXRandR *brightness)
 			RRScreenChangeNotifyMask |
 			RROutputPropertyNotifyMask); /* <--- the only one we need, but see rh:345551 */
 	gdk_flush ();
-	if (gdk_error_trap_pop ()) {
+	if (gdk_error_trap_pop ())
 		egg_warning ("failed to select XRRSelectInput");
-	}
 
 	/* create cache of XRRScreenResources as XRRGetScreenResources() is slow */
 	gpm_brightness_xrandr_update_cache (brightness);

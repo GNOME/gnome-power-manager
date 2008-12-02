@@ -130,7 +130,9 @@ gpm_brightness_set (GpmBrightness *brightness, guint percentage, gboolean *hw_ch
 	/* set the hardware */
 	if (brightness->priv->use_xrandr) {
 		ret = gpm_brightness_xrandr_set (brightness->priv->xrandr, percentage, &hw_changed_local);
-		goto out;
+		if (ret)
+			goto out;
+		brightness->priv->use_xrandr = FALSE;
 	}
 	if (brightness->priv->use_hal) {
 		ret = gpm_brightness_hal_set (brightness->priv->hal, percentage, &hw_changed_local);
@@ -178,7 +180,9 @@ gpm_brightness_get (GpmBrightness *brightness, guint *percentage)
 	/* get the brightness from hardware -- slow */
 	if (brightness->priv->use_xrandr) {
 		ret = gpm_brightness_xrandr_get (brightness->priv->xrandr, &percentage_local);
-		goto out;
+		if (ret)
+			goto out;
+		brightness->priv->use_xrandr = FALSE;
 	}
 	if (brightness->priv->use_hal) {
 		ret = gpm_brightness_hal_get (brightness->priv->hal, &percentage_local);
@@ -221,7 +225,9 @@ gpm_brightness_up (GpmBrightness *brightness, gboolean *hw_changed)
 
 	if (brightness->priv->use_xrandr) {
 		ret = gpm_brightness_xrandr_up (brightness->priv->xrandr, &hw_changed_local);
-		goto out;
+		if (ret)
+			goto out;
+		brightness->priv->use_xrandr = FALSE;
 	}
 	if (brightness->priv->use_hal) {
 		ret = gpm_brightness_hal_up (brightness->priv->hal, &hw_changed_local);
@@ -258,7 +264,9 @@ gpm_brightness_down (GpmBrightness *brightness, gboolean *hw_changed)
 
 	if (brightness->priv->use_xrandr) {
 		ret = gpm_brightness_xrandr_down (brightness->priv->xrandr, &hw_changed_local);
-		goto out;
+		if (ret)
+			goto out;
+		brightness->priv->use_xrandr = FALSE;
 	}
 	if (brightness->priv->use_hal) {
 		ret = gpm_brightness_hal_down (brightness->priv->hal, &hw_changed_local);
@@ -388,15 +396,11 @@ gpm_brightness_init (GpmBrightness *brightness)
 	brightness->priv->cache_percentage = 0;
 
 	brightness->priv->xrandr = gpm_brightness_xrandr_new ();
-	if (gpm_brightness_xrandr_has_hw (brightness->priv->xrandr)) {
+	if (gpm_brightness_xrandr_has_hw (brightness->priv->xrandr))
 		brightness->priv->use_xrandr = TRUE;
-	}
 	brightness->priv->hal = gpm_brightness_hal_new ();
 	if (gpm_brightness_hal_has_hw (brightness->priv->hal))
 		brightness->priv->use_hal = TRUE;
-	/* we want to default to only use XRANDR if available, as some hardware can use either */
-	if (brightness->priv->use_xrandr)
-		brightness->priv->use_hal = FALSE;
 	g_signal_connect (brightness->priv->hal, "brightness-changed",
 			  G_CALLBACK (gpm_brightness_hal_changed_cb), brightness);
 	g_signal_connect (brightness->priv->xrandr, "brightness-changed",
