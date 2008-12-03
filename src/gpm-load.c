@@ -39,11 +39,6 @@
 
 #include <glib/gi18n.h>
 
-#include <hal-device-power.h>
-#include <hal-device.h>
-#include <hal-device-store.h>
-#include <hal-manager.h>
-
 #include "gpm-common.h"
 #include "gpm-prefs.h"
 #include "gpm-marshal.h"

@@ -54,6 +54,10 @@ GType		 egg_console_kit_get_type	  	(void) G_GNUC_CONST;
 EggConsoleKit	*egg_console_kit_new			(void);
 gboolean	 egg_console_kit_is_local		(EggConsoleKit	*console);
 gboolean	 egg_console_kit_is_active		(EggConsoleKit	*console);
+gboolean	 egg_console_kit_stop			(EggConsoleKit	*console,
+							 GError		**error);
+gboolean	 egg_console_kit_restart		(EggConsoleKit	*console,
+							 GError		**error);
 
 G_END_DECLS
 

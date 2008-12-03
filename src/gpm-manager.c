@@ -43,10 +43,10 @@
 
 #ifdef HAVE_DK_POWER
  #include <dkp-device.h>
+#else
+ #include <hal-device-power.h>
+ #include <hal-manager.h>
 #endif
-
-#include <hal-device-power.h>
-#include <hal-manager.h>
 
 #include "egg-debug.h"
 #include "egg-console-kit.h"
@@ -104,7 +104,6 @@ struct GpmManagerPrivate
 	GpmScreensaver 		*screensaver;
 	GpmTrayIcon		*tray_icon;
 	GpmEngine		*engine;
-	HalDevicePower		*hal_device_power;
 	gboolean		 low_power;
 	GpmBrightnessKbd	*brightness_kbd;
 	GpmFeedback		*feedback_kbd;
@@ -324,8 +323,6 @@ gpm_manager_sync_policy_sleep (GpmManager *manager)
 		power_save = gconf_client_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_BATT, NULL);
 	}
 
-	hal_device_power_enable_power_save (manager->priv->hal_device_power, power_save);
-
 	/* set the new sleep (inactivity) value */
 	gpm_idle_set_system_timeout (manager->priv->idle, sleep_computer);
 }
@@ -414,19 +411,6 @@ gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 		return FALSE;
 	}
 
-	/* check if computer able to do action */
-	allowed = hal_device_power_can_suspend (manager->priv->hal_device_power);
-	if (allowed == FALSE) {
-		/* error msg as disabled in HAL */
-		gpm_notify_display (manager->priv->notify,
-				    _("Action forbidden"),
-				    _("Suspend is not available on this computer."),
-				    GPM_NOTIFY_TIMEOUT_SHORT,
-				    GPM_STOCK_APP_ICON,
-				    GPM_NOTIFY_URGENCY_NORMAL);
-		return FALSE;
-	}
-
 	/* check to see if we are inhibited */
 	if (gpm_manager_is_inhibit_valid (manager, FALSE, "suspend") == FALSE)
 		return FALSE;
@@ -455,19 +439,6 @@ gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 		gpm_notify_display (manager->priv->notify,
 				    _("Action disallowed"),
 				    _("Hibernate support has been disabled. Contact your administrator for more details."),
-				    GPM_NOTIFY_TIMEOUT_SHORT,
-				    GPM_STOCK_APP_ICON,
-				    GPM_NOTIFY_URGENCY_NORMAL);
-		return FALSE;
-	}
-
-	/* check if computer able to do action */
-	allowed = hal_device_power_can_hibernate (manager->priv->hal_device_power);
-	if (allowed == FALSE) {
-		/* error msg as disabled in HAL */
-		gpm_notify_display (manager->priv->notify,
-				    _("Action forbidden"),
-				    _("Hibernate is not available on this computer."),
 				    GPM_NOTIFY_TIMEOUT_SHORT,
 				    GPM_STOCK_APP_ICON,
 				    GPM_NOTIFY_URGENCY_NORMAL);
@@ -582,13 +553,6 @@ gpm_manager_suspend (GpmManager *manager, GError **error)
 		return FALSE;
 	}
 
-	/* check if computer able to do action */
-	allowed = hal_device_power_can_suspend (manager->priv->hal_device_power);
-	if (allowed == FALSE) {
-		g_set_error (error, GPM_MANAGER_ERROR, GPM_MANAGER_ERROR_NO_HW, "Suspend is not available on this computer");
-		return FALSE;
-	}
-
 	/* check to see if we are inhibited */
 	if (gpm_manager_is_inhibit_valid (manager, FALSE, "hibernate") == FALSE)
 		return FALSE;
@@ -613,13 +577,6 @@ gpm_manager_hibernate (GpmManager *manager, GError **error)
 	allowed = gconf_client_get_bool (manager->priv->conf, GPM_CONF_CAN_HIBERNATE, NULL);
 	if (allowed == FALSE) {
 		g_set_error (error, GPM_MANAGER_ERROR, GPM_MANAGER_ERROR_DENIED, "Hibernate denied by gconf policy");
-		return FALSE;
-	}
-
-	/* check if computer able to do action */
-	allowed = hal_device_power_can_hibernate (manager->priv->hal_device_power);
-	if (allowed == FALSE) {
-		g_set_error (error, GPM_MANAGER_ERROR, GPM_MANAGER_ERROR_NO_HW, "Hibernate is not available on this computer");
 		return FALSE;
 	}
 
@@ -1188,27 +1145,6 @@ gpm_manager_tray_icon_suspend (GpmManager *manager, GpmTrayIcon *tray)
 }
 
 /**
- * gpm_manager_check_sleep_errors:
- * @manager: This class instance
- *
- * Checks HAL for resume failures
- **/
-static void
-gpm_manager_check_sleep_errors (GpmManager *manager)
-{
-	gboolean suspend_error;
-	gboolean hibernate_error;
-
-	hal_device_power_has_suspend_error (manager->priv->hal_device_power, &suspend_error);
-	hal_device_power_has_hibernate_error (manager->priv->hal_device_power, &hibernate_error);
-
-	if (suspend_error)
-		gpm_notify_sleep_failed (manager->priv->notify, FALSE);
-	if (hibernate_error)
-		gpm_notify_sleep_failed (manager->priv->notify, TRUE);
-}
-
-/**
  * screensaver_auth_request_cb:
  * @manager: This manager class instance
  * @auth: If we are trying to authenticate
@@ -1219,23 +1155,6 @@ static void
 screensaver_auth_request_cb (GpmScreensaver *screensaver, gboolean auth_begin, GpmManager *manager)
 {
 	GError *error = NULL;
-	gboolean ret;
-	/* only clear errors if we have finished the authentication */
-	if (!auth_begin) {
-		ret = hal_device_power_clear_suspend_error (manager->priv->hal_device_power, &error);
-		if (!ret) {
-			egg_debug ("Failed to clear suspend error; %s", error->message);
-			g_error_free (error);
-			error = NULL;
-		}
-		error = NULL;
-		ret = hal_device_power_clear_hibernate_error (manager->priv->hal_device_power, &error);
-		if (!ret) {
-			egg_debug ("Failed to clear hibernate error; %s", error->message);
-			g_error_free (error);
-			error = NULL;
-		}
-	}
 
 	if (auth_begin) {
 		/* TODO: This may be a bid of a bodge, as we will have multiple
@@ -1252,22 +1171,6 @@ screensaver_auth_request_cb (GpmScreensaver *screensaver, gboolean auth_begin, G
 			error = NULL;
 		}
 	}
-}
-
-/**
- * gpm_manager_at_exit:
- *
- * Called when we are exiting. We should remove the errors if any
- * exist so we don't get them again on next boot.
- **/
-static void
-gpm_manager_at_exit (void)
-{
-	/* we can't use manager as g_atexit has no userdata */
-	HalDevicePower *hal_device_power = hal_device_power_new ();
-	hal_device_power_clear_suspend_error (hal_device_power, NULL);
-	hal_device_power_clear_hibernate_error (hal_device_power, NULL);
-	g_object_unref (hal_device_power);
 }
 
 /**
@@ -1758,8 +1661,10 @@ gpm_engine_charge_action_cb (GpmEngine *engine, GpmCellUnit *unit, GpmManager *m
 static void
 has_inhibit_changed_cb (GpmInhibit *inhibit, gboolean has_inhibit, GpmManager *manager)
 {
+#ifndef HAVE_DK_POWER
 	HalManager *hal_manager;
-	gboolean is_laptop;
+#endif
+	gboolean is_laptop = FALSE;
 	gboolean show_inhibit_lid;
 	gchar *action = NULL;
 
@@ -1774,9 +1679,11 @@ has_inhibit_changed_cb (GpmInhibit *inhibit, gboolean has_inhibit, GpmManager *m
 	if (show_inhibit_lid == FALSE)
 		return;
 
+#ifndef HAVE_DK_POWER
 	hal_manager = hal_manager_new ();
 	is_laptop = hal_manager_is_laptop (hal_manager);
 	g_object_unref (hal_manager);
+#endif
 
 	/* we don't warn for desktops, as they do not have a lid... */
 	if (is_laptop == FALSE)
@@ -1784,7 +1691,6 @@ has_inhibit_changed_cb (GpmInhibit *inhibit, gboolean has_inhibit, GpmManager *m
 
 	/* get the policy action for battery */
 	action = gconf_client_get_string (manager->priv->conf, GPM_CONF_BUTTON_LID_BATT, NULL);
-
 	if (action == NULL)
 		return;
 
@@ -1869,9 +1775,6 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->screensaver_dpms_throttle_id = 0;
 	manager->priv->screensaver_lid_throttle_id = 0;
 
-	/* do some actions even when killed */
-	g_atexit (gpm_manager_at_exit);
-
 	/* don't apply policy when not active */
 	manager->priv->console = egg_console_kit_new ();
 	g_signal_connect (manager->priv->console, "active-changed",
@@ -1918,8 +1821,6 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->button = gpm_button_new ();
 	g_signal_connect (manager->priv->button, "button-pressed",
 			  G_CALLBACK (button_pressed_cb), manager);
-
-	manager->priv->hal_device_power = hal_device_power_new ();
 
 	/* try and start an interactive service */
 	manager->priv->screensaver = gpm_screensaver_new ();
@@ -1983,9 +1884,6 @@ gpm_manager_init (GpmManager *manager)
 
 	gpm_manager_sync_policy_sleep (manager);
 
-	/* on startup, check if there are suspend errors left */
-	gpm_manager_check_sleep_errors (manager);
-
 	manager->priv->engine = gpm_engine_new ();
 	g_signal_connect (manager->priv->engine, "perhaps-recall",
 			  G_CALLBACK (gpm_engine_perhaps_recall_cb), manager);
@@ -2035,7 +1933,6 @@ gpm_manager_finalize (GObject *object)
 	g_return_if_fail (manager->priv != NULL);
 
 	g_object_unref (manager->priv->conf);
-	g_object_unref (manager->priv->hal_device_power);
 	g_object_unref (manager->priv->dpms);
 	g_object_unref (manager->priv->idle);
 	g_object_unref (manager->priv->engine);

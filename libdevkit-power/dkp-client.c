@@ -44,13 +44,13 @@ struct DkpClientPrivate
 	GHashTable		*hash;
 	GPtrArray		*array;
 
-	gboolean have_properties;
+	gboolean		 have_properties;
 
-	char *daemon_version;
-	gboolean can_suspend;
-	gboolean can_hibernate;
-	gboolean on_battery;
-	gboolean on_low_battery;
+	gchar			*daemon_version;
+	gboolean		 can_suspend;
+	gboolean		 can_hibernate;
+	gboolean		 on_battery;
+	gboolean		 on_low_battery;
 };
 
 enum {
@@ -101,7 +101,7 @@ dkp_client_enumerate_devices (DkpClient *client)
 /**
  * dkp_client_enumerate_devices_private:
  **/
-GPtrArray *
+static GPtrArray *
 dkp_client_enumerate_devices_private (DkpClient *client, GError **error)
 {
 	gboolean ret;
@@ -121,6 +121,52 @@ dkp_client_enumerate_devices_private (DkpClient *client, GError **error)
 		g_error_free (error_local);
 	}
 	return devices;
+}
+
+/**
+ * dkp_client_suspend:
+ **/
+gboolean
+dkp_client_suspend (DkpClient *client, GError **error)
+{
+	gboolean ret;
+	GError *error_local = NULL;
+
+	g_return_val_if_fail (DKP_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (client->priv->proxy != NULL, FALSE);
+
+	ret = dbus_g_proxy_call (client->priv->proxy, "Suspend", &error_local,
+				 G_TYPE_INVALID, G_TYPE_INVALID);
+	if (!ret) {
+		egg_warning ("Couldn't suspend: %s", error_local->message);
+		if (error != NULL)
+			*error = g_error_new (1, 0, "%s", error_local->message);
+		g_error_free (error_local);
+	}
+	return ret;
+}
+
+/**
+ * dkp_client_hibernate:
+ **/
+gboolean
+dkp_client_hibernate (DkpClient *client, GError **error)
+{
+	gboolean ret;
+	GError *error_local = NULL;
+
+	g_return_val_if_fail (DKP_IS_CLIENT (client), FALSE);
+	g_return_val_if_fail (client->priv->proxy != NULL, FALSE);
+
+	ret = dbus_g_proxy_call (client->priv->proxy, "Hibernate", &error_local,
+				 G_TYPE_INVALID, G_TYPE_INVALID);
+	if (!ret) {
+		egg_warning ("Couldn't hibernate: %s", error_local->message);
+		if (error != NULL)
+			*error = g_error_new (1, 0, "%s", error_local->message);
+		g_error_free (error_local);
+	}
+	return ret;
 }
 
 /**

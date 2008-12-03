@@ -1,3 +1,31 @@
+2008-12-03  Richard Hughes  <richard@hughsie.com>
+
+	* libdevkit-power/dkp-client.c: (dkp_client_suspend),
+	(dkp_client_hibernate):
+	* libdevkit-power/dkp-client.h:
+	Add suspend and hibernate helpers.
+
+	* src/egg-console-kit.c: (egg_console_kit_restart),
+	(egg_console_kit_stop):
+	* src/egg-console-kit.h:
+	Add stop and restart helpers.
+
+	* src/gpm-control.c: (gpm_control_allowed_suspend),
+	(gpm_control_allowed_hibernate), (gpm_control_convert_hal_error),
+	(gpm_control_shutdown), (gpm_control_get_lock_policy),
+	(gpm_control_suspend), (gpm_control_hibernate),
+	(gpm_control_finalize), (gpm_control_init):
+	Convert from HAL to DeviceKit and ConsoleKit.
+
+	* src/gpm-load.c:
+	Remove un-needed defines.
+
+	* src/gpm-manager.c: (gpm_manager_sync_policy_sleep),
+	(gpm_manager_action_suspend), (gpm_manager_action_hibernate),
+	(gpm_manager_suspend), (gpm_manager_hibernate),
+	(screensaver_auth_request_cb):
+	Don't include the HAL code if we compiled without HAL.
+
 2008-12-02  Richard Hughes  <richard@hughsie.com>
 
 	* po/POTFILES.in:

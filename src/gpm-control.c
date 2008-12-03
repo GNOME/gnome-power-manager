@@ -42,16 +42,22 @@
 #include <gnome-keyring.h>
 #include <gconf/gconf-client.h>
 
-#include <hal-device-power.h>
+#ifdef HAVE_DK_POWER
+ #include <dkp-client.h>
+#else
+ #include <hal-device-power.h>
+#endif
 
 #ifdef HAVE_POLKIT
 #include <polkit/polkit.h>
 #include <polkit-dbus/polkit-dbus.h>
 #endif
 
+#include "egg-debug.h"
+#include "egg-console-kit.h"
+
 #include "gpm-screensaver.h"
 #include "gpm-common.h"
-#include "egg-debug.h"
 #include "gpm-control.h"
 #include "gpm-networkmanager.h"
 
@@ -60,7 +66,11 @@
 struct GpmControlPrivate
 {
 	GConfClient		*conf;
+#ifdef HAVE_DK_POWER
+	DkpClient		*client;
+#else
 	HalDevicePower		*hal_device_power;
+#endif
 };
 
 enum {
@@ -151,26 +161,27 @@ gpm_control_check_foreground_console (GpmControl *control)
  * @control: This class instance
  * @can: If we can suspend
  *
- * Checks the HAL key power_management.can_suspend_to_ram and also
  * checks gconf to see if we are allowed to suspend this computer.
  **/
 gboolean
-gpm_control_allowed_suspend (GpmControl *control,
-			     gboolean   *can,
-			     GError    **error)
+gpm_control_allowed_suspend (GpmControl *control, gboolean *can, GError **error)
 {
 	gboolean conf_ok;
 	gboolean polkit_ok = TRUE;
-	gboolean hal_ok = FALSE;
+	gboolean hardware_ok = FALSE;
 	gboolean fg;
 	g_return_val_if_fail (can, FALSE);
 
 	*can = FALSE;
 	conf_ok = gconf_client_get_bool (control->priv->conf, GPM_CONF_CAN_SUSPEND, NULL);
-	hal_ok = hal_device_power_can_suspend (control->priv->hal_device_power);
+#ifdef HAVE_DK_POWER
+	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.devicekit.power.suspend");
+#else
+	hardware_ok = hal_device_power_can_suspend (control->priv->hal_device_power);
 	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.hal.power-management.suspend");
+#endif
 	fg = gpm_control_check_foreground_console (control);
-	if (conf_ok && hal_ok && polkit_ok && fg)
+	if (conf_ok && hardware_ok && polkit_ok && fg)
 		*can = TRUE;
 	return TRUE;
 }
@@ -184,30 +195,32 @@ gpm_control_allowed_suspend (GpmControl *control,
  * checks gconf to see if we are allowed to hibernate this computer.
  **/
 gboolean
-gpm_control_allowed_hibernate (GpmControl *control,
-			       gboolean   *can,
-			       GError    **error)
+gpm_control_allowed_hibernate (GpmControl *control, gboolean *can, GError **error)
 {
 	gboolean conf_ok;
 	gboolean polkit_ok = TRUE;
-	gboolean hal_ok = FALSE;
+	gboolean hardware_ok = FALSE;
 	gboolean fg;
 	g_return_val_if_fail (can, FALSE);
 
 	*can = FALSE;
 	conf_ok = gconf_client_get_bool (control->priv->conf, GPM_CONF_CAN_HIBERNATE, NULL);
-	hal_ok = hal_device_power_can_hibernate (control->priv->hal_device_power);
 	fg = gpm_control_check_foreground_console (control);
+#ifdef HAVE_DK_POWER
+	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.devicekit.power.hibernate");
+#else
+	hardware_ok = hal_device_power_can_hibernate (control->priv->hal_device_power);
 	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.hal.power-management.hibernate");
-	if (conf_ok && hal_ok && polkit_ok && fg)
+#endif
+	if (conf_ok && hardware_ok && polkit_ok && fg)
 		*can = TRUE;
 	return TRUE;
 }
 
+#ifndef HAVE_DK_POWER
 /* convert the HAL error to a local error */
 static void
-gpm_control_convert_hal_error (GpmControl *control,
-			       GError    **error)
+gpm_control_convert_hal_error (GpmControl *control, GError **error)
 {
 	gint code;
 	gchar *message;
@@ -234,33 +247,29 @@ gpm_control_convert_hal_error (GpmControl *control,
 	}
 	g_free (message);
 }
+#endif
 
 /**
  * gpm_control_shutdown:
  * @control: This class instance
  *
- * Shuts down the computer, saving the session if possible.
+ * Shuts down the computer
  **/
 gboolean
 gpm_control_shutdown (GpmControl *control, GError **error)
 {
 	gboolean ret;
-	gboolean save_session;
 
-	save_session = gconf_client_get_bool (control->priv->conf, GPM_CONF_SESSION_REQUEST_SAVE, NULL);
-	/* We can set g-p-m to not save the session to avoid confusing new
-	   users. By default we save the session to preserve data. */
-	if (save_session) {
-#if 0
-		gnome_client_request_save (gnome_master_client (),
-					   GNOME_SAVE_GLOBAL,
-					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
-#endif
-	}
-
+#ifdef HAVE_DK_POWER
+	EggConsoleKit *console;
+	console = egg_console_kit_new ();
+	ret = egg_console_kit_stop (console, error);
+	g_object_unref (console);
+#else
 	ret = hal_device_power_shutdown (control->priv->hal_device_power, error);
 	if (!ret)
 		gpm_control_convert_hal_error (control, error);
+#endif
 
 	return ret;
 }
@@ -277,8 +286,7 @@ gpm_control_shutdown (GpmControl *control, GError **error)
  * Return value: TRUE if we should lock.
  **/
 gboolean
-gpm_control_get_lock_policy (GpmControl  *control,
-			     const gchar *policy)
+gpm_control_get_lock_policy (GpmControl *control, const gchar *policy)
 {
 	gboolean do_lock;
 	gboolean use_ss_setting;
@@ -296,9 +304,11 @@ gpm_control_get_lock_policy (GpmControl  *control,
 	return do_lock;
 }
 
+/**
+ * gpm_control_suspend:
+ **/
 gboolean
-gpm_control_suspend (GpmControl *control,
-		     GError    **error)
+gpm_control_suspend (GpmControl *control, GError **error)
 {
 	gboolean allowed;
 	gboolean ret;
@@ -341,9 +351,13 @@ gpm_control_suspend (GpmControl *control,
 	egg_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_SUSPEND);
 
+#ifdef HAVE_DK_POWER
+	ret = dkp_client_suspend (control->priv->client, error);
+#else
 	ret = hal_device_power_suspend (control->priv->hal_device_power, 0, error);
 	if (!ret)
 		gpm_control_convert_hal_error (control, error);
+#endif
 
 	egg_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_SUSPEND);
@@ -365,9 +379,11 @@ gpm_control_suspend (GpmControl *control,
 	return ret;
 }
 
+/**
+ * gpm_control_hibernate:
+ **/
 gboolean
-gpm_control_hibernate (GpmControl *control,
-		       GError    **error)
+gpm_control_hibernate (GpmControl *control, GError **error)
 {
 	gboolean allowed;
 	gboolean ret;
@@ -411,9 +427,13 @@ gpm_control_hibernate (GpmControl *control,
 	egg_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_HIBERNATE);
 
+#ifdef HAVE_DK_POWER
+	ret = dkp_client_hibernate (control->priv->client, error);
+#else
 	ret = hal_device_power_hibernate (control->priv->hal_device_power, error);
 	if (!ret)
 		gpm_control_convert_hal_error (control, error);
+#endif
 
 	egg_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_HIBERNATE);
@@ -448,7 +468,11 @@ gpm_control_finalize (GObject *object)
 	control = GPM_CONTROL (object);
 
 	g_object_unref (control->priv->conf);
+#ifdef HAVE_DK_POWER
+	g_object_unref (control->priv->client);
+#else
 	g_object_unref (control->priv->hal_device_power);
+#endif
 
 	g_return_if_fail (control->priv != NULL);
 	G_OBJECT_CLASS (gpm_control_parent_class)->finalize (object);
@@ -512,7 +536,11 @@ gpm_control_init (GpmControl *control)
 {
 	control->priv = GPM_CONTROL_GET_PRIVATE (control);
 
+#ifdef HAVE_DK_POWER
+	control->priv->client = dkp_client_new ();
+#else
 	control->priv->hal_device_power = hal_device_power_new ();
+#endif
 	control->priv->conf = gconf_client_get_default ();
 }
 

@@ -63,6 +63,52 @@ static guint signals [EGG_CONSOLE_KIT_LAST_SIGNAL] = { 0 };
 G_DEFINE_TYPE (EggConsoleKit, egg_console_kit, G_TYPE_OBJECT)
 
 /**
+ * egg_console_kit_restart:
+ **/
+gboolean
+egg_console_kit_restart (EggConsoleKit *console, GError **error)
+{
+	gboolean ret;
+	GError *error_local = NULL;
+
+	g_return_val_if_fail (EGG_IS_CONSOLE_KIT (console), FALSE);
+	g_return_val_if_fail (console->priv->proxy_manager != NULL, FALSE);
+
+	ret = dbus_g_proxy_call (console->priv->proxy_manager, "Restart", &error_local,
+				 G_TYPE_INVALID, G_TYPE_INVALID);
+	if (!ret) {
+		egg_warning ("Couldn't restart: %s", error_local->message);
+		if (error != NULL)
+			*error = g_error_new (1, 0, "%s", error_local->message);
+		g_error_free (error_local);
+	}
+	return ret;
+}
+
+/**
+ * egg_console_kit_stop:
+ **/
+gboolean
+egg_console_kit_stop (EggConsoleKit *console, GError **error)
+{
+	gboolean ret;
+	GError *error_local = NULL;
+
+	g_return_val_if_fail (EGG_IS_CONSOLE_KIT (console), FALSE);
+	g_return_val_if_fail (console->priv->proxy_manager != NULL, FALSE);
+
+	ret = dbus_g_proxy_call (console->priv->proxy_manager, "Stop", &error_local,
+				 G_TYPE_INVALID, G_TYPE_INVALID);
+	if (!ret) {
+		egg_warning ("Couldn't stop: %s", error_local->message);
+		if (error != NULL)
+			*error = g_error_new (1, 0, "%s", error_local->message);
+		g_error_free (error_local);
+	}
+	return ret;
+}
+
+/**
  * egg_console_kit_is_local:
  *
  * Return value: Returns whether the session is local

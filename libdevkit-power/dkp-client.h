@@ -60,6 +60,10 @@ typedef struct
 GType		 dkp_client_get_type			(void) G_GNUC_CONST;
 DkpClient	*dkp_client_new				(void);
 GPtrArray	*dkp_client_enumerate_devices		(DkpClient		*client);
+gboolean	 dkp_client_suspend			(DkpClient		*client,
+							 GError			**error);
+gboolean	 dkp_client_hibernate			(DkpClient		*client,
+							 GError			**error);
 const gchar	*dkp_client_get_daemon_version		(DkpClient		*client);
 gboolean	 dkp_client_can_hibernate		(DkpClient		*client);
 gboolean	 dkp_client_can_suspend			(DkpClient		*client);
