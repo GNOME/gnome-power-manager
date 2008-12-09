@@ -306,6 +306,8 @@ if HAVE_DK_POWER
 gnome_power_self_test_SOURCES +=			\
 	gpm-devicekit.h					\
 	gpm-devicekit.c					\
+	egg-console-kit.h				\
+	egg-console-kit.c				\
 	$(NULL)
 else
 gnome_power_self_test_SOURCES +=			\

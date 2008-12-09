@@ -90,13 +90,13 @@ gpm_load_get_cpu_values (long unsigned *cpu_idle, long unsigned *cpu_total)
 	long unsigned cpu_wait = 0;
 	kstat_ctl_t *kc = NULL;
 	kstat_named_t *kn = NULL;
-	kstat_t     *ks = NULL;
+	kstat_t *ks = NULL;
 	cpu_stat_t  data;
 	int ncpus;
 	int count;
 	   	
 	kc = kstat_open();
-	if (!kc){
+	if (!kc) {
 		egg_warning ("Cannot open kstat!\n");
 		return FALSE;
 	}
@@ -175,9 +175,8 @@ gpm_load_get_cpu_values (long unsigned *cpu_idle, long unsigned *cpu_total)
 	char *suc;
 
 	fd = fopen("/proc/stat", "r");
-	if (! fd) {
+	if (!fd)
 		return FALSE;
-	}
 	suc = fgets (str, 80, fd);
 	len = sscanf (str, "%s %lu %lu %lu %lu", tmp,
 		      &cpu_user, &cpu_nice, &cpu_system, cpu_idle);
@@ -199,7 +198,7 @@ gpm_load_get_cpu_values (long unsigned *cpu_idle, long unsigned *cpu_total)
 gdouble
 gpm_load_get_current (GpmLoad *load)
 {
-	double	      percentage_load;
+	double percentage_load;
 	long unsigned cpu_idle;
 	long unsigned cpu_total;
 	long unsigned diff_idle;
@@ -208,19 +207,17 @@ gpm_load_get_current (GpmLoad *load)
 
 	/* work out the differences */
 	ret = gpm_load_get_cpu_values (&cpu_idle, &cpu_total);
-	if (!ret) {
+	if (!ret)
 		return 0.0;
-	}
 
 	diff_idle = cpu_idle - load->priv->old_idle;
 	diff_total = cpu_total - load->priv->old_total;
 
 	/* If we divide the total time by idle time we get the load. */
-	if (diff_idle > 0) {
+	if (diff_idle > 0)
 		percentage_load = (double) diff_total / (double) diff_idle;
-	} else {
+	else
 		percentage_load = 100;
-	}
 
 	load->priv->old_idle = cpu_idle;
 	load->priv->old_total = cpu_total;
