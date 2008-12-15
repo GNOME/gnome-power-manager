@@ -123,7 +123,7 @@ gpm_tray_icon_mode_to_string (GpmIconPolicy mode)
  * @link_id: Subsection of gnome-power-manager help section
  **/
 void
-gpm_help_display (char * link_id)
+gpm_help_display (const gchar *link_id)
 {
 	GError *error = NULL;
 	char *command;

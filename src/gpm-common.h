@@ -189,7 +189,7 @@ typedef enum {
 gchar		*gpm_get_timestring		(guint		 time);
 GpmIconPolicy	 gpm_tray_icon_mode_from_string	(const gchar	*mode);
 const gchar	*gpm_tray_icon_mode_to_string	(GpmIconPolicy	 mode);
-void 		 gpm_help_display		(char		*link_id);
+void 		 gpm_help_display		(const gchar	*link_id);
 
 G_END_DECLS
 

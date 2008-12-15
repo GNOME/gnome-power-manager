@@ -30,7 +30,6 @@
 #include <panel-applet.h>
 #include <gtk/gtk.h>
 #include <gtk/gtkbox.h>
-#include <libgnomeui/gnome-help.h>
 #include <glib-object.h>
 #include <dbus/dbus-glib.h>
 
@@ -465,24 +464,7 @@ gpm_applet_dialog_about_cb (BonoboUIComponent *uic, gpointer data, const gchar *
 static void
 gpm_applet_help_cb (BonoboUIComponent *uic, gpointer data, const gchar *verbname)
 {
-	GError *error = NULL;
-	GpmInhibitApplet *applet = GPM_INHIBIT_APPLET(data);
-	GnomeProgram *program = gnome_program_get ();
-
-	gnome_help_display_with_doc_id (program, "gnome-power-manager",
-					"gnome-power-manager.xml",
-					"applets-inhibit", &error);
-	if (error != NULL) {
-		GtkWidget *dialog =
-			gtk_message_dialog_new (GTK_WINDOW (GTK_WIDGET(applet)->parent),
-						GTK_DIALOG_DESTROY_WITH_PARENT,
-						GTK_MESSAGE_ERROR,
-						GTK_BUTTONS_CLOSE,
-						"%s", error->message);
-		gtk_dialog_run (GTK_DIALOG (dialog));
-		gtk_widget_destroy (dialog);
-		g_error_free (error);
-	}
+	gpm_help_display ("applets-inhibit");
 }
 
 /**

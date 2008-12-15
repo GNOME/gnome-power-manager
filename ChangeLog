@@ -1,3 +1,17 @@
+2008-12-15  Richard Hughes  <richard@hughsie.com>
+
+	* applets/brightness/Makefile.am:
+	* applets/brightness/brightness-applet.c: (gpm_applet_help_cb):
+	* applets/brightness/gpm-common.c:
+	* applets/inhibit/Makefile.am:
+	* applets/inhibit/gpm-common.c:
+	* applets/inhibit/inhibit-applet.c: (gpm_applet_help_cb):
+	* src/gpm-common.c: (gpm_help_display):
+	* src/gpm-common.h:
+	Remove libgnomeui dependency from brightness and inhibit applets.
+	Original patch from Lucas Rocha <lucasr.at.mundo@gmail.com>.
+	Fixes #564531
+
 2008-12-09  Richard Hughes  <richard@hughsie.com>
 
 	* src/Makefile.am:

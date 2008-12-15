@@ -14,16 +14,24 @@ INCLUDES =							\
 	-DLIBDIR=\""$(libdir)"\" 				\
 	-DVERSION="\"$(VERSION)\"" 				\
 	-DGPM_DATA=\"$(pkgdatadir)\"				\
-	-DEGG_LOG_FILE=\""~/gnome-power-manager.log"\"	\
-	-DEGG_VERBOSE="\"GPM_VERBOSE\""			\
-	-DEGG_LOGGING="\"GPM_LOGGING\""			\
-	-DEGG_CONSOLE="\"GPM_CONSOLE\""			\
+	-DEGG_LOG_FILE=\""~/gnome-power-manager.log"\"		\
+	-DEGG_VERBOSE="\"GPM_VERBOSE\""				\
+	-DEGG_LOGGING="\"GPM_LOGGING\""				\
+	-DEGG_CONSOLE="\"GPM_CONSOLE\""				\
 	-I$(top_srcdir)/libdbus-glib				\
 	$(NULL)
 
 libexec_PROGRAMS=gnome-brightness-applet
 
-gnome_brightness_applet_SOURCES = brightness-applet.c egg-dbus-monitor.c egg-dbus-monitor.h egg-debug.c egg-debug.h gpm-common.h
+gnome_brightness_applet_SOURCES =				\
+	brightness-applet.c					\
+	egg-dbus-monitor.c					\
+	egg-dbus-monitor.h					\
+	egg-debug.c						\
+	egg-debug.h						\
+	gpm-common.c						\
+	gpm-common.h
+
 gnome_brightness_applet_LDADD =					\
 	$(DBUS_LIBS)						\
 	$(GNOME_LIBS)
