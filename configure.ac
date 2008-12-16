@@ -139,9 +139,20 @@ AM_GCONF_SOURCE_2
 
 AC_PATH_XTRA
 
+dnl ---------------------------------------------------------------------------
+dnl - Check XF86XK_Keys
+dnl ---------------------------------------------------------------------------
 AC_CHECK_DECL(XF86XK_Battery,have_XF86XK_Battery=1,have_XF86XK_Battery=0,[#include <X11/XF86keysym.h>])
 if test "x${ac_cv_have_decl_XF86XK_Battery}" != "xno"; then
   AC_DEFINE(HAVE_XF86XK_BATTERY, 1, [Define if XF86XK_Battery is available])
+fi
+AC_CHECK_DECL(XF86XK_Suspend,have_XF86XK_Suspend=1,have_XF86XK_Suspend=0,[#include <X11/XF86keysym.h>])
+if test "x${ac_cv_have_decl_XF86XK_Suspend}" != "xno"; then
+  AC_DEFINE(HAVE_XF86XK_SUSPEND, 1, [Define if XF86XK_Suspend is available])
+fi
+AC_CHECK_DECL(XF86XK_Hibernate,have_XF86XK_Hibernate=1,have_XF86XK_Hibernate=0,[#include <X11/XF86keysym.h>])
+if test "x${ac_cv_have_decl_XF86XK_Hibernate}" != "xno"; then
+  AC_DEFINE(HAVE_XF86XK_HIBERNATE, 1, [Define if XF86XK_Hibernate is available])
 fi
 
 ALL_X_LIBS="$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS"

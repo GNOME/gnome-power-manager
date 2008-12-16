@@ -519,9 +519,13 @@ gpm_button_init (GpmButton *button)
 	if (have_xevents) {
 		/* register the brightness keys */
 		gpm_button_xevent_key (button, XF86XK_PowerOff, GPM_BUTTON_POWER);
-//		gpm_button_xevent_key (button, XF86XK_Suspend, GPM_BUTTON_SUSPEND);
+#ifdef HAVE_XF86XK_SUSPEND
+		gpm_button_xevent_key (button, XF86XK_Suspend, GPM_BUTTON_SUSPEND);
+#endif
 		gpm_button_xevent_key (button, XF86XK_Sleep, GPM_BUTTON_SUSPEND); /* should be configurable */
-//		gpm_button_xevent_key (button, XF86XK_Hibernate, GPM_BUTTON_HIBERNATE);
+#ifdef HAVE_XF86XK_HIBERNATE
+		gpm_button_xevent_key (button, XF86XK_Hibernate, GPM_BUTTON_HIBERNATE);
+#endif
 		gpm_button_xevent_key (button, XF86XK_MonBrightnessUp, GPM_BUTTON_BRIGHT_UP);
 		gpm_button_xevent_key (button, XF86XK_MonBrightnessDown, GPM_BUTTON_BRIGHT_DOWN);
 		gpm_button_xevent_key (button, XF86XK_ScreenSaver, GPM_BUTTON_LOCK);
