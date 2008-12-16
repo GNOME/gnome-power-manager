@@ -525,7 +525,9 @@ gpm_button_init (GpmButton *button)
 		gpm_button_xevent_key (button, XF86XK_MonBrightnessUp, GPM_BUTTON_BRIGHT_UP);
 		gpm_button_xevent_key (button, XF86XK_MonBrightnessDown, GPM_BUTTON_BRIGHT_DOWN);
 		gpm_button_xevent_key (button, XF86XK_ScreenSaver, GPM_BUTTON_LOCK);
+#ifdef HAVE_XF86XK_BATTERY
 		gpm_button_xevent_key (button, XF86XK_Battery, GPM_BUTTON_BATTERY);
+#endif
 		gpm_button_xevent_key (button, XF86XK_KbdBrightnessUp, GPM_BUTTON_KBD_BRIGHT_UP);
 		gpm_button_xevent_key (button, XF86XK_KbdBrightnessDown, GPM_BUTTON_KBD_BRIGHT_DOWN);
 		gpm_button_xevent_key (button, XF86XK_KbdLightOnOff, GPM_BUTTON_KBD_BRIGHT_TOGGLE);

@@ -1,3 +1,10 @@
+2008-12-16  Frederic Peters  <fpeters@0d.be>
+
+	* configure.ac:
+	* src/gpm-button.c: (gpm_button_init):
+	Added check for XF86XK_Battery as it is new in x11proto.
+	Fixes #558103
+
 2008-12-15  Richard Hughes  <richard@hughsie.com>
 
 	* applets/brightness/Makefile.am:

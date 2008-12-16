@@ -139,6 +139,11 @@ AM_GCONF_SOURCE_2
 
 AC_PATH_XTRA
 
+AC_CHECK_DECL(XF86XK_Battery,have_XF86XK_Battery=1,have_XF86XK_Battery=0,[#include <X11/XF86keysym.h>])
+if test "x${ac_cv_have_decl_XF86XK_Battery}" != "xno"; then
+  AC_DEFINE(HAVE_XF86XK_BATTERY, 1, [Define if XF86XK_Battery is available])
+fi
+
 ALL_X_LIBS="$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS"
 
 dnl ---------------------------------------------------------------------------
