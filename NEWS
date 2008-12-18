@@ -1,3 +1,69 @@
+==============
+Version 2.25.1
+==============
+
+- Rewrite engine to support DeviceKit-power
+- Rewrite statistics graphing application to support DeviceKit-power
+- NOTE: you can still build g-p-m without DeviceKit-power, but functionality
+  is very limited, and there are no statistics or battery profiling available.
+  It's also not tested by me. The next release will probably have the HAL
+  compatability code removed completely.
+- Distros that do not yet ship DeviceKit-power can ship packages from
+  GNOME_POWER_MANAGER_2_24_X which is still maintained.
+
+- Fixed #462109, make distcheck fails on my laptop (Richard Hughes)
+- Fixed #549844, DBUS times out after longer suspends (Richard Hughes)
+- Fixed #551582, build error ('warning' undeclared) (Richard Hughes)
+- Fixed #558103, Build fails with undefined symbol XF86XK_Battery (Frederic Peters)
+- Fixed #558670, Make "Make defaults" actually work :-) (Vincent Untz)
+- Fixed #559994, missing locale.h includes (Frederic Peters)
+- Fixed #561114, Escape should close/cancel focused toplevel dialog (Richard Hughes)
+- Fixed #562445, build failure; missing gpm-engine.h (Richard Hughes)
+- Fixed #562836, GPM OSD does not popup on machines that support keys in HW but not in xrandr (Richard Hughes)
+- Fixed #562900, gnome power manager keeps using xrandr backend after failed calls (Richard Hughes)
+- Fixed #564531, build error, applets depend on libgnomeui (Richard Hughes)
+
+Translations:
+- Updated ast: Astur, Gil Forcada
+- Updated bg: Alexander Shopov
+- Updated ca: David Planella
+- Updated cs: Pavel Sefranek, Petr Kovar
+- Updated da: Kenneth Nielsen
+- Updated de: Michael Kanis, Hendrik Richter
+- Updated es: Jorge González, Jorge Gonzalez
+- Updated et: Ivar Smolin
+- Updated eu: Iñaki Larrañaga Murgoitio, Djihed Afifi
+- Updated fi: Timo Jyrinki
+- Updated gl: Ignacio Casal Quinteiro
+- Updated he: Yair Hershkoviz, Yaniv Abir
+- Updated hr: Robert Sedak, Tomislav Pavlović
+- Updated hu: Gabor Kelemen
+- Updated is: Djihed Afifi
+- Updated it: Luca Ferretti, Milo Casagrande
+- Updated ko: Changwoo Ryu
+- Updated lt: Gintautas Miliauskas
+- Updated lv: Djihed Afifi
+- Updated mk: Djihed Afifi, Arangel Angov
+- Updated nb: Kjartan Maraas
+- Updated nl: Wouter Bolsterlee
+- Updated pl: Tomasz Dominikowski
+- Updated pt: Duarte Loreto
+- Updated pt_BR: Djihed Afifi
+- Updated ro: Mugurel Tudor, Alexandru Szasz
+- Updated ru: Yuriy Penkin, Djihed Afifi
+- Updated sr@latin: Goran Rakić, Ignacio Casal Quinteiro
+- Updated sv: Daniel Nylander
+- Updated uk: Djihed Afifi
+- Updated vi: Nguyễn Thái Ngọc Duy, Clytie Siddall
+- Updated zh_CN: Funda Wang, YangZhang
+- Updated zh_TW: Hialan Liu, Djihed Afifi
+
+Help Manual Translations:
+- Updated ca: Joan Duran
+- Updated fr: Robert-André Mauchin
+- Updated hu: Gabor Kelemen
+- Updated it: Luca Ferretti, Milo Casagrande
+
 ===============
 Version 2.23.91
 ===============
