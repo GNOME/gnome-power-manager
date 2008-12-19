@@ -1,5 +1,14 @@
 2008-12-19  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-control.c: (gpm_control_allowed_suspend),
+	(gpm_control_allowed_hibernate):
+	* src/run-gpm.sh:
+	When using DeviceKit actually query the can_suspend and can_hibernate
+	properties.
+	Fixes #565025
+
+2008-12-19  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-feedback-widget.c:
 	* src/gpm-refcount.c: (gpm_refcount_add),
 	(gpm_refcount_set_timeout):

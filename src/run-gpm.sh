@@ -15,7 +15,7 @@ fi
 
 killall gnome-power-manager
 export G_DEBUG=fatal_criticals
-extra='--no-daemon --verbose'
+extra='--verbose'
 
 if [ "$1" = "--profile" ] ; then
 	shift

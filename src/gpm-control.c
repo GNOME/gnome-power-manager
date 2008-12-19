@@ -167,8 +167,8 @@ gboolean
 gpm_control_allowed_suspend (GpmControl *control, gboolean *can, GError **error)
 {
 	gboolean conf_ok;
-	gboolean polkit_ok = TRUE;
-	gboolean hardware_ok = FALSE;
+	gboolean polkit_ok;
+	gboolean hardware_ok;
 	gboolean fg;
 	g_return_val_if_fail (can, FALSE);
 
@@ -176,13 +176,15 @@ gpm_control_allowed_suspend (GpmControl *control, gboolean *can, GError **error)
 	conf_ok = gconf_client_get_bool (control->priv->conf, GPM_CONF_CAN_SUSPEND, NULL);
 #ifdef HAVE_DK_POWER
 	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.devicekit.power.suspend");
+	hardware_ok = dkp_client_can_suspend (control->priv->client);
 #else
-	hardware_ok = hal_device_power_can_suspend (control->priv->hal_device_power);
 	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.hal.power-management.suspend");
+	hardware_ok = hal_device_power_can_suspend (control->priv->hal_device_power);
 #endif
 	fg = gpm_control_check_foreground_console (control);
 	if (conf_ok && hardware_ok && polkit_ok && fg)
 		*can = TRUE;
+	egg_warning ("conf=%i, polkit=%i, fg=%i, can=%i", conf_ok, polkit_ok, fg, *can);
 	return TRUE;
 }
 
@@ -198,8 +200,8 @@ gboolean
 gpm_control_allowed_hibernate (GpmControl *control, gboolean *can, GError **error)
 {
 	gboolean conf_ok;
-	gboolean polkit_ok = TRUE;
-	gboolean hardware_ok = FALSE;
+	gboolean polkit_ok;
+	gboolean hardware_ok;
 	gboolean fg;
 	g_return_val_if_fail (can, FALSE);
 
@@ -208,12 +210,14 @@ gpm_control_allowed_hibernate (GpmControl *control, gboolean *can, GError **erro
 	fg = gpm_control_check_foreground_console (control);
 #ifdef HAVE_DK_POWER
 	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.devicekit.power.hibernate");
+	hardware_ok = dkp_client_can_hibernate (control->priv->client);
 #else
-	hardware_ok = hal_device_power_can_hibernate (control->priv->hal_device_power);
 	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.hal.power-management.hibernate");
+	hardware_ok = hal_device_power_can_hibernate (control->priv->hal_device_power);
 #endif
 	if (conf_ok && hardware_ok && polkit_ok && fg)
 		*can = TRUE;
+	egg_warning ("conf=%i, polkit=%i, fg=%i, can=%i", conf_ok, polkit_ok, fg, *can);
 	return TRUE;
 }
 
