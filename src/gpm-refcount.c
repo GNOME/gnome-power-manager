@@ -38,7 +38,7 @@ static void     gpm_refcount_finalize   (GObject	  *object);
 
 struct GpmRefcountPrivate
 {
-	guint		 timeout; /* ms */
+	guint		 timeout; /* s */
 	guint		 refcount;
 };
 
@@ -105,7 +105,7 @@ gpm_refcount_add (GpmRefcount *refcount)
 	g_idle_remove_by_data (refcount);
 
 	/* add ONE automatic timeout */
-	g_timeout_add (refcount->priv->timeout, gpm_refcount_auto_decrement, refcount);
+	g_timeout_add_seconds (refcount->priv->timeout, gpm_refcount_auto_decrement, refcount);
 
 	return TRUE;
 }
@@ -135,6 +135,7 @@ gpm_refcount_remove (GpmRefcount *refcount)
 /**
  * gpm_refcount_set_timeout:
  * @refcount: This class instance
+ * @timeout: seconds
  * Return value: success
  **/
 gboolean
@@ -143,13 +144,13 @@ gpm_refcount_set_timeout (GpmRefcount *refcount, guint timeout)
 	g_return_val_if_fail (refcount != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_REFCOUNT (refcount), FALSE);
 
-	if (timeout > 100000) {
+	if (timeout > 1000) {
 		egg_warning ("refcount is not designed for long timeouts");
 		return FALSE;
 	}
 	if (timeout == 0) {
 		egg_warning ("refcount cannot be zero");
-		timeout = 1000;
+		timeout = 1; /* seconds */
 	}
 
 	refcount->priv->timeout = timeout;

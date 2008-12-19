@@ -39,7 +39,7 @@ static void	gpm_feedback_show	(GtkWidget 	  *widget);
 
 #define GPM_FEEDBACK_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_FEEDBACK, GpmFeedbackPrivate))
 
-#define GPM_FEEDBACK_TIMOUT		2000	/* ms */
+#define GPM_FEEDBACK_TIMOUT		2	/* s */
 
 struct GpmFeedbackPrivate
 {

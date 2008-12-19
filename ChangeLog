@@ -1,3 +1,11 @@
+2008-12-19  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-feedback-widget.c:
+	* src/gpm-refcount.c: (gpm_refcount_add),
+	(gpm_refcount_set_timeout):
+	Convert the one last g_timeout_add into g_timeout_add_seconds.
+	Fixes #565076
+
 2008-12-18  Richard Hughes  <richard@hughsie.com>
 
 	* configure.ac:
