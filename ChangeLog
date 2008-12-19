@@ -2,6 +2,16 @@
 
 	* src/gpm-control.c: (gpm_control_allowed_suspend),
 	(gpm_control_allowed_hibernate):
+	Make warnings into debug statements.
+
+	* src/gpm-devicekit.c: (gpm_devicekit_get_object_description):
+	Fix a bug where the DeviceKit device descriptions were being
+	rescaled from mWh to Wh, but DK-p already sends them in Wh.
+
+2008-12-19  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-control.c: (gpm_control_allowed_suspend),
+	(gpm_control_allowed_hibernate):
 	* src/run-gpm.sh:
 	When using DeviceKit actually query the can_suspend and can_hibernate
 	properties.

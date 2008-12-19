@@ -184,7 +184,7 @@ gpm_control_allowed_suspend (GpmControl *control, gboolean *can, GError **error)
 	fg = gpm_control_check_foreground_console (control);
 	if (conf_ok && hardware_ok && polkit_ok && fg)
 		*can = TRUE;
-	egg_warning ("conf=%i, polkit=%i, fg=%i, can=%i", conf_ok, polkit_ok, fg, *can);
+	egg_debug ("conf=%i, polkit=%i, fg=%i, can=%i", conf_ok, polkit_ok, fg, *can);
 	return TRUE;
 }
 
@@ -217,7 +217,7 @@ gpm_control_allowed_hibernate (GpmControl *control, gboolean *can, GError **erro
 #endif
 	if (conf_ok && hardware_ok && polkit_ok && fg)
 		*can = TRUE;
-	egg_warning ("conf=%i, polkit=%i, fg=%i, can=%i", conf_ok, polkit_ok, fg, *can);
+	egg_debug ("conf=%i, polkit=%i, fg=%i, can=%i", conf_ok, polkit_ok, fg, *can);
 	return TRUE;
 }
 

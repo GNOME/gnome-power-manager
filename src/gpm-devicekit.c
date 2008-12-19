@@ -287,17 +287,17 @@ gpm_devicekit_get_object_description (const DkpObject *obj)
 	if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
 		if (obj->energy > 0)
 			g_string_append_printf (details, _("<b>Current charge:</b> %.1f Wh\n"),
-						obj->energy / 1000.0f);
+						obj->energy);
 		if (obj->energy_full > 0 &&
 		    obj->energy_full_design != obj->energy_full)
 			g_string_append_printf (details, _("<b>Last full charge:</b> %.1f Wh\n"),
-						obj->energy_full / 1000.0f);
+						obj->energy_full);
 		if (obj->energy_full_design > 0)
 			g_string_append_printf (details, _("<b>Design charge:</b> %.1f Wh\n"),
-						obj->energy_full_design / 1000.0f);
+						obj->energy_full_design);
 		if (obj->energy_rate > 0)
 			g_string_append_printf (details, _("<b>Charge rate:</b> %.1f W\n"),
-						obj->energy_rate / 1000.0f);
+						obj->energy_rate);
 	}
 	if (obj->type == DKP_DEVICE_TYPE_MOUSE ||
 	    obj->type == DKP_DEVICE_TYPE_KEYBOARD) {
