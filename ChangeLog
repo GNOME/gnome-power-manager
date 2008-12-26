@@ -1,5 +1,10 @@
 2008-12-26  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-cell-array.c: (phone_device_added_cb):
+	Fix a trivial compile warning in the old code.
+
+2008-12-26  Richard Hughes  <richard@hughsie.com>
+
 	* libdevkit-power/dkp-device.c: (dkp_device_finalize):
 	Don't do dbus_g_connection_ref on a global connection object.
 	Fixes RH#477913

@@ -1072,7 +1072,7 @@ conf_key_changed_cb (GConfClient      *conf,
  **/
 static void
 phone_device_added_cb (GpmPhone     *phone,
-		       guint        *index,
+		       guint         index,
 		       GpmCellArray *cell_array)
 {
 
@@ -1093,7 +1093,7 @@ phone_device_added_cb (GpmPhone     *phone,
 			  G_CALLBACK (gpm_cell_charging_changed_cb), cell_array);
 	g_signal_connect (cell, "discharging-changed",
 			  G_CALLBACK (gpm_cell_discharging_changed_cb), cell_array);
-	gpm_cell_set_phone_index (cell, 0);
+	gpm_cell_set_phone_index (cell, index);
 	gpm_cell_print (cell);
 
 	g_ptr_array_add (cell_array->priv->array, (gpointer) cell);
