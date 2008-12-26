@@ -1,3 +1,9 @@
+2008-12-26  Richard Hughes  <richard@hughsie.com>
+
+	* libdevkit-power/dkp-device.c: (dkp_device_finalize):
+	Don't do dbus_g_connection_ref on a global connection object.
+	Fixes RH#477913
+
 2008-12-25  Frederic Peters  <fpeters@0d.be>
 
 	* src/gpm-tray-icon.c: (gpm_tray_icon_set_tooltip):

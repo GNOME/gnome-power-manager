@@ -475,7 +475,6 @@ dkp_device_finalize (GObject *object)
 		g_object_unref (device->priv->proxy_device);
 	if (device->priv->proxy_props != NULL)
 		g_object_unref (device->priv->proxy_props);
-	dbus_g_connection_unref (device->priv->bus);
 
 	G_OBJECT_CLASS (dkp_device_parent_class)->finalize (object);
 }
