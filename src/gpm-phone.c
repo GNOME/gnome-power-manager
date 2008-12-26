@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2007 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2007-2008 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -53,7 +53,6 @@ enum {
 	DEVICE_ADDED,
 	DEVICE_REMOVED,
 	DEVICE_REFRESH,
-	CONNECTION_CHANGED,
 	LAST_SIGNAL
 };
 
@@ -216,9 +215,7 @@ gpm_phone_class_init (GpmPhoneClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmPhoneClass, device_added),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__UINT,
+			      NULL, NULL, g_cclosure_marshal_VOID__UINT,
 			      G_TYPE_NONE, 1, G_TYPE_UINT);
 
 	signals [DEVICE_REMOVED] =
@@ -226,9 +223,7 @@ gpm_phone_class_init (GpmPhoneClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmPhoneClass, device_removed),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__UINT,
+			      NULL, NULL, g_cclosure_marshal_VOID__UINT,
 			      G_TYPE_NONE, 1, G_TYPE_UINT);
 
 	signals [DEVICE_REFRESH] =
@@ -236,20 +231,8 @@ gpm_phone_class_init (GpmPhoneClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmPhoneClass, device_refresh),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__UINT,
+			      NULL, NULL, g_cclosure_marshal_VOID__UINT,
 			      G_TYPE_NONE, 1, G_TYPE_UINT);
-
-	signals [CONNECTION_CHANGED] =
-		g_signal_new ("connection-changed",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmPhoneClass, connection_changed),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 }
 
 /**
@@ -346,11 +329,10 @@ monitor_connection_cb (EggDbusMonitor *monitor,
 		     gboolean   status,
 		     GpmPhone  *phone)
 {
-	if (status) {
+	if (status)
 		gpm_phone_dbus_connect (phone);
-	} else {
+	else
 		gpm_phone_dbus_disconnect (phone);
-	}
 }
 
 /**
@@ -437,9 +419,8 @@ phone_device_refresh_cb (GpmPhone     *phone,
 		         gpointer     *data)
 {
 	g_debug ("index refresh = %i", index);
-	if (index == 0 && GPOINTER_TO_UINT (data) == 44) {
+	if (index == 0 && GPOINTER_TO_UINT (data) == 44)
 		test_got_refresh = TRUE;
-	}
 }
 
 void
@@ -456,11 +437,10 @@ gpm_phone_test (EggTest *test)
 	/************************************************************/
 	egg_test_title (test, "make sure we get a non null phone");
 	phone = gpm_phone_new ();
-	if (phone != NULL) {
+	if (phone != NULL)
 		egg_test_success (test, "got GpmPhone");
-	} else {
+	else
 		egg_test_failed (test, "could not get GpmPhone");
-	}
 
 	/* connect signals */
 	g_signal_connect (phone, "device-refresh",

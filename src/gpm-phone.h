@@ -48,8 +48,6 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
-	void		(* connection_changed)		(GpmPhone	*phone,
-					    		 gboolean	 connected);
 	void		(* device_added)		(GpmPhone	*phone,
 							 guint		 index);
 	void		(* device_removed)		(GpmPhone	*phone,
