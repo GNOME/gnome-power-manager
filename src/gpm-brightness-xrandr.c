@@ -301,6 +301,7 @@ gpm_brightness_xrandr_output_set (GpmBrightnessXRandR *brightness, RROutput outp
 	guint min, max;
 	gint i;
 	gint shared_value_abs;
+	guint step;
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness), FALSE);
 
@@ -326,8 +327,13 @@ gpm_brightness_xrandr_output_set (GpmBrightnessXRandR *brightness, RROutput outp
 
 	/* step the correct way */
 	if (cur < shared_value_abs) {
+
+		/* some adaptors have a large number of steps */
+		step = gpm_brightness_get_step (shared_value_abs - cur);
+		egg_debug ("using step of %i", step);
+
 		/* going up */
-		for (i=cur; i<=shared_value_abs; i++) {
+		for (i=cur; i<=shared_value_abs; i+=step) {
 			ret = gpm_brightness_xrandr_output_set_internal (brightness, output, i);
 			if (!ret)
 				break;
@@ -335,8 +341,13 @@ gpm_brightness_xrandr_output_set (GpmBrightnessXRandR *brightness, RROutput outp
 				g_usleep (1000 * GPM_BRIGHTNESS_DIM_INTERVAL);
 		}
 	} else {
+
+		/* some adaptors have a large number of steps */
+		step = gpm_brightness_get_step (cur - shared_value_abs);
+		egg_debug ("using step of %i", step);
+
 		/* going down */
-		for (i=cur; i>=shared_value_abs; i--) {
+		for (i=cur; i>=shared_value_abs; i-=step) {
 			ret = gpm_brightness_xrandr_output_set_internal (brightness, output, i);
 			if (!ret)
 				break;

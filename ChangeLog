@@ -1,3 +1,11 @@
+2009-01-02  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-brightness-xrandr.c: (gpm_brightness_xrandr_output_set):
+	Don't step through each brightness state when we fade modes, some
+	devices using XRandR have an insane number of steps. Use the step
+	value we calculated for the _up and _down logic.
+	Fixes #566095
+
 2008-12-26  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-phone.c: (gpm_phone_class_init), (monitor_connection_cb),
