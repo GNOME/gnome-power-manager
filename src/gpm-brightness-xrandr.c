@@ -103,7 +103,7 @@ gpm_brightness_xrandr_output_get_internal (GpmBrightnessXRandR *brightness, RROu
 		return FALSE;
 	}
 	if (actual_type == XA_INTEGER && nitems == 1 && actual_format == 32) {
-		*cur = *((int *) prop);
+		memcpy (cur, prop, sizeof (guint));
 		ret = TRUE;
 	}
 	XFree (prop);

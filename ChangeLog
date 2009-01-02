@@ -1,3 +1,11 @@
+2009-01-03  Josselin Mouette  <joss@malsain.org>
+
+	* src/gpm-brightness-xrandr.c:
+	(gpm_brightness_xrandr_output_get_internal):
+	Use memcpy instead of casting a char* to an int* without 
+	alignment guarantees.
+	Fixes #566115 (fails to build on sparc)
+
 2009-01-02  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-brightness-xrandr.c: (gpm_brightness_xrandr_output_set):
