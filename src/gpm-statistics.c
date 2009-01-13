@@ -585,6 +585,25 @@ gpm_stats_update_info_data (const DkpDevice *device)
 	return;
 }
 
+static void
+gpm_stats_set_title (GtkWindow *window, gint page_num)
+{
+	const gchar * const page_titles[] = {
+		N_("Device Information"),
+		N_("Device History"),
+		N_("Device Profile")
+	};
+	gchar *title;
+
+	g_assert (page_num < G_N_ELEMENTS (page_titles));
+
+	title = g_strdup_printf ("%s - %s", _("Power Statistics"), _(page_titles[page_num]));
+
+	gtk_window_set_title (window, title);
+
+	g_free (title);
+}
+
 /**
  * gpm_stats_notebook_changed_cb:
  **/
@@ -596,12 +615,7 @@ gpm_stats_notebook_changed_cb (GtkNotebook *notebook, GtkNotebookPage *page, gin
 
 	/* set the window title depending on the mode */
 	widget = glade_xml_get_widget (glade_xml, "dialog_stats");
-	if (page_num == 0)
-		gtk_window_set_title (GTK_WINDOW(widget), _("Power Statistics - Device Information"));
-	else if (page_num == 1)
-		gtk_window_set_title (GTK_WINDOW(widget), _("Power Statistics - Device History"));
-	else if (page_num == 2)
-		gtk_window_set_title (GTK_WINDOW(widget), _("Power Statistics - Device Profile"));
+	gpm_stats_set_title (GTK_WINDOW (widget), page_num);
 
 	/* save page in gconf */
 	gconf_client_set_int (gconf_client, GPM_CONF_INFO_PAGE_NUMBER, page_num, NULL);
