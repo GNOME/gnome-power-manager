@@ -592,6 +592,16 @@ static void
 gpm_stats_notebook_changed_cb (GtkNotebook *notebook, GtkNotebookPage *page, gint page_num, gpointer user_data)
 {
 	DkpDevice *device;
+	GtkWidget *widget;
+
+	/* set the window title depending on the mode */
+	widget = glade_xml_get_widget (glade_xml, "dialog_stats");
+	if (page_num == 0)
+		gtk_window_set_title (GTK_WINDOW(widget), _("Power Statistics - Device Information"));
+	else if (page_num == 1)
+		gtk_window_set_title (GTK_WINDOW(widget), _("Power Statistics - Device History"));
+	else if (page_num == 2)
+		gtk_window_set_title (GTK_WINDOW(widget), _("Power Statistics - Device Profile"));
 
 	/* save page in gconf */
 	gconf_client_set_int (gconf_client, GPM_CONF_INFO_PAGE_NUMBER, page_num, NULL);

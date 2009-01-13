@@ -1,5 +1,12 @@
 2009-01-13  Richard Hughes  <richard@hughsie.com>
 
+	* data/gpm-statistics.glade:
+	* src/gpm-statistics.c: (gpm_stats_notebook_changed_cb):
+	Change the window title when in different modes.
+	Fixes #567295
+
+2009-01-13  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-prefs-core.c: (gpm_prefs_init):
 	* src/gpm-statistics.c: (main):
 	Fix some small code issues found by Paolo Borelli.
