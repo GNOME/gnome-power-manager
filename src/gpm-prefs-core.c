@@ -1111,8 +1111,7 @@ gpm_prefs_init (GpmPrefs *prefs)
 
 	/* Hide window first so that the dialogue resizes itself without redrawing */
 	gtk_widget_hide (main_window);
-
-	gtk_window_set_icon_name (GTK_WINDOW(main_window), GPM_STOCK_APP_ICON);
+	gtk_window_set_default_icon_name (GPM_STOCK_APP_ICON);
 
 	/* Get the main window quit */
 	g_signal_connect (main_window, "delete_event",

@@ -990,7 +990,7 @@ main (int argc, char *argv[])
 	g_type_init ();
 
 	context = g_option_context_new (NULL);
-	g_option_context_set_summary (context, _("Software Log Viewer"));
+	g_option_context_set_summary (context, _("Power Statistics"));
 	g_option_context_add_main_entries (context, options, NULL);
 	g_option_context_parse (context, &argc, &argv, NULL);
 	g_option_context_free (context);
@@ -1025,9 +1025,8 @@ main (int argc, char *argv[])
 
 	glade_xml = glade_xml_new (GPM_DATA "/gpm-statistics.glade", NULL, NULL);
 	widget = glade_xml_get_widget (glade_xml, "dialog_stats");
-	gtk_window_set_icon_name (GTK_WINDOW (widget), "gtk-help");
-	gtk_widget_set_size_request (widget, 800, 500);
-	gtk_window_set_icon_name (GTK_WINDOW (widget), GPM_STOCK_APP_ICON);
+	gtk_window_set_default_size (GTK_WINDOW(widget), 800, 500);
+	gtk_window_set_default_icon_name (GPM_STOCK_APP_ICON);
 
 	/* Get the main window quit */
 	g_signal_connect_swapped (widget, "delete_event", G_CALLBACK (gtk_main_quit), NULL);
