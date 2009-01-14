@@ -1,3 +1,23 @@
+2009-01-14  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-engine.c: (gpm_engine_coldplug_idle_cb),
+	(gpm_engine_device_added_cb), (phone_device_added_cb),
+	(phone_device_removed_cb), (phone_device_refresh_cb),
+	(gpm_engine_init), (gpm_engine_finalize):
+	Use gnome-phone-manager and show cell phone batteries.
+
+	* src/gpm-phone.c: (gpm_phone_battery_state_changed),
+	(gpm_phone_num_batteries_changed):
+	Whitespace cleanup.
+
+	* src/gpm-tray-icon.c: (gpm_tray_icon_show_info_cb):
+	Don't exit silently when we want more details on a device that has no
+	more details.
+
+	* src/gpm-warnings.c: (gpm_warnings_get_state_time),
+	(gpm_warnings_get_state_percentage):
+	Be less verbose when a device has 0% percentage.
+
 2009-01-13  Paolo Borelli  <pborelli@katamail.com>
 
 	* src/gpm-statistics.c: (gpm_stats_notebook_changed_cb):

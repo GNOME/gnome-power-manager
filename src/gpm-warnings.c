@@ -96,7 +96,7 @@ gpm_warnings_get_state_time (GpmWarnings *warnings, GpmCellUnit *unit)
 {
 	if (unit->time_discharge == 0) {
 		/* this is probably an error condition */
-		egg_warning ("time zero, something's gone wrong");
+		egg_debug ("time zero, something's gone wrong");
 		return GPM_WARNINGS_NONE;
 	}
 	if (unit->time_discharge <= warnings->priv->action_time) {
@@ -114,7 +114,7 @@ gpm_warnings_get_state_percentage (GpmWarnings *warnings, GpmCellUnit *unit)
 {
 	if (unit->percentage == 0) {
 		/* this is probably an error condition */
-		egg_warning ("percentage zero, something's gone wrong");
+		egg_debug ("percentage zero, something's gone wrong");
 		return GPM_WARNINGS_NONE;
 	}
 	if (unit->percentage <= warnings->priv->action_percentage) {

@@ -236,8 +236,16 @@ gpm_tray_icon_show_info_cb (GtkMenuItem *item, gpointer data)
 #else
 	object_path = g_object_get_data (G_OBJECT (item), "object-path");
 	egg_debug ("object_path=%s", object_path);
-	if (object_path == NULL)
+	if (object_path == NULL) {
+		dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
+						 GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "%s",
+						 _("Device information"));
+		gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog),
+							    "%s", _("There is no detailed information for this device"));
+		gtk_dialog_run (GTK_DIALOG (dialog));
+		gtk_widget_destroy (GTK_WIDGET (dialog));
 		goto out;
+	}
 
 	device = dkp_device_new ();
 	ret = dkp_device_set_object_path (device, object_path);

@@ -36,6 +36,7 @@
 #include "gpm-engine.h"
 #include "gpm-stock-icons.h"
 #include "gpm-prefs-server.h"
+#include "gpm-phone.h"
 
 static void     gpm_engine_class_init (GpmEngineClass *klass);
 static void     gpm_engine_init       (GpmEngine      *engine);
@@ -54,6 +55,7 @@ struct GpmEnginePrivate
 	GConfClient		*conf;
 	DkpClient		*client;
 	GPtrArray		*array;
+	GpmPhone		*phone;
 	GpmIconPolicy		 icon_policy;
 	gchar			*previous_icon;
 	gchar			*previous_summary;
@@ -571,6 +573,9 @@ gpm_engine_coldplug_idle_cb (GpmEngine *engine)
 		gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_UPS);
 	g_object_unref (prefs_server);
 
+	/* connected mobile phones */
+	gpm_phone_coldplug (engine->priv->phone);
+
 	gpm_engine_recalculate_state (engine);
 
 	/* add to database */
@@ -590,8 +595,7 @@ static void
 gpm_engine_device_added_cb (DkpClient *client, DkpDevice *device, GpmEngine *engine)
 {
 	/* add to list */
-	g_object_ref (device);
-	g_ptr_array_add (engine->priv->array, device);
+	g_ptr_array_add (engine->priv->array, g_object_ref (device));
 
 	gpm_engine_recalculate_state (engine);
 }
@@ -688,6 +692,82 @@ gpm_engine_get_devices (GpmEngine *engine)
 }
 
 /**
+ * phone_device_added_cb:
+ **/
+static void
+phone_device_added_cb (GpmPhone *phone, guint index, GpmEngine *engine)
+{
+	DkpObject *obj;
+	DkpDevice *device;
+	device = dkp_device_new ();
+
+	egg_debug ("phone added %i", index);
+	
+	obj = (DkpObject *) dkp_device_get_object (device);
+	obj->native_path = g_strdup_printf ("phone_%i", index);
+	obj->is_rechargeable = TRUE;
+	obj->type = DKP_DEVICE_TYPE_PHONE;
+
+	/* state changed */
+	gpm_engine_device_add (engine, device);
+	g_ptr_array_add (engine->priv->array, g_object_ref (device));
+	gpm_engine_recalculate_state (engine);
+}
+
+/**
+ * phone_device_removed_cb:
+ **/
+static void
+phone_device_removed_cb (GpmPhone *phone, guint index, GpmEngine *engine)
+{
+	guint i;
+	DkpDevice *device;
+	const DkpObject *obj;
+
+	egg_debug ("phone removed %i", index);
+
+	for (i=0; i<engine->priv->array->len; i++) {
+		device = g_ptr_array_index (engine->priv->array, i);
+		obj = dkp_device_get_object (device);
+		if (obj->type == DKP_DEVICE_TYPE_PHONE) {
+			g_ptr_array_remove_index (engine->priv->array, i);
+			g_object_unref (device);
+			break;
+		}
+	}
+
+	/* state changed */
+	gpm_engine_recalculate_state (engine);
+}
+
+/**
+ * phone_device_refresh_cb:
+ **/
+static void
+phone_device_refresh_cb (GpmPhone *phone, guint index, GpmEngine *engine)
+{
+	guint i;
+	DkpDevice *device;
+	DkpObject *obj;
+
+	egg_debug ("phone refresh %i", index);
+
+	for (i=0; i<engine->priv->array->len; i++) {
+		device = g_ptr_array_index (engine->priv->array, i);
+		obj = (DkpObject *) dkp_device_get_object (device);
+		if (obj->type == DKP_DEVICE_TYPE_PHONE) {
+			obj->is_present = gpm_phone_get_present (phone, index);
+			obj->state = gpm_phone_get_on_ac (phone, index) ? DKP_DEVICE_STATE_CHARGING : DKP_DEVICE_STATE_DISCHARGING;
+			obj->percentage = gpm_phone_get_percentage (phone, index);
+			break;
+		}
+	}
+
+	/* state changed */
+	gpm_engine_recalculate_state (engine);
+}
+
+/**
  * gpm_engine_init:
  * @engine: This class instance
  **/
@@ -711,6 +791,14 @@ gpm_engine_init (GpmEngine *engine)
 	gconf_client_notify_add (engine->priv->conf, GPM_CONF_DIR,
 				 (GConfClientNotifyFunc) gpm_engine_conf_key_changed_cb,
 				 engine, NULL, NULL);
+
+	engine->priv->phone = gpm_phone_new ();
+	g_signal_connect (engine->priv->phone, "device-added",
+			  G_CALLBACK (phone_device_added_cb), engine);
+	g_signal_connect (engine->priv->phone, "device-removed",
+			  G_CALLBACK (phone_device_removed_cb), engine);
+	g_signal_connect (engine->priv->phone, "device-refresh",
+			  G_CALLBACK (phone_device_refresh_cb), engine);
 
 	engine->priv->previous_icon = NULL;
 	engine->priv->previous_summary = NULL;
@@ -836,6 +924,7 @@ gpm_engine_finalize (GObject *object)
 	g_ptr_array_free (engine->priv->array, TRUE);
 
 	g_object_unref (engine->priv->client);
+	g_object_unref (engine->priv->phone);
 
 	g_free (engine->priv->previous_icon);
 	g_free (engine->priv->previous_summary);
