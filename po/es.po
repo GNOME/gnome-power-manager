@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"power-manager&amp;component=general\n"
-"POT-Creation-Date: 2008-12-19 13:39+0000\n"
-"PO-Revision-Date: 2009-01-10 03:16+0100\n"
+"power-manager&component=general\n"
+"POT-Creation-Date: 2009-01-14 17:24+0000\n"
+"PO-Revision-Date: 2009-01-14 20:29+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -43,12 +43,12 @@ msgid "LCD brightness : %d%%"
 msgstr "Brillo del LCD : %d%%"
 
 #: ../applets/brightness/brightness-applet.c:748
-#: ../applets/inhibit/inhibit-applet.c:418 ../src/gpm-tray-icon.c:358
+#: ../applets/inhibit/inhibit-applet.c:418 ../src/gpm-tray-icon.c:370
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Licenciado bajo la Licencia Pública General GNU Versión 2"
 
 #: ../applets/brightness/brightness-applet.c:749
-#: ../applets/inhibit/inhibit-applet.c:419 ../src/gpm-tray-icon.c:359
+#: ../applets/inhibit/inhibit-applet.c:419 ../src/gpm-tray-icon.c:371
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -61,7 +61,7 @@ msgstr ""
 "de la Licencia, o (a su opción) cualquier versión posterior."
 
 #: ../applets/brightness/brightness-applet.c:753
-#: ../applets/inhibit/inhibit-applet.c:423 ../src/gpm-tray-icon.c:363
+#: ../applets/inhibit/inhibit-applet.c:423 ../src/gpm-tray-icon.c:375
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -74,7 +74,7 @@ msgstr ""
 "Licencia Pública General GNU para más detalles."
 
 #: ../applets/brightness/brightness-applet.c:757
-#: ../applets/inhibit/inhibit-applet.c:427 ../src/gpm-tray-icon.c:367
+#: ../applets/inhibit/inhibit-applet.c:427 ../src/gpm-tray-icon.c:379
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -1062,6 +1062,8 @@ msgid "Observe power management"
 msgstr "Observar la gestión de energía"
 
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
+#: ../data/gpm-statistics.glade.h:5 ../src/gpm-statistics.c:600
+#: ../src/gpm-statistics.c:1017
 msgid "Power Statistics"
 msgstr "Estadísticas de energía"
 
@@ -1084,10 +1086,6 @@ msgstr "Tipo de gráfica:"
 #: ../data/gpm-statistics.glade.h:4
 msgid "History"
 msgstr "Histórico"
-
-#: ../data/gpm-statistics.glade.h:5
-msgid "Power Device Viewer"
-msgstr "Visor de disposivos de energía"
 
 #: ../data/gpm-statistics.glade.h:6
 msgid "Show data points"
@@ -1661,7 +1659,7 @@ msgstr "Varias aplicaciones han impedido que la acción de reinicio se ejecute."
 msgid "Multiple applications have stopped the shutdown from taking place."
 msgstr "Varias aplicaciones han impedido que la acción de apagado se ejecute."
 
-#: ../src/gpm-main.c:136 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:977
+#: ../src/gpm-main.c:136 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1001
 msgid "Show extra debugging information"
 msgstr "Muestra información adicional de depuración"
 
@@ -2430,86 +2428,107 @@ msgstr "Tecnología"
 msgid "Online"
 msgstr "En línea"
 
+#: ../src/gpm-statistics.c:592
+#| msgid "Device information"
+msgid "Device Information"
+msgstr "Información del dispositivo"
+
+#: ../src/gpm-statistics.c:593
+#| msgid "History"
+msgid "Device History"
+msgstr "Histórico del dispositivo"
+
+#: ../src/gpm-statistics.c:594
+#| msgid "Discharge profile"
+msgid "Device Profile"
+msgstr "Perfil del dispositivo"
+
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:788 ../src/gpm-statistics.c:794
-#: ../src/gpm-statistics.c:800 ../src/gpm-statistics.c:806
+#: ../src/gpm-statistics.c:812 ../src/gpm-statistics.c:818
+#: ../src/gpm-statistics.c:824 ../src/gpm-statistics.c:830
 msgid "Time elapsed"
 msgstr "Tiempo transcurrido"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:790
+#: ../src/gpm-statistics.c:814
 msgid "Power"
 msgstr "Energía"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:796 ../src/gpm-statistics.c:839
-#: ../src/gpm-statistics.c:845 ../src/gpm-statistics.c:851
-#: ../src/gpm-statistics.c:857
+#: ../src/gpm-statistics.c:820 ../src/gpm-statistics.c:863
+#: ../src/gpm-statistics.c:869 ../src/gpm-statistics.c:875
+#: ../src/gpm-statistics.c:881
 msgid "Cell charge"
 msgstr "Carga de la celda"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:802 ../src/gpm-statistics.c:808
+#: ../src/gpm-statistics.c:826 ../src/gpm-statistics.c:832
 msgid "Predicted time"
 msgstr "Tiempo estimado"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:841 ../src/gpm-statistics.c:853
+#: ../src/gpm-statistics.c:865 ../src/gpm-statistics.c:877
 msgid "Correction factor"
 msgstr "Factor de corrección"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:847 ../src/gpm-statistics.c:859
+#: ../src/gpm-statistics.c:871 ../src/gpm-statistics.c:883
 msgid "Prediction accuracy"
 msgstr "Precisión de la estimación"
 
-#: ../src/gpm-statistics.c:993
-msgid "Software Log Viewer"
-msgstr "Software del visor del registro"
-
-#: ../src/gpm-tray-icon.c:250
+#: ../src/gpm-tray-icon.c:242 ../src/gpm-tray-icon.c:262
 msgid "Device information"
 msgstr "Información del dispositivo"
 
-#: ../src/gpm-tray-icon.c:372
+#: ../src/gpm-tray-icon.c:244
+msgid "There is no detailed information for this device"
+msgstr "No hay información detallada para este dispositivo"
+
+#: ../src/gpm-tray-icon.c:384
 msgid "translator-credits"
 msgstr ""
 "Jorge González <jorgegonz@svn.gnome.org>, 2007-2009\n"
 "Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2005, 2006"
 
-#: ../src/gpm-tray-icon.c:388
+#: ../src/gpm-tray-icon.c:400
 msgid "GNOME Power Manager Website"
 msgstr "Página web del Gestor de energía"
 
 #. preferences
-#: ../src/gpm-tray-icon.c:461
+#: ../src/gpm-tray-icon.c:473
 msgid "_Preferences"
 msgstr "Prefere_ncias"
 
 #. statistics
-#: ../src/gpm-tray-icon.c:469
+#: ../src/gpm-tray-icon.c:481
 msgid "Power _History"
 msgstr "_Histórico de energía"
 
 #. help
-#: ../src/gpm-tray-icon.c:481
+#: ../src/gpm-tray-icon.c:493
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:2
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:2
 msgid "_Help"
 msgstr "Ay_uda"
 
 #. about
-#: ../src/gpm-tray-icon.c:489
+#: ../src/gpm-tray-icon.c:501
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:1
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:1
 msgid "_About"
 msgstr "Acerca _de"
 
-#: ../src/gpm-tray-icon.c:653
+#: ../src/gpm-tray-icon.c:665
 msgid "_Suspend"
 msgstr "_Suspender"
 
-#: ../src/gpm-tray-icon.c:663
+#: ../src/gpm-tray-icon.c:675
 msgid "Hi_bernate"
 msgstr "_Hibernar"
+
+#~ msgid "Power Device Viewer"
+#~ msgstr "Visor de disposivos de energía"
+
+#~ msgid "Software Log Viewer"
+#~ msgstr "Software del visor del registro"
