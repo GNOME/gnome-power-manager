@@ -509,8 +509,7 @@ gpm_brightness_kbd_finalize (GObject *object)
 	g_return_if_fail (GPM_IS_BRIGHTNESS_KBD (object));
 	brightness = GPM_BRIGHTNESS_KBD (object);
 
-	if (brightness->priv->udi != NULL)
-		g_free (brightness->priv->udi);
+	g_free (brightness->priv->udi);
 	if (brightness->priv->gproxy != NULL)
 		g_object_unref (brightness->priv->gproxy);
 	if (brightness->priv->sensor != NULL)

@@ -282,8 +282,8 @@ dkp_device_get_history (const DkpDevice *device, const gchar *type, guint timesp
 	EggObjList *array = NULL;
 	gboolean ret;
 
-	g_return_val_if_fail (DKP_IS_DEVICE (device), FALSE);
-	g_return_val_if_fail (device->priv->proxy_device != NULL, FALSE);
+	g_return_val_if_fail (DKP_IS_DEVICE (device), NULL);
+	g_return_val_if_fail (device->priv->proxy_device != NULL, NULL);
 
 	g_type_gvalue_array = dbus_g_type_get_collection ("GPtrArray",
 					dbus_g_type_get_struct("GValueArray",
@@ -360,8 +360,8 @@ dkp_device_get_statistics (const DkpDevice *device, const gchar *type)
 	EggObjList *array = NULL;
 	gboolean ret;
 
-	g_return_val_if_fail (DKP_IS_DEVICE (device), FALSE);
-	g_return_val_if_fail (device->priv->proxy_device != NULL, FALSE);
+	g_return_val_if_fail (DKP_IS_DEVICE (device), NULL);
+	g_return_val_if_fail (device->priv->proxy_device != NULL, NULL);
 
 	g_type_gvalue_array = dbus_g_type_get_collection ("GPtrArray",
 					dbus_g_type_get_struct("GValueArray",
