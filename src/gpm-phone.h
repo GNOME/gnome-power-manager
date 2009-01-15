@@ -49,22 +49,22 @@ typedef struct
 {
 	GObjectClass	parent_class;
 	void		(* device_added)		(GpmPhone	*phone,
-							 guint		 index);
+							 guint		 idx);
 	void		(* device_removed)		(GpmPhone	*phone,
-							 guint		 index);
+							 guint		 idx);
 	void		(* device_refresh)		(GpmPhone	*phone,
-							 guint		 index);
+							 guint		 idx);
 } GpmPhoneClass;
 
 GType		 gpm_phone_get_type		(void);
 GpmPhone	*gpm_phone_new			(void);
 
 gboolean	 gpm_phone_get_present		(GpmPhone	*phone,
-						 guint		 index);
+						 guint		 idx);
 guint		 gpm_phone_get_percentage	(GpmPhone	*phone,
-						 guint		 index);
+						 guint		 idx);
 gboolean	 gpm_phone_get_on_ac		(GpmPhone	*phone,
-						 guint		 index);
+						 guint		 idx);
 guint		 gpm_phone_get_num_batteries	(GpmPhone	*phone);
 gboolean	 gpm_phone_coldplug		(GpmPhone	*phone);
 
