@@ -79,8 +79,6 @@
 #include "org.freedesktop.PowerManagement.Inhibit.h"
 #include "org.freedesktop.PowerManagement.Backlight.h"
 
-static void     gpm_manager_class_init	(GpmManagerClass *klass);
-static void     gpm_manager_init	(GpmManager      *manager);
 static void     gpm_manager_finalize	(GObject	 *object);
 
 #define GPM_MANAGER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_MANAGER, GpmManagerPrivate))
@@ -1396,18 +1394,18 @@ gpm_engine_charge_low_cb (GpmEngine *engine, GpmCellUnit *unit, GpmManager *mana
 static gchar *
 gpm_manager_get_time_until_action_text (GpmManager *manager)
 {
-	guint time = 0;
+	guint time_s = 0;
 #ifndef HAVE_DK_POWER
 	GpmEngineCollection *collection;
 
 	collection = gpm_engine_get_collection (manager->priv->engine);
 
 	/* we should tell the user how much time they have */
-	time = gpm_cell_array_get_time_until_action (collection->primary);
-	if (time == 0)
+	time_s = gpm_cell_array_get_time_until_action (collection->primary);
+	if (time_s == 0)
 		return g_strdup (_("a short time"));
 #endif
-	return gpm_get_timestring (time);
+	return gpm_get_timestring (time_s);
 }
 
 /**

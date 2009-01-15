@@ -403,14 +403,14 @@ egg_obj_list_remove (EggObjList *list, gconstpointer obj)
 /**
  * egg_obj_list_remove_index:
  * @list: a valid #EggObjList instance
- * @index: the number to remove
+ * @idx: the number to remove
  *
  * Return value: TRUE is we removed something
  *
  * Removes an item from a list
  **/
 gboolean
-egg_obj_list_remove_index (EggObjList *list, guint index)
+egg_obj_list_remove_index (EggObjList *list, guint idx)
 {
 	gpointer obj;
 
@@ -418,7 +418,7 @@ egg_obj_list_remove_index (EggObjList *list, guint index)
 	g_return_val_if_fail (list->priv->func_free != NULL, FALSE);
 
 	/* get the object */
-	obj = g_ptr_array_remove_index (list->priv->array, index);
+	obj = g_ptr_array_remove_index (list->priv->array, idx);
 	if (obj == NULL)
 		return FALSE;
 	list->priv->func_free (obj);
@@ -555,18 +555,18 @@ out:
 /**
  * egg_obj_list_index:
  * @list: a valid #EggObjList instance
- * @index: the element to return
+ * @idx: the element to return
  *
  * Gets an object from the list
  **/
 gconstpointer
-egg_obj_list_index (const EggObjList *list, guint index)
+egg_obj_list_index (const EggObjList *list, guint idx)
 {
 	gconstpointer obj;
 
 	g_return_val_if_fail (EGG_IS_OBJ_LIST (list), NULL);
 
-	obj = g_ptr_array_index (list->priv->array, index);
+	obj = g_ptr_array_index (list->priv->array, idx);
 	return obj;
 }
 

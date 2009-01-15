@@ -60,8 +60,6 @@
 #include "gpm-stock-icons.h"
 #include "gpm-tray-icon.h"
 
-static void     gpm_tray_icon_class_init (GpmTrayIconClass *klass);
-static void     gpm_tray_icon_init       (GpmTrayIcon      *tray_icon);
 static void     gpm_tray_icon_finalize   (GObject	   *object);
 
 #define GPM_TRAY_ICON_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_TRAY_ICON, GpmTrayIconPrivate))
@@ -628,7 +626,9 @@ gpm_tray_icon_activate_cb (GtkStatusIcon *status_icon, GpmTrayIcon *icon)
 	GtkWidget *item;
 	GtkWidget *image;
 	guint dev_cnt = 0;
-
+#ifdef HAVE_DK_POWER
+	const GPtrArray *array;
+#endif
 	egg_debug ("icon left clicked");
 
 	/* add all device types to the drop down menu */
@@ -640,7 +640,6 @@ gpm_tray_icon_activate_cb (GtkStatusIcon *status_icon, GpmTrayIcon *icon)
 	dev_cnt += gpm_tray_icon_add_device (icon, menu, icon->priv->collection->keyboard);
 	dev_cnt += gpm_tray_icon_add_device (icon, menu, icon->priv->collection->pda);
 #else
-	const GPtrArray *array;
 	array = gpm_engine_get_devices (icon->priv->engine);
 	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, DKP_DEVICE_TYPE_BATTERY);
 	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, DKP_DEVICE_TYPE_UPS);

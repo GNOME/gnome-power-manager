@@ -135,8 +135,7 @@ gpm_brightness_kbd_get_hw (GpmBrightnessKbd *brightness,
  * Return value: Success.
  **/
 static gboolean
-gpm_brightness_kbd_set_hw (GpmBrightnessKbd *brightness,
-			   guint	     brightness_level_hw)
+gpm_brightness_kbd_set_hw (GpmBrightnessKbd *brightness, guint brightness_level_hw)
 {
 	GError *error = NULL;
 	gboolean ret;
@@ -151,8 +150,7 @@ gpm_brightness_kbd_set_hw (GpmBrightnessKbd *brightness,
 		return FALSE;
 	}
 
-	if (brightness_level_hw < 0 ||
-	    brightness_level_hw > brightness->priv->levels - 1) {
+	if (brightness_level_hw > brightness->priv->levels - 1) {
 		egg_warning ("set outside range (%i of %i)",
 			     brightness_level_hw, brightness->priv->levels - 1);
 		return FALSE;
@@ -185,9 +183,7 @@ gpm_brightness_kbd_set_hw (GpmBrightnessKbd *brightness,
  * Just do the step up and down, after knowing the step interval
  **/
 static gboolean
-gpm_brightness_kbd_dim_hw_step (GpmBrightnessKbd *brightness,
-				guint             new_level_hw,
-				guint		  step_interval)
+gpm_brightness_kbd_dim_hw_step (GpmBrightnessKbd *brightness, guint new_level_hw, guint step_interval)
 {
 	guint current_hw;
 	gint a;
@@ -199,13 +195,12 @@ gpm_brightness_kbd_dim_hw_step (GpmBrightnessKbd *brightness,
 	egg_debug ("new_level_hw=%i, current_hw=%i", new_level_hw, current_hw);
 
 	/* we do the step interval as we can have insane levels of brightness_kbd */
-	if (new_level_hw == current_hw) {
+	if (new_level_hw == current_hw)
 		return FALSE;
-	}
 
 	if (new_level_hw > current_hw) {
 		/* going up */
-		for (a=current_hw; a <= new_level_hw; a+=step_interval) {
+		for (a=current_hw; a <= (gint) new_level_hw; a+=step_interval) {
 			gpm_brightness_kbd_set_hw (brightness, a);
 			g_usleep (1000 * DIM_INTERVAL);
 		}
@@ -490,9 +485,8 @@ gpm_brightness_kbd_down (GpmBrightnessKbd *brightness)
 		/* macbook pro has a bazzillion brightness_kbd levels, be a bit clever */
 		step = gpm_brightness_kbd_get_step (brightness);
 		/* don't underflow */
-		if (brightness->priv->current_hw < step) {
+		if ((gint) brightness->priv->current_hw < step)
 			step = brightness->priv->current_hw;
-		}
 		gpm_brightness_kbd_set_hw (brightness, brightness->priv->current_hw - step);
 	}
 

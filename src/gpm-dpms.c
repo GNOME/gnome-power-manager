@@ -46,8 +46,6 @@
 #include "egg-debug.h"
 #include "gpm-dpms.h"
 
-static void     gpm_dpms_class_init (GpmDpmsClass *klass);
-static void     gpm_dpms_init       (GpmDpms      *dpms);
 static void     gpm_dpms_finalize   (GObject      *object);
 
 #define GPM_DPMS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_DPMS, GpmDpmsPrivate))

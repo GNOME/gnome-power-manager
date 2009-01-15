@@ -33,8 +33,6 @@
 
 #include "egg-dbus-monitor.h"
 
-static void     gpm_phone_class_init (GpmPhoneClass *klass);
-static void     gpm_phone_init       (GpmPhone      *phone);
 static void     gpm_phone_finalize   (GObject	    *object);
 
 #define GPM_PHONE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_PHONE, GpmPhonePrivate))
@@ -94,7 +92,7 @@ gpm_phone_coldplug (GpmPhone *phone)
  * Return value: if present
  **/
 gboolean
-gpm_phone_get_present (GpmPhone	*phone, guint index)
+gpm_phone_get_present (GpmPhone	*phone, guint idx)
 {
 	g_return_val_if_fail (phone != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_PHONE (phone), FALSE);
@@ -106,7 +104,7 @@ gpm_phone_get_present (GpmPhone	*phone, guint index)
  * Return value: if present
  **/
 guint
-gpm_phone_get_percentage (GpmPhone *phone, guint index)
+gpm_phone_get_percentage (GpmPhone *phone, guint idx)
 {
 	g_return_val_if_fail (phone != NULL, 0);
 	g_return_val_if_fail (GPM_IS_PHONE (phone), 0);
@@ -118,7 +116,7 @@ gpm_phone_get_percentage (GpmPhone *phone, guint index)
  * Return value: if present
  **/
 gboolean
-gpm_phone_get_on_ac (GpmPhone *phone, guint index)
+gpm_phone_get_on_ac (GpmPhone *phone, guint idx)
 {
 	g_return_val_if_fail (phone != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_PHONE (phone), FALSE);
@@ -143,17 +141,17 @@ gpm_phone_get_num_batteries (GpmPhone *phone)
 /** Invoked when we get the BatteryStateChanged
  */
 static void
-gpm_phone_battery_state_changed (DBusGProxy *proxy, guint index, guint percentage, gboolean on_ac, GpmPhone *phone)
+gpm_phone_battery_state_changed (DBusGProxy *proxy, guint idx, guint percentage, gboolean on_ac, GpmPhone *phone)
 {
 	g_return_if_fail (phone != NULL);
 	g_return_if_fail (GPM_IS_PHONE (phone));
 
-	egg_debug ("got BatteryStateChanged %i = %i (%i)", index, percentage, on_ac);
+	egg_debug ("got BatteryStateChanged %i = %i (%i)", idx, percentage, on_ac);
 	phone->priv->percentage = percentage;
 	phone->priv->onac = on_ac;
 	phone->priv->present = TRUE;
-	egg_debug ("emitting device-refresh : (%i)", index);
-	g_signal_emit (phone, signals [DEVICE_REFRESH], 0, index);
+	egg_debug ("emitting device-refresh : (%i)", idx);
+	g_signal_emit (phone, signals [DEVICE_REFRESH], 0, idx);
 }
 
 /** Invoked when we get NumberBatteriesChanged
@@ -232,7 +230,7 @@ gpm_phone_class_init (GpmPhoneClass *klass)
 /**
  * gpm_phone_dbus_connect:
  **/
-gboolean
+static gboolean
 gpm_phone_dbus_connect (GpmPhone *phone)
 {
 	GError *error = NULL;
@@ -292,7 +290,7 @@ gpm_phone_dbus_connect (GpmPhone *phone)
 /**
  * gpm_phone_dbus_disconnect:
  **/
-gboolean
+static gboolean
 gpm_phone_dbus_disconnect (GpmPhone *phone)
 {
 	g_return_val_if_fail (phone != NULL, FALSE);
@@ -408,12 +406,10 @@ egg_test_mainloop_wait (guint ms)
 }
 
 static void
-phone_device_refresh_cb (GpmPhone     *phone,
-		         guint         index,
-		         gpointer     *data)
+phone_device_refresh_cb (GpmPhone *phone, guint idx, gpointer *data)
 {
-	g_debug ("index refresh = %i", index);
-	if (index == 0 && GPOINTER_TO_UINT (data) == 44)
+	g_debug ("idx refresh = %i", idx);
+	if (idx == 0 && GPOINTER_TO_UINT (data) == 44)
 		test_got_refresh = TRUE;
 }
 

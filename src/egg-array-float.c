@@ -137,23 +137,23 @@ EggArrayFloat *
 egg_array_float_compute_gaussian (guint length, gfloat sigma)
 {
 	EggArrayFloat *array;
-	gint half_length;
+	guint half_length;
 	guint i;
-	gfloat div;
+	gfloat division;
 
 	array = egg_array_float_new (length);
 
 	/* array positions 0..10, has to be an odd number */
 	half_length = (length / 2) + 1;
 	for (i=0; i<half_length; i++) {
-		div = half_length - (i + 1);
-		g_array_index (array, gfloat, i) = egg_array_float_guassian_value (div, sigma);
+		division = half_length - (i + 1);
+		g_array_index (array, gfloat, i) = egg_array_float_guassian_value (division, sigma);
 	}
 
 	/* no point working these out, we can just reflect the gaussian */
 	for (i=half_length; i<length; i++) {
-		div = g_array_index (array, gfloat, length-(i+1));
-		g_array_index (array, gfloat, i) = div;
+		division = g_array_index (array, gfloat, length-(i+1));
+		g_array_index (array, gfloat, i) = division;
 	}
 	return array;
 }
@@ -217,7 +217,7 @@ egg_array_float_convolve (EggArrayFloat *data, EggArrayFloat *kernel)
 	gfloat value;
 	gint i;
 	gint j;
-	gint index;
+	gint idx;
 
 	length_data = data->len;
 	length_kernel = kernel->len;
@@ -228,12 +228,12 @@ egg_array_float_convolve (EggArrayFloat *data, EggArrayFloat *kernel)
 	for (i=0;i<length_data;i++) {
 		value = 0;
 		for (j=0;j<length_kernel;j++) {
-			index = i+j-(length_kernel/2);
-			if (index < 0)
-				index = 0;
-			else if (index >= length_data)
-				index = length_data - 1;
-			value += g_array_index (data, gfloat, index) * g_array_index (kernel, gfloat, j);
+			idx = i+j-(length_kernel/2);
+			if (idx < 0)
+				idx = 0;
+			else if (idx >= length_data)
+				idx = length_data - 1;
+			value += g_array_index (data, gfloat, idx) * g_array_index (kernel, gfloat, j);
 		}
 		g_array_index (result, gfloat, i) = value;
 	}
@@ -251,7 +251,7 @@ gfloat
 egg_array_float_compute_integral (EggArrayFloat *array, guint x1, guint x2)
 {
 	gfloat value;
-	gint i;
+	guint i;
 
 	g_return_val_if_fail (x2 >= x1, 0.0);
 

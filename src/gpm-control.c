@@ -104,7 +104,7 @@ gpm_control_error_quark (void)
  * @polkit: This polkit class instance
  * Return value: Success value.
  **/
-gboolean
+static gboolean
 gpm_control_is_user_privileged (GpmControl *control, const gchar *privilege)
 {
 	gboolean ret = TRUE;

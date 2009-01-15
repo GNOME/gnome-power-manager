@@ -119,7 +119,6 @@ gpm_brightness_xrandr_output_set_internal (GpmBrightnessXRandR *brightness, RROu
 	gboolean ret = TRUE;
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness), FALSE);
-	g_return_val_if_fail (value >= 0, FALSE);
 
 	/* don't abort on error */
 	gdk_error_trap_push ();
@@ -316,17 +315,17 @@ gpm_brightness_xrandr_output_set (GpmBrightnessXRandR *brightness, RROutput outp
 	egg_debug ("percent=%i, absolute=%i", brightness->priv->shared_value, shared_value_abs);
 
 	egg_debug ("hard value=%i, min=%i, max=%i", cur, min, max);
-	if (shared_value_abs > max)
+	if (shared_value_abs > (gint) max)
 		shared_value_abs = max;
-	if (shared_value_abs < min)
+	if (shared_value_abs < (gint) min)
 		shared_value_abs = min;
-	if (cur == shared_value_abs) {
+	if ((gint) cur == shared_value_abs) {
 		egg_debug ("already set %i", cur);
 		return TRUE;
 	}
 
 	/* step the correct way */
-	if (cur < shared_value_abs) {
+	if ((gint) cur < shared_value_abs) {
 
 		/* some adaptors have a large number of steps */
 		step = gpm_brightness_get_step (shared_value_abs - cur);
@@ -337,7 +336,7 @@ gpm_brightness_xrandr_output_set (GpmBrightnessXRandR *brightness, RROutput outp
 			ret = gpm_brightness_xrandr_output_set_internal (brightness, output, i);
 			if (!ret)
 				break;
-			if (cur != shared_value_abs)
+			if ((gint) cur != shared_value_abs)
 				g_usleep (1000 * GPM_BRIGHTNESS_DIM_INTERVAL);
 		}
 	} else {
@@ -351,7 +350,7 @@ gpm_brightness_xrandr_output_set (GpmBrightnessXRandR *brightness, RROutput outp
 			ret = gpm_brightness_xrandr_output_set_internal (brightness, output, i);
 			if (!ret)
 				break;
-			if (cur != shared_value_abs)
+			if ((gint) cur != shared_value_abs)
 				g_usleep (1000 * GPM_BRIGHTNESS_DIM_INTERVAL);
 		}
 	}
@@ -364,16 +363,17 @@ gpm_brightness_xrandr_output_set (GpmBrightnessXRandR *brightness, RROutput outp
 static gboolean
 gpm_brightness_xrandr_foreach_resource (GpmBrightnessXRandR *brightness, GpmXRandROp op, XRRScreenResources *resources)
 {
-	guint i;
+	gint i;
 	gboolean ret;
 	gboolean success_any = FALSE;
+	RROutput output;
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness), FALSE);
 
 	/* do for each output */
 	for (i=0; i<resources->noutput; i++) {
+		output = resources->outputs[i];
 		egg_debug ("resource %i of %i", i+1, resources->noutput);
-		RROutput output = resources->outputs[i];
 		if (op==ACTION_BACKLIGHT_GET) {
 			ret = gpm_brightness_xrandr_output_get_percentage (brightness, output);
 		} else if (op==ACTION_BACKLIGHT_INC) {
@@ -598,14 +598,14 @@ gpm_brightness_xrandr_update_cache (GpmBrightnessXRandR *brightness)
 	/* do for each screen */
 	display = gdk_display_get_default ();
 	length = ScreenCount (brightness->priv->dpy);
-	for (screen = 0; screen < length; screen++) {
+	for (screen = 0; screen < (gint) length; screen++) {
 		egg_debug ("screen %i of %i", screen+1, length);
 		gscreen = gdk_display_get_screen (display, screen);
 
 		/* if we have not setup the changed on the monitor, set it here */
 		if (g_object_get_data (G_OBJECT (gscreen), "gpk-set-monitors-changed") == NULL) {
 			egg_debug ("watching ::monitors_changed on %p", gscreen);
-			g_object_set_data (G_OBJECT (gscreen), "gpk-set-monitors-changed", "true");
+			g_object_set_data (G_OBJECT (gscreen), "gpk-set-monitors-changed", (gpointer) "true");
 			g_signal_connect (G_OBJECT (gscreen), "monitors_changed",
 					  G_CALLBACK (gpm_brightness_monitors_changed), brightness);
 		}

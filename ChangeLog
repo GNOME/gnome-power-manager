@@ -1,3 +1,58 @@
+2009-01-15  Richard Hughes  <richard@hughsie.com>
+
+	* configure.ac:
+	* src/Makefile.am:
+	* src/egg-array-float.c: (egg_array_float_compute_gaussian),
+	(egg_array_float_convolve), (egg_array_float_compute_integral):
+	* src/egg-array-float.h:
+	* src/egg-color.c:
+	* src/egg-console-kit.c:
+	* src/egg-dbus-monitor.c:
+	* src/egg-dbus-proxy.c:
+	* src/egg-debug.h:
+	* src/egg-obj-list.c: (egg_obj_list_remove_index),
+	(egg_obj_list_index):
+	* src/egg-precision.c:
+	* src/egg-precision.h:
+	* src/egg-test.c: (egg_test_elapsed), (egg_test_get_data_file):
+	* src/egg-test.h:
+	* src/egg-unique.c: (egg_unique_message_cb):
+	* src/gpm-brightness-hal.c: (gpm_brightness_hal_set_hw),
+	(gpm_brightness_hal_dim_hw_step), (gpm_brightness_hal_down):
+	* src/gpm-brightness-kbd.c: (gpm_brightness_kbd_set_hw),
+	(gpm_brightness_kbd_dim_hw_step), (gpm_brightness_kbd_down):
+	* src/gpm-brightness-xrandr.c:
+	(gpm_brightness_xrandr_output_set_internal),
+	(gpm_brightness_xrandr_output_set),
+	(gpm_brightness_xrandr_foreach_resource),
+	(gpm_brightness_xrandr_update_cache):
+	* src/gpm-button.c:
+	* src/gpm-control.c:
+	* src/gpm-dpms.c:
+	* src/gpm-engine.c: (phone_device_added_cb),
+	(phone_device_removed_cb), (phone_device_refresh_cb):
+	* src/gpm-feedback-widget.c:
+	* src/gpm-graph-widget.c: (gpm_get_axis_label),
+	(gpm_graph_widget_get_y_label_max_width),
+	(gpm_graph_widget_draw_legend),
+	(gpm_graph_widget_legend_calculate_size):
+	* src/gpm-inhibit.c: (gpm_inhibit_get_requests),
+	(gpm_inhibit_remove_dbus), (gpm_inhibit_get_message):
+	* src/gpm-light-sensor.c: (gpm_light_sensor_get_hw):
+	* src/gpm-load.c:
+	* src/gpm-manager.c: (gpm_manager_get_time_until_action_text):
+	* src/gpm-phone.c: (gpm_phone_get_present),
+	(gpm_phone_get_percentage), (gpm_phone_get_on_ac),
+	(gpm_phone_battery_state_changed), (phone_device_refresh_cb):
+	* src/gpm-prefs-core.c:
+	* src/gpm-refcount.c:
+	* src/gpm-screensaver.c:
+	* src/gpm-screensaver.h:
+	* src/gpm-statistics.c: (gpm_stats_set_title),
+	(gpm_stats_devices_treeview_clicked_cb), (main):
+	* src/gpm-tray-icon.c: (gpm_tray_icon_activate_cb):
+	Enable way more compiler warnings, and fix up all the failures.
+
 2009-01-14  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-engine.c: (gpm_engine_coldplug_idle_cb),

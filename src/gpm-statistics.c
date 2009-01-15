@@ -588,19 +588,15 @@ gpm_stats_update_info_data (const DkpDevice *device)
 static void
 gpm_stats_set_title (GtkWindow *window, gint page_num)
 {
+	gchar *title;
 	const gchar * const page_titles[] = {
 		N_("Device Information"),
 		N_("Device History"),
 		N_("Device Profile")
 	};
-	gchar *title;
-
-	g_assert (page_num < G_N_ELEMENTS (page_titles));
 
 	title = g_strdup_printf ("%s - %s", _("Power Statistics"), _(page_titles[page_num]));
-
 	gtk_window_set_title (window, title);
-
 	g_free (title);
 }
 
@@ -665,6 +661,7 @@ gpm_stats_devices_treeview_clicked_cb (GtkTreeSelection *selection, gboolean dat
 {
 	GtkTreeModel *model;
 	GtkTreeIter iter;
+	DkpDevice *device;
 
 	/* This will only work in single or browse selection mode! */
 	if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
@@ -677,7 +674,6 @@ gpm_stats_devices_treeview_clicked_cb (GtkTreeSelection *selection, gboolean dat
 		/* show transaction_id */
 		egg_debug ("selected row is: %s", current_device);
 
-		DkpDevice *device;
 		device = dkp_device_new ();
 		dkp_device_set_object_path (device, current_device);
 		gpm_stats_update_info_data (device);
@@ -995,6 +991,7 @@ main (int argc, char *argv[])
 	gint page;
 	const gchar *object_path;
 	gboolean checked;
+	gchar *last_device;
 
 	const GOptionEntry options[] = {
 		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
@@ -1204,7 +1201,6 @@ main (int argc, char *argv[])
 		}
 	}
 
-	gchar *last_device;
 	last_device = gconf_client_get_string (gconf_client, GPM_CONF_INFO_LAST_DEVICE, NULL);
 
 	/* set the correct focus on the last device */

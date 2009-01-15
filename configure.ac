@@ -21,10 +21,45 @@ AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal)
 dnl ---------------------------------------------------------------------------
 dnl - Extra verbose warning switches
 dnl ---------------------------------------------------------------------------
+#CPPFLAGS="$CPPFLAGS -DG_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_SINGLE_INCLUDES"
+CPPFLAGS="$CPPFLAGS -DG_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED"
+#CPPFLAGS="$CPPFLAGS -DGDK_MULTIHEAD_SAFE -DGTK_MULTIHEAD_SAFE"
+
 if test "$GCC" = "yes"; then
-    CPPFLAGS="$CPPFLAGS -Werror -Wcast-align -Wno-uninitialized"
-    CPPFLAGS="$CPPFLAGS -Wall -Wformat-security"
+	WARNINGFLAGS="$WARNINGFLAGS -Wall"
+	WARNINGFLAGS="$WARNINGFLAGS -Werror"
+	WARNINGFLAGS="$WARNINGFLAGS -Wcast-align -Wno-uninitialized"
+	WARNINGFLAGS="$WARNINGFLAGS -Wmissing-declarations"
+	WARNINGFLAGS="$WARNINGFLAGS -Wredundant-decls"
+	WARNINGFLAGS="$WARNINGFLAGS -Wmissing-noreturn"
+	WARNINGFLAGS="$WARNINGFLAGS -Wpointer-arith"
+	WARNINGFLAGS="$WARNINGFLAGS -Wcast-align"
+	WARNINGFLAGS="$WARNINGFLAGS -Wwrite-strings"
+	WARNINGFLAGS="$WARNINGFLAGS -Winit-self"
+	WARNINGFLAGS="$WARNINGFLAGS -Wreturn-type"
+	WARNINGFLAGS="$WARNINGFLAGS -Wformat-nonliteral"
+	WARNINGFLAGS="$WARNINGFLAGS -Wformat-security"
+	WARNINGFLAGS="$WARNINGFLAGS -Wmissing-include-dirs"
+	WARNINGFLAGS="$WARNINGFLAGS -Wmissing-format-attribute"
+	WARNINGFLAGS="$WARNINGFLAGS -Wclobbered"
+	WARNINGFLAGS="$WARNINGFLAGS -Wempty-body"
+	WARNINGFLAGS="$WARNINGFLAGS -Wignored-qualifiers"
+	WARNINGFLAGS="$WARNINGFLAGS -Wsign-compare"
+	WARNINGFLAGS="$WARNINGFLAGS -Wtype-limits"
+	WARNINGFLAGS="$WARNINGFLAGS -Wuninitialized"
+	WARNINGFLAGS="$WARNINGFLAGS -Waggregate-return"
+	WARNINGFLAGS="$WARNINGFLAGS -Wdeclaration-after-statement"
+	WARNINGFLAGS="$WARNINGFLAGS -Wshadow"
+	WARNINGFLAGS="$WARNINGFLAGS -Winline"
+#	WARNINGFLAGS="$WARNINGFLAGS -Wswitch-enum"
+	WARNINGFLAGS="$WARNINGFLAGS -Wmissing-parameter-type"
+	WARNINGFLAGS="$WARNINGFLAGS -Woverride-init"
+else
+	WARNINGFLAGS=""
+	WARNINGFLAGS=""
 fi
+AC_SUBST(WARNINGFLAGS)
+AC_SUBST(WARNINGFLAGS)
 
 dnl ---------------------------------------------------------------------------
 dnl - Debugging switches (uncomment this if you want to use gdb)
@@ -37,13 +72,6 @@ dnl - GProf switches (do not use for normal building)
 dnl ---------------------------------------------------------------------------
 #CPPFLAGS="$CPPFLAGS -c -pg"
 #LDFLAGS="$LDFLAGS -pg"
-
-dnl ---------------------------------------------------------------------------
-dnl - Code checks
-dnl ---------------------------------------------------------------------------
-#CPPFLAGS="$CPPFLAGS -DG_DISABLE_SINGLE_INCLUDES -DGDK_PIXBUF_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_SINGLE_INCLUDES"
-CPPFLAGS="$CPPFLAGS -DGDK_PIXBUF_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
-CPPFLAGS="$CPPFLAGS -DG_DISABLE_DEPRECATED"
 
 dnl ---------------------------------------------------------------------------
 dnl - gettext stuff

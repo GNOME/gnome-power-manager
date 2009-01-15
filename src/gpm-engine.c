@@ -38,8 +38,6 @@
 #include "gpm-prefs-server.h"
 #include "gpm-phone.h"
 
-static void     gpm_engine_class_init (GpmEngineClass *klass);
-static void     gpm_engine_init       (GpmEngine      *engine);
 static void     gpm_engine_finalize   (GObject	  *object);
 
 #define GPM_ENGINE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_ENGINE, GpmEnginePrivate))
@@ -695,16 +693,16 @@ gpm_engine_get_devices (GpmEngine *engine)
  * phone_device_added_cb:
  **/
 static void
-phone_device_added_cb (GpmPhone *phone, guint index, GpmEngine *engine)
+phone_device_added_cb (GpmPhone *phone, guint idx, GpmEngine *engine)
 {
 	DkpObject *obj;
 	DkpDevice *device;
 	device = dkp_device_new ();
 
-	egg_debug ("phone added %i", index);
+	egg_debug ("phone added %i", idx);
 	
 	obj = (DkpObject *) dkp_device_get_object (device);
-	obj->native_path = g_strdup_printf ("phone_%i", index);
+	obj->native_path = g_strdup_printf ("phone_%i", idx);
 	obj->is_rechargeable = TRUE;
 	obj->type = DKP_DEVICE_TYPE_PHONE;
 
@@ -718,13 +716,13 @@ phone_device_added_cb (GpmPhone *phone, guint index, GpmEngine *engine)
  * phone_device_removed_cb:
  **/
 static void
-phone_device_removed_cb (GpmPhone *phone, guint index, GpmEngine *engine)
+phone_device_removed_cb (GpmPhone *phone, guint idx, GpmEngine *engine)
 {
 	guint i;
 	DkpDevice *device;
 	const DkpObject *obj;
 
-	egg_debug ("phone removed %i", index);
+	egg_debug ("phone removed %i", idx);
 
 	for (i=0; i<engine->priv->array->len; i++) {
 		device = g_ptr_array_index (engine->priv->array, i);
@@ -744,21 +742,21 @@ phone_device_removed_cb (GpmPhone *phone, guint index, GpmEngine *engine)
  * phone_device_refresh_cb:
  **/
 static void
-phone_device_refresh_cb (GpmPhone *phone, guint index, GpmEngine *engine)
+phone_device_refresh_cb (GpmPhone *phone, guint idx, GpmEngine *engine)
 {
 	guint i;
 	DkpDevice *device;
 	DkpObject *obj;
 
-	egg_debug ("phone refresh %i", index);
+	egg_debug ("phone refresh %i", idx);
 
 	for (i=0; i<engine->priv->array->len; i++) {
 		device = g_ptr_array_index (engine->priv->array, i);
 		obj = (DkpObject *) dkp_device_get_object (device);
 		if (obj->type == DKP_DEVICE_TYPE_PHONE) {
-			obj->is_present = gpm_phone_get_present (phone, index);
-			obj->state = gpm_phone_get_on_ac (phone, index) ? DKP_DEVICE_STATE_CHARGING : DKP_DEVICE_STATE_DISCHARGING;
-			obj->percentage = gpm_phone_get_percentage (phone, index);
+			obj->is_present = gpm_phone_get_present (phone, idx);
+			obj->state = gpm_phone_get_on_ac (phone, idx) ? DKP_DEVICE_STATE_CHARGING : DKP_DEVICE_STATE_DISCHARGING;
+			obj->percentage = gpm_phone_get_percentage (phone, idx);
 			break;
 		}
 	}

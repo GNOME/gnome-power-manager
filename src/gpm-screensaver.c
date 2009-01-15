@@ -32,8 +32,6 @@
 #include "egg-debug.h"
 #include "egg-dbus-proxy.h"
 
-static void     gpm_screensaver_class_init (GpmScreensaverClass *klass);
-static void     gpm_screensaver_init       (GpmScreensaver      *screensaver);
 static void     gpm_screensaver_finalize   (GObject		*object);
 
 #define GPM_SCREENSAVER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_SCREENSAVER, GpmScreensaverPrivate))

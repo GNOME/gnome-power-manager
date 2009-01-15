@@ -30,8 +30,6 @@
 #include "egg-dbus-monitor.h"
 #include "egg-dbus-proxy.h"
 
-static void     egg_dbus_proxy_class_init (EggDbusProxyClass *klass);
-static void     egg_dbus_proxy_init       (EggDbusProxy      *proxy);
 static void     egg_dbus_proxy_finalize   (GObject        *object);
 
 #define EGG_DBUS_PROXY_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), EGG_TYPE_DBUS_PROXY, EggDbusProxyPrivate))

@@ -158,9 +158,9 @@ egg_test_finish (EggTest *test)
 guint
 egg_test_elapsed (EggTest *test)
 {
-	gdouble time;
-	time = g_timer_elapsed (test->timer, NULL);
-	return (guint) (time * 1000.0f);
+	gdouble time_s;
+	time_s = g_timer_elapsed (test->timer, NULL);
+	return (guint) (time_s * 1000.0f);
 }
 
 /**
@@ -320,17 +320,23 @@ egg_test_get_data_file (const gchar *filename)
 	/* check to see if we are being run in the build root */
 	full = g_build_filename ("..", "data", "tests", filename, NULL);
 	ret = g_file_test (full, G_FILE_TEST_EXISTS);
-	if (ret) {
+	if (ret)
 		return full;
-	}
+	g_free (full);
+
+	/* check to see if we are being run in the build root */
+	full = g_build_filename ("..", "..", "data", "tests", filename, NULL);
+	ret = g_file_test (full, G_FILE_TEST_EXISTS);
+	if (ret)
+		return full;
 	g_free (full);
 
 	/* check to see if we are being run in make check */
-	full = g_build_filename ("..", "..", "data", "tests", filename, NULL);
+	full = g_build_filename ("..", "..", "..", "data", "tests", filename, NULL);
 	ret = g_file_test (full, G_FILE_TEST_EXISTS);
-	if (ret) {
+	if (ret)
 		return full;
-	}
+	g_print ("[WARN] failed to find '%s'\n", full);
 	g_free (full);
 	return NULL;
 }

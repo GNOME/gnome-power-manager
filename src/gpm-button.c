@@ -39,8 +39,6 @@
 #include "egg-debug.h"
 #include "gpm-marshal.h"
 
-static void     gpm_button_class_init (GpmButtonClass *klass);
-static void     gpm_button_init       (GpmButton      *button);
 static void     gpm_button_finalize   (GObject	      *object);
 
 #define GPM_BUTTON_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_BUTTON, GpmButtonPrivate))
@@ -72,7 +70,7 @@ G_DEFINE_TYPE (GpmButton, gpm_button, G_TYPE_OBJECT)
 /**
  * gpm_button_emit_type:
  **/
-gboolean
+static gboolean
 gpm_button_emit_type (GpmButton *button, const gchar *type)
 {
 	g_return_val_if_fail (GPM_IS_BUTTON (button), FALSE);

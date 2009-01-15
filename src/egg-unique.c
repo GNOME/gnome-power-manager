@@ -31,8 +31,6 @@
 #include "egg-unique.h"
 #include "egg-debug.h"
 
-static void     egg_unique_class_init (EggUniqueClass *klass);
-static void     egg_unique_init       (EggUnique      *unique);
 static void     egg_unique_finalize   (GObject        *object);
 
 #define EGG_UNIQUE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), EGG_UNIQUE_TYPE, EggUniquePrivate))
@@ -60,8 +58,7 @@ G_DEFINE_TYPE (EggUnique, egg_unique, G_TYPE_OBJECT)
  * egg_unique_message_cb:
  **/
 static void
-egg_unique_message_cb (UniqueApp *app, UniqueCommand command, UniqueMessageData *message_data,
-		      guint time, EggUnique *egg_unique)
+egg_unique_message_cb (UniqueApp *app, UniqueCommand command, UniqueMessageData *message_data, guint time_s, EggUnique *egg_unique)
 {
 	g_return_if_fail (EGG_IS_UNIQUE (egg_unique));
 	if (command == UNIQUE_ACTIVATE)

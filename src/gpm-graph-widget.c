@@ -73,7 +73,7 @@ static void	gpm_graph_widget_finalize (GObject *object);
 /**
  * gpm_graph_widget_key_data_clear:
  **/
-gboolean
+static gboolean
 gpm_graph_widget_key_data_clear (GpmGraphWidget *graph)
 {
 	GpmGraphWidgetKeyData *keyitem;
@@ -284,9 +284,9 @@ gpm_get_axis_label (GpmGraphWidgetType axis, gfloat value)
 {
 	gchar *text = NULL;
 	if (axis == GPM_GRAPH_WIDGET_TYPE_TIME) {
-		gint time = abs((gint) value);
-		gint minutes = time / 60;
-		gint seconds = time - (minutes * 60);
+		gint time_s = abs((gint) value);
+		gint minutes = time_s / 60;
+		gint seconds = time_s - (minutes * 60);
 		gint hours = minutes / 60;
 		gint days = hours / 24;
 		minutes = minutes - (hours * 60);
@@ -474,7 +474,7 @@ gpm_graph_widget_get_y_label_max_width (GpmGraphWidget *graph, cairo_t *cr)
 		text = gpm_get_axis_label (graph->priv->axis_type_y, value);
 		pango_layout_set_text (graph->priv->layout, text, -1);
 		pango_layout_get_pixel_extents (graph->priv->layout, &ink_rect, &logical_rect);
-		if (ink_rect.width > biggest)
+		if (ink_rect.width > (gint) biggest)
 			biggest = ink_rect.width;
 		g_free (text);
 	}
@@ -806,7 +806,7 @@ gpm_graph_widget_draw_legend (GpmGraphWidget *graph, gint x, gint y, gint width,
 {
 	cairo_t *cr = graph->priv->cr;
 	gint y_count;
-	gint a;
+	guint a;
 	GpmGraphWidgetKeyData *keydataitem;
 
 	gpm_graph_widget_draw_bounding_box (cr, x, y, width, height);
@@ -859,7 +859,7 @@ gpm_graph_widget_legend_calculate_size (GpmGraphWidget *graph, cairo_t *cr,
 		*height = *height + GPM_GRAPH_WIDGET_LEGEND_SPACING;
 		pango_layout_set_text (graph->priv->layout, keydataitem->desc, -1);
 		pango_layout_get_pixel_extents (graph->priv->layout, &ink_rect, &logical_rect);
-		if (*width < ink_rect.width)
+		if ((gint) *width < ink_rect.width)
 			*width = ink_rect.width;
 	}
 

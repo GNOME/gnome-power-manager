@@ -32,8 +32,6 @@
 #include "gpm-refcount.h"
 #include "egg-debug.h"
 
-static void     gpm_feedback_class_init (GpmFeedbackClass *klass);
-static void     gpm_feedback_init       (GpmFeedback      *feedback);
 static void     gpm_feedback_finalize   (GObject	  *object);
 static void	gpm_feedback_show	(GtkWidget 	  *widget);
 

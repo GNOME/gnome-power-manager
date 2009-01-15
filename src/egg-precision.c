@@ -23,7 +23,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <glib.h>
+
 #include "egg-debug.h"
+#include "egg-precision.h"
 
 /**
  * egg_precision_round_up:

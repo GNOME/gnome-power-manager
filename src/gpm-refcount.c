@@ -28,8 +28,6 @@
 #include "gpm-refcount.h"
 #include "egg-debug.h"
 
-static void     gpm_refcount_class_init (GpmRefcountClass *klass);
-static void     gpm_refcount_init       (GpmRefcount      *refcount);
 static void     gpm_refcount_finalize   (GObject	  *object);
 
 #define GPM_REFCOUNT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_REFCOUNT, GpmRefcountPrivate))

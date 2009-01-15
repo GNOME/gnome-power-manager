@@ -41,9 +41,9 @@ gfloat		 egg_array_float_get_average		(EggArrayFloat	*array);
 gboolean	 egg_array_float_print			(EggArrayFloat	*array);
 EggArrayFloat	*egg_array_float_convolve		(EggArrayFloat	*data,
 							 EggArrayFloat	*kernel);
-inline gfloat	 egg_array_float_get			(EggArrayFloat	*array,
+gfloat	 egg_array_float_get				(EggArrayFloat	*array,
 							 guint		 i);
-inline void	 egg_array_float_set			(EggArrayFloat	*array,
+void	 egg_array_float_set				(EggArrayFloat	*array,
 							 guint		 i,
 							 gfloat		 value);
 

@@ -26,9 +26,9 @@
 
 G_BEGIN_DECLS
 
-guint		 egg_precision_round_up			(gfloat		 value,
+gint		 egg_precision_round_up			(gfloat		 value,
 							 gint		 smallest);
-guint		 egg_precision_round_down		(gfloat		 value,
+gint		 egg_precision_round_down		(gfloat		 value,
 							 gint		 smallest);
 
 G_END_DECLS

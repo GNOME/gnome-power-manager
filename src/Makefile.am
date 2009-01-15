@@ -98,6 +98,10 @@ gnome_power_statistics_LDADD +=				\
 	$(NULL)
 endif
 
+gnome_power_statistics_CFLAGS =				\
+	$(WARNINGFLAGS)					\
+	$(NULL)
+
 endif
 
 gnome_power_preferences_SOURCES =			\
@@ -135,6 +139,10 @@ gnome_power_preferences_LDADD =				\
 	$(POLKIT_GNOME_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
 	$(LOCAL_LIBHAL_LIBS)				\
+	$(NULL)
+
+gnome_power_preferences_CFLAGS =			\
+	$(WARNINGFLAGS)					\
 	$(NULL)
 
 if HAVE_UNIQUE
@@ -253,6 +261,10 @@ if HAVE_DK_POWER
 gnome_power_manager_LDADD +=				\
 	$(DEVKIT_POWER_LIBS)
 endif
+
+gnome_power_manager_CFLAGS =				\
+	$(WARNINGFLAGS)					\
+	$(NULL)
 
 gnome_power_self_test_SOURCES =				\
 	egg-color.h					\

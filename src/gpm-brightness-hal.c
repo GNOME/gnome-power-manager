@@ -146,8 +146,7 @@ gpm_brightness_hal_set_hw (GpmBrightnessHal *brightness, guint value_hw)
 		return FALSE;
 	}
 
-	if (value_hw < 0 ||
-	    value_hw > brightness->priv->levels - 1) {
+	if (value_hw > brightness->priv->levels - 1) {
 		egg_warning ("set outside range (%i of %i)",
 			     value_hw, brightness->priv->levels - 1);
 		return FALSE;
@@ -207,7 +206,7 @@ gpm_brightness_hal_dim_hw_step (GpmBrightnessHal *brightness, guint new_level_hw
 
 	if (new_level_hw > last_set_hw) {
 		/* going up */
-		for (a=last_set_hw; a <= new_level_hw; a+=step_interval) {
+		for (a=last_set_hw; a <= (gint) new_level_hw; a+=step_interval) {
 			ret = gpm_brightness_hal_set_hw (brightness, a);
 			/* we failed the last brightness set command, don't keep trying */
 			if (!ret) {
@@ -373,7 +372,7 @@ gpm_brightness_hal_down (GpmBrightnessHal *brightness, gboolean *hw_changed)
 		/* macbook pro has a bazzillion brightness levels, be a bit clever */
 		step = gpm_brightness_get_step (brightness->priv->levels);
 		/* don't underflow */
-		if (brightness->priv->last_set_hw < step) {
+		if ((gint) brightness->priv->last_set_hw < step) {
 			step = brightness->priv->last_set_hw;
 		}
 		ret = gpm_brightness_hal_set_hw (brightness, brightness->priv->last_set_hw - step);

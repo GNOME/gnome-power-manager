@@ -46,8 +46,6 @@
 
 #include "gpm-load.h"
 
-static void     gpm_load_class_init (GpmLoadClass *klass);
-static void     gpm_load_init       (GpmLoad      *load);
 static void     gpm_load_finalize   (GObject	  *object);
 
 #define GPM_LOAD_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_LOAD, GpmLoadPrivate))

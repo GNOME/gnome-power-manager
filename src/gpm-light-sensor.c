@@ -84,12 +84,12 @@ G_DEFINE_TYPE (GpmLightSensor, gpm_light_sensor, G_TYPE_OBJECT)
 static gboolean
 gpm_light_sensor_get_hw (GpmLightSensor *sensor)
 {
-	guint	    sensor_level_hw;
-	GError     *error = NULL;
-	gboolean    ret;
+	guint sensor_level_hw;
+	GError *error = NULL;
+	gboolean ret;
 	DBusGProxy *proxy;
-	GArray     *levels;
-	int         i;
+	GArray *levels;
+	gint i;
 
 	g_return_val_if_fail (sensor != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_LIGHT_SENSOR (sensor), FALSE);
@@ -116,9 +116,8 @@ gpm_light_sensor_get_hw (GpmLightSensor *sensor)
 
 	/* work out average */
 	sensor_level_hw = 0;
-	for (i = 0; i < levels->len; i++) {
+	for (i = 0; i < (gint) levels->len; i++)
 		sensor_level_hw += g_array_index (levels, gint, i);
-	}
 	sensor_level_hw /= levels->len;
 
 	/* save */

@@ -32,8 +32,6 @@
 #include "gpm-common.h"
 #include "gpm-inhibit.h"
 
-static void     gpm_inhibit_class_init (GpmInhibitClass *klass);
-static void     gpm_inhibit_init       (GpmInhibit      *inhibit);
 static void     gpm_inhibit_finalize   (GObject		*object);
 
 #define GPM_INHIBIT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_INHIBIT, GpmInhibitPrivate))
@@ -246,9 +244,7 @@ gpm_inhibit_un_inhibit (GpmInhibit  *inhibit,
  * Gets a list of inhibits.
  **/
 gboolean
-gpm_inhibit_get_requests (GpmInhibit *inhibit,
-			  gchar	   ***requests,
-			  GError    **error)
+gpm_inhibit_get_requests (GpmInhibit *inhibit, gchar ***requests, GError **error)
 {
 	egg_warning ("Not implimented");
 	return FALSE;
@@ -264,10 +260,9 @@ gpm_inhibit_get_requests (GpmInhibit *inhibit,
  * unregister it.
  **/
 static void
-gpm_inhibit_remove_dbus (GpmInhibit  *inhibit,
-			 const gchar *connection)
+gpm_inhibit_remove_dbus (GpmInhibit  *inhibit, const gchar *connection)
 {
-	int a;
+	guint a;
 	GpmInhibitData *data;
 	/* Remove *any* connections that match the connection */
 	for (a=0; a<g_slist_length (inhibit->priv->list); a++) {
@@ -345,11 +340,13 @@ gpm_inhibit_get_message (GpmInhibit *inhibit, GString *message, const gchar *act
 {
 	guint a;
 	GpmInhibitData *data;
+	gchar *boldstr;
+	gchar *italicstr;
 
 	if (g_slist_length (inhibit->priv->list) == 1) {
 		data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list, 0);
-		gchar *boldstr = g_strdup_printf ("<b>%s</b>", data->application);
-		gchar *italicstr = g_strdup_printf ("<b>%s</b>", data->reason);
+		boldstr = g_strdup_printf ("<b>%s</b>", data->application);
+		italicstr = g_strdup_printf ("<b>%s</b>", data->reason);
 		
 		if (strcmp (action, "suspend") == 0) {
 			/*Translators: first %s is an application name, second %s is the reason*/

@@ -20,6 +20,7 @@
  */
 
 #include <glib.h>
+#include "egg-color.h"
 
 /**
  * egg_color_from_rgb:

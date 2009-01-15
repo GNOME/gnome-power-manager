@@ -48,8 +48,6 @@
 #include <polkit-gnome/polkit-gnome.h>
 #endif
 
-static void     gpm_prefs_class_init (GpmPrefsClass *klass);
-static void     gpm_prefs_init       (GpmPrefs      *prefs);
 static void     gpm_prefs_finalize   (GObject	    *object);
 
 #define GPM_PREFS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_PREFS, GpmPrefsPrivate))

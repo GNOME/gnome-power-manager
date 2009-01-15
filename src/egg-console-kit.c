@@ -31,8 +31,6 @@
 #include "egg-debug.h"
 #include "egg-console-kit.h"
 
-static void     egg_console_kit_class_init	(EggConsoleKitClass	*klass);
-static void     egg_console_kit_init		(EggConsoleKit		*console_kit);
 static void     egg_console_kit_finalize	(GObject		*object);
 
 #define EGG_CONSOLE_KIT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), EGG_TYPE_CONSOLE_KIT, EggConsoleKitPrivate))
