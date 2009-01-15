@@ -972,10 +972,11 @@ prefs_setup_general (GpmPrefs *prefs)
 static void
 pk_prefs_set_defaults_cb (PolKitGnomeAction *default_action, GpmPrefs *prefs)
 {
+	GConfClient *client;
 	DBusGProxy *proxy;
 	DBusGConnection *connection;
 	GError *error;
-	gchar *keys[5] = {
+	const gchar *keys[5] = {
 		"/apps/gnome-power-manager/actions",
 		"/apps/gnome-power-manager/ui",
 		"/apps/gnome-power-manager/buttons",
@@ -1000,7 +1001,6 @@ pk_prefs_set_defaults_cb (PolKitGnomeAction *default_action, GpmPrefs *prefs)
 		return;
 	}
 
-	GConfClient *client;
 	client = gconf_client_get_default ();
 	gconf_client_suggest_sync (client, NULL);
 	g_object_unref (client);
