@@ -610,9 +610,15 @@ gpm_brightness_xrandr_update_cache (GpmBrightnessXRandR *brightness)
 					  G_CALLBACK (gpm_brightness_monitors_changed), brightness);
 		}
 
-		/* this is slow */
 		root = RootWindow (brightness->priv->dpy, screen);
+		/* XRRGetScreenResourcesCurrent is less expensive than
+		   XRRGetScreenResources, however it is available only
+		   in RandR 1.3 or higher */
+#ifdef RANDR_13_INTERFACE
+		resource = XRRGetScreenResourcesCurrent (brightness->priv->dpy, root);
+#else
 		resource = XRRGetScreenResources (brightness->priv->dpy, root);
+#endif
 		if (resource != NULL) {
 			egg_debug ("adding resource %p", resource);
 			g_ptr_array_add (brightness->priv->resources, resource);

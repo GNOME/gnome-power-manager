@@ -1,3 +1,22 @@
+2009-01-19  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-brightness-xrandr.c:
+	(gpm_brightness_xrandr_update_cache):
+	According to the following bug report the gnome settings daemon causes
+	high CPU usage with libxrandr 1.2.99.2 or higher:
+	https://bugs.edge.launchpad.net/ubuntu/+source/libxrandr/+bug/307306
+
+	The problem is that it calls XRRGetScreenResources() (which is an rather
+	expensive call) instead of XRRGetScreenResourcesCurrent() which is
+	cheaper and doesn't cause hardware to be reprobed.
+
+	While I agree that listening to events which represent changes in output
+	properties is ideal, calling XRRGetScreenResources each time a property
+	(e.g. the backlight) changes is really expensive and (if RandR 1.3 is
+	available) this can be avoided.
+
+	Patch from Alberto Milone <albertomilone@alice.it>, many thanks.
+
 2009-01-15  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs-core.c: (pk_prefs_set_defaults_cb):
