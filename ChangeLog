@@ -2,6 +2,16 @@
 
 	* src/gpm-brightness-xrandr.c:
 	(gpm_brightness_xrandr_update_cache):
+	This patch relies on randr.h i.e. on the RandR procol rather than on the
+	xserver itself. This will prevent us from adding the xserver development
+	libraries as build dependencies (thus preserving the previous behaviour).
+
+	Patch from Alberto Milone <albertomilone@alice.it>, many thanks.
+
+2009-01-19  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-brightness-xrandr.c:
+	(gpm_brightness_xrandr_update_cache):
 	According to the following bug report the gnome settings daemon causes
 	high CPU usage with libxrandr 1.2.99.2 or higher:
 	https://bugs.edge.launchpad.net/ubuntu/+source/libxrandr/+bug/307306
