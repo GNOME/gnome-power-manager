@@ -46,6 +46,8 @@ gfloat	 egg_array_float_get				(EggArrayFloat	*array,
 void	 egg_array_float_set				(EggArrayFloat	*array,
 							 guint		 i,
 							 gfloat		 value);
+EggArrayFloat *
+egg_array_float_remove_outliers (EggArrayFloat *data, guint length, gfloat sigma);
 
 G_END_DECLS
 

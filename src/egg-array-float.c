@@ -140,13 +140,17 @@ egg_array_float_compute_gaussian (guint length, gfloat sigma)
 	guint half_length;
 	guint i;
 	gfloat division;
+	gfloat value;
+
+	g_return_val_if_fail (length % 2 == 1, NULL);
 
 	array = egg_array_float_new (length);
 
-	/* array positions 0..10, has to be an odd number */
+	/* array positions 0..length, has to be an odd number */
 	half_length = (length / 2) + 1;
 	for (i=0; i<half_length; i++) {
 		division = half_length - (i + 1);
+	egg_debug ("half_length=%i, div=%f, sigma=%f", half_length, division, sigma);
 		g_array_index (array, gfloat, i) = egg_array_float_guassian_value (division, sigma);
 	}
 
@@ -155,6 +159,15 @@ egg_array_float_compute_gaussian (guint length, gfloat sigma)
 		division = g_array_index (array, gfloat, length-(i+1));
 		g_array_index (array, gfloat, i) = division;
 	}
+
+	/* make sure we get an accurate gaussian */
+	value = egg_array_float_sum (array);
+	if (fabs (value - 1.0f) > 0.01f) {
+		egg_warning ("got wrong sum (%f), perhaps sigma too high for size?", value);
+		egg_array_float_free (array);
+		array = NULL;
+	}
+
 	return array;
 }
 
@@ -265,6 +278,97 @@ egg_array_float_compute_integral (EggArrayFloat *array, guint x1, guint x2)
 	return value;
 }
 
+/**
+ * powfi:
+ **/
+static gfloat
+powfi (gfloat base, guint n)
+{
+	guint i;
+	gfloat retval = 1;
+	for (i=1; i <= n; i++)
+		retval *= base;
+	return retval;
+}
+
+/**
+ * egg_array_float_remove_outliers:
+ *
+ * @data: input array
+ * @size: size to analyse
+ * @sigma: sigma for standard deviation
+ * Return value: Data with outliers removed
+ *
+ * Compares local sections of the data, removing outliers if they fall
+ * ouside of sigma, and using the average of the other points in it's place.
+ **/
+EggArrayFloat *
+egg_array_float_remove_outliers (EggArrayFloat *data, guint length, gfloat sigma)
+{
+	guint i;
+	guint j;
+	guint half_length;
+	gfloat value;
+	gfloat average;
+	gfloat average_not_inc;
+	gfloat average_square;
+	gfloat biggest_difference;
+	gfloat outlier_value;
+	EggArrayFloat *result;
+
+	g_return_val_if_fail (length % 2 == 1, NULL);
+
+	result = egg_array_float_new (data->len);
+	half_length = (length - 1) / 2;
+
+	/* copy start and end of array */
+	for (i=0; i < half_length; i++)
+		g_array_index (result, gfloat, i) = g_array_index (data, gfloat, i);
+	for (i=data->len-half_length; i < data->len; i++)
+		g_array_index (result, gfloat, i) = g_array_index (data, gfloat, i);
+
+	/* find the standard deviation of a block off data */
+	for (i=half_length; i < data->len-half_length; i++) {
+		average = 0;
+		average_square = 0;
+
+		/* find the average and the squared average */
+		for (j=i-half_length; j<i+half_length+1; j++) {
+			value = g_array_index (data, gfloat, j);
+			average += value;
+			average_square += powfi (value, 2);
+		}
+
+		/* divide by length to get average */
+		average /= length;
+		average_square /= length;
+
+		/* find the standard deviation */
+		value = sqrtf (average_square - powfi (average, 2));
+
+		/* stddev is okay */
+		if (value < sigma) {
+			g_array_index (result, gfloat, i) = g_array_index (data, gfloat, i);
+		} else {
+			/* ignore the biggest difference from the average */
+			biggest_difference = 0;
+			outlier_value = 0;
+			for (j=i-half_length; j<i+half_length+1; j++) {
+				value = fabs (g_array_index (data, gfloat, j) - average);
+				if (value > biggest_difference) {
+					biggest_difference = value;
+					outlier_value = g_array_index (data, gfloat, j);
+				}
+			}
+			average_not_inc = (average * length) - outlier_value;
+			average_not_inc /= length - 1;
+			g_array_index (result, gfloat, i) = average_not_inc;
+		}
+	}
+
+	return result;
+}
+
 /***************************************************************************
  ***                          MAKE CHECK TESTS                           ***
  ***************************************************************************/
@@ -311,30 +415,117 @@ egg_array_float_test (EggTest *test)
 		egg_test_failed (test, "got wrong sum (%f)", value);
 
 	/************************************************************/
-	egg_test_title (test, "get gaussian 0.0, sigma 1.0");
-	value = egg_array_float_guassian_value (0.0, 1.0);
-	if (value - 0.398942 < 0.0001)
+	egg_test_title (test, "remove outliers");
+	egg_array_float_set (array, 0, 30.0);
+	egg_array_float_set (array, 1, 29.0);
+	egg_array_float_set (array, 2, 31.0);
+	egg_array_float_set (array, 3, 33.0);
+	egg_array_float_set (array, 4, 100.0);
+	egg_array_float_set (array, 5, 27.0);
+	egg_array_float_set (array, 6, 30.0);
+	egg_array_float_set (array, 7, 29.0);
+	egg_array_float_set (array, 8, 31.0);
+	egg_array_float_set (array, 9, 30.0);
+	kernel = egg_array_float_remove_outliers (array, 3, 10.0);
+	if (kernel != NULL && kernel->len == 10) 
+		egg_test_success (test, "got correct length outlier array");
+	else
+		egg_test_failed (test, "got gaussian array length (%i)", array->len);
+	egg_array_float_print (array);
+	egg_array_float_print (kernel);
+
+	/************************************************************/
+	egg_test_title (test, "make sure we removed the outliers");
+	value = egg_array_float_sum (kernel);
+	if (fabs(value - 30*10) < 1)
+		egg_test_success (test, "got sum (%f)", value);
+	else
+		egg_test_failed (test, "got wrong sum (%f)", value);
+	egg_array_float_free (kernel);
+
+	/************************************************************/
+	egg_test_title (test, "remove outliers step");
+	egg_array_float_set (array, 0, 0.0);
+	egg_array_float_set (array, 1, 0.0);
+	egg_array_float_set (array, 2, 0.0);
+	egg_array_float_set (array, 3, 0.0);
+	egg_array_float_set (array, 4, 0.0);
+	egg_array_float_set (array, 5, 0.0);
+	egg_array_float_set (array, 6, 0.0);
+	egg_array_float_set (array, 7, 10.0);
+	egg_array_float_set (array, 8, 20.0);
+	egg_array_float_set (array, 9, 50.0);
+	kernel = egg_array_float_remove_outliers (array, 3, 20.0);
+	if (kernel != NULL && kernel->len == 10) 
+		egg_test_success (test, "got correct length outlier array");
+	else
+		egg_test_failed (test, "got gaussian array length (%i)", array->len);
+	egg_array_float_print (array);
+	egg_array_float_print (kernel);
+
+	/************************************************************/
+	egg_test_title (test, "make sure we removed the outliers");
+	value = egg_array_float_sum (kernel);
+	if (fabs(value - 80) < 1)
+		egg_test_success (test, "got sum (%f)", value);
+	else
+		egg_test_failed (test, "got wrong sum (%f)", value);
+	egg_array_float_free (kernel);
+
+	/************************************************************/
+	egg_test_title (test, "get gaussian 0.0, sigma 1.1");
+	value = egg_array_float_guassian_value (0.0, 1.1);
+	if (fabs (value - 0.36267) < 0.0001)
 		egg_test_success (test, "got correct gaussian");
 	else
 		egg_test_failed (test, "got wrong gaussian (%f)", value);
 
 	/************************************************************/
-	egg_test_title (test, "get gaussian 1.0, sigma 1.0");
-	value = egg_array_float_guassian_value (1.0, 1.0);
-	if (value - 0.241971 < 0.0001)
+	egg_test_title (test, "get gaussian 0.5, sigma 1.1");
+	value = egg_array_float_guassian_value (0.5, 1.1);
+	if (fabs (value - 0.32708) < 0.0001)
 		egg_test_success (test, "got correct gaussian");
 	else
 		egg_test_failed (test, "got wrong gaussian (%f)", value);
+
+	/************************************************************/
+	egg_test_title (test, "get gaussian 1.0, sigma 1.1");
+	value = egg_array_float_guassian_value (1.0, 1.1);
+	if (fabs (value - 0.23991) < 0.0001)
+		egg_test_success (test, "got correct gaussian");
+	else
+		egg_test_failed (test, "got wrong gaussian (%f)", value);
+
+	/************************************************************/
+	egg_test_title (test, "get gaussian 0.5, sigma 4.5");
+	value = egg_array_float_guassian_value (0.5, 4.5);
+	if (fabs (value - 0.088108) < 0.0001)
+		egg_test_success (test, "got correct gaussian");
+	else
+		egg_test_failed (test, "got wrong gaussian (%f)", value);
+
+	/************************************************************/
+	size = 5;
+	sigma = 1.1;
+	egg_test_title (test, "get inprecise gaussian array (%i), sigma %f", size, sigma);
+	kernel = egg_array_float_compute_gaussian (size, sigma);
+	if (kernel == NULL) 
+		egg_test_success (test, NULL);
+	else {
+		egg_test_failed (test, "got gaussian array length (%i)", array->len);
+		egg_array_float_print (kernel);
+	}
 
 	/************************************************************/
 	size = 9;
 	sigma = 1.1;
-	egg_test_title (test, "get gaussian array (%i), sigma %f", size, sigma);
+	egg_test_title (test, "get gaussian-9 array (%i), sigma %f", size, sigma);
 	kernel = egg_array_float_compute_gaussian (size, sigma);
 	if (kernel != NULL && kernel->len == size) 
 		egg_test_success (test, "got correct length gaussian array");
 	else
 		egg_test_failed (test, "got gaussian array length (%i)", array->len);
+	egg_array_float_print (kernel);
 
 	/************************************************************/
 	egg_test_title (test, "make sure we get an accurate gaussian");
@@ -343,7 +534,6 @@ egg_array_float_test (EggTest *test)
 		egg_test_success (test, "got sum (%f)", value);
 	else
 		egg_test_failed (test, "got wrong sum (%f)", value);
-	egg_array_float_print (kernel);
 
 	/************************************************************/
 	egg_test_title (test, "make sure we get get and set");
@@ -355,11 +545,20 @@ egg_array_float_test (EggTest *test)
 		egg_test_failed (test, "got wrong value (%f)", value);
 	egg_array_float_print (array);
 
-
 	/************************************************************/
 	egg_test_title (test, "make sure we get the correct array sum (2)");
+	egg_array_float_set (array, 0, 20.0);
+	egg_array_float_set (array, 1, 44.0);
+	egg_array_float_set (array, 2, 45.0);
+	egg_array_float_set (array, 3, 89.0);
+	egg_array_float_set (array, 4, 100.0);
+	egg_array_float_set (array, 5, 12.0);
+	egg_array_float_set (array, 6, 76.0);
+	egg_array_float_set (array, 7, 78.0);
+	egg_array_float_set (array, 8, 1.20);
+	egg_array_float_set (array, 9, 3.0);
 	value = egg_array_float_sum (array);
-	if (value == 100.0)
+	if (fabs (value - 468.2) < 0.0001f)
 		egg_test_success (test, "got correct sum");
 	else
 		egg_test_failed (test, "got wrong sum (%f)", value);

@@ -281,6 +281,8 @@ gnome_power_self_test_SOURCES =				\
 	egg-precision.c					\
 	egg-discrete.h					\
 	egg-discrete.c					\
+	egg-array-float.h				\
+	egg-array-float.c				\
 	gpm-ac-adapter.h				\
 	gpm-ac-adapter.c				\
 	gpm-prefs-server.h				\

@@ -1,3 +1,20 @@
+2009-01-22  Richard Hughes  <richard@hughsie.com>
+
+	* src/Makefile.am:
+	* src/gpm-self-test.c: (main):
+	Add in egg-array-float to the self checks;
+
+	* src/egg-array-float.c: (egg_array_float_compute_gaussian),
+	(powfi), (egg_array_float_remove_outliers), (egg_array_float_test):
+	Add in a simple outlier removal function, and add some more unit tests.
+
+	* src/egg-array-float.h:
+	* src/gpm-statistics.c: (gpm_stats_update_smooth_data),
+	(gpm_stats_update_info_page_history),
+	(gpm_stats_update_info_page_stats), (main):
+	Remove outliers from the data, and smooth with different values of
+	sigma for the different graph tabs.
+
 2009-01-19  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-brightness-xrandr.c:

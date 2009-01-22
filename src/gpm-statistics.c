@@ -55,7 +55,7 @@ static const gchar *history_type;
 static const gchar *stats_type;
 static guint history_time;
 static GConfClient *gconf_client;
-static EggArrayFloat *gaussian = NULL;
+static gfloat sigma_smoothing = 0.0f;
 
 enum {
 	GPM_INFO_COLUMN_TEXT,
@@ -182,6 +182,8 @@ gpm_stats_update_smooth_data (EggObjList *list)
 	EggObjList *new;
 	EggArrayFloat *raw;
 	EggArrayFloat *convolved;
+	EggArrayFloat *outliers;
+	EggArrayFloat *gaussian = NULL;
 
 	/* convert the y data to a EggArrayFloat array */
 	raw = egg_array_float_new (list->len);
@@ -191,8 +193,12 @@ gpm_stats_update_smooth_data (EggObjList *list)
 		egg_array_float_set (raw, i, point->y);
 	}
 
+	/* remove any outliers */
+	outliers = egg_array_float_remove_outliers (raw, 3, 0.1);
+
 	/* convolve with gaussian */
-	convolved = egg_array_float_convolve (raw, gaussian);
+	gaussian = egg_array_float_compute_gaussian (11, sigma_smoothing);
+	convolved = egg_array_float_convolve (outliers, gaussian);
 
 	/* add the smoothed data back into a new array */
 	new = egg_obj_list_new ();
@@ -207,8 +213,10 @@ gpm_stats_update_smooth_data (EggObjList *list)
 	}
 
 	/* free data */
+	egg_array_float_free (gaussian);
 	egg_array_float_free (raw);
 	egg_array_float_free (convolved);
+	egg_array_float_free (outliers);
 
 	return new;
 }
@@ -443,6 +451,8 @@ gpm_stats_update_info_page_history (const DkpDevice *device)
 		dkp_point_obj_free (point);
 	}
 
+	/* render */
+	sigma_smoothing = 2.0;
 	widget = glade_xml_get_widget (glade_xml, "checkbutton_smooth_history");
 	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 	widget = glade_xml_get_widget (glade_xml, "checkbutton_points_history");
@@ -522,6 +532,7 @@ gpm_stats_update_info_page_stats (const DkpDevice *device)
 	}
 
 	/* render */
+	sigma_smoothing = 1.1;
 	widget = glade_xml_get_widget (glade_xml, "checkbutton_smooth_stats");
 	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 	widget = glade_xml_get_widget (glade_xml, "checkbutton_points_stats");
@@ -1034,9 +1045,6 @@ main (int argc, char *argv[])
 	/* get data from gconf */
 	gconf_client = gconf_client_get_default ();
 
-	/* create the gaussian dataset */
-	gaussian = egg_array_float_compute_gaussian (35, 4.5);
-
 	/* add application specific icons to search path */
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
                                            GPM_DATA G_DIR_SEPARATOR_S "icons");
@@ -1235,7 +1243,6 @@ main (int argc, char *argv[])
 	gtk_main ();
 
 out:
-	egg_array_float_free (gaussian);
 	g_object_unref (gconf_client);
 	g_object_unref (client);
 	g_object_unref (glade_xml);

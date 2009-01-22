@@ -31,6 +31,7 @@
 void egg_precision_test (EggTest *test);
 void egg_discrete_test (EggTest *test);
 void egg_color_test (EggTest *test);
+void egg_array_float_test (EggTest *test);
 
 void gpm_common_test (EggTest *test);
 void gpm_cell_unit_test (EggTest *test);
@@ -62,6 +63,7 @@ main (int argc, char **argv)
 	egg_precision_test (test);
 	egg_discrete_test (test);
 	egg_color_test (test);
+	egg_array_float_test (test);
 
 	gpm_common_test (test);
 #ifndef HAVE_DK_POWER
