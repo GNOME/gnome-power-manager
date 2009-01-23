@@ -1,3 +1,15 @@
+2009-01-23  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-cell-unit.h:
+	* src/gpm-cell.c: (gpm_cell_refresh_hal_all), (gpm_cell_get_id):
+	We have to include capacity in the profile name as some vendors create
+	different sized batteries with the same serial number.
+	This break batteries that use the current voltage for the mAh to mWh
+	conversion when the design voltage is also invalid. In this case
+	use the reporting string as we don't care about units.
+	Patch from Stephen Gildea and Joe, many thanks.
+	Fixes #562576
+
 2009-01-16  Richard Hughes  <richard@hughsie.com>
 
 	* RELEASE:
