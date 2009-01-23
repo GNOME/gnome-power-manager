@@ -2,6 +2,13 @@
 
 	* configure.ac:
 	* src/Makefile.am:
+	* src/egg-unique.c: (egg_unique_assign):
+	Now libnotify is a blessed external dependency, remove the compat code.
+
+2009-01-23  Richard Hughes  <richard@hughsie.com>
+
+	* configure.ac:
+	* src/Makefile.am:
 	* src/gpm-notify.c: (gpm_notify_cancel),
 	(notify_general_clicked_cb), (gpm_notify_perhaps_recall),
 	(gpm_notify_low_capacity), (gpm_notify_inhibit_lid),
@@ -9,7 +16,7 @@
 	(gpm_notify_discharging_primary), (gpm_notify_discharging_ups),
 	(gpm_notify_sleep_failed), (gpm_notify_finalize),
 	(gpm_notify_init):
-	Now libnotify is a external dependency, remove the compat code.
+	Now libnotify is a blessed external dependency, remove the compat code.
 
 2009-01-23  Richard Hughes  <richard@hughsie.com>
 

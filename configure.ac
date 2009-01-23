@@ -166,6 +166,10 @@ PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= $LIBNOTIFY_REQUIRED)
 AC_SUBST(LIBNOTIFY_CFLAGS)
 AC_SUBST(LIBNOTIFY_LIBS)
 
+PKG_CHECK_MODULES(UNIQUE, unique-1.0 >= $UNIQUE_REQUIRED)
+AC_SUBST(UNIQUE_CFLAGS)
+AC_SUBST(UNIQUE_LIBS)
+
 AC_PATH_PROG(GCONFTOOL, gconftool-2)
 AM_GCONF_SOURCE_2
 
@@ -394,21 +398,6 @@ else
 	DBUS_SERVICES_DIR="$DATADIR/dbus-1/services"
 fi
 AC_SUBST(DBUS_SERVICES_DIR)
-
-dnl ---------------------------------------------------------------------------
-dnl - Is unique available?
-dnl ---------------------------------------------------------------------------
-if $PKG_CONFIG --atleast-version $UNIQUE_REQUIRED unique-1.0; then
-   have_unique=yes
-   PKG_CHECK_MODULES(UNIQUE, unique-1.0 >= $UNIQUE_REQUIRED)
-   AC_SUBST(UNIQUE_CFLAGS)
-   AC_SUBST(UNIQUE_LIBS)
-   AC_DEFINE(HAVE_UNIQUE, 1, [Building with unique support]) 
-else
-   have_unique=no
-   AC_DEFINE(HAVE_UNIQUE, 0, [Not building with unique support]) 
-fi
-AM_CONDITIONAL([HAVE_UNIQUE], [test $have_unique = yes])
 
 dnl ---------------------------------------------------------------------------
 dnl - Some utility functions to make checking for X things easier.
@@ -687,7 +676,6 @@ echo "
         datadir:                   ${datadir}
         compiler:                  ${CC}
         cflags:                    ${CFLAGS}
-        unique support:            ${have_unique}
         Building extra applets:    ${enable_applets}
         DPMS support:              ${have_dpms}
         DeviceKit-power support:   ${have_dk_power}

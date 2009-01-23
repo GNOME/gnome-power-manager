@@ -23,10 +23,7 @@
 
 #include <string.h>
 #include <glib.h>
-
-#if HAVE_UNIQUE
 #include <unique/unique.h>
-#endif
 
 #include "egg-unique.h"
 #include "egg-debug.h"
@@ -37,11 +34,7 @@ static void     egg_unique_finalize   (GObject        *object);
 
 struct EggUniquePrivate
 {
-#if HAVE_UNIQUE
 	UniqueApp		*uniqueapp;
-#else
-	gpointer		 uniqueapp;
-#endif
 };
 
 enum {
@@ -53,7 +46,6 @@ static guint signals [LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (EggUnique, egg_unique, G_TYPE_OBJECT)
 
-#if HAVE_UNIQUE
 /**
  * egg_unique_message_cb:
  **/
@@ -95,21 +87,6 @@ egg_unique_assign (EggUnique *egg_unique, const gchar *service)
 			  G_CALLBACK (egg_unique_message_cb), egg_unique);
 	return TRUE;
 }
-#else
-
-/**
- * egg_unique_assign:
- * @egg_unique: This class instance
- * @service: The service name
- * Return value: always %TRUE
- **/
-gboolean
-egg_unique_assign (EggUnique *egg_unique, const gchar *service)
-{
-	g_return_val_if_fail (EGG_IS_UNIQUE (egg_unique), FALSE);
-	return TRUE;
-}
-#endif
 
 /**
  * egg_unique_class_init:

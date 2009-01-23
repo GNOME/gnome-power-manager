@@ -19,7 +19,6 @@ INCLUDES =						\
 	$(XRANDR_CFLAGS)				\
 	$(LIBNOTIFY_CFLAGS)				\
 	$(CANBERRA_CFLAGS)				\
-	$(UNIQUE_CFLAGS)				\
 	$(GSTREAMER_CFLAGS)				\
 	$(POLKIT_CFLAGS)				\
 	$(POLKIT_GNOME_CFLAGS)				\
@@ -89,19 +88,13 @@ gnome_power_statistics_LDADD =				\
 	$(GLIB_LIBS)					\
 	$(DEVKIT_POWER_LIBS)				\
 	$(GNOME_LIBS)					\
+	$(UNIQUE_LIBS)					\
 	$(DBUS_LIBS)					\
 	$(NULL)
-
-if HAVE_UNIQUE
-gnome_power_statistics_LDADD +=				\
-	$(UNIQUE_LIBS)
-	$(NULL)
-endif
 
 gnome_power_statistics_CFLAGS =				\
 	$(WARNINGFLAGS)					\
 	$(NULL)
-
 endif
 
 gnome_power_preferences_SOURCES =			\
@@ -136,6 +129,7 @@ gnome_power_preferences_LDADD =				\
 	$(GNOME_LIBS)					\
 	$(HAL_LIBS)					\
 	$(DBUS_LIBS)					\
+	$(UNIQUE_LIBS)					\
 	$(POLKIT_GNOME_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
 	$(LOCAL_LIBHAL_LIBS)				\
@@ -144,11 +138,6 @@ gnome_power_preferences_LDADD =				\
 gnome_power_preferences_CFLAGS =			\
 	$(WARNINGFLAGS)					\
 	$(NULL)
-
-if HAVE_UNIQUE
-gnome_power_preferences_LDADD +=			\
-	$(UNIQUE_LIBS)
-endif
 
 gnome_power_manager_SOURCES =				\
 	egg-debug.h					\
