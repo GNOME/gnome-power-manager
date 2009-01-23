@@ -39,16 +39,13 @@
 #include <dbus/dbus-glib.h>
 #include <gtk/gtk.h>
 #include <gconf/gconf-client.h>
+#include <libnotify/notify.h>
 
 #include "gpm-ac-adapter.h"
 #include "gpm-common.h"
 #include "egg-debug.h"
 #include "gpm-notify.h"
 #include "gpm-stock-icons.h"
-
-#ifdef HAVE_LIBNOTIFY
-#include <libnotify/notify.h>
-#endif
 
 #define GPM_NOTIFY_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_NOTIFY, GpmNotifyPrivate))
 #define QUIRK_WEBSITE	"http://people.freedesktop.org/~hughsient/quirk/"
@@ -60,9 +57,7 @@ struct GpmNotifyPrivate
 	GtkStatusIcon		*status_icon;
 	gchar			*internet_url;
 	const gchar		*do_not_show_gconf;
-#ifdef HAVE_LIBNOTIFY
 	NotifyNotification	*libnotify;
-#endif
 };
 
 enum {
@@ -75,7 +70,6 @@ static gpointer gpm_notify_object = NULL;
 
 G_DEFINE_TYPE (GpmNotify, gpm_notify, G_TYPE_OBJECT)
 
-#ifdef HAVE_LIBNOTIFY
 /**
  * notify_closed_cb:
  * @notify: our libnotify instance
@@ -166,85 +160,6 @@ gpm_notify_display (GpmNotify 	 *notify,
 	return TRUE;
 }
 
-#else
-
-/**
- * gpm_notify_show:
- *
- * Stub.
- **/
-static gboolean
-gpm_notify_show (GpmNotify *notify)
-{
-	return TRUE;
-}
-
-/**
- * gpm_notify_create:
- *
- * Stub.
- **/
-gboolean
-gpm_notify_create (GpmNotify 	 *notify,
-	 	   const gchar	 *title,
-		   const gchar	 *content,
-		   GpmNotifyTimeout timeout,
-		   const gchar	 *msgicon,
-		   GpmNotifyUrgency urgency)
-{
-	gpm_notify_display (notify, title, content, timeout, msgicon, urgency);
-	return TRUE;
-}
-
-/**
- * gpm_notify_display:
- * @notify: This class instance
- * @title: The title, e.g. "Battery Low"
- * @content: The contect, e.g. "17 minutes remaining"
- * @timeout: The time we should remain on screen in seconds
- * @msgicon: The icon to display, or NULL, e.g. GPM_STOCK_UPS_CHARGING_080
- * @urgency: The urgency type, e.g. GPM_NOTIFY_URGENCY_CRITICAL
- *
- * Does a gtk messagebox dialogue.
- * Return value: success
- **/
-gboolean
-gpm_notify_display (GpmNotify 	 *notify,
-	 	    const gchar	 *title,
-		    const gchar	 *content,
-		    GpmNotifyTimeout timeout,
-		    const gchar	 *msgicon,
-		    GpmNotifyUrgency urgency)
-{
-	GtkWidget     *dialog;
-	GtkMessageType msg_type;
-
-	if (urgency == GPM_NOTIFY_URGENCY_CRITICAL) {
-		msg_type = GTK_MESSAGE_WARNING;
-	} else {
-		msg_type = GTK_MESSAGE_INFO;
-	}
-
-	dialog = gtk_message_dialog_new_with_markup (NULL,
-						     GTK_DIALOG_DESTROY_WITH_PARENT,
-						     msg_type,
-						     GTK_BUTTONS_CLOSE,
-						     "<span size='larger'><b>%s</b></span>",
-						     GPM_NAME);
-
-	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog), "%s", content);
-
-	g_signal_connect_swapped (dialog,
-				  "response",
-				  G_CALLBACK (gtk_widget_destroy),
-				  dialog);
-
-	gtk_window_present (GTK_WINDOW (dialog));
-
-	return TRUE;
-}
-#endif
-
 /**
  * gpm_notify_cancel:
  * @notify: This class instance
@@ -256,13 +171,11 @@ gpm_notify_cancel (GpmNotify *notify)
 {
 	g_return_if_fail (GPM_IS_NOTIFY (notify));
 
-#ifdef HAVE_LIBNOTIFY
 	if (notify->priv->libnotify != NULL) {
 		notify_notification_close (notify->priv->libnotify, NULL);
 		g_object_unref (notify->priv->libnotify);
 		notify->priv->libnotify = NULL;
 	}
-#endif
 }
 
 /**
@@ -297,7 +210,6 @@ gpm_notify_use_status_icon (GpmNotify *notify, GtkStatusIcon *status_icon)
 	notify->priv->status_icon = status_icon;
 }
 
-#ifdef HAVE_LIBNOTIFY
 static void
 notify_general_clicked_cb (NotifyNotification *libnotify,
                            gchar *action, GpmNotify *notify)
@@ -347,7 +259,6 @@ notify_general_clicked_cb (NotifyNotification *libnotify,
 	}
 	egg_debug ("action %s unknown", action);
 }
-#endif
 
 /**
  * gpm_notify_perhaps_recall:
@@ -379,7 +290,6 @@ gpm_notify_perhaps_recall (GpmNotify   *notify,
 			   GPM_NOTIFY_URGENCY_CRITICAL);
 
 	/* add extra stuff */
-#ifdef HAVE_LIBNOTIFY
 	notify->priv->internet_url = g_strdup (website);
 	notify_notification_add_action  (notify->priv->libnotify,
 	                                 "visit-website",
@@ -392,7 +302,6 @@ gpm_notify_perhaps_recall (GpmNotify   *notify,
 	                                 _("Do not show me this again"),
 	                                 (NotifyActionCallback) notify_general_clicked_cb,
 	                                 notify, NULL);
-#endif
 
 	gpm_notify_show (notify);
 	g_free (msg);
@@ -425,14 +334,12 @@ gpm_notify_low_capacity (GpmNotify *notify,
 			   GPM_NOTIFY_URGENCY_CRITICAL);
 
 	/* add extra stuff */
-#ifdef HAVE_LIBNOTIFY
 	notify->priv->do_not_show_gconf = GPM_CONF_NOTIFY_LOW_CAPACITY;
 	notify_notification_add_action  (notify->priv->libnotify,
 	                                 "dont-show-again",
 	                                 _("Do not show me this again"),
 	                                 (NotifyActionCallback) notify_general_clicked_cb,
 	                                 notify, NULL);
-#endif
 
 	gpm_notify_show (notify);
 	g_free (msg);
@@ -465,14 +372,12 @@ gpm_notify_inhibit_lid (GpmNotify *notify)
 			   GPM_NOTIFY_URGENCY_CRITICAL);
 
 	/* add extra stuff */
-#ifdef HAVE_LIBNOTIFY
 	notify->priv->do_not_show_gconf = GPM_CONF_NOTIFY_INHIBIT_LID;
 	notify_notification_add_action  (notify->priv->libnotify,
 	                                 "dont-show-again",
 	                                 _("Do not show me this again"),
 	                                 (NotifyActionCallback) notify_general_clicked_cb,
 	                                 notify, NULL);
-#endif
 
 	gpm_notify_show (notify);
 	g_free (msg);
@@ -496,14 +401,12 @@ gpm_notify_fully_charged_primary (GpmNotify *notify)
 			   GPM_NOTIFY_URGENCY_CRITICAL);
 
 	/* add extra stuff */
-#ifdef HAVE_LIBNOTIFY
 	notify->priv->do_not_show_gconf = GPM_CONF_NOTIFY_FULLY_CHARGED;
 	notify_notification_add_action  (notify->priv->libnotify,
 	                                 "dont-show-again",
 	                                 _("Do not show me this again"),
 	                                 (NotifyActionCallback) notify_general_clicked_cb,
 	                                 notify, NULL);
-#endif
 
 	gpm_notify_show (notify);
 	return TRUE;
@@ -526,14 +429,12 @@ gpm_notify_discharging_primary (GpmNotify *notify)
 			   GPM_NOTIFY_URGENCY_CRITICAL);
 
 	/* add extra stuff */
-#ifdef HAVE_LIBNOTIFY
 	notify->priv->do_not_show_gconf = GPM_CONF_NOTIFY_DISCHARGING;
 	notify_notification_add_action  (notify->priv->libnotify,
 	                                 "dont-show-again",
 	                                 _("Do not show me this again"),
 	                                 (NotifyActionCallback) notify_general_clicked_cb,
 	                                 notify, NULL);
-#endif
 
 	gpm_notify_show (notify);
 	return TRUE;
@@ -556,14 +457,12 @@ gpm_notify_discharging_ups (GpmNotify *notify)
 			   GPM_NOTIFY_URGENCY_CRITICAL);
 
 	/* add extra stuff */
-#ifdef HAVE_LIBNOTIFY
 	notify->priv->do_not_show_gconf = GPM_CONF_NOTIFY_DISCHARGING;
 	notify_notification_add_action  (notify->priv->libnotify,
 	                                 "dont-show-again",
 	                                 _("Do not show me this again"),
 	                                 (NotifyActionCallback) notify_general_clicked_cb,
 	                                 notify, NULL);
-#endif
 
 	gpm_notify_show (notify);
 	return TRUE;
@@ -592,7 +491,6 @@ gpm_notify_sleep_failed (GpmNotify *notify, gboolean hibernate)
 			   GPM_NOTIFY_URGENCY_CRITICAL);
 
 	/* add extra stuff */
-#ifdef HAVE_LIBNOTIFY
 	notify->priv->do_not_show_gconf = GPM_CONF_NOTIFY_SLEEP_FAILED;
 	notify_notification_add_action  (notify->priv->libnotify,
 	                                 "dont-show-again",
@@ -612,7 +510,6 @@ gpm_notify_sleep_failed (GpmNotify *notify, gboolean hibernate)
 	                                 _("Visit quirk website"),
 	                                 (NotifyActionCallback) notify_general_clicked_cb,
 	                                 notify, NULL);
-#endif
 
 	gpm_notify_show (notify);
 	return TRUE;
@@ -630,15 +527,11 @@ gpm_notify_finalize (GObject *object)
 	notify = GPM_NOTIFY (object);
 	g_return_if_fail (notify->priv != NULL);
 
-#ifdef HAVE_LIBNOTIFY
-	if (notify->priv->libnotify != NULL) {
+	if (notify->priv->libnotify != NULL)
 		notify_notification_close (notify->priv->libnotify, NULL);
-	}
-#endif
 	g_object_unref (notify->priv->conf);
-	if (notify->priv->ac_adapter != NULL) {
+	if (notify->priv->ac_adapter != NULL)
 		g_object_unref (notify->priv->ac_adapter);
-	}
 
 	G_OBJECT_CLASS (gpm_notify_parent_class)->finalize (object);
 }
@@ -677,10 +570,8 @@ gpm_notify_init (GpmNotify *notify)
 			  G_CALLBACK (ac_adapter_changed_cb), notify);
 
 	notify->priv->status_icon = NULL;
-#ifdef HAVE_LIBNOTIFY
 	notify->priv->libnotify = NULL;
 	notify_init (GPM_NAME);
-#endif
 }
 
 /**

@@ -162,6 +162,10 @@ PKG_CHECK_MODULES(XRANDR, [
 AC_SUBST(XRANDR_CFLAGS)
 AC_SUBST(XRANDR_LIBS)
 
+PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= $LIBNOTIFY_REQUIRED)
+AC_SUBST(LIBNOTIFY_CFLAGS)
+AC_SUBST(LIBNOTIFY_LIBS)
+
 AC_PATH_PROG(GCONFTOOL, gconftool-2)
 AM_GCONF_SOURCE_2
 
@@ -390,20 +394,6 @@ else
 	DBUS_SERVICES_DIR="$DATADIR/dbus-1/services"
 fi
 AC_SUBST(DBUS_SERVICES_DIR)
-
-dnl ---------------------------------------------------------------------------
-dnl - Is a new enough libnotify available?
-dnl ---------------------------------------------------------------------------
-if $PKG_CONFIG --atleast-version $LIBNOTIFY_REQUIRED libnotify; then
-   have_libnotify=yes
-   PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= $LIBNOTIFY_REQUIRED)
-   AC_SUBST(LIBNOTIFY_CFLAGS)
-   AC_SUBST(LIBNOTIFY_LIBS)
-   AC_DEFINE(HAVE_LIBNOTIFY, 1, [Building with libnotify support]) 
-else
-   have_libnotify=no
-fi
-AM_CONDITIONAL([HAVE_LIBNOTIFY], [test $have_libnotify = yes])
 
 dnl ---------------------------------------------------------------------------
 dnl - Is unique available?
@@ -697,7 +687,6 @@ echo "
         datadir:                   ${datadir}
         compiler:                  ${CC}
         cflags:                    ${CFLAGS}
-        libnotify support:         ${have_libnotify}
         unique support:            ${have_unique}
         Building extra applets:    ${enable_applets}
         DPMS support:              ${have_dpms}

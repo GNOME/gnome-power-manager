@@ -247,15 +247,10 @@ gnome_power_manager_LDADD =				\
 	$(DBUS_LIBS)					\
 	$(XRANDR_LIBS)					\
 	$(CANBERRA_LIBS)				\
+	$(LIBNOTIFY_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
 	$(LOCAL_LIBHAL_LIBS)				\
 	$(NULL)
-
-if HAVE_LIBNOTIFY
-gnome_power_manager_LDADD +=				\
-	$(LIBNOTIFY_LIBS)				\
-	$(NULL)
-endif
 
 if HAVE_DK_POWER
 gnome_power_manager_LDADD +=				\
