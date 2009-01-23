@@ -24,9 +24,6 @@
 #define __GPM_TRAY_ICON_H
 
 #include <glib-object.h>
-#ifndef HAVE_DK_POWER
-#include "gpm-engine-old.h"
-#endif
 
 G_BEGIN_DECLS
 
@@ -59,10 +56,6 @@ gboolean	 gpm_tray_icon_set_tooltip		(GpmTrayIcon	*icon,
 							 const gchar	*tooltip);
 gboolean	 gpm_tray_icon_set_icon			(GpmTrayIcon	*icon,
 							 const gchar	*filename);
-#ifndef HAVE_DK_POWER
-gboolean	 gpm_tray_icon_set_collection_data	(GpmTrayIcon	*icon,
-							 GpmEngineCollection *collection);
-#endif
 
 G_END_DECLS
 

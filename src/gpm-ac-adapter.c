@@ -38,13 +38,8 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 
-#ifdef HAVE_DK_POWER
  #include <dkp-client.h>
  #include <dkp-device.h>
-#else
- #include <hal-device.h>
- #include <hal-manager.h>
-#endif
 
 #include "gpm-common.h"
 #include "egg-debug.h"
@@ -55,11 +50,7 @@
 struct GpmAcAdapterPrivate
 {
 	gboolean		 has_hardware;
-#ifdef HAVE_DK_POWER
 	DkpClient		*client;
-#else
-	HalDevice		*device;
-#endif
 };
 
 enum {
@@ -82,59 +73,13 @@ gboolean
 gpm_ac_adapter_is_present (GpmAcAdapter *ac_adapter)
 {
 	gboolean is_on_ac;
-#ifndef HAVE_DK_POWER
-	GError *error;
-
-	g_return_val_if_fail (ac_adapter != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_AC_ADAPTER (ac_adapter), FALSE);
-
-	/* bodge for now, PC's are considered on AC power */
-	if (!ac_adapter->priv->has_hardware)
-		return TRUE;
-
-	error = NULL;
-	hal_device_get_bool (ac_adapter->priv->device, "ac_adapter.present", &is_on_ac, &error);
-	if (error != NULL) {
-		egg_warning ("could not read ac_adapter.present");
-		g_error_free (error);
-	}
-#else
 	gboolean on_battery;
 	on_battery = dkp_client_on_battery (ac_adapter->priv->client);
 	/* battery -> not AC */
 	is_on_ac = !on_battery;
-#endif
 	return is_on_ac;
 }
 
-#ifndef HAVE_DK_POWER
-/**
- * hal_device_property_modified_cb:
- *
- * @udi: The HAL UDI
- * @key: Property key
- * @is_added: If the key was added
- * @is_removed: If the key was removed
- *
- * Invoked when a property of a device in the Global Device List is
- * changed, and we have we have subscribed to changes for that device.
- */
-static void
-hal_device_property_modified_cb (HalDevice   *device,
-				 const gchar  *key,
-				 gboolean      is_added,
-				 gboolean      is_removed,
-				 gboolean      finally,
-				 GpmAcAdapter *ac_adapter)
-{
-	gboolean on_ac;
-	if (strcmp (key, "ac_adapter.present") == 0) {
-		on_ac = gpm_ac_adapter_is_present (ac_adapter);
-		g_signal_emit (ac_adapter, signals [AC_ADAPTER_CHANGED], 0, on_ac);
-		return;
-	}
-}
-#else
 /**
  * gpm_ac_adapter_changed_cb:
  */
@@ -145,7 +90,6 @@ gpm_ac_adapter_changed_cb (DkpClient *client, GpmAcAdapter *ac_adapter)
 	on_battery = dkp_client_on_battery (client);
 	g_signal_emit (ac_adapter, signals [AC_ADAPTER_CHANGED], 0, !on_battery);
 }
-#endif
 
 /**
  * gpm_ac_adapter_finalize:
@@ -197,48 +141,9 @@ static void
 gpm_ac_adapter_init (GpmAcAdapter *ac_adapter)
 {
 	ac_adapter->priv = GPM_AC_ADAPTER_GET_PRIVATE (ac_adapter);
-#ifdef HAVE_DK_POWER
 	ac_adapter->priv->client = dkp_client_new ();
 	g_signal_connect (ac_adapter->priv->client, "changed",
 			  G_CALLBACK (gpm_ac_adapter_changed_cb), ac_adapter);
-#else
-	gchar **device_names;
-	gboolean ret;
-	GError *error;
-	HalManager *hal_manager;
-
-	ac_adapter->priv->device = hal_device_new ();
-	hal_manager = hal_manager_new ();
-
-	/* save udi of lcd adapter */
-	error = NULL;
-	ret = hal_manager_find_capability (hal_manager, "ac_adapter", &device_names, &error);
-	if (!ret) {
-		egg_warning ("Couldn't obtain list of AC adapters: %s", error->message);
-		g_error_free (error);
-		return;
-	}
-	if (device_names[0] != NULL) {
-		/* we track this by hand as machines that have no ac_adapter object must
-		 * return that they are on ac power */
-		ac_adapter->priv->has_hardware = TRUE;
-		egg_debug ("using %s", device_names[0]);
-
-		/* We only want first ac_adapter object (should only be one) */
-		hal_device_set_udi (ac_adapter->priv->device, device_names[0]);
-		hal_device_watch_property_modified (ac_adapter->priv->device);
-
-		/* we want state changes */
-		g_signal_connect (ac_adapter->priv->device, "property-modified",
-				  G_CALLBACK (hal_device_property_modified_cb), ac_adapter);
-	} else {
-		/* no ac-adapter class support */
-		ac_adapter->priv->has_hardware = FALSE;
-		egg_debug ("No devices of capability ac_adapter");
-	}
-	hal_manager_free_capability (device_names);
-	g_object_unref (hal_manager);
-#endif
 }
 
 /**

@@ -66,11 +66,6 @@ main (int argc, char **argv)
 	egg_array_float_test (test);
 
 	gpm_common_test (test);
-#ifndef HAVE_DK_POWER
-	gpm_cell_unit_test (test);
-	gpm_cell_test (test);
-	gpm_cell_test_array (test);
-#endif
 	gpm_inhibit_test (test);
 	gpm_phone_test (test);
 //	gpm_graph_widget_test (test);

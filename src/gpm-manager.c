@@ -40,13 +40,7 @@
 #include <dbus/dbus-glib-lowlevel.h>
 #include <gconf/gconf-client.h>
 #include <canberra-gtk.h>
-
-#ifdef HAVE_DK_POWER
- #include <dkp-device.h>
-#else
- #include <hal-device-power.h>
- #include <hal-manager.h>
-#endif
+#include <dkp-device.h>
 
 #include "egg-debug.h"
 #include "egg-console-kit.h"
@@ -68,12 +62,8 @@
 #include "gpm-stock-icons.h"
 #include "gpm-prefs-server.h"
 #include "gpm-tray-icon.h"
-#ifdef HAVE_DK_POWER
- #include "gpm-engine.h"
- #include "gpm-devicekit.h"
-#else
- #include "gpm-engine-old.h"
-#endif
+#include "gpm-engine.h"
+#include "gpm-devicekit.h"
 #include "gpm-feedback-widget.h"
 
 #include "org.freedesktop.PowerManagement.Inhibit.h"
@@ -1191,11 +1181,7 @@ gpm_manager_perhaps_recall (GpmManager *manager)
  * gpm_engine_perhaps_recall_cb:
  */
 static void
-#ifdef HAVE_DK_POWER
 gpm_engine_perhaps_recall_cb (GpmEngine *engine, DkpDeviceType type, gchar *oem_vendor, gchar *website, GpmManager *manager)
-#else
-gpm_engine_perhaps_recall_cb (GpmEngine *engine, GpmCellUnitKind kind, gchar *oem_vendor, gchar *website, GpmManager *manager)
-#endif
 {
 	g_object_set_data (G_OBJECT (manager), "recall-oem-vendor", (gpointer) g_strdup (oem_vendor));
 	g_object_set_data (G_OBJECT (manager), "recall-oem-website", (gpointer) g_strdup (website));
@@ -1207,11 +1193,7 @@ gpm_engine_perhaps_recall_cb (GpmEngine *engine, GpmCellUnitKind kind, gchar *oe
  * gpm_engine_low_capacity_cb:
  */
 static void
-#ifdef HAVE_DK_POWER
 gpm_engine_low_capacity_cb (GpmEngine *engine, DkpDeviceType type, guint capacity, GpmManager *manager)
-#else
-gpm_engine_low_capacity_cb (GpmEngine *engine, GpmCellUnitKind kind, guint capacity, GpmManager *manager)
-#endif
 {
 	/* We should notify the user if the battery has a low capacity,
 	 * where capacity is the ratio of the last_full capacity with that of
@@ -1241,17 +1223,9 @@ gpm_engine_summary_changed_cb (GpmEngine *engine, gchar *summary, GpmManager *ma
  * gpm_engine_low_capacity_cb:
  */
 static void
-#ifdef HAVE_DK_POWER
 gpm_engine_fully_charged_cb (GpmEngine *engine, DkpDeviceType type, GpmManager *manager)
-#else
-gpm_engine_fully_charged_cb (GpmEngine *engine, GpmCellUnitKind kind, GpmManager *manager)
-#endif
 {
-#ifndef HAVE_DK_POWER
-	if (kind == GPM_CELL_UNIT_KIND_PRIMARY)
-#else
 	if (type == DKP_DEVICE_TYPE_BATTERY)
-#endif
 		gpm_notify_fully_charged_primary (manager->priv->notify);
 }
 
@@ -1259,23 +1233,11 @@ gpm_engine_fully_charged_cb (GpmEngine *engine, GpmCellUnitKind kind, GpmManager
  * gpm_engine_low_capacity_cb:
  */
 static void
-#ifdef HAVE_DK_POWER
 gpm_engine_discharging_cb (GpmEngine *engine, DkpDeviceType type, GpmManager *manager)
-#else
-gpm_engine_discharging_cb (GpmEngine *engine, GpmCellUnitKind kind, GpmManager *manager)
-#endif
 {
-#ifndef HAVE_DK_POWER
-	if (kind == GPM_CELL_UNIT_KIND_PRIMARY)
-#else
 	if (type == DKP_DEVICE_TYPE_BATTERY)
-#endif
 		gpm_notify_discharging_primary (manager->priv->notify);
-#ifndef HAVE_DK_POWER
-	else if (kind == GPM_CELL_UNIT_KIND_UPS)
-#else
 	else if (type == DKP_DEVICE_TYPE_UPS)
-#endif
 		gpm_notify_discharging_ups (manager->priv->notify);
 }
 
@@ -1309,45 +1271,13 @@ control_sleep_failure_cb (GpmControl *control, GpmControlAction action, GpmManag
  * gpm_engine_charge_low_cb:
  */
 static void
-#ifdef HAVE_DK_POWER
 gpm_engine_charge_low_cb (GpmEngine *engine, DkpObject *obj, GpmManager *manager)
-#else
-gpm_engine_charge_low_cb (GpmEngine *engine, GpmCellUnit *unit, GpmManager *manager)
-#endif
 {
 	const gchar *title = NULL;
 	gchar *message = NULL;
 	gchar *remaining_text;
 	gchar *icon;
 
-#ifndef HAVE_DK_POWER
-	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
-		title = _("Laptop battery low");
-		remaining_text = gpm_get_timestring (unit->time_discharge);
-		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%.1f%%)"),
-					   remaining_text, unit->percentage);
-	} else if (unit->kind == GPM_CELL_UNIT_KIND_UPS) {
-		title = _("UPS low");
-		remaining_text = gpm_get_timestring (unit->time_discharge);
-		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"),
-					   remaining_text, unit->percentage);
-	} else if (unit->kind == GPM_CELL_UNIT_KIND_MOUSE) {
-		title = _("Mouse battery low");
-		message = g_strdup_printf (_("The wireless mouse attached to this computer is low in power (%.1f%%)"), unit->percentage);
-
-	} else if (unit->kind == GPM_CELL_UNIT_KIND_KEYBOARD) {
-		title = _("Keyboard battery low");
-		message = g_strdup_printf (_("The wireless keyboard attached to this computer is low in power (%.1f%%)"), unit->percentage);
-
-	} else if (unit->kind == GPM_CELL_UNIT_KIND_PDA) {
-		title = _("PDA battery low");
-		message = g_strdup_printf (_("The PDA attached to this computer is low in power (%.1f%%)"), unit->percentage);
-
-	} else if (unit->kind == GPM_CELL_UNIT_KIND_PHONE) {
-		title = _("Cell phone battery low");
-		message = g_strdup_printf (_("The cell phone attached to this computer is low in power (%.1f%%)"), unit->percentage);
-	}
-#else
 	if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
 		title = _("Laptop battery low");
 		remaining_text = gpm_get_timestring (obj->time_to_empty);
@@ -1374,14 +1304,9 @@ gpm_engine_charge_low_cb (GpmEngine *engine, GpmCellUnit *unit, GpmManager *mana
 		title = _("Cell phone battery low");
 		message = g_strdup_printf (_("The cell phone attached to this computer is low in power (%.1f%%)"), obj->percentage);
 	}
-#endif
 
 	/* get correct icon */
-#ifndef HAVE_DK_POWER
-	icon = gpm_cell_unit_get_icon (unit);
-#else
 	icon = gpm_devicekit_get_object_icon (obj);
-#endif
 	gpm_notify_display (manager->priv->notify, title, message, GPM_NOTIFY_TIMEOUT_LONG, icon, GPM_NOTIFY_URGENCY_NORMAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
 	g_free (icon);
@@ -1395,16 +1320,6 @@ static gchar *
 gpm_manager_get_time_until_action_text (GpmManager *manager)
 {
 	guint time_s = 0;
-#ifndef HAVE_DK_POWER
-	GpmEngineCollection *collection;
-
-	collection = gpm_engine_get_collection (manager->priv->engine);
-
-	/* we should tell the user how much time they have */
-	time_s = gpm_cell_array_get_time_until_action (collection->primary);
-	if (time_s == 0)
-		return g_strdup (_("a short time"));
-#endif
 	return gpm_get_timestring (time_s);
 }
 
@@ -1412,11 +1327,7 @@ gpm_manager_get_time_until_action_text (GpmManager *manager)
  * gpm_engine_charge_critical_cb:
  */
 static void
-#ifdef HAVE_DK_POWER
 gpm_engine_charge_critical_cb (GpmEngine *engine, DkpObject *obj, GpmManager *manager)
-#else
-gpm_engine_charge_critical_cb (GpmEngine *engine, GpmCellUnit *unit, GpmManager *manager)
-#endif
 {
 	const gchar *title = NULL;
 	gchar *message = NULL;
@@ -1426,65 +1337,6 @@ gpm_engine_charge_critical_cb (GpmEngine *engine, GpmCellUnit *unit, GpmManager 
 	gchar *icon;
 	gchar *time_text;
 
-#ifndef HAVE_DK_POWER
-	if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
-		title = _("Laptop battery critically low");
-		remaining_text = gpm_get_timestring (unit->time_discharge);
-		time_text = gpm_manager_get_time_until_action_text (manager);
-
-		/* we have to do different warnings depending on the policy */
-		action = gconf_client_get_string (manager->priv->conf, GPM_CONF_ACTIONS_CRITICAL_BATT, NULL);
-		if (action == NULL) {
-			egg_warning ("schema invalid!");
-			action = g_strdup (ACTION_NOTHING);
-		}
-
-		/* use different text for different actions */
-		if (strcmp (action, ACTION_NOTHING) == 0)
-			action_text = g_strdup (_("Plug in your AC adapter to avoid losing data."));
-		else if (strcmp (action, ACTION_SUSPEND) == 0)
-			action_text = g_strdup_printf (_("This computer will suspend in %s if the AC is not connected."), time_text);
-		else if (strcmp (action, ACTION_HIBERNATE) == 0)
-			action_text = g_strdup_printf (_("This computer will hibernate in %s if the AC is not connected."), time_text);
-		else if (strcmp (action, ACTION_SHUTDOWN) == 0)
-			action_text = g_strdup_printf (_("This computer will shutdown in %s if the AC is not connected."), time_text);
-
-		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%.1f%%). %s"),
-					   remaining_text, unit->percentage, action_text);
-
-		g_free (action);
-		g_free (action_text);
-		g_free (remaining_text);
-		g_free (time_text);
-	} else if (unit->kind == GPM_CELL_UNIT_KIND_UPS) {
-		title = _("UPS critically low");
-		remaining_text = gpm_get_timestring (unit->time_discharge);
-		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining UPS power (%.1f%%). "
-					     "Restore AC power to your computer to avoid losing data."),
-					   remaining_text, unit->percentage);
-		g_free (remaining_text);
-	} else if (unit->kind == GPM_CELL_UNIT_KIND_MOUSE) {
-		title = _("Mouse battery low");
-		message = g_strdup_printf (_("The wireless mouse attached to this computer is very low in power (%.1f%%). "
-					     "This device will soon stop functioning if not charged."),
-					   unit->percentage);
-	} else if (unit->kind == GPM_CELL_UNIT_KIND_KEYBOARD) {
-		title = _("Keyboard battery low");
-		message = g_strdup_printf (_("The wireless keyboard attached to this computer is very low in power (%.1f%%). "
-					     "This device will soon stop functioning if not charged."),
-					   unit->percentage);
-	} else if (unit->kind == GPM_CELL_UNIT_KIND_PDA) {
-		title = _("PDA battery low");
-		message = g_strdup_printf (_("The PDA attached to this computer is very low in power (%.1f%%). "
-					     "This device will soon stop functioning if not charged."),
-					   unit->percentage);
-	} else if (unit->kind == GPM_CELL_UNIT_KIND_PHONE) {
-		title = _("Cell phone battery low");
-		message = g_strdup_printf (_("Your cell phone is very low in power (%.1f%%). "
-					     "This device will soon stop functioning if not charged."),
-					   unit->percentage);
-	}
-#else
 	if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
 		title = _("Laptop battery critically low");
 		remaining_text = gpm_get_timestring (obj->time_to_empty);
@@ -1542,14 +1394,9 @@ gpm_engine_charge_critical_cb (GpmEngine *engine, GpmCellUnit *unit, GpmManager 
 					     "This device will soon stop functioning if not charged."),
 					   obj->percentage);
 	}
-#endif
 
 	/* get correct icon */
-#ifndef HAVE_DK_POWER
-	icon = gpm_cell_unit_get_icon (unit);
-#else
 	icon = gpm_devicekit_get_object_icon (obj);
-#endif
 	gpm_notify_display (manager->priv->notify, title, message, GPM_NOTIFY_TIMEOUT_LONG, icon, GPM_NOTIFY_URGENCY_CRITICAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
 	g_free (icon);
@@ -1560,22 +1407,14 @@ gpm_engine_charge_critical_cb (GpmEngine *engine, GpmCellUnit *unit, GpmManager 
  * gpm_engine_charge_action_cb:
  */
 static void
-#ifdef HAVE_DK_POWER
 gpm_engine_charge_action_cb (GpmEngine *engine, DkpObject *obj, GpmManager *manager)
-#else
-gpm_engine_charge_action_cb (GpmEngine *engine, GpmCellUnit *unit, GpmManager *manager)
-#endif
 {
 	const gchar *title = NULL;
 	gchar *action;
 	gchar *message = NULL;
 	gchar *icon;
 
-#ifndef HAVE_DK_POWER
-	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
-#else
 	if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
-#endif
 		title = _("Laptop battery critically low");
 
 		/* we have to do different warnings depending on the policy */
@@ -1607,11 +1446,7 @@ gpm_engine_charge_action_cb (GpmEngine *engine, GpmCellUnit *unit, GpmManager *m
 		/* wait 10 seconds for user-panic */
 		g_timeout_add_seconds (10, (GSourceFunc) manager_critical_action_do, manager);
 
-#ifndef HAVE_DK_POWER
-	} else if (unit->kind == GPM_CELL_UNIT_KIND_UPS) {
-#else
 	} else if (obj->type == DKP_DEVICE_TYPE_UPS) {
-#endif
 		title = _("UPS critically low");
 
 		/* we have to do different warnings depending on the policy */
@@ -1640,11 +1475,7 @@ gpm_engine_charge_action_cb (GpmEngine *engine, GpmCellUnit *unit, GpmManager *m
 		return;
 
 	/* get correct icon */
-#ifndef HAVE_DK_POWER
-	icon = gpm_cell_unit_get_icon (unit);
-#else
 	icon = gpm_devicekit_get_object_icon (obj);
-#endif
 	gpm_notify_display (manager->priv->notify,
 			    title, message, GPM_NOTIFY_TIMEOUT_LONG,
 			    icon, GPM_NOTIFY_URGENCY_CRITICAL);
@@ -1659,9 +1490,6 @@ gpm_engine_charge_action_cb (GpmEngine *engine, GpmCellUnit *unit, GpmManager *m
 static void
 has_inhibit_changed_cb (GpmInhibit *inhibit, gboolean has_inhibit, GpmManager *manager)
 {
-#ifndef HAVE_DK_POWER
-	HalManager *hal_manager;
-#endif
 	gboolean is_laptop = FALSE;
 	gboolean show_inhibit_lid;
 	gchar *action = NULL;
@@ -1677,11 +1505,7 @@ has_inhibit_changed_cb (GpmInhibit *inhibit, gboolean has_inhibit, GpmManager *m
 	if (show_inhibit_lid == FALSE)
 		return;
 
-#ifndef HAVE_DK_POWER
-	hal_manager = hal_manager_new ();
-	is_laptop = hal_manager_is_laptop (hal_manager);
-	g_object_unref (hal_manager);
-#endif
+/* FIXME: detect if laptop */
 
 	/* we don't warn for desktops, as they do not have a lid... */
 	if (is_laptop == FALSE)
@@ -1758,9 +1582,6 @@ gpm_manager_init (GpmManager *manager)
 {
 	gboolean check_type_cpu;
 	DBusGConnection *connection;
-#ifndef HAVE_DK_POWER
-	GpmEngineCollection *collection;
-#endif
 	GError *error = NULL;
 	gboolean on_ac;
 	guint version;
@@ -1905,11 +1726,6 @@ gpm_manager_init (GpmManager *manager)
 	/* update ac throttle */
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
 	update_ac_throttle (manager, on_ac);
-
-#ifndef HAVE_DK_POWER
-	collection = gpm_engine_get_collection (manager->priv->engine);
-	gpm_tray_icon_set_collection_data (manager->priv->tray_icon, collection);
-#endif
 }
 
 /**

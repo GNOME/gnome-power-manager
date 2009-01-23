@@ -1,5 +1,30 @@
 2009-01-23  Richard Hughes  <richard@hughsie.com>
 
+	* Makefile.am:
+	* configure.ac:
+	* src/Makefile.am:
+	* src/gpm-ac-adapter.c: (gpm_ac_adapter_is_present),
+	(gpm_ac_adapter_changed_cb), (gpm_ac_adapter_init):
+	* src/gpm-control.c: (gpm_control_allowed_suspend),
+	(gpm_control_allowed_hibernate), (gpm_control_shutdown),
+	(gpm_control_suspend), (gpm_control_hibernate),
+	(gpm_control_finalize), (gpm_control_init):
+	* src/gpm-manager.c: (gpm_engine_perhaps_recall_cb),
+	(gpm_engine_low_capacity_cb), (gpm_engine_fully_charged_cb),
+	(gpm_engine_discharging_cb), (gpm_engine_charge_low_cb),
+	(gpm_manager_get_time_until_action_text),
+	(gpm_engine_charge_critical_cb), (gpm_engine_charge_action_cb),
+	(has_inhibit_changed_cb), (gpm_manager_init):
+	* src/gpm-self-test.c: (main):
+	* src/gpm-tray-icon.c: (gpm_tray_icon_show_info_cb),
+	(gpm_tray_icon_add_device), (gpm_tray_icon_activate_cb),
+	(gpm_tray_icon_init), (gpm_tray_icon_finalize):
+	* src/gpm-tray-icon.h:
+	Now DeviceKit-power is a blessed external dependency, remove the compat
+	code.
+
+2009-01-23  Richard Hughes  <richard@hughsie.com>
+
 	* configure.ac:
 	* src/Makefile.am:
 	* src/egg-unique.c: (egg_unique_assign):

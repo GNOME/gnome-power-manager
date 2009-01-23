@@ -41,12 +41,7 @@
 #include <dbus/dbus-glib-lowlevel.h>
 #include <gnome-keyring.h>
 #include <gconf/gconf-client.h>
-
-#ifdef HAVE_DK_POWER
- #include <dkp-client.h>
-#else
- #include <hal-device-power.h>
-#endif
+#include <dkp-client.h>
 
 #ifdef HAVE_POLKIT
 #include <polkit/polkit.h>
@@ -66,11 +61,7 @@
 struct GpmControlPrivate
 {
 	GConfClient		*conf;
-#ifdef HAVE_DK_POWER
 	DkpClient		*client;
-#else
-	HalDevicePower		*hal_device_power;
-#endif
 };
 
 enum {
@@ -174,13 +165,8 @@ gpm_control_allowed_suspend (GpmControl *control, gboolean *can, GError **error)
 
 	*can = FALSE;
 	conf_ok = gconf_client_get_bool (control->priv->conf, GPM_CONF_CAN_SUSPEND, NULL);
-#ifdef HAVE_DK_POWER
 	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.devicekit.power.suspend");
 	hardware_ok = dkp_client_can_suspend (control->priv->client);
-#else
-	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.hal.power-management.suspend");
-	hardware_ok = hal_device_power_can_suspend (control->priv->hal_device_power);
-#endif
 	fg = gpm_control_check_foreground_console (control);
 	if (conf_ok && hardware_ok && polkit_ok && fg)
 		*can = TRUE;
@@ -208,50 +194,13 @@ gpm_control_allowed_hibernate (GpmControl *control, gboolean *can, GError **erro
 	*can = FALSE;
 	conf_ok = gconf_client_get_bool (control->priv->conf, GPM_CONF_CAN_HIBERNATE, NULL);
 	fg = gpm_control_check_foreground_console (control);
-#ifdef HAVE_DK_POWER
 	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.devicekit.power.hibernate");
 	hardware_ok = dkp_client_can_hibernate (control->priv->client);
-#else
-	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.hal.power-management.hibernate");
-	hardware_ok = hal_device_power_can_hibernate (control->priv->hal_device_power);
-#endif
 	if (conf_ok && hardware_ok && polkit_ok && fg)
 		*can = TRUE;
 	egg_debug ("conf=%i, polkit=%i, fg=%i, can=%i", conf_ok, polkit_ok, fg, *can);
 	return TRUE;
 }
-
-#ifndef HAVE_DK_POWER
-/* convert the HAL error to a local error */
-static void
-gpm_control_convert_hal_error (GpmControl *control, GError **error)
-{
-	gint code;
-	gchar *message;
-	if (error == NULL) {
-		return;
-	}
-
-	/* copy out the needed data */
-	code = (*error)->code;
-	message = g_strdup ((*error)->message);
-
-	/* clear the old HAL error */
-	g_error_free (*error);
-	*error = NULL;
-
-	/* localize */
-	if (code == 9) {
-		/* DBUS security prevents sending */
-		g_set_error (error, GPM_CONTROL_ERROR, GPM_CONTROL_ERROR_GENERAL,
-			     "%s", _("The message was not sent due to DBUS security rules"));
-	} else {
-		g_set_error (error, GPM_CONTROL_ERROR, GPM_CONTROL_ERROR_GENERAL,
-			     "%s:%s", _("General failure"), message);
-	}
-	g_free (message);
-}
-#endif
 
 /**
  * gpm_control_shutdown:
@@ -263,18 +212,10 @@ gboolean
 gpm_control_shutdown (GpmControl *control, GError **error)
 {
 	gboolean ret;
-
-#ifdef HAVE_DK_POWER
 	EggConsoleKit *console;
 	console = egg_console_kit_new ();
 	ret = egg_console_kit_stop (console, error);
 	g_object_unref (console);
-#else
-	ret = hal_device_power_shutdown (control->priv->hal_device_power, error);
-	if (!ret)
-		gpm_control_convert_hal_error (control, error);
-#endif
-
 	return ret;
 }
 
@@ -355,13 +296,7 @@ gpm_control_suspend (GpmControl *control, GError **error)
 	egg_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_SUSPEND);
 
-#ifdef HAVE_DK_POWER
 	ret = dkp_client_suspend (control->priv->client, error);
-#else
-	ret = hal_device_power_suspend (control->priv->hal_device_power, 0, error);
-	if (!ret)
-		gpm_control_convert_hal_error (control, error);
-#endif
 
 	egg_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_SUSPEND);
@@ -431,13 +366,7 @@ gpm_control_hibernate (GpmControl *control, GError **error)
 	egg_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_HIBERNATE);
 
-#ifdef HAVE_DK_POWER
 	ret = dkp_client_hibernate (control->priv->client, error);
-#else
-	ret = hal_device_power_hibernate (control->priv->hal_device_power, error);
-	if (!ret)
-		gpm_control_convert_hal_error (control, error);
-#endif
 
 	egg_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_HIBERNATE);
@@ -472,11 +401,7 @@ gpm_control_finalize (GObject *object)
 	control = GPM_CONTROL (object);
 
 	g_object_unref (control->priv->conf);
-#ifdef HAVE_DK_POWER
 	g_object_unref (control->priv->client);
-#else
-	g_object_unref (control->priv->hal_device_power);
-#endif
 
 	g_return_if_fail (control->priv != NULL);
 	G_OBJECT_CLASS (gpm_control_parent_class)->finalize (object);
@@ -540,11 +465,7 @@ gpm_control_init (GpmControl *control)
 {
 	control->priv = GPM_CONTROL_GET_PRIVATE (control);
 
-#ifdef HAVE_DK_POWER
 	control->priv->client = dkp_client_new ();
-#else
-	control->priv->hal_device_power = hal_device_power_new ();
-#endif
 	control->priv->conf = gconf_client_get_default ();
 }
 

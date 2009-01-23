@@ -48,18 +48,12 @@ DEVKIT_POWER_LIBS =					\
 bin_PROGRAMS =						\
 	gnome-power-manager				\
 	gnome-power-preferences				\
-	$(NULL)
-
-if HAVE_DK_POWER
-bin_PROGRAMS +=						\
 	gnome-power-statistics				\
 	$(NULL)
-endif
 
 check_PROGRAMS =					\
 	gnome-power-self-test
 
-if HAVE_DK_POWER
 gnome_power_statistics_SOURCES =			\
 	egg-color.c					\
 	egg-color.h					\
@@ -95,7 +89,6 @@ gnome_power_statistics_LDADD =				\
 gnome_power_statistics_CFLAGS =				\
 	$(WARNINGFLAGS)					\
 	$(NULL)
-endif
 
 gnome_power_preferences_SOURCES =			\
 	egg-debug.h					\
@@ -204,28 +197,12 @@ gnome_power_manager_SOURCES =				\
 	gpm-feedback-widget.c				\
 	$(NULL)
 
-if HAVE_DK_POWER
 gnome_power_manager_SOURCES +=				\
 	gpm-engine.h					\
 	gpm-engine.c					\
 	gpm-devicekit.h					\
 	gpm-devicekit.c					\
 	$(NULL)
-else
-	egg-color.c					\
-	egg-color.h					\
-	gpm-engine-old.h				\
-	gpm-engine-old.c				\
-	gpm-cell.h					\
-	gpm-cell.c					\
-	gpm-cell-unit.h					\
-	gpm-cell-unit.c					\
-	gpm-cell-array.h				\
-	gpm-cell-array.c				\
-	gpm-warnings.h					\
-	gpm-warnings.c					\
-	$(NULL)
-endif
 
 gnome_power_manager_LDADD =				\
 	$(GLIB_LIBS)					\
@@ -239,12 +216,8 @@ gnome_power_manager_LDADD =				\
 	$(LIBNOTIFY_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
 	$(LOCAL_LIBHAL_LIBS)				\
+	$(DEVKIT_POWER_LIBS)				\
 	$(NULL)
-
-if HAVE_DK_POWER
-gnome_power_manager_LDADD +=				\
-	$(DEVKIT_POWER_LIBS)
-endif
 
 gnome_power_manager_CFLAGS =				\
 	$(WARNINGFLAGS)					\
@@ -300,25 +273,12 @@ gnome_power_self_test_SOURCES =				\
 	gpm-inhibit.c					\
 	$(NULL)
 
-if HAVE_DK_POWER
 gnome_power_self_test_SOURCES +=			\
 	gpm-devicekit.h					\
 	gpm-devicekit.c					\
 	egg-console-kit.h				\
 	egg-console-kit.c				\
 	$(NULL)
-else
-gnome_power_self_test_SOURCES +=			\
-	gpm-warnings.h					\
-	gpm-warnings.c					\
-	gpm-cell.h					\
-	gpm-cell.c					\
-	gpm-cell-unit.h					\
-	gpm-cell-unit.c					\
-	gpm-cell-array.h				\
-	gpm-cell-array.c				\
-	$(NULL)
-endif
 
 gnome_power_self_test_LDADD =				\
 	$(GLIB_LIBS)					\
@@ -341,10 +301,6 @@ BUILT_SOURCES = 					\
 	gpm-marshal.c					\
 	gpm-marshal.h					\
 	$(NULL)
-
-if !HAVE_DK_POWER
-BUILT_SOURCES += org.freedesktop.PowerManagement.Statistics.h
-endif
 
 gpm-marshal.c: gpm-marshal.list
 	echo "#include \"gpm-marshal.h\"" > $@ && \
