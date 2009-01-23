@@ -47,6 +47,7 @@ typedef struct {
 	guint		 charge_design;
 	guint		 charge_last_full;
 	guint		 charge_current;
+	guint		 reporting_design;
 	guint		 rate;
 	gfloat		 percentage;
 	guint		 time_charge;

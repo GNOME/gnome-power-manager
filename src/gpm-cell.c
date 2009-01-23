@@ -105,6 +105,8 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 
 	hal_device_get_uint (device, "battery.charge_level.design",
 				 &unit->charge_design, NULL);
+	hal_device_get_uint (device, "battery.reporting.design",
+				 &unit->reporting_design, NULL);
 	hal_device_get_uint (device, "battery.charge_level.last_full",
 				 &unit->charge_last_full, NULL);
 	hal_device_get_uint (device, "battery.charge_level.current",
@@ -181,12 +183,12 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 				capacity = 100.0f / (float) unit->charge_design;
 				unit->capacity = capacity * (float) unit->charge_last_full;
 				if (unit->capacity > 100) {
-					egg_debug ("rounding down capactity from "
+					egg_debug ("rounding down capacity from "
 						   "%i to 100", unit->capacity);
 					unit->capacity = 100;
 				}
 				if (unit->capacity < 0) {
-					egg_debug ("rounding up capactity from "
+					egg_debug ("rounding up capacity from "
 						   "%i to 0", unit->capacity);
 					unit->capacity = 0;
 				}
@@ -483,8 +485,8 @@ gpm_cell_get_id (GpmCell *cell)
 		g_string_append (string, cell->priv->model);
 		g_string_append_c (string, '-');
 	}
-	if (cell->priv->unit.charge_design > 0) {
-		g_string_append_printf (string, "%i", cell->priv->unit.charge_design);
+	if (cell->priv->unit.reporting_design > 0) {
+		g_string_append_printf (string, "%i", cell->priv->unit.reporting_design);
 		g_string_append_c (string, '-');
 	}
 	if (cell->priv->serial != NULL && strlen (cell->priv->serial) > 2) {
