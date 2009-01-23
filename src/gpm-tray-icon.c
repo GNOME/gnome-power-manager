@@ -49,9 +49,6 @@
 #include "gpm-control.h"
 #include "gpm-common.h"
 #include "gpm-notify.h"
-#include "gpm-cell-array.h"
-#include "gpm-cell.h"
-#include "gpm-cell-unit.h"
 #include "gpm-stock-icons.h"
 #include "gpm-tray-icon.h"
 
