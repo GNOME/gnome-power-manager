@@ -38,7 +38,6 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <gtk/gtkstatusicon.h>
 #include <gconf/gconf-client.h>
 #include <dkp-device.h>
 

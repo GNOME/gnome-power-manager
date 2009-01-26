@@ -29,7 +29,6 @@
 #include <string.h>
 #include <panel-applet.h>
 #include <gtk/gtk.h>
-#include <gtk/gtkbox.h>
 #include <gdk/gdkkeysyms.h>
 #include <glib-object.h>
 #include <dbus/dbus-glib.h>
