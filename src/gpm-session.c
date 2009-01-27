@@ -35,11 +35,11 @@ static void     gpm_session_finalize   (GObject		*object);
 
 #define GPM_SESSION_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_SESSION, GpmSessionPrivate))
 
-#define GPM_SESSION_MANAGER_SERVICE			"org.gnome.Session"
-#define GPM_SESSION_MANAGER_PATH			"/org/gnome/Session"
-#define GPM_SESSION_MANAGER_INTERFACE			"org.gnome.Session"
-#define GPM_SESSION_MANAGER_PRESENCE_PATH		"/org/gnome/Session/Presence"
-#define GPM_SESSION_MANAGER_PRESENCE_INTERFACE		"org.gnome.Session.Presence"
+#define GPM_SESSION_MANAGER_SERVICE			"org.gnome.SessionManager"
+#define GPM_SESSION_MANAGER_PATH			"/org/gnome/SessionManager"
+#define GPM_SESSION_MANAGER_INTERFACE			"org.gnome.SessionManager"
+#define GPM_SESSION_MANAGER_PRESENCE_PATH		"/org/gnome/SessionManager/Presence"
+#define GPM_SESSION_MANAGER_PRESENCE_INTERFACE		"org.gnome.SessionManager.Presence"
 #define GPM_DBUS_PROPERTIES_INTERFACE			"org.freedesktop.DBus.Properties"
 
 typedef enum {
@@ -135,12 +135,13 @@ gpm_session_is_idle (GpmSession *session)
 	GError *error = NULL;
 	GValue *value;
 
+	value = g_new0(GValue, 1);
 	/* find out if this change altered the inhibited state */
 	ret = dbus_g_proxy_call (session->priv->proxy_prop, "Get", &error,
 				 G_TYPE_STRING, GPM_SESSION_MANAGER_PRESENCE_INTERFACE,
 				 G_TYPE_STRING, "status",
 				 G_TYPE_INVALID,
-				 G_TYPE_VALUE, &value,
+				 G_TYPE_VALUE, value,
 				 G_TYPE_INVALID);
 	if (!ret) {
 		egg_warning ("failed to get idle status: %s", error->message);
@@ -149,6 +150,7 @@ gpm_session_is_idle (GpmSession *session)
 		goto out;
 	}
 	is_idle = (g_value_get_uint (value) == GPM_SESSION_STATUS_ENUM_IDLE);
+	g_free (value);
 out:
 	return is_idle;
 }
