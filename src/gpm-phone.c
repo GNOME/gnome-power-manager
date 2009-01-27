@@ -73,7 +73,7 @@ gpm_phone_coldplug (GpmPhone *phone)
 	g_return_val_if_fail (GPM_IS_PHONE (phone), FALSE);
 
 	if (phone->priv->proxy == NULL) {
-		egg_warning ("not connected\n");
+		egg_warning ("not connected");
 		return FALSE;
 	}
 
@@ -239,7 +239,7 @@ gpm_phone_dbus_connect (GpmPhone *phone)
 	g_return_val_if_fail (GPM_IS_PHONE (phone), FALSE);
 
 	if (phone->priv->connection == NULL) {
-		egg_debug ("get connection\n");
+		egg_debug ("get connection");
 		g_clear_error (&error);
 		phone->priv->connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 		if (error != NULL) {
@@ -250,7 +250,7 @@ gpm_phone_dbus_connect (GpmPhone *phone)
 		}
 	}
 	if (phone->priv->proxy == NULL) {
-		egg_debug ("get proxy\n");
+		egg_debug ("get proxy");
 		g_clear_error (&error);
 		phone->priv->proxy = dbus_g_proxy_new_for_name_owner (phone->priv->connection,
 							 GNOME_PHONE_MANAGER_DBUS_SERVICE,
@@ -258,7 +258,7 @@ gpm_phone_dbus_connect (GpmPhone *phone)
 							 GNOME_PHONE_MANAGER_DBUS_INTERFACE,
 							 &error);
 		if (error != NULL) {
-			egg_warning ("Cannot connect, maybe the daemon is not running: %s\n", error->message);
+			egg_warning ("Cannot connect, maybe the daemon is not running: %s", error->message);
 			g_error_free (error);
 			phone->priv->proxy = NULL;
 			return FALSE;
@@ -297,7 +297,7 @@ gpm_phone_dbus_disconnect (GpmPhone *phone)
 	g_return_val_if_fail (GPM_IS_PHONE (phone), FALSE);
 
 	if (phone->priv->proxy != NULL) {
-		egg_debug ("removing proxy\n");
+		egg_debug ("removing proxy");
 		g_object_unref (phone->priv->proxy);
 		phone->priv->proxy = NULL;
 		if (phone->priv->present) {

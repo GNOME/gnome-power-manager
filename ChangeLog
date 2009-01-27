@@ -1,5 +1,11 @@
 2009-01-27  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-phone.c: (gpm_phone_coldplug), (gpm_phone_dbus_connect),
+	(gpm_phone_dbus_disconnect):
+	Don't double print debug newlines.
+
+2009-01-27  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-backlight.c: (idle_changed_cb):
 	* src/gpm-idle.c: (gpm_idle_mode_to_text), (gpm_idle_set_mode),
 	(gpm_idle_set_check_cpu), (gpm_idle_get_mode),
