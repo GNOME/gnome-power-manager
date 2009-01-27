@@ -1,5 +1,20 @@
 2009-01-27  Richard Hughes  <richard@hughsie.com>
 
+	* src/egg-idletime.c: (egg_idletime_xsync_alarm_set),
+	(egg_idletime_alarm_reset_all), (egg_idletime_timeout),
+	(egg_idletime_xsync_value_add_one), (egg_idletime_alarm_find_id),
+	(egg_idletime_x_set_reset), (egg_idletime_alarm_find_event),
+	(egg_idletime_x_event_filter), (egg_idletime_alarm_get),
+	(egg_idletime_alarm_set), (egg_idletime_alarm_free),
+	(egg_idletime_alarm_remove), (egg_idletime_class_init),
+	(egg_idletime_init), (egg_idletime_finalize), (egg_idletime_new),
+	(egg_test_egg_idletime_wait), (gpm_alarm_expired_cb),
+	(wait_until_alarm), (wait_until_reset), (egg_idletime_test):
+	* src/egg-idletime.h:
+	Add missing file. Sleeptime. Fixes #569356.
+
+2009-01-27  Richard Hughes  <richard@hughsie.com>
+
 	* configure.ac:
 	* src/gpm-backlight.c: (gpm_backlight_error_quark),
 	(gpm_backlight_sync_policy), (gpm_backlight_set_mode),
