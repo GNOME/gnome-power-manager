@@ -1,5 +1,10 @@
 2009-01-27  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c: (manager_policy_do):
+	Use the logout function in gpm-session, not our own local version.
+
+2009-01-27  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-screensaver.c: (gpm_screensaver_proxy_connect_more),
 	(gpm_screensaver_class_init):
 	* src/gpm-screensaver.h:
