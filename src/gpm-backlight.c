@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2005-2007 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2005-2009 Richard Hughes <richard@hughsie.com>
  * Copyright (C) 2005 William Jon McCann <mccann@jhu.edu>
  *
  * Licensed under the GNU General Public License Version 2
@@ -58,8 +58,6 @@
 #include "gpm-stock-icons.h"
 #include "gpm-prefs-server.h"
 
-#define DIM_INTERVAL		10 /* ms */
-
 #define GPM_BACKLIGHT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_BACKLIGHT, GpmBacklightPrivate))
 
 struct GpmBacklightPrivate
@@ -90,7 +88,7 @@ enum {
 	LAST_SIGNAL
 };
 
-static guint	     signals [LAST_SIGNAL] = { 0 };
+static guint signals [LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (GpmBacklight, gpm_backlight, G_TYPE_OBJECT)
 
@@ -102,9 +100,8 @@ GQuark
 gpm_backlight_error_quark (void)
 {
 	static GQuark quark = 0;
-	if (!quark) {
+	if (!quark)
 		quark = g_quark_from_static_string ("gpm_backlight_error");
-	}
 	return quark;
 }
 
@@ -117,20 +114,19 @@ gpm_backlight_error_quark (void)
 static void
 gpm_backlight_sync_policy (GpmBacklight *backlight)
 {
-	GError  *error;
+	GError *error;
 	gboolean res;
-	guint    timeout = 0;
-	guint    standby = 0;
-	guint    suspend = 0;
-	guint    off = 0;
-	gchar   *dpms_method;
+	guint timeout = 0;
+	guint standby = 0;
+	guint suspend = 0;
+	guint off = 0;
+	gchar *dpms_method;
 	GpmDpmsMethod method;
 	gboolean on_ac;
 
 	/* no point processing if we can't do the dpms action */
-	if (backlight->priv->can_dpms == FALSE) {
+	if (!backlight->priv->can_dpms)
 		return;
-	}
 
 	/* get the ac state */
 	on_ac = gpm_ac_adapter_is_present (backlight->priv->ac_adapter);
@@ -173,19 +169,19 @@ gpm_backlight_sync_policy (GpmBacklight *backlight)
 		/* suspend after one timeout, turn off after another */
 		standby = timeout;
 		suspend = timeout;
-		off     = timeout * 2;
+		off = timeout * 2;
 	} else if (method == GPM_DPMS_METHOD_STANDBY) {
 		standby = timeout;
 		suspend = 0;
-		off     = 0;
+		off = 0;
 	} else if (method == GPM_DPMS_METHOD_SUSPEND) {
 		standby = 0;
 		suspend = timeout;
-		off     = 0;
+		off = 0;
 	} else if (method == GPM_DPMS_METHOD_OFF) {
 		standby = 0;
 		suspend = 0;
-		off     = timeout;
+		off = timeout;
 	} else {
 		/* wtf? */
 		egg_warning ("unknown backlight mode!");
@@ -212,9 +208,7 @@ gpm_backlight_sync_policy (GpmBacklight *backlight)
 
 /* dbus methods shouldn't use enumerated types, but should use textual descriptors */
 gboolean
-gpm_backlight_set_mode (GpmBacklight *backlight,
-			const gchar  *mode_str,
-			GError      **error)
+gpm_backlight_set_mode (GpmBacklight *backlight, const gchar *mode_str, GError **error)
 {
 	gboolean ret;
 	GpmDpmsMode mode;
@@ -257,9 +251,8 @@ gpm_backlight_get_mode (GpmBacklight *backlight,
 	}
 
 	ret = gpm_dpms_get_mode_enum (backlight->priv->dpms, &mode, error);
-	if (ret) {
+	if (ret)
 		*mode_str = g_strdup (gpm_dpms_mode_to_string (mode));
-	}
 	return ret;
 }
 
@@ -397,11 +390,10 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	egg_debug ("2. battery scale %f, brightness %f", scale, brightness);
 
 	/* reduce if system is momentarily idle */
-	if (on_ac) {
+	if (on_ac)
 		enable_action = gconf_client_get_bool (backlight->priv->conf, GPM_CONF_BACKLIGHT_IDLE_DIM_AC, NULL);
-	} else {
+	else
 		enable_action = gconf_client_get_bool (backlight->priv->conf, GPM_CONF_BACKLIGHT_IDLE_DIM_BATT, NULL);
-	}
 	if (enable_action && backlight->priv->system_is_idle) {
 		value = gconf_client_get_int (backlight->priv->conf, GPM_CONF_BACKLIGHT_IDLE_BRIGHTNESS, NULL);
 		if (value > 100) {
@@ -446,9 +438,8 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	}
 
 	/* only show dialog if interactive */
-	if (interactive) {
+	if (interactive)
 		gpm_feedback_display_value (backlight->priv->feedback, (float) brightness);
-	}
 
 	ret = gpm_brightness_set (backlight->priv->brightness, value, &hw_changed);
 	/* we emit a signal for the brightness applet */
@@ -500,6 +491,7 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 		gpm_backlight_sync_policy (backlight);
 	} else if (strcmp (entry->key, GPM_CONF_BACKLIGHT_IDLE_DIM_TIME) == 0) {
 		backlight->priv->idle_dim_timeout = gconf_value_get_int (value);
+		gpm_idle_set_timeout_dim (backlight->priv->idle, backlight->priv->idle_dim_timeout);
 	} else {
 		egg_debug ("unknown key %s", entry->key);
 	}
@@ -514,9 +506,7 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
  * Does the actions when the ac power source is inserted/removed.
  **/
 static void
-ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
-		       gboolean		 on_ac,
-		       GpmBacklight     *backlight)
+ac_adapter_changed_cb (GpmAcAdapter *ac_adapter, gboolean on_ac, GpmBacklight *backlight)
 {
 	gpm_backlight_brightness_evaluate_and_set (backlight, TRUE);
 }
@@ -601,11 +591,8 @@ gpm_backlight_notify_system_idle_changed (GpmBacklight *backlight, gboolean is_i
 		if (elapsed < 10) {
 			/* double the event time */
 			backlight->priv->idle_dim_timeout *= 2.0;
-			gconf_client_set_int (backlight->priv->conf,
-					   GPM_CONF_GNOME_SS_PM_DELAY,
-					   backlight->priv->idle_dim_timeout, NULL);
-			egg_debug ("increasing idle dim time to %is",
-				   backlight->priv->idle_dim_timeout);
+			egg_debug ("increasing idle dim time to %is", backlight->priv->idle_dim_timeout);
+			gpm_idle_set_timeout_dim (backlight->priv->idle, backlight->priv->idle_dim_timeout);
 		}
 
 		/* We reset the dimming after 2 minutes of idle,
@@ -615,11 +602,8 @@ gpm_backlight_notify_system_idle_changed (GpmBacklight *backlight, gboolean is_i
 			backlight->priv->idle_dim_timeout =
 				gconf_client_get_int (backlight->priv->conf,
 					   GPM_CONF_BACKLIGHT_IDLE_DIM_TIME, NULL);
-			gconf_client_set_int (backlight->priv->conf,
-					   GPM_CONF_GNOME_SS_PM_DELAY,
-					   backlight->priv->idle_dim_timeout, NULL);
-			egg_debug ("resetting idle dim time to %is",
-				   backlight->priv->idle_dim_timeout);
+			egg_debug ("resetting idle dim time to %is", backlight->priv->idle_dim_timeout);
+			gpm_idle_set_timeout_dim (backlight->priv->idle, backlight->priv->idle_dim_timeout);
 		}
 	} else {
 		egg_debug ("we were active for %lfs", elapsed);
@@ -642,16 +626,13 @@ gpm_backlight_notify_system_idle_changed (GpmBacklight *backlight, gboolean is_i
  * session timeout has elapsed for the idle action.
  **/
 static void
-idle_changed_cb (GpmIdle      *idle,
-		 GpmIdleMode   mode,
-		 GpmBacklight *backlight)
+idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *backlight)
 {
 	GError *error;
 
 	/* don't dim or undim the screen when the lid is closed */
-	if (gpm_button_is_lid_closed (backlight->priv->button)) {
+	if (gpm_button_is_lid_closed (backlight->priv->button))
 		return;
-	}
 
 	if (mode == GPM_IDLE_MODE_NORMAL) {
 		/* deactivate display power management */
@@ -705,9 +686,7 @@ idle_changed_cb (GpmIdle      *idle,
  * What happens when the DPMS mode is changed.
  **/
 static void
-mode_changed_cb (GpmDpms      *dpms,
-		 GpmDpmsMode   mode,
-		 GpmBacklight *backlight)
+mode_changed_cb (GpmDpms *dpms, GpmDpmsMode mode, GpmBacklight *backlight)
 {
 	egg_debug ("emitting mode-changed : %s", gpm_dpms_mode_to_string (mode));
 	g_signal_emit (backlight, signals [MODE_CHANGED], 0, gpm_dpms_mode_to_string (mode));
@@ -745,9 +724,7 @@ brightness_changed_cb (GpmBrightness *brightness, guint percentage, GpmBacklight
  * This callback is called when the brightness value changes.
  **/
 static void
-sensor_changed_cb (GpmLightSensor *sensor,
-		   guint           percentage,
-		   GpmBacklight   *backlight)
+sensor_changed_cb (GpmLightSensor *sensor, guint percentage, GpmBacklight *backlight)
 {
 	egg_debug ("sensor changed! %i", percentage);
 	backlight->priv->ambient_sensor_value = percentage / 100.0f;
@@ -762,9 +739,7 @@ sensor_changed_cb (GpmLightSensor *sensor,
  * We have to update the caches on resume
  **/
 static void
-control_resume_cb (GpmControl      *control,
-		   GpmControlAction action,
-		   GpmBacklight    *backlight)
+control_resume_cb (GpmControl *control, GpmControlAction action, GpmBacklight *backlight)
 {
 	gpm_backlight_sync_policy (backlight);
 }
@@ -782,33 +757,17 @@ gpm_backlight_finalize (GObject *object)
 
 	g_timer_destroy (backlight->priv->idle_timer);
 
-	if (backlight->priv->light_sensor != NULL) {
-		g_object_unref (backlight->priv->light_sensor);
-	}
-	if (backlight->priv->feedback != NULL) {
-		g_object_unref (backlight->priv->feedback);
-	}
-	if (backlight->priv->dpms != NULL) {
+	if (backlight->priv->dpms != NULL)
 		g_object_unref (backlight->priv->dpms);
-	}
-	if (backlight->priv->control != NULL) {
+	if (backlight->priv->control != NULL)
 		g_object_unref (backlight->priv->control);
-	}
-	if (backlight->priv->conf != NULL) {
-		g_object_unref (backlight->priv->conf);
-	}
-	if (backlight->priv->ac_adapter != NULL) {
-		g_object_unref (backlight->priv->ac_adapter);
-	}
-	if (backlight->priv->button != NULL) {
-		g_object_unref (backlight->priv->button);
-	}
-	if (backlight->priv->idle != NULL) {
-		g_object_unref (backlight->priv->idle);
-	}
-	if (backlight->priv->brightness != NULL) {
-		g_object_unref (backlight->priv->brightness);
-	}
+	g_object_unref (backlight->priv->light_sensor);
+	g_object_unref (backlight->priv->feedback);
+	g_object_unref (backlight->priv->conf);
+	g_object_unref (backlight->priv->ac_adapter);
+	g_object_unref (backlight->priv->button);
+	g_object_unref (backlight->priv->idle)
+	g_object_unref (backlight->priv->brightness);
 
 	g_return_if_fail (backlight->priv != NULL);
 	G_OBJECT_CLASS (gpm_backlight_parent_class)->finalize (object);
@@ -895,16 +854,12 @@ gpm_backlight_init (GpmBacklight *backlight)
 
 	/* watch for dim value changes */
 	backlight->priv->conf = gconf_client_get_default ();
+
 	/* watch gnome-power-manager keys */
-	gconf_client_add_dir (backlight->priv->conf, GPM_CONF_DIR,
-			      GCONF_CLIENT_PRELOAD_NONE, NULL);
+	gconf_client_add_dir (backlight->priv->conf, GPM_CONF_DIR, GCONF_CLIENT_PRELOAD_NONE, NULL);
 	gconf_client_notify_add (backlight->priv->conf, GPM_CONF_DIR,
 				 (GConfClientNotifyFunc) gpm_conf_gconf_key_changed_cb,
 				 backlight, NULL, NULL);
-
-	/* get and set the default idle dim timeout */
-	backlight->priv->idle_dim_timeout = gconf_client_get_int (backlight->priv->conf, GPM_CONF_BACKLIGHT_IDLE_DIM_TIME, NULL);
-	gconf_client_set_int (backlight->priv->conf, GPM_CONF_GNOME_SS_PM_DELAY, backlight->priv->idle_dim_timeout, NULL);
 
 	/* set the main brightness, this is designed to be updated if the user changes the
 	 * brightness so we can undim to the 'correct' value */
@@ -920,10 +875,15 @@ gpm_backlight_init (GpmBacklight *backlight)
 	g_signal_connect (backlight->priv->ac_adapter, "ac-adapter-changed",
 			  G_CALLBACK (ac_adapter_changed_cb), backlight);
 
+	/* watch for idle mode changes */
+	backlight->priv->idle = gpm_idle_new ();
+	g_signal_connect (backlight->priv->idle, "idle-changed",
+			  G_CALLBACK (idle_changed_cb), backlight);
+
 	/* assumption */
 	backlight->priv->system_is_idle = FALSE;
 	backlight->priv->idle_dim_timeout = gconf_client_get_int (backlight->priv->conf, GPM_CONF_BACKLIGHT_IDLE_DIM_TIME, NULL);
-	gconf_client_set_int (backlight->priv->conf, GPM_CONF_GNOME_SS_PM_DELAY, backlight->priv->idle_dim_timeout, NULL);
+	gpm_idle_set_timeout_dim (backlight->priv->idle, backlight->priv->idle_dim_timeout);
 
 	/* use a visual widget */
 	backlight->priv->feedback = gpm_feedback_new ();
@@ -941,11 +901,6 @@ gpm_backlight_init (GpmBacklight *backlight)
 		g_signal_connect (backlight->priv->control, "resume",
 				  G_CALLBACK (control_resume_cb), backlight);
 	}
-
-	/* watch for idle mode changes */
-	backlight->priv->idle = gpm_idle_new ();
-	g_signal_connect (backlight->priv->idle, "idle-changed",
-			  G_CALLBACK (idle_changed_cb), backlight);
 
 	/* sync at startup */
 	gpm_light_sensor_get_absolute (backlight->priv->light_sensor, &value);

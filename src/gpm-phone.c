@@ -421,9 +421,8 @@ gpm_phone_test (gpointer data)
 	gboolean ret;
 	EggTest *test = (EggTest *) data;
 
-	if (egg_test_start (test, "GpmPhone") == FALSE) {
+	if (egg_test_start (test, "GpmPhone") == FALSE)
 		return;
-	}
 
 	/************************************************************/
 	egg_test_title (test, "make sure we get a non null phone");

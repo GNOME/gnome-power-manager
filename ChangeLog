@@ -1,3 +1,26 @@
+2009-01-27  Richard Hughes  <richard@hughsie.com>
+
+	* configure.ac:
+	* src/gpm-backlight.c: (gpm_backlight_error_quark),
+	(gpm_backlight_sync_policy), (gpm_backlight_set_mode),
+	(gpm_backlight_get_mode),
+	(gpm_backlight_brightness_evaluate_and_set),
+	(gpm_conf_gconf_key_changed_cb), (ac_adapter_changed_cb),
+	(gpm_backlight_notify_system_idle_changed), (idle_changed_cb),
+	(mode_changed_cb), (sensor_changed_cb), (control_resume_cb),
+	(gpm_backlight_finalize), (gpm_backlight_init):
+	* src/gpm-common.h:
+	* src/gpm-idle.c: (gpm_idle_evaluate), (gpm_idle_set_timeout_dim),
+	(gpm_idle_set_timeout_blank), (gpm_idle_set_timeout_sleep),
+	(gpm_idle_idletime_alarm_expired_cb), (gpm_idle_idletime_reset_cb),
+	(gpm_idle_finalize), (gpm_idle_init):
+	* src/gpm-manager.c: (gpm_manager_sync_policy_sleep):
+	* src/gpm-phone.c: (gpm_phone_test):
+	Use EggIdletime code to control the X idle time, and use gnome-session
+	to control the session idle time.
+	We still need to proxy requests from the legacy interface.
+	Fixes #567918
+
 2009-01-27  Richard Hughes  <hughsie@localhost.localdomain>
 
 	* src/gpm-session.c (gpm_session_is_idle):

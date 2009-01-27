@@ -309,7 +309,6 @@ gpm_manager_sync_policy_sleep (GpmManager *manager)
 	}
 
 	/* set the new sleep (inactivity) value */
-	gpm_idle_set_timeout_dim (manager->priv->idle, 5);
 	gpm_idle_set_timeout_blank (manager->priv->idle, sleep_display);
 	gpm_idle_set_timeout_sleep (manager->priv->idle, sleep_computer);
 }

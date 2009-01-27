@@ -159,9 +159,6 @@ G_BEGIN_DECLS
 /* we use the gnome-session key now */
 #define GPM_CONF_SESSION_REQUEST_SAVE		"/apps/gnome-session/options/auto_save_session"
 
-/* okay to change at runtime */
-#define GPM_CONF_GNOME_SS_PM_DELAY		"/apps/gnome-screensaver/power_management_delay"
-
 /* new info binary */
 #define GPM_CONF_INFO_HISTORY_TIME		"/apps/gnome-power-manager/info/history_time"
 #define GPM_CONF_INFO_HISTORY_TYPE		"/apps/gnome-power-manager/info/history_type"
