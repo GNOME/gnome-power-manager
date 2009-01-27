@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
  * Copyright (C) 2005 William Jon McCann <mccann@jhu.edu>
+ * Copyright (C) 2005-2008 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -35,9 +36,9 @@ G_BEGIN_DECLS
 
 typedef enum {
 	GPM_IDLE_MODE_NORMAL,
-	GPM_IDLE_MODE_POWERSAVE,
-	GPM_IDLE_MODE_SESSION,
-	GPM_IDLE_MODE_SYSTEM
+	GPM_IDLE_MODE_DIM,
+	GPM_IDLE_MODE_BLANK,
+	GPM_IDLE_MODE_SLEEP
 } GpmIdleMode;
 
 typedef struct GpmIdlePrivate GpmIdlePrivate;
@@ -51,20 +52,20 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
-
 	void		(* idle_changed)		(GpmIdle	*idle,
 							 GpmIdleMode	 mode);
 } GpmIdleClass;
 
 GType		 gpm_idle_get_type			(void);
 GpmIdle		*gpm_idle_new				(void);
-
 GpmIdleMode	 gpm_idle_get_mode			(GpmIdle	*idle);
-void		 gpm_idle_set_mode			(GpmIdle	*idle,
-							 GpmIdleMode	 mode);
 void		 gpm_idle_set_check_cpu			(GpmIdle	*idle,
 							 gboolean	 check_type_cpu);
-void		 gpm_idle_set_system_timeout		(GpmIdle	*idle,
+gboolean	 gpm_idle_set_timeout_dim		(GpmIdle	*idle,
+							 guint		 timeout);
+gboolean	 gpm_idle_set_timeout_blank		(GpmIdle	*idle,
+							 guint		 timeout);
+gboolean	 gpm_idle_set_timeout_sleep		(GpmIdle	*idle,
 							 guint		 timeout);
 
 G_END_DECLS

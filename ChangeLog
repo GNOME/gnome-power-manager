@@ -1,5 +1,22 @@
 2009-01-27  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-backlight.c: (idle_changed_cb):
+	* src/gpm-idle.c: (gpm_idle_mode_to_text), (gpm_idle_set_mode),
+	(gpm_idle_set_check_cpu), (gpm_idle_get_mode),
+	(gpm_idle_set_timeout_dim), (gpm_idle_set_timeout_blank),
+	(gpm_idle_set_timeout_sleep), (gpm_idle_dim_cb),
+	(gpm_idle_blank_cb), (gpm_idle_sleep_cb), (gpm_idle_evaluate),
+	(gpm_idle_session_idle_changed_cb),
+	(gpm_idle_session_inhibited_changed_cb), (gpm_idle_finalize),
+	(gpm_idle_class_init), (gpm_idle_init):
+	* src/gpm-idle.h:
+	* src/gpm-manager.c: (gpm_manager_sync_policy_sleep),
+	(idle_changed_cb):
+	Rewrite the idle detection to use gnome-session rather than
+	gnome-screensaver. Completely untested, but it compiles.
+
+2009-01-27  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c: (manager_policy_do):
 	Use the logout function in gpm-session, not our own local version.
 

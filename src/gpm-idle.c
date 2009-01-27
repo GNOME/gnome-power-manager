@@ -1,7 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
  * Copyright (C) 2005 William Jon McCann <mccann@jhu.edu>
- * Copyright (C) 2005-2007 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2005-2009 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -39,34 +39,26 @@
 #include "gpm-idle.h"
 #include "gpm-load.h"
 #include "egg-debug.h"
-#include "gpm-screensaver.h"
-
-static void	gpm_idle_reset (GpmIdle *idle);
+#include "gpm-session.h"
 
 #define GPM_IDLE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_IDLE, GpmIdlePrivate))
 
-/* How many seconds between polling? */
-#define POLL_FREQUENCY	5
-
 /* Sets the idle percent limit, i.e. how hard the computer can work
    while considered "at idle" */
-#define IDLE_LIMIT	5
+#define GPM_IDLE_CPU_LIMIT	5
 
 struct GpmIdlePrivate
 {
 	GpmLoad		*load;
-	GpmScreensaver	*screensaver;
+	GpmSession	*session;
 	GpmIdleMode	 mode;
-
-	guint		 system_timeout;	/* in seconds */
-	guint		 system_timer_id;
-	guint		 system_idle_timer_id;
-
+	guint		 timeout_dim;		/* in seconds */
+	guint		 timeout_blank;		/* in seconds */
+	guint		 timeout_sleep;		/* in seconds */
+	guint		 timeout_dim_id;
+	guint		 timeout_blank_id;
+	guint		 timeout_sleep_id;
 	gboolean	 check_type_cpu;
-
-	gboolean	 init;
-	long unsigned	 old_idle;
-	long unsigned	 old_total;
 };
 
 enum {
@@ -80,145 +72,36 @@ static gpointer gpm_idle_object = NULL;
 G_DEFINE_TYPE (GpmIdle, gpm_idle, G_TYPE_OBJECT)
 
 /**
+ * gpm_idle_mode_to_text:
+ **/
+static const gchar *
+gpm_idle_mode_to_text (GpmIdleMode mode)
+{
+	if (mode == GPM_IDLE_MODE_NORMAL)
+		return "normal";
+	if (mode == GPM_IDLE_MODE_DIM)
+		return "dim";
+	if (mode == GPM_IDLE_MODE_BLANK)
+		return "blank";
+	if (mode == GPM_IDLE_MODE_SLEEP)
+		return "sleep";
+	return "unknown";
+}
+
+/**
  * gpm_idle_set_mode:
  * @idle: This class instance
- * @mode: The new mode, e.g. GPM_IDLE_MODE_SYSTEM
+ * @mode: The new mode, e.g. GPM_IDLE_MODE_SLEEP
  **/
-void
-gpm_idle_set_mode (GpmIdle    *idle,
-		   GpmIdleMode mode)
+static void
+gpm_idle_set_mode (GpmIdle *idle, GpmIdleMode mode)
 {
 	g_return_if_fail (GPM_IS_IDLE (idle));
 
 	if (mode != idle->priv->mode) {
 		idle->priv->mode = mode;
-
-		gpm_idle_reset (idle);
-
-		egg_debug ("Doing a state transition: %d", mode);
-		g_signal_emit (idle,
-			       signals [IDLE_CHANGED],
-			       0,
-			       mode);
-	}
-}
-
-/**
- * gpm_idle_poll_system_timer:
- * @idle: This class instance
- * Return value: If the current load is low enough for the transition to occur.
- **/
-static gboolean
-gpm_idle_poll_system_timer (GpmIdle *idle)
-{
-	gdouble  load;
-	gboolean do_action = TRUE;
-
-	/* get our computed load value */
-	if (idle->priv->check_type_cpu) {
-
-		load = gpm_load_get_current (idle->priv->load);
-
-		/* FIXME: should this stay below this level for a certain time? */
-		if (load > IDLE_LIMIT) {
-			/* check if system is "idle" enough */
-			egg_debug ("Detected that the CPU is busy");
-			do_action = FALSE;
-		}
-	}
-
-	if (do_action) {
-		gpm_idle_set_mode (idle, GPM_IDLE_MODE_SYSTEM);
-		idle->priv->system_idle_timer_id = 0;
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-/**
- * gpm_idle_add_gpm_idle_poll_system_timer:
- **/
-static void
-gpm_idle_add_gpm_idle_poll_system_timer (GpmIdle *idle,
-		       glong	timeout)
-{
-	idle->priv->system_idle_timer_id = g_timeout_add_seconds (timeout, (GSourceFunc)gpm_idle_poll_system_timer, idle);
-}
-
-/**
- * gpm_idle_remove_gpm_idle_poll_system_timer:
- **/
-static void
-gpm_idle_remove_gpm_idle_poll_system_timer (GpmIdle *idle)
-{
-	if (idle->priv->system_idle_timer_id != 0) {
-		g_source_remove (idle->priv->system_idle_timer_id);
-		idle->priv->system_idle_timer_id = 0;
-	}
-}
-
-/**
- * system_timer:
- * @idle: This class instance
- *
- * Instead of doing the state transition directly we wait until the
- * system is quiet
- **/
-static gboolean
-system_timer (GpmIdle *idle)
-{
-	egg_debug ("System idle timeout");
-
-	gpm_idle_remove_gpm_idle_poll_system_timer (idle);
-	gpm_idle_add_gpm_idle_poll_system_timer (idle, POLL_FREQUENCY);
-
-	idle->priv->system_timer_id = 0;
-	return FALSE;
-}
-
-/**
- * gpm_idle_remove_system_timer:
- * @idle: This class instance
- **/
-static void
-gpm_idle_remove_system_timer (GpmIdle *idle)
-{
-	if (idle->priv->system_timer_id != 0) {
-		g_source_remove (idle->priv->system_timer_id);
-		idle->priv->system_timer_id = 0;
-	}
-}
-
-/**
- * gpm_idle_remove_all_timers:
- * @idle: This class instance
- **/
-static void
-gpm_idle_remove_all_timers (GpmIdle *idle)
-{
-	gpm_idle_remove_gpm_idle_poll_system_timer (idle);
-	gpm_idle_remove_system_timer (idle);
-}
-
-/**
- * add_system_timer:
- * @idle: This class instance
- *
- * Adds a idle timeout if the value is greater than zero
- **/
-static void
-add_system_timer (GpmIdle *idle)
-{
-	guint64 secs;
-
-	secs = idle->priv->system_timeout;
-
-	if (idle->priv->system_timeout > 0) {
-		idle->priv->system_timer_id = g_timeout_add_seconds (secs,
-							     (GSourceFunc)system_timer, idle);
-	} else {
-		egg_debug ("System idle disabled");
+		egg_debug ("Doing a state transition: %s", gpm_idle_mode_to_text (mode));
+		g_signal_emit (idle, signals [IDLE_CHANGED], 0, mode);
 	}
 }
 
@@ -226,11 +109,10 @@ add_system_timer (GpmIdle *idle)
  * gpm_idle_set_check_cpu:
  * @idle: This class instance
  * @check_type_cpu: If we should check the CPU before mode becomes
- *		    GPM_IDLE_MODE_SYSTEM and the event is done.
+ *		    GPM_IDLE_MODE_SLEEP and the event is done.
  **/
 void
-gpm_idle_set_check_cpu (GpmIdle    *idle,
-			gboolean    check_type_cpu)
+gpm_idle_set_check_cpu (GpmIdle *idle, gboolean check_type_cpu)
 {
 	g_return_if_fail (GPM_IS_IDLE (idle));
 	egg_debug ("Setting the CPU load check to %i", check_type_cpu);
@@ -238,109 +120,206 @@ gpm_idle_set_check_cpu (GpmIdle    *idle,
 }
 
 /**
- * gpm_idle_reset:
- * @idle: This class instance
- *
- * Reset the idle timer.
- **/
-static void
-gpm_idle_reset (GpmIdle *idle)
-{
-	g_return_if_fail (GPM_IS_IDLE (idle));
-
-	gpm_idle_remove_all_timers (idle);
-
-	if (idle->priv->mode == GPM_IDLE_MODE_NORMAL) {
-		/* do nothing */
-	} else if (idle->priv->mode == GPM_IDLE_MODE_SESSION) {
-		/* restart system idle timer */
-		add_system_timer (idle);
-	} else if (idle->priv->mode == GPM_IDLE_MODE_SYSTEM) {
-		/* do nothing? */
-	}
-}
-
-/**
  * gpm_idle_get_mode:
  * @idle: This class instance
- * Return value: The current mode, e.g. GPM_IDLE_MODE_SYSTEM
+ * Return value: The current mode, e.g. GPM_IDLE_MODE_SLEEP
  **/
 GpmIdleMode
 gpm_idle_get_mode (GpmIdle *idle)
 {
-	GpmIdleMode mode;
-	mode = idle->priv->mode;
-	return mode;
+	return idle->priv->mode;
 }
 
 /**
- * gpm_idle_set_system_timeout:
+ * gpm_idle_set_timeout_dim:
  * @idle: This class instance
  * @timeout: The new timeout we want to set, in seconds
  **/
-void
-gpm_idle_set_system_timeout (GpmIdle	*idle,
-			     guint	 timeout)
+gboolean
+gpm_idle_set_timeout_dim (GpmIdle *idle, guint timeout)
 {
-	g_return_if_fail (GPM_IS_IDLE (idle));
+	g_return_val_if_fail (GPM_IS_IDLE (idle), FALSE);
 
-	egg_debug ("Setting system idle timeout: %d", timeout);
-	if (idle->priv->system_timeout != timeout) {
-		idle->priv->system_timeout = timeout;
+	egg_debug ("Setting dim idle timeout: %ds", timeout);
+	if (idle->priv->timeout_dim != timeout) {
+		idle->priv->timeout_dim = timeout;
+//		gpm_idle_reset (idle);
+	}
+	return TRUE;
+}
 
-		/* restart the timers if necessary */
-		gpm_idle_reset (idle);
+/**
+ * gpm_idle_set_timeout_blank:
+ * @idle: This class instance
+ * @timeout: The new timeout we want to set, in seconds
+ **/
+gboolean
+gpm_idle_set_timeout_blank (GpmIdle *idle, guint timeout)
+{
+	g_return_val_if_fail (GPM_IS_IDLE (idle), FALSE);
+
+	egg_debug ("Setting blank idle timeout: %ds", timeout);
+	if (idle->priv->timeout_blank != timeout) {
+		idle->priv->timeout_blank = timeout;
+//		gpm_idle_reset (idle);
+	}
+	return TRUE;
+}
+
+/**
+ * gpm_idle_set_timeout_sleep:
+ * @idle: This class instance
+ * @timeout: The new timeout we want to set, in seconds
+ **/
+gboolean
+gpm_idle_set_timeout_sleep (GpmIdle *idle, guint timeout)
+{
+	g_return_val_if_fail (GPM_IS_IDLE (idle), FALSE);
+
+	egg_debug ("Setting sleep idle timeout: %ds", timeout);
+	if (idle->priv->timeout_sleep != timeout) {
+		idle->priv->timeout_sleep = timeout;
+//		gpm_idle_reset (idle);
+	}
+	return TRUE;
+}
+
+/**
+ * gpm_idle_dim_cb:
+ **/
+static gboolean
+gpm_idle_dim_cb (GpmIdle *idle)
+{
+	if (idle->priv->mode > GPM_IDLE_MODE_DIM) {
+		egg_debug ("ignoring current mode %s", gpm_idle_mode_to_text (idle->priv->mode));
+		return FALSE;
+	}
+	gpm_idle_set_mode (idle, GPM_IDLE_MODE_DIM);
+	return FALSE;
+}
+
+/**
+ * gpm_idle_blank_cb:
+ **/
+static gboolean
+gpm_idle_blank_cb (GpmIdle *idle)
+{
+	if (idle->priv->mode > GPM_IDLE_MODE_BLANK) {
+		egg_debug ("ignoring current mode %s", gpm_idle_mode_to_text (idle->priv->mode));
+		return FALSE;
+	}
+	gpm_idle_set_mode (idle, GPM_IDLE_MODE_BLANK);
+	return FALSE;
+}
+
+/**
+ * gpm_idle_sleep_cb:
+ **/
+static gboolean
+gpm_idle_sleep_cb (GpmIdle *idle)
+{
+	gdouble load;
+	gboolean ret = FALSE;
+
+	/* get our computed load value */
+	if (idle->priv->check_type_cpu) {
+		load = gpm_load_get_current (idle->priv->load);
+		/* FIXME: should this stay below this level for a certain time? */
+		if (load > GPM_IDLE_CPU_LIMIT) {
+			/* check if system is "idle" enough */
+			egg_debug ("Detected that the CPU is busy");
+			ret = TRUE;
+			goto out;
+		}
+	}
+	gpm_idle_set_mode (idle, GPM_IDLE_MODE_SLEEP);
+out:
+	return ret;
+}
+
+/**
+ * gpm_idle_evaluate:
+ **/
+static void
+gpm_idle_evaluate (GpmIdle *idle)
+{
+	gboolean is_idle;
+	gboolean is_inhibited;
+
+	is_idle = gpm_session_get_idle (idle->priv->session);
+	is_inhibited = gpm_session_get_inhibited (idle->priv->session);
+
+	/* normal */
+	if (!is_idle || is_inhibited) {
+		if (idle->priv->timeout_dim_id != 0) {
+			g_source_remove (idle->priv->timeout_dim_id);
+			idle->priv->timeout_dim_id = 0;
+		}
+		if (idle->priv->timeout_blank_id != 0) {
+			g_source_remove (idle->priv->timeout_blank_id);
+			idle->priv->timeout_blank_id = 0;
+		}
+		if (idle->priv->timeout_sleep_id != 0) {
+			g_source_remove (idle->priv->timeout_sleep_id);
+			idle->priv->timeout_sleep_id = 0;
+		}
+		gpm_idle_set_mode (idle, GPM_IDLE_MODE_NORMAL);
+		return;
+	}
+
+	/* setup dim */
+	if (!is_idle && !is_inhibited) {
+		if (idle->priv->timeout_dim_id != 0)
+			idle->priv->timeout_dim_id = g_timeout_add_seconds (idle->priv->timeout_dim, (GSourceFunc) gpm_idle_dim_cb, idle);
+		if (idle->priv->timeout_blank_id != 0) {
+			g_source_remove (idle->priv->timeout_blank_id);
+			idle->priv->timeout_blank_id = 0;
+		}
+		if (idle->priv->timeout_sleep_id != 0) {
+			g_source_remove (idle->priv->timeout_sleep_id);
+			idle->priv->timeout_sleep_id = 0;
+		}
+		return;
+	}
+
+	/* if there are any inhibits, clear the dim timeout */
+	if (is_idle) {
+		/* normal to dim */
+		if (idle->priv->mode == GPM_IDLE_MODE_NORMAL)
+			gpm_idle_set_mode (idle, GPM_IDLE_MODE_DIM);
+		if (idle->priv->timeout_blank_id != 0)
+			idle->priv->timeout_blank_id = g_timeout_add_seconds (idle->priv->timeout_blank, (GSourceFunc) gpm_idle_blank_cb, idle);
+		if (idle->priv->timeout_sleep_id != 0)
+			idle->priv->timeout_sleep_id = g_timeout_add_seconds (idle->priv->timeout_sleep, (GSourceFunc) gpm_idle_sleep_cb, idle);
 	}
 }
 
 /**
- * session_idle_changed_cb:
+ * gpm_idle_session_idle_changed_cb:
  * @is_idle: If the session is idle
  * @idle: This class instance
  *
- * The SessionIdleChanged callback from gnome-screensaver.
+ * The SessionIdleChanged callback from gnome-session.
  **/
 static void
-session_idle_changed_cb (GpmScreensaver *screensaver,
-			 gboolean	 is_idle,
-			 GpmIdle	*idle)
+gpm_idle_session_idle_changed_cb (GpmSession *session, gboolean is_idle, GpmIdle *idle)
 {
-	GpmIdleMode mode;
-
-	egg_debug ("Received GS session idle changed: %d", is_idle);
-
-	if (is_idle) {
-		mode = GPM_IDLE_MODE_SESSION;
-	} else {
-		mode = GPM_IDLE_MODE_NORMAL;
-	}
-
-	gpm_idle_set_mode (idle, mode);
+	egg_debug ("Received gnome session idle changed: %i", is_idle);
+	gpm_idle_evaluate (idle);
 }
 
 /**
- * powersave_idle_changed_cb:
+ * gpm_idle_session_inhibited_changed_cb:
  * @is_idle: If the session is idle
  * @idle: This class instance
  *
- * The SessionIdleChanged callback from gnome-screensaver.
+ * The SessionIdleChanged callback from gnome-session.
  **/
 static void
-powersave_idle_changed_cb (GpmScreensaver *screensaver,
-			  gboolean	 is_idle,
-			  GpmIdle	*idle)
+gpm_idle_session_inhibited_changed_cb (GpmSession *session, gboolean is_inhibited, GpmIdle *idle)
 {
-	GpmIdleMode mode;
-
-	egg_debug ("Received GS powesave idle changed: %d", is_idle);
-
-	if (is_idle) {
-		mode = GPM_IDLE_MODE_POWERSAVE;
-	} else {
-		mode = GPM_IDLE_MODE_NORMAL;
-	}
-
-	gpm_idle_set_mode (idle, mode);
+	egg_debug ("Received gnome session inhibited changed: %i", is_inhibited);
+	gpm_idle_evaluate (idle);
 }
 
 /**
@@ -359,9 +338,15 @@ gpm_idle_finalize (GObject *object)
 
 	g_return_if_fail (idle->priv != NULL);
 
+	if (idle->priv->timeout_dim_id != 0)
+		g_source_remove (idle->priv->timeout_dim_id);
+	if (idle->priv->timeout_blank_id != 0)
+		g_source_remove (idle->priv->timeout_blank_id);
+	if (idle->priv->timeout_sleep_id != 0)
+		g_source_remove (idle->priv->timeout_sleep_id);
+
 	g_object_unref (idle->priv->load);
-	g_object_unref (idle->priv->screensaver);
-	gpm_idle_remove_all_timers (idle);
+	g_object_unref (idle->priv->session);
 
 	G_OBJECT_CLASS (gpm_idle_parent_class)->finalize (object);
 }
@@ -382,11 +367,8 @@ gpm_idle_class_init (GpmIdleClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmIdleClass, idle_changed),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__INT,
-			      G_TYPE_NONE,
-			      1, G_TYPE_INT);
+			      NULL, NULL, g_cclosure_marshal_VOID__INT,
+			      G_TYPE_NONE, 1, G_TYPE_INT);
 
 	g_type_class_add_private (klass, sizeof (GpmIdlePrivate));
 }
@@ -395,7 +377,7 @@ gpm_idle_class_init (GpmIdleClass *klass)
  * gpm_idle_init:
  * @idle: This class instance
  *
- * Gets a DBUS connection, and aquires the screensaver connection so we can
+ * Gets a DBUS connection, and aquires the session connection so we can
  * get session changed events.
  *
  **/
@@ -404,13 +386,17 @@ gpm_idle_init (GpmIdle *idle)
 {
 	idle->priv = GPM_IDLE_GET_PRIVATE (idle);
 
-	idle->priv->system_timeout = G_MAXUINT;
+	idle->priv->timeout_dim = G_MAXUINT;
+	idle->priv->timeout_blank = G_MAXUINT;
+	idle->priv->timeout_sleep = G_MAXUINT;
+	idle->priv->timeout_dim_id = 0;
+	idle->priv->timeout_blank_id = 0;
+	idle->priv->timeout_sleep_id = 0;
 	idle->priv->load = gpm_load_new ();
-	idle->priv->screensaver = gpm_screensaver_new ();
-	g_signal_connect (idle->priv->screensaver, "session-idle-changed",
-			  G_CALLBACK (session_idle_changed_cb), idle);
-	g_signal_connect (idle->priv->screensaver, "powersave-idle-changed",
-			  G_CALLBACK (powersave_idle_changed_cb), idle);
+	idle->priv->session = gpm_session_new ();
+	g_signal_connect (idle->priv->session, "idle-changed", G_CALLBACK (gpm_idle_session_idle_changed_cb), idle);
+	g_signal_connect (idle->priv->session, "inhibited-changed", G_CALLBACK (gpm_idle_session_inhibited_changed_cb), idle);
+	gpm_idle_evaluate (idle);
 }
 
 /**

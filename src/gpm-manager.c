@@ -309,7 +309,9 @@ gpm_manager_sync_policy_sleep (GpmManager *manager)
 	}
 
 	/* set the new sleep (inactivity) value */
-	gpm_idle_set_system_timeout (manager->priv->idle, sleep_computer);
+	gpm_idle_set_timeout_dim (manager->priv->idle, 5);
+	gpm_idle_set_timeout_blank (manager->priv->idle, sleep_display);
+	gpm_idle_set_timeout_sleep (manager->priv->idle, sleep_computer);
 }
 
 /**
@@ -700,12 +702,12 @@ idle_do_sleep (GpmManager *manager)
 /**
  * idle_changed_cb:
  * @idle: The idle class instance
- * @mode: The idle mode, e.g. GPM_IDLE_MODE_SESSION
+ * @mode: The idle mode, e.g. GPM_IDLE_MODE_BLANK
  * @manager: This class instance
  *
  * This callback is called when gnome-screensaver detects that the idle state
- * has changed. GPM_IDLE_MODE_SESSION is when the session has become inactive,
- * and GPM_IDLE_MODE_SYSTEM is where the session has become inactive, AND the
+ * has changed. GPM_IDLE_MODE_BLANK is when the session has become inactive,
+ * and GPM_IDLE_MODE_SLEEP is where the session has become inactive, AND the
  * session timeout has elapsed for the idle action.
  **/
 static void
@@ -730,10 +732,10 @@ idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmManager *manager)
 	if (mode == GPM_IDLE_MODE_NORMAL) {
 		egg_debug ("Idle state changed: NORMAL");
 		gpm_brightness_kbd_undim (manager->priv->brightness_kbd);
-	} else if (mode == GPM_IDLE_MODE_SESSION) {
+	} else if (mode == GPM_IDLE_MODE_BLANK) {
 		egg_debug ("Idle state changed: SESSION");
 		gpm_brightness_kbd_dim (manager->priv->brightness_kbd);
-	} else if (mode == GPM_IDLE_MODE_SYSTEM) {
+	} else if (mode == GPM_IDLE_MODE_SLEEP) {
 		egg_debug ("Idle state changed: SYSTEM");
 		if (gpm_manager_is_inhibit_valid (manager, FALSE, "timeout action") == FALSE)
 			return;

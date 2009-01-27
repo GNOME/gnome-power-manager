@@ -633,12 +633,12 @@ gpm_backlight_notify_system_idle_changed (GpmBacklight *backlight, gboolean is_i
 /**
  * idle_changed_cb:
  * @idle: The idle class instance
- * @mode: The idle mode, e.g. GPM_IDLE_MODE_SESSION
+ * @mode: The idle mode, e.g. GPM_IDLE_MODE_BLANK
  * @manager: This class instance
  *
  * This callback is called when gnome-screensaver detects that the idle state
- * has changed. GPM_IDLE_MODE_SESSION is when the session has become inactive,
- * and GPM_IDLE_MODE_SYSTEM is where the session has become inactive, AND the
+ * has changed. GPM_IDLE_MODE_BLANK is when the session has become inactive,
+ * and GPM_IDLE_MODE_SLEEP is where the session has become inactive, AND the
  * session timeout has elapsed for the idle action.
  **/
 static void
@@ -671,7 +671,7 @@ idle_changed_cb (GpmIdle      *idle,
 		/* sync timeouts */
 		gpm_backlight_sync_policy (backlight);
 
-	} else if (mode == GPM_IDLE_MODE_SESSION) {
+	} else if (mode == GPM_IDLE_MODE_BLANK) {
 		/* activate display power management */
 		if (backlight->priv->can_dpms) {
 			error = NULL;
@@ -689,7 +689,7 @@ idle_changed_cb (GpmIdle      *idle,
 		/* sync timeouts */
 		gpm_backlight_sync_policy (backlight);
 
-	} else if (mode == GPM_IDLE_MODE_POWERSAVE) {
+	} else if (mode == GPM_IDLE_MODE_DIM) {
 
 		/* sync lcd brightness */
 		gpm_backlight_notify_system_idle_changed (backlight, TRUE);
