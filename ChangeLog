@@ -1,3 +1,15 @@
+2009-01-27  Richard Hughes  <richard@hughsie.com>
+
+	* src/Makefile.am:
+	* src/gpm-session.c: (gpm_session_logout), (gpm_session_get_idle),
+	(gpm_session_get_inhibited),
+	(gpm_session_presence_status_changed_cb), (gpm_session_is_idle),
+	(gpm_session_is_inhibited), (gpm_session_inhibit_changed_cb),
+	(gpm_session_class_init), (gpm_session_init),
+	(gpm_session_finalize), (gpm_session_new):
+	* src/gpm-session.h:
+	Add a new GObject to interface with gnome-session.
+
 2008-12-09  Pedro Fragoso  <ember@ubuntu.com>
 
 	* applets/brightness/brightness-applet.c:

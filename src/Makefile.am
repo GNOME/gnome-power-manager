@@ -103,6 +103,8 @@ gnome_power_preferences_SOURCES =			\
 	gpm-dpms.c					\
 	gpm-idle.h					\
 	gpm-idle.c					\
+	gpm-session.h					\
+	gpm-session.c					\
 	gpm-load.h					\
 	gpm-load.c					\
 	gpm-prefs.h					\
@@ -188,6 +190,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-common.c					\
 	gpm-screensaver.h				\
 	gpm-screensaver.c				\
+	gpm-session.h					\
+	gpm-session.c					\
 	gpm-networkmanager.h				\
 	gpm-networkmanager.c				\
 	gpm-stock-icons.h				\
@@ -263,6 +267,8 @@ gnome_power_self_test_SOURCES =				\
 	gpm-phone.c					\
 	gpm-idle.h					\
 	gpm-idle.c					\
+	gpm-session.h					\
+	gpm-session.c					\
 	gpm-load.h					\
 	gpm-load.c					\
 	gpm-marshal.h					\
