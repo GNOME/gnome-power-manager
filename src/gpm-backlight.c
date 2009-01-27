@@ -766,7 +766,7 @@ gpm_backlight_finalize (GObject *object)
 	g_object_unref (backlight->priv->conf);
 	g_object_unref (backlight->priv->ac_adapter);
 	g_object_unref (backlight->priv->button);
-	g_object_unref (backlight->priv->idle)
+	g_object_unref (backlight->priv->idle);
 	g_object_unref (backlight->priv->brightness);
 
 	g_return_if_fail (backlight->priv != NULL);
