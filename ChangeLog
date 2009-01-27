@@ -1,5 +1,14 @@
 2009-01-27  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-screensaver.c: (gpm_screensaver_proxy_connect_more),
+	(gpm_screensaver_class_init):
+	* src/gpm-screensaver.h:
+	gnome-screensaver no longer sends the SessionIdleChanged or
+	SessionPowerManagementIdleChanged signals. We'll have to change the way
+	we get idle information from gnome-session.
+
+2009-01-27  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-screensaver.c:
 	* src/gpm-screensaver.h:
 	Move private defines into the c file.

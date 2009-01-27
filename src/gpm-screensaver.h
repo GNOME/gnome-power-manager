@@ -50,10 +50,6 @@ typedef struct
 					    		 gboolean	 connected);
 	void		(* auth_request)		(GpmScreensaver	*screensaver,
 					    		 gboolean	 auth);
-	void		(* session_idle_changed)	(GpmScreensaver	*screensaver,
-					    		 gboolean	 is_idle);
-	void		(* powersave_idle_changed)	(GpmScreensaver	*screensaver,
-					    		 gboolean	 is_idle);
 } GpmScreensaverClass;
 
 GType		 gpm_screensaver_get_type		(void);
@@ -70,8 +66,6 @@ gboolean 	 gpm_screensaver_remove_throttle    	(GpmScreensaver	*screensaver,
 							 guint32         cookie);
 gboolean	 gpm_screensaver_check_running		(GpmScreensaver	*screensaver);
 gboolean	 gpm_screensaver_poke			(GpmScreensaver	*screensaver);
-gboolean	 gpm_screensaver_get_idle		(GpmScreensaver	*screensaver,
-							 gint		*time);
 
 G_END_DECLS
 

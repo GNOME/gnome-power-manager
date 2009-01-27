@@ -50,8 +50,6 @@ struct GpmScreensaverPrivate
 enum {
 	GS_DELAY_CHANGED,
 	CONNECTION_CHANGED,
-	SESSION_IDLE_CHANGED,
-	POWERSAVE_IDLE_CHANGED,
 	AUTH_REQUEST,
 	LAST_SIGNAL
 };
@@ -81,29 +79,6 @@ gpm_screensaver_auth_end (DBusGProxy     *proxy,
 {
 	egg_debug ("emitting auth-request : (%i)", FALSE);
 	g_signal_emit (screensaver, signals [AUTH_REQUEST], 0, FALSE);
-}
-
-/** Invoked when we get the AuthenticationRequestEnd from g-s when the user
- *  has entered a valid password or re-authenticated.
- */
-static void
-gpm_screensaver_session_idle_changed (DBusGProxy     *proxy,
-			      gboolean        is_idle,
-			      GpmScreensaver *screensaver)
-{
-	egg_debug ("emitting session-idle-changed : (%i)", is_idle);
-	g_signal_emit (screensaver, signals [SESSION_IDLE_CHANGED], 0, is_idle);
-}
-
-/** Invoked after a short delay
- */
-static void
-gpm_screensaver_powersave_idle_changed (DBusGProxy     *proxy,
-			                gboolean        is_idle,
-			                GpmScreensaver *screensaver)
-{
-	egg_debug ("emitting powersave-idle-changed : (%i)", is_idle);
-	g_signal_emit (screensaver, signals [POWERSAVE_IDLE_CHANGED], 0, is_idle);
 }
 
 /**
@@ -137,20 +112,6 @@ gpm_screensaver_proxy_connect_more (GpmScreensaver *screensaver)
 	dbus_g_proxy_connect_signal (proxy,
 				     "AuthenticationRequestEnd",
 				     G_CALLBACK (gpm_screensaver_auth_end),
-				     screensaver, NULL);
-
-	/* get SessionIdleChanged */
-	dbus_g_proxy_add_signal (proxy, "SessionIdleChanged", G_TYPE_BOOLEAN, G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal (proxy,
-				     "SessionIdleChanged",
-				     G_CALLBACK (gpm_screensaver_session_idle_changed),
-				     screensaver, NULL);
-
-	/* get SessionIdleChanged */
-	dbus_g_proxy_add_signal (proxy, "SessionPowerManagementIdleChanged", G_TYPE_BOOLEAN, G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal (proxy,
-				     "SessionPowerManagementIdleChanged",
-				     G_CALLBACK (gpm_screensaver_powersave_idle_changed),
 				     screensaver, NULL);
 
 	return TRUE;
@@ -419,45 +380,6 @@ gpm_screensaver_poke (GpmScreensaver *screensaver)
 }
 
 /**
- * gpm_screensaver_get_idle:
- * @screensaver: This class instance
- * @time_secs: The returned idle time, passed by ref
- * Return value: Success value.
- **/
-gboolean
-gpm_screensaver_get_idle (GpmScreensaver *screensaver, gint *time_secs)
-{
-	GError *error = NULL;
-	gboolean ret = TRUE;
-	DBusGProxy *proxy;
-
-	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
-	g_return_val_if_fail (time != NULL, FALSE);
-
-	proxy = egg_dbus_proxy_get_proxy (screensaver->priv->gproxy);
-	if (proxy == NULL) {
-		egg_warning ("not connected");
-		return FALSE;
-	}
-
-	ret = dbus_g_proxy_call (proxy, "GetActiveTime", &error,
-				 G_TYPE_INVALID,
-				 G_TYPE_UINT, time_secs,
-				 G_TYPE_INVALID);
-	if (error) {
-		egg_debug ("ERROR: %s", error->message);
-		g_error_free (error);
-	}
-	if (!ret) {
-		/* abort as the DBUS method failed */
-		egg_warning ("GetActiveTime failed!");
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-/**
  * gpm_screensaver_class_init:
  * @klass: This class instance
  **/
@@ -493,25 +415,6 @@ gpm_screensaver_class_init (GpmScreensaverClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmScreensaverClass, auth_request),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
-
-	signals [SESSION_IDLE_CHANGED] =
-		g_signal_new ("session-idle-changed",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmScreensaverClass, session_idle_changed),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
-	signals [POWERSAVE_IDLE_CHANGED] =
-		g_signal_new ("powersave-idle-changed",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmScreensaverClass, session_idle_changed),
 			      NULL,
 			      NULL,
 			      g_cclosure_marshal_VOID__BOOLEAN,
