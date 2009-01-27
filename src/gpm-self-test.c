@@ -32,6 +32,7 @@ void egg_precision_test (EggTest *test);
 void egg_discrete_test (EggTest *test);
 void egg_color_test (EggTest *test);
 void egg_array_float_test (EggTest *test);
+void egg_idletime_test (EggTest *test);
 
 void gpm_common_test (EggTest *test);
 void gpm_cell_unit_test (EggTest *test);
@@ -45,7 +46,6 @@ void gpm_hal_device_power_test (EggTest *test);
 void gpm_hal_manager_test (EggTest *test);
 void gpm_device_test (EggTest *test);
 void gpm_device_teststore (EggTest *test);
-void gpm_idletime_test (EggTest *test);
 
 int
 main (int argc, char **argv)
@@ -64,6 +64,7 @@ main (int argc, char **argv)
 	egg_discrete_test (test);
 	egg_color_test (test);
 	egg_array_float_test (test);
+	egg_idletime_test (test);
 
 	gpm_common_test (test);
 	gpm_inhibit_test (test);
@@ -76,7 +77,6 @@ main (int argc, char **argv)
 	gpm_hal_manager_test (test);
 	gpm_device_test (test);
 	gpm_device_teststore (test);
-	gpm_idletime_test (test);
 #endif
 
 	return (egg_test_finish (test));

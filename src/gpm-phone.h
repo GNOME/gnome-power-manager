@@ -56,17 +56,20 @@ typedef struct
 							 guint		 idx);
 } GpmPhoneClass;
 
-GType		 gpm_phone_get_type		(void);
-GpmPhone	*gpm_phone_new			(void);
+GType		 gpm_phone_get_type			(void);
+GpmPhone	*gpm_phone_new				(void);
 
-gboolean	 gpm_phone_get_present		(GpmPhone	*phone,
-						 guint		 idx);
-guint		 gpm_phone_get_percentage	(GpmPhone	*phone,
-						 guint		 idx);
-gboolean	 gpm_phone_get_on_ac		(GpmPhone	*phone,
-						 guint		 idx);
-guint		 gpm_phone_get_num_batteries	(GpmPhone	*phone);
-gboolean	 gpm_phone_coldplug		(GpmPhone	*phone);
+gboolean	 gpm_phone_get_present			(GpmPhone	*phone,
+							 guint		 idx);
+guint		 gpm_phone_get_percentage		(GpmPhone	*phone,
+							 guint		 idx);
+gboolean	 gpm_phone_get_on_ac			(GpmPhone	*phone,
+							 guint		 idx);
+guint		 gpm_phone_get_num_batteries		(GpmPhone	*phone);
+gboolean	 gpm_phone_coldplug			(GpmPhone	*phone);
+#ifdef EGG_TEST
+void		 gpm_phone_test				(gpointer	 data);
+#endif
 
 G_END_DECLS
 

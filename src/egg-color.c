@@ -59,10 +59,11 @@ egg_color_to_rgb (guint32 color, guint8 *red, guint8 *green, guint8 *blue)
 #include "egg-test.h"
 
 void
-egg_color_test (EggTest *test)
+egg_color_test (gpointer data)
 {
 	guint8 r, g, b;
 	guint32 color;
+	EggTest *test = (EggTest *) data;
 
 	if (egg_test_start (test, "EggColor") == FALSE) {
 		return;

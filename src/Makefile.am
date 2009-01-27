@@ -67,6 +67,8 @@ gnome_power_statistics_SOURCES =			\
 	egg-obj-list.h					\
 	egg-array-float.c				\
 	egg-array-float.h				\
+	egg-idletime.h					\
+	egg-idletime.c					\
 	gpm-common.h					\
 	gpm-common.c					\
 	gpm-statistics.c				\
@@ -99,6 +101,8 @@ gnome_power_preferences_SOURCES =			\
 	egg-dbus-proxy.c				\
 	egg-dbus-monitor.h				\
 	egg-dbus-monitor.c				\
+	egg-idletime.h					\
+	egg-idletime.c					\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
 	gpm-idle.h					\
@@ -147,6 +151,8 @@ gnome_power_manager_SOURCES =				\
 	egg-discrete.c					\
 	egg-console-kit.h				\
 	egg-console-kit.c				\
+	egg-idletime.h					\
+	egg-idletime.c					\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
 	gpm-notify.h					\
@@ -228,6 +234,7 @@ gnome_power_manager_CFLAGS =				\
 	$(NULL)
 
 gnome_power_self_test_SOURCES =				\
+	gpm-self-test.c					\
 	egg-color.h					\
 	egg-color.c					\
 	egg-test.h					\
@@ -240,17 +247,20 @@ gnome_power_self_test_SOURCES =				\
 	egg-dbus-proxy.c				\
 	egg-precision.h					\
 	egg-precision.c					\
+	egg-idletime.h					\
+	egg-idletime.c					\
 	egg-discrete.h					\
 	egg-discrete.c					\
 	egg-array-float.h				\
 	egg-array-float.c				\
+	egg-console-kit.h				\
+	egg-console-kit.c				\
 	gpm-ac-adapter.h				\
 	gpm-ac-adapter.c				\
 	gpm-prefs-server.h				\
 	gpm-prefs-server.c				\
 	gpm-control.h					\
 	gpm-control.c					\
-	gpm-self-test.c					\
 	gpm-networkmanager.h				\
 	gpm-networkmanager.c				\
 	gpm-dpms.h					\
@@ -277,13 +287,8 @@ gnome_power_self_test_SOURCES =				\
 	gpm-common.c					\
 	gpm-inhibit.h					\
 	gpm-inhibit.c					\
-	$(NULL)
-
-gnome_power_self_test_SOURCES +=			\
 	gpm-devicekit.h					\
 	gpm-devicekit.c					\
-	egg-console-kit.h				\
-	egg-console-kit.c				\
 	$(NULL)
 
 gnome_power_self_test_LDADD =				\
@@ -298,7 +303,7 @@ gnome_power_self_test_LDADD =				\
 	$(GPM_EXTRA_LIBS)				\
 	$(NULL)
 
-gnome_power_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS)
+gnome_power_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS) $(WARNINGFLAGS)
 
 BUILT_SOURCES = 					\
 	org.freedesktop.PowerManagement.h		\

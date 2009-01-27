@@ -32,6 +32,9 @@ guint		 egg_discrete_to_percent		(guint		 discrete,
 							 guint		 levels);
 gfloat		 egg_discrete_to_fraction		(guint		 discrete,
 							 guint		 levels);
+#ifdef EGG_TEST
+void		 egg_discrete_test			(gpointer	 data);
+#endif
 
 G_END_DECLS
 

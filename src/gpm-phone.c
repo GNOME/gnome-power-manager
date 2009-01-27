@@ -414,11 +414,12 @@ phone_device_refresh_cb (GpmPhone *phone, guint idx, gpointer *data)
 }
 
 void
-gpm_phone_test (EggTest *test)
+gpm_phone_test (gpointer data)
 {
 	GpmPhone *phone;
 	guint value;
 	gboolean ret;
+	EggTest *test = (EggTest *) data;
 
 	if (egg_test_start (test, "GpmPhone") == FALSE) {
 		return;

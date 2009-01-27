@@ -183,11 +183,11 @@ gpm_help_display (const gchar *link_id)
 #include "egg-test.h"
 
 void
-gpm_common_test (EggTest *test)
+gpm_common_test (gpointer data)
 {
-	if (egg_test_start (test, "GpmCommon") == FALSE) {
+	EggTest *test = (EggTest *) data;
+	if (egg_test_start (test, "GpmCommon") == FALSE)
 		return;
-	}
 
 	egg_test_end (test);
 }

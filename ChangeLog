@@ -1,5 +1,29 @@
 2009-01-27  Richard Hughes  <richard@hughsie.com>
 
+	* configure.ac:
+	* src/Makefile.am:
+	* src/egg-array-float.c: (egg_array_float_test):
+	* src/egg-array-float.h:
+	* src/egg-color.c: (egg_color_test):
+	* src/egg-color.h:
+	* src/egg-discrete.c: (egg_discrete_test):
+	* src/egg-discrete.h:
+	* src/egg-precision.c: (egg_precision_test):
+	* src/egg-precision.h:
+	* src/gpm-common.c: (gpm_common_test):
+	* src/gpm-common.h:
+	* src/gpm-idle.c: (gpm_idle_evaluate):
+	* src/gpm-inhibit.c: (gpm_inhibit_test_has_inhibit),
+	(gpm_inhibit_test):
+	* src/gpm-inhibit.h:
+	* src/gpm-phone.c: (gpm_phone_test):
+	* src/gpm-phone.h:
+	* src/gpm-self-test.c: (main):
+	Fix up the self checks and include the idletime code which had
+	bitrotted.
+
+2009-01-27  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-phone.c: (gpm_phone_coldplug), (gpm_phone_dbus_connect),
 	(gpm_phone_dbus_disconnect):
 	Don't double print debug newlines.

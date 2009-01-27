@@ -50,6 +50,9 @@ void		 egg_color_to_rgb			(guint32	 color,
 							 guint8		*red,
 							 guint8		*green,
 							 guint8		*blue);
+#ifdef EGG_TEST
+void		 egg_color_test				(gpointer	 data);
+#endif
 
 G_END_DECLS
 

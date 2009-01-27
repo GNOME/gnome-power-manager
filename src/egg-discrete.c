@@ -101,10 +101,11 @@ egg_discrete_to_fraction (guint discrete, guint levels)
 #include "egg-test.h"
 
 void
-egg_discrete_test (EggTest *test)
+egg_discrete_test (gpointer data)
 {
 	guint value;
 	gfloat fvalue;
+	EggTest *test = (EggTest *) data;
 
 	if (!egg_test_start (test, "EggDiscrete"))
 		return;

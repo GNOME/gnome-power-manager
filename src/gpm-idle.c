@@ -248,6 +248,7 @@ gpm_idle_evaluate (GpmIdle *idle)
 
 	is_idle = gpm_session_get_idle (idle->priv->session);
 	is_inhibited = gpm_session_get_inhibited (idle->priv->session);
+	egg_debug ("is_idle=%i, is_inhibited=%i", is_idle, is_inhibited);
 
 	/* normal */
 	if (!is_idle || is_inhibited) {

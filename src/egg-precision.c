@@ -88,9 +88,10 @@ egg_precision_round_down (gfloat value, gint smallest)
 #include "egg-test.h"
 
 void
-egg_precision_test (EggTest *test)
+egg_precision_test (gpointer data)
 {
 	guint value;
+	EggTest *test = (EggTest *) data;
 
 	if (!egg_test_start (test, "EggPrecision"))
 		return;

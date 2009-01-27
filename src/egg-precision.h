@@ -30,6 +30,9 @@ gint		 egg_precision_round_up			(gfloat		 value,
 							 gint		 smallest);
 gint		 egg_precision_round_down		(gfloat		 value,
 							 gint		 smallest);
+#ifdef EGG_TEST
+void		 egg_precision_test			(gpointer	 data);
+#endif
 
 G_END_DECLS
 

@@ -72,7 +72,7 @@ egg_array_float_new (guint length)
  *
  * @array: input array
  **/
-inline gfloat
+gfloat
 egg_array_float_get (EggArrayFloat *array, guint i)
 {
 	if (i >= array->len)
@@ -85,7 +85,7 @@ egg_array_float_get (EggArrayFloat *array, guint i)
  *
  * @array: input array
  **/
-inline void
+void
 egg_array_float_set (EggArrayFloat *array, guint i, gfloat value)
 {
 	g_array_index (array, gfloat, i) = value;
@@ -376,7 +376,7 @@ egg_array_float_remove_outliers (EggArrayFloat *data, guint length, gfloat sigma
 #include "egg-test.h"
 
 void
-egg_array_float_test (EggTest *test)
+egg_array_float_test (gpointer data)
 {
 	EggArrayFloat *array;
 	EggArrayFloat *kernel;
@@ -384,6 +384,7 @@ egg_array_float_test (EggTest *test)
 	gfloat value;
 	gfloat sigma;
 	guint size;
+	EggTest *test = (EggTest *) data;
 
 	if (egg_test_start (test, "EggArrayFloat") == FALSE)
 		return;

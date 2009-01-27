@@ -587,8 +587,7 @@ uninhibit (EggDbusProxy *gproxy,
 }
 
 static gboolean
-has_inhibit (EggDbusProxy *gproxy,
-			      gboolean        *has_inhibit)
+gpm_inhibit_test_has_inhibit (EggDbusProxy *gproxy, gboolean *has_inhibit)
 {
 	GError  *error = NULL;
 	gboolean ret;
@@ -617,7 +616,7 @@ has_inhibit (EggDbusProxy *gproxy,
 }
 
 void
-gpm_inhibit_test (EggTest *test)
+gpm_inhibit_test (gpointer data)
 {
 	gboolean ret;
 	gboolean valid;
@@ -625,6 +624,7 @@ gpm_inhibit_test (EggTest *test)
 	guint cookie2 = 0;
 	DBusGConnection *connection;
 	EggDbusProxy *gproxy;
+	EggTest *test = (EggTest *) data;
 
 	if (egg_test_start (test, "GpmInhibit") == FALSE) {
 		return;
@@ -642,7 +642,7 @@ gpm_inhibit_test (EggTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "make sure we are not inhibited");
-	ret = has_inhibit (gproxy, &valid);
+	ret = gpm_inhibit_test_has_inhibit (gproxy, &valid);
 	if (!ret) {
 		egg_test_failed (test, "Unable to test validity");
 	} else if (valid) {
@@ -676,7 +676,7 @@ gpm_inhibit_test (EggTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "make sure we are auto inhibited");
-	ret = has_inhibit (gproxy, &valid);
+	ret = gpm_inhibit_test_has_inhibit (gproxy, &valid);
 	if (!ret) {
 		egg_test_failed (test, "Unable to test validity");
 	} else if (valid) {
@@ -710,7 +710,7 @@ gpm_inhibit_test (EggTest *test)
 
 	/************************************************************/
 	egg_test_title (test, "make sure we are still inhibited");
-	ret = has_inhibit (gproxy, &valid);
+	ret = gpm_inhibit_test_has_inhibit (gproxy, &valid);
 	if (!ret) {
 		egg_test_failed (test, "Unable to test validity");
 	} else if (valid) {
