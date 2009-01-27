@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2005-2007 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2005-2008 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -32,10 +32,6 @@ G_BEGIN_DECLS
 #define GPM_IS_SCREENSAVER(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_SCREENSAVER))
 #define GPM_IS_SCREENSAVER_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_SCREENSAVER))
 #define GPM_SCREENSAVER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_SCREENSAVER, GpmScreensaverClass))
-
-#define GS_LISTENER_SERVICE	"org.gnome.ScreenSaver"
-#define GS_LISTENER_PATH	"/org/gnome/ScreenSaver"
-#define GS_LISTENER_INTERFACE	"org.gnome.ScreenSaver"
 
 typedef struct GpmScreensaverPrivate GpmScreensaverPrivate;
 

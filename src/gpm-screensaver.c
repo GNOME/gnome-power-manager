@@ -36,6 +36,10 @@ static void     gpm_screensaver_finalize   (GObject		*object);
 
 #define GPM_SCREENSAVER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_SCREENSAVER, GpmScreensaverPrivate))
 
+#define GS_LISTENER_SERVICE	"org.gnome.ScreenSaver"
+#define GS_LISTENER_PATH	"/org/gnome/ScreenSaver"
+#define GS_LISTENER_INTERFACE	"org.gnome.ScreenSaver"
+
 struct GpmScreensaverPrivate
 {
 	EggDbusProxy		*gproxy;
