@@ -67,8 +67,7 @@ void		 gpm_inhibit_get_message		(GpmInhibit	*inhibit,
 void		 gpm_inhibit_inhibit			(GpmInhibit	*inhibit,
 							 const gchar	*application,
 							 const gchar	*reason,
-							 DBusGMethodInvocation *context,
-							 GError		**error);
+							 DBusGMethodInvocation *context);
 gboolean	 gpm_inhibit_un_inhibit			(GpmInhibit	*inhibit,
 							 guint32	 cookie,
 							 GError		**error);

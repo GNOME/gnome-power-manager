@@ -1,5 +1,13 @@
 2009-01-28  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-inhibit.c: (gpm_inhibit_inhibit),
+	(gpm_inhibit_un_inhibit), (gpm_inhibit_remove_dbus),
+	(gpm_inhibit_init), (gpm_inhibit_finalize):
+	* src/gpm-inhibit.h:
+	Proxy inhibit requests up to gnome-session.
+
+2009-01-28  Richard Hughes  <richard@hughsie.com>
+
 	* configure.ac:
 	* src/gpm-self-test.c: (main):
 	Fix up the name for the DeviceKit pkgconfig file.
