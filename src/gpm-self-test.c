@@ -64,7 +64,7 @@ main (int argc, char **argv)
 	egg_discrete_test (test);
 	egg_color_test (test);
 	egg_array_float_test (test);
-	egg_idletime_test (test);
+//	egg_idletime_test (test);
 
 	gpm_common_test (test);
 	gpm_inhibit_test (test);
