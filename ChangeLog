@@ -1,3 +1,12 @@
+2009-01-28  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-brightness-xrandr.c: (gpm_brightness_xrandr_output_down):
+	When the minimum reported brightness is not zero don't wraparound 0
+	when we try to step down a large number of brightness levels.
+	Instead truncate to the minimum to fix a hang.
+	Fixes #569100
+	Patch from Fortunato Ventre, many thanks.
+
 2009-01-23  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-cell-unit.h:
