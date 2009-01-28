@@ -232,6 +232,7 @@ static gboolean
 gpm_brightness_xrandr_output_down (GpmBrightnessXRandR *brightness, RROutput output)
 {
 	guint cur;
+	guint step;
 	gboolean ret;
 	guint min, max;
 
@@ -248,10 +249,12 @@ gpm_brightness_xrandr_output_down (GpmBrightnessXRandR *brightness, RROutput out
 		egg_debug ("already min");
 		return TRUE;
 	}
-	cur -= gpm_brightness_get_step ((max-min)+1);
-	if (cur < min) {
+	step = gpm_brightness_get_step ((max-min)+1);
+	if (cur < step) {
 		egg_debug ("truncating to %i", min);
 		cur = min;
+	} else {
+		cur -= step;
 	}
 	ret = gpm_brightness_xrandr_output_set_internal (brightness, output, cur);
 	return ret;
