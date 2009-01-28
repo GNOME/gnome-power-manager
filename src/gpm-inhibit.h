@@ -72,9 +72,6 @@ void		 gpm_inhibit_inhibit			(GpmInhibit	*inhibit,
 gboolean	 gpm_inhibit_un_inhibit			(GpmInhibit	*inhibit,
 							 guint32	 cookie,
 							 GError		**error);
-gboolean	 gpm_inhibit_get_requests		(GpmInhibit	*inhibit,
-							 gchar		***requests,
-							 GError		**error);
 #ifdef EGG_TEST
 void		 gpm_inhibit_test			(gpointer	 data);
 #endif

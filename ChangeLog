@@ -1,5 +1,16 @@
 2009-01-28  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-inhibit.c: (gpm_inhibit_error_quark),
+	(gpm_inhibit_inhibit), (gpm_inhibit_un_inhibit),
+	(gpm_inhibit_has_inhibit):
+	* src/gpm-inhibit.h:
+	* src/org.freedesktop.PowerManagement.Inhibit.xml:
+	Remove org.freedesktop.PowerManagement.Inhibit.GetRequests() -
+	it's never worked so nothing must be using it. gnome-session
+	provides a better alternative.
+
+2009-01-28  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-common.h:
 	* src/gpm-prefs-core.c: (gpm_prefs_sleep_slider_changed_cb),
 	(gpm_prefs_setup_sleep_slider), (set_idle_hscale_stops),

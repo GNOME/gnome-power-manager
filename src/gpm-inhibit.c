@@ -48,7 +48,7 @@ struct GpmInhibitPrivate
 {
 	GSList			*list;
 	DBusGProxy		*proxy;
-	GConfClient			*conf;
+	GConfClient		*conf;
 	gboolean		 ignore_inhibits;
 };
 
@@ -69,9 +69,8 @@ GQuark
 gpm_inhibit_error_quark (void)
 {
 	static GQuark quark = 0;
-	if (!quark) {
+	if (!quark)
 		quark = g_quark_from_static_string ("gpm_inhibit_error");
-	}
 	return quark;
 }
 
@@ -109,7 +108,7 @@ static GpmInhibitData *
 gpm_inhibit_find_cookie (GpmInhibit *inhibit, guint32 cookie)
 {
 	GpmInhibitData *data;
-	GSList	       *ret;
+	GSList *ret;
 	/* search list */
 	ret = g_slist_find_custom (inhibit->priv->list, &cookie,
 				   gpm_inhibit_cookie_compare_func);
@@ -130,7 +129,7 @@ gpm_inhibit_find_cookie (GpmInhibit *inhibit, guint32 cookie)
 static guint32
 gpm_inhibit_generate_cookie (GpmInhibit *inhibit)
 {
-	guint32		cookie;
+	guint32 cookie;
 
 	/* Iterate until we have a unique cookie */
 	do {
@@ -142,7 +141,7 @@ gpm_inhibit_generate_cookie (GpmInhibit *inhibit)
 /**
  * gpm_inhibit_inhibit:
  * @connection: Connection name, e.g. ":0.13"
- * @application:	Application name, e.g. "Nautilus"
+ * @application: Application name, e.g. "Nautilus"
  * @reason: Reason for inhibiting, e.g. "Copying files"
  *
  * Allocates a random cookie used to identify the connection, as multiple
@@ -153,11 +152,8 @@ gpm_inhibit_generate_cookie (GpmInhibit *inhibit)
  * Return value: a new random cookie.
  **/
 void
-gpm_inhibit_inhibit (GpmInhibit  *inhibit,
-		          const gchar *application,
-		          const gchar *reason,
-		          DBusGMethodInvocation *context,
-		          GError     **error)
+gpm_inhibit_inhibit (GpmInhibit  *inhibit, const gchar *application, const gchar *reason,
+		     DBusGMethodInvocation *context, GError **error)
 {
 	const gchar *connection;
 	GpmInhibitData *data;
@@ -204,15 +200,13 @@ gpm_inhibit_free_data_object (GpmInhibitData *data)
 
 /**
  * gpm_inhibit_un_inhibit:
- * @application:	Application name
+ * @application: Application name
  * @cookie: The cookie that we used to register
  *
  * Removes a cookie and associated data from the GpmInhibitData struct.
  **/
 gboolean
-gpm_inhibit_un_inhibit (GpmInhibit  *inhibit,
-		        guint32      cookie,
-		        GError     **error)
+gpm_inhibit_un_inhibit (GpmInhibit *inhibit, guint32 cookie, GError **error)
 {
 	GpmInhibitData *data;
 
@@ -239,28 +233,16 @@ gpm_inhibit_un_inhibit (GpmInhibit  *inhibit,
 }
 
 /**
- * gpm_inhibit_get_requests:
- *
- * Gets a list of inhibits.
- **/
-gboolean
-gpm_inhibit_get_requests (GpmInhibit *inhibit, gchar ***requests, GError **error)
-{
-	egg_warning ("Not implimented");
-	return FALSE;
-}
-
-/**
  * gpm_inhibit_remove_dbus:
  * @connection: Connection name
- * @application:	Application name
+ * @application: Application name
  * @cookie: The cookie that we used to register
  *
  * Checks to see if the dbus closed session is registered, in which case
  * unregister it.
  **/
 static void
-gpm_inhibit_remove_dbus (GpmInhibit  *inhibit, const gchar *connection)
+gpm_inhibit_remove_dbus (GpmInhibit *inhibit, const gchar *connection)
 {
 	guint a;
 	GpmInhibitData *data;
@@ -298,9 +280,7 @@ gpm_inhibit_name_owner_changed_cb (DBusGProxy *proxy, const gchar *name,
  * TRUE if the action is OK, i.e. we have *not* been inhibited.
  **/
 gboolean
-gpm_inhibit_has_inhibit (GpmInhibit *inhibit,
-		         gboolean   *has_inihibit,
-		         GError    **error)
+gpm_inhibit_has_inhibit (GpmInhibit *inhibit, gboolean *has_inihibit, GError **error)
 {
 	guint length;
 
@@ -328,8 +308,8 @@ gpm_inhibit_has_inhibit (GpmInhibit *inhibit,
 /**
  * gpm_inhibit_get_message:
  *
- * @message:	Description string, e.g. "Nautilus because 'copying files'"
- * @action:	Action we wanted to do, e.g. "suspend"
+ * @message: Description string, e.g. "Nautilus because 'copying files'"
+ * @action: Action we wanted to do, e.g. "suspend"
  *
  * Returns a localised message text describing what application has inhibited
  * the action, and why.
