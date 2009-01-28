@@ -1,5 +1,17 @@
 2009-01-28  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-common.h:
+	* src/gpm-prefs-core.c: (gpm_prefs_sleep_slider_changed_cb),
+	(gpm_prefs_setup_sleep_slider), (set_idle_hscale_stops),
+	(prefs_setup_ac), (prefs_setup_battery), (prefs_setup_ups),
+	(gpm_prefs_init), (gpm_prefs_finalize):
+	* src/gpm-screensaver.c: (gpm_screensaver_init):
+	* src/gpm-screensaver.h:
+	Don't rely on the gnome-screensaver idle key now we are using
+	gnome-session.
+
+2009-01-28  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness-xrandr.c: (gpm_brightness_xrandr_output_down):
 	When the minimum reported brightness is not zero don't wraparound 0
 	when we try to step down a large number of brightness levels.

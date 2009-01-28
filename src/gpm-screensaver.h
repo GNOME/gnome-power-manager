@@ -55,7 +55,6 @@ typedef struct
 GType		 gpm_screensaver_get_type		(void);
 GpmScreensaver	*gpm_screensaver_new			(void);
 
-int		 gpm_screensaver_get_delay		(GpmScreensaver	*screensaver);
 gboolean	 gpm_screensaver_lock			(GpmScreensaver	*screensaver);
 gboolean	 gpm_screensaver_lock_enabled		(GpmScreensaver	*screensaver);
 gboolean	 gpm_screensaver_lock_set		(GpmScreensaver	*screensaver,

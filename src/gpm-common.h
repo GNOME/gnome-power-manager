@@ -173,7 +173,9 @@ G_BEGIN_DECLS
 /* gnome-screensaver */
 #define GS_CONF_DIR				"/apps/gnome-screensaver"
 #define GS_PREF_LOCK_ENABLED			GS_CONF_DIR "/lock_enabled"
-#define GS_PREF_IDLE_DELAY			GS_CONF_DIR "/idle_delay"
+
+/* gnome-session */
+#define GPM_CONF_IDLE_DELAY			"/desktop/gnome/session/idle_delay"
 
 typedef enum {
 	GPM_ICON_POLICY_ALWAYS,

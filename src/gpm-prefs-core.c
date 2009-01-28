@@ -41,7 +41,6 @@
 #include "gpm-prefs-core.h"
 #include "egg-debug.h"
 #include "gpm-stock-icons.h"
-#include "gpm-screensaver.h"
 #include "gpm-prefs-server.h"
 
 #ifdef HAVE_GCONF_DEFAULTS
@@ -64,8 +63,8 @@ struct GpmPrefsPrivate
 	gboolean		 can_shutdown;
 	gboolean		 can_suspend;
 	gboolean		 can_hibernate;
-	GConfClient			*conf;
-	GpmScreensaver		*screensaver;
+	guint			 idle_delay;
+	GConfClient		*conf;
 #ifdef HAVE_GCONF_DEFAULTS
 	PolKitGnomeAction	*default_action;
 #endif
@@ -297,7 +296,6 @@ gpm_prefs_sleep_slider_changed_cb (GtkRange *range,
 				   GpmPrefs *prefs)
 {
 	int value;
-	int gs_idle_time;
 	char *gpm_pref_key;
 
 	value = (int) gtk_range_get_value (range);
@@ -307,10 +305,9 @@ gpm_prefs_sleep_slider_changed_cb (GtkRange *range,
 		value = 0;
 	} else {
 		/* We take away the g-s idle time as the slider represents
-		 * global time but we only do our timeout from when g-s
+		 * global time but we only do our timeout from when gnome-session
 		 * declares the session idle */
-		gs_idle_time = gpm_screensaver_get_delay (prefs->priv->screensaver);
-		value -= gs_idle_time;
+		value -= prefs->priv->idle_delay;
 
 		/* policy is in seconds, slider is in minutes */
 		value *= 60;
@@ -328,14 +325,11 @@ gpm_prefs_sleep_slider_changed_cb (GtkRange *range,
  * @gpm_pref_key: The GConf key for this preference setting.
  **/
 static GtkWidget *
-gpm_prefs_setup_sleep_slider (GpmPrefs    *prefs,
-			      const gchar *widget_name,
-			      const gchar *gpm_pref_key)
+gpm_prefs_setup_sleep_slider (GpmPrefs *prefs, const gchar *widget_name, const gchar *gpm_pref_key)
 {
 	GtkWidget *widget;
 	gint value;
 	gboolean is_writable;
-	guint gs_idle_time;
 
 	widget = glade_xml_get_widget (prefs->priv->glade_xml, widget_name);
 	g_signal_connect (G_OBJECT (widget), "format-value",
@@ -351,8 +345,7 @@ gpm_prefs_setup_sleep_slider (GpmPrefs    *prefs,
 	} else {
 		/* policy is in seconds, slider is in minutes */
 		value /= 60;
-		gs_idle_time = gpm_screensaver_get_delay (prefs->priv->screensaver);
-		value += gs_idle_time;
+		value += prefs->priv->idle_delay;
 	}
 
 	gtk_range_set_value (GTK_RANGE (widget), value);
@@ -626,7 +619,7 @@ gpm_prefs_delete_event_cb (GtkWidget *widget,
  * @widget_name: The widget name
  *
  * Here we make sure that the start of the hscale is set to the
- * gnome-screensaver idle time to avoid confusion.
+ * gnome-session idle time to avoid confusion.
  **/
 static void
 set_idle_hscale_stops (GpmPrefs    *prefs,
@@ -636,28 +629,10 @@ set_idle_hscale_stops (GpmPrefs    *prefs,
 	GtkWidget *widget;
 	widget = glade_xml_get_widget (prefs->priv->glade_xml, widget_name);
 	if (gs_idle_time + 1 > NEVER_TIME_ON_SLIDER) {
-		egg_warning ("gnome-screensaver timeout is really big. "
-			     "Not sure what to do");
+		egg_warning ("gnome-session timeout is really big");
 		return;
 	}
 	gtk_range_set_range (GTK_RANGE (widget), gs_idle_time + 1, NEVER_TIME_ON_SLIDER);
-}
-
-/**
- * gs_delay_changed_cb:
- * @key: The conf key
- * @prefs: This prefs class instance
- **/
-static void
-gs_delay_changed_cb (GpmScreensaver *screensaver,
-		     gint	     delay,
-		     GpmPrefs	    *prefs)
-{
-	/* update the start and stop points on the hscales */
-	set_idle_hscale_stops (prefs, "hscale_battery_computer", delay);
-	set_idle_hscale_stops (prefs, "hscale_battery_display", delay);
-	set_idle_hscale_stops (prefs, "hscale_ac_computer", delay);
-	set_idle_hscale_stops (prefs, "hscale_ac_display", delay);
 }
 
 /**
@@ -790,7 +765,6 @@ static void
 prefs_setup_ac (GpmPrefs *prefs)
 {
 	GtkWidget *widget;
-	gint delay;
 	const gchar  *button_lid_actions[] =
 				{ACTION_NOTHING,
 				 ACTION_BLANK,
@@ -812,9 +786,8 @@ prefs_setup_ac (GpmPrefs *prefs)
 	gpm_prefs_setup_checkbox (prefs, "checkbutton_ac_display_dim",
 				  GPM_CONF_BACKLIGHT_IDLE_DIM_AC);
 
-	delay = gpm_screensaver_get_delay (prefs->priv->screensaver);
-	set_idle_hscale_stops (prefs, "hscale_ac_computer", delay);
-	set_idle_hscale_stops (prefs, "hscale_ac_display", delay);
+	set_idle_hscale_stops (prefs, "hscale_ac_computer", prefs->priv->idle_delay);
+	set_idle_hscale_stops (prefs, "hscale_ac_display", prefs->priv->idle_delay);
 
 	if (prefs->priv->has_button_lid == FALSE) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_ac_lid");
@@ -833,7 +806,6 @@ prefs_setup_battery (GpmPrefs *prefs)
 {
 	GtkWidget *widget;
 	GtkWidget *notebook;
-	gint delay;
 	gint page;
 
 	const gchar  *button_lid_actions[] =
@@ -881,9 +853,8 @@ prefs_setup_battery (GpmPrefs *prefs)
 		gtk_widget_hide_all (widget);
 	}
 
-	delay = gpm_screensaver_get_delay (prefs->priv->screensaver);
-	set_idle_hscale_stops (prefs, "hscale_battery_computer", delay);
-	set_idle_hscale_stops (prefs, "hscale_battery_display", delay);
+	set_idle_hscale_stops (prefs, "hscale_battery_computer", prefs->priv->idle_delay);
+	set_idle_hscale_stops (prefs, "hscale_battery_display", prefs->priv->idle_delay);
 
 	if (prefs->priv->has_button_lid == FALSE) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_battery_lid");
@@ -900,7 +871,6 @@ prefs_setup_ups (GpmPrefs *prefs)
 {
 	GtkWidget *widget;
 	GtkWidget *notebook;
-	gint delay;
 	gint page;
 
 	const gchar  *ups_low_actions[] =
@@ -925,8 +895,7 @@ prefs_setup_ups (GpmPrefs *prefs)
 				      ups_low_actions);
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_ups_computer",
 				      GPM_CONF_TIMEOUT_SLEEP_COMPUTER_BATT);
-	delay = gpm_screensaver_get_delay (prefs->priv->screensaver);
-	set_idle_hscale_stops (prefs, "hscale_ups_computer", delay);
+	set_idle_hscale_stops (prefs, "hscale_ups_computer", prefs->priv->idle_delay);
 }
 
 static void
@@ -1068,10 +1037,6 @@ gpm_prefs_init (GpmPrefs *prefs)
 
 	prefs->priv = GPM_PREFS_GET_PRIVATE (prefs);
 
-	prefs->priv->screensaver = gpm_screensaver_new ();
-	g_signal_connect (prefs->priv->screensaver, "gs-delay-changed",
-			  G_CALLBACK (gs_delay_changed_cb), prefs);
-
 	prefs->priv->conf = gconf_client_get_default ();
 	/* watch gnome-power-manager keys */
 	gconf_client_add_dir (prefs->priv->conf, GPM_CONF_DIR,
@@ -1079,6 +1044,9 @@ gpm_prefs_init (GpmPrefs *prefs)
 	gconf_client_notify_add (prefs->priv->conf, GPM_CONF_DIR,
 				 (GConfClientNotifyFunc) gpm_conf_gconf_key_changed_cb,
 				 prefs, NULL, NULL);
+
+	/* get value of delay in gnome-session */
+	prefs->priv->idle_delay = gconf_client_get_int (prefs->priv->conf, GPM_CONF_IDLE_DELAY, NULL);
 
 	caps = gpm_dbus_method_int ("GetPreferencesOptions");
 	prefs->priv->has_batteries = ((caps & GPM_PREFS_SERVER_BATTERY) > 0);
@@ -1152,9 +1120,6 @@ gpm_prefs_finalize (GObject *object)
 	prefs->priv = GPM_PREFS_GET_PRIVATE (prefs);
 
 	g_object_unref (prefs->priv->conf);
-	if (prefs->priv->screensaver) {
-		g_object_unref (prefs->priv->screensaver);
-	}
 
 	G_OBJECT_CLASS (gpm_prefs_parent_class)->finalize (object);
 }

@@ -44,7 +44,6 @@ struct GpmScreensaverPrivate
 {
 	EggDbusProxy		*gproxy;
 	GConfClient		*conf;
-	guint			 idle_delay;	/* the setting in g-s-p, cached */
 };
 
 enum {
@@ -132,27 +131,6 @@ gpm_screensaver_proxy_disconnect_more (GpmScreensaver *screensaver)
 }
 
 /**
- * gpm_conf_gconf_key_changed_cb:
- *
- * We might have to do things when the gconf keys change; do them here.
- **/
-static void
-gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *entry, GpmScreensaver *screensaver)
-{
-	GConfValue *value;
-
-	value = gconf_entry_get_value (entry);
-	if (value == NULL)
-		return;
-
-	if (strcmp (entry->key, GS_PREF_IDLE_DELAY) == 0) {
-		screensaver->priv->idle_delay = gconf_value_get_int (value);
-		egg_debug ("emitting gs-delay-changed : %i", screensaver->priv->idle_delay);
-		g_signal_emit (screensaver, signals [GS_DELAY_CHANGED], 0, screensaver->priv->idle_delay);
-	}
-}
-
-/**
  * gpm_screensaver_lock_enabled:
  * @screensaver: This class instance
  * Return value: If gnome-screensaver is set to lock the screen on screensave
@@ -179,18 +157,6 @@ gpm_screensaver_lock_set (GpmScreensaver *screensaver, gboolean lock)
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 	gconf_client_set_bool (screensaver->priv->conf, GS_PREF_LOCK_ENABLED, lock, NULL);
 	return TRUE;
-}
-
-/**
- * gpm_screensaver_get_delay:
- * @screensaver: This class instance
- * Return value: The delay for the idle time set in gnome-screesaver-properties.
- **/
-gint
-gpm_screensaver_get_delay (GpmScreensaver *screensaver)
-{
-	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), 0);
-	return screensaver->priv->idle_delay;
 }
 
 /**
@@ -465,16 +431,6 @@ gpm_screensaver_init (GpmScreensaver *screensaver)
 	gpm_screensaver_proxy_connect_more (screensaver);
 
 	screensaver->priv->conf = gconf_client_get_default ();
-
-	/* watch gnome-screensaver keys */
-	gconf_client_add_dir (screensaver->priv->conf, GS_CONF_DIR,
-			      GCONF_CLIENT_PRELOAD_NONE, NULL);
-	gconf_client_notify_add (screensaver->priv->conf, GS_CONF_DIR,
-				 (GConfClientNotifyFunc) gpm_conf_gconf_key_changed_cb,
-				 screensaver, NULL, NULL);
-
-	/* get value of delay in g-s-p */
-	screensaver->priv->idle_delay = gconf_client_get_int (screensaver->priv->conf, GS_PREF_IDLE_DELAY, NULL);
 }
 
 /**
