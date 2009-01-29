@@ -46,7 +46,7 @@ if test "$GCC" = "yes"; then
 	WARNINGFLAGS="$WARNINGFLAGS -Wignored-qualifiers"
 #	WARNINGFLAGS="$WARNINGFLAGS -Wsign-compare"
 	WARNINGFLAGS="$WARNINGFLAGS -Wtype-limits"
-	WARNINGFLAGS="$WARNINGFLAGS -Wuninitialized"
+#	WARNINGFLAGS="$WARNINGFLAGS -Wuninitialized"
 	WARNINGFLAGS="$WARNINGFLAGS -Waggregate-return"
 	WARNINGFLAGS="$WARNINGFLAGS -Wdeclaration-after-statement"
 	WARNINGFLAGS="$WARNINGFLAGS -Wshadow"
@@ -100,7 +100,7 @@ LIBPANEL_REQUIRED=2.0.0
 XRANDR_REQUIRED=1.2.0
 POLKIT_GNOME_REQUIRED=0.8
 CANBERRA_REQUIRED=0.10
-DEVKIT_REQUIRED=003
+DEVKIT_REQUIRED=001
 
 dnl ---------------------------------------------------------------------------
 dnl - Make above strings available for packaging files (e.g. rpm spec files)
@@ -171,9 +171,9 @@ PKG_CHECK_MODULES(UNIQUE, unique-1.0 >= $UNIQUE_REQUIRED)
 AC_SUBST(UNIQUE_CFLAGS)
 AC_SUBST(UNIQUE_LIBS)
 
-PKG_CHECK_MODULES(DEVKIT, devkit-gobject >= $DEVKIT_REQUIRED)
-AC_SUBST(DEVKIT_CFLAGS)
-AC_SUBST(DEVKIT_LIBS)
+#PKG_CHECK_MODULES(DEVKIT, devkit-gobject >= $DEVKIT_REQUIRED)
+#AC_SUBST(DEVKIT_CFLAGS)
+#AC_SUBST(DEVKIT_LIBS)
 
 AC_PATH_PROG(GCONFTOOL, gconftool-2)
 AM_GCONF_SOURCE_2
