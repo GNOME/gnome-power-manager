@@ -707,11 +707,46 @@ gpm_stats_add_wakeups_obj (const DkpWakeupsObj *obj)
 	else
 		cmdline_ptr = cmdline;
 
-	/* format command line */
-	cmdline_escaped = g_markup_escape_text (cmdline_ptr, -1);
+	if (strcmp (cmdline_ptr, "insmod") == 0)
+		cmdline_ptr = _("Kernel module");
+	else if (strcmp (cmdline_ptr, "modprobe") == 0)
+		cmdline_ptr = _("Kernel module");
+	else if (strcmp (cmdline_ptr, "swapper") == 0)
+		cmdline_ptr = _("Kernel core");
+	else if (strcmp (cmdline_ptr, "kernel-ipi") == 0)
+		cmdline_ptr = _("Interprocessor interrupt");
+	else if (strcmp (cmdline_ptr, "interrupt") == 0)
+		cmdline_ptr = _("Interrupt");
 
-	/* format details */
-	details = g_markup_escape_text (obj->details, -1);
+	/* format command line */
+	if (obj->is_userspace)
+		cmdline_escaped = g_markup_escape_text (cmdline_ptr, -1);
+	else
+		cmdline_escaped = g_markup_printf_escaped ("<i>%s</i>", cmdline_ptr);
+
+	/* replace common driver names */
+	if (strcmp (obj->details, "i8042") == 0)
+		details = g_strdup (_("PS/2 keyboard/mouse/touchpad"));
+	else if (strcmp (obj->details, "acpi") == 0)
+		details = g_strdup (_("ACPI"));
+	else if (strcmp (obj->details, "ata_piix") == 0)
+		details = g_strdup (_("Serial ATA"));
+
+	/* try to make the wakeup type nicer */
+	else if (g_str_has_prefix (obj->details, "__mod_timer"))
+		details = g_strdup_printf ("Timer %s", obj->details+12);
+	else if (g_str_has_prefix (obj->details, "mod_timer"))
+		details = g_strdup_printf ("Timer %s", obj->details+10);
+	else if (g_str_has_prefix (obj->details, "do_setitimer"))
+		details = g_strdup_printf ("Timer %s", obj->details+10);
+	else if (g_str_has_prefix (obj->details, "do_nanosleep"))
+		details = g_strdup_printf ("Sleep %s", obj->details+13);
+	else if (g_str_has_prefix (obj->details, "futex_wait"))
+		details = g_strdup_printf ("Wait %s", obj->details+11);
+	else if (g_str_has_prefix (obj->details, "queue_delayed_work"))
+		details = g_strdup_printf ("Work queue %s", obj->details+11);
+	else
+		details = g_markup_escape_text (obj->details, -1);
 
 	gtk_list_store_append (list_store_wakeups, &iter);
 	gtk_list_store_set (list_store_wakeups, &iter,

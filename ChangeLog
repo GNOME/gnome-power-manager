@@ -1,5 +1,11 @@
 2009-01-30  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-statistics.c: (gpm_stats_add_wakeups_obj):
+	Move the translations here from Devicekit-power. They belong in the
+	client tool.
+
+2009-01-30  Richard Hughes  <richard@hughsie.com>
+
 	* libdevkit-power/Makefile.am:
 	* libdevkit-power/dkp-wakeups-obj.c:
 	(dkp_wakeups_obj_clear_internal), (dkp_wakeups_obj_copy),
