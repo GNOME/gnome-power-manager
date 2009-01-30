@@ -1,3 +1,28 @@
+2009-01-30  Richard Hughes  <richard@hughsie.com>
+
+	* libdevkit-power/Makefile.am:
+	* libdevkit-power/dkp-wakeups-obj.c:
+	(dkp_wakeups_obj_clear_internal), (dkp_wakeups_obj_copy),
+	(dkp_wakeups_obj_equal), (dkp_wakeups_obj_print),
+	(dkp_wakeups_obj_new), (dkp_wakeups_obj_free):
+	* libdevkit-power/dkp-wakeups-obj.h:
+	* libdevkit-power/dkp-wakeups.c: (dkp_wakeups_get_total),
+	(dkp_wakeups_get_data), (dkp_wakeups_total_changed_cb),
+	(dkp_wakeups_data_changed_cb), (dkp_wakeups_class_init),
+	(dkp_wakeups_init), (dkp_wakeups_finalize), (dkp_wakeups_new):
+	* libdevkit-power/dkp-wakeups.h:
+	Add the new GObject client functions for the wakeup functionality.
+
+	* data/gpm-statistics.glade:
+	* src/gpm-statistics.c: (gpm_stats_add_wakeups_columns),
+	(gpm_stats_update_info_data), (gpm_stats_add_wakeups_obj),
+	(gpm_stats_update_wakeups_data), (gpm_stats_set_title),
+	(gpm_stats_notebook_changed_cb),
+	(gpm_stats_devices_treeview_clicked_cb),
+	(gpm_stats_data_changed_cb), (main):
+	Add processor wakeup support into gnome-power-statistics.
+	This requires DeviceKit-power from git master.
+
 2009-01-29  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* configure.ac: Lower the devkit required version to 001.

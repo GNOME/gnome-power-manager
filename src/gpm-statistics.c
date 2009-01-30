@@ -46,16 +46,19 @@
 #include "dkp-history-obj.h"
 #include "dkp-stats-obj.h"
 #include "dkp-device.h"
+#include "dkp-wakeups.h"
 
 static GladeXML *glade_xml = NULL;
 static GtkListStore *list_store_info = NULL;
 static GtkListStore *list_store_devices = NULL;
+static GtkListStore *list_store_wakeups = NULL;
 gchar *current_device = NULL;
 static const gchar *history_type;
 static const gchar *stats_type;
 static guint history_time;
 static GConfClient *gconf_client;
 static gfloat sigma_smoothing = 0.0f;
+static DkpWakeups *wakeups = NULL;
 
 enum {
 	GPM_INFO_COLUMN_TEXT,
@@ -68,6 +71,15 @@ enum {
 	GPM_DEVICES_COLUMN_TEXT,
 	GPM_DEVICES_COLUMN_ID,
 	GPM_DEVICES_COLUMN_LAST
+};
+
+enum {
+	GPM_WAKEUPS_COLUMN_ICON,
+	GPM_WAKEUPS_COLUMN_ID,
+	GPM_WAKEUPS_COLUMN_VALUE,
+	GPM_WAKEUPS_COLUMN_CMDLINE,
+	GPM_WAKEUPS_COLUMN_DETAILS,
+	GPM_WAKEUPS_COLUMN_LAST
 };
 
 #define GPM_HISTORY_RATE_TEXT			_("Rate")
@@ -153,6 +165,51 @@ gpm_stats_add_devices_columns (GtkTreeView *treeview)
 	column = gtk_tree_view_column_new_with_attributes (_("Description"), renderer,
 							   "markup", GPM_DEVICES_COLUMN_TEXT, NULL);
 	gtk_tree_view_column_set_sort_column_id (column, GPM_INFO_COLUMN_TEXT);
+	gtk_tree_view_append_column (treeview, column);
+	gtk_tree_view_column_set_expand (column, TRUE);
+}
+
+/**
+ * gpm_stats_add_wakeups_columns:
+ **/
+static void
+gpm_stats_add_wakeups_columns (GtkTreeView *treeview)
+{
+	GtkCellRenderer *renderer;
+	GtkTreeViewColumn *column;
+
+	/* image */
+	renderer = gtk_cell_renderer_pixbuf_new ();
+	g_object_set (renderer, "stock-size", GTK_ICON_SIZE_BUTTON, NULL);
+	column = gtk_tree_view_column_new_with_attributes (_("Type"), renderer,
+							   "icon-name", GPM_WAKEUPS_COLUMN_ICON, NULL);
+	gtk_tree_view_append_column (treeview, column);
+
+	/* column for id */
+	renderer = gtk_cell_renderer_text_new ();
+	column = gtk_tree_view_column_new_with_attributes (_("ID"), renderer,
+							   "markup", GPM_WAKEUPS_COLUMN_ID, NULL);
+	gtk_tree_view_append_column (treeview, column);
+	gtk_tree_view_column_set_expand (column, TRUE);
+
+	/* column for value */
+	renderer = gtk_cell_renderer_text_new ();
+	column = gtk_tree_view_column_new_with_attributes (_("Wakeups"), renderer,
+							   "markup", GPM_WAKEUPS_COLUMN_VALUE, NULL);
+	gtk_tree_view_append_column (treeview, column);
+	gtk_tree_view_column_set_expand (column, TRUE);
+
+	/* column for cmdline */
+	renderer = gtk_cell_renderer_text_new ();
+	column = gtk_tree_view_column_new_with_attributes (_("Command"), renderer,
+							   "markup", GPM_WAKEUPS_COLUMN_CMDLINE, NULL);
+	gtk_tree_view_append_column (treeview, column);
+	gtk_tree_view_column_set_expand (column, TRUE);
+
+	/* column for details */
+	renderer = gtk_cell_renderer_text_new ();
+	column = gtk_tree_view_column_new_with_attributes (_("Details"), renderer,
+							   "markup", GPM_WAKEUPS_COLUMN_DETAILS, NULL);
 	gtk_tree_view_append_column (treeview, column);
 	gtk_tree_view_column_set_expand (column, TRUE);
 }
@@ -576,6 +633,10 @@ gpm_stats_update_info_data (const DkpDevice *device)
 	widget = glade_xml_get_widget (glade_xml, "notebook1");
 	obj = dkp_device_get_object (device);
 
+	/* show info page */
+	page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK(widget), 0);
+	gtk_widget_show (page_widget);
+
 	/* hide history if no support */
 	page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK(widget), 1);
 	if (obj->has_history)
@@ -590,10 +651,134 @@ gpm_stats_update_info_data (const DkpDevice *device)
 	else
 		gtk_widget_hide (page_widget);
 
+	/* hide wakeups page */
+	page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK(widget), 3);
+	gtk_widget_hide (page_widget);
+
 	page = gtk_notebook_get_current_page (GTK_NOTEBOOK (widget));
 	gpm_stats_update_info_data_page (device, page);
 
 	return;
+}
+
+/**
+ * gpm_stats_add_wakeups_obj:
+ **/
+static void
+gpm_stats_add_wakeups_obj (const DkpWakeupsObj *obj)
+{
+	const gchar *icon;
+	gchar *value;
+	gchar *cmdline;
+	gchar *id;
+	const gchar *cmdline_ptr;
+	gchar *cmdline_escaped;
+	gchar *details;
+	gchar *found;
+	GtkTreeIter iter;
+
+	if (obj->is_userspace) {
+		icon = "application-x-executable";
+		id = g_strdup_printf ("%i", obj->id);
+	} else {
+		icon = "applications-system";
+		if (obj->id < 0xff0)
+			id = g_strdup_printf ("IRQ%i", obj->id);
+		else
+			id = g_strdup ("IRQx");
+	}
+
+	/* formate value to one decimal place */
+	value = g_strdup_printf ("%.1f", obj->value);
+
+	/* truncate at first space or ':' */
+	cmdline = g_strdup (obj->cmdline);
+	found = strstr (cmdline, ":");
+	if (found != NULL)
+		*found = '\0';
+	found = strstr (cmdline, " ");
+	if (found != NULL)
+		*found = '\0';
+
+	/* remove ./ */
+	found = g_strrstr (cmdline, "/");
+	if (found != NULL)
+		cmdline_ptr = found + 1;
+	else
+		cmdline_ptr = cmdline;
+
+	/* format command line */
+	cmdline_escaped = g_markup_escape_text (cmdline_ptr, -1);
+
+	/* format details */
+	details = g_markup_escape_text (obj->details, -1);
+
+	gtk_list_store_append (list_store_wakeups, &iter);
+	gtk_list_store_set (list_store_wakeups, &iter,
+			    GPM_WAKEUPS_COLUMN_ID, id,
+			    GPM_WAKEUPS_COLUMN_VALUE, value,
+			    GPM_WAKEUPS_COLUMN_CMDLINE, cmdline_escaped,
+			    GPM_WAKEUPS_COLUMN_DETAILS, details,
+			    GPM_WAKEUPS_COLUMN_ICON, icon, -1);
+	g_free (cmdline);
+	g_free (cmdline_escaped);
+	g_free (details);
+	g_free (value);
+	g_free (id);
+}
+
+/**
+ * gpm_stats_update_wakeups_data:
+ **/
+static void
+gpm_stats_update_wakeups_data (void)
+{
+	GtkWidget *widget;
+	GtkWidget *page_widget;
+	guint total;
+	DkpWakeupsObj *obj;
+	gchar *text;
+	guint i;
+	GError *error = NULL;
+	GPtrArray *array;
+
+	widget = glade_xml_get_widget (glade_xml, "notebook1");
+
+	/* hide other pages */
+	page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK(widget), 0);
+	gtk_widget_hide (page_widget);
+	page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK(widget), 1);
+	gtk_widget_hide (page_widget);
+	page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK(widget), 2);
+	gtk_widget_hide (page_widget);
+
+	/* show wakeups page */
+	page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK(widget), 3);
+	gtk_widget_show (page_widget);
+
+	/* show total */
+	total = dkp_wakeups_get_total (wakeups, &error);
+	widget = glade_xml_get_widget (glade_xml, "label_total_wakeups");
+	if (error == NULL) {
+		text = g_strdup_printf ("%i", total);
+		gtk_label_set_label (GTK_LABEL(widget), text);
+		g_free (text);
+	} else {
+		gtk_label_set_label (GTK_LABEL(widget), error->message);
+		g_error_free (error);
+	}
+
+	/* get data */
+	gtk_list_store_clear (list_store_wakeups);
+	array = dkp_wakeups_get_data (wakeups, NULL);
+	if (array == NULL)
+		return;
+	for (i=0; i<array->len; i++) {
+		obj = g_ptr_array_index (array, i);
+		gpm_stats_add_wakeups_obj (obj);
+	}
+	g_ptr_array_foreach (array, (GFunc) dkp_wakeups_obj_free, NULL);
+	g_ptr_array_free (array, TRUE);
 }
 
 static void
@@ -603,7 +788,8 @@ gpm_stats_set_title (GtkWindow *window, gint page_num)
 	const gchar * const page_titles[] = {
 		N_("Device Information"),
 		N_("Device History"),
-		N_("Device Profile")
+		N_("Device Profile"),
+		N_("Processor Wakeups")
 	};
 
 	title = g_strdup_printf ("%s - %s", _("Power Statistics"), _(page_titles[page_num]));
@@ -628,6 +814,9 @@ gpm_stats_notebook_changed_cb (GtkNotebook *notebook, GtkNotebookPage *page, gin
 	gconf_client_set_int (gconf_client, GPM_CONF_INFO_PAGE_NUMBER, page_num, NULL);
 
 	if (current_device == NULL)
+		return;
+
+	if (egg_strequal (current_device, "wakeups"))
 		return;
 
 	device = dkp_device_new ();
@@ -685,10 +874,15 @@ gpm_stats_devices_treeview_clicked_cb (GtkTreeSelection *selection, gboolean dat
 		/* show transaction_id */
 		egg_debug ("selected row is: %s", current_device);
 
-		device = dkp_device_new ();
-		dkp_device_set_object_path (device, current_device);
-		gpm_stats_update_info_data (device);
-		g_object_unref (device);
+		/* is special device */
+		if (egg_strequal (current_device, "wakeups")) {
+			gpm_stats_update_wakeups_data ();
+		} else {
+			device = dkp_device_new ();
+			dkp_device_set_object_path (device, current_device);
+			gpm_stats_update_info_data (device);
+			g_object_unref (device);
+		}
 
 	} else {
 		egg_debug ("no row selected");
@@ -744,6 +938,15 @@ gpm_stats_add_device (const DkpDevice *device)
 			    GPM_DEVICES_COLUMN_ID, id,
 			    GPM_DEVICES_COLUMN_TEXT, text,
 			    GPM_DEVICES_COLUMN_ICON, icon, -1);
+}
+
+/**
+ * gpm_stats_data_changed_cb:
+ **/
+static void
+gpm_stats_data_changed_cb (DkpClient *client, gpointer user_data)
+{
+	gpm_stats_update_wakeups_data ();
 }
 
 /**
@@ -1106,6 +1309,8 @@ main (int argc, char *argv[])
 	list_store_info = gtk_list_store_new (GPM_INFO_COLUMN_LAST, G_TYPE_STRING, G_TYPE_STRING);
 	list_store_devices = gtk_list_store_new (GPM_DEVICES_COLUMN_LAST, G_TYPE_STRING,
 						 G_TYPE_STRING, G_TYPE_STRING);
+	list_store_wakeups = gtk_list_store_new (GPM_WAKEUPS_COLUMN_LAST, G_TYPE_STRING,
+						 G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 
 	/* create transaction_id tree view */
 	widget = glade_xml_get_widget (glade_xml, "treeview_info");
@@ -1126,6 +1331,16 @@ main (int argc, char *argv[])
 
 	/* add columns to the tree view */
 	gpm_stats_add_devices_columns (GTK_TREE_VIEW (widget));
+	gtk_tree_view_columns_autosize (GTK_TREE_VIEW (widget)); /* show */
+
+	/* create wakeups tree view */
+	widget = glade_xml_get_widget (glade_xml, "treeview_wakeups");
+	gtk_tree_view_set_model (GTK_TREE_VIEW (widget),
+				 GTK_TREE_MODEL (list_store_wakeups));
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (widget));
+
+	/* add columns to the tree view */
+	gpm_stats_add_wakeups_columns (GTK_TREE_VIEW (widget));
 	gtk_tree_view_columns_autosize (GTK_TREE_VIEW (widget)); /* show */
 
 	history_type = gconf_client_get_string (gconf_client, GPM_CONF_INFO_HISTORY_TYPE, NULL);
@@ -1196,6 +1411,9 @@ main (int argc, char *argv[])
 	g_signal_connect (client, "device-removed", G_CALLBACK (gpm_stats_device_removed_cb), NULL);
 	g_signal_connect (client, "device-changed", G_CALLBACK (gpm_stats_device_changed_cb), NULL);
 
+	wakeups = dkp_wakeups_new ();
+	g_signal_connect (wakeups, "data-changed", G_CALLBACK (gpm_stats_data_changed_cb), NULL);
+
 	/* coldplug */
 	devices = dkp_client_enumerate_devices (client);
 	if (devices == NULL)
@@ -1210,6 +1428,17 @@ main (int argc, char *argv[])
 	}
 
 	last_device = gconf_client_get_string (gconf_client, GPM_CONF_INFO_LAST_DEVICE, NULL);
+
+	/* can we get wakeup data? */
+	i = dkp_wakeups_get_total (wakeups, NULL);
+	if (i > 0) {
+		GtkTreeIter iter;
+		gtk_list_store_append (list_store_devices, &iter);
+		gtk_list_store_set (list_store_devices, &iter,
+				    GPM_DEVICES_COLUMN_ID, "wakeups",
+				    GPM_DEVICES_COLUMN_TEXT, _("Processor"),
+				    GPM_DEVICES_COLUMN_ICON, "computer", -1);
+	}
 
 	/* set the correct focus on the last device */
 	for (i=0; i < devices->len; i++) {
@@ -1245,6 +1474,7 @@ main (int argc, char *argv[])
 out:
 	g_object_unref (gconf_client);
 	g_object_unref (client);
+	g_object_unref (wakeups);
 	g_object_unref (glade_xml);
 	g_object_unref (list_store_info);
 unique_out:
