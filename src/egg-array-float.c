@@ -317,8 +317,12 @@ egg_array_float_remove_outliers (EggArrayFloat *data, guint length, gfloat sigma
 	EggArrayFloat *result;
 
 	g_return_val_if_fail (length % 2 == 1, NULL);
-
 	result = egg_array_float_new (data->len);
+
+	/* check for no data */
+	if (data->len == 0)
+		goto out;
+
 	half_length = (length - 1) / 2;
 
 	/* copy start and end of array */
@@ -365,7 +369,7 @@ egg_array_float_remove_outliers (EggArrayFloat *data, guint length, gfloat sigma
 			g_array_index (result, gfloat, i) = average_not_inc;
 		}
 	}
-
+out:
 	return result;
 }
 

@@ -1,5 +1,10 @@
 2009-01-31  Richard Hughes  <richard@hughsie.com>
 
+	* src/egg-array-float.c: (egg_array_float_remove_outliers):
+	Fix a crash in the statistics tool when we have no stats data.
+
+2009-01-31  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-statistics.c: (gpm_stats_add_wakeups_obj):
 	Add some more translations for kernel drivers and processes.
 
