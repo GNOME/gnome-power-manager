@@ -731,6 +731,10 @@ gpm_stats_add_wakeups_obj (const DkpWakeupsObj *obj)
 		details = g_strdup (_("ACPI"));
 	else if (strcmp (obj->details, "ata_piix") == 0)
 		details = g_strdup (_("Serial ATA"));
+	else if (strcmp (obj->details, "libata") == 0)
+		details = g_strdup (_("ATA host controller"));
+	else if (strcmp (obj->details, "iwl3945") == 0)
+		details = g_strdup (_("Intel wireless adaptor"));
 
 	/* try to make the wakeup type nicer */
 	else if (g_str_has_prefix (obj->details, "__mod_timer"))
@@ -743,8 +747,14 @@ gpm_stats_add_wakeups_obj (const DkpWakeupsObj *obj)
 		details = g_strdup_printf ("Sleep %s", obj->details+13);
 	else if (g_str_has_prefix (obj->details, "futex_wait"))
 		details = g_strdup_printf ("Wait %s", obj->details+11);
+	else if (g_str_has_prefix (obj->details, "queue_delayed_work_on"))
+		details = g_strdup_printf ("Work queue %s", obj->details+22);
 	else if (g_str_has_prefix (obj->details, "queue_delayed_work"))
-		details = g_strdup_printf ("Work queue %s", obj->details+11);
+		details = g_strdup_printf ("Work queue %s", obj->details+19);
+	else if (g_str_has_prefix (obj->details, "dst_run_gc"))
+		details = g_strdup_printf ("Network route flush %s", obj->details+11);
+	else if (g_str_has_prefix (obj->details, "usb_hcd_poll_rh_status"))
+		details = g_strdup_printf ("USB activity %s", obj->details+23);
 	else
 		details = g_markup_escape_text (obj->details, -1);
 
