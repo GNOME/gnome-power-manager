@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&component=general\n"
-"POT-Creation-Date: 2009-01-30 17:36+0000\n"
-"PO-Revision-Date: 2009-01-30 19:19+0100\n"
+"POT-Creation-Date: 2009-01-31 13:40+0000\n"
+"PO-Revision-Date: 2009-01-31 14:55+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1062,8 +1062,8 @@ msgid "Observe power management"
 msgstr "Observar la gestión de energía"
 
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.glade.h:6 ../src/gpm-statistics.c:830
-#: ../src/gpm-statistics.c:1263
+#: ../data/gpm-statistics.glade.h:6 ../src/gpm-statistics.c:840
+#: ../src/gpm-statistics.c:1273
 msgid "Power Statistics"
 msgstr "Estadísticas de energía"
 
@@ -1662,7 +1662,7 @@ msgstr "Varias aplicaciones han impedido que la acción de reinicio se ejecute."
 msgid "Multiple applications have stopped the shutdown from taking place."
 msgstr "Varias aplicaciones han impedido que la acción de apagado se ejecute."
 
-#: ../src/gpm-main.c:136 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1247
+#: ../src/gpm-main.c:136 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1257
 msgid "Show extra debugging information"
 msgstr "Muestra información adicional de depuración"
 
@@ -2361,62 +2361,68 @@ msgid "ACPI"
 msgstr "ACPI"
 
 #: ../src/gpm-statistics.c:733
-#| msgid "Serial number"
 msgid "Serial ATA"
 msgstr "Serial ATA"
 
-#: ../src/gpm-statistics.c:824
+#: ../src/gpm-statistics.c:735
+msgid "ATA host controller"
+msgstr "Controlador ATA del equipo"
+
+#: ../src/gpm-statistics.c:737
+msgid "Intel wireless adaptor"
+msgstr "Adaptador inalámbrico Intel"
+
+#: ../src/gpm-statistics.c:834
 msgid "Device Information"
 msgstr "Información del dispositivo"
 
-#: ../src/gpm-statistics.c:825
+#: ../src/gpm-statistics.c:835
 msgid "Device History"
 msgstr "Histórico del dispositivo"
 
-#: ../src/gpm-statistics.c:826
+#: ../src/gpm-statistics.c:836
 msgid "Device Profile"
 msgstr "Perfil del dispositivo"
 
-#: ../src/gpm-statistics.c:827
+#: ../src/gpm-statistics.c:837
 msgid "Processor Wakeups"
 msgstr "Recuperaciones del procesador"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1057 ../src/gpm-statistics.c:1063
-#: ../src/gpm-statistics.c:1069 ../src/gpm-statistics.c:1075
+#: ../src/gpm-statistics.c:1067 ../src/gpm-statistics.c:1073
+#: ../src/gpm-statistics.c:1079 ../src/gpm-statistics.c:1085
 msgid "Time elapsed"
 msgstr "Tiempo transcurrido"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1059
+#: ../src/gpm-statistics.c:1069
 msgid "Power"
 msgstr "Energía"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1065 ../src/gpm-statistics.c:1108
-#: ../src/gpm-statistics.c:1114 ../src/gpm-statistics.c:1120
-#: ../src/gpm-statistics.c:1126
+#: ../src/gpm-statistics.c:1075 ../src/gpm-statistics.c:1118
+#: ../src/gpm-statistics.c:1124 ../src/gpm-statistics.c:1130
+#: ../src/gpm-statistics.c:1136
 msgid "Cell charge"
 msgstr "Carga de la celda"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1071 ../src/gpm-statistics.c:1077
+#: ../src/gpm-statistics.c:1081 ../src/gpm-statistics.c:1087
 msgid "Predicted time"
 msgstr "Tiempo estimado"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1110 ../src/gpm-statistics.c:1122
+#: ../src/gpm-statistics.c:1120 ../src/gpm-statistics.c:1132
 msgid "Correction factor"
 msgstr "Factor de corrección"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1116 ../src/gpm-statistics.c:1128
+#: ../src/gpm-statistics.c:1126 ../src/gpm-statistics.c:1138
 msgid "Prediction accuracy"
 msgstr "Precisión de la estimación"
 
-#: ../src/gpm-statistics.c:1474
-#| msgid "Poor"
+#: ../src/gpm-statistics.c:1484
 msgid "Processor"
 msgstr "Procesador"
 
