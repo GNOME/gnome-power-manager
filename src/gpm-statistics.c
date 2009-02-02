@@ -254,7 +254,7 @@ gpm_stats_update_smooth_data (EggObjList *list)
 	outliers = egg_array_float_remove_outliers (raw, 3, 0.1);
 
 	/* convolve with gaussian */
-	gaussian = egg_array_float_compute_gaussian (11, sigma_smoothing);
+	gaussian = egg_array_float_compute_gaussian (15, sigma_smoothing);
 	convolved = egg_array_float_convolve (outliers, gaussian);
 
 	/* add the smoothed data back into a new array */
@@ -991,7 +991,8 @@ gpm_stats_add_device (const DkpDevice *device)
 static void
 gpm_stats_data_changed_cb (DkpClient *client, gpointer user_data)
 {
-	gpm_stats_update_wakeups_data ();
+	if (egg_strequal (current_device, "wakeups"))
+		gpm_stats_update_wakeups_data ();
 }
 
 /**
