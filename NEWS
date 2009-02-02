@@ -1,4 +1,36 @@
 ==============
+Version 2.25.3
+==============
+
+- Fixed #562576, profile is not saved correctly (Richard Hughes)
+- Fixed #563791, GNOME Goal: Clean up GLib and GTK+ includes (Pedro Fragoso)
+- Fixed #565076, Use g_timeout_add_seconds where possible (Richard Hughes)
+- Fixed #565552, gtk_status_icon_set_tooltip has been deprecated (Frederic Peters)
+- Fixed #565867, build time check for DeviceKit (Richard Hughes)
+- Fixed #566115, Fails to build on sparc (fails to build on sparc)
+- Fixed #567295, statistics doesn't update title (Richard Hughes)
+- Fixed #567298, some minor code issues in gpm-statisctics.c main() (Richard Hughes)
+- Fixed #567918, idle delay changes (Richard Hughes)
+- Fixed #569100, when brightness is to 0, pressing one more brightness down makes brightness up/down stop working. (Richard Hughes)
+- Fixed #569356, build error, missing egg-idletime.c (Richard Hughes)
+- Add processor wakeup support into gnome-power-statistics. This requires DeviceKit-power from git master to work properly.
+- Don't rely on the gnome-screensaver idle key now we are using gnome-session
+
+Translations:
+- Updated ca: David Planella
+- Updated es: Jorge González, Jorge Gonzalez
+- Updated fi: Timo Jyrinki
+- Updated he: Yaniv Abir <yanivabir at gmail dot com>, Yair Hershkoviz
+- Updated ko: Changwoo Ryu
+- Updated nb: Kjartan Maraas
+- Updated ru: Nickolay V. Shmyrev
+- Updated sv: Daniel Nylander
+- Updated zh_CN: 甘露(Gan Lu)
+
+Help Manual Translations:
+- Updated de: Mario Blättermann
+
+==============
 Version 2.25.2
 ==============
 
