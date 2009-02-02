@@ -707,16 +707,22 @@ gpm_stats_add_wakeups_obj (const DkpWakeupsObj *obj)
 	else
 		cmdline_ptr = cmdline;
 
-	if (strcmp (cmdline_ptr, "insmod") == 0)
+	if (strcmp (cmdline_ptr, "insmod") == 0) {
+		/* TRANSLATORS: kernel module, usually a device driver */
 		cmdline_ptr = _("Kernel module");
-	else if (strcmp (cmdline_ptr, "modprobe") == 0)
+	} else if (strcmp (cmdline_ptr, "modprobe") == 0) {
+		/* TRANSLATORS: kernel module, usually a device driver */
 		cmdline_ptr = _("Kernel module");
-	else if (strcmp (cmdline_ptr, "swapper") == 0)
+	} else if (strcmp (cmdline_ptr, "swapper") == 0) {
+		/* TRANSLATORS: kernel housekeeping */
 		cmdline_ptr = _("Kernel core");
-	else if (strcmp (cmdline_ptr, "kernel-ipi") == 0)
+	} else if (strcmp (cmdline_ptr, "kernel-ipi") == 0) {
+		/* TRANSLATORS: interrupt between processors */
 		cmdline_ptr = _("Interprocessor interrupt");
-	else if (strcmp (cmdline_ptr, "interrupt") == 0)
+	} else if (strcmp (cmdline_ptr, "interrupt") == 0) {
+		/* TRANSLATORS: unknown interrupt */
 		cmdline_ptr = _("Interrupt");
+	}
 
 	/* format command line */
 	if (obj->is_userspace)
@@ -725,41 +731,57 @@ gpm_stats_add_wakeups_obj (const DkpWakeupsObj *obj)
 		cmdline_escaped = g_markup_printf_escaped ("<i>%s</i>", cmdline_ptr);
 
 	/* replace common driver names */
-	if (strcmp (obj->details, "i8042") == 0)
+	if (strcmp (obj->details, "i8042") == 0) {
+		/* TRANSLATORS: the keyboard and mouse device event */
 		details = g_strdup (_("PS/2 keyboard/mouse/touchpad"));
-	else if (strcmp (obj->details, "acpi") == 0)
+	} else if (strcmp (obj->details, "acpi") == 0) {
+		/* TRANSLATORS: ACPI, the Intel power standard on laptops and desktops */
 		details = g_strdup (_("ACPI"));
-	else if (strcmp (obj->details, "ata_piix") == 0)
+	} else if (strcmp (obj->details, "ata_piix") == 0) {
+		/* TRANSLATORS: serial ATA is a new style of hard disk interface */
 		details = g_strdup (_("Serial ATA"));
-	else if (strcmp (obj->details, "libata") == 0)
+	} else if (strcmp (obj->details, "libata") == 0) {
+		/* TRANSLATORS: this is the old-style ATA interface */
 		details = g_strdup (_("ATA host controller"));
-	else if (strcmp (obj->details, "iwl3945") == 0)
+	} else if (strcmp (obj->details, "iwl3945") == 0) {
+		/* TRANSLATORS: 802.11 wireless adaptor */
 		details = g_strdup (_("Intel wireless adaptor"));
 
 	/* try to make the wakeup type nicer */
-	else if (g_str_has_prefix (obj->details, "__mod_timer"))
+	} else if (g_str_has_prefix (obj->details, "__mod_timer")) {
+		/* TRANSLATORS: a timer is something that fires periodically */
 		details = g_strdup_printf (_("Timer %s"), obj->details+12);
-	else if (g_str_has_prefix (obj->details, "mod_timer"))
+	} else if (g_str_has_prefix (obj->details, "mod_timer")) {
+		/* TRANSLATORS: a timer is something that fires periodically */
 		details = g_strdup_printf (_("Timer %s"), obj->details+10);
-	else if (g_str_has_prefix (obj->details, "do_setitimer"))
+	} else if (g_str_has_prefix (obj->details, "do_setitimer")) {
+		/* TRANSLATORS: a timer is something that fires periodically */
 		details = g_strdup_printf (_("Timer %s"), obj->details+10);
-	else if (g_str_has_prefix (obj->details, "do_nanosleep"))
+	} else if (g_str_has_prefix (obj->details, "do_nanosleep")) {
+		/* TRANSLATORS: this is a task that's woken up from sleeping */
 		details = g_strdup_printf (_("Sleep %s"), obj->details+13);
-	else if (g_str_has_prefix (obj->details, "futex_wait"))
+	} else if (g_str_has_prefix (obj->details, "futex_wait")) {
+		/* TRANSLATORS: this is a task thats woken to check state */
 		details = g_strdup_printf (_("Wait %s"), obj->details+11);
-	else if (g_str_has_prefix (obj->details, "queue_delayed_work_on"))
+	} else if (g_str_has_prefix (obj->details, "queue_delayed_work_on")) {
+		/* TRANSLATORS: a work queue is a list of work that has to be done */
 		details = g_strdup_printf (_("Work queue %s"), obj->details+22);
-	else if (g_str_has_prefix (obj->details, "queue_delayed_work"))
+	} else if (g_str_has_prefix (obj->details, "queue_delayed_work")) {
+		/* TRANSLATORS: a work queue is a list of work that has to be done */
 		details = g_strdup_printf (_("Work queue %s"), obj->details+19);
-	else if (g_str_has_prefix (obj->details, "dst_run_gc"))
+	} else if (g_str_has_prefix (obj->details, "dst_run_gc")) {
+		/* TRANSLATORS: this is when the networking subsystem clears out old entries */
 		details = g_strdup_printf (_("Network route flush %s"), obj->details+11);
-	else if (g_str_has_prefix (obj->details, "usb_hcd_poll_rh_status"))
+	} else if (g_str_has_prefix (obj->details, "usb_hcd_poll_rh_status")) {
+		/* TRANSLATORS: activity on the USB bus */
 		details = g_strdup_printf (_("USB activity %s"), obj->details+23);
-	else if (g_str_has_prefix (obj->details, "Local timer interrupts"))
+	} else if (g_str_has_prefix (obj->details, "Local timer interrupts")) {
+		/* TRANSLATORS: interupts on the system required for basic operation */
 		details = g_strdup (_("Local interrupts"));
-	else if (g_str_has_prefix (obj->details, "Rescheduling interrupts"))
+	} else if (g_str_has_prefix (obj->details, "Rescheduling interrupts")) {
+		/* TRANSLATORS: interrupts when a task gets moved from one core to another */
 		details = g_strdup (_("Rescheduling interrupts"));
-	else
+	} else
 		details = g_markup_escape_text (obj->details, -1);
 
 	gtk_list_store_append (list_store_wakeups, &iter);
@@ -835,12 +857,17 @@ gpm_stats_set_title (GtkWindow *window, gint page_num)
 {
 	gchar *title;
 	const gchar * const page_titles[] = {
+		/* TRANSLATORS: shown on the titlebar */
 		N_("Device Information"),
+		/* TRANSLATORS: shown on the titlebar */
 		N_("Device History"),
+		/* TRANSLATORS: shown on the titlebar */
 		N_("Device Profile"),
+		/* TRANSLATORS: shown on the titlebar */
 		N_("Processor Wakeups")
 	};
 
+	/* TRANSLATORS: shown on the titlebar */
 	title = g_strdup_printf ("%s - %s", _("Power Statistics"), _(page_titles[page_num]));
 	gtk_window_set_title (window, title);
 	g_free (title);
@@ -1259,6 +1286,7 @@ main (int argc, char *argv[])
 
 	const GOptionEntry options[] = {
 		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
+		  /* TRANSLATORS: show verbose debugging */
 		  N_("Show extra debugging information"), NULL },
 		{ NULL}
 	};
@@ -1275,6 +1303,7 @@ main (int argc, char *argv[])
 	g_type_init ();
 
 	context = g_option_context_new (NULL);
+	/* TRANSLATORS: the program name */
 	g_option_context_set_summary (context, _("Power Statistics"));
 	g_option_context_add_main_entries (context, options, NULL);
 	g_option_context_parse (context, &argc, &argv, NULL);
@@ -1486,6 +1515,7 @@ main (int argc, char *argv[])
 		gtk_list_store_append (list_store_devices, &iter);
 		gtk_list_store_set (list_store_devices, &iter,
 				    GPM_DEVICES_COLUMN_ID, "wakeups",
+				    /* TRANSLATORS: the icon for the CPU */
 				    GPM_DEVICES_COLUMN_TEXT, _("Processor"),
 				    GPM_DEVICES_COLUMN_ICON, "computer", -1);
 	}
