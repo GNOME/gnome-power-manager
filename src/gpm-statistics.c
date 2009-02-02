@@ -738,23 +738,27 @@ gpm_stats_add_wakeups_obj (const DkpWakeupsObj *obj)
 
 	/* try to make the wakeup type nicer */
 	else if (g_str_has_prefix (obj->details, "__mod_timer"))
-		details = g_strdup_printf ("Timer %s", obj->details+12);
+		details = g_strdup_printf (_("Timer %s"), obj->details+12);
 	else if (g_str_has_prefix (obj->details, "mod_timer"))
-		details = g_strdup_printf ("Timer %s", obj->details+10);
+		details = g_strdup_printf (_("Timer %s"), obj->details+10);
 	else if (g_str_has_prefix (obj->details, "do_setitimer"))
-		details = g_strdup_printf ("Timer %s", obj->details+10);
+		details = g_strdup_printf (_("Timer %s"), obj->details+10);
 	else if (g_str_has_prefix (obj->details, "do_nanosleep"))
-		details = g_strdup_printf ("Sleep %s", obj->details+13);
+		details = g_strdup_printf (_("Sleep %s"), obj->details+13);
 	else if (g_str_has_prefix (obj->details, "futex_wait"))
-		details = g_strdup_printf ("Wait %s", obj->details+11);
+		details = g_strdup_printf (_("Wait %s"), obj->details+11);
 	else if (g_str_has_prefix (obj->details, "queue_delayed_work_on"))
-		details = g_strdup_printf ("Work queue %s", obj->details+22);
+		details = g_strdup_printf (_("Work queue %s"), obj->details+22);
 	else if (g_str_has_prefix (obj->details, "queue_delayed_work"))
-		details = g_strdup_printf ("Work queue %s", obj->details+19);
+		details = g_strdup_printf (_("Work queue %s"), obj->details+19);
 	else if (g_str_has_prefix (obj->details, "dst_run_gc"))
-		details = g_strdup_printf ("Network route flush %s", obj->details+11);
+		details = g_strdup_printf (_("Network route flush %s"), obj->details+11);
 	else if (g_str_has_prefix (obj->details, "usb_hcd_poll_rh_status"))
-		details = g_strdup_printf ("USB activity %s", obj->details+23);
+		details = g_strdup_printf (_("USB activity %s"), obj->details+23);
+	else if (g_str_has_prefix (obj->details, "Local timer interrupts"))
+		details = g_strdup (_("Local interrupts"));
+	else if (g_str_has_prefix (obj->details, "Rescheduling interrupts"))
+		details = g_strdup (_("Rescheduling interrupts"));
 	else
 		details = g_markup_escape_text (obj->details, -1);
 
