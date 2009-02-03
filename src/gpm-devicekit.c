@@ -80,10 +80,6 @@ gpm_devicekit_get_object_icon (const DkpObject *obj)
 	/* get correct icon prefix */
 	prefix = dkp_device_type_to_text (obj->type);
 
-	/* TODO: rename icons when we remove HAL backend */
-	if (obj->type == DKP_DEVICE_TYPE_BATTERY)
-		prefix = "primary";
-
 	/* get the icon from some simple rules */
 	if (obj->type == DKP_DEVICE_TYPE_LINE_POWER) {
 		filename = g_strdup ("gpm-ac-adapter");
@@ -96,7 +92,7 @@ gpm_devicekit_get_object_icon (const DkpObject *obj)
 			filename = g_strdup_printf ("gpm-%s-missing", prefix);
 
 		} else if (obj->state == DKP_DEVICE_STATE_FULLY_CHARGED) {
-			filename = g_strdup_printf ("gpm-%s-charged", prefix);
+			filename = g_strdup_printf ("gpm-%s-100", prefix);
 
 		} else if (obj->state == DKP_DEVICE_STATE_CHARGING) {
 			index_str = gpm_devicekit_get_object_icon_index (obj);
@@ -109,15 +105,17 @@ gpm_devicekit_get_object_icon (const DkpObject *obj)
 	} else if (obj->type == DKP_DEVICE_TYPE_MOUSE ||
 		   obj->type == DKP_DEVICE_TYPE_KEYBOARD ||
 		   obj->type == DKP_DEVICE_TYPE_PHONE) {
-		if (obj->percentage < 26)
-			index_str = "000";
-		else if (obj->percentage < 51)
-			index_str = "030";
-		else if (obj->percentage < 60)
-			index_str = "060";
-		else
-			index_str = "100";
-		filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
+		if (!obj->is_present) {
+			/* battery missing */
+			filename = g_strdup_printf ("gpm-%s-000", prefix);
+
+		} else if (obj->state == DKP_DEVICE_STATE_FULLY_CHARGED) {
+			filename = g_strdup_printf ("gpm-%s-100", prefix);
+
+		} else {
+			index_str = gpm_devicekit_get_object_icon_index (obj);
+			filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
+		}
 	}
 	egg_debug ("got filename: %s", filename);
 	return filename;
