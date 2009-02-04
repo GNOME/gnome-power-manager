@@ -662,73 +662,85 @@ gpm_stats_update_info_data (const DkpDevice *device)
 }
 
 /**
- * gpm_stats_add_wakeups_obj:
+ * gpm_stats_format_cmdline:
  **/
-static void
-gpm_stats_add_wakeups_obj (const DkpWakeupsObj *obj)
+static gchar *
+gpm_stats_format_cmdline (const DkpWakeupsObj *obj)
 {
-	const gchar *icon;
-	gchar *value;
-	gchar *cmdline;
-	gchar *id;
-	const gchar *cmdline_ptr;
-	gchar *cmdline_escaped;
-	gchar *details;
 	gchar *found;
-	GtkTreeIter iter;
+	gchar *temp = NULL;
+	gchar *cmdline;
+	const gchar *temp_ptr;
 
-	if (obj->is_userspace) {
-		icon = "application-x-executable";
-		id = g_strdup_printf ("%i", obj->id);
-	} else {
-		icon = "applications-system";
-		if (obj->id < 0xff0)
-			id = g_strdup_printf ("IRQ%i", obj->id);
-		else
-			id = g_strdup ("IRQx");
+	/* nothing */
+	if (obj->cmdline == NULL) {
+		/* TRANSLATORS: the command line was not provided */
+		temp_ptr = _("No data");
+		goto out;
 	}
 
-	/* formate value to one decimal place */
-	value = g_strdup_printf ("%.1f", obj->value);
+	/* common kernel cmd names */
+	if (strcmp (obj->cmdline, "insmod") == 0) {
+		/* TRANSLATORS: kernel module, usually a device driver */
+		temp_ptr = _("Kernel module");
+		goto out;
+	}
+	if (strcmp (obj->cmdline, "modprobe") == 0) {
+		/* TRANSLATORS: kernel module, usually a device driver */
+		temp_ptr = _("Kernel module");
+		goto out;
+	}
+	if (strcmp (obj->cmdline, "swapper") == 0) {
+		/* TRANSLATORS: kernel housekeeping */
+		temp_ptr = _("Kernel core");
+		goto out;
+	}
+	if (strcmp (obj->cmdline, "kernel-ipi") == 0) {
+		/* TRANSLATORS: interrupt between processors */
+		temp_ptr = _("Interprocessor interrupt");
+		goto out;
+	}
+	if (strcmp (obj->cmdline, "interrupt") == 0) {
+		/* TRANSLATORS: unknown interrupt */
+		temp_ptr = _("Interrupt");
+		goto out;
+	}
 
 	/* truncate at first space or ':' */
-	cmdline = g_strdup (obj->cmdline);
-	found = strstr (cmdline, ":");
+	temp = g_strdup (obj->cmdline);
+	found = strstr (temp, ":");
 	if (found != NULL)
 		*found = '\0';
-	found = strstr (cmdline, " ");
+	found = strstr (temp, " ");
 	if (found != NULL)
 		*found = '\0';
 
-	/* remove ./ */
-	found = g_strrstr (cmdline, "/");
-	if (found != NULL)
-		cmdline_ptr = found + 1;
+	/* remove path */
+	found = g_strrstr (temp, "/");
+	if (found != NULL && strncmp (temp, "event", 5) != 0)
+		temp_ptr = found + 1;
 	else
-		cmdline_ptr = cmdline;
+		temp_ptr = temp;
 
-	if (strcmp (cmdline_ptr, "insmod") == 0) {
-		/* TRANSLATORS: kernel module, usually a device driver */
-		cmdline_ptr = _("Kernel module");
-	} else if (strcmp (cmdline_ptr, "modprobe") == 0) {
-		/* TRANSLATORS: kernel module, usually a device driver */
-		cmdline_ptr = _("Kernel module");
-	} else if (strcmp (cmdline_ptr, "swapper") == 0) {
-		/* TRANSLATORS: kernel housekeeping */
-		cmdline_ptr = _("Kernel core");
-	} else if (strcmp (cmdline_ptr, "kernel-ipi") == 0) {
-		/* TRANSLATORS: interrupt between processors */
-		cmdline_ptr = _("Interprocessor interrupt");
-	} else if (strcmp (cmdline_ptr, "interrupt") == 0) {
-		/* TRANSLATORS: unknown interrupt */
-		cmdline_ptr = _("Interrupt");
-	}
-
+out:
 	/* format command line */
 	if (obj->is_userspace)
-		cmdline_escaped = g_markup_escape_text (cmdline_ptr, -1);
+		cmdline = g_markup_escape_text (temp_ptr, -1);
 	else
-		cmdline_escaped = g_markup_printf_escaped ("<i>%s</i>", cmdline_ptr);
+		cmdline = g_markup_printf_escaped ("<i>%s</i>", temp_ptr);
+	g_free (temp);
+
+	/* return */
+	return cmdline;
+}
+
+/**
+ * gpm_stats_format_details:
+ **/
+static gchar *
+gpm_stats_format_details (const DkpWakeupsObj *obj)
+{
+	gchar *details;
 
 	/* replace common driver names */
 	if (strcmp (obj->details, "i8042") == 0) {
@@ -743,7 +755,7 @@ gpm_stats_add_wakeups_obj (const DkpWakeupsObj *obj)
 	} else if (strcmp (obj->details, "libata") == 0) {
 		/* TRANSLATORS: this is the old-style ATA interface */
 		details = g_strdup (_("ATA host controller"));
-	} else if (strcmp (obj->details, "iwl3945") == 0) {
+	} else if (strcmp (obj->details, "iwl3945") == 0 || strcmp (obj->details, "iwlagn") == 0) {
 		/* TRANSLATORS: 802.11 wireless adaptor */
 		details = g_strdup (_("Intel wireless adaptor"));
 
@@ -760,6 +772,9 @@ gpm_stats_add_wakeups_obj (const DkpWakeupsObj *obj)
 	} else if (g_str_has_prefix (obj->details, "do_nanosleep")) {
 		/* TRANSLATORS: this is a task that's woken up from sleeping */
 		details = g_strdup_printf (_("Sleep %s"), obj->details+13);
+	} else if (g_str_has_prefix (obj->details, "enqueue_task_rt")) {
+		/* TRANSLATORS: this is a new realtime task */
+		details = g_strdup_printf (_("New task %s"), obj->details+16);
 	} else if (g_str_has_prefix (obj->details, "futex_wait")) {
 		/* TRANSLATORS: this is a task thats woken to check state */
 		details = g_strdup_printf (_("Wait %s"), obj->details+11);
@@ -775,6 +790,9 @@ gpm_stats_add_wakeups_obj (const DkpWakeupsObj *obj)
 	} else if (g_str_has_prefix (obj->details, "usb_hcd_poll_rh_status")) {
 		/* TRANSLATORS: activity on the USB bus */
 		details = g_strdup_printf (_("USB activity %s"), obj->details+23);
+	} else if (g_str_has_prefix (obj->details, "schedule_hrtimeout_range")) {
+		/* TRANSLATORS: we've timed out of an aligned timer */
+		details = g_strdup_printf (_("Wakeup %s"), obj->details+25);
 	} else if (g_str_has_prefix (obj->details, "Local timer interrupts")) {
 		/* TRANSLATORS: interupts on the system required for basic operation */
 		details = g_strdup (_("Local interrupts"));
@@ -784,15 +802,47 @@ gpm_stats_add_wakeups_obj (const DkpWakeupsObj *obj)
 	} else
 		details = g_markup_escape_text (obj->details, -1);
 
+	return details;
+}
+/**
+ * gpm_stats_add_wakeups_obj:
+ **/
+static void
+gpm_stats_add_wakeups_obj (const DkpWakeupsObj *obj)
+{
+	const gchar *icon;
+	gchar *value;
+	gchar *id;
+	gchar *details;
+	gchar *cmdline;
+	GtkTreeIter iter;
+
+	if (obj->is_userspace) {
+		icon = "application-x-executable";
+		id = g_strdup_printf ("%i", obj->id);
+	} else {
+		icon = "applications-system";
+		if (obj->id < 0xff0)
+			id = g_strdup_printf ("IRQ%i", obj->id);
+		else
+			id = g_strdup ("IRQx");
+	}
+
+	/* formate value to one decimal place */
+	value = g_strdup_printf ("%.1f", obj->value);
+
+	/* get formatted lines */
+	cmdline = gpm_stats_format_cmdline (obj);
+	details = gpm_stats_format_details (obj);
+
 	gtk_list_store_append (list_store_wakeups, &iter);
 	gtk_list_store_set (list_store_wakeups, &iter,
 			    GPM_WAKEUPS_COLUMN_ID, id,
 			    GPM_WAKEUPS_COLUMN_VALUE, value,
-			    GPM_WAKEUPS_COLUMN_CMDLINE, cmdline_escaped,
+			    GPM_WAKEUPS_COLUMN_CMDLINE, cmdline,
 			    GPM_WAKEUPS_COLUMN_DETAILS, details,
 			    GPM_WAKEUPS_COLUMN_ICON, icon, -1);
 	g_free (cmdline);
-	g_free (cmdline_escaped);
 	g_free (details);
 	g_free (value);
 	g_free (id);
