@@ -30,9 +30,11 @@
 #include <gtk/gtk.h>
 #include <X11/XF86keysym.h>
 
-#include <hal-manager.h>
-#include <hal-device.h>
-#include <hal-device-store.h>
+#ifdef HAVE_LEGACY_BUTTONS
+ #include <hal-manager.h>
+ #include <hal-device.h>
+ #include <hal-device-store.h>
+#endif
 
 #include "gpm-common.h"
 #include "gpm-button.h"
@@ -51,8 +53,10 @@ struct GpmButtonPrivate
 	gchar			*last_button;
 	GTimer			*timer;
 	gboolean		 lid_is_closed;
+#ifdef HAVE_LEGACY_BUTTONS
 	HalManager		*hal_manager; /* remove when input events is in the kernel */
 	HalDeviceStore		*hal_device_store;
+#endif
 };
 
 enum {
@@ -65,7 +69,7 @@ static gpointer gpm_button_object = NULL;
 
 G_DEFINE_TYPE (GpmButton, gpm_button, G_TYPE_OBJECT)
 
-#define GPM_BUTTON_DUPLICATE_TIMEOUT	0.25f
+#define GPM_BUTTON_DUPLICATE_TIMEOUT	0.125f
 
 /**
  * gpm_button_emit_type:
@@ -194,7 +198,7 @@ gpm_button_grab_keystring (GpmButton *button, guint64 keycode)
  * Return value: TRUE if we parsed and grabbed okay
  **/
 static gboolean
-gpm_button_xevent_key (GpmButton *button, guint keysym, const gchar *hal_key)
+gpm_button_xevent_key (GpmButton *button, guint keysym, const gchar *key_name)
 {
 	gchar *key = NULL;
 	gboolean ret;
@@ -226,7 +230,7 @@ gpm_button_xevent_key (GpmButton *button, guint keysym, const gchar *hal_key)
 	}
 
 	/* add to hash table */
-	g_hash_table_insert (button->priv->keysym_to_name_hash, (gpointer) keycode_str, (gpointer) g_strdup (hal_key));
+	g_hash_table_insert (button->priv->keysym_to_name_hash, (gpointer) keycode_str, (gpointer) g_strdup (key_name));
 
 	/* the key is freed in the hash function unref */
 	return TRUE;
@@ -277,6 +281,7 @@ gpm_button_reset_time (GpmButton *button)
 	return TRUE;
 }
 
+#ifdef HAVE_LEGACY_BUTTONS
 /**
  * emit_button_pressed:
  *
@@ -489,6 +494,7 @@ hal_daemon_stop_cb (HalManager *hal_manager,
 		button->priv->hal_device_store = NULL;
 	}
 }
+#endif
 
 /**
  * gpm_button_init:
@@ -497,8 +503,6 @@ hal_daemon_stop_cb (HalManager *hal_manager,
 static void
 gpm_button_init (GpmButton *button)
 {
-	gboolean have_xevents = FALSE;
-
 	button->priv = GPM_BUTTON_GET_PRIVATE (button);
 
 	button->priv->screen = gdk_screen_get_default ();
@@ -510,45 +514,40 @@ gpm_button_init (GpmButton *button)
 
 	button->priv->lid_is_closed = FALSE;
 
-#ifdef HAVE_XEVENTS
-	have_xevents = TRUE;
-#endif
-
-	if (have_xevents) {
-		/* register the brightness keys */
-		gpm_button_xevent_key (button, XF86XK_PowerOff, GPM_BUTTON_POWER);
+	/* register the brightness keys */
+	gpm_button_xevent_key (button, XF86XK_PowerOff, GPM_BUTTON_POWER);
 #ifdef HAVE_XF86XK_SUSPEND
-		gpm_button_xevent_key (button, XF86XK_Suspend, GPM_BUTTON_SUSPEND);
+	gpm_button_xevent_key (button, XF86XK_Suspend, GPM_BUTTON_SUSPEND);
 #endif
-		gpm_button_xevent_key (button, XF86XK_Sleep, GPM_BUTTON_SUSPEND); /* should be configurable */
+	gpm_button_xevent_key (button, XF86XK_Sleep, GPM_BUTTON_SUSPEND); /* should be configurable */
 #ifdef HAVE_XF86XK_HIBERNATE
-		gpm_button_xevent_key (button, XF86XK_Hibernate, GPM_BUTTON_HIBERNATE);
+	gpm_button_xevent_key (button, XF86XK_Hibernate, GPM_BUTTON_HIBERNATE);
 #endif
-		gpm_button_xevent_key (button, XF86XK_MonBrightnessUp, GPM_BUTTON_BRIGHT_UP);
-		gpm_button_xevent_key (button, XF86XK_MonBrightnessDown, GPM_BUTTON_BRIGHT_DOWN);
-		gpm_button_xevent_key (button, XF86XK_ScreenSaver, GPM_BUTTON_LOCK);
+	gpm_button_xevent_key (button, XF86XK_MonBrightnessUp, GPM_BUTTON_BRIGHT_UP);
+	gpm_button_xevent_key (button, XF86XK_MonBrightnessDown, GPM_BUTTON_BRIGHT_DOWN);
+	gpm_button_xevent_key (button, XF86XK_ScreenSaver, GPM_BUTTON_LOCK);
 #ifdef HAVE_XF86XK_BATTERY
-		gpm_button_xevent_key (button, XF86XK_Battery, GPM_BUTTON_BATTERY);
+	gpm_button_xevent_key (button, XF86XK_Battery, GPM_BUTTON_BATTERY);
 #endif
-		gpm_button_xevent_key (button, XF86XK_KbdBrightnessUp, GPM_BUTTON_KBD_BRIGHT_UP);
-		gpm_button_xevent_key (button, XF86XK_KbdBrightnessDown, GPM_BUTTON_KBD_BRIGHT_DOWN);
-		gpm_button_xevent_key (button, XF86XK_KbdLightOnOff, GPM_BUTTON_KBD_BRIGHT_TOGGLE);
+	gpm_button_xevent_key (button, XF86XK_KbdBrightnessUp, GPM_BUTTON_KBD_BRIGHT_UP);
+	gpm_button_xevent_key (button, XF86XK_KbdBrightnessDown, GPM_BUTTON_KBD_BRIGHT_DOWN);
+	gpm_button_xevent_key (button, XF86XK_KbdLightOnOff, GPM_BUTTON_KBD_BRIGHT_TOGGLE);
 
-		/* use global filter */
-		gdk_window_add_filter (button->priv->window,
-				       gpm_button_filter_x_events, (gpointer) button);
-	}
+	/* use global filter */
+	gdk_window_add_filter (button->priv->window,
+			       gpm_button_filter_x_events, (gpointer) button);
 
+#ifdef HAVE_LEGACY_BUTTONS
 	/* remove when button support is out of HAL */
 	button->priv->hal_manager = hal_manager_new ();
 	g_signal_connect (button->priv->hal_manager, "daemon-start",
 			  G_CALLBACK (hal_daemon_start_cb), button);
 	g_signal_connect (button->priv->hal_manager, "daemon-stop",
 			  G_CALLBACK (hal_daemon_stop_cb), button);
-
 	button->priv->hal_device_store = hal_device_store_new ();
 
 	coldplug_buttons (button);
+#endif
 }
 
 /**
@@ -565,8 +564,10 @@ gpm_button_finalize (GObject *object)
 	button = GPM_BUTTON (object);
 	button->priv = GPM_BUTTON_GET_PRIVATE (button);
 
+#ifdef HAVE_LEGACY_BUTTONS
 	g_object_unref (button->priv->hal_manager);
 	g_object_unref (button->priv->hal_device_store);
+#endif
 	g_free (button->priv->last_button);
 	g_timer_destroy (button->priv->timer);
 

@@ -1,5 +1,15 @@
 2009-02-04  Richard Hughes  <richard@hughsie.com>
 
+	* configure.ac:
+	* src/gpm-button.c: (gpm_button_xevent_key), (gpm_button_init),
+	(gpm_button_finalize):
+	Add a configure option for --enable-legacy-buttons to support HAL and
+	Xorg keys. By default we are now only supporting Xorg events.
+	NOTE: the HAL support will be ripped out early in 2-27.
+	If keys stop working when switching to evdev, please file bugs.
+
+2009-02-04  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-statistics.c: (gpm_stats_format_cmdline),
 	(gpm_stats_format_details), (gpm_stats_add_wakeups_obj):
 	Add two more translations, and don't strip events/ paths.

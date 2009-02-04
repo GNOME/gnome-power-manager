@@ -269,16 +269,16 @@ fi
 dnl ---------------------------------------------------------------------------
 dnl - Respond to XEvents
 dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(xevents,
-              AS_HELP_STRING([--disable-xevents],
-                             [Support XEVENTS (requires a new x.org)]),
-              enable_xevents=$enableval,enable_xevents=yes)
+AC_ARG_ENABLE(legacy-buttons,
+              AS_HELP_STRING([--enable-legacy-buttons],
+                             [Support legacy buttons (button events from HAL)]),
+              enable_legacy_buttons=$enableval,enable_legacy_buttons=no)
 
-AC_MSG_CHECKING([whether to support xevents])
-have_xevents=no
-if test x$enable_xevents = xyes ; then
-    have_xevents=yes
-    AC_DEFINE(HAVE_XEVENTS, 1, [Define if we use XEVENTS])
+AC_MSG_CHECKING([whether to support legacy button events from hal])
+have_legacy_buttons=no
+if test x$enable_legacy_buttons = xyes ; then
+    have_legacy_buttons=yes
+    AC_DEFINE(HAVE_LEGACY_BUTTONS, 1, [Define if we use LEGACY_BUTTONS])
     AC_MSG_RESULT(yes)
 else
     AC_MSG_RESULT(no)
@@ -670,7 +670,7 @@ echo "
         Building extra applets:    ${enable_applets}
         DPMS support:              ${have_dpms}
         PolicyKit support:         ${have_polkit}
-        XEVENTS support:           ${have_xevents}
+        Legacy buttons support:    ${have_legacy_buttons}
         Self test support:         ${have_tests}
         GConf default support:     ${have_gconfdefaults}
         Docbook support:           ${enable_docbook_docs}
