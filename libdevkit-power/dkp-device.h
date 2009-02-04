@@ -53,7 +53,7 @@ typedef struct
 							 const DkpObject	*obj);
 } DkpDeviceClass;
 
-GType		 dkp_device_get_type			(void) G_GNUC_CONST;
+GType		 dkp_device_get_type			(void);
 DkpDevice	*dkp_device_new				(void);
 
 const DkpObject	*dkp_device_get_object			(const DkpDevice	*device);

@@ -55,7 +55,7 @@ typedef gint	 (*EggObjListCompareFunc)	(gconstpointer		 data1,
 typedef gpointer (*EggObjListFromStringFunc)	(const gchar		*data);
 typedef gchar	*(*EggObjListToStringFunc)	(gconstpointer		 data);
 
-GType		 egg_obj_list_get_type		(void) G_GNUC_CONST;
+GType		 egg_obj_list_get_type		(void);
 EggObjList	*egg_obj_list_new		(void);
 
 void		 egg_obj_list_set_new		(EggObjList		*list,

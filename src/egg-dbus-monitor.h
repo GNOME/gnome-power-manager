@@ -52,7 +52,7 @@ typedef struct
 	void		(* connection_replaced)		(EggDbusMonitor	*watch);
 } EggDbusMonitorClass;
 
-GType		 egg_dbus_monitor_get_type	  	(void) G_GNUC_CONST;
+GType		 egg_dbus_monitor_get_type	  	(void);
 EggDbusMonitor	*egg_dbus_monitor_new			(void);
 gboolean	 egg_dbus_monitor_assign		(EggDbusMonitor	*monitor,
 							 DBusGConnection *connection,

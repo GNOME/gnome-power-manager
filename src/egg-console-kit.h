@@ -50,7 +50,7 @@ typedef struct
 							 gboolean	 active);
 } EggConsoleKitClass;
 
-GType		 egg_console_kit_get_type	  	(void) G_GNUC_CONST;
+GType		 egg_console_kit_get_type	  	(void);
 EggConsoleKit	*egg_console_kit_new			(void);
 gboolean	 egg_console_kit_is_local		(EggConsoleKit	*console);
 gboolean	 egg_console_kit_is_active		(EggConsoleKit	*console);

@@ -54,7 +54,7 @@ typedef struct
 							 guint			 value);
 } DkpWakeupsClass;
 
-GType		 dkp_wakeups_get_type			(void) G_GNUC_CONST;
+GType		 dkp_wakeups_get_type			(void);
 DkpWakeups	*dkp_wakeups_new			(void);
 guint		 dkp_wakeups_get_total			(DkpWakeups		*wakeups,
 							 GError			**error);

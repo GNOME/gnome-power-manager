@@ -57,7 +57,7 @@ typedef struct
 	void			(*changed)              (DkpClient		*client);
 } DkpClientClass;
 
-GType		 dkp_client_get_type			(void) G_GNUC_CONST;
+GType		 dkp_client_get_type			(void);
 DkpClient	*dkp_client_new				(void);
 GPtrArray	*dkp_client_enumerate_devices		(DkpClient		*client);
 gboolean	 dkp_client_suspend			(DkpClient		*client,
