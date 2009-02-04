@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&component=general\n"
-"POT-Creation-Date: 2009-02-02 13:37+0000\n"
-"PO-Revision-Date: 2009-02-02 18:33+0100\n"
+"POT-Creation-Date: 2009-02-04 11:53+0000\n"
+"PO-Revision-Date: 2009-02-04 20:53+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1061,9 +1061,11 @@ msgstr "Gestor de energía"
 msgid "Observe power management"
 msgstr "Observar la gestión de energía"
 
+#. TRANSLATORS: shown on the titlebar
+#. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.glade.h:6 ../src/gpm-statistics.c:844
-#: ../src/gpm-statistics.c:1278
+#: ../data/gpm-statistics.glade.h:6 ../src/gpm-statistics.c:921
+#: ../src/gpm-statistics.c:1357
 msgid "Power Statistics"
 msgstr "Estadísticas de energía"
 
@@ -1304,7 +1306,7 @@ msgstr[1] "minutos"
 msgid "Power Manager for the GNOME desktop"
 msgstr "Gestor de energía para el escritorio GNOME"
 
-#: ../src/gpm-devicekit.c:170
+#: ../src/gpm-devicekit.c:168
 #, c-format
 msgid ""
 "%s fully charged (%.1f%%)\n"
@@ -1313,23 +1315,23 @@ msgstr ""
 "%s totalmente cargada (%.1f%%)\n"
 "Proporciona %s de uso de batería"
 
-#: ../src/gpm-devicekit.c:174
+#: ../src/gpm-devicekit.c:172
 #, c-format
 msgid "%s fully charged (%.1f%%)"
 msgstr "%s totalmente cargada (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:182
+#: ../src/gpm-devicekit.c:180
 #, c-format
 msgid "%s %s remaining (%.1f%%)"
 msgstr "%s %s restantes (%.1f%%)"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:187
+#: ../src/gpm-devicekit.c:185
 #, c-format
 msgid "%s discharging (%.1f%%)"
 msgstr "%s descargándose (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:199
+#: ../src/gpm-devicekit.c:197
 #, c-format
 msgid ""
 "%s %s until charged (%.1f%%)\n"
@@ -1338,209 +1340,209 @@ msgstr ""
 "%s %s hasta su carga (%.1f%%)\n"
 "Proporciona %s de tiempo de uso de batería"
 
-#: ../src/gpm-devicekit.c:208
+#: ../src/gpm-devicekit.c:206
 #, c-format
 msgid "%s %s until charged (%.1f%%)"
 msgstr "%s %s hasta su carga (%.1f%%)"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:214
+#: ../src/gpm-devicekit.c:212
 #, c-format
 msgid "%s charging (%.1f%%)"
 msgstr "%s cargando (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:221
+#: ../src/gpm-devicekit.c:219
 msgid "Device state could not be read at this time"
 msgstr "No se pudo leer el estado del dispositivo en este momento"
 
-#: ../src/gpm-devicekit.c:240
+#: ../src/gpm-devicekit.c:238
 #, c-format
 msgid "<b>Product:</b> %s\n"
 msgstr "<b>Producto:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:242 ../src/gpm-devicekit.c:244
-#: ../src/gpm-devicekit.c:246 ../src/gpm-devicekit.c:248
+#: ../src/gpm-devicekit.c:240 ../src/gpm-devicekit.c:242
+#: ../src/gpm-devicekit.c:244 ../src/gpm-devicekit.c:246
 #, c-format
 msgid "<b>Status:</b> %s\n"
 msgstr "<b>Estado:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:242
+#: ../src/gpm-devicekit.c:240
 msgid "Missing"
 msgstr "Faltante"
 
-#: ../src/gpm-devicekit.c:244
+#: ../src/gpm-devicekit.c:242
 msgid "Charged"
 msgstr "Cargada"
 
-#: ../src/gpm-devicekit.c:246
+#: ../src/gpm-devicekit.c:244
 msgid "Charging"
 msgstr "Cargando"
 
-#: ../src/gpm-devicekit.c:248
+#: ../src/gpm-devicekit.c:246
 msgid "Discharging"
 msgstr "Descargando"
 
-#: ../src/gpm-devicekit.c:250
+#: ../src/gpm-devicekit.c:248
 #, c-format
 msgid "<b>Percentage charge:</b> %.1f%%\n"
 msgstr "<b>Porcentaje de carga:</b> %.1f%%\n"
 
-#: ../src/gpm-devicekit.c:252
+#: ../src/gpm-devicekit.c:250
 #, c-format
 msgid "<b>Vendor:</b> %s\n"
 msgstr "<b>Fabricante:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:255
+#: ../src/gpm-devicekit.c:253
 #, c-format
 msgid "<b>Technology:</b> %s\n"
 msgstr "<b>Tecnología:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:258
+#: ../src/gpm-devicekit.c:256
 #, c-format
 msgid "<b>Serial number:</b> %s\n"
 msgstr "<b>Número de serie:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:260
+#: ../src/gpm-devicekit.c:258
 #, c-format
 msgid "<b>Model:</b> %s\n"
 msgstr "<b>Modelo:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:263
+#: ../src/gpm-devicekit.c:261
 #, c-format
 msgid "<b>Charge time:</b> %s\n"
 msgstr "<b>Tiempo de carga</b> %s\n"
 
-#: ../src/gpm-devicekit.c:268
+#: ../src/gpm-devicekit.c:266
 #, c-format
 msgid "<b>Discharge time:</b> %s\n"
 msgstr "<b>Tiempo de descarga:</b> %s\n"
 
 #. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
-#: ../src/gpm-devicekit.c:275
+#: ../src/gpm-devicekit.c:273
 msgid "Excellent"
 msgstr "Excelente"
 
-#: ../src/gpm-devicekit.c:277
+#: ../src/gpm-devicekit.c:275
 msgid "Good"
 msgstr "Bueno"
 
-#: ../src/gpm-devicekit.c:279
+#: ../src/gpm-devicekit.c:277
 msgid "Fair"
 msgstr "Normal"
 
-#: ../src/gpm-devicekit.c:281
+#: ../src/gpm-devicekit.c:279
 msgid "Poor"
 msgstr "Pobre"
 
 #. Translators: %i is a percentage and %s the condition (Excellent, Good, ...)
-#: ../src/gpm-devicekit.c:284
+#: ../src/gpm-devicekit.c:282
 #, c-format
 msgid "<b>Capacity:</b> %.1f%% (%s)\n"
 msgstr "<b>Capacidad:</b> %.1f%% (%s)\n"
 
-#: ../src/gpm-devicekit.c:289
+#: ../src/gpm-devicekit.c:287
 #, c-format
 msgid "<b>Current charge:</b> %.1f Wh\n"
 msgstr "<b>Carga actual:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:293
+#: ../src/gpm-devicekit.c:291
 #, c-format
 msgid "<b>Last full charge:</b> %.1f Wh\n"
 msgstr "<b>Última carga completa:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:296
+#: ../src/gpm-devicekit.c:294
 #, c-format
 msgid "<b>Design charge:</b> %.1f Wh\n"
 msgstr "<b>Carga de diseño:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:299
+#: ../src/gpm-devicekit.c:297
 #, c-format
 msgid "<b>Charge rate:</b> %.1f W\n"
 msgstr "<b>Tasa de carga:</b> %.1f W\n"
 
-#: ../src/gpm-devicekit.c:305
+#: ../src/gpm-devicekit.c:303
 #, c-format
 msgid "<b>Current charge:</b> %.0f/7\n"
 msgstr "<b>Carga actual:</b> %.0f/7\n"
 
-#: ../src/gpm-devicekit.c:308
+#: ../src/gpm-devicekit.c:306
 #, c-format
 msgid "<b>Design charge:</b> %.0f/7\n"
 msgstr "<b>Carga de diseño:</b> %.0f/7\n"
 
-#: ../src/gpm-devicekit.c:326
+#: ../src/gpm-devicekit.c:324
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "Adaptador de corriente"
 msgstr[1] "Adaptadores de corriente"
 
-#: ../src/gpm-devicekit.c:329
+#: ../src/gpm-devicekit.c:327
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "Batería de portátil"
 msgstr[1] "Baterías de portátiles"
 
-#: ../src/gpm-devicekit.c:332
+#: ../src/gpm-devicekit.c:330
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "SAI (UPS)"
 msgstr[1] "SAI (UPS)"
 
-#: ../src/gpm-devicekit.c:335
+#: ../src/gpm-devicekit.c:333
 msgid "Monitor"
 msgid_plural "Monitors"
 msgstr[0] "Monitor"
 msgstr[1] "Monitores"
 
-#: ../src/gpm-devicekit.c:338
+#: ../src/gpm-devicekit.c:336
 msgid "Wireless mouse"
 msgid_plural "Wireless mice"
 msgstr[0] "Ratón inalámbrico"
 msgstr[1] "Ratones inalámbricos"
 
-#: ../src/gpm-devicekit.c:341
+#: ../src/gpm-devicekit.c:339
 msgid "Wireless keyboard"
 msgid_plural "Wireless keyboards"
 msgstr[0] "Teclado inalámbrico"
 msgstr[1] "Teclados inalámbricos"
 
-#: ../src/gpm-devicekit.c:344
+#: ../src/gpm-devicekit.c:342
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "PDA"
 msgstr[1] "PDA"
 
-#: ../src/gpm-devicekit.c:347
+#: ../src/gpm-devicekit.c:345
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "Teléfono móvil"
 msgstr[1] "Teléfonos móviles"
 
-#: ../src/gpm-devicekit.c:404
+#: ../src/gpm-devicekit.c:402
 msgid "Lithium Ion"
 msgstr "Ion litio"
 
-#: ../src/gpm-devicekit.c:407
+#: ../src/gpm-devicekit.c:405
 msgid "Lithium Polymer"
 msgstr "Polímero de litio"
 
-#: ../src/gpm-devicekit.c:410
+#: ../src/gpm-devicekit.c:408
 msgid "Lithium Iron Phosphate"
 msgstr "Fosfato de litio hierro"
 
-#: ../src/gpm-devicekit.c:413
+#: ../src/gpm-devicekit.c:411
 msgid "Lead acid"
 msgstr "Plomo y ácido"
 
-#: ../src/gpm-devicekit.c:416
+#: ../src/gpm-devicekit.c:414
 msgid "Nickel Cadmium"
 msgstr "Níquel cadmio"
 
-#: ../src/gpm-devicekit.c:419
+#: ../src/gpm-devicekit.c:417
 msgid "Nickel metal hydride"
 msgstr "Híbrido de níquel metal"
 
-#: ../src/gpm-devicekit.c:422
+#: ../src/gpm-devicekit.c:420
 msgid "Unknown technology"
 msgstr "Tecnología desconocida"
 
@@ -1662,7 +1664,8 @@ msgstr "Varias aplicaciones han impedido que la acción de reinicio se ejecute."
 msgid "Multiple applications have stopped the shutdown from taking place."
 msgstr "Varias aplicaciones han impedido que la acción de apagado se ejecute."
 
-#: ../src/gpm-main.c:136 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1262
+#. TRANSLATORS: show verbose debugging
+#: ../src/gpm-main.c:136 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1340
 msgid "Show extra debugging information"
 msgstr "Muestra información adicional de depuración"
 
@@ -2336,134 +2339,172 @@ msgstr "Tecnología"
 msgid "Online"
 msgstr "En línea"
 
-#: ../src/gpm-statistics.c:711 ../src/gpm-statistics.c:713
+#. TRANSLATORS: the command line was not provided
+#: ../src/gpm-statistics.c:678
+msgid "No data"
+msgstr "Sin datos"
+
+#. TRANSLATORS: kernel module, usually a device driver
+#: ../src/gpm-statistics.c:685 ../src/gpm-statistics.c:690
 msgid "Kernel module"
 msgstr "Módulo del kernel"
 
-#: ../src/gpm-statistics.c:715
+#. TRANSLATORS: kernel housekeeping
+#: ../src/gpm-statistics.c:695
 msgid "Kernel core"
 msgstr "Core del núcleo"
 
-#: ../src/gpm-statistics.c:717
+#. TRANSLATORS: interrupt between processors
+#: ../src/gpm-statistics.c:700
 msgid "Interprocessor interrupt"
 msgstr "Interrupción entre procesadores"
 
-#: ../src/gpm-statistics.c:719
+#. TRANSLATORS: unknown interrupt
+#: ../src/gpm-statistics.c:705
 msgid "Interrupt"
 msgstr "Interrupción"
 
-#: ../src/gpm-statistics.c:729
+#. TRANSLATORS: the keyboard and mouse device event
+#: ../src/gpm-statistics.c:748
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "Teclado/ratón/touchpad PS/2"
 
-#: ../src/gpm-statistics.c:731
+#. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
+#: ../src/gpm-statistics.c:751
 msgid "ACPI"
 msgstr "ACPI"
 
-#: ../src/gpm-statistics.c:733
+#. TRANSLATORS: serial ATA is a new style of hard disk interface
+#: ../src/gpm-statistics.c:754
 msgid "Serial ATA"
 msgstr "Serial ATA"
 
-#: ../src/gpm-statistics.c:735
+#. TRANSLATORS: this is the old-style ATA interface
+#: ../src/gpm-statistics.c:757
 msgid "ATA host controller"
 msgstr "Controlador ATA del equipo"
 
-#: ../src/gpm-statistics.c:737
+#. TRANSLATORS: 802.11 wireless adaptor
+#: ../src/gpm-statistics.c:760
 msgid "Intel wireless adaptor"
 msgstr "Adaptador inalámbrico Intel"
 
-#: ../src/gpm-statistics.c:741 ../src/gpm-statistics.c:743
-#: ../src/gpm-statistics.c:745
+#. TRANSLATORS: a timer is something that fires periodically
+#: ../src/gpm-statistics.c:765 ../src/gpm-statistics.c:768
+#: ../src/gpm-statistics.c:771
 #, c-format
-#| msgid "Time elapsed"
 msgid "Timer %s"
 msgstr ""
 
-#: ../src/gpm-statistics.c:747
+#. TRANSLATORS: this is a task that's woken up from sleeping
+#: ../src/gpm-statistics.c:774
 #, c-format
 msgid "Sleep %s"
-msgstr ""
+msgstr "%s dormida"
 
-#: ../src/gpm-statistics.c:749
+#. TRANSLATORS: this is a new realtime task
+#: ../src/gpm-statistics.c:777
+#, c-format
+msgid "New task %s"
+msgstr "Tarea nueva %s"
+
+#. TRANSLATORS: this is a task thats woken to check state
+#: ../src/gpm-statistics.c:780
 #, c-format
 msgid "Wait %s"
-msgstr ""
+msgstr "%s en espera"
 
-#: ../src/gpm-statistics.c:751 ../src/gpm-statistics.c:753
+#. TRANSLATORS: a work queue is a list of work that has to be done
+#: ../src/gpm-statistics.c:783 ../src/gpm-statistics.c:786
 #, c-format
 msgid "Work queue %s"
 msgstr "Cola de trabajo %s"
 
-#: ../src/gpm-statistics.c:755
+#. TRANSLATORS: this is when the networking subsystem clears out old entries
+#: ../src/gpm-statistics.c:789
 #, c-format
 msgid "Network route flush %s"
 msgstr ""
 
-#: ../src/gpm-statistics.c:757
+#. TRANSLATORS: activity on the USB bus
+#: ../src/gpm-statistics.c:792
 #, c-format
 msgid "USB activity %s"
 msgstr "Actividad del USB %s"
 
-#: ../src/gpm-statistics.c:759
-#| msgid "Interrupt"
+#. TRANSLATORS: we've timed out of an aligned timer
+#: ../src/gpm-statistics.c:795
+#, c-format
+#| msgid "Wakeups"
+msgid "Wakeup %s"
+msgstr ""
+
+#. TRANSLATORS: interupts on the system required for basic operation
+#: ../src/gpm-statistics.c:798
 msgid "Local interrupts"
 msgstr "Interrupciones locales"
 
-#: ../src/gpm-statistics.c:761
+#. TRANSLATORS: interrupts when a task gets moved from one core to another
+#: ../src/gpm-statistics.c:801
 msgid "Rescheduling interrupts"
 msgstr "Planificando de nuevo las interrupciones"
 
-#: ../src/gpm-statistics.c:838
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:911
 msgid "Device Information"
 msgstr "Información del dispositivo"
 
-#: ../src/gpm-statistics.c:839
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:913
 msgid "Device History"
 msgstr "Histórico del dispositivo"
 
-#: ../src/gpm-statistics.c:840
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:915
 msgid "Device Profile"
 msgstr "Perfil del dispositivo"
 
-#: ../src/gpm-statistics.c:841
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:917
 msgid "Processor Wakeups"
 msgstr "Recuperaciones del procesador"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1072 ../src/gpm-statistics.c:1078
-#: ../src/gpm-statistics.c:1084 ../src/gpm-statistics.c:1090
+#: ../src/gpm-statistics.c:1149 ../src/gpm-statistics.c:1155
+#: ../src/gpm-statistics.c:1161 ../src/gpm-statistics.c:1167
 msgid "Time elapsed"
 msgstr "Tiempo transcurrido"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1074
+#: ../src/gpm-statistics.c:1151
 msgid "Power"
 msgstr "Energía"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1080 ../src/gpm-statistics.c:1123
-#: ../src/gpm-statistics.c:1129 ../src/gpm-statistics.c:1135
-#: ../src/gpm-statistics.c:1141
+#: ../src/gpm-statistics.c:1157 ../src/gpm-statistics.c:1200
+#: ../src/gpm-statistics.c:1206 ../src/gpm-statistics.c:1212
+#: ../src/gpm-statistics.c:1218
 msgid "Cell charge"
 msgstr "Carga de la celda"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1086 ../src/gpm-statistics.c:1092
+#: ../src/gpm-statistics.c:1163 ../src/gpm-statistics.c:1169
 msgid "Predicted time"
 msgstr "Tiempo estimado"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1125 ../src/gpm-statistics.c:1137
+#: ../src/gpm-statistics.c:1202 ../src/gpm-statistics.c:1214
 msgid "Correction factor"
 msgstr "Factor de corrección"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1131 ../src/gpm-statistics.c:1143
+#: ../src/gpm-statistics.c:1208 ../src/gpm-statistics.c:1220
 msgid "Prediction accuracy"
 msgstr "Precisión de la estimación"
 
-#: ../src/gpm-statistics.c:1489
+#. TRANSLATORS: the icon for the CPU
+#: ../src/gpm-statistics.c:1569
 msgid "Processor"
 msgstr "Procesador"
 
