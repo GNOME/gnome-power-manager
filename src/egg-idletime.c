@@ -83,9 +83,9 @@ egg_idletime_xsync_alarm_set (EggIdletime *idletime, EggIdletimeAlarm *alarm, gb
 
 	/* which way do we do the test? */
 	if (positive)
-		test = XSyncPositiveComparison;
+		test = XSyncPositiveTransition;
 	else
-		test = XSyncNegativeComparison;
+		test = XSyncNegativeTransition;
 
 	XSyncIntToValue (&delta, 0);
 

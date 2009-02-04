@@ -1,3 +1,9 @@
+2009-02-04  Adam Jackson  <ajax@redhat.com>
+
+	* src/egg-idletime.c: (egg_idletime_xsync_alarm_set):
+	Ask for edge triggers on system idle time, not level triggers.
+	The latter lead to wakeup storms and sadness.
+
 2009-02-04  Richard Hughes  <richard@hughsie.com>
 
 	* configure.ac:
