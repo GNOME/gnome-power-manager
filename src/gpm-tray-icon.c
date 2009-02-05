@@ -1,7 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
  * Copyright (C) 2005 William Jon McCann <mccann@jhu.edu>
- * Copyright (C) 2005-2007 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2005-2009 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -62,7 +62,6 @@ struct GpmTrayIconPrivate
 	GpmNotify		*notify;
 	GpmEngine		*engine;
 	GtkStatusIcon		*status_icon;
-	gboolean		 is_visible;
 	gboolean		 show_suspend;
 	gboolean		 show_hibernate;
 	gboolean		 show_context_menu;
@@ -74,23 +73,16 @@ enum {
 	LAST_SIGNAL
 };
 
-enum {
-	PROP_0,
-	PROP_MODE
-};
-
-static guint	 signals [LAST_SIGNAL] = { 0 };
+static guint signals [LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (GpmTrayIcon, gpm_tray_icon, G_TYPE_OBJECT)
 
 /**
  * gpm_tray_icon_enable_suspend:
- * @icon: This TrayIcon class instance
  * @enabled: If we should enable (i.e. show) the suspend icon
  **/
 static void
-gpm_tray_icon_enable_suspend (GpmTrayIcon *icon,
-			      gboolean     enabled)
+gpm_tray_icon_enable_suspend (GpmTrayIcon *icon, gboolean enabled)
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
 	icon->priv->show_suspend = enabled;
@@ -98,20 +90,20 @@ gpm_tray_icon_enable_suspend (GpmTrayIcon *icon,
 
 /**
  * gpm_tray_icon_enable_hibernate:
- * @icon: This TrayIcon class instance
  * @enabled: If we should enable (i.e. show) the hibernate icon
  **/
 static void
-gpm_tray_icon_enable_hibernate (GpmTrayIcon *icon,
-				gboolean     enabled)
+gpm_tray_icon_enable_hibernate (GpmTrayIcon *icon, gboolean enabled)
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
 	icon->priv->show_hibernate = enabled;
 }
 
+/**
+ * gpm_tray_icon_enable_context_menu:
+ **/
 static void
-gpm_tray_icon_enable_context_menu (GpmTrayIcon *icon,
-				   gboolean     enabled)
+gpm_tray_icon_enable_context_menu (GpmTrayIcon *icon, gboolean enabled)
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
 	icon->priv->show_context_menu = enabled;
@@ -119,27 +111,21 @@ gpm_tray_icon_enable_context_menu (GpmTrayIcon *icon,
 
 /**
  * gpm_tray_icon_show:
- * @icon: This TrayIcon class instance
  * @enabled: If we should show the tray
  **/
 static void
-gpm_tray_icon_show (GpmTrayIcon *icon,
-		    gboolean     enabled)
+gpm_tray_icon_show (GpmTrayIcon *icon, gboolean enabled)
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
-
 	gtk_status_icon_set_visible (GTK_STATUS_ICON (icon->priv->status_icon), enabled);
-	icon->priv->is_visible = enabled != FALSE;
 }
 
 /**
  * gpm_tray_icon_set_tooltip:
- * @icon: This TrayIcon class instance
  * @tooltip: The tooltip text, e.g. "Batteries fully charged"
  **/
 gboolean
-gpm_tray_icon_set_tooltip (GpmTrayIcon  *icon,
-			   const gchar  *tooltip)
+gpm_tray_icon_set_tooltip (GpmTrayIcon *icon, const gchar *tooltip)
 {
 	g_return_val_if_fail (icon != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_TRAY_ICON (icon), FALSE);
@@ -155,7 +141,6 @@ gpm_tray_icon_set_tooltip (GpmTrayIcon  *icon,
 
 /**
  * gpm_tray_icon_set_image_from_stock:
- * @icon: This TrayIcon class instance
  * @filename: The icon name, e.g. GPM_STOCK_APP_ICON, or NULL to remove.
  *
  * Loads a pixmap from disk, and sets as the tooltip icon
@@ -242,7 +227,6 @@ out:
 /**
  * gpm_tray_icon_hibernate_cb:
  * @action: A valid GtkAction
- * @icon: This TrayIcon class instance
  **/
 static void
 gpm_tray_icon_hibernate_cb (GtkMenuItem *item, gpointer data)
@@ -255,7 +239,6 @@ gpm_tray_icon_hibernate_cb (GtkMenuItem *item, gpointer data)
 /**
  * gpm_tray_icon_suspend_cb:
  * @action: A valid GtkAction
- * @icon: This TrayIcon class instance
  **/
 static void
 gpm_tray_icon_suspend_cb (GtkMenuItem *item, gpointer data)
@@ -268,37 +251,32 @@ gpm_tray_icon_suspend_cb (GtkMenuItem *item, gpointer data)
 /**
  * gpm_tray_icon_show_statistics_cb:
  * @action: A valid GtkAction
- * @icon: This TrayIcon class instance
  **/
 static void
 gpm_tray_icon_show_statistics_cb (GtkMenuItem *item, gpointer data)
 {
 	const gchar *command = "gnome-power-statistics";
 
-	if (g_spawn_command_line_async (command, NULL) == FALSE) {
+	if (g_spawn_command_line_async (command, NULL) == FALSE)
 		egg_warning ("Couldn't execute command: %s", command);
-	}
 }
 
 /**
  * gpm_tray_icon_show_preferences_cb:
  * @action: A valid GtkAction
- * @icon: This TrayIcon class instance
  **/
 static void
 gpm_tray_icon_show_preferences_cb (GtkMenuItem *item, gpointer data)
 {
 	const gchar *command = "gnome-power-preferences";
 
-	if (g_spawn_command_line_async (command, NULL) == FALSE) {
+	if (g_spawn_command_line_async (command, NULL) == FALSE)
 		egg_warning ("Couldn't execute command: %s", command);
-	}
 }
 
 /**
  * gpm_tray_icon_show_help_cb:
  * @action: A valid GtkAction
- * @icon: This TrayIcon class instance
  **/
 static void
 gpm_tray_icon_show_help_cb (GtkMenuItem *item, gpointer data)
@@ -309,7 +287,6 @@ gpm_tray_icon_show_help_cb (GtkMenuItem *item, gpointer data)
 /**
  * gpm_tray_icon_show_about_cb:
  * @action: A valid GtkAction
- * @icon: This TrayIcon class instance
  **/
 static void
 gpm_tray_icon_show_about_cb (GtkMenuItem *item, gpointer data)
@@ -345,9 +322,8 @@ gpm_tray_icon_show_about_cb (GtkMenuItem *item, gpointer data)
 	char	    *license_trans;
 
 	/* Translators comment: put your own name here to appear in the about dialog. */
-  	if (!strcmp (translators, "translator-credits")) {
+  	if (!strcmp (translators, "translator-credits"))
 		translators = NULL;
-	}
 
 	license_trans = g_strconcat (_(license[0]), "\n\n", _(license[1]), "\n\n",
 				     _(license[2]), "\n\n", _(license[3]), "\n",  NULL);
@@ -372,7 +348,6 @@ gpm_tray_icon_show_about_cb (GtkMenuItem *item, gpointer data)
 /**
  * gpm_tray_icon_popup_cleared_cd:
  * @widget: The popup Gtkwidget
- * @icon: This TrayIcon class instance
  *
  * We have to re-enable the tooltip when the popup is removed
  **/
@@ -529,7 +504,6 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon, GtkMenu *menu, const GPtrArray *arr
 /**
  * gpm_tray_icon_activate_cb:
  * @button: Which buttons are pressed
- * @icon: This TrayIcon class instance
  *
  * Callback when the icon is clicked
  **/
@@ -633,7 +607,6 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 
 /**
  * gpm_tray_icon_init:
- * @icon: This TrayIcon class instance
  *
  * Initialise the tray object
  **/
@@ -682,8 +655,6 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 
 	allowed_in_menu = gconf_client_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_CONTEXT_MENU, NULL);
 	gpm_tray_icon_enable_context_menu (icon, allowed_in_menu);
-
-	gpm_tray_icon_show (GPM_TRAY_ICON (icon), FALSE);
 }
 
 /**
@@ -721,3 +692,4 @@ gpm_tray_icon_new (void)
 	tray_icon = g_object_new (GPM_TYPE_TRAY_ICON, NULL);
 	return GPM_TRAY_ICON (tray_icon);
 }
+

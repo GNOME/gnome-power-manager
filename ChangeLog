@@ -1,3 +1,21 @@
+2009-02-05  Richard Hughes  <richard@hughsie.com>
+
+	* src/Makefile.am:
+	Correct the log file name to be actually usefull.
+
+	* src/gpm-engine.c: (gpm_engine_recalculate_state_icon):
+	Don't clear the icon after 2 seconds, as we have a daemon and kernel
+	that doesn't need userspace bodges.
+
+	* src/gpm-tray-icon.c: (gpm_tray_icon_enable_suspend),
+	(gpm_tray_icon_enable_hibernate),
+	(gpm_tray_icon_enable_context_menu), (gpm_tray_icon_show),
+	(gpm_tray_icon_set_tooltip), (gpm_tray_icon_show_statistics_cb),
+	(gpm_tray_icon_show_preferences_cb), (gpm_tray_icon_show_about_cb),
+	(gpm_tray_icon_init):
+	Don't unconditionally clear the icon on startup to try to prevent
+	the race on startup with newer versions of gnome-panel.
+
 2009-02-04  Adam Jackson  <ajax@redhat.com>
 
 	* src/egg-idletime.c: (egg_idletime_xsync_alarm_set):

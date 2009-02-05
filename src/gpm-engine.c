@@ -344,26 +344,6 @@ gpm_engine_get_icon (GpmEngine *engine)
 	return g_strdup (GPM_STOCK_AC_ADAPTER);
 }
 
-#if 0
-//		egg_debug ("** EMIT: perhaps-recall");
-//		g_signal_emit (engine, signals [PERHAPS_RECALL], 0, kind, oem_vendor, website);
-#endif
-
-/**
- * gpm_engine_icon_clear_delay:
- *
- * We don't send the action for the icon to clear for a few seconds so that
- * any notification can be shown pointing to the icon.
- *
- * Return value: FALSE, as we don't want to repeat this action.
- **/
-static gboolean
-gpm_engine_icon_clear_delay (GpmEngine *engine)
-{
-	g_signal_emit (engine, signals [ICON_CHANGED], 0, NULL);
-	return FALSE;
-}
-
 /**
  * gpm_engine_recalculate_state_icon:
  */
@@ -383,9 +363,7 @@ gpm_engine_recalculate_state_icon (GpmEngine *engine)
 			return FALSE;
 		/* icon before, now none */
 		egg_debug ("** EMIT: icon-changed: none");
-
-		/* we let the icon stick around for a couple of seconds */
-		g_timeout_add_seconds (2, (GSourceFunc) gpm_engine_icon_clear_delay, engine);
+		g_signal_emit (engine, signals [ICON_CHANGED], 0, NULL);
 
 		g_free (engine->priv->previous_icon);
 		engine->priv->previous_icon = NULL;
