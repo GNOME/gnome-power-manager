@@ -766,6 +766,12 @@ gpm_stats_format_details (const DkpWakeupsObj *obj)
 	} else if (g_str_has_prefix (obj->details, "mod_timer")) {
 		/* TRANSLATORS: a timer is something that fires periodically */
 		details = g_strdup_printf (_("Timer %s"), obj->details+10);
+	} else if (g_str_has_prefix (obj->details, "hrtimer_start_expires")) {
+		/* TRANSLATORS: a timer is something that fires periodically */
+		details = g_strdup_printf (_("Timer %s"), obj->details+22);
+	} else if (g_str_has_prefix (obj->details, "hrtimer_start")) {
+		/* TRANSLATORS: a timer is something that fires periodically */
+		details = g_strdup_printf (_("Timer %s"), obj->details+14);
 	} else if (g_str_has_prefix (obj->details, "do_setitimer")) {
 		/* TRANSLATORS: a timer is something that fires periodically */
 		details = g_strdup_printf (_("Timer %s"), obj->details+10);
