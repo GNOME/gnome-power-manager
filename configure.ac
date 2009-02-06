@@ -646,6 +646,10 @@ data/icons/24x24/Makefile
 data/icons/24x24/actions/Makefile
 data/icons/24x24/apps/Makefile
 data/icons/24x24/status/Makefile
+data/icons/32x32/Makefile
+data/icons/32x32/actions/Makefile
+data/icons/32x32/apps/Makefile
+data/icons/32x32/status/Makefile
 data/icons/48x48/Makefile
 data/icons/48x48/actions/Makefile
 data/icons/48x48/apps/Makefile
