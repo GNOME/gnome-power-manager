@@ -98,7 +98,7 @@ gpm_devicekit_get_object_icon (const DkpObject *obj)
 			index_str = gpm_devicekit_get_object_icon_index (obj);
 			filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index_str);
 
-		} else {
+		} else if (obj->state == DKP_DEVICE_STATE_DISCHARGING) {
 			index_str = gpm_devicekit_get_object_icon_index (obj);
 			filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 		}
@@ -112,7 +112,7 @@ gpm_devicekit_get_object_icon (const DkpObject *obj)
 		} else if (obj->state == DKP_DEVICE_STATE_FULLY_CHARGED) {
 			filename = g_strdup_printf ("gpm-%s-100", prefix);
 
-		} else {
+		} else if (obj->state == DKP_DEVICE_STATE_DISCHARGING) {
 			index_str = gpm_devicekit_get_object_icon_index (obj);
 			filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 		}

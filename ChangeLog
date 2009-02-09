@@ -1,5 +1,10 @@
 2009-02-09  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-devicekit.c: (gpm_devicekit_get_object_icon):
+	Don't show the discharging icon when the status is unknown.
+
+2009-02-09  Richard Hughes  <richard@hughsie.com>
+
 	* configure.ac:
 	Add Wno-strict-aliasing to fix the compile thanks to GCC 4.4
 
