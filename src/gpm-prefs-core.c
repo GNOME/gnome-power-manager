@@ -1055,7 +1055,8 @@ gpm_prefs_init (GpmPrefs *prefs)
 	prefs->priv->has_ambient = ((caps & GPM_PREFS_SERVER_AMBIENT) > 0);
 	prefs->priv->has_button_lid = ((caps & GPM_PREFS_SERVER_LID) > 0);
 	prefs->priv->has_button_suspend = TRUE;
-	prefs->priv->can_shutdown = gpm_dbus_method_bool ("CanShutdown");
+	/* TODO: use DeviceKit-power */
+	prefs->priv->can_shutdown = TRUE;
 	prefs->priv->can_suspend = gpm_dbus_method_bool ("CanSuspend");
 	prefs->priv->can_hibernate = gpm_dbus_method_bool ("CanHibernate");
 	egg_debug ("caps=%i", caps);
