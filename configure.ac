@@ -54,6 +54,7 @@ if test "$GCC" = "yes"; then
 #	WARNINGFLAGS="$WARNINGFLAGS -Wswitch-enum"
 	WARNINGFLAGS="$WARNINGFLAGS -Wmissing-parameter-type"
 	WARNINGFLAGS="$WARNINGFLAGS -Woverride-init"
+	WARNINGFLAGS="$WARNINGFLAGS -Wno-strict-aliasing"
 else
 	WARNINGFLAGS=""
 	WARNINGFLAGS=""
