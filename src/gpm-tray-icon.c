@@ -117,7 +117,7 @@ static void
 gpm_tray_icon_show (GpmTrayIcon *icon, gboolean enabled)
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
-	gtk_status_icon_set_visible (GTK_STATUS_ICON (icon->priv->status_icon), enabled);
+	gtk_status_icon_set_visible (icon->priv->status_icon, enabled);
 }
 
 /**
@@ -132,9 +132,9 @@ gpm_tray_icon_set_tooltip (GpmTrayIcon *icon, const gchar *tooltip)
 	g_return_val_if_fail (tooltip != NULL, FALSE);
 
 #if GTK_CHECK_VERSION(2,15,0)
-	gtk_status_icon_set_tooltip_text (GTK_STATUS_ICON (icon->priv->status_icon), tooltip);
+	gtk_status_icon_set_tooltip_text (icon->priv->status_icon, tooltip);
 #else
-	gtk_status_icon_set_tooltip (GTK_STATUS_ICON (icon->priv->status_icon), tooltip);
+	gtk_status_icon_set_tooltip (icon->priv->status_icon, tooltip);
 #endif
 	return TRUE;
 }
@@ -153,7 +153,7 @@ gpm_tray_icon_set_icon (GpmTrayIcon *icon, const gchar *filename)
 
 	if (filename != NULL) {
 		egg_debug ("Setting icon to %s", filename);
-		gtk_status_icon_set_from_icon_name (GTK_STATUS_ICON (icon->priv->status_icon), filename);
+		gtk_status_icon_set_from_icon_name (icon->priv->status_icon, filename);
 
 		/* make sure that we are visible */
 		gpm_tray_icon_show (icon, TRUE);
