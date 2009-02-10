@@ -56,6 +56,9 @@ GpmSession	*gpm_session_new			(void);
 gboolean	 gpm_session_logout			(GpmSession	*session);
 gboolean	 gpm_session_get_idle			(GpmSession	*session);
 gboolean	 gpm_session_get_inhibited		(GpmSession	*session);
+gboolean	 gpm_session_register_client		(GpmSession	*session,
+							 const gchar	*app_id,
+							 const gchar	*client_startup_id);
 
 G_END_DECLS
 

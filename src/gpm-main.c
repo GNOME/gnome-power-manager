@@ -39,10 +39,12 @@
 
 #include "gpm-stock-icons.h"
 #include "gpm-common.h"
-#include "egg-debug.h"
-
 #include "gpm-manager.h"
+#include "gpm-session.h"
+
 #include "org.freedesktop.PowerManagement.h"
+
+#include "egg-debug.h"
 
 /**
  * gpm_object_register:
@@ -127,6 +129,7 @@ main (int argc, char *argv[])
 	gboolean version = FALSE;
 	gboolean timed_exit = FALSE;
 	gboolean immediate_exit = FALSE;
+	GpmSession *session = NULL;
 	GpmManager *manager = NULL;
 	GError *error = NULL;
 	GOptionContext *context;
@@ -200,6 +203,10 @@ main (int argc, char *argv[])
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
                                            GPM_DATA G_DIR_SEPARATOR_S "icons");
 
+	/* we have to register with the session as we are starting up with the panel */
+	session = gpm_session_new ();
+	gpm_session_register_client (session, "gnome-power-manager", getenv ("DESKTOP_AUTOSTART_ID"));
+
 	/* create a new gui object */
 	manager = gpm_manager_new ();
 
@@ -222,6 +229,7 @@ main (int argc, char *argv[])
 
 	g_main_loop_unref (loop);
 
+	g_object_unref (session);
 	g_object_unref (manager);
 unref_program:
 	g_option_context_free (context);

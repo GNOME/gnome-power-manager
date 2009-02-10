@@ -180,6 +180,34 @@ gpm_session_is_inhibited (GpmSession *session)
 }
 
 /**
+ * gpm_session_register_client:
+ **/
+gboolean
+gpm_session_register_client (GpmSession *session, const gchar *app_id, const gchar *client_startup_id)
+{
+	gboolean ret;
+	gchar *client_id = NULL;
+	GError *error = NULL;
+
+	g_return_val_if_fail (GPM_IS_SESSION (session), FALSE);
+
+	/* find out if this change altered the inhibited state */
+	ret = dbus_g_proxy_call (session->priv->proxy, "RegisterClient", &error,
+				 G_TYPE_STRING, app_id,
+				 G_TYPE_STRING, client_startup_id,
+				 G_TYPE_INVALID,
+				 DBUS_TYPE_G_OBJECT_PATH, &client_id,
+				 G_TYPE_INVALID);
+	if (!ret) {
+		egg_warning ("failed to register client '%s': %s", client_startup_id, error->message);
+		g_error_free (error);
+	}
+	egg_debug ("registered startup '%s' to client id '%s'", client_startup_id, client_id);
+	g_free (client_id);
+	return ret;
+}
+
+/**
  * gpm_session_inhibit_changed_cb:
  **/
 static void
