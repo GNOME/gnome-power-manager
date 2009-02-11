@@ -1,3 +1,35 @@
+===============
+Version 2.25.91
+===============
+
+- Fixed #545886, Hard-to-distinguish charge levels for charging icons (Richard Hughes)
+- Fixed #568756, Install the autostart file in the xdg directory (Richard Hughes)
+- Fixed #545886, Add 32x32 icons, and make sure all charging icons are blue (Lapo Calamandrei)
+- Fixed #570242, Add some translator comments to the new stats interface (Richard Hughes)
+- Fixed #570254, Used new icons in 16, 22, and 24 sizes in on-shelf perspective (Andreas Nilsson)
+- Fixed problem where the icon would not show on startup or when the notification try was reloaded (Richard Hughes)
+- Start in the GNOME Panel phase, not the GNOME Applications phase so we work with the fast user switch applet (Richard Hughes)
+- Don't show the discharging icon when the status is unknown (Richard Hughes)
+- Remove translatable flag from gtk-refresh stock button (Gabor Kelemen)
+- Ask for edge triggers on system idle time, not level triggers (Adam Jackson)
+- Add a configure option for --enable-legacy-buttons to support HAL and Xorg keys. By default we are now only supporting Xorg events (Richard Hughes)
+- Fix compile failure with gcc-4.4.0 and old versions of glib2 (Richard Hughes)
+
+Translations:
+- Updated ast: Gil Forcada, Astur
+- Updated es: Jorge González, Jorge Gonzalez
+- Updated gu: Sweta Kothari
+- Updated hu: Gabor Kelemen
+- Updated nb: Kjartan Maraas
+- Updated te: Krishnababu K, Krishna Babu K
+- Updated vi: Clytie Siddall
+- Updated zh_HK: Chao-Hsiung Liao
+- Updated zh_TW: Chao-Hsiung Liao
+
+Help Manual Translations:
+- Updated de: Mario Blättermann
+- Updated sv: Daniel Nylander
+
 ==============
 Version 2.25.3
 ==============
