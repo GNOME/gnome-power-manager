@@ -389,13 +389,7 @@ egg_idletime_init (EggIdletime *idletime)
 
 	idletime->priv->reset_set = FALSE;
 
-	/* only match on XSyncAlarmNotifyMask */
-	gdk_error_trap_push ();
-	XSelectInput (idletime->priv->dpy, GDK_ROOT_WINDOW (), XSyncAlarmNotifyMask);
-	if (gdk_error_trap_pop ())
-		g_warning ("XSelectInput failed");
-
-	/* this is where we want events */
+	/* catch the timer alarm */
 	gdk_window_add_filter (NULL, egg_idletime_x_event_filter, idletime);
 
 	/* create a reset alarm */

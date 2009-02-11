@@ -1,3 +1,17 @@
+2009-02-11  Richard Hughes  <richard@hughsie.com>
+
+	* data/Makefile.am:
+	Install the autostart file in the xdg directory, not the legacy
+	GNOME directory.
+
+	* data/gnome-power-manager.desktop.in.in:
+	Disable X-GNOME-AutoRestart for now as it makes debugging impossible.
+
+	* src/egg-idletime.c: (egg_idletime_init):
+	Remove the XSelectInput mask of XSyncAlarmNotifyMask otherwise we
+	filter the reparent of the notification icon and don't show an icon at
+	startup.
+
 2009-02-10  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-tray-icon.c: (gpm_tray_icon_show),
