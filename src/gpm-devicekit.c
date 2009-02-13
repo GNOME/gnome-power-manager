@@ -278,7 +278,7 @@ gpm_devicekit_get_object_description (const DkpObject *obj)
 		} else {
 			condition = _("Poor");
 		}
-		/* Translators: %i is a percentage and %s the condition (Excellent, Good, ...) */
+		/* Translators: %.1f is a percentage and %s the condition (Excellent, Good, ...) */
 		g_string_append_printf (details, _("<b>Capacity:</b> %.1f%% (%s)\n"),
 					obj->capacity, condition);
 	}
