@@ -291,6 +291,7 @@ gpm_devicekit_get_object_description (const DkpObject *obj)
 			g_string_append_printf (details, _("<b>Last full charge:</b> %.1f Wh\n"),
 						obj->energy_full);
 		if (obj->energy_full_design > 0)
+			/* Translators: Design charge is the amount of charge the battery is designed to have when brand new */
 			g_string_append_printf (details, _("<b>Design charge:</b> %.1f Wh\n"),
 						obj->energy_full_design);
 		if (obj->energy_rate > 0)
