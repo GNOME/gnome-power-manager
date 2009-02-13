@@ -959,20 +959,6 @@ gpm_stats_notebook_changed_cb (GtkNotebook *notebook, GtkNotebookPage *page, gin
 }
 
 /**
- * gpm_stats_button_refresh_cb:
- **/
-static void
-gpm_stats_button_refresh_cb (GtkWidget *widget, gpointer data)
-{
-	DkpDevice *device;
-	device = dkp_device_new ();
-	dkp_device_set_object_path (device, current_device);
-	dkp_device_refresh (device);
-	gpm_stats_update_info_data (device);
-	g_object_unref (device);
-}
-
-/**
  * gpm_stats_button_update_ui:
  **/
 static void
@@ -1405,10 +1391,6 @@ main (int argc, char *argv[])
 	widget = glade_xml_get_widget (glade_xml, "button_help");
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_stats_button_help_cb), NULL);
-
-	widget = glade_xml_get_widget (glade_xml, "button_refresh");
-	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_stats_button_refresh_cb), NULL);
 
 	widget = glade_xml_get_widget (glade_xml, "checkbutton_smooth_history");
 	checked = gconf_client_get_bool (gconf_client, GPM_CONF_INFO_HISTORY_GRAPH_SMOOTH, NULL);
