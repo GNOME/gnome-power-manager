@@ -13,6 +13,7 @@
 # AC             - netstroom
 # battery        - accu/accustroom
 # hibernate      - slaapstand
+# lid            - scherm  (vrij vertaald, want deksel en klep zijn erg lelijk)
 # suspend        - pauzestand
 # suspend button - pauzeerknop
 #
@@ -20,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-13 23:54+0100\n"
+"POT-Creation-Date: 2009-02-13 23:58+0100\n"
 "PO-Revision-Date: 2009-02-13 23:55+0100\n"
 "Last-Translator: Wouter Bolsterlee <wbolster@gnome.org>\n"
 "Language-Team: Nederlands <vertaling@vrijschrift.org>\n"
@@ -314,7 +315,7 @@ msgid ""
 "If the battery event should occur when the lid is shut and the power "
 "disconnected"
 msgstr ""
-"Geeft aan of de accu-gebeurtenis plaats moet vinden als de laptopdeksel "
+"Geeft aan of de accu-gebeurtenis plaats moet vinden als het laptopscherm "
 "gesloten wordt en de netstroom niet aangesloten is"
 
 #: ../data/gnome-power-manager.schemas.in.h:26
@@ -323,9 +324,10 @@ msgid ""
 "closed on battery') when the lid is previously shut and the AC power "
 "disconnected at a later time."
 msgstr ""
-"Geeft aan of de sluitgebeurtenis moet plaatsvinden (bijvoorbeeld 'In "
-"slaapstand zetten bij sluiten van laptopdeksel tijdens accustroom') als de "
-"laptopdeksel gesloten werd en de netstroom later niet meer aangesloten is."
+"Geeft aan of de sluitgebeurtenis moet plaatsvinden (bijvoorbeeld ‘In "
+"slaapstand zetten bij sluiten van het laptopscherm tijdens accustroom’) als "
+"het laptopscherm gesloten werd en de netstroom later niet meer aangesloten "
+"is."
 
 #: ../data/gnome-power-manager.schemas.in.h:27
 msgid "If the learnt profile should be used to calculate the time remaining"
@@ -483,7 +485,7 @@ msgid ""
 msgstr ""
 "Geeft aan of de waarschuwing zal worden getoond bij een geldige verhindering "
 "terwijl is ingesteld dat de laptop in slaapstand gaat bij het sluiten van "
-"het deksel"
+"het scherm"
 
 #: ../data/gnome-power-manager.schemas.in.h:50
 msgid ""
@@ -492,7 +494,7 @@ msgid ""
 msgstr ""
 "Geeft aan of de waarschuwing zal worden getoond bij een geldige verhindering "
 "terwijl is ingesteld dat de laptop in slaapstand gaat bij het sluiten van "
-"het deksel."
+"het scherm."
 
 #: ../data/gnome-power-manager.schemas.in.h:51
 msgid "Keyboard brightness when on AC"
@@ -512,11 +514,11 @@ msgstr "LCD-helderheid bij accustroom"
 
 #: ../data/gnome-power-manager.schemas.in.h:55
 msgid "Laptop lid close action on battery"
-msgstr "Actie bij het sluiten van de laptopdeksel bij accustroom"
+msgstr "Actie bij het sluiten van het laptopscherm bij accustroom"
 
 #: ../data/gnome-power-manager.schemas.in.h:56
 msgid "Laptop lid close action when on AC"
-msgstr "Actie bij het sluiten van de laptopdeksel bij netstroom"
+msgstr "Actie bij het sluiten van het laptopscherm bij netstroom"
 
 #: ../data/gnome-power-manager.schemas.in.h:57
 msgid "Lock GNOME keyring on sleep"
@@ -664,7 +666,7 @@ msgid ""
 "power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
 "\"nothing\"."
 msgstr ""
-"De te nemen actie wanneer de laptopdeksel wordt gesloten tijdens netstroom. "
+"De te nemen actie wanneer het laptopscherm wordt gesloten tijdens netstroom. "
 "Mogelijke waarden zijn \"suspend\", \"hibernate\", \"blank\" en \"nothing\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:86
@@ -673,8 +675,9 @@ msgid ""
 "battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
 "and \"nothing\"."
 msgstr ""
-"De te nemen actie wanneer de laptopdeksel wordt gesloten tijdens accustroom. "
-"Geldige waarden zijn \"suspend\", \"hibernate\", \"blank\" en \"nothing\"."
+"De te nemen actie wanneer het laptopscherm wordt gesloten tijdens "
+"accustroom. Geldige waarden zijn \"suspend\", \"hibernate\", \"blank\" en "
+"\"nothing\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:87
 msgid ""
@@ -1170,7 +1173,7 @@ msgstr "<b>Mededelingengebied</b>"
 
 #: ../data/gpm-prefs.glade.h:5
 msgid "Always sleep when the lid is _closed"
-msgstr "Altijd in slaapstand bij _sluiten van deksel"
+msgstr "Altijd in slaapstand bij _sluiten van scherm"
 
 #: ../data/gpm-prefs.glade.h:6
 msgid "Di_m display when idle"
@@ -1256,7 +1259,7 @@ msgstr "_Wanneer accucapaciteit kritiek laag is:"
 
 #: ../data/gpm-prefs.glade.h:24
 msgid "When laptop lid is cl_osed:"
-msgstr "Wanneer laptopdeksel w_ordt gesloten:"
+msgstr "Wanneer laptopscherm w_ordt gesloten:"
 
 #: ../data/gpm-prefs.glade.h:25
 msgid "When the _suspend button is pressed:"
@@ -1802,11 +1805,11 @@ msgstr ""
 
 #: ../src/gpm-manager.c:777
 msgid "The lid has been closed on ac power."
-msgstr "Het deksel is gesloten tijdens netstroomgebruik."
+msgstr "Het scherm is gesloten tijdens netstroomgebruik."
 
 #: ../src/gpm-manager.c:806
 msgid "The lid has been closed on battery power."
-msgstr "het deksel is gesloten tijdens accustroomgebruik."
+msgstr "Het scherm is gesloten tijdens accustroomgebruik."
 
 #: ../src/gpm-manager.c:826
 msgid "Display DPMS activated"
@@ -1818,7 +1821,7 @@ msgstr "Op accustroom"
 
 #: ../src/gpm-manager.c:862
 msgid "Laptop lid is closed"
-msgstr "Laptopdeksel wordt gesloten"
+msgstr "Laptopscherm wordt gesloten"
 
 #: ../src/gpm-manager.c:886
 msgid "The power button has been pressed."
@@ -1840,7 +1843,7 @@ msgstr "Energie-informatie"
 msgid ""
 "The lid has been closed, and the ac adapter removed (and gconf is okay)."
 msgstr ""
-"Het deksel is gesloten en de adapter is verwijderd (en gconf is in orde)."
+"Het scherm is gesloten en de adapter is verwijderd (en gconf is in orde)."
 
 #: ../src/gpm-manager.c:1006
 msgid "Battery is critically low."
@@ -2114,10 +2117,10 @@ msgid ""
 "prevented this.\n"
 "Some laptops can overheat if they do not sleep when the lid is closed."
 msgstr ""
-"Uw laptop zal niet in de slaapstand gaan als u het laptopdeksel sluit omdat "
+"Uw laptop zal niet in de slaapstand gaan als u het laptopscherm sluit omdat "
 "dit momenteel wordt verhinderd.\n"
 "Sommige laptops kunnen oververhit raken als ze niet in de slaapstand gaan "
-"als het deksel wordt gesloten."
+"als het scherm wordt gesloten."
 
 #: ../src/gpm-notify.c:396
 msgid "Battery Charged"
@@ -2601,366 +2604,3 @@ msgstr "_Pauzestand"
 #: ../src/gpm-tray-icon.c:552
 msgid "Hi_bernate"
 msgstr "_Slaapstand"
-
-#~ msgid "Add related _events"
-#~ msgstr "Verwante g_ebeurtenissen toevoegen"
-
-#~ msgid "Time since startup"
-#~ msgstr "Tijd sinds opstarten"
-
-#~ msgid "The message was not sent due to DBUS security rules"
-#~ msgstr "Het bericht is niet verzonden vanwege veiligheidsregels van DBUS"
-
-#~ msgid "General failure"
-#~ msgstr "Algemene fout"
-
-#~ msgid "Computer is running on backup power\n"
-#~ msgstr "De computer gebruikt nu reservestroom\n"
-
-#~ msgid "Computer is running on AC power\n"
-#~ msgstr "De computer gebruikt nu netstroom\n"
-
-# draait/loopt op batterijen/gebruikt batterijen/batterijstroom
-#~ msgid "Computer is running on battery power\n"
-#~ msgstr "De computer gebruikt nu accustroom\n"
-
-#~ msgid "Battery discharge time is currently unknown\n"
-#~ msgstr "De ontlaadtijd van de accu is momenteel onbekend\n"
-
-#~ msgid "Battery charge time is currently unknown\n"
-#~ msgstr "De laadtijd van de accu is momenteel onbekend\n"
-
-#~ msgid "Battery discharge time is estimated\n"
-#~ msgstr "De ontlaadtijd van de accu is geschat\n"
-
-#~ msgid "Battery charge time is estimated\n"
-#~ msgstr "De laadtijd van de accu is geschat\n"
-
-#~ msgid "Unable to get data..."
-#~ msgstr "Kon geen gegevens verkrijgen..."
-
-#~ msgid "Reason: %s"
-#~ msgstr "Reden: %s"
-
-#~ msgid "On AC"
-#~ msgstr "Netstroom"
-
-#~ msgid "On battery"
-#~ msgstr "Accu"
-
-#~ msgid "Session powersave"
-#~ msgstr "Sessie energiebesparing"
-
-#~ msgid "Session idle"
-#~ msgstr "Sessie inactief"
-
-#~ msgid "Session active"
-#~ msgstr "Sessie actief"
-
-#~ msgid "label shown on graph|Suspend"
-#~ msgstr "Pauzestand"
-
-#~ msgid "label shown on graph|Resume"
-#~ msgstr "Hervatten"
-
-#~ msgid "label shown on graph|Hibernate"
-#~ msgstr "Slaapstand"
-
-#~ msgid "Notification"
-#~ msgstr "Mededeling"
-
-#~ msgid "DPMS On"
-#~ msgstr "DPMS aan"
-
-#~ msgid "DPMS Standby"
-#~ msgstr "DPMS standby"
-
-#~ msgid "DPMS Suspend"
-#~ msgstr "DPMS pauzestand"
-
-#~ msgid "DPMS Off"
-#~ msgstr "DPMS uit"
-
-#~ msgid "Battery percentage"
-#~ msgstr "Accupercentage"
-
-#~ msgid "Battery Voltage"
-#~ msgstr "Accuvoltage"
-
-#~ msgid "Accuracy of reading"
-#~ msgstr "Juistheid van lezen"
-
-#~ msgid "Trusted"
-#~ msgstr "Vertrouwd"
-
-#~ msgid "Untrusted"
-#~ msgstr "Niet vertrouwd"
-
-#~ msgid "Valid data"
-#~ msgstr "Geldige gegevens"
-
-#~ msgid "Extrapolated data"
-#~ msgstr "Extrapoleerde gegevens"
-
-#~ msgid "Stop point"
-#~ msgstr "Eindpunt"
-
-#~ msgid "AC adapter inserted"
-#~ msgstr "Netstroomadapter aangekoppeld"
-
-#~ msgid "The laptop lid has been closed"
-#~ msgstr "De laptopdeksel is gesloten"
-
-#~ msgid "The laptop lid has been re-opened"
-#~ msgstr "De laptopdeksel is opnieuw geopend"
-
-#~ msgid "idle mode ended"
-#~ msgstr "inactiviteitsmodus geëindigd"
-
-#~ msgid "idle mode started"
-#~ msgstr "inactiviteitsmodus gestart"
-
-#~ msgid "powersave mode started"
-#~ msgstr "energiebesparingsmodus gestart"
-
-#~ msgid "dpms on"
-#~ msgstr "dpms aan"
-
-#~ msgid "dpms standby"
-#~ msgstr "dpms standby"
-
-#~ msgid "dpms suspend"
-#~ msgstr "dpms pauzestand"
-
-#~ msgid "dpms off"
-#~ msgstr "dpms uit"
-
-#~ msgid "Resuming computer"
-#~ msgstr "Computer ontwaakt"
-
-# diepslaap/slaapstand
-#~ msgid "Hibernate Problem"
-#~ msgstr "Probleem met slaapstand"
-
-#~ msgid "Suspend Problem"
-#~ msgstr "Probleem met pauzestand"
-
-#~ msgid "Do not daemonize"
-#~ msgstr "Niet als daemon uitvoeren"
-
-#~ msgid "Request to reboot"
-#~ msgstr "Verzoek tot herstarten computer"
-
-#~ msgid "Request to shutdown"
-#~ msgstr "Verzoek tot afsluiten computer"
-
-#~ msgid "Action forbidden"
-#~ msgstr "Actie verboden"
-
-#~ msgid "Suspend is not available on this computer."
-#~ msgstr "De pauzestand is niet beschikbaar op deze computer."
-
-#~ msgid "Suspending computer."
-#~ msgstr "Computer wordt in de pauzestand gezet."
-
-#~ msgid "Hibernate is not available on this computer."
-#~ msgstr "De slaapstand is niet beschikbaar op uw computer."
-
-# diepslaap/slaapstand
-#~ msgid "Hibernating computer."
-#~ msgstr "Computer wordt in slaapstand gezet."
-
-#~ msgid "Doing nothing."
-#~ msgstr "Niets doen."
-
-#~ msgid "Shutting down computer."
-#~ msgstr "De computer wordt afgesloten."
-
-#~ msgid "GNOME interactive logout."
-#~ msgstr "Interactief uitloggen."
-
-#~ msgid "System idle."
-#~ msgstr "Systeeminactiviteit."
-
-#~ msgid "a short time"
-#~ msgstr "een korte tijd"
-
-#~ msgid "Unknown"
-#~ msgstr "Onbekend"
-
-#~ msgid "Laptop batteries"
-#~ msgstr "Laptop-accu's"
-
-#~ msgid "UPSs"
-#~ msgstr "UPS'en"
-
-#~ msgid "Wireless mice"
-#~ msgstr "Draadloze muizen"
-
-#~ msgid "Wireless keyboards"
-#~ msgstr "Draadloze toetsenborden"
-
-#~ msgid "PDAs"
-#~ msgstr "PDA's"
-
-#~ msgid "Cell phones"
-#~ msgstr "Mobiele telefoons"
-
-#~ msgid "GNOME Power Statistics"
-#~ msgstr "GNOME Energiestatistieken"
-
-#~ msgid "Charge history"
-#~ msgstr "Oplaadhistorie"
-
-# vrij vertaald (Wouter Bolsterlee & Rinse de Vries)
-#~ msgid "Power history"
-#~ msgstr "Spanninghistorie"
-
-#~ msgid "Voltage history"
-#~ msgstr "Voltagehistorie"
-
-#~ msgid "Estimated time history"
-#~ msgstr "Geschatte-tijd-historie"
-
-#~ msgid "Could not connect to GNOME Power Manager."
-#~ msgstr "Kon geen verbinding maken met GNOME Energiebeheer."
-
-#~ msgid ""
-#~ "If niced processes are considered, they can cause a frequency increment "
-#~ "even though their absolute load percentage wouldn't trigger the scaling "
-#~ "mechanism to switch up the frequency."
-#~ msgstr ""
-#~ "Geeft aan of processen met een hogere prioriteit worden overwogen. Deze "
-#~ "kunnen frequentietoename veroorzaken, zelfs als hun absolute "
-#~ "laadpercentage het schalingsmechanisme om de frequentie te verhogen niet "
-#~ "activeert."
-
-#~ msgid "If we should show the CPU frequency scaling in the UI"
-#~ msgstr ""
-#~ "Geeft aan of CPU-frequentieaanpassing in de gebruikersinterface getoond "
-#~ "moet worden"
-
-#~ msgid ""
-#~ "If we should show the CPU frequency scaling in the UI. Some people need "
-#~ "to configure this for specific systems."
-#~ msgstr ""
-#~ "Geeft aan of de frequentieschaling van de processor zal worden getoond. "
-#~ "Sommige personen dienen dit voor specifieke systemen in te stellen."
-
-#~ msgid "The cpufreq performance value to use when on AC power"
-#~ msgstr ""
-#~ "De waarde van de processorfrequentie om te gebruiken tijdens netstroom"
-
-#~ msgid "The cpufreq performance value to use when on battery power"
-#~ msgstr ""
-#~ "De waarde van de processorfrequentie om te gebruiken tijdens accustroom"
-
-#~ msgid ""
-#~ "The cpufreq performance value used to scale the processor when on AC "
-#~ "power."
-#~ msgstr ""
-#~ "De waarde voor de processorfrequentie gebruikt om de processor te schalen "
-#~ "tijdens netstroom."
-
-#~ msgid ""
-#~ "The cpufreq performance value used to scale the processor when on battery "
-#~ "power."
-#~ msgstr ""
-#~ "De waarde voor de processorfrequentie gebruikt om de processor te schalen "
-#~ "tijdens accustroom."
-
-#~ msgid "The cpufreq policy to use when on AC power"
-#~ msgstr ""
-#~ "Het beleid voor de processorfrequentie om te gebruiken tijdens netstroom"
-
-#~ msgid "The cpufreq policy to use when on battery power"
-#~ msgstr ""
-#~ "Het beleid voor de processorfrequentie om te gebruiken tijdens accustroom"
-
-#~ msgid ""
-#~ "The cpufreq policy used to scale the processor when on AC power. Possible "
-#~ "values are ondemand, conservative, powersave, userspace, performance, "
-#~ "nothing."
-#~ msgstr ""
-#~ "Het beleid voor de processorfrequentie dat gebruikt wordt om de processor "
-#~ "te schalen tijdens netstroom. Mogelijke waarden zijn ondemand, "
-#~ "conservative, powersave, userspace, performance, nothing."
-
-#~ msgid ""
-#~ "The cpufreq policy used to scale the processor when on battery power. "
-#~ "Possible values are ondemand, conservative, powersave, userspace, "
-#~ "performance, nothing."
-#~ msgstr ""
-#~ "Het beleid voor de processorfrequentie dat gebruikt wordt om de processor "
-#~ "te schalen tijdens accustroom. Mogelijke waarden zijn ondemand, "
-#~ "conservative, powersave, userspace, performance, nothing."
-
-#~ msgid ""
-#~ "The device name for the v4l device used as a brightness sensor backup"
-#~ msgstr ""
-#~ "De naam voor het v4l-apparaat dat gebruikt wordt als backup voor de "
-#~ "helderheidssensor"
-
-#~ msgid ""
-#~ "The device name for the v4l device used as a brightness sensor backup. A "
-#~ "value of 'default' uses the first discovered sensor, or devices can be "
-#~ "specified, e.g. '/dev/video0'"
-#~ msgstr ""
-#~ "De naam voor het v4l-apparaat dat gebruikt wordt als backup voor de "
-#~ "helderheidssensor. De waarde 'default' gebruikt de eerstgevonden sensor. "
-#~ "U kunt apparaten ook specificeren, bijv. '/dev/video0'"
-
-#~ msgid ""
-#~ "Whether or not niced processes should be considered on processor load "
-#~ "calculation"
-#~ msgstr ""
-#~ "Geeft aan of processen met een hogere prioriteit moeten worden overwogen "
-#~ "tijdens het berekenen van de processorbelasting"
-
-#~ msgid "Computer sp_eed policy:"
-#~ msgstr "B_eleid voor computersnelheid:"
-
-#~ msgid "Debug specific files, e.g. power"
-#~ msgstr "Specifieke bestanden debuggen, zoals power"
-
-#~ msgid ""
-#~ "Policy timeout is not valid. Please wait a few seconds and try again."
-#~ msgstr ""
-#~ "Tijdslimiet voor beleid is ongeldig. Wacht enkele seconden en probeer het "
-#~ "opnieuw."
-
-#~ msgid "<b>Status:</b> Charged\n"
-#~ msgstr "<b>Status:</b> Opgeladen\n"
-
-#~ msgid "<b>Status:</b> Charging\n"
-#~ msgstr "<b>Status:</b> Aan het opladen\n"
-
-#~ msgid "<b>Status:</b> Discharging\n"
-#~ msgstr "<b>Status:</b> Aan het ontladen\n"
-
-#~ msgid "Current charge:"
-#~ msgstr "Huidige lading:"
-
-#~ msgid "Design charge:"
-#~ msgstr "Lading (fabrieksontwerp):"
-
-#~ msgid "Based on processor load"
-#~ msgstr "Gebaseerd op processorbelasting"
-
-#~ msgid "Automatic power saving"
-#~ msgstr "Automatische energiesparing"
-
-#~ msgid "Maximum power saving"
-#~ msgstr "Maximale energiebesparing"
-
-#~ msgid "Always maximum speed"
-#~ msgstr "Altijd maximum snelheid"
-
-#~ msgid "Dim display _brightness by:"
-#~ msgstr "Helderheid van scherm _dimmen bij:"
-
-#~ msgid "%s because %s"
-#~ msgstr "%s omdat %s"
-
-#~ msgid "Inhibit warning!"
-#~ msgstr "Verhinderingswaarschuwing!"
