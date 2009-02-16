@@ -46,6 +46,7 @@ icons_DATA = 			        \
 	gpm-battery-080-charging.png	\
 	gpm-battery-100-charging.png	\
 	gpm-battery-missing.png		\
+	gpm-battery-charged.png		\
 	gpm-ups-000.png			\
 	gpm-ups-020.png			\
 	gpm-ups-040.png			\

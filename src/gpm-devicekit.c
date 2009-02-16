@@ -85,14 +85,29 @@ gpm_devicekit_get_object_icon (const DkpObject *obj)
 		filename = g_strdup ("gpm-ac-adapter");
 	} else if (obj->type == DKP_DEVICE_TYPE_MONITOR) {
 		filename = g_strdup ("gpm-monitor");
-	} else if (obj->type == DKP_DEVICE_TYPE_BATTERY ||
-		   obj->type == DKP_DEVICE_TYPE_UPS) {
+	} else if (obj->type == DKP_DEVICE_TYPE_UPS) {
 		if (!obj->is_present) {
 			/* battery missing */
 			filename = g_strdup_printf ("gpm-%s-missing", prefix);
 
 		} else if (obj->state == DKP_DEVICE_STATE_FULLY_CHARGED) {
 			filename = g_strdup_printf ("gpm-%s-100", prefix);
+
+		} else if (obj->state == DKP_DEVICE_STATE_CHARGING) {
+			index_str = gpm_devicekit_get_object_icon_index (obj);
+			filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index_str);
+
+		} else if (obj->state == DKP_DEVICE_STATE_DISCHARGING) {
+			index_str = gpm_devicekit_get_object_icon_index (obj);
+			filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
+		}
+	} else if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
+		if (!obj->is_present) {
+			/* battery missing */
+			filename = g_strdup_printf ("gpm-%s-missing", prefix);
+
+		} else if (obj->state == DKP_DEVICE_STATE_FULLY_CHARGED) {
+			filename = g_strdup_printf ("gpm-%s-charged", prefix);
 
 		} else if (obj->state == DKP_DEVICE_STATE_CHARGING) {
 			index_str = gpm_devicekit_get_object_icon_index (obj);

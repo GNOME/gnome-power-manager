@@ -38,6 +38,7 @@ icons_DATA = 			        \
 	gpm-battery-080-charging.svg	\
 	gpm-battery-100-charging.svg	\
 	gpm-battery-missing.svg		\
+	gpm-battery-charged.svg		\
 	gpm-ups-000.svg			\
 	gpm-ups-020.svg			\
 	gpm-ups-040.svg			\
