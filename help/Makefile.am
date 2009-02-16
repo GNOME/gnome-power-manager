@@ -19,4 +19,4 @@ DOC_FIGURES = \
 	figures/gpm-unplugged.png \
 	figures/gs-prefs.png
 
-DOC_LINGUAS = ca de es fr hu it oc pa ru sv
+DOC_LINGUAS = ca de es eu fr hu it oc pa ru sv
