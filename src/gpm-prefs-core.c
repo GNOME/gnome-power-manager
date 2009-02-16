@@ -1014,12 +1014,6 @@ gpk_prefs_setup_policykit (GpmPrefs *prefs)
 	polkit_action_set_action_id (pk_action, "org.gnome.gconf.defaults.set-system");
 	prefs->priv->default_action = polkit_gnome_action_new_default ("set-defaults", pk_action,
 								       _("Make Default"), NULL);
-	g_object_set (prefs->priv->default_action,
-		      "no-icon-name", GTK_STOCK_FLOPPY,
-		      "auth-icon-name", GTK_STOCK_FLOPPY,
-		      "yes-icon-name", GTK_STOCK_FLOPPY,
-		      "self-blocked-icon-name", GTK_STOCK_FLOPPY,
-		      NULL);
 	polkit_action_unref (pk_action);
 }
 #endif
