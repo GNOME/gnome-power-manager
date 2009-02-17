@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-power-manager&component=general\n"
-"POT-Creation-Date: 2009-01-31 09:27+0000\n"
-"PO-Revision-Date: 2009-02-06 11:22+0100\n"
+"POT-Creation-Date: 2009-02-13 22:52+0000\n"
+"PO-Revision-Date: 2009-02-17 14:24+0100\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@fsf.hu>\n"
 "MIME-Version: 1.0\n"
@@ -42,12 +42,12 @@ msgid "LCD brightness : %d%%"
 msgstr "LCD fényerő: %d%%"
 
 #: ../applets/brightness/brightness-applet.c:747
-#: ../applets/inhibit/inhibit-applet.c:417 ../src/gpm-tray-icon.c:330
+#: ../applets/inhibit/inhibit-applet.c:417 ../src/gpm-tray-icon.c:307
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "A GNU General Public License 2. változata szerint használható"
 
 #: ../applets/brightness/brightness-applet.c:748
-#: ../applets/inhibit/inhibit-applet.c:418 ../src/gpm-tray-icon.c:331
+#: ../applets/inhibit/inhibit-applet.c:418 ../src/gpm-tray-icon.c:308
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -60,7 +60,7 @@ msgstr ""
 "változatában foglaltak alapján."
 
 #: ../applets/brightness/brightness-applet.c:752
-#: ../applets/inhibit/inhibit-applet.c:422 ../src/gpm-tray-icon.c:335
+#: ../applets/inhibit/inhibit-applet.c:422 ../src/gpm-tray-icon.c:312
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -74,7 +74,7 @@ msgstr ""
 "További részletekért tanulmányozza a GNU GPL licencet."
 
 #: ../applets/brightness/brightness-applet.c:756
-#: ../applets/inhibit/inhibit-applet.c:426 ../src/gpm-tray-icon.c:339
+#: ../applets/inhibit/inhibit-applet.c:426 ../src/gpm-tray-icon.c:316
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -1018,9 +1018,11 @@ msgstr "Energiagazdálkodás"
 msgid "Observe power management"
 msgstr "Energiagazdálkodás megfigyelése"
 
+#. TRANSLATORS: shown on the titlebar
+#. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.glade.h:6 ../src/gpm-statistics.c:840
-#: ../src/gpm-statistics.c:1273
+#: ../data/gpm-statistics.glade.h:6 ../src/gpm-statistics.c:927
+#: ../src/gpm-statistics.c:1349
 msgid "Power Statistics"
 msgstr "Energiastatisztika"
 
@@ -1045,7 +1047,6 @@ msgid "Graph type:"
 msgstr "Grafikontípus:"
 
 #: ../data/gpm-statistics.glade.h:5
-#| msgid "Power History"
 msgid "History"
 msgstr "Előzmények"
 
@@ -1054,12 +1055,10 @@ msgid "Processor wakeups per second:"
 msgstr "Processzorébredések másodpercenként:"
 
 #: ../data/gpm-statistics.glade.h:8
-#| msgid "Start point"
 msgid "Show data points"
 msgstr "Adatpontok megjelenítése"
 
 #: ../data/gpm-statistics.glade.h:9
-#| msgid "Power Statistics"
 msgid "Statistics"
 msgstr "Statisztika"
 
@@ -1070,10 +1069,6 @@ msgstr "Simított vonal használata"
 #: ../data/gpm-statistics.glade.h:11 ../src/gpm-statistics.c:197
 msgid "Wakeups"
 msgstr "Ébredések"
-
-#: ../data/gpm-statistics.glade.h:12
-msgid "gtk-refresh"
-msgstr ""
 
 #: ../data/gpm-inhibit-test.glade.h:1
 msgid "Application:"
@@ -1264,11 +1259,8 @@ msgstr[1] "perc"
 msgid "Power Manager for the GNOME desktop"
 msgstr "Energiakezelő a GNOME asztalhoz"
 
-#: ../src/gpm-devicekit.c:170
+#: ../src/gpm-devicekit.c:168
 #, c-format
-#| msgid ""
-#| "%s fully charged (%.1f%%)\n"
-#| "Provides %s battery runtime\n"
 msgid ""
 "%s fully charged (%.1f%%)\n"
 "Provides %s battery runtime"
@@ -1276,31 +1268,25 @@ msgstr ""
 "%s teljesen feltöltve (%.1f%%)\n"
 "Várható működési idő akkumulátorról: %s"
 
-#: ../src/gpm-devicekit.c:174
+#: ../src/gpm-devicekit.c:172
 #, c-format
-#| msgid "%s fully charged (%.1f%%)\n"
 msgid "%s fully charged (%.1f%%)"
 msgstr "%s: teljesen feltöltve (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:182
+#: ../src/gpm-devicekit.c:180
 #, c-format
-#| msgid "%s %s remaining (%.1f%%)\n"
 msgid "%s %s remaining (%.1f%%)"
 msgstr "%s: %s van hátra (%.1f%%)"
 
 # fixme
 #. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:187
+#: ../src/gpm-devicekit.c:185
 #, c-format
-#| msgid "%s discharging (%.1f%%)\n"
 msgid "%s discharging (%.1f%%)"
 msgstr "%s: kisül (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:199
+#: ../src/gpm-devicekit.c:197
 #, c-format
-#| msgid ""
-#| "%s %s until charged (%.1f%%)\n"
-#| "Provides %s battery runtime\n"
 msgid ""
 "%s %s until charged (%.1f%%)\n"
 "Provides %s battery runtime"
@@ -1308,241 +1294,223 @@ msgstr ""
 "%s: %s a feltöltésig (%.1f%%)\n"
 "Várható működési idő akkumulátorról: %s"
 
-#: ../src/gpm-devicekit.c:208
+#: ../src/gpm-devicekit.c:206
 #, c-format
-#| msgid "%s %s until charged (%.1f%%)\n"
 msgid "%s %s until charged (%.1f%%)"
 msgstr "%s: %s a feltöltésig (%.1f%%)"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:214
+#: ../src/gpm-devicekit.c:212
 #, c-format
-#| msgid "%s charging (%.1f%%)\n"
 msgid "%s charging (%.1f%%)"
 msgstr "%s: töltés (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:221
-#| msgid "Battery state could not be read at this time\n"
+#: ../src/gpm-devicekit.c:219
 msgid "Device state could not be read at this time"
 msgstr "Az akkumulátor állapota most nem olvasható"
 
-#: ../src/gpm-devicekit.c:240
+#: ../src/gpm-devicekit.c:238
 #, c-format
 msgid "<b>Product:</b> %s\n"
 msgstr "<b>Termék:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:242 ../src/gpm-devicekit.c:244
-#: ../src/gpm-devicekit.c:246 ../src/gpm-devicekit.c:248
+#: ../src/gpm-devicekit.c:240 ../src/gpm-devicekit.c:242
+#: ../src/gpm-devicekit.c:244 ../src/gpm-devicekit.c:246
 #, c-format
 msgid "<b>Status:</b> %s\n"
 msgstr "<b>Állapot:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:242
+#: ../src/gpm-devicekit.c:240
 msgid "Missing"
 msgstr "Hiányzik"
 
-#: ../src/gpm-devicekit.c:244
+#: ../src/gpm-devicekit.c:242
 msgid "Charged"
 msgstr "Feltöltve"
 
-#: ../src/gpm-devicekit.c:246
+#: ../src/gpm-devicekit.c:244
 msgid "Charging"
 msgstr "Töltés"
 
-#: ../src/gpm-devicekit.c:248
+#: ../src/gpm-devicekit.c:246
 msgid "Discharging"
 msgstr "Kisülés"
 
-#: ../src/gpm-devicekit.c:250
+#: ../src/gpm-devicekit.c:248
 #, c-format
 msgid "<b>Percentage charge:</b> %.1f%%\n"
 msgstr "<b>Töltöttség százalékban:</b> %.1f%%\n"
 
-#: ../src/gpm-devicekit.c:252
+#: ../src/gpm-devicekit.c:250
 #, c-format
 msgid "<b>Vendor:</b> %s\n"
 msgstr "<b>Gyártó:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:255
+#: ../src/gpm-devicekit.c:253
 #, c-format
 msgid "<b>Technology:</b> %s\n"
 msgstr "<b>Technológia:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:258
+#: ../src/gpm-devicekit.c:256
 #, c-format
 msgid "<b>Serial number:</b> %s\n"
 msgstr "<b>Sorozatszám:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:260
+#: ../src/gpm-devicekit.c:258
 #, c-format
 msgid "<b>Model:</b> %s\n"
 msgstr "<b>Modell:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:263
+#: ../src/gpm-devicekit.c:261
 #, c-format
 msgid "<b>Charge time:</b> %s\n"
 msgstr "<b>Töltési idő:</b> %s\n"
 
 # fixme
-#: ../src/gpm-devicekit.c:268
+#: ../src/gpm-devicekit.c:266
 #, c-format
 msgid "<b>Discharge time:</b> %s\n"
 msgstr "<b>Kisülési idő:</b> %s\n"
 
 #. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
-#: ../src/gpm-devicekit.c:275
+#: ../src/gpm-devicekit.c:273
 msgid "Excellent"
 msgstr "Kitűnő"
 
-#: ../src/gpm-devicekit.c:277
+#: ../src/gpm-devicekit.c:275
 msgid "Good"
 msgstr "Jó"
 
-#: ../src/gpm-devicekit.c:279
+#: ../src/gpm-devicekit.c:277
 msgid "Fair"
 msgstr "Elfogadható"
 
-#: ../src/gpm-devicekit.c:281
+#: ../src/gpm-devicekit.c:279
 msgid "Poor"
 msgstr "Rossz"
 
-#. Translators: %i is a percentage and %s the condition (Excellent, Good, ...)
-#: ../src/gpm-devicekit.c:284
+#. Translators: %.1f is a percentage and %s the condition (Excellent, Good, ...)
+#: ../src/gpm-devicekit.c:282
 #, c-format
-#| msgid "<b>Capacity:</b> %i%% (%s)\n"
 msgid "<b>Capacity:</b> %.1f%% (%s)\n"
 msgstr "<b>Kapacitás:</b> %.1f%% (%s)\n"
 
-#: ../src/gpm-devicekit.c:289
+#: ../src/gpm-devicekit.c:287
 #, c-format
 msgid "<b>Current charge:</b> %.1f Wh\n"
 msgstr "<b>Jelenlegi töltöttség:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:293
+#: ../src/gpm-devicekit.c:291
 #, c-format
 msgid "<b>Last full charge:</b> %.1f Wh\n"
 msgstr "<b>Utolsó teljes töltés:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:296
+#. Translators: Design charge is the amount of charge the battery is designed to have when brand new
+#: ../src/gpm-devicekit.c:295
 #, c-format
 msgid "<b>Design charge:</b> %.1f Wh\n"
 msgstr "<b>Tervezett töltés:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:299
+#: ../src/gpm-devicekit.c:298
 #, c-format
 msgid "<b>Charge rate:</b> %.1f W\n"
 msgstr "<b>Töltés sebessége:</b> %.1f W\n"
 
-#: ../src/gpm-devicekit.c:305
+#: ../src/gpm-devicekit.c:304
 #, c-format
-#| msgid "<b>Current charge:</b> %i/7\n"
 msgid "<b>Current charge:</b> %.0f/7\n"
 msgstr "<b>Jelenlegi töltöttség:</b> %.0f/7\n"
 
-#: ../src/gpm-devicekit.c:308
+#: ../src/gpm-devicekit.c:307
 #, c-format
-#| msgid "<b>Design charge:</b> %i/7\n"
 msgid "<b>Design charge:</b> %.0f/7\n"
 msgstr "<b>Tervezett töltés:</b> %.0f/7\n"
 
-#: ../src/gpm-devicekit.c:326
-#| msgid "AC adapter removed"
+#: ../src/gpm-devicekit.c:325
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "Hálózati csatlakozó"
 msgstr[1] "Hálózati csatlakozók"
 
-#: ../src/gpm-devicekit.c:329
-#| msgid "Laptop battery"
+#: ../src/gpm-devicekit.c:328
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "Noteszgép-akkumulátor"
 msgstr[1] "Noteszgép-akkumulátorok"
 
-#: ../src/gpm-devicekit.c:332
-#| msgid "UPS"
+#: ../src/gpm-devicekit.c:331
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "UPS"
 msgstr[1] "UPS-ek"
 
-#: ../src/gpm-devicekit.c:335
+#: ../src/gpm-devicekit.c:334
 msgid "Monitor"
 msgid_plural "Monitors"
 msgstr[0] "Monitor"
 msgstr[1] "Monitorok"
 
-#: ../src/gpm-devicekit.c:338
-#| msgid "Wireless mouse"
+#: ../src/gpm-devicekit.c:337
 msgid "Wireless mouse"
 msgid_plural "Wireless mice"
 msgstr[0] "Vezeték nélküli egér"
 msgstr[1] "Vezeték nélküli egerek"
 
-#: ../src/gpm-devicekit.c:341
-#| msgid "Wireless keyboard"
+#: ../src/gpm-devicekit.c:340
 msgid "Wireless keyboard"
 msgid_plural "Wireless keyboards"
 msgstr[0] "Vezeték nélküli billentyűzet"
 msgstr[1] "Vezeték nélküli billentyűzetek"
 
-#: ../src/gpm-devicekit.c:344
-#| msgid "PDA"
+#: ../src/gpm-devicekit.c:343
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "PDA"
 msgstr[1] "PDA-k"
 
-#: ../src/gpm-devicekit.c:347
-#| msgid "Cell phone"
+#: ../src/gpm-devicekit.c:346
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "Mobiltelefon"
 msgstr[1] "Mobiltelefonok"
 
-#: ../src/gpm-devicekit.c:404
-#| msgid "Lithium ion"
+#: ../src/gpm-devicekit.c:403
 msgid "Lithium Ion"
 msgstr "Lítiumion"
 
-#: ../src/gpm-devicekit.c:407
-#| msgid "Lithium polymer"
+#: ../src/gpm-devicekit.c:406
 msgid "Lithium Polymer"
 msgstr "Lítiumpolimer"
 
-#: ../src/gpm-devicekit.c:410
-#| msgid "Lithium ion"
+#: ../src/gpm-devicekit.c:409
 msgid "Lithium Iron Phosphate"
 msgstr "Lítium-vasfoszfát"
 
-#: ../src/gpm-devicekit.c:413
+#: ../src/gpm-devicekit.c:412
 msgid "Lead acid"
 msgstr "Ólmos-savas"
 
-#: ../src/gpm-devicekit.c:416
+#: ../src/gpm-devicekit.c:415
 msgid "Nickel Cadmium"
 msgstr "Nikkel-kadmium"
 
-#: ../src/gpm-devicekit.c:419
+#: ../src/gpm-devicekit.c:418
 msgid "Nickel metal hydride"
 msgstr "Nikkel-fém hidrid"
 
-#: ../src/gpm-devicekit.c:422
-#| msgid "Unknown time"
+#: ../src/gpm-devicekit.c:421
 msgid "Unknown technology"
 msgstr "Ismeretlen technológia"
 
 #. Translators: This is %i days
 #: ../src/gpm-graph-widget.c:297
 #, c-format
-#| msgid "%ih"
 msgid "%id"
 msgstr "%in"
 
 #. Translators: This is %i days %02i hours
 #: ../src/gpm-graph-widget.c:300
 #, c-format
-#| msgid "%ih%02i"
 msgid "%id%02ih"
 msgstr "%dn %02ió"
 
@@ -1555,7 +1523,6 @@ msgstr "%ió"
 #. Translators: This is %i hours %02i minutes
 #: ../src/gpm-graph-widget.c:308
 #, c-format
-#| msgid "%ih%02i"
 msgid "%ih%02im"
 msgstr "%ió %02im"
 
@@ -1651,23 +1618,24 @@ msgstr "Több alkalmazás megakadályozta az újraindítás bekövetkezését."
 msgid "Multiple applications have stopped the shutdown from taking place."
 msgstr "Több alkalmazás megakadályozta a leállítás bekövetkezését."
 
-#: ../src/gpm-main.c:136 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1257
+#. TRANSLATORS: show verbose debugging
+#: ../src/gpm-main.c:139 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1332
 msgid "Show extra debugging information"
 msgstr "Extra hibakeresési információk megjelenítése"
 
-#: ../src/gpm-main.c:138
+#: ../src/gpm-main.c:141
 msgid "Show version of installed program and exit"
 msgstr "A telepített program verziószámának megjelenítése és kilépés"
 
-#: ../src/gpm-main.c:140
+#: ../src/gpm-main.c:143
 msgid "Exit after a small delay (for debugging)"
 msgstr "Kilépés rövid késleltetés után (hibakereséshez)"
 
-#: ../src/gpm-main.c:142
+#: ../src/gpm-main.c:145
 msgid "Exit after the manager has loaded (for debugging)"
 msgstr "Kilépés a felügyelő betöltése után (hibakereséshez)"
 
-#: ../src/gpm-main.c:156 ../src/gpm-main.c:160
+#: ../src/gpm-main.c:159 ../src/gpm-main.c:163
 msgid "GNOME Power Manager"
 msgstr "GNOME Energiakezelő"
 
@@ -1678,43 +1646,36 @@ msgstr "Áramellátás bekapcsolva"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:184
-#| msgid "Power Manager"
 msgid "Power unplugged"
 msgstr "Áramellátás kikapcsolva"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:188
-#| msgid "Lid opened"
 msgid "Lid has opened"
 msgstr "Fedél kinyitva"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:192
-#| msgid "Lid closed"
 msgid "Lid has closed"
 msgstr "Fedél lezárva"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:196
-#| msgid "Battery is critically low."
 msgid "Battery is low"
 msgstr "Az akkumulátor gyenge"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:200
-#| msgid "Battery is critically low."
 msgid "Battery is very low"
 msgstr "Az akkumulátor nagyon gyenge"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:204
-#| msgid "Battery is critically low."
 msgid "Battery is full"
 msgstr "Az akkumulátor feltöltve"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:208
-#| msgid "Suspend enabled"
 msgid "Suspend started"
 msgstr "Felfüggesztés megkezdve"
 
@@ -1725,7 +1686,6 @@ msgstr "Folytatás"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:216
-#| msgid "Suspend enabled"
 msgid "Suspend failed"
 msgstr "Felfüggesztés meghiúsult"
 
@@ -2178,7 +2138,6 @@ msgid "Rate"
 msgstr "Sebesség"
 
 #: ../src/gpm-statistics.c:86
-#| msgid "Charged"
 msgid "Charge"
 msgstr "Töltés"
 
@@ -2191,14 +2150,10 @@ msgid "Time to empty"
 msgstr "Idő a lemerülésig"
 
 #: ../src/gpm-statistics.c:95
-#| msgid "minute"
-#| msgid_plural "minutes"
 msgid "10 minutes"
 msgstr "10 perc"
 
 #: ../src/gpm-statistics.c:96
-#| msgid "hour"
-#| msgid_plural "hours"
 msgid "2 hours"
 msgstr "2 óra"
 
@@ -2211,24 +2166,20 @@ msgid "1 week"
 msgstr "1 hét"
 
 #: ../src/gpm-statistics.c:105
-#| msgid "Charge time profile"
 msgid "Charge profile"
 msgstr "Töltés profilja"
 
 #: ../src/gpm-statistics.c:106
-#| msgid "Charge time accuracy profile"
 msgid "Charge accuracy"
 msgstr "Töltés pontossága"
 
 # fixme
 #: ../src/gpm-statistics.c:107
-#| msgid "Discharge time profile"
 msgid "Discharge profile"
 msgstr "Kisülés profilja"
 
 # fixme
 #: ../src/gpm-statistics.c:108
-#| msgid "Discharge time accuracy profile"
 msgid "Discharge accuracy"
 msgstr "Kisülés pontossága"
 
@@ -2281,13 +2232,17 @@ msgid "Model"
 msgstr "Modell"
 
 #: ../src/gpm-statistics.c:340
-#| msgid "<b>Serial number:</b> %s\n"
 msgid "Serial number"
 msgstr "Sorozatszám"
 
 #: ../src/gpm-statistics.c:341
 msgid "Supply"
 msgstr "Ellátás"
+
+#: ../src/gpm-statistics.c:343
+#, c-format
+msgid "%d seconds"
+msgstr "%d másodperc"
 
 #: ../src/gpm-statistics.c:344
 msgid "Refreshed"
@@ -2334,7 +2289,6 @@ msgid "Capacity"
 msgstr "Kapacitás"
 
 #: ../src/gpm-statistics.c:414
-#| msgid "<b>Technology:</b> %s\n"
 msgid "Technology"
 msgstr "Technológia"
 
@@ -2342,151 +2296,226 @@ msgstr "Technológia"
 msgid "Online"
 msgstr "Online"
 
-#: ../src/gpm-statistics.c:711 ../src/gpm-statistics.c:713
+#. TRANSLATORS: the command line was not provided
+#: ../src/gpm-statistics.c:678
+msgid "No data"
+msgstr "Nincs adat"
+
+#. TRANSLATORS: kernel module, usually a device driver
+#: ../src/gpm-statistics.c:685 ../src/gpm-statistics.c:690
 msgid "Kernel module"
 msgstr "Rendszermagmodul"
 
-#: ../src/gpm-statistics.c:715
+#. TRANSLATORS: kernel housekeeping
+#: ../src/gpm-statistics.c:695
 msgid "Kernel core"
 msgstr "Rendszermag"
 
-#: ../src/gpm-statistics.c:717
+#. TRANSLATORS: interrupt between processors
+#: ../src/gpm-statistics.c:700
 msgid "Interprocessor interrupt"
 msgstr "Processzorközi megszakítás"
 
-#: ../src/gpm-statistics.c:719
+#. TRANSLATORS: unknown interrupt
+#: ../src/gpm-statistics.c:705
 msgid "Interrupt"
 msgstr "Megszakítás"
 
-#: ../src/gpm-statistics.c:729
+#. TRANSLATORS: the keyboard and mouse device event
+#: ../src/gpm-statistics.c:748
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "PS/2 billentyűzet/egér/érintőtábla"
 
-#: ../src/gpm-statistics.c:731
+#. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
+#: ../src/gpm-statistics.c:751
 msgid "ACPI"
 msgstr "ACPI"
 
-#: ../src/gpm-statistics.c:733
+#. TRANSLATORS: serial ATA is a new style of hard disk interface
+#: ../src/gpm-statistics.c:754
 msgid "Serial ATA"
 msgstr "Soros ATA"
 
-#: ../src/gpm-statistics.c:735
+#. TRANSLATORS: this is the old-style ATA interface
+#: ../src/gpm-statistics.c:757
 msgid "ATA host controller"
 msgstr "ATA gépvezérlő"
 
-#: ../src/gpm-statistics.c:737
+#. TRANSLATORS: 802.11 wireless adaptor
+#: ../src/gpm-statistics.c:760
 msgid "Intel wireless adaptor"
 msgstr "Intel vezeték nélküli csatoló"
 
-#: ../src/gpm-statistics.c:834
-#| msgid "Device information"
+#. TRANSLATORS: a timer is something that fires periodically
+#: ../src/gpm-statistics.c:765 ../src/gpm-statistics.c:768
+#: ../src/gpm-statistics.c:771 ../src/gpm-statistics.c:774
+#: ../src/gpm-statistics.c:777
+#, c-format
+#| msgid "Time elapsed"
+msgid "Timer %s"
+msgstr "Időzítő: %s"
+
+#. TRANSLATORS: this is a task that's woken up from sleeping
+#: ../src/gpm-statistics.c:780
+#, c-format
+msgid "Sleep %s"
+msgstr "Alvó: %s"
+
+#. TRANSLATORS: this is a new realtime task
+#: ../src/gpm-statistics.c:783
+#, c-format
+msgid "New task %s"
+msgstr "Új feladat: %s"
+
+#. TRANSLATORS: this is a task thats woken to check state
+#: ../src/gpm-statistics.c:786
+#, c-format
+msgid "Wait %s"
+msgstr "Várakozik: %s"
+
+#. TRANSLATORS: a work queue is a list of work that has to be done
+#: ../src/gpm-statistics.c:789 ../src/gpm-statistics.c:792
+#, c-format
+msgid "Work queue %s"
+msgstr "Munkasor: %s"
+
+#. TRANSLATORS: this is when the networking subsystem clears out old entries
+#: ../src/gpm-statistics.c:795
+#, c-format
+msgid "Network route flush %s"
+msgstr "Hálózati útválasztás ürítése: %s"
+
+#. TRANSLATORS: activity on the USB bus
+#: ../src/gpm-statistics.c:798
+#, c-format
+msgid "USB activity %s"
+msgstr "USB tevékenység: %s"
+
+#. TRANSLATORS: we've timed out of an aligned timer
+#: ../src/gpm-statistics.c:801
+#, c-format
+#| msgid "Wakeups"
+msgid "Wakeup %s"
+msgstr "Ébredések: %s"
+
+#. TRANSLATORS: interupts on the system required for basic operation
+#: ../src/gpm-statistics.c:804
+#| msgid "Interrupt"
+msgid "Local interrupts"
+msgstr "Helyi megszakítások"
+
+#. TRANSLATORS: interrupts when a task gets moved from one core to another
+#: ../src/gpm-statistics.c:807
+msgid "Rescheduling interrupts"
+msgstr "Átütemezett megszakítások"
+
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:917
 msgid "Device Information"
 msgstr "Eszközinformációk"
 
-#: ../src/gpm-statistics.c:835
-#| msgid "Power History"
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:919
 msgid "Device History"
 msgstr "Eszköz előzményei"
 
 # fixme
-#: ../src/gpm-statistics.c:836
-#| msgid "Discharge time profile"
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:921
 msgid "Device Profile"
 msgstr "Eszköz profilja"
 
-#: ../src/gpm-statistics.c:837
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:923
 msgid "Processor Wakeups"
 msgstr "Processzorébredések"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1067 ../src/gpm-statistics.c:1073
-#: ../src/gpm-statistics.c:1079 ../src/gpm-statistics.c:1085
-#| msgid "Average time elapsed"
+#: ../src/gpm-statistics.c:1141 ../src/gpm-statistics.c:1147
+#: ../src/gpm-statistics.c:1153 ../src/gpm-statistics.c:1159
 msgid "Time elapsed"
 msgstr "Eltelt idő"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1069
+#: ../src/gpm-statistics.c:1143
 msgid "Power"
 msgstr "Energia"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1075 ../src/gpm-statistics.c:1118
-#: ../src/gpm-statistics.c:1124 ../src/gpm-statistics.c:1130
-#: ../src/gpm-statistics.c:1136
-#| msgid "Cell Voltage"
+#: ../src/gpm-statistics.c:1149 ../src/gpm-statistics.c:1192
+#: ../src/gpm-statistics.c:1198 ../src/gpm-statistics.c:1204
+#: ../src/gpm-statistics.c:1210
 msgid "Cell charge"
 msgstr "Cellatöltés"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1081 ../src/gpm-statistics.c:1087
-#| msgid "Estimated time"
+#: ../src/gpm-statistics.c:1155 ../src/gpm-statistics.c:1161
 msgid "Predicted time"
 msgstr "Előrejelzett idő"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1120 ../src/gpm-statistics.c:1132
+#: ../src/gpm-statistics.c:1194 ../src/gpm-statistics.c:1206
 msgid "Correction factor"
 msgstr "Javítási tényező"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1126 ../src/gpm-statistics.c:1138
+#: ../src/gpm-statistics.c:1200 ../src/gpm-statistics.c:1212
 msgid "Prediction accuracy"
 msgstr "Előrejelzés pontossága"
 
-#: ../src/gpm-statistics.c:1484
-#| msgid "Poor"
+#. TRANSLATORS: the icon for the CPU
+#: ../src/gpm-statistics.c:1557
 msgid "Processor"
 msgstr "Processzor"
 
-#: ../src/gpm-tray-icon.c:205 ../src/gpm-tray-icon.c:224
+#: ../src/gpm-tray-icon.c:190 ../src/gpm-tray-icon.c:209
 msgid "Device information"
 msgstr "Eszközinformációk"
 
-#: ../src/gpm-tray-icon.c:207
+#: ../src/gpm-tray-icon.c:192
 msgid "There is no detailed information for this device"
 msgstr "Nincsenek részletes információk az eszközről"
 
-#: ../src/gpm-tray-icon.c:344
+#: ../src/gpm-tray-icon.c:321
 msgid "translator-credits"
 msgstr ""
 "Kelemen Gábor <kelemeng@gnome.hu>\n"
 "Szabolcs Varga <shirokuma@shirokuma.hu>"
 
-#: ../src/gpm-tray-icon.c:360
+#: ../src/gpm-tray-icon.c:336
 msgid "GNOME Power Manager Website"
 msgstr "A GNOME Energiakezelő weboldala"
 
 #. preferences
-#: ../src/gpm-tray-icon.c:433
+#: ../src/gpm-tray-icon.c:408
 msgid "_Preferences"
 msgstr "_Beállítások"
 
 #. statistics
-#: ../src/gpm-tray-icon.c:441
+#: ../src/gpm-tray-icon.c:416
 msgid "Power _History"
 msgstr "Energiaszint _előzményei"
 
 #. help
-#: ../src/gpm-tray-icon.c:453
+#: ../src/gpm-tray-icon.c:428
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:2
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:2
 msgid "_Help"
 msgstr "_Súgó"
 
 #. about
-#: ../src/gpm-tray-icon.c:461
+#: ../src/gpm-tray-icon.c:436
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:1
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:1
 msgid "_About"
 msgstr "_Névjegy"
 
-#: ../src/gpm-tray-icon.c:568
+#: ../src/gpm-tray-icon.c:542
 msgid "_Suspend"
 msgstr "_Felfüggesztés"
 
-#: ../src/gpm-tray-icon.c:578
+#: ../src/gpm-tray-icon.c:552
 msgid "Hi_bernate"
 msgstr "_Hibernálás"
 
