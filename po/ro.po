@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-power-manager&component=general\n"
-"POT-Creation-Date: 2009-02-13 22:52+0000\n"
-"PO-Revision-Date: 2009-02-14 12:04+0200\n"
+"POT-Creation-Date: 2009-02-15 22:22+0000\n"
+"PO-Revision-Date: 2009-02-17 23:51+0200\n"
 "Last-Translator: Adi Roiban <adi@roiban.ro>\n"
 "Language-Team: Gnome Romanian Team <gnomero-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: ../applets/brightness/brightness-applet.c:105
 msgid "Power Manager Brightness Applet"
-msgstr "Utilitarul de luminozitate"
+msgstr "Miniaplicație luminozitate ecran"
 
 #: ../applets/brightness/brightness-applet.c:106
 msgid "Adjusts laptop panel brightness."
@@ -95,7 +95,7 @@ msgstr "Drepturi de autor © 2006 Benjamin Canou"
 
 #: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:1
 msgid "Adjusts Laptop panel brightness"
-msgstr "Ajustează luminozitatea ecranului laptopului"
+msgstr "Modifică luminozitatea ecranului laptopului"
 
 #: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:2
 msgid "Brightness Applet"
@@ -766,48 +766,45 @@ msgstr "Luminozitate"
 
 #: ../data/gpm-statistics.glade.h:1
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: ../data/gpm-statistics.glade.h:2
 msgid "Data length:"
-msgstr ""
+msgstr "Lungime date:"
 
 #: ../data/gpm-statistics.glade.h:3
 #: ../src/gpm-statistics.c:211
 msgid "Details"
-msgstr ""
+msgstr "Detalii"
 
 #: ../data/gpm-statistics.glade.h:4
 msgid "Graph type:"
 msgstr "Tip grafic:"
 
 #: ../data/gpm-statistics.glade.h:5
-#| msgid "Power History"
 msgid "History"
 msgstr "Istoric"
 
 #: ../data/gpm-statistics.glade.h:7
 msgid "Processor wakeups per second:"
-msgstr ""
+msgstr "Treziri procesor pe secundă:"
 
 #: ../data/gpm-statistics.glade.h:8
-#| msgid "Start point"
 msgid "Show data points"
 msgstr "Afișare puncte date"
 
 #: ../data/gpm-statistics.glade.h:9
-#| msgid "Power Statistics"
 msgid "Statistics"
 msgstr "Statistici"
 
 #: ../data/gpm-statistics.glade.h:10
 msgid "Use smoothed line"
-msgstr ""
+msgstr "Folosește linie netezită"
 
 #: ../data/gpm-statistics.glade.h:11
 #: ../src/gpm-statistics.c:197
 msgid "Wakeups"
-msgstr ""
+msgstr "Treziri"
 
 #: ../data/gpm-inhibit-test.glade.h:1
 msgid "Application:"
@@ -835,7 +832,7 @@ msgstr "Deblochează"
 
 #: ../data/gpm-inhibit-test.glade.h:7
 msgid "Vendor Acme Foo"
-msgstr ""
+msgstr "Producător Facem Tot "
 
 #: ../data/gpm-prefs.glade.h:1
 msgid "<b>Actions</b>"
@@ -1004,9 +1001,6 @@ msgstr "Administrator de consum pentru mediul GNOME"
 
 #: ../src/gpm-devicekit.c:168
 #, c-format
-#| msgid ""
-#| "%s fully charged (%.1f%%)\n"
-#| "Provides %s battery runtime\n"
 msgid ""
 "%s fully charged (%.1f%%)\n"
 "Provides %s battery runtime"
@@ -1016,28 +1010,22 @@ msgstr ""
 
 #: ../src/gpm-devicekit.c:172
 #, c-format
-#| msgid "%s fully charged (%.1f%%)\n"
 msgid "%s fully charged (%.1f%%)"
 msgstr "%s încărcat complet (%.1f%%)"
 
 #: ../src/gpm-devicekit.c:180
 #, c-format
-#| msgid "%s %s remaining (%.1f%%)\n"
 msgid "%s %s remaining (%.1f%%)"
 msgstr "%s %s rămas (%.1f%%)"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-devicekit.c:185
 #, c-format
-#| msgid "%s discharging (%.1f%%)\n"
 msgid "%s discharging (%.1f%%)"
 msgstr "%s se descarcă (%.1f%%)"
 
 #: ../src/gpm-devicekit.c:197
 #, c-format
-#| msgid ""
-#| "%s %s until charged (%.1f%%)\n"
-#| "Provides %s battery runtime\n"
 msgid ""
 "%s %s until charged (%.1f%%)\n"
 "Provides %s battery runtime"
@@ -1047,19 +1035,16 @@ msgstr ""
 
 #: ../src/gpm-devicekit.c:206
 #, c-format
-#| msgid "%s %s until charged (%.1f%%)\n"
 msgid "%s %s until charged (%.1f%%)"
 msgstr "%s %s până la încărcarea completă (%.1f%%)"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-devicekit.c:212
 #, c-format
-#| msgid "%s charging (%.1f%%)\n"
 msgid "%s charging (%.1f%%)"
 msgstr "%s se încarcă (%.1f%%)"
 
 #: ../src/gpm-devicekit.c:219
-#| msgid "Battery state could not be read at this time\n"
 msgid "Device state could not be read at this time"
 msgstr "Starea acumulatorului nu poate fi citită acum"
 
@@ -1147,7 +1132,6 @@ msgstr "Slabă"
 #. Translators: %.1f is a percentage and %s the condition (Excellent, Good, ...)
 #: ../src/gpm-devicekit.c:282
 #, c-format
-#| msgid "<b>Capacity:</b> %i%% (%s)\n"
 msgid "<b>Capacity:</b> %.1f%% (%s)\n"
 msgstr "<b>Capacitate:</b> %1f%% (%s)\n"
 
@@ -1174,18 +1158,15 @@ msgstr "<b>Rată de încărcare:</b> %.1f W\n"
 
 #: ../src/gpm-devicekit.c:304
 #, c-format
-#| msgid "<b>Current charge:</b> %i/7\n"
 msgid "<b>Current charge:</b> %.0f/7\n"
 msgstr "<b>Încărcare curentă acumulator:</b>%0f/7\n"
 
 #: ../src/gpm-devicekit.c:307
 #, c-format
-#| msgid "<b>Design charge:</b> %i/7\n"
 msgid "<b>Design charge:</b> %.0f/7\n"
 msgstr "<b>Model încărcare:</b>%0f/7\n"
 
 #: ../src/gpm-devicekit.c:325
-#| msgid "AC adapter removed"
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "Adaptor rețea electrică"
@@ -1193,7 +1174,6 @@ msgstr[1] "Adaptoare rețea electrică"
 msgstr[2] "Adaptoare rețea electrică"
 
 #: ../src/gpm-devicekit.c:328
-#| msgid "Laptop battery"
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "Acumulator laptop"
@@ -1201,7 +1181,6 @@ msgstr[1] "Acumulatoare laptop"
 msgstr[2] "Acumulatoare laptop"
 
 #: ../src/gpm-devicekit.c:331
-#| msgid "UPS"
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "UPS"
@@ -1216,7 +1195,6 @@ msgstr[1] "Monitoare"
 msgstr[2] "Monitoare"
 
 #: ../src/gpm-devicekit.c:337
-#| msgid "Wireless mouse"
 msgid "Wireless mouse"
 msgid_plural "Wireless mice"
 msgstr[0] "Maus fară fir"
@@ -1224,7 +1202,6 @@ msgstr[1] "Mausuri fară fir"
 msgstr[2] "Mausuri fară fir"
 
 #: ../src/gpm-devicekit.c:340
-#| msgid "Wireless keyboard"
 msgid "Wireless keyboard"
 msgid_plural "Wireless keyboards"
 msgstr[0] "Tastatură fară fir"
@@ -1232,7 +1209,6 @@ msgstr[1] "Tastaturi fară fir"
 msgstr[2] "Tastaturi fară fir"
 
 #: ../src/gpm-devicekit.c:343
-#| msgid "PDA"
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "PDA"
@@ -1240,7 +1216,6 @@ msgstr[1] "PDA-uri"
 msgstr[2] "PDA-uri"
 
 #: ../src/gpm-devicekit.c:346
-#| msgid "Cell phone"
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "Telefon mobil"
@@ -1248,17 +1223,14 @@ msgstr[1] "Telefoane mobil"
 msgstr[2] "Telefoane mobil"
 
 #: ../src/gpm-devicekit.c:403
-#| msgid "Lithium ion"
 msgid "Lithium Ion"
 msgstr "Ioni litiu"
 
 #: ../src/gpm-devicekit.c:406
-#| msgid "Lithium polymer"
 msgid "Lithium Polymer"
 msgstr "Polimer litiu"
 
 #: ../src/gpm-devicekit.c:409
-#| msgid "Lithium ion"
 msgid "Lithium Iron Phosphate"
 msgstr "Fostați fier litiu"
 
@@ -1268,28 +1240,25 @@ msgstr "Acizi plumb"
 
 #: ../src/gpm-devicekit.c:415
 msgid "Nickel Cadmium"
-msgstr ""
+msgstr "Nichel Cadmiu"
 
 #: ../src/gpm-devicekit.c:418
 msgid "Nickel metal hydride"
 msgstr "Metal hidrat de nichel"
 
 #: ../src/gpm-devicekit.c:421
-#| msgid "Unknown time"
 msgid "Unknown technology"
 msgstr "Tehnologie necunoscută"
 
 #. Translators: This is %i days
 #: ../src/gpm-graph-widget.c:297
 #, c-format
-#| msgid "%ih"
 msgid "%id"
 msgstr "%id"
 
 #. Translators: This is %i days %02i hours
 #: ../src/gpm-graph-widget.c:300
 #, c-format
-#| msgid "%ih%02i"
 msgid "%id%02ih"
 msgstr "%id%02ih"
 
@@ -1302,7 +1271,6 @@ msgstr "%io"
 #. Translators: This is %i hours %02i minutes
 #: ../src/gpm-graph-widget.c:308
 #, c-format
-#| msgid "%ih%02i"
 msgid "%ih%02im"
 msgstr "%ih%02im"
 
@@ -1426,58 +1394,50 @@ msgstr "Administrator consum GNOME"
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:180
 msgid "Power plugged in"
-msgstr ""
+msgstr "Alimentare rețea conectată"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:184
-#| msgid "Power Manager"
 msgid "Power unplugged"
 msgstr "Deconectare rețea electrică"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:188
-#| msgid "Lid opened"
 msgid "Lid has opened"
 msgstr "Capac deschis"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:192
-#| msgid "Lid closed"
 msgid "Lid has closed"
 msgstr "Capac închis"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:196
-#| msgid "Battery is critically low."
 msgid "Battery is low"
 msgstr "Acumulatorul este scăzut"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:200
-#| msgid "Battery is critically low."
 msgid "Battery is very low"
 msgstr "Acumulatorul este critic de scăzut"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:204
-#| msgid "Battery is critically low."
 msgid "Battery is full"
 msgstr "Acumulatorul este plin"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:208
-#| msgid "Suspend enabled"
 msgid "Suspend started"
 msgstr "Suspendare pornită"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:212
 msgid "Resumed"
-msgstr ""
+msgstr "Revenit"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:216
-#| msgid "Suspend enabled"
 msgid "Suspend failed"
 msgstr "Suspendare eșuată"
 
@@ -1865,7 +1825,6 @@ msgid "Rate"
 msgstr "Rată"
 
 #: ../src/gpm-statistics.c:86
-#| msgid "Charged"
 msgid "Charge"
 msgstr "Încărcare"
 
@@ -1880,14 +1839,10 @@ msgid "Time to empty"
 msgstr "Timp până la golire"
 
 #: ../src/gpm-statistics.c:95
-#| msgid "minute"
-#| msgid_plural "minutes"
 msgid "10 minutes"
 msgstr "zece minute"
 
 #: ../src/gpm-statistics.c:96
-#| msgid "hour"
-#| msgid_plural "hours"
 msgid "2 hours"
 msgstr "două ore"
 
@@ -1900,22 +1855,18 @@ msgid "1 week"
 msgstr "O săptămână"
 
 #: ../src/gpm-statistics.c:105
-#| msgid "Charge time profile"
 msgid "Charge profile"
 msgstr "Profil încărcare"
 
 #: ../src/gpm-statistics.c:106
-#| msgid "Charge time accuracy profile"
 msgid "Charge accuracy"
 msgstr "Acuratețe încărcare"
 
 #: ../src/gpm-statistics.c:107
-#| msgid "Discharge time profile"
 msgid "Discharge profile"
 msgstr "Profil descărcare"
 
 #: ../src/gpm-statistics.c:108
-#| msgid "Discharge time accuracy profile"
 msgid "Discharge accuracy"
 msgstr "Acuratețe descărcare"
 
@@ -1969,13 +1920,12 @@ msgid "Model"
 msgstr "Model"
 
 #: ../src/gpm-statistics.c:340
-#| msgid "<b>Serial number:</b> %s\n"
 msgid "Serial number"
 msgstr "Număr serie"
 
 #: ../src/gpm-statistics.c:341
 msgid "Supply"
-msgstr ""
+msgstr "Alimentare"
 
 #: ../src/gpm-statistics.c:343
 #, c-format
@@ -1984,7 +1934,7 @@ msgstr "%d secunde"
 
 #: ../src/gpm-statistics.c:344
 msgid "Refreshed"
-msgstr ""
+msgstr "Reactualizat"
 
 #: ../src/gpm-statistics.c:351
 msgid "Present"
@@ -2027,7 +1977,6 @@ msgid "Capacity"
 msgstr "Capacitate"
 
 #: ../src/gpm-statistics.c:414
-#| msgid "<b>Technology:</b> %s\n"
 msgid "Technology"
 msgstr "Tehnologie"
 
@@ -2049,7 +1998,7 @@ msgstr "Modul kernel"
 #. TRANSLATORS: kernel housekeeping
 #: ../src/gpm-statistics.c:695
 msgid "Kernel core"
-msgstr ""
+msgstr "Kernel core"
 
 #. TRANSLATORS: interrupt between processors
 #: ../src/gpm-statistics.c:700
@@ -2064,7 +2013,7 @@ msgstr "Intrerupere"
 #. TRANSLATORS: the keyboard and mouse device event
 #: ../src/gpm-statistics.c:748
 msgid "PS/2 keyboard/mouse/touchpad"
-msgstr ""
+msgstr "Tastatură/maus/touchpad PS2"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
 #: ../src/gpm-statistics.c:751
@@ -2093,7 +2042,6 @@ msgstr "Adaptor fără fir Intel"
 #: ../src/gpm-statistics.c:774
 #: ../src/gpm-statistics.c:777
 #, c-format
-#| msgid "Time"
 msgid "Timer %s"
 msgstr "Declanșator %s"
 
@@ -2126,7 +2074,7 @@ msgstr "Coadă sarcini %s"
 #: ../src/gpm-statistics.c:795
 #, c-format
 msgid "Network route flush %s"
-msgstr ""
+msgstr "Golire rută rețea %s"
 
 #. TRANSLATORS: activity on the USB bus
 #: ../src/gpm-statistics.c:798
@@ -2148,37 +2096,33 @@ msgstr "Întreruper locale"
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
 #: ../src/gpm-statistics.c:807
 msgid "Rescheduling interrupts"
-msgstr ""
+msgstr "Se replanifică întreruperile"
 
 #. TRANSLATORS: shown on the titlebar
 #: ../src/gpm-statistics.c:917
-#| msgid "Device information"
 msgid "Device Information"
 msgstr "Informații dispozitiv"
 
 #. TRANSLATORS: shown on the titlebar
 #: ../src/gpm-statistics.c:919
-#| msgid "Power History"
 msgid "Device History"
 msgstr "Istoric dispozitiv"
 
 #. TRANSLATORS: shown on the titlebar
 #: ../src/gpm-statistics.c:921
-#| msgid "Discharge time profile"
 msgid "Device Profile"
 msgstr "Profil dispozitiv"
 
 #. TRANSLATORS: shown on the titlebar
 #: ../src/gpm-statistics.c:923
 msgid "Processor Wakeups"
-msgstr ""
+msgstr "Treziri procesor"
 
 #. TRANSLATORS: this is the X axis on the graph
 #: ../src/gpm-statistics.c:1141
 #: ../src/gpm-statistics.c:1147
 #: ../src/gpm-statistics.c:1153
 #: ../src/gpm-statistics.c:1159
-#| msgid "Average time elapsed"
 msgid "Time elapsed"
 msgstr "Timp trecut"
 
@@ -2194,14 +2138,12 @@ msgstr "Putere"
 #: ../src/gpm-statistics.c:1198
 #: ../src/gpm-statistics.c:1204
 #: ../src/gpm-statistics.c:1210
-#| msgid "Cell Voltage"
 msgid "Cell charge"
 msgstr "Încărcare celulă"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #: ../src/gpm-statistics.c:1155
 #: ../src/gpm-statistics.c:1161
-#| msgid "Estimated time"
 msgid "Predicted time"
 msgstr "Timp estimat"
 
@@ -2209,17 +2151,16 @@ msgstr "Timp estimat"
 #: ../src/gpm-statistics.c:1194
 #: ../src/gpm-statistics.c:1206
 msgid "Correction factor"
-msgstr ""
+msgstr "Factor corecție"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #: ../src/gpm-statistics.c:1200
 #: ../src/gpm-statistics.c:1212
 msgid "Prediction accuracy"
-msgstr ""
+msgstr "Precizie predicție"
 
 #. TRANSLATORS: the icon for the CPU
 #: ../src/gpm-statistics.c:1557
-#| msgid "Poor"
 msgid "Processor"
 msgstr "Procesor"
 
@@ -2230,7 +2171,7 @@ msgstr "Informații dispozitiv"
 
 #: ../src/gpm-tray-icon.c:192
 msgid "There is no detailed information for this device"
-msgstr ""
+msgstr "Nu există informații detaliate pentru acest dispozitiv"
 
 #: ../src/gpm-tray-icon.c:321
 msgid "translator-credits"
