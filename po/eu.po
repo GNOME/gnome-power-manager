@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-13 11:00+0100\n"
-"PO-Revision-Date: 2009-02-13 11:49+0100\n"
+"POT-Creation-Date: 2009-02-18 22:05+0100\n"
+"PO-Revision-Date: 2009-02-18 22:06+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -1002,7 +1002,7 @@ msgstr "Begiratu energia kudeatzailea"
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
 #: ../data/gpm-statistics.glade.h:6 ../src/gpm-statistics.c:927
-#: ../src/gpm-statistics.c:1363
+#: ../src/gpm-statistics.c:1349
 msgid "Power Statistics"
 msgstr "Energiaren estatistikak"
 
@@ -1239,7 +1239,7 @@ msgstr[1] "minutu"
 msgid "Power Manager for the GNOME desktop"
 msgstr "Energia kudeatzailea GNOME mahaigainerako"
 
-#: ../src/gpm-devicekit.c:168
+#: ../src/gpm-devicekit.c:183
 #, c-format
 msgid ""
 "%s fully charged (%.1f%%)\n"
@@ -1248,23 +1248,23 @@ msgstr ""
 "%s erabat kargatuta (%% %.1f)\n"
 "Eskainiko duen bateriaren denbora: %s"
 
-#: ../src/gpm-devicekit.c:172
+#: ../src/gpm-devicekit.c:187
 #, c-format
 msgid "%s fully charged (%.1f%%)"
 msgstr "%s erabat kargatuta (%% %.1f)"
 
-#: ../src/gpm-devicekit.c:180
+#: ../src/gpm-devicekit.c:195
 #, c-format
 msgid "%s %s remaining (%.1f%%)"
 msgstr "%s %s geratzen da (%% %.1f)"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:185
+#: ../src/gpm-devicekit.c:200
 #, c-format
 msgid "%s discharging (%.1f%%)"
 msgstr "%s deskargatzen (%% %.1f)"
 
-#: ../src/gpm-devicekit.c:197
+#: ../src/gpm-devicekit.c:212
 #, c-format
 msgid ""
 "%s %s until charged (%.1f%%)\n"
@@ -1273,209 +1273,210 @@ msgstr ""
 "%s %s kargatu arte (%% %.1f)\n"
 "Eskainiko duen bateriaren denbora: %s"
 
-#: ../src/gpm-devicekit.c:206
+#: ../src/gpm-devicekit.c:221
 #, c-format
 msgid "%s %s until charged (%.1f%%)"
 msgstr "%s %s kargatu arte (%% %.1f)"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:212
+#: ../src/gpm-devicekit.c:227
 #, c-format
 msgid "%s charging (%.1f%%)"
 msgstr "%s kargatzen (%% %.1f)"
 
-#: ../src/gpm-devicekit.c:219
+#: ../src/gpm-devicekit.c:234
 msgid "Device state could not be read at this time"
 msgstr "Unean bateriaren egoera ezin izan da irakurri"
 
-#: ../src/gpm-devicekit.c:238
+#: ../src/gpm-devicekit.c:253
 #, c-format
 msgid "<b>Product:</b> %s\n"
 msgstr "<b>Produktua:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:240 ../src/gpm-devicekit.c:242
-#: ../src/gpm-devicekit.c:244 ../src/gpm-devicekit.c:246
+#: ../src/gpm-devicekit.c:255 ../src/gpm-devicekit.c:257
+#: ../src/gpm-devicekit.c:259 ../src/gpm-devicekit.c:261
 #, c-format
 msgid "<b>Status:</b> %s\n"
 msgstr "<b>Egoera:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:240
+#: ../src/gpm-devicekit.c:255
 msgid "Missing"
 msgstr "Falta da"
 
-#: ../src/gpm-devicekit.c:242
+#: ../src/gpm-devicekit.c:257
 msgid "Charged"
 msgstr "Kargatuta"
 
-#: ../src/gpm-devicekit.c:244
+#: ../src/gpm-devicekit.c:259
 msgid "Charging"
 msgstr "Kargatzen"
 
-#: ../src/gpm-devicekit.c:246
+#: ../src/gpm-devicekit.c:261
 msgid "Discharging"
 msgstr "Deskargatzen"
 
-#: ../src/gpm-devicekit.c:248
+#: ../src/gpm-devicekit.c:263
 #, c-format
 msgid "<b>Percentage charge:</b> %.1f%%\n"
 msgstr "<b>Kargaren ehunekoa:</b> %% %.1f\n"
 
-#: ../src/gpm-devicekit.c:250
+#: ../src/gpm-devicekit.c:265
 #, c-format
 msgid "<b>Vendor:</b> %s\n"
 msgstr "<b>Hornitzailea:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:253
+#: ../src/gpm-devicekit.c:268
 #, c-format
 msgid "<b>Technology:</b> %s\n"
 msgstr "<b>Teknologia:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:256
+#: ../src/gpm-devicekit.c:271
 #, c-format
 msgid "<b>Serial number:</b> %s\n"
 msgstr "<b>Serie-zenbakia:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:258
+#: ../src/gpm-devicekit.c:273
 #, c-format
 msgid "<b>Model:</b> %s\n"
 msgstr "<b>Modeloa:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:261
+#: ../src/gpm-devicekit.c:276
 #, c-format
 msgid "<b>Charge time:</b> %s\n"
 msgstr "<b>Kargaren denbora:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:266
+#: ../src/gpm-devicekit.c:281
 #, c-format
 msgid "<b>Discharge time:</b> %s\n"
 msgstr "<b>Deskargaren denbora:</b> %s\n"
 
 #. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
-#: ../src/gpm-devicekit.c:273
+#: ../src/gpm-devicekit.c:288
 msgid "Excellent"
 msgstr "Oso ona"
 
-#: ../src/gpm-devicekit.c:275
+#: ../src/gpm-devicekit.c:290
 msgid "Good"
 msgstr "Ona"
 
-#: ../src/gpm-devicekit.c:277
+#: ../src/gpm-devicekit.c:292
 msgid "Fair"
 msgstr "Arrunta"
 
-#: ../src/gpm-devicekit.c:279
+#: ../src/gpm-devicekit.c:294
 msgid "Poor"
 msgstr "Baxua"
 
-#. Translators: %i is a percentage and %s the condition (Excellent, Good, ...)
-#: ../src/gpm-devicekit.c:282
+#. Translators: %.1f is a percentage and %s the condition (Excellent, Good, ...)
+#: ../src/gpm-devicekit.c:297
 #, c-format
 msgid "<b>Capacity:</b> %.1f%% (%s)\n"
 msgstr "<b>Edukiera:</b> %% %.1f (%s)\n"
 
-#: ../src/gpm-devicekit.c:287
+#: ../src/gpm-devicekit.c:302
 #, c-format
 msgid "<b>Current charge:</b> %.1f Wh\n"
 msgstr "<b>Uneko karga:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:291
+#: ../src/gpm-devicekit.c:306
 #, c-format
 msgid "<b>Last full charge:</b> %.1f Wh\n"
 msgstr "<b>Betetako azken karga:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:294
+#. Translators: Design charge is the amount of charge the battery is designed to have when brand new
+#: ../src/gpm-devicekit.c:310
 #, c-format
 msgid "<b>Design charge:</b> %.1f Wh\n"
 msgstr "<b>Karga teorikoa:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:297
+#: ../src/gpm-devicekit.c:313
 #, c-format
 msgid "<b>Charge rate:</b> %.1f W\n"
 msgstr "<b>Kargaren tasa:</b> %.1f W\n"
 
-#: ../src/gpm-devicekit.c:303
+#: ../src/gpm-devicekit.c:319
 #, c-format
 msgid "<b>Current charge:</b> %.0f/7\n"
 msgstr "<b>Uneko karga:</b> %.0f/7\n"
 
-#: ../src/gpm-devicekit.c:306
+#: ../src/gpm-devicekit.c:322
 #, c-format
 msgid "<b>Design charge:</b> %.0f/7\n"
 msgstr "<b>Karga teorikoa:</b> %.0f/7\n"
 
-#: ../src/gpm-devicekit.c:324
+#: ../src/gpm-devicekit.c:340
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "AC moldagailua"
 msgstr[1] "AC moldagailuak"
 
-#: ../src/gpm-devicekit.c:327
+#: ../src/gpm-devicekit.c:343
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "Eramangarriaren bateria"
 msgstr[1] "Eramangarriaren bateriak"
 
-#: ../src/gpm-devicekit.c:330
+#: ../src/gpm-devicekit.c:346
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "UPS"
 msgstr[1] "UPSak"
 
-#: ../src/gpm-devicekit.c:333
+#: ../src/gpm-devicekit.c:349
 msgid "Monitor"
 msgid_plural "Monitors"
 msgstr[0] "Pantaila"
 msgstr[1] "Pantailak"
 
-#: ../src/gpm-devicekit.c:336
+#: ../src/gpm-devicekit.c:352
 msgid "Wireless mouse"
 msgid_plural "Wireless mice"
 msgstr[0] "Haririk gabeko sagua"
 msgstr[1] "Haririk gabeko saguak"
 
-#: ../src/gpm-devicekit.c:339
+#: ../src/gpm-devicekit.c:355
 msgid "Wireless keyboard"
 msgid_plural "Wireless keyboards"
 msgstr[0] "Haririk gabeko teklatua"
 msgstr[1] "Haririk gabeko teklatuak"
 
-#: ../src/gpm-devicekit.c:342
+#: ../src/gpm-devicekit.c:358
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "PDA"
 msgstr[1] "PDAk"
 
-#: ../src/gpm-devicekit.c:345
+#: ../src/gpm-devicekit.c:361
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "Telefono mugikorra"
 msgstr[1] "Telefono mugikorrak"
 
-#: ../src/gpm-devicekit.c:402
+#: ../src/gpm-devicekit.c:418
 msgid "Lithium Ion"
 msgstr "Litiozko ion"
 
-#: ../src/gpm-devicekit.c:405
+#: ../src/gpm-devicekit.c:421
 msgid "Lithium Polymer"
 msgstr "Litiozko polimeroa"
 
-#: ../src/gpm-devicekit.c:408
+#: ../src/gpm-devicekit.c:424
 msgid "Lithium Iron Phosphate"
 msgstr "Litiozko burdin fosfatoa"
 
-#: ../src/gpm-devicekit.c:411
+#: ../src/gpm-devicekit.c:427
 msgid "Lead acid"
 msgstr "Berun azidoa"
 
-#: ../src/gpm-devicekit.c:414
+#: ../src/gpm-devicekit.c:430
 msgid "Nickel Cadmium"
 msgstr "Nikel kadmioa"
 
-#: ../src/gpm-devicekit.c:417
+#: ../src/gpm-devicekit.c:433
 msgid "Nickel metal hydride"
 msgstr "Nikel metal hidruroa"
 
-#: ../src/gpm-devicekit.c:420
+#: ../src/gpm-devicekit.c:436
 msgid "Unknown technology"
 msgstr "Teknologia ezezaguna"
 
@@ -1596,7 +1597,7 @@ msgid "Multiple applications have stopped the shutdown from taking place."
 msgstr "Hainbat aplikaziok itzaltzea galarazi dute."
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-main.c:139 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1346
+#: ../src/gpm-main.c:139 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1332
 msgid "Show extra debugging information"
 msgstr "Erakutsi arazketako datu gehigarriak"
 
@@ -2191,6 +2192,11 @@ msgstr "Serie-zenbakia"
 msgid "Supply"
 msgstr "Hornitu"
 
+#: ../src/gpm-statistics.c:343
+#, c-format
+msgid "%d seconds"
+msgstr "%d segundo"
+
 #: ../src/gpm-statistics.c:344
 msgid "Refreshed"
 msgstr "Freskatuta"
@@ -2374,41 +2380,41 @@ msgid "Processor Wakeups"
 msgstr "Prozesagailuaren esnatzea"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1155 ../src/gpm-statistics.c:1161
-#: ../src/gpm-statistics.c:1167 ../src/gpm-statistics.c:1173
+#: ../src/gpm-statistics.c:1141 ../src/gpm-statistics.c:1147
+#: ../src/gpm-statistics.c:1153 ../src/gpm-statistics.c:1159
 msgid "Time elapsed"
 msgstr "Igarotako denbora"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1157
+#: ../src/gpm-statistics.c:1143
 msgid "Power"
 msgstr "Energia"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1163 ../src/gpm-statistics.c:1206
-#: ../src/gpm-statistics.c:1212 ../src/gpm-statistics.c:1218
-#: ../src/gpm-statistics.c:1224
+#: ../src/gpm-statistics.c:1149 ../src/gpm-statistics.c:1192
+#: ../src/gpm-statistics.c:1198 ../src/gpm-statistics.c:1204
+#: ../src/gpm-statistics.c:1210
 msgid "Cell charge"
 msgstr "Gelaxkaren karga"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1169 ../src/gpm-statistics.c:1175
+#: ../src/gpm-statistics.c:1155 ../src/gpm-statistics.c:1161
 msgid "Predicted time"
 msgstr "Aurrikusitako denbora"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1208 ../src/gpm-statistics.c:1220
+#: ../src/gpm-statistics.c:1194 ../src/gpm-statistics.c:1206
 msgid "Correction factor"
 msgstr "Zuzenketaren faktorea"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1214 ../src/gpm-statistics.c:1226
+#: ../src/gpm-statistics.c:1200 ../src/gpm-statistics.c:1212
 msgid "Prediction accuracy"
 msgstr "Aurrikusitako doitasuna"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:1575
+#: ../src/gpm-statistics.c:1557
 msgid "Processor"
 msgstr "Prozesagailua"
 
