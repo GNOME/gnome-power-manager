@@ -203,9 +203,12 @@ main (int argc, char *argv[])
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
                                            GPM_DATA G_DIR_SEPARATOR_S "icons");
 
-	/* we have to register with the session as we are starting up with the panel */
+	/* optionally register with the session */
 	session = gpm_session_new ();
-	gpm_session_register_client (session, "gnome-power-manager", getenv ("DESKTOP_AUTOSTART_ID"));
+	if (FALSE) {
+		egg_warning ("register with the session requires logout handling");
+		gpm_session_register_client (session, "gnome-power-manager", getenv ("DESKTOP_AUTOSTART_ID"));
+	}
 
 	/* create a new gui object */
 	manager = gpm_manager_new ();
