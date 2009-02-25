@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-power-manager 2.25.4\n"
+"Project-Id-Version: gnome-power-manager 2.25.91\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-06 21:40+0800\n"
-"PO-Revision-Date: 2009-02-06 19:35+0800\n"
+"POT-Creation-Date: 2009-02-25 20:33+0800\n"
+"PO-Revision-Date: 2009-02-23 21:48+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Taiwan) <zh-l10n@lists.linux.org.tw>\n"
 "MIME-Version: 1.0\n"
@@ -936,7 +936,7 @@ msgstr "監控電源管理程式"
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
 #: ../data/gpm-statistics.glade.h:6 ../src/gpm-statistics.c:927
-#: ../src/gpm-statistics.c:1363
+#: ../src/gpm-statistics.c:1349
 msgid "Power Statistics"
 msgstr "電源統計"
 
@@ -983,10 +983,6 @@ msgstr "使用平滑的線條"
 #: ../data/gpm-statistics.glade.h:11 ../src/gpm-statistics.c:197
 msgid "Wakeups"
 msgstr "喚醒"
-
-#: ../data/gpm-statistics.glade.h:12
-msgid "gtk-refresh"
-msgstr "gtk-refresh"
 
 #: ../data/gpm-inhibit-test.glade.h:1
 msgid "Application:"
@@ -1173,7 +1169,7 @@ msgstr[0] "分鐘"
 msgid "Power Manager for the GNOME desktop"
 msgstr "GNOME 桌面的電源管理程式"
 
-#: ../src/gpm-devicekit.c:168
+#: ../src/gpm-devicekit.c:183
 #, c-format
 msgid ""
 "%s fully charged (%.1f%%)\n"
@@ -1182,23 +1178,23 @@ msgstr ""
 "%s 已充滿 (%.1f%%)\n"
 "提供 %s 電池使用時間"
 
-#: ../src/gpm-devicekit.c:172
+#: ../src/gpm-devicekit.c:187
 #, c-format
 msgid "%s fully charged (%.1f%%)"
 msgstr "%s 已充滿 (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:180
+#: ../src/gpm-devicekit.c:195
 #, c-format
 msgid "%s %s remaining (%.1f%%)"
 msgstr "%s %s 剩餘 (%.1f%%)"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:185
+#: ../src/gpm-devicekit.c:200
 #, c-format
 msgid "%s discharging (%.1f%%)"
 msgstr "%s 正在放電 (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:197
+#: ../src/gpm-devicekit.c:212
 #, c-format
 msgid ""
 "%s %s until charged (%.1f%%)\n"
@@ -1207,201 +1203,202 @@ msgstr ""
 "%s %s 直到充滿 (%.1f%%)\n"
 "提供 %s 電池使用時間"
 
-#: ../src/gpm-devicekit.c:206
+#: ../src/gpm-devicekit.c:221
 #, c-format
 msgid "%s %s until charged (%.1f%%)"
 msgstr "%s %s 直到充滿 (%.1f%%)"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:212
+#: ../src/gpm-devicekit.c:227
 #, c-format
 msgid "%s charging (%.1f%%)"
 msgstr "%s 正在充電 (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:219
+#: ../src/gpm-devicekit.c:234
 msgid "Device state could not be read at this time"
 msgstr "現在無法讀取裝置狀態"
 
-#: ../src/gpm-devicekit.c:238
+#: ../src/gpm-devicekit.c:253
 #, c-format
 msgid "<b>Product:</b> %s\n"
 msgstr "<b>產品：</b>%s\n"
 
-#: ../src/gpm-devicekit.c:240 ../src/gpm-devicekit.c:242
-#: ../src/gpm-devicekit.c:244 ../src/gpm-devicekit.c:246
+#: ../src/gpm-devicekit.c:255 ../src/gpm-devicekit.c:257
+#: ../src/gpm-devicekit.c:259 ../src/gpm-devicekit.c:261
 #, c-format
 msgid "<b>Status:</b> %s\n"
 msgstr "<b>狀態：</b> %s\n"
 
-#: ../src/gpm-devicekit.c:240
+#: ../src/gpm-devicekit.c:255
 msgid "Missing"
 msgstr "遺失"
 
-#: ../src/gpm-devicekit.c:242
+#: ../src/gpm-devicekit.c:257
 msgid "Charged"
 msgstr "已充飽"
 
-#: ../src/gpm-devicekit.c:244
+#: ../src/gpm-devicekit.c:259
 msgid "Charging"
 msgstr "充電中"
 
-#: ../src/gpm-devicekit.c:246
+#: ../src/gpm-devicekit.c:261
 msgid "Discharging"
 msgstr "放電中"
 
-#: ../src/gpm-devicekit.c:248
+#: ../src/gpm-devicekit.c:263
 #, c-format
 msgid "<b>Percentage charge:</b> %.1f%%\n"
 msgstr "<b>充電百分比：</b> %.1f%%\n"
 
-#: ../src/gpm-devicekit.c:250
+#: ../src/gpm-devicekit.c:265
 #, c-format
 msgid "<b>Vendor:</b> %s\n"
 msgstr "<b>廠商：</b> %s\n"
 
-#: ../src/gpm-devicekit.c:253
+#: ../src/gpm-devicekit.c:268
 #, c-format
 msgid "<b>Technology:</b> %s\n"
 msgstr "<b>科技：</b> %s\n"
 
-#: ../src/gpm-devicekit.c:256
+#: ../src/gpm-devicekit.c:271
 #, c-format
 msgid "<b>Serial number:</b> %s\n"
 msgstr "<b>序號：</b> %s\n"
 
-#: ../src/gpm-devicekit.c:258
+#: ../src/gpm-devicekit.c:273
 #, c-format
 msgid "<b>Model:</b> %s\n"
 msgstr "<b>型號：</b> %s\n"
 
-#: ../src/gpm-devicekit.c:261
+#: ../src/gpm-devicekit.c:276
 #, c-format
 msgid "<b>Charge time:</b> %s\n"
 msgstr "<b>充電時間：</b> %s\n"
 
-#: ../src/gpm-devicekit.c:266
+#: ../src/gpm-devicekit.c:281
 #, c-format
 msgid "<b>Discharge time:</b> %s\n"
 msgstr "<b>放電時間：</b> %s\n"
 
 #. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
-#: ../src/gpm-devicekit.c:273
+#: ../src/gpm-devicekit.c:288
 msgid "Excellent"
 msgstr "很好"
 
-#: ../src/gpm-devicekit.c:275
+#: ../src/gpm-devicekit.c:290
 msgid "Good"
 msgstr "良好"
 
-#: ../src/gpm-devicekit.c:277
+#: ../src/gpm-devicekit.c:292
 msgid "Fair"
 msgstr "一般"
 
-#: ../src/gpm-devicekit.c:279
+#: ../src/gpm-devicekit.c:294
 msgid "Poor"
 msgstr "差"
 
-#. Translators: %i is a percentage and %s the condition (Excellent, Good, ...)
-#: ../src/gpm-devicekit.c:282
+#. Translators: %.1f is a percentage and %s the condition (Excellent, Good, ...)
+#: ../src/gpm-devicekit.c:297
 #, c-format
 msgid "<b>Capacity:</b> %.1f%% (%s)\n"
 msgstr "<b>容量：</b> %.1f%% (%s)\n"
 
-#: ../src/gpm-devicekit.c:287
+#: ../src/gpm-devicekit.c:302
 #, c-format
 msgid "<b>Current charge:</b> %.1f Wh\n"
 msgstr "<b>目前充電：</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:291
+#: ../src/gpm-devicekit.c:306
 #, c-format
 msgid "<b>Last full charge:</b> %.1f Wh\n"
 msgstr "<b>上次完全充飽：</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:294
+#. Translators: Design charge is the amount of charge the battery is designed to have when brand new
+#: ../src/gpm-devicekit.c:310
 #, c-format
 msgid "<b>Design charge:</b> %.1f Wh\n"
 msgstr "<b>設計充電：</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:297
+#: ../src/gpm-devicekit.c:313
 #, c-format
 msgid "<b>Charge rate:</b> %.1f W\n"
 msgstr "<b>充雷率：</b> %.1f W\n"
 
-#: ../src/gpm-devicekit.c:303
+#: ../src/gpm-devicekit.c:319
 #, c-format
 msgid "<b>Current charge:</b> %.0f/7\n"
 msgstr "<b>目前充電：</b> %.0f/7\n"
 
-#: ../src/gpm-devicekit.c:306
+#: ../src/gpm-devicekit.c:322
 #, c-format
 msgid "<b>Design charge:</b> %.0f/7\n"
 msgstr "<b>設計充電：</b> %.0f/7\n"
 
-#: ../src/gpm-devicekit.c:324
+#: ../src/gpm-devicekit.c:340
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "AC 電源"
 
-#: ../src/gpm-devicekit.c:327
+#: ../src/gpm-devicekit.c:343
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "筆記型電腦電池"
 
-#: ../src/gpm-devicekit.c:330
+#: ../src/gpm-devicekit.c:346
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "不斷電系統"
 
-#: ../src/gpm-devicekit.c:333
+#: ../src/gpm-devicekit.c:349
 msgid "Monitor"
 msgid_plural "Monitors"
 msgstr[0] "顯示器"
 
-#: ../src/gpm-devicekit.c:336
+#: ../src/gpm-devicekit.c:352
 msgid "Wireless mouse"
 msgid_plural "Wireless mice"
 msgstr[0] "無線滑鼠"
 
-#: ../src/gpm-devicekit.c:339
+#: ../src/gpm-devicekit.c:355
 msgid "Wireless keyboard"
 msgid_plural "Wireless keyboards"
 msgstr[0] "無線鍵盤"
 
-#: ../src/gpm-devicekit.c:342
+#: ../src/gpm-devicekit.c:358
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "PDA"
 
-#: ../src/gpm-devicekit.c:345
+#: ../src/gpm-devicekit.c:361
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "行動電話"
 
-#: ../src/gpm-devicekit.c:402
+#: ../src/gpm-devicekit.c:418
 msgid "Lithium Ion"
 msgstr "鋰離子"
 
-#: ../src/gpm-devicekit.c:405
+#: ../src/gpm-devicekit.c:421
 msgid "Lithium Polymer"
 msgstr "鋰聚合物"
 
-#: ../src/gpm-devicekit.c:408
+#: ../src/gpm-devicekit.c:424
 msgid "Lithium Iron Phosphate"
 msgstr "磷酸鋰鐵"
 
-#: ../src/gpm-devicekit.c:411
+#: ../src/gpm-devicekit.c:427
 msgid "Lead acid"
 msgstr "鉛酸"
 
-#: ../src/gpm-devicekit.c:414
+#: ../src/gpm-devicekit.c:430
 msgid "Nickel Cadmium"
 msgstr "鎳鎘"
 
-#: ../src/gpm-devicekit.c:417
+#: ../src/gpm-devicekit.c:433
 msgid "Nickel metal hydride"
 msgstr "鎳氫"
 
-#: ../src/gpm-devicekit.c:420
+#: ../src/gpm-devicekit.c:436
 msgid "Unknown technology"
 msgstr "不明科技"
 
@@ -1522,23 +1519,23 @@ msgid "Multiple applications have stopped the shutdown from taking place."
 msgstr "多個程式停止關機以避免發生問題。"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-main.c:136 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1346
+#: ../src/gpm-main.c:139 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1332
 msgid "Show extra debugging information"
 msgstr "顯示額外的除錯資訊"
 
-#: ../src/gpm-main.c:138
+#: ../src/gpm-main.c:141
 msgid "Show version of installed program and exit"
 msgstr "顯示已安裝程式的版本並離開"
 
-#: ../src/gpm-main.c:140
+#: ../src/gpm-main.c:143
 msgid "Exit after a small delay (for debugging)"
 msgstr "短暫延遲後離開（偵錯用）"
 
-#: ../src/gpm-main.c:142
+#: ../src/gpm-main.c:145
 msgid "Exit after the manager has loaded (for debugging)"
 msgstr "當管理員載入後離開（偵錯用）"
 
-#: ../src/gpm-main.c:156 ../src/gpm-main.c:160
+#: ../src/gpm-main.c:159 ../src/gpm-main.c:163
 msgid "GNOME Power Manager"
 msgstr "GNOME 電源管理程式"
 
@@ -2099,6 +2096,11 @@ msgstr "序號"
 msgid "Supply"
 msgstr "供給"
 
+#: ../src/gpm-statistics.c:343
+#, c-format
+msgid "%d seconds"
+msgstr "%d 秒"
+
 #: ../src/gpm-statistics.c:344
 msgid "Refreshed"
 msgstr "已重新整理"
@@ -2169,7 +2171,7 @@ msgstr ""
 #. TRANSLATORS: interrupt between processors
 #: ../src/gpm-statistics.c:700
 msgid "Interprocessor interrupt"
-msgstr ""
+msgstr "處理器間的中斷"
 
 #. TRANSLATORS: unknown interrupt
 #: ../src/gpm-statistics.c:705
@@ -2219,7 +2221,7 @@ msgstr "睡眠 %s"
 #: ../src/gpm-statistics.c:783
 #, c-format
 msgid "New task %s"
-msgstr ""
+msgstr "新工作 %s"
 
 #. TRANSLATORS: this is a task thats woken to check state
 #: ../src/gpm-statistics.c:786
@@ -2235,9 +2237,9 @@ msgstr "工作佇列 %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
 #: ../src/gpm-statistics.c:795
-#, fuzzy, c-format
+#, c-format
 msgid "Network route flush %s"
-msgstr "追蹤到某網路位址的路由"
+msgstr "網路路由清空 %s"
 
 #. TRANSLATORS: activity on the USB bus
 #: ../src/gpm-statistics.c:798
@@ -2247,10 +2249,9 @@ msgstr "USB 使用 %s"
 
 #. TRANSLATORS: we've timed out of an aligned timer
 #: ../src/gpm-statistics.c:801
-#, fuzzy, c-format
-#| msgid "Wakeups"
+#, c-format
 msgid "Wakeup %s"
-msgstr "喚醒"
+msgstr "喚醒 %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
 #: ../src/gpm-statistics.c:804
@@ -2260,7 +2261,7 @@ msgstr "本地端中斷"
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
 #: ../src/gpm-statistics.c:807
 msgid "Rescheduling interrupts"
-msgstr ""
+msgstr "重新排程中斷"
 
 #. TRANSLATORS: shown on the titlebar
 #: ../src/gpm-statistics.c:917
@@ -2283,42 +2284,41 @@ msgid "Processor Wakeups"
 msgstr "處理器喚醒"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1155 ../src/gpm-statistics.c:1161
-#: ../src/gpm-statistics.c:1167 ../src/gpm-statistics.c:1173
+#: ../src/gpm-statistics.c:1141 ../src/gpm-statistics.c:1147
+#: ../src/gpm-statistics.c:1153 ../src/gpm-statistics.c:1159
 msgid "Time elapsed"
 msgstr "花費時間"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1157
+#: ../src/gpm-statistics.c:1143
 msgid "Power"
 msgstr "電源"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1163 ../src/gpm-statistics.c:1206
-#: ../src/gpm-statistics.c:1212 ../src/gpm-statistics.c:1218
-#: ../src/gpm-statistics.c:1224
+#: ../src/gpm-statistics.c:1149 ../src/gpm-statistics.c:1192
+#: ../src/gpm-statistics.c:1198 ../src/gpm-statistics.c:1204
+#: ../src/gpm-statistics.c:1210
 msgid "Cell charge"
 msgstr "Cell 充電"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1169 ../src/gpm-statistics.c:1175
+#: ../src/gpm-statistics.c:1155 ../src/gpm-statistics.c:1161
 msgid "Predicted time"
 msgstr "預計時間"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1208 ../src/gpm-statistics.c:1220
-#, fuzzy
+#: ../src/gpm-statistics.c:1194 ../src/gpm-statistics.c:1206
 msgid "Correction factor"
-msgstr "設定自訂縮放因子"
+msgstr "校正因素"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1214 ../src/gpm-statistics.c:1226
+#: ../src/gpm-statistics.c:1200 ../src/gpm-statistics.c:1212
 msgid "Prediction accuracy"
-msgstr ""
+msgstr "預測準確度"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:1575
+#: ../src/gpm-statistics.c:1557
 msgid "Processor"
 msgstr "處理器"
 
@@ -2328,7 +2328,7 @@ msgstr "裝置資訊"
 
 #: ../src/gpm-tray-icon.c:192
 msgid "There is no detailed information for this device"
-msgstr ""
+msgstr "沒有關於這個裝置的詳細資訊"
 
 #: ../src/gpm-tray-icon.c:321
 msgid "translator-credits"
@@ -2376,6 +2376,9 @@ msgstr "暫停(_S)"
 #: ../src/gpm-tray-icon.c:552
 msgid "Hi_bernate"
 msgstr "休眠(_B)"
+
+#~ msgid "gtk-refresh"
+#~ msgstr "gtk-refresh"
 
 #~ msgid "Add related _events"
 #~ msgstr "加入相關事件(_E)"
