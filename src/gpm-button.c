@@ -499,13 +499,13 @@ hal_daemon_stop_cb (HalManager *hal_manager,
  * hal_daemon_new_device_cb
  **/
 static void
-hal_daemon_new_device_cb (HalGManager *hal_manager, const gchar *udi, GpmButton *button)
+hal_daemon_new_device_cb (HalManager *hal_manager, const gchar *udi, GpmButton *button)
 
 {
 	gboolean is_button;
 	HalDevice *device;
 
-	device = hal_gdevice_new ();
+	device = hal_device_new ();
 	hal_device_set_udi (device, udi);
 	hal_device_query_capability (device, "button", &is_button, NULL);
 	if (is_button == TRUE) {
