@@ -280,7 +280,7 @@ hal_device_query_capability (HalDevice  *device,
 		return FALSE;
 	}
 	ret = dbus_g_proxy_call (proxy, "QueryCapability", error,
-				 G_TYPE_STRING, device->priv->udi,
+				 G_TYPE_STRING, capability,
 				 G_TYPE_INVALID,
 				 G_TYPE_BOOLEAN, has_capability,
 				 G_TYPE_INVALID);

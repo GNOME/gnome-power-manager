@@ -67,53 +67,53 @@ dkp_object_collect_props (const char *key, const GValue *value, DkpObject *obj)
 {
 	gboolean handled = TRUE;
 
-	if (egg_strequal (key, "native-path"))
+	if (g_strcmp0 (key, "native-path") == 0)
 		obj->native_path = g_strdup (g_value_get_string (value));
-	else if (egg_strequal (key, "vendor"))
+	else if (g_strcmp0 (key, "vendor") == 0)
 		obj->vendor = g_strdup (g_value_get_string (value));
-	else if (egg_strequal (key, "model"))
+	else if (g_strcmp0 (key, "model") == 0)
 		obj->model = g_strdup (g_value_get_string (value));
-	else if (egg_strequal (key, "serial"))
+	else if (g_strcmp0 (key, "serial") == 0)
 		obj->serial = g_strdup (g_value_get_string (value));
-	else if (egg_strequal (key, "update-time"))
+	else if (g_strcmp0 (key, "update-time") == 0)
 		obj->update_time = g_value_get_uint64 (value);
-	else if (egg_strequal (key, "type"))
+	else if (g_strcmp0 (key, "type") == 0)
 		obj->type = dkp_device_type_from_text (g_value_get_string (value));
-	else if (egg_strequal (key, "online"))
+	else if (g_strcmp0 (key, "online") == 0)
 		obj->online = g_value_get_boolean (value);
-	else if (egg_strequal (key, "has-history"))
+	else if (g_strcmp0 (key, "has-history") == 0)
 		obj->has_history = g_value_get_boolean (value);
-	else if (egg_strequal (key, "has-statistics"))
+	else if (g_strcmp0 (key, "has-statistics") == 0)
 		obj->has_statistics = g_value_get_boolean (value);
-	else if (egg_strequal (key, "energy"))
+	else if (g_strcmp0 (key, "energy") == 0)
 		obj->energy = g_value_get_double (value);
-	else if (egg_strequal (key, "energy-empty"))
+	else if (g_strcmp0 (key, "energy-empty") == 0)
 		obj->energy_empty = g_value_get_double (value);
-	else if (egg_strequal (key, "energy-full"))
+	else if (g_strcmp0 (key, "energy-full") == 0)
 		obj->energy_full = g_value_get_double (value);
-	else if (egg_strequal (key, "energy-full-design"))
+	else if (g_strcmp0 (key, "energy-full-design") == 0)
 		obj->energy_full_design = g_value_get_double (value);
-	else if (egg_strequal (key, "energy-rate"))
+	else if (g_strcmp0 (key, "energy-rate") == 0)
 		obj->energy_rate = g_value_get_double (value);
-	else if (egg_strequal (key, "voltage"))
+	else if (g_strcmp0 (key, "voltage") == 0)
 		obj->voltage = g_value_get_double (value);
-	else if (egg_strequal (key, "time-to-full"))
+	else if (g_strcmp0 (key, "time-to-full") == 0)
 		obj->time_to_full = g_value_get_int64 (value);
-	else if (egg_strequal (key, "time-to-empty"))
+	else if (g_strcmp0 (key, "time-to-empty") == 0)
 		obj->time_to_empty = g_value_get_int64 (value);
-	else if (egg_strequal (key, "percentage"))
+	else if (g_strcmp0 (key, "percentage") == 0)
 		obj->percentage = g_value_get_double (value);
-	else if (egg_strequal (key, "technology"))
+	else if (g_strcmp0 (key, "technology") == 0)
 		obj->technology = dkp_device_technology_from_text (g_value_get_string (value));
-	else if (egg_strequal (key, "is-present"))
+	else if (g_strcmp0 (key, "is-present") == 0)
 		obj->is_present = g_value_get_boolean (value);
-	else if (egg_strequal (key, "is-rechargeable"))
+	else if (g_strcmp0 (key, "is-rechargeable") == 0)
 		obj->is_rechargeable = g_value_get_boolean (value);
-	else if (egg_strequal (key, "power-supply"))
+	else if (g_strcmp0 (key, "power-supply") == 0)
 		obj->power_supply = g_value_get_boolean (value);
-	else if (egg_strequal (key, "capacity"))
+	else if (g_strcmp0 (key, "capacity") == 0)
 		obj->capacity = g_value_get_double (value);
-	else if (egg_strequal (key, "state"))
+	else if (g_strcmp0 (key, "state") == 0)
 		obj->state = dkp_device_state_from_text (g_value_get_string (value));
 	else
 		handled = FALSE;
@@ -189,10 +189,10 @@ dkp_object_equal (const DkpObject *obj1, const DkpObject *obj2)
 	    obj1->time_to_full == obj2->time_to_full &&
 	    obj1->state == obj2->state &&
 	    obj1->technology == obj2->technology &&
-	    egg_strequal (obj1->vendor, obj2->vendor) &&
-	    egg_strequal (obj1->model, obj2->model) &&
-	    egg_strequal (obj1->serial, obj2->serial) &&
-	    egg_strequal (obj1->native_path, obj2->native_path) &&
+	    g_strcmp0 (obj1->vendor, obj2->vendor) == 0 &&
+	    g_strcmp0 (obj1->model, obj2->model) == 0 &&
+	    g_strcmp0 (obj1->serial, obj2->serial) == 0 &&
+	    g_strcmp0 (obj1->native_path, obj2->native_path) == 0 &&
 	    obj1->online == obj2->online &&
 	    obj1->is_present == obj2->is_present &&
 	    obj1->power_supply == obj2->power_supply &&
@@ -326,11 +326,11 @@ dkp_object_diff (const DkpObject *old, const DkpObject *obj)
 	gchar *time_str_old;
 
 	g_print ("  native-path:          %s\n", obj->native_path);
-	if (!egg_strequal (obj->vendor, old->vendor))
+	if (g_strcmp0 (obj->vendor, old->vendor) != 0)
 		g_print ("  vendor:               %s -> %s\n", old->vendor, obj->vendor);
-	if (!egg_strequal (obj->model, old->model))
+	if (g_strcmp0 (obj->model, old->model) != 0)
 		g_print ("  model:                %s -> %s\n", old->model, obj->model);
-	if (!egg_strequal (obj->serial, old->serial))
+	if (g_strcmp0 (obj->serial, old->serial) != 0)
 		g_print ("  serial:               %s -> %s\n", old->serial, obj->serial);
 	if (obj->has_history != old->has_history)
 		g_print ("  has history:          %s -> %s\n",
@@ -510,6 +510,7 @@ dkp_object_get_id (DkpObject *obj)
 			g_string_append_c (string, '-');
 		}
 		if (obj->energy_full_design > 0) {
+			/* FIXME: this may not be stable if we are using voltage_now */
 			g_string_append_printf (string, "%i", (guint) obj->energy_full_design);
 			g_string_append_c (string, '-');
 		}
@@ -535,7 +536,7 @@ dkp_object_get_id (DkpObject *obj)
 		id = g_strdup_printf ("%s-%s-%s", obj->vendor, obj->model, obj->serial);
 	}
 
-	g_strdelimit (id, "\\\t\"?' /", '_');
+	g_strdelimit (id, "\\\t\"?' /,.", '_');
 
 out:
 	return id;

@@ -1,3 +1,13 @@
+2009-02-27  Richard Hughes  <richard@hughsie.com>
+
+	* libdevkit-power/dkp-object.c: (dkp_object_collect_props),
+	(dkp_object_equal), (dkp_object_diff), (dkp_object_get_id):
+	Use g_strcmp0 rather than homemade function. No functional change.
+
+	* libhal-glib/hal-device.c: (hal_device_query_capability):
+	Fix a typo in a function we don't use anymore.
+	Found by Arnaud Patard, many thanks.
+
 2009-02-25  Richard Hughes  <richard@hughsie.com>
 
 	* data/gnome-power-manager.schemas.in:
