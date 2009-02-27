@@ -1,5 +1,11 @@
 2009-02-27  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-button.c: (hal_daemon_new_device_cb), (gpm_button_init):
+	Add buttons as they appear, as would do on a hibernate with a USB
+	keyboard. Patch by Arnaud Patard, many thanks.
+
+2009-02-27  Richard Hughes  <richard@hughsie.com>
+
 	* libdevkit-power/dkp-object.c: (dkp_object_collect_props),
 	(dkp_object_equal), (dkp_object_diff), (dkp_object_get_id):
 	Use g_strcmp0 rather than homemade function. No functional change.

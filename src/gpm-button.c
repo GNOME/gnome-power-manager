@@ -494,6 +494,26 @@ hal_daemon_stop_cb (HalManager *hal_manager,
 		button->priv->hal_device_store = NULL;
 	}
 }
+
+/**
+ * hal_daemon_new_device_cb
+ **/
+static void
+hal_daemon_new_device_cb (HalGManager *hal_manager, const gchar *udi, GpmButton *button)
+
+{
+	gboolean is_button;
+	HalDevice *device;
+
+	device = hal_gdevice_new ();
+	hal_device_set_udi (device, udi);
+	hal_device_query_capability (device, "button", &is_button, NULL);
+	if (is_button == TRUE) {
+		egg_debug ("Watching %s", udi);
+		watch_add_button (button, udi);
+	}
+	g_object_unref (device);
+}
 #endif
 
 /**
@@ -544,6 +564,8 @@ gpm_button_init (GpmButton *button)
 			  G_CALLBACK (hal_daemon_start_cb), button);
 	g_signal_connect (button->priv->hal_manager, "daemon-stop",
 			  G_CALLBACK (hal_daemon_stop_cb), button);
+	g_signal_connect (button->priv->hal_manager, "device-added",
+			  G_CALLBACK (hal_daemon_new_device_cb), button);
 	button->priv->hal_device_store = hal_device_store_new ();
 
 	coldplug_buttons (button);
