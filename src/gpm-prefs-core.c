@@ -88,8 +88,11 @@ G_DEFINE_TYPE (GpmPrefs, gpm_prefs, G_TYPE_OBJECT)
 #define ACTION_BLANK_TEXT		_("Blank screen")
 #define ACTION_NOTHING_TEXT		_("Do nothing")
 
-/* If sleep time in a slider is set to 61 it is considered as never */
-const int NEVER_TIME_ON_SLIDER = 61;
+/* If sleep time in a slider is set to 122 it is considered as never.
+ * We use 122 because gnome-screensaver's idle delay can be pushed to 120.
+ * We leave ourselves an extra minute past that (because our slider is always
+ * at least idle_delay+1).  Then 122 is the special value 'never'. */
+const int NEVER_TIME_ON_SLIDER = 122;
 
 /**
  * gpm_prefs_class_init:
@@ -330,6 +333,7 @@ gpm_prefs_setup_sleep_slider (GpmPrefs *prefs, const gchar *widget_name, const g
 	GtkWidget *widget;
 	gint value;
 	gboolean is_writable;
+	GtkAdjustment *adjustment;
 
 	widget = glade_xml_get_widget (prefs->priv->glade_xml, widget_name);
 	g_signal_connect (G_OBJECT (widget), "format-value",
@@ -347,6 +351,10 @@ gpm_prefs_setup_sleep_slider (GpmPrefs *prefs, const gchar *widget_name, const g
 		value /= 60;
 		value += prefs->priv->idle_delay;
 	}
+
+	/* set upper */
+	adjustment = gtk_range_get_adjustment (GTK_RANGE (widget));
+	gtk_adjustment_set_upper (adjustment, NEVER_TIME_ON_SLIDER);
 
 	gtk_range_set_value (GTK_RANGE (widget), value);
 

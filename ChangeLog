@@ -1,5 +1,13 @@
 2009-03-02  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-prefs-core.c: (gpm_prefs_setup_sleep_slider):
+	Increase the size of the timeout widget to two hours, which fixes
+	things when gnome-screensaver has a long timeout.
+	Based on a patch from Michael Terry, many thanks.
+	Fixes #529214
+
+2009-03-02  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-inhibit.c: (gpm_inhibit_inhibit),
 	(gpm_inhibit_un_inhibit), (gpm_inhibit_remove_dbus),
 	(gpm_inhibit_init), (gpm_inhibit_finalize):
