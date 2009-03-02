@@ -1,3 +1,11 @@
+2009-03-02  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-inhibit.c: (gpm_inhibit_inhibit),
+	(gpm_inhibit_un_inhibit), (gpm_inhibit_remove_dbus),
+	(gpm_inhibit_init), (gpm_inhibit_finalize):
+	Don't crash if there's no gnome-session.
+	Fixes #485103
+
 2009-02-27  Richard Hughes  <richard@hughsie.com>
 
 	Fix compile with --enable-legacy-buttons

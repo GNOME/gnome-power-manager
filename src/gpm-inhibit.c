@@ -154,6 +154,10 @@ gpm_inhibit_inhibit (GpmInhibit  *inhibit, const gchar *application, const gchar
 		return;
 	}
 
+	/* if there's no gnome-session, this will be NULL */
+	if (inhibit->priv->proxy_session == NULL)
+		goto skip;
+
 	/* proxy to gnome-session */
 	ret = dbus_g_proxy_call (inhibit->priv->proxy_session, "Inhibit", &error,
 				 G_TYPE_STRING, application, /* app_id */
@@ -169,6 +173,7 @@ gpm_inhibit_inhibit (GpmInhibit  *inhibit, const gchar *application, const gchar
 		return;
 	}
 
+skip:
 	/* seems okay, add to list */
 	data = g_new (GpmInhibitData, 1);
 	data->cookie = inhibit_cookie;
@@ -222,6 +227,10 @@ gpm_inhibit_un_inhibit (GpmInhibit *inhibit, guint32 cookie, GError **error)
 	}
 	egg_debug ("UnInhibit okay #%i", cookie);
 
+	/* if there's no gnome-session, this will be NULL */
+	if (inhibit->priv->proxy_session == NULL)
+		goto skip;
+
 	/* proxy to gnome-session */
 	ret = dbus_g_proxy_call (inhibit->priv->proxy_session, "Uninhibit", error,
 				 G_TYPE_UINT, cookie,
@@ -232,6 +241,7 @@ gpm_inhibit_un_inhibit (GpmInhibit *inhibit, guint32 cookie, GError **error)
 		return FALSE;
 	}
 
+skip:
 	gpm_inhibit_free_data_object (data);
 
 	/* remove it from the list */
@@ -267,6 +277,10 @@ gpm_inhibit_remove_dbus (GpmInhibit *inhibit, const gchar *connection)
 		if (strcmp (data->connection, connection) == 0) {
 			egg_debug ("Auto-revoked idle inhibit on '%s'.", data->application);
 
+			/* if there's no gnome-session, this will be NULL */
+			if (inhibit->priv->proxy_session == NULL)
+				goto skip;
+
 			/* proxy to gnome-session */
 			ret = dbus_g_proxy_call (inhibit->priv->proxy_session, "Uninhibit", &error,
 						 G_TYPE_UINT, data->cookie,
@@ -276,13 +290,12 @@ gpm_inhibit_remove_dbus (GpmInhibit *inhibit, const gchar *connection)
 				egg_warning ("failed to proxy: %s", error->message);
 				g_error_free (error);
 			}
-
+skip:
 			gpm_inhibit_free_data_object (data);
 			/* remove it from the list */
 			inhibit->priv->list = g_slist_remove (inhibit->priv->list, (gconstpointer) data);
 		}
 	}
-	return;
 }
 
 /**
@@ -464,11 +477,10 @@ gpm_inhibit_init (GpmInhibit *inhibit)
 
 	inhibit->priv->proxy_session = dbus_g_proxy_new_for_name_owner (connection,
 									GPM_SESSION_MANAGER_SERVICE, GPM_SESSION_MANAGER_PATH,
-						 			GPM_SESSION_MANAGER_INTERFACE, NULL);
+						 			GPM_SESSION_MANAGER_INTERFACE, &error);
 	if (inhibit->priv->proxy_session == NULL) {
 		egg_warning ("failed to get proxy: %s", error->message);
 		g_error_free (error);
-		return;
 	}
 
 	/* Do we ignore inhibit requests? */
@@ -497,7 +509,8 @@ gpm_inhibit_finalize (GObject *object)
 
 	g_object_unref (inhibit->priv->conf);
 	g_object_unref (inhibit->priv->proxy);
-	g_object_unref (inhibit->priv->proxy_session);
+	if (inhibit->priv->proxy_session != NULL)
+		g_object_unref (inhibit->priv->proxy_session);
 	G_OBJECT_CLASS (gpm_inhibit_parent_class)->finalize (object);
 }
 
