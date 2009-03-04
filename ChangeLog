@@ -1,3 +1,14 @@
+2009-03-04  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-devicekit.c: (gpm_devicekit_get_object_icon):
+	Fix up the icon when we are state unknown, and very close to the
+	charging capacity.
+	Some batteries like to stop charging before they get to	100%.
+
+	* src/gpm-devicekit.c: (gpm_devicekit_get_object_summary):
+	Print a less scary warning when the device state is unknown.
+	This removes one string, and does not add any.
+
 2009-03-02  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs-core.c: (gpm_prefs_setup_sleep_slider):

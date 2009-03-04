@@ -109,6 +109,10 @@ gpm_devicekit_get_object_icon (const DkpObject *obj)
 		} else if (obj->state == DKP_DEVICE_STATE_FULLY_CHARGED) {
 			filename = g_strdup_printf ("gpm-%s-charged", prefix);
 
+		} else if (obj->state == DKP_DEVICE_STATE_UNKNOWN && obj->percentage > 95.0f) {
+			egg_warning ("fixing up unknown %f", obj->percentage);
+			filename = g_strdup_printf ("gpm-%s-charged", prefix);
+
 		} else if (obj->state == DKP_DEVICE_STATE_CHARGING) {
 			index_str = gpm_devicekit_get_object_icon_index (obj);
 			filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index_str);
@@ -231,7 +235,7 @@ gpm_devicekit_get_object_summary (const DkpObject *obj)
 	} else {
 		egg_warning ("in an undefined state we are not charging or "
 			     "discharging and the batteries are also not charged");
-		description = g_strdup (_("Device state could not be read at this time"));
+		description = g_strdup_printf ("%s (%.1f%%)", type_desc, obj->percentage);
 	}
 	return description;
 }
