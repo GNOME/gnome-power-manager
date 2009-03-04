@@ -1,5 +1,10 @@
 2009-03-04  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-main.c: (main):
+	Don't double free when using gnome-power-manager --version
+
+2009-03-04  Richard Hughes  <richard@hughsie.com>
+
 	* libdevkit-power/dkp-device.c: (dkp_device_get_history):
 	* libdevkit-power/dkp-enum.h:
 	* libdevkit-power/dkp-object.c: (dkp_object_collect_props):

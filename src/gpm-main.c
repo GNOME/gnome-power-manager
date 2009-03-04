@@ -162,7 +162,6 @@ main (int argc, char *argv[])
 	g_option_context_set_translation_domain(context, GETTEXT_PACKAGE);
 	g_option_context_set_summary (context, _("GNOME Power Manager"));
 	g_option_context_parse (context, &argc, &argv, NULL);
-	g_option_context_free (context);
 
 	if (version) {
 		g_print ("Version %s\n", VERSION);
