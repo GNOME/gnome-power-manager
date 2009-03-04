@@ -77,9 +77,12 @@ dkp_object_collect_props (const char *key, const GValue *value, DkpObject *obj)
 		obj->serial = g_strdup (g_value_get_string (value));
 	else if (g_strcmp0 (key, "update-time") == 0)
 		obj->update_time = g_value_get_uint64 (value);
-	else if (g_strcmp0 (key, "type") == 0)
-		obj->type = dkp_device_type_from_text (g_value_get_string (value));
-	else if (g_strcmp0 (key, "online") == 0)
+	else if (g_strcmp0 (key, "type") == 0) {
+		if (G_VALUE_HOLDS_STRING(value))
+			obj->type = dkp_device_type_from_text (g_value_get_string (value));
+		else
+			obj->type = g_value_get_uint (value);
+	} else if (g_strcmp0 (key, "online") == 0)
 		obj->online = g_value_get_boolean (value);
 	else if (g_strcmp0 (key, "has-history") == 0)
 		obj->has_history = g_value_get_boolean (value);
@@ -103,9 +106,12 @@ dkp_object_collect_props (const char *key, const GValue *value, DkpObject *obj)
 		obj->time_to_empty = g_value_get_int64 (value);
 	else if (g_strcmp0 (key, "percentage") == 0)
 		obj->percentage = g_value_get_double (value);
-	else if (g_strcmp0 (key, "technology") == 0)
-		obj->technology = dkp_device_technology_from_text (g_value_get_string (value));
-	else if (g_strcmp0 (key, "is-present") == 0)
+	else if (g_strcmp0 (key, "technology") == 0) {
+		if (G_VALUE_HOLDS_STRING(value))
+			obj->technology = dkp_device_technology_from_text (g_value_get_string (value));
+		else
+			obj->technology = g_value_get_uint (value);
+	} else if (g_strcmp0 (key, "is-present") == 0)
 		obj->is_present = g_value_get_boolean (value);
 	else if (g_strcmp0 (key, "is-rechargeable") == 0)
 		obj->is_rechargeable = g_value_get_boolean (value);
@@ -113,9 +119,12 @@ dkp_object_collect_props (const char *key, const GValue *value, DkpObject *obj)
 		obj->power_supply = g_value_get_boolean (value);
 	else if (g_strcmp0 (key, "capacity") == 0)
 		obj->capacity = g_value_get_double (value);
-	else if (g_strcmp0 (key, "state") == 0)
-		obj->state = dkp_device_state_from_text (g_value_get_string (value));
-	else
+	else if (g_strcmp0 (key, "state") == 0) {
+		if (G_VALUE_HOLDS_STRING(value))
+			obj->state = dkp_device_state_from_text (g_value_get_string (value));
+		else
+			obj->state = g_value_get_uint (value);
+	} else
 		handled = FALSE;
 
 	if (!handled)

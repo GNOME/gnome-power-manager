@@ -329,7 +329,10 @@ dkp_device_get_history (const DkpDevice *device, const gchar *type, guint timesp
 		g_value_unset (gv);
 		/* 2 */
 		gv = g_value_array_get_nth (gva, 2);
-		obj->state = dkp_device_state_from_text (g_value_get_string (gv));
+		if (G_VALUE_HOLDS_STRING(gv))
+			obj->state = dkp_device_state_from_text (g_value_get_string (gv));
+		else
+			obj->state = g_value_get_uint (gv);
 		g_value_unset (gv);
 		egg_obj_list_add (array, obj);
 		dkp_history_obj_free (obj);

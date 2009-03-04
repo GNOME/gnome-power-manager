@@ -1,5 +1,15 @@
 2009-03-04  Richard Hughes  <richard@hughsie.com>
 
+	* libdevkit-power/dkp-device.c: (dkp_device_get_history):
+	* libdevkit-power/dkp-enum.h:
+	* libdevkit-power/dkp-object.c: (dkp_object_collect_props):
+	Add in a check for the enum type, as upstream DeviceKit-power will
+	soon move to sending uint based enums, rather than strings.
+	For now, bodge in some checking code, so that 2-26 can work with
+	either version of DeviceKit-power.
+
+2009-03-04  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-devicekit.c: (gpm_devicekit_get_object_icon):
 	Fix up the icon when we are state unknown, and very close to the
 	charging capacity.
