@@ -273,7 +273,8 @@ EggObjList *
 dkp_device_get_history (const DkpDevice *device, const gchar *type, guint timespec, guint resolution)
 {
 	GError *error = NULL;
-	GType g_type_gvalue_array;
+	GType g_type_gvalue_array_old;
+	GType g_type_gvalue_array_new;
 	GPtrArray *gvalue_ptr_array = NULL;
 	GValueArray *gva;
 	GValue *gv;
@@ -285,11 +286,17 @@ dkp_device_get_history (const DkpDevice *device, const gchar *type, guint timesp
 	g_return_val_if_fail (DKP_IS_DEVICE (device), NULL);
 	g_return_val_if_fail (device->priv->proxy_device != NULL, NULL);
 
-	g_type_gvalue_array = dbus_g_type_get_collection ("GPtrArray",
+	g_type_gvalue_array_old = dbus_g_type_get_collection ("GPtrArray",
 					dbus_g_type_get_struct("GValueArray",
 						G_TYPE_UINT,
 						G_TYPE_DOUBLE,
 						G_TYPE_STRING,
+						G_TYPE_INVALID));
+	g_type_gvalue_array_new = dbus_g_type_get_collection ("GPtrArray",
+					dbus_g_type_get_struct("GValueArray",
+						G_TYPE_UINT,
+						G_TYPE_DOUBLE,
+						G_TYPE_UINT,
 						G_TYPE_INVALID));
 
 	/* get compound data */
@@ -298,8 +305,23 @@ dkp_device_get_history (const DkpDevice *device, const gchar *type, guint timesp
 				 G_TYPE_UINT, timespec,
 				 G_TYPE_UINT, resolution,
 				 G_TYPE_INVALID,
-				 g_type_gvalue_array, &gvalue_ptr_array,
+				 g_type_gvalue_array_new, &gvalue_ptr_array,
 				 G_TYPE_INVALID);
+
+	/* this failed, try with the old daemon */
+	if (!ret && error->code == 16) {
+		egg_warning ("falling back to old daemon type");
+		g_clear_error (&error);
+		ret = dbus_g_proxy_call (device->priv->proxy_device, "GetHistory", &error,
+					 G_TYPE_STRING, type,
+					 G_TYPE_UINT, timespec,
+					 G_TYPE_UINT, resolution,
+					 G_TYPE_INVALID,
+					 g_type_gvalue_array_old, &gvalue_ptr_array,
+					 G_TYPE_INVALID);
+	}
+
+	/* we failed */
 	if (!ret) {
 		egg_debug ("GetHistory(%s,%i) on %s failed: %s", type, timespec,
 			   device->priv->object_path, error->message);
