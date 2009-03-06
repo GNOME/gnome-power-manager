@@ -7,14 +7,15 @@
 # Og Maciel <ogmaciel@ubuntu.com>, 2007.
 # Fábio Nogueira <deb-user-ba@ubuntu.com>, 2008.
 # Enrico Nicoletto <liverig@gmail.com>, 2009.
+# Djavan Fagundes <dnoway@gmail.com>, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-23 16:03-0500\n"
-"PO-Revision-Date: 2009-02-09 13:16-0300\n"
-"Last-Translator: Enrico Nicoletto <liverig@gmail.com>\n"
+"POT-Creation-Date: 2009-03-06 08:35-0500\n"
+"PO-Revision-Date: 2009-03-06 10:05-0300\n"
+"Last-Translator: Djavan Fagundes <dnoway@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1032,7 +1033,7 @@ msgstr "Brilho"
 
 #: ../data/gpm-statistics.glade.h:1
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: ../data/gpm-statistics.glade.h:2
 msgid "Data length:"
@@ -1052,7 +1053,7 @@ msgstr "Histórico"
 
 #: ../data/gpm-statistics.glade.h:7
 msgid "Processor wakeups per second:"
-msgstr ""
+msgstr "Recuperações do processador por segundo:"
 
 #: ../data/gpm-statistics.glade.h:8
 msgid "Show data points"
@@ -1068,7 +1069,7 @@ msgstr "Usar linha suavizada"
 
 #: ../data/gpm-statistics.glade.h:11 ../src/gpm-statistics.c:197
 msgid "Wakeups"
-msgstr ""
+msgstr "Recuperações"
 
 #: ../data/gpm-inhibit-test.glade.h:1
 msgid "Application:"
@@ -1259,7 +1260,7 @@ msgstr[1] "minutos"
 msgid "Power Manager for the GNOME desktop"
 msgstr "Gerenciador de Energia para o GNOME"
 
-#: ../src/gpm-devicekit.c:183
+#: ../src/gpm-devicekit.c:187
 #, c-format
 msgid ""
 "%s fully charged (%.1f%%)\n"
@@ -1268,23 +1269,23 @@ msgstr ""
 "%s completamente carregada (%.1f%%)\n"
 "Proporciona %s tempo de execução da bateria"
 
-#: ../src/gpm-devicekit.c:187
+#: ../src/gpm-devicekit.c:191
 #, c-format
 msgid "%s fully charged (%.1f%%)"
 msgstr "%s completamente carregada (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:195
+#: ../src/gpm-devicekit.c:199
 #, c-format
 msgid "%s %s remaining (%.1f%%)"
 msgstr "%s %s restando (%.1f%%)"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:200
+#: ../src/gpm-devicekit.c:204
 #, c-format
 msgid "%s discharging (%.1f%%)"
 msgstr "%s descarregando (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:212
+#: ../src/gpm-devicekit.c:216
 #, c-format
 msgid ""
 "%s %s until charged (%.1f%%)\n"
@@ -1293,211 +1294,207 @@ msgstr ""
 "%s %s até ser carregada (%.1f%%)\n"
 "Proporciona %s tempo de execução da bateria"
 
-#: ../src/gpm-devicekit.c:221
+#: ../src/gpm-devicekit.c:225
 #, c-format
 msgid "%s %s until charged (%.1f%%)"
 msgstr "%s %s até ser carregada (%.1f%%)"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:227
+#: ../src/gpm-devicekit.c:231
 #, c-format
 msgid "%s charging (%.1f%%)"
 msgstr "%s carregando (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:234
-msgid "Device state could not be read at this time"
-msgstr "Não foi possível ler o estado do dispositivo desta vez"
-
-#: ../src/gpm-devicekit.c:253
+#: ../src/gpm-devicekit.c:257
 #, c-format
 msgid "<b>Product:</b> %s\n"
 msgstr "<b>Produto:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:255 ../src/gpm-devicekit.c:257
 #: ../src/gpm-devicekit.c:259 ../src/gpm-devicekit.c:261
+#: ../src/gpm-devicekit.c:263 ../src/gpm-devicekit.c:265
 #, c-format
 msgid "<b>Status:</b> %s\n"
 msgstr "<b>Estado:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:255
+#: ../src/gpm-devicekit.c:259
 msgid "Missing"
 msgstr "Faltando"
 
-#: ../src/gpm-devicekit.c:257
+#: ../src/gpm-devicekit.c:261
 msgid "Charged"
 msgstr "Carregada"
 
-#: ../src/gpm-devicekit.c:259
+#: ../src/gpm-devicekit.c:263
 msgid "Charging"
 msgstr "Carregando"
 
-#: ../src/gpm-devicekit.c:261
+#: ../src/gpm-devicekit.c:265
 msgid "Discharging"
 msgstr "Descarregando"
 
-#: ../src/gpm-devicekit.c:263
+#: ../src/gpm-devicekit.c:267
 #, c-format
 msgid "<b>Percentage charge:</b> %.1f%%\n"
 msgstr "<b>Percentual de carga:</b> %.1f%%\n"
 
-#: ../src/gpm-devicekit.c:265
+#: ../src/gpm-devicekit.c:269
 #, c-format
 msgid "<b>Vendor:</b> %s\n"
 msgstr "<b>Fabricante:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:268
+#: ../src/gpm-devicekit.c:272
 #, c-format
 msgid "<b>Technology:</b> %s\n"
 msgstr "<b>Tecnologia:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:271
+#: ../src/gpm-devicekit.c:275
 #, c-format
 msgid "<b>Serial number:</b> %s\n"
 msgstr "<b>Número de série:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:273
+#: ../src/gpm-devicekit.c:277
 #, c-format
 msgid "<b>Model:</b> %s\n"
 msgstr "<b>Modelo:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:276
+#: ../src/gpm-devicekit.c:280
 #, c-format
 msgid "<b>Charge time:</b> %s\n"
 msgstr "<b>Tempo de carga:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:281
+#: ../src/gpm-devicekit.c:285
 #, c-format
 msgid "<b>Discharge time:</b> %s\n"
 msgstr "<b>Tempo de descarga:</b> %s\n"
 
 #. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
-#: ../src/gpm-devicekit.c:288
+#: ../src/gpm-devicekit.c:292
 msgid "Excellent"
 msgstr "Excelente"
 
-#: ../src/gpm-devicekit.c:290
+#: ../src/gpm-devicekit.c:294
 msgid "Good"
 msgstr "Boa"
 
-#: ../src/gpm-devicekit.c:292
+#: ../src/gpm-devicekit.c:296
 msgid "Fair"
 msgstr "Razoável"
 
-#: ../src/gpm-devicekit.c:294
+#: ../src/gpm-devicekit.c:298
 msgid "Poor"
 msgstr "Ruim"
 
 #. Translators: %.1f is a percentage and %s the condition (Excellent, Good, ...)
-#: ../src/gpm-devicekit.c:297
+#: ../src/gpm-devicekit.c:301
 #, c-format
 msgid "<b>Capacity:</b> %.1f%% (%s)\n"
 msgstr "<b>Capacidade:</b> %.1f%% (%s)\n"
 
-#: ../src/gpm-devicekit.c:302
+#: ../src/gpm-devicekit.c:306
 #, c-format
 msgid "<b>Current charge:</b> %.1f Wh\n"
 msgstr "<b>Percentual de carga:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:306
+#: ../src/gpm-devicekit.c:310
 #, c-format
 msgid "<b>Last full charge:</b> %.1f Wh\n"
 msgstr "<b>Última carga completa:</b> %.1f Wh\n"
 
 #. Translators: Design charge is the amount of charge the battery is designed to have when brand new
-#: ../src/gpm-devicekit.c:310
+#: ../src/gpm-devicekit.c:314
 #, c-format
 msgid "<b>Design charge:</b> %.1f Wh\n"
 msgstr "<b>Carga teórica:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:313
+#: ../src/gpm-devicekit.c:317
 #, c-format
 msgid "<b>Charge rate:</b> %.1f W\n"
 msgstr "<b>Taxa de carga:</b> %.1f W\n"
 
-#: ../src/gpm-devicekit.c:319
+#: ../src/gpm-devicekit.c:323
 #, c-format
 msgid "<b>Current charge:</b> %.0f/7\n"
 msgstr "<b>Carga atual:</b> %.0f/7\n"
 
 # I think "Carga teórica" looks like better than "Carga de esboço".
-#: ../src/gpm-devicekit.c:322
+#: ../src/gpm-devicekit.c:326
 #, c-format
 msgid "<b>Design charge:</b> %.0f/7\n"
 msgstr "<b>Carga teórica:</b> %.0f/7\n"
 
-#: ../src/gpm-devicekit.c:340
+#: ../src/gpm-devicekit.c:344
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "Adaptador de corrente"
 msgstr[1] "Adaptadores de corrente"
 
-#: ../src/gpm-devicekit.c:343
+#: ../src/gpm-devicekit.c:347
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "Bateria de laptop"
 msgstr[1] "Baterias de laptop"
 
-#: ../src/gpm-devicekit.c:346
+#: ../src/gpm-devicekit.c:350
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "No-break"
 msgstr[1] "No-breakes"
 
-#: ../src/gpm-devicekit.c:349
+#: ../src/gpm-devicekit.c:353
 msgid "Monitor"
 msgid_plural "Monitors"
 msgstr[0] "Monitor"
 msgstr[1] "Monitores"
 
-#: ../src/gpm-devicekit.c:352
+#: ../src/gpm-devicekit.c:356
 msgid "Wireless mouse"
 msgid_plural "Wireless mice"
 msgstr[0] "Mouse sem fio"
 msgstr[1] "Mouses sem fio"
 
-#: ../src/gpm-devicekit.c:355
+#: ../src/gpm-devicekit.c:359
 msgid "Wireless keyboard"
 msgid_plural "Wireless keyboards"
 msgstr[0] "Teclado sem fio"
 msgstr[1] "Teclados sem fio"
 
-#: ../src/gpm-devicekit.c:358
+#: ../src/gpm-devicekit.c:362
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "PDA"
 msgstr[1] "PDAs"
 
-#: ../src/gpm-devicekit.c:361
+#: ../src/gpm-devicekit.c:365
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "Telefone celular"
 msgstr[1] "Telefones celulares"
 
-#: ../src/gpm-devicekit.c:418
+#: ../src/gpm-devicekit.c:422
 msgid "Lithium Ion"
 msgstr "Íon de lítio"
 
-#: ../src/gpm-devicekit.c:421
+#: ../src/gpm-devicekit.c:425
 msgid "Lithium Polymer"
 msgstr "Polímero de lítio"
 
-#: ../src/gpm-devicekit.c:424
+#: ../src/gpm-devicekit.c:428
 msgid "Lithium Iron Phosphate"
 msgstr "Fosfato de lítio e ferro"
 
-#: ../src/gpm-devicekit.c:427
+#: ../src/gpm-devicekit.c:431
 msgid "Lead acid"
 msgstr "Chumbo e ácido"
 
-#: ../src/gpm-devicekit.c:430
+#: ../src/gpm-devicekit.c:434
 msgid "Nickel Cadmium"
 msgstr "Níquel-cádmio"
 
-#: ../src/gpm-devicekit.c:433
+#: ../src/gpm-devicekit.c:437
 msgid "Nickel metal hydride"
 msgstr "Níquel-hidreto metálico"
 
-#: ../src/gpm-devicekit.c:436
+#: ../src/gpm-devicekit.c:440
 msgid "Unknown technology"
 msgstr "Tecnologia desconhecida"
 
@@ -1562,58 +1559,58 @@ msgid "%.1fV"
 msgstr "%.1fV"
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:358
+#: ../src/gpm-inhibit.c:371
 #, c-format
 msgid "%s has stopped the suspend from taking place: %s."
 msgstr "%s impediu a suspensão de acontecer: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:363
+#: ../src/gpm-inhibit.c:376
 #, c-format
 msgid "%s has stopped the hibernate from taking place: %s."
 msgstr "%s impediu a hibernação de acontecer: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:368
+#: ../src/gpm-inhibit.c:381
 #, c-format
 msgid "%s has stopped the policy action from taking place: %s."
 msgstr "%s impediu a ação da política de acontecer: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:373
+#: ../src/gpm-inhibit.c:386
 #, c-format
 msgid "%s has stopped the reboot from taking place: %s."
 msgstr "%s impediu a reinicialização de acontecer: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:378
+#: ../src/gpm-inhibit.c:391
 #, c-format
 msgid "%s has stopped the shutdown from taking place: %s."
 msgstr "%s impediu o desligamento de acontecer: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:383
+#: ../src/gpm-inhibit.c:396
 #, c-format
 msgid "%s has stopped the timeout action from taking place: %s."
 msgstr "%s impediu a ação de tempo de espera de acontecer: %s."
 
-#: ../src/gpm-inhibit.c:392 ../src/gpm-inhibit.c:407
+#: ../src/gpm-inhibit.c:405 ../src/gpm-inhibit.c:420
 msgid "Multiple applications have stopped the suspend from taking place."
 msgstr "Múltiplos aplicativos impediram a suspensão de acontecer."
 
-#: ../src/gpm-inhibit.c:395
+#: ../src/gpm-inhibit.c:408
 msgid "Multiple applications have stopped the hibernate from taking place."
 msgstr "Múltiplos aplicativos impediram a hibernação de acontecer."
 
-#: ../src/gpm-inhibit.c:398
+#: ../src/gpm-inhibit.c:411
 msgid "Multiple applications have stopped the policy action from taking place."
 msgstr "Múltiplos aplicativos impediram a ação da política de acontecer."
 
-#: ../src/gpm-inhibit.c:401
+#: ../src/gpm-inhibit.c:414
 msgid "Multiple applications have stopped the reboot from taking place."
 msgstr "Múltiplos aplicativos impediram a reinicialização de acontecer."
 
-#: ../src/gpm-inhibit.c:404
+#: ../src/gpm-inhibit.c:417
 msgid "Multiple applications have stopped the shutdown from taking place."
 msgstr "Múltiplos aplicativos impediram o desligamento de acontecer."
 
@@ -2009,7 +2006,7 @@ msgstr ""
 "A bateria em seu computador pode estar sendo recolhida pela %s e você pode "
 "estar em risco.\n"
 "\n"
-"Para mais informações, visite o <i>site</i> da %s sobre o <i>recall</i>."
+"Para mais informações, visite o site da %s sobre o recall."
 
 #: ../src/gpm-notify.c:296
 msgid "Visit recall website"
@@ -2129,11 +2126,11 @@ msgstr "Apagar tela"
 msgid "Do nothing"
 msgstr "Não agir"
 
-#: ../src/gpm-prefs-core.c:282
+#: ../src/gpm-prefs-core.c:285
 msgid "Never"
 msgstr "Nunca"
 
-#: ../src/gpm-prefs-core.c:1016
+#: ../src/gpm-prefs-core.c:1024
 msgid "Make Default"
 msgstr "Tornar padrão"
 
@@ -2207,11 +2204,11 @@ msgstr "Tipo"
 
 #: ../src/gpm-statistics.c:190
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: ../src/gpm-statistics.c:204
 msgid "Command"
-msgstr ""
+msgstr "Comando"
 
 #: ../src/gpm-statistics.c:309
 msgid "Yes"
@@ -2244,7 +2241,7 @@ msgstr "Suprimento"
 #: ../src/gpm-statistics.c:343
 #, c-format
 msgid "%d seconds"
-msgstr ""
+msgstr "%d segundos"
 
 #: ../src/gpm-statistics.c:344
 msgid "Refreshed"
@@ -2307,110 +2304,107 @@ msgstr "Nenhum dado"
 #. TRANSLATORS: kernel module, usually a device driver
 #: ../src/gpm-statistics.c:685 ../src/gpm-statistics.c:690
 msgid "Kernel module"
-msgstr ""
+msgstr "Módulo do kernel"
 
 #. TRANSLATORS: kernel housekeeping
 #: ../src/gpm-statistics.c:695
 msgid "Kernel core"
-msgstr ""
+msgstr "Núcleo do kernel"
 
 #. TRANSLATORS: interrupt between processors
 #: ../src/gpm-statistics.c:700
 msgid "Interprocessor interrupt"
-msgstr ""
+msgstr "Interrupção inter-processos"
 
 #. TRANSLATORS: unknown interrupt
 #: ../src/gpm-statistics.c:705
 msgid "Interrupt"
-msgstr ""
+msgstr "Interrupção"
 
 #. TRANSLATORS: the keyboard and mouse device event
 #: ../src/gpm-statistics.c:748
 msgid "PS/2 keyboard/mouse/touchpad"
-msgstr ""
+msgstr "Teclado PS/2/mouse/touchpad"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
 #: ../src/gpm-statistics.c:751
 msgid "ACPI"
-msgstr ""
+msgstr "ACPI"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
 #: ../src/gpm-statistics.c:754
-#, fuzzy
-#| msgid "Serial number"
 msgid "Serial ATA"
-msgstr "Número de série"
+msgstr "Serial ATA"
 
 #. TRANSLATORS: this is the old-style ATA interface
 #: ../src/gpm-statistics.c:757
 msgid "ATA host controller"
-msgstr ""
+msgstr "Controlador ATA"
 
 #. TRANSLATORS: 802.11 wireless adaptor
 #: ../src/gpm-statistics.c:760
 msgid "Intel wireless adaptor"
-msgstr ""
+msgstr "Adaptador de redes sem fio Intel"
 
 #. TRANSLATORS: a timer is something that fires periodically
 #: ../src/gpm-statistics.c:765 ../src/gpm-statistics.c:768
 #: ../src/gpm-statistics.c:771 ../src/gpm-statistics.c:774
 #: ../src/gpm-statistics.c:777
-#, fuzzy, c-format
-#| msgid "Time"
+#, c-format
 msgid "Timer %s"
-msgstr "Tempo"
+msgstr "Cronômetro %s"
 
 #. TRANSLATORS: this is a task that's woken up from sleeping
 #: ../src/gpm-statistics.c:780
 #, c-format
 msgid "Sleep %s"
-msgstr ""
+msgstr "Dormir %s"
 
 #. TRANSLATORS: this is a new realtime task
 #: ../src/gpm-statistics.c:783
 #, c-format
 msgid "New task %s"
-msgstr ""
+msgstr "Nova tarefa %s"
 
 #. TRANSLATORS: this is a task thats woken to check state
 #: ../src/gpm-statistics.c:786
 #, c-format
 msgid "Wait %s"
-msgstr ""
+msgstr "Esperar %s"
 
 #. TRANSLATORS: a work queue is a list of work that has to be done
 #: ../src/gpm-statistics.c:789 ../src/gpm-statistics.c:792
 #, c-format
 msgid "Work queue %s"
-msgstr ""
+msgstr "Fila de trabalhos %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
 #: ../src/gpm-statistics.c:795
 #, c-format
 msgid "Network route flush %s"
-msgstr ""
+msgstr "Limpeza de rotas da rede %s"
 
 #. TRANSLATORS: activity on the USB bus
 #: ../src/gpm-statistics.c:798
 #, c-format
 msgid "USB activity %s"
-msgstr ""
+msgstr "Atividade USB %s"
 
 #. TRANSLATORS: we've timed out of an aligned timer
 #: ../src/gpm-statistics.c:801
 #, c-format
 msgid "Wakeup %s"
-msgstr ""
+msgstr "Recuperar %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
 #: ../src/gpm-statistics.c:804
 msgid "Local interrupts"
-msgstr ""
+msgstr "Interrupções locais"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
 #: ../src/gpm-statistics.c:807
 msgid "Rescheduling interrupts"
-msgstr ""
+msgstr "Reagendando interrupções"
 
 #. TRANSLATORS: shown on the titlebar
 #: ../src/gpm-statistics.c:917
@@ -2430,7 +2424,7 @@ msgstr "Perfil do dispositivo"
 #. TRANSLATORS: shown on the titlebar
 #: ../src/gpm-statistics.c:923
 msgid "Processor Wakeups"
-msgstr ""
+msgstr "Recuperações do processador"
 
 #. TRANSLATORS: this is the X axis on the graph
 #: ../src/gpm-statistics.c:1141 ../src/gpm-statistics.c:1147
@@ -2468,10 +2462,8 @@ msgstr "Precisão da estimativa"
 
 #. TRANSLATORS: the icon for the CPU
 #: ../src/gpm-statistics.c:1557
-#, fuzzy
-#| msgid "Poor"
 msgid "Processor"
-msgstr "Ruim"
+msgstr "Processador"
 
 #: ../src/gpm-tray-icon.c:190 ../src/gpm-tray-icon.c:209
 msgid "Device information"
@@ -2490,7 +2482,8 @@ msgstr ""
 "Vladimir Melo <vmelo@gnome.org>\n"
 "Og Maciel <ogmaciel@ubuntu.com>\n"
 "Fábio Nogueira <deb-user-ba@ubuntu.com>\n"
-"Enrico Nicoletto <liverig@gmail.com>"
+"Enrico Nicoletto <liverig@gmail.com>\n"
+"Djavan Fagundes <dnoway@gmail.com>"
 
 #: ../src/gpm-tray-icon.c:336
 msgid "GNOME Power Manager Website"
@@ -2527,6 +2520,9 @@ msgstr "Suspen_der"
 #: ../src/gpm-tray-icon.c:552
 msgid "Hi_bernate"
 msgstr "_Hibernar"
+
+#~ msgid "Device state could not be read at this time"
+#~ msgstr "Não foi possível ler o estado do dispositivo desta vez"
 
 #~ msgid "gtk-refresh"
 #~ msgstr "gtk-refresh"
