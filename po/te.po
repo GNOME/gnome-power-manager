@@ -1,20 +1,21 @@
-# translation of gnome-power-manager.HEAD.po to Telugu
+# translation of gnome-power-manager.HEAD.te.po to Telugu
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Krishna Babu K <kkrothap@redhat.com>, 2009.
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-power-manager.HEAD\n"
+"Project-Id-Version: gnome-power-manager.HEAD.te\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-power-manager&component=general\n"
-"POT-Creation-Date: 2009-02-03 17:36+0000\n"
-"PO-Revision-Date: 2009-02-04 11:23+0530\n"
+"POT-Creation-Date: 2009-03-04 12:45+0000\n"
+"PO-Revision-Date: 2009-03-11 13:29+0530\n"
 "Last-Translator: Krishna Babu K <kkrothap@redhat.com>\n"
 "Language-Team: Telugu <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "X-Generator: KBabel 1.11.4\n"
 
 #: ../applets/brightness/brightness-applet.c:105
@@ -40,12 +41,12 @@ msgid "LCD brightness : %d%%"
 msgstr "LCD కాంతిప్రకాశం : %d%%"
 
 #: ../applets/brightness/brightness-applet.c:747
-#: ../applets/inhibit/inhibit-applet.c:417 ../src/gpm-tray-icon.c:330
+#: ../applets/inhibit/inhibit-applet.c:417 ../src/gpm-tray-icon.c:307
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "GNU జనరల్ పబ్లిక్ లైసెన్సు వర్షన్ 2 క్రింద లైసెన్సు పొందబడిఉంది"
 
 #: ../applets/brightness/brightness-applet.c:748
-#: ../applets/inhibit/inhibit-applet.c:418 ../src/gpm-tray-icon.c:331
+#: ../applets/inhibit/inhibit-applet.c:418 ../src/gpm-tray-icon.c:308
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -58,7 +59,7 @@ msgstr ""
 "(మీ ఐచ్చికం వద్ద) దాని తరువాతి వర్షన్ కాని."
 
 #: ../applets/brightness/brightness-applet.c:752
-#: ../applets/inhibit/inhibit-applet.c:422 ../src/gpm-tray-icon.c:335
+#: ../applets/inhibit/inhibit-applet.c:422 ../src/gpm-tray-icon.c:312
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -71,7 +72,7 @@ msgstr ""
 "చూడండి."
 
 #: ../applets/brightness/brightness-applet.c:756
-#: ../applets/inhibit/inhibit-applet.c:426 ../src/gpm-tray-icon.c:339
+#: ../applets/inhibit/inhibit-applet.c:426 ../src/gpm-tray-icon.c:316
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -940,8 +941,8 @@ msgstr "పవర్ నిర్వహణను గమనించుము"
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.glade.h:6 ../src/gpm-statistics.c:871
-#: ../src/gpm-statistics.c:1307
+#: ../data/gpm-statistics.glade.h:6 ../src/gpm-statistics.c:927
+#: ../src/gpm-statistics.c:1349
 msgid "Power Statistics"
 msgstr "పవర్ గణాంకములు"
 
@@ -951,7 +952,7 @@ msgstr "కాంతిప్రకాశం"
 
 #: ../data/gpm-statistics.glade.h:1
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: ../data/gpm-statistics.glade.h:2
 msgid "Data length:"
@@ -959,7 +960,7 @@ msgstr ""
 
 #: ../data/gpm-statistics.glade.h:3 ../src/gpm-statistics.c:211
 msgid "Details"
-msgstr ""
+msgstr "వివరములు"
 
 #: ../data/gpm-statistics.glade.h:4
 msgid "Graph type:"
@@ -967,7 +968,7 @@ msgstr "రేఖాచిత్రం రకం:"
 
 #: ../data/gpm-statistics.glade.h:5
 msgid "History"
-msgstr ""
+msgstr "చరిత్ర"
 
 #: ../data/gpm-statistics.glade.h:7
 msgid "Processor wakeups per second:"
@@ -979,7 +980,7 @@ msgstr ""
 
 #: ../data/gpm-statistics.glade.h:9
 msgid "Statistics"
-msgstr ""
+msgstr "గణాంకాలు"
 
 #: ../data/gpm-statistics.glade.h:10
 msgid "Use smoothed line"
@@ -987,10 +988,6 @@ msgstr ""
 
 #: ../data/gpm-statistics.glade.h:11 ../src/gpm-statistics.c:197
 msgid "Wakeups"
-msgstr ""
-
-#: ../data/gpm-statistics.glade.h:12
-msgid "gtk-refresh"
 msgstr ""
 
 #: ../data/gpm-inhibit-test.glade.h:1
@@ -1182,239 +1179,236 @@ msgstr[1] "నిమిషం"
 msgid "Power Manager for the GNOME desktop"
 msgstr "GNOME డెస్కుటాప్ కొరకు పవర్ నిర్వాహకి"
 
-#: ../src/gpm-devicekit.c:168
+#: ../src/gpm-devicekit.c:187
 #, c-format
 msgid ""
 "%s fully charged (%.1f%%)\n"
 "Provides %s battery runtime"
 msgstr ""
 
-#: ../src/gpm-devicekit.c:172
+#: ../src/gpm-devicekit.c:191
 #, c-format
 msgid "%s fully charged (%.1f%%)"
 msgstr ""
 
-#: ../src/gpm-devicekit.c:180
+#: ../src/gpm-devicekit.c:199
 #, c-format
 msgid "%s %s remaining (%.1f%%)"
 msgstr ""
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:185
+#: ../src/gpm-devicekit.c:204
 #, c-format
 msgid "%s discharging (%.1f%%)"
 msgstr ""
 
-#: ../src/gpm-devicekit.c:197
+#: ../src/gpm-devicekit.c:216
 #, c-format
 msgid ""
 "%s %s until charged (%.1f%%)\n"
 "Provides %s battery runtime"
 msgstr ""
 
-#: ../src/gpm-devicekit.c:206
+#: ../src/gpm-devicekit.c:225
 #, c-format
 msgid "%s %s until charged (%.1f%%)"
 msgstr ""
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:212
+#: ../src/gpm-devicekit.c:231
 #, c-format
 msgid "%s charging (%.1f%%)"
 msgstr ""
 
-#: ../src/gpm-devicekit.c:219
-msgid "Device state could not be read at this time"
-msgstr ""
-
-#: ../src/gpm-devicekit.c:238
+#: ../src/gpm-devicekit.c:257
 #, c-format
 msgid "<b>Product:</b> %s\n"
 msgstr "<b>ఉత్పత్తి:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:240 ../src/gpm-devicekit.c:242
-#: ../src/gpm-devicekit.c:244 ../src/gpm-devicekit.c:246
+#: ../src/gpm-devicekit.c:259 ../src/gpm-devicekit.c:261
+#: ../src/gpm-devicekit.c:263 ../src/gpm-devicekit.c:265
 #, c-format
 msgid "<b>Status:</b> %s\n"
 msgstr "<b>స్థితి:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:240
+#: ../src/gpm-devicekit.c:259
 msgid "Missing"
 msgstr "తప్పిపోయిన"
 
-#: ../src/gpm-devicekit.c:242
+#: ../src/gpm-devicekit.c:261
 msgid "Charged"
 msgstr "చార్జ్‍అయిన"
 
-#: ../src/gpm-devicekit.c:244
+#: ../src/gpm-devicekit.c:263
 msgid "Charging"
 msgstr "చార్జింగ్"
 
-#: ../src/gpm-devicekit.c:246
+#: ../src/gpm-devicekit.c:265
 msgid "Discharging"
 msgstr "చార్జ్‍ తీసివేయబడుతున్నది"
 
-#: ../src/gpm-devicekit.c:248
+#: ../src/gpm-devicekit.c:267
 #, c-format
 msgid "<b>Percentage charge:</b> %.1f%%\n"
 msgstr "<b>చార్జ్‍ అయిన శాతం:</b> %.1f%%\n"
 
-#: ../src/gpm-devicekit.c:250
+#: ../src/gpm-devicekit.c:269
 #, c-format
 msgid "<b>Vendor:</b> %s\n"
 msgstr "<b>అమ్మకందారు:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:253
+#: ../src/gpm-devicekit.c:272
 #, c-format
 msgid "<b>Technology:</b> %s\n"
 msgstr "<b>సాంకేతికత:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:256
+#: ../src/gpm-devicekit.c:275
 #, c-format
 msgid "<b>Serial number:</b> %s\n"
 msgstr "<b>వరుస సంఖ్య:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:258
+#: ../src/gpm-devicekit.c:277
 #, c-format
 msgid "<b>Model:</b> %s\n"
 msgstr "<b>రీతి:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:261
+#: ../src/gpm-devicekit.c:280
 #, c-format
 msgid "<b>Charge time:</b> %s\n"
 msgstr "<b>చార్జ్‍ సమయం:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:266
+#: ../src/gpm-devicekit.c:285
 #, c-format
 msgid "<b>Discharge time:</b> %s\n"
 msgstr "<b>డిస్‌చార్జ్‍ సమయం:</b> %s\n"
 
 #. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
-#: ../src/gpm-devicekit.c:273
+#: ../src/gpm-devicekit.c:292
 msgid "Excellent"
 msgstr "అద్బుతమైన"
 
-#: ../src/gpm-devicekit.c:275
+#: ../src/gpm-devicekit.c:294
 msgid "Good"
 msgstr "మంచి"
 
-#: ../src/gpm-devicekit.c:277
+#: ../src/gpm-devicekit.c:296
 msgid "Fair"
 msgstr "అందమైన"
 
-#: ../src/gpm-devicekit.c:279
+#: ../src/gpm-devicekit.c:298
 msgid "Poor"
 msgstr "మందకొడి"
 
-#. Translators: %i is a percentage and %s the condition (Excellent, Good, ...)
-#: ../src/gpm-devicekit.c:282
+#. Translators: %.1f is a percentage and %s the condition (Excellent, Good, ...)
+#: ../src/gpm-devicekit.c:301
 #, c-format
 msgid "<b>Capacity:</b> %.1f%% (%s)\n"
 msgstr ""
 
-#: ../src/gpm-devicekit.c:287
+#: ../src/gpm-devicekit.c:306
 #, c-format
 msgid "<b>Current charge:</b> %.1f Wh\n"
 msgstr "<b>ప్రస్తుత చార్జ్‍:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:291
+#: ../src/gpm-devicekit.c:310
 #, c-format
 msgid "<b>Last full charge:</b> %.1f Wh\n"
 msgstr "<b>చివరిగావున్న మొత్త చార్జ్‍:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:294
+#. Translators: Design charge is the amount of charge the battery is designed to have when brand new
+#: ../src/gpm-devicekit.c:314
 #, c-format
 msgid "<b>Design charge:</b> %.1f Wh\n"
 msgstr "<b>డిజైన్ చార్జ్‍:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:297
+#: ../src/gpm-devicekit.c:317
 #, c-format
 msgid "<b>Charge rate:</b> %.1f W\n"
 msgstr "<b>చార్జ్‍ వృద్ధితీరు:</b> %.1f W\n"
 
-#: ../src/gpm-devicekit.c:303
+#: ../src/gpm-devicekit.c:323
 #, c-format
 msgid "<b>Current charge:</b> %.0f/7\n"
 msgstr ""
 
-#: ../src/gpm-devicekit.c:306
+#: ../src/gpm-devicekit.c:326
 #, c-format
 msgid "<b>Design charge:</b> %.0f/7\n"
 msgstr ""
 
-#: ../src/gpm-devicekit.c:324
+#: ../src/gpm-devicekit.c:344
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/gpm-devicekit.c:327
+#: ../src/gpm-devicekit.c:347
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "లాప్‌టాప్ బ్యాటరీ"
 msgstr[1] "లాప్‌టాప్ బ్యాటరీ"
 
-#: ../src/gpm-devicekit.c:330
+#: ../src/gpm-devicekit.c:350
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "UPS"
 msgstr[1] "UPS"
 
-#: ../src/gpm-devicekit.c:333
+#: ../src/gpm-devicekit.c:353
 msgid "Monitor"
 msgid_plural "Monitors"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "మానిటర్"
+msgstr[1] "మానిటర్"
 
-#: ../src/gpm-devicekit.c:336
+#: ../src/gpm-devicekit.c:356
 msgid "Wireless mouse"
 msgid_plural "Wireless mice"
 msgstr[0] "వెర్‌లెస్ మౌస్"
 msgstr[1] "వెర్‌లెస్ మౌస్"
 
-#: ../src/gpm-devicekit.c:339
+#: ../src/gpm-devicekit.c:359
 msgid "Wireless keyboard"
 msgid_plural "Wireless keyboards"
 msgstr[0] "వైర్‌లెస్ కీబోర్డు"
 msgstr[1] "వైర్‌లెస్ కీబోర్డు"
 
-#: ../src/gpm-devicekit.c:342
+#: ../src/gpm-devicekit.c:362
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "PDA"
 msgstr[1] "PDA"
 
-#: ../src/gpm-devicekit.c:345
+#: ../src/gpm-devicekit.c:365
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "సెల్ ఫోన్"
 msgstr[1] "సెల్ ఫోన్"
 
-#: ../src/gpm-devicekit.c:402
+#: ../src/gpm-devicekit.c:422
 msgid "Lithium Ion"
 msgstr ""
 
-#: ../src/gpm-devicekit.c:405
+#: ../src/gpm-devicekit.c:425
 msgid "Lithium Polymer"
 msgstr ""
 
-#: ../src/gpm-devicekit.c:408
+#: ../src/gpm-devicekit.c:428
 msgid "Lithium Iron Phosphate"
 msgstr ""
 
-#: ../src/gpm-devicekit.c:411
+#: ../src/gpm-devicekit.c:431
 msgid "Lead acid"
 msgstr "లెడ్ యాసిడ్"
 
-#: ../src/gpm-devicekit.c:414
+#: ../src/gpm-devicekit.c:434
 msgid "Nickel Cadmium"
 msgstr ""
 
-#: ../src/gpm-devicekit.c:417
+#: ../src/gpm-devicekit.c:437
 msgid "Nickel metal hydride"
 msgstr "నికెల్ మెటల్ హైడ్రైడ్"
 
-#: ../src/gpm-devicekit.c:420
+#: ../src/gpm-devicekit.c:440
 msgid "Unknown technology"
 msgstr ""
 
@@ -1479,79 +1473,79 @@ msgid "%.1fV"
 msgstr "%.1fV"
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:358
+#: ../src/gpm-inhibit.c:371
 #, c-format
 msgid "%s has stopped the suspend from taking place: %s."
 msgstr "2$%s తీసుకోబడుట వలన అర్ధాంతరంగానిలిపివేయుట అపివేసింది: 1$%s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:363
+#: ../src/gpm-inhibit.c:376
 #, c-format
 msgid "%s has stopped the hibernate from taking place: %s."
 msgstr "2$%s తీసుకోబడుట వలన షుప్తావస్థను అపివేసింది: 1$%s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:368
+#: ../src/gpm-inhibit.c:381
 #, c-format
 msgid "%s has stopped the policy action from taking place: %s."
 msgstr "2$%s తీసుకోబడుట వలన విధానం చర్యను అపివేసింది: 1$%s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:373
+#: ../src/gpm-inhibit.c:386
 #, c-format
 msgid "%s has stopped the reboot from taking place: %s."
 msgstr "2$%s తీసుకోబడుట వలన పునఃప్రారంభం అపివేసింది: 1$%s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:378
+#: ../src/gpm-inhibit.c:391
 #, c-format
 msgid "%s has stopped the shutdown from taking place: %s."
 msgstr "2$%s తీసుకోబడుట వలన మూసివేయుట అపివేసింది: 1$%s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:383
+#: ../src/gpm-inhibit.c:396
 #, c-format
 msgid "%s has stopped the timeout action from taking place: %s."
 msgstr "2$%s తీసుకోబడుట వలన కాలముమించిన చర్యను అపివేసింది: 1$%s."
 
-#: ../src/gpm-inhibit.c:392 ../src/gpm-inhibit.c:407
+#: ../src/gpm-inhibit.c:405 ../src/gpm-inhibit.c:420
 msgid "Multiple applications have stopped the suspend from taking place."
 msgstr "అ‌ర్దాంతరంగానిలిపివేయబడుతోంది కావున బహుళ అనువర్తనాలు ఆపివేయబడ్డాయి."
 
-#: ../src/gpm-inhibit.c:395
+#: ../src/gpm-inhibit.c:408
 msgid "Multiple applications have stopped the hibernate from taking place."
 msgstr "షుప్తావస్థ చేయబడుతోంది కావున బహుళ అనువర్తనాలు ఆపివేయబడ్డాయి."
 
-#: ../src/gpm-inhibit.c:398
+#: ../src/gpm-inhibit.c:411
 msgid "Multiple applications have stopped the policy action from taking place."
 msgstr "విధానం చర్య తీసుకోబడుతోంది కావున బహుళ అనువర్తనాలు ఆపివేయబడ్డాయి."
 
-#: ../src/gpm-inhibit.c:401
+#: ../src/gpm-inhibit.c:414
 msgid "Multiple applications have stopped the reboot from taking place."
 msgstr "పునఃప్రారంభం చేయబడుతోంది కావున బహుళ అనువర్తనాలు ఆపివేయబడ్డాయి."
 
-#: ../src/gpm-inhibit.c:404
+#: ../src/gpm-inhibit.c:417
 msgid "Multiple applications have stopped the shutdown from taking place."
 msgstr "మూసివేయుట చేయబడుతోంది కావున బహుళ అనువర్తనాలు ఆపివేయబడ్డాయి."
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-main.c:136 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1290
+#: ../src/gpm-main.c:139 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1332
 msgid "Show extra debugging information"
 msgstr "అధిక డీబగ్గింగ్ సమాచారాన్ని చూపుము"
 
-#: ../src/gpm-main.c:138
+#: ../src/gpm-main.c:141
 msgid "Show version of installed program and exit"
 msgstr "సంస్థాపించిన ప్రోగ్రామ్ యొక్క వర్షన్ చూపించు మరియు బయటికరమ్ము"
 
-#: ../src/gpm-main.c:140
+#: ../src/gpm-main.c:143
 msgid "Exit after a small delay (for debugging)"
 msgstr "చిన్న ఆలస్యం తర్వాత బయటకిరమ్ము (డీబగ్గింగ్ కొరకు)"
 
-#: ../src/gpm-main.c:142
+#: ../src/gpm-main.c:145
 msgid "Exit after the manager has loaded (for debugging)"
 msgstr "నిర్వాహకి నింపబడిన తర్వాత బయటకిరమ్ము (డీబగ్గింగ్ కొరకు)"
 
-#: ../src/gpm-main.c:156 ../src/gpm-main.c:160
+#: ../src/gpm-main.c:159 ../src/gpm-main.c:163
 msgid "GNOME Power Manager"
 msgstr "GNOME పవర్ నిర్వాహకి"
 
@@ -2005,17 +1999,17 @@ msgstr "అప్రదర్శిత తెర"
 msgid "Do nothing"
 msgstr "ఏమి చేయవద్దు"
 
-#: ../src/gpm-prefs-core.c:282
+#: ../src/gpm-prefs-core.c:285
 msgid "Never"
 msgstr "ఎప్పటికివద్దు"
 
-#: ../src/gpm-prefs-core.c:1016
+#: ../src/gpm-prefs-core.c:1024
 msgid "Make Default"
 msgstr "అప్రమేయ చేయి"
 
 #: ../src/gpm-statistics.c:85 ../src/gpm-statistics.c:377
 msgid "Rate"
-msgstr ""
+msgstr "రేటు"
 
 #: ../src/gpm-statistics.c:86
 msgid "Charge"
@@ -2063,15 +2057,15 @@ msgstr ""
 
 #: ../src/gpm-statistics.c:135
 msgid "Attribute"
-msgstr ""
+msgstr "ఆపాదించు"
 
 #: ../src/gpm-statistics.c:142
 msgid "Value"
-msgstr ""
+msgstr "విలువ"
 
 #: ../src/gpm-statistics.c:159
 msgid "Image"
-msgstr ""
+msgstr "ప్రతిరూపం"
 
 #: ../src/gpm-statistics.c:165
 msgid "Description"
@@ -2079,7 +2073,7 @@ msgstr "విశదీకరణ"
 
 #: ../src/gpm-statistics.c:184 ../src/gpm-statistics.c:334
 msgid "Type"
-msgstr ""
+msgstr "రకం"
 
 #: ../src/gpm-statistics.c:190
 msgid "ID"
@@ -2087,27 +2081,27 @@ msgstr "ID"
 
 #: ../src/gpm-statistics.c:204
 msgid "Command"
-msgstr ""
+msgstr "ఆదేశము"
 
 #: ../src/gpm-statistics.c:309
 msgid "Yes"
-msgstr ""
+msgstr "అవును"
 
 #: ../src/gpm-statistics.c:309
 msgid "No"
-msgstr ""
+msgstr "వద్దు"
 
 #: ../src/gpm-statistics.c:333
 msgid "Device"
-msgstr ""
+msgstr "పరికరం"
 
 #: ../src/gpm-statistics.c:336
 msgid "Vendor"
-msgstr ""
+msgstr "అమ్మకందారి (వెండార్)"
 
 #: ../src/gpm-statistics.c:338
 msgid "Model"
-msgstr ""
+msgstr "మొడల్"
 
 #: ../src/gpm-statistics.c:340
 msgid "Serial number"
@@ -2117,13 +2111,18 @@ msgstr ""
 msgid "Supply"
 msgstr ""
 
+#: ../src/gpm-statistics.c:343
+#, c-format
+msgid "%d seconds"
+msgstr ""
+
 #: ../src/gpm-statistics.c:344
 msgid "Refreshed"
 msgstr ""
 
 #: ../src/gpm-statistics.c:351
 msgid "Present"
-msgstr ""
+msgstr "ప్రస్తుత"
 
 #: ../src/gpm-statistics.c:355
 msgid "Rechargeable"
@@ -2131,7 +2130,7 @@ msgstr ""
 
 #: ../src/gpm-statistics.c:359
 msgid "State"
-msgstr ""
+msgstr "స్థితి"
 
 #: ../src/gpm-statistics.c:362
 msgid "Energy"
@@ -2167,204 +2166,222 @@ msgstr ""
 
 #: ../src/gpm-statistics.c:416
 msgid "Online"
-msgstr ""
+msgstr "ఆన్‌లైన్"
+
+#. TRANSLATORS: the command line was not provided
+#: ../src/gpm-statistics.c:678
+msgid "No data"
+msgstr "దత్తాంశం లేదు"
 
 #. TRANSLATORS: kernel module, usually a device driver
-#: ../src/gpm-statistics.c:712 ../src/gpm-statistics.c:715
+#: ../src/gpm-statistics.c:685 ../src/gpm-statistics.c:690
 msgid "Kernel module"
-msgstr ""
+msgstr "కెర్నల్ మాడ్యూల్"
 
 #. TRANSLATORS: kernel housekeeping
-#: ../src/gpm-statistics.c:718
+#: ../src/gpm-statistics.c:695
 msgid "Kernel core"
 msgstr ""
 
 #. TRANSLATORS: interrupt between processors
-#: ../src/gpm-statistics.c:721
+#: ../src/gpm-statistics.c:700
 msgid "Interprocessor interrupt"
 msgstr ""
 
 #. TRANSLATORS: unknown interrupt
-#: ../src/gpm-statistics.c:724
+#: ../src/gpm-statistics.c:705
 msgid "Interrupt"
-msgstr ""
+msgstr "ఇంటరప్ట్"
 
 #. TRANSLATORS: the keyboard and mouse device event
-#: ../src/gpm-statistics.c:736
+#: ../src/gpm-statistics.c:748
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr ""
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
-#: ../src/gpm-statistics.c:739
+#: ../src/gpm-statistics.c:751
 msgid "ACPI"
 msgstr ""
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
-#: ../src/gpm-statistics.c:742
+#: ../src/gpm-statistics.c:754
 msgid "Serial ATA"
 msgstr ""
 
 #. TRANSLATORS: this is the old-style ATA interface
-#: ../src/gpm-statistics.c:745
+#: ../src/gpm-statistics.c:757
 msgid "ATA host controller"
 msgstr ""
 
 #. TRANSLATORS: 802.11 wireless adaptor
-#: ../src/gpm-statistics.c:748
+#: ../src/gpm-statistics.c:760
 msgid "Intel wireless adaptor"
 msgstr ""
 
 #. TRANSLATORS: a timer is something that fires periodically
-#: ../src/gpm-statistics.c:753 ../src/gpm-statistics.c:756
-#: ../src/gpm-statistics.c:759
+#: ../src/gpm-statistics.c:765 ../src/gpm-statistics.c:768
+#: ../src/gpm-statistics.c:771 ../src/gpm-statistics.c:774
+#: ../src/gpm-statistics.c:777
 #, c-format
 msgid "Timer %s"
 msgstr ""
 
 #. TRANSLATORS: this is a task that's woken up from sleeping
-#: ../src/gpm-statistics.c:762
+#: ../src/gpm-statistics.c:780
 #, c-format
 msgid "Sleep %s"
 msgstr ""
 
+#. TRANSLATORS: this is a new realtime task
+#: ../src/gpm-statistics.c:783
+#, c-format
+msgid "New task %s"
+msgstr ""
+
 #. TRANSLATORS: this is a task thats woken to check state
-#: ../src/gpm-statistics.c:765
+#: ../src/gpm-statistics.c:786
 #, c-format
 msgid "Wait %s"
 msgstr ""
 
 #. TRANSLATORS: a work queue is a list of work that has to be done
-#: ../src/gpm-statistics.c:768 ../src/gpm-statistics.c:771
+#: ../src/gpm-statistics.c:789 ../src/gpm-statistics.c:792
 #, c-format
 msgid "Work queue %s"
 msgstr ""
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
-#: ../src/gpm-statistics.c:774
+#: ../src/gpm-statistics.c:795
 #, c-format
 msgid "Network route flush %s"
 msgstr ""
 
 #. TRANSLATORS: activity on the USB bus
-#: ../src/gpm-statistics.c:777
+#: ../src/gpm-statistics.c:798
 #, c-format
 msgid "USB activity %s"
 msgstr ""
 
+#. TRANSLATORS: we've timed out of an aligned timer
+#: ../src/gpm-statistics.c:801
+#, c-format
+msgid "Wakeup %s"
+msgstr ""
+
 #. TRANSLATORS: interupts on the system required for basic operation
-#: ../src/gpm-statistics.c:780
+#: ../src/gpm-statistics.c:804
 msgid "Local interrupts"
 msgstr ""
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
-#: ../src/gpm-statistics.c:783
+#: ../src/gpm-statistics.c:807
 msgid "Rescheduling interrupts"
 msgstr ""
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:861
+#: ../src/gpm-statistics.c:917
 msgid "Device Information"
-msgstr ""
+msgstr "పరికర సమాచారం"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:863
+#: ../src/gpm-statistics.c:919
 msgid "Device History"
 msgstr ""
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:865
+#: ../src/gpm-statistics.c:921
 msgid "Device Profile"
 msgstr ""
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:867
+#: ../src/gpm-statistics.c:923
 msgid "Processor Wakeups"
 msgstr ""
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1099 ../src/gpm-statistics.c:1105
-#: ../src/gpm-statistics.c:1111 ../src/gpm-statistics.c:1117
+#: ../src/gpm-statistics.c:1141 ../src/gpm-statistics.c:1147
+#: ../src/gpm-statistics.c:1153 ../src/gpm-statistics.c:1159
 msgid "Time elapsed"
 msgstr ""
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1101
+#: ../src/gpm-statistics.c:1143
 msgid "Power"
 msgstr "పవర్"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1107 ../src/gpm-statistics.c:1150
-#: ../src/gpm-statistics.c:1156 ../src/gpm-statistics.c:1162
-#: ../src/gpm-statistics.c:1168
+#: ../src/gpm-statistics.c:1149 ../src/gpm-statistics.c:1192
+#: ../src/gpm-statistics.c:1198 ../src/gpm-statistics.c:1204
+#: ../src/gpm-statistics.c:1210
 msgid "Cell charge"
 msgstr ""
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1113 ../src/gpm-statistics.c:1119
+#: ../src/gpm-statistics.c:1155 ../src/gpm-statistics.c:1161
 msgid "Predicted time"
 msgstr ""
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1152 ../src/gpm-statistics.c:1164
+#: ../src/gpm-statistics.c:1194 ../src/gpm-statistics.c:1206
 msgid "Correction factor"
 msgstr ""
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1158 ../src/gpm-statistics.c:1170
+#: ../src/gpm-statistics.c:1200 ../src/gpm-statistics.c:1212
 msgid "Prediction accuracy"
 msgstr ""
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:1519
+#: ../src/gpm-statistics.c:1557
 msgid "Processor"
-msgstr ""
+msgstr "ప్రోసెసర్"
 
-#: ../src/gpm-tray-icon.c:205 ../src/gpm-tray-icon.c:224
+#: ../src/gpm-tray-icon.c:190 ../src/gpm-tray-icon.c:209
 msgid "Device information"
 msgstr "పరికరం సమాచారం"
 
-#: ../src/gpm-tray-icon.c:207
+#: ../src/gpm-tray-icon.c:192
 msgid "There is no detailed information for this device"
 msgstr ""
 
-#: ../src/gpm-tray-icon.c:344
+#: ../src/gpm-tray-icon.c:321
 msgid "translator-credits"
 msgstr "KrishnaBabu K <kkrothap@redhat.com> 2008."
 
-#: ../src/gpm-tray-icon.c:360
+#: ../src/gpm-tray-icon.c:336
 msgid "GNOME Power Manager Website"
 msgstr "GNOME పవర్ నిర్వాహకి వెబ్‌సైట్"
 
 #. preferences
-#: ../src/gpm-tray-icon.c:433
+#: ../src/gpm-tray-icon.c:408
 msgid "_Preferences"
 msgstr "అభీష్టాలు(_P)"
 
 #. statistics
-#: ../src/gpm-tray-icon.c:441
+#: ../src/gpm-tray-icon.c:416
 msgid "Power _History"
 msgstr "పవర్ చరిత్ర(_H)"
 
 #. help
-#: ../src/gpm-tray-icon.c:453
+#: ../src/gpm-tray-icon.c:428
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:2
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:2
 msgid "_Help"
 msgstr "సహాయం(_H)"
 
 #. about
-#: ../src/gpm-tray-icon.c:461
+#: ../src/gpm-tray-icon.c:436
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:1
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:1
 msgid "_About"
 msgstr "గురించి(_A)"
 
-#: ../src/gpm-tray-icon.c:568
+#: ../src/gpm-tray-icon.c:542
 msgid "_Suspend"
 msgstr "అర్ధాంతరంగానిలిపివేయు(_S)"
 
-#: ../src/gpm-tray-icon.c:578
+#: ../src/gpm-tray-icon.c:552
 msgid "Hi_bernate"
 msgstr "షుప్తావస్థ(_‌b)"
 
