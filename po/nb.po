@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 2.25.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-10 07:47+0100\n"
-"PO-Revision-Date: 2009-02-10 07:50+0100\n"
+"POT-Creation-Date: 2009-03-12 00:25+0100\n"
+"PO-Revision-Date: 2009-03-12 00:28+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -925,7 +925,7 @@ msgstr "Overvåk strømstyring"
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
 #: ../data/gpm-statistics.glade.h:6 ../src/gpm-statistics.c:927
-#: ../src/gpm-statistics.c:1363
+#: ../src/gpm-statistics.c:1349
 msgid "Power Statistics"
 msgstr "Strømstatistikk"
 
@@ -955,7 +955,7 @@ msgstr "Historikk"
 
 #: ../data/gpm-statistics.glade.h:7
 msgid "Processor wakeups per second:"
-msgstr ""
+msgstr "Antall ganger prosessoren våkner opp per sekund:"
 
 #: ../data/gpm-statistics.glade.h:8
 msgid "Show data points"
@@ -971,7 +971,7 @@ msgstr "Bruk utjevnet linje"
 
 #: ../data/gpm-statistics.glade.h:11 ../src/gpm-statistics.c:197
 msgid "Wakeups"
-msgstr ""
+msgstr "Oppvåkninger"
 
 #: ../data/gpm-inhibit-test.glade.h:1
 msgid "Application:"
@@ -1162,7 +1162,7 @@ msgstr[1] "minutter"
 msgid "Power Manager for the GNOME desktop"
 msgstr "Strømstyring for GNOME skrivebordet"
 
-#: ../src/gpm-devicekit.c:168
+#: ../src/gpm-devicekit.c:187
 #, c-format
 msgid ""
 "%s fully charged (%.1f%%)\n"
@@ -1171,23 +1171,23 @@ msgstr ""
 "%s fullt ladet (%.1f%%)\n"
 "Gir %s kjøringstid"
 
-#: ../src/gpm-devicekit.c:172
+#: ../src/gpm-devicekit.c:191
 #, c-format
 msgid "%s fully charged (%.1f%%)"
 msgstr "%s fullt ladet (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:180
+#: ../src/gpm-devicekit.c:199
 #, c-format
 msgid "%s %s remaining (%.1f%%)"
 msgstr "%s %s gjenstår (%.1f%%)"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:185
+#: ../src/gpm-devicekit.c:204
 #, c-format
 msgid "%s discharging (%.1f%%)"
 msgstr "%s lader ut (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:197
+#: ../src/gpm-devicekit.c:216
 #, c-format
 msgid ""
 "%s %s until charged (%.1f%%)\n"
@@ -1196,209 +1196,206 @@ msgstr ""
 "%s %s til batteriet er ladet (%.1f%%)\n"
 "Gir %s kjøretid"
 
-#: ../src/gpm-devicekit.c:206
+#: ../src/gpm-devicekit.c:225
 #, c-format
 msgid "%s %s until charged (%.1f%%)"
 msgstr "%s %s til batteriet er ladet (%.1f%%)"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:212
+#: ../src/gpm-devicekit.c:231
 #, c-format
 msgid "%s charging (%.1f%%)"
 msgstr "%s lader (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:219
-msgid "Device state could not be read at this time"
-msgstr "Batteriets tilstand kunne ikke leses nå"
-
-#: ../src/gpm-devicekit.c:238
+#: ../src/gpm-devicekit.c:257
 #, c-format
 msgid "<b>Product:</b> %s\n"
 msgstr "<b>Produkt:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:240 ../src/gpm-devicekit.c:242
-#: ../src/gpm-devicekit.c:244 ../src/gpm-devicekit.c:246
+#: ../src/gpm-devicekit.c:259 ../src/gpm-devicekit.c:261
+#: ../src/gpm-devicekit.c:263 ../src/gpm-devicekit.c:265
 #, c-format
 msgid "<b>Status:</b> %s\n"
 msgstr "<b>Status:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:240
+#: ../src/gpm-devicekit.c:259
 msgid "Missing"
 msgstr "Mangler"
 
-#: ../src/gpm-devicekit.c:242
+#: ../src/gpm-devicekit.c:261
 msgid "Charged"
 msgstr "Ladet"
 
-#: ../src/gpm-devicekit.c:244
+#: ../src/gpm-devicekit.c:263
 msgid "Charging"
 msgstr "Lader"
 
-#: ../src/gpm-devicekit.c:246
+#: ../src/gpm-devicekit.c:265
 msgid "Discharging"
 msgstr "Lader ut"
 
-#: ../src/gpm-devicekit.c:248
+#: ../src/gpm-devicekit.c:267
 #, c-format
 msgid "<b>Percentage charge:</b> %.1f%%\n"
 msgstr "<b>Ladeprosent:</b> %.1f%%\n"
 
-#: ../src/gpm-devicekit.c:250
+#: ../src/gpm-devicekit.c:269
 #, c-format
 msgid "<b>Vendor:</b> %s\n"
 msgstr "<b>Produsent:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:253
+#: ../src/gpm-devicekit.c:272
 #, c-format
 msgid "<b>Technology:</b> %s\n"
 msgstr "<b>Teknologi:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:256
+#: ../src/gpm-devicekit.c:275
 #, c-format
 msgid "<b>Serial number:</b> %s\n"
 msgstr "<b>Serienummer:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:258
+#: ../src/gpm-devicekit.c:277
 #, c-format
 msgid "<b>Model:</b> %s\n"
 msgstr "<b>Modell:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:261
+#: ../src/gpm-devicekit.c:280
 #, c-format
 msgid "<b>Charge time:</b> %s\n"
 msgstr "<b>Ladetid:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:266
+#: ../src/gpm-devicekit.c:285
 #, c-format
 msgid "<b>Discharge time:</b> %s\n"
 msgstr "<b>Utladingstid:</b> %s\n"
 
 #. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
-#: ../src/gpm-devicekit.c:273
+#: ../src/gpm-devicekit.c:292
 msgid "Excellent"
 msgstr "Utmerket"
 
-#: ../src/gpm-devicekit.c:275
+#: ../src/gpm-devicekit.c:294
 msgid "Good"
 msgstr "God"
 
-#: ../src/gpm-devicekit.c:277
+#: ../src/gpm-devicekit.c:296
 msgid "Fair"
 msgstr "Akseptabel"
 
-#: ../src/gpm-devicekit.c:279
+#: ../src/gpm-devicekit.c:298
 msgid "Poor"
 msgstr "Dårlig"
 
-#. Translators: %i is a percentage and %s the condition (Excellent, Good, ...)
-#: ../src/gpm-devicekit.c:282
+#. Translators: %.1f is a percentage and %s the condition (Excellent, Good, ...)
+#: ../src/gpm-devicekit.c:301
 #, c-format
 msgid "<b>Capacity:</b> %.1f%% (%s)\n"
 msgstr "<b>Kapasitet:</b> %.1f%% (%s)\n"
 
-#: ../src/gpm-devicekit.c:287
+#: ../src/gpm-devicekit.c:306
 #, c-format
 msgid "<b>Current charge:</b> %.1f Wh\n"
 msgstr "<b>Nåværende nivå:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:291
+#: ../src/gpm-devicekit.c:310
 #, c-format
 msgid "<b>Last full charge:</b> %.1f Wh\n"
 msgstr "<b>Siste fulle lading:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:294
+#. Translators: Design charge is the amount of charge the battery is designed to have when brand new
+#: ../src/gpm-devicekit.c:314
 #, c-format
 msgid "<b>Design charge:</b> %.1f Wh\n"
 msgstr "<b>Ladekapasitet fra fabrikk:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:297
+#: ../src/gpm-devicekit.c:317
 #, c-format
 msgid "<b>Charge rate:</b> %.1f W\n"
 msgstr "<b>Laderate:</b> %.1f W\n"
 
-#: ../src/gpm-devicekit.c:303
+#: ../src/gpm-devicekit.c:323
 #, c-format
 msgid "<b>Current charge:</b> %.0f/7\n"
 msgstr "<b>Nåværende ladenivå:</b> %.0f/7\n"
 
-#: ../src/gpm-devicekit.c:306
+#: ../src/gpm-devicekit.c:326
 #, c-format
 msgid "<b>Design charge:</b> %.0f/7\n"
 msgstr "<b>Ladekapasitet fra fabrikk:</b> %.0f/7\n"
 
-#: ../src/gpm-devicekit.c:324
+#: ../src/gpm-devicekit.c:344
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "AC-adapter"
 msgstr[1] "AC-adaptere"
 
-#: ../src/gpm-devicekit.c:327
+#: ../src/gpm-devicekit.c:347
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "Batteri"
 msgstr[1] "Batterier"
 
-#: ../src/gpm-devicekit.c:330
+#: ../src/gpm-devicekit.c:350
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "UPS"
 msgstr[1] "UPSer"
 
-#: ../src/gpm-devicekit.c:333
+#: ../src/gpm-devicekit.c:353
 msgid "Monitor"
 msgid_plural "Monitors"
 msgstr[0] "Skjerm"
 msgstr[1] "Skjermer"
 
-#: ../src/gpm-devicekit.c:336
+#: ../src/gpm-devicekit.c:356
 msgid "Wireless mouse"
 msgid_plural "Wireless mice"
 msgstr[0] "Trådløs mus"
 msgstr[1] "Trådløse mus"
 
-#: ../src/gpm-devicekit.c:339
+#: ../src/gpm-devicekit.c:359
 msgid "Wireless keyboard"
 msgid_plural "Wireless keyboards"
 msgstr[0] "Trådløst tastatur"
 msgstr[1] "Trådløse tastatur"
 
-#: ../src/gpm-devicekit.c:342
+#: ../src/gpm-devicekit.c:362
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "PDA"
 msgstr[1] "PDAer"
 
-#: ../src/gpm-devicekit.c:345
+#: ../src/gpm-devicekit.c:365
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "Mobiltelefon"
 msgstr[1] "Mobiltelefoner"
 
-#: ../src/gpm-devicekit.c:402
+#: ../src/gpm-devicekit.c:422
 msgid "Lithium Ion"
 msgstr "Litium ion"
 
-#: ../src/gpm-devicekit.c:405
+#: ../src/gpm-devicekit.c:425
 msgid "Lithium Polymer"
 msgstr "Litium polymer"
 
-#: ../src/gpm-devicekit.c:408
+#: ../src/gpm-devicekit.c:428
 msgid "Lithium Iron Phosphate"
 msgstr "Litium jern fosfat"
 
-#: ../src/gpm-devicekit.c:411
+#: ../src/gpm-devicekit.c:431
 msgid "Lead acid"
 msgstr "Lead acid"
 
-#: ../src/gpm-devicekit.c:414
+#: ../src/gpm-devicekit.c:434
 msgid "Nickel Cadmium"
 msgstr "Nikkel-kadmium"
 
-#: ../src/gpm-devicekit.c:417
+#: ../src/gpm-devicekit.c:437
 msgid "Nickel metal hydride"
 msgstr "Nikkel/metall hybrid"
 
-#: ../src/gpm-devicekit.c:420
+#: ../src/gpm-devicekit.c:440
 msgid "Unknown technology"
 msgstr "Ukjent teknologi"
 
@@ -1463,79 +1460,79 @@ msgid "%.1fV"
 msgstr "%.1fV"
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:358
+#: ../src/gpm-inhibit.c:371
 #, c-format
 msgid "%s has stopped the suspend from taking place: %s."
 msgstr "%s har hindret hvilemodus: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:363
+#: ../src/gpm-inhibit.c:376
 #, c-format
 msgid "%s has stopped the hibernate from taking place: %s."
 msgstr "%s har hindret dvalemodus: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:368
+#: ../src/gpm-inhibit.c:381
 #, c-format
 msgid "%s has stopped the policy action from taking place: %s."
 msgstr "%s har stoppet handling basert på regelsett fra å inntreffe: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:373
+#: ../src/gpm-inhibit.c:386
 #, c-format
 msgid "%s has stopped the reboot from taking place: %s."
 msgstr "%s har hindret omstart: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:378
+#: ../src/gpm-inhibit.c:391
 #, c-format
 msgid "%s has stopped the shutdown from taking place: %s."
 msgstr "%s har stoppet nedstenging av maskinen fra å inntreffe: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:383
+#: ../src/gpm-inhibit.c:396
 #, c-format
 msgid "%s has stopped the timeout action from taking place: %s."
 msgstr "%s har stoppet tidsbasert hendelse fra å inntreffe: %s."
 
-#: ../src/gpm-inhibit.c:392 ../src/gpm-inhibit.c:407
+#: ../src/gpm-inhibit.c:405 ../src/gpm-inhibit.c:420
 msgid "Multiple applications have stopped the suspend from taking place."
 msgstr "Flere programmer har hindret hvilemodus."
 
-#: ../src/gpm-inhibit.c:395
+#: ../src/gpm-inhibit.c:408
 msgid "Multiple applications have stopped the hibernate from taking place."
 msgstr "Flere programmer har hindret dvalemodus."
 
-#: ../src/gpm-inhibit.c:398
+#: ../src/gpm-inhibit.c:411
 msgid "Multiple applications have stopped the policy action from taking place."
 msgstr "Flere programmer har hindret handling basert på regelsett."
 
-#: ../src/gpm-inhibit.c:401
+#: ../src/gpm-inhibit.c:414
 msgid "Multiple applications have stopped the reboot from taking place."
 msgstr "Flere programmer har hindret omstart."
 
-#: ../src/gpm-inhibit.c:404
+#: ../src/gpm-inhibit.c:417
 msgid "Multiple applications have stopped the shutdown from taking place."
 msgstr "Flere programmer har hindret nedstenging av maskinen."
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-main.c:136 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1346
+#: ../src/gpm-main.c:139 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1332
 msgid "Show extra debugging information"
 msgstr "Vis ekstra feilsøkingsinformasjon"
 
-#: ../src/gpm-main.c:138
+#: ../src/gpm-main.c:141
 msgid "Show version of installed program and exit"
 msgstr "Vis versjon for installert program og avslutt"
 
-#: ../src/gpm-main.c:140
+#: ../src/gpm-main.c:143
 msgid "Exit after a small delay (for debugging)"
 msgstr "Avslutt etter en liten pause (for feilsøking)"
 
-#: ../src/gpm-main.c:142
+#: ../src/gpm-main.c:145
 msgid "Exit after the manager has loaded (for debugging)"
 msgstr "Avslutt når tjenesten har startet (for feilsøking)"
 
-#: ../src/gpm-main.c:156 ../src/gpm-main.c:160
+#: ../src/gpm-main.c:159 ../src/gpm-main.c:163
 msgid "GNOME Power Manager"
 msgstr "GNOME strømstyring"
 
@@ -2018,11 +2015,11 @@ msgstr "Blank skjerm"
 msgid "Do nothing"
 msgstr "Ikke gjør noe"
 
-#: ../src/gpm-prefs-core.c:282
+#: ../src/gpm-prefs-core.c:285
 msgid "Never"
 msgstr "Aldri"
 
-#: ../src/gpm-prefs-core.c:1016
+#: ../src/gpm-prefs-core.c:1024
 msgid "Make Default"
 msgstr "Sett til forvalg"
 
@@ -2130,6 +2127,11 @@ msgstr "Serienummer"
 msgid "Supply"
 msgstr "Forsyning"
 
+#: ../src/gpm-statistics.c:343
+#, c-format
+msgid "%d seconds"
+msgstr "%d sekunder"
+
 #: ../src/gpm-statistics.c:344
 msgid "Refreshed"
 msgstr "Oppdatert"
@@ -2200,7 +2202,7 @@ msgstr "Kjerne"
 #. TRANSLATORS: interrupt between processors
 #: ../src/gpm-statistics.c:700
 msgid "Interprocessor interrupt"
-msgstr ""
+msgstr "Avbrudd på tvers av prosessorene"
 
 #. TRANSLATORS: unknown interrupt
 #: ../src/gpm-statistics.c:705
@@ -2210,7 +2212,7 @@ msgstr "Avbrudd"
 #. TRANSLATORS: the keyboard and mouse device event
 #: ../src/gpm-statistics.c:748
 msgid "PS/2 keyboard/mouse/touchpad"
-msgstr ""
+msgstr "PS/2 tastatur/mus/musplate"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
 #: ../src/gpm-statistics.c:751
@@ -2268,7 +2270,7 @@ msgstr "Arbeidskø %s"
 #: ../src/gpm-statistics.c:795
 #, c-format
 msgid "Network route flush %s"
-msgstr ""
+msgstr "Tømming av nettverksruter %s"
 
 #. TRANSLATORS: activity on the USB bus
 #: ../src/gpm-statistics.c:798
@@ -2289,8 +2291,9 @@ msgstr "Lokale avbrudd"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
 #: ../src/gpm-statistics.c:807
+#, fuzzy
 msgid "Rescheduling interrupts"
-msgstr ""
+msgstr "avbrudd"
 
 #. TRANSLATORS: shown on the titlebar
 #: ../src/gpm-statistics.c:917
@@ -2310,44 +2313,44 @@ msgstr "Profil for enhet"
 #. TRANSLATORS: shown on the titlebar
 #: ../src/gpm-statistics.c:923
 msgid "Processor Wakeups"
-msgstr ""
+msgstr "Prosessoroppvåkninger"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1155 ../src/gpm-statistics.c:1161
-#: ../src/gpm-statistics.c:1167 ../src/gpm-statistics.c:1173
+#: ../src/gpm-statistics.c:1141 ../src/gpm-statistics.c:1147
+#: ../src/gpm-statistics.c:1153 ../src/gpm-statistics.c:1159
 msgid "Time elapsed"
 msgstr "Medgått tid"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1157
+#: ../src/gpm-statistics.c:1143
 msgid "Power"
 msgstr "Strøm"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1163 ../src/gpm-statistics.c:1206
-#: ../src/gpm-statistics.c:1212 ../src/gpm-statistics.c:1218
-#: ../src/gpm-statistics.c:1224
+#: ../src/gpm-statistics.c:1149 ../src/gpm-statistics.c:1192
+#: ../src/gpm-statistics.c:1198 ../src/gpm-statistics.c:1204
+#: ../src/gpm-statistics.c:1210
 msgid "Cell charge"
 msgstr "Spenning for celle"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1169 ../src/gpm-statistics.c:1175
+#: ../src/gpm-statistics.c:1155 ../src/gpm-statistics.c:1161
 msgid "Predicted time"
 msgstr "Estimert tid"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1208 ../src/gpm-statistics.c:1220
+#: ../src/gpm-statistics.c:1194 ../src/gpm-statistics.c:1206
 msgid "Correction factor"
 msgstr "Korrigeringsfaktor"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1214 ../src/gpm-statistics.c:1226
+#: ../src/gpm-statistics.c:1200 ../src/gpm-statistics.c:1212
 msgid "Prediction accuracy"
 msgstr "Nøyaktighet for forutbestemmelse"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:1575
+#: ../src/gpm-statistics.c:1557
 msgid "Processor"
 msgstr "Prosessor"
 
