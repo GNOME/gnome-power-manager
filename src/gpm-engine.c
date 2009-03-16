@@ -484,7 +484,7 @@ gpm_engine_device_check_capacity (GpmEngine *engine, const DkpDevice *device)
 	ret = gconf_client_get_bool (engine->priv->conf, GPM_CONF_NOTIFY_LOW_CAPACITY, NULL);
 	if (ret) {
 		egg_debug ("** EMIT: low-capacity");
-		g_signal_emit (engine, signals [LOW_CAPACITY], 0, obj->type, obj->capacity);
+		g_signal_emit (engine, signals [LOW_CAPACITY], 0, obj->type, (guint) obj->capacity);
 	}
 	return TRUE;
 }
