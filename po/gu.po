@@ -3,20 +3,20 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
 #
 # Ankit Patel <ankit644@yahoo.com>, 2005, 2006.
-# Ankit Patel <ankit@redhat.com>, 2007.
+# Ankit Patel <ankit@redhat.com>, 2007, 2009.
 # Sweta Kothari <swkothar@redhat.com>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD.gu\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-power-manager&component=general\n"
-"POT-Creation-Date: 2009-02-04 11:53+0000\n"
-"PO-Revision-Date: 2009-02-05 17:20+0530\n"
-"Last-Translator: Sweta Kothari <swkothar@redhat.com>\n"
-"Language-Team: Gujarati\n"
+"POT-Creation-Date: 2009-03-04 12:45+0000\n"
+"PO-Revision-Date: 2009-03-16 15:01+0530\n"
+"Last-Translator: Ankit Patel <ankit@redhat.com>\n"
+"Language-Team: Gujarati <fedora-trans-gu@redhat.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Plural-Forms:  nplurals=2; plural=(n!=1);\n\n"
 "\n"
 "\n"
 "\n"
@@ -64,12 +64,12 @@ msgid "LCD brightness : %d%%"
 msgstr "LCD તેજસ્વીતા : %d%%"
 
 #: ../applets/brightness/brightness-applet.c:747
-#: ../applets/inhibit/inhibit-applet.c:417 ../src/gpm-tray-icon.c:330
+#: ../applets/inhibit/inhibit-applet.c:417 ../src/gpm-tray-icon.c:307
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "GNU General Public License Version 2 હેઠળ લાઈસન્સ થયેલ છે"
 
 #: ../applets/brightness/brightness-applet.c:748
-#: ../applets/inhibit/inhibit-applet.c:418 ../src/gpm-tray-icon.c:331
+#: ../applets/inhibit/inhibit-applet.c:418 ../src/gpm-tray-icon.c:308
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -82,7 +82,7 @@ msgstr ""
 "of the License, or (at your option) any later version."
 
 #: ../applets/brightness/brightness-applet.c:752
-#: ../applets/inhibit/inhibit-applet.c:422 ../src/gpm-tray-icon.c:335
+#: ../applets/inhibit/inhibit-applet.c:422 ../src/gpm-tray-icon.c:312
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -95,7 +95,7 @@ msgstr ""
 "GNU General Public License for more details."
 
 #: ../applets/brightness/brightness-applet.c:756
-#: ../applets/inhibit/inhibit-applet.c:426 ../src/gpm-tray-icon.c:339
+#: ../applets/inhibit/inhibit-applet.c:426 ../src/gpm-tray-icon.c:316
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -271,7 +271,6 @@ msgid "If extra debugging messages should be used. Only turn this on for debuggi
 msgstr "શું વધારાના ડિબગીંગ સંદેશાઓ વાપરવામાં આવવા જોઈએ. આને માત્ર ડિબગીંગ માટે ચાલુ કરો."
 
 #: ../data/gnome-power-manager.schemas.in.h:20
-#| msgid "If sounds should be used"
 msgid "If preferences should be shown"
 msgstr "શું પસંદગીઓ ને બતાવેલ હોવી જોઇએ"
 
@@ -375,16 +374,13 @@ msgstr ""
 "સ્ક્રીન ઝાંખી થવી જોઈએ."
 
 #: ../data/gnome-power-manager.schemas.in.h:37
-#, fuzzy
 #| msgid ""
 #| "If the screen should be dimmed to save power when the computer is idle "
 #| "when on battery power."
 msgid ""
 "If the screen should be reduced in brightness when the computer is on "
 "battery power."
-msgstr ""
-"જ્યારે કમ્પ્યૂટર બેટરી પાવર પર હોય ત્યારે જો કમ્પ્યૂટર ફાજલ હોય તો શું પાવર બચાવવા માટે "
-"સ્ક્રીન ઝાંખી થવી જોઈએ."
+msgstr "જ્યારે કમ્પ્યૂટર બેટરી પાવર પર હોય ત્યારે શું સ્ક્રીન તેજસ્વીતામાં ઘટાડવામાં આવવી જોઈએ."
 
 #: ../data/gnome-power-manager.schemas.in.h:38
 msgid "If the system low-power mode should be enabled when on AC power."
@@ -469,10 +465,9 @@ msgid "LCD brightness when on AC"
 msgstr "જ્યારે AC પર હોય ત્યારે LCD તેજસ્વીતા"
 
 #: ../data/gnome-power-manager.schemas.in.h:54
-#, fuzzy
 #| msgid "LCD brightness when on battery"
 msgid "LCD dimming amount when on battery"
-msgstr "જ્યારે બેટરી પર હોય ત્યારે LCD તેજસ્વીતા"
+msgstr "LCD ઝાંખી કરવાન જથ્થો જ્યારે બેટરી પર હોય"
 
 #: ../data/gnome-power-manager.schemas.in.h:55
 msgid "Laptop lid close action on battery"
@@ -547,10 +542,9 @@ msgid "Power button action"
 msgstr "પાવર બટન ક્રિયા"
 
 #: ../data/gnome-power-manager.schemas.in.h:73
-#, fuzzy
 #| msgid "Keyboard brightness when on battery"
 msgid "Reduce the backlight brightness when on battery power"
-msgstr "જ્યારે બેટરી પર હોય ત્યારે કીબોર્ડ તેજસ્વીતા"
+msgstr "જ્યારે બેટરી પાવર પર હોય ત્યારે બેકલાઈટ તેજસ્વીતા ઘટાડો"
 
 #: ../data/gnome-power-manager.schemas.in.h:74
 msgid "Sleep timeout computer when on AC"
@@ -700,14 +694,13 @@ msgid "The amount the light sensors should contribute to the brightness."
 msgstr "તેજસ્વીતામાં ફાળવવા માટે પ્રકાશ સંવેદકોનો જથ્થો."
 
 #: ../data/gnome-power-manager.schemas.in.h:96
-#, fuzzy
 #| msgid ""
 #| "The brightness of the display when on battery power. Possible values are "
 #| "between 0 and 100."
 msgid ""
 "The amount to dim the brightness of the display when on battery power. "
 "Possible values are between 0 and 100."
-msgstr "જ્યારે બેટરી પાવર હોય ત્યારે ડિસ્પ્લેની તેજસ્વીતા. શક્ય કિંમતો ૦ અને ૧૦૦ વચ્ચેની છે."
+msgstr "જ્યારે બેટરી પાવર પર હોય ત્યારે ડિસ્પ્લેની તેજસ્વીતાને ઝાંખી કરવાનો જથ્થો. શક્ય કિંમત ૦ અને ૧૦૦ વચ્ચે છે."
 
 #: ../data/gnome-power-manager.schemas.in.h:97
 msgid ""
@@ -996,8 +989,8 @@ msgstr "પાવર વ્યવસ્થાપનનું નીરિક્�
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.glade.h:6 ../src/gpm-statistics.c:921
-#: ../src/gpm-statistics.c:1357
+#: ../data/gpm-statistics.glade.h:6 ../src/gpm-statistics.c:927
+#: ../src/gpm-statistics.c:1349
 msgid "Power Statistics"
 msgstr "પાવર પરિસ્થિતિ"
 
@@ -1015,42 +1008,35 @@ msgstr "માહિતીની લંબાઇ:"
 
 #: ../data/gpm-statistics.glade.h:3 ../src/gpm-statistics.c:211
 msgid "Details"
-msgstr ""
+msgstr "વિગતો"
 
 #: ../data/gpm-statistics.glade.h:4
 msgid "Graph type:"
 msgstr "ગ્રાફ પ્રકાર:"
 
 #: ../data/gpm-statistics.glade.h:5
-#| msgid "Power History"
 msgid "History"
 msgstr "ઈતિહાસ"
 
 #: ../data/gpm-statistics.glade.h:7
 msgid "Processor wakeups per second:"
-msgstr ""
+msgstr "પ્રોસેસર સેકન્ડ પ્રતિ જાગે છે:"
 
 #: ../data/gpm-statistics.glade.h:8
-#| msgid "Start point"
 msgid "Show data points"
 msgstr "માહિતી બિંદુઓ ને બતાવો"
 
 #: ../data/gpm-statistics.glade.h:9
-#| msgid "Power Statistics"
 msgid "Statistics"
 msgstr "પરિસ્થિતિઓ"
 
 #: ../data/gpm-statistics.glade.h:10
 msgid "Use smoothed line"
-msgstr ""
+msgstr "લીસી કરેલ રેખા વાપરો"
 
 #: ../data/gpm-statistics.glade.h:11 ../src/gpm-statistics.c:197
 msgid "Wakeups"
-msgstr ""
-
-#: ../data/gpm-statistics.glade.h:12
-msgid "gtk-refresh"
-msgstr ""
+msgstr "જાગો"
 
 #: ../data/gpm-inhibit-test.glade.h:1
 msgid "Application:"
@@ -1101,10 +1087,9 @@ msgid "Always sleep when the lid is _closed"
 msgstr "જ્યારે લીડ બંધ થયેલ હોય ત્યારે હંમેશા ઊંઘો (_c)"
 
 #: ../data/gpm-prefs.glade.h:6
-#, fuzzy
 #| msgid "Dim display when idle"
 msgid "Di_m display when idle"
-msgstr "જ્યારે ફાજલ હોય ત્યારે ઝાંખુ ડિસ્પ્લે"
+msgstr "જ્યારે ફાજલ થાય ત્યારે ડિસ્પ્લે ઝાંખી કરો (_m)"
 
 #: ../data/gpm-prefs.glade.h:7
 msgid "Enable UPS discharge _alarm"
@@ -1199,10 +1184,9 @@ msgid "_Only display an icon when battery power is critically low"
 msgstr "જ્યારે બેટરી પાવર જટિલ રીતે નીચો હોય ત્યારે માત્ર ચિહ્ન જ દર્શાવો (_O)"
 
 #: ../data/gpm-prefs.glade.h:30
-#, fuzzy
 #| msgid "Allow backlight brightness adjustment"
 msgid "_Reduce backlight brightness"
-msgstr "પાશ્વપ્રકાશ તેજસ્વીતા સંતુલનની પરવાનગી આપે છે"
+msgstr "બેકલાઈટ તેજસ્વીતા ઝાંખી કરો (_R)"
 
 #: ../src/gpm-common.c:53
 msgid "Unknown time"
@@ -1245,8 +1229,8 @@ msgstr[1] "મિનિટો"
 msgid "Power Manager for the GNOME desktop"
 msgstr "જીનોમ ડેસ્કટોપ માટે પાવર મેનેજર"
 
-#: ../src/gpm-devicekit.c:168
-#, fuzzy, c-format
+#: ../src/gpm-devicekit.c:187
+#, c-format
 #| msgid ""
 #| "%s fully charged (%i%%)\n"
 #| "Provides %s battery runtime\n"
@@ -1254,30 +1238,27 @@ msgid ""
 "%s fully charged (%.1f%%)\n"
 "Provides %s battery runtime"
 msgstr ""
-"%s સંપૂર્ણપણે ચાર્જ થઈ ગયું (%i%%)\n"
-"%s બેટરી રનટાઈમ પૂરું પાડે છે\n"
+"%s સંપૂર્ણપણે ભારિત થયેલ છે (%.1f%%)\n"
+"%s બેટરી રનટાઈમ પૂરો પાડે છે"
 
-#: ../src/gpm-devicekit.c:172
+#: ../src/gpm-devicekit.c:191
 #, c-format
-#| msgid "%s fully charged (%i%%)\n"
 msgid "%s fully charged (%.1f%%)"
 msgstr "%s પૂર્ણ ચાર્જ થયેલ છે (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:180
+#: ../src/gpm-devicekit.c:199
 #, c-format
-#| msgid "%s %s remaining (%i%%)\n"
 msgid "%s %s remaining (%.1f%%)"
 msgstr "%s %s બાકી રહેલી છે (%.1f%%)"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:185
+#: ../src/gpm-devicekit.c:204
 #, c-format
-#| msgid "%s discharging (%i%%)\n"
 msgid "%s discharging (%.1f%%)"
 msgstr "%s ડિસ્ચાર્જ કરી રહ્યા છે (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:197
-#, fuzzy, c-format
+#: ../src/gpm-devicekit.c:216
+#, c-format
 #| msgid ""
 #| "%s %s until charged (%i%%)\n"
 #| "Provides %s battery runtime\n"
@@ -1285,258 +1266,225 @@ msgid ""
 "%s %s until charged (%.1f%%)\n"
 "Provides %s battery runtime"
 msgstr ""
-"%s %s જ્યાં સુધી ચાર્જ નહિં થાય (%i%%)\n"
-"%s બેટરી રનટાઈમ પૂરું પાડે છે\n"
+"%s %s જ્યાં સુધી ભારિત નહિં થયેલ હોય (%.1f%%)\n"
+"%s બેટરી રનટાઈમ પૂરું પાડે છે"
 
-#: ../src/gpm-devicekit.c:206
-#, fuzzy, c-format
+#: ../src/gpm-devicekit.c:225
+#, c-format
 #| msgid "%s %s until charged (%i%%)\n"
 msgid "%s %s until charged (%.1f%%)"
-msgstr "%s %s જ્યાં સુધી ભારિત નહિં થાય (%i%%)\n"
+msgstr "%s %s જ્યાં સુધી ભારિત થયેલ નહિં હોય (%.1f%%)"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:212
+#: ../src/gpm-devicekit.c:231
 #, c-format
-#| msgid "%s charging (%i%%)\n"
 msgid "%s charging (%.1f%%)"
 msgstr "%s ચાર્જ કરી રહ્યા છે (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:219
-#| msgid "Battery state could not be read at this time\n"
-msgid "Device state could not be read at this time"
-msgstr "ઉપકરણ સ્થિતિ આ સમયે વાંચી શક્યા નહિં"
-
-#: ../src/gpm-devicekit.c:238
+#: ../src/gpm-devicekit.c:257
 #, c-format
 msgid "<b>Product:</b> %s\n"
 msgstr "<b>ઉત્પાદન:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:240 ../src/gpm-devicekit.c:242
-#: ../src/gpm-devicekit.c:244 ../src/gpm-devicekit.c:246
+#: ../src/gpm-devicekit.c:259 ../src/gpm-devicekit.c:261
+#: ../src/gpm-devicekit.c:263 ../src/gpm-devicekit.c:265
 #, c-format
-#| msgid "<b>Status:</b> Missing\n"
 msgid "<b>Status:</b> %s\n"
 msgstr "<b>પરિસ્થિતિ:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:240
+#: ../src/gpm-devicekit.c:259
 msgid "Missing"
 msgstr "ગુમ થયેલ"
 
-#: ../src/gpm-devicekit.c:242
-#| msgid "Battery Charged"
+#: ../src/gpm-devicekit.c:261
 msgid "Charged"
 msgstr "ચાર્જ થઈ ગઈ"
 
-#: ../src/gpm-devicekit.c:244
-#| msgid "UPS Discharging"
+#: ../src/gpm-devicekit.c:263
 msgid "Charging"
 msgstr "ચાર્જ કરી રહ્યા છીએ"
 
-#: ../src/gpm-devicekit.c:246
-#| msgid "UPS Discharging"
+#: ../src/gpm-devicekit.c:265
 msgid "Discharging"
 msgstr "ડિસ્ચાર્જ કરી રહ્યા છીએ"
 
-#: ../src/gpm-devicekit.c:248
+#: ../src/gpm-devicekit.c:267
 #, c-format
-#| msgid "<b>Percentage charge:</b> %i%%\n"
 msgid "<b>Percentage charge:</b> %.1f%%\n"
 msgstr "<b>ટકા ચાર્જ:</b> %.1f%%\n"
 
-#: ../src/gpm-devicekit.c:250
+#: ../src/gpm-devicekit.c:269
 #, c-format
-#| msgid "<b>Product:</b> %s\n"
 msgid "<b>Vendor:</b> %s\n"
 msgstr "<b>વિક્રેતા:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:253
+#: ../src/gpm-devicekit.c:272
 #, c-format
-#| msgid "Technology:"
 msgid "<b>Technology:</b> %s\n"
 msgstr "<b>ટેક્નોલોજી:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:256
+#: ../src/gpm-devicekit.c:275
 #, c-format
-#| msgid "Serial number:"
 msgid "<b>Serial number:</b> %s\n"
 msgstr "<b>સીરીયલ નંબર:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:258
+#: ../src/gpm-devicekit.c:277
 #, c-format
-#| msgid "<b>Product:</b> %s\n"
 msgid "<b>Model:</b> %s\n"
 msgstr "<b>મોડેલ:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:261
+#: ../src/gpm-devicekit.c:280
 #, c-format
-#| msgid "Charge time:"
 msgid "<b>Charge time:</b> %s\n"
 msgstr "<b>ચાર્જ સમય:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:266
+#: ../src/gpm-devicekit.c:285
 #, c-format
-#| msgid "Discharge time:"
 msgid "<b>Discharge time:</b> %s\n"
 msgstr "<b>ડિસ્ચાર્જ સમય:</b> %s\n"
 
 #. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
-#: ../src/gpm-devicekit.c:273
+#: ../src/gpm-devicekit.c:292
 msgid "Excellent"
 msgstr "ઉચ્ચતમ"
 
-#: ../src/gpm-devicekit.c:275
+#: ../src/gpm-devicekit.c:294
 msgid "Good"
 msgstr "સરસ"
 
-#: ../src/gpm-devicekit.c:277
+#: ../src/gpm-devicekit.c:296
 msgid "Fair"
 msgstr "સારું"
 
-#: ../src/gpm-devicekit.c:279
+#: ../src/gpm-devicekit.c:298
 msgid "Poor"
 msgstr "નબળું"
 
-#. Translators: %i is a percentage and %s the condition (Excellent, Good, ...)
-#: ../src/gpm-devicekit.c:282
+#. Translators: %.1f is a percentage and %s the condition (Excellent, Good, ...)
+#: ../src/gpm-devicekit.c:301
 #, c-format
 msgid "<b>Capacity:</b> %.1f%% (%s)\n"
 msgstr "<b>ક્ષમતા:</b> %.1f%% (%s)\n"
 
-#: ../src/gpm-devicekit.c:287
+#: ../src/gpm-devicekit.c:306
 #, c-format
-#| msgid "<b>Percentage charge:</b> %i%%\n"
 msgid "<b>Current charge:</b> %.1f Wh\n"
 msgstr "<b>હાલનો ચાર્જ:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:291
+#: ../src/gpm-devicekit.c:310
 #, c-format
-#| msgid "Last full charge:"
 msgid "<b>Last full charge:</b> %.1f Wh\n"
 msgstr "<b>છેલ્લો સંપૂર્ણ ચાર્જ:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:294
-#, fuzzy, c-format
+#. Translators: Design charge is the amount of charge the battery is designed to have when brand new
+#: ../src/gpm-devicekit.c:314
+#, c-format
 #| msgid "<b>Percentage charge:</b> %i%%\n"
 msgid "<b>Design charge:</b> %.1f Wh\n"
-msgstr "<b>ટકા ચાર્જ:</b> %i%%\n"
+msgstr "<b>રચના ભાર:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:297
+#: ../src/gpm-devicekit.c:317
 #, c-format
-#| msgid "Charge rate:"
 msgid "<b>Charge rate:</b> %.1f W\n"
 msgstr "<b>ચાર્જ દર:</b> %.1f W\n"
 
-#: ../src/gpm-devicekit.c:303
+#: ../src/gpm-devicekit.c:323
 #, c-format
-#| msgid "<b>Percentage charge:</b> %i%%\n"
 msgid "<b>Current charge:</b> %.0f/7\n"
 msgstr "<b>હાલનો ચાર્જ:</b> %.0f/7\n"
 
-#: ../src/gpm-devicekit.c:306
-#, fuzzy, c-format
+#: ../src/gpm-devicekit.c:326
+#, c-format
 #| msgid "<b>Percentage charge:</b> %i%%\n"
 msgid "<b>Design charge:</b> %.0f/7\n"
-msgstr "<b>ટકા ચાર્જ:</b> %i%%\n"
+msgstr "<b>રચના ભાર:</b> %.0f/7\n"
 
-#: ../src/gpm-devicekit.c:324
-#| msgid "AC adapter removed"
+#: ../src/gpm-devicekit.c:344
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "AC એડેપ્ટર"
 msgstr[1] "AC એડેપ્ટરો"
 
-#: ../src/gpm-devicekit.c:327
-#| msgid "Laptop battery"
+#: ../src/gpm-devicekit.c:347
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "લેપટોપ બેટરી"
 msgstr[1] "લેપટોપ બેટરીઓ"
 
-#: ../src/gpm-devicekit.c:330
-#| msgid "UPS"
+#: ../src/gpm-devicekit.c:350
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "UPS"
 msgstr[1] "UPSs"
 
-#: ../src/gpm-devicekit.c:333
+#: ../src/gpm-devicekit.c:353
 msgid "Monitor"
 msgid_plural "Monitors"
 msgstr[0] "મોનિટર"
 msgstr[1] "મોનિટરો"
 
-#: ../src/gpm-devicekit.c:336
-#| msgid "Wireless mouse"
+#: ../src/gpm-devicekit.c:356
 msgid "Wireless mouse"
 msgid_plural "Wireless mice"
 msgstr[0] "વાયરલેસ માઉસ"
 msgstr[1] "વાયરલેસ માઉસો"
 
-#: ../src/gpm-devicekit.c:339
-#| msgid "Wireless keyboard"
+#: ../src/gpm-devicekit.c:359
 msgid "Wireless keyboard"
 msgid_plural "Wireless keyboards"
 msgstr[0] "વાયરલેસ કીબોર્ડ"
 msgstr[1] "વાયરલેસ કીબોર્ડો"
 
-#: ../src/gpm-devicekit.c:342
-#| msgid "PDA"
+#: ../src/gpm-devicekit.c:362
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "PDA"
 msgstr[1] "PDAs"
 
-#: ../src/gpm-devicekit.c:345
-#| msgid "Cell phone"
+#: ../src/gpm-devicekit.c:365
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "સેલ ફોન"
 msgstr[1] "સેલ ફોનો"
 
-#: ../src/gpm-devicekit.c:402
-#| msgid "Lithium ion"
+#: ../src/gpm-devicekit.c:422
 msgid "Lithium Ion"
 msgstr "Lithium ion"
 
-#: ../src/gpm-devicekit.c:405
-#| msgid "Lithium polymer"
+#: ../src/gpm-devicekit.c:425
 msgid "Lithium Polymer"
 msgstr "લિથિયમ પોલીમર"
 
-#: ../src/gpm-devicekit.c:408
-#, fuzzy
+#: ../src/gpm-devicekit.c:428
 #| msgid "Lithium ion"
 msgid "Lithium Iron Phosphate"
-msgstr "Lithium ion"
+msgstr "લિથિયમ આયર્ન ફોસ્ફેટ"
 
-#: ../src/gpm-devicekit.c:411
+#: ../src/gpm-devicekit.c:431
 msgid "Lead acid"
 msgstr "Lead acid"
 
-#: ../src/gpm-devicekit.c:414
+#: ../src/gpm-devicekit.c:434
 msgid "Nickel Cadmium"
 msgstr "નિકેલ કેડમિયમ"
 
-#: ../src/gpm-devicekit.c:417
+#: ../src/gpm-devicekit.c:437
 msgid "Nickel metal hydride"
 msgstr "નિકલ મેટલ હાઈડ્રાઈડ"
 
-#: ../src/gpm-devicekit.c:420
-#| msgid "Unknown time"
+#: ../src/gpm-devicekit.c:440
 msgid "Unknown technology"
 msgstr "અજ્ઞાત ટેકનોલોજી"
 
 #. Translators: This is %i days
 #: ../src/gpm-graph-widget.c:297
 #, c-format
-#| msgid "%ih"
 msgid "%id"
 msgstr "%id"
 
 #. Translators: This is %i days %02i hours
 #: ../src/gpm-graph-widget.c:300
 #, c-format
-#| msgid "%ih%02i"
 msgid "%id%02ih"
 msgstr "%id%02ih"
 
@@ -1549,7 +1497,6 @@ msgstr "%ih"
 #. Translators: This is %i hours %02i minutes
 #: ../src/gpm-graph-widget.c:308
 #, c-format
-#| msgid "%ih%02i"
 msgid "%ih%02im"
 msgstr "%ih%02im"
 
@@ -1590,95 +1537,90 @@ msgid "%.1fV"
 msgstr "%.1fV"
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:358
-#, fuzzy, c-format
+#: ../src/gpm-inhibit.c:371
+#, c-format
 #| msgid "has stopped the %s from taking place : "
 msgid "%s has stopped the suspend from taking place: %s."
-msgstr "એ %s ને જગ્યા લેવાથી અટકાવેલ છે : "
+msgstr "%s એ સસ્પેન્ટ થવાથી અટકાવેલ છે: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:363
-#, fuzzy, c-format
+#: ../src/gpm-inhibit.c:376
+#, c-format
 #| msgid "has stopped the %s from taking place : "
 msgid "%s has stopped the hibernate from taking place: %s."
-msgstr "એ %s ને જગ્યા લેવાથી અટકાવેલ છે : "
+msgstr "%s એ હાયબરનેટ થવાથી અટકાવેલ છે: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:368
-#, fuzzy, c-format
+#: ../src/gpm-inhibit.c:381
+#, c-format
 #| msgid "has stopped the %s from taking place : "
 msgid "%s has stopped the policy action from taking place: %s."
-msgstr "એ %s ને જગ્યા લેવાથી અટકાવેલ છે : "
+msgstr "%s એ પોલિસી ક્રિયા થવાથી અટકાવેલ છે: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:373
-#, fuzzy, c-format
+#: ../src/gpm-inhibit.c:386
+#, c-format
 #| msgid "has stopped the %s from taking place : "
 msgid "%s has stopped the reboot from taking place: %s."
-msgstr "એ %s ને જગ્યા લેવાથી અટકાવેલ છે : "
+msgstr "%s એ રીબુટ થવાથી અટકાવેલ છે: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:378
-#, fuzzy, c-format
+#: ../src/gpm-inhibit.c:391
+#, c-format
 #| msgid "has stopped the %s from taking place : "
 msgid "%s has stopped the shutdown from taking place: %s."
-msgstr "એ %s ને જગ્યા લેવાથી અટકાવેલ છે : "
+msgstr "%s એ બંધ થવાથી અટકાવેલ છે: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:383
-#, fuzzy, c-format
+#: ../src/gpm-inhibit.c:396
+#, c-format
 #| msgid "has stopped the %s from taking place : "
 msgid "%s has stopped the timeout action from taking place: %s."
-msgstr "એ %s ને જગ્યા લેવાથી અટકાવેલ છે : "
+msgstr "%s એ સમયસમાપ્તિ ક્રિયા થવાથી અટકાવેલ છે: %s."
 
-#: ../src/gpm-inhibit.c:392 ../src/gpm-inhibit.c:407
-#, fuzzy
+#: ../src/gpm-inhibit.c:405 ../src/gpm-inhibit.c:420
 #| msgid "Multiple applications have stopped the %s from taking place."
 msgid "Multiple applications have stopped the suspend from taking place."
-msgstr "ઘણા કાર્યક્રમોએ %s ને જગ્યા લેવાથી અટકાવ્યા છે."
+msgstr "ઘણાબધા કાર્યક્રમોએ સસ્પેન્ટ થવાથી અટકાવેલ છે."
 
-#: ../src/gpm-inhibit.c:395
-#, fuzzy
+#: ../src/gpm-inhibit.c:408
 #| msgid "Multiple applications have stopped the %s from taking place."
 msgid "Multiple applications have stopped the hibernate from taking place."
-msgstr "ઘણા કાર્યક્રમોએ %s ને જગ્યા લેવાથી અટકાવ્યા છે."
+msgstr "ઘણાબધા કાર્યક્રમોએ હાયબરનેટ થવાથી અટકાવેલ છે."
 
-#: ../src/gpm-inhibit.c:398
-#, fuzzy
+#: ../src/gpm-inhibit.c:411
 #| msgid "Multiple applications have stopped the %s from taking place."
 msgid "Multiple applications have stopped the policy action from taking place."
-msgstr "ઘણા કાર્યક્રમોએ %s ને જગ્યા લેવાથી અટકાવ્યા છે."
+msgstr "ઘણાબધા કાર્યક્રમોએ પોલિસી ક્રિયા થવાથી અટકાવેલ છે."
 
-#: ../src/gpm-inhibit.c:401
-#, fuzzy
+#: ../src/gpm-inhibit.c:414
 #| msgid "Multiple applications have stopped the %s from taking place."
 msgid "Multiple applications have stopped the reboot from taking place."
-msgstr "ઘણા કાર્યક્રમોએ %s ને જગ્યા લેવાથી અટકાવ્યા છે."
+msgstr "ઘણાબધા કાર્યક્રમોએ રીબુટ કરવાથી અટકાવેલ છે."
 
-#: ../src/gpm-inhibit.c:404
-#, fuzzy
+#: ../src/gpm-inhibit.c:417
 #| msgid "Multiple applications have stopped the %s from taking place."
 msgid "Multiple applications have stopped the shutdown from taking place."
-msgstr "ઘણા કાર્યક્રમોએ %s ને જગ્યા લેવાથી અટકાવ્યા છે."
+msgstr "ઘણાબધા કાર્યક્રમોએ બંધ થવાથી અટકાવેલ છે."
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-main.c:136 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1340
+#: ../src/gpm-main.c:139 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1332
 msgid "Show extra debugging information"
 msgstr "વધારાની ડિબગીંગ જાણકારી બતાવો"
 
-#: ../src/gpm-main.c:138
+#: ../src/gpm-main.c:141
 msgid "Show version of installed program and exit"
 msgstr "સ્થાપિત કાર્યક્રમની આવૃત્તિ બતાવો અને બહાર નીકળો"
 
-#: ../src/gpm-main.c:140
+#: ../src/gpm-main.c:143
 msgid "Exit after a small delay (for debugging)"
 msgstr "નાના વિલંબ પછી બહાર નીકળો (ડિબગીંગ માટે)"
 
-#: ../src/gpm-main.c:142
+#: ../src/gpm-main.c:145
 msgid "Exit after the manager has loaded (for debugging)"
 msgstr "વ્યવસ્થાપક લોડ થઈ જાય પછી બંધ કરો (ડિબગીંગ માટે)"
 
-#: ../src/gpm-main.c:156 ../src/gpm-main.c:160
+#: ../src/gpm-main.c:159 ../src/gpm-main.c:163
 msgid "GNOME Power Manager"
 msgstr "જીનોમ પાવર મેનેજર"
 
@@ -1689,77 +1631,67 @@ msgstr "માં પાવર પ્લગ થયેલ છે"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:184
-#| msgid "Power Manager"
 msgid "Power unplugged"
 msgstr "પાવર પ્લગ થયેલ નથી"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:188
-#| msgid "Lid opened"
 msgid "Lid has opened"
 msgstr "Lid ખોલી નાંખેલ"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:192
-#| msgid "Lid closed"
 msgid "Lid has closed"
 msgstr "Lid બંધ થયેલ"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:196
-#| msgid "PDA battery low"
 msgid "Battery is low"
 msgstr "બેટરી નીચી છે"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:200
-#| msgid "battery is critically low"
 msgid "Battery is very low"
 msgstr "બેટરી ઘણી નીચી છે"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:204
-#| msgid "Battery Voltage"
 msgid "Battery is full"
 msgstr "બેટરી સંપૂર્ણ છે"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:208
-#, fuzzy
 #| msgid "Suspend enabled"
 msgid "Suspend started"
-msgstr "અટકાવો સક્રિયકૃત"
+msgstr "સસ્પેન્ડ શરૂ થયું"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:212
 msgid "Resumed"
-msgstr ""
+msgstr "અટકાવાયેલ"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:216
-#, fuzzy
 #| msgid "Suspend enabled"
 msgid "Suspend failed"
-msgstr "અટકાવો સક્રિયકૃત"
+msgstr "સસ્પેન્ડ નિષ્ફળ"
 
 #: ../src/gpm-manager.c:258
-#, fuzzy
 #| msgid "Request to %s"
 msgid "Request to suspend"
-msgstr "%s ને અરજી"
+msgstr "સસ્પેન્ડ કરવાની અરજી"
 
 #: ../src/gpm-manager.c:260
-#| msgid "Request to %s"
 msgid "Request to hibernate"
 msgstr "હાઇબરનેટ ની અરજી"
 
 #: ../src/gpm-manager.c:262
 msgid "Request to do policy action"
-msgstr ""
+msgstr "પોલિસી ક્રિયા કરવા માટેની અરજી"
 
 #: ../src/gpm-manager.c:264
 msgid "Request to do timeout action"
-msgstr ""
+msgstr "સમયસમાપ્તિ ક્રિયા કરવા માટેની અરજી"
 
 #. I want this translated
 #: ../src/gpm-manager.c:274
@@ -1783,16 +1715,14 @@ msgid ""
 msgstr "હાયબરનેટ આધાર નિષ્ક્રિય કરવામાં આવેલ છે. વધુ વિગતો માટે તમારા સંચાલકનો સંપર્ક કરો."
 
 #: ../src/gpm-manager.c:777
-#, fuzzy
 #| msgid "the lid has been closed on ac power"
 msgid "The lid has been closed on ac power."
-msgstr "ac પાવર પર lid બંધ કરાયેલ છે"
+msgstr "લીડ ac પાવર પર બંધ કરવામાં આવેલ છે."
 
 #: ../src/gpm-manager.c:806
-#, fuzzy
 #| msgid "the lid has been closed on battery power"
 msgid "The lid has been closed on battery power."
-msgstr "બેટરી પાવર પર lid બંધ કરાયેલ છે"
+msgstr "લીડ બેટરી પાવર પર બંધ કરવામાં આવેલ છે."
 
 #: ../src/gpm-manager.c:826
 msgid "Display DPMS activated"
@@ -1807,103 +1737,98 @@ msgid "Laptop lid is closed"
 msgstr "લેપટોપ lid બંધ કરેલ છે"
 
 #: ../src/gpm-manager.c:886
-#| msgid "the power button has been pressed"
 msgid "The power button has been pressed."
 msgstr "પાવર બટન ને દબાવી દેવામાં આવ્યુ છે."
 
 #: ../src/gpm-manager.c:888 ../src/gpm-manager.c:890
-#, fuzzy
 #| msgid "the suspend button has been pressed"
 msgid "The suspend button has been pressed."
-msgstr "અટકાવો બટન દબાયેલ છે"
+msgstr "સસ્પેન્ડ બટન દબાવવામાં આવેલ છે."
 
 #: ../src/gpm-manager.c:892
-#, fuzzy
 #| msgid "the hibernate button has been pressed"
 msgid "The hibernate button has been pressed."
-msgstr "હાયબરનેટ બટન દબાયેલ છે"
+msgstr "હાયબરનેટ બટન દબાવવામાં આવેલ છે."
 
 #: ../src/gpm-manager.c:900
 msgid "Power Information"
 msgstr "પાવર જાણકારી"
 
 #: ../src/gpm-manager.c:989
-#, fuzzy
 #| msgid ""
 #| "the lid has been closed, and the ac adapter removed (and gconf is okay)"
 msgid "The lid has been closed, and the ac adapter removed (and gconf is okay)."
-msgstr "lid બંધ કરી દેવાયેલ છે, અને ac એડેપ્ટર દૂર કરવામાં આવેલ છે (અને gconf બરાબર છે)"
+msgstr "લીડ બંધ કરવામાં આવેલ છે, અને ac એડેપ્ટર દૂર કરવામાં આવેલ છે (અને gconf બરાબર છે)."
 
 #: ../src/gpm-manager.c:1006
-#| msgid "battery is critically low"
 msgid "Battery is critically low."
 msgstr "બેટરી જટિલ રીતે નીચી છે."
 
 #: ../src/gpm-manager.c:1091 ../src/gpm-manager.c:1105
 msgid "User clicked on tray"
-msgstr ""
+msgstr "વપરાશકર્તાએ ટ્રે પર ક્લિક કર્યું"
 
 #: ../src/gpm-manager.c:1255
 msgid "Laptop battery low"
 msgstr "લેપટોપ બેટરી નીચી"
 
 #: ../src/gpm-manager.c:1257
-#, fuzzy, c-format
+#, c-format
 #| msgid "You have approximately <b>%s</b> of remaining battery life (%d%%)"
 msgid "You have approximately <b>%s</b> of remaining battery life (%.1f%%)"
-msgstr "તમારી પાસે આશરે <b>%s</b> જેટલું બાકીના બેટરી જીવનનું બાકી છે (%d%%)"
+msgstr "તમારી પાસે અંદાજીત <b>%s</b> જેટલું બેટરી જીવન બાકી છે (%.1f%%)"
 
 #: ../src/gpm-manager.c:1260
 msgid "UPS low"
 msgstr "UPS નીચું"
 
 #: ../src/gpm-manager.c:1262
-#, fuzzy, c-format
+#, c-format
 #| msgid ""
 #| "You have approximately <b>%s</b> of remaining UPS backup power (%d%%)"
 msgid "You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"
-msgstr "તમારી પાસે આશરે <b>%s</b> જેટલું બાકીના UPS બેકઅપ પાવરનું છે (%d%%)"
+msgstr "તમારી પાસે અંદાજીત <b>%s</b> જેટલું UPS બેકઅપ પાવર બાકી છે (%.1f%%)"
 
 #: ../src/gpm-manager.c:1265 ../src/gpm-manager.c:1350
 msgid "Mouse battery low"
 msgstr "માઉસ બેટરી નીચી"
 
 #: ../src/gpm-manager.c:1266
-#, fuzzy, c-format
+#, c-format
 #| msgid "The wireless mouse attached to this computer is low in power (%d%%)"
 msgid "The wireless mouse attached to this computer is low in power (%.1f%%)"
-msgstr "આ કમ્પ્યૂટર સાથે જોડાયેલ વાયરલેસ માઉસ પાવરમાં નીચું છે (%d%%)"
+msgstr "આ કમ્પ્યૂટર સાથે જોડાયેલ વાયરલેસ માઉસ પાવરમાં નીચું છે (%.1f%%)"
 
 #: ../src/gpm-manager.c:1269 ../src/gpm-manager.c:1355
 msgid "Keyboard battery low"
 msgstr "કીબોર્ડ બેટરી નીચી"
 
 #: ../src/gpm-manager.c:1270
-#, fuzzy, c-format
+#, c-format
 #| msgid ""
 #| "The wireless keyboard attached to this computer is low in power (%d%%)"
 msgid "The wireless keyboard attached to this computer is low in power (%.1f%%)"
-msgstr "આ કમ્પ્યૂટર સાથે જોડાયેલ વાયરલેસ કીબોર્ડ પાવરમાં નીચું છે (%d%%)"
+msgstr "આ કમ્પ્યૂટર સાથે જોડાયેલ વાયરલેસ કીબોર્ડ પારવમાં નીચું છે (%.1f%%)"
 
 #: ../src/gpm-manager.c:1273 ../src/gpm-manager.c:1360
 msgid "PDA battery low"
 msgstr "PDA બેટરી નીચી"
 
 #: ../src/gpm-manager.c:1274
-#, fuzzy, c-format
+#, c-format
 #| msgid "The PDA attached to this computer is low in power (%d%%)"
 msgid "The PDA attached to this computer is low in power (%.1f%%)"
-msgstr "આ કમ્પ્યૂટર સાથે જોડાયેલ PDA પાવરમાં નીચું છે (%d%%)"
+msgstr "આ કમ્પ્યૂટર સાથે જોડાયેલ PDA પાવરમાં નીચું છે (%.1f%%)"
 
 #: ../src/gpm-manager.c:1277 ../src/gpm-manager.c:1365
 msgid "Cell phone battery low"
 msgstr "સેલ ફોન બેટરી નીચી"
 
 #: ../src/gpm-manager.c:1278
-#, fuzzy, c-format
+#, c-format
 #| msgid "The cell phone attached to this computer is low in power (%d%%)"
 msgid "The cell phone attached to this computer is low in power (%.1f%%)"
-msgstr "આ કમ્પ્યૂટર સાથે જોડાયેલ સેલફોન બેટરી પાવરમાં નીચી છે (%d%%)"
+msgstr "આ કમ્પ્યૂટર સાથે જોડાયેલ સેલ ફોન પાવરમાં નીચો છે (%.1f%%)"
 
 #: ../src/gpm-manager.c:1314 ../src/gpm-manager.c:1391
 msgid "Laptop battery critically low"
@@ -1929,75 +1854,65 @@ msgid "This computer will shutdown in %s if the AC is not connected."
 msgstr "આ કમ્પ્યૂટર %s માં બંધ થઈ જશે જો AC જોડાયેલ નહિં હોય."
 
 #: ../src/gpm-manager.c:1335
-#, fuzzy, c-format
+#, c-format
 #| msgid ""
 #| "You have approximately <b>%s</b> of remaining battery life (%d%%). %s"
 msgid "You have approximately <b>%s</b> of remaining battery life (%.1f%%). %s"
-msgstr "તમારી પાસે આસરે <b>%s</b> જેટલું બાકી રહેલ બેટરી જીવનનું છે (%d%%). %s"
+msgstr "તમારી પાસે અંદાજીત <b>%s</b> જેટલું બેટરી જીવન બાકી છે (%.1f%%). %s"
 
 #: ../src/gpm-manager.c:1343 ../src/gpm-manager.c:1423
 msgid "UPS critically low"
 msgstr "UPS જટિલ રીતે નીચું છે"
 
 #: ../src/gpm-manager.c:1345
-#, fuzzy, c-format
+#, c-format
 #| msgid ""
 #| "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
 #| "AC power to your computer to avoid losing data."
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%.1f%%). Restore AC "
 "power to your computer to avoid losing data."
-msgstr ""
-"તમારી પાસે આશરે <b>%s</b> જેટલું બાકીના UPS પાવરનું છે (%d%%). માહિતી ગુમાવવાથી બચવા "
-"માટે તમારા કમ્પ્યૂટરનો AC પાવર પુનઃસંગ્રહો."
+msgstr "તમારી પાસે અંદાજીત <b>%s</b> જેટલો UPS પાવર બાકી છે (%.1f%%). માહિતી ગુમાવવાનું ટાળવા માટે તમારા કમ્પ્યૂટરનો AC પાવર પુનઃસંગ્રહો."
 
 #: ../src/gpm-manager.c:1351
-#, fuzzy, c-format
+#, c-format
 #| msgid ""
 #| "The wireless mouse attached to this computer is very low in power (%d%%). "
 #| "This device will soon stop functioning if not charged."
 msgid ""
 "The wireless mouse attached to this computer is very low in power (%.1f%%). "
 "This device will soon stop functioning if not charged."
-msgstr ""
-"આ કમ્પ્યૂટર સાથે જોડાયેલ વાયરલેસ માઉસ પાવરમાં ખૂબ નીચું છે (%d%%). આ ઉપકરણ થોડ જ સમયમાં "
-"કામ આપતું બંધ થઈ જશે જો ચાર્જ થયેલ નહિં હોય."
+msgstr "આ કમ્પ્યૂટર સાથે જોડાયેલ વાયરલેસ માઉસ પાવરમાં ખૂબ નીચું છે (%.1f%%). જો ભારિત નહિં થાય તો આ ઉપકરણ થોડા વખતમાં જ કામ કરવાનું બંધ કરશે."
 
 #: ../src/gpm-manager.c:1356
-#, fuzzy, c-format
+#, c-format
 #| msgid ""
 #| "The wireless keyboard attached to this computer is very low in power (%d%"
 #| "%). This device will soon stop functioning if not charged."
 msgid ""
 "The wireless keyboard attached to this computer is very low in power (%.1f%"
 "%). This device will soon stop functioning if not charged."
-msgstr ""
-"આ કમ્પ્યૂટર સાથે જોડાયેલ વાયરલેસ કીબોર્ડ પાવરમાં ખૂબ નીચું છે (%d%%). આ ઉપકરણ થોડ જ "
-"સમયમાં કામ આપતું બંધ થઈ જશે જો ચાર્જ થયેલ નહિં હોય."
+msgstr "આ કમ્પ્યૂટર સાથે જોડાયેલ વાયરલેસ કીબોર્ડ પાવરમાં ખૂબ નીચું છે (%.1f%%). જો ભારિત નહિં થાય તો આ ઉપકરણ થોડા વખતમાં જ કામ કરવાનું બંધ કરશે."
 
 #: ../src/gpm-manager.c:1361
-#, fuzzy, c-format
+#, c-format
 #| msgid ""
 #| "The PDA attached to this computer is very low in power (%d%%). This "
 #| "device will soon stop functioning if not charged."
 msgid ""
 "The PDA attached to this computer is very low in power (%.1f%%). This device "
 "will soon stop functioning if not charged."
-msgstr ""
-"આ કમ્પ્યૂટર સાથે જોડાયેલ PDA પાવરમાં ખૂબ નીચું છે (%d%%). આ ઉપકરણ થોડ જ સમયમાં કામ આપતું "
-"બંધ થઈ જશે જો ચાર્જ થયેલ નહિં હોય."
+msgstr "આ કમ્પ્યૂટર સાથે જોડાયેલ PDA પાવરમાં ખૂબ નીચું છે (%.1f%%). જો ભારિત નહિં થાય તો આ ઉપકરણ થોડા સમયમાં જ કામ કરવાનું બંધ કરશે."
 
 #: ../src/gpm-manager.c:1366
-#, fuzzy, c-format
+#, c-format
 #| msgid ""
 #| "Your cell phone is very low in power (%d%%). This device will soon stop "
 #| "functioning if not charged."
 msgid ""
 "Your cell phone is very low in power (%.1f%%). This device will soon stop "
 "functioning if not charged."
-msgstr ""
-"આ કમ્પ્યૂટર સાથે જોડાયેલ સેલ ફોન પાવરમાં ખૂબ નીચો છે (%d%%). આ ઉપકરણ થોડ જ સમયમાં કામ "
-"આપતું બંધ થઈ જશે જો ચાર્જ થયેલ નહિં હોય."
+msgstr "તમારો સેલ ફોન પાવરમાં ખૂબ નીચો છે (%.1f%%). જો ભારિત નહિં થાય તો આ ઉપકરણ થોડા સમયમાં જ કામ કરવાનું બંધ કરી દેશે."
 
 #: ../src/gpm-manager.c:1398
 msgid ""
@@ -2100,7 +2015,6 @@ msgid "Sleep warning"
 msgstr "ઊંઘવાની ચેતવણી"
 
 #: ../src/gpm-notify.c:365
-#, fuzzy
 #| msgid ""
 #| "Your laptop will not sleep if you shut the lid as it is currently "
 #| "inhibited.\n"
@@ -2110,8 +2024,8 @@ msgid ""
 "prevented this.\n"
 "Some laptops can overheat if they do not sleep when the lid is closed."
 msgstr ""
-"જો તમે લીડ બંધ કરો તો તમારું લેપટોપ ઊંઘશે નહિં કારણ કે તે વર્તમાનમાં અટકાવેલ છે.\n"
-"અમુક લેપટોપ વધુ ગરમી કરી શકે છે જો તેઓ ઊંઘે નહિં જ્યારે લીડ બંધ થયેલ હોય."
+"તમારું લેપટોપ ઉંઘશે નહિં જો તમે લીડને ચાલતા કાર્યક્રમ તરીકે બંધ કરી દો કે જેણે આને અટકાવેલ હોય.\n"
+"અમુક લેપટોપ વધુ પડતા ગરમ થઈ જાય જો તેઓ જ્યારે લીડ બંધ હોય ત્યારે ઊંઘે નહિં."
 
 #: ../src/gpm-notify.c:396
 msgid "Battery Charged"
@@ -2190,12 +2104,11 @@ msgstr "કોરી સ્ક્રીન"
 msgid "Do nothing"
 msgstr "કંઈ નહિં કરો"
 
-#: ../src/gpm-prefs-core.c:282
+#: ../src/gpm-prefs-core.c:285
 msgid "Never"
 msgstr "ક્યારેય નહિં"
 
-#: ../src/gpm-prefs-core.c:1016
-#| msgid "Make _default"
+#: ../src/gpm-prefs-core.c:1024
 msgid "Make Default"
 msgstr "મૂળભૂત બનાવો"
 
@@ -2204,7 +2117,6 @@ msgid "Rate"
 msgstr "દર"
 
 #: ../src/gpm-statistics.c:86
-#| msgid "Charge time:"
 msgid "Charge"
 msgstr "ચાર્જ"
 
@@ -2217,14 +2129,10 @@ msgid "Time to empty"
 msgstr "ખાલી થવાનો સમય"
 
 #: ../src/gpm-statistics.c:95
-#| msgid "minute"
-#| msgid_plural "minutes"
 msgid "10 minutes"
 msgstr "૧૦ મિનિટો"
 
 #: ../src/gpm-statistics.c:96
-#| msgid "hour"
-#| msgid_plural "hours"
 msgid "2 hours"
 msgstr "૨ કલાકો"
 
@@ -2237,22 +2145,18 @@ msgid "1 week"
 msgstr "૧ અઠવાડિયુ"
 
 #: ../src/gpm-statistics.c:105
-#| msgid "Charge time profile"
 msgid "Charge profile"
 msgstr "રૂપરેખા ને ચાર્જ કરો"
 
 #: ../src/gpm-statistics.c:106
-#| msgid "Charge time accuracy profile"
 msgid "Charge accuracy"
 msgstr "ચાર્જ ચોકસાઈ"
 
 #: ../src/gpm-statistics.c:107
-#| msgid "Discharge time profile"
 msgid "Discharge profile"
 msgstr "ડિસ્ચાર્જ રૂપરેખા"
 
 #: ../src/gpm-statistics.c:108
-#| msgid "Discharge time accuracy profile"
 msgid "Discharge accuracy"
 msgstr "ડિસ્ચાર્જ સમય ચોકસાઈ"
 
@@ -2297,23 +2201,25 @@ msgid "Device"
 msgstr "ઉપકરણ"
 
 #: ../src/gpm-statistics.c:336
-#| msgid "Vendor:"
 msgid "Vendor"
 msgstr "વિક્રેતા"
 
 #: ../src/gpm-statistics.c:338
-#| msgid "Model:"
 msgid "Model"
 msgstr "મોડેલ"
 
 #: ../src/gpm-statistics.c:340
-#| msgid "Serial number:"
 msgid "Serial number"
 msgstr "સીરીયલ નંબર"
 
 #: ../src/gpm-statistics.c:341
 msgid "Supply"
 msgstr "પૂરુ પાડો"
+
+#: ../src/gpm-statistics.c:343
+#, c-format
+msgid "%d seconds"
+msgstr "%d સેકન્ડો"
 
 #: ../src/gpm-statistics.c:344
 msgid "Refreshed"
@@ -2325,11 +2231,11 @@ msgstr "હાલમાં"
 
 #: ../src/gpm-statistics.c:355
 msgid "Rechargeable"
-msgstr ""
+msgstr "પુનઃભારિત કરી શકાય તેવું"
 
 #: ../src/gpm-statistics.c:359
 msgid "State"
-msgstr ""
+msgstr "સ્થિતિ"
 
 #: ../src/gpm-statistics.c:362
 msgid "Energy"
@@ -2356,12 +2262,10 @@ msgid "Percentage"
 msgstr "ટકા"
 
 #: ../src/gpm-statistics.c:410
-#| msgid "Capacity:"
 msgid "Capacity"
 msgstr "ક્ષમતા"
 
 #: ../src/gpm-statistics.c:414
-#| msgid "Technology:"
 msgid "Technology"
 msgstr "ટેક્નોલોજી"
 
@@ -2387,7 +2291,7 @@ msgstr "કર્નલ કોર"
 #. TRANSLATORS: interrupt between processors
 #: ../src/gpm-statistics.c:700
 msgid "Interprocessor interrupt"
-msgstr ""
+msgstr "આંતરપ્રોસેસર અટકણ"
 
 #. TRANSLATORS: unknown interrupt
 #: ../src/gpm-statistics.c:705
@@ -2407,7 +2311,7 @@ msgstr "ACPI"
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
 #: ../src/gpm-statistics.c:754
 msgid "Serial ATA"
-msgstr ""
+msgstr "શ્રેણીય ATA"
 
 #. TRANSLATORS: this is the old-style ATA interface
 #: ../src/gpm-statistics.c:757
@@ -2417,181 +2321,174 @@ msgstr "ATA યજમાન નિયંત્રક"
 #. TRANSLATORS: 802.11 wireless adaptor
 #: ../src/gpm-statistics.c:760
 msgid "Intel wireless adaptor"
-msgstr ""
+msgstr "Intel વાયરલેસ એડેપ્ટર"
 
 #. TRANSLATORS: a timer is something that fires periodically
 #: ../src/gpm-statistics.c:765 ../src/gpm-statistics.c:768
-#: ../src/gpm-statistics.c:771
+#: ../src/gpm-statistics.c:771 ../src/gpm-statistics.c:774
+#: ../src/gpm-statistics.c:777
 #, c-format
-#| msgid "Time"
 msgid "Timer %s"
 msgstr "ટાઇમર %s"
 
 #. TRANSLATORS: this is a task that's woken up from sleeping
-#: ../src/gpm-statistics.c:774
+#: ../src/gpm-statistics.c:780
 #, c-format
 msgid "Sleep %s"
-msgstr ""
+msgstr "ઉંઘ %s"
 
 #. TRANSLATORS: this is a new realtime task
-#: ../src/gpm-statistics.c:777
+#: ../src/gpm-statistics.c:783
 #, c-format
 msgid "New task %s"
 msgstr "નવુ કાર્ય %s"
 
 #. TRANSLATORS: this is a task thats woken to check state
-#: ../src/gpm-statistics.c:780
+#: ../src/gpm-statistics.c:786
 #, c-format
 msgid "Wait %s"
 msgstr "થોભો %s"
 
 #. TRANSLATORS: a work queue is a list of work that has to be done
-#: ../src/gpm-statistics.c:783 ../src/gpm-statistics.c:786
+#: ../src/gpm-statistics.c:789 ../src/gpm-statistics.c:792
 #, c-format
 msgid "Work queue %s"
 msgstr "કામની કતાર %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
-#: ../src/gpm-statistics.c:789
+#: ../src/gpm-statistics.c:795
 #, c-format
 msgid "Network route flush %s"
-msgstr ""
+msgstr "નેટવર્ક રુટ ફ્લશ %s"
 
 #. TRANSLATORS: activity on the USB bus
-#: ../src/gpm-statistics.c:792
+#: ../src/gpm-statistics.c:798
 #, c-format
 msgid "USB activity %s"
 msgstr "USB પ્રવૃત્તિ %s"
 
 #. TRANSLATORS: we've timed out of an aligned timer
-#: ../src/gpm-statistics.c:795
+#: ../src/gpm-statistics.c:801
 #, c-format
 msgid "Wakeup %s"
 msgstr "જાગો %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
-#: ../src/gpm-statistics.c:798
+#: ../src/gpm-statistics.c:804
 msgid "Local interrupts"
-msgstr ""
+msgstr "સ્થાનીય અટકણો"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
-#: ../src/gpm-statistics.c:801
+#: ../src/gpm-statistics.c:807
 msgid "Rescheduling interrupts"
-msgstr ""
+msgstr "અટકણો પુનઃસુયોજીત કરી રહ્યા છીએ"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:911
-#| msgid "Device information"
+#: ../src/gpm-statistics.c:917
 msgid "Device Information"
 msgstr "ઉપકરણ જાણકારી"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:913
-#| msgid "Power History"
+#: ../src/gpm-statistics.c:919
 msgid "Device History"
 msgstr "ઉપકરણ ઈતિહાસ"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:915
-#| msgid "Discharge time profile"
+#: ../src/gpm-statistics.c:921
 msgid "Device Profile"
 msgstr "ઉપકરણ રૂપરેખા"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:917
+#: ../src/gpm-statistics.c:923
 msgid "Processor Wakeups"
-msgstr ""
+msgstr "પ્રોસેસર જગાડવાનું"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1149 ../src/gpm-statistics.c:1155
-#: ../src/gpm-statistics.c:1161 ../src/gpm-statistics.c:1167
-#, fuzzy
+#: ../src/gpm-statistics.c:1141 ../src/gpm-statistics.c:1147
+#: ../src/gpm-statistics.c:1153 ../src/gpm-statistics.c:1159
 #| msgid "Average time elapsed"
 msgid "Time elapsed"
-msgstr "પસાર થયેલ સરેરાશ સમય"
+msgstr "પસાર થયેલ સમય"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1151
+#: ../src/gpm-statistics.c:1143
 msgid "Power"
 msgstr "પાવર"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1157 ../src/gpm-statistics.c:1200
-#: ../src/gpm-statistics.c:1206 ../src/gpm-statistics.c:1212
-#: ../src/gpm-statistics.c:1218
-#, fuzzy
+#: ../src/gpm-statistics.c:1149 ../src/gpm-statistics.c:1192
+#: ../src/gpm-statistics.c:1198 ../src/gpm-statistics.c:1204
+#: ../src/gpm-statistics.c:1210
 #| msgid "Cell Voltage"
 msgid "Cell charge"
-msgstr "સેલ વોલ્ટેજ"
+msgstr "કોષ ભાર"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1163 ../src/gpm-statistics.c:1169
-#| msgid "Estimated time"
+#: ../src/gpm-statistics.c:1155 ../src/gpm-statistics.c:1161
 msgid "Predicted time"
 msgstr "અંદાજીત સમય"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1202 ../src/gpm-statistics.c:1214
+#: ../src/gpm-statistics.c:1194 ../src/gpm-statistics.c:1206
 msgid "Correction factor"
-msgstr ""
+msgstr "સુધારા અવયવ"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1208 ../src/gpm-statistics.c:1220
+#: ../src/gpm-statistics.c:1200 ../src/gpm-statistics.c:1212
 msgid "Prediction accuracy"
-msgstr ""
+msgstr "ધારણા ચોકસાઈ"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:1569
-#| msgid "Poor"
+#: ../src/gpm-statistics.c:1557
 msgid "Processor"
 msgstr "પ્રોસેસર"
 
-#: ../src/gpm-tray-icon.c:205 ../src/gpm-tray-icon.c:224
+#: ../src/gpm-tray-icon.c:190 ../src/gpm-tray-icon.c:209
 msgid "Device information"
 msgstr "ઉપકરણ જાણકારી"
 
-#: ../src/gpm-tray-icon.c:207
+#: ../src/gpm-tray-icon.c:192
 msgid "There is no detailed information for this device"
 msgstr "આ ઉપકરણ માટે વિગત થયેલ જાણકારી નથી"
 
-#: ../src/gpm-tray-icon.c:344
+#: ../src/gpm-tray-icon.c:321
 msgid "translator-credits"
 msgstr "અંકિત પટેલ <ankit644@yahoo.com>"
 
-#: ../src/gpm-tray-icon.c:360
+#: ../src/gpm-tray-icon.c:336
 msgid "GNOME Power Manager Website"
 msgstr "જીનોમ પાવર વ્યવસ્થાપક વેબસાઈટ"
 
 #. preferences
-#: ../src/gpm-tray-icon.c:433
+#: ../src/gpm-tray-icon.c:408
 msgid "_Preferences"
 msgstr "પસંદગીઓ (_P)"
 
 #. statistics
-#: ../src/gpm-tray-icon.c:441
+#: ../src/gpm-tray-icon.c:416
 msgid "Power _History"
 msgstr "પાવર ઈતિહાસ (_H)"
 
 #. help
-#: ../src/gpm-tray-icon.c:453
+#: ../src/gpm-tray-icon.c:428
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:2
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:2
 msgid "_Help"
 msgstr "મદદ (_H)"
 
 #. about
-#: ../src/gpm-tray-icon.c:461
+#: ../src/gpm-tray-icon.c:436
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:1
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:1
 msgid "_About"
 msgstr "વિશે (_A)"
 
-#: ../src/gpm-tray-icon.c:568
+#: ../src/gpm-tray-icon.c:542
 msgid "_Suspend"
 msgstr "અટકાવો (_S)"
 
-#: ../src/gpm-tray-icon.c:578
+#: ../src/gpm-tray-icon.c:552
 msgid "Hi_bernate"
 msgstr "હાયબરનેટ (_b)"
 
