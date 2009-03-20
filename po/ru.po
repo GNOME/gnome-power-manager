@@ -1,6 +1,6 @@
 # translation of gnome-power-manager to Russian
 #
-# Copyright (C) 2005, 2006, 2008 Free Software Foundation, Inc.
+# Copyright (C) 2005-2009 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnome-power-manager package.
 #
 # Leonid Kanter <leon@asplinux.ru>, 2006.
@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-01 13:07+0300\n"
-"PO-Revision-Date: 2008-09-22 00:33+0300\n"
+"POT-Creation-Date: 2009-03-20 23:50+0300\n"
+"PO-Revision-Date: 2009-03-22 00:33+0300\n"
 "Last-Translator: Nickolay V. Shmyrev <nshmyrev@yandex.ru>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -45,12 +45,12 @@ msgid "LCD brightness : %d%%"
 msgstr "Яркость LCD: %d%%"
 
 #: ../applets/brightness/brightness-applet.c:747
-#: ../applets/inhibit/inhibit-applet.c:417 ../src/gpm-tray-icon.c:330
+#: ../applets/inhibit/inhibit-applet.c:417 ../src/gpm-tray-icon.c:307
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Лицензировано на условиях GNU General Public License версии 2"
 
 #: ../applets/brightness/brightness-applet.c:748
-#: ../applets/inhibit/inhibit-applet.c:418 ../src/gpm-tray-icon.c:331
+#: ../applets/inhibit/inhibit-applet.c:418 ../src/gpm-tray-icon.c:308
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -64,7 +64,7 @@ msgstr ""
 "Обеспечения, версии 2 или (на ваше усмотрение) более поздней."
 
 #: ../applets/brightness/brightness-applet.c:752
-#: ../applets/inhibit/inhibit-applet.c:422 ../src/gpm-tray-icon.c:335
+#: ../applets/inhibit/inhibit-applet.c:422 ../src/gpm-tray-icon.c:312
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -80,7 +80,7 @@ msgstr ""
 "дополнительных сведений обратитесь к Универсальной Общественной Лицензии GNU."
 
 #: ../applets/brightness/brightness-applet.c:756
-#: ../applets/inhibit/inhibit-applet.c:426 ../src/gpm-tray-icon.c:339
+#: ../applets/inhibit/inhibit-applet.c:426 ../src/gpm-tray-icon.c:316
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -604,8 +604,8 @@ msgid ""
 "The action to take when the UPS is low. Possible values are \"hibernate\", "
 "\"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
-"Действие, выполняемое при разряде UPS. Возможные значения: "
-"«hibernate», «suspend», «shutdown» и «nothing»."
+"Действие, выполняемое при разряде UPS. Возможные значения: «hibernate», "
+"«suspend», «shutdown» и «nothing»."
 
 #: ../data/gnome-power-manager.schemas.in.h:84
 msgid ""
@@ -1009,9 +1009,11 @@ msgstr "Управление питанием"
 msgid "Observe power management"
 msgstr "Обзор системы управления питанием"
 
+#. TRANSLATORS: shown on the titlebar
+#. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.glade.h:6 ../src/gpm-statistics.c:840
-#: ../src/gpm-statistics.c:1273
+#: ../data/gpm-statistics.glade.h:6 ../src/gpm-statistics.c:927
+#: ../src/gpm-statistics.c:1349
 msgid "Power Statistics"
 msgstr "История потребления"
 
@@ -1058,10 +1060,6 @@ msgstr "Использовать сглаживание"
 #: ../data/gpm-statistics.glade.h:11 ../src/gpm-statistics.c:197
 msgid "Wakeups"
 msgstr "Пробуждения"
-
-#: ../data/gpm-statistics.glade.h:12
-msgid "gtk-refresh"
-msgstr "gtk-refresh"
 
 #: ../data/gpm-inhibit-test.glade.h:1
 msgid "Application:"
@@ -1256,7 +1254,7 @@ msgstr[2] "минут"
 msgid "Power Manager for the GNOME desktop"
 msgstr "Управление питанием для среды GNOME"
 
-#: ../src/gpm-devicekit.c:170
+#: ../src/gpm-devicekit.c:187
 #, c-format
 msgid ""
 "%s fully charged (%.1f%%)\n"
@@ -1265,23 +1263,23 @@ msgstr ""
 "%s полностью заряжена (%.1f%%)\n"
 "Обеспечивает %s времени работы батареи"
 
-#: ../src/gpm-devicekit.c:174
+#: ../src/gpm-devicekit.c:191
 #, c-format
 msgid "%s fully charged (%.1f%%)"
 msgstr "%s полностью заряжена (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:182
+#: ../src/gpm-devicekit.c:199
 #, c-format
 msgid "%s %s remaining (%.1f%%)"
 msgstr "%s %s осталось (%.1f%%)"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:187
+#: ../src/gpm-devicekit.c:204
 #, c-format
 msgid "%s discharging (%.1f%%)"
 msgstr "%s разряжается (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:199
+#: ../src/gpm-devicekit.c:216
 #, c-format
 msgid ""
 "%s %s until charged (%.1f%%)\n"
@@ -1290,217 +1288,214 @@ msgstr ""
 "%s %s до полного заряда (%.1f%%)\n"
 "Обеспечивает %s времени работы батареи"
 
-#: ../src/gpm-devicekit.c:208
+#: ../src/gpm-devicekit.c:225
 #, c-format
 msgid "%s %s until charged (%.1f%%)"
 msgstr "%s %s до полного заряда (%.1f%%)"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:214
+#: ../src/gpm-devicekit.c:231
 #, c-format
 msgid "%s charging (%.1f%%)"
 msgstr "%s заряжается (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:221
-msgid "Device state could not be read at this time"
-msgstr "В этот раз не удалось прочитать информацию о состоянии"
-
-#: ../src/gpm-devicekit.c:240
+#: ../src/gpm-devicekit.c:257
 #, c-format
 msgid "<b>Product:</b> %s\n"
 msgstr "<b>Продукт:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:242 ../src/gpm-devicekit.c:244
-#: ../src/gpm-devicekit.c:246 ../src/gpm-devicekit.c:248
+#: ../src/gpm-devicekit.c:259 ../src/gpm-devicekit.c:261
+#: ../src/gpm-devicekit.c:263 ../src/gpm-devicekit.c:265
 #, c-format
 msgid "<b>Status:</b> %s\n"
 msgstr "<b>Состояние:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:242
+#: ../src/gpm-devicekit.c:259
 msgid "Missing"
 msgstr "Не найдена"
 
-#: ../src/gpm-devicekit.c:244
+#: ../src/gpm-devicekit.c:261
 msgid "Charged"
 msgstr "Заряжена"
 
-#: ../src/gpm-devicekit.c:246
+#: ../src/gpm-devicekit.c:263
 msgid "Charging"
 msgstr "Заряжается"
 
-#: ../src/gpm-devicekit.c:248
+#: ../src/gpm-devicekit.c:265
 msgid "Discharging"
 msgstr "Разряжается"
 
-#: ../src/gpm-devicekit.c:250
+#: ../src/gpm-devicekit.c:267
 #, c-format
 msgid "<b>Percentage charge:</b> %.1f%%\n"
 msgstr "<b>Процент заряда:</b> %.1f%%\n"
 
-#: ../src/gpm-devicekit.c:252
+#: ../src/gpm-devicekit.c:269
 #, c-format
 msgid "<b>Vendor:</b> %s\n"
 msgstr "<b>Производитель:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:255
+#: ../src/gpm-devicekit.c:272
 #, c-format
 msgid "<b>Technology:</b> %s\n"
 msgstr "<b>Технология:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:258
+#: ../src/gpm-devicekit.c:275
 #, c-format
 msgid "<b>Serial number:</b> %s\n"
 msgstr "<b>Серийный номер:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:260
+#: ../src/gpm-devicekit.c:277
 #, c-format
 msgid "<b>Model:</b> %s\n"
 msgstr "<b>Модель:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:263
+#: ../src/gpm-devicekit.c:280
 #, c-format
 msgid "<b>Charge time:</b> %s\n"
 msgstr "<b>Время заряда:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:268
+#: ../src/gpm-devicekit.c:285
 #, c-format
 msgid "<b>Discharge time:</b> %s\n"
 msgstr "<b>Время разряда:</b> %s\n"
 
 #. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
-#: ../src/gpm-devicekit.c:275
+#: ../src/gpm-devicekit.c:292
 msgid "Excellent"
 msgstr "отличная"
 
-#: ../src/gpm-devicekit.c:277
+#: ../src/gpm-devicekit.c:294
 msgid "Good"
 msgstr "хорошая"
 
-#: ../src/gpm-devicekit.c:279
+#: ../src/gpm-devicekit.c:296
 msgid "Fair"
 msgstr "удовлетворительная"
 
-#: ../src/gpm-devicekit.c:281
+#: ../src/gpm-devicekit.c:298
 msgid "Poor"
 msgstr "плохая"
 
-#. Translators: %i is a percentage and %s the condition (Excellent, Good, ...)
-#: ../src/gpm-devicekit.c:284
+#. Translators: %.1f is a percentage and %s the condition (Excellent, Good, ...)
+#: ../src/gpm-devicekit.c:301
 #, c-format
 msgid "<b>Capacity:</b> %.1f%% (%s)\n"
 msgstr "<b>Ёмкость:</b> %.1f%% (%s)\n"
 
-#: ../src/gpm-devicekit.c:289
+#: ../src/gpm-devicekit.c:306
 #, c-format
 msgid "<b>Current charge:</b> %.1f Wh\n"
 msgstr "<b>Заряд:</b> %.1f Вт·ч\n"
 
-#: ../src/gpm-devicekit.c:293
+#: ../src/gpm-devicekit.c:310
 #, c-format
 msgid "<b>Last full charge:</b> %.1f Wh\n"
 msgstr "<b>Последний полный заряд:</b> %.1f Вт·ч\n"
 
-#: ../src/gpm-devicekit.c:296
+#. Translators: Design charge is the amount of charge the battery is designed to have when brand new
+#: ../src/gpm-devicekit.c:314
 #, c-format
 msgid "<b>Design charge:</b> %.1f Wh\n"
 msgstr "<b>Предусмотренный заряд:</b>  %.1f Вт·ч\n"
 
-#: ../src/gpm-devicekit.c:299
+#: ../src/gpm-devicekit.c:317
 #, c-format
 msgid "<b>Charge rate:</b> %.1f W\n"
 msgstr "<b>Скорость заряда:</b> %.1f Вт\n"
 
-#: ../src/gpm-devicekit.c:305
+#: ../src/gpm-devicekit.c:323
 #, c-format
 msgid "<b>Current charge:</b> %.0f/7\n"
 msgstr "<b>Заряд:</b> %.0f/7\n"
 
-#: ../src/gpm-devicekit.c:308
+#: ../src/gpm-devicekit.c:326
 #, c-format
 msgid "<b>Design charge:</b> %.0f/7\n"
 msgstr "<b>Предусмотренный заряд:</b> %.0f/7\n"
 
-#: ../src/gpm-devicekit.c:326
+#: ../src/gpm-devicekit.c:344
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "Сетевой адаптер"
 msgstr[1] "Сетевых адаптера"
 msgstr[2] "Сетевых адаптеров"
 
-#: ../src/gpm-devicekit.c:329
+#: ../src/gpm-devicekit.c:347
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "Батарея ноутбука"
 msgstr[1] "Батареи ноутбука"
 msgstr[2] "Батарей ноутбука"
 
-#: ../src/gpm-devicekit.c:332
+#: ../src/gpm-devicekit.c:350
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "Блок бесперебойного питания"
 msgstr[1] "Блока бесперебойного питания"
 msgstr[2] "Блоков бесперебойного питания"
 
-#: ../src/gpm-devicekit.c:335
+#: ../src/gpm-devicekit.c:353
 msgid "Monitor"
 msgid_plural "Monitors"
 msgstr[0] "Монитор"
 msgstr[1] "Монитора"
 msgstr[2] "Мониторов"
 
-#: ../src/gpm-devicekit.c:338
+#: ../src/gpm-devicekit.c:356
 msgid "Wireless mouse"
 msgid_plural "Wireless mice"
 msgstr[0] "Беспроводная мышь"
 msgstr[1] "Беспроводных мыши"
 msgstr[2] "Беспроводных мышей"
 
-#: ../src/gpm-devicekit.c:341
+#: ../src/gpm-devicekit.c:359
 msgid "Wireless keyboard"
 msgid_plural "Wireless keyboards"
 msgstr[0] "Беспроводная клавиатура"
 msgstr[1] "Беспроводных клавиатуры"
 msgstr[2] "Беспроводных клавиатур"
 
-#: ../src/gpm-devicekit.c:344
+#: ../src/gpm-devicekit.c:362
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "КПК"
 msgstr[1] "КПК"
 msgstr[2] "КПК"
 
-#: ../src/gpm-devicekit.c:347
+#: ../src/gpm-devicekit.c:365
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "Мобильный телефон"
 msgstr[1] "Мобильных телефона"
 msgstr[2] "Мобильный телефонов"
 
-#: ../src/gpm-devicekit.c:404
+#: ../src/gpm-devicekit.c:422
 msgid "Lithium Ion"
 msgstr "Литий-ионная"
 
-#: ../src/gpm-devicekit.c:407
+#: ../src/gpm-devicekit.c:425
 msgid "Lithium Polymer"
 msgstr "Литий-полимерная"
 
-#: ../src/gpm-devicekit.c:410
+#: ../src/gpm-devicekit.c:428
 msgid "Lithium Iron Phosphate"
 msgstr "Литий-фосфатная"
 
-#: ../src/gpm-devicekit.c:413
+#: ../src/gpm-devicekit.c:431
 msgid "Lead acid"
 msgstr "Свинцово-кислотная"
 
-#: ../src/gpm-devicekit.c:416
+#: ../src/gpm-devicekit.c:434
 msgid "Nickel Cadmium"
 msgstr "Никель-кадмиевая"
 
-#: ../src/gpm-devicekit.c:419
+#: ../src/gpm-devicekit.c:437
 msgid "Nickel metal hydride"
 msgstr "Никелевая металгидридная"
 
-#: ../src/gpm-devicekit.c:422
+#: ../src/gpm-devicekit.c:440
 msgid "Unknown technology"
 msgstr "Неизвестная технология"
 
@@ -1565,78 +1560,79 @@ msgid "%.1fV"
 msgstr "%.1fВ"
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:358
+#: ../src/gpm-inhibit.c:371
 #, c-format
 msgid "%s has stopped the suspend from taking place: %s."
 msgstr "Приложение %s препятствует входу в ждущий режим: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:363
+#: ../src/gpm-inhibit.c:376
 #, c-format
 msgid "%s has stopped the hibernate from taking place: %s."
 msgstr "Приложение %s препятствует входу в спящий режим: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:368
+#: ../src/gpm-inhibit.c:381
 #, c-format
 msgid "%s has stopped the policy action from taking place: %s."
 msgstr "Приложение %s препятствует соблюдению политики: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:373
+#: ../src/gpm-inhibit.c:386
 #, c-format
 msgid "%s has stopped the reboot from taking place: %s."
 msgstr "Приложение %s препятствует перезагрузке: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:378
+#: ../src/gpm-inhibit.c:391
 #, c-format
 msgid "%s has stopped the shutdown from taking place: %s."
 msgstr "Приложение %s препятствует выключению: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:383
+#: ../src/gpm-inhibit.c:396
 #, c-format
 msgid "%s has stopped the timeout action from taking place: %s."
 msgstr "Приложение %s препятствует выполнению действия задержки: %s."
 
-#: ../src/gpm-inhibit.c:392 ../src/gpm-inhibit.c:407
+#: ../src/gpm-inhibit.c:405 ../src/gpm-inhibit.c:420
 msgid "Multiple applications have stopped the suspend from taking place."
 msgstr "Несколько приложений препятствуют входу в ждущий режим."
 
-#: ../src/gpm-inhibit.c:395
+#: ../src/gpm-inhibit.c:408
 msgid "Multiple applications have stopped the hibernate from taking place."
 msgstr "Несколько приложений препятствуют входу в спящий режим."
 
-#: ../src/gpm-inhibit.c:398
+#: ../src/gpm-inhibit.c:411
 msgid "Multiple applications have stopped the policy action from taking place."
 msgstr "Несколько приложений препятствуют соблюдению политики."
 
-#: ../src/gpm-inhibit.c:401
+#: ../src/gpm-inhibit.c:414
 msgid "Multiple applications have stopped the reboot from taking place."
 msgstr "Несколько приложений препятствуют перезагрузке."
 
-#: ../src/gpm-inhibit.c:404
+#: ../src/gpm-inhibit.c:417
 msgid "Multiple applications have stopped the shutdown from taking place."
 msgstr "Несколько приложений препятствуют выключению."
 
-#: ../src/gpm-main.c:136 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1257
+#. TRANSLATORS: show verbose debugging
+#: ../src/gpm-main.c:139 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1332
 msgid "Show extra debugging information"
 msgstr "Показывать отладочную информацию"
 
-#: ../src/gpm-main.c:138
+#: ../src/gpm-main.c:141
 msgid "Show version of installed program and exit"
 msgstr "Вывести версию установленной программы и выйти"
 
-#: ../src/gpm-main.c:140
+#: ../src/gpm-main.c:143
 msgid "Exit after a small delay (for debugging)"
 msgstr "Выйти после небольшой задержки (для отладки)"
 
-#: ../src/gpm-main.c:142
+#: ../src/gpm-main.c:145
 msgid "Exit after the manager has loaded (for debugging)"
 msgstr "Выйти после полной загрузки (для отладки)"
 
-#: ../src/gpm-main.c:156 ../src/gpm-main.c:160
+#: ../src/gpm-main.c:159 ../src/gpm-main.c:163
 msgid "GNOME Power Manager"
 msgstr "Управление питанием среды GNOME"
 
@@ -1884,8 +1880,8 @@ msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%.1f%%). Restore AC "
 "power to your computer to avoid losing data."
 msgstr ""
-"Осталось примерно <b>%s</b> заряда UPS (%.1f%%). Восстановите питание "
-"вашего компьютера, чтобы избежать потери данных."
+"Осталось примерно <b>%s</b> заряда UPS (%.1f%%). Восстановите питание вашего "
+"компьютера, чтобы избежать потери данных."
 
 #: ../src/gpm-manager.c:1351
 #, c-format
@@ -1938,8 +1934,8 @@ msgid ""
 "computer in a suspended state."
 msgstr ""
 "Уровень заряда батареи ниже критического, компьютер сейчас будет переведён в "
-"ждущий режим. <br><b>Внимание:</b> Для поддержания работы компьютера в ждущем "
-"режиме необходимо небольшое количество энергии."
+"ждущий режим. <br><b>Внимание:</b> Для поддержания работы компьютера в "
+"ждущем режиме необходимо небольшое количество энергии."
 
 #: ../src/gpm-manager.c:1409
 msgid ""
@@ -2124,11 +2120,11 @@ msgstr "Заблокировать экран"
 msgid "Do nothing"
 msgstr "Ничего не делать"
 
-#: ../src/gpm-prefs-core.c:282
+#: ../src/gpm-prefs-core.c:285
 msgid "Never"
 msgstr "Никогда"
 
-#: ../src/gpm-prefs-core.c:1016
+#: ../src/gpm-prefs-core.c:1024
 msgid "Make Default"
 msgstr "Установить по умолчанию"
 
@@ -2236,6 +2232,11 @@ msgstr "Серийный номер"
 msgid "Supply"
 msgstr "Поставщик энергии"
 
+#: ../src/gpm-statistics.c:343
+#, c-format
+msgid "%d seconds"
+msgstr "%d секунд"
+
 #: ../src/gpm-statistics.c:344
 msgid "Refreshed"
 msgstr "Обновлено"
@@ -2288,140 +2289,219 @@ msgstr "Технология"
 msgid "Online"
 msgstr "Подключено"
 
-#: ../src/gpm-statistics.c:711 ../src/gpm-statistics.c:713
+#. TRANSLATORS: the command line was not provided
+#: ../src/gpm-statistics.c:678
+msgid "No data"
+msgstr "Нет данных"
+
+#. TRANSLATORS: kernel module, usually a device driver
+#: ../src/gpm-statistics.c:685 ../src/gpm-statistics.c:690
 msgid "Kernel module"
 msgstr "Модуль ядра"
 
-#: ../src/gpm-statistics.c:715
+#. TRANSLATORS: kernel housekeeping
+#: ../src/gpm-statistics.c:695
 msgid "Kernel core"
 msgstr "Ядро"
 
-#: ../src/gpm-statistics.c:717
+#. TRANSLATORS: interrupt between processors
+#: ../src/gpm-statistics.c:700
 msgid "Interprocessor interrupt"
 msgstr "Межпроцессорное прерывание"
 
-#: ../src/gpm-statistics.c:719
+#. TRANSLATORS: unknown interrupt
+#: ../src/gpm-statistics.c:705
 msgid "Interrupt"
 msgstr "Прерывание"
 
-#: ../src/gpm-statistics.c:729
+#. TRANSLATORS: the keyboard and mouse device event
+#: ../src/gpm-statistics.c:748
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "Клавиатура/Мышь/Сенсорная панель"
 
-#: ../src/gpm-statistics.c:731
+#. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
+#: ../src/gpm-statistics.c:751
 msgid "ACPI"
 msgstr "ACPI"
 
-#: ../src/gpm-statistics.c:733
+#. TRANSLATORS: serial ATA is a new style of hard disk interface
+#: ../src/gpm-statistics.c:754
 msgid "Serial ATA"
 msgstr "Serial ATA"
 
-#: ../src/gpm-statistics.c:735
+#. TRANSLATORS: this is the old-style ATA interface
+#: ../src/gpm-statistics.c:757
 msgid "ATA host controller"
 msgstr "Контроллер ATA"
 
-#: ../src/gpm-statistics.c:737
+#. TRANSLATORS: 802.11 wireless adaptor
+#: ../src/gpm-statistics.c:760
 msgid "Intel wireless adaptor"
 msgstr "Беспроводной адаптер Intel"
 
-#: ../src/gpm-statistics.c:834
+#. TRANSLATORS: a timer is something that fires periodically
+#: ../src/gpm-statistics.c:765 ../src/gpm-statistics.c:768
+#: ../src/gpm-statistics.c:771 ../src/gpm-statistics.c:774
+#: ../src/gpm-statistics.c:777
+#, c-format
+msgid "Timer %s"
+msgstr "Периодическая активность %s"
+
+#. TRANSLATORS: this is a task that's woken up from sleeping
+#: ../src/gpm-statistics.c:780
+#, c-format
+msgid "Sleep %s"
+msgstr "Пробуждение %s"
+
+#. TRANSLATORS: this is a new realtime task
+#: ../src/gpm-statistics.c:783
+#, c-format
+msgid "New task %s"
+msgstr "Новая задача %s"
+
+#. TRANSLATORS: this is a task thats woken to check state
+#: ../src/gpm-statistics.c:786
+#, c-format
+msgid "Wait %s"
+msgstr "Ожидание %s"
+
+#. TRANSLATORS: a work queue is a list of work that has to be done
+#: ../src/gpm-statistics.c:789 ../src/gpm-statistics.c:792
+#, c-format
+msgid "Work queue %s"
+msgstr "Очередь заданий %s"
+
+#. TRANSLATORS: this is when the networking subsystem clears out old entries
+#: ../src/gpm-statistics.c:795
+#, c-format
+msgid "Network route flush %s"
+msgstr "Очистка сетевых маршрутов %s"
+
+#. TRANSLATORS: activity on the USB bus
+#: ../src/gpm-statistics.c:798
+#, c-format
+msgid "USB activity %s"
+msgstr "Активность USB %s"
+
+#. TRANSLATORS: we've timed out of an aligned timer
+#: ../src/gpm-statistics.c:801
+#, c-format
+msgid "Wakeup %s"
+msgstr "Пробуждение периодического задания %s"
+
+#. TRANSLATORS: interupts on the system required for basic operation
+#: ../src/gpm-statistics.c:804
+msgid "Local interrupts"
+msgstr "Прерывания"
+
+#. TRANSLATORS: interrupts when a task gets moved from one core to another
+#: ../src/gpm-statistics.c:807
+msgid "Rescheduling interrupts"
+msgstr "Перепланировка задач"
+
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:917
 msgid "Device Information"
 msgstr "Сведения об устройстве"
 
-#: ../src/gpm-statistics.c:835
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:919
 msgid "Device History"
 msgstr "История устройства"
 
-#: ../src/gpm-statistics.c:836
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:921
 msgid "Device Profile"
 msgstr "Профиль устройства"
 
-#: ../src/gpm-statistics.c:837
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:923
 msgid "Processor Wakeups"
 msgstr "Пробуждения процессора"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1067 ../src/gpm-statistics.c:1073
-#: ../src/gpm-statistics.c:1079 ../src/gpm-statistics.c:1085
+#: ../src/gpm-statistics.c:1141 ../src/gpm-statistics.c:1147
+#: ../src/gpm-statistics.c:1153 ../src/gpm-statistics.c:1159
 msgid "Time elapsed"
 msgstr "Среднее время до окончания"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1069
+#: ../src/gpm-statistics.c:1143
 msgid "Power"
 msgstr "Питание"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1075 ../src/gpm-statistics.c:1118
-#: ../src/gpm-statistics.c:1124 ../src/gpm-statistics.c:1130
-#: ../src/gpm-statistics.c:1136
+#: ../src/gpm-statistics.c:1149 ../src/gpm-statistics.c:1192
+#: ../src/gpm-statistics.c:1198 ../src/gpm-statistics.c:1204
+#: ../src/gpm-statistics.c:1210
 msgid "Cell charge"
 msgstr "Заряд ячейки"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1081 ../src/gpm-statistics.c:1087
+#: ../src/gpm-statistics.c:1155 ../src/gpm-statistics.c:1161
 msgid "Predicted time"
 msgstr "Ожидаемое время"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1120 ../src/gpm-statistics.c:1132
+#: ../src/gpm-statistics.c:1194 ../src/gpm-statistics.c:1206
 msgid "Correction factor"
 msgstr "Коррекция"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1126 ../src/gpm-statistics.c:1138
+#: ../src/gpm-statistics.c:1200 ../src/gpm-statistics.c:1212
 msgid "Prediction accuracy"
 msgstr "Точность предсказания"
 
-#: ../src/gpm-statistics.c:1484
+#. TRANSLATORS: the icon for the CPU
+#: ../src/gpm-statistics.c:1557
 msgid "Processor"
 msgstr "Процессор"
 
-#: ../src/gpm-tray-icon.c:205 ../src/gpm-tray-icon.c:224
+#: ../src/gpm-tray-icon.c:190 ../src/gpm-tray-icon.c:209
 msgid "Device information"
 msgstr "Сведения об устройстве"
 
-#: ../src/gpm-tray-icon.c:207
+#: ../src/gpm-tray-icon.c:192
 msgid "There is no detailed information for this device"
 msgstr "Подробные сведения об этом устройстве отсутствуют"
 
-#: ../src/gpm-tray-icon.c:344
+#: ../src/gpm-tray-icon.c:321
 msgid "translator-credits"
 msgstr "Леонид Кантер <leon@asplinux.ru>"
 
-#: ../src/gpm-tray-icon.c:360
+#: ../src/gpm-tray-icon.c:336
 msgid "GNOME Power Manager Website"
 msgstr "Веб-сайт программы управления питанием GNOME"
 
 #. preferences
-#: ../src/gpm-tray-icon.c:433
+#: ../src/gpm-tray-icon.c:408
 msgid "_Preferences"
 msgstr "_Параметры"
 
 #. statistics
-#: ../src/gpm-tray-icon.c:441
+#: ../src/gpm-tray-icon.c:416
 msgid "Power _History"
 msgstr "История п_отребления"
 
 #. help
-#: ../src/gpm-tray-icon.c:453
+#: ../src/gpm-tray-icon.c:428
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:2
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:2
 msgid "_Help"
 msgstr "_Справка"
 
 #. about
-#: ../src/gpm-tray-icon.c:461
+#: ../src/gpm-tray-icon.c:436
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:1
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:1
 msgid "_About"
 msgstr "_О программе"
 
-#: ../src/gpm-tray-icon.c:568
+#: ../src/gpm-tray-icon.c:542
 msgid "_Suspend"
 msgstr "Перевести в _ждущий режим"
 
-#: ../src/gpm-tray-icon.c:578
+#: ../src/gpm-tray-icon.c:552
 msgid "Hi_bernate"
 msgstr "Перевести в сп_ящий режим"
