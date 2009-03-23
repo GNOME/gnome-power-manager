@@ -1,5 +1,11 @@
 2009-03-23  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-idle.c: (gpm_idle_set_mode),
+	(gpm_idle_idletime_alarm_expired_cb), (gpm_idle_idletime_reset_cb):
+	Remove some warning calls that slipped in to the DPMS rewrite.
+
+2009-03-23  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-statistics.c: (gpm_stats_update_info_page_details):
 	Use ngettext for a 2.26.x era string.
 	Fixes #576128

@@ -112,7 +112,7 @@ gpm_idle_set_mode (GpmIdle *idle, GpmIdleMode mode)
 		 * timer reset when we change brightness or do DPMS actions */
 		g_timer_reset (idle->priv->timer);
 
-		egg_warning ("Doing a state transition: %s", gpm_idle_mode_to_text (mode));
+		egg_debug ("Doing a state transition: %s", gpm_idle_mode_to_text (mode));
 		g_signal_emit (idle, signals [IDLE_CHANGED], 0, mode);
 	}
 }
@@ -340,7 +340,7 @@ gpm_idle_idletime_alarm_expired_cb (EggIdletime *idletime, guint alarm_id, GpmId
 
 	/* this must be out 500ms ignored timer */
 	if (idle->priv->x_idle) {
-		egg_warning ("removing ignored timer");
+		egg_debug ("removing ignored timer");
 		ret = egg_idletime_alarm_remove (idle->priv->idletime, GPM_IDLE_IDLETIME_IGNORE_ID);
 		if (!ret)
 			egg_warning ("failed to remove timer %i", GPM_IDLE_IDLETIME_IGNORE_ID);
@@ -371,7 +371,7 @@ gpm_idle_idletime_reset_cb (EggIdletime *idletime, GpmIdle *idle)
 	/* have we just chaged state? */
 	if (idle->priv->mode == GPM_IDLE_MODE_BLANK &&
 	    elapsed < GPM_IDLE_TIMEOUT_IGNORE_DPMS_CHANGE) {
-		egg_warning ("ignoring reset, as we've just done a state change");
+		egg_debug ("ignoring reset, as we've just done a state change");
 		/* make sure we trigger a short 1ms timeout so we can get the expired signal */
 		ret = egg_idletime_alarm_set (idle->priv->idletime, GPM_IDLE_IDLETIME_IGNORE_ID, 500);
 		if (!ret)
