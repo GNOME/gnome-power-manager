@@ -1,5 +1,11 @@
 2009-03-23  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-statistics.c: (gpm_stats_update_info_page_details):
+	Use ngettext for a 2.26.x era string.
+	Fixes #576128
+
+2009-03-23  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in:
 	* src/gpm-common.h:
 	Remove unused GConf keys.

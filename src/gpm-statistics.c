@@ -320,6 +320,7 @@ gpm_stats_update_info_page_details (const DkpDevice *device)
 	time_t t;
 	gchar time_buf[256];
 	gchar *text;
+	guint refreshed;
 
 	gtk_list_store_clear (list_store_info);
 
@@ -340,7 +341,8 @@ gpm_stats_update_info_page_details (const DkpDevice *device)
 		gpm_stats_add_info_data (_("Serial number"), obj->serial);
 	gpm_stats_add_info_data (_("Supply"), gpm_stats_bool_to_text (obj->power_supply));
 
-	text = g_strdup_printf (_("%d seconds"), (int) (time (NULL) - obj->update_time));
+	refreshed = (int) (time (NULL) - obj->update_time);
+	text = g_strdup_printf (ngettext ("%d second", "%d seconds", refreshed), refreshed);
 	gpm_stats_add_info_data (_("Refreshed"), text);
 	g_free (text);
 
