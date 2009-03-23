@@ -47,9 +47,10 @@
 
 /* Sets the idle percent limit, i.e. how hard the computer can work
    while considered "at idle" */
-#define GPM_IDLE_CPU_LIMIT		5
-
-#define GPM_IDLE_IDLETIME_ALARM_ID	1
+#define GPM_IDLE_CPU_LIMIT			5
+#define GPM_IDLE_IDLETIME_ALARM_ID		1
+#define GPM_IDLE_IDLETIME_IGNORE_ID		2
+#define GPM_IDLE_TIMEOUT_IGNORE_DPMS_CHANGE	1.0f /* seconds */
 
 struct GpmIdlePrivate
 {
@@ -64,6 +65,7 @@ struct GpmIdlePrivate
 	guint		 timeout_sleep_id;
 	gboolean	 x_idle;
 	gboolean	 check_type_cpu;
+	GTimer		*timer;
 };
 
 enum {
@@ -105,7 +107,12 @@ gpm_idle_set_mode (GpmIdle *idle, GpmIdleMode mode)
 
 	if (mode != idle->priv->mode) {
 		idle->priv->mode = mode;
-		egg_debug ("Doing a state transition: %s", gpm_idle_mode_to_text (mode));
+
+		/* we save the time of the last state, so we can ignore the X11
+		 * timer reset when we change brightness or do DPMS actions */
+		g_timer_reset (idle->priv->timer);
+
+		egg_warning ("Doing a state transition: %s", gpm_idle_mode_to_text (mode));
 		g_signal_emit (idle, signals [IDLE_CHANGED], 0, mode);
 	}
 }
@@ -187,17 +194,10 @@ gpm_idle_evaluate (GpmIdle *idle)
 	is_inhibited = gpm_session_get_inhibited (idle->priv->session);
 	egg_debug ("is_idle=%i, is_inhibited=%i", is_idle, is_inhibited);
 
-	if (idle->priv->x_idle) {
-		if (is_inhibited)
-			gpm_idle_set_mode (idle, GPM_IDLE_MODE_NORMAL);
-		else
-			gpm_idle_set_mode (idle, GPM_IDLE_MODE_DIM);
-	} else {
+	/* check we are really idle */
+	if (!idle->priv->x_idle) {
 		gpm_idle_set_mode (idle, GPM_IDLE_MODE_NORMAL);
-	}
-
-	/* normal */
-	if (!is_idle) {
+		egg_debug ("X not idle");
 		if (idle->priv->timeout_blank_id != 0) {
 			g_source_remove (idle->priv->timeout_blank_id);
 			idle->priv->timeout_blank_id = 0;
@@ -206,22 +206,45 @@ gpm_idle_evaluate (GpmIdle *idle)
 			g_source_remove (idle->priv->timeout_sleep_id);
 			idle->priv->timeout_sleep_id = 0;
 		}
-		/* don't reset DIM state */
-		if (idle->priv->mode == GPM_IDLE_MODE_BLANK ||
-		    idle->priv->mode == GPM_IDLE_MODE_SLEEP)
-			gpm_idle_set_mode (idle, GPM_IDLE_MODE_NORMAL);
+		goto out;
 	}
 
-	/* if there are any inhibits, clear the dim timeout */
-	if (is_idle) {
-		/* normal to dim */
-		if (idle->priv->mode == GPM_IDLE_MODE_NORMAL)
-			gpm_idle_set_mode (idle, GPM_IDLE_MODE_DIM);
-		if (idle->priv->timeout_blank_id != 0)
-			idle->priv->timeout_blank_id = g_timeout_add_seconds (idle->priv->timeout_blank, (GSourceFunc) gpm_idle_blank_cb, idle);
-		if (idle->priv->timeout_sleep_id != 0)
-			idle->priv->timeout_sleep_id = g_timeout_add_seconds (idle->priv->timeout_sleep, (GSourceFunc) gpm_idle_sleep_cb, idle);
+	/* are we inhibited */
+	if (is_inhibited) {
+		egg_debug ("inhibited, so using normal state");
+		gpm_idle_set_mode (idle, GPM_IDLE_MODE_NORMAL);
+		if (idle->priv->timeout_blank_id != 0) {
+			g_source_remove (idle->priv->timeout_blank_id);
+			idle->priv->timeout_blank_id = 0;
+		}
+		if (idle->priv->timeout_sleep_id != 0) {
+			g_source_remove (idle->priv->timeout_sleep_id);
+			idle->priv->timeout_sleep_id = 0;
+		}
+		goto out;
 	}
+
+	/* normal to dim */
+	if (idle->priv->mode == GPM_IDLE_MODE_NORMAL) {
+		egg_debug ("normal to dim");
+		gpm_idle_set_mode (idle, GPM_IDLE_MODE_DIM);
+	}
+
+	/* set up blank callback even when session is not idle */
+	if (idle->priv->timeout_blank_id == 0) {
+		egg_debug ("setting up blank callback");
+		idle->priv->timeout_blank_id = g_timeout_add_seconds (idle->priv->timeout_blank, (GSourceFunc) gpm_idle_blank_cb, idle);
+	}
+
+	/* only do the sleep timeout when the session is idle */
+	if (is_idle) {
+		if (idle->priv->timeout_sleep_id == 0) {
+			egg_debug ("setting up sleep callback = %i", idle->priv->timeout_blank);
+			idle->priv->timeout_sleep_id = g_timeout_add_seconds (idle->priv->timeout_sleep, (GSourceFunc) gpm_idle_sleep_cb, idle);
+		}
+	}
+out:
+	return;
 }
 
 /**
@@ -305,23 +328,57 @@ gpm_idle_session_inhibited_changed_cb (GpmSession *session, gboolean is_inhibite
 
 /**
  * gpm_idle_idletime_alarm_expired_cb:
+ *
+ * We're idle, something timed out
  **/
 static void
 gpm_idle_idletime_alarm_expired_cb (EggIdletime *idletime, guint alarm_id, GpmIdle *idle)
 {
+	gboolean ret;
+
+	egg_debug ("idletime alarm: %i", alarm_id);
+
+	/* this must be out 500ms ignored timer */
+	if (idle->priv->x_idle) {
+		egg_warning ("removing ignored timer");
+		ret = egg_idletime_alarm_remove (idle->priv->idletime, GPM_IDLE_IDLETIME_IGNORE_ID);
+		if (!ret)
+			egg_warning ("failed to remove timer %i", GPM_IDLE_IDLETIME_IGNORE_ID);
+		return;
+	}
+
 	/* set again */
-	egg_debug ("idletime alarm");
 	idle->priv->x_idle = TRUE;
 	gpm_idle_evaluate (idle);
 }
 
 /**
  * gpm_idle_idletime_reset_cb:
+ *
+ * We're no longer idle, the user moved
  **/
 static void
 gpm_idle_idletime_reset_cb (EggIdletime *idletime, GpmIdle *idle)
 {
-	egg_debug ("idletime reset");
+	guint id;
+	gboolean ret;
+	gdouble elapsed;
+	elapsed = g_timer_elapsed (idle->priv->timer, NULL);
+
+	id = egg_idletime_alarm_get (idle->priv->idletime);
+	egg_debug ("idletime reset: %i", id);
+
+	/* have we just chaged state? */
+	if (idle->priv->mode == GPM_IDLE_MODE_BLANK &&
+	    elapsed < GPM_IDLE_TIMEOUT_IGNORE_DPMS_CHANGE) {
+		egg_warning ("ignoring reset, as we've just done a state change");
+		/* make sure we trigger a short 1ms timeout so we can get the expired signal */
+		ret = egg_idletime_alarm_set (idle->priv->idletime, GPM_IDLE_IDLETIME_IGNORE_ID, 500);
+		if (!ret)
+			egg_error ("failed to set timer %i", GPM_IDLE_IDLETIME_IGNORE_ID);
+		return;
+	}
+
 	idle->priv->x_idle = FALSE;
 	gpm_idle_evaluate (idle);
 }
@@ -347,6 +404,7 @@ gpm_idle_finalize (GObject *object)
 	if (idle->priv->timeout_sleep_id != 0)
 		g_source_remove (idle->priv->timeout_sleep_id);
 
+	g_timer_destroy (idle->priv->timer);
 	g_object_unref (idle->priv->load);
 	g_object_unref (idle->priv->session);
 	g_object_unref (idle->priv->idletime);
@@ -395,6 +453,7 @@ gpm_idle_init (GpmIdle *idle)
 	idle->priv->timeout_blank_id = 0;
 	idle->priv->timeout_sleep_id = 0;
 	idle->priv->x_idle = FALSE;
+	idle->priv->timer = g_timer_new ();
 	idle->priv->load = gpm_load_new ();
 	idle->priv->session = gpm_session_new ();
 	g_signal_connect (idle->priv->session, "idle-changed", G_CALLBACK (gpm_idle_session_idle_changed_cb), idle);

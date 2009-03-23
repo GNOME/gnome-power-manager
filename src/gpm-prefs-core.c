@@ -300,8 +300,10 @@ gpm_prefs_sleep_slider_changed_cb (GtkRange *range,
 {
 	int value;
 	char *gpm_pref_key;
+	gboolean sleep_prefix;
 
 	value = (int) gtk_range_get_value (range);
+	sleep_prefix = (gboolean) GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (range), "sleep-prefix"));
 
 	if (value == NEVER_TIME_ON_SLIDER) {
 		/* power manager interprets 0 as Never */
@@ -310,7 +312,8 @@ gpm_prefs_sleep_slider_changed_cb (GtkRange *range,
 		/* We take away the g-s idle time as the slider represents
 		 * global time but we only do our timeout from when gnome-session
 		 * declares the session idle */
-		value -= prefs->priv->idle_delay;
+		if (sleep_prefix)
+			value -= prefs->priv->idle_delay;
 
 		/* policy is in seconds, slider is in minutes */
 		value *= 60;
@@ -328,7 +331,7 @@ gpm_prefs_sleep_slider_changed_cb (GtkRange *range,
  * @gpm_pref_key: The GConf key for this preference setting.
  **/
 static GtkWidget *
-gpm_prefs_setup_sleep_slider (GpmPrefs *prefs, const gchar *widget_name, const gchar *gpm_pref_key)
+gpm_prefs_setup_sleep_slider (GpmPrefs *prefs, const gchar *widget_name, const gchar *gpm_pref_key, gboolean sleep_prefix)
 {
 	GtkWidget *widget;
 	gint value;
@@ -349,8 +352,11 @@ gpm_prefs_setup_sleep_slider (GpmPrefs *prefs, const gchar *widget_name, const g
 	} else {
 		/* policy is in seconds, slider is in minutes */
 		value /= 60;
-		value += prefs->priv->idle_delay;
+		if (sleep_prefix)
+			value += prefs->priv->idle_delay;
 	}
+
+	g_object_set_data (G_OBJECT (widget), "sleep-prefix", GUINT_TO_POINTER (sleep_prefix));
 
 	/* set upper */
 	adjustment = gtk_range_get_adjustment (GTK_RANGE (widget));
@@ -373,8 +379,7 @@ gpm_prefs_setup_sleep_slider (GpmPrefs *prefs, const gchar *widget_name, const g
  * @gpm_pref_key: The GConf key for this preference setting.
  **/
 static void
-gpm_prefs_brightness_slider_changed_cb (GtkRange *range,
-					GpmPrefs *prefs)
+gpm_prefs_brightness_slider_changed_cb (GtkRange *range, GpmPrefs *prefs)
 {
 	gdouble value;
 	gchar *gpm_pref_key;
@@ -785,9 +790,9 @@ prefs_setup_ac (GpmPrefs *prefs)
 				      GPM_CONF_BUTTON_LID_AC,
 				      button_lid_actions);
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_ac_computer",
-				      GPM_CONF_TIMEOUT_SLEEP_COMPUTER_AC);
+				      GPM_CONF_TIMEOUT_SLEEP_COMPUTER_AC, TRUE);
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_ac_display",
-				      GPM_CONF_TIMEOUT_SLEEP_DISPLAY_AC);
+				      GPM_CONF_TIMEOUT_SLEEP_DISPLAY_AC, FALSE);
 	gpm_prefs_setup_brightness_slider (prefs, "hscale_ac_brightness",
 					   GPM_CONF_BACKLIGHT_BRIGHTNESS_AC);
 
@@ -795,7 +800,6 @@ prefs_setup_ac (GpmPrefs *prefs)
 				  GPM_CONF_BACKLIGHT_IDLE_DIM_AC);
 
 	set_idle_hscale_stops (prefs, "hscale_ac_computer", prefs->priv->idle_delay);
-	set_idle_hscale_stops (prefs, "hscale_ac_display", prefs->priv->idle_delay);
 
 	if (prefs->priv->has_button_lid == FALSE) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_ac_lid");
@@ -845,9 +849,9 @@ prefs_setup_battery (GpmPrefs *prefs)
 				      GPM_CONF_ACTIONS_CRITICAL_BATT,
 				      battery_critical_actions);
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_battery_computer",
-				      GPM_CONF_TIMEOUT_SLEEP_COMPUTER_BATT);
+				      GPM_CONF_TIMEOUT_SLEEP_COMPUTER_BATT, TRUE);
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_battery_display",
-				      GPM_CONF_TIMEOUT_SLEEP_DISPLAY_BATT);
+				      GPM_CONF_TIMEOUT_SLEEP_DISPLAY_BATT, FALSE);
 
 	/* set up the battery reduce checkbox */
 	gpm_prefs_setup_checkbox (prefs, "checkbutton_battery_display_reduce",
@@ -862,7 +866,6 @@ prefs_setup_battery (GpmPrefs *prefs)
 	}
 
 	set_idle_hscale_stops (prefs, "hscale_battery_computer", prefs->priv->idle_delay);
-	set_idle_hscale_stops (prefs, "hscale_battery_display", prefs->priv->idle_delay);
 
 	if (prefs->priv->has_button_lid == FALSE) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_battery_lid");
@@ -902,7 +905,7 @@ prefs_setup_ups (GpmPrefs *prefs)
 				      GPM_CONF_ACTIONS_CRITICAL_UPS,
 				      ups_low_actions);
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_ups_computer",
-				      GPM_CONF_TIMEOUT_SLEEP_COMPUTER_BATT);
+				      GPM_CONF_TIMEOUT_SLEEP_COMPUTER_BATT, TRUE);
 	set_idle_hscale_stops (prefs, "hscale_ups_computer", prefs->priv->idle_delay);
 }
 

@@ -337,7 +337,7 @@ gpm_manager_blank_screen (GpmManager *manager, GError **noerror)
 		if (!gpm_screensaver_lock (manager->priv->screensaver))
 			egg_debug ("Could not lock screen via gnome-screensaver");
 	}
-	gpm_dpms_set_mode_enum (manager->priv->dpms, GPM_DPMS_MODE_OFF, &error);
+	gpm_dpms_set_mode (manager->priv->dpms, GPM_DPMS_MODE_OFF, &error);
 	if (error) {
 		egg_debug ("Unable to set DPMS mode: %s", error->message);
 		g_error_free (error);
@@ -362,7 +362,7 @@ gpm_manager_unblank_screen (GpmManager *manager, GError **noerror)
 	GError   *error;
 
 	error = NULL;
-	gpm_dpms_set_mode_enum (manager->priv->dpms, GPM_DPMS_MODE_ON, &error);
+	gpm_dpms_set_mode (manager->priv->dpms, GPM_DPMS_MODE_ON, &error);
 	if (error) {
 		egg_debug ("Unable to set DPMS mode: %s", error->message);
 		g_error_free (error);
@@ -704,7 +704,7 @@ idle_do_sleep (GpmManager *manager)
  * @mode: The idle mode, e.g. GPM_IDLE_MODE_BLANK
  * @manager: This class instance
  *
- * This callback is called when gnome-screensaver detects that the idle state
+ * This callback is called when the idle class detects that the idle state
  * has changed. GPM_IDLE_MODE_BLANK is when the session has become inactive,
  * and GPM_IDLE_MODE_SLEEP is where the session has become inactive, AND the
  * session timeout has elapsed for the idle action.
@@ -732,10 +732,10 @@ idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmManager *manager)
 		egg_debug ("Idle state changed: NORMAL");
 		gpm_brightness_kbd_undim (manager->priv->brightness_kbd);
 	} else if (mode == GPM_IDLE_MODE_BLANK) {
-		egg_debug ("Idle state changed: SESSION");
+		egg_debug ("Idle state changed: BLANK");
 		gpm_brightness_kbd_dim (manager->priv->brightness_kbd);
 	} else if (mode == GPM_IDLE_MODE_SLEEP) {
-		egg_debug ("Idle state changed: SYSTEM");
+		egg_debug ("Idle state changed: SLEEP");
 		if (gpm_manager_is_inhibit_valid (manager, FALSE, "timeout action") == FALSE)
 			return;
 		idle_do_sleep (manager);
@@ -810,7 +810,7 @@ static void
 update_dpms_throttle (GpmManager *manager)
 {
 	GpmDpmsMode mode;
-	gpm_dpms_get_mode_enum (manager->priv->dpms, &mode, NULL);
+	gpm_dpms_get_mode (manager->priv->dpms, &mode, NULL);
 
 	/* Throttle the manager when DPMS is active since we can't see it anyway */
 	if (mode == GPM_DPMS_MODE_ON) {
@@ -1125,7 +1125,7 @@ screensaver_auth_request_cb (GpmScreensaver *screensaver, gboolean auth_begin, G
 		/* We turn on the monitor unconditionally, as we may be using
 		 * a smartcard to authenticate and DPMS might still be on.
 		 * See #350291 for more details */
-		gpm_dpms_set_mode_enum (manager->priv->dpms, GPM_DPMS_MODE_ON, &error);
+		gpm_dpms_set_mode (manager->priv->dpms, GPM_DPMS_MODE_ON, &error);
 		if (error != NULL) {
 			egg_warning ("Failed to turn on DPMS: %s", error->message);
 			g_error_free (error);

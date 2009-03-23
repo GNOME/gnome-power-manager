@@ -1,3 +1,52 @@
+2009-03-23  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-dpms.h:
+	* src/gpm-dpms.c: (gpm_dpms_error_quark), (gpm_dpms_x11_get_mode),
+	(gpm_dpms_x11_set_mode), (gpm_dpms_mode_from_string),
+	(gpm_dpms_mode_to_string), (gpm_dpms_set_mode),
+	(gpm_dpms_get_mode), (gpm_dpms_poll_mode_cb),
+	(gpm_dpms_class_init), (gpm_dpms_init), (gpm_dpms_finalize),
+	(gpm_dpms_test):
+	Rewrite the DPMS class to have 1% of the complexity. Don't try and sync
+	with the XServer, as each distro seems to default to doing different
+	things, and if XOrg is managing DPMS then we disagree when the idle
+	point happens. We can't rely of the XServer to tell us a changed signal
+	for policy, as it's only polled once every 10 seconds.
+	In this new model we just tell the server to turn on and off when
+	required.
+	Should fix #576169.
+
+	* data/gnome-power-manager.schemas.in:
+	Change the default DPMS off mode to "off".
+
+	* src/gpm-backlight.c: (gpm_backlight_set_mode),
+	(gpm_backlight_get_mode), (gpm_conf_gconf_key_changed_cb),
+	(gpm_backlight_button_pressed_cb), (idle_changed_cb),
+	(control_resume_cb), (gpm_backlight_finalize),
+	(gpm_backlight_init):
+	* src/gpm-idle.c: (gpm_idle_set_mode), (gpm_idle_evaluate),
+	(gpm_idle_idletime_alarm_expired_cb), (gpm_idle_idletime_reset_cb),
+	(gpm_idle_finalize), (gpm_idle_init):
+	Make sure the backlight mode is scheduled, as a typo prevented it from
+	activating in 2.26.x code, and IDLETIME was reset with the DPMS request
+	which made the server come straight back to life.
+	Basically, it was terminally broken, and it's now fixed.
+
+	* src/gpm-manager.c: (gpm_manager_blank_screen),
+	(gpm_manager_unblank_screen), (idle_changed_cb),
+	(update_dpms_throttle), (screensaver_auth_request_cb):
+	Trivial method renames.
+
+	* src/gpm-prefs-core.c: (gpm_prefs_sleep_slider_changed_cb),
+	(gpm_prefs_setup_sleep_slider),
+	(gpm_prefs_brightness_slider_changed_cb), (prefs_setup_ac),
+	(prefs_setup_battery), (prefs_setup_ups):
+	We don't base our DPMS off on the session idle anymore, so don't add
+	the session idle timeout to DPMS sliders.
+
+	* src/gpm-self-test.c: (main):
+	Add some unit tests for the DPMS code.
+
 2009-03-16  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-engine.c: (gpm_engine_device_check_capacity):
