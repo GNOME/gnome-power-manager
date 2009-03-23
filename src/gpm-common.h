@@ -88,7 +88,6 @@ G_BEGIN_DECLS
 #define GPM_CONF_BUTTON_POWER			GPM_CONF_DIR "/buttons/power"
 
 /* general */
-#define GPM_CONF_DEBUG				GPM_CONF_DIR "/general/debug"
 #define GPM_CONF_SCHEMA_VERSION			GPM_CONF_DIR "/general/installed_schema"
 #define GPM_CONF_CAN_SUSPEND			GPM_CONF_DIR "/general/can_suspend"
 #define GPM_CONF_CAN_HIBERNATE			GPM_CONF_DIR "/general/can_hibernate"
@@ -96,9 +95,7 @@ G_BEGIN_DECLS
 #define GPM_CONF_USE_PROFILE_TIME		GPM_CONF_DIR "/general/use_profile_time"
 #define GPM_CONF_NETWORKMANAGER_SLEEP		GPM_CONF_DIR "/general/network_sleep"
 #define GPM_CONF_IDLE_CHECK_CPU			GPM_CONF_DIR "/general/check_type_cpu"
-#define GPM_CONF_INVALID_TIMEOUT		GPM_CONF_DIR "/general/invalid_timeout"
 #define GPM_CONF_LAPTOP_USES_EXT_MON		GPM_CONF_DIR "/general/using_external_monitor"
-#define GPM_CONF_POLICY_TIMEOUT			GPM_CONF_DIR "/general/policy_suppression_timeout"
 #define GPM_CONF_IGNORE_INHIBITS		GPM_CONF_DIR "/general/ignore_inhibit_requests"
 
 /* keyboard */

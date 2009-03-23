@@ -312,18 +312,6 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/general/debug</key>
-      <applyto>/apps/gnome-power-manager/general/debug</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>false</default>
-      <locale name="C">
-        <short>If extra debugging messages should be used</short>
-        <long>If extra debugging messages should be used. Only turn this on for debugging.</long>
-      </locale>
-    </schema>
-
-    <schema>
       <key>/schemas/apps/gnome-power-manager/general/use_profile_time</key>
       <applyto>/apps/gnome-power-manager/general/use_profile_time</applyto>
       <owner>gnome-power-manager</owner>
@@ -336,18 +324,6 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/general/invalid_timeout</key>
-      <applyto>/apps/gnome-power-manager/general/invalid_timeout</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>int</type>
-      <default>500</default>
-      <locale name="C">
-        <short>The invalid timeout for power actions</short>
-        <long>The invalid timeout in ms for power actions. Set this longer if you get 'battery critical' messages when you unplug.</long>
-      </locale>
-    </schema>
-
-    <schema>
       <key>/schemas/apps/gnome-power-manager/general/ignore_inhibit_requests</key>
       <applyto>/apps/gnome-power-manager/general/ignore_inhibit_requests</applyto>
       <owner>gnome-power-manager</owner>
@@ -356,17 +332,6 @@
       <locale name="C">
         <short>If DBUS inhibit requests should be ignored.</short>
         <long>If DBUS inhibit requests should be ignored from other programs.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/general/policy_suppression_timeout</key>
-      <applyto>/apps/gnome-power-manager/general/policy_suppression_timeout</applyto>
-      <type>int</type>
-      <default>5</default>
-      <locale name="C">
-        <short>Number of seconds to suppress policy after resume</short>
-        <long>After resume, gnome-power-manager will suppress policy actions for a number of seconds to allow messages to settle and HAL to refresh. Commonly five seconds is enough while not being so long that the user gets confused.</long>
       </locale>
     </schema>
 
