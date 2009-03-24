@@ -1,3 +1,17 @@
+2009-03-24  Richard Hughes  <richard@hughsie.com>
+
+	* configure.ac:
+	Bump for new trunk version.
+
+	* data/gnome-power-manager.schemas.in:
+	Reduce initial dim threshold to 10 seconds.
+
+	* src/gpm-brightness-xrandr.c: (gpm_brightness_xrandr_init):
+	* src/gpm-brightness.c: (gpm_brightness_set), (gpm_brightness_get),
+	(gpm_brightness_up), (gpm_brightness_down), (gpm_brightness_init):
+	Add some debugging to try to work out why XRANDR craps out on us
+	sometimes.
+
 2009-03-23  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-idle.c: (gpm_idle_set_mode),

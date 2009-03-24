@@ -684,8 +684,10 @@ gpm_brightness_xrandr_init (GpmBrightnessXRandR *brightness)
 
 	/* can we do this */
 	brightness->priv->has_extension = gpm_brightness_xrandr_setup_display (brightness);
-	if (brightness->priv->has_extension == FALSE)
+	if (brightness->priv->has_extension == FALSE) {
+		egg_debug ("no XRANDR extension, so aborting init");
 		return;
+	}
 
 	screen = gdk_screen_get_default ();
 	window = gdk_screen_get_root_window (screen);
