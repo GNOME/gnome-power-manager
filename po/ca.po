@@ -29,10 +29,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"power-manager&component=general\n"
-"POT-Creation-Date: 2009-02-02 00:08+0100\n"
-"PO-Revision-Date: 2009-01-31 12:04+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-03-24 22:28+0100\n"
+"PO-Revision-Date: 2009-03-21 14:09+0100\n"
 "Last-Translator: David Planella <david.planella@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -64,12 +63,12 @@ msgid "LCD brightness : %d%%"
 msgstr "Brillantor de la pantalla LCD: %d%%"
 
 #: ../applets/brightness/brightness-applet.c:747
-#: ../applets/inhibit/inhibit-applet.c:417 ../src/gpm-tray-icon.c:330
+#: ../applets/inhibit/inhibit-applet.c:417 ../src/gpm-tray-icon.c:307
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Sota la Llicència Pública General GNU, versió 2"
 
 #: ../applets/brightness/brightness-applet.c:748
-#: ../applets/inhibit/inhibit-applet.c:418 ../src/gpm-tray-icon.c:331
+#: ../applets/inhibit/inhibit-applet.c:418 ../src/gpm-tray-icon.c:308
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -82,7 +81,7 @@ msgstr ""
 "llicència, o (si ho preferiu) qualsevol versió posterior."
 
 #: ../applets/brightness/brightness-applet.c:752
-#: ../applets/inhibit/inhibit-applet.c:422 ../src/gpm-tray-icon.c:335
+#: ../applets/inhibit/inhibit-applet.c:422 ../src/gpm-tray-icon.c:312
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -95,7 +94,7 @@ msgstr ""
 "Vegeu la Llicència Publica General GNU per a obtenir-ne més detalls."
 
 #: ../applets/brightness/brightness-applet.c:756
-#: ../applets/inhibit/inhibit-applet.c:426 ../src/gpm-tray-icon.c:339
+#: ../applets/inhibit/inhibit-applet.c:426 ../src/gpm-tray-icon.c:316
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -1111,9 +1110,11 @@ msgstr "Gestor d'energia"
 msgid "Observe power management"
 msgstr "Observeu la gestió d'energia"
 
+#. TRANSLATORS: shown on the titlebar
+#. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.glade.h:6 ../src/gpm-statistics.c:840
-#: ../src/gpm-statistics.c:1273
+#: ../data/gpm-statistics.glade.h:6 ../src/gpm-statistics.c:927
+#: ../src/gpm-statistics.c:1349
 msgid "Power Statistics"
 msgstr "Estadístiques de l'energia"
 
@@ -1160,10 +1161,6 @@ msgstr "Utilitza una línia suavitzada"
 #: ../data/gpm-statistics.glade.h:11 ../src/gpm-statistics.c:197
 msgid "Wakeups"
 msgstr "Despertaments"
-
-#: ../data/gpm-statistics.glade.h:12
-msgid "gtk-refresh"
-msgstr "gtk-refresh"
 
 #: ../data/gpm-inhibit-test.glade.h:1
 msgid "Application:"
@@ -1355,7 +1352,7 @@ msgstr[1] "minuts"
 msgid "Power Manager for the GNOME desktop"
 msgstr "Gestor d'energia per a l'escriptori GNOME"
 
-#: ../src/gpm-devicekit.c:170
+#: ../src/gpm-devicekit.c:187
 #, c-format
 msgid ""
 "%s fully charged (%.1f%%)\n"
@@ -1364,23 +1361,23 @@ msgstr ""
 "%s del tot carregada (%.1f%%)\n"
 "Això us ofereix %s de durada de la bateria"
 
-#: ../src/gpm-devicekit.c:174
+#: ../src/gpm-devicekit.c:191
 #, c-format
 msgid "%s fully charged (%.1f%%)"
 msgstr "%s del tot carregada (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:182
+#: ../src/gpm-devicekit.c:199
 #, c-format
 msgid "%s %s remaining (%.1f%%)"
 msgstr "%s %s restant (%.1f%%)"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:187
+#: ../src/gpm-devicekit.c:204
 #, c-format
 msgid "%s discharging (%.1f%%)"
 msgstr "%s descarregant-se (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:199
+#: ../src/gpm-devicekit.c:216
 #, c-format
 msgid ""
 "%s %s until charged (%.1f%%)\n"
@@ -1389,189 +1386,186 @@ msgstr ""
 "%s %s per a estar carregada (%.1f%%)\n"
 "Això us ofereix %s de durada de la bateria"
 
-#: ../src/gpm-devicekit.c:208
+#: ../src/gpm-devicekit.c:225
 #, c-format
 msgid "%s %s until charged (%.1f%%)"
 msgstr "%s %s per a estar carregada (%.1f%%)"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:214
+#: ../src/gpm-devicekit.c:231
 #, c-format
 msgid "%s charging (%.1f%%)"
 msgstr "%s carregant-se (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:221
-msgid "Device state could not be read at this time"
-msgstr "No s'ha pogut llegir l'estat actual del dispositiu"
-
-#: ../src/gpm-devicekit.c:240
+#: ../src/gpm-devicekit.c:257
 #, c-format
 msgid "<b>Product:</b> %s\n"
 msgstr "<b>Producte:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:242 ../src/gpm-devicekit.c:244
-#: ../src/gpm-devicekit.c:246 ../src/gpm-devicekit.c:248
+#: ../src/gpm-devicekit.c:259 ../src/gpm-devicekit.c:261
+#: ../src/gpm-devicekit.c:263 ../src/gpm-devicekit.c:265
 #, c-format
 msgid "<b>Status:</b> %s\n"
 msgstr "<b>Estat:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:242
+#: ../src/gpm-devicekit.c:259
 msgid "Missing"
 msgstr "Manca"
 
-#: ../src/gpm-devicekit.c:244
+#: ../src/gpm-devicekit.c:261
 msgid "Charged"
 msgstr "Carregada"
 
-#: ../src/gpm-devicekit.c:246
+#: ../src/gpm-devicekit.c:263
 msgid "Charging"
 msgstr "Carregant-se"
 
-#: ../src/gpm-devicekit.c:248
+#: ../src/gpm-devicekit.c:265
 msgid "Discharging"
 msgstr "Descarregant-se"
 
-#: ../src/gpm-devicekit.c:250
+#: ../src/gpm-devicekit.c:267
 #, c-format
 msgid "<b>Percentage charge:</b> %.1f%%\n"
 msgstr "<b>Percentatge de càrrega:</b> %.1f%%\n"
 
-#: ../src/gpm-devicekit.c:252
+#: ../src/gpm-devicekit.c:269
 #, c-format
 msgid "<b>Vendor:</b> %s\n"
 msgstr "<b>Fabricant:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:255
+#: ../src/gpm-devicekit.c:272
 #, c-format
 msgid "<b>Technology:</b> %s\n"
 msgstr "<b>Tecnologia:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:258
+#: ../src/gpm-devicekit.c:275
 #, c-format
 msgid "<b>Serial number:</b> %s\n"
 msgstr "<b>Número de sèrie:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:260
+#: ../src/gpm-devicekit.c:277
 #, c-format
 msgid "<b>Model:</b> %s\n"
 msgstr "<b>Model:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:263
+#: ../src/gpm-devicekit.c:280
 #, c-format
 msgid "<b>Charge time:</b> %s\n"
 msgstr "<b>Temps de càrrega:</b> %s\n"
 
-#: ../src/gpm-devicekit.c:268
+#: ../src/gpm-devicekit.c:285
 #, c-format
 msgid "<b>Discharge time:</b> %s\n"
 msgstr "<b>Temps de descàrrega:</b> %s\n"
 
 #. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
-#: ../src/gpm-devicekit.c:275
+#: ../src/gpm-devicekit.c:292
 msgid "Excellent"
 msgstr "Excel·lent"
 
-#: ../src/gpm-devicekit.c:277
+#: ../src/gpm-devicekit.c:294
 msgid "Good"
 msgstr "Bona"
 
-#: ../src/gpm-devicekit.c:279
+#: ../src/gpm-devicekit.c:296
 msgid "Fair"
 msgstr "Regular"
 
-#: ../src/gpm-devicekit.c:281
+#: ../src/gpm-devicekit.c:298
 msgid "Poor"
 msgstr "Dolenta"
 
-#. Translators: %i is a percentage and %s the condition (Excellent, Good, ...)
-#: ../src/gpm-devicekit.c:284
+#. Translators: %.1f is a percentage and %s the condition (Excellent, Good, ...)
+#: ../src/gpm-devicekit.c:301
 #, c-format
 msgid "<b>Capacity:</b> %.1f%% (%s)\n"
 msgstr "<b>Capacitat:</b> %.1f%% (%s)\n"
 
-#: ../src/gpm-devicekit.c:289
+#: ../src/gpm-devicekit.c:306
 #, c-format
 msgid "<b>Current charge:</b> %.1f Wh\n"
 msgstr "<b>Càrrega actual:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:293
+#: ../src/gpm-devicekit.c:310
 #, c-format
 msgid "<b>Last full charge:</b> %.1f Wh\n"
 msgstr "<b>Darrera càrrega completa:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:296
+#. Translators: Design charge is the amount of charge the battery is designed to have when brand new
+#: ../src/gpm-devicekit.c:314
 #, c-format
 msgid "<b>Design charge:</b> %.1f Wh\n"
 msgstr "<b>Càrrega de disseny:</b> %.1f Wh\n"
 
-#: ../src/gpm-devicekit.c:299
+#: ../src/gpm-devicekit.c:317
 #, c-format
 msgid "<b>Charge rate:</b> %.1f W\n"
 msgstr "<b>Taxa de càrrega:</b> %.1f W\n"
 
-#: ../src/gpm-devicekit.c:305
+#: ../src/gpm-devicekit.c:323
 #, c-format
 msgid "<b>Current charge:</b> %.0f/7\n"
 msgstr "<b>Càrrega actual:</b> %.0f/7\n"
 
-#: ../src/gpm-devicekit.c:308
+#: ../src/gpm-devicekit.c:326
 #, c-format
 msgid "<b>Design charge:</b> %.0f/7\n"
 msgstr "<b>Càrrega de disseny:</b> %.0f/7\n"
 
-#: ../src/gpm-devicekit.c:326
+#: ../src/gpm-devicekit.c:344
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "Adaptador de la xarxa elèctrica"
 msgstr[1] "Adaptadors de la xarxa elèctrica"
 
-#: ../src/gpm-devicekit.c:329
+#: ../src/gpm-devicekit.c:347
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "Bateria d'ordinador portàtil"
 msgstr[1] "Bateries d'ordinador portàtil"
 
-#: ../src/gpm-devicekit.c:332
+#: ../src/gpm-devicekit.c:350
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "SAI"
 msgstr[1] "SAI"
 
-#: ../src/gpm-devicekit.c:335
+#: ../src/gpm-devicekit.c:353
 msgid "Monitor"
 msgid_plural "Monitors"
 msgstr[0] "Monitor"
 msgstr[1] "Monitors"
 
-#: ../src/gpm-devicekit.c:338
+#: ../src/gpm-devicekit.c:356
 msgid "Wireless mouse"
 msgid_plural "Wireless mice"
 msgstr[0] "Ratolí sense fil"
 msgstr[1] "Ratolins sense fil"
 
-#: ../src/gpm-devicekit.c:341
+#: ../src/gpm-devicekit.c:359
 msgid "Wireless keyboard"
 msgid_plural "Wireless keyboards"
 msgstr[0] "Teclat sense fil"
 msgstr[1] "Teclats sense fil"
 
-#: ../src/gpm-devicekit.c:344
+#: ../src/gpm-devicekit.c:362
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "PDA"
 msgstr[1] "PDA"
 
-#: ../src/gpm-devicekit.c:347
+#: ../src/gpm-devicekit.c:365
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "Telèfon mòbil"
 msgstr[1] "Telèfons mòbils"
 
-#: ../src/gpm-devicekit.c:404
+#: ../src/gpm-devicekit.c:422
 msgid "Lithium Ion"
 msgstr "Ió liti"
 
-#: ../src/gpm-devicekit.c:407
+#: ../src/gpm-devicekit.c:425
 msgid "Lithium Polymer"
 msgstr "Polímer de liti"
 
@@ -1579,23 +1573,23 @@ msgstr "Polímer de liti"
 # es tracta de bateries de ió liti amb el càtode de fosfat de liti i
 # ferro. Vegeu http://en.wikipedia.org/wiki/Lithium_iron_phosphate_battery
 # i http://www.iec.cat/diec1/entrada/fitxa_DIEC.asp?MOCODI=83379&Page=avancada
-#: ../src/gpm-devicekit.c:410
+#: ../src/gpm-devicekit.c:428
 msgid "Lithium Iron Phosphate"
 msgstr "Fosfat de liti i ferro"
 
-#: ../src/gpm-devicekit.c:413
+#: ../src/gpm-devicekit.c:431
 msgid "Lead acid"
 msgstr "Plom i àcid"
 
-#: ../src/gpm-devicekit.c:416
+#: ../src/gpm-devicekit.c:434
 msgid "Nickel Cadmium"
 msgstr "Níquel cadmi"
 
-#: ../src/gpm-devicekit.c:419
+#: ../src/gpm-devicekit.c:437
 msgid "Nickel metal hydride"
 msgstr "Níquel-hidrur metàl·lic"
 
-#: ../src/gpm-devicekit.c:422
+#: ../src/gpm-devicekit.c:440
 msgid "Unknown technology"
 msgstr "Tecnologia desconeguda"
 
@@ -1660,79 +1654,80 @@ msgid "%.1fV"
 msgstr "%.1f V"
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:358
+#: ../src/gpm-inhibit.c:371
 #, c-format
 msgid "%s has stopped the suspend from taking place: %s."
 msgstr "%s ha evitat l'aturada temporal: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:363
+#: ../src/gpm-inhibit.c:376
 #, c-format
 msgid "%s has stopped the hibernate from taking place: %s."
 msgstr "%s ha evitat la hibernació: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:368
+#: ../src/gpm-inhibit.c:381
 #, c-format
 msgid "%s has stopped the policy action from taking place: %s."
 msgstr "%s ha evitat l'acció de directiva: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:373
+#: ../src/gpm-inhibit.c:386
 #, c-format
 msgid "%s has stopped the reboot from taking place: %s."
 msgstr "%s ha evitat l'arrencada de nou: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:378
+#: ../src/gpm-inhibit.c:391
 #, c-format
 msgid "%s has stopped the shutdown from taking place: %s."
 msgstr "%s ha evitat l'aturada: %s."
 
 #. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:383
+#: ../src/gpm-inhibit.c:396
 #, c-format
 msgid "%s has stopped the timeout action from taking place: %s."
 msgstr "%s ha evitat l'acció de temporització: %s."
 
-#: ../src/gpm-inhibit.c:392 ../src/gpm-inhibit.c:407
+#: ../src/gpm-inhibit.c:405 ../src/gpm-inhibit.c:420
 msgid "Multiple applications have stopped the suspend from taking place."
 msgstr "Múltiples aplicacions han aturat l'execució de l'aturada temporal."
 
-#: ../src/gpm-inhibit.c:395
+#: ../src/gpm-inhibit.c:408
 msgid "Multiple applications have stopped the hibernate from taking place."
 msgstr "Múltiples aplicacions han aturat l'execució de la hibernació."
 
-#: ../src/gpm-inhibit.c:398
+#: ../src/gpm-inhibit.c:411
 msgid "Multiple applications have stopped the policy action from taking place."
 msgstr "Múltiples aplicacions han aturat l'execució de l'acció de directiva."
 
-#: ../src/gpm-inhibit.c:401
+#: ../src/gpm-inhibit.c:414
 msgid "Multiple applications have stopped the reboot from taking place."
 msgstr "Múltiples aplicacions han aturat l'execució de l'arrencada de nou."
 
-#: ../src/gpm-inhibit.c:404
+#: ../src/gpm-inhibit.c:417
 msgid "Multiple applications have stopped the shutdown from taking place."
 msgstr "Múltiples aplicacions han aturat l'execució de l'aturada."
 
-#: ../src/gpm-main.c:136 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1257
+#. TRANSLATORS: show verbose debugging
+#: ../src/gpm-main.c:139 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1332
 msgid "Show extra debugging information"
 msgstr "Mostra informació extra de depuració"
 
-#: ../src/gpm-main.c:138
+#: ../src/gpm-main.c:141
 msgid "Show version of installed program and exit"
 msgstr "Mostra la versió instal·lada del programa i surt"
 
-#: ../src/gpm-main.c:140
+#: ../src/gpm-main.c:143
 msgid "Exit after a small delay (for debugging)"
 msgstr "Surt al cap d'una estona (per a depurar)"
 
 # FIXME: msgid erroni
-#: ../src/gpm-main.c:142
+#: ../src/gpm-main.c:145
 msgid "Exit after the manager has loaded (for debugging)"
 msgstr "Surt després que s'hagi carregat el gestor (per a la depuració)"
 
-#: ../src/gpm-main.c:156 ../src/gpm-main.c:160
+#: ../src/gpm-main.c:159 ../src/gpm-main.c:163
 msgid "GNOME Power Manager"
 msgstr "Gestor d'energia del GNOME"
 
@@ -2230,11 +2225,11 @@ msgstr "Enfosqueix la pantalla"
 msgid "Do nothing"
 msgstr "No facis res"
 
-#: ../src/gpm-prefs-core.c:282
+#: ../src/gpm-prefs-core.c:285
 msgid "Never"
 msgstr "Mai"
 
-#: ../src/gpm-prefs-core.c:1016
+#: ../src/gpm-prefs-core.c:1024
 msgid "Make Default"
 msgstr "Marca com a predeterminat"
 
@@ -2343,6 +2338,11 @@ msgstr "Número de sèrie"
 msgid "Supply"
 msgstr "Xarxa elèctrica"
 
+#: ../src/gpm-statistics.c:343
+#, c-format
+msgid "%d seconds"
+msgstr "%d segons"
+
 #: ../src/gpm-statistics.c:344
 msgid "Refreshed"
 msgstr "Refrescada"
@@ -2395,146 +2395,231 @@ msgstr "Tecnologia"
 msgid "Online"
 msgstr "En línia"
 
-#: ../src/gpm-statistics.c:711 ../src/gpm-statistics.c:713
+#. TRANSLATORS: the command line was not provided
+#: ../src/gpm-statistics.c:678
+msgid "No data"
+msgstr "Cap dada"
+
+#. TRANSLATORS: kernel module, usually a device driver
+#: ../src/gpm-statistics.c:685 ../src/gpm-statistics.c:690
 msgid "Kernel module"
 msgstr "Mòdul del nucli"
 
-#: ../src/gpm-statistics.c:715
+#. TRANSLATORS: kernel housekeeping
+#: ../src/gpm-statistics.c:695
 msgid "Kernel core"
 msgstr "Ànima del nucli"
 
-#: ../src/gpm-statistics.c:717
+#. TRANSLATORS: interrupt between processors
+#: ../src/gpm-statistics.c:700
 msgid "Interprocessor interrupt"
 msgstr "Interrupció entre processadors"
 
-#: ../src/gpm-statistics.c:719
+#. TRANSLATORS: unknown interrupt
+#: ../src/gpm-statistics.c:705
 msgid "Interrupt"
 msgstr "Interrupció"
 
-#: ../src/gpm-statistics.c:729
+#. TRANSLATORS: the keyboard and mouse device event
+#: ../src/gpm-statistics.c:748
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "teclat/ratolí/ratolí tàctil PS/2"
 
-#: ../src/gpm-statistics.c:731
+#. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
+#: ../src/gpm-statistics.c:751
 msgid "ACPI"
 msgstr "ACPI"
 
-#: ../src/gpm-statistics.c:733
+#. TRANSLATORS: serial ATA is a new style of hard disk interface
+#: ../src/gpm-statistics.c:754
 msgid "Serial ATA"
 msgstr "ATA en sèrie (SATA)"
 
-#: ../src/gpm-statistics.c:735
+#. TRANSLATORS: this is the old-style ATA interface
+#: ../src/gpm-statistics.c:757
 msgid "ATA host controller"
 msgstr "Controlador d'amfitrió ATA"
 
-#: ../src/gpm-statistics.c:737
+#. TRANSLATORS: 802.11 wireless adaptor
+#: ../src/gpm-statistics.c:760
 msgid "Intel wireless adaptor"
 msgstr "Adaptador de xarxa sense fil d'Intel"
 
-#: ../src/gpm-statistics.c:834
+#. TRANSLATORS: a timer is something that fires periodically
+#: ../src/gpm-statistics.c:765 ../src/gpm-statistics.c:768
+#: ../src/gpm-statistics.c:771 ../src/gpm-statistics.c:774
+#: ../src/gpm-statistics.c:777
+#, c-format
+msgid "Timer %s"
+msgstr "Temporitzador %s"
+
+#. TRANSLATORS: this is a task that's woken up from sleeping
+#: ../src/gpm-statistics.c:780
+#, c-format
+msgid "Sleep %s"
+msgstr "Adormida %s"
+
+#. TRANSLATORS: this is a new realtime task
+#: ../src/gpm-statistics.c:783
+#, c-format
+msgid "New task %s"
+msgstr "Tasca nova %s"
+
+#. TRANSLATORS: this is a task thats woken to check state
+#: ../src/gpm-statistics.c:786
+#, c-format
+msgid "Wait %s"
+msgstr "En espera %s"
+
+#. TRANSLATORS: a work queue is a list of work that has to be done
+#: ../src/gpm-statistics.c:789 ../src/gpm-statistics.c:792
+#, c-format
+msgid "Work queue %s"
+msgstr "Cua de treball %s"
+
+#. TRANSLATORS: this is when the networking subsystem clears out old entries
+#: ../src/gpm-statistics.c:795
+#, c-format
+msgid "Network route flush %s"
+msgstr "Neteja de rutes de xarxa %s"
+
+#. TRANSLATORS: activity on the USB bus
+#: ../src/gpm-statistics.c:798
+#, c-format
+msgid "USB activity %s"
+msgstr "Activitat als USB %s"
+
+#. TRANSLATORS: we've timed out of an aligned timer
+#: ../src/gpm-statistics.c:801
+#, c-format
+msgid "Wakeup %s"
+msgstr "Es desperta %s"
+
+#. TRANSLATORS: interupts on the system required for basic operation
+#: ../src/gpm-statistics.c:804
+msgid "Local interrupts"
+msgstr "Interrupcions locals"
+
+#. TRANSLATORS: interrupts when a task gets moved from one core to another
+#: ../src/gpm-statistics.c:807
+msgid "Rescheduling interrupts"
+msgstr "Re-planificació de les interrupcions"
+
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:917
 msgid "Device Information"
 msgstr "Informació del dispositiu"
 
-#: ../src/gpm-statistics.c:835
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:919
 msgid "Device History"
 msgstr "Historial del dispositiu"
 
-#: ../src/gpm-statistics.c:836
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:921
 msgid "Device Profile"
 msgstr "Perfil del dispositiu"
 
-#: ../src/gpm-statistics.c:837
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:923
 msgid "Processor Wakeups"
 msgstr "Despertaments del processador"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1067 ../src/gpm-statistics.c:1073
-#: ../src/gpm-statistics.c:1079 ../src/gpm-statistics.c:1085
+#: ../src/gpm-statistics.c:1141 ../src/gpm-statistics.c:1147
+#: ../src/gpm-statistics.c:1153 ../src/gpm-statistics.c:1159
 msgid "Time elapsed"
 msgstr "Temps transcorregut"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1069
+#: ../src/gpm-statistics.c:1143
 msgid "Power"
 msgstr "Potència"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1075 ../src/gpm-statistics.c:1118
-#: ../src/gpm-statistics.c:1124 ../src/gpm-statistics.c:1130
-#: ../src/gpm-statistics.c:1136
+#: ../src/gpm-statistics.c:1149 ../src/gpm-statistics.c:1192
+#: ../src/gpm-statistics.c:1198 ../src/gpm-statistics.c:1204
+#: ../src/gpm-statistics.c:1210
 msgid "Cell charge"
 msgstr "Càrrega de la cel·la"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1081 ../src/gpm-statistics.c:1087
+#: ../src/gpm-statistics.c:1155 ../src/gpm-statistics.c:1161
 msgid "Predicted time"
 msgstr "Temps predit"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1120 ../src/gpm-statistics.c:1132
+#: ../src/gpm-statistics.c:1194 ../src/gpm-statistics.c:1206
 msgid "Correction factor"
 msgstr "Factor de correcció"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1126 ../src/gpm-statistics.c:1138
+#: ../src/gpm-statistics.c:1200 ../src/gpm-statistics.c:1212
 msgid "Prediction accuracy"
 msgstr "Precisió de la predicció"
 
-#: ../src/gpm-statistics.c:1484
+#. TRANSLATORS: the icon for the CPU
+#: ../src/gpm-statistics.c:1557
 msgid "Processor"
 msgstr "Processador"
 
-#: ../src/gpm-tray-icon.c:205 ../src/gpm-tray-icon.c:224
+#: ../src/gpm-tray-icon.c:190 ../src/gpm-tray-icon.c:209
 msgid "Device information"
 msgstr "Informació del dispositiu"
 
-#: ../src/gpm-tray-icon.c:207
+#: ../src/gpm-tray-icon.c:192
 msgid "There is no detailed information for this device"
 msgstr "No hi ha informació detallada sobre aquest dispositiu"
 
-#: ../src/gpm-tray-icon.c:344
+#: ../src/gpm-tray-icon.c:321
 msgid "translator-credits"
 msgstr ""
 "Josep Puigdemont <josep.puigdemont@gmail.com>\n"
 "Esteve Blanch <anakinjinn@gmail.com>\n"
 "David Planella <david.planella@gmail.com>"
 
-#: ../src/gpm-tray-icon.c:360
+#: ../src/gpm-tray-icon.c:336
 msgid "GNOME Power Manager Website"
 msgstr "Lloc web del gestor d'energia del GNOME"
 
 #. preferences
-#: ../src/gpm-tray-icon.c:433
+#: ../src/gpm-tray-icon.c:408
 msgid "_Preferences"
 msgstr "_Preferències"
 
 #. statistics
-#: ../src/gpm-tray-icon.c:441
+#: ../src/gpm-tray-icon.c:416
 msgid "Power _History"
 msgstr "_Historial d'energia"
 
 #. help
-#: ../src/gpm-tray-icon.c:453
+#: ../src/gpm-tray-icon.c:428
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:2
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:2
 msgid "_Help"
 msgstr "A_juda"
 
 #. about
-#: ../src/gpm-tray-icon.c:461
+#: ../src/gpm-tray-icon.c:436
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:1
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:1
 msgid "_About"
 msgstr "_Quant a"
 
-#: ../src/gpm-tray-icon.c:568
+#: ../src/gpm-tray-icon.c:542
 msgid "_Suspend"
 msgstr "Atura _temporalment"
 
-#: ../src/gpm-tray-icon.c:578
+#: ../src/gpm-tray-icon.c:552
 msgid "Hi_bernate"
 msgstr "Hi_berna"
+
+#~ msgid "gtk-refresh"
+#~ msgstr "gtk-refresh"
+
+#~ msgid "Device state could not be read at this time"
+#~ msgstr "No s'ha pogut llegir l'estat actual del dispositiu"
 
 #~ msgid "The message was not sent due to DBUS security rules"
 #~ msgstr "No s'ha enviat el missatge degut a les regles de seguretat del DBUS"
@@ -2678,9 +2763,6 @@ msgstr "Hi_berna"
 #~ msgid "DPMS Off"
 #~ msgstr "Aturat per DPMS"
 
-#~ msgid "Time"
-#~ msgstr "Temps"
-
 #~ msgid "Battery percentage"
 #~ msgstr "Percentatge de la bateria"
 
@@ -2701,9 +2783,6 @@ msgstr "Hi_berna"
 
 #~ msgid "Extrapolated data"
 #~ msgstr "Dades extrapolades"
-
-#~ msgid "No data"
-#~ msgstr "Cap dada"
 
 #~ msgid "Stop point"
 #~ msgstr "Punt final"
@@ -2824,9 +2903,6 @@ msgstr "Hi_berna"
 
 #~ msgid "Processing Speed"
 #~ msgstr "Velocitat de procés"
-
-#~ msgid "Sleep"
-#~ msgstr "Dorm"
 
 #~ msgid "Sleep _type when inactive:"
 #~ msgstr "_Tipus de baix consum en inactivitat:"
