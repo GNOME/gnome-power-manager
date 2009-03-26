@@ -1,3 +1,9 @@
+2009-03-26  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c: (gpm_conf_gconf_key_changed_cb):
+	Monitor the backlight blank time GConf value change, and set the
+	blank idle time when this changes.
+
 2009-03-24  Richard Hughes  <richard@hughsie.com>
 
 	* configure.ac:
