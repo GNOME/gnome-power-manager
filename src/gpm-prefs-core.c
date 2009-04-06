@@ -148,10 +148,10 @@ gpm_dbus_method_bool (const gchar *method)
 {
 	DBusGConnection *connection;
 	DBusGProxy *proxy;
-	GError *error;
+	GError *error = NULL;
 	gboolean ret;
 	gboolean value = FALSE;
-	error = NULL;
+
 	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (connection == NULL) {
 		if (error) {
@@ -192,10 +192,10 @@ gpm_dbus_method_int (const gchar *method)
 {
 	DBusGConnection *connection;
 	DBusGProxy *proxy;
-	GError *error;
+	GError *error = NULL;
 	gboolean ret;
 	gint value = 0;
-	error = NULL;
+
 	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (connection == NULL) {
 		if (error) {
@@ -955,7 +955,7 @@ pk_prefs_set_defaults_cb (PolKitGnomeAction *default_action, GpmPrefs *prefs)
 	GConfClient *client;
 	DBusGProxy *proxy;
 	DBusGConnection *connection;
-	GError *error;
+	GError *error = NULL;
 	const gchar *keys[5] = {
 		"/apps/gnome-power-manager/actions",
 		"/apps/gnome-power-manager/ui",
@@ -964,7 +964,6 @@ pk_prefs_set_defaults_cb (PolKitGnomeAction *default_action, GpmPrefs *prefs)
 		"/apps/gnome-power-manager/timeout"
 	};
 
-	error = NULL;
 	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (error != NULL) {
 		g_warning ("failed to get system bus connection: %s", error->message);

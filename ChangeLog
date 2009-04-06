@@ -1,5 +1,17 @@
 2009-04-06  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-backlight.c: (gpm_backlight_button_pressed_cb),
+	(idle_changed_cb), (control_resume_cb):
+	* src/gpm-button.c: (coldplug_buttons):
+	* src/gpm-manager.c: (gpm_manager_unblank_screen):
+	* src/gpm-notify.c: (notify_general_clicked_cb):
+	* src/gpm-prefs-core.c: (gpm_dbus_method_bool),
+	(gpm_dbus_method_int), (pk_prefs_set_defaults_cb):
+	Verify that all GError's are initialised to NULL before they are
+	used. Should fix #576169
+
+2009-04-06  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-tray-icon.c: (gpm_tray_icon_popup_cleared_cd):
 	Unref the popup window when it's cleared.
 	Fixes #577901

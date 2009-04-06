@@ -444,10 +444,9 @@ coldplug_buttons (GpmButton *button)
 	int i;
 	char **device_names = NULL;
 	gboolean ret;
-	GError *error;
+	GError *error = NULL;
 
 	/* devices of type button */
-	error = NULL;
 	ret = hal_manager_find_capability (button->priv->hal_manager, "button", &device_names, &error);
 	if (!ret) {
 		egg_warning ("Couldn't obtain list of buttons: %s", error->message);

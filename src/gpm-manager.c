@@ -329,7 +329,7 @@ gpm_manager_blank_screen (GpmManager *manager, GError **noerror)
 {
 	gboolean do_lock;
 	gboolean ret = TRUE;
-	GError  *error = NULL;
+	GError *error = NULL;
 
 	do_lock = gpm_control_get_lock_policy (manager->priv->control,
 					       GPM_CONF_LOCK_ON_BLANK_SCREEN);
@@ -357,11 +357,10 @@ gpm_manager_blank_screen (GpmManager *manager, GError **noerror)
 static gboolean
 gpm_manager_unblank_screen (GpmManager *manager, GError **noerror)
 {
-	gboolean  do_lock;
-	gboolean  ret = TRUE;
-	GError   *error;
+	gboolean do_lock;
+	gboolean ret = TRUE;
+	GError *error = NULL;
 
-	error = NULL;
 	gpm_dpms_set_mode (manager->priv->dpms, GPM_DPMS_MODE_ON, &error);
 	if (error) {
 		egg_debug ("Unable to set DPMS mode: %s", error->message);

@@ -398,7 +398,7 @@ static void
 gpm_backlight_button_pressed_cb (GpmButton *button, const gchar *type, GpmBacklight *backlight)
 {
 	gboolean ret;
-	GError *error;
+	GError *error = NULL;
 	guint percentage;
 	gboolean hw_changed;
 	egg_debug ("Button press event type=%s", type);
@@ -512,7 +512,7 @@ static void
 idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *backlight)
 {
 	gboolean ret;
-	GError *error;
+	GError *error = NULL;
 	gboolean on_ac;
 	gchar *dpms_method;
 	GpmDpmsMode dpms_mode;
@@ -643,7 +643,7 @@ static void
 control_resume_cb (GpmControl *control, GpmControlAction action, GpmBacklight *backlight)
 {
 	gboolean ret;
-	GError *error;
+	GError *error = NULL;
 
 	/* ensure backlight is on */
 	ret = gpm_dpms_set_mode (backlight->priv->dpms, GPM_DPMS_MODE_ON, &error);

@@ -215,7 +215,7 @@ notify_general_clicked_cb (NotifyNotification *libnotify,
                            gchar *action, GpmNotify *notify)
 {
 	gboolean ret;
-	GError *error;
+	GError *error = NULL;
  	char *cmdline;
 	GdkScreen *gscreen;
 	GtkWidget *error_dialog;
