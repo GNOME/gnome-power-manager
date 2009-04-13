@@ -1,3 +1,8 @@
+2009-04-13  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-dpms.c: (gpm_dpms_clear_timeouts), (gpm_dpms_init):
+	Ensure we clear the default DPMS timeout of 1200s. Should fix #576169
+
 2009-04-06  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-backlight.c: (gpm_backlight_button_pressed_cb),

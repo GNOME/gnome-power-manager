@@ -328,6 +328,30 @@ gpm_dpms_poll_mode_cb (GpmDpms *dpms)
 }
 
 /**
+ * gpm_dpms_clear_timeouts:
+ **/
+static gboolean
+gpm_dpms_clear_timeouts (GpmDpms *dpms)
+{
+	gboolean ret = FALSE;
+
+	/* never going to work */
+	if (!dpms->priv->dpms_capable) {
+		egg_debug ("not DPMS capable");
+		goto out;
+	}
+
+#ifdef HAVE_DPMS_EXTENSION
+	egg_debug ("set timeouts to zero");
+	ret = DPMSSetTimeouts (GDK_DISPLAY (), 0, 0, 0);
+#else
+	egg_warning ("no DPMS extension");
+#endif
+out:
+	return ret;
+}
+
+/**
  * gpm_dpms_class_init:
  **/
 static void
@@ -358,6 +382,9 @@ gpm_dpms_init (GpmDpms *dpms)
 	/* DPMSCapable() can never change for a given display */
 	dpms->priv->dpms_capable = DPMSCapable (GDK_DISPLAY ());
 	dpms->priv->timer_id = g_timeout_add_seconds (GPM_DPMS_POLL_TIME, (GSourceFunc)gpm_dpms_poll_mode_cb, dpms);
+
+	/* ensure we clear the default timeouts (Standby: 1200s, Suspend: 1800s, Off: 2400s) */
+	gpm_dpms_clear_timeouts (dpms);
 }
 
 /**
