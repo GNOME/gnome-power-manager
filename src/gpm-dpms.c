@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
  * Copyright (C) 2005 William Jon McCann <mccann@jhu.edu>
+ * Copyright (C) 2006-2009 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -42,11 +43,10 @@
 #include <X11/extensions/dpmsstr.h>
 #endif
 
-#include <gconf/gconf-client.h>
 #include "egg-debug.h"
 #include "gpm-dpms.h"
 
-static void     gpm_dpms_finalize   (GObject      *object);
+static void   gpm_dpms_finalize  (GObject   *object);
 
 #define GPM_DPMS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_DPMS, GpmDpmsPrivate))
 
@@ -55,17 +55,8 @@ static void     gpm_dpms_finalize   (GObject      *object);
 
 struct GpmDpmsPrivate
 {
-	gboolean		 enabled;
-	gboolean		 active;
 	gboolean		 dpms_capable;
-
-	guint			 standby_timeout;
-	guint			 suspend_timeout;
-	guint			 off_timeout;
-
-	GConfClient			*conf;
 	GpmDpmsMode		 mode;
-
 	guint			 timer_id;
 };
 
@@ -74,132 +65,30 @@ enum {
 	LAST_SIGNAL
 };
 
-enum {
-	PROP_0,
-	PROP_STANDBY_TIMEOUT,
-	PROP_SUSPEND_TIMEOUT,
-	PROP_OFF_TIMEOUT
-};
-
 static guint signals [LAST_SIGNAL] = { 0 };
 static gpointer gpm_dpms_object = NULL;
 
 G_DEFINE_TYPE (GpmDpms, gpm_dpms, G_TYPE_OBJECT)
 
+/**
+ * gpm_dpms_error_quark:
+ **/
 GQuark
 gpm_dpms_error_quark (void)
 {
 	static GQuark quark = 0;
 	if (!quark)
 		quark = g_quark_from_static_string ("gpm_dpms_error");
-
 	return quark;
 }
 
-gboolean
-gpm_dpms_has_hw (void)
-{
 #ifdef HAVE_DPMS_EXTENSION
-	return TRUE;
-#else
-	return FALSE;
-#endif
-}
 
-/* the following function is derived from
-   xscreensaver Copyright (C) Jamie Zawinski
-*/
+/**
+ * gpm_dpms_x11_get_mode:
+ **/
 static gboolean
-x11_sync_server_dpms_settings (Display *dpy,
-			       gboolean enabled,
-			       guint	standby_secs,
-			       guint	suspend_secs,
-			       guint	off_secs,
-			       GError **error)
-{
-#ifdef HAVE_DPMS_EXTENSION
-	BOOL o_enabled = FALSE;
-	CARD16 o_power = 0;
-	CARD16 o_standby = 0;
-	CARD16 o_suspend = 0;
-	CARD16 o_off = 0;
-
-	egg_debug ("Syncing DPMS settings enabled=%d timeouts=%d %d %d",
-		   enabled, standby_secs, suspend_secs, off_secs);
-
-	if (! DPMSInfo (dpy, &o_power, &o_enabled)) {
-		egg_debug ("unable to get DPMS state.");
-		g_set_error (error,
-			     GPM_DPMS_ERROR,
-			     GPM_DPMS_ERROR_GENERAL,
-			     "Unable to get DPMS state");
-
-		return FALSE;
-	}
-
-	if (o_enabled != enabled) {
-		int res;
-
-		if (enabled) {
-			res = DPMSEnable (dpy);
-		} else {
-			res = DPMSDisable (dpy);
-		}
-
-		if (! res) {
-			egg_debug ("unable to set DPMS state.");
-			g_set_error (error,
-				     GPM_DPMS_ERROR,
-				     GPM_DPMS_ERROR_GENERAL,
-				     "Unable to set DPMS state");
-
-			return FALSE;
-		} else {
-			egg_debug ("turned DPMS %s", enabled ? "ON" : "OFF");
-		}
-	}
-
-	if (! DPMSGetTimeouts (dpy, &o_standby, &o_suspend, &o_off)) {
-		egg_debug ("unable to get DPMS timeouts.");
-		g_set_error (error,
-			     GPM_DPMS_ERROR,
-			     GPM_DPMS_ERROR_GENERAL,
-			     "Unable to get DPMS timeouts");
-
-		return FALSE;
-	}
-
-	if (o_standby != standby_secs ||
-	    o_suspend != suspend_secs ||
-	    o_off != off_secs) {
-		if (! DPMSSetTimeouts (dpy, standby_secs, suspend_secs, off_secs)) {
-			egg_debug ("unable to set DPMS timeouts.");
-			g_set_error (error,
-				     GPM_DPMS_ERROR,
-				     GPM_DPMS_ERROR_GENERAL,
-				     "Unable to set DPMS timeouts");
-
-			return FALSE;
-		} else {
-			egg_debug ("set DPMS timeouts: %d %d %d.",
-				  standby_secs, suspend_secs, off_secs);
-		}
-	}
-
-	return TRUE;
-# else	/* !HAVE_DPMS_EXTENSION */
-
-	egg_debug ("DPMS support not compiled in.");
-	return FALSE;
-# endif /* HAVE_DPMS_EXTENSION */
-}
-
-#ifdef HAVE_DPMS_EXTENSION
-
-static gboolean
-x11_get_mode (GpmDpms     *dpms,
-	      GpmDpmsMode *mode,
-	      GError     **error)
+gpm_dpms_x11_get_mode (GpmDpms *dpms, GpmDpmsMode *mode, GError **error)
 {
 	GpmDpmsMode result;
 	BOOL enabled = FALSE;
@@ -208,72 +97,67 @@ x11_get_mode (GpmDpms     *dpms,
 	if (dpms->priv->dpms_capable == FALSE) {
 		/* Server or monitor can't DPMS -- assume the monitor is on. */
 		result = GPM_DPMS_MODE_ON;
-	} else {
-		DPMSInfo (GDK_DISPLAY (), &state, &enabled);
-		if (! enabled) {
-			/* Server says DPMS is disabled -- so the monitor is on. */
-			result = GPM_DPMS_MODE_ON;
-		} else {
-			switch (state) {
-			case DPMSModeOn:
-				result = GPM_DPMS_MODE_ON;
-				break;
-			case DPMSModeStandby:
-				result = GPM_DPMS_MODE_STANDBY;
-				break;
-			case DPMSModeSuspend:
-				result = GPM_DPMS_MODE_SUSPEND;
-				break;
-			case DPMSModeOff:
-				result = GPM_DPMS_MODE_OFF;
-				break;
-			default:
-				result = GPM_DPMS_MODE_ON;
-				break;
-			}
-		}
+		goto out;
 	}
 
-	if (mode) {
+	DPMSInfo (GDK_DISPLAY (), &state, &enabled);
+	if (!enabled) {
+		/* Server says DPMS is disabled -- so the monitor is on. */
+		result = GPM_DPMS_MODE_ON;
+		goto out;
+	}
+
+	switch (state) {
+	case DPMSModeOn:
+		result = GPM_DPMS_MODE_ON;
+		break;
+	case DPMSModeStandby:
+		result = GPM_DPMS_MODE_STANDBY;
+		break;
+	case DPMSModeSuspend:
+		result = GPM_DPMS_MODE_SUSPEND;
+		break;
+	case DPMSModeOff:
+		result = GPM_DPMS_MODE_OFF;
+		break;
+	default:
+		result = GPM_DPMS_MODE_ON;
+		break;
+	}
+out:
+	if (mode)
 		*mode = result;
-	}
-
 	return TRUE;
 }
 
+/**
+ * gpm_dpms_x11_set_mode:
+ **/
 static gboolean
-x11_set_mode (GpmDpms	 *dpms,
-	      GpmDpmsMode mode,
-	      GError    **error)
+gpm_dpms_x11_set_mode (GpmDpms *dpms, GpmDpmsMode mode, GError **error)
 {
 	GpmDpmsMode current_mode;
 	CARD16 state;
 	CARD16 current_state;
 	BOOL current_enabled;
 
-	if (dpms->priv->dpms_capable == FALSE) {
+	if (!dpms->priv->dpms_capable) {
 		egg_debug ("not DPMS capable");
-		g_set_error (error,
-			     GPM_DPMS_ERROR,
-			     GPM_DPMS_ERROR_GENERAL,
+		g_set_error (error, GPM_DPMS_ERROR, GPM_DPMS_ERROR_GENERAL,
 			     "Display is not DPMS capable");
 		return FALSE;
 	}
 
-	if (! DPMSInfo (GDK_DISPLAY (), &current_state, &current_enabled)) {
+	if (!DPMSInfo (GDK_DISPLAY (), &current_state, &current_enabled)) {
 		egg_debug ("couldn't get DPMS info");
-		g_set_error (error,
-			     GPM_DPMS_ERROR,
-			     GPM_DPMS_ERROR_GENERAL,
+		g_set_error (error, GPM_DPMS_ERROR, GPM_DPMS_ERROR_GENERAL,
 			     "Unable to get DPMS state");
 		return FALSE;
 	}
 
-	if (! current_enabled) {
+	if (!current_enabled) {
 		egg_debug ("DPMS not enabled");
-		g_set_error (error,
-			     GPM_DPMS_ERROR,
-			     GPM_DPMS_ERROR_GENERAL,
+		g_set_error (error, GPM_DPMS_ERROR, GPM_DPMS_ERROR_GENERAL,
 			     "DPMS is not enabled");
 		return FALSE;
 	}
@@ -296,17 +180,13 @@ x11_set_mode (GpmDpms	 *dpms,
 		break;
 	}
 
-	x11_get_mode (dpms, &current_mode, NULL);
-
+	gpm_dpms_x11_get_mode (dpms, &current_mode, NULL);
 	if (current_mode != mode) {
 		if (! DPMSForceLevel (GDK_DISPLAY (), state)) {
-			g_set_error (error,
-				     GPM_DPMS_ERROR,
-				     GPM_DPMS_ERROR_GENERAL,
+			g_set_error (error, GPM_DPMS_ERROR, GPM_DPMS_ERROR_GENERAL,
 				     "Could not change DPMS mode");
 			return FALSE;
 		}
-
 		XSync (GDK_DISPLAY (), FALSE);
 	}
 
@@ -315,215 +195,50 @@ x11_set_mode (GpmDpms	 *dpms,
 
 #else  /* HAVE_DPMS_EXTENSION */
 
+/**
+ * gpm_dpms_x11_get_mode:
+ **/
 static gboolean
-x11_get_mode (GpmDpms     *dpms,
-	      GpmDpmsMode *mode,
-	      GError     **error)
+gpm_dpms_x11_get_mode (GpmDpms *dpms, GpmDpmsMode *mode, GError **error)
 {
-	if (mode) {
+	if (mode)
 		*mode = GPM_DPMS_MODE_ON;
-	}
-
 	return TRUE;
 }
 
+/**
+ * gpm_dpms_x11_set_mode:
+ **/
 static gboolean
-x11_set_mode (GpmDpms	 *dpms,
-	      GpmDpmsMode mode,
-	      GError    **error)
+gpm_dpms_x11_set_mode (GpmDpms *dpms, GpmDpmsMode mode, GError **error)
 {
 	return FALSE;
 }
 
 #endif /* !HAVE_DPMS_EXTENSION */
 
-static gboolean
-sync_settings (GpmDpms *dpms,
-	       GError **error)
-{
-	guint    standby;
-	guint    suspend;
-	guint    off;
-
-	if (dpms->priv->active) {
-		standby = dpms->priv->standby_timeout;
-		suspend = dpms->priv->suspend_timeout;
-		off     = dpms->priv->off_timeout;
-	} else {
-		standby = 0;
-		suspend = 0;
-		off     = 0;
-	}
-
-	if (dpms->priv->dpms_capable == FALSE) {
-		egg_debug ("Display is not DPMS capable");
-		g_set_error (error,
-			     GPM_DPMS_ERROR,
-			     GPM_DPMS_ERROR_GENERAL,
-			     "Display is not DPMS capable");
-
-		return FALSE;
-	}
-
-	/* We always try to keep the DPMS enabled so that
-	   we can use set the mode manually.  We will
-	   use zero values for the timeouts when the
-	   we aren't active in order to prevent it
-	   from activating.  */
-	return x11_sync_server_dpms_settings (GDK_DISPLAY (),
-					      dpms->priv->enabled,
-					      standby,
-					      suspend,
-					      off,
-					      error);
-}
-
-gboolean
-gpm_dpms_get_enabled (GpmDpms  *dpms,
-		      gboolean *enabled,
-		      GError  **error)
-{
-	g_return_val_if_fail (GPM_IS_DPMS (dpms), FALSE);
-
-	if (enabled) {
-		*enabled = dpms->priv->enabled;
-	}
-
-	return TRUE;
-}
-
-gboolean
-gpm_dpms_set_enabled (GpmDpms *dpms,
-		      gboolean enabled,
-		      GError **error)
-{
-	gboolean ret;
-
-	g_return_val_if_fail (GPM_IS_DPMS (dpms), FALSE);
-
-	ret = FALSE;
-	if (dpms->priv->enabled != enabled) {
-		egg_debug ("setting DPMS enabled: %d", enabled);
-
-		dpms->priv->enabled = enabled;
-
-		ret = sync_settings (dpms, error);
-	}
-
-	return ret;
-}
-
-gboolean
-gpm_dpms_get_active (GpmDpms  *dpms,
-		     gboolean *active,
-		     GError  **error)
-{
-	g_return_val_if_fail (GPM_IS_DPMS (dpms), FALSE);
-
-	if (active) {
-		*active = dpms->priv->active;
-	}
-
-	return TRUE;
-}
-
-gboolean
-gpm_dpms_set_active (GpmDpms *dpms,
-		     gboolean active,
-		     GError **error)
-{
-	gboolean ret;
-
-	g_return_val_if_fail (GPM_IS_DPMS (dpms), FALSE);
-
-	ret = FALSE;
-	if (dpms->priv->active != active) {
-		egg_debug ("setting DPMS active: %d", active);
-
-		dpms->priv->active = active;
-
-		ret = sync_settings (dpms, error);
-	}
-
-	return ret;
-}
-
-/* time specified in seconds */
-gboolean
-gpm_dpms_set_timeouts (GpmDpms	 *dpms,
-		       guint	  standby,
-		       guint	  suspend,
-		       guint	  off,
-		       GError   **error)
-{
-	gboolean ret;
-
-	g_return_val_if_fail (GPM_IS_DPMS (dpms), FALSE);
-
-	dpms->priv->standby_timeout = standby;
-	dpms->priv->suspend_timeout = suspend;
-	dpms->priv->off_timeout     = off;
-
-	ret = sync_settings (dpms, error);
-
-	return ret;
-}
-
 /**
- * gpm_dpms_method_from_string:
- * @dpms_method: Method type, e.g. "off" or "staggered"
- *
- * Convert descriptive types to enumerated values.
+ * gpm_dpms_mode_from_string:
  **/
-GpmDpmsMethod
-gpm_dpms_method_from_string (const gchar *dpms_method)
-{
-	GpmDpmsMethod method;
-
-	/* default to unknown */
-	method = GPM_DPMS_METHOD_UNKNOWN;
-	if (dpms_method == NULL) {
-		return method;
-	}
-
-	/* convert descriptive types to enumerated values */
-	if (strcmp (dpms_method, "default") == 0) {
-		method = GPM_DPMS_METHOD_DEFAULT;
-	} else if (strcmp (dpms_method, "stagger") == 0) {
-		method = GPM_DPMS_METHOD_STAGGER;
-	} else if (strcmp (dpms_method, "standby") == 0) {
-		method = GPM_DPMS_METHOD_STANDBY;
-	} else if (strcmp (dpms_method, "suspend") == 0) {
-		method = GPM_DPMS_METHOD_SUSPEND;
-	} else if (strcmp (dpms_method, "off") == 0) {
-		method = GPM_DPMS_METHOD_OFF;
-	} else {
-		egg_warning ("dpms_method '%s' not recognised", dpms_method);
-	}
-
-	return method;
-}
-
 GpmDpmsMode
 gpm_dpms_mode_from_string (const gchar *str)
 {
-	if (str == NULL) {
+	if (str == NULL)
 		return GPM_DPMS_MODE_UNKNOWN;
-	}
-
-	if (strcmp (str, "on") == 0) {
+	if (strcmp (str, "on") == 0)
 		return GPM_DPMS_MODE_ON;
-	} else if (strcmp (str, "standby") == 0) {
+	if (strcmp (str, "standby") == 0)
 		return GPM_DPMS_MODE_STANDBY;
-	} else if (strcmp (str, "suspend") == 0) {
+	if (strcmp (str, "suspend") == 0)
 		return GPM_DPMS_MODE_SUSPEND;
-	} else if (strcmp (str, "off") == 0) {
+	if (strcmp (str, "off") == 0)
 		return GPM_DPMS_MODE_OFF;
-	} else {
-		return GPM_DPMS_MODE_UNKNOWN;
-	}
+	return GPM_DPMS_MODE_UNKNOWN;
 }
 
+/**
+ * gpm_dpms_mode_to_string:
+ **/
 const gchar *
 gpm_dpms_mode_to_string (GpmDpmsMode mode)
 {
@@ -546,14 +261,14 @@ gpm_dpms_mode_to_string (GpmDpmsMode mode)
 		str = NULL;
 		break;
 	}
-
 	return str;
 }
 
+/**
+ * gpm_dpms_set_mode:
+ **/
 gboolean
-gpm_dpms_set_mode_enum (GpmDpms    *dpms,
-		        GpmDpmsMode mode,
-		        GError    **error)
+gpm_dpms_set_mode (GpmDpms *dpms, GpmDpmsMode mode, GError **error)
 {
 	gboolean ret;
 
@@ -561,224 +276,104 @@ gpm_dpms_set_mode_enum (GpmDpms    *dpms,
 
 	if (mode == GPM_DPMS_MODE_UNKNOWN) {
 		egg_debug ("mode unknown");
-		g_set_error (error,
-			     GPM_DPMS_ERROR,
-			     GPM_DPMS_ERROR_GENERAL,
+		g_set_error (error, GPM_DPMS_ERROR, GPM_DPMS_ERROR_GENERAL,
 			     "Unknown DPMS mode");
 		return FALSE;
 	}
 
-	ret = x11_set_mode (dpms, mode, error);
-
+	ret = gpm_dpms_x11_set_mode (dpms, mode, error);
 	return ret;
 }
 
+/**
+ * gpm_dpms_get_mode:
+ **/
 gboolean
-gpm_dpms_get_mode_enum (GpmDpms     *dpms,
-		        GpmDpmsMode *mode,
-		        GError     **error)
+gpm_dpms_get_mode (GpmDpms *dpms, GpmDpmsMode *mode, GError **error)
 {
 	gboolean ret;
-
-	if (mode) {
+	if (mode)
 		*mode = GPM_DPMS_MODE_UNKNOWN;
-	}
-
-	ret = x11_get_mode (dpms, mode, error);
-
+	ret = gpm_dpms_x11_get_mode (dpms, mode, error);
 	return ret;
 }
 
-static void
-gpm_dpms_set_standby_timeout (GpmDpms *dpms,
-			      guint    timeout)
-{
-	g_return_if_fail (GPM_IS_DPMS (dpms));
-
-	if (dpms->priv->standby_timeout != timeout) {
-		dpms->priv->standby_timeout = timeout;
-		sync_settings (dpms, NULL);
-	}
-}
-
-static void
-gpm_dpms_set_suspend_timeout (GpmDpms *dpms,
-			      guint    timeout)
-{
-	g_return_if_fail (GPM_IS_DPMS (dpms));
-
-	if (dpms->priv->suspend_timeout != timeout) {
-		dpms->priv->suspend_timeout = timeout;
-		sync_settings (dpms, NULL);
-	}
-}
-
-static void
-gpm_dpms_set_off_timeout (GpmDpms *dpms,
-			  guint	   timeout)
-{
-	g_return_if_fail (GPM_IS_DPMS (dpms));
-
-	if (dpms->priv->off_timeout != timeout) {
-		dpms->priv->off_timeout = timeout;
-		sync_settings (dpms, NULL);
-	}
-}
-
-static void
-gpm_dpms_set_property (GObject		  *object,
-		       guint		   prop_id,
-		       const GValue	  *value,
-		       GParamSpec	  *pspec)
-{
-	GpmDpms *self;
-
-	self = GPM_DPMS (object);
-
-	switch (prop_id) {
-	case PROP_STANDBY_TIMEOUT:
-		gpm_dpms_set_standby_timeout (self, g_value_get_uint (value));
-		break;
-	case PROP_SUSPEND_TIMEOUT:
-		gpm_dpms_set_suspend_timeout (self, g_value_get_uint (value));
-		break;
-	case PROP_OFF_TIMEOUT:
-		gpm_dpms_set_off_timeout (self, g_value_get_uint (value));
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
-	}
-}
-
-static void
-gpm_dpms_get_property (GObject		  *object,
-		       guint		   prop_id,
-		       GValue		  *value,
-		       GParamSpec	  *pspec)
-{
-	GpmDpms *self;
-
-	self = GPM_DPMS (object);
-
-	switch (prop_id) {
-	case PROP_STANDBY_TIMEOUT:
-		g_value_set_uint (value, self->priv->standby_timeout);
-		break;
-	case PROP_SUSPEND_TIMEOUT:
-		g_value_set_uint (value, self->priv->suspend_timeout);
-		break;
-	case PROP_OFF_TIMEOUT:
-		g_value_set_uint (value, self->priv->off_timeout);
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
-	}
-}
-
-static void
-gpm_dpms_class_init (GpmDpmsClass *klass)
-{
-	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
-
-	object_class->finalize	   = gpm_dpms_finalize;
-	object_class->get_property = gpm_dpms_get_property;
-	object_class->set_property = gpm_dpms_set_property;
-
-	signals [MODE_CHANGED] =
-		g_signal_new ("mode-changed",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmDpmsClass, mode_changed),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__INT,
-			      G_TYPE_NONE,
-			      1, G_TYPE_INT);
-
-	g_object_class_install_property (object_class,
-					 PROP_STANDBY_TIMEOUT,
-					 g_param_spec_uint ("standby-timeout",
-							    NULL,
-							    NULL,
-							    0,
-							    G_MAXUINT,
-							    0,
-							    G_PARAM_READWRITE));
-	g_object_class_install_property (object_class,
-					 PROP_SUSPEND_TIMEOUT,
-					 g_param_spec_uint ("suspend-timeout",
-							    NULL,
-							    NULL,
-							    0,
-							    G_MAXUINT,
-							    0,
-							    G_PARAM_READWRITE));
-	g_object_class_install_property (object_class,
-					 PROP_OFF_TIMEOUT,
-					 g_param_spec_uint ("off-timeout",
-							    NULL,
-							    NULL,
-							    0,
-							    G_MAXUINT,
-							    0,
-							    G_PARAM_READWRITE));
-
-	g_type_class_add_private (klass, sizeof (GpmDpmsPrivate));
-}
-
+/**
+ * gpm_dpms_poll_mode_cb:
+ **/
 static gboolean
-poll_dpms_mode (GpmDpms *dpms)
+gpm_dpms_poll_mode_cb (GpmDpms *dpms)
 {
-	gboolean    res;
+	gboolean ret;
 	GpmDpmsMode mode;
-	GError     *error;
+	GError *error = NULL;
 
 #ifndef HAVE_DPMS_EXTENSION
 	return FALSE;
 #endif
 
-	error = NULL;
-	res = x11_get_mode (dpms, &mode, &error);
-
 	/* Try again */
-	if (! res) {
+	ret = gpm_dpms_x11_get_mode (dpms, &mode, &error);
+	if (!ret) {
 		g_clear_error (&error);
-
 		return TRUE;
 	}
 
 	if (mode != dpms->priv->mode) {
 		dpms->priv->mode = mode;
-
-		g_signal_emit (dpms,
-			       signals [MODE_CHANGED],
-			       0,
-			       mode);
+		g_signal_emit (dpms, signals [MODE_CHANGED], 0, mode);
 	}
-
-	/* FIXME: check that we are on console? */
 
 	return TRUE;
 }
 
-static void
-remove_poll_timer (GpmDpms *dpms)
+/**
+ * gpm_dpms_clear_timeouts:
+ **/
+static gboolean
+gpm_dpms_clear_timeouts (GpmDpms *dpms)
 {
-	if (dpms->priv->timer_id != 0) {
-		g_source_remove (dpms->priv->timer_id);
-		dpms->priv->timer_id = 0;
+	gboolean ret = FALSE;
+
+	/* never going to work */
+	if (!dpms->priv->dpms_capable) {
+		egg_debug ("not DPMS capable");
+		goto out;
 	}
+
+#ifdef HAVE_DPMS_EXTENSION
+	egg_debug ("set timeouts to zero");
+	ret = DPMSSetTimeouts (GDK_DISPLAY (), 0, 0, 0);
+#else
+	egg_warning ("no DPMS extension");
+#endif
+out:
+	return ret;
 }
 
+/**
+ * gpm_dpms_class_init:
+ **/
 static void
-add_poll_timer (GpmDpms *dpms,
-		glong	 timeout)
+gpm_dpms_class_init (GpmDpmsClass *klass)
 {
-	dpms->priv->timer_id = g_timeout_add_seconds (timeout, (GSourceFunc)poll_dpms_mode, dpms);
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	object_class->finalize = gpm_dpms_finalize;
+
+	signals [MODE_CHANGED] =
+		g_signal_new ("mode-changed",
+			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmDpmsClass, mode_changed),
+			      NULL, NULL, g_cclosure_marshal_VOID__UINT,
+			      G_TYPE_NONE, 1, G_TYPE_UINT);
+
+	g_type_class_add_private (klass, sizeof (GpmDpmsPrivate));
 }
 
+/**
+ * gpm_dpms_init:
+ **/
 static void
 gpm_dpms_init (GpmDpms *dpms)
 {
@@ -786,10 +381,15 @@ gpm_dpms_init (GpmDpms *dpms)
 
 	/* DPMSCapable() can never change for a given display */
 	dpms->priv->dpms_capable = DPMSCapable (GDK_DISPLAY ());
+	dpms->priv->timer_id = g_timeout_add_seconds (GPM_DPMS_POLL_TIME, (GSourceFunc)gpm_dpms_poll_mode_cb, dpms);
 
-	add_poll_timer (dpms, GPM_DPMS_POLL_TIME);
+	/* ensure we clear the default timeouts (Standby: 1200s, Suspend: 1800s, Off: 2400s) */
+	gpm_dpms_clear_timeouts (dpms);
 }
 
+/**
+ * gpm_dpms_finalize:
+ **/
 static void
 gpm_dpms_finalize (GObject *object)
 {
@@ -802,11 +402,15 @@ gpm_dpms_finalize (GObject *object)
 
 	g_return_if_fail (dpms->priv != NULL);
 
-	remove_poll_timer (dpms);
+	if (dpms->priv->timer_id != 0)
+		g_source_remove (dpms->priv->timer_id);
 
 	G_OBJECT_CLASS (gpm_dpms_parent_class)->finalize (object);
 }
 
+/**
+ * gpm_dpms_new:
+ **/
 GpmDpms *
 gpm_dpms_new (void)
 {
@@ -818,3 +422,87 @@ gpm_dpms_new (void)
 	}
 	return GPM_DPMS (gpm_dpms_object);
 }
+
+
+/***************************************************************************
+ ***                          MAKE CHECK TESTS                           ***
+ ***************************************************************************/
+#ifdef EGG_TEST
+#include "egg-test.h"
+
+void
+gpm_dpms_test (gpointer data)
+{
+	GpmDpms *dpms;
+	gboolean ret;
+	GError *error = NULL;
+	EggTest *test = (EggTest *) data;
+
+	if (!egg_test_start (test, "GpmDpms"))
+		return;
+
+	/************************************************************/
+	egg_test_title (test, "get object");
+	dpms = gpm_dpms_new ();
+	if (dpms != NULL)
+		egg_test_success (test, NULL);
+	else
+		egg_test_failed (test, "got no object");
+
+	/************************************************************/
+	egg_test_title (test, "set on");
+	ret = gpm_dpms_set_mode (dpms, GPM_DPMS_MODE_ON, &error);
+	if (ret)
+		egg_test_success (test, NULL);
+	else
+		egg_test_failed (test, "failed: %s", error->message);
+
+	g_usleep (2*1000*1000);
+
+	/************************************************************/
+	egg_test_title (test, "set STANDBY");
+	ret = gpm_dpms_set_mode (dpms, GPM_DPMS_MODE_STANDBY, &error);
+	if (ret)
+		egg_test_success (test, NULL);
+	else
+		egg_test_failed (test, "failed: %s", error->message);
+
+	g_usleep (2*1000*1000);
+
+	/************************************************************/
+	egg_test_title (test, "set SUSPEND");
+	ret = gpm_dpms_set_mode (dpms, GPM_DPMS_MODE_SUSPEND, &error);
+	if (ret)
+		egg_test_success (test, NULL);
+	else
+		egg_test_failed (test, "failed: %s", error->message);
+
+	g_usleep (2*1000*1000);
+
+	/************************************************************/
+	egg_test_title (test, "set OFF");
+	ret = gpm_dpms_set_mode (dpms, GPM_DPMS_MODE_OFF, &error);
+	if (ret)
+		egg_test_success (test, NULL);
+	else
+		egg_test_failed (test, "failed: %s", error->message);
+
+	g_usleep (2*1000*1000);
+
+	/************************************************************/
+	egg_test_title (test, "set on");
+	ret = gpm_dpms_set_mode (dpms, GPM_DPMS_MODE_ON, &error);
+	if (ret)
+		egg_test_success (test, NULL);
+	else
+		egg_test_failed (test, "failed: %s", error->message);
+
+	g_usleep (2*1000*1000);
+
+	g_object_unref (dpms);
+
+	egg_test_end (test);
+}
+
+#endif
+

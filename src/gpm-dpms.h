@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
  * Copyright (C) 2004-2005 William Jon McCann <mccann@jhu.edu>
+ * Copyright (C) 2006-2009 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -39,15 +40,6 @@ typedef enum {
 	GPM_DPMS_MODE_UNKNOWN
 } GpmDpmsMode;
 
-typedef enum {
-	GPM_DPMS_METHOD_DEFAULT,
-	GPM_DPMS_METHOD_STAGGER,
-	GPM_DPMS_METHOD_STANDBY,
-	GPM_DPMS_METHOD_SUSPEND,
-	GPM_DPMS_METHOD_OFF,
-	GPM_DPMS_METHOD_UNKNOWN
-} GpmDpmsMethod;
-
 typedef struct GpmDpmsPrivate GpmDpmsPrivate;
 
 typedef struct
@@ -73,40 +65,15 @@ typedef enum
 GQuark		 gpm_dpms_error_quark		(void);
 GType		 gpm_dpms_get_type		(void);
 GpmDpms		*gpm_dpms_new			(void);
-gboolean	 gpm_dpms_has_hw		(void);
-
-gboolean	 gpm_dpms_get_active		(GpmDpms 	*dpms,
-						 gboolean	*active,
-						 GError 	**error);
-gboolean	 gpm_dpms_set_active		(GpmDpms 	*dpms,
-						 gboolean	 active,
-						 GError 	**error);
-
-gboolean	 gpm_dpms_get_enabled		(GpmDpms 	*dpms,
-						 gboolean	*enabled,
-						 GError 	**error);
-gboolean	 gpm_dpms_set_enabled		(GpmDpms 	*dpms,
-						 gboolean	 enabled,
-						 GError 	**error);
-
-gboolean	 gpm_dpms_set_timeouts		(GpmDpms 	*dpms,
-						 guint		 standby,
-						 guint		 suspend,
-						 guint		 off,
-						 GError 	**error);
-
-/* Direct manipulation */
-gboolean	 gpm_dpms_get_mode_enum	 	(GpmDpms	*dpms,
+gboolean	 gpm_dpms_get_mode	 	(GpmDpms	*dpms,
 						 GpmDpmsMode	*mode,
 						 GError		**error);
-gboolean	 gpm_dpms_set_mode_enum	 	(GpmDpms	*dpms,
+gboolean	 gpm_dpms_set_mode	 	(GpmDpms	*dpms,
 						 GpmDpmsMode	 mode,
 						 GError		**error);
-
 const gchar	*gpm_dpms_mode_to_string	(GpmDpmsMode	 mode);
 GpmDpmsMode	 gpm_dpms_mode_from_string	(const gchar	*mode);
-
-GpmDpmsMethod	 gpm_dpms_method_from_string	(const gchar	*dpms_method);
+void		 gpm_dpms_test			(gpointer	 data);
 
 G_END_DECLS
 

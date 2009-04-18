@@ -73,7 +73,6 @@ struct GpmBacklightPrivate
 	GpmLightSensor		*light_sensor;
 	gboolean		 can_dim;
 	gboolean		 can_sense;
-	gboolean		 can_dpms;
 	gboolean		 is_laptop;
 	gboolean		 system_is_idle;
 	GTimer			*idle_timer;
@@ -105,107 +104,6 @@ gpm_backlight_error_quark (void)
 	return quark;
 }
 
-/**
- * gpm_backlight_sync_policy:
- * @backlight: This class instance
- *
- * Sync the BACKLIGHT policy with what we have set in gconf.
- **/
-static void
-gpm_backlight_sync_policy (GpmBacklight *backlight)
-{
-	GError *error;
-	gboolean res;
-	guint timeout = 0;
-	guint standby = 0;
-	guint suspend = 0;
-	guint off = 0;
-	gchar *dpms_method;
-	GpmDpmsMethod method;
-	gboolean on_ac;
-
-	/* no point processing if we can't do the dpms action */
-	if (!backlight->priv->can_dpms)
-		return;
-
-	/* get the ac state */
-	on_ac = gpm_ac_adapter_is_present (backlight->priv->ac_adapter);
-
-	error = NULL;
-
-	if (on_ac) {
-		timeout = gconf_client_get_int (backlight->priv->conf, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_AC, NULL);
-		dpms_method = gconf_client_get_string (backlight->priv->conf, GPM_CONF_BACKLIGHT_DPMS_METHOD_AC, NULL);
-	} else {
-		timeout = gconf_client_get_int (backlight->priv->conf, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_BATT, NULL);
-		dpms_method = gconf_client_get_string (backlight->priv->conf, GPM_CONF_BACKLIGHT_DPMS_METHOD_BATT, NULL);
-	}
-
-	/* convert the string types to standard types */
-	method = gpm_dpms_method_from_string (dpms_method);
-	g_free (dpms_method);
-
-	/* check if method is valid */
-	if (method == GPM_DPMS_METHOD_UNKNOWN) {
-		egg_warning ("BACKLIGHT method unknown. Possible schema problem!");
-		return;
-	}
-
-	/* choose a sensible default */
-	if (method == GPM_DPMS_METHOD_DEFAULT) {
-		egg_debug ("choosing sensible default");
-		if (backlight->priv->is_laptop) {
-			egg_debug ("laptop, so use GPM_DPMS_METHOD_OFF");
-			method = GPM_DPMS_METHOD_OFF;
-		} else {
-			egg_debug ("not laptop, so use GPM_BACKLIGHT_METHOD_STAGGER");
-			method = GPM_DPMS_METHOD_STAGGER;
-		}
-	}
-
-	/* Some monitors do not support certain suspend states, so we have to
-	 * provide a way to only use the one that works. */
-	if (method == GPM_DPMS_METHOD_STAGGER) {
-		/* suspend after one timeout, turn off after another */
-		standby = timeout;
-		suspend = timeout;
-		off = timeout * 2;
-	} else if (method == GPM_DPMS_METHOD_STANDBY) {
-		standby = timeout;
-		suspend = 0;
-		off = 0;
-	} else if (method == GPM_DPMS_METHOD_SUSPEND) {
-		standby = 0;
-		suspend = timeout;
-		off = 0;
-	} else if (method == GPM_DPMS_METHOD_OFF) {
-		standby = 0;
-		suspend = 0;
-		off = timeout;
-	} else {
-		/* wtf? */
-		egg_warning ("unknown backlight mode!");
-	}
-
-	egg_debug ("BACKLIGHT parameters %d %d %d, method '%i'", standby, suspend, off, method);
-
-	error = NULL;
-	res = gpm_dpms_set_enabled (backlight->priv->dpms, TRUE, &error);
-	if (error) {
-		egg_warning ("Unable to enable BACKLIGHT: %s", error->message);
-		g_error_free (error);
-		return;
-	}
-
-	error = NULL;
-	res = gpm_dpms_set_timeouts (backlight->priv->dpms, standby, suspend, off, &error);
-	if (error) {
-		egg_warning ("Unable to get BACKLIGHT timeouts: %s", error->message);
-		g_error_free (error);
-		return;
-	}
-}
-
 /* dbus methods shouldn't use enumerated types, but should use textual descriptors */
 gboolean
 gpm_backlight_set_mode (GpmBacklight *backlight, const gchar *mode_str, GError **error)
@@ -215,18 +113,9 @@ gpm_backlight_set_mode (GpmBacklight *backlight, const gchar *mode_str, GError *
 
 	g_return_val_if_fail (GPM_IS_BACKLIGHT (backlight), FALSE);
 
-	/* check if we have the hw */
-	if (backlight->priv->can_dpms == FALSE) {
-		*error = g_error_new (gpm_backlight_error_quark (),
-				      GPM_BACKLIGHT_ERROR_HARDWARE_NOT_PRESENT,
-				      "DPMS capable hardware not present");
-		return FALSE;
-	}
-
 	/* convert mode to an enumerated type */
 	mode = gpm_dpms_mode_from_string (mode_str);
-
-	ret = gpm_dpms_set_mode_enum (backlight->priv->dpms, mode, error);
+	ret = gpm_dpms_set_mode (backlight->priv->dpms, mode, error);
 	return ret;
 }
 
@@ -242,15 +131,7 @@ gpm_backlight_get_mode (GpmBacklight *backlight,
 	g_return_val_if_fail (GPM_IS_BACKLIGHT (backlight), FALSE);
 	g_return_val_if_fail (mode_str != NULL, FALSE);
 
-	/* check if we have the hw */
-	if (backlight->priv->can_dpms == FALSE) {
-		*error = g_error_new (gpm_backlight_error_quark (),
-				      GPM_BACKLIGHT_ERROR_HARDWARE_NOT_PRESENT,
-				      "DPMS capable hardware not present");
-		return FALSE;
-	}
-
-	ret = gpm_dpms_get_mode_enum (backlight->priv->dpms, &mode, error);
+	ret = gpm_dpms_get_mode (backlight->priv->dpms, &mode, error);
 	if (ret)
 		*mode_str = g_strdup (gpm_dpms_mode_to_string (mode));
 	return ret;
@@ -484,11 +365,6 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 	         strcmp (entry->key, GPM_CONF_BACKLIGHT_IDLE_BRIGHTNESS) == 0) {
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 
-	} else if (strcmp (entry->key, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_BATT) == 0 ||
-	           strcmp (entry->key, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_AC) == 0 ||
-	           strcmp (entry->key, GPM_CONF_BACKLIGHT_DPMS_METHOD_AC) == 0 ||
-	           strcmp (entry->key, GPM_CONF_BACKLIGHT_DPMS_METHOD_BATT) == 0) {
-		gpm_backlight_sync_policy (backlight);
 	} else if (strcmp (entry->key, GPM_CONF_BACKLIGHT_IDLE_DIM_TIME) == 0) {
 		backlight->priv->idle_dim_timeout = gconf_value_get_int (value);
 		gpm_idle_set_timeout_dim (backlight->priv->idle, backlight->priv->idle_dim_timeout);
@@ -521,8 +397,9 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter, gboolean on_ac, GpmBacklight *b
 static void
 gpm_backlight_button_pressed_cb (GpmButton *button, const gchar *type, GpmBacklight *backlight)
 {
-	guint percentage;
 	gboolean ret;
+	GError *error = NULL;
+	guint percentage;
 	gboolean hw_changed;
 	egg_debug ("Button press event type=%s", type);
 
@@ -561,7 +438,13 @@ gpm_backlight_button_pressed_cb (GpmButton *button, const gchar *type, GpmBackli
 	} else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0) {
 		/* make sure we undim when we lift the lid */
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
-		gpm_backlight_sync_policy (backlight);
+
+		/* ensure backlight is on */
+		ret = gpm_dpms_set_mode (backlight->priv->dpms, GPM_DPMS_MODE_ON, &error);
+		if (!ret) {
+			egg_warning ("failed to turn on DPMS: %s", error->message);
+			g_error_free (error);
+		}
 	}
 }
 
@@ -628,53 +511,71 @@ gpm_backlight_notify_system_idle_changed (GpmBacklight *backlight, gboolean is_i
 static void
 idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *backlight)
 {
-	GError *error;
+	gboolean ret;
+	GError *error = NULL;
+	gboolean on_ac;
+	gchar *dpms_method;
+	GpmDpmsMode dpms_mode;
 
 	/* don't dim or undim the screen when the lid is closed */
 	if (gpm_button_is_lid_closed (backlight->priv->button))
 		return;
 
 	if (mode == GPM_IDLE_MODE_NORMAL) {
-		/* deactivate display power management */
-		if (backlight->priv->can_dpms) {
-			error = NULL;
-			gpm_dpms_set_active (backlight->priv->dpms, FALSE, &error);
-			if (error) {
-				egg_debug ("Unable to set DPMS not active: %s", error->message);
-				g_error_free (error);
-			}
-		}
-
 		/* sync lcd brightness */
 		gpm_backlight_notify_system_idle_changed (backlight, FALSE);
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 
-		/* sync timeouts */
-		gpm_backlight_sync_policy (backlight);
-
-	} else if (mode == GPM_IDLE_MODE_BLANK) {
-		/* activate display power management */
-		if (backlight->priv->can_dpms) {
-			error = NULL;
-			gpm_dpms_set_active (backlight->priv->dpms, TRUE, &error);
-			if (error) {
-				egg_debug ("Unable to set DPMS active: %s", error->message);
-				g_error_free (error);
-			}
+		/* ensure backlight is on */
+		ret = gpm_dpms_set_mode (backlight->priv->dpms, GPM_DPMS_MODE_ON, &error);
+		if (!ret) {
+			egg_warning ("failed to turn on DPMS: %s", error->message);
+			g_error_free (error);
 		}
-
-		/* sync lcd brightness */
-		gpm_backlight_notify_system_idle_changed (backlight, FALSE);
-		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
-
-		/* sync timeouts */
-		gpm_backlight_sync_policy (backlight);
 
 	} else if (mode == GPM_IDLE_MODE_DIM) {
 
 		/* sync lcd brightness */
 		gpm_backlight_notify_system_idle_changed (backlight, TRUE);
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
+
+		/* ensure backlight is on */
+		ret = gpm_dpms_set_mode (backlight->priv->dpms, GPM_DPMS_MODE_ON, &error);
+		if (!ret) {
+			egg_warning ("failed to turn on DPMS: %s", error->message);
+			g_error_free (error);
+		}
+
+	} else if (mode == GPM_IDLE_MODE_BLANK) {
+
+		/* sync lcd brightness */
+		gpm_backlight_notify_system_idle_changed (backlight, TRUE);
+		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
+
+		/* get the DPMS state we're supposed to use on the power state */
+		on_ac = gpm_ac_adapter_is_present (backlight->priv->ac_adapter);
+		if (on_ac)
+			dpms_method = gconf_client_get_string (backlight->priv->conf, GPM_CONF_BACKLIGHT_DPMS_METHOD_AC, NULL);
+		else
+			dpms_method = gconf_client_get_string (backlight->priv->conf, GPM_CONF_BACKLIGHT_DPMS_METHOD_BATT, NULL);
+
+		/* convert the string types to standard types */
+		dpms_mode = gpm_dpms_mode_from_string (dpms_method);
+
+		/* check if method is valid */
+		if (dpms_mode == GPM_DPMS_MODE_UNKNOWN || dpms_mode == GPM_DPMS_MODE_ON) {
+			egg_warning ("BACKLIGHT method %s unknown. Using OFF.", dpms_method);
+			dpms_mode = GPM_DPMS_MODE_OFF;
+		}
+
+		/* turn backlight off */
+		ret = gpm_dpms_set_mode (backlight->priv->dpms, dpms_mode, &error);
+		if (!ret) {
+			egg_warning ("failed to change DPMS: %s", error->message);
+			g_error_free (error);
+		}
+
+		g_free (dpms_method);
 	}
 }
 
@@ -741,7 +642,15 @@ sensor_changed_cb (GpmLightSensor *sensor, guint percentage, GpmBacklight *backl
 static void
 control_resume_cb (GpmControl *control, GpmControlAction action, GpmBacklight *backlight)
 {
-	gpm_backlight_sync_policy (backlight);
+	gboolean ret;
+	GError *error = NULL;
+
+	/* ensure backlight is on */
+	ret = gpm_dpms_set_mode (backlight->priv->dpms, GPM_DPMS_MODE_ON, &error);
+	if (!ret) {
+		egg_warning ("failed to turn on DPMS: %s", error->message);
+		g_error_free (error);
+	}
 }
 
 /**
@@ -757,10 +666,8 @@ gpm_backlight_finalize (GObject *object)
 
 	g_timer_destroy (backlight->priv->idle_timer);
 
-	if (backlight->priv->dpms != NULL)
-		g_object_unref (backlight->priv->dpms);
-	if (backlight->priv->control != NULL)
-		g_object_unref (backlight->priv->control);
+	g_object_unref (backlight->priv->dpms);
+	g_object_unref (backlight->priv->control);
 	g_object_unref (backlight->priv->light_sensor);
 	g_object_unref (backlight->priv->feedback);
 	g_object_unref (backlight->priv->conf);
@@ -834,7 +741,6 @@ gpm_backlight_init (GpmBacklight *backlight)
 
 	/* gets caps */
 	backlight->priv->can_dim = gpm_brightness_has_hw (backlight->priv->brightness);
-	backlight->priv->can_dpms = gpm_dpms_has_hw ();
 	backlight->priv->can_sense = gpm_light_sensor_has_hw (backlight->priv->light_sensor);
 
 	/* we use hal to see if we are a laptop */
@@ -890,23 +796,20 @@ gpm_backlight_init (GpmBacklight *backlight)
 	gpm_feedback_set_icon_name (backlight->priv->feedback,
 				    GPM_STOCK_BRIGHTNESS_LCD);
 
-	if (backlight->priv->can_dpms) {
-		/* DPMS mode poll class */
-		backlight->priv->dpms = gpm_dpms_new ();
-		g_signal_connect (backlight->priv->dpms, "mode-changed",
-				  G_CALLBACK (mode_changed_cb), backlight);
+	/* DPMS mode poll class */
+	backlight->priv->dpms = gpm_dpms_new ();
+	g_signal_connect (backlight->priv->dpms, "mode-changed",
+			  G_CALLBACK (mode_changed_cb), backlight);
 
-		/* we refresh DPMS on resume */
-		backlight->priv->control = gpm_control_new ();
-		g_signal_connect (backlight->priv->control, "resume",
-				  G_CALLBACK (control_resume_cb), backlight);
-	}
+	/* we refresh DPMS on resume */
+	backlight->priv->control = gpm_control_new ();
+	g_signal_connect (backlight->priv->control, "resume",
+			  G_CALLBACK (control_resume_cb), backlight);
 
 	/* sync at startup */
 	gpm_light_sensor_get_absolute (backlight->priv->light_sensor, &value);
 	backlight->priv->ambient_sensor_value = value / 100.0f;
 	gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
-	gpm_backlight_sync_policy (backlight);
 }
 
 /**
