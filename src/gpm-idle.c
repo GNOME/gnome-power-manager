@@ -48,8 +48,6 @@
 /* Sets the idle percent limit, i.e. how hard the computer can work
    while considered "at idle" */
 #define GPM_IDLE_CPU_LIMIT			5
-#define GPM_IDLE_IDLETIME_ALARM_ID		1
-#define GPM_IDLE_IDLETIME_IGNORE_ID		2
 #define GPM_IDLE_TIMEOUT_IGNORE_DPMS_CHANGE	1.0f /* seconds */
 
 struct GpmIdlePrivate
@@ -63,6 +61,8 @@ struct GpmIdlePrivate
 	guint		 timeout_sleep;		/* in seconds */
 	guint		 timeout_blank_id;
 	guint		 timeout_sleep_id;
+	guint		 idletime_id;
+	guint		 idletime_ignore_id;
 	gboolean	 x_idle;
 	gboolean	 check_type_cpu;
 	GTimer		*timer;
@@ -260,8 +260,12 @@ gpm_idle_set_timeout_dim (GpmIdle *idle, guint timeout)
 	egg_debug ("Setting dim idle timeout: %ds", timeout);
 	if (idle->priv->timeout_dim != timeout) {
 		idle->priv->timeout_dim = timeout;
-		egg_idletime_alarm_set (idle->priv->idletime, GPM_IDLE_IDLETIME_ALARM_ID, idle->priv->timeout_dim * 1000);
-		gpm_idle_evaluate (idle);
+
+		/* remove old id */
+		if (idle->priv->idletime_id != 0)
+			egg_idletime_remove_watch (idle->priv->idletime, idle->priv->idletime_id);
+		idle->priv->idletime_id =
+			egg_idletime_add_watch (idle->priv->idletime, timeout * 1000);
 	}
 	return TRUE;
 }
@@ -334,18 +338,10 @@ gpm_idle_session_inhibited_changed_cb (GpmSession *session, gboolean is_inhibite
 static void
 gpm_idle_idletime_alarm_expired_cb (EggIdletime *idletime, guint alarm_id, GpmIdle *idle)
 {
-	gboolean ret;
-
 	egg_debug ("idletime alarm: %i", alarm_id);
 
-	/* this must be out 500ms ignored timer */
-	if (idle->priv->x_idle) {
-		egg_debug ("removing ignored timer");
-		ret = egg_idletime_alarm_remove (idle->priv->idletime, GPM_IDLE_IDLETIME_IGNORE_ID);
-		if (!ret)
-			egg_warning ("failed to remove timer %i", GPM_IDLE_IDLETIME_IGNORE_ID);
-		return;
-	}
+	if (alarm_id == idle->priv->idletime_ignore_id)
+		egg_debug ("expired 1ms timeout");
 
 	/* set again */
 	idle->priv->x_idle = TRUE;
@@ -360,23 +356,26 @@ gpm_idle_idletime_alarm_expired_cb (EggIdletime *idletime, guint alarm_id, GpmId
 static void
 gpm_idle_idletime_reset_cb (EggIdletime *idletime, GpmIdle *idle)
 {
-	guint id;
-	gboolean ret;
 	gdouble elapsed;
 	elapsed = g_timer_elapsed (idle->priv->timer, NULL);
-
-	id = egg_idletime_alarm_get (idle->priv->idletime);
-	egg_debug ("idletime reset: %i", id);
 
 	/* have we just chaged state? */
 	if (idle->priv->mode == GPM_IDLE_MODE_BLANK &&
 	    elapsed < GPM_IDLE_TIMEOUT_IGNORE_DPMS_CHANGE) {
 		egg_debug ("ignoring reset, as we've just done a state change");
 		/* make sure we trigger a short 1ms timeout so we can get the expired signal */
-		ret = egg_idletime_alarm_set (idle->priv->idletime, GPM_IDLE_IDLETIME_IGNORE_ID, 500);
-		if (!ret)
-			egg_error ("failed to set timer %i", GPM_IDLE_IDLETIME_IGNORE_ID);
+		if (idle->priv->idletime_ignore_id != 0)
+			egg_idletime_remove_watch (idle->priv->idletime, idle->priv->idletime_ignore_id);
+		idle->priv->idletime_ignore_id =
+			egg_idletime_add_watch (idle->priv->idletime, 1);
 		return;
+	}
+
+	/* remove 1ms timeout */
+	if (idle->priv->idletime_ignore_id != 0) {
+		egg_debug ("removing 1ms timeout");
+		egg_idletime_remove_watch (idle->priv->idletime, idle->priv->idletime_ignore_id);
+		idle->priv->idletime_ignore_id = 0;
 	}
 
 	idle->priv->x_idle = FALSE;
@@ -407,6 +406,11 @@ gpm_idle_finalize (GObject *object)
 	g_timer_destroy (idle->priv->timer);
 	g_object_unref (idle->priv->load);
 	g_object_unref (idle->priv->session);
+
+	if (idle->priv->idletime_id != 0)
+		egg_idletime_remove_watch (idle->priv->idletime, idle->priv->idletime_id);
+	if (idle->priv->idletime_ignore_id != 0)
+		egg_idletime_remove_watch (idle->priv->idletime, idle->priv->idletime_ignore_id);
 	g_object_unref (idle->priv->idletime);
 
 	G_OBJECT_CLASS (gpm_idle_parent_class)->finalize (object);
@@ -452,6 +456,8 @@ gpm_idle_init (GpmIdle *idle)
 	idle->priv->timeout_sleep = G_MAXUINT;
 	idle->priv->timeout_blank_id = 0;
 	idle->priv->timeout_sleep_id = 0;
+	idle->priv->idletime_id = 0;
+	idle->priv->idletime_ignore_id = 0;
 	idle->priv->x_idle = FALSE;
 	idle->priv->timer = g_timer_new ();
 	idle->priv->load = gpm_load_new ();
