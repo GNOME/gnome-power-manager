@@ -25,8 +25,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gconf/gconf-client.h>
-#include <dkp-client.h>
-#include <dkp-device.h>
+#include <devkit-power-gobject/devicekit-power.h>
 
 #include "egg-debug.h"
 
@@ -99,11 +98,16 @@ typedef enum {
  * gpm_engine_get_warning_csr:
  **/
 static GpmEngineWarning
-gpm_engine_get_warning_csr (GpmEngine *engine, const DkpObject *obj)
+gpm_engine_get_warning_csr (GpmEngine *engine, DkpDevice *device)
 {
-	if (obj->percentage < 26.0f)
+	gdouble percentage;
+
+	/* get device properties */
+	g_object_get (device, "percentage", &percentage, NULL);
+
+	if (percentage < 26.0f)
 		return GPM_ENGINE_WARNING_LOW;
-	else if (obj->percentage < 13.0f)
+	else if (percentage < 13.0f)
 		return GPM_ENGINE_WARNING_CRITICAL;
 	return GPM_ENGINE_WARNING_NONE;
 }
@@ -112,18 +116,23 @@ gpm_engine_get_warning_csr (GpmEngine *engine, const DkpObject *obj)
  * gpm_engine_get_warning_percentage:
  **/
 static GpmEngineWarning
-gpm_engine_get_warning_percentage (GpmEngine *engine, const DkpObject *obj)
+gpm_engine_get_warning_percentage (GpmEngine *engine, DkpDevice *device)
 {
+	gdouble percentage;
+
+	/* get device properties */
+	g_object_get (device, "percentage", &percentage, NULL);
+
 	/* this is probably an error condition */
-	if (obj->percentage == 0) {
+	if (percentage == 0) {
 		egg_warning ("percentage zero, something's gone wrong");
 		return GPM_ENGINE_WARNING_NONE;
 	}
-	if (obj->percentage <= engine->priv->action_percentage)
+	if (percentage <= engine->priv->action_percentage)
 		return GPM_ENGINE_WARNING_ACTION;
-	else if (obj->percentage <= engine->priv->critical_percentage)
+	else if (percentage <= engine->priv->critical_percentage)
 		return GPM_ENGINE_WARNING_CRITICAL;
-	else if (obj->percentage <= engine->priv->low_percentage)
+	else if (percentage <= engine->priv->low_percentage)
 		return GPM_ENGINE_WARNING_LOW;
 	return GPM_ENGINE_WARNING_NONE;
 }
@@ -132,19 +141,28 @@ gpm_engine_get_warning_percentage (GpmEngine *engine, const DkpObject *obj)
  * gpm_engine_get_warning_time:
  **/
 static GpmEngineWarning
-gpm_engine_get_warning_time (GpmEngine *engine, const DkpObject *obj)
+gpm_engine_get_warning_time (GpmEngine *engine, DkpDevice *device)
 {
+	DkpDeviceType type;
+	gint64 time_to_empty;
+
+	/* get device properties */
+	g_object_get (device,
+		      "type", &type,
+		      "time-to-empty", &time_to_empty,
+		      NULL);
+
 	/* this is probably an error condition */
-	if (obj->time_to_empty == 0) {
-		egg_debug ("time zero, falling back to percentage for %s", dkp_device_type_to_text (obj->type));
-		return gpm_engine_get_warning_percentage (engine, obj);
+	if (time_to_empty == 0) {
+		egg_debug ("time zero, falling back to percentage for %s", dkp_device_type_to_text (type));
+		return gpm_engine_get_warning_percentage (engine, device);
 	}
 
-	if (obj->time_to_empty <= engine->priv->action_time)
+	if (time_to_empty <= engine->priv->action_time)
 		return GPM_ENGINE_WARNING_ACTION;
-	else if (obj->time_to_empty <= engine->priv->critical_time)
+	else if (time_to_empty <= engine->priv->critical_time)
 		return GPM_ENGINE_WARNING_CRITICAL;
-	else if (obj->time_to_empty <= engine->priv->low_time)
+	else if (time_to_empty <= engine->priv->low_time)
 		return GPM_ENGINE_WARNING_LOW;
 	return GPM_ENGINE_WARNING_NONE;
 }
@@ -158,41 +176,49 @@ gpm_engine_get_warning_time (GpmEngine *engine, const DkpObject *obj)
  * Return value: A GpmEngine state, e.g. GPM_ENGINE_WARNING_DISCHARGING
  **/
 static GpmEngineWarning
-gpm_engine_get_warning (GpmEngine *engine, const DkpObject *obj)
+gpm_engine_get_warning (GpmEngine *engine, DkpDevice *device)
 {
-	GpmEngineWarning type;
+	DkpDeviceType type;
+	DkpDeviceState state;
+	GpmEngineWarning warning_type;
+
+	/* get device properties */
+	g_object_get (device,
+		      "type", &type,
+		      "state", &state,
+		      NULL);
 
 	/* default to no engine */
-	type = GPM_ENGINE_WARNING_NONE;
+	warning_type = GPM_ENGINE_WARNING_NONE;
 
-	if (obj->type == DKP_DEVICE_TYPE_MOUSE ||
-	    obj->type == DKP_DEVICE_TYPE_KEYBOARD) {
+	if (type == DKP_DEVICE_TYPE_MOUSE ||
+	    type == DKP_DEVICE_TYPE_KEYBOARD) {
 
-		type = gpm_engine_get_warning_csr (engine, obj);
+		warning_type = gpm_engine_get_warning_csr (engine, device);
 
-	} else if (obj->type == DKP_DEVICE_TYPE_UPS ||
-		   obj->type == DKP_DEVICE_TYPE_PDA) {
+	} else if (type == DKP_DEVICE_TYPE_UPS ||
+		   type == DKP_DEVICE_TYPE_PDA) {
 
-		type = gpm_engine_get_warning_percentage (engine, obj);
+		warning_type = gpm_engine_get_warning_percentage (engine, device);
 
-	} else if (obj->type == DKP_DEVICE_TYPE_PHONE) {
+	} else if (type == DKP_DEVICE_TYPE_PHONE) {
 
-		type = gpm_engine_get_warning_percentage (engine, obj);
+		warning_type = gpm_engine_get_warning_percentage (engine, device);
 
-	} else if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
+	} else if (type == DKP_DEVICE_TYPE_BATTERY) {
 		/* only use the time when it is accurate, and GConf is not disabled */
 		if (engine->priv->use_time_primary)
-			type = gpm_engine_get_warning_time (engine, obj);
+			warning_type = gpm_engine_get_warning_time (engine, device);
 		else
-			type = gpm_engine_get_warning_percentage (engine, obj);
+			warning_type = gpm_engine_get_warning_percentage (engine, device);
 	}
 
 	/* If we have no important engines, we should test for discharging */
-	if (type == GPM_ENGINE_WARNING_NONE) {
-		if (obj->state == DKP_DEVICE_STATE_DISCHARGING)
-			type = GPM_ENGINE_WARNING_DISCHARGING;
+	if (warning_type == GPM_ENGINE_WARNING_NONE) {
+		if (state == DKP_DEVICE_STATE_DISCHARGING)
+			warning_type = GPM_ENGINE_WARNING_DISCHARGING;
 	}
-	return type;
+	return warning_type;
 }
 
 /**
@@ -207,8 +233,7 @@ gpm_engine_get_summary (GpmEngine *engine)
 {
 	guint i;
 	GPtrArray *array;
-	const DkpDevice *device;
-	const DkpObject	*obj;
+	DkpDevice *device;
 	GString *tooltip = NULL;
 	gchar *part;
 
@@ -221,8 +246,7 @@ gpm_engine_get_summary (GpmEngine *engine)
 	array = engine->priv->array;
 	for (i=0;i<array->len;i++) {
 		device = g_ptr_array_index (engine->priv->array, i);
-		obj = dkp_device_get_object (device);
-		part = gpm_devicekit_get_object_summary (obj);
+		part = gpm_devicekit_get_object_summary (device);
 		if (part != NULL)
 			g_string_append_printf (tooltip, "%s\n", part);
 		g_free (part);
@@ -242,32 +266,41 @@ gpm_engine_get_summary (GpmEngine *engine)
  * Returns the icon
  **/
 static gchar *
-gpm_engine_get_icon_priv (GpmEngine *engine, DkpDeviceType type, GpmEngineWarning warning, gboolean state)
+gpm_engine_get_icon_priv (GpmEngine *engine, DkpDeviceType device_type, GpmEngineWarning warning, gboolean use_state)
 {
 	guint i;
 	GPtrArray *array;
-	const DkpDevice *device;
-	const DkpObject	*obj;
+	DkpDevice *device;
 	GpmEngineWarning warning_temp;
+	DkpDeviceType type;
+	DkpDeviceState state;
+	gboolean is_present;
 
 	/* do we have specific device types? */
 	array = engine->priv->array;
 	for (i=0;i<array->len;i++) {
 		device = g_ptr_array_index (engine->priv->array, i);
-		obj = dkp_device_get_object (device);
+
+		/* get device properties */
+		g_object_get (device,
+			      "type", &type,
+			      "state", &state,
+			      "is-present", &is_present,
+			      NULL);
+
 		warning_temp = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(device), "engine-warning-old"));
-		if (obj->type == type && obj->is_present) {
+		if (type == device_type && is_present) {
 			if (warning != GPM_ENGINE_WARNING_NONE) {
 				if (warning_temp == warning)
-					return gpm_devicekit_get_object_icon (obj);
+					return gpm_devicekit_get_object_icon (device);
 				continue;
 			}
-			if (state) {
-				if (obj->state == DKP_DEVICE_STATE_CHARGING || obj->state == DKP_DEVICE_STATE_DISCHARGING)
-					return gpm_devicekit_get_object_icon (obj);
+			if (use_state) {
+				if (state == DKP_DEVICE_STATE_CHARGING || state == DKP_DEVICE_STATE_DISCHARGING)
+					return gpm_devicekit_get_object_icon (device);
 				continue;
 			}
-			return gpm_devicekit_get_object_icon (obj);
+			return gpm_devicekit_get_object_icon (device);
 		}
 	}
 	return NULL;
@@ -471,20 +504,26 @@ gpm_engine_conf_key_changed_cb (GConfClient *conf, guint cnxn_id, GConfEntry *en
  * gpm_engine_device_check_capacity:
  **/
 static gboolean
-gpm_engine_device_check_capacity (GpmEngine *engine, const DkpDevice *device)
+gpm_engine_device_check_capacity (GpmEngine *engine, DkpDevice *device)
 {
-	const DkpObject	*obj;
 	gboolean ret;
+	DkpDeviceType type;
+	gdouble capacity;
 
-	obj = dkp_device_get_object (device);
-	if (obj->type != DKP_DEVICE_TYPE_BATTERY || obj->capacity > 50.0f)
+	/* get device properties */
+	g_object_get (device,
+		      "type", &type,
+		      "capacity", &capacity,
+		      NULL);
+
+	if (type != DKP_DEVICE_TYPE_BATTERY || capacity > 50.0f)
 		return FALSE;
 
 	/* only emit this if specified in gconf */
 	ret = gconf_client_get_bool (engine->priv->conf, GPM_CONF_NOTIFY_LOW_CAPACITY, NULL);
 	if (ret) {
 		egg_debug ("** EMIT: low-capacity");
-		g_signal_emit (engine, signals [LOW_CAPACITY], 0, obj->type, (guint) obj->capacity);
+		g_signal_emit (engine, signals [LOW_CAPACITY], 0, device);
 	}
 	return TRUE;
 }
@@ -496,18 +535,22 @@ static void
 gpm_engine_device_add (GpmEngine *engine, DkpDevice *device)
 {
 	GpmEngineWarning warning;
-	const DkpObject *obj;
+	DkpDeviceState state;
 
 	/* assign warning */
-	obj = dkp_device_get_object (device);
-	warning = gpm_engine_get_warning (engine, obj);
+	warning = gpm_engine_get_warning (engine, device);
 	g_object_set_data (G_OBJECT(device), "engine-warning-old", GUINT_TO_POINTER(warning));
 
 	/* check capacity */
 	gpm_engine_device_check_capacity (engine, device);
 
+	/* get device properties */
+	g_object_get (device,
+		      "state", &state,
+		      NULL);
+
 	/* add old state for transitions */
-	g_object_set_data (G_OBJECT(device), "engine-state-old", GUINT_TO_POINTER(obj->state));
+	g_object_set_data (G_OBJECT(device), "engine-state-old", GUINT_TO_POINTER(state));
 }
 
 /**
@@ -522,22 +565,27 @@ gpm_engine_coldplug_idle_cb (GpmEngine *engine)
 	gboolean has_ups = FALSE;
 	GpmPrefsServer *prefs_server;
 	DkpDevice *device;
-	const DkpObject	*obj;
+	DkpDeviceType type;
 
 	g_return_val_if_fail (engine != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_ENGINE (engine), FALSE);
 
 	/* get array */
-	engine->priv->array = dkp_client_enumerate_devices (engine->priv->client);
+	engine->priv->array = dkp_client_enumerate_devices (engine->priv->client, NULL);
 
 	/* do we have specific device types? */
 	array = engine->priv->array;
 	for (i=0;i<array->len;i++) {
 		device = g_ptr_array_index (engine->priv->array, i);
-		obj = dkp_device_get_object (device);
-		if (obj->type == DKP_DEVICE_TYPE_BATTERY)
+
+		/* get device properties */
+		g_object_get (device,
+			      "type", &type,
+			      NULL);
+
+		if (type == DKP_DEVICE_TYPE_BATTERY)
 			has_battery = TRUE;
-		else if (obj->type == DKP_DEVICE_TYPE_UPS)
+		else if (type == DKP_DEVICE_TYPE_UPS)
 			has_ups = TRUE;
 	}
 
@@ -597,53 +645,56 @@ static void
 gpm_engine_device_changed_cb (DkpClient *client, DkpDevice *device, GpmEngine *engine)
 {
 	DkpDeviceState state;
-	const DkpObject *obj;
+	DkpDeviceState state_old;
 	GpmEngineWarning warning_old;
 	GpmEngineWarning warning;
 	gboolean ret;
 
-	obj = dkp_device_get_object (device);
-
 	/* check the warning state has not changed */
 	warning_old = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(device), "engine-warning-old"));
-	warning = gpm_engine_get_warning (engine, obj);
+	warning = gpm_engine_get_warning (engine, device);
 	if (warning != warning_old) {
 		if (warning == GPM_ENGINE_WARNING_LOW) {
 			egg_debug ("** EMIT: charge-low");
-			g_signal_emit (engine, signals [CHARGE_LOW], 0, obj);
+			g_signal_emit (engine, signals [CHARGE_LOW], 0, device);
 		} else if (warning == GPM_ENGINE_WARNING_CRITICAL) {
 			egg_debug ("** EMIT: charge-low");
-			g_signal_emit (engine, signals [CHARGE_CRITICAL], 0, obj);
+			g_signal_emit (engine, signals [CHARGE_CRITICAL], 0, device);
 		} else if (warning == GPM_ENGINE_WARNING_ACTION) {
 			egg_debug ("** EMIT: charge-low");
-			g_signal_emit (engine, signals [CHARGE_ACTION], 0, obj);
+			g_signal_emit (engine, signals [CHARGE_ACTION], 0, device);
 		}
 		/* save new state */
 		g_object_set_data (G_OBJECT(device), "engine-warning-old", GUINT_TO_POINTER(warning));
 	}
 
-	/* see if any interesting state changes have happened */
-	state = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(device), "engine-state-old"));
-	if (state != obj->state) {
+	/* get device properties */
+	g_object_get (device,
+		      "state", &state,
+		      NULL);
 
-		if (state == DKP_DEVICE_STATE_DISCHARGING) {
+	/* see if any interesting state changes have happened */
+	state_old = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(device), "engine-state-old"));
+	if (state_old != state) {
+
+		if (state_old == DKP_DEVICE_STATE_DISCHARGING) {
 			/* only emit this if specified in gconf */
 			ret = gconf_client_get_bool (engine->priv->conf, GPM_CONF_NOTIFY_DISCHARGING, NULL);
 			if (ret) {
 				egg_debug ("** EMIT: discharging");
-				g_signal_emit (engine, signals [DISCHARGING], 0, obj->type);
+				g_signal_emit (engine, signals [DISCHARGING], 0, device);
 			}
-		} else if (state == DKP_DEVICE_STATE_FULLY_CHARGED) {
+		} else if (state_old == DKP_DEVICE_STATE_FULLY_CHARGED) {
 			/* only emit this if specified in gconf */
 			ret = gconf_client_get_bool (engine->priv->conf, GPM_CONF_NOTIFY_FULLY_CHARGED, NULL);
 			if (ret) {
 				egg_debug ("** EMIT: discharging");
-				g_signal_emit (engine, signals [FULLY_CHARGED], 0, obj->type);
+				g_signal_emit (engine, signals [FULLY_CHARGED], 0, device);
 			}
 		}
 
 		/* save new state */
-		g_object_set_data (G_OBJECT(device), "engine-state-old", GUINT_TO_POINTER(obj->state));
+		g_object_set_data (G_OBJECT(device), "engine-state-old", GUINT_TO_POINTER(state));
 	}
 
 	gpm_engine_recalculate_state (engine);
@@ -673,16 +724,18 @@ gpm_engine_get_devices (GpmEngine *engine)
 static void
 phone_device_added_cb (GpmPhone *phone, guint idx, GpmEngine *engine)
 {
-	DkpObject *obj;
 	DkpDevice *device;
 	device = dkp_device_new ();
 
 	egg_debug ("phone added %i", idx);
-	
-	obj = (DkpObject *) dkp_device_get_object (device);
-	obj->native_path = g_strdup_printf ("phone_%i", idx);
-	obj->is_rechargeable = TRUE;
-	obj->type = DKP_DEVICE_TYPE_PHONE;
+
+	/* get device properties */
+	g_object_set (device,
+		      "type", DKP_DEVICE_TYPE_PHONE,
+		      "is-rechargeable", TRUE,
+		      "native-path", g_strdup_printf ("phone_%i", idx),
+		      "is-present", TRUE,
+		      NULL);
 
 	/* state changed */
 	gpm_engine_device_add (engine, device);
@@ -698,14 +751,19 @@ phone_device_removed_cb (GpmPhone *phone, guint idx, GpmEngine *engine)
 {
 	guint i;
 	DkpDevice *device;
-	const DkpObject *obj;
+	DkpDeviceType type;
 
 	egg_debug ("phone removed %i", idx);
 
 	for (i=0; i<engine->priv->array->len; i++) {
 		device = g_ptr_array_index (engine->priv->array, i);
-		obj = dkp_device_get_object (device);
-		if (obj->type == DKP_DEVICE_TYPE_PHONE) {
+
+		/* get device properties */
+		g_object_get (device,
+			      "type", &type,
+			      NULL);
+
+		if (type == DKP_DEVICE_TYPE_PHONE) {
 			g_ptr_array_remove_index (engine->priv->array, i);
 			g_object_unref (device);
 			break;
@@ -724,17 +782,28 @@ phone_device_refresh_cb (GpmPhone *phone, guint idx, GpmEngine *engine)
 {
 	guint i;
 	DkpDevice *device;
-	DkpObject *obj;
+	DkpDeviceType type;
+	DkpDeviceState state;
+	gboolean is_present;
+	gdouble percentage;
 
 	egg_debug ("phone refresh %i", idx);
 
 	for (i=0; i<engine->priv->array->len; i++) {
 		device = g_ptr_array_index (engine->priv->array, i);
-		obj = (DkpObject *) dkp_device_get_object (device);
-		if (obj->type == DKP_DEVICE_TYPE_PHONE) {
-			obj->is_present = gpm_phone_get_present (phone, idx);
-			obj->state = gpm_phone_get_on_ac (phone, idx) ? DKP_DEVICE_STATE_CHARGING : DKP_DEVICE_STATE_DISCHARGING;
-			obj->percentage = gpm_phone_get_percentage (phone, idx);
+
+		/* get device properties */
+		g_object_get (device,
+			      "type", &type,
+			      "state", &state,
+			      "percentage", &percentage,
+			      "is-present", &is_present,
+			      NULL);
+
+		if (type == DKP_DEVICE_TYPE_PHONE) {
+			is_present = gpm_phone_get_present (phone, idx);
+			state = gpm_phone_get_on_ac (phone, idx) ? DKP_DEVICE_STATE_CHARGING : DKP_DEVICE_STATE_DISCHARGING;
+			percentage = gpm_phone_get_percentage (phone, idx);
 			break;
 		}
 	}
@@ -834,30 +903,30 @@ gpm_engine_class_init (GpmEngineClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmEngineClass, low_capacity),
-			      NULL, NULL, gpm_marshal_VOID__UINT_UINT,
-			      G_TYPE_NONE, 2, G_TYPE_UINT, G_TYPE_UINT);
+			      NULL, NULL, g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE, 1, G_TYPE_POINTER);
 	signals [PERHAPS_RECALL] =
 		g_signal_new ("perhaps-recall",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmEngineClass, perhaps_recall),
-			      NULL, NULL, gpm_marshal_VOID__UINT_STRING_STRING,
+			      NULL, NULL, gpm_marshal_VOID__POINTER_STRING_STRING,
 			      G_TYPE_NONE,
-			      3, G_TYPE_UINT, G_TYPE_STRING, G_TYPE_STRING);
+			      3, G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING);
 	signals [FULLY_CHARGED] =
 		g_signal_new ("fully-charged",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmEngineClass, fully_charged),
 			      NULL, NULL, g_cclosure_marshal_VOID__UINT,
-			      G_TYPE_NONE, 1, G_TYPE_UINT);
+			      G_TYPE_NONE, 1, G_TYPE_POINTER);
 	signals [DISCHARGING] =
 		g_signal_new ("discharging",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmEngineClass, discharging),
-			      NULL, NULL, g_cclosure_marshal_VOID__UINT,
-			      G_TYPE_NONE, 1, G_TYPE_UINT);
+			      NULL, NULL, g_cclosure_marshal_VOID__POINTER,
+			      G_TYPE_NONE, 1, G_TYPE_POINTER);
 	signals [CHARGE_ACTION] =
 		g_signal_new ("charge-action",
 			      G_TYPE_FROM_CLASS (object_class),

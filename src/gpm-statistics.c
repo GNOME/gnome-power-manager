@@ -30,11 +30,10 @@
 #include <gtk/gtk.h>
 #include <dbus/dbus-glib.h>
 #include <gconf/gconf-client.h>
+#include <devkit-power-gobject/devicekit-power.h>
 
 #include "egg-debug.h"
 #include "egg-color.h"
-#include "egg-string.h"
-#include "egg-obj-list.h"
 #include "egg-array-float.h"
 #include "egg-unique.h"
 
@@ -42,11 +41,6 @@
 #include "gpm-stock-icons.h"
 #include "gpm-devicekit.h"
 #include "gpm-graph-widget.h"
-#include "dkp-client.h"
-#include "dkp-history-obj.h"
-#include "dkp-stats-obj.h"
-#include "dkp-device.h"
-#include "dkp-wakeups.h"
 
 static GladeXML *glade_xml = NULL;
 static GtkListStore *list_store_info = NULL;
@@ -230,13 +224,13 @@ gpm_stats_add_info_data (const gchar *attr, const gchar *text)
 /**
  * gpm_stats_update_smooth_data:
  **/
-static EggObjList *
-gpm_stats_update_smooth_data (EggObjList *list)
+static GPtrArray *
+gpm_stats_update_smooth_data (GPtrArray *list)
 {
 	guint i;
 	GpmPointObj *point;
-	GpmPointObj point_new;
-	EggObjList *new;
+	GpmPointObj *point_new;
+	GPtrArray *new;
 	EggArrayFloat *raw;
 	EggArrayFloat *convolved;
 	EggArrayFloat *outliers;
@@ -246,7 +240,7 @@ gpm_stats_update_smooth_data (EggObjList *list)
 	raw = egg_array_float_new (list->len);
 	convolved = egg_array_float_new (list->len);
 	for (i=0; i<list->len; i++) {
-		point = (GpmPointObj *) egg_obj_list_index (list, i);
+		point = (GpmPointObj *) g_ptr_array_index (list, i);
 		egg_array_float_set (raw, i, point->y);
 	}
 
@@ -258,15 +252,14 @@ gpm_stats_update_smooth_data (EggObjList *list)
 	convolved = egg_array_float_convolve (outliers, gaussian);
 
 	/* add the smoothed data back into a new array */
-	new = egg_obj_list_new ();
-	egg_obj_list_set_copy (new, (EggObjListCopyFunc) dkp_point_obj_copy);
-	egg_obj_list_set_free (new, (EggObjListFreeFunc) dkp_point_obj_free);
+	new = g_ptr_array_new ();
 	for (i=0; i<list->len; i++) {
-		point = (GpmPointObj *) egg_obj_list_index (list, i);
-		point_new.color = point->color;
-		point_new.x = point->x;
-		point_new.y = egg_array_float_get (convolved, i);
-		egg_obj_list_add (new, &point_new);
+		point = (GpmPointObj *) g_ptr_array_index (list, i);
+		point_new = g_new0 (GpmPointObj, 1);
+		point_new->color = point->color;
+		point_new->x = point->x;
+		point_new->y = egg_array_float_get (convolved, i);
+		g_ptr_array_add (new, point_new);
 	}
 
 	/* free data */
@@ -313,118 +306,165 @@ gpm_stats_bool_to_text (gboolean ret)
  * gpm_stats_update_info_page_details:
  **/
 static void
-gpm_stats_update_info_page_details (const DkpDevice *device)
+gpm_stats_update_info_page_details (DkpDevice *device)
 {
-	const DkpObject *obj;
 	struct tm *time_tm;
 	time_t t;
 	gchar time_buf[256];
 	gchar *text;
 	guint refreshed;
+	DkpDeviceType type;
+	DkpDeviceState state;
+	DkpDeviceTechnology technology;
+	gdouble percentage;
+	gdouble capacity;
+	gdouble energy;
+	gdouble energy_empty;
+	gdouble energy_full;
+	gdouble energy_full_design;
+	gdouble energy_rate;
+	gdouble voltage;
+	gboolean online;
+	gboolean is_present;
+	gboolean power_supply;
+	gboolean is_rechargeable;
+	guint64 update_time;
+	gint64 time_to_full;
+	gint64 time_to_empty;
+	gchar *vendor = NULL;
+	gchar *serial = NULL;
+	gchar *model = NULL;
 
 	gtk_list_store_clear (list_store_info);
 
-	obj = dkp_device_get_object (device);
+	/* get device properties */
+	g_object_get (device,
+		      "type", &type,
+		      "state", &state,
+		      "percentage", &percentage,
+		      "online", &online,
+		      "update_time", &update_time,
+		      "power_supply", &power_supply,
+		      "is_rechargeable", &is_rechargeable,
+		      "is-present", &is_present,
+		      "time-to-full", &time_to_full,
+		      "time-to-empty", &time_to_empty,
+		      "technology", &technology,
+		      "capacity", &capacity,
+		      "energy", &energy,
+		      "energy-empty", &energy_empty,
+		      "energy-full", &energy_full,
+		      "energy-full-design", &energy_full_design,
+		      "energy-rate", &energy_rate,
+		      "voltage", &voltage,
+		      "vendor", &vendor,
+		      "serial", &serial,
+		      "model", &model,
+		      NULL);
 
 	/* get a human readable time */
-	t = (time_t) obj->update_time;
+	t = (time_t) update_time;
 	time_tm = localtime (&t);
 	strftime (time_buf, sizeof time_buf, "%c", time_tm);
 
 	gpm_stats_add_info_data (_("Device"), dkp_device_get_object_path (device));
-	gpm_stats_add_info_data (_("Type"), gpm_device_type_to_localised_text (obj->type, 1));
-	if (!egg_strzero (obj->vendor))
-		gpm_stats_add_info_data (_("Vendor"), obj->vendor);
-	if (!egg_strzero (obj->model))
-		gpm_stats_add_info_data (_("Model"), obj->model);
-	if (!egg_strzero (obj->serial))
-		gpm_stats_add_info_data (_("Serial number"), obj->serial);
-	gpm_stats_add_info_data (_("Supply"), gpm_stats_bool_to_text (obj->power_supply));
+	gpm_stats_add_info_data (_("Type"), gpm_device_type_to_localised_text (type, 1));
+	if (vendor != NULL && vendor[0] != '\0')
+		gpm_stats_add_info_data (_("Vendor"), vendor);
+	if (model != NULL && model[0] != '\0')
+		gpm_stats_add_info_data (_("Model"), model);
+	if (serial != NULL && serial[0] != '\0')
+		gpm_stats_add_info_data (_("Serial number"), serial);
+	gpm_stats_add_info_data (_("Supply"), gpm_stats_bool_to_text (power_supply));
 
-	refreshed = (int) (time (NULL) - obj->update_time);
+	refreshed = (int) (time (NULL) - update_time);
 	text = g_strdup_printf (ngettext ("%d second", "%d seconds", refreshed), refreshed);
 	gpm_stats_add_info_data (_("Refreshed"), text);
 	g_free (text);
 
-	if (obj->type == DKP_DEVICE_TYPE_BATTERY ||
-	    obj->type == DKP_DEVICE_TYPE_MOUSE ||
-	    obj->type == DKP_DEVICE_TYPE_KEYBOARD ||
-	    obj->type == DKP_DEVICE_TYPE_UPS)
-		gpm_stats_add_info_data (_("Present"), gpm_stats_bool_to_text (obj->is_present));
-	if (obj->type == DKP_DEVICE_TYPE_BATTERY ||
-	    obj->type == DKP_DEVICE_TYPE_MOUSE ||
-	    obj->type == DKP_DEVICE_TYPE_KEYBOARD)
-		gpm_stats_add_info_data (_("Rechargeable"), gpm_stats_bool_to_text (obj->is_rechargeable));
-	if (obj->type == DKP_DEVICE_TYPE_BATTERY ||
-	    obj->type == DKP_DEVICE_TYPE_MOUSE ||
-	    obj->type == DKP_DEVICE_TYPE_KEYBOARD)
-		gpm_stats_add_info_data (_("State"), dkp_device_state_to_text (obj->state));
-	if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
-		text = g_strdup_printf ("%.1f Wh", obj->energy);
+	if (type == DKP_DEVICE_TYPE_BATTERY ||
+	    type == DKP_DEVICE_TYPE_MOUSE ||
+	    type == DKP_DEVICE_TYPE_KEYBOARD ||
+	    type == DKP_DEVICE_TYPE_UPS)
+		gpm_stats_add_info_data (_("Present"), gpm_stats_bool_to_text (is_present));
+	if (type == DKP_DEVICE_TYPE_BATTERY ||
+	    type == DKP_DEVICE_TYPE_MOUSE ||
+	    type == DKP_DEVICE_TYPE_KEYBOARD)
+		gpm_stats_add_info_data (_("Rechargeable"), gpm_stats_bool_to_text (is_rechargeable));
+	if (type == DKP_DEVICE_TYPE_BATTERY ||
+	    type == DKP_DEVICE_TYPE_MOUSE ||
+	    type == DKP_DEVICE_TYPE_KEYBOARD)
+		gpm_stats_add_info_data (_("State"), dkp_device_state_to_text (state));
+	if (type == DKP_DEVICE_TYPE_BATTERY) {
+		text = g_strdup_printf ("%.1f Wh", energy);
 		gpm_stats_add_info_data (_("Energy"), text);
 		g_free (text);
-		text = g_strdup_printf ("%.1f Wh", obj->energy_empty);
+		text = g_strdup_printf ("%.1f Wh", energy_empty);
 		gpm_stats_add_info_data (_("Energy when empty"), text);
 		g_free (text);
-		text = g_strdup_printf ("%.1f Wh", obj->energy_full);
+		text = g_strdup_printf ("%.1f Wh", energy_full);
 		gpm_stats_add_info_data (_("Energy when full"), text);
 		g_free (text);
-		text = g_strdup_printf ("%.1f Wh", obj->energy_full_design);
+		text = g_strdup_printf ("%.1f Wh", energy_full_design);
 		gpm_stats_add_info_data (_("Energy (design)"), text);
 		g_free (text);
 	}
-	if (obj->type == DKP_DEVICE_TYPE_BATTERY ||
-	    obj->type == DKP_DEVICE_TYPE_MONITOR) {
-		text = g_strdup_printf ("%.1f W", obj->energy_rate);
+	if (type == DKP_DEVICE_TYPE_BATTERY ||
+	    type == DKP_DEVICE_TYPE_MONITOR) {
+		text = g_strdup_printf ("%.1f W", energy_rate);
 		gpm_stats_add_info_data (_("Rate"), text);
 		g_free (text);
 	}
-	if (obj->type == DKP_DEVICE_TYPE_UPS ||
-	    obj->type == DKP_DEVICE_TYPE_BATTERY ||
-	    obj->type == DKP_DEVICE_TYPE_MONITOR) {
-		text = g_strdup_printf ("%.1f V", obj->voltage);
+	if (type == DKP_DEVICE_TYPE_UPS ||
+	    type == DKP_DEVICE_TYPE_BATTERY ||
+	    type == DKP_DEVICE_TYPE_MONITOR) {
+		text = g_strdup_printf ("%.1f V", voltage);
 		gpm_stats_add_info_data (_("Voltage"), text);
 		g_free (text);
 	}
-	if (obj->type == DKP_DEVICE_TYPE_BATTERY ||
-	    obj->type == DKP_DEVICE_TYPE_UPS) {
-		if (obj->time_to_full >= 0) {
-			text = gpm_stats_time_to_text (obj->time_to_full);
+	if (type == DKP_DEVICE_TYPE_BATTERY ||
+	    type == DKP_DEVICE_TYPE_UPS) {
+		if (time_to_full >= 0) {
+			text = gpm_stats_time_to_text (time_to_full);
 			gpm_stats_add_info_data (_("Time to full"), text);
 			g_free (text);
 		}
-		if (obj->time_to_empty >= 0) {
-			text = gpm_stats_time_to_text (obj->time_to_empty);
+		if (time_to_empty >= 0) {
+			text = gpm_stats_time_to_text (time_to_empty);
 			gpm_stats_add_info_data (_("Time to empty"), text);
 			g_free (text);
 		}
 	}
-	if (obj->type == DKP_DEVICE_TYPE_BATTERY ||
-	    obj->type == DKP_DEVICE_TYPE_MOUSE ||
-	    obj->type == DKP_DEVICE_TYPE_KEYBOARD ||
-	    obj->type == DKP_DEVICE_TYPE_UPS) {
-		text = g_strdup_printf ("%.1f%%", obj->percentage);
+	if (type == DKP_DEVICE_TYPE_BATTERY ||
+	    type == DKP_DEVICE_TYPE_MOUSE ||
+	    type == DKP_DEVICE_TYPE_KEYBOARD ||
+	    type == DKP_DEVICE_TYPE_UPS) {
+		text = g_strdup_printf ("%.1f%%", percentage);
 		gpm_stats_add_info_data (_("Percentage"), text);
 		g_free (text);
 	}
-	if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
-		text = g_strdup_printf ("%.1f%%", obj->capacity);
+	if (type == DKP_DEVICE_TYPE_BATTERY) {
+		text = g_strdup_printf ("%.1f%%", capacity);
 		gpm_stats_add_info_data (_("Capacity"), text);
 		g_free (text);
 	}
-	if (obj->type == DKP_DEVICE_TYPE_BATTERY)
-		gpm_stats_add_info_data (_("Technology"), gpm_device_technology_to_localised_text (obj->technology));
-	if (obj->type == DKP_DEVICE_TYPE_LINE_POWER)
-		gpm_stats_add_info_data (_("Online"), gpm_stats_bool_to_text (obj->online));
+	if (type == DKP_DEVICE_TYPE_BATTERY)
+		gpm_stats_add_info_data (_("Technology"), gpm_device_technology_to_localised_text (technology));
+	if (type == DKP_DEVICE_TYPE_LINE_POWER)
+		gpm_stats_add_info_data (_("Online"), gpm_stats_bool_to_text (online));
+
+	g_free (vendor);
+	g_free (serial);
+	g_free (model);
 }
 
 /**
  * gpm_stats_set_graph_data:
  **/
 static void
-gpm_stats_set_graph_data (GtkWidget *widget, EggObjList *data, gboolean use_smoothed, gboolean use_points)
+gpm_stats_set_graph_data (GtkWidget *widget, GPtrArray *data, gboolean use_smoothed, gboolean use_points)
 {
-	EggObjList *smoothed;
+	GPtrArray *smoothed;
 
 	gpm_graph_widget_data_clear (GPM_GRAPH_WIDGET (widget));
 
@@ -439,7 +479,8 @@ gpm_stats_set_graph_data (GtkWidget *widget, EggObjList *data, gboolean use_smoo
 		if (use_points)
 			gpm_graph_widget_data_assign (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_PLOT_POINTS, data);
 		gpm_graph_widget_data_assign (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_PLOT_LINE, smoothed);
-		g_object_unref (smoothed);
+		g_ptr_array_foreach (smoothed, (GFunc) gpm_point_obj_free, NULL);
+		g_ptr_array_free (smoothed, TRUE);
 	}
 
 	/* show */
@@ -450,23 +491,20 @@ gpm_stats_set_graph_data (GtkWidget *widget, EggObjList *data, gboolean use_smoo
  * gpm_stats_update_info_page_history:
  **/
 static void
-gpm_stats_update_info_page_history (const DkpDevice *device)
+gpm_stats_update_info_page_history (DkpDevice *device)
 {
-	EggObjList *array;
+	GPtrArray *array;
 	guint i;
 	DkpHistoryObj *hobj;
 	GtkWidget *widget;
 	gboolean checked;
 	gboolean points;
 	GpmPointObj *point;
-	EggObjList *new;
+	GPtrArray *new;
 	gint32 offset = 0;
 	GTimeVal timeval;
 
-	new = egg_obj_list_new ();
-	egg_obj_list_set_copy (new, (EggObjListCopyFunc) dkp_point_obj_copy);
-	egg_obj_list_set_free (new, (EggObjListFreeFunc) dkp_point_obj_free);
-
+	new = g_ptr_array_new ();
 	widget = glade_xml_get_widget (glade_xml, "custom_graph_history");
 	gpm_graph_widget_set_type_x (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_TIME);
 	if (strcmp (history_type, GPM_HISTORY_CHARGE_VALUE) == 0)
@@ -476,7 +514,7 @@ gpm_stats_update_info_page_history (const DkpDevice *device)
 	else
 		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_TIME);
 
-	array = dkp_device_get_history (device, history_type, history_time, 150);
+	array = dkp_device_get_history (device, history_type, history_time, 150, NULL);
 	if (array == NULL) {
 		gtk_widget_hide (widget);
 		goto out;
@@ -487,13 +525,13 @@ gpm_stats_update_info_page_history (const DkpDevice *device)
 	offset = timeval.tv_sec;
 
 	for (i=0; i<array->len; i++) {
-		hobj = (DkpHistoryObj *) egg_obj_list_index (array, i);
+		hobj = (DkpHistoryObj *) g_ptr_array_index (array, i);
 
 		/* abandon this point */
 		if (hobj->state == DKP_DEVICE_STATE_UNKNOWN)
 			continue;
 
-		point = dkp_point_obj_new ();
+		point = gpm_point_obj_new ();
 		point->x = (gint32) hobj->time - offset;
 		point->y = hobj->value;
 		if (hobj->state == DKP_DEVICE_STATE_CHARGING)
@@ -506,8 +544,7 @@ gpm_stats_update_info_page_history (const DkpDevice *device)
 			else
 				point->color = egg_color_from_rgb (0, 255, 0);
 		}
-		egg_obj_list_add (new, point);
-		dkp_point_obj_free (point);
+		g_ptr_array_add (new, point);
 	}
 
 	/* render */
@@ -521,8 +558,10 @@ gpm_stats_update_info_page_history (const DkpDevice *device)
 	widget = glade_xml_get_widget (glade_xml, "custom_graph_history");
 	gpm_stats_set_graph_data (widget, new, checked, points);
 
-	g_object_unref (array);
-	g_object_unref (new);
+	g_ptr_array_foreach (array, (GFunc) dkp_history_obj_free, NULL);
+	g_ptr_array_free (array, TRUE);
+	g_ptr_array_foreach (new, (GFunc) gpm_point_obj_free, NULL);
+	g_ptr_array_free (new, TRUE);
 out:
 	return;
 }
@@ -531,23 +570,20 @@ out:
  * gpm_stats_update_info_page_stats:
  **/
 static void
-gpm_stats_update_info_page_stats (const DkpDevice *device)
+gpm_stats_update_info_page_stats (DkpDevice *device)
 {
-	EggObjList *array;
+	GPtrArray *array;
 	guint i;
 	DkpStatsObj *sobj;
 	GtkWidget *widget;
 	gboolean checked;
 	gboolean points;
 	GpmPointObj *point;
-	EggObjList *new;
+	GPtrArray *new;
 	gboolean use_data = FALSE;
 	const gchar *type = NULL;
 
-	new = egg_obj_list_new ();
-	egg_obj_list_set_copy (new, (EggObjListCopyFunc) dkp_point_obj_copy);
-	egg_obj_list_set_free (new, (EggObjListFreeFunc) dkp_point_obj_free);
-
+	new = g_ptr_array_new ();
 	widget = glade_xml_get_widget (glade_xml, "custom_graph_stats");
 	if (strcmp (stats_type, GPM_STATS_CHARGE_DATA_VALUE) == 0) {
 		type = "charging";
@@ -571,23 +607,22 @@ gpm_stats_update_info_page_stats (const DkpDevice *device)
 	else
 		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
 
-	array = dkp_device_get_statistics (device, type);
+	array = dkp_device_get_statistics (device, type, NULL);
 	if (array == NULL) {
 		gtk_widget_hide (widget);
 		goto out;
 	}
 
 	for (i=0; i<array->len; i++) {
-		sobj = (DkpStatsObj *) egg_obj_list_index (array, i);
-		point = dkp_point_obj_new ();
+		sobj = (DkpStatsObj *) g_ptr_array_index (array, i);
+		point = gpm_point_obj_new ();
 		point->x = i;
 		if (use_data)
 			point->y = sobj->value;
 		else
 			point->y = sobj->accuracy;
 		point->color = egg_color_from_rgb (255, 0, 0);
-		egg_obj_list_add (new, point);
-		dkp_point_obj_free (point);
+		g_ptr_array_add (new, point);
 	}
 
 	/* render */
@@ -601,8 +636,10 @@ gpm_stats_update_info_page_stats (const DkpDevice *device)
 	widget = glade_xml_get_widget (glade_xml, "custom_graph_stats");
 	gpm_stats_set_graph_data (widget, new, checked, points);
 
-	g_object_unref (array);
-	g_object_unref (new);
+	g_ptr_array_foreach (array, (GFunc) dkp_stats_obj_free, NULL);
+	g_ptr_array_free (array, TRUE);
+	g_ptr_array_foreach (new, (GFunc) gpm_point_obj_free, NULL);
+	g_ptr_array_free (new, TRUE);
 out:
 	return;
 }
@@ -611,7 +648,7 @@ out:
  * gpm_stats_update_info_data_page:
  **/
 static void
-gpm_stats_update_info_data_page (const DkpDevice *device, gint page)
+gpm_stats_update_info_data_page (DkpDevice *device, gint page)
 {
 	if (page == 0)
 		gpm_stats_update_info_page_details (device);
@@ -625,15 +662,22 @@ gpm_stats_update_info_data_page (const DkpDevice *device, gint page)
  * gpm_stats_update_info_data:
  **/
 static void
-gpm_stats_update_info_data (const DkpDevice *device)
+gpm_stats_update_info_data (DkpDevice *device)
 {
 	gint page;
 	GtkWidget *widget;
 	GtkWidget *page_widget;
-	const DkpObject	*obj;
+	gboolean has_history;
+	gboolean has_statistics;
+
+	/* get properties */
+	g_object_get (device,
+		      "has-history", &has_history,
+		      "has-statistics", &has_statistics,
+		      NULL);
+
 
 	widget = glade_xml_get_widget (glade_xml, "notebook1");
-	obj = dkp_device_get_object (device);
 
 	/* show info page */
 	page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK(widget), 0);
@@ -641,14 +685,14 @@ gpm_stats_update_info_data (const DkpDevice *device)
 
 	/* hide history if no support */
 	page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK(widget), 1);
-	if (obj->has_history)
+	if (has_history)
 		gtk_widget_show (page_widget);
 	else
 		gtk_widget_hide (page_widget);
 
 	/* hide statistics if no support */
 	page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK(widget), 2);
-	if (obj->has_statistics)
+	if (has_statistics)
 		gtk_widget_show (page_widget);
 	else
 		gtk_widget_hide (page_widget);
@@ -950,11 +994,11 @@ gpm_stats_notebook_changed_cb (GtkNotebook *notebook, GtkNotebookPage *page, gin
 	if (current_device == NULL)
 		return;
 
-	if (egg_strequal (current_device, "wakeups"))
+	if (g_strcmp0 (current_device, "wakeups") == 0)
 		return;
 
 	device = dkp_device_new ();
-	dkp_device_set_object_path (device, current_device);
+	dkp_device_set_object_path (device, current_device, NULL);
 	gpm_stats_update_info_data_page (device, page_num);
 	gpm_stats_update_info_data (device);
 	g_object_unref (device);
@@ -968,7 +1012,7 @@ gpm_stats_button_update_ui (void)
 {
 	DkpDevice *device;
 	device = dkp_device_new ();
-	dkp_device_set_object_path (device, current_device);
+	dkp_device_set_object_path (device, current_device, NULL);
 	gpm_stats_update_info_data (device);
 	g_object_unref (device);
 }
@@ -995,11 +1039,11 @@ gpm_stats_devices_treeview_clicked_cb (GtkTreeSelection *selection, gboolean dat
 		egg_debug ("selected row is: %s", current_device);
 
 		/* is special device */
-		if (egg_strequal (current_device, "wakeups")) {
+		if (g_strcmp0 (current_device, "wakeups") == 0) {
 			gpm_stats_update_wakeups_data ();
 		} else {
 			device = dkp_device_new ();
-			dkp_device_set_object_path (device, current_device);
+			dkp_device_set_object_path (device, current_device, NULL);
 			gpm_stats_update_info_data (device);
 			g_object_unref (device);
 		}
@@ -1040,18 +1084,22 @@ gpm_stats_window_activated_cb (EggUnique *egg_unique, gpointer data)
  * gpm_stats_add_device:
  **/
 static void
-gpm_stats_add_device (const DkpDevice *device)
+gpm_stats_add_device (DkpDevice *device)
 {
 	const gchar *id;
 	GtkTreeIter iter;
-	const DkpObject *obj;
 	const gchar *text;
 	const gchar *icon;
+	DkpDeviceType type;
 
-	obj = dkp_device_get_object (device);
+	/* get device properties */
+	g_object_get (device,
+		      "type", &type,
+		      NULL);
+
 	id = dkp_device_get_object_path (device);
-	text = gpm_device_type_to_localised_text (obj->type, 1);
-	icon = gpm_devicekit_get_object_icon (obj);
+	text = gpm_device_type_to_localised_text (type, 1);
+	icon = gpm_devicekit_get_object_icon (device);
 
 	gtk_list_store_append (list_store_devices, &iter);
 	gtk_list_store_set (list_store_devices, &iter,
@@ -1066,7 +1114,7 @@ gpm_stats_add_device (const DkpDevice *device)
 static void
 gpm_stats_data_changed_cb (DkpClient *client, gpointer user_data)
 {
-	if (egg_strequal (current_device, "wakeups"))
+	if (g_strcmp0 (current_device, "wakeups") == 0)
 		gpm_stats_update_wakeups_data ();
 }
 
@@ -1074,7 +1122,7 @@ gpm_stats_data_changed_cb (DkpClient *client, gpointer user_data)
  * gpm_stats_device_added_cb:
  **/
 static void
-gpm_stats_device_added_cb (DkpClient *client, const DkpDevice *device, gpointer user_data)
+gpm_stats_device_added_cb (DkpClient *client, DkpDevice *device, gpointer user_data)
 {
 	const gchar *object_path;
 	object_path = dkp_device_get_object_path (device);
@@ -1086,7 +1134,7 @@ gpm_stats_device_added_cb (DkpClient *client, const DkpDevice *device, gpointer 
  * gpm_stats_device_changed_cb:
  **/
 static void
-gpm_stats_device_changed_cb (DkpClient *client, const DkpDevice *device, gpointer user_data)
+gpm_stats_device_changed_cb (DkpClient *client, DkpDevice *device, gpointer user_data)
 {
 	const gchar *object_path;
 	object_path = dkp_device_get_object_path (device);
@@ -1101,7 +1149,7 @@ gpm_stats_device_changed_cb (DkpClient *client, const DkpDevice *device, gpointe
  * gpm_stats_device_removed_cb:
  **/
 static void
-gpm_stats_device_removed_cb (DkpClient *client, const DkpDevice *device, gpointer user_data)
+gpm_stats_device_removed_cb (DkpClient *client, DkpDevice *device, gpointer user_data)
 {
 	const gchar *object_path;
 	GtkTreeIter iter;
@@ -1534,7 +1582,7 @@ main (int argc, char *argv[])
 	g_signal_connect (wakeups, "data-changed", G_CALLBACK (gpm_stats_data_changed_cb), NULL);
 
 	/* coldplug */
-	devices = dkp_client_enumerate_devices (client);
+	devices = dkp_client_enumerate_devices (client, NULL);
 	if (devices == NULL)
 		goto out;
 	for (i=0; i < devices->len; i++) {

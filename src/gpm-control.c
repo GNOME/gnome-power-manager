@@ -41,7 +41,7 @@
 #include <dbus/dbus-glib-lowlevel.h>
 #include <gnome-keyring.h>
 #include <gconf/gconf-client.h>
-#include <dkp-client.h>
+#include <devkit-power-gobject/devicekit-power.h>
 
 #ifdef HAVE_POLKIT
 #include <polkit/polkit.h>

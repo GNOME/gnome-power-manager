@@ -102,6 +102,7 @@ XRANDR_REQUIRED=1.2.0
 POLKIT_GNOME_REQUIRED=0.8
 CANBERRA_REQUIRED=0.10
 DEVKIT_REQUIRED=001
+DEVKIT_POWER_REQUIRED=007
 
 dnl ---------------------------------------------------------------------------
 dnl - Make above strings available for packaging files (e.g. rpm spec files)
@@ -172,7 +173,9 @@ PKG_CHECK_MODULES(UNIQUE, unique-1.0 >= $UNIQUE_REQUIRED)
 AC_SUBST(UNIQUE_CFLAGS)
 AC_SUBST(UNIQUE_LIBS)
 
-PKG_CHECK_MODULES(DEVKIT, devkit-gobject >= $DEVKIT_REQUIRED)
+PKG_CHECK_MODULES(DEVKIT, [
+ devkit-gobject >= $DEVKIT_REQUIRED
+ devkit-power-gobject >= $DEVKIT_POWER_REQUIRED])
 AC_SUBST(DEVKIT_CFLAGS)
 AC_SUBST(DEVKIT_LIBS)
 
@@ -623,7 +626,6 @@ applets/Makefile
 applets/brightness/Makefile
 applets/inhibit/Makefile
 libhal-glib/Makefile
-libdevkit-power/Makefile
 docs/Makefile
 man/Makefile
 help/Makefile

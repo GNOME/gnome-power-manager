@@ -32,9 +32,9 @@ typedef struct
 	guint32		 color;
 } GpmPointObj;
 
-GpmPointObj	*dkp_point_obj_new		(void);
-GpmPointObj	*dkp_point_obj_copy		(const GpmPointObj	*cobj);
-void		 dkp_point_obj_free		(GpmPointObj		*obj);
+GpmPointObj	*gpm_point_obj_new		(void);
+GpmPointObj	*gpm_point_obj_copy		(const GpmPointObj	*cobj);
+void		 gpm_point_obj_free		(GpmPointObj		*obj);
 
 G_END_DECLS
 

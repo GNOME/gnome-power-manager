@@ -20,6 +20,8 @@ INCLUDES =						\
 	$(LIBNOTIFY_CFLAGS)				\
 	$(CANBERRA_CFLAGS)				\
 	$(GSTREAMER_CFLAGS)				\
+	-DI_KNOW_THE_DEVICEKIT_POWER_API_IS_SUBJECT_TO_CHANGE \
+	$(DEVKIT_CFLAGS)				\
 	$(POLKIT_CFLAGS)				\
 	$(POLKIT_GNOME_CFLAGS)				\
 	-DBINDIR=\"$(bindir)\"			 	\
@@ -35,15 +37,11 @@ INCLUDES =						\
 	-DEGG_LOGGING="\"GPM_LOGGING\""			\
 	-DEGG_CONSOLE="\"GPM_CONSOLE\""			\
 	-I$(top_srcdir)					\
-	-I$(top_srcdir)/libdevkit-power			\
 	-I$(top_srcdir)/libhal-glib			\
 	$(NULL)
 
 LOCAL_LIBHAL_LIBS =					\
 	$(top_builddir)/libhal-glib/libhal.la
-
-DEVKIT_POWER_LIBS =					\
-	$(top_builddir)/libdevkit-power/libdevkit-power.la
 
 bin_PROGRAMS =						\
 	gnome-power-manager				\
@@ -63,8 +61,6 @@ gnome_power_statistics_SOURCES =			\
 	egg-unique.c					\
 	egg-precision.h					\
 	egg-precision.c					\
-	egg-obj-list.c					\
-	egg-obj-list.h					\
 	egg-array-float.c				\
 	egg-array-float.h				\
 	egg-idletime.h					\
@@ -82,7 +78,7 @@ gnome_power_statistics_SOURCES =			\
 
 gnome_power_statistics_LDADD =				\
 	$(GLIB_LIBS)					\
-	$(DEVKIT_POWER_LIBS)				\
+	$(DEVKIT_LIBS)					\
 	$(GNOME_LIBS)					\
 	$(UNIQUE_LIBS)					\
 	$(DBUS_LIBS)					\
@@ -226,7 +222,7 @@ gnome_power_manager_LDADD =				\
 	$(LIBNOTIFY_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
 	$(LOCAL_LIBHAL_LIBS)				\
-	$(DEVKIT_POWER_LIBS)				\
+	$(DEVKIT_LIBS)					\
 	$(NULL)
 
 gnome_power_manager_CFLAGS =				\
@@ -296,7 +292,7 @@ gnome_power_self_test_LDADD =				\
 	$(GNOME_LIBS)					\
 	$(GSTREAMER_LIBS)				\
 	$(POLKIT_GNOME_LIBS)				\
-	$(DEVKIT_POWER_LIBS)				\
+	$(DEVKIT_LIBS)					\
 	$(DBUS_LIBS)					\
 	$(LIBNOTIFY_LIBS)				\
 	$(LOCAL_LIBHAL_LIBS)				\

@@ -23,7 +23,6 @@
 #define __GPM_GRAPH_WIDGET_H__
 
 #include <gtk/gtk.h>
-#include "egg-obj-list.h"
 #include "gpm-point-obj.h"
 
 G_BEGIN_DECLS
@@ -82,7 +81,7 @@ void		 gpm_graph_widget_enable_legend		(GpmGraphWidget		*graph,
 gboolean	 gpm_graph_widget_data_clear		(GpmGraphWidget		*graph);
 gboolean	 gpm_graph_widget_data_assign		(GpmGraphWidget		*graph,
 							 GpmGraphWidgetPlot	 plot,
-							 EggObjList		*array);
+							 GPtrArray		*array);
 void		 gpm_graph_widget_set_type_x		(GpmGraphWidget		*graph,
 							 GpmGraphWidgetType	 axis);
 void		 gpm_graph_widget_set_type_y		(GpmGraphWidget		*graph,

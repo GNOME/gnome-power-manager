@@ -23,8 +23,7 @@
 #define __GPM_DEVICEKIT_H
 
 #include <glib-object.h>
-#include "dkp-enum.h"
-#include "dkp-object.h"
+#include <devkit-power-gobject/devicekit-power.h>
 
 G_BEGIN_DECLS
 
@@ -32,9 +31,9 @@ const gchar	*gpm_device_type_to_localised_text	(DkpDeviceType	 type,
 							 guint		 number);
 const gchar	*gpm_device_type_to_icon		(DkpDeviceType	 type);
 const gchar	*gpm_device_technology_to_localised_text (DkpDeviceTechnology technology_enum);
-gchar		*gpm_devicekit_get_object_icon		(const DkpObject *obj);
-gchar		*gpm_devicekit_get_object_summary	(const DkpObject *obj);
-gchar		*gpm_devicekit_get_object_description	(const DkpObject *obj);
+gchar		*gpm_devicekit_get_object_icon		(DkpDevice *device);
+gchar		*gpm_devicekit_get_object_summary	(DkpDevice *device);
+gchar		*gpm_devicekit_get_object_description	(DkpDevice *device);
 
 G_END_DECLS
 

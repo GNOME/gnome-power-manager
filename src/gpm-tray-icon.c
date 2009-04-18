@@ -39,7 +39,7 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <gconf/gconf-client.h>
-#include <dkp-device.h>
+#include <devkit-power-gobject/devicekit-power.h>
 
 #include "egg-debug.h"
 
@@ -177,7 +177,6 @@ gpm_tray_icon_show_info_cb (GtkMenuItem *item, gpointer data)
 	gchar *description = NULL;
 	GtkWidget *dialog;
 	GtkWidget *image;
-	const DkpObject	*obj;
 	const gchar *object_path;
 	DkpDevice *device = NULL;
 	gboolean ret;
@@ -196,12 +195,11 @@ gpm_tray_icon_show_info_cb (GtkMenuItem *item, gpointer data)
 	}
 
 	device = dkp_device_new ();
-	ret = dkp_device_set_object_path (device, object_path);
+	ret = dkp_device_set_object_path (device, object_path, NULL);
 	if (!ret)
 		goto out;
-	obj = dkp_device_get_object (device);
-	icon_name = gpm_devicekit_get_object_icon (obj);
-	description = gpm_devicekit_get_object_description (obj);
+	icon_name = gpm_devicekit_get_object_icon (device);
+	description = gpm_devicekit_get_object_description (device);
 
 	image = gtk_image_new ();
 	dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -466,15 +464,22 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon, GtkMenu *menu, const GPtrArray *arr
 	GtkWidget *item;
 	GtkWidget *image;
 	const gchar *object_path;
-	const DkpObject	*obj;
 	const gchar *desc;
-	const DkpDevice *device;
+	DkpDevice *device;
+	DkpDeviceType type_tmp;
+	gdouble percentage;
 
 	/* find type */
 	for (i=0;i<array->len;i++) {
 		device = g_ptr_array_index (array, i);
-		obj = dkp_device_get_object (device);
-		if (obj->type != type)
+
+		/* get device properties */
+		g_object_get (device,
+			      "type", &type_tmp,
+			      "percentage", &percentage,
+			      NULL);
+
+		if (type != type_tmp)
 			continue;
 
 		object_path = dkp_device_get_object_path (device);
@@ -483,11 +488,11 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon, GtkMenu *menu, const GPtrArray *arr
 
 		/* generate the label */
 		desc = gpm_device_type_to_localised_text (type, 1);
-		label = g_strdup_printf ("%s (%.1f%%)", desc, obj->percentage);
+		label = g_strdup_printf ("%s (%.1f%%)", desc, percentage);
 		item = gtk_image_menu_item_new_with_label (label);
 
 		/* generate the image */
-		icon_name = gpm_devicekit_get_object_icon (obj);
+		icon_name = gpm_devicekit_get_object_icon (device);
 		image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
 		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
 

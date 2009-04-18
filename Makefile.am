@@ -3,7 +3,6 @@ ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = 						\
 	libhal-glib					\
-	libdevkit-power					\
 	src						\
 	po						\
 	docs						\

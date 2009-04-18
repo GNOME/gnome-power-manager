@@ -28,6 +28,7 @@
 #include "gpm-common.h"
 #include "gpm-point-obj.h"
 #include "gpm-graph-widget.h"
+
 #include "egg-debug.h"
 #include "egg-color.h"
 #include "egg-precision.h"
@@ -207,6 +208,29 @@ gpm_graph_widget_init (GpmGraphWidget *graph)
 }
 
 /**
+ * gpm_graph_widget_data_clear:
+ **/
+gboolean
+gpm_graph_widget_data_clear (GpmGraphWidget *graph)
+{
+	guint i;
+	GPtrArray *array;
+
+	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
+
+	for (i=0; i<graph->priv->data_list->len; i++) {
+		array = g_ptr_array_index (graph->priv->data_list, i);
+		g_ptr_array_foreach (array, (GFunc) gpm_point_obj_free, NULL);
+		g_ptr_array_free (array, TRUE);
+	}
+
+	g_ptr_array_set_size (graph->priv->data_list, 0);
+	g_ptr_array_set_size (graph->priv->plot_list, 0);
+
+	return TRUE;
+}
+
+/**
  * gpm_graph_widget_finalize:
  * @object: This graph class instance
  **/
@@ -216,11 +240,11 @@ gpm_graph_widget_finalize (GObject *object)
 	PangoContext *context;
 	GpmGraphWidget *graph = (GpmGraphWidget*) object;
 
-	/* clear key */
+	/* clear key and data */
 	gpm_graph_widget_key_data_clear (graph);
+	gpm_graph_widget_data_clear (graph);
 
 	/* free data */
-	g_ptr_array_foreach (graph->priv->data_list, (GFunc) g_object_unref, NULL);
 	g_ptr_array_free (graph->priv->data_list, TRUE);
 	g_ptr_array_free (graph->priv->plot_list, TRUE);
 
@@ -231,34 +255,31 @@ gpm_graph_widget_finalize (GObject *object)
 }
 
 /**
- * gpm_graph_widget_data_clear:
- **/
-gboolean
-gpm_graph_widget_data_clear (GpmGraphWidget *graph)
-{
-	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
-
-	g_ptr_array_foreach (graph->priv->data_list, (GFunc) g_object_unref, NULL);
-	g_ptr_array_set_size (graph->priv->data_list, 0);
-	g_ptr_array_set_size (graph->priv->plot_list, 0);
-
-	return TRUE;
-}
-
-/**
  * gpm_graph_widget_data_assign:
  * @graph: This class instance
+ * @data: an array of GpmPointObj's
  *
  * Sets the data for the graph
  **/
 gboolean
-gpm_graph_widget_data_assign (GpmGraphWidget *graph, GpmGraphWidgetPlot plot, EggObjList *data)
+gpm_graph_widget_data_assign (GpmGraphWidget *graph, GpmGraphWidgetPlot plot, GPtrArray *data)
 {
+	GPtrArray *copy;
+	GpmPointObj *obj;
+	guint i;
+
 	g_return_val_if_fail (data != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
 
+	/* make a deep copy */
+	copy = g_ptr_array_new ();
+	for (i=0; i<data->len; i++) {
+		obj = gpm_point_obj_copy (g_ptr_array_index (data, i));
+		g_ptr_array_add (copy, obj);
+	}
+
 	/* get the new data */
-	g_ptr_array_add (graph->priv->data_list, g_object_ref (data));
+	g_ptr_array_add (graph->priv->data_list, copy);
 	g_ptr_array_add (graph->priv->plot_list, GUINT_TO_POINTER(plot));
 
 	/* refresh */
@@ -498,7 +519,7 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 	gfloat smallest_y = G_MAXFLOAT;
 	guint rounding_x = 1;
 	guint rounding_y = 1;
-	EggObjList *data;
+	GPtrArray *data;
 	GpmPointObj *point;
 	guint i, j;
 	guint len = 0;
@@ -528,7 +549,7 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 	for (j=0; j<array->len; j++) {
 		data = g_ptr_array_index (array, j);
 		for (i=0; i < data->len; i++) {
-			point = (GpmPointObj *) egg_obj_list_index (data, i);
+			point = (GpmPointObj *) g_ptr_array_index (data, i);
 			if (point->x > biggest_x)
 				biggest_x = point->x;
 			if (point->y > biggest_y)
@@ -709,7 +730,7 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 {
 	gfloat oldx, oldy;
 	gfloat newx, newy;
-	EggObjList *data;
+	GPtrArray *data;
 	GPtrArray *array;
 	GpmGraphWidgetPlot plot;
 	GpmPointObj *point;
@@ -731,14 +752,14 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 		plot = GPOINTER_TO_UINT (g_ptr_array_index (graph->priv->plot_list, j));
 
 		/* get the very first point so we can work out the old */
-		point = (GpmPointObj *) egg_obj_list_index (data, 0);
+		point = (GpmPointObj *) g_ptr_array_index (data, 0);
 		oldx = 0;
 		oldy = 0;
 		gpm_graph_widget_get_pos_on_graph (graph, point->x, point->y, &oldx, &oldy);
 		gpm_graph_widget_draw_dot (cr, oldx, oldy, point->color);
 
 		for (i=1; i < data->len; i++) {
-			point = (GpmPointObj *) egg_obj_list_index (data, i);
+			point = (GpmPointObj *) g_ptr_array_index (data, i);
 
 			gpm_graph_widget_get_pos_on_graph (graph, point->x, point->y, &newx, &newy);
 

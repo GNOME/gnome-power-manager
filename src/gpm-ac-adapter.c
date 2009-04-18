@@ -37,9 +37,7 @@
 
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
-
- #include <dkp-client.h>
- #include <dkp-device.h>
+#include <devkit-power-gobject/devicekit-power.h>
 
 #include "gpm-common.h"
 #include "egg-debug.h"

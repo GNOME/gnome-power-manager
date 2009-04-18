@@ -23,7 +23,7 @@
 #define __GPM_ENGINE_H
 
 #include <glib-object.h>
-#include <dkp-device.h>
+#include <devkit-power-gobject/devicekit-power.h>
 
 G_BEGIN_DECLS
 
@@ -50,24 +50,21 @@ typedef struct
 	void		(* summary_changed)	(GpmEngine	*engine,
 						 gchar		*status);
 	void		(* perhaps_recall)	(GpmEngine	*engine,
-						 DkpDeviceType	 kind,
+						 DkpDevice	*device,
 						 const gchar	*oem_vendor,
 						 const gchar	*website);
 	void		(* low_capacity)	(GpmEngine	*engine,
-						 DkpDeviceType	 kind,
-						 guint		 capacity);
+						 DkpDevice	*device);
 	void		(* charge_low)		(GpmEngine	*engine,
-						 DkpDeviceType	 kind,
-						 DkpObject	*obj);
+						 DkpDevice	*device);
 	void		(* charge_critical)	(GpmEngine	*engine,
-						 DkpDeviceType	 kind,
-						 DkpObject	*obj);
+						 DkpDevice	*device);
 	void		(* charge_action)	(GpmEngine	*engine,
-						 DkpDeviceType	 kind);
+						 DkpDevice	*device);
 	void		(* fully_charged)	(GpmEngine	*engine,
-						 DkpDeviceType	 kind);
+						 DkpDevice	*device);
 	void		(* discharging)		(GpmEngine	*engine,
-						 DkpDeviceType	 kind);
+						 DkpDevice	*device);
 } GpmEngineClass;
 
 GType		 gpm_engine_get_type		(void);

@@ -40,7 +40,7 @@
 #include <dbus/dbus-glib-lowlevel.h>
 #include <gconf/gconf-client.h>
 #include <canberra-gtk.h>
-#include <dkp-device.h>
+#include <devkit-power-gobject/devicekit-power.h>
 
 #include "egg-debug.h"
 #include "egg-console-kit.h"
@@ -1155,24 +1155,12 @@ gpm_manager_perhaps_recall (GpmManager *manager)
  * gpm_engine_perhaps_recall_cb:
  */
 static void
-gpm_engine_perhaps_recall_cb (GpmEngine *engine, DkpDeviceType type, gchar *oem_vendor, gchar *website, GpmManager *manager)
+gpm_engine_perhaps_recall_cb (GpmEngine *engine, DkpDevice *device, gchar *oem_vendor, gchar *website, GpmManager *manager)
 {
 	g_object_set_data (G_OBJECT (manager), "recall-oem-vendor", (gpointer) g_strdup (oem_vendor));
 	g_object_set_data (G_OBJECT (manager), "recall-oem-website", (gpointer) g_strdup (website));
 	/* delay by a few seconds so the panel can load */
 	g_timeout_add_seconds (GPM_MANAGER_RECALL_DELAY, (GSourceFunc) gpm_manager_perhaps_recall, manager);
-}
-
-/**
- * gpm_engine_low_capacity_cb:
- */
-static void
-gpm_engine_low_capacity_cb (GpmEngine *engine, DkpDeviceType type, guint capacity, GpmManager *manager)
-{
-	/* We should notify the user if the battery has a low capacity,
-	 * where capacity is the ratio of the last_full capacity with that of
-	 * the design capacity. (#326740) */
-	gpm_notify_low_capacity (manager->priv->notify, capacity);
 }
 
 /**
@@ -1197,18 +1185,51 @@ gpm_engine_summary_changed_cb (GpmEngine *engine, gchar *summary, GpmManager *ma
  * gpm_engine_low_capacity_cb:
  */
 static void
-gpm_engine_fully_charged_cb (GpmEngine *engine, DkpDeviceType type, GpmManager *manager)
+gpm_engine_low_capacity_cb (GpmEngine *engine, DkpDevice *device, GpmManager *manager)
 {
+	gdouble capacity;
+
+	/* get device properties */
+	g_object_get (device,
+		      "capacity", &capacity,
+		      NULL);
+
+	/* We should notify the user if the battery has a low capacity,
+	 * where capacity is the ratio of the last_full capacity with that of
+	 * the design capacity. (#326740) */
+	gpm_notify_low_capacity (manager->priv->notify, capacity);
+}
+
+/**
+ * gpm_engine_fully_charged_cb:
+ */
+static void
+gpm_engine_fully_charged_cb (GpmEngine *engine, DkpDevice *device, GpmManager *manager)
+{
+	DkpDeviceType type;
+
+	/* get device properties */
+	g_object_get (device,
+		      "type", &type,
+		      NULL);
+
 	if (type == DKP_DEVICE_TYPE_BATTERY)
 		gpm_notify_fully_charged_primary (manager->priv->notify);
 }
 
 /**
- * gpm_engine_low_capacity_cb:
+ * gpm_engine_discharging_cb:
  */
 static void
-gpm_engine_discharging_cb (GpmEngine *engine, DkpDeviceType type, GpmManager *manager)
+gpm_engine_discharging_cb (GpmEngine *engine, DkpDevice *device, GpmManager *manager)
 {
+	DkpDeviceType type;
+
+	/* get device properties */
+	g_object_get (device,
+		      "type", &type,
+		      NULL);
+
 	if (type == DKP_DEVICE_TYPE_BATTERY)
 		gpm_notify_discharging_primary (manager->priv->notify);
 	else if (type == DKP_DEVICE_TYPE_UPS)
@@ -1245,42 +1266,52 @@ control_sleep_failure_cb (GpmControl *control, GpmControlAction action, GpmManag
  * gpm_engine_charge_low_cb:
  */
 static void
-gpm_engine_charge_low_cb (GpmEngine *engine, DkpObject *obj, GpmManager *manager)
+gpm_engine_charge_low_cb (GpmEngine *engine, DkpDevice *device, GpmManager *manager)
 {
 	const gchar *title = NULL;
 	gchar *message = NULL;
 	gchar *remaining_text;
 	gchar *icon;
+	DkpDeviceType type;
+	gdouble percentage;
+	gint64 time_to_empty;
 
-	if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
+	/* get device properties */
+	g_object_get (device,
+		      "type", &type,
+		      "percentage", &percentage,
+		      "time-to-empty", &time_to_empty,
+		      NULL);
+
+	if (type == DKP_DEVICE_TYPE_BATTERY) {
 		title = _("Laptop battery low");
-		remaining_text = gpm_get_timestring (obj->time_to_empty);
+		remaining_text = gpm_get_timestring (time_to_empty);
 		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%.1f%%)"),
-					   remaining_text, obj->percentage);
-	} else if (obj->type == DKP_DEVICE_TYPE_UPS) {
+					   remaining_text, percentage);
+	} else if (type == DKP_DEVICE_TYPE_UPS) {
 		title = _("UPS low");
-		remaining_text = gpm_get_timestring (obj->time_to_empty);
+		remaining_text = gpm_get_timestring (time_to_empty);
 		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"),
-					   remaining_text, obj->percentage);
-	} else if (obj->type == DKP_DEVICE_TYPE_MOUSE) {
+					   remaining_text, percentage);
+	} else if (type == DKP_DEVICE_TYPE_MOUSE) {
 		title = _("Mouse battery low");
-		message = g_strdup_printf (_("The wireless mouse attached to this computer is low in power (%.1f%%)"), obj->percentage);
+		message = g_strdup_printf (_("The wireless mouse attached to this computer is low in power (%.1f%%)"), percentage);
 
-	} else if (obj->type == DKP_DEVICE_TYPE_KEYBOARD) {
+	} else if (type == DKP_DEVICE_TYPE_KEYBOARD) {
 		title = _("Keyboard battery low");
-		message = g_strdup_printf (_("The wireless keyboard attached to this computer is low in power (%.1f%%)"), obj->percentage);
+		message = g_strdup_printf (_("The wireless keyboard attached to this computer is low in power (%.1f%%)"), percentage);
 
-	} else if (obj->type == DKP_DEVICE_TYPE_PDA) {
+	} else if (type == DKP_DEVICE_TYPE_PDA) {
 		title = _("PDA battery low");
-		message = g_strdup_printf (_("The PDA attached to this computer is low in power (%.1f%%)"), obj->percentage);
+		message = g_strdup_printf (_("The PDA attached to this computer is low in power (%.1f%%)"), percentage);
 
-	} else if (obj->type == DKP_DEVICE_TYPE_PHONE) {
+	} else if (type == DKP_DEVICE_TYPE_PHONE) {
 		title = _("Cell phone battery low");
-		message = g_strdup_printf (_("The cell phone attached to this computer is low in power (%.1f%%)"), obj->percentage);
+		message = g_strdup_printf (_("The cell phone attached to this computer is low in power (%.1f%%)"), percentage);
 	}
 
 	/* get correct icon */
-	icon = gpm_devicekit_get_object_icon (obj);
+	icon = gpm_devicekit_get_object_icon (device);
 	gpm_notify_display (manager->priv->notify, title, message, GPM_NOTIFY_TIMEOUT_LONG, icon, GPM_NOTIFY_URGENCY_NORMAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
 	g_free (icon);
@@ -1301,7 +1332,7 @@ gpm_manager_get_time_until_action_text (GpmManager *manager)
  * gpm_engine_charge_critical_cb:
  */
 static void
-gpm_engine_charge_critical_cb (GpmEngine *engine, DkpObject *obj, GpmManager *manager)
+gpm_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, GpmManager *manager)
 {
 	const gchar *title = NULL;
 	gchar *message = NULL;
@@ -1310,10 +1341,20 @@ gpm_engine_charge_critical_cb (GpmEngine *engine, DkpObject *obj, GpmManager *ma
 	gchar *action;
 	gchar *icon;
 	gchar *time_text;
+	DkpDeviceType type;
+	gdouble percentage;
+	gint64 time_to_empty;
 
-	if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
+	/* get device properties */
+	g_object_get (device,
+		      "type", &type,
+		      "percentage", &percentage,
+		      "time-to-empty", &time_to_empty,
+		      NULL);
+
+	if (type == DKP_DEVICE_TYPE_BATTERY) {
 		title = _("Laptop battery critically low");
-		remaining_text = gpm_get_timestring (obj->time_to_empty);
+		remaining_text = gpm_get_timestring (time_to_empty);
 		time_text = gpm_manager_get_time_until_action_text (manager);
 
 		/* we have to do different warnings depending on the policy */
@@ -1334,43 +1375,43 @@ gpm_engine_charge_critical_cb (GpmEngine *engine, DkpObject *obj, GpmManager *ma
 			action_text = g_strdup_printf (_("This computer will shutdown in %s if the AC is not connected."), time_text);
 
 		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%.1f%%). %s"),
-					   remaining_text, obj->percentage, action_text);
+					   remaining_text, percentage, action_text);
 
 		g_free (action);
 		g_free (action_text);
 		g_free (remaining_text);
 		g_free (time_text);
-	} else if (obj->type == DKP_DEVICE_TYPE_UPS) {
+	} else if (type == DKP_DEVICE_TYPE_UPS) {
 		title = _("UPS critically low");
-		remaining_text = gpm_get_timestring (obj->time_to_empty);
+		remaining_text = gpm_get_timestring (time_to_empty);
 		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining UPS power (%.1f%%). "
 					     "Restore AC power to your computer to avoid losing data."),
-					   remaining_text, obj->percentage);
+					   remaining_text, percentage);
 		g_free (remaining_text);
-	} else if (obj->type == DKP_DEVICE_TYPE_MOUSE) {
+	} else if (type == DKP_DEVICE_TYPE_MOUSE) {
 		title = _("Mouse battery low");
 		message = g_strdup_printf (_("The wireless mouse attached to this computer is very low in power (%.1f%%). "
 					     "This device will soon stop functioning if not charged."),
-					   obj->percentage);
-	} else if (obj->type == DKP_DEVICE_TYPE_KEYBOARD) {
+					   percentage);
+	} else if (type == DKP_DEVICE_TYPE_KEYBOARD) {
 		title = _("Keyboard battery low");
 		message = g_strdup_printf (_("The wireless keyboard attached to this computer is very low in power (%.1f%%). "
 					     "This device will soon stop functioning if not charged."),
-					   obj->percentage);
-	} else if (obj->type == DKP_DEVICE_TYPE_PDA) {
+					   percentage);
+	} else if (type == DKP_DEVICE_TYPE_PDA) {
 		title = _("PDA battery low");
 		message = g_strdup_printf (_("The PDA attached to this computer is very low in power (%.1f%%). "
 					     "This device will soon stop functioning if not charged."),
-					   obj->percentage);
-	} else if (obj->type == DKP_DEVICE_TYPE_PHONE) {
+					   percentage);
+	} else if (type == DKP_DEVICE_TYPE_PHONE) {
 		title = _("Cell phone battery low");
 		message = g_strdup_printf (_("Your cell phone is very low in power (%.1f%%). "
 					     "This device will soon stop functioning if not charged."),
-					   obj->percentage);
+					   percentage);
 	}
 
 	/* get correct icon */
-	icon = gpm_devicekit_get_object_icon (obj);
+	icon = gpm_devicekit_get_object_icon (device);
 	gpm_notify_display (manager->priv->notify, title, message, GPM_NOTIFY_TIMEOUT_LONG, icon, GPM_NOTIFY_URGENCY_CRITICAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
 	g_free (icon);
@@ -1381,14 +1422,20 @@ gpm_engine_charge_critical_cb (GpmEngine *engine, DkpObject *obj, GpmManager *ma
  * gpm_engine_charge_action_cb:
  */
 static void
-gpm_engine_charge_action_cb (GpmEngine *engine, DkpObject *obj, GpmManager *manager)
+gpm_engine_charge_action_cb (GpmEngine *engine, DkpDevice *device, GpmManager *manager)
 {
 	const gchar *title = NULL;
 	gchar *action;
 	gchar *message = NULL;
 	gchar *icon;
+	DkpDeviceType type;
 
-	if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
+	/* get device properties */
+	g_object_get (device,
+		      "type", &type,
+		      NULL);
+
+	if (type == DKP_DEVICE_TYPE_BATTERY) {
 		title = _("Laptop battery critically low");
 
 		/* we have to do different warnings depending on the policy */
@@ -1420,7 +1467,7 @@ gpm_engine_charge_action_cb (GpmEngine *engine, DkpObject *obj, GpmManager *mana
 		/* wait 10 seconds for user-panic */
 		g_timeout_add_seconds (10, (GSourceFunc) manager_critical_action_do, manager);
 
-	} else if (obj->type == DKP_DEVICE_TYPE_UPS) {
+	} else if (type == DKP_DEVICE_TYPE_UPS) {
 		title = _("UPS critically low");
 
 		/* we have to do different warnings depending on the policy */
@@ -1449,7 +1496,7 @@ gpm_engine_charge_action_cb (GpmEngine *engine, DkpObject *obj, GpmManager *mana
 		return;
 
 	/* get correct icon */
-	icon = gpm_devicekit_get_object_icon (obj);
+	icon = gpm_devicekit_get_object_icon (device);
 	gpm_notify_display (manager->priv->notify,
 			    title, message, GPM_NOTIFY_TIMEOUT_LONG,
 			    icon, GPM_NOTIFY_URGENCY_CRITICAL);

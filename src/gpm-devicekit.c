@@ -22,15 +22,16 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <devkit-power-gobject/devicekit-power.h>
 
 #include "egg-debug.h"
 #include "egg-precision.h"
 
-#include "dkp-enum.h"
-#include "dkp-object.h"
-
 #include "gpm-devicekit.h"
 #include "gpm-common.h"
+
+#define GPM_DKP_TIME_PRECISION			5*60
+#define GPM_DKP_TEXT_MIN_TIME			120
 
 /**
  * gpm_devicekit_get_object_icon_index:
@@ -47,17 +48,20 @@
  * Return value: The character string for the filename suffix.
  **/
 static const gchar *
-gpm_devicekit_get_object_icon_index (const DkpObject *obj)
+gpm_devicekit_get_object_icon_index (DkpDevice *device)
 {
-	if (obj->percentage < 10)
+	gdouble percentage;
+	/* get device properties */
+	g_object_get (device, "percentage", &percentage, NULL);
+	if (percentage < 10)
 		return "000";
-	else if (obj->percentage < 30)
+	else if (percentage < 30)
 		return "020";
-	else if (obj->percentage < 50)
+	else if (percentage < 50)
 		return "040";
-	else if (obj->percentage < 70)
+	else if (percentage < 70)
 		return "060";
-	else if (obj->percentage < 90)
+	else if (percentage < 90)
 		return "080";
 	return "100";
 }
@@ -69,70 +73,82 @@ gpm_devicekit_get_object_icon_index (const DkpObject *obj)
  *
  **/
 gchar *
-gpm_devicekit_get_object_icon (const DkpObject *obj)
+gpm_devicekit_get_object_icon (DkpDevice *device)
 {
 	gchar *filename = NULL;
 	const gchar *prefix = NULL;
 	const gchar *index_str;
+	DkpDeviceType type;
+	DkpDeviceState state;
+	gboolean is_present;
+	gdouble percentage;
 
-	g_return_val_if_fail (obj != NULL, NULL);
+	g_return_val_if_fail (device != NULL, NULL);
+
+	/* get device properties */
+	g_object_get (device,
+		      "type", &type,
+		      "state", &state,
+		      "percentage", &percentage,
+		      "is-present", &is_present,
+		      NULL);
 
 	/* get correct icon prefix */
-	prefix = dkp_device_type_to_text (obj->type);
+	prefix = dkp_device_type_to_text (type);
 
 	/* get the icon from some simple rules */
-	if (obj->type == DKP_DEVICE_TYPE_LINE_POWER) {
+	if (type == DKP_DEVICE_TYPE_LINE_POWER) {
 		filename = g_strdup ("gpm-ac-adapter");
-	} else if (obj->type == DKP_DEVICE_TYPE_MONITOR) {
+	} else if (type == DKP_DEVICE_TYPE_MONITOR) {
 		filename = g_strdup ("gpm-monitor");
-	} else if (obj->type == DKP_DEVICE_TYPE_UPS) {
-		if (!obj->is_present) {
+	} else if (type == DKP_DEVICE_TYPE_UPS) {
+		if (!is_present) {
 			/* battery missing */
 			filename = g_strdup_printf ("gpm-%s-missing", prefix);
 
-		} else if (obj->state == DKP_DEVICE_STATE_FULLY_CHARGED) {
+		} else if (state == DKP_DEVICE_STATE_FULLY_CHARGED) {
 			filename = g_strdup_printf ("gpm-%s-100", prefix);
 
-		} else if (obj->state == DKP_DEVICE_STATE_CHARGING) {
-			index_str = gpm_devicekit_get_object_icon_index (obj);
+		} else if (state == DKP_DEVICE_STATE_CHARGING) {
+			index_str = gpm_devicekit_get_object_icon_index (device);
 			filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index_str);
 
-		} else if (obj->state == DKP_DEVICE_STATE_DISCHARGING) {
-			index_str = gpm_devicekit_get_object_icon_index (obj);
+		} else if (state == DKP_DEVICE_STATE_DISCHARGING) {
+			index_str = gpm_devicekit_get_object_icon_index (device);
 			filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 		}
-	} else if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
-		if (!obj->is_present) {
+	} else if (type == DKP_DEVICE_TYPE_BATTERY) {
+		if (!is_present) {
 			/* battery missing */
 			filename = g_strdup_printf ("gpm-%s-missing", prefix);
 
-		} else if (obj->state == DKP_DEVICE_STATE_FULLY_CHARGED) {
+		} else if (state == DKP_DEVICE_STATE_FULLY_CHARGED) {
 			filename = g_strdup_printf ("gpm-%s-charged", prefix);
 
-		} else if (obj->state == DKP_DEVICE_STATE_UNKNOWN && obj->percentage > 95.0f) {
-			egg_warning ("fixing up unknown %f", obj->percentage);
+		} else if (state == DKP_DEVICE_STATE_UNKNOWN && percentage > 95.0f) {
+			egg_warning ("fixing up unknown %f", percentage);
 			filename = g_strdup_printf ("gpm-%s-charged", prefix);
 
-		} else if (obj->state == DKP_DEVICE_STATE_CHARGING) {
-			index_str = gpm_devicekit_get_object_icon_index (obj);
+		} else if (state == DKP_DEVICE_STATE_CHARGING) {
+			index_str = gpm_devicekit_get_object_icon_index (device);
 			filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index_str);
 
-		} else if (obj->state == DKP_DEVICE_STATE_DISCHARGING) {
-			index_str = gpm_devicekit_get_object_icon_index (obj);
+		} else if (state == DKP_DEVICE_STATE_DISCHARGING) {
+			index_str = gpm_devicekit_get_object_icon_index (device);
 			filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 		}
-	} else if (obj->type == DKP_DEVICE_TYPE_MOUSE ||
-		   obj->type == DKP_DEVICE_TYPE_KEYBOARD ||
-		   obj->type == DKP_DEVICE_TYPE_PHONE) {
-		if (!obj->is_present) {
+	} else if (type == DKP_DEVICE_TYPE_MOUSE ||
+		   type == DKP_DEVICE_TYPE_KEYBOARD ||
+		   type == DKP_DEVICE_TYPE_PHONE) {
+		if (!is_present) {
 			/* battery missing */
 			filename = g_strdup_printf ("gpm-%s-000", prefix);
 
-		} else if (obj->state == DKP_DEVICE_STATE_FULLY_CHARGED) {
+		} else if (state == DKP_DEVICE_STATE_FULLY_CHARGED) {
 			filename = g_strdup_printf ("gpm-%s-100", prefix);
 
-		} else if (obj->state == DKP_DEVICE_STATE_DISCHARGING) {
-			index_str = gpm_devicekit_get_object_icon_index (obj);
+		} else if (state == DKP_DEVICE_STATE_DISCHARGING) {
+			index_str = gpm_devicekit_get_object_icon_index (device);
 			filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 		}
 	}
@@ -140,15 +156,11 @@ gpm_devicekit_get_object_icon (const DkpObject *obj)
 	return filename;
 }
 
-
-#define GPM_DKP_TIME_PRECISION			5*60
-#define GPM_DKP_TEXT_MIN_TIME			120
-
 /**
  * gpm_devicekit_get_object_summary:
  **/
 gchar *
-gpm_devicekit_get_object_summary (const DkpObject *obj)
+gpm_devicekit_get_object_summary (DkpDevice *device)
 {
 	const gchar *type_desc = NULL;
 	gchar *description = NULL;
@@ -156,56 +168,72 @@ gpm_devicekit_get_object_summary (const DkpObject *obj)
 	guint time_to_empty_round;
 	gchar *time_to_full_str;
 	gchar *time_to_empty_str;
+	DkpDeviceType type;
+	DkpDeviceState state;
+	gdouble percentage;
+	gboolean is_present;
+	gint64 time_to_full;
+	gint64 time_to_empty;
 
-	if (!obj->is_present)
+	/* get device properties */
+	g_object_get (device,
+		      "type", &type,
+		      "state", &state,
+		      "percentage", &percentage,
+		      "is-present", &is_present,
+		      "time-to-full", &time_to_full,
+		      "time-to-empty", &time_to_empty,
+		      NULL);
+
+	if (!is_present)
 		return NULL;
 
-	type_desc = gpm_device_type_to_localised_text (obj->type, 1);
+	type_desc = gpm_device_type_to_localised_text (type, 1);
 
 	/* don't display all the extra stuff for keyboards and mice */
-	if (obj->type == DKP_DEVICE_TYPE_MOUSE ||
-	    obj->type == DKP_DEVICE_TYPE_KEYBOARD ||
-	    obj->type == DKP_DEVICE_TYPE_PDA)
-		return g_strdup_printf ("%s (%.1f%%)", type_desc, obj->percentage);
+	if (type == DKP_DEVICE_TYPE_MOUSE ||
+	    type == DKP_DEVICE_TYPE_KEYBOARD ||
+	    type == DKP_DEVICE_TYPE_PDA)
+		return g_strdup_printf ("%s (%.1f%%)", type_desc, percentage);
 
 	/* we care if we are on AC */
-	if (obj->type == DKP_DEVICE_TYPE_PHONE) {
-		if (obj->state == DKP_DEVICE_STATE_CHARGING || !obj->state == DKP_DEVICE_STATE_DISCHARGING)
-			return g_strdup_printf ("%s charging (%.1f%%)", type_desc, obj->percentage);
-		return g_strdup_printf ("%s (%.1f%%)", type_desc, obj->percentage);
+	if (type == DKP_DEVICE_TYPE_PHONE) {
+		if (state == DKP_DEVICE_STATE_CHARGING || !state == DKP_DEVICE_STATE_DISCHARGING)
+			return g_strdup_printf ("%s charging (%.1f%%)", type_desc, percentage);
+		return g_strdup_printf ("%s (%.1f%%)", type_desc, percentage);
 	}
 
 	/* precalculate so we don't get Unknown time remaining */
-	time_to_full_round = egg_precision_round_down (obj->time_to_full, GPM_DKP_TIME_PRECISION);
-	time_to_empty_round = egg_precision_round_down (obj->time_to_empty, GPM_DKP_TIME_PRECISION);
+	time_to_full_round = egg_precision_round_down (time_to_full, GPM_DKP_TIME_PRECISION);
+	time_to_empty_round = egg_precision_round_down (time_to_empty, GPM_DKP_TIME_PRECISION);
 
 	/* we always display "Laptop battery 16 minutes remaining" as we need to clarify what device we are refering to */
-	if (obj->state == DKP_DEVICE_STATE_FULLY_CHARGED) {
+	if (state == DKP_DEVICE_STATE_FULLY_CHARGED) {
 
-		if (obj->type == DKP_DEVICE_TYPE_BATTERY && time_to_empty_round > GPM_DKP_TEXT_MIN_TIME) {
+		if (type == DKP_DEVICE_TYPE_BATTERY && time_to_empty_round > GPM_DKP_TEXT_MIN_TIME) {
 			time_to_empty_str = gpm_get_timestring (time_to_empty_round);
 			description = g_strdup_printf (_("%s fully charged (%.1f%%)\nProvides %s battery runtime"),
-							type_desc, obj->percentage, time_to_empty_str);
+							type_desc, percentage, time_to_empty_str);
 			g_free (time_to_empty_str);
 		} else {
 			description = g_strdup_printf (_("%s fully charged (%.1f%%)"),
-							type_desc, obj->percentage);
+							type_desc, percentage);
 		}
 
-	} else if (obj->state == DKP_DEVICE_STATE_DISCHARGING) {
+	} else if (state == DKP_DEVICE_STATE_DISCHARGING) {
 
 		if (time_to_empty_round > GPM_DKP_TEXT_MIN_TIME) {
 			time_to_empty_str = gpm_get_timestring (time_to_empty_round);
 			description = g_strdup_printf (_("%s %s remaining (%.1f%%)"),
-							type_desc, time_to_empty_str, obj->percentage);
+							type_desc, time_to_empty_str, percentage);
 			g_free (time_to_empty_str);
 		} else {
 			/* don't display "Unknown remaining" */
 			description = g_strdup_printf (_("%s discharging (%.1f%%)"),
-							type_desc, obj->percentage);
+							type_desc, percentage);
 		}
 
-	} else if (obj->state == DKP_DEVICE_STATE_CHARGING) {
+	} else if (state == DKP_DEVICE_STATE_CHARGING) {
 
 		if (time_to_full_round > GPM_DKP_TEXT_MIN_TIME &&
 		    time_to_empty_round > GPM_DKP_TEXT_MIN_TIME) {
@@ -214,7 +242,7 @@ gpm_devicekit_get_object_summary (const DkpObject *obj)
 			time_to_full_str = gpm_get_timestring (time_to_full_round);
 			time_to_empty_str = gpm_get_timestring (time_to_empty_round);
 			description = g_strdup_printf (_("%s %s until charged (%.1f%%)\nProvides %s battery runtime"),
-							type_desc, time_to_full_str, obj->percentage, time_to_empty_str);
+							type_desc, time_to_full_str, percentage, time_to_empty_str);
 			g_free (time_to_full_str);
 			g_free (time_to_empty_str);
 
@@ -223,19 +251,19 @@ gpm_devicekit_get_object_summary (const DkpObject *obj)
 			/* display only charge time */
 			time_to_full_str = gpm_get_timestring (time_to_full_round);
 			description = g_strdup_printf (_("%s %s until charged (%.1f%%)"),
-						type_desc, time_to_full_str, obj->percentage);
+						type_desc, time_to_full_str, percentage);
 			g_free (time_to_full_str);
 		} else {
 
 			/* don't display "Unknown remaining" */
 			description = g_strdup_printf (_("%s charging (%.1f%%)"),
-						type_desc, obj->percentage);
+						type_desc, percentage);
 		}
 
 	} else {
 		egg_warning ("in an undefined state we are not charging or "
 			     "discharging and the batteries are also not charged");
-		description = g_strdup_printf ("%s (%.1f%%)", type_desc, obj->percentage);
+		description = g_strdup_printf ("%s (%.1f%%)", type_desc, percentage);
 	}
 	return description;
 }
@@ -244,91 +272,128 @@ gpm_devicekit_get_object_summary (const DkpObject *obj)
  * gpm_devicekit_get_object_description:
  **/
 gchar *
-gpm_devicekit_get_object_description (const DkpObject *obj)
+gpm_devicekit_get_object_description (DkpDevice *device)
 {
 	GString	*details;
 	const gchar *text;
 	gchar *time_str;
+	DkpDeviceType type;
+	DkpDeviceState state;
+	DkpDeviceTechnology technology;
+	gdouble percentage;
+	gdouble capacity;
+	gdouble energy;
+	gdouble energy_full;
+	gdouble energy_full_design;
+	gdouble energy_rate;
+	gboolean is_present;
+	gint64 time_to_full;
+	gint64 time_to_empty;
+	gchar *vendor = NULL;
+	gchar *serial = NULL;
+	gchar *model = NULL;
 
-	g_return_val_if_fail (obj != NULL, NULL);
+	g_return_val_if_fail (device != NULL, NULL);
+
+	/* get device properties */
+	g_object_get (device,
+		      "type", &type,
+		      "state", &state,
+		      "percentage", &percentage,
+		      "is-present", &is_present,
+		      "time-to-full", &time_to_full,
+		      "time-to-empty", &time_to_empty,
+		      "technology", &technology,
+		      "capacity", &capacity,
+		      "energy", &energy,
+		      "energy-full", &energy_full,
+		      "energy-full-design", &energy_full_design,
+		      "energy-rate", &energy_rate,
+		      "vendor", &vendor,
+		      "serial", &serial,
+		      "model", &model,
+		      NULL);
 
 	details = g_string_new ("");
-	text = gpm_device_type_to_localised_text (obj->type, 1);
+	text = gpm_device_type_to_localised_text (type, 1);
 	g_string_append_printf (details, _("<b>Product:</b> %s\n"), text);
-	if (!obj->is_present)
+	if (!is_present)
 		g_string_append_printf (details, _("<b>Status:</b> %s\n"), _("Missing"));
-	else if (obj->state == DKP_DEVICE_STATE_FULLY_CHARGED)
+	else if (state == DKP_DEVICE_STATE_FULLY_CHARGED)
 		g_string_append_printf (details, _("<b>Status:</b> %s\n"), _("Charged"));
-	else if (obj->state == DKP_DEVICE_STATE_CHARGING)
+	else if (state == DKP_DEVICE_STATE_CHARGING)
 		g_string_append_printf (details, _("<b>Status:</b> %s\n"), _("Charging"));
-	else if (obj->state == DKP_DEVICE_STATE_DISCHARGING)
+	else if (state == DKP_DEVICE_STATE_DISCHARGING)
 		g_string_append_printf (details, _("<b>Status:</b> %s\n"), _("Discharging"));
-	if (obj->percentage >= 0)
-		g_string_append_printf (details, _("<b>Percentage charge:</b> %.1f%%\n"), obj->percentage);
-	if (obj->vendor)
-		g_string_append_printf (details, _("<b>Vendor:</b> %s\n"), obj->vendor);
-	if (obj->technology != DKP_DEVICE_TECHNOLGY_UNKNOWN) {
-		text = gpm_device_technology_to_localised_text (obj->technology);
+	if (percentage >= 0)
+		g_string_append_printf (details, _("<b>Percentage charge:</b> %.1f%%\n"), percentage);
+	if (vendor)
+		g_string_append_printf (details, _("<b>Vendor:</b> %s\n"), vendor);
+	if (technology != DKP_DEVICE_TECHNOLOGY_UNKNOWN) {
+		text = gpm_device_technology_to_localised_text (technology);
 		g_string_append_printf (details, _("<b>Technology:</b> %s\n"), text);
 	}
-	if (obj->serial)
-		g_string_append_printf (details, _("<b>Serial number:</b> %s\n"), obj->serial);
-	if (obj->model)
-		g_string_append_printf (details, _("<b>Model:</b> %s\n"), obj->model);
-	if (obj->time_to_full > 0) {
-		time_str = gpm_get_timestring (obj->time_to_full);
+	if (serial)
+		g_string_append_printf (details, _("<b>Serial number:</b> %s\n"), serial);
+	if (model)
+		g_string_append_printf (details, _("<b>Model:</b> %s\n"), model);
+	if (time_to_full > 0) {
+		time_str = gpm_get_timestring (time_to_full);
 		g_string_append_printf (details, _("<b>Charge time:</b> %s\n"), time_str);
 		g_free (time_str);
 	}
-	if (obj->time_to_empty > 0) {
-		time_str = gpm_get_timestring (obj->time_to_empty);
+	if (time_to_empty > 0) {
+		time_str = gpm_get_timestring (time_to_empty);
 		g_string_append_printf (details, _("<b>Discharge time:</b> %s\n"), time_str);
 		g_free (time_str);
 	}
-	if (obj->capacity > 0) {
+	if (capacity > 0) {
 		const gchar *condition;
-		if (obj->capacity > 99) {
+		if (capacity > 99) {
 			/* Translators: Excellent, Good, Fair and Poor are all related to battery Capacity */
 			condition = _("Excellent");
-		} else if (obj->capacity > 90) {
+		} else if (capacity > 90) {
 			condition = _("Good");
-		} else if (obj->capacity > 70) {
+		} else if (capacity > 70) {
 			condition = _("Fair");
 		} else {
 			condition = _("Poor");
 		}
 		/* Translators: %.1f is a percentage and %s the condition (Excellent, Good, ...) */
 		g_string_append_printf (details, _("<b>Capacity:</b> %.1f%% (%s)\n"),
-					obj->capacity, condition);
+					capacity, condition);
 	}
-	if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
-		if (obj->energy > 0)
+	if (type == DKP_DEVICE_TYPE_BATTERY) {
+		if (energy > 0)
 			g_string_append_printf (details, _("<b>Current charge:</b> %.1f Wh\n"),
-						obj->energy);
-		if (obj->energy_full > 0 &&
-		    obj->energy_full_design != obj->energy_full)
+						energy);
+		if (energy_full > 0 &&
+		    energy_full_design != energy_full)
 			g_string_append_printf (details, _("<b>Last full charge:</b> %.1f Wh\n"),
-						obj->energy_full);
-		if (obj->energy_full_design > 0)
+						energy_full);
+		if (energy_full_design > 0)
 			/* Translators: Design charge is the amount of charge the battery is designed to have when brand new */
 			g_string_append_printf (details, _("<b>Design charge:</b> %.1f Wh\n"),
-						obj->energy_full_design);
-		if (obj->energy_rate > 0)
+						energy_full_design);
+		if (energy_rate > 0)
 			g_string_append_printf (details, _("<b>Charge rate:</b> %.1f W\n"),
-						obj->energy_rate);
+						energy_rate);
 	}
-	if (obj->type == DKP_DEVICE_TYPE_MOUSE ||
-	    obj->type == DKP_DEVICE_TYPE_KEYBOARD) {
-		if (obj->energy > 0)
+	if (type == DKP_DEVICE_TYPE_MOUSE ||
+	    type == DKP_DEVICE_TYPE_KEYBOARD) {
+		if (energy > 0)
 			g_string_append_printf (details, _("<b>Current charge:</b> %.0f/7\n"),
-						obj->energy);
-		if (obj->energy_full_design > 0)
+						energy);
+		if (energy_full_design > 0)
 			g_string_append_printf (details, _("<b>Design charge:</b> %.0f/7\n"),
-						obj->energy_full_design);
+						energy_full_design);
 	}
 	/* remove the last \n */
 	g_string_truncate (details, details->len-1);
 
+	g_free (vendor);
+	g_free (serial);
+	g_free (model);
 	return g_string_free (details, FALSE);
 }
 
@@ -418,25 +483,25 @@ gpm_device_technology_to_localised_text (DkpDeviceTechnology technology_enum)
 {
 	const gchar *technology = NULL;
 	switch (technology_enum) {
-	case DKP_DEVICE_TECHNOLGY_LITHIUM_ION:
+	case DKP_DEVICE_TECHNOLOGY_LITHIUM_ION:
 		technology = _("Lithium Ion");
 		break;
-	case DKP_DEVICE_TECHNOLGY_LITHIUM_POLYMER:
+	case DKP_DEVICE_TECHNOLOGY_LITHIUM_POLYMER:
 		technology = _("Lithium Polymer");
 		break;
-	case DKP_DEVICE_TECHNOLGY_LITHIUM_IRON_PHOSPHATE:
+	case DKP_DEVICE_TECHNOLOGY_LITHIUM_IRON_PHOSPHATE:
 		technology = _("Lithium Iron Phosphate");
 		break;
-	case DKP_DEVICE_TECHNOLGY_LEAD_ACID:
+	case DKP_DEVICE_TECHNOLOGY_LEAD_ACID:
 		technology = _("Lead acid");
 		break;
-	case DKP_DEVICE_TECHNOLGY_NICKEL_CADMIUM:
+	case DKP_DEVICE_TECHNOLOGY_NICKEL_CADMIUM:
 		technology = _("Nickel Cadmium");
 		break;
-	case DKP_DEVICE_TECHNOLGY_NICKEL_METAL_HYDRIDE:
+	case DKP_DEVICE_TECHNOLOGY_NICKEL_METAL_HYDRIDE:
 		technology = _("Nickel metal hydride");
 		break;
-	case DKP_DEVICE_TECHNOLGY_UNKNOWN:
+	case DKP_DEVICE_TECHNOLOGY_UNKNOWN:
 		technology = _("Unknown technology");
 		break;
 	default:
