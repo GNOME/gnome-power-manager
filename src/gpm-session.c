@@ -40,6 +40,7 @@ static void     gpm_session_finalize   (GObject		*object);
 #define GPM_SESSION_MANAGER_INTERFACE			"org.gnome.SessionManager"
 #define GPM_SESSION_MANAGER_PRESENCE_PATH		"/org/gnome/SessionManager/Presence"
 #define GPM_SESSION_MANAGER_PRESENCE_INTERFACE		"org.gnome.SessionManager.Presence"
+#define GPM_SESSION_MANAGER_CLIENT_PRIVATE_INTERFACE	"org.gnome.SessionManager.ClientPrivate"
 #define GPM_DBUS_PROPERTIES_INTERFACE			"org.freedesktop.DBus.Properties"
 
 typedef enum {
@@ -61,6 +62,7 @@ struct GpmSessionPrivate
 {
 	DBusGProxy		*proxy;
 	DBusGProxy		*proxy_presence;
+	DBusGProxy		*proxy_client_private;
 	DBusGProxy		*proxy_prop;
 	gboolean		 is_idle_old;
 	gboolean		 is_inhibited_old;
@@ -69,6 +71,10 @@ struct GpmSessionPrivate
 enum {
 	IDLE_CHANGED,
 	INHIBITED_CHANGED,
+	STOP,
+	QUERY_END_SESSION,
+	END_SESSION,
+	CANCEL_END_SESSION,
 	LAST_SIGNAL
 };
 
@@ -180,6 +186,63 @@ gpm_session_is_inhibited (GpmSession *session)
 }
 
 /**
+ * gpm_session_stop_cb:
+ **/
+static void
+gpm_session_stop_cb (DBusGProxy *proxy, GpmSession *session)
+{
+	egg_debug ("emitting ::stop()");
+	g_signal_emit (session, signals [STOP], 0);
+}
+
+/**
+ * gpm_session_query_end_session_cb:
+ **/
+static void
+gpm_session_query_end_session_cb (DBusGProxy *proxy, guint flags, GpmSession *session)
+{
+	egg_debug ("emitting ::query-end-session(%i)", flags);
+	g_signal_emit (session, signals [QUERY_END_SESSION], 0, flags);
+}
+
+/**
+ * gpm_session_end_session_cb:
+ **/
+static void
+gpm_session_end_session_cb (DBusGProxy *proxy, guint flags, GpmSession *session)
+{
+	egg_debug ("emitting ::end-session(%i)", flags);
+	g_signal_emit (session, signals [END_SESSION], 0, flags);
+}
+
+/**
+ * gpm_session_end_session_response:
+ **/
+gboolean
+gpm_session_end_session_response (GpmSession *session, gboolean is_okay, const gchar *reason)
+{
+	gboolean ret;
+	GError *error = NULL;
+
+	g_return_val_if_fail (GPM_IS_SESSION (session), FALSE);
+	g_return_val_if_fail (session->priv->proxy_client_private != NULL, FALSE);
+
+	/* send response */
+	ret = dbus_g_proxy_call (session->priv->proxy_client_private, "EndSessionResponse", &error,
+				 G_TYPE_BOOLEAN, is_okay,
+				 G_TYPE_STRING, reason,
+				 G_TYPE_INVALID,
+				 G_TYPE_INVALID);
+	if (!ret) {
+		egg_warning ("failed to send session response: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+out:
+	return ret;
+}
+
+/**
  * gpm_session_register_client:
  **/
 gboolean
@@ -188,6 +251,7 @@ gpm_session_register_client (GpmSession *session, const gchar *app_id, const gch
 	gboolean ret;
 	gchar *client_id = NULL;
 	GError *error = NULL;
+	DBusGConnection *connection;
 
 	g_return_val_if_fail (GPM_IS_SESSION (session), FALSE);
 
@@ -201,8 +265,33 @@ gpm_session_register_client (GpmSession *session, const gchar *app_id, const gch
 	if (!ret) {
 		egg_warning ("failed to register client '%s': %s", client_startup_id, error->message);
 		g_error_free (error);
+		goto out;
 	}
+
+	/* get org.gnome.Session.ClientPrivate interface */
+	connection = dbus_g_bus_get (DBUS_BUS_SESSION, NULL);
+	session->priv->proxy_client_private = dbus_g_proxy_new_for_name_owner (connection, GPM_SESSION_MANAGER_SERVICE,
+									       client_id, GPM_SESSION_MANAGER_CLIENT_PRIVATE_INTERFACE, &error);
+	if (session->priv->proxy_client_private == NULL) {
+		egg_warning ("DBUS error: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* get Stop */
+	dbus_g_proxy_add_signal (session->priv->proxy_client_private, "Stop", G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal (session->priv->proxy_client_private, "Stop", G_CALLBACK (gpm_session_stop_cb), session, NULL);
+
+	/* get QueryEndSession */
+	dbus_g_proxy_add_signal (session->priv->proxy_client_private, "QueryEndSession", G_TYPE_UINT, G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal (session->priv->proxy_client_private, "QueryEndSession", G_CALLBACK (gpm_session_query_end_session_cb), session, NULL);
+
+	/* get EndSession */
+	dbus_g_proxy_add_signal (session->priv->proxy_client_private, "EndSession", G_TYPE_UINT, G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal (session->priv->proxy_client_private, "EndSession", G_CALLBACK (gpm_session_end_session_cb), session, NULL);
+
 	egg_debug ("registered startup '%s' to client id '%s'", client_startup_id, client_id);
+out:
 	g_free (client_id);
 	return ret;
 }
@@ -248,6 +337,34 @@ gpm_session_class_init (GpmSessionClass *klass)
 			      G_STRUCT_OFFSET (GpmSessionClass, inhibited_changed),
 			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
 			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+	signals [STOP] =
+		g_signal_new ("stop",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmSessionClass, stop),
+			      NULL, NULL, g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE, 0);
+	signals [QUERY_END_SESSION] =
+		g_signal_new ("query-end-session",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmSessionClass, query_end_session),
+			      NULL, NULL, g_cclosure_marshal_VOID__UINT,
+			      G_TYPE_NONE, 1, G_TYPE_UINT);
+	signals [END_SESSION] =
+		g_signal_new ("end-session",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmSessionClass, end_session),
+			      NULL, NULL, g_cclosure_marshal_VOID__UINT,
+			      G_TYPE_NONE, 1, G_TYPE_UINT);
+	signals [CANCEL_END_SESSION] =
+		g_signal_new ("cancel-end-session",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmSessionClass, cancel_end_session),
+			      NULL, NULL, g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE, 0);
 }
 
 /**
@@ -263,6 +380,7 @@ gpm_session_init (GpmSession *session)
 	session->priv = GPM_SESSION_GET_PRIVATE (session);
 	session->priv->is_idle_old = FALSE;
 	session->priv->is_inhibited_old = FALSE;
+	session->priv->proxy_client_private = NULL;
 
 	connection = dbus_g_bus_get (DBUS_BUS_SESSION, NULL);
 
@@ -330,6 +448,7 @@ gpm_session_finalize (GObject *object)
 
 	g_object_unref (session->priv->proxy);
 	g_object_unref (session->priv->proxy_presence);
+	g_object_unref (session->priv->proxy_client_private);
 	g_object_unref (session->priv->proxy_prop);
 
 	G_OBJECT_CLASS (gpm_session_parent_class)->finalize (object);
