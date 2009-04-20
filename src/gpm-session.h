@@ -45,9 +45,18 @@ typedef struct
 {
 	GObjectClass	parent_class;
 	void		(* idle_changed)		(GpmSession	*session,
-					    		 gboolean	 is_idle);
+							 gboolean	 is_idle);
 	void		(* inhibited_changed)		(GpmSession	*session,
-					    		 gboolean	 is_inhibited);
+							 gboolean	 is_inhibited);
+	/* just exit */
+	void		(* stop)			(GpmSession	*session);
+	/* reply with EndSessionResponse */
+	void		(* query_end_session)		(GpmSession	*session,
+							 guint		 flags);
+	/* reply with EndSessionResponse */
+	void		(* end_session)			(GpmSession	*session,
+							 guint		 flags);
+	void		(* cancel_end_session)		(GpmSession	*session);
 } GpmSessionClass;
 
 GType		 gpm_session_get_type			(void);
@@ -59,6 +68,9 @@ gboolean	 gpm_session_get_inhibited		(GpmSession	*session);
 gboolean	 gpm_session_register_client		(GpmSession	*session,
 							 const gchar	*app_id,
 							 const gchar	*client_startup_id);
+gboolean	 gpm_session_end_session_response	(GpmSession	*session,
+							 gboolean	 is_okay,
+							 const gchar	*reason);
 
 G_END_DECLS
 
