@@ -2,14 +2,14 @@ Follow http://developer.gnome.org/dotplan/for_maintainers.html and http://live.g
 
 • update configure.in, NEWS, ChangeLog (the "==== <version> ====") to the right release
 • Add translators to NEWS: maintainer.py -w -r GNOME_POWER_MANAGER_2_25_92
-• Run "make distcheck", correct any problems encountered (don't forget to update the ChangeLog if you make any changes)
+• Run "make distcheck", correct any problems encountered
 • Commit all the changes
 • Create a tag:
 
-svn copy \
-svn+ssh://rhughes@svn.gnome.org/svn/gnome-power-manager/trunk \
-svn+ssh://rhughes@svn.gnome.org/svn/gnome-power-manager/tags/GNOME_POWER_MANAGER_2_25_92 \
--m "Tagged for release 2.25.92"
+git commit -a -m "==== Version 2.26.1 ===="
+git tag GNOME_POWER_MANAGER_2_26_1
+git push --tags
+git push
 
 • Copy the resulting tarball to master.gnome.org (scp)
 scp gnome-power-manager-*.tar.gz  rhughes@master.gnome.org:
@@ -21,6 +21,9 @@ install-module gnome-power-manager-*.tar.gz
 
 - Do a post-release version bump by updating configure.in
 
+git commit -a -m "Post release version bump"
+git push
+
 - Update jhbuild modulesets
 
 - Notify gnome-announce-list@gnome.org, gnome-doc-list@gnome.org, gnome-i18n@gnome.org
@@ -28,13 +31,7 @@ install-module gnome-power-manager-*.tar.gz
 GNOME Power Manager is a session daemon that makes it easy to manage the
 power on your laptop or desktop system.
 
-This _unstable_ release contains lots of crazy new code since 2.25.3 was released. WARNING, this code will impregnate your cat called Dave and steal all of the magazines from the bathroom.
+This stable release contains important fixes since 2.24.4 was released. Distributions should consider upgrading gnome-power-manager via errata packages if possible.
 
 - Done!
 
-Making a Branch
-===============
-
-svn cp svn+ssh://rhughes@svn.gnome.org/svn/gnome-power-manager/trunk svn+ssh://rhughes@svn.gnome.org/svn/gnome-power-manager/branches/gnome-2-24  -m "Branched for gnome-2-24"
-
-Additionally, gnome-power-manager has branched, with future development work being done in trunk.
