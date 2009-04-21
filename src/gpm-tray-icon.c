@@ -636,7 +636,7 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 	icon->priv->conf = gconf_client_get_default ();
 	/* watch gnome-power-manager keys */
 	gconf_client_add_dir (icon->priv->conf, GPM_CONF_DIR,
-			      GCONF_CLIENT_PRELOAD_NONE, NULL);
+			      GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
 	gconf_client_notify_add (icon->priv->conf, GPM_CONF_DIR,
 				 (GConfClientNotifyFunc) gpm_conf_gconf_key_changed_cb,
 				 icon, NULL, NULL);

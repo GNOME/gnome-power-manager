@@ -762,7 +762,7 @@ gpm_backlight_init (GpmBacklight *backlight)
 	backlight->priv->conf = gconf_client_get_default ();
 
 	/* watch gnome-power-manager keys */
-	gconf_client_add_dir (backlight->priv->conf, GPM_CONF_DIR, GCONF_CLIENT_PRELOAD_NONE, NULL);
+	gconf_client_add_dir (backlight->priv->conf, GPM_CONF_DIR, GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
 	gconf_client_notify_add (backlight->priv->conf, GPM_CONF_DIR,
 				 (GConfClientNotifyFunc) gpm_conf_gconf_key_changed_cb,
 				 backlight, NULL, NULL);
