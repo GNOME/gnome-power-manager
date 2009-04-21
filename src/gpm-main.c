@@ -117,6 +117,38 @@ timed_exit_cb (GMainLoop *loop)
 }
 
 /**
+ * gpm_main_stop_cb:
+ **/
+static void
+gpm_main_stop_cb (GpmSession *session, GMainLoop *loop)
+{
+	g_main_loop_quit (loop);
+}
+
+/**
+ * gpm_main_query_end_session_cb:
+ **/
+static void
+gpm_main_query_end_session_cb (GpmSession *session, guint flags, GMainLoop *loop)
+{
+	/* just send response */
+	gpm_session_end_session_response (session, TRUE, NULL);
+}
+
+/**
+ * gpm_main_end_session_cb:
+ **/
+static void
+gpm_main_end_session_cb (GpmSession *session, guint flags, GMainLoop *loop)
+{
+	/* send response */
+	gpm_session_end_session_response (session, TRUE, NULL);
+
+	/* exit loop, will unref manager */
+	g_main_loop_quit (loop);
+}
+
+/**
  * main:
  **/
 int
@@ -202,12 +234,14 @@ main (int argc, char *argv[])
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
                                            GPM_DATA G_DIR_SEPARATOR_S "icons");
 
+	loop = g_main_loop_new (NULL, FALSE);
+
 	/* optionally register with the session */
 	session = gpm_session_new ();
-	if (FALSE) {
-		egg_warning ("register with the session requires logout handling");
-		gpm_session_register_client (session, "gnome-power-manager", getenv ("DESKTOP_AUTOSTART_ID"));
-	}
+	g_signal_connect (session, "stop", G_CALLBACK (gpm_main_stop_cb), loop);
+	g_signal_connect (session, "query-end-session", G_CALLBACK (gpm_main_query_end_session_cb), loop);
+	g_signal_connect (session, "end-session", G_CALLBACK (gpm_main_end_session_cb), loop);
+	gpm_session_register_client (session, "gnome-power-manager", getenv ("DESKTOP_AUTOSTART_ID"));
 
 	/* create a new gui object */
 	manager = gpm_manager_new ();
@@ -216,8 +250,6 @@ main (int argc, char *argv[])
 		egg_error ("%s is already running in this session.", GPM_NAME);
 		return 0;
 	}
-
-	loop = g_main_loop_new (NULL, FALSE);
 
 	/* Only timeout and close the mainloop if we have specified it
 	 * on the command line */

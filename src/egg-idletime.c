@@ -130,7 +130,7 @@ egg_idletime_handle_alarm_notify_event (EggIdletime *idletime, XSyncAlarmNotifyE
 		return;
 	}
 
-	egg_debug ("Watch %d fired, idle time = %lld",
+	egg_debug ("Watch %d fired, idle time = %" G_GINT64_FORMAT,
 		   watch->id, egg_idletime_xsyncvalue_to_int64 (alarm_event->counter_value));
 
 	if (alarm_event->alarm == watch->xalarm_positive) {
@@ -280,22 +280,22 @@ egg_idletime_xsync_alarm_set (EggIdletime *idletime, EggIdletimeWatch *watch)
 
 	attr.trigger.test_type = XSyncPositiveTransition;
 	if (watch->xalarm_positive != None) {
-		egg_debug ("EggIdletime: updating alarm for positive transition wait=%lld",
+		egg_debug ("EggIdletime: updating alarm for positive transition wait=%" G_GINT64_FORMAT,
 			   egg_idletime_xsyncvalue_to_int64 (attr.trigger.wait_value));
 		XSyncChangeAlarm (GDK_DISPLAY (), watch->xalarm_positive, flags, &attr);
 	} else {
-		egg_debug ("EggIdletime: creating new alarm for positive transition wait=%lld",
+		egg_debug ("EggIdletime: creating new alarm for positive transition wait=%" G_GINT64_FORMAT,
 			   egg_idletime_xsyncvalue_to_int64 (attr.trigger.wait_value));
 		watch->xalarm_positive = XSyncCreateAlarm (GDK_DISPLAY (), flags, &attr);
 	}
 
 	attr.trigger.test_type = XSyncNegativeTransition;
 	if (watch->xalarm_negative != None) {
-		egg_debug ("EggIdletime: updating alarm for negative transition wait=%lld",
+		egg_debug ("EggIdletime: updating alarm for negative transition wait=%" G_GINT64_FORMAT,
 			   egg_idletime_xsyncvalue_to_int64 (attr.trigger.wait_value));
 		XSyncChangeAlarm (GDK_DISPLAY (), watch->xalarm_negative, flags, &attr);
 	} else {
-		egg_debug ("EggIdletime: creating new alarm for negative transition wait=%lld",
+		egg_debug ("EggIdletime: creating new alarm for negative transition wait=%" G_GINT64_FORMAT,
 			   egg_idletime_xsyncvalue_to_int64 (attr.trigger.wait_value));
 		watch->xalarm_negative = XSyncCreateAlarm (GDK_DISPLAY (), flags, &attr);
 	}
