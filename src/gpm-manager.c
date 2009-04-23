@@ -1590,8 +1590,32 @@ dpms_mode_changed_cb (GpmDpms *dpms, GpmDpmsMode mode, GpmManager *manager)
 static void
 gpm_manager_console_kit_active_changed_cb (EggConsoleKit *console, gboolean active, GpmManager *manager)
 {
+	gboolean on_ac;
+	gboolean ret;
+
 	egg_debug ("console now %s", active ? "active" : "inactive");
-	/* FIXME: do we need to do policy actions when we switch? */
+
+	/* gone inactive */
+	if (!active)
+		return;
+
+	/* get lid state */
+	ret = gpm_button_is_lid_closed (manager->priv->button);
+	if (!ret)
+		return;
+
+	/* get ac state */
+	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
+	if (on_ac) {
+		egg_debug ("Performing AC policy as become active when lid down");
+		manager_policy_do (manager, GPM_CONF_BUTTON_LID_AC,
+				   _("The lid has been found closed on ac power."));
+		return;
+	}
+
+	egg_debug ("Performing battery policy as become active when lid down");
+	manager_policy_do (manager, GPM_CONF_BUTTON_LID_BATT,
+			   _("The lid has been found closed on battery power."));
 }
 
 /**
