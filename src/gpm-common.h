@@ -150,7 +150,7 @@ G_BEGIN_DECLS
 #define GPM_CONF_UI_ICON_POLICY			GPM_CONF_DIR "/ui/icon_policy"
 #define GPM_CONF_UI_SHOW_CPUFREQ		GPM_CONF_DIR "/ui/cpufreq_show"
 #define GPM_CONF_UI_SHOW_ACTIONS_IN_MENU	GPM_CONF_DIR "/ui/show_actions_in_menu"
-#define GPM_CONF_UI_ENABLE_BEEPING		GPM_CONF_DIR "/ui/enable_sound"
+#define GPM_CONF_UI_ENABLE_SOUND		GPM_CONF_DIR "/ui/enable_sound"
 #define GPM_CONF_UI_SHOW_CONTEXT_MENU		GPM_CONF_DIR "/ui/show_context_menu"
 
 /* we use the gnome-session key now */

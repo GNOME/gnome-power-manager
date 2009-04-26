@@ -757,7 +757,7 @@ prefs_setup_notification (GpmPrefs *prefs)
 
 	/* set up the sound checkbox */
 	gpm_prefs_setup_checkbox (prefs, "checkbutton_notification_sound",
-	  			  GPM_CONF_UI_ENABLE_BEEPING);
+				  GPM_CONF_UI_ENABLE_SOUND);
 
 	if (prefs->priv->has_batteries) {
 		/* there's no use case for displaying this option */

@@ -168,7 +168,7 @@ gpm_manager_play (GpmManager *manager, GpmManagerSound action, gboolean force)
 	const gchar *desc = NULL;
 	gboolean ret;
 
-	ret = gconf_client_get_bool (manager->priv->conf, GPM_CONF_UI_ENABLE_BEEPING, NULL);
+	ret = gconf_client_get_bool (manager->priv->conf, GPM_CONF_UI_ENABLE_SOUND, NULL);
 	if (!ret && !force) {
 		egg_debug ("ignoring sound due to policy");
 		return FALSE;
