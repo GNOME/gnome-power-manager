@@ -90,6 +90,13 @@ gboolean
 gpm_session_logout (GpmSession *session)
 {
 	g_return_val_if_fail (GPM_IS_SESSION (session), FALSE);
+
+	/* no gnome-session */
+	if (session->priv->proxy == NULL) {
+		egg_warning ("no gnome-session");
+		return FALSE;
+	}
+
 	/* we have to use no reply, as the SM calls into g-p-m to get the can_suspend property */
 	dbus_g_proxy_call_no_reply (session->priv->proxy, "Shutdown", G_TYPE_INVALID);
 	return TRUE;
@@ -137,9 +144,15 @@ static gboolean
 gpm_session_is_idle (GpmSession *session)
 {
 	gboolean ret;
-	gboolean is_idle;
+	gboolean is_idle = FALSE;
 	GError *error = NULL;
 	GValue *value;
+
+	/* no gnome-session */
+	if (session->priv->proxy_prop == NULL) {
+		egg_warning ("no gnome-session");
+		goto out;
+	}
 
 	value = g_new0(GValue, 1);
 	/* find out if this change altered the inhibited state */
@@ -168,8 +181,14 @@ static gboolean
 gpm_session_is_inhibited (GpmSession *session)
 {
 	gboolean ret;
-	gboolean is_inhibited;
+	gboolean is_inhibited = FALSE;
 	GError *error = NULL;
+
+	/* no gnome-session */
+	if (session->priv->proxy == NULL) {
+		egg_warning ("no gnome-session");
+		goto out;
+	}
 
 	/* find out if this change altered the inhibited state */
 	ret = dbus_g_proxy_call (session->priv->proxy, "IsInhibited", &error,
@@ -182,6 +201,7 @@ gpm_session_is_inhibited (GpmSession *session)
 		g_error_free (error);
 		is_inhibited = FALSE;
 	}
+out:
 	return is_inhibited;
 }
 
@@ -221,11 +241,17 @@ gpm_session_end_session_cb (DBusGProxy *proxy, guint flags, GpmSession *session)
 gboolean
 gpm_session_end_session_response (GpmSession *session, gboolean is_okay, const gchar *reason)
 {
-	gboolean ret;
+	gboolean ret = FALSE;
 	GError *error = NULL;
 
 	g_return_val_if_fail (GPM_IS_SESSION (session), FALSE);
 	g_return_val_if_fail (session->priv->proxy_client_private != NULL, FALSE);
+
+	/* no gnome-session */
+	if (session->priv->proxy_client_private == NULL) {
+		egg_warning ("no gnome-session proxy");
+		goto out;
+	}
 
 	/* send response */
 	ret = dbus_g_proxy_call (session->priv->proxy_client_private, "EndSessionResponse", &error,
@@ -248,12 +274,18 @@ out:
 gboolean
 gpm_session_register_client (GpmSession *session, const gchar *app_id, const gchar *client_startup_id)
 {
-	gboolean ret;
+	gboolean ret = FALSE;
 	gchar *client_id = NULL;
 	GError *error = NULL;
 	DBusGConnection *connection;
 
 	g_return_val_if_fail (GPM_IS_SESSION (session), FALSE);
+
+	/* no gnome-session */
+	if (session->priv->proxy == NULL) {
+		egg_warning ("no gnome-session");
+		goto out;
+	}
 
 	/* find out if this change altered the inhibited state */
 	ret = dbus_g_proxy_call (session->priv->proxy, "RegisterClient", &error,
