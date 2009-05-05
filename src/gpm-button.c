@@ -29,6 +29,7 @@
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 #include <X11/XF86keysym.h>
+#include <devkit-power-gobject/devicekit-power.h>
 
 #ifdef HAVE_LEGACY_BUTTONS
  #include <hal-manager.h>
@@ -53,6 +54,7 @@ struct GpmButtonPrivate
 	gchar			*last_button;
 	GTimer			*timer;
 	gboolean		 lid_is_closed;
+	DkpClient		*client;
 #ifdef HAVE_LEGACY_BUTTONS
 	HalManager		*hal_manager; /* remove when input events is in the kernel */
 	HalDeviceStore		*hal_device_store;
@@ -516,6 +518,31 @@ hal_daemon_new_device_cb (HalManager *hal_manager, const gchar *udi, GpmButton *
 #endif
 
 /**
+ * gpm_button_client_changed_cb
+ **/
+static void
+gpm_button_client_changed_cb (DkpClient *client, GpmButton *button)
+{
+	gboolean lid_is_closed;
+
+	/* get new state */
+	lid_is_closed = dkp_client_lid_is_closed (client);
+
+	/* same state */
+	if (button->priv->lid_is_closed == lid_is_closed)
+		return;
+
+	/* save state */
+	button->priv->lid_is_closed = lid_is_closed;
+
+	/* sent correct event */
+	if (lid_is_closed)
+		gpm_button_emit_type (button, GPM_BUTTON_LID_CLOSED);
+	else
+		gpm_button_emit_type (button, GPM_BUTTON_LID_OPEN);
+}
+
+/**
  * gpm_button_init:
  * @button: This class instance
  **/
@@ -532,6 +559,9 @@ gpm_button_init (GpmButton *button)
 	button->priv->timer = g_timer_new ();
 
 	button->priv->lid_is_closed = FALSE;
+	button->priv->client = dkp_client_new ();
+	g_signal_connect (button->priv->client, "changed",
+			  G_CALLBACK (gpm_button_client_changed_cb), button);
 
 	/* register the brightness keys */
 	gpm_button_xevent_key (button, XF86XK_PowerOff, GPM_BUTTON_POWER);
@@ -585,6 +615,7 @@ gpm_button_finalize (GObject *object)
 	button = GPM_BUTTON (object);
 	button->priv = GPM_BUTTON_GET_PRIVATE (button);
 
+	g_object_unref (button->priv->client);
 #ifdef HAVE_LEGACY_BUTTONS
 	g_object_unref (button->priv->hal_manager);
 	g_object_unref (button->priv->hal_device_store);
