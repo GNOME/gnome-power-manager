@@ -13,24 +13,6 @@
     <method name="GetPreferencesOptions">
       <arg type="i" name="capability" direction="out"/>
     </method>
-    <method name="GetPowerSaveStatus">
-      <arg type="b" name="save_power" direction="out"/>
-    </method>
-    <method name="GetOnBattery">
-      <arg type="b" name="on_battery" direction="out"/>
-    </method>
-    <method name="GetLowBattery">
-      <arg type="b" name="on_battery" direction="out"/>
-    </method>
-    <signal name="OnBatteryChanged">
-      <arg type="b" name="on_battery" direction="out"/>
-    </signal>
-    <signal name="LowBatteryChanged">
-      <arg type="b" name="on_battery" direction="out"/>
-    </signal>
-    <signal name="PowerSaveStatusChanged">
-      <arg type="b" name="low_power" direction="out"/>
-    </signal>
   </interface>
 </node>
 

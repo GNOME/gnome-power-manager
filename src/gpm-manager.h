@@ -52,12 +52,6 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
-	void		(* on_battery_changed)		(GpmManager	*manager,
-							 gboolean	 on_battery);
-	void		(* low_battery_changed)		(GpmManager	*manager,
-							 gboolean	 low_battery);
-	void		(* power_save_status_changed)	(GpmManager	*manager,
-							 gboolean	 save_power);
 } GpmManagerClass;
 
 typedef enum
@@ -73,15 +67,6 @@ GType		 gpm_manager_error_get_type		(void);
 GType		 gpm_manager_get_type		  	(void);
 GpmManager	*gpm_manager_new			(void);
 
-gboolean	 gpm_manager_get_power_save_status	(GpmManager	*manager,
-							 gboolean	*save_power,
-							 GError		**error);
-gboolean	 gpm_manager_get_on_battery		(GpmManager	*manager,
-							 gboolean	*on_battery,
-							 GError		**error);
-gboolean	 gpm_manager_get_low_battery		(GpmManager	*manager,
-							 gboolean	*low_battery,
-							 GError		**error);
 gboolean	 gpm_manager_suspend			(GpmManager	*manager,
 							 GError		**error);
 gboolean	 gpm_manager_hibernate			(GpmManager	*manager,
@@ -91,12 +76,6 @@ gboolean	 gpm_manager_can_suspend		(GpmManager	*manager,
 							 GError		**error);
 gboolean	 gpm_manager_can_hibernate		(GpmManager	*manager,
 							 gboolean	*can_hibernate,
-							 GError		**error);
-gboolean	 gpm_manager_can_reboot			(GpmManager	*manager,
-							 gboolean	*can_reboot,
-							 GError		**error);
-gboolean	 gpm_manager_can_shutdown		(GpmManager	*manager,
-							 gboolean	*can_shutdown,
 							 GError		**error);
 gboolean	 gpm_manager_get_preferences_options	(GpmManager	*manager,
 							 gint		*capability,

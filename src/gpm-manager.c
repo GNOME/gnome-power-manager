@@ -98,13 +98,6 @@ struct GpmManagerPrivate
 	gboolean		 on_battery;
 };
 
-enum {
-	ON_BATTERY_CHANGED,
-	LOW_BATTERY_CHANGED,
-	POWER_SAVE_STATUS_CHANGED,
-	LAST_SIGNAL
-};
-
 typedef enum {
 	GPM_MANAGER_SOUND_POWER_PLUG,
 	GPM_MANAGER_SOUND_POWER_UNPLUG,
@@ -118,8 +111,6 @@ typedef enum {
 	GPM_MANAGER_SOUND_SUSPEND_ERROR,
 	GPM_MANAGER_SOUND_LAST
 } GpmManagerSound;
-
-static guint	     signals [LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (GpmManager, gpm_manager, G_TYPE_OBJECT)
 
@@ -577,53 +568,6 @@ gpm_manager_get_preferences_options (GpmManager *manager, gint *capability, GErr
 }
 
 /**
- * gpm_manager_get_power_save_status:
- *
- * Returns true if low power mode has been set.
- * This may be set on AC or battery power, both, or neither depending on
- * the users policy setting.
- * This setting may also change with the battery level changing.
- * Programs should respect this value for the session.
- **/
-gboolean
-gpm_manager_get_power_save_status (GpmManager *manager, gboolean *low_power, GError **error)
-{
-	g_return_val_if_fail (manager != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
-	*low_power = FALSE;
-	return TRUE;
-}
-
-/**
- * gpm_manager_get_on_battery:
- *
- * Returns the system AC state, i.e. if we are not running on battery
- * power.
- * Note: This method may still return false on AC using a desktop system
- * if the computer is using backup power from a monitored UPS.
- **/
-gboolean
-gpm_manager_get_on_battery (GpmManager *manager, gboolean *on_battery, GError **error)
-{
-	g_return_val_if_fail (manager != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
-	*on_battery = manager->priv->on_battery;
-	return TRUE;
-}
-
-/**
- * gpm_manager_get_low_battery:
- **/
-gboolean
-gpm_manager_get_low_battery (GpmManager *manager, gboolean *low_battery, GError **error)
-{
-	g_return_val_if_fail (manager != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
-	*low_battery = FALSE;
-	return TRUE;
-}
-
-/**
  * idle_do_sleep:
  * @manager: This class instance
  *
@@ -955,9 +899,6 @@ gpm_manager_client_changed_cb (DkpClient *client, GpmManager *manager)
 	else
 		gpm_manager_play (manager, GPM_MANAGER_SOUND_POWER_UNPLUG, FALSE);
 
-	egg_debug ("emitting on-battery-changed : %i", on_battery);
-	g_signal_emit (manager, signals [ON_BATTERY_CHANGED], 0, on_battery);
-
 	/* We do the lid close on battery action if the ac adapter is removed
 	   when the laptop is closed and on battery. Fixes #331655 */
 	event_when_closed = gconf_client_get_bool (manager->priv->conf, GPM_CONF_ACTIONS_SLEEP_WHEN_CLOSED, NULL);
@@ -996,28 +937,7 @@ static void
 gpm_manager_class_init (GpmManagerClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
 	object_class->finalize = gpm_manager_finalize;
-
-	signals [ON_BATTERY_CHANGED] =
-		g_signal_new ("on-battery-changed",
-			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmManagerClass, on_battery_changed),
-			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
-	signals [LOW_BATTERY_CHANGED] =
-		g_signal_new ("low-battery-changed",
-			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmManagerClass, low_battery_changed),
-			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
-	signals [POWER_SAVE_STATUS_CHANGED] =
-		g_signal_new ("power-save-status-changed",
-			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmManagerClass, power_save_status_changed),
-			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
-
 	g_type_class_add_private (klass, sizeof (GpmManagerPrivate));
 }
 
