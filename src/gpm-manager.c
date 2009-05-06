@@ -97,6 +97,7 @@ struct GpmManagerPrivate
 	guint32         	 screensaver_ac_throttle_id;
 	guint32         	 screensaver_dpms_throttle_id;
 	guint32         	 screensaver_lid_throttle_id;
+	DkpClient		*client;
 };
 
 enum {
@@ -1271,10 +1272,11 @@ gpm_engine_charge_low_cb (GpmEngine *engine, DkpDevice *device, GpmManager *mana
 	const gchar *title = NULL;
 	gchar *message = NULL;
 	gchar *remaining_text;
-	gchar *icon;
+	gchar *icon = NULL;
 	DkpDeviceType type;
 	gdouble percentage;
 	gint64 time_to_empty;
+	gboolean on_battery;
 
 	/* get device properties */
 	g_object_get (device,
@@ -1282,6 +1284,15 @@ gpm_engine_charge_low_cb (GpmEngine *engine, DkpDevice *device, GpmManager *mana
 		      "percentage", &percentage,
 		      "time-to-empty", &time_to_empty,
 		      NULL);
+
+	/* check to see if the batteries have not noticed we are on AC */
+	if (type == DKP_DEVICE_TYPE_BATTERY) {
+		on_battery = dkp_client_on_battery (manager->priv->client);
+		if (!on_battery) {
+			egg_warning ("ignoring critically low message as we are not on battery power");
+			goto out;
+		}
+	}
 
 	if (type == DKP_DEVICE_TYPE_BATTERY) {
 		title = _("Laptop battery low");
@@ -1314,6 +1325,7 @@ gpm_engine_charge_low_cb (GpmEngine *engine, DkpDevice *device, GpmManager *mana
 	icon = gpm_devicekit_get_object_icon (device);
 	gpm_notify_display (manager->priv->notify, title, message, GPM_NOTIFY_TIMEOUT_LONG, icon, GPM_NOTIFY_URGENCY_NORMAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
+out:
 	g_free (icon);
 	g_free (message);
 }
@@ -1339,11 +1351,12 @@ gpm_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, GpmManager 
 	gchar *action_text = NULL;
 	gchar *remaining_text;
 	gchar *action;
-	gchar *icon;
+	gchar *icon = NULL;
 	gchar *time_text;
 	DkpDeviceType type;
 	gdouble percentage;
 	gint64 time_to_empty;
+	gboolean on_battery;
 
 	/* get device properties */
 	g_object_get (device,
@@ -1351,6 +1364,15 @@ gpm_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, GpmManager 
 		      "percentage", &percentage,
 		      "time-to-empty", &time_to_empty,
 		      NULL);
+
+	/* check to see if the batteries have not noticed we are on AC */
+	if (type == DKP_DEVICE_TYPE_BATTERY) {
+		on_battery = dkp_client_on_battery (manager->priv->client);
+		if (!on_battery) {
+			egg_warning ("ignoring critically low message as we are not on battery power");
+			goto out;
+		}
+	}
 
 	if (type == DKP_DEVICE_TYPE_BATTERY) {
 		title = _("Laptop battery critically low");
@@ -1414,6 +1436,7 @@ gpm_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, GpmManager 
 	icon = gpm_devicekit_get_object_icon (device);
 	gpm_notify_display (manager->priv->notify, title, message, GPM_NOTIFY_TIMEOUT_LONG, icon, GPM_NOTIFY_URGENCY_CRITICAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
+out:
 	g_free (icon);
 	g_free (message);
 }
@@ -1427,13 +1450,23 @@ gpm_engine_charge_action_cb (GpmEngine *engine, DkpDevice *device, GpmManager *m
 	const gchar *title = NULL;
 	gchar *action;
 	gchar *message = NULL;
-	gchar *icon;
+	gchar *icon = NULL;
 	DkpDeviceType type;
+	gboolean on_battery;
 
 	/* get device properties */
 	g_object_get (device,
 		      "type", &type,
 		      NULL);
+
+	/* check to see if the batteries have not noticed we are on AC */
+	if (type == DKP_DEVICE_TYPE_BATTERY) {
+		on_battery = dkp_client_on_battery (manager->priv->client);
+		if (!on_battery) {
+			egg_warning ("ignoring critically low message as we are not on battery power");
+			goto out;
+		}
+	}
 
 	if (type == DKP_DEVICE_TYPE_BATTERY) {
 		title = _("Laptop battery critically low");
@@ -1501,6 +1534,7 @@ gpm_engine_charge_action_cb (GpmEngine *engine, DkpDevice *device, GpmManager *m
 			    title, message, GPM_NOTIFY_TIMEOUT_LONG,
 			    icon, GPM_NOTIFY_URGENCY_CRITICAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
+out:
 	g_free (icon);
 	g_free (message);
 }
@@ -1649,6 +1683,7 @@ gpm_manager_init (GpmManager *manager)
 
 	manager->priv->notify = gpm_notify_new ();
 	manager->priv->conf = gconf_client_get_default ();
+	manager->priv->client = dkp_client_new ();
 
 	/* watch gnome-power-manager keys */
 	gconf_client_add_dir (manager->priv->conf, GPM_CONF_DIR,
@@ -1806,6 +1841,7 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->brightness_kbd);
 	g_object_unref (manager->priv->backlight);
 	g_object_unref (manager->priv->console);
+	g_object_unref (manager->priv->client);
 
 	G_OBJECT_CLASS (gpm_manager_parent_class)->finalize (object);
 }
