@@ -230,15 +230,18 @@ gpm_idle_evaluate (GpmIdle *idle)
 		gpm_idle_set_mode (idle, GPM_IDLE_MODE_DIM);
 	}
 
-	/* set up blank callback even when session is not idle */
-	if (idle->priv->timeout_blank_id == 0) {
+	/* set up blank callback even when session is not idle,
+	 * but only if we actually want to blank. */
+	if (idle->priv->timeout_blank_id == 0 &&
+	    idle->priv->timeout_blank != 0) {
 		egg_debug ("setting up blank callback");
 		idle->priv->timeout_blank_id = g_timeout_add_seconds (idle->priv->timeout_blank, (GSourceFunc) gpm_idle_blank_cb, idle);
 	}
 
 	/* only do the sleep timeout when the session is idle */
 	if (is_idle) {
-		if (idle->priv->timeout_sleep_id == 0) {
+		if (idle->priv->timeout_sleep_id == 0 &&
+		    idle->priv->timeout_sleep != 0) {
 			egg_debug ("setting up sleep callback = %i", idle->priv->timeout_blank);
 			idle->priv->timeout_sleep_id = g_timeout_add_seconds (idle->priv->timeout_sleep, (GSourceFunc) gpm_idle_sleep_cb, idle);
 		}
