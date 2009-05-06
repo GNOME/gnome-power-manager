@@ -165,8 +165,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-load.c					\
 	gpm-control.h					\
 	gpm-control.c					\
-	gpm-refcount.h					\
-	gpm-refcount.c					\
 	gpm-button.h					\
 	gpm-button.c					\
 	gpm-brightness.h				\
