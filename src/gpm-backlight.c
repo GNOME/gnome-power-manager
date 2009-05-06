@@ -40,10 +40,10 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 #include <gconf/gconf-client.h>
+#include <devkit-power-gobject/devicekit-power.h>
 
 #include <hal-manager.h>
 
-#include "gpm-ac-adapter.h"
 #include "gpm-button.h"
 #include "gpm-backlight.h"
 #include "gpm-brightness.h"
@@ -62,7 +62,7 @@
 
 struct GpmBacklightPrivate
 {
-	GpmAcAdapter		*ac_adapter;
+	DkpClient		*client;
 	GpmBrightness		*brightness;
 	GpmButton		*button;
 	GConfClient		*conf;
@@ -229,7 +229,7 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	gfloat brightness;
 	gfloat scale;
 	gboolean ret;
-	gboolean on_ac;
+	gboolean on_battery;
 	gboolean do_laptop_lcd;
 	gboolean enable_action;
 	gboolean battery_reduce;
@@ -253,11 +253,11 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	egg_debug ("1. main brightness %f", brightness);
 
 	/* get AC status */
-	on_ac = gpm_ac_adapter_is_present (backlight->priv->ac_adapter);
+	on_battery = dkp_client_on_battery (backlight->priv->client);
 
 	/* reduce if on battery power if we should */
 	battery_reduce = gconf_client_get_bool (backlight->priv->conf, GPM_CONF_BACKLIGHT_BATTERY_REDUCE, NULL);
-	if (on_ac == FALSE && battery_reduce) {
+	if (on_battery && battery_reduce) {
 		value = gconf_client_get_int (backlight->priv->conf, GPM_CONF_BACKLIGHT_BRIGHTNESS_DIM_BATT, NULL);
 		if (value > 100) {
 			egg_warning ("cannot use battery brightness value %i, correcting to 50", value);
@@ -271,7 +271,7 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	egg_debug ("2. battery scale %f, brightness %f", scale, brightness);
 
 	/* reduce if system is momentarily idle */
-	if (on_ac)
+	if (!on_battery)
 		enable_action = gconf_client_get_bool (backlight->priv->conf, GPM_CONF_BACKLIGHT_IDLE_DIM_AC, NULL);
 	else
 		enable_action = gconf_client_get_bool (backlight->priv->conf, GPM_CONF_BACKLIGHT_IDLE_DIM_BATT, NULL);
@@ -340,19 +340,19 @@ static void
 gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *entry, GpmBacklight *backlight)
 {
 	GConfValue *value;
-	gboolean on_ac;
+	gboolean on_battery;
 
 	value = gconf_entry_get_value (entry);
 	if (value == NULL)
 		return;
 
-	on_ac = gpm_ac_adapter_is_present (backlight->priv->ac_adapter);
+	on_battery = dkp_client_on_battery (backlight->priv->client);
 
-	if (on_ac && strcmp (entry->key, GPM_CONF_BACKLIGHT_BRIGHTNESS_AC) == 0) {
+	if (!on_battery && strcmp (entry->key, GPM_CONF_BACKLIGHT_BRIGHTNESS_AC) == 0) {
 		backlight->priv->master_percentage = gconf_value_get_int (value);
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 
-	} else if (!on_ac && strcmp (entry->key, GPM_CONF_BACKLIGHT_BRIGHTNESS_DIM_BATT) == 0) {
+	} else if (on_battery && strcmp (entry->key, GPM_CONF_BACKLIGHT_BRIGHTNESS_DIM_BATT) == 0) {
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 
 	} else if (strcmp (entry->key, GPM_CONF_BACKLIGHT_IDLE_DIM_AC) == 0 ||
@@ -374,15 +374,14 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 }
 
 /**
- * ac_adapter_changed_cb:
- * @ac_adapter: The ac_adapter class instance
- * @on_ac: if we are on AC power
- * @brightness: This class instance
+ * gpm_backlight_client_changed_cb:
+ * @client: The dkp_client class instance
+ * @backlight: This class instance
  *
  * Does the actions when the ac power source is inserted/removed.
  **/
 static void
-ac_adapter_changed_cb (GpmAcAdapter *ac_adapter, gboolean on_ac, GpmBacklight *backlight)
+gpm_backlight_client_changed_cb (DkpClient *client, GpmBacklight *backlight)
 {
 	gpm_backlight_brightness_evaluate_and_set (backlight, TRUE);
 }
@@ -513,7 +512,7 @@ idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *backlight)
 {
 	gboolean ret;
 	GError *error = NULL;
-	gboolean on_ac;
+	gboolean on_battery;
 	gchar *dpms_method;
 	GpmDpmsMode dpms_mode;
 
@@ -553,8 +552,8 @@ idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *backlight)
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 
 		/* get the DPMS state we're supposed to use on the power state */
-		on_ac = gpm_ac_adapter_is_present (backlight->priv->ac_adapter);
-		if (on_ac)
+		on_battery = dkp_client_on_battery (backlight->priv->client);
+		if (!on_battery)
 			dpms_method = gconf_client_get_string (backlight->priv->conf, GPM_CONF_BACKLIGHT_DPMS_METHOD_AC, NULL);
 		else
 			dpms_method = gconf_client_get_string (backlight->priv->conf, GPM_CONF_BACKLIGHT_DPMS_METHOD_BATT, NULL);
@@ -671,7 +670,7 @@ gpm_backlight_finalize (GObject *object)
 	g_object_unref (backlight->priv->light_sensor);
 	g_object_unref (backlight->priv->feedback);
 	g_object_unref (backlight->priv->conf);
-	g_object_unref (backlight->priv->ac_adapter);
+	g_object_unref (backlight->priv->client);
 	g_object_unref (backlight->priv->button);
 	g_object_unref (backlight->priv->idle);
 	g_object_unref (backlight->priv->brightness);
@@ -776,10 +775,10 @@ gpm_backlight_init (GpmBacklight *backlight)
 	g_signal_connect (backlight->priv->button, "button-pressed",
 			  G_CALLBACK (gpm_backlight_button_pressed_cb), backlight);
 
-	/* we use ac_adapter for the ac-adapter-changed signal */
-	backlight->priv->ac_adapter = gpm_ac_adapter_new ();
-	g_signal_connect (backlight->priv->ac_adapter, "ac-adapter-changed",
-			  G_CALLBACK (ac_adapter_changed_cb), backlight);
+	/* we use dkp_client for the ac-adapter-changed signal */
+	backlight->priv->client = dkp_client_new ();
+	g_signal_connect (backlight->priv->client, "changed",
+			  G_CALLBACK (gpm_backlight_client_changed_cb), backlight);
 
 	/* watch for idle mode changes */
 	backlight->priv->idle = gpm_idle_new ();

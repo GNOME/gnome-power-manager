@@ -182,8 +182,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-main.c					\
 	gpm-manager.h					\
 	gpm-manager.c					\
-	gpm-ac-adapter.h				\
-	gpm-ac-adapter.c				\
 	gpm-tray-icon.h					\
 	gpm-tray-icon.c					\
 	gpm-marshal.h					\
@@ -251,8 +249,6 @@ gnome_power_self_test_SOURCES =				\
 	egg-array-float.c				\
 	egg-console-kit.h				\
 	egg-console-kit.c				\
-	gpm-ac-adapter.h				\
-	gpm-ac-adapter.c				\
 	gpm-prefs-server.h				\
 	gpm-prefs-server.c				\
 	gpm-control.h					\

@@ -40,8 +40,8 @@
 #include <gtk/gtk.h>
 #include <gconf/gconf-client.h>
 #include <libnotify/notify.h>
+#include <devkit-power-gobject/devicekit-power.h>
 
-#include "gpm-ac-adapter.h"
 #include "gpm-common.h"
 #include "egg-debug.h"
 #include "gpm-notify.h"
@@ -52,7 +52,7 @@
 
 struct GpmNotifyPrivate
 {
-	GpmAcAdapter		*ac_adapter;
+	DkpClient		*client;
 	GConfClient		*conf;
 	GtkStatusIcon		*status_icon;
 	gchar			*internet_url;
@@ -181,19 +181,19 @@ gpm_notify_cancel (GpmNotify *notify)
 /**
  * power_on_ac_changed_cb:
  * @power: The power class instance
- * @on_ac: if we are on AC power
  * @icon: This class instance
  *
  * Does the actions when the ac power source is inserted/removed.
  **/
 static void
-ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
-		       gboolean      on_ac,
-		       GpmNotify    *notify)
+gpm_notify_client_changed_cb (DkpClient *client, GpmNotify *notify)
 {
-	/* for where we add back the ac_adapter before the "AC Power unplugged"
+	gboolean on_battery;
+
+	/* for where we add back the client before the "AC Power unplugged"
 	 * message times out. */
-	if (on_ac) {
+	on_battery = dkp_client_on_battery (client);
+	if (!on_battery) {
 		egg_debug ("clearing notify due ac being present");
 		gpm_notify_cancel (notify);
 	}
@@ -530,8 +530,8 @@ gpm_notify_finalize (GObject *object)
 	if (notify->priv->libnotify != NULL)
 		notify_notification_close (notify->priv->libnotify, NULL);
 	g_object_unref (notify->priv->conf);
-	if (notify->priv->ac_adapter != NULL)
-		g_object_unref (notify->priv->ac_adapter);
+	if (notify->priv->client != NULL)
+		g_object_unref (notify->priv->client);
 
 	G_OBJECT_CLASS (gpm_notify_parent_class)->finalize (object);
 }
@@ -543,7 +543,7 @@ static void
 gpm_notify_class_init (GpmNotifyClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	object_class->finalize	   = gpm_notify_finalize;
+	object_class->finalize = gpm_notify_finalize;
 
 	g_type_class_add_private (klass, sizeof (GpmNotifyPrivate));
 }
@@ -564,10 +564,10 @@ gpm_notify_init (GpmNotify *notify)
 	notify->priv->conf = gconf_client_get_default ();
 	notify->priv->do_not_show_gconf = NULL;
 
-	/* we use ac_adapter so we can log the event */
-	notify->priv->ac_adapter = gpm_ac_adapter_new ();
-	g_signal_connect (notify->priv->ac_adapter, "ac-adapter-changed",
-			  G_CALLBACK (ac_adapter_changed_cb), notify);
+	/* we use client so we can log the event */
+	notify->priv->client = dkp_client_new ();
+	g_signal_connect (notify->priv->client, "changed",
+			  G_CALLBACK (gpm_notify_client_changed_cb), notify);
 
 	notify->priv->status_icon = NULL;
 	notify->priv->libnotify = NULL;

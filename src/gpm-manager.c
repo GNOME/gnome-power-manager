@@ -45,7 +45,6 @@
 #include "egg-debug.h"
 #include "egg-console-kit.h"
 
-#include "gpm-ac-adapter.h"
 #include "gpm-button.h"
 #include "gpm-control.h"
 #include "gpm-common.h"
@@ -77,7 +76,6 @@ static void     gpm_manager_finalize	(GObject	 *object);
 
 struct GpmManagerPrivate
 {
-	GpmAcAdapter		*ac_adapter;
 	GpmButton		*button;
 	GConfClient		*conf;
 	GpmDpms			*dpms;
@@ -89,7 +87,6 @@ struct GpmManagerPrivate
 	GpmScreensaver 		*screensaver;
 	GpmTrayIcon		*tray_icon;
 	GpmEngine		*engine;
-	gboolean		 low_power;
 	GpmBrightnessKbd	*brightness_kbd;
 	GpmFeedback		*feedback_kbd;
 	GpmBacklight		*backlight;
@@ -98,6 +95,7 @@ struct GpmManagerPrivate
 	guint32         	 screensaver_dpms_throttle_id;
 	guint32         	 screensaver_lid_throttle_id;
 	DkpClient		*client;
+	gboolean		 on_battery;
 };
 
 enum {
@@ -282,7 +280,6 @@ gpm_manager_is_inhibit_valid (GpmManager *manager, gboolean user_action, const c
 /**
  * gpm_manager_sync_policy_sleep:
  * @manager: This class instance
- * @on_ac: If we are on AC power
  *
  * Changes the policy if required, setting brightness, display and computer
  * timeouts.
@@ -294,19 +291,13 @@ gpm_manager_sync_policy_sleep (GpmManager *manager)
 {
 	guint sleep_display;
 	guint sleep_computer;
-	gboolean on_ac;
-	gboolean power_save;
 
-	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
-
-	if (on_ac) {
+	if (!manager->priv->on_battery) {
 		sleep_computer = gconf_client_get_int (manager->priv->conf, GPM_CONF_TIMEOUT_SLEEP_COMPUTER_AC, NULL);
 		sleep_display = gconf_client_get_int (manager->priv->conf, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_AC, NULL);
-		power_save = gconf_client_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_AC, NULL);
 	} else {
 		sleep_computer = gconf_client_get_int (manager->priv->conf, GPM_CONF_TIMEOUT_SLEEP_COMPUTER_BATT, NULL);
 		sleep_display = gconf_client_get_int (manager->priv->conf, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_BATT, NULL);
-		power_save = gconf_client_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_BATT, NULL);
 	}
 
 	/* set the new sleep (inactivity) value */
@@ -599,7 +590,7 @@ gpm_manager_get_power_save_status (GpmManager *manager, gboolean *low_power, GEr
 {
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
-	*low_power = manager->priv->low_power;
+	*low_power = FALSE;
 	return TRUE;
 }
 
@@ -614,11 +605,9 @@ gpm_manager_get_power_save_status (GpmManager *manager, gboolean *low_power, GEr
 gboolean
 gpm_manager_get_on_battery (GpmManager *manager, gboolean *on_battery, GError **error)
 {
-	gboolean on_ac;
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
-	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
-	*on_battery = !on_ac;
+	*on_battery = manager->priv->on_battery;
 	return TRUE;
 }
 
@@ -630,8 +619,6 @@ gpm_manager_get_low_battery (GpmManager *manager, gboolean *low_battery, GError 
 {
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
-
-	/* TODO */
 	*low_battery = FALSE;
 	return TRUE;
 }
@@ -646,15 +633,11 @@ gpm_manager_get_low_battery (GpmManager *manager, gboolean *low_battery, GError 
 static void
 idle_do_sleep (GpmManager *manager)
 {
-	gboolean on_ac;
 	gchar *action = NULL;
 	gboolean ret;
 	GError *error = NULL;
 
-	/* find if we are on AC power */
-	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
-
-	if (on_ac)
+	if (!manager->priv->on_battery)
 		action = gconf_client_get_string (manager->priv->conf, GPM_CONF_ACTIONS_SLEEP_TYPE_AC, NULL);
 	else
 		action = gconf_client_get_string (manager->priv->conf, GPM_CONF_ACTIONS_SLEEP_TYPE_BATT, NULL);
@@ -753,12 +736,9 @@ idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmManager *manager)
 static void
 lid_button_pressed (GpmManager *manager, gboolean pressed)
 {
-	gboolean on_ac;
 	gboolean has_inhibit;
 	gboolean do_policy;
 	gchar *action;
-
-	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
 
 	if (pressed)
 		gpm_manager_play (manager, GPM_MANAGER_SOUND_LID_CLOSE, FALSE);
@@ -771,7 +751,7 @@ lid_button_pressed (GpmManager *manager, gboolean pressed)
 		return;
 	}
 
-	if (on_ac) {
+	if (!manager->priv->on_battery) {
 		egg_debug ("Performing AC policy");
 		manager_policy_do (manager, GPM_CONF_BUTTON_LID_AC,
 				   _("The lid has been closed on ac power."));
@@ -828,11 +808,11 @@ update_dpms_throttle (GpmManager *manager)
 }
 
 static void
-update_ac_throttle (GpmManager *manager, gboolean on_ac)
+update_ac_throttle (GpmManager *manager)
 {
 	/* Throttle the manager when we are not on AC power so we don't
 	   waste the battery */
-	if (on_ac) {
+	if (manager->priv->on_battery) {
 		if (manager->priv->screensaver_ac_throttle_id != 0) {
 			gpm_screensaver_remove_throttle (manager->priv->screensaver, manager->priv->screensaver_ac_throttle_id);
 			manager->priv->screensaver_ac_throttle_id = 0;
@@ -924,7 +904,7 @@ button_pressed_cb (GpmButton *button, const gchar *type, GpmManager *manager)
 }
 
 /**
- * power_on_ac_changed_cb:
+ * gpm_manager_client_changed_cb:
  * @power: The power class instance
  * @on_ac: if we are on AC power
  * @manager: This class instance
@@ -932,11 +912,21 @@ button_pressed_cb (GpmButton *button, const gchar *type, GpmManager *manager)
  * Does the actions when the ac power source is inserted/removed.
  **/
 static void
-ac_adapter_changed_cb (GpmAcAdapter *ac_adapter, gboolean on_ac, GpmManager *manager)
+gpm_manager_client_changed_cb (DkpClient *client, GpmManager *manager)
 {
 	gboolean event_when_closed;
-	gboolean power_save;
 	guint brightness;
+	gboolean on_battery;
+
+	/* get the on-battery state */
+	on_battery = dkp_client_on_battery (manager->priv->client);
+	if (on_battery == manager->priv->on_battery) {
+		egg_debug ("same state as before, ignoring");
+		return;
+	}
+
+	/* save in local cache */
+	manager->priv->on_battery = on_battery;
 
 	/* ConsoleKit says we are not on active console */
 	if (!egg_console_kit_is_active (manager->priv->console)) {
@@ -944,9 +934,9 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter, gboolean on_ac, GpmManager *man
 		return;
 	}
 
-	egg_debug ("Setting on-ac: %d", on_ac);
+	egg_debug ("on_battery: %d", on_battery);
 
-	if (on_ac)
+	if (!on_battery)
 		brightness = gconf_client_get_int (manager->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_AC, NULL);
 	else
 		brightness = gconf_client_get_int (manager->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_BATT, NULL);
@@ -954,37 +944,28 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter, gboolean on_ac, GpmManager *man
 
 	gpm_manager_sync_policy_sleep (manager);
 
-	update_ac_throttle (manager, on_ac);
+	update_ac_throttle (manager);
 
 	/* simulate user input, but only when the lid is open */
-	if (gpm_button_is_lid_closed (manager->priv->button) == FALSE)
+	if (!gpm_button_is_lid_closed (manager->priv->button))
 		gpm_screensaver_poke (manager->priv->screensaver);
 
-	if (on_ac)
+	if (!on_battery)
 		gpm_manager_play (manager, GPM_MANAGER_SOUND_POWER_PLUG, FALSE);
 	else
 		gpm_manager_play (manager, GPM_MANAGER_SOUND_POWER_UNPLUG, FALSE);
 
-	egg_debug ("emitting on-ac-changed : %i", on_ac);
-	g_signal_emit (manager, signals [ON_BATTERY_CHANGED], 0, !on_ac);
+	egg_debug ("emitting on-battery-changed : %i", on_battery);
+	g_signal_emit (manager, signals [ON_BATTERY_CHANGED], 0, on_battery);
 
-	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
-	if (on_ac)
-		power_save = gconf_client_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_AC, NULL);
-	else
-		power_save = gconf_client_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_BATT, NULL);
-	if (manager->priv->low_power != power_save)
-		g_signal_emit (manager, signals [POWER_SAVE_STATUS_CHANGED], 0, power_save);
-	manager->priv->low_power = power_save;
-
-	/* We do the lid close on battery action if the ac_adapter is removed
+	/* We do the lid close on battery action if the ac adapter is removed
 	   when the laptop is closed and on battery. Fixes #331655 */
 	event_when_closed = gconf_client_get_bool (manager->priv->conf, GPM_CONF_ACTIONS_SLEEP_WHEN_CLOSED, NULL);
 
 	/* We keep track of the lid state so we can do the
-	   lid close on battery action if the ac_adapter is removed when the laptop
+	   lid close on battery action if the ac adapter is removed when the laptop
 	   is closed. Fixes #331655 */
-	if (event_when_closed && on_ac == FALSE && gpm_button_is_lid_closed (manager->priv->button)) {
+	if (event_when_closed && on_battery && gpm_button_is_lid_closed (manager->priv->button)) {
 		manager_policy_do (manager, GPM_CONF_BUTTON_LID_BATT,
 				   _("The lid has been closed, and the ac adapter "
 				     "removed (and gconf is okay)."));
@@ -1050,7 +1031,6 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 {
 	GConfValue *value;
 	gint brightness;
-	gboolean on_ac;
 
 	value = gconf_entry_get_value (entry);
 	if (value == NULL)
@@ -1063,17 +1043,16 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 		gpm_manager_sync_policy_sleep (manager);
 
 	/* set keyboard brightness */
-	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
-	if (strcmp (entry->key, GPM_CONF_KEYBOARD_BRIGHTNESS_AC) == 0) {
+	if (strcmp (entry->key, GPM_CONF_KEYBOARD_BRIGHTNESS_BATT) == 0) {
 
 		brightness = gconf_value_get_int (value);
-		if (on_ac)
+		if (manager->priv->on_battery)
 			gpm_brightness_kbd_set_std (manager->priv->brightness_kbd, brightness);
 
-	} else if (strcmp (entry->key, GPM_CONF_KEYBOARD_BRIGHTNESS_BATT) == 0) {
+	} else if (strcmp (entry->key, GPM_CONF_KEYBOARD_BRIGHTNESS_AC) == 0) {
 
 		brightness = gconf_client_get_int (manager->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_AC, NULL);
-		if (on_ac == FALSE)
+		if (!manager->priv->on_battery)
 			gpm_brightness_kbd_set_std (manager->priv->brightness_kbd, brightness);
 
 	}
@@ -1276,7 +1255,6 @@ gpm_engine_charge_low_cb (GpmEngine *engine, DkpDevice *device, GpmManager *mana
 	DkpDeviceType type;
 	gdouble percentage;
 	gint64 time_to_empty;
-	gboolean on_battery;
 
 	/* get device properties */
 	g_object_get (device,
@@ -1287,8 +1265,7 @@ gpm_engine_charge_low_cb (GpmEngine *engine, DkpDevice *device, GpmManager *mana
 
 	/* check to see if the batteries have not noticed we are on AC */
 	if (type == DKP_DEVICE_TYPE_BATTERY) {
-		on_battery = dkp_client_on_battery (manager->priv->client);
-		if (!on_battery) {
+		if (!manager->priv->on_battery) {
 			egg_warning ("ignoring critically low message as we are not on battery power");
 			goto out;
 		}
@@ -1356,7 +1333,6 @@ gpm_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, GpmManager 
 	DkpDeviceType type;
 	gdouble percentage;
 	gint64 time_to_empty;
-	gboolean on_battery;
 
 	/* get device properties */
 	g_object_get (device,
@@ -1367,8 +1343,7 @@ gpm_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, GpmManager 
 
 	/* check to see if the batteries have not noticed we are on AC */
 	if (type == DKP_DEVICE_TYPE_BATTERY) {
-		on_battery = dkp_client_on_battery (manager->priv->client);
-		if (!on_battery) {
+		if (!manager->priv->on_battery) {
 			egg_warning ("ignoring critically low message as we are not on battery power");
 			goto out;
 		}
@@ -1452,7 +1427,6 @@ gpm_engine_charge_action_cb (GpmEngine *engine, DkpDevice *device, GpmManager *m
 	gchar *message = NULL;
 	gchar *icon = NULL;
 	DkpDeviceType type;
-	gboolean on_battery;
 
 	/* get device properties */
 	g_object_get (device,
@@ -1461,8 +1435,7 @@ gpm_engine_charge_action_cb (GpmEngine *engine, DkpDevice *device, GpmManager *m
 
 	/* check to see if the batteries have not noticed we are on AC */
 	if (type == DKP_DEVICE_TYPE_BATTERY) {
-		on_battery = dkp_client_on_battery (manager->priv->client);
-		if (!on_battery) {
+		if (!manager->priv->on_battery) {
 			egg_warning ("ignoring critically low message as we are not on battery power");
 			goto out;
 		}
@@ -1624,7 +1597,6 @@ dpms_mode_changed_cb (GpmDpms *dpms, GpmDpmsMode mode, GpmManager *manager)
 static void
 gpm_manager_console_kit_active_changed_cb (EggConsoleKit *console, gboolean active, GpmManager *manager)
 {
-	gboolean on_ac;
 	gboolean ret;
 
 	egg_debug ("console now %s", active ? "active" : "inactive");
@@ -1639,8 +1611,7 @@ gpm_manager_console_kit_active_changed_cb (EggConsoleKit *console, gboolean acti
 		return;
 
 	/* get ac state */
-	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
-	if (on_ac) {
+	if (!manager->priv->on_battery) {
 		egg_debug ("Performing AC policy as become active when lid down");
 		manager_policy_do (manager, GPM_CONF_BUTTON_LID_AC,
 				   _("The lid has been found closed on ac power."));
@@ -1662,7 +1633,6 @@ gpm_manager_init (GpmManager *manager)
 	gboolean check_type_cpu;
 	DBusGConnection *connection;
 	GError *error = NULL;
-	gboolean on_ac;
 	guint version;
 
 	manager->priv = GPM_MANAGER_GET_PRIVATE (manager);
@@ -1684,6 +1654,8 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->notify = gpm_notify_new ();
 	manager->priv->conf = gconf_client_get_default ();
 	manager->priv->client = dkp_client_new ();
+	g_signal_connect (manager->priv->client, "changed",
+			  G_CALLBACK (gpm_manager_client_changed_cb), manager);
 
 	/* watch gnome-power-manager keys */
 	gconf_client_add_dir (manager->priv->conf, GPM_CONF_DIR,
@@ -1705,17 +1677,8 @@ gpm_manager_init (GpmManager *manager)
 		egg_error ("no gconf schema installed!");
 	}
 
-	/* we use ac_adapter so we can poke the screensaver and throttle */
-	manager->priv->ac_adapter = gpm_ac_adapter_new ();
-	g_signal_connect (manager->priv->ac_adapter, "ac-adapter-changed",
-			  G_CALLBACK (ac_adapter_changed_cb), manager);
-
 	/* coldplug so we are in the correct state at startup */
-	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
-	if (on_ac)
-		manager->priv->low_power = gconf_client_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_AC, NULL);
-	else
-		manager->priv->low_power = gconf_client_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_BATT, NULL);
+	manager->priv->on_battery = dkp_client_on_battery (manager->priv->client);
 
 	manager->priv->button = gpm_button_new ();
 	g_signal_connect (manager->priv->button, "button-pressed",
@@ -1804,8 +1767,7 @@ gpm_manager_init (GpmManager *manager)
 			  G_CALLBACK (gpm_engine_charge_action_cb), manager);
 
 	/* update ac throttle */
-	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
-	update_ac_throttle (manager, on_ac);
+	update_ac_throttle (manager);
 }
 
 /**
