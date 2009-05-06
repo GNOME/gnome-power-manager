@@ -465,7 +465,7 @@ coldplug_buttons (GpmButton *button)
 		egg_debug ("Couldn't obtain list of buttons");
 	}
 
-	hal_manager_free_capability (device_names);
+	g_strfreev (device_names);
 }
 
 /**

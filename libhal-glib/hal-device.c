@@ -32,7 +32,6 @@
 #include "egg-dbus-proxy.h"
 
 #include "hal-marshal.h"
-#include "hal-device-power.h"
 #include "hal-device.h"
 #include "hal-manager.h"
 
@@ -202,7 +201,7 @@ hal_device_get_string (HalDevice   *device,
  * @value: return value, passed by ref
  * Return value: TRUE for success, FALSE for failure
  **/
-gboolean
+static gboolean
 hal_device_get_int (HalDevice   *device,
 		     const gchar  *key,
 		     gint         *value,

@@ -62,7 +62,7 @@ egg_test_hal_manager (GpmSelfTest *test)
 	} else {
 		egg_test_failed (test, "did not find battery device");
 	}
-	hal_manager_free_capability (value);
+	g_strfreev (value);
 
 	g_object_unref (manager);
 

@@ -465,7 +465,7 @@ gpm_brightness_hal_init (GpmBrightnessHal *brightness)
 
 	/* We only want first laptop_panel object (should only be one) */
 	brightness->priv->udi = g_strdup (names[0]);
-	hal_manager_free_capability (names);
+	g_strfreev (names);
 
 	device = hal_device_new ();
 	hal_device_set_udi (device, brightness->priv->udi);

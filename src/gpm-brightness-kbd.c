@@ -757,7 +757,7 @@ gpm_brightness_kbd_init (GpmBrightnessKbd *brightness)
 	/* choose a start value */
 	adjust_kbd_brightness_according_to_ambient_light (brightness, TRUE);
 out:
-	hal_manager_free_capability (names);
+	g_strfreev (names);
 	g_object_unref (manager);
 }
 

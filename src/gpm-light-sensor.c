@@ -334,7 +334,7 @@ gpm_light_sensor_init (GpmLightSensor *sensor)
 		sensor->priv->udi = g_strdup (names[0]);
 		sensor->priv->has_sensor = TRUE;
 	}
-	hal_manager_free_capability (names);
+	g_strfreev (names);
 
 	/* connect to the devices */
 	if (sensor->priv->has_sensor) {

@@ -74,10 +74,6 @@ gboolean	 hal_device_get_string			(HalDevice	*device,
 							 const gchar	*key,
 							 gchar		**value,
 							 GError		**error);
-gboolean	 hal_device_get_int			(HalDevice	*device,
-							 const gchar	*key,
-							 gint		*value,
-							 GError		**error);
 gboolean	 hal_device_get_uint			(HalDevice	*device,
 							 const gchar	*key,
 							 guint		*value,

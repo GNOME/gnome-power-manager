@@ -69,12 +69,6 @@ typedef struct
 							 const gchar	*udi);
 	void		(* device_removed)		(HalManager	*manager,
 							 const gchar	*udi);
-	void		(* new_capability)		(HalManager	*manager,
-							 const gchar	*udi,
-							 const gchar	*capability);
-	void		(* lost_capability)		(HalManager	*manager,
-							 const gchar	*udi,
-							 const gchar	*capability);
 	void		(* daemon_start)		(HalManager	*manager);
 	void		(* daemon_stop)			(HalManager	*manager);
 } HalManagerClass;
@@ -82,23 +76,10 @@ typedef struct
 GType		 hal_manager_get_type			(void);
 HalManager	*hal_manager_new			(void);
 
-gboolean	 hal_manager_is_running			(HalManager	*manager);
-gint		 hal_manager_num_devices_of_capability	(HalManager	*manager,
-							 const gchar	*capability);
-gint		 hal_manager_num_devices_of_capability_with_value (HalManager *manager,
-							 const gchar	*capability,
-							 const gchar	*key,
-							 const gchar	*value);
 gboolean	 hal_manager_find_capability		(HalManager	*manager,
 							 const gchar	*capability,
 							 gchar     	***value,
 							 GError		**error);
-gboolean	 hal_manager_find_device_string_match	(HalManager	*manager,
-							 const gchar	*key,
-							 const gchar	*value,
-							 gchar		***devices,
-							 GError		**error);
-void		 hal_manager_free_capability		(gchar		**value);
 gboolean	 hal_manager_is_laptop			(HalManager	*manager);
 
 G_END_DECLS
