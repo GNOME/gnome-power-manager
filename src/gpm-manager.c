@@ -50,7 +50,6 @@
 #include "gpm-common.h"
 #include "gpm-dpms.h"
 #include "gpm-idle.h"
-#include "gpm-inhibit.h"
 #include "gpm-manager.h"
 #include "gpm-notify.h"
 #include "gpm-prefs.h"
@@ -66,7 +65,6 @@
 #include "gpm-devicekit.h"
 #include "gpm-feedback-widget.h"
 
-#include "org.freedesktop.PowerManagement.Inhibit.h"
 #include "org.freedesktop.PowerManagement.Backlight.h"
 
 static void     gpm_manager_finalize	(GObject	 *object);
@@ -81,7 +79,6 @@ struct GpmManagerPrivate
 	GpmDpms			*dpms;
 	GpmIdle			*idle;
 	GpmPrefsServer		*prefs_server;
-	GpmInhibit		*inhibit;
 	GpmNotify		*notify;
 	GpmControl		*control;
 	GpmScreensaver 		*screensaver;
@@ -225,47 +222,13 @@ gpm_manager_play (GpmManager *manager, GpmManagerSound action, gboolean force)
  * @action: The action we want to do, e.g. "suspend"
  *
  * Checks to see if the specific action has been inhibited by a program.
- * If so, displays a warning libnotify dialogue for the user explaining
- * the situation.
  *
  * Return value: TRUE if we can perform the action.
  **/
 static gboolean
 gpm_manager_is_inhibit_valid (GpmManager *manager, gboolean user_action, const char *action)
 {
-	gboolean has_inhibit;
-	gchar *title = NULL;
-
-	/* We have to decide on whether this is a idle action or a user keypress */
-	gpm_inhibit_has_inhibit (manager->priv->inhibit, &has_inhibit, NULL);
-
-	if (has_inhibit) {
-		GString *message = g_string_new ("");
-		const char *msg;
-
-		/*Compose message for each possible action*/
-		if (strcmp (action, "suspend") == 0)
-				title = g_strdup (_("Request to suspend")); 
-		else if (strcmp (action, "hibernate") == 0)
-				title = g_strdup (_("Request to hibernate")); 
-		else if (strcmp (action, "policy action") == 0)
-				title = g_strdup (_("Request to do policy action")); 
-		else if (strcmp (action, "timeout action") == 0)
-				title = g_strdup (_("Request to do timeout action"));
-		
-		gpm_inhibit_get_message (manager->priv->inhibit, message, action);
-		gpm_notify_display (manager->priv->notify,
-				      title,
-				      message->str,
-				      GPM_NOTIFY_TIMEOUT_LONG,
-				      GTK_STOCK_DIALOG_WARNING,
-				      GPM_NOTIFY_URGENCY_NORMAL);
-		/* I want this translated */
-		msg = _("Perform action anyway");
-		g_string_free (message, TRUE);
-		g_free (title);
-	}
-	return !has_inhibit;
+	return TRUE;
 }
 
 /**
@@ -680,10 +643,6 @@ idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmManager *manager)
 static void
 lid_button_pressed (GpmManager *manager, gboolean pressed)
 {
-	gboolean has_inhibit;
-	gboolean do_policy;
-	gchar *action;
-
 	if (pressed)
 		gpm_manager_play (manager, GPM_MANAGER_SOUND_LID_CLOSE, FALSE);
 	else
@@ -699,29 +658,6 @@ lid_button_pressed (GpmManager *manager, gboolean pressed)
 		egg_debug ("Performing AC policy");
 		manager_policy_do (manager, GPM_CONF_BUTTON_LID_AC,
 				   _("The lid has been closed on ac power."));
-		return;
-	}
-
-	/* default */
-	do_policy = TRUE;
-
-	/* are we inhibited? */
-	gpm_inhibit_has_inhibit (manager->priv->inhibit, &has_inhibit, NULL);
-
-	/* do not do lid close action if suspend (or hibernate) */
-	if (has_inhibit) {
-		/* get the policy action for battery */
-		action = gconf_client_get_string (manager->priv->conf, GPM_CONF_BUTTON_LID_BATT, NULL);
-
-		/* if we are trying to suspend or hibernate then don't do action */
-		if ((strcmp (action, ACTION_SUSPEND) == 0) ||
-		    (strcmp (action, ACTION_HIBERNATE) == 0))
-			do_policy = FALSE;
-		g_free (action);
-	}
-
-	if (do_policy == FALSE) {
-		egg_debug ("Not doing lid policy action as inhibited as set to sleep");
 		return;
 	}
 
@@ -1433,46 +1369,6 @@ out:
 }
 
 /**
- * has_inhibit_changed_cb:
- **/
-static void
-has_inhibit_changed_cb (GpmInhibit *inhibit, gboolean has_inhibit, GpmManager *manager)
-{
-	gboolean is_laptop = FALSE;
-	gboolean show_inhibit_lid;
-	gchar *action = NULL;
-
-	/* we don't care about uninhibits */
-	if (has_inhibit == FALSE)
-		return;
-
-	/* only show this if specified in gconf */
-	show_inhibit_lid = gconf_client_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_INHIBIT_LID, NULL);
-
-	/* we've already shown the UI and been clicked */
-	if (show_inhibit_lid == FALSE)
-		return;
-
-/* FIXME: detect if laptop */
-
-	/* we don't warn for desktops, as they do not have a lid... */
-	if (is_laptop == FALSE)
-		return;
-
-	/* get the policy action for battery */
-	action = gconf_client_get_string (manager->priv->conf, GPM_CONF_BUTTON_LID_BATT, NULL);
-	if (action == NULL)
-		return;
-
-	/* if the policy on lid close is sleep then show a warning */
-	if ((strcmp (action, ACTION_SUSPEND) == 0) ||
-	    (strcmp (action, ACTION_HIBERNATE) == 0))
-		gpm_notify_inhibit_lid (manager->priv->notify);
-
-	g_free (action);
-}
-
-/**
  * brightness_kbd_changed_cb:
  * @brightness: The GpmBrightnessKbd class instance
  * @percentage: The new percentage brightness
@@ -1639,16 +1535,6 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect (manager->priv->dpms, "mode-changed",
 			  G_CALLBACK (dpms_mode_changed_cb), manager);
 
-	/* use a class to handle the complex stuff */
-	egg_debug ("creating new inhibit instance");
-	manager->priv->inhibit = gpm_inhibit_new ();
-	g_signal_connect (manager->priv->inhibit, "has-inhibit-changed",
-			  G_CALLBACK (has_inhibit_changed_cb), manager);
-	/* add the interface */
-	dbus_g_object_type_install_info (GPM_TYPE_INHIBIT, &dbus_glib_gpm_inhibit_object_info);
-	dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH_INHIBIT,
-					     G_OBJECT (manager->priv->inhibit));
-
 	/* use the control object */
 	egg_debug ("creating new control instance");
 	manager->priv->control = gpm_control_new ();
@@ -1713,7 +1599,6 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->idle);
 	g_object_unref (manager->priv->engine);
 	g_object_unref (manager->priv->tray_icon);
-	g_object_unref (manager->priv->inhibit);
 	g_object_unref (manager->priv->screensaver);
 	g_object_unref (manager->priv->notify);
 	g_object_unref (manager->priv->prefs_server);

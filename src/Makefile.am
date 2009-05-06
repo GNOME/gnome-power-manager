@@ -5,7 +5,6 @@ NULL =
 
 EXTRA_DIST =						\
 	org.freedesktop.PowerManagement.xml		\
-	org.freedesktop.PowerManagement.Inhibit.xml	\
 	org.freedesktop.PowerManagement.Backlight.xml	\
 	gpm-marshal.list				\
 	$(NULL)
@@ -193,8 +192,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-networkmanager.h				\
 	gpm-networkmanager.c				\
 	gpm-stock-icons.h				\
-	gpm-inhibit.h					\
-	gpm-inhibit.c					\
 	gpm-feedback-widget.h				\
 	gpm-feedback-widget.c				\
 	$(NULL)
@@ -275,8 +272,6 @@ gnome_power_self_test_SOURCES =				\
 	gpm-marshal.c					\
 	gpm-common.h					\
 	gpm-common.c					\
-	gpm-inhibit.h					\
-	gpm-inhibit.c					\
 	gpm-devicekit.h					\
 	gpm-devicekit.c					\
 	$(NULL)
@@ -297,7 +292,6 @@ gnome_power_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS) $(WARNINGFLAGS)
 
 BUILT_SOURCES = 					\
 	org.freedesktop.PowerManagement.h		\
-	org.freedesktop.PowerManagement.Inhibit.h	\
 	org.freedesktop.PowerManagement.Backlight.h	\
 	gpm-marshal.c					\
 	gpm-marshal.h					\
@@ -316,13 +310,6 @@ org.freedesktop.PowerManagement.h: org.freedesktop.PowerManagement.xml
 		--mode=glib-server			\
 		--output=org.freedesktop.PowerManagement.h		\
 		$(srcdir)/org.freedesktop.PowerManagement.xml
-
-org.freedesktop.PowerManagement.Inhibit.h: org.freedesktop.PowerManagement.Inhibit.xml
-	libtool --mode=execute dbus-binding-tool	\
-		--prefix=gpm_inhibit			\
-		--mode=glib-server			\
-		--output=org.freedesktop.PowerManagement.Inhibit.h	\
-		$(srcdir)/org.freedesktop.PowerManagement.Inhibit.xml
 
 org.freedesktop.PowerManagement.Backlight.h: org.freedesktop.PowerManagement.Backlight.xml
 	libtool --mode=execute dbus-binding-tool	\
