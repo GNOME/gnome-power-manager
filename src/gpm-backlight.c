@@ -82,7 +82,6 @@ struct GpmBacklightPrivate
 };
 
 enum {
-	MODE_CHANGED,
 	BRIGHTNESS_CHANGED,
 	LAST_SIGNAL
 };
@@ -102,39 +101,6 @@ gpm_backlight_error_quark (void)
 	if (!quark)
 		quark = g_quark_from_static_string ("gpm_backlight_error");
 	return quark;
-}
-
-/* dbus methods shouldn't use enumerated types, but should use textual descriptors */
-gboolean
-gpm_backlight_set_mode (GpmBacklight *backlight, const gchar *mode_str, GError **error)
-{
-	gboolean ret;
-	GpmDpmsMode mode;
-
-	g_return_val_if_fail (GPM_IS_BACKLIGHT (backlight), FALSE);
-
-	/* convert mode to an enumerated type */
-	mode = gpm_dpms_mode_from_string (mode_str);
-	ret = gpm_dpms_set_mode (backlight->priv->dpms, mode, error);
-	return ret;
-}
-
-/* dbus methods shouldn't use enumerated types, but should use textual descriptors */
-gboolean
-gpm_backlight_get_mode (GpmBacklight *backlight,
-			const gchar **mode_str,
-			GError      **error)
-{
-	gboolean ret;
-	GpmDpmsMode mode;
-
-	g_return_val_if_fail (GPM_IS_BACKLIGHT (backlight), FALSE);
-	g_return_val_if_fail (mode_str != NULL, FALSE);
-
-	ret = gpm_dpms_get_mode (backlight->priv->dpms, &mode, error);
-	if (ret)
-		*mode_str = g_strdup (gpm_dpms_mode_to_string (mode));
-	return ret;
 }
 
 /**
@@ -579,20 +545,6 @@ idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *backlight)
 }
 
 /**
- * mode_changed_cb:
- * @mode: The DPMS mode, e.g. GPM_DPMS_MODE_OFF
- * @manager: This class instance
- *
- * What happens when the DPMS mode is changed.
- **/
-static void
-mode_changed_cb (GpmDpms *dpms, GpmDpmsMode mode, GpmBacklight *backlight)
-{
-	egg_debug ("emitting mode-changed : %s", gpm_dpms_mode_to_string (mode));
-	g_signal_emit (backlight, signals [MODE_CHANGED], 0, gpm_dpms_mode_to_string (mode));
-}
-
-/**
  * brightness_changed_cb:
  * @brightness: The GpmBrightness class instance
  * @percentage: The new percentage brightness
@@ -696,14 +648,6 @@ gpm_backlight_class_init (GpmBacklightClass *klass)
 			      NULL, NULL,
 			      g_cclosure_marshal_VOID__UINT,
 			      G_TYPE_NONE, 1, G_TYPE_UINT);
-	signals [MODE_CHANGED] =
-		g_signal_new ("mode-changed",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmBacklightClass, mode_changed),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__STRING,
-			      G_TYPE_NONE, 1, G_TYPE_STRING);
 
 	g_type_class_add_private (klass, sizeof (GpmBacklightPrivate));
 }
@@ -797,8 +741,6 @@ gpm_backlight_init (GpmBacklight *backlight)
 
 	/* DPMS mode poll class */
 	backlight->priv->dpms = gpm_dpms_new ();
-	g_signal_connect (backlight->priv->dpms, "mode-changed",
-			  G_CALLBACK (mode_changed_cb), backlight);
 
 	/* we refresh DPMS on resume */
 	backlight->priv->control = gpm_control_new ();

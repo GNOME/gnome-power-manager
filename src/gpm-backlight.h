@@ -47,8 +47,6 @@ typedef struct
 	GObjectClass	parent_class;
 	void		(* brightness_changed)		(GpmBacklight	*backlight,
 							 gint		 brightness);
-	void		(* mode_changed)		(GpmBacklight	*backlight,
-							 const gchar	*mode);
 } GpmBacklightClass;
 
 typedef enum
@@ -67,12 +65,6 @@ gboolean	 gpm_backlight_get_brightness		(GpmBacklight	*backlight,
 							 GError		**error);
 gboolean	 gpm_backlight_set_brightness		(GpmBacklight	*backlight,
 							 guint		 brightness,
-							 GError		**error);
-gboolean	 gpm_backlight_get_mode			(GpmBacklight	*backlight,
-							 const gchar	**mode,
-							 GError		**error);
-gboolean	 gpm_backlight_set_mode			(GpmBacklight	*backlight,
-							 const gchar	*mode,
 							 GError		**error);
 
 G_END_DECLS

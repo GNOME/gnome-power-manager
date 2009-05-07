@@ -785,11 +785,6 @@ button_pressed_cb (GpmButton *button, const gchar *type, GpmManager *manager)
 
 /**
  * gpm_manager_client_changed_cb:
- * @power: The power class instance
- * @on_ac: if we are on AC power
- * @manager: This class instance
- *
- * Does the actions when the ac power source is inserted/removed.
  **/
 static void
 gpm_manager_client_changed_cb (DkpClient *client, GpmManager *manager)
