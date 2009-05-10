@@ -60,8 +60,11 @@ struct GpmBrightnessXRandRPrivate
 	Display			*dpy;
 	guint			 shared_value;
 	gboolean		 has_extension;
+#if (RANDR_MAJOR == 1 && RANDR_MINOR >= 3)
+	gboolean		 has_randr13;
+#endif
 	gboolean		 hw_changed;
-	/* An cache of XRRScreenResources is used as XRRGetScreenResources is expensive */
+	/* A cache of XRRScreenResources is used as XRRGetScreenResources is expensive */
 	GPtrArray		*resources;
 };
 
@@ -169,6 +172,34 @@ gpm_brightness_xrandr_setup_display (GpmBrightnessXRandR *brightness)
 	}
 	return TRUE;
 }
+
+#if (RANDR_MAJOR == 1 && RANDR_MINOR >= 3)
+/**
+ * gpm_brightness_xrandr_setup_version: Check whether xserver really supports xrandr-1.3 features.
+ **/
+static gboolean
+gpm_brightness_xrandr_setup_version (GpmBrightnessXRandR *brightness)
+{
+	gint major, minor;
+
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS_XRANDR (brightness), FALSE);
+
+	/* get the display */
+	brightness->priv->dpy = GDK_DISPLAY();
+	if (!brightness->priv->dpy) {
+		egg_error ("Cannot open display");
+		return FALSE;
+	}
+	if (!XRRQueryVersion (brightness->priv->dpy, &major, &minor)) {
+		return FALSE;
+	}
+	if (major == 1 && minor < 3) {
+		egg_debug ("RandR version %d.%d does not support XRRGetScreenResourcesCurrent", major, minor);
+		return FALSE;
+	}
+	return TRUE;
+}
+#endif
 
 /**
  * gpm_brightness_xrandr_output_get_limits:
@@ -616,9 +647,14 @@ gpm_brightness_xrandr_update_cache (GpmBrightnessXRandR *brightness)
 		root = RootWindow (brightness->priv->dpy, screen);
 		/* XRRGetScreenResourcesCurrent is less expensive than
 		   XRRGetScreenResources, however it is available only
-		   in RandR 1.3 or higher */
+		   in RandR 1.3 or higher and of course xserver needs
+		   to support it.
+		*/
 #if (RANDR_MAJOR == 1 && RANDR_MINOR >= 3)
-		resource = XRRGetScreenResourcesCurrent (brightness->priv->dpy, root);
+		if (brightness->priv->has_randr13)
+			resource = XRRGetScreenResourcesCurrent (brightness->priv->dpy, root);
+		else
+			resource = XRRGetScreenResources (brightness->priv->dpy, root);
 #else
 		resource = XRRGetScreenResources (brightness->priv->dpy, root);
 #endif
@@ -684,6 +720,9 @@ gpm_brightness_xrandr_init (GpmBrightnessXRandR *brightness)
 
 	/* can we do this */
 	brightness->priv->has_extension = gpm_brightness_xrandr_setup_display (brightness);
+#if (RANDR_MAJOR == 1 && RANDR_MINOR >= 3)
+	brightness->priv->has_randr13 = gpm_brightness_xrandr_setup_version (brightness);
+#endif
 	if (brightness->priv->has_extension == FALSE) {
 		egg_debug ("no XRANDR extension, so aborting init");
 		return;
