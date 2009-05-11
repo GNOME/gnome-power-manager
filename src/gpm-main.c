@@ -35,7 +35,6 @@
 #include <gtk/gtk.h>
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
-#include <glade/glade.h>
 
 #include "gpm-stock-icons.h"
 #include "gpm-common.h"

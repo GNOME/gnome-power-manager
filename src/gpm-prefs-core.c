@@ -26,7 +26,6 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 
-#include <glade/glade.h>
 #include <gtk/gtk.h>
 #include <dbus/dbus-glib.h>
 #include <math.h>
@@ -53,7 +52,7 @@ static void     gpm_prefs_finalize   (GObject	    *object);
 
 struct GpmPrefsPrivate
 {
-	GladeXML		*glade_xml;
+	GtkBuilder		*builder;
 	gboolean		 has_batteries;
 	gboolean		 has_lcd;
 	gboolean		 has_ups;
@@ -134,9 +133,9 @@ gpm_prefs_class_init (GpmPrefsClass *klass)
 void
 gpm_prefs_activate_window (GpmPrefs *prefs)
 {
-	GtkWidget *widget;
-	widget = glade_xml_get_widget (prefs->priv->glade_xml, "dialog_preferences");
-	gtk_window_present (GTK_WINDOW (widget));
+	GtkWindow *window;
+	window = GTK_WINDOW (gtk_builder_get_object (prefs->priv->builder, "dialog_preferences"));
+	gtk_window_present (window);
 }
 
 /**
@@ -338,7 +337,7 @@ gpm_prefs_setup_sleep_slider (GpmPrefs *prefs, const gchar *widget_name, const g
 	gboolean is_writable;
 	GtkAdjustment *adjustment;
 
-	widget = glade_xml_get_widget (prefs->priv->glade_xml, widget_name);
+	widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, widget_name));
 	g_signal_connect (G_OBJECT (widget), "format-value",
 			  G_CALLBACK (gpm_prefs_format_time_cb), prefs);
 
@@ -403,12 +402,12 @@ gpm_prefs_setup_brightness_slider (GpmPrefs    *prefs,
 				   const gchar *widget_name,
 				   const gchar *gpm_pref_key)
 {
-	GladeXML    *xml = prefs->priv->glade_xml;
+	GtkBuilder    *xml = prefs->priv->builder;
 	GtkWidget *widget;
 	int value;
 	gboolean is_writable;
 
-	widget = glade_xml_get_widget (xml, widget_name);
+	widget = GTK_WIDGET (gtk_builder_get_object (xml, widget_name));
 
 	g_signal_connect (G_OBJECT (widget), "format-value",
 			  G_CALLBACK (gpm_prefs_format_percentage_cb), NULL);
@@ -466,6 +465,26 @@ gpm_prefs_action_combo_changed_cb (GtkWidget *widget,
 }
 
 /**
+ * gpm_prefs_set_combo_simple_text:
+ **/
+static void
+gpm_prefs_set_combo_simple_text (GtkWidget *combo_box)
+{
+	GtkCellRenderer *cell;
+	GtkListStore *store;
+
+	store = gtk_list_store_new (1, G_TYPE_STRING);
+	gtk_combo_box_set_model (GTK_COMBO_BOX (combo_box), GTK_TREE_MODEL (store));
+	g_object_unref (store);
+
+	cell = gtk_cell_renderer_text_new ();
+	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), cell, TRUE);
+	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), cell,
+					"text", 0,
+					NULL);
+}
+
+/**
  * gpm_prefs_setup_action_combo:
  * @prefs: This prefs class instance
  * @widget_name: The GtkWidget name
@@ -478,14 +497,15 @@ gpm_prefs_setup_action_combo (GpmPrefs     *prefs,
 			      const gchar  *gpm_pref_key,
 			      const gchar **actions)
 {
-	GladeXML    *xml = prefs->priv->glade_xml;
+	GtkBuilder    *xml = prefs->priv->builder;
 	gchar *value;
 	gint i = 0;
 	gint n_added = 0;
 	gboolean is_writable;
 	GtkWidget *widget;
 
-	widget = glade_xml_get_widget (xml, widget_name);
+	widget = GTK_WIDGET (gtk_builder_get_object (xml, widget_name));
+	gpm_prefs_set_combo_simple_text (widget);
 
 	value = gconf_client_get_string (prefs->priv->conf, gpm_pref_key, NULL);
 	is_writable = gconf_client_key_is_writable (prefs->priv->conf, gpm_pref_key, NULL);
@@ -577,13 +597,13 @@ gpm_prefs_setup_checkbox (GpmPrefs    *prefs,
 			  const gchar *gpm_pref_key)
 {
 
-	GladeXML    *xml = prefs->priv->glade_xml;
+	GtkBuilder    *xml = prefs->priv->builder;
 	gboolean checked;
 	GtkWidget *widget;
 
 	egg_debug ("Setting up %s", gpm_pref_key);
 
-	widget = glade_xml_get_widget (xml, widget_name);
+	widget = GTK_WIDGET (gtk_builder_get_object (xml, widget_name));
 
 	checked = gconf_client_get_bool (prefs->priv->conf, gpm_pref_key, NULL);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
@@ -640,7 +660,7 @@ set_idle_hscale_stops (GpmPrefs    *prefs,
 		       gint         gs_idle_time)
 {
 	GtkWidget *widget;
-	widget = glade_xml_get_widget (prefs->priv->glade_xml, widget_name);
+	widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, widget_name));
 	if (gs_idle_time + 1 > NEVER_TIME_ON_SLIDER) {
 		egg_warning ("gnome-session timeout is really big");
 		return;
@@ -666,7 +686,7 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 		return;
 
 	if (strcmp (entry->key, GPM_CONF_BACKLIGHT_BRIGHTNESS_AC) == 0) {
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hscale_ac_brightness");
+		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "hscale_ac_brightness"));
 		brightness = gconf_value_get_int (value);
 		gtk_range_set_value (GTK_RANGE (widget), brightness);
 	}
@@ -702,16 +722,16 @@ prefs_setup_notification (GpmPrefs *prefs)
 	icon_policy = gpm_tray_icon_mode_from_string (icon_policy_str);
 	g_free (icon_policy_str);
 
-	radiobutton_icon_always = glade_xml_get_widget (prefs->priv->glade_xml,
-							"radiobutton_notification_always");
-	radiobutton_icon_present = glade_xml_get_widget (prefs->priv->glade_xml,
-							"radiobutton_notification_present");
-	radiobutton_icon_charge = glade_xml_get_widget (prefs->priv->glade_xml,
-							"radiobutton_notification_charge");
-	radiobutton_icon_critical = glade_xml_get_widget (prefs->priv->glade_xml,
-							"radiobutton_notification_critical");
-	radiobutton_icon_never = glade_xml_get_widget (prefs->priv->glade_xml,
-							"radiobutton_notification_never");
+	radiobutton_icon_always = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder,
+					      "radiobutton_notification_always"));
+	radiobutton_icon_present = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder,
+					       "radiobutton_notification_present"));
+	radiobutton_icon_charge = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder,
+					      "radiobutton_notification_charge"));
+	radiobutton_icon_critical = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder,
+					      "radiobutton_notification_critical"));
+	radiobutton_icon_never = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder,
+					     "radiobutton_notification_never"));
 
 	is_writable = gconf_client_key_is_writable (prefs->priv->conf, GPM_CONF_UI_ICON_POLICY, NULL);
 	gtk_widget_set_sensitive (radiobutton_icon_always, is_writable);
@@ -802,13 +822,13 @@ prefs_setup_ac (GpmPrefs *prefs)
 	set_idle_hscale_stops (prefs, "hscale_ac_computer", prefs->priv->idle_delay);
 
 	if (prefs->priv->has_button_lid == FALSE) {
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_ac_lid");
+		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "hbox_ac_lid"));
 		gtk_widget_hide_all (widget);
 	}
 	if (prefs->priv->has_lcd == FALSE) {
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_ac_brightness");
+		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "hbox_ac_brightness"));
 		gtk_widget_hide_all (widget);
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "checkbutton_ac_display_dim");
+		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "checkbutton_ac_display_dim"));
 		gtk_widget_hide_all (widget);
 	}
 }
@@ -817,7 +837,7 @@ static void
 prefs_setup_battery (GpmPrefs *prefs)
 {
 	GtkWidget *widget;
-	GtkWidget *notebook;
+	GtkNotebook *notebook;
 	gint page;
 
 	const gchar  *button_lid_actions[] =
@@ -835,10 +855,10 @@ prefs_setup_battery (GpmPrefs *prefs)
 				 NULL};
 
 	if (prefs->priv->has_batteries == FALSE) {
-		notebook = glade_xml_get_widget (prefs->priv->glade_xml, "notebook_preferences");
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_battery");
-		page = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (widget));
-		gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page);
+		notebook = GTK_NOTEBOOK (gtk_builder_get_object (prefs->priv->builder, "notebook_preferences"));
+		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "vbox_battery"));
+		page = gtk_notebook_page_num (notebook, GTK_WIDGET (widget));
+		gtk_notebook_remove_page (notebook, page);
 		return;
 	}
 
@@ -861,18 +881,18 @@ prefs_setup_battery (GpmPrefs *prefs)
 				  GPM_CONF_BACKLIGHT_IDLE_DIM_BATT);
 
 	if (prefs->priv->has_ambient == FALSE) {
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "checkbutton_general_ambient");
+		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "checkbutton_general_ambient"));
 		gtk_widget_hide_all (widget);
 	}
 
 	set_idle_hscale_stops (prefs, "hscale_battery_computer", prefs->priv->idle_delay);
 
 	if (prefs->priv->has_button_lid == FALSE) {
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_battery_lid");
+		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "hbox_battery_lid"));
 		gtk_widget_hide_all (widget);
 	}
 	if (prefs->priv->has_lcd == FALSE) {
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "checkbutton_battery_display_dim");
+		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "checkbutton_battery_display_dim"));
 		gtk_widget_hide_all (widget);
 	}
 }
@@ -881,7 +901,7 @@ static void
 prefs_setup_ups (GpmPrefs *prefs)
 {
 	GtkWidget *widget;
-	GtkWidget *notebook;
+	GtkNotebook *notebook;
 	gint page;
 
 	const gchar  *ups_low_actions[] =
@@ -891,10 +911,10 @@ prefs_setup_ups (GpmPrefs *prefs)
 				 NULL};
 
 	if (prefs->priv->has_ups == FALSE) {
-		notebook = glade_xml_get_widget (prefs->priv->glade_xml, "notebook_preferences");
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_ups");
-		page = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (widget));
-		gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page);
+		notebook = GTK_NOTEBOOK (gtk_builder_get_object (prefs->priv->builder, "notebook_preferences"));
+		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "vbox_ups"));
+		page = gtk_notebook_page_num (notebook, GTK_WIDGET (widget));
+		gtk_notebook_remove_page (notebook, page);
 		return;
 	}
 
@@ -935,12 +955,12 @@ prefs_setup_general (GpmPrefs *prefs)
 				  GPM_CONF_AMBIENT_ENABLE);
 
 	if (prefs->priv->has_ambient == FALSE) {
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "checkbutton_general_ambient");
+		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "checkbutton_general_ambient"));
 		gtk_widget_hide_all (widget);
 	}
 
 	if (prefs->priv->has_button_suspend == FALSE) {
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_general_suspend");
+		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "hbox_general_suspend"));
 		gtk_widget_hide_all (widget);
 	}
 }
@@ -992,22 +1012,6 @@ pk_prefs_set_defaults_cb (PolKitGnomeAction *default_action, GpmPrefs *prefs)
 }
 
 /**
- * gpk_prefs_create_custom_widget:
- **/
-static GtkWidget *
-gpk_prefs_create_custom_widget (GladeXML *xml, gchar *func_name, gchar *name,
-				     gchar *string1, gchar *string2,
-				     gint int1, gint int2, gpointer user_data)
-{
-	GpmPrefs *prefs = GPM_PREFS (user_data);
-	if (strcmp (name, "button_default") == 0) {
-		return polkit_gnome_action_create_button (prefs->priv->default_action);
-	}
-	egg_warning ("name unknown=%s", name);
-	return NULL;
-}
-
-/**
  * gpk_prefs_setup_policykit:
  *
  * We have to do this before the glade stuff if done as the custom handler needs the actions setup
@@ -1037,7 +1041,12 @@ gpm_prefs_init (GpmPrefs *prefs)
 {
 	GtkWidget *main_window;
 	GtkWidget *widget;
+#ifdef HAVE_GCONF_DEFAULTS
+	GtkWidget *button;
+#endif
 	gint caps;
+	guint retval;
+	GError *error = NULL;
 
 	prefs->priv = GPM_PREFS_GET_PRIVATE (prefs);
 
@@ -1065,20 +1074,26 @@ gpm_prefs_init (GpmPrefs *prefs)
 	prefs->priv->can_hibernate = gpm_dbus_method_bool ("CanHibernate");
 	egg_debug ("caps=%i", caps);
 
-#ifdef HAVE_GCONF_DEFAULTS
-	/* use custom widgets */
-	glade_set_custom_handler (gpk_prefs_create_custom_widget, prefs);
-
-	/* we have to do this before we connect up the glade file */
-	gpk_prefs_setup_policykit (prefs);
-#endif
-
-	prefs->priv->glade_xml = glade_xml_new (GPM_DATA "/gpm-prefs.glade", NULL, NULL);
-	if (prefs->priv->glade_xml == NULL) {
-		g_error ("Cannot find 'gpm-prefs.glade'");
+	prefs->priv->builder = gtk_builder_new ();
+	retval = gtk_builder_add_from_file (prefs->priv->builder, GPM_DATA "/gpm-prefs.ui", &error);
+	if (error != NULL) {
+		egg_warning ("failed to load ui: %s", error->message);
+		g_error_free (error);
 	}
 
-	main_window = glade_xml_get_widget (prefs->priv->glade_xml, "dialog_preferences");
+	main_window = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "dialog_preferences"));
+
+#ifdef HAVE_GCONF_DEFAULTS
+	/* we have to do this before we connect up the GtkBuilder file */
+	gpk_prefs_setup_policykit (prefs);
+
+	/* create PolicyKit button */
+	widget = gtk_dialog_get_action_area (GTK_DIALOG (main_window));
+	button = polkit_gnome_action_create_button (prefs->priv->default_action);
+	gtk_box_pack_start (GTK_BOX (widget), button, FALSE, FALSE, 0);
+	gtk_box_reorder_child (GTK_BOX (widget), button, 0);
+	gtk_widget_show (button);
+#endif
 
 	/* Hide window first so that the dialogue resizes itself without redrawing */
 	gtk_widget_hide (main_window);
@@ -1088,11 +1103,11 @@ gpm_prefs_init (GpmPrefs *prefs)
 	g_signal_connect (main_window, "delete_event",
 			  G_CALLBACK (gpm_prefs_delete_event_cb), prefs);
 
-	widget = glade_xml_get_widget (prefs->priv->glade_xml, "button_close");
+	widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "button_close"));
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_prefs_close_cb), prefs);
 
-	widget = glade_xml_get_widget (prefs->priv->glade_xml, "button_help");
+	widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "button_help"));
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_prefs_help_cb), prefs);
 

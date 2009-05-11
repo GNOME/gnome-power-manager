@@ -23,7 +23,6 @@
 
 #include <glib.h>
 
-#include <glade/glade.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 
@@ -40,7 +39,7 @@ static void	gpm_feedback_show	(GtkWidget 	  *widget);
 
 struct GpmFeedbackPrivate
 {
-	GladeXML		*xml;
+	GtkBuilder		*builder;
 	GtkWidget		*main_window;
 	GtkWidget		*progress;
 	guint			 timer_id;
@@ -153,7 +152,7 @@ gpm_feedback_display_value (GpmFeedback *feedback, gfloat value)
 gboolean
 gpm_feedback_set_icon_name (GpmFeedback *feedback, const gchar *icon_name)
 {
-	GtkWidget *image;
+	GtkImage *image;
 
 	g_return_val_if_fail (feedback != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_FEEDBACK (feedback), FALSE);
@@ -166,8 +165,8 @@ gpm_feedback_set_icon_name (GpmFeedback *feedback, const gchar *icon_name)
 	egg_debug ("Using icon name '%s'", icon_name);
 	feedback->priv->icon_name = g_strdup (icon_name);
 
-	image = glade_xml_get_widget (feedback->priv->xml, "image");
-	gtk_image_set_from_icon_name  (GTK_IMAGE (image), feedback->priv->icon_name, GTK_ICON_SIZE_DIALOG);
+	image = GTK_IMAGE (gtk_builder_get_object (feedback->priv->builder, "image"));
+	gtk_image_set_from_icon_name  (image, feedback->priv->icon_name, GTK_ICON_SIZE_DIALOG);
 
 	return TRUE;
 }
@@ -179,17 +178,24 @@ gpm_feedback_set_icon_name (GpmFeedback *feedback, const gchar *icon_name)
 static void
 gpm_feedback_init (GpmFeedback *feedback)
 {
+	guint retval;
+	GError *error = NULL;
+
 	feedback->priv = GPM_FEEDBACK_GET_PRIVATE (feedback);
 	feedback->priv->timer_id = 0;
 	feedback->priv->icon_name = NULL;
 
-	/* initialise the window */
-	feedback->priv->xml = glade_xml_new (GPM_DATA "/gpm-feedback-widget.glade", NULL, NULL);
-	if (feedback->priv->xml == NULL)
-		egg_error ("Can't find gpm-feedback-widget.glade");
-	feedback->priv->main_window = glade_xml_get_widget (feedback->priv->xml, "main_window");
+	/* get UI */
+	feedback->priv->builder = gtk_builder_new ();
+	retval = gtk_builder_add_from_file (feedback->priv->builder, GPM_DATA "/gpm-feedback-widget.ui", &error);
+	if (error != NULL) {
+		egg_warning ("failed to load ui: %s", error->message);
+		g_error_free (error);
+	}
 
-	feedback->priv->progress = glade_xml_get_widget (feedback->priv->xml, "progressbar");
+	/* initialise the window */
+	feedback->priv->main_window = GTK_WIDGET (gtk_builder_get_object (feedback->priv->builder, "main_window"));
+	feedback->priv->progress = GTK_WIDGET (gtk_builder_get_object (feedback->priv->builder, "progressbar"));
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (feedback->priv->progress), 0.0f);
 	gtk_widget_set_sensitive (feedback->priv->progress, FALSE);
 

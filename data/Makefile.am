@@ -24,10 +24,10 @@ $(service_DATA): $(service_in_files) Makefile
 	@sed -e "s|\@servicedir\@|$(bindir)|" $< > $@
 
 pkgdata_DATA =						\
-	gpm-statistics.glade				\
-	gpm-feedback-widget.glade			\
-	gpm-inhibit-test.glade				\
-	gpm-prefs.glade
+	gpm-statistics.ui				\
+	gpm-feedback-widget.ui				\
+	gpm-inhibit-test.ui				\
+	gpm-prefs.ui
 
 EXTRA_DIST =						\
 	gnome-power-manager.schemas.in			\

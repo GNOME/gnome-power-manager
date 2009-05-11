@@ -26,7 +26,6 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 
-#include <glade/glade.h>
 #include <gtk/gtk.h>
 #include <dbus/dbus-glib.h>
 #include <gconf/gconf-client.h>
@@ -42,7 +41,7 @@
 #include "gpm-devicekit.h"
 #include "gpm-graph-widget.h"
 
-static GladeXML *glade_xml = NULL;
+static GtkBuilder *builder = NULL;
 static GtkListStore *list_store_info = NULL;
 static GtkListStore *list_store_devices = NULL;
 static GtkListStore *list_store_wakeups = NULL;
@@ -53,6 +52,8 @@ static guint history_time;
 static GConfClient *gconf_client;
 static gfloat sigma_smoothing = 0.0f;
 static DkpWakeups *wakeups = NULL;
+static GtkWidget *graph_history = NULL;
+static GtkWidget *graph_statistics = NULL;
 
 enum {
 	GPM_INFO_COLUMN_TEXT,
@@ -505,21 +506,20 @@ gpm_stats_update_info_page_history (DkpDevice *device)
 	GTimeVal timeval;
 
 	new = g_ptr_array_new ();
-	widget = glade_xml_get_widget (glade_xml, "custom_graph_history");
-	gpm_graph_widget_set_type_x (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_TIME);
+	gpm_graph_widget_set_type_x (GPM_GRAPH_WIDGET (graph_history), GPM_GRAPH_WIDGET_TYPE_TIME);
 	if (strcmp (history_type, GPM_HISTORY_CHARGE_VALUE) == 0)
-		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
+		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (graph_history), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
 	else if (strcmp (history_type, GPM_HISTORY_RATE_VALUE) == 0)
-		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_POWER);
+		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (graph_history), GPM_GRAPH_WIDGET_TYPE_POWER);
 	else
-		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_TIME);
+		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (graph_history), GPM_GRAPH_WIDGET_TYPE_TIME);
 
 	array = dkp_device_get_history (device, history_type, history_time, 150, NULL);
 	if (array == NULL) {
-		gtk_widget_hide (widget);
+		gtk_widget_hide (graph_history);
 		goto out;
 	}
-	gtk_widget_show (widget);
+	gtk_widget_show (graph_history);
 
 	g_get_current_time (&timeval);
 	offset = timeval.tv_sec;
@@ -549,14 +549,13 @@ gpm_stats_update_info_page_history (DkpDevice *device)
 
 	/* render */
 	sigma_smoothing = 2.0;
-	widget = glade_xml_get_widget (glade_xml, "checkbutton_smooth_history");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_smooth_history"));
 	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
-	widget = glade_xml_get_widget (glade_xml, "checkbutton_points_history");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_points_history"));
 	points = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 
 	/* present data to graph */
-	widget = glade_xml_get_widget (glade_xml, "custom_graph_history");
-	gpm_stats_set_graph_data (widget, new, checked, points);
+	gpm_stats_set_graph_data (graph_history, new, checked, points);
 
 	g_ptr_array_foreach (array, (GFunc) dkp_history_obj_free, NULL);
 	g_ptr_array_free (array, TRUE);
@@ -584,7 +583,6 @@ gpm_stats_update_info_page_stats (DkpDevice *device)
 	const gchar *type = NULL;
 
 	new = g_ptr_array_new ();
-	widget = glade_xml_get_widget (glade_xml, "custom_graph_stats");
 	if (strcmp (stats_type, GPM_STATS_CHARGE_DATA_VALUE) == 0) {
 		type = "charging";
 		use_data = TRUE;
@@ -600,16 +598,16 @@ gpm_stats_update_info_page_stats (DkpDevice *device)
 	} else {
 		g_assert_not_reached ();
 	}
-	gpm_graph_widget_set_type_x (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
+	gpm_graph_widget_set_type_x (GPM_GRAPH_WIDGET (graph_statistics), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
 
 	if (use_data)
-		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_FACTOR);
+		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (graph_statistics), GPM_GRAPH_WIDGET_TYPE_FACTOR);
 	else
-		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
+		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (graph_statistics), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
 
 	array = dkp_device_get_statistics (device, type, NULL);
 	if (array == NULL) {
-		gtk_widget_hide (widget);
+		gtk_widget_hide (graph_statistics);
 		goto out;
 	}
 
@@ -627,14 +625,13 @@ gpm_stats_update_info_page_stats (DkpDevice *device)
 
 	/* render */
 	sigma_smoothing = 1.1;
-	widget = glade_xml_get_widget (glade_xml, "checkbutton_smooth_stats");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_smooth_stats"));
 	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
-	widget = glade_xml_get_widget (glade_xml, "checkbutton_points_stats");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_points_stats"));
 	points = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 
 	/* present data to graph */
-	widget = glade_xml_get_widget (glade_xml, "custom_graph_stats");
-	gpm_stats_set_graph_data (widget, new, checked, points);
+	gpm_stats_set_graph_data (graph_statistics, new, checked, points);
 
 	g_ptr_array_foreach (array, (GFunc) dkp_stats_obj_free, NULL);
 	g_ptr_array_free (array, TRUE);
@@ -665,7 +662,7 @@ static void
 gpm_stats_update_info_data (DkpDevice *device)
 {
 	gint page;
-	GtkWidget *widget;
+	GtkNotebook *notebook;
 	GtkWidget *page_widget;
 	gboolean has_history;
 	gboolean has_statistics;
@@ -677,31 +674,31 @@ gpm_stats_update_info_data (DkpDevice *device)
 		      NULL);
 
 
-	widget = glade_xml_get_widget (glade_xml, "notebook1");
+	notebook = GTK_NOTEBOOK (gtk_builder_get_object (builder, "notebook1"));
 
 	/* show info page */
-	page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK(widget), 0);
+	page_widget = gtk_notebook_get_nth_page (notebook, 0);
 	gtk_widget_show (page_widget);
 
 	/* hide history if no support */
-	page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK(widget), 1);
+	page_widget = gtk_notebook_get_nth_page (notebook, 1);
 	if (has_history)
 		gtk_widget_show (page_widget);
 	else
 		gtk_widget_hide (page_widget);
 
 	/* hide statistics if no support */
-	page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK(widget), 2);
+	page_widget = gtk_notebook_get_nth_page (notebook, 2);
 	if (has_statistics)
 		gtk_widget_show (page_widget);
 	else
 		gtk_widget_hide (page_widget);
 
 	/* hide wakeups page */
-	page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK(widget), 3);
+	page_widget = gtk_notebook_get_nth_page (notebook, 3);
 	gtk_widget_hide (page_widget);
 
-	page = gtk_notebook_get_current_page (GTK_NOTEBOOK (widget));
+	page = gtk_notebook_get_current_page (notebook);
 	gpm_stats_update_info_data_page (device, page);
 
 	return;
@@ -915,7 +912,7 @@ gpm_stats_update_wakeups_data (void)
 	GError *error = NULL;
 	GPtrArray *array;
 
-	widget = glade_xml_get_widget (glade_xml, "notebook1");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "notebook1"));
 
 	/* hide other pages */
 	page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK(widget), 0);
@@ -931,7 +928,7 @@ gpm_stats_update_wakeups_data (void)
 
 	/* show total */
 	total = dkp_wakeups_get_total (wakeups, &error);
-	widget = glade_xml_get_widget (glade_xml, "label_total_wakeups");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "label_total_wakeups"));
 	if (error == NULL) {
 		text = g_strdup_printf ("%i", total);
 		gtk_label_set_label (GTK_LABEL(widget), text);
@@ -985,7 +982,7 @@ gpm_stats_notebook_changed_cb (GtkNotebook *notebook, GtkNotebookPage *page, gin
 	GtkWidget *widget;
 
 	/* set the window title depending on the mode */
-	widget = glade_xml_get_widget (glade_xml, "dialog_stats");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_stats"));
 	gpm_stats_set_title (GTK_WINDOW (widget), page_num);
 
 	/* save page in gconf */
@@ -1054,29 +1051,13 @@ gpm_stats_devices_treeview_clicked_cb (GtkTreeSelection *selection, gboolean dat
 }
 
 /**
- * gpm_stats_create_custom_widget:
- **/
-static GtkWidget *
-gpm_stats_create_custom_widget (GladeXML *xml, gchar *func_name, gchar *name,
-				gchar *string1, gchar *string2, gint int1, gint int2, gpointer user_data)
-{
-	GtkWidget *widget = NULL;
-	if (strcmp ("gpm_graph_widget_new", func_name) == 0) {
-		widget = gpm_graph_widget_new ();
-		return widget;
-	}
-	egg_warning ("name unknown=%s", name);
-	return NULL;
-}
-
-/**
  * gpm_stats_window_activated_cb
  **/
 static void
 gpm_stats_window_activated_cb (EggUnique *egg_unique, gpointer data)
 {
 	GtkWidget *widget;
-	widget = glade_xml_get_widget (glade_xml, "dialog_stats");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_stats"));
 	gtk_window_present (GTK_WINDOW (widget));
 }
 
@@ -1214,9 +1195,9 @@ gpm_stats_history_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 	}
 
 	/* set axis */
-	widget = glade_xml_get_widget (glade_xml, "label_axis_history_x");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "label_axis_history_x"));
 	gtk_label_set_label (GTK_LABEL(widget), axis_x);
-	widget = glade_xml_get_widget (glade_xml, "label_axis_history_y");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "label_axis_history_y"));
 	gtk_label_set_label (GTK_LABEL(widget), axis_y);
 
 	gpm_stats_button_update_ui ();
@@ -1265,9 +1246,9 @@ gpm_stats_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 	}
 
 	/* set axis */
-	widget = glade_xml_get_widget (glade_xml, "label_axis_stats_x");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "label_axis_stats_x"));
 	gtk_label_set_label (GTK_LABEL(widget), axis_x);
-	widget = glade_xml_get_widget (glade_xml, "label_axis_stats_y");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "label_axis_stats_y"));
 	gtk_label_set_label (GTK_LABEL(widget), axis_y);
 
 	gpm_stats_button_update_ui ();
@@ -1356,6 +1337,26 @@ gpm_stats_points_checkbox_stats_cb (GtkWidget *widget, gpointer data)
 }
 
 /**
+ * gpm_stats_set_combo_simple_text:
+ **/
+static void
+gpm_stats_set_combo_simple_text (GtkWidget *combo_box)
+{
+	GtkCellRenderer *cell;
+	GtkListStore *store;
+
+	store = gtk_list_store_new (1, G_TYPE_STRING);
+	gtk_combo_box_set_model (GTK_COMBO_BOX (combo_box), GTK_TREE_MODEL (store));
+	g_object_unref (store);
+
+	cell = gtk_cell_renderer_text_new ();
+	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), cell, TRUE);
+	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), cell,
+					"text", 0,
+					NULL);
+}
+
+/**
  * main:
  **/
 int
@@ -1363,6 +1364,7 @@ main (int argc, char *argv[])
 {
 	gboolean verbose = FALSE;
 	GOptionContext *context;
+	GtkBox *box;
 	GtkWidget *widget;
 	GtkTreeSelection *selection;
 	EggUnique *egg_unique;
@@ -1375,6 +1377,8 @@ main (int argc, char *argv[])
 	const gchar *object_path;
 	gboolean checked;
 	gchar *last_device;
+	guint retval;
+	GError *error = NULL;
 
 	const GOptionEntry options[] = {
 		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
@@ -1423,50 +1427,68 @@ main (int argc, char *argv[])
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
                                            GPM_DATA G_DIR_SEPARATOR_S "icons");
 
-	/* use custom widgets */
-	glade_set_custom_handler (gpm_stats_create_custom_widget, NULL);
+	/* get UI */
+	builder = gtk_builder_new ();
+	retval = gtk_builder_add_from_file (builder, GPM_DATA "/gpm-statistics.ui", &error);
+	if (error != NULL) {
+		egg_warning ("failed to load ui: %s", error->message);
+		g_error_free (error);
+	}
 
-	glade_xml = glade_xml_new (GPM_DATA "/gpm-statistics.glade", NULL, NULL);
-	widget = glade_xml_get_widget (glade_xml, "dialog_stats");
+	/* add history graph */
+	box = GTK_BOX (gtk_builder_get_object (builder, "hbox_history"));
+	graph_history = gpm_graph_widget_new ();
+	gtk_box_pack_start (box, graph_history, TRUE, TRUE, 0);
+	gtk_widget_set_size_request (graph_history, 600, 300);
+	gtk_widget_show (graph_history);
+
+	/* add statistics graph */
+	box = GTK_BOX (gtk_builder_get_object (builder, "hbox_statistics"));
+	graph_statistics = gpm_graph_widget_new ();
+	gtk_box_pack_start (box, graph_statistics, TRUE, TRUE, 0);
+	gtk_widget_set_size_request (graph_statistics, 600, 300);
+	gtk_widget_show (graph_statistics);
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_stats"));
 	gtk_window_set_default_size (GTK_WINDOW(widget), 800, 500);
 	gtk_window_set_default_icon_name (GPM_STOCK_APP_ICON);
 
 	/* Get the main window quit */
 	g_signal_connect_swapped (widget, "delete_event", G_CALLBACK (gtk_main_quit), NULL);
 
-	widget = glade_xml_get_widget (glade_xml, "button_close");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "button_close"));
 	g_signal_connect_swapped (widget, "clicked", G_CALLBACK (gtk_main_quit), NULL);
 	gtk_widget_grab_default (widget);
 
-	widget = glade_xml_get_widget (glade_xml, "button_help");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "button_help"));
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_stats_button_help_cb), NULL);
 
-	widget = glade_xml_get_widget (glade_xml, "checkbutton_smooth_history");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_smooth_history"));
 	checked = gconf_client_get_bool (gconf_client, GPM_CONF_INFO_HISTORY_GRAPH_SMOOTH, NULL);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_stats_smooth_checkbox_history_cb), NULL);
 
-	widget = glade_xml_get_widget (glade_xml, "checkbutton_smooth_stats");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_smooth_stats"));
 	checked = gconf_client_get_bool (gconf_client, GPM_CONF_INFO_STATS_GRAPH_SMOOTH, NULL);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_stats_smooth_checkbox_stats_cb), NULL);
 
-	widget = glade_xml_get_widget (glade_xml, "checkbutton_points_history");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_points_history"));
 	checked = gconf_client_get_bool (gconf_client, GPM_CONF_INFO_HISTORY_GRAPH_POINTS, NULL);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_stats_points_checkbox_history_cb), NULL);
 
-	widget = glade_xml_get_widget (glade_xml, "checkbutton_points_stats");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_points_stats"));
 	checked = gconf_client_get_bool (gconf_client, GPM_CONF_INFO_STATS_GRAPH_POINTS, NULL);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_stats_points_checkbox_stats_cb), NULL);
 
-	widget = glade_xml_get_widget (glade_xml, "notebook1");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "notebook1"));
 	page = gconf_client_get_int (gconf_client, GPM_CONF_INFO_PAGE_NUMBER, NULL);
 	gtk_notebook_set_current_page (GTK_NOTEBOOK (widget), page);
 	g_signal_connect (widget, "switch-page",
@@ -1480,7 +1502,7 @@ main (int argc, char *argv[])
 						 G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 
 	/* create transaction_id tree view */
-	widget = glade_xml_get_widget (glade_xml, "treeview_info");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "treeview_info"));
 	gtk_tree_view_set_model (GTK_TREE_VIEW (widget),
 				 GTK_TREE_MODEL (list_store_info));
 
@@ -1489,7 +1511,7 @@ main (int argc, char *argv[])
 	gtk_tree_view_columns_autosize (GTK_TREE_VIEW (widget)); /* show */
 
 	/* create transaction_id tree view */
-	widget = glade_xml_get_widget (glade_xml, "treeview_devices");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "treeview_devices"));
 	gtk_tree_view_set_model (GTK_TREE_VIEW (widget),
 				 GTK_TREE_MODEL (list_store_devices));
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (widget));
@@ -1501,7 +1523,7 @@ main (int argc, char *argv[])
 	gtk_tree_view_columns_autosize (GTK_TREE_VIEW (widget)); /* show */
 
 	/* create wakeups tree view */
-	widget = glade_xml_get_widget (glade_xml, "treeview_wakeups");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "treeview_wakeups"));
 	gtk_tree_view_set_model (GTK_TREE_VIEW (widget),
 				 GTK_TREE_MODEL (list_store_wakeups));
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (widget));
@@ -1521,7 +1543,8 @@ main (int argc, char *argv[])
 	if (stats_type == NULL)
 		stats_type = GPM_STATS_CHARGE_DATA_VALUE;
 
-	widget = glade_xml_get_widget (glade_xml, "combobox_history_type");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "combobox_history_type"));
+	gpm_stats_set_combo_simple_text (widget);
 	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_RATE_TEXT);
 	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_CHARGE_TEXT);
 	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_TIME_FULL_TEXT);
@@ -1533,7 +1556,8 @@ main (int argc, char *argv[])
 	g_signal_connect (G_OBJECT (widget), "changed",
 			  G_CALLBACK (gpm_stats_history_type_combo_changed_cb), NULL);
 
-	widget = glade_xml_get_widget (glade_xml, "combobox_stats_type");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "combobox_stats_type"));
+	gpm_stats_set_combo_simple_text (widget);
 	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_STATS_CHARGE_DATA_TEXT);
 	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_STATS_CHARGE_ACCURACY_TEXT);
 	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_STATS_DISCHARGE_DATA_TEXT);
@@ -1551,7 +1575,8 @@ main (int argc, char *argv[])
 	g_signal_connect (G_OBJECT (widget), "changed",
 			  G_CALLBACK (gpm_stats_type_combo_changed_cb), NULL);
 
-	widget = glade_xml_get_widget (glade_xml, "combobox_history_time");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "combobox_history_time"));
+	gpm_stats_set_combo_simple_text (widget);
 	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_MINUTE_TEXT);
 	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_HOUR_TEXT);
 	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_DAY_TEXT);
@@ -1565,13 +1590,6 @@ main (int argc, char *argv[])
 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 2);
 	g_signal_connect (G_OBJECT (widget), "changed",
 			  G_CALLBACK (gpm_stats_range_combo_changed), NULL);
-
-	widget = glade_xml_get_widget (glade_xml, "custom_graph_history");
-	gtk_widget_set_size_request (widget, 700, 400);
-	gtk_widget_show (widget);
-	widget = glade_xml_get_widget (glade_xml, "custom_graph_stats");
-	gtk_widget_set_size_request (widget, 700, 400);
-	gtk_widget_show (widget);
 
 	client = dkp_client_new ();
 	g_signal_connect (client, "device-added", G_CALLBACK (gpm_stats_device_added_cb), NULL);
@@ -1623,7 +1641,7 @@ main (int argc, char *argv[])
 			gchar *path_str;
 			path_str = g_strdup_printf ("%i", i);
 			path = gtk_tree_path_new_from_string (path_str);
-			widget = glade_xml_get_widget (glade_xml, "treeview_devices");
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "treeview_devices"));
 			gtk_tree_view_set_cursor_on_cell (GTK_TREE_VIEW (widget), path, NULL, NULL, FALSE);
 			g_free (path_str);
 			gtk_tree_path_free (path);
@@ -1634,12 +1652,12 @@ main (int argc, char *argv[])
 	g_ptr_array_free (devices, TRUE);
 
 	/* set axis */
-	widget = glade_xml_get_widget (glade_xml, "combobox_history_type");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "combobox_history_type"));
 	gpm_stats_history_type_combo_changed_cb (widget, NULL);
-	widget = glade_xml_get_widget (glade_xml, "combobox_stats_type");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "combobox_stats_type"));
 	gpm_stats_type_combo_changed_cb (widget, NULL);
 
-	widget = glade_xml_get_widget (glade_xml, "dialog_stats");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_stats"));
 	gtk_widget_show (widget);
 
 	gtk_main ();
@@ -1648,7 +1666,7 @@ out:
 	g_object_unref (gconf_client);
 	g_object_unref (client);
 	g_object_unref (wakeups);
-	g_object_unref (glade_xml);
+	g_object_unref (builder);
 	g_object_unref (list_store_info);
 unique_out:
 	g_object_unref (egg_unique);
