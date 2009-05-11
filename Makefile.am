@@ -15,10 +15,6 @@ if HAVE_APPLETS
 SUBDIRS += applets
 endif
 
-if HAVE_TESTS
-SUBDIRS += test
-endif
-
 EXTRA_DIST =						\
 	HACKING						\
 	MAINTAINERS					\
