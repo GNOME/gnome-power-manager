@@ -42,10 +42,6 @@
 #include "gpm-stock-icons.h"
 #include "gpm-prefs-server.h"
 
-#ifdef HAVE_GCONF_DEFAULTS
-#include <polkit-gnome/polkit-gnome.h>
-#endif
-
 static void     gpm_prefs_finalize   (GObject	    *object);
 
 #define GPM_PREFS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_PREFS, GpmPrefsPrivate))
@@ -64,9 +60,6 @@ struct GpmPrefsPrivate
 	gboolean		 can_hibernate;
 	guint			 idle_delay;
 	GConfClient		*conf;
-#ifdef HAVE_GCONF_DEFAULTS
-	PolKitGnomeAction	*default_action;
-#endif
 };
 
 enum {
@@ -232,8 +225,7 @@ gpm_dbus_method_int (const gchar *method)
  * @prefs: This prefs class instance
  **/
 static void
-gpm_prefs_help_cb (GtkWidget *widget,
-		   GpmPrefs  *prefs)
+gpm_prefs_help_cb (GtkWidget *widget, GpmPrefs *prefs)
 {
 	egg_debug ("emitting action-help");
 	g_signal_emit (prefs, signals [ACTION_HELP], 0);
@@ -244,8 +236,7 @@ gpm_prefs_help_cb (GtkWidget *widget,
  * @widget: The GtkWidget object
  **/
 static void
-gpm_prefs_icon_radio_cb (GtkWidget *widget,
-			 GpmPrefs  *prefs)
+gpm_prefs_icon_radio_cb (GtkWidget *widget, GpmPrefs *prefs)
 {
 	const gchar *str;
 	gint policy;
@@ -262,8 +253,7 @@ gpm_prefs_icon_radio_cb (GtkWidget *widget,
  * @value: The value in %.
  **/
 static gchar *
-gpm_prefs_format_percentage_cb (GtkScale *scale,
-				gdouble   value)
+gpm_prefs_format_percentage_cb (GtkScale *scale, gdouble value)
 {
 	return g_strdup_printf ("%.0f%%", value);
 }
@@ -275,9 +265,7 @@ gpm_prefs_format_percentage_cb (GtkScale *scale,
  * @prefs: This prefs class instance
  **/
 static gchar *
-gpm_prefs_format_time_cb (GtkScale *scale,
-			  gdouble   value,
-			  GpmPrefs *prefs)
+gpm_prefs_format_time_cb (GtkScale *scale, gdouble value, GpmPrefs *prefs)
 {
 	gchar *str;
 	if ((gint) value == NEVER_TIME_ON_SLIDER) {
@@ -294,8 +282,7 @@ gpm_prefs_format_time_cb (GtkScale *scale,
  * @gpm_pref_key: The GConf key for this preference setting.
  **/
 static void
-gpm_prefs_sleep_slider_changed_cb (GtkRange *range,
-				   GpmPrefs *prefs)
+gpm_prefs_sleep_slider_changed_cb (GtkRange *range, GpmPrefs *prefs)
 {
 	int value;
 	char *gpm_pref_key;
@@ -965,12 +952,11 @@ prefs_setup_general (GpmPrefs *prefs)
 	}
 }
 
-#ifdef HAVE_GCONF_DEFAULTS
 /**
- * pk_prefs_set_defaults_cb:
+ * gpm_prefs_set_defaults_cb:
  **/
 static void
-pk_prefs_set_defaults_cb (PolKitGnomeAction *default_action, GpmPrefs *prefs)
+gpm_prefs_set_defaults_cb (GtkWidget *widget, GpmPrefs *prefs)
 {
 	GConfClient *client;
 	DBusGProxy *proxy;
@@ -1012,27 +998,6 @@ pk_prefs_set_defaults_cb (PolKitGnomeAction *default_action, GpmPrefs *prefs)
 }
 
 /**
- * gpk_prefs_setup_policykit:
- *
- * We have to do this before the glade stuff if done as the custom handler needs the actions setup
- **/
-static void
-gpk_prefs_setup_policykit (GpmPrefs *prefs)
-{
-	PolKitAction *pk_action;
-
-	g_return_if_fail (GPM_IS_PREFS (prefs));
-
-	/* set default */
-	pk_action = polkit_action_new ();
-	polkit_action_set_action_id (pk_action, "org.gnome.gconf.defaults.set-system");
-	prefs->priv->default_action = polkit_gnome_action_new_default ("set-defaults", pk_action,
-								       _("Make Default"), NULL);
-	polkit_action_unref (pk_action);
-}
-#endif
-
-/**
  * gpm_prefs_init:
  * @prefs: This prefs class instance
  **/
@@ -1041,9 +1006,6 @@ gpm_prefs_init (GpmPrefs *prefs)
 {
 	GtkWidget *main_window;
 	GtkWidget *widget;
-#ifdef HAVE_GCONF_DEFAULTS
-	GtkWidget *button;
-#endif
 	gint caps;
 	guint retval;
 	GError *error = NULL;
@@ -1083,18 +1045,6 @@ gpm_prefs_init (GpmPrefs *prefs)
 
 	main_window = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "dialog_preferences"));
 
-#ifdef HAVE_GCONF_DEFAULTS
-	/* we have to do this before we connect up the GtkBuilder file */
-	gpk_prefs_setup_policykit (prefs);
-
-	/* create PolicyKit button */
-	widget = gtk_dialog_get_action_area (GTK_DIALOG (main_window));
-	button = polkit_gnome_action_create_button (prefs->priv->default_action);
-	gtk_box_pack_start (GTK_BOX (widget), button, FALSE, FALSE, 0);
-	gtk_box_reorder_child (GTK_BOX (widget), button, 0);
-	gtk_widget_show (button);
-#endif
-
 	/* Hide window first so that the dialogue resizes itself without redrawing */
 	gtk_widget_hide (main_window);
 	gtk_window_set_default_icon_name (GPM_STOCK_APP_ICON);
@@ -1111,9 +1061,12 @@ gpm_prefs_init (GpmPrefs *prefs)
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_prefs_help_cb), prefs);
 
+	widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "button_defaults"));
 #ifdef HAVE_GCONF_DEFAULTS
-	g_signal_connect (prefs->priv->default_action, "activate",
-			  G_CALLBACK (pk_prefs_set_defaults_cb), prefs);
+	g_signal_connect (widget, "clicked",
+			  G_CALLBACK (gpm_prefs_set_defaults_cb), prefs);
+#else
+	gtk_widget_hide (widget);
 #endif
 
 	prefs_setup_ac (prefs);

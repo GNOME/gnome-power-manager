@@ -99,7 +99,6 @@ CAIRO_REQUIRED=1.0.0
 UNIQUE_REQUIRED=0.9.4
 LIBPANEL_REQUIRED=2.0.0
 XRANDR_REQUIRED=1.2.0
-POLKIT_GNOME_REQUIRED=0.8
 CANBERRA_REQUIRED=0.10
 DEVKIT_REQUIRED=001
 DEVKIT_POWER_REQUIRED=007
@@ -118,7 +117,6 @@ AC_SUBST(CAIRO_REQUIRED)
 AC_SUBST(UNIQUE_REQUIRED)
 AC_SUBST(LIBPANEL_REQUIRED)
 AC_SUBST(XRANDR_REQUIRED)
-AC_SUBST(POLKIT_GNOME_REQUIRED)
 
 dnl ---------------------------------------------------------------------------
 dnl - Check library dependencies
@@ -223,29 +221,6 @@ fi
 AC_SUBST(DOCDIR)
 
 dnl ---------------------------------------------------------------------------
-dnl - PolicyKit support?
-dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(policykit,
-              AS_HELP_STRING([--enable-policykit],
-                             [support PolicyKit permissions daemon (requires polkitd)]),
-              enable_policykit=$enableval,enable_policykit=no)
-
-AC_MSG_CHECKING([whether to support PolicyKit])
-have_polkit=no
-if test x$enable_policykit = xyes ; then
-    PKG_CHECK_MODULES(POLKIT, \
-                      polkit-grant >= $POLKIT_GNOME_REQUIRED\
-                      polkit-dbus >= $POLKIT_GNOME_REQUIRED)
-    AC_SUBST(POLKIT_CFLAGS)
-    AC_SUBST(POLKIT_LIBS)
-    have_polkit=yes
-    AC_DEFINE(HAVE_POLKIT, 1, [Define if we use PolicyKit])
-    AC_MSG_RESULT(yes)
-else
-    AC_MSG_RESULT(no)
-fi
-
-dnl ---------------------------------------------------------------------------
 dnl - Require DeviceKit-power support
 dnl ---------------------------------------------------------------------------
 AC_PATH_PROG(DEVKIT_POWER, devkit-power)
@@ -311,17 +286,11 @@ dnl ---------------------------------------------------------------------------
 AC_ARG_ENABLE(gconf-defaults,
               AS_HELP_STRING([--disable-gconf-defaults],
                              [Allow setting gconf default settings]),
-              enable_gconfdefaults=$enableval,enable_gconfdefaults=yes)
+              have_gconfdefaults=$enableval,have_gconfdefaults=yes)
 
 AC_MSG_CHECKING([whether to support gconf defaults])
-have_gconfdefaults=no
-if test x$enable_gconfdefaults = xyes && test $have_polkit = yes ; then
-    PKG_CHECK_MODULES(POLKIT_GNOME, [
-                      polkit-gnome >= $POLKIT_GNOME_REQUIRED])
-    AC_SUBST(POLKIT_GNOME_CFLAGS)
-    AC_SUBST(POLKIT_GNOME_LIBS)
-    have_gconfdefaults=yes
-    AC_DEFINE(HAVE_GCONF_DEFAULTS, 1, [Define if have policykit-gnome])
+if test x$have_gconfdefaults = xyes ; then
+    AC_DEFINE(HAVE_GCONF_DEFAULTS, 1, [Define if have gconf defaults])
     AC_MSG_RESULT(yes)
 else
     AC_MSG_RESULT(no)
@@ -673,7 +642,6 @@ echo "
         cflags:                    ${CFLAGS}
         Building extra applets:    ${enable_applets}
         DPMS support:              ${have_dpms}
-        PolicyKit support:         ${have_polkit}
         Legacy buttons support:    ${have_legacy_buttons}
         Self test support:         ${have_tests}
         GConf default support:     ${have_gconfdefaults}
