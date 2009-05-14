@@ -1,3 +1,15 @@
+2009-05-14  Vincent Untz  <vuntz@gnome.org>
+
+	* src/gpm-cell-array.c: (gpm_cell_array_update): do not recompute the
+	percentage based on the charge when the percentage reported by hal is
+	less or equal than 1%. It seems hal doesn't computer the percentage the
+	same was as gnome-power-manager, and it can happen that when we get the
+	final event from hal, gnome-power-manager still thinks it's too early
+	for the critical action. However, since this was the last event from
+	hal, the critical action will never be triggered.
+	This should fix laptops not hibernating on low battery.
+	Fix bug #559578.
+
 2009-02-27  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-button.c: (hal_daemon_new_device_cb), (gpm_button_init):

@@ -355,7 +355,8 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 	 * get an with batteries which have a very small charge unit and consequently
 	 * a very high charge. Fixes bug #327471 */
 	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY &&
-	    unit->charge_current > 0 && unit->charge_last_full > 0) {
+	    unit->charge_current > 0 && unit->charge_last_full > 0 &&
+	    unit->percentage > 1) {
 		gfloat pc = 100.0f * ((gfloat)unit->charge_current /
 				(gfloat)unit->charge_last_full);
 		if (pc < 0.0f) {
