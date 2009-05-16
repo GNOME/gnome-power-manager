@@ -54,6 +54,7 @@
 static void     gpm_tray_icon_finalize   (GObject	   *object);
 
 #define GPM_TRAY_ICON_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_TRAY_ICON, GpmTrayIconPrivate))
+#define GPM_TRAY_ICON_CONNECT_TIMEOUT		10 /* s */
 
 struct GpmTrayIconPrivate
 {
@@ -613,6 +614,18 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 }
 
 /**
+ * gpm_tray_status_icon_handler_cb:
+ *
+ * This attaches any future notifications to the status icon if it exists
+ **/
+static gboolean
+gpm_tray_status_icon_handler_cb (GpmTrayIcon *icon)
+{
+	gpm_notify_use_status_icon (icon->priv->notify, icon->priv->status_icon);
+	return FALSE;
+}
+
+/**
  * gpm_tray_icon_init:
  *
  * Initialise the tray object
@@ -650,7 +663,9 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 				 "activate",
 				 G_CALLBACK (gpm_tray_icon_activate_cb),
 				 icon, 0);
-	gpm_notify_use_status_icon (icon->priv->notify, icon->priv->status_icon);
+
+	/* attach the status icon after a few seconds to allow for the session to load properly */
+	g_timeout_add_seconds (GPM_TRAY_ICON_CONNECT_TIMEOUT, (GSourceFunc) gpm_tray_status_icon_handler_cb, icon);
 
 	/* only show the suspend and hibernate icons if we can do the action,
 	   and the policy allows the actions in the menu */
