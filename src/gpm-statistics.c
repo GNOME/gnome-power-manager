@@ -506,13 +506,34 @@ gpm_stats_update_info_page_history (DkpDevice *device)
 	GTimeVal timeval;
 
 	new = g_ptr_array_new ();
-	gpm_graph_widget_set_type_x (GPM_GRAPH_WIDGET (graph_history), GPM_GRAPH_WIDGET_TYPE_TIME);
-	if (strcmp (history_type, GPM_HISTORY_CHARGE_VALUE) == 0)
-		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (graph_history), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
-	else if (strcmp (history_type, GPM_HISTORY_RATE_VALUE) == 0)
-		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (graph_history), GPM_GRAPH_WIDGET_TYPE_POWER);
-	else
-		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (graph_history), GPM_GRAPH_WIDGET_TYPE_TIME);
+	if (strcmp (history_type, GPM_HISTORY_CHARGE_VALUE) == 0) {
+		g_object_set (graph_history,
+			      "type-x", GPM_GRAPH_WIDGET_TYPE_TIME,
+			      "type-y", GPM_GRAPH_WIDGET_TYPE_PERCENTAGE,
+			      "autorange-x", FALSE,
+			      "start-x", -history_time,
+			      "stop-x", 0,
+			      "autorange-y", TRUE,
+			      NULL);
+	} else if (strcmp (history_type, GPM_HISTORY_RATE_VALUE) == 0) {
+		g_object_set (graph_history,
+			      "type-x", GPM_GRAPH_WIDGET_TYPE_TIME,
+			      "type-y", GPM_GRAPH_WIDGET_TYPE_POWER,
+			      "autorange-x", FALSE,
+			      "start-x", -history_time,
+			      "stop-x", 0,
+			      "autorange-y", TRUE,
+			      NULL);
+	} else {
+		g_object_set (graph_history,
+			      "type-x", GPM_GRAPH_WIDGET_TYPE_TIME,
+			      "type-y", GPM_GRAPH_WIDGET_TYPE_TIME,
+			      "autorange-x", FALSE,
+			      "start-x", -history_time,
+			      "stop-x", 0,
+			      "autorange-y", TRUE,
+			      NULL);
+	}
 
 	array = dkp_device_get_history (device, history_type, history_time, 150, NULL);
 	if (array == NULL) {
@@ -598,12 +619,22 @@ gpm_stats_update_info_page_stats (DkpDevice *device)
 	} else {
 		g_assert_not_reached ();
 	}
-	gpm_graph_widget_set_type_x (GPM_GRAPH_WIDGET (graph_statistics), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
 
-	if (use_data)
-		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (graph_statistics), GPM_GRAPH_WIDGET_TYPE_FACTOR);
-	else
-		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (graph_statistics), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
+	if (use_data) {
+		g_object_set (graph_statistics,
+			      "type-x", GPM_GRAPH_WIDGET_TYPE_PERCENTAGE,
+			      "type-y", GPM_GRAPH_WIDGET_TYPE_FACTOR,
+			      "autorange-x", TRUE,
+			      "autorange-y", TRUE,
+			      NULL);
+	} else {
+		g_object_set (graph_statistics,
+			      "type-x", GPM_GRAPH_WIDGET_TYPE_PERCENTAGE,
+			      "type-y", GPM_GRAPH_WIDGET_TYPE_PERCENTAGE,
+			      "autorange-x", TRUE,
+			      "autorange-y", TRUE,
+			      NULL);
+	}
 
 	array = dkp_device_get_statistics (device, type, NULL);
 	if (array == NULL) {
