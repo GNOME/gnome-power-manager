@@ -138,11 +138,17 @@ dkp_client_suspend (DkpClient *client, GError **error)
 	ret = dbus_g_proxy_call (client->priv->proxy, "Suspend", &error_local,
 				 G_TYPE_INVALID, G_TYPE_INVALID);
 	if (!ret) {
+		if (g_error_matches (error_local, DBUS_GERROR, DBUS_GERROR_NO_REPLY)) {
+			ret = TRUE;
+			goto out;
+		}
 		egg_warning ("Couldn't suspend: %s", error_local->message);
 		if (error != NULL)
 			*error = g_error_new (1, 0, "%s", error_local->message);
-		g_error_free (error_local);
 	}
+out:
+	if (error_local != NULL)
+		g_error_free (error_local);
 	return ret;
 }
 
@@ -161,11 +167,17 @@ dkp_client_hibernate (DkpClient *client, GError **error)
 	ret = dbus_g_proxy_call (client->priv->proxy, "Hibernate", &error_local,
 				 G_TYPE_INVALID, G_TYPE_INVALID);
 	if (!ret) {
+		if (g_error_matches (error_local, DBUS_GERROR, DBUS_GERROR_NO_REPLY)) {
+			ret = TRUE;
+			goto out;
+		}
 		egg_warning ("Couldn't hibernate: %s", error_local->message);
 		if (error != NULL)
 			*error = g_error_new (1, 0, "%s", error_local->message);
-		g_error_free (error_local);
 	}
+out:
+	if (error_local != NULL)
+		g_error_free (error_local);
 	return ret;
 }
 
