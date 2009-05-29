@@ -932,7 +932,8 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 		oldx = 0;
 		oldy = 0;
 		gpm_graph_widget_get_pos_on_graph (graph, point->x, point->y, &oldx, &oldy);
-		gpm_graph_widget_draw_dot (cr, oldx, oldy, point->color);
+		if (plot == GPM_GRAPH_WIDGET_PLOT_POINTS || plot == GPM_GRAPH_WIDGET_PLOT_BOTH)
+			gpm_graph_widget_draw_dot (cr, oldx, oldy, point->color);
 
 		for (i=1; i < data->len; i++) {
 			point = (GpmPointObj *) g_ptr_array_index (data, i);
