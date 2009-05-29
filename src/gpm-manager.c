@@ -1037,6 +1037,14 @@ static void
 gpm_engine_fully_charged_cb (GpmEngine *engine, DkpDevice *device, GpmManager *manager)
 {
 	DkpDeviceType type;
+	gboolean ret;
+
+	/* only action this if specified in gconf */
+	ret = gconf_client_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_FULLY_CHARGED, NULL);
+	if (!ret) {
+		egg_debug ("no notification");
+		return;
+	}
 
 	/* get device properties */
 	g_object_get (device,
@@ -1054,6 +1062,14 @@ static void
 gpm_engine_discharging_cb (GpmEngine *engine, DkpDevice *device, GpmManager *manager)
 {
 	DkpDeviceType type;
+	gboolean ret;
+
+	/* only action this if specified in gconf */
+	ret = gconf_client_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_DISCHARGING, NULL);
+	if (!ret) {
+		egg_debug ("no notification");
+		return;
+	}
 
 	/* get device properties */
 	g_object_get (device,
