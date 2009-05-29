@@ -657,10 +657,10 @@ gpm_engine_device_changed_cb (DkpClient *client, DkpDevice *device, GpmEngine *e
 			egg_debug ("** EMIT: charge-low");
 			g_signal_emit (engine, signals [CHARGE_LOW], 0, device);
 		} else if (warning == GPM_ENGINE_WARNING_CRITICAL) {
-			egg_debug ("** EMIT: charge-low");
+			egg_debug ("** EMIT: charge-critical");
 			g_signal_emit (engine, signals [CHARGE_CRITICAL], 0, device);
 		} else if (warning == GPM_ENGINE_WARNING_ACTION) {
-			egg_debug ("** EMIT: charge-low");
+			egg_debug ("** EMIT: charge-action");
 			g_signal_emit (engine, signals [CHARGE_ACTION], 0, device);
 		}
 		/* save new state */
