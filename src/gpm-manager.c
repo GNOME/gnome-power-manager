@@ -691,7 +691,7 @@ update_ac_throttle (GpmManager *manager)
 {
 	/* Throttle the manager when we are not on AC power so we don't
 	   waste the battery */
-	if (manager->priv->on_battery) {
+	if (!manager->priv->on_battery) {
 		if (manager->priv->screensaver_ac_throttle_id != 0) {
 			gpm_screensaver_remove_throttle (manager->priv->screensaver, manager->priv->screensaver_ac_throttle_id);
 			manager->priv->screensaver_ac_throttle_id = 0;
