@@ -1,4 +1,64 @@
 ==============
+Version 2.27.1
+==============
+
+Translations:
+ - Updated Korean translation (Shankar Prasad)
+ - Updated Greek translation (Simos Xenitellis, Michael Kotsarinis)
+ - Updated Tamil translation (drtvasudevan)
+ - Updated Punjabi (Gurmukhi) Translation (A S Alam)
+ - Updated Simplified Chinese translation (Gavin Huang, Deng Xiyue)
+ - Updated Catalan translation (David Planella, Jordi Mas i Hernandez)
+ - Updated Serbian translation (Miloš Popović)
+ - Updated Galician translation (Suso Baleato)
+ - Updated Estonian translation (Ivar Smolin)
+ - Updated Spanish translation (Jorge Gonzalez)
+ - Updated Slovenian translation (Matej Urban)
+ - Updated Ukrainian translation (Maxim V. Dziumanenko)
+ - Updated German translation (Nathan-J. Hirschauer)
+ - Updated Russian translation (Nickolay V. Shmyrev)
+ - Updated Czech translation (Lucas Lommer, Petr Kovar)
+
+Features:
+ - Add DOAP file (Richard Hughes)
+ - Connect to gnome-session and exit on logout (Richard Hughes)
+ - Change the default lid close on AC policy to be suspend, not blank (Richard Hughes)
+ - Show the processor device if we have capability, not if we have events (Richard Hughes)
+ - Add support for the DeviceKit-power property lid-is-closed so we can now run without --enable-legacy-buttons (Richard Hughes)
+ - Convert from libglade to GtkBuilder (Richard Hughes)
+ - Expose graph details as properties on the object, and constrain time to user value. Fixes #581910 (Richard Hughes)
+ - Add a composite device to GpmEngine so we can DTRT for multiple primary batteries (Richard Hughes)
+
+Bugfixes:
+ - Add desktop category to doap file (Olav Vitters)
+ - Only setup the blanking timeout when a timeout is set. Fixes rh#498041 (Kyle McMartin)
+ - Attach the libnotify popups to the notification icon later (Pramod Dematagoda)
+ - Check whether xrandr-1.3 features are really supported by xorg-server. Fixes #582142 (Priit Laes)
+ - Preload gconf tree /apps/gnome-power-manager recursively. Fixes #578545 (Behdad Esfahbod)
+ - Fix the low capacity warning to fix rh#489832 (Richard Hughes)
+ - Rewrite the DPMS class to have 1% of the complexity (Richard Hughes)
+ - Remove unused GConf keys (Richard Hughes)
+ - Use ngettext for a 2.26.x era string. Fixes #576128 (Richard Hughes)
+ - Unref the popup window when it's cleared. Fixes #577901 (Richard Hughes)
+ - Ensure we clear the default DPMS timeout of 1200s. Should fix #576169 (Richard Hughes)
+ - Remove our local copy of libdevkit-power (Richard Hughes)
+ - Convert a floating reference to prevent a GTK warning (Richard Hughes)
+ - Use G_GINT64_FORMAT to fix compile on 64 bit computers (Richard Hughes)
+ - Do the lid policy action on active-change. Fixes rh#497262 (Richard Hughes)
+ - Don't segfault if org.gnome.Session is not present on the bus. Fixes #581425 (Richard Hughes)
+ - Ensure we are on battery power before we take any of the low power battery actions (Richard Hughes)
+ - Remove the unused abstraction GpmAdapter, and use DkpClient directly (Richard Hughes)
+ - Remove the single use abstract GpmRefcount and use a local timer (Richard Hughes)
+ - Remove some methods on the DBus interface that have moved to DeviceKit-power (Richard Hughes)
+ - Remove the inhibit interface, and rely on gnome-session (Richard Hughes)
+ - Use DeviceKit-power to get the can-suspend and can-hibernate properties (Richard Hughes)
+ - Handle return to NORMAL idle when lid closed a bit better (Richard Hughes)
+ - Correct the polarity of the on-ac battery check when inhibiting the screensaver (Richard Hughes)
+ - Correct the logic for the fully charged and discharging popups (Richard Hughes)
+ - Don't try to keep closing the feedback widget (Richard Hughes)
+ - Don't always show a single graph dot in gnome-power-statistics (Richard Hughes)
+
+==============
 Version 2.26.0
 ==============
 
