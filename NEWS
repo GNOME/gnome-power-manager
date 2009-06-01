@@ -1,4 +1,23 @@
 ==============
+Version 2.26.2
+==============
+
+Translations:
+ - Updated Simplified Chinese translation (Gavin Huang, Deng Xiyue)
+ - Updated Catalan translation (Jordi Mas i Hernandez)
+ - Updated Ukrainian translation (Maxim V. Dziumanenko)
+ - Updated Czech translation. Fixed #580327 (Petr Kovar)
+
+Fixed:
+ - Only setup the blanking timeout when a timeout is set. Fixes rh#498041 (Kyle McMartin)
+ - Don't show an error if the Suspend or Hibernate timed out (Matthew Garrett)
+ - Check whether xrandr-1.3 features are really supported by xorg-server. Fixes #582142 (Priit Laes)
+ - Backport the gnome-power-preferences prefix patch from master (Richard Hughes)
+ - Don't segfault if org.gnome.Session is not present on the bus. Fixes #581425 (Richard Hughes)
+ - Don't always show a single graph dot in gnome-power-statistics (Richard Hughes)
+ - Go back to the original IDLETIME code to fix backlight bugs (Richard Hughes)
+
+==============
 Version 2.26.1
 ==============
 
