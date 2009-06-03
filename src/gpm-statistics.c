@@ -1470,14 +1470,14 @@ main (int argc, char *argv[])
 	box = GTK_BOX (gtk_builder_get_object (builder, "hbox_history"));
 	graph_history = gpm_graph_widget_new ();
 	gtk_box_pack_start (box, graph_history, TRUE, TRUE, 0);
-	gtk_widget_set_size_request (graph_history, 600, 300);
+	gtk_widget_set_size_request (graph_history, 400, 250);
 	gtk_widget_show (graph_history);
 
 	/* add statistics graph */
 	box = GTK_BOX (gtk_builder_get_object (builder, "hbox_statistics"));
 	graph_statistics = gpm_graph_widget_new ();
 	gtk_box_pack_start (box, graph_statistics, TRUE, TRUE, 0);
-	gtk_widget_set_size_request (graph_statistics, 600, 300);
+	gtk_widget_set_size_request (graph_statistics, 400, 250);
 	gtk_widget_show (graph_statistics);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_stats"));
