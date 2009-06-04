@@ -58,6 +58,7 @@ gboolean	 egg_idletime_alarm_set			(EggIdletime	*idletime,
 							 guint		 timeout);
 gboolean	 egg_idletime_alarm_remove		(EggIdletime	*idletime,
 							 guint		 alarm_id);
+gint64		 egg_idletime_get_time			(EggIdletime	*idletime);
 #ifdef EGG_TEST
 void		 egg_idletime_test			(gpointer	 data);
 #endif
