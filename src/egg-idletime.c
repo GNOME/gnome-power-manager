@@ -74,6 +74,26 @@ static gpointer egg_idletime_object = NULL;
 G_DEFINE_TYPE (EggIdletime, egg_idletime, G_TYPE_OBJECT)
 
 /**
+ * egg_idletime_xsyncvalue_to_int64:
+ */
+static gint64
+egg_idletime_xsyncvalue_to_int64 (XSyncValue value)
+{
+	return ((guint64) XSyncValueHigh32 (value)) << 32 | (guint64) XSyncValueLow32 (value);
+}
+
+/**
+ * egg_idletime_get_time:
+ */
+gint64
+egg_idletime_get_time (EggIdletime *idletime)
+{
+	XSyncValue value;
+	XSyncQueryCounter (idletime->priv->dpy, idletime->priv->idle_counter, &value);
+	return egg_idletime_xsyncvalue_to_int64 (value);
+}
+
+/**
  * egg_idletime_xsync_alarm_set:
  */
 static void
