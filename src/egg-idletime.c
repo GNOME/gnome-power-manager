@@ -252,11 +252,14 @@ egg_idletime_event_filter_cb (GdkXEvent *gdkxevent, GdkEvent *event, gpointer da
 
 			/* we need the first alarm to go off to set the reset alarm */
 			egg_idletime_set_reset_alarm (idletime, alarm_event);
-			return GDK_FILTER_CONTINUE;
+			return GDK_FILTER_REMOVE;
 		}
 
 		/* do the reset callback */
 		egg_idletime_alarm_reset_all (idletime);
+
+		/* don't propagate */
+		return GDK_FILTER_REMOVE;
 	}
 
 	return GDK_FILTER_CONTINUE;
