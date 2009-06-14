@@ -52,10 +52,8 @@ struct GpmEnginePrivate
 {
 	GConfClient		*conf;
 	DkpClient		*client;
-	GPtrArray		*array;
-#if GPM_USE_COMPOSITE
 	DkpDevice		*battery_composite;
-#endif
+	GPtrArray		*array;
 	GpmPhone		*phone;
 	GpmIconPolicy		 icon_policy;
 	gchar			*previous_icon;
@@ -541,15 +539,13 @@ gpm_engine_device_check_capacity (GpmEngine *engine, DkpDevice *device)
 	return TRUE;
 }
 
-#if GPM_USE_COMPOSITE
 /**
  * gpm_engine_update_composite_device:
  **/
 static DkpDevice *
-gpm_engine_update_composite_device (GpmEngine *engine)
+gpm_engine_update_composite_device (GpmEngine *engine, DkpDevice *original_device)
 {
 	guint i;
-
 	gdouble percentage;
 	gdouble energy;
 	gdouble energy_full;
@@ -557,10 +553,8 @@ gpm_engine_update_composite_device (GpmEngine *engine)
 	gdouble energy_total = 0.0;
 	gdouble energy_full_total = 0.0;
 	gdouble energy_rate_total = 0.0;
-
 	gint64 time_to_empty = 0;
 	gint64 time_to_full = 0;
-
 	guint battery_devices = 0;
 	gboolean is_charging = FALSE;
 	gboolean is_discharging = FALSE;
@@ -602,6 +596,13 @@ gpm_engine_update_composite_device (GpmEngine *engine)
 		battery_devices++;
 	}
 
+	/* just use the original device if only one primary battery */
+	if (battery_devices == 1) {
+		egg_debug ("using original device as only one primary battery");
+		device = original_device;
+		goto out;
+	}
+
 	/* use percentage weighted for each battery capacity */
 	percentage = 100.0 * energy_total / energy_full_total;
 
@@ -623,8 +624,11 @@ gpm_engine_update_composite_device (GpmEngine *engine)
 			time_to_full = 3600 * ((energy_full_total - energy_total) / energy_rate_total);
 	}
 
+	/* okay, we can use the composite device */
+	device = engine->priv->battery_composite;
+
 	egg_debug ("printing composite device");
-	g_object_set (engine->priv->battery_composite,
+	g_object_set (device,
 		      "energy", energy,
 		      "energy-full", energy_full,
 		      "energy-rate", energy_rate,
@@ -633,12 +637,11 @@ gpm_engine_update_composite_device (GpmEngine *engine)
 		      "percentage", percentage,
 		      "state", state,
 		      NULL);
-	dkp_device_print (engine->priv->battery_composite);
-
-	/* return set composite device */
-	return engine->priv->battery_composite;
+	dkp_device_print (device);
+out:
+	/* return composite device or original device */
+	return device;
 }
-#endif
 
 /**
  * gpm_engine_device_add:
@@ -649,9 +652,7 @@ gpm_engine_device_add (GpmEngine *engine, DkpDevice *device)
 	GpmEngineWarning warning;
 	DkpDeviceState state;
 	DkpDeviceType type;
-#if GPM_USE_COMPOSITE
 	DkpDevice *composite;
-#endif
 
 	/* assign warning */
 	warning = gpm_engine_get_warning (engine, device);
@@ -669,9 +670,8 @@ gpm_engine_device_add (GpmEngine *engine, DkpDevice *device)
 	/* add old state for transitions */
 	g_object_set_data (G_OBJECT(device), "engine-state-old", GUINT_TO_POINTER(state));
 
-#if GPM_USE_COMPOSITE
 	if (type == DKP_DEVICE_TYPE_BATTERY) {
-		composite = gpm_engine_update_composite_device (engine);
+		composite = gpm_engine_update_composite_device (engine, device);
 
 		/* get the same values for the composite device */
 		warning = gpm_engine_get_warning (engine, composite);
@@ -679,7 +679,6 @@ gpm_engine_device_add (GpmEngine *engine, DkpDevice *device)
 		g_object_get (composite, "state", &state, NULL);
 		g_object_set_data (G_OBJECT(composite), "engine-state-old", GUINT_TO_POINTER(state));
 	}
-#endif
 }
 
 /**
@@ -800,11 +799,9 @@ gpm_engine_device_changed_cb (DkpClient *client, DkpDevice *device, GpmEngine *e
 		g_object_set_data (G_OBJECT(device), "engine-state-old", GUINT_TO_POINTER(state));
 	}
 
-#if GPM_USE_COMPOSITE
 	/* if battery then use composite device to cope with multiple batteries */
 	if (type == DKP_DEVICE_TYPE_BATTERY)
-		device = gpm_engine_update_composite_device (engine);
-#endif
+		device = gpm_engine_update_composite_device (engine, device);
 
 	/* check the warning state has not changed */
 	warning_old = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(device), "engine-warning-old"));
@@ -972,16 +969,15 @@ gpm_engine_init (GpmEngine *engine)
 	g_signal_connect (engine->priv->phone, "device-refresh",
 			  G_CALLBACK (phone_device_refresh_cb), engine);
 
-#if GPM_USE_COMPOSITE
 	/* create a fake virtual composite battery */
 	engine->priv->battery_composite = dkp_device_new ();
 	g_object_set (engine->priv->battery_composite,
 		      "type", DKP_DEVICE_TYPE_BATTERY,
 		      "is-rechargeable", TRUE,
 		      "native-path", "dummy:composite_battery",
+		      "power-supply", TRUE,
 		      "is-present", TRUE,
 		      NULL);
-#endif
 
 	engine->priv->previous_icon = NULL;
 	engine->priv->previous_summary = NULL;
@@ -1108,9 +1104,7 @@ gpm_engine_finalize (GObject *object)
 
 	g_object_unref (engine->priv->client);
 	g_object_unref (engine->priv->phone);
-#if GPM_USE_COMPOSITE
 	g_object_unref (engine->priv->battery_composite);
-#endif
 
 	g_free (engine->priv->previous_icon);
 	g_free (engine->priv->previous_summary);
