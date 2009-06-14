@@ -540,12 +540,18 @@ static DkpDevice *
 gpm_engine_update_composite_device (GpmEngine *engine)
 {
 	guint i;
+
+	gdouble percentage;
+	gdouble energy;
+	gdouble energy_full;
+	gdouble energy_rate;
+	gdouble energy_total = 0.0;
+	gdouble energy_full_total = 0.0;
+	gdouble energy_rate_total = 0.0;
+
 	gint64 time_to_empty = 0;
-	gint64 time_to_empty_total = 0;
 	gint64 time_to_full = 0;
-	gint64 time_to_full_total = 0;
-	gdouble percentage = 0;
-	gdouble percentage_total = 0;
+
 	guint battery_devices = 0;
 	gboolean is_charging = FALSE;
 	gboolean is_discharging = FALSE;
@@ -561,10 +567,10 @@ gpm_engine_update_composite_device (GpmEngine *engine)
 		device = g_ptr_array_index (engine->priv->array, i);
 		g_object_get (device,
 			      "type", &type,
-			      "time-to-empty", &time_to_empty,
-			      "time-to-full", &time_to_full,
-			      "percentage", &percentage,
 			      "state", &state,
+			      "energy", &energy,
+			      "energy-full", &energy_full,
+			      "energy-rate", &energy_rate,
 			      NULL);
 		if (type != DKP_DEVICE_TYPE_BATTERY)
 			continue;
@@ -579,15 +585,16 @@ gpm_engine_update_composite_device (GpmEngine *engine)
 			is_discharging = TRUE;
 		if (state == DKP_DEVICE_STATE_FULLY_CHARGED)
 			is_fully_charged = TRUE;
-		time_to_empty_total += time_to_empty;
-		time_to_full_total += time_to_full;
-		percentage_total += percentage;
+
+		/* sum up composite */
+		energy_total += energy;
+		energy_full_total += energy_full;
+		energy_rate_total += energy_rate;
 		battery_devices++;
 	}
 
-	/* use average percentage */
-	if (battery_devices > 0)
-		percentage_total /= battery_devices;
+	/* use percentage weighted for each battery capacity */
+	percentage = 100.0 * energy_total / energy_full_total;
 
 	/* set composite state */
 	if (is_charging)
@@ -599,11 +606,22 @@ gpm_engine_update_composite_device (GpmEngine *engine)
 	else
 		state = DKP_DEVICE_STATE_UNKNOWN;
 
+	/* calculate a quick and dirty time remaining value */
+	if (energy_rate_total > 0) {
+		if (state == DKP_DEVICE_STATE_DISCHARGING)
+			time_to_empty = 3600 * (energy_total / energy_rate_total);
+		else if (state == DKP_DEVICE_STATE_CHARGING)
+			time_to_full = 3600 * ((energy_full_total - energy_total) / energy_rate_total);
+	}
+
 	egg_debug ("printing composite device");
 	g_object_set (engine->priv->battery_composite,
-		      "time-to-empty", time_to_empty_total,
-		      "time-to-full", time_to_full_total,
-		      "percentage", percentage_total,
+		      "energy", energy,
+		      "energy-full", energy_full,
+		      "energy-rate", energy_rate,
+		      "time-to-empty", time_to_empty,
+		      "time-to-full", time_to_full,
+		      "percentage", percentage,
 		      "state", state,
 		      NULL);
 	dkp_device_print (engine->priv->battery_composite);
