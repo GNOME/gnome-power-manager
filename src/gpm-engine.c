@@ -520,7 +520,16 @@ gpm_engine_device_check_capacity (GpmEngine *engine, DkpDevice *device)
 		      "capacity", &capacity,
 		      NULL);
 
-	if (type != DKP_DEVICE_TYPE_BATTERY || capacity > 50.0f)
+	/* not laptop battery */
+	if (type != DKP_DEVICE_TYPE_BATTERY)
+		return FALSE;
+
+	/* capacity okay */
+	if (capacity > 50.0f)
+		return FALSE;
+
+	/* capacity invalid */
+	if (capacity < 1.0f)
 		return FALSE;
 
 	/* only emit this if specified in gconf */
