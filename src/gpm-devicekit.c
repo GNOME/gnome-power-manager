@@ -133,7 +133,8 @@ gpm_devicekit_get_object_icon (DkpDevice *device)
 			index_str = gpm_devicekit_get_object_icon_index (device);
 			filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index_str);
 
-		} else if (state == DKP_DEVICE_STATE_DISCHARGING) {
+		} else if (state == DKP_DEVICE_STATE_DISCHARGING ||
+			   state == DKP_DEVICE_STATE_EMPTY) {
 			index_str = gpm_devicekit_get_object_icon_index (device);
 			filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 		}
