@@ -1658,13 +1658,8 @@ main (int argc, char *argv[])
 
 	last_device = gconf_client_get_string (gconf_client, GPM_CONF_INFO_LAST_DEVICE, NULL);
 
-#if 0
-	/* FIXME: this is only available in DeviceKit 008 */
+	/* has capability to measure wakeups */
 	ret = dkp_wakeups_has_capability (wakeups);
-#else
-	/* can we get wakeup data? */
-	ret = TRUE;
-#endif
 	if (ret) {
 		GtkTreeIter iter;
 		gtk_list_store_append (list_store_devices, &iter);
