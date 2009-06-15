@@ -535,11 +535,17 @@ gpm_stats_update_info_page_history (DkpDevice *device)
 			      NULL);
 	}
 
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "label_history_nodata"));
 	array = dkp_device_get_history (device, history_type, history_time, 150, NULL);
 	if (array == NULL) {
+		/* show no data label and hide graph */
 		gtk_widget_hide (graph_history);
+		gtk_widget_show (widget);
 		goto out;
 	}
+
+	/* hide no data and show graph */
+	gtk_widget_hide (widget);
 	gtk_widget_show (graph_history);
 
 	g_get_current_time (&timeval);
@@ -636,11 +642,18 @@ gpm_stats_update_info_page_stats (DkpDevice *device)
 			      NULL);
 	}
 
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "label_stats_nodata"));
 	array = dkp_device_get_statistics (device, type, NULL);
 	if (array == NULL) {
+		/* show no data label and hide graph */
 		gtk_widget_hide (graph_statistics);
+		gtk_widget_show (widget);
 		goto out;
 	}
+
+	/* hide no data and show graph */
+	gtk_widget_hide (widget);
+	gtk_widget_show (graph_statistics);
 
 	for (i=0; i<array->len; i++) {
 		sobj = (DkpStatsObj *) g_ptr_array_index (array, i);
