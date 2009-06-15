@@ -1416,6 +1416,7 @@ main (int argc, char *argv[])
 	DkpClient *client;
 	GPtrArray *devices;
 	DkpDevice *device;
+	DkpDeviceType type;
 	guint i;
 	gint page;
 	const gchar *object_path;
@@ -1647,14 +1648,49 @@ main (int argc, char *argv[])
 	devices = dkp_client_enumerate_devices (client, NULL);
 	if (devices == NULL)
 		goto out;
+
+	/* add devices in visually pleasing order */
 	for (i=0; i < devices->len; i++) {
 		device = g_ptr_array_index (devices, i);
-		gpm_stats_add_device (device);
-		if (i == 0) {
-			gpm_stats_update_info_data (device);
-			current_device = g_strdup (dkp_device_get_object_path (device));
-		}
+		g_object_get (device, "type", &type, NULL);
+		if (type == DKP_DEVICE_TYPE_LINE_POWER)
+			gpm_stats_add_device (device);
 	}
+	for (i=0; i < devices->len; i++) {
+		device = g_ptr_array_index (devices, i);
+		g_object_get (device, "type", &type, NULL);
+		if (type == DKP_DEVICE_TYPE_BATTERY)
+			gpm_stats_add_device (device);
+	}
+	for (i=0; i < devices->len; i++) {
+		device = g_ptr_array_index (devices, i);
+		g_object_get (device, "type", &type, NULL);
+		if (type == DKP_DEVICE_TYPE_UPS)
+			gpm_stats_add_device (device);
+	}
+	for (i=0; i < devices->len; i++) {
+		device = g_ptr_array_index (devices, i);
+		g_object_get (device, "type", &type, NULL);
+		if (type == DKP_DEVICE_TYPE_MONITOR)
+			gpm_stats_add_device (device);
+	}
+	for (i=0; i < devices->len; i++) {
+		device = g_ptr_array_index (devices, i);
+		g_object_get (device, "type", &type, NULL);
+		if (type == DKP_DEVICE_TYPE_MOUSE)
+			gpm_stats_add_device (device);
+	}
+	for (i=0; i < devices->len; i++) {
+		device = g_ptr_array_index (devices, i);
+		g_object_get (device, "type", &type, NULL);
+		if (type == DKP_DEVICE_TYPE_KEYBOARD)
+			gpm_stats_add_device (device);
+	}
+
+	/* set current device */
+	device = g_ptr_array_index (devices, 0);
+	gpm_stats_update_info_data (device);
+	current_device = g_strdup (dkp_device_get_object_path (device));
 
 	last_device = gconf_client_get_string (gconf_client, GPM_CONF_INFO_LAST_DEVICE, NULL);
 
