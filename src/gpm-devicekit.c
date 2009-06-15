@@ -155,6 +155,13 @@ gpm_devicekit_get_object_icon (DkpDevice *device)
 			filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 		}
 	}
+
+	/* nothing matched */
+	if (filename == NULL) {
+		egg_warning ("nothing matched, falling back to default icon");
+		filename = g_strdup ("dialog-warning");
+	}
+
 	egg_debug ("got filename: %s", filename);
 	return filename;
 }
