@@ -5,7 +5,7 @@
 # This file is distributed under the same license as the gnome-power-manager
 # package.
 #
-# Priit Laes <amd@store20.com>, 2006.
+# Priit Laes <plaes plaes org>, 2006, 2009.
 # Ivar Smolin <okul at linux ee>, 2006-2009.
 #
 msgid ""
@@ -13,9 +13,9 @@ msgstr ""
 "Project-Id-Version: Gnome Power Manager HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&component=general\n"
-"POT-Creation-Date: 2009-04-17 14:40+0000\n"
-"PO-Revision-Date: 2009-04-27 08:52+0300\n"
-"Last-Translator: Ivar Smolin <okul@linux.ee>\n"
+"POT-Creation-Date: 2009-06-15 09:21+0000\n"
+"PO-Revision-Date: 2009-06-15 13:16+0300\n"
+"Last-Translator: Priit Laes <plaes@plaes.org>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -121,18 +121,11 @@ msgstr ""
 msgid "Inhibit Applet Factory"
 msgstr ""
 
-#. common descriptions of this program
 msgid "Power Manager"
 msgstr "Vooluhaldur"
 
 msgid "Power management daemon"
 msgstr "Vooluhaldusdeemon"
-
-msgid ""
-"After resume, gnome-power-manager will suppress policy actions for a number "
-"of seconds to allow messages to settle and HAL to refresh. Commonly five "
-"seconds is enough while not being so long that the user gets confused."
-msgstr ""
 
 msgid "Allow Suspend and Hibernate in the menu"
 msgstr ""
@@ -194,13 +187,6 @@ msgstr ""
 msgid ""
 "If a notification message should be displayed when the profile data is "
 "guessed."
-msgstr ""
-
-msgid "If extra debugging messages should be used"
-msgstr ""
-
-msgid ""
-"If extra debugging messages should be used. Only turn this on for debugging."
 msgstr ""
 
 msgid "If preferences should be shown"
@@ -397,9 +383,6 @@ msgstr "Teavitamine aku täislaadimise korral"
 msgid "Notify when the profile data is guessed"
 msgstr ""
 
-msgid "Number of seconds to suppress policy after resume"
-msgstr ""
-
 msgid "Percentage action is taken"
 msgstr ""
 
@@ -433,26 +416,32 @@ msgstr ""
 msgid "Suspend enabled"
 msgstr ""
 
+#| msgid ""
+#| "The DPMS method used to blank the screen when on AC power. Possible "
+#| "values are \"default\", \"standby\", \"suspend\" and \"off\"."
 msgid ""
 "The DPMS method used to blank the screen when on AC power. Possible values "
-"are \"default\", \"standby\", \"suspend\" and \"off\"."
+"are \"standby\", \"suspend\" and \"off\"."
 msgstr ""
 "Võrgutoitel töötamisel ekraani tühjendamiseks kasutatav DPMS-meetod. "
-"Võimalikud väärtused on \"default\", \"standby\", \"suspend\" ja \"off\"."
+"Võimalikud väärtused on \"standby\", \"suspend\" ja \"off\"."
 
+#| msgid ""
+#| "The DPMS method used to blank the screen when on battery power. Possible "
+#| "values are \"default\", \"standby\", \"suspend\" and \"off\"."
 msgid ""
 "The DPMS method used to blank the screen when on battery power. Possible "
-"values are \"default\", \"standby\", \"suspend\" and \"off\"."
+"values are \"standby\", \"suspend\" and \"off\"."
 msgstr ""
 "Akutoitel töötamisel ekraani tühjendamiseks kasutatav DPMS-meetod. "
-"Võimalikud väärtused on \"default\", \"standby\", \"suspend\" ja \"off\"."
+"Võimalikud väärtused on \"standby\", \"suspend\" ja \"off\"."
 
 msgid ""
 "The action to take when the UPS is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
 "UPS-i kriitilise täituvuse korral ette võetav tegevus. Võimalikud väärtused "
-"on \"default\", \"standby\", \"suspend\" ja \"off\"."
+"on \"hibernate\", \"suspend\", \"shutdown\" ja \"nothing\"."
 
 msgid ""
 "The action to take when the UPS is low. Possible values are \"hibernate\", "
@@ -466,7 +455,7 @@ msgid ""
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
 "Aku kriitilise täituvuse korral ette võetav tegevus. Võimalikud väärtused on "
-"\"default\", \"standby\", \"suspend\" ja \"off\"."
+"\"hibernate\", \"suspend\", \"shutdown\" ja \"nothing\"."
 
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on AC "
@@ -492,7 +481,7 @@ msgid ""
 "\"."
 msgstr ""
 "Voolunupu vajutamise korral ette võetav tegevus. Võimalikud väärtused on "
-"\"default\", \"standby\", \"suspend\" ja \"off\"."
+"\"suspend\", \"hibernate\", \"interactive\", \"shutdown\" ja \"nothing\"."
 
 msgid ""
 "The action to take when the system suspend button is pressed. Possible "
@@ -589,14 +578,6 @@ msgid "The interval the ambient light sensors should be polled in seconds."
 msgstr ""
 "Mitme sekundilise vahega hangitakse valgussensoritelt andmeidSekunditest "
 "määratud intervall, mille järel tuleb valgussensorite andmeid lugeda."
-
-msgid "The invalid timeout for power actions"
-msgstr ""
-
-msgid ""
-"The invalid timeout in ms for power actions. Set this longer if you get "
-"'battery critical' messages when you unplug."
-msgstr ""
 
 msgid "The maximum duration of time displayed on the x-axis of the graph."
 msgstr "Graafiku X-teljel näidatav suurim kestus."
@@ -778,32 +759,14 @@ msgstr ""
 msgid "Statistics"
 msgstr "Statistika"
 
+msgid "There is no data to display."
+msgstr ""
+
 msgid "Use smoothed line"
 msgstr ""
 
 msgid "Wakeups"
 msgstr ""
-
-msgid "Application:"
-msgstr "Rakendus:"
-
-msgid "Burning DVD, titled \"My Photos\""
-msgstr "DVD salvestamine, pealkirjaga \"Minu fotod\""
-
-msgid "Inhibit"
-msgstr "Piira"
-
-msgid "Inhibit Tester"
-msgstr "Piirangutester"
-
-msgid "Reason:"
-msgstr "Põhjus:"
-
-msgid "UnInhibit"
-msgstr "Eemalda piirang"
-
-msgid "Vendor Acme Foo"
-msgstr "Lihtsalt üks rakendus"
 
 msgid "<b>Actions</b>"
 msgstr "<b>Tegevused</b>"
@@ -896,7 +859,7 @@ msgid "_Reduce backlight brightness"
 msgstr "_Taustavalgustuse heledust vähendatakse"
 
 msgid "Unknown time"
-msgstr "Tundmatu aeg"
+msgstr "teadmata aja"
 
 #, c-format
 msgid "%i minute"
@@ -925,9 +888,6 @@ msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minut"
 msgstr[1] "minutit"
-
-msgid "Power Manager for the GNOME desktop"
-msgstr "Vooluhaldur GNOME töölauale"
 
 #, c-format
 msgid ""
@@ -1169,51 +1129,6 @@ msgstr "%.1fW"
 msgid "%.1fV"
 msgstr "%.1fV"
 
-#. Translators: first %s is an application name, second %s is the reason
-#, c-format
-msgid "%s has stopped the suspend from taking place: %s."
-msgstr ""
-
-#. Translators: first %s is an application name, second %s is the reason
-#, c-format
-msgid "%s has stopped the hibernate from taking place: %s."
-msgstr ""
-
-#. Translators: first %s is an application name, second %s is the reason
-#, c-format
-msgid "%s has stopped the policy action from taking place: %s."
-msgstr ""
-
-#. Translators: first %s is an application name, second %s is the reason
-#, c-format
-msgid "%s has stopped the reboot from taking place: %s."
-msgstr ""
-
-#. Translators: first %s is an application name, second %s is the reason
-#, c-format
-msgid "%s has stopped the shutdown from taking place: %s."
-msgstr ""
-
-#. Translators: first %s is an application name, second %s is the reason
-#, c-format
-msgid "%s has stopped the timeout action from taking place: %s."
-msgstr ""
-
-msgid "Multiple applications have stopped the suspend from taking place."
-msgstr ""
-
-msgid "Multiple applications have stopped the hibernate from taking place."
-msgstr ""
-
-msgid "Multiple applications have stopped the policy action from taking place."
-msgstr ""
-
-msgid "Multiple applications have stopped the reboot from taking place."
-msgstr ""
-
-msgid "Multiple applications have stopped the shutdown from taking place."
-msgstr ""
-
 #. TRANSLATORS: show verbose debugging
 msgid "Show extra debugging information"
 msgstr "Silumisteabe näitamine"
@@ -1268,22 +1183,6 @@ msgstr ""
 
 #. TRANSLATORS: this is the sound description
 msgid "Suspend failed"
-msgstr ""
-
-msgid "Request to suspend"
-msgstr ""
-
-msgid "Request to hibernate"
-msgstr ""
-
-msgid "Request to do policy action"
-msgstr ""
-
-msgid "Request to do timeout action"
-msgstr ""
-
-#. I want this translated
-msgid "Perform action anyway"
 msgstr ""
 
 msgid "Action disallowed"
@@ -1475,6 +1374,16 @@ msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr "UPS-i täituvus on alla kriitilist taset ja seetõttu arvuti seisatakse."
 
+#, fuzzy
+#| msgid "The lid has been closed on ac power."
+msgid "The lid has been found closed on ac power."
+msgstr "Kaas suleti ajal, mil vooluadapter oli ühendatud."
+
+#, fuzzy
+#| msgid "The lid has been closed on battery power."
+msgid "The lid has been found closed on battery power."
+msgstr "Kaas suleti ajal, mil arvuti oli akutoitel."
+
 msgid "Install problem!"
 msgstr "Paigaldusprobleem!"
 
@@ -1664,9 +1573,12 @@ msgstr "Seerianumber"
 msgid "Supply"
 msgstr ""
 
-#, c-format
-msgid "%d seconds"
-msgstr "%d sekundit"
+#, fuzzy, c-format
+#| msgid "%d seconds"
+msgid "%d second"
+msgid_plural "%d seconds"
+msgstr[0] "%d sekundit"
+msgstr[1] "%d sekundit"
 
 msgid "Refreshed"
 msgstr ""
@@ -1713,7 +1625,7 @@ msgstr "Andmed puuduvad"
 
 #. TRANSLATORS: kernel module, usually a device driver
 msgid "Kernel module"
-msgstr ""
+msgstr "Kerneli moodul"
 
 #. TRANSLATORS: kernel housekeeping
 msgid "Kernel core"
@@ -1729,11 +1641,11 @@ msgstr ""
 
 #. TRANSLATORS: the keyboard and mouse device event
 msgid "PS/2 keyboard/mouse/touchpad"
-msgstr ""
+msgstr "PS/2 klaviatuur/hiir/puuteplaat"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
 msgid "ACPI"
-msgstr ""
+msgstr "ACPI"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
 msgid "Serial ATA"
@@ -1780,7 +1692,7 @@ msgstr ""
 #. TRANSLATORS: activity on the USB bus
 #, c-format
 msgid "USB activity %s"
-msgstr ""
+msgstr "USB aktiivsus %s"
 
 #. TRANSLATORS: we've timed out of an aligned timer
 #, c-format
@@ -1830,11 +1742,11 @@ msgstr "Ennustatav aeg"
 
 #. TRANSLATORS: this is the Y axis on the graph
 msgid "Correction factor"
-msgstr "Korrektsioonitegur"
+msgstr "Parandustegur"
 
 #. TRANSLATORS: this is the Y axis on the graph
 msgid "Prediction accuracy"
-msgstr "Ennustamise täpsus"
+msgstr "Ennustuse täpsus"
 
 #. TRANSLATORS: the icon for the CPU
 msgid "Processor"
@@ -1848,7 +1760,7 @@ msgstr ""
 
 msgid "translator-credits"
 msgstr ""
-"Priit Laes <amd@store20.com>, 2006.\n"
+"Priit Laes <plaes+i18n@plaes.org>, 2006, 2009\n"
 "Ivar Smolin <okul@linux ee>, 2006-2009."
 
 msgid "GNOME Power Manager Website"
@@ -1875,3 +1787,27 @@ msgstr "_Peata"
 
 msgid "Hi_bernate"
 msgstr "_Talveuni"
+
+#~ msgid "Application:"
+#~ msgstr "Rakendus:"
+
+#~ msgid "Burning DVD, titled \"My Photos\""
+#~ msgstr "DVD salvestamine, pealkirjaga \"Minu fotod\""
+
+#~ msgid "Inhibit"
+#~ msgstr "Piira"
+
+#~ msgid "Inhibit Tester"
+#~ msgstr "Piirangutester"
+
+#~ msgid "Reason:"
+#~ msgstr "Põhjus:"
+
+#~ msgid "UnInhibit"
+#~ msgstr "Eemalda piirang"
+
+#~ msgid "Vendor Acme Foo"
+#~ msgstr "Lihtsalt üks rakendus"
+
+#~ msgid "Power Manager for the GNOME desktop"
+#~ msgstr "Vooluhaldur GNOME töölauale"
