@@ -1037,7 +1037,9 @@ static void
 gpm_engine_fully_charged_cb (GpmEngine *engine, DkpDevice *device, GpmManager *manager)
 {
 	DkpDeviceType type;
+	gchar *native_path;
 	gboolean ret;
+	guint plural = 1;
 
 	/* only action this if specified in gconf */
 	ret = gconf_client_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_FULLY_CHARGED, NULL);
@@ -1049,10 +1051,16 @@ gpm_engine_fully_charged_cb (GpmEngine *engine, DkpDevice *device, GpmManager *m
 	/* get device properties */
 	g_object_get (device,
 		      "type", &type,
+		      "native-path", &native_path,
 		      NULL);
 
-	if (type == DKP_DEVICE_TYPE_BATTERY)
-		gpm_notify_fully_charged_primary (manager->priv->notify);
+	if (type == DKP_DEVICE_TYPE_BATTERY) {
+		/* is this a dummy composite device, which is plural? */
+		if (g_str_has_prefix (native_path, "dummy"))
+			plural = 2;
+		gpm_notify_fully_charged_primary (manager->priv->notify, plural);
+	}
+	g_free (native_path);
 }
 
 /**

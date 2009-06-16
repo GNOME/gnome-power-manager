@@ -388,13 +388,13 @@ gpm_notify_inhibit_lid (GpmNotify *notify)
  * gpm_notify_fully_charged_primary:
  **/
 gboolean
-gpm_notify_fully_charged_primary (GpmNotify *notify)
+gpm_notify_fully_charged_primary (GpmNotify *notify, guint plural)
 {
 	const gchar *msg;
 	const gchar *title;
 
-	title = _("Battery Charged");
-	msg = _("Your laptop battery is now fully charged");
+	title = ngettext ("Battery Charged", "Batteries Charged", plural);
+	msg = ngettext ("Your laptop battery is now fully charged", "Your laptop batteries are now fully charged", plural);
 
 	gpm_notify_create (notify, title, msg, GPM_NOTIFY_TIMEOUT_SHORT,
 			   GTK_STOCK_DIALOG_WARNING,
