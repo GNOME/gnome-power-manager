@@ -127,6 +127,7 @@ gnome_power_preferences_LDADD =				\
 	$(POLKIT_GNOME_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
 	$(LOCAL_LIBHAL_LIBS)				\
+	$(DEVKIT_LIBS)					\
 	$(NULL)
 
 gnome_power_preferences_CFLAGS =			\

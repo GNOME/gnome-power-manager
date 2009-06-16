@@ -76,16 +76,10 @@ struct GpmGraphWidgetClass
 GType		 gpm_graph_widget_get_type		(void);
 GtkWidget	*gpm_graph_widget_new			(void);
 
-void		 gpm_graph_widget_enable_legend		(GpmGraphWidget		*graph,
-							 gboolean		 enable);
 gboolean	 gpm_graph_widget_data_clear		(GpmGraphWidget		*graph);
 gboolean	 gpm_graph_widget_data_assign		(GpmGraphWidget		*graph,
 							 GpmGraphWidgetPlot	 plot,
 							 GPtrArray		*array);
-void		 gpm_graph_widget_set_type_x		(GpmGraphWidget		*graph,
-							 GpmGraphWidgetType	 axis);
-void		 gpm_graph_widget_set_type_y		(GpmGraphWidget		*graph,
-							 GpmGraphWidgetType	 axis);
 gboolean	 gpm_graph_widget_key_data_add		(GpmGraphWidget		*graph,
 							 guint32		 color,
 							 const gchar		*desc);

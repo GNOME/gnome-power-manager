@@ -67,6 +67,7 @@ gboolean	 gpm_idle_set_timeout_blank		(GpmIdle	*idle,
 							 guint		 timeout);
 gboolean	 gpm_idle_set_timeout_sleep		(GpmIdle	*idle,
 							 guint		 timeout);
+void		 gpm_idle_test				(gpointer	 data);
 
 G_END_DECLS
 

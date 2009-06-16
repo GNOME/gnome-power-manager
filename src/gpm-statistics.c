@@ -506,19 +506,46 @@ gpm_stats_update_info_page_history (DkpDevice *device)
 	GTimeVal timeval;
 
 	new = g_ptr_array_new ();
-	gpm_graph_widget_set_type_x (GPM_GRAPH_WIDGET (graph_history), GPM_GRAPH_WIDGET_TYPE_TIME);
-	if (strcmp (history_type, GPM_HISTORY_CHARGE_VALUE) == 0)
-		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (graph_history), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
-	else if (strcmp (history_type, GPM_HISTORY_RATE_VALUE) == 0)
-		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (graph_history), GPM_GRAPH_WIDGET_TYPE_POWER);
-	else
-		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (graph_history), GPM_GRAPH_WIDGET_TYPE_TIME);
+	if (strcmp (history_type, GPM_HISTORY_CHARGE_VALUE) == 0) {
+		g_object_set (graph_history,
+			      "type-x", GPM_GRAPH_WIDGET_TYPE_TIME,
+			      "type-y", GPM_GRAPH_WIDGET_TYPE_PERCENTAGE,
+			      "autorange-x", FALSE,
+			      "start-x", -history_time,
+			      "stop-x", 0,
+			      "autorange-y", TRUE,
+			      NULL);
+	} else if (strcmp (history_type, GPM_HISTORY_RATE_VALUE) == 0) {
+		g_object_set (graph_history,
+			      "type-x", GPM_GRAPH_WIDGET_TYPE_TIME,
+			      "type-y", GPM_GRAPH_WIDGET_TYPE_POWER,
+			      "autorange-x", FALSE,
+			      "start-x", -history_time,
+			      "stop-x", 0,
+			      "autorange-y", TRUE,
+			      NULL);
+	} else {
+		g_object_set (graph_history,
+			      "type-x", GPM_GRAPH_WIDGET_TYPE_TIME,
+			      "type-y", GPM_GRAPH_WIDGET_TYPE_TIME,
+			      "autorange-x", FALSE,
+			      "start-x", -history_time,
+			      "stop-x", 0,
+			      "autorange-y", TRUE,
+			      NULL);
+	}
 
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "label_history_nodata"));
 	array = dkp_device_get_history (device, history_type, history_time, 150, NULL);
 	if (array == NULL) {
+		/* show no data label and hide graph */
 		gtk_widget_hide (graph_history);
+		gtk_widget_show (widget);
 		goto out;
 	}
+
+	/* hide no data and show graph */
+	gtk_widget_hide (widget);
 	gtk_widget_show (graph_history);
 
 	g_get_current_time (&timeval);
@@ -598,18 +625,35 @@ gpm_stats_update_info_page_stats (DkpDevice *device)
 	} else {
 		g_assert_not_reached ();
 	}
-	gpm_graph_widget_set_type_x (GPM_GRAPH_WIDGET (graph_statistics), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
 
-	if (use_data)
-		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (graph_statistics), GPM_GRAPH_WIDGET_TYPE_FACTOR);
-	else
-		gpm_graph_widget_set_type_y (GPM_GRAPH_WIDGET (graph_statistics), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
+	if (use_data) {
+		g_object_set (graph_statistics,
+			      "type-x", GPM_GRAPH_WIDGET_TYPE_PERCENTAGE,
+			      "type-y", GPM_GRAPH_WIDGET_TYPE_FACTOR,
+			      "autorange-x", TRUE,
+			      "autorange-y", TRUE,
+			      NULL);
+	} else {
+		g_object_set (graph_statistics,
+			      "type-x", GPM_GRAPH_WIDGET_TYPE_PERCENTAGE,
+			      "type-y", GPM_GRAPH_WIDGET_TYPE_PERCENTAGE,
+			      "autorange-x", TRUE,
+			      "autorange-y", TRUE,
+			      NULL);
+	}
 
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "label_stats_nodata"));
 	array = dkp_device_get_statistics (device, type, NULL);
 	if (array == NULL) {
+		/* show no data label and hide graph */
 		gtk_widget_hide (graph_statistics);
+		gtk_widget_show (widget);
 		goto out;
 	}
+
+	/* hide no data and show graph */
+	gtk_widget_hide (widget);
+	gtk_widget_show (graph_statistics);
 
 	for (i=0; i<array->len; i++) {
 		sobj = (DkpStatsObj *) g_ptr_array_index (array, i);
@@ -1372,6 +1416,7 @@ main (int argc, char *argv[])
 	DkpClient *client;
 	GPtrArray *devices;
 	DkpDevice *device;
+	DkpDeviceType type;
 	guint i;
 	gint page;
 	const gchar *object_path;
@@ -1439,14 +1484,14 @@ main (int argc, char *argv[])
 	box = GTK_BOX (gtk_builder_get_object (builder, "hbox_history"));
 	graph_history = gpm_graph_widget_new ();
 	gtk_box_pack_start (box, graph_history, TRUE, TRUE, 0);
-	gtk_widget_set_size_request (graph_history, 600, 300);
+	gtk_widget_set_size_request (graph_history, 400, 250);
 	gtk_widget_show (graph_history);
 
 	/* add statistics graph */
 	box = GTK_BOX (gtk_builder_get_object (builder, "hbox_statistics"));
 	graph_statistics = gpm_graph_widget_new ();
 	gtk_box_pack_start (box, graph_statistics, TRUE, TRUE, 0);
-	gtk_widget_set_size_request (graph_statistics, 600, 300);
+	gtk_widget_set_size_request (graph_statistics, 400, 250);
 	gtk_widget_show (graph_statistics);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_stats"));
@@ -1603,24 +1648,54 @@ main (int argc, char *argv[])
 	devices = dkp_client_enumerate_devices (client, NULL);
 	if (devices == NULL)
 		goto out;
+
+	/* add devices in visually pleasing order */
 	for (i=0; i < devices->len; i++) {
 		device = g_ptr_array_index (devices, i);
-		gpm_stats_add_device (device);
-		if (i == 0) {
-			gpm_stats_update_info_data (device);
-			current_device = g_strdup (dkp_device_get_object_path (device));
-		}
+		g_object_get (device, "type", &type, NULL);
+		if (type == DKP_DEVICE_TYPE_LINE_POWER)
+			gpm_stats_add_device (device);
 	}
+	for (i=0; i < devices->len; i++) {
+		device = g_ptr_array_index (devices, i);
+		g_object_get (device, "type", &type, NULL);
+		if (type == DKP_DEVICE_TYPE_BATTERY)
+			gpm_stats_add_device (device);
+	}
+	for (i=0; i < devices->len; i++) {
+		device = g_ptr_array_index (devices, i);
+		g_object_get (device, "type", &type, NULL);
+		if (type == DKP_DEVICE_TYPE_UPS)
+			gpm_stats_add_device (device);
+	}
+	for (i=0; i < devices->len; i++) {
+		device = g_ptr_array_index (devices, i);
+		g_object_get (device, "type", &type, NULL);
+		if (type == DKP_DEVICE_TYPE_MONITOR)
+			gpm_stats_add_device (device);
+	}
+	for (i=0; i < devices->len; i++) {
+		device = g_ptr_array_index (devices, i);
+		g_object_get (device, "type", &type, NULL);
+		if (type == DKP_DEVICE_TYPE_MOUSE)
+			gpm_stats_add_device (device);
+	}
+	for (i=0; i < devices->len; i++) {
+		device = g_ptr_array_index (devices, i);
+		g_object_get (device, "type", &type, NULL);
+		if (type == DKP_DEVICE_TYPE_KEYBOARD)
+			gpm_stats_add_device (device);
+	}
+
+	/* set current device */
+	device = g_ptr_array_index (devices, 0);
+	gpm_stats_update_info_data (device);
+	current_device = g_strdup (dkp_device_get_object_path (device));
 
 	last_device = gconf_client_get_string (gconf_client, GPM_CONF_INFO_LAST_DEVICE, NULL);
 
-#if 0
-	/* FIXME: this is only available in DeviceKit 008 */
+	/* has capability to measure wakeups */
 	ret = dkp_wakeups_has_capability (wakeups);
-#else
-	/* can we get wakeup data? */
-	ret = TRUE;
-#endif
 	if (ret) {
 		GtkTreeIter iter;
 		gtk_list_store_append (list_store_devices, &iter);

@@ -1,7 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2007-2009 Richard Hughes <richard@hughsie.com>
- * Copyright (C) 2007-2009 William Jon McCann <mccann@jhu.edu>
+ * Copyright (C) 2007 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -27,12 +26,12 @@
 
 G_BEGIN_DECLS
 
-#define EGG_TYPE_IDLETIME		(egg_idletime_get_type ())
-#define EGG_IDLETIME(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), EGG_TYPE_IDLETIME, EggIdletime))
-#define EGG_IDLETIME_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EGG_TYPE_IDLETIME, EggIdletimeClass))
-#define EGG_IS_IDLETIME(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EGG_TYPE_IDLETIME))
-#define EGG_IS_IDLETIME_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EGG_TYPE_IDLETIME))
-#define EGG_IDLETIME_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EGG_TYPE_IDLETIME, EggIdletimeClass))
+#define EGG_IDLETIME_TYPE		(egg_idletime_get_type ())
+#define EGG_IDLETIME(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), EGG_IDLETIME_TYPE, EggIdletime))
+#define EGG_IDLETIME_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), EGG_IDLETIME_TYPE, EggIdletimeClass))
+#define EGG_IS_IDLETIME(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), EGG_IDLETIME_TYPE))
+#define EGG_IS_IDLETIME_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), EGG_IDLETIME_TYPE))
+#define EGG_IDLETIME_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), EGG_IDLETIME_TYPE, EggIdletimeClass))
 
 typedef struct EggIdletimePrivate EggIdletimePrivate;
 
@@ -44,22 +43,26 @@ typedef struct
 
 typedef struct
 {
-	GObjectClass	 parent_class;
-	void		(* alarm_expired)	(EggIdletime	*idletime,
-						 guint		 timer_id);
-	void		(* reset)		(EggIdletime	*idletime);
+	GObjectClass	parent_class;
+	void		(* alarm_expired)		(EggIdletime	*idletime,
+							 guint		 timer_id);
+	void		(* reset)			(EggIdletime	*idletime);
 } EggIdletimeClass;
 
-GType		 egg_idletime_get_type		(void);
-EggIdletime	*egg_idletime_new		(void);
-guint		 egg_idletime_add_watch		(EggIdletime	*idletime,
-						 guint		 interval);
-void		 egg_idletime_remove_watch	(EggIdletime	*idletime,
-						 guint		 id);
+GType		 egg_idletime_get_type			(void);
+EggIdletime	*egg_idletime_new			(void);
+
+void		 egg_idletime_alarm_reset_all		(EggIdletime	*idletime);
+gboolean	 egg_idletime_alarm_set			(EggIdletime	*idletime,
+							 guint		 alarm_id,
+							 guint		 timeout);
+gboolean	 egg_idletime_alarm_remove		(EggIdletime	*idletime,
+							 guint		 alarm_id);
+gint64		 egg_idletime_get_time			(EggIdletime	*idletime);
 #ifdef EGG_TEST
-void		 egg_idletime_test		(gpointer	 data);
+void		 egg_idletime_test			(gpointer	 data);
 #endif
 
 G_END_DECLS
 
-#endif /* __EGG_IDLETIME_H */
+#endif	/* __EGG_IDLETIME_H */

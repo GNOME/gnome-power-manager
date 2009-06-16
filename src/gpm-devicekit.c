@@ -122,6 +122,9 @@ gpm_devicekit_get_object_icon (DkpDevice *device)
 			/* battery missing */
 			filename = g_strdup_printf ("gpm-%s-missing", prefix);
 
+		} else if (state == DKP_DEVICE_STATE_EMPTY) {
+			filename = g_strdup_printf ("gpm-%s-empty", prefix);
+
 		} else if (state == DKP_DEVICE_STATE_FULLY_CHARGED) {
 			filename = g_strdup_printf ("gpm-%s-charged", prefix);
 
@@ -152,6 +155,13 @@ gpm_devicekit_get_object_icon (DkpDevice *device)
 			filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 		}
 	}
+
+	/* nothing matched */
+	if (filename == NULL) {
+		egg_warning ("nothing matched, falling back to default icon");
+		filename = g_strdup ("dialog-warning");
+	}
+
 	egg_debug ("got filename: %s", filename);
 	return filename;
 }

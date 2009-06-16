@@ -1,6 +1,6 @@
 AC_PREREQ(2.60)
 
-AC_INIT(gnome-power-manager, 2.27.1)
+AC_INIT(gnome-power-manager, 2.27.2)
 AC_CONFIG_SRCDIR(src)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AM_INIT_AUTOMAKE([foreign])
@@ -101,7 +101,7 @@ LIBPANEL_REQUIRED=2.0.0
 XRANDR_REQUIRED=1.2.0
 CANBERRA_REQUIRED=0.10
 DEVKIT_REQUIRED=001
-DEVKIT_POWER_REQUIRED=007
+DEVKIT_POWER_REQUIRED=008
 
 dnl ---------------------------------------------------------------------------
 dnl - Make above strings available for packaging files (e.g. rpm spec files)

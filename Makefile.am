@@ -37,7 +37,11 @@ DISTCLEANFILES =					\
 	intltool-update					\
 	gnome-power-manager-*.tar.gz
 
-DISTCHECK_CONFIGURE_FLAGS = --disable-schemas-install --disable-scrollkeeper --disable-applets
+DISTCHECK_CONFIGURE_FLAGS = 				\
+	--disable-schemas-install			\
+	--disable-scrollkeeper				\
+	--disable-applets				\
+	--disable-tests
 
 distclean-local:
 	if test $(srdcir) = .; then :; else \

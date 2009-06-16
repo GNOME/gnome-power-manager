@@ -1,10 +1,10 @@
 Follow http://developer.gnome.org/dotplan/for_maintainers.html
 
-• update configure.in, NEWS, ChangeLog (the "==== <version> ====") to the right release
-• Add translators to NEWS: maintainer.py -w -r GNOME_POWER_MANAGER_2_26_0
-• Run "make distcheck", correct any problems encountered (don't forget to update the ChangeLog if you make any changes)
-• Commit all the changes
-• Create a tag:
+• update configure.in, NEWS
+• Add translators to NEWS: maintainer.py -w -r GNOME_POWER_MANAGER_2_27_1
+ or git shortlog GNOME_POWER_MANAGER_2_27_1.. | grep -i -v trivial | grep -v Merge > NEWS.new
+• Run "make distcheck", correct any problems encountered
+• Commit all the changes and create a tag:
 
 git tag -s GNOME_POWER_MANAGER_2_27_2 -m "==== Version 2.27.2 ===="
 git push --tags

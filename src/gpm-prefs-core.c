@@ -31,6 +31,7 @@
 #include <math.h>
 #include <string.h>
 #include <gconf/gconf-client.h>
+#include <devkit-power-gobject/devicekit-power.h>
 
 #include <hal-manager.h>
 
@@ -48,6 +49,7 @@ static void     gpm_prefs_finalize   (GObject	    *object);
 
 struct GpmPrefsPrivate
 {
+	DkpClient		*client;
 	GtkBuilder		*builder;
 	gboolean		 has_batteries;
 	gboolean		 has_lcd;
@@ -132,90 +134,42 @@ gpm_prefs_activate_window (GpmPrefs *prefs)
 }
 
 /**
- * gpm_dbus_method_bool:
- * @method: The g-p-m DBUS method name, e.g. "AllowedSuspend"
- **/
-static gboolean
-gpm_dbus_method_bool (const gchar *method)
-{
-	DBusGConnection *connection;
-	DBusGProxy *proxy;
-	GError *error = NULL;
-	gboolean ret;
-	gboolean value = FALSE;
-
-	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
-	if (connection == NULL) {
-		if (error) {
-			egg_warning ("Couldn't connect to PowerManager %s",
-				     error->message);
-			g_error_free (error);
-		}
-		return FALSE;
-	}
-
-	proxy = dbus_g_proxy_new_for_name (connection,
-					   GPM_DBUS_SERVICE,
-					   GPM_DBUS_PATH,
-					   GPM_DBUS_INTERFACE);
-	ret = dbus_g_proxy_call (proxy, method, &error,
-				 G_TYPE_INVALID,
-				 G_TYPE_BOOLEAN, &value,
-				 G_TYPE_INVALID);
-	if (error) {
-		egg_debug ("ERROR: %s", error->message);
-		g_error_free (error);
-	}
-	if (!ret) {
-		/* abort as the DBUS method failed */
-		egg_warning ("%s failed!", method);
-		return FALSE;
-	}
-	g_object_unref (proxy);
-	return value;
-}
-
-/**
- * gpm_dbus_method_int:
+ * gpm_dbus_get_caps:
  * @method: The g-p-m DBUS method name, e.g. "AllowedSuspend"
  **/
 static gint
-gpm_dbus_method_int (const gchar *method)
+gpm_dbus_get_caps (GpmPrefs *prefs)
 {
 	DBusGConnection *connection;
-	DBusGProxy *proxy;
+	DBusGProxy *proxy = NULL;
 	GError *error = NULL;
 	gboolean ret;
 	gint value = 0;
 
 	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (connection == NULL) {
-		if (error) {
-			egg_warning ("Couldn't connect to PowerManager %s",
-				     error->message);
-			g_error_free (error);
-		}
-		return FALSE;
+		egg_warning ("Couldn't connect to g-p-m %s", error->message);
+		g_error_free (error);
+		goto out;
 	}
 
 	proxy = dbus_g_proxy_new_for_name (connection,
 					   GPM_DBUS_SERVICE,
 					   GPM_DBUS_PATH,
 					   GPM_DBUS_INTERFACE);
-	ret = dbus_g_proxy_call (proxy, method, &error,
+	ret = dbus_g_proxy_call (proxy, "GetPreferencesOptions", &error,
 				 G_TYPE_INVALID,
 				 G_TYPE_INT, &value,
 				 G_TYPE_INVALID);
-	if (error) {
-		egg_debug ("ERROR: %s", error->message);
-		g_error_free (error);
-	}
 	if (!ret) {
 		/* abort as the DBUS method failed */
-		egg_warning ("%s failed!", method);
-		return FALSE;
+		egg_warning ("GetPreferencesOptions failed: %s", error->message);
+		g_error_free (error);
+		goto out;
 	}
-	g_object_unref (proxy);
+out:
+	if (proxy != NULL)
+		g_object_unref (proxy);
 	return value;
 }
 
@@ -1012,6 +966,7 @@ gpm_prefs_init (GpmPrefs *prefs)
 
 	prefs->priv = GPM_PREFS_GET_PRIVATE (prefs);
 
+	prefs->priv->client = dkp_client_new ();
 	prefs->priv->conf = gconf_client_get_default ();
 	/* watch gnome-power-manager keys */
 	gconf_client_add_dir (prefs->priv->conf, GPM_CONF_DIR,
@@ -1023,17 +978,16 @@ gpm_prefs_init (GpmPrefs *prefs)
 	/* get value of delay in gnome-session */
 	prefs->priv->idle_delay = gconf_client_get_int (prefs->priv->conf, GPM_CONF_IDLE_DELAY, NULL);
 
-	caps = gpm_dbus_method_int ("GetPreferencesOptions");
+	caps = gpm_dbus_get_caps (prefs);
 	prefs->priv->has_batteries = ((caps & GPM_PREFS_SERVER_BATTERY) > 0);
 	prefs->priv->has_ups = ((caps & GPM_PREFS_SERVER_UPS) > 0);
 	prefs->priv->has_lcd = ((caps & GPM_PREFS_SERVER_BACKLIGHT) > 0);
 	prefs->priv->has_ambient = ((caps & GPM_PREFS_SERVER_AMBIENT) > 0);
 	prefs->priv->has_button_lid = ((caps & GPM_PREFS_SERVER_LID) > 0);
 	prefs->priv->has_button_suspend = TRUE;
-	/* TODO: use DeviceKit-power */
 	prefs->priv->can_shutdown = TRUE;
-	prefs->priv->can_suspend = gpm_dbus_method_bool ("CanSuspend");
-	prefs->priv->can_hibernate = gpm_dbus_method_bool ("CanHibernate");
+	prefs->priv->can_suspend = dkp_client_can_suspend (prefs->priv->client);
+	prefs->priv->can_hibernate = dkp_client_can_hibernate (prefs->priv->client);
 	egg_debug ("caps=%i", caps);
 
 	prefs->priv->builder = gtk_builder_new ();
@@ -1093,6 +1047,7 @@ gpm_prefs_finalize (GObject *object)
 	prefs->priv = GPM_PREFS_GET_PRIVATE (prefs);
 
 	g_object_unref (prefs->priv->conf);
+	g_object_unref (prefs->priv->client);
 
 	G_OBJECT_CLASS (gpm_prefs_parent_class)->finalize (object);
 }

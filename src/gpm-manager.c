@@ -608,13 +608,12 @@ idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmManager *manager)
 		return;
 	}
 
-	/* Ignore timeout events when the lid is closed, as the DPMS is
-	 * already off, and we don't want to perform policy actions or re-enable
-	 * the screen when the user moves the mouse on systems that do not
-	 * support hardware blanking.
-	 * Details are here: https://launchpad.net/malone/bugs/22522 */
-	if (gpm_button_is_lid_closed (manager->priv->button)) {
-		egg_debug ("lid is closed, so we are ignoring idle state changes");
+	/* Ignore back-to-NORMAL events when the lid is closed, as the DPMS is
+	 * already off, and we don't want to re-enable the screen when the user
+	 * moves the mouse on systems that do not support hardware blanking. */
+	if (gpm_button_is_lid_closed (manager->priv->button) &&
+	    mode == GPM_IDLE_MODE_NORMAL) {
+		egg_debug ("lid is closed, so we are ignoring ->NORMAL state changes");
 		return;
 	}
 
@@ -692,7 +691,7 @@ update_ac_throttle (GpmManager *manager)
 {
 	/* Throttle the manager when we are not on AC power so we don't
 	   waste the battery */
-	if (manager->priv->on_battery) {
+	if (!manager->priv->on_battery) {
 		if (manager->priv->screensaver_ac_throttle_id != 0) {
 			gpm_screensaver_remove_throttle (manager->priv->screensaver, manager->priv->screensaver_ac_throttle_id);
 			manager->priv->screensaver_ac_throttle_id = 0;
@@ -1038,14 +1037,30 @@ static void
 gpm_engine_fully_charged_cb (GpmEngine *engine, DkpDevice *device, GpmManager *manager)
 {
 	DkpDeviceType type;
+	gchar *native_path;
+	gboolean ret;
+	guint plural = 1;
+
+	/* only action this if specified in gconf */
+	ret = gconf_client_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_FULLY_CHARGED, NULL);
+	if (!ret) {
+		egg_debug ("no notification");
+		return;
+	}
 
 	/* get device properties */
 	g_object_get (device,
 		      "type", &type,
+		      "native-path", &native_path,
 		      NULL);
 
-	if (type == DKP_DEVICE_TYPE_BATTERY)
-		gpm_notify_fully_charged_primary (manager->priv->notify);
+	if (type == DKP_DEVICE_TYPE_BATTERY) {
+		/* is this a dummy composite device, which is plural? */
+		if (g_str_has_prefix (native_path, "dummy"))
+			plural = 2;
+		gpm_notify_fully_charged_primary (manager->priv->notify, plural);
+	}
+	g_free (native_path);
 }
 
 /**
@@ -1055,6 +1070,14 @@ static void
 gpm_engine_discharging_cb (GpmEngine *engine, DkpDevice *device, GpmManager *manager)
 {
 	DkpDeviceType type;
+	gboolean ret;
+
+	/* only action this if specified in gconf */
+	ret = gconf_client_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_DISCHARGING, NULL);
+	if (!ret) {
+		egg_debug ("no notification");
+		return;
+	}
 
 	/* get device properties */
 	g_object_get (device,

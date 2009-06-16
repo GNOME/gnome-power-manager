@@ -118,12 +118,13 @@ gpm_feedback_show (GtkWidget *widget)
 /**
  * gpm_feedback_close_window:
  **/
-static void
+static gboolean
 gpm_feedback_close_window (GpmFeedback *feedback)
 {
-	g_return_if_fail (GPM_IS_FEEDBACK (feedback));
+	g_return_val_if_fail (GPM_IS_FEEDBACK (feedback), FALSE);
 	egg_debug ("Closing feedback widget");
 	gtk_widget_hide (feedback->priv->main_window);
+	return FALSE;
 }
 
 /**

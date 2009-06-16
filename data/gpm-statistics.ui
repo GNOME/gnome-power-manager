@@ -154,6 +154,15 @@
                                 <property name="position">0</property>
                               </packing>
                             </child>
+                            <child>
+                              <object class="GtkLabel" id="label_history_nodata">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">There is no data to display.</property>
+                              </object>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="position">0</property>
@@ -276,6 +285,15 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label_stats_nodata">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">There is no data to display.</property>
+                              </object>
+                              <packing>
+                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>

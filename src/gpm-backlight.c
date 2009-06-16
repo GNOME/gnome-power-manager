@@ -555,10 +555,6 @@ idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *backlight)
 static void
 brightness_changed_cb (GpmBrightness *brightness, guint percentage, GpmBacklight *backlight)
 {
-	/* display the widget when something else changed the backlight */
-	egg_debug ("Need to display backlight feedback value %i", percentage);
-	gpm_feedback_display_value (backlight->priv->feedback, (float) percentage / 100.0f);
-
 	/* save the new percentage */
 	backlight->priv->master_percentage = percentage;
 
