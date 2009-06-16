@@ -21,8 +21,6 @@ INCLUDES =						\
 	$(GSTREAMER_CFLAGS)				\
 	-DI_KNOW_THE_DEVICEKIT_POWER_API_IS_SUBJECT_TO_CHANGE \
 	$(DEVKIT_CFLAGS)				\
-	$(POLKIT_CFLAGS)				\
-	$(POLKIT_GNOME_CFLAGS)				\
 	-DBINDIR=\"$(bindir)\"			 	\
 	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
 	-DDATADIR=\"$(datadir)\"			\
@@ -124,7 +122,6 @@ gnome_power_preferences_LDADD =				\
 	$(HAL_LIBS)					\
 	$(DBUS_LIBS)					\
 	$(UNIQUE_LIBS)					\
-	$(POLKIT_GNOME_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
 	$(LOCAL_LIBHAL_LIBS)				\
 	$(DEVKIT_LIBS)					\
@@ -209,7 +206,6 @@ gnome_power_manager_LDADD =				\
 	$(GSTREAMER_LIBS)				\
 	$(GNOME_LIBS)					\
 	$(HAL_LIBS)					\
-	$(POLKIT_LIBS)					\
 	$(DBUS_LIBS)					\
 	$(XRANDR_LIBS)					\
 	$(CANBERRA_LIBS)				\
@@ -281,7 +277,6 @@ gnome_power_self_test_LDADD =				\
 	$(GLIB_LIBS)					\
 	$(GNOME_LIBS)					\
 	$(GSTREAMER_LIBS)				\
-	$(POLKIT_GNOME_LIBS)				\
 	$(DEVKIT_LIBS)					\
 	$(DBUS_LIBS)					\
 	$(LIBNOTIFY_LIBS)				\
