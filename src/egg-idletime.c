@@ -247,11 +247,14 @@ egg_idletime_event_filter_cb (GdkXEvent *gdkxevent, GdkEvent *event, gpointer da
 
 		/* are we not the reset symbol */
 		if (alarm->id != 0) {
-			/* emit signal */
-			g_signal_emit (idletime, signals [SIGNAL_ALARM_EXPIRED], 0, alarm->id);
-
 			/* we need the first alarm to go off to set the reset alarm */
 			egg_idletime_set_reset_alarm (idletime, alarm_event);
+
+			/* emit signal after setting up reset, as we don't want
+			 * to miss the expired signal when we are dimming or
+			 * turning off the screen for the other events */
+			g_signal_emit (idletime, signals [SIGNAL_ALARM_EXPIRED], 0, alarm->id);
+
 			return GDK_FILTER_REMOVE;
 		}
 
