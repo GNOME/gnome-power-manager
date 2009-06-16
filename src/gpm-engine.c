@@ -88,6 +88,8 @@ static gpointer gpm_engine_object = NULL;
 
 G_DEFINE_TYPE (GpmEngine, gpm_engine, G_TYPE_OBJECT)
 
+static DkpDevice *gpm_engine_update_composite_device (GpmEngine *engine, DkpDevice *original_device);
+
 typedef enum {
 	GPM_ENGINE_WARNING_NONE = 0,
 	GPM_ENGINE_WARNING_DISCHARGING = 1,
@@ -289,6 +291,10 @@ gpm_engine_get_icon_priv (GpmEngine *engine, DkpDeviceType device_type, GpmEngin
 			      "state", &state,
 			      "is-present", &is_present,
 			      NULL);
+
+		/* if battery then use composite device to cope with multiple batteries */
+		if (type == DKP_DEVICE_TYPE_BATTERY)
+			device = gpm_engine_update_composite_device (engine, device);
 
 		warning_temp = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(device), "engine-warning-old"));
 		if (type == device_type && is_present) {
