@@ -47,6 +47,7 @@ struct EggIdletimePrivate
 	XSyncCounter		 idle_counter;
 	GPtrArray		*array;
 	Display			*dpy;
+	guint			 emit_idle_id;
 };
 
 typedef struct
@@ -54,6 +55,7 @@ typedef struct
 	guint			 id;
 	XSyncValue		 timeout;
 	XSyncAlarm		 xalarm;
+	EggIdletime		*idletime;
 } EggIdletimeAlarm;
 
 enum {
@@ -223,6 +225,25 @@ egg_idletime_alarm_find_event (EggIdletime *idletime, XSyncAlarmNotifyEvent *ala
 }
 
 /**
+ * egg_idletime_emit_idle_cb:
+ */
+static gboolean
+egg_idletime_emit_idle_cb (EggIdletimeAlarm *alarm)
+{
+	g_return_val_if_fail (alarm != NULL, FALSE);
+	g_return_val_if_fail (EGG_IS_IDLETIME (alarm->idletime), FALSE);
+
+	/* emit */
+	g_signal_emit (alarm->idletime, signals [SIGNAL_ALARM_EXPIRED], 0, alarm->id);
+
+	/* clear event */
+	alarm->idletime->priv->emit_idle_id = 0;
+
+	/* never repeat */
+	return FALSE;
+}
+
+/**
  * egg_idletime_event_filter_cb:
  */
 static GdkFilterReturn
@@ -247,15 +268,20 @@ egg_idletime_event_filter_cb (GdkXEvent *gdkxevent, GdkEvent *event, gpointer da
 
 		/* are we not the reset symbol */
 		if (alarm->id != 0) {
+			/* emit signal idle, as we don't want to miss the
+			 * expired signal when we are actually dimming */
+			idletime->priv->emit_idle_id = g_idle_add ((GSourceFunc) egg_idletime_emit_idle_cb, alarm);
+
 			/* we need the first alarm to go off to set the reset alarm */
 			egg_idletime_set_reset_alarm (idletime, alarm_event);
 
-			/* emit signal after setting up reset, as we don't want
-			 * to miss the expired signal when we are dimming or
-			 * turning off the screen for the other events */
-			g_signal_emit (idletime, signals [SIGNAL_ALARM_EXPIRED], 0, alarm->id);
-
 			return GDK_FILTER_REMOVE;
+		}
+
+		/* we have queued an idle event, so unqueue it */
+		if (idletime->priv->emit_idle_id > 0) {
+			g_source_remove (idletime->priv->emit_idle_id);
+			idletime->priv->emit_idle_id = 0;
 		}
 
 		/* do the reset callback */
@@ -266,6 +292,25 @@ egg_idletime_event_filter_cb (GdkXEvent *gdkxevent, GdkEvent *event, gpointer da
 	}
 
 	return GDK_FILTER_CONTINUE;
+}
+
+/**
+ * egg_idletime_alarm_new:
+ */
+static EggIdletimeAlarm *
+egg_idletime_alarm_new (EggIdletime *idletime, guint id)
+{
+	EggIdletimeAlarm *alarm;
+
+	/* create a new alarm */
+	alarm = g_new0 (EggIdletimeAlarm, 1);
+
+	/* set the default values */
+	alarm->id = id;
+	alarm->xalarm = None;
+	alarm->idletime = g_object_ref (idletime);
+
+	return alarm;
 }
 
 /**
@@ -284,11 +329,7 @@ egg_idletime_alarm_set (EggIdletime *idletime, guint id, guint timeout)
 	alarm = egg_idletime_alarm_find_id (idletime, id);
 	if (alarm == NULL) {
 		/* create a new alarm */
-		alarm = g_new0 (EggIdletimeAlarm, 1);
-
-		/* set the default values */
-		alarm->id = id;
-		alarm->xalarm = None;
+		alarm = egg_idletime_alarm_new (idletime, id);
 
 		/* add to array */
 		g_ptr_array_add (idletime->priv->array, alarm);
@@ -308,8 +349,12 @@ egg_idletime_alarm_set (EggIdletime *idletime, guint id, guint timeout)
 static gboolean
 egg_idletime_alarm_free (EggIdletime *idletime, EggIdletimeAlarm *alarm)
 {
+	g_return_val_if_fail (EGG_IS_IDLETIME (idletime), FALSE);
+	g_return_val_if_fail (alarm != NULL, FALSE);
+
 	if (alarm->xalarm)
 		XSyncDestroyAlarm (idletime->priv->dpy, alarm->xalarm);
+	g_object_unref (alarm->idletime);
 	g_free (alarm);
 	g_ptr_array_remove (idletime->priv->array, alarm);
 	return TRUE;
@@ -377,6 +422,7 @@ egg_idletime_init (EggIdletime *idletime)
 	idletime->priv->idle_counter = None;
 	idletime->priv->last_event = 0;
 	idletime->priv->sync_event = 0;
+	idletime->priv->emit_idle_id = 0;
 	idletime->priv->dpy = GDK_DISPLAY ();
 
 	/* get the sync event */
@@ -405,9 +451,7 @@ egg_idletime_init (EggIdletime *idletime)
 	gdk_window_add_filter (NULL, egg_idletime_event_filter_cb, idletime);
 
 	/* create a reset alarm */
-	alarm = g_new0 (EggIdletimeAlarm, 1);
-	alarm->id = 0;
-	alarm->xalarm = None;
+	alarm = egg_idletime_alarm_new (idletime, 0);
 	g_ptr_array_add (idletime->priv->array, alarm);
 }
 
