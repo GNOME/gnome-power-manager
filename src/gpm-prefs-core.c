@@ -729,10 +729,6 @@ prefs_setup_notification (GpmPrefs *prefs)
 	g_signal_connect (radiobutton_icon_never, "clicked",
 			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
 
-	/* set up the sound checkbox */
-	gpm_prefs_setup_checkbox (prefs, "checkbutton_notification_sound",
-				  GPM_CONF_UI_ENABLE_SOUND);
-
 	if (prefs->priv->has_batteries) {
 		/* there's no use case for displaying this option */
 		gtk_widget_hide_all (radiobutton_icon_never);
@@ -834,11 +830,6 @@ prefs_setup_battery (GpmPrefs *prefs)
 	gpm_prefs_setup_checkbox (prefs, "checkbutton_battery_display_dim",
 				  GPM_CONF_BACKLIGHT_IDLE_DIM_BATT);
 
-	if (prefs->priv->has_ambient == FALSE) {
-		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "checkbutton_general_ambient"));
-		gtk_widget_hide_all (widget);
-	}
-
 	set_idle_hscale_stops (prefs, "hscale_battery_computer", prefs->priv->idle_delay);
 
 	if (prefs->priv->has_button_lid == FALSE) {
@@ -905,13 +896,6 @@ prefs_setup_general (GpmPrefs *prefs)
 	gpm_prefs_setup_action_combo (prefs, "combobox_general_suspend",
 				      GPM_CONF_BUTTON_SUSPEND,
 				      suspend_button_actions);
-	gpm_prefs_setup_checkbox (prefs, "checkbutton_general_ambient",
-				  GPM_CONF_AMBIENT_ENABLE);
-
-	if (prefs->priv->has_ambient == FALSE) {
-		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "checkbutton_general_ambient"));
-		gtk_widget_hide_all (widget);
-	}
 
 	if (prefs->priv->has_button_suspend == FALSE) {
 		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "hbox_general_suspend"));
