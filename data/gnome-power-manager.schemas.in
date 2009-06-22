@@ -490,6 +490,54 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/disks/spindown_enable_ac</key>
+      <applyto>/apps/gnome-power-manager/disks/spindown_enable_ac</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>If the low-power mode should be enabled when on AC</short>
+        <long>If the system low-power mode should be enabled when on AC power.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/disks/spindown_enable_battery</key>
+      <applyto>/apps/gnome-power-manager/disks/spindown_enable_battery</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>If the low-power mode should be enabled when on battery</short>
+        <long>If the system low-power mode should be enabled when on laptop battery power.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/disks/spindown_timeout_ac</key>
+      <applyto>/apps/gnome-power-manager/disks/spindown_timeout_ac</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>int</type>
+      <default>600</default>
+      <locale name="C">
+        <short>Seconds of inactivity to spin down when on AC</short>
+        <long>The number of seconds of inactivity to spin down the disks when on AC power.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/disks/spindown_timeout_battery</key>
+      <applyto>/apps/gnome-power-manager/disks/spindown_timeout_battery</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>int</type>
+      <default>60</default>
+      <locale name="C">
+        <short>Seconds of inactivity to spin down when on battery</short>
+        <long>The number of seconds of inactivity to spin down the disks when on battery power.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/notify/perhaps_recall</key>
       <applyto>/apps/gnome-power-manager/notify/perhaps_recall</applyto>
       <owner>gnome-power-manager</owner>

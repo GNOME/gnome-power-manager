@@ -110,6 +110,12 @@ G_BEGIN_DECLS
 #define GPM_CONF_LOCK_GNOME_KEYRING_SUSPEND	GPM_CONF_DIR "/lock/gnome_keyring_suspend"
 #define GPM_CONF_LOCK_GNOME_KEYRING_HIBERNATE	GPM_CONF_DIR "/lock/gnome_keyring_hibernate"
 
+/* disks */
+#define GPM_CONF_DISKS_SPINDOWN_ENABLE_AC	GPM_CONF_DIR "/disks/spindown_enable_ac"
+#define GPM_CONF_DISKS_SPINDOWN_ENABLE_BATT	GPM_CONF_DIR "/disks/spindown_enable_battery"
+#define GPM_CONF_DISKS_SPINDOWN_TIMEOUT_AC	GPM_CONF_DIR "/disks/spindown_timeout_ac"
+#define GPM_CONF_DISKS_SPINDOWN_TIMEOUT_BATT	GPM_CONF_DIR "/disks/spindown_timeout_battery"
+
 /* notify */
 #define GPM_CONF_NOTIFY_PERHAPS_RECALL		GPM_CONF_DIR "/notify/perhaps_recall"
 #define GPM_CONF_NOTIFY_LOW_CAPACITY		GPM_CONF_DIR "/notify/low_capacity"
