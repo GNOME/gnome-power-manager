@@ -63,6 +63,7 @@
 #include "gpm-tray-icon.h"
 #include "gpm-engine.h"
 #include "gpm-devicekit.h"
+#include "gpm-disks.h"
 #include "gpm-feedback-widget.h"
 
 #include "org.freedesktop.PowerManagement.Backlight.h"
@@ -76,6 +77,7 @@ struct GpmManagerPrivate
 {
 	GpmButton		*button;
 	GConfClient		*conf;
+	GpmDisks		*disks;
 	GpmDpms			*dpms;
 	GpmIdle			*idle;
 	GpmPrefsServer		*prefs_server;
@@ -783,6 +785,28 @@ button_pressed_cb (GpmButton *button, const gchar *type, GpmManager *manager)
 }
 
 /**
+ * gpm_manager_get_spindown_timeout:
+ **/
+static guint
+gpm_manager_get_spindown_timeout (GpmManager *manager)
+{
+	gboolean enabled;
+	guint timeout;
+
+	/* get policy */
+	if (!manager->priv->on_battery) {
+		enabled = gconf_client_get_bool (manager->priv->conf, GPM_CONF_DISKS_SPINDOWN_ENABLE_AC, NULL);
+		timeout = gconf_client_get_int (manager->priv->conf, GPM_CONF_DISKS_SPINDOWN_TIMEOUT_AC, NULL);
+	} else {
+		enabled = gconf_client_get_bool (manager->priv->conf, GPM_CONF_DISKS_SPINDOWN_ENABLE_BATT, NULL);
+		timeout = gconf_client_get_int (manager->priv->conf, GPM_CONF_DISKS_SPINDOWN_TIMEOUT_BATT, NULL);
+	}
+	if (!enabled)
+		timeout = 0;
+	return timeout;
+}
+
+/**
  * gpm_manager_client_changed_cb:
  **/
 static void
@@ -790,6 +814,7 @@ gpm_manager_client_changed_cb (DkpClient *client, GpmManager *manager)
 {
 	gboolean event_when_closed;
 	guint brightness;
+	guint timeout;
 	gboolean on_battery;
 
 	/* get the on-battery state */
@@ -809,6 +834,10 @@ gpm_manager_client_changed_cb (DkpClient *client, GpmManager *manager)
 	}
 
 	egg_debug ("on_battery: %d", on_battery);
+
+	/* set disk spindown threshold */
+	timeout = gpm_manager_get_spindown_timeout (manager);
+	gpm_disks_set_spindown_timeout (manager->priv->disks, timeout);
 
 	if (!on_battery)
 		brightness = gconf_client_get_int (manager->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_AC, NULL);
@@ -1465,6 +1494,7 @@ static void
 gpm_manager_init (GpmManager *manager)
 {
 	gboolean check_type_cpu;
+	guint timeout;
 	DBusGConnection *connection;
 	GError *error = NULL;
 	guint version;
@@ -1486,6 +1516,7 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->prefs_server = gpm_prefs_server_new ();
 
 	manager->priv->notify = gpm_notify_new ();
+	manager->priv->disks = gpm_disks_new ();
 	manager->priv->conf = gconf_client_get_default ();
 	manager->priv->client = dkp_client_new ();
 	g_signal_connect (manager->priv->client, "changed",
@@ -1590,6 +1621,10 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect (manager->priv->engine, "charge-action",
 			  G_CALLBACK (gpm_engine_charge_action_cb), manager);
 
+	/* set disk spindown threshold */
+	timeout = gpm_manager_get_spindown_timeout (manager);
+	gpm_disks_set_spindown_timeout (manager->priv->disks, timeout);
+
 	/* update ac throttle */
 	update_ac_throttle (manager);
 }
@@ -1613,6 +1648,7 @@ gpm_manager_finalize (GObject *object)
 	g_return_if_fail (manager->priv != NULL);
 
 	g_object_unref (manager->priv->conf);
+	g_object_unref (manager->priv->disks);
 	g_object_unref (manager->priv->dpms);
 	g_object_unref (manager->priv->idle);
 	g_object_unref (manager->priv->engine);

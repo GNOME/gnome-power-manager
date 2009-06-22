@@ -163,6 +163,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-idle.c					\
 	gpm-load.h					\
 	gpm-load.c					\
+	gpm-disks.h					\
+	gpm-disks.c					\
 	gpm-control.h					\
 	gpm-control.c					\
 	gpm-button.h					\
