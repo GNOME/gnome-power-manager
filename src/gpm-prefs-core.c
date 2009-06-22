@@ -644,6 +644,17 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 		brightness = gconf_value_get_int (value);
 		gtk_range_set_value (GTK_RANGE (widget), brightness);
 	}
+
+	if (strcmp (entry->key, GPM_CONF_DISKS_SPINDOWN_ENABLE_AC) == 0) {
+		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "checkbutton_ac_spindown"));
+		enabled = gconf_value_get_bool (value);
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), enabled);
+
+	} else if (strcmp (entry->key, GPM_CONF_DISKS_SPINDOWN_ENABLE_BATT) == 0) {
+		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "checkbutton_battery_spindown"));
+		enabled = gconf_value_get_bool (value);
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), enabled);
+	}
 }
 
 /** setup the notification page */
@@ -755,6 +766,8 @@ prefs_setup_ac (GpmPrefs *prefs)
 
 	gpm_prefs_setup_checkbox (prefs, "checkbutton_ac_display_dim",
 				  GPM_CONF_BACKLIGHT_IDLE_DIM_AC);
+	gpm_prefs_setup_checkbox (prefs, "checkbutton_ac_spindown",
+				  GPM_CONF_DISKS_SPINDOWN_ENABLE_AC);
 
 	set_idle_hscale_stops (prefs, "hscale_ac_computer", prefs->priv->idle_delay);
 
@@ -813,9 +826,10 @@ prefs_setup_battery (GpmPrefs *prefs)
 	/* set up the battery reduce checkbox */
 	gpm_prefs_setup_checkbox (prefs, "checkbutton_battery_display_reduce",
 	  			  GPM_CONF_BACKLIGHT_BATTERY_REDUCE);
-
 	gpm_prefs_setup_checkbox (prefs, "checkbutton_battery_display_dim",
 				  GPM_CONF_BACKLIGHT_IDLE_DIM_BATT);
+	gpm_prefs_setup_checkbox (prefs, "checkbutton_battery_spindown",
+				  GPM_CONF_DISKS_SPINDOWN_ENABLE_BATT);
 
 	set_idle_hscale_stops (prefs, "hscale_battery_computer", prefs->priv->idle_delay);
 
