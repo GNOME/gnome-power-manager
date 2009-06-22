@@ -644,19 +644,6 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 		brightness = gconf_value_get_int (value);
 		gtk_range_set_value (GTK_RANGE (widget), brightness);
 	}
-
-	if (strcmp (entry->key, GPM_CONF_LOWPOWER_AC) == 0) {
-		enabled = gconf_value_get_bool (value);
-		egg_debug ("need to enable checkbox");
-
-	} else if (strcmp (entry->key, GPM_CONF_LOWPOWER_UPS) == 0) {
-		enabled = gconf_value_get_bool (value);
-		egg_debug ("need to enable checkbox");
-
-	} else if (strcmp (entry->key, GPM_CONF_LOWPOWER_BATT) == 0) {
-		enabled = gconf_value_get_bool (value);
-		egg_debug ("need to enable checkbox");
-	}
 }
 
 /** setup the notification page */
