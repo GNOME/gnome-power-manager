@@ -5,7 +5,7 @@
 # This file is distributed under the same license as the gnome-power-manager
 # package.
 #
-# Priit Laes <plaes plaes org>, 2006, 2009.
+# Priit Laes <amd@store20.com>, 2006.
 # Ivar Smolin <okul at linux ee>, 2006-2009.
 #
 msgid ""
@@ -13,9 +13,9 @@ msgstr ""
 "Project-Id-Version: Gnome Power Manager HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&component=general\n"
-"POT-Creation-Date: 2009-06-15 09:21+0000\n"
-"PO-Revision-Date: 2009-06-15 13:16+0300\n"
-"Last-Translator: Priit Laes <plaes@plaes.org>\n"
+"POT-Creation-Date: 2009-06-02 20:37+0000\n"
+"PO-Revision-Date: 2009-06-20 02:12+0300\n"
+"Last-Translator: Mattias Põldaru <mahfiaz gmail com>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,7 +26,7 @@ msgid "Power Manager Brightness Applet"
 msgstr "Vooluhalduri heleduse rakend"
 
 msgid "Adjusts laptop panel brightness."
-msgstr "Sülearvuti paneeli heleduse muutmine."
+msgstr "Muudab sülearvuti ekraani heledust."
 
 msgid "Cannot connect to gnome-power-manager"
 msgstr "gnome-power-manager'iga pole võimalik ühendust võtta"
@@ -47,7 +47,7 @@ msgid ""
 "as published by the Free Software Foundation; either version 2\n"
 "of the License, or (at your option) any later version."
 msgstr ""
-"Vooluhaldur on vaba tarkvara. Te võite seda edasi levitad\n"
+"Vooluhaldur on vaba tarkvara. Te võite seda edasi levitada\n"
 "ja/või muuta vastavalt GNU Üldise Avaliku Litsentsi tingimustele,\n"
 "nagu need on Vaba Tarkvara Fondi poolt avaldatud; kas Litsentsi\n"
 "versioon number 2 või (vastavalt Teie valikule) ükskõik milline\n"
@@ -80,7 +80,7 @@ msgid "Copyright © 2006 Benjamin Canou"
 msgstr "Autoriõigused © 2006 Benjamin Canou"
 
 msgid "Adjusts Laptop panel brightness"
-msgstr "Sülearvuti paneeli heleduse muutmine"
+msgstr "Sülearvuti ekraani heleduse muutmine"
 
 msgid "Brightness Applet"
 msgstr "Heleduse rakend"
@@ -89,7 +89,7 @@ msgid "Brightness Applet Factory"
 msgstr "Heleduse rakendi factory"
 
 msgid "Factory for Brightness Applet"
-msgstr "Factory heleduse rakendile"
+msgstr "Heleduse rakendi factory"
 
 msgid "Power Manager Inhibit Applet"
 msgstr "Vooluhalduri piirangute rakend"
@@ -104,7 +104,7 @@ msgid "Automatic sleep enabled"
 msgstr "Automaatne uinumine on lubatud"
 
 msgid "Manual inhibit"
-msgstr ""
+msgstr "Vooluhalduri käsitsipiirang"
 
 msgid "Copyright © 2006-2007 Richard Hughes"
 msgstr "Autoriõigused © 2006-2007 Richard Hughes"
@@ -113,13 +113,13 @@ msgid "Allows user to inhibit automatic power saving"
 msgstr "Voolusäästmisele kasutajapoolsete piirangute seadmine"
 
 msgid "Factory for Inhibit Applet"
-msgstr ""
+msgstr "Vooluhalduri piirangute rakendi factory"
 
 msgid "Inhibit Applet"
-msgstr ""
+msgstr "Vooluhalduri piirangute rakend"
 
 msgid "Inhibit Applet Factory"
-msgstr ""
+msgstr "Vooluhalduri piirangute rakendi factory"
 
 msgid "Power Manager"
 msgstr "Vooluhaldur"
@@ -128,7 +128,7 @@ msgid "Power management daemon"
 msgstr "Vooluhaldusdeemon"
 
 msgid "Allow Suspend and Hibernate in the menu"
-msgstr ""
+msgstr "Uinaku ja talveune menüükirjed"
 
 msgid "Allow backlight brightness adjustment"
 msgstr "Taustavalguse heleduse sättimise lubamine"
@@ -158,36 +158,37 @@ msgstr ""
 "\" (alati)."
 
 msgid "Hibernate button action"
-msgstr "Hiberneerimisnupu tegevus"
+msgstr "Talveune nupu tegevus"
 
 msgid "Hibernate enabled"
-msgstr "Hiberneerimine on lubatud"
+msgstr "Talveuni on lubatud"
 
 msgid "If DBUS inhibit requests should be ignored from other programs."
 msgstr ""
+"Kas teiste programmide DBUS'i vooluhalduri piiramise nõudeid tuleb eirata."
 
 msgid "If DBUS inhibit requests should be ignored."
-msgstr ""
+msgstr "Kas DBUS'i vooluhalduri piiramise nõudeid peaks eirama."
 
 msgid ""
 "If a notification message should be displayed after suspend or hibernate "
 "failed."
-msgstr ""
+msgstr "Kas pärast uinaku või talveune nurjumist tuleks näidata teadet."
 
 msgid ""
 "If a notification message should be displayed when the battery is fully "
 "charged."
-msgstr ""
+msgstr "Kas aku täislaetuse korral tuleks näidata teadet."
 
 msgid ""
 "If a notification message should be displayed when the battery is getting "
 "low."
-msgstr ""
+msgstr "Kas aku madala täituvuse korral tuleks näidata teadet."
 
 msgid ""
 "If a notification message should be displayed when the profile data is "
 "guessed."
-msgstr ""
+msgstr "Kas profiiliandmete arvamise korral tuleks näidata teadet."
 
 msgid "If preferences should be shown"
 msgstr "Kas eelistusi tuleb näidata"
@@ -199,33 +200,40 @@ msgid ""
 "If sounds should be used when the power is critically low, or inhibit "
 "requests have stopped the policy action."
 msgstr ""
+"Kas kasutatakse heliteadet kriitilise akutäituvuse korral või kui "
+"piirangunõue peatab tegevuse."
 
 msgid "If the CPU load should be checked before doing the idle action."
-msgstr ""
+msgstr "Kas enne uinumist peaks kontrollima CPU kasutust."
 
 msgid ""
 "If the Suspend and Hibernate options should be allowed in the notification "
 "area drop down menu."
-msgstr ""
+msgstr "Kas teateala ikooni menüüs tuleb näidata uinaku ja talveune kirjeid."
 
 msgid ""
 "If the battery event should occur when the lid is shut and the power "
 "disconnected"
 msgstr ""
+"Kas akusündmus võib esineda siis, kui kaas on suletud ja võrgutoidet pole"
 
 msgid ""
 "If the battery lid close event should occur (for example 'Suspend when lid "
 "closed on battery') when the lid is previously shut and the AC power "
 "disconnected at a later time."
 msgstr ""
+"Kas kaane sulgemise akusündmus võib esineda (näiteks uinak suletud kaane ja "
+"akutoite korral), kui kaas suleti enne ja võrgutoide eemaldati hiljem"
 
 msgid "If the learnt profile should be used to calculate the time remaining"
-msgstr ""
+msgstr "Kas järelejäänud aja arvutamisel peaks kasutama õpitud profiili"
 
 msgid ""
 "If the learnt profile should be used to calculate the time remaining. Only "
 "turn this off for debugging."
 msgstr ""
+"Kas järelejäänud aja arvutamisel peaks kasutama õpitud profiili. Seda ei "
+"peaks muidu keelama, kui ainult silumiseks."
 
 msgid "If the low-power mode should be enabled when on AC"
 msgstr "Kas madala täituvuse režiim peab võrgutoite korral olema lubatud"
@@ -290,10 +298,10 @@ msgstr ""
 "Kas süsteemne madala täituvuse režiim peab akutoite korral olema lubatud"
 
 msgid "If the user is authorized to hibernate the computer."
-msgstr "Kui kasutaja on volitatud arvutit hiberneerima."
+msgstr "Kas kasutaja on volitatud arvuti talveund alustama."
 
 msgid "If the user is authorized to suspend the computer."
-msgstr "Kui kasutaja on volitatud arvutit passiivsesse olekusse viima."
+msgstr "Kas kasutaja on volitatud arvuti uinakut alustama."
 
 msgid "If the user should be notified when the AC adapter is disconnected."
 msgstr "Kas kasutajat tuleb võrgutoite kadumisest teavitada."
@@ -302,6 +310,8 @@ msgid ""
 "If time based notifications should be used. If set to false, then the "
 "percentage change is used instead, which may fix a broken ACPI BIOS."
 msgstr ""
+"Kas teated peaksid sõltuma ajast. Kui see on väär, kasutatakse akutäituvuse "
+"protsenti, see võib aidata vigase ACPI BIOS'i korral."
 
 msgid "If we should show the low capacity warning for a broken battery"
 msgstr "Kas vigase aku korral tuleb anda madala täituvuse hoiatust"
@@ -326,11 +336,15 @@ msgid ""
 "If we should show the warning when we have a valid inhibit and configured to "
 "sleep on lid close"
 msgstr ""
+"Kas kuvada hoiatus, kui on kehtiv vooluhalduri piirang ja arvuti on "
+"seadistatud uinakule kaane sulgemise korral"
 
 msgid ""
 "If we should show the warning when we have a valid inhibit and configured to "
 "sleep on lid close."
 msgstr ""
+"Kas kuvada hoiatus, kui on kehtiv vooluhalduri piirang ja arvuti on "
+"seadistatud uinakule kaane sulgemise korral."
 
 msgid "Keyboard brightness when on AC"
 msgstr "Klaviatuuri heledus võrgutoite korral"
@@ -354,10 +368,10 @@ msgid "Lock GNOME keyring on sleep"
 msgstr "GNOME võtmerõnga lukustamine uinumisel"
 
 msgid "Lock screen on hibernate"
-msgstr "Ekraani lukustamine hiberneerimisel"
+msgstr "Ekraani lukustamine talveune korral"
 
 msgid "Lock screen on suspend"
-msgstr "Ekraani lukustamine passiivse oleku korral"
+msgstr "Ekraani lukustamine uinaku korral"
 
 msgid "Lock screen when blanked"
 msgstr "Ekraani lukustamine selle puhastamisel"
@@ -372,7 +386,7 @@ msgid "Notify on a low power"
 msgstr "Teavitamine madala täituvuse korral"
 
 msgid "Notify on a sleep failure"
-msgstr ""
+msgstr "Teadaanne uinaku nurjumisest"
 
 msgid "Notify when AC adapter is disconnected"
 msgstr "Teavitamine võrgutoite kadumise korral"
@@ -381,10 +395,10 @@ msgid "Notify when fully charged"
 msgstr "Teavitamine aku täislaadimise korral"
 
 msgid "Notify when the profile data is guessed"
-msgstr ""
+msgstr "Profiiliandmete arvamisest teatatakse"
 
 msgid "Percentage action is taken"
-msgstr ""
+msgstr "Täituvusprotsent, mille juures tegevus sooritatakse"
 
 msgid "Percentage considered critical"
 msgstr "Kriitilise oleku protsent "
@@ -399,22 +413,22 @@ msgid "Reduce the backlight brightness when on battery power"
 msgstr "Taustavalguse heleduse vähendamine akutoite korral"
 
 msgid "Sleep timeout computer when on AC"
-msgstr ""
+msgstr "Uinaku alguse viivitus võrgutoitel"
 
 msgid "Sleep timeout computer when on battery"
-msgstr ""
+msgstr "Uinaku alguse viivitus akutoitel"
 
 msgid "Sleep timeout display when on AC"
-msgstr ""
+msgstr "Ekraani väljalülitamise viivitus võrgutoitel"
 
 msgid "Sleep timeout display when on battery"
-msgstr ""
+msgstr "Ekraani väljalülitamise viivitus akutoitel"
 
 msgid "Suspend button action"
-msgstr ""
+msgstr "Uinakunupu tegevus"
 
 msgid "Suspend enabled"
-msgstr ""
+msgstr "Uinakud lubatud"
 
 #| msgid ""
 #| "The DPMS method used to blank the screen when on AC power. Possible "
@@ -424,7 +438,8 @@ msgid ""
 "are \"standby\", \"suspend\" and \"off\"."
 msgstr ""
 "Võrgutoitel töötamisel ekraani tühjendamiseks kasutatav DPMS-meetod. "
-"Võimalikud väärtused on \"standby\", \"suspend\" ja \"off\"."
+"Võimalikud väärtused on \"standby\" (ooterežiim), \"suspend\" (uinak) ja "
+"\"off\" (midagi ei tehta)."
 
 #| msgid ""
 #| "The DPMS method used to blank the screen when on battery power. Possible "
@@ -434,46 +449,59 @@ msgid ""
 "values are \"standby\", \"suspend\" and \"off\"."
 msgstr ""
 "Akutoitel töötamisel ekraani tühjendamiseks kasutatav DPMS-meetod. "
-"Võimalikud väärtused on \"standby\", \"suspend\" ja \"off\"."
+"Võimalikud väärtused on \"standby\" (ooterežiim), \"suspend\" (uinak) ja "
+"\"off\" (midagi ei tehta)."
 
 msgid ""
 "The action to take when the UPS is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
 "UPS-i kriitilise täituvuse korral ette võetav tegevus. Võimalikud väärtused "
-"on \"hibernate\", \"suspend\", \"shutdown\" ja \"nothing\"."
+"on \"hibernate\" (talveuni), \"suspend\" (uinak), \"shutdown\" (välja "
+"lülitamine) ja \"nothing\" (mitte midagi)."
 
 msgid ""
 "The action to take when the UPS is low. Possible values are \"hibernate\", "
 "\"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
 "UPS-i madala täituvuse korral ette võetav tegevus. Võimalikud väärtused on "
-"\"hibernate\", \"suspend\", \"shutdown\" ja \"nothing\"."
+"\"hibernate\" (talveuni), \"suspend\" (uinak), \"shutdown\" (välja "
+"lülitamine) ja \"nothing\" (mitte midagi)."
 
 msgid ""
 "The action to take when the battery is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
 "Aku kriitilise täituvuse korral ette võetav tegevus. Võimalikud väärtused on "
-"\"hibernate\", \"suspend\", \"shutdown\" ja \"nothing\"."
+"\"hibernate\" (talveuni), \"suspend\" (uinak), \"shutdown\" (välja "
+"lülitamine) ja \"nothing\" (mitte midagi)."
 
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on AC "
 "power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
 "\"nothing\"."
 msgstr ""
+"Kaane sulgemisel sooritatav tegevus, kui sülearvuti on võrgutoitel. "
+"Võimalikud väärtused on \"suspend\" (uinak), \"hibernate\" (talveuni), "
+"\"blank\" (tühjendamine) ja \"nothing\" (mitte midagi)."
 
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on "
 "battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
 "and \"nothing\"."
 msgstr ""
+"Kaane sulgemisel sooritatav tegevus, kui sülearvuti on akutoitel. Võimalikud "
+"väärtused on \"suspend\" (uinak), \"hibernate\" (talveuni), \"blank"
+"\" (tühjendamine) ja \"nothing\" (mitte midagi)."
 
 msgid ""
 "The action to take when the system hibernate button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
 "\"nothing\"."
 msgstr ""
+"Talveune nupu vajutamisel sooritatav tegevus.Võimalikud väärtused on "
+"\"suspend\" (uinak), \"hibernate\" (talveuni), \"interactive\" (küsitakse), "
+"\"shutdown\" (välja lülitamine) ja \"nothing\" (mitte midagi)."
 
 msgid ""
 "The action to take when the system power button is pressed. Possible values "
@@ -481,39 +509,50 @@ msgid ""
 "\"."
 msgstr ""
 "Voolunupu vajutamise korral ette võetav tegevus. Võimalikud väärtused on "
-"\"suspend\", \"hibernate\", \"interactive\", \"shutdown\" ja \"nothing\"."
+"\"suspend\" (uinak), \"hibernate\" (talveuni), \"interactive\" (küsitakse), "
+"\"shutdown\" (välja lülitamine) ja \"nothing\" (mitte midagi)."
 
 msgid ""
 "The action to take when the system suspend button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
 "\"nothing\"."
 msgstr ""
+"Uinaku nupu vajutamisel sooritatav tegevus.Võimalikud väärtused on \"suspend"
+"\" (uinak), \"hibernate\" (talveuni), \"interactive\" (küsitakse), \"shutdown"
+"\" (välja lülitamine) ja \"nothing\" (mitte midagi)."
 
 msgid ""
 "The amount of time in seconds before the display goes to sleep when the "
 "computer is on AC power."
 msgstr ""
+"Viivitus sekundites enne ekraani väljalülitamist, kui arvuti on võrgutoitel."
 
 msgid ""
 "The amount of time in seconds the computer on AC power needs to be inactive "
 "before it goes to sleep."
 msgstr ""
+"Viivitus sekundites, mille järel võrgutoitel arvuti alustab uinakut, kui "
+"seda pole kasutatud."
 
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before it goes to sleep."
 msgstr ""
+"Viivitus sekundites, mille järel akutoitel arvuti alustab uinakut, kui seda "
+"pole kasutatud."
 
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before the display goes to sleep."
 msgstr ""
+"Viivitus sekundites, mille järel ekraan lülitatakse välja, kui arvutit pole "
+"kasutatud ja see on akutoitel."
 
 msgid "The amount the light sensors should contribute to the brightness"
-msgstr ""
+msgstr "Kui palju peaksid valgustatuse sensorid mõjutama ekraani heledust"
 
 msgid "The amount the light sensors should contribute to the brightness."
-msgstr ""
+msgstr "Kui palju peaksid valgustatuse sensorid mõjutama ekraani heledust."
 
 msgid ""
 "The amount to dim the brightness of the display when on battery power. "
@@ -548,12 +587,14 @@ msgstr "Ekraani heledus jõudeoleku korral"
 
 msgid ""
 "The calibration of the light sensors so that the screen is bright enough"
-msgstr ""
+msgstr "Valgustatuse sensorite kalibreerimine, et ekraan oleks piisavalt hele"
 
 msgid ""
 "The calibration of the light sensors so that the screen is bright enough, in "
 "percent."
 msgstr ""
+"Valgustatuse sensorite kalibreerimine, et ekraan oleks piisavalt hele, "
+"protsentides."
 
 msgid "The default amount of time to dim the screen after idle"
 msgstr "Ekraani tuhmistamiseks vajalik jõudeoleku vaikimisi aeg"
@@ -566,10 +607,10 @@ msgid "The default configuration version."
 msgstr "Vaikimisi seadistuste versioon."
 
 msgid "The default graph type to show in the statistics window"
-msgstr ""
+msgstr "Vaikimisi graafiku tüüp statistikaaknas"
 
 msgid "The default graph type to show in the statistics window."
-msgstr ""
+msgstr "Vaikimisi graafiku tüüp statistikaaknas."
 
 msgid "The interval the ambient light sensors should be polled"
 msgstr "Valgussensorite andmete hankimise intervall"
@@ -589,58 +630,74 @@ msgid ""
 "The percentage of the battery when it is considered critical. Only valid "
 "when use_time_for_policy is false."
 msgstr ""
+"Aku täituvus protsentides, mis loetakse kriitiliseks. Kehtib ainult siis, "
+"kui use_time_for_policy pole tõene."
 
 msgid ""
 "The percentage of the battery when it is considered low. Only valid when "
 "use_time_for_policy is false."
 msgstr ""
+"Aku täituvus protsentides, mis loetakse madalaks. Kehtib ainult siis, kui "
+"use_time_for_policy pole tõene."
 
 msgid ""
 "The percentage of the battery when the critical action is performed. Only "
 "valid when use_time_for_policy is false."
 msgstr ""
+"Aku täituvus protsentides, mille puhul sooritatakse kriitilise täituvuse "
+"tegevus. Kehtib ainult siis, kui use_time_for_policy pole tõene."
 
 msgid ""
 "The time remaining in seconds of the battery when critical action is taken. "
 "Only valid when use_time_for_policy is true."
 msgstr ""
+"Aku järelejäänud aeg sekundites, millal sooritatakse kriitilise täituvuse "
+"tegevus. Kehtib ainult siis, kui use_time_for_policy pole tõene."
 
 msgid ""
 "The time remaining in seconds of the battery when it is considered critical. "
 "Only valid when use_time_for_policy is true."
 msgstr ""
+"Aku järelejäänud aeg sekundites, mis loetakse kriitiliseks. Kehtib ainult "
+"siis, kui use_time_for_policy pole tõene."
 
 msgid ""
 "The time remaining in seconds of the battery when it is considered low. Only "
 "valid when use_time_for_policy is true."
 msgstr ""
+"Aku järelejäänud aeg sekundites, mis loetakse madalaks täituvuseks. Kehtib "
+"ainult siis, kui use_time_for_policy pole tõene."
 
 msgid "The time remaining when action is taken"
-msgstr ""
+msgstr "Pärast tegevust jääv aeg"
 
 msgid "The time remaining when critical"
-msgstr ""
+msgstr "Pärast kriitilist piiri jäänud aeg"
 
 msgid "The time remaining when low"
-msgstr ""
+msgstr "Pärast madalat täituvust jäänud aeg"
 
 msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
 "Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
 msgstr ""
 "Mismoodi arvuti jõudeoleku korral uinutatakse. Võimalikud väärtused on "
-"\"hibernate\" (hiberneerimine), \"suspend\" (peatamine) ja \"nothing"
-"\" (midagi ei tehta)."
+"\"hibernate\" (talveuni), \"suspend\" (uinak) ja \"nothing\" (midagi ei "
+"tehta)."
 
 msgid ""
 "The version of the installed version of the schema. Do not edit this value, "
 "it is used so that configure changes between versions can be detected."
 msgstr ""
+"Paigaldatud skeemi versioon. Seda ei peaks muutma, seda kasutatakse, et "
+"tuvastada häälestuse muutuseid."
 
 msgid ""
 "This is the laptop panel screen brightness used when the session is idle. "
 "Only valid when use_time_for_policy is true."
 msgstr ""
+"Sellist ekraaniheledust kasutatakse siis, kui sessioon on jõude. Kehtib "
+"ainult siis, kui use_time_for_policy pole tõene."
 
 msgid "UPS critical low action"
 msgstr "UPS-i kriitilise täituvustaseme tegevus"
@@ -655,68 +712,82 @@ msgid "When to show the notification icon"
 msgstr "Millal tuleb teavitusikooni näidata."
 
 msgid "Whether NetworkManager should be connected and disconnected on sleep."
-msgstr ""
+msgstr "Kas võrguhaldur tuleks uinaku korral ühendada ja lahti ühendada."
 
 msgid ""
 "Whether NetworkManager should disconnect before suspending or hibernating "
 "and connect on resume."
 msgstr ""
+"Kas võrguhaldur peaks enne uinakut või talveund lahti ühenduma ning "
+"naasmisel uuesti ühenduma."
 
 msgid ""
 "Whether the GNOME keyring is locked before the computer enters hibernate. "
 "This means the keyring will have to be unlocked on resume."
 msgstr ""
+"Kas GNOME võtmerõngas lukustatakse, enne kui arvuti siseneb talveunne. See "
+"tähendab, et naasmisel pole vaja võtmerõngast avada."
 
 msgid ""
 "Whether the GNOME keyring is locked before the computer enters suspend. This "
 "means the keyring will have to be unlocked on resume."
 msgstr ""
+"Kas GNOME võtmerõngas lukustatakse, enne kui arvuti alustab uinakut. See "
+"tähendab, et naasmisel pole vaja võtmerõngast avada."
 
 msgid ""
 "Whether the screen is locked when the computer wakes up from a hibernate. "
 "Only used if lock_use_screensaver_settings is false."
 msgstr ""
+"Kas ekraan lukustatakse, kui arvuti ärkab talveunest. Seda kasutatakse "
+"ainult siis, kui lock_use_screensaver_settings pole tõene."
 
 msgid ""
 "Whether the screen is locked when the computer wakes up from a suspend. Only "
 "used if lock_use_screensaver_settings is false."
 msgstr ""
+"Kas ekraan lukustatakse, kui arvuti ärkab uinakust. Seda kasutatakse ainult "
+"siis, kui lock_use_screensaver_settings pole tõene."
 
 msgid ""
 "Whether the screen is locked when the screen is turned off. Only used if "
 "lock_use_screensaver_settings is false."
 msgstr ""
+"Kas ekraan lukustatakse, kui arvuti ekraan lülitatakse välja. Seda "
+"kasutatakse ainult siis, kui lock_use_screensaver_settings pole tõene."
 
 msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr ""
-"Kas jõudeoleku korral tuleb arvuti hiberneerida, peatada või ei pea midagi "
+"Kas jõudeoleku korral tuleb alustada talveund, teha uinak või ei pea midagi "
 "tegema"
 
 msgid ""
 "Whether to use the screen lock setting of gnome-screensaver to decide if the "
 "screen is locked after a hibernate, suspend or blank screen."
 msgstr ""
+"Kas kasutada gnome-screensaver'i ekraanilukustamise sätteid ekraani "
+"lukustamisel pärast talveund, uinakut või ekraani tühjendamist."
 
 msgid "Whether to use time-based notifications"
-msgstr ""
+msgstr "Kas kasutada ajapõhiseid teateid"
 
 msgid "Whether we should show the axis labels in the statistics window"
-msgstr ""
+msgstr "Kas statistikaaknas kuvatakse telgede pealkirju"
 
 msgid "Whether we should show the axis labels in the statistics window."
-msgstr ""
+msgstr "Kas statistikaaknas kuvatakse telgede pealkirju"
 
 msgid "Whether we should show the events in the statistics window"
-msgstr ""
+msgstr "Kas statistikaaknas kuvatakse sündmuseid"
 
 msgid "Whether we should show the events in the statistics window."
-msgstr ""
+msgstr "Kas statistikaaknas kuvatakse sündmuseid"
 
 msgid "Whether we should smooth the data in the graph"
-msgstr ""
+msgstr "Kas graafikut silutakse"
 
 msgid "Whether we should smooth the data in the graph."
-msgstr ""
+msgstr "Kas graafikut silutakse."
 
 msgid "Configure power management"
 msgstr "Vooluhalduse seadistamine"
@@ -736,10 +807,10 @@ msgid "Brightness"
 msgstr "Heledus"
 
 msgid "0"
-msgstr ""
+msgstr "0"
 
 msgid "Data length:"
-msgstr ""
+msgstr "Andmete pikkus:"
 
 msgid "Details"
 msgstr "Üksikasjad"
@@ -751,22 +822,19 @@ msgid "History"
 msgstr "Ajalugu"
 
 msgid "Processor wakeups per second:"
-msgstr ""
+msgstr "Protsessori ärkamisi sekundis:"
 
 msgid "Show data points"
-msgstr ""
+msgstr "Andmepunktid"
 
 msgid "Statistics"
 msgstr "Statistika"
 
-msgid "There is no data to display."
-msgstr ""
-
 msgid "Use smoothed line"
-msgstr ""
+msgstr "Sile joon"
 
 msgid "Wakeups"
-msgstr ""
+msgstr "Ärkamised"
 
 msgid "<b>Actions</b>"
 msgstr "<b>Tegevused</b>"
@@ -781,13 +849,13 @@ msgid "<b>Notification Area</b>"
 msgstr "<b>Teateala</b>"
 
 msgid "Always sleep when the lid is _closed"
-msgstr ""
+msgstr "Kaane _sulgemisel tehakse uinak"
 
 msgid "Di_m display when idle"
 msgstr "_Jõudeolekus kuva tuhmistatakse"
 
 msgid "Enable UPS discharge _alarm"
-msgstr ""
+msgstr "_UPS'i tühejenemise alarmi lubamine"
 
 msgid "General"
 msgstr "Üldine"
@@ -811,10 +879,10 @@ msgid "Power Management Preferences"
 msgstr "Vooluhalduse eelistused"
 
 msgid "Put _display to sleep when inactive for:"
-msgstr "_Kuva viiakse puhkerežiimi kui ollakse tegevuseta:"
+msgstr "_Kuva viiakse puhkerežiimi, kui ollakse tegevuseta:"
 
 msgid "Put computer to _sleep when inactive for:"
-msgstr "A_rvuti viiakse puhkerežiimi kui ollakse tegevuseta:"
+msgstr "A_rvuti viiakse puhkerežiimi, kui ollakse tegevuseta:"
 
 msgid "Set display _brightness to:"
 msgstr "Kuva _heledustase:"
@@ -823,7 +891,7 @@ msgid "Turn on keyboard light when light level is low"
 msgstr "Puuduliku valguse korral lülitatakse klaviatuuri tuled sisse"
 
 msgid "Use _ambient light to adjust LCD brightness"
-msgstr ""
+msgstr "_Taustavalguse sensori kasutamine LCD heleduse valimisel"
 
 msgid "Use _sound to notify in event of an error"
 msgstr "Sündmusest või veast teavitamiseks kasutatakse _heli"
@@ -841,10 +909,10 @@ msgid "When laptop lid is cl_osed:"
 msgstr "Sülearvuti kaane _sulgemise korral:"
 
 msgid "When the _suspend button is pressed:"
-msgstr "S_eiskamise nupu vajutamise korral:"
+msgstr "_Uinutamise nupu vajutamisel:"
 
 msgid "When the power _button is pressed:"
-msgstr "_Voolunupu vajutamise korral:"
+msgstr "_Sisselülitamise nupu vajutamisel:"
 
 msgid "_Always display an icon"
 msgstr "_Ikooni kuvatakse alati"
@@ -1008,7 +1076,7 @@ msgstr "<b>Tehasetäituvus:</b> %.1f Wh\n"
 
 #, c-format
 msgid "<b>Charge rate:</b> %.1f W\n"
-msgstr ""
+msgstr "<b>Täituvus:</b> %.1f W\n"
 
 #, c-format
 msgid "<b>Current charge:</b> %.0f/7\n"
@@ -1065,19 +1133,19 @@ msgid "Lithium Polymer"
 msgstr "Liitiumpolümeer"
 
 msgid "Lithium Iron Phosphate"
-msgstr ""
+msgstr "Liitium-raudfosfaat"
 
 msgid "Lead acid"
-msgstr ""
+msgstr "Pliihape"
 
 msgid "Nickel Cadmium"
-msgstr ""
+msgstr "Nikkel-kaadium"
 
 msgid "Nickel metal hydride"
-msgstr ""
+msgstr "Nikkel-metallhübriid"
 
 msgid "Unknown technology"
-msgstr ""
+msgstr "Tundmatu tehnoloogia"
 
 #. Translators: This is %i days
 #, c-format
@@ -1167,7 +1235,7 @@ msgstr "Aku on tühjenemas"
 
 #. TRANSLATORS: this is the sound description
 msgid "Battery is very low"
-msgstr "Aku on täituvus on kriitilisel tasemel"
+msgstr "Aku täituvus on kriitilisel tasemel"
 
 #. TRANSLATORS: this is the sound description
 msgid "Battery is full"
@@ -1175,28 +1243,28 @@ msgstr "Aku on täis"
 
 #. TRANSLATORS: this is the sound description
 msgid "Suspend started"
-msgstr ""
+msgstr "Uinaku alustamine"
 
 #. TRANSLATORS: this is the sound description
 msgid "Resumed"
-msgstr ""
+msgstr "Naasemine"
 
 #. TRANSLATORS: this is the sound description
 msgid "Suspend failed"
-msgstr ""
+msgstr "Uinaku nurjumine"
 
 msgid "Action disallowed"
-msgstr ""
+msgstr "Tegevus keelatud"
 
 msgid ""
 "Suspend support has been disabled. Contact your administrator for more "
 "details."
-msgstr ""
+msgstr "Uinaku tugi on keelatud. Täpsemalt küsi süsteemihalduri käest."
 
 msgid ""
 "Hibernate support has been disabled. Contact your administrator for more "
 "details."
-msgstr ""
+msgstr "Talveune tugi on keelatud. Täpsemalt küsi süsteemihalduri käest."
 
 msgid "The lid has been closed on ac power."
 msgstr "Kaas suleti ajal, mil vooluadapter oli ühendatud."
@@ -1217,10 +1285,10 @@ msgid "The power button has been pressed."
 msgstr "Vajutati voolunuppu."
 
 msgid "The suspend button has been pressed."
-msgstr ""
+msgstr "Vajutati uinaku nuppu."
 
 msgid "The hibernate button has been pressed."
-msgstr "Vajutati hiberneerimisnuppu."
+msgstr "Vajutati talveune nuppu."
 
 msgid "Power Information"
 msgstr "Vooluga seotud sündmuste andmed"
@@ -1287,15 +1355,15 @@ msgstr "Andmete kaotsimineku vältimiseks ühenda arvuti vooluvõrku."
 
 #, c-format
 msgid "This computer will suspend in %s if the AC is not connected."
-msgstr ""
+msgstr "Arvuti uinumiseni on aega %s, kui seda vooluvõrku ei ühendata."
 
 #, c-format
 msgid "This computer will hibernate in %s if the AC is not connected."
-msgstr ""
+msgstr "Talveune alguseni on aega %s, kui arvutit vooluvõrku ei ühendata."
 
 #, c-format
 msgid "This computer will shutdown in %s if the AC is not connected."
-msgstr ""
+msgstr "Arvuti väljalülitamiseni on aega %s, kui seda vooluvõrku ei ühendata."
 
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%.1f%%). %s"
@@ -1317,40 +1385,52 @@ msgid ""
 "The wireless mouse attached to this computer is very low in power (%.1f%%). "
 "This device will soon stop functioning if not charged."
 msgstr ""
+"Selle arvutiga ühendatud juhtmeta hiir on peaaegu tühi (%.1f%%). See seade "
+"lõpetab varsti töö, kui seda ei laadita."
 
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is very low in power (%.1f%"
 "%). This device will soon stop functioning if not charged."
 msgstr ""
+"Selle arvutiga ühendatud juhtmeta klaviatuur on peaaegu tühi (%.1f%%). See "
+"seade lõpetab varsti töö, kui seda ei laadita."
 
 #, c-format
 msgid ""
 "The PDA attached to this computer is very low in power (%.1f%%). This device "
 "will soon stop functioning if not charged."
 msgstr ""
+"Selle arvutiga ühendatud pihuarvuti (PDA) on peaaegu tühi (%.1f%%). See "
+"lülitub varsti välja, kui seda ei laadita."
 
 #, c-format
 msgid ""
 "Your cell phone is very low in power (%.1f%%). This device will soon stop "
 "functioning if not charged."
 msgstr ""
+"Sinu mobiiltelefon on peaaegu tühi (%.1f%%). See lülitub varsti välja, kui "
+"seda ei laadita."
 
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
 msgstr ""
+"Aku täituvus on alla kriitilise piiri, see arvuti <b>lülitub välja</b> kui "
+"aku päris tühjaks saab."
 
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
 "computer in a suspended state."
 msgstr ""
+"Aku täituvus on alla kriitilise piiri ning see arvuti uinub.<br/><b>Märkus:</"
+"b> ka uinaku ajal tarvitab arvuti natukene voolu."
 
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
-msgstr ""
+msgstr "Aku täituvus on alla kriitilise piiri ning see arvuti läheb talveunne."
 
 msgid ""
 "The battery is below the critical level and this computer is about to "
@@ -1367,19 +1447,16 @@ msgstr ""
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr ""
-"UPS-i täituvus on allapoole kriitilist taset ja seetõttu arvuti "
-"hiberneeritakse."
+"UPS-i täituvus on alla kriitilist taset ja seetõttu läheb arvuti talveunne."
 
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr "UPS-i täituvus on alla kriitilist taset ja seetõttu arvuti seisatakse."
 
-#, fuzzy
 #| msgid "The lid has been closed on ac power."
 msgid "The lid has been found closed on ac power."
 msgstr "Kaas suleti ajal, mil vooluadapter oli ühendatud."
 
-#, fuzzy
 #| msgid "The lid has been closed on battery power."
 msgid "The lid has been found closed on battery power."
 msgstr "Kaas suleti ajal, mil arvuti oli akutoitel."
@@ -1406,6 +1483,9 @@ msgid ""
 "\n"
 "For more information visit the %s battery recall website."
 msgstr ""
+"Sinu arvutis olev aku võib olla ohtlik ning %s palub selle tagastamist.\n"
+"\n"
+"Täpsemat infot leiab %s akutagastuse veebilehelt."
 
 msgid "Visit recall website"
 msgstr "Külasta tagasikutsumise veebisaiti"
@@ -1425,13 +1505,16 @@ msgstr ""
 "olla vana või vigane."
 
 msgid "Sleep warning"
-msgstr ""
+msgstr "Uinaku hoiatus"
 
 msgid ""
 "Your laptop will not sleep if you shut the lid as a running program has "
 "prevented this.\n"
 "Some laptops can overheat if they do not sleep when the lid is closed."
 msgstr ""
+"Sinu sülearvuti ei saa uinuda kaane sulgemisel, mingi rakendus takistab "
+"seda.\n"
+"Mõned sülearvutid võivad üle kuumeneda, kui need töötavad suletud kaanega."
 
 msgid "Battery Charged"
 msgstr "Aku on laetud"
@@ -1452,20 +1535,24 @@ msgid "The AC power has been unplugged. The system is now using backup power."
 msgstr "Võrgutoide on kadunud. Süsteem on nüüd varutoitel."
 
 msgid "Sleep Problem"
-msgstr ""
+msgstr "Viga uinumisel"
 
 msgid ""
 "Your computer failed to hibernate.\n"
 "Check the help file for common problems."
 msgstr ""
+"Sinu arvuti ei suutnud jääda talveunne.\n"
+"Sagedasematele probleemidele leiad  lahenduse abifailist."
 
 msgid ""
 "Your computer failed to suspend.\n"
 "Check the help file for common problems."
 msgstr ""
+"Sinu arvuti ei suutnud uinuda.\n"
+"Sagedasematele probleemidele leiad  lahenduse abifailist."
 
 msgid "Visit quirk website"
-msgstr ""
+msgstr "Külasta quirk'i veebilehte"
 
 msgid "GNOME Power Preferences"
 msgstr "GNOME voolutarbimiseelistused"
@@ -1475,13 +1562,13 @@ msgid "Ask me"
 msgstr "Küsitakse kasutajalt"
 
 msgid "Suspend"
-msgstr "Arvuti seisatakse"
+msgstr "Alustatakse uinakut"
 
 msgid "Shutdown"
 msgstr "Lülitatakse arvuti välja"
 
 msgid "Hibernate"
-msgstr "Arvuti uinutatakse"
+msgstr "Alustatakse talveund"
 
 msgid "Blank screen"
 msgstr "Tühjendatakse ekraan"
@@ -1496,16 +1583,16 @@ msgid "Make Default"
 msgstr "Määra vaikimisi"
 
 msgid "Rate"
-msgstr ""
+msgstr "Kiirus"
 
 msgid "Charge"
-msgstr ""
+msgstr "Laadimine"
 
 msgid "Time to full"
-msgstr ""
+msgstr "Aega täitumiseni"
 
 msgid "Time to empty"
-msgstr ""
+msgstr "Aega tühjenemiseni"
 
 msgid "10 minutes"
 msgstr "10 minutit"
@@ -1532,13 +1619,13 @@ msgid "Discharge accuracy"
 msgstr "Tühjenemisaja täpsus"
 
 msgid "Attribute"
-msgstr ""
+msgstr "Nimetus"
 
 msgid "Value"
 msgstr "Väärtus"
 
 msgid "Image"
-msgstr ""
+msgstr "Pilt"
 
 msgid "Description"
 msgstr "Kirjeldus"
@@ -1553,10 +1640,10 @@ msgid "Command"
 msgstr "Käsk"
 
 msgid "Yes"
-msgstr ""
+msgstr "Jah"
 
 msgid "No"
-msgstr ""
+msgstr "Ei"
 
 msgid "Device"
 msgstr "Seade"
@@ -1571,38 +1658,38 @@ msgid "Serial number"
 msgstr "Seerianumber"
 
 msgid "Supply"
-msgstr ""
+msgstr "Toide"
 
-#, fuzzy, c-format
+#, c-format
 #| msgid "%d seconds"
 msgid "%d second"
 msgid_plural "%d seconds"
-msgstr[0] "%d sekundit"
+msgstr[0] "%d sekund"
 msgstr[1] "%d sekundit"
 
 msgid "Refreshed"
-msgstr ""
+msgstr "Värskendatud"
 
 msgid "Present"
-msgstr ""
+msgstr "Olemas"
 
 msgid "Rechargeable"
-msgstr ""
+msgstr "Laaditav"
 
 msgid "State"
-msgstr ""
+msgstr "Olek"
 
 msgid "Energy"
-msgstr ""
+msgstr "Täituvus"
 
 msgid "Energy when empty"
-msgstr ""
+msgstr "Tühitäituvus"
 
 msgid "Energy when full"
-msgstr ""
+msgstr "Täistäituvus"
 
 msgid "Energy (design)"
-msgstr ""
+msgstr "Tehasetäituvus"
 
 msgid "Voltage"
 msgstr "Pinge"
@@ -1617,7 +1704,7 @@ msgid "Technology"
 msgstr "Tehnoloogia"
 
 msgid "Online"
-msgstr ""
+msgstr "Ühendatud"
 
 #. TRANSLATORS: the command line was not provided
 msgid "No data"
@@ -1629,15 +1716,15 @@ msgstr "Kerneli moodul"
 
 #. TRANSLATORS: kernel housekeeping
 msgid "Kernel core"
-msgstr ""
+msgstr "Kerneli tuum"
 
 #. TRANSLATORS: interrupt between processors
 msgid "Interprocessor interrupt"
-msgstr ""
+msgstr "Protsessoritevaheline katkestus"
 
 #. TRANSLATORS: unknown interrupt
 msgid "Interrupt"
-msgstr ""
+msgstr "Katkestus"
 
 #. TRANSLATORS: the keyboard and mouse device event
 msgid "PS/2 keyboard/mouse/touchpad"
@@ -1649,45 +1736,45 @@ msgstr "ACPI"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
 msgid "Serial ATA"
-msgstr ""
+msgstr "Serial ATA"
 
 #. TRANSLATORS: this is the old-style ATA interface
 msgid "ATA host controller"
-msgstr ""
+msgstr "ATA kettakontroller"
 
 #. TRANSLATORS: 802.11 wireless adaptor
 msgid "Intel wireless adaptor"
-msgstr ""
+msgstr "Intel'i wifiadapter"
 
 #. TRANSLATORS: a timer is something that fires periodically
 #, c-format
 msgid "Timer %s"
-msgstr ""
+msgstr "Taimer %s"
 
 #. TRANSLATORS: this is a task that's woken up from sleeping
 #, c-format
 msgid "Sleep %s"
-msgstr ""
+msgstr "Uinak %s"
 
 #. TRANSLATORS: this is a new realtime task
 #, c-format
 msgid "New task %s"
-msgstr ""
+msgstr "Uus ülesanne %s"
 
 #. TRANSLATORS: this is a task thats woken to check state
 #, c-format
 msgid "Wait %s"
-msgstr ""
+msgstr "Ootamine %s"
 
 #. TRANSLATORS: a work queue is a list of work that has to be done
 #, c-format
 msgid "Work queue %s"
-msgstr ""
+msgstr "Töö ootejärjekord %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
 #, c-format
 msgid "Network route flush %s"
-msgstr ""
+msgstr "Võrgupuhvri tühjendamine %s"
 
 #. TRANSLATORS: activity on the USB bus
 #, c-format
@@ -1697,15 +1784,15 @@ msgstr "USB aktiivsus %s"
 #. TRANSLATORS: we've timed out of an aligned timer
 #, c-format
 msgid "Wakeup %s"
-msgstr ""
+msgstr "Äratus %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
 msgid "Local interrupts"
-msgstr ""
+msgstr "Kohalikud katkestused"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
 msgid "Rescheduling interrupts"
-msgstr ""
+msgstr "Ümberjaotuse katkestus"
 
 #. TRANSLATORS: shown on the titlebar
 msgid "Device Information"
@@ -1721,7 +1808,7 @@ msgstr "Seadme profiil"
 
 #. TRANSLATORS: shown on the titlebar
 msgid "Processor Wakeups"
-msgstr ""
+msgstr "Protsessori ärkamised"
 
 #. TRANSLATORS: this is the X axis on the graph
 msgid "Time elapsed"
@@ -1734,7 +1821,7 @@ msgstr "Toide"
 #. TRANSLATORS: this is the Y axis on the graph
 #. TRANSLATORS: this is the X axis on the graph
 msgid "Cell charge"
-msgstr ""
+msgstr "Aku laetus"
 
 #. TRANSLATORS: this is the Y axis on the graph
 msgid "Predicted time"
@@ -1756,11 +1843,11 @@ msgid "Device information"
 msgstr "Seadme andmed"
 
 msgid "There is no detailed information for this device"
-msgstr ""
+msgstr "Selle seadme kohta puudub täpsem teave"
 
 msgid "translator-credits"
 msgstr ""
-"Priit Laes <plaes+i18n@plaes.org>, 2006, 2009\n"
+"Priit Laes <amd@store20.com>, 2006.\n"
 "Ivar Smolin <okul@linux ee>, 2006-2009."
 
 msgid "GNOME Power Manager Website"
@@ -1783,7 +1870,7 @@ msgid "_About"
 msgstr "_Programmist lähemalt"
 
 msgid "_Suspend"
-msgstr "_Peata"
+msgstr "_Uinak"
 
 msgid "Hi_bernate"
 msgstr "_Talveuni"
