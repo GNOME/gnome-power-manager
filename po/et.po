@@ -7,15 +7,16 @@
 #
 # Priit Laes <amd@store20.com>, 2006.
 # Ivar Smolin <okul at linux ee>, 2006-2009.
+# Mattias Põldaru <mahfiaz gmail com>, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Gnome Power Manager HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&component=general\n"
-"POT-Creation-Date: 2009-06-02 20:37+0000\n"
-"PO-Revision-Date: 2009-06-20 02:12+0300\n"
-"Last-Translator: Mattias Põldaru <mahfiaz gmail com>\n"
+"POT-Creation-Date: 2009-06-25 11:25+0000\n"
+"PO-Revision-Date: 2009-06-26 08:54+0300\n"
+"Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -430,9 +431,6 @@ msgstr "Uinakunupu tegevus"
 msgid "Suspend enabled"
 msgstr "Uinakud lubatud"
 
-#| msgid ""
-#| "The DPMS method used to blank the screen when on AC power. Possible "
-#| "values are \"default\", \"standby\", \"suspend\" and \"off\"."
 msgid ""
 "The DPMS method used to blank the screen when on AC power. Possible values "
 "are \"standby\", \"suspend\" and \"off\"."
@@ -441,9 +439,6 @@ msgstr ""
 "Võimalikud väärtused on \"standby\" (ooterežiim), \"suspend\" (uinak) ja "
 "\"off\" (midagi ei tehta)."
 
-#| msgid ""
-#| "The DPMS method used to blank the screen when on battery power. Possible "
-#| "values are \"default\", \"standby\", \"suspend\" and \"off\"."
 msgid ""
 "The DPMS method used to blank the screen when on battery power. Possible "
 "values are \"standby\", \"suspend\" and \"off\"."
@@ -830,6 +825,9 @@ msgstr "Andmepunktid"
 msgid "Statistics"
 msgstr "Statistika"
 
+msgid "There is no data to display."
+msgstr "Pole andmeid, mida kuvada."
+
 msgid "Use smoothed line"
 msgstr "Sile joon"
 
@@ -842,20 +840,11 @@ msgstr "<b>Tegevused</b>"
 msgid "<b>Display</b>"
 msgstr "<b>Kuva</b>"
 
-msgid "<b>Extras</b>"
-msgstr "<b>Lisaks</b>"
-
 msgid "<b>Notification Area</b>"
 msgstr "<b>Teateala</b>"
 
-msgid "Always sleep when the lid is _closed"
-msgstr "Kaane _sulgemisel tehakse uinak"
-
 msgid "Di_m display when idle"
 msgstr "_Jõudeolekus kuva tuhmistatakse"
-
-msgid "Enable UPS discharge _alarm"
-msgstr "_UPS'i tühejenemise alarmi lubamine"
 
 msgid "General"
 msgstr "Üldine"
@@ -886,15 +875,6 @@ msgstr "A_rvuti viiakse puhkerežiimi, kui ollakse tegevuseta:"
 
 msgid "Set display _brightness to:"
 msgstr "Kuva _heledustase:"
-
-msgid "Turn on keyboard light when light level is low"
-msgstr "Puuduliku valguse korral lülitatakse klaviatuuri tuled sisse"
-
-msgid "Use _ambient light to adjust LCD brightness"
-msgstr "_Taustavalguse sensori kasutamine LCD heleduse valimisel"
-
-msgid "Use _sound to notify in event of an error"
-msgstr "Sündmusest või veast teavitamiseks kasutatakse _heli"
 
 msgid "When UPS power is _critically low:"
 msgstr "Kui UPS-itoide on k_riitiliselt madal:"
@@ -1453,11 +1433,9 @@ msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr "UPS-i täituvus on alla kriitilist taset ja seetõttu arvuti seisatakse."
 
-#| msgid "The lid has been closed on ac power."
 msgid "The lid has been found closed on ac power."
 msgstr "Kaas suleti ajal, mil vooluadapter oli ühendatud."
 
-#| msgid "The lid has been closed on battery power."
 msgid "The lid has been found closed on battery power."
 msgstr "Kaas suleti ajal, mil arvuti oli akutoitel."
 
@@ -1517,10 +1495,14 @@ msgstr ""
 "Mõned sülearvutid võivad üle kuumeneda, kui need töötavad suletud kaanega."
 
 msgid "Battery Charged"
-msgstr "Aku on laetud"
+msgid_plural "Batteries Charged"
+msgstr[0] "Aku on laetud"
+msgstr[1] "Akud on laetud"
 
 msgid "Your laptop battery is now fully charged"
-msgstr "Sinu sülearvuti aku on nüüd täis laetud"
+msgid_plural "Your laptop batteries are now fully charged"
+msgstr[0] "Sinu sülearvuti aku on nüüd täis laetud"
+msgstr[1] "Sinu sülearvuti akud on nüüd täis laetud"
 
 msgid "Battery Discharging"
 msgstr "Aku tühjenemine"
@@ -1661,7 +1643,6 @@ msgid "Supply"
 msgstr "Toide"
 
 #, c-format
-#| msgid "%d seconds"
 msgid "%d second"
 msgid_plural "%d seconds"
 msgstr[0] "%d sekund"
@@ -1875,8 +1856,20 @@ msgstr "_Uinak"
 msgid "Hi_bernate"
 msgstr "_Talveuni"
 
-#~ msgid "Application:"
-#~ msgstr "Rakendus:"
+#~ msgid "Always sleep when the lid is _closed"
+#~ msgstr "Kaane _sulgemisel tehakse uinak"
+
+#~ msgid "Enable UPS discharge _alarm"
+#~ msgstr "_UPS'i tühejenemise alarmi lubamine"
+
+#~ msgid "Turn on keyboard light when light level is low"
+#~ msgstr "Puuduliku valguse korral lülitatakse klaviatuuri tuled sisse"
+
+#~ msgid "Use _ambient light to adjust LCD brightness"
+#~ msgstr "_Taustavalguse sensori kasutamine LCD heleduse valimisel"
+
+#~ msgid "Use _sound to notify in event of an error"
+#~ msgstr "Sündmusest või veast teavitamiseks kasutatakse _heli"
 
 #~ msgid "Burning DVD, titled \"My Photos\""
 #~ msgstr "DVD salvestamine, pealkirjaga \"Minu fotod\""
