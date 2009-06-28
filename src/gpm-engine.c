@@ -674,6 +674,7 @@ gpm_engine_device_add (GpmEngine *engine, DkpDevice *device)
 		      NULL);
 
 	/* add old state for transitions */
+	egg_debug ("adding %s with state %s", dkp_device_get_object_path (device), dkp_device_state_to_text (state));
 	g_object_set_data (G_OBJECT(device), "engine-state-old", GUINT_TO_POINTER(state));
 
 	if (type == DKP_DEVICE_TYPE_BATTERY) {
@@ -772,6 +773,7 @@ gpm_engine_device_removed_cb (DkpClient *client, DkpDevice *device, GpmEngine *e
 	gpm_engine_recalculate_state (engine);
 }
 
+
 /**
  * gpm_engine_device_changed_cb:
  **/
@@ -789,6 +791,8 @@ gpm_engine_device_changed_cb (DkpClient *client, DkpDevice *device, GpmEngine *e
 		      "type", &type,
 		      "state", &state,
 		      NULL);
+
+	egg_debug ("%s state is now %s", dkp_device_get_object_path (device), dkp_device_state_to_text (state));
 
 	/* see if any interesting state changes have happened */
 	state_old = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(device), "engine-state-old"));
