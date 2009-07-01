@@ -7,6 +7,9 @@ AM_INIT_AUTOMAKE([foreign])
 AM_CONFIG_HEADER(config.h)
 AC_CONFIG_MACRO_DIR([m4])
 
+# enable nice build output on automake1.11
+m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
+
 AC_PROG_CC
 AM_PROG_CC_C_O
 
