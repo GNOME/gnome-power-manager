@@ -304,6 +304,29 @@ gpm_stats_bool_to_text (gboolean ret)
 }
 
 /**
+ * gpm_stats_get_printable_device_path:
+ **/
+static gchar *
+gpm_stats_get_printable_device_path (DkpDevice *device)
+{
+	const gchar *prefix = "/org/freedesktop/DeviceKit/Power/devices/";
+	const gchar *object_path;
+	gchar *device_path = NULL;
+	guint len;
+
+	/* get object path */
+	object_path = dkp_device_get_object_path (device);
+	if (!g_str_has_prefix (object_path, prefix))
+		goto out;
+
+	/* trim */
+	len = strlen (prefix);
+	device_path = g_strdup (object_path+len);
+out:
+	return device_path;
+}
+
+/**
  * gpm_stats_update_info_page_details:
  **/
 static void
@@ -335,6 +358,7 @@ gpm_stats_update_info_page_details (DkpDevice *device)
 	gchar *vendor = NULL;
 	gchar *serial = NULL;
 	gchar *model = NULL;
+	gchar *device_path = NULL;
 
 	gtk_list_store_clear (list_store_info);
 
@@ -368,7 +392,11 @@ gpm_stats_update_info_page_details (DkpDevice *device)
 	time_tm = localtime (&t);
 	strftime (time_buf, sizeof time_buf, "%c", time_tm);
 
-	gpm_stats_add_info_data (_("Device"), dkp_device_get_object_path (device));
+	/* remove prefix */
+	device_path = gpm_stats_get_printable_device_path (device);
+	gpm_stats_add_info_data (_("Device"), device_path);
+	g_free (device_path);
+
 	gpm_stats_add_info_data (_("Type"), gpm_device_type_to_localised_text (type, 1));
 	if (vendor != NULL && vendor[0] != '\0')
 		gpm_stats_add_info_data (_("Vendor"), vendor);
