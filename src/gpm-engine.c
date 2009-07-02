@@ -569,6 +569,10 @@ gpm_engine_update_composite_device (GpmEngine *engine, DkpDevice *original_devic
 	DkpDevice *device;
 	DkpDeviceState state;
 	DkpDeviceType type;
+	gboolean debug;
+
+	/* are we printing to console? */
+	debug = egg_debug_enabled ();
 
 	/* update the composite device */
 	array = engine->priv->array;
@@ -584,8 +588,10 @@ gpm_engine_update_composite_device (GpmEngine *engine, DkpDevice *original_devic
 		if (type != DKP_DEVICE_TYPE_BATTERY)
 			continue;
 
-		egg_debug ("printing device %i", i);
-		dkp_device_print (device);
+		if (debug) {
+			egg_debug ("printing device %i", i);
+			dkp_device_print (device);
+		}
 
 		/* one of these will be charging or discharging */
 		if (state == DKP_DEVICE_STATE_CHARGING)
