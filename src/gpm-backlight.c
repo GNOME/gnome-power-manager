@@ -42,8 +42,6 @@
 #include <gconf/gconf-client.h>
 #include <devkit-power-gobject/devicekit-power.h>
 
-#include <hal-manager.h>
-
 #include "gpm-button.h"
 #include "gpm-backlight.h"
 #include "gpm-brightness.h"
@@ -73,7 +71,6 @@ struct GpmBacklightPrivate
 	GpmLightSensor		*light_sensor;
 	gboolean		 can_dim;
 	gboolean		 can_sense;
-	gboolean		 is_laptop;
 	gboolean		 system_is_idle;
 	GTimer			*idle_timer;
 	gfloat			 ambient_sensor_value;
@@ -659,8 +656,8 @@ gpm_backlight_class_init (GpmBacklightClass *klass)
 static void
 gpm_backlight_init (GpmBacklight *backlight)
 {
-	HalManager *hal_manager;
 	guint value;
+	gboolean lid_is_present = TRUE;
 	GpmPrefsServer *prefs_server;
 
 	backlight->priv = GPM_BACKLIGHT_GET_PRIVATE (backlight);
@@ -678,18 +675,25 @@ gpm_backlight_init (GpmBacklight *backlight)
 	g_signal_connect (backlight->priv->brightness, "brightness-changed",
 			  G_CALLBACK (brightness_changed_cb), backlight);
 
+	/* we use dkp_client for the ac-adapter-changed signal */
+	backlight->priv->client = dkp_client_new ();
+	g_signal_connect (backlight->priv->client, "changed",
+			  G_CALLBACK (gpm_backlight_client_changed_cb), backlight);
+
 	/* gets caps */
 	backlight->priv->can_dim = gpm_brightness_has_hw (backlight->priv->brightness);
 	backlight->priv->can_sense = gpm_light_sensor_has_hw (backlight->priv->light_sensor);
 
-	/* we use hal to see if we are a laptop */
-	hal_manager = hal_manager_new ();
-	backlight->priv->is_laptop = hal_manager_is_laptop (hal_manager);
-	g_object_unref (hal_manager);
+	/* we use DeviceKit-power to see if we should show the lid UI */
+#if DKP_CHECK_VERSION(0x009)
+	g_object_get (backlight->priv->client,
+		      "lid-is-present", &lid_is_present,
+		      NULL);
+#endif
 
 	/* expose ui in prefs program */
 	prefs_server = gpm_prefs_server_new ();
-	if (backlight->priv->is_laptop)
+	if (lid_is_present)
 		gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_LID);
 	if (backlight->priv->can_dim)
 		gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_BACKLIGHT);
@@ -714,11 +718,6 @@ gpm_backlight_init (GpmBacklight *backlight)
 	backlight->priv->button = gpm_button_new ();
 	g_signal_connect (backlight->priv->button, "button-pressed",
 			  G_CALLBACK (gpm_backlight_button_pressed_cb), backlight);
-
-	/* we use dkp_client for the ac-adapter-changed signal */
-	backlight->priv->client = dkp_client_new ();
-	g_signal_connect (backlight->priv->client, "changed",
-			  G_CALLBACK (gpm_backlight_client_changed_cb), backlight);
 
 	/* watch for idle mode changes */
 	backlight->priv->idle = gpm_idle_new ();

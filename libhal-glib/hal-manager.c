@@ -321,37 +321,6 @@ hal_manager_init (HalManager *manager)
 }
 
 /**
- * hal_manager_is_laptop:
- *
- * @manager: This class instance
- * Return value: TRUE is computer is identified as a laptop
- *
- * Returns true if system.formfactor is "laptop"
- **/
-gboolean
-hal_manager_is_laptop (HalManager *manager)
-{
-	gboolean ret = TRUE;
-	gchar *formfactor = NULL;
-
-	g_return_val_if_fail (HAL_IS_MANAGER (manager), FALSE);
-
-	/* always present */
-	hal_device_get_string (manager->priv->computer, "system.formfactor", &formfactor, NULL);
-	if (formfactor == NULL) {
-		/* no need to free */
-		return FALSE;
-	}
-	if (strcmp (formfactor, "laptop") != 0) {
-		egg_warning ("This machine is not identified as a laptop."
-			   "system.formfactor is %s.", formfactor);
-		ret = FALSE;
-	}
-	g_free (formfactor);
-	return ret;
-}
-
-/**
  * hal_manager_finalize:
  * @object: This class instance
  **/
