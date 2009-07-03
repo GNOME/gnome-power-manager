@@ -94,7 +94,6 @@ GLIB_REQUIRED=2.13.0
 GTK_REQUIRED=2.11.0
 GDK_REQUIRED=2.11.0
 GNOME_KEYRING_REQUIRED=0.6.0
-HAL_REQUIRED=0.5.8
 DBUS_REQUIRED=0.70
 LIBNOTIFY_REQUIRED=0.4.3
 LIBWNCK_REQUIRED=2.10.0
@@ -113,7 +112,6 @@ dnl ---------------------------------------------------------------------------
 AC_SUBST(GLIB_REQUIRED)
 AC_SUBST(GTK_REQUIRED)
 AC_SUBST(GDK_REQUIRED)
-AC_SUBST(HAL_REQUIRED)
 AC_SUBST(DBUS_REQUIRED)
 AC_SUBST(LIBNOTIFY_REQUIRED)
 AC_SUBST(LIBWNCK_REQUIRED)
@@ -129,10 +127,6 @@ dnl ---------------------------------------------------------------------------
 PKG_CHECK_MODULES(GLIB, glib-2.0 >= $GLIB_REQUIRED gobject-2.0)
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
-
-PKG_CHECK_MODULES(HAL, hal >= $HAL_REQUIRED)
-AC_SUBST(HAL_CFLAGS)
-AC_SUBST(HAL_LIBS)
 
 PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk >= $CANBERRA_REQUIRED)
 AC_SUBST(CANBERRA_CFLAGS)
@@ -608,7 +602,6 @@ src/Makefile
 applets/Makefile
 applets/brightness/Makefile
 applets/inhibit/Makefile
-libhal-glib/Makefile
 docs/Makefile
 man/Makefile
 help/Makefile
