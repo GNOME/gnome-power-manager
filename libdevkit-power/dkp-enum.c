@@ -58,11 +58,8 @@ dkp_device_type_to_text (DkpDeviceType type_enum)
 	case DKP_DEVICE_TYPE_PHONE:
 		type = "phone";
 		break;
-	case DKP_DEVICE_TYPE_UNKNOWN:
-		type = "unknown";
-		break;
 	default:
-		g_assert_not_reached ();
+		type = "unknown";
 		break;
 	}
 	return type;
@@ -115,11 +112,8 @@ dkp_device_state_to_text (DkpDeviceState state_enum)
 	case DKP_DEVICE_STATE_FULLY_CHARGED:
 		state = "fully-charged";
 		break;
-	case DKP_DEVICE_STATE_UNKNOWN:
-		state = "unknown";
-		break;
 	default:
-		g_assert_not_reached ();
+		state = "unknown";
 		break;
 	}
 	return state;
@@ -170,11 +164,8 @@ dkp_device_technology_to_text (DkpDeviceTechnology technology_enum)
 	case DKP_DEVICE_TECHNOLGY_NICKEL_METAL_HYDRIDE:
 		technology = "nickel-metal-hydride";
 		break;
-	case DKP_DEVICE_TECHNOLGY_UNKNOWN:
-		technology = "unknown";
-		break;
 	default:
-		g_assert_not_reached ();
+		technology = "unknown";
 		break;
 	}
 	return technology;
