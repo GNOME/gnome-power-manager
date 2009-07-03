@@ -33,8 +33,6 @@
 #include <gconf/gconf-client.h>
 #include <devkit-power-gobject/devicekit-power.h>
 
-#include <hal-manager.h>
-
 #include "gpm-tray-icon.h"
 #include "gpm-common.h"
 #include "gpm-prefs.h"
