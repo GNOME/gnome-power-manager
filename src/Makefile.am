@@ -31,6 +31,7 @@ INCLUDES =						\
 	-DLIBDIR=\""$(libdir)"\" 			\
 	-DVERSION="\"$(VERSION)\"" 			\
 	-DGPM_DATA=\"$(pkgdatadir)\"			\
+	-DDKP_DISABLE_DEPRECATED			\
 	-DEGG_LOG_FILE=\""/tmp/gpm.log"\"		\
 	-DEGG_VERBOSE="\"GPM_VERBOSE\""			\
 	-DEGG_LOGGING="\"GPM_LOGGING\""			\

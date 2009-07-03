@@ -818,7 +818,9 @@ gpm_manager_client_changed_cb (DkpClient *client, GpmManager *manager)
 	gboolean on_battery;
 
 	/* get the on-battery state */
-	on_battery = dkp_client_on_battery (manager->priv->client);
+	g_object_get (client,
+		      "on-battery", &on_battery,
+		      NULL);
 	if (on_battery == manager->priv->on_battery) {
 		egg_debug ("same state as before, ignoring");
 		return;
@@ -1543,7 +1545,9 @@ gpm_manager_init (GpmManager *manager)
 	}
 
 	/* coldplug so we are in the correct state at startup */
-	manager->priv->on_battery = dkp_client_on_battery (manager->priv->client);
+	g_object_get (manager->priv->client,
+		      "on-battery", &manager->priv->on_battery,
+		      NULL);
 
 	manager->priv->button = gpm_button_new ();
 	g_signal_connect (manager->priv->button, "button-pressed",

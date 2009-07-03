@@ -1009,9 +1009,13 @@ gpm_prefs_init (GpmPrefs *prefs)
 	prefs->priv->has_button_lid = ((caps & GPM_PREFS_SERVER_LID) > 0);
 	prefs->priv->has_button_suspend = TRUE;
 	prefs->priv->can_shutdown = TRUE;
-	prefs->priv->can_suspend = dkp_client_can_suspend (prefs->priv->client);
-	prefs->priv->can_hibernate = dkp_client_can_hibernate (prefs->priv->client);
 	egg_debug ("caps=%i", caps);
+
+	/* get values from DkpClient */
+	g_object_get (prefs->priv->client,
+		      "can-suspend", &prefs->priv->can_suspend,
+		      "can-hibernate", &prefs->priv->can_hibernate,
+		      NULL);
 
 	prefs->priv->builder = gtk_builder_new ();
 	retval = gtk_builder_add_from_file (prefs->priv->builder, GPM_DATA "/gpm-prefs.ui", &error);

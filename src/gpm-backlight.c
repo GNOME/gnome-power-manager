@@ -215,8 +215,10 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	brightness = backlight->priv->master_percentage / 100.0f;
 	egg_debug ("1. main brightness %f", brightness);
 
-	/* get AC status */
-	on_battery = dkp_client_on_battery (backlight->priv->client);
+	/* get battery status */
+	g_object_get (backlight->priv->client,
+		      "on-battery", &on_battery,
+		      NULL);
 
 	/* reduce if on battery power if we should */
 	battery_reduce = gconf_client_get_bool (backlight->priv->conf, GPM_CONF_BACKLIGHT_BATTERY_REDUCE, NULL);
@@ -309,7 +311,10 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 	if (value == NULL)
 		return;
 
-	on_battery = dkp_client_on_battery (backlight->priv->client);
+	/* get battery status */
+	g_object_get (backlight->priv->client,
+		      "on-battery", &on_battery,
+		      NULL);
 
 	if (!on_battery && strcmp (entry->key, GPM_CONF_BACKLIGHT_BRIGHTNESS_AC) == 0) {
 		backlight->priv->master_percentage = gconf_value_get_int (value);
@@ -515,7 +520,9 @@ idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *backlight)
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 
 		/* get the DPMS state we're supposed to use on the power state */
-		on_battery = dkp_client_on_battery (backlight->priv->client);
+		g_object_get (backlight->priv->client,
+			      "on-battery", &on_battery,
+			      NULL);
 		if (!on_battery)
 			dpms_method = gconf_client_get_string (backlight->priv->conf, GPM_CONF_BACKLIGHT_DPMS_METHOD_AC, NULL);
 		else

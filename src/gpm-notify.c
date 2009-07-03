@@ -192,7 +192,9 @@ gpm_notify_client_changed_cb (DkpClient *client, GpmNotify *notify)
 
 	/* for where we add back the client before the "AC Power unplugged"
 	 * message times out. */
-	on_battery = dkp_client_on_battery (client);
+	g_object_get (client,
+		      "on-battery", &on_battery,
+		      NULL);
 	if (!on_battery) {
 		egg_debug ("clearing notify due ac being present");
 		gpm_notify_cancel (notify);

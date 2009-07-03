@@ -164,9 +164,14 @@ gpm_control_allowed_suspend (GpmControl *control, gboolean *can, GError **error)
 	g_return_val_if_fail (can, FALSE);
 
 	*can = FALSE;
+
+	/* get values from DkpClient */
+	g_object_get (control->priv->client,
+		      "can-suspend", &hardware_ok,
+		      NULL);
+
 	conf_ok = gconf_client_get_bool (control->priv->conf, GPM_CONF_CAN_SUSPEND, NULL);
 	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.devicekit.power.suspend");
-	hardware_ok = dkp_client_can_suspend (control->priv->client);
 	fg = gpm_control_check_foreground_console (control);
 	if (conf_ok && hardware_ok && polkit_ok && fg)
 		*can = TRUE;
@@ -191,11 +196,15 @@ gpm_control_allowed_hibernate (GpmControl *control, gboolean *can, GError **erro
 	gboolean fg;
 	g_return_val_if_fail (can, FALSE);
 
+	/* get values from DkpClient */
+	g_object_get (control->priv->client,
+		      "can-hibernate", &hardware_ok,
+		      NULL);
+
 	*can = FALSE;
 	conf_ok = gconf_client_get_bool (control->priv->conf, GPM_CONF_CAN_HIBERNATE, NULL);
 	fg = gpm_control_check_foreground_console (control);
 	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.devicekit.power.hibernate");
-	hardware_ok = dkp_client_can_hibernate (control->priv->client);
 	if (conf_ok && hardware_ok && polkit_ok && fg)
 		*can = TRUE;
 	egg_debug ("conf=%i, polkit=%i, fg=%i, can=%i", conf_ok, polkit_ok, fg, *can);

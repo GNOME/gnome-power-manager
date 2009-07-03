@@ -526,7 +526,9 @@ gpm_button_client_changed_cb (DkpClient *client, GpmButton *button)
 	gboolean lid_is_closed;
 
 	/* get new state */
-	lid_is_closed = dkp_client_lid_is_closed (client);
+	g_object_get (client,
+		      "lid-is-closed", &lid_is_closed,
+		      NULL);
 
 	/* same state */
 	if (button->priv->lid_is_closed == lid_is_closed)
