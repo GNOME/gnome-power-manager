@@ -56,7 +56,6 @@ struct GpmPrefsPrivate
 	gboolean		 has_batteries;
 	gboolean		 has_lcd;
 	gboolean		 has_ups;
-	gboolean		 has_ambient;
 	gboolean		 has_button_lid;
 	gboolean		 has_button_suspend;
 	gboolean		 can_shutdown;
@@ -1003,7 +1002,6 @@ gpm_prefs_init (GpmPrefs *prefs)
 	prefs->priv->has_batteries = ((caps & GPM_PREFS_SERVER_BATTERY) > 0);
 	prefs->priv->has_ups = ((caps & GPM_PREFS_SERVER_UPS) > 0);
 	prefs->priv->has_lcd = ((caps & GPM_PREFS_SERVER_BACKLIGHT) > 0);
-	prefs->priv->has_ambient = ((caps & GPM_PREFS_SERVER_AMBIENT) > 0);
 	prefs->priv->has_button_lid = ((caps & GPM_PREFS_SERVER_LID) > 0);
 	prefs->priv->has_button_suspend = TRUE;
 	prefs->priv->can_shutdown = TRUE;

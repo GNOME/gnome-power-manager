@@ -57,13 +57,6 @@ G_BEGIN_DECLS
 
 #define GPM_CONF_DIR 				"/apps/gnome-power-manager"
 
-/* ambient */
-#define GPM_CONF_AMBIENT_ENABLE			GPM_CONF_DIR "/ambient/enable"
-#define GPM_CONF_AMBIENT_POLL			GPM_CONF_DIR "/ambient/poll_timeout"
-#define GPM_CONF_AMBIENT_FACTOR			GPM_CONF_DIR "/ambient/correction_factor"
-#define GPM_CONF_AMBIENT_SCALE			GPM_CONF_DIR "/ambient/correction_scale"
-#define GPM_CONF_AMBIENT_DIM_POLICY		GPM_CONF_DIR "/ambient/dim_policy"
-
 /* actions */
 #define GPM_CONF_ACTIONS_CRITICAL_UPS		GPM_CONF_DIR "/actions/critical_ups"
 #define GPM_CONF_ACTIONS_CRITICAL_BATT		GPM_CONF_DIR "/actions/critical_battery"
@@ -101,10 +94,6 @@ G_BEGIN_DECLS
 #define GPM_CONF_IDLE_CHECK_CPU			GPM_CONF_DIR "/general/check_type_cpu"
 #define GPM_CONF_LAPTOP_USES_EXT_MON		GPM_CONF_DIR "/general/using_external_monitor"
 #define GPM_CONF_IGNORE_INHIBITS		GPM_CONF_DIR "/general/ignore_inhibit_requests"
-
-/* keyboard */
-#define GPM_CONF_KEYBOARD_BRIGHTNESS_AC		GPM_CONF_DIR "/keyboard/brightness_ac"
-#define GPM_CONF_KEYBOARD_BRIGHTNESS_BATT	GPM_CONF_DIR "/keyboard/brightness_battery"
 
 /* lock */
 #define GPM_CONF_LOCK_USE_SCREENSAVER		GPM_CONF_DIR "/lock/use_screensaver_settings"
