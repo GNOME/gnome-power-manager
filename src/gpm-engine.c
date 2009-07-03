@@ -626,14 +626,14 @@ gpm_engine_device_changed_cb (DkpClient *client, DkpDevice *device, GpmEngine *e
 	state = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(device), "engine-state-old"));
 	if (state != obj->state) {
 
-		if (state == DKP_DEVICE_STATE_DISCHARGING) {
+		if (obj->state == DKP_DEVICE_STATE_DISCHARGING) {
 			/* only emit this if specified in gconf */
 			ret = gconf_client_get_bool (engine->priv->conf, GPM_CONF_NOTIFY_DISCHARGING, NULL);
 			if (ret) {
 				egg_debug ("** EMIT: discharging");
 				g_signal_emit (engine, signals [DISCHARGING], 0, obj->type);
 			}
-		} else if (state == DKP_DEVICE_STATE_FULLY_CHARGED) {
+		} else if (obj->state == DKP_DEVICE_STATE_FULLY_CHARGED) {
 			/* only emit this if specified in gconf */
 			ret = gconf_client_get_bool (engine->priv->conf, GPM_CONF_NOTIFY_FULLY_CHARGED, NULL);
 			if (ret) {
