@@ -308,6 +308,7 @@ gboolean
 gpm_brightness_dkp_has_hw (GpmBrightnessDkp *brightness)
 {
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_DKP (brightness), FALSE);
+	egg_error ("mo: %i", brightness->priv->maximum);
 	return (brightness->priv->maximum != 0);
 }
 
