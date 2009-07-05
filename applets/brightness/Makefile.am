@@ -1,6 +1,7 @@
 INCLUDES =							\
 	-I. -I$(srcdir) 					\
 	$(GLIB_CFLAGS)						\
+	$(HAL_CFLAGS)						\
 	$(DBUS_CFLAGS)						\
 	$(GNOME_CFLAGS)						\
 	$(LIBNOTIFY_CFLAGS)					\

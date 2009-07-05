@@ -11,6 +11,7 @@ EXTRA_DIST =						\
 
 INCLUDES =						\
 	$(GLIB_CFLAGS)					\
+	$(HAL_CFLAGS)					\
 	$(DBUS_CFLAGS)					\
 	$(GNOME_CFLAGS)					\
 	$(UNIQUE_CFLAGS)				\
@@ -36,7 +37,11 @@ INCLUDES =						\
 	-DEGG_LOGGING="\"GPM_LOGGING\""			\
 	-DEGG_CONSOLE="\"GPM_CONSOLE\""			\
 	-I$(top_srcdir)					\
+	-I$(top_srcdir)/libhal-glib			\
 	$(NULL)
+
+LOCAL_LIBHAL_LIBS =					\
+	$(top_builddir)/libhal-glib/libhal.la
 
 bin_PROGRAMS =						\
 	gnome-power-manager				\
@@ -117,10 +122,12 @@ gnome_power_preferences_SOURCES =			\
 gnome_power_preferences_LDADD =				\
 	$(GLIB_LIBS)					\
 	$(GNOME_LIBS)					\
+	$(HAL_LIBS)					\
 	$(DBUS_LIBS)					\
 	$(UNIQUE_LIBS)					\
 	$(POLKIT_GNOME_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
+	$(LOCAL_LIBHAL_LIBS)				\
 	$(DEVKIT_LIBS)					\
 	$(NULL)
 
@@ -165,6 +172,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-button.c					\
 	gpm-brightness.h				\
 	gpm-brightness.c				\
+	gpm-brightness-hal.h				\
+	gpm-brightness-hal.c				\
 	gpm-brightness-xrandr.h				\
 	gpm-brightness-xrandr.c				\
 	gpm-brightness-dkp.h				\
@@ -200,12 +209,14 @@ gnome_power_manager_LDADD =				\
 	$(GLIB_LIBS)					\
 	$(GSTREAMER_LIBS)				\
 	$(GNOME_LIBS)					\
+	$(HAL_LIBS)					\
 	$(POLKIT_LIBS)					\
 	$(DBUS_LIBS)					\
 	$(XRANDR_LIBS)					\
 	$(CANBERRA_LIBS)				\
 	$(LIBNOTIFY_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
+	$(LOCAL_LIBHAL_LIBS)				\
 	$(DEVKIT_LIBS)					\
 	$(NULL)
 
@@ -275,6 +286,7 @@ gnome_power_self_test_LDADD =				\
 	$(DEVKIT_LIBS)					\
 	$(DBUS_LIBS)					\
 	$(LIBNOTIFY_LIBS)				\
+	$(LOCAL_LIBHAL_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
 	$(NULL)
 
