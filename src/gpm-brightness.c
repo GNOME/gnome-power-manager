@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2008-2009 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2008 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -37,7 +37,6 @@
 
 #include "gpm-brightness.h"
 #include "gpm-brightness-hal.h"
-#include "gpm-brightness-dkp.h"
 #include "gpm-brightness-xrandr.h"
 #include "gpm-common.h"
 #include "egg-debug.h"
@@ -50,12 +49,10 @@ struct GpmBrightnessPrivate
 {
 	gboolean		 use_xrandr;
 	gboolean		 use_hal;
-	gboolean		 use_dkp;
 	gboolean		 has_changed_events;
 	gboolean		 cache_trusted;
 	guint			 cache_percentage;
 	GpmBrightnessHal	*hal;
-	GpmBrightnessDkp	*dkp;
 	GpmBrightnessXRandR	*xrandr;
 };
 
@@ -138,12 +135,6 @@ gpm_brightness_set (GpmBrightness *brightness, guint percentage, gboolean *hw_ch
 		egg_warning ("failed to set using xrandr, falling back to HAL");
 		brightness->priv->use_xrandr = FALSE;
 	}
-	if (brightness->priv->use_dkp) {
-		ret = gpm_brightness_dkp_set (brightness->priv->dkp, percentage, &hw_changed_local);
-		if (ret)
-			goto out;
-		egg_warning ("failed to set using DeviceKit-power");
-	}
 	if (brightness->priv->use_hal) {
 		ret = gpm_brightness_hal_set (brightness->priv->hal, percentage, &hw_changed_local);
 		if (ret)
@@ -197,12 +188,6 @@ gpm_brightness_get (GpmBrightness *brightness, guint *percentage)
 		egg_warning ("failed to set using xrandr, falling back to HAL");
 		brightness->priv->use_xrandr = FALSE;
 	}
-	if (brightness->priv->use_dkp) {
-		ret = gpm_brightness_dkp_get (brightness->priv->dkp, &percentage_local);
-		if (ret)
-			goto out;
-		egg_warning ("failed to set using DeviceKit-power");
-	}
 	if (brightness->priv->use_hal) {
 		ret = gpm_brightness_hal_get (brightness->priv->hal, &percentage_local);
 		if (ret)
@@ -251,12 +236,6 @@ gpm_brightness_up (GpmBrightness *brightness, gboolean *hw_changed)
 		egg_warning ("failed to set using xrandr, falling back to HAL");
 		brightness->priv->use_xrandr = FALSE;
 	}
-	if (brightness->priv->use_dkp) {
-		ret = gpm_brightness_dkp_up (brightness->priv->dkp, &hw_changed_local);
-		if (ret)
-			goto out;
-		egg_warning ("failed to set using DeviceKit-power");
-	}
 	if (brightness->priv->use_hal) {
 		ret = gpm_brightness_hal_up (brightness->priv->hal, &hw_changed_local);
 		if (ret)
@@ -299,12 +278,6 @@ gpm_brightness_down (GpmBrightness *brightness, gboolean *hw_changed)
 		egg_warning ("failed to set using xrandr, falling back to HAL");
 		brightness->priv->use_xrandr = FALSE;
 	}
-	if (brightness->priv->use_dkp) {
-		ret = gpm_brightness_dkp_down (brightness->priv->dkp, &hw_changed_local);
-		if (ret)
-			goto out;
-		egg_warning ("failed to set using DeviceKit-power");
-	}
 	if (brightness->priv->use_hal) {
 		ret = gpm_brightness_hal_down (brightness->priv->hal, &hw_changed_local);
 		if (ret)
@@ -331,7 +304,7 @@ gboolean
 gpm_brightness_has_hw (GpmBrightness *brightness)
 {
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
-	return (brightness->priv->use_xrandr || brightness->priv->use_dkp || brightness->priv->use_hal);
+	return (brightness->priv->use_xrandr || brightness->priv->use_hal);
 }
 
 /**
@@ -344,7 +317,6 @@ gpm_brightness_finalize (GObject *object)
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GPM_IS_BRIGHTNESS (object));
 	brightness = GPM_BRIGHTNESS (object);
-	g_object_unref (brightness->priv->dkp);
 	g_object_unref (brightness->priv->hal);
 	g_object_unref (brightness->priv->xrandr);
 	G_OBJECT_CLASS (gpm_brightness_parent_class)->finalize (object);
@@ -409,18 +381,6 @@ gpm_brightness_xrandr_changed_cb (GpmBrightnessXRandR *xrandr, guint percentage,
 }
 
 /**
- * gpm_brightness_dkp_changed_cb:
- * This callback is called when the brightness value changes.
- **/
-static void
-gpm_brightness_dkp_changed_cb (GpmBrightnessDkp *dkp, guint percentage, GpmBrightness *brightness)
-{
-	g_return_if_fail (GPM_IS_BRIGHTNESS (brightness));
-	if (brightness->priv->use_dkp)
-		gpm_brightness_changed (brightness, percentage);
-}
-
-/**
  * gpm_brightness_hal_changed_cb:
  * This callback is called when the brightness value changes.
  **/
@@ -442,7 +402,6 @@ gpm_brightness_init (GpmBrightness *brightness)
 	brightness->priv = GPM_BRIGHTNESS_GET_PRIVATE (brightness);
 
 	brightness->priv->use_xrandr = FALSE;
-	brightness->priv->use_dkp = FALSE;
 	brightness->priv->use_hal = FALSE;
 	brightness->priv->cache_trusted = FALSE;
 	brightness->priv->has_changed_events = FALSE;
@@ -453,18 +412,11 @@ gpm_brightness_init (GpmBrightness *brightness)
 		egg_debug ("detected XRANDR hardware");
 		brightness->priv->use_xrandr = TRUE;
 	}
-	brightness->priv->dkp = gpm_brightness_dkp_new ();
-	if (gpm_brightness_dkp_has_hw (brightness->priv->dkp)) {
-		egg_debug ("detected DeviceKit-power hardware");
-		brightness->priv->use_dkp = TRUE;
-	}
 	brightness->priv->hal = gpm_brightness_hal_new ();
 	if (gpm_brightness_hal_has_hw (brightness->priv->hal)) {
 		egg_debug ("detected HAL hardware");
 		brightness->priv->use_hal = TRUE;
 	}
-	g_signal_connect (brightness->priv->dkp, "brightness-changed",
-			  G_CALLBACK (gpm_brightness_dkp_changed_cb), brightness);
 	g_signal_connect (brightness->priv->hal, "brightness-changed",
 			  G_CALLBACK (gpm_brightness_hal_changed_cb), brightness);
 	g_signal_connect (brightness->priv->xrandr, "brightness-changed",

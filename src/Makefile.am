@@ -176,8 +176,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-brightness-hal.c				\
 	gpm-brightness-xrandr.h				\
 	gpm-brightness-xrandr.c				\
-	gpm-brightness-dkp.h				\
-	gpm-brightness-dkp.c				\
 	gpm-main.c					\
 	gpm-manager.h					\
 	gpm-manager.c					\
