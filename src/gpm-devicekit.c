@@ -128,9 +128,11 @@ gpm_devicekit_get_object_icon (DkpDevice *device)
 		} else if (state == DKP_DEVICE_STATE_FULLY_CHARGED) {
 			filename = g_strdup_printf ("gpm-%s-charged", prefix);
 
+#if !DKP_CHECK_VERSION(0x009)
 		} else if (state == DKP_DEVICE_STATE_UNKNOWN && percentage > 95.0f) {
 			egg_warning ("fixing up unknown %f", percentage);
 			filename = g_strdup_printf ("gpm-%s-charged", prefix);
+#endif
 
 		} else if (state == DKP_DEVICE_STATE_CHARGING) {
 			index_str = gpm_devicekit_get_object_icon_index (device);
@@ -139,7 +141,32 @@ gpm_devicekit_get_object_icon (DkpDevice *device)
 		} else if (state == DKP_DEVICE_STATE_DISCHARGING) {
 			index_str = gpm_devicekit_get_object_icon_index (device);
 			filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
+
+#if !DKP_CHECK_VERSION(0x009)
+		/* the battery isn't charging or discharging, it's just
+		 * sitting there half full doing nothing */
+		} else {
+			DkpClient *client;
+			gboolean on_battery;
+
+			/* get battery status */
+			client = dkp_client_new ();
+			g_object_get (client,
+				      "on-battery", &on_battery,
+				      NULL);
+			g_object_unref (client);
+
+			/* try to find a suitable icon depending on AC state */
+			if (on_battery) {
+				index_str = gpm_devicekit_get_object_icon_index (device);
+				filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
+			} else {
+				index_str = gpm_devicekit_get_object_icon_index (device);
+				filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index_str);
+			}
+#endif
 		}
+
 	} else if (type == DKP_DEVICE_TYPE_MOUSE ||
 		   type == DKP_DEVICE_TYPE_KEYBOARD ||
 		   type == DKP_DEVICE_TYPE_PHONE) {
