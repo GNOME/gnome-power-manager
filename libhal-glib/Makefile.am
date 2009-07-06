@@ -23,9 +23,7 @@ libhal_la_SOURCES =						\
 	hal-device.c						\
 	hal-device.h						\
 	hal-manager.c						\
-	hal-manager.h						\
-	hal-device-store.c					\
-	hal-device-store.h
+	hal-manager.h
 
 libhal_la_LIBADD =						\
 	$(DBUS_LIBS)						\

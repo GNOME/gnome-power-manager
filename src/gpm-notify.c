@@ -192,7 +192,9 @@ gpm_notify_client_changed_cb (DkpClient *client, GpmNotify *notify)
 
 	/* for where we add back the client before the "AC Power unplugged"
 	 * message times out. */
-	on_battery = dkp_client_on_battery (client);
+	g_object_get (client,
+		      "on-battery", &on_battery,
+		      NULL);
 	if (!on_battery) {
 		egg_debug ("clearing notify due ac being present");
 		gpm_notify_cancel (notify);
@@ -216,7 +218,6 @@ notify_general_clicked_cb (NotifyNotification *libnotify,
 {
 	gboolean ret;
 	GError *error = NULL;
- 	char *cmdline;
 	GdkScreen *gscreen;
 	GtkWidget *error_dialog;
 
@@ -230,21 +231,8 @@ notify_general_clicked_cb (NotifyNotification *libnotify,
 	}
 	if (strcmp (action, "visit-website") == 0) {
 		egg_debug ("autovisit website %s", notify->priv->internet_url);
-		error = NULL;
 
- 		cmdline = g_strconcat ("gnome-open ", notify->priv->internet_url, NULL);
-		ret = gdk_spawn_command_line_on_screen (gscreen, cmdline, &error);
-		g_free (cmdline);
-
-		if (ret)
-			return;
-
-		g_error_free (error);
-		error = NULL;
-
- 		cmdline = g_strconcat ("xdg-open ", notify->priv->internet_url, NULL);
-		ret = gdk_spawn_command_line_on_screen (gscreen, cmdline, &error);
-		g_free (cmdline);
+		ret = gtk_show_uri (gscreen, notify->priv->internet_url, gtk_get_current_event_time (), &error);
 
 		if (!ret) {
 			error_dialog = gtk_message_dialog_new ( NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Failed to show url %s", error->message); 

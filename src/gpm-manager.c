@@ -55,7 +55,6 @@
 #include "gpm-prefs.h"
 #include "gpm-screensaver.h"
 #include "gpm-backlight.h"
-#include "gpm-brightness-kbd.h"
 #include "gpm-screensaver.h"
 #include "gpm-session.h"
 #include "gpm-stock-icons.h"
@@ -63,6 +62,7 @@
 #include "gpm-tray-icon.h"
 #include "gpm-engine.h"
 #include "gpm-devicekit.h"
+#include "gpm-disks.h"
 #include "gpm-feedback-widget.h"
 
 #include "org.freedesktop.PowerManagement.Backlight.h"
@@ -76,6 +76,7 @@ struct GpmManagerPrivate
 {
 	GpmButton		*button;
 	GConfClient		*conf;
+	GpmDisks		*disks;
 	GpmDpms			*dpms;
 	GpmIdle			*idle;
 	GpmPrefsServer		*prefs_server;
@@ -84,8 +85,6 @@ struct GpmManagerPrivate
 	GpmScreensaver 		*screensaver;
 	GpmTrayIcon		*tray_icon;
 	GpmEngine		*engine;
-	GpmBrightnessKbd	*brightness_kbd;
-	GpmFeedback		*feedback_kbd;
 	GpmBacklight		*backlight;
 	EggConsoleKit		*console;
 	guint32         	 screensaver_ac_throttle_id;
@@ -617,13 +616,7 @@ idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmManager *manager)
 		return;
 	}
 
-	if (mode == GPM_IDLE_MODE_NORMAL) {
-		egg_debug ("Idle state changed: NORMAL");
-		gpm_brightness_kbd_undim (manager->priv->brightness_kbd);
-	} else if (mode == GPM_IDLE_MODE_BLANK) {
-		egg_debug ("Idle state changed: BLANK");
-		gpm_brightness_kbd_dim (manager->priv->brightness_kbd);
-	} else if (mode == GPM_IDLE_MODE_SLEEP) {
+	if (mode == GPM_IDLE_MODE_SLEEP) {
 		egg_debug ("Idle state changed: SLEEP");
 		if (gpm_manager_is_inhibit_valid (manager, FALSE, "timeout action") == FALSE)
 			return;
@@ -773,13 +766,28 @@ button_pressed_cb (GpmButton *button, const gchar *type, GpmManager *manager)
 		update_lid_throttle (manager, TRUE);
 	else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0)
 		update_lid_throttle (manager, FALSE);
+}
 
-	if ((strcmp (type, GPM_BUTTON_KBD_BRIGHT_UP) == 0))
-		gpm_brightness_kbd_up (manager->priv->brightness_kbd);
-	else if ((strcmp (type, GPM_BUTTON_KBD_BRIGHT_DOWN) == 0))
-		gpm_brightness_kbd_down (manager->priv->brightness_kbd);
-	else if (strcmp (type, GPM_BUTTON_KBD_BRIGHT_TOGGLE) == 0)
-		gpm_brightness_kbd_toggle (manager->priv->brightness_kbd);
+/**
+ * gpm_manager_get_spindown_timeout:
+ **/
+static guint
+gpm_manager_get_spindown_timeout (GpmManager *manager)
+{
+	gboolean enabled;
+	guint timeout;
+
+	/* get policy */
+	if (!manager->priv->on_battery) {
+		enabled = gconf_client_get_bool (manager->priv->conf, GPM_CONF_DISKS_SPINDOWN_ENABLE_AC, NULL);
+		timeout = gconf_client_get_int (manager->priv->conf, GPM_CONF_DISKS_SPINDOWN_TIMEOUT_AC, NULL);
+	} else {
+		enabled = gconf_client_get_bool (manager->priv->conf, GPM_CONF_DISKS_SPINDOWN_ENABLE_BATT, NULL);
+		timeout = gconf_client_get_int (manager->priv->conf, GPM_CONF_DISKS_SPINDOWN_TIMEOUT_BATT, NULL);
+	}
+	if (!enabled)
+		timeout = 0;
+	return timeout;
 }
 
 /**
@@ -789,11 +797,13 @@ static void
 gpm_manager_client_changed_cb (DkpClient *client, GpmManager *manager)
 {
 	gboolean event_when_closed;
-	guint brightness;
+	guint timeout;
 	gboolean on_battery;
 
 	/* get the on-battery state */
-	on_battery = dkp_client_on_battery (manager->priv->client);
+	g_object_get (client,
+		      "on-battery", &on_battery,
+		      NULL);
 	if (on_battery == manager->priv->on_battery) {
 		egg_debug ("same state as before, ignoring");
 		return;
@@ -810,11 +820,9 @@ gpm_manager_client_changed_cb (DkpClient *client, GpmManager *manager)
 
 	egg_debug ("on_battery: %d", on_battery);
 
-	if (!on_battery)
-		brightness = gconf_client_get_int (manager->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_AC, NULL);
-	else
-		brightness = gconf_client_get_int (manager->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_BATT, NULL);
-	gpm_brightness_kbd_set_std (manager->priv->brightness_kbd, brightness);
+	/* set disk spindown threshold */
+	timeout = gpm_manager_get_spindown_timeout (manager);
+	gpm_disks_set_spindown_timeout (manager->priv->disks, timeout);
 
 	gpm_manager_sync_policy_sleep (manager);
 
@@ -880,7 +888,6 @@ static void
 gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *entry, GpmManager *manager)
 {
 	GConfValue *value;
-	gint brightness;
 
 	value = gconf_entry_get_value (entry);
 	if (value == NULL)
@@ -891,21 +898,6 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 	    strcmp (entry->key, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_BATT) == 0 ||
 	    strcmp (entry->key, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_AC) == 0)
 		gpm_manager_sync_policy_sleep (manager);
-
-	/* set keyboard brightness */
-	if (strcmp (entry->key, GPM_CONF_KEYBOARD_BRIGHTNESS_BATT) == 0) {
-
-		brightness = gconf_value_get_int (value);
-		if (manager->priv->on_battery)
-			gpm_brightness_kbd_set_std (manager->priv->brightness_kbd, brightness);
-
-	} else if (strcmp (entry->key, GPM_CONF_KEYBOARD_BRIGHTNESS_AC) == 0) {
-
-		brightness = gconf_client_get_int (manager->priv->conf, GPM_CONF_KEYBOARD_BRIGHTNESS_AC, NULL);
-		if (!manager->priv->on_battery)
-			gpm_brightness_kbd_set_std (manager->priv->brightness_kbd, brightness);
-
-	}
 }
 
 /**
@@ -949,10 +941,6 @@ screensaver_auth_request_cb (GpmScreensaver *screensaver, gboolean auth_begin, G
 	GError *error = NULL;
 
 	if (auth_begin) {
-		/* TODO: This may be a bid of a bodge, as we will have multiple
-			 resume requests -- maybe this need a logic cleanup */
-		gpm_brightness_kbd_undim (manager->priv->brightness_kbd);
-
 		/* We turn on the monitor unconditionally, as we may be using
 		 * a smartcard to authenticate and DPMS might still be on.
 		 * See #350291 for more details */
@@ -1387,21 +1375,6 @@ out:
 }
 
 /**
- * brightness_kbd_changed_cb:
- * @brightness: The GpmBrightnessKbd class instance
- * @percentage: The new percentage brightness
- * @brightness: This class instance
- *
- * This callback is called when the brightness value changes.
- **/
-static void
-brightness_kbd_changed_cb (GpmBrightnessKbd *brightness, gint percentage, GpmManager *manager)
-{
-	egg_debug ("Need to display backlight feedback value %i", percentage);
-	gpm_feedback_display_value (manager->priv->feedback_kbd, (float) percentage / 100.0f);
-}
-
-/**
  * dpms_mode_changed_cb:
  * @mode: The DPMS mode, e.g. GPM_DPMS_MODE_OFF
  * @info: This class instance
@@ -1465,6 +1438,7 @@ static void
 gpm_manager_init (GpmManager *manager)
 {
 	gboolean check_type_cpu;
+	guint timeout;
 	DBusGConnection *connection;
 	GError *error = NULL;
 	guint version;
@@ -1486,6 +1460,7 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->prefs_server = gpm_prefs_server_new ();
 
 	manager->priv->notify = gpm_notify_new ();
+	manager->priv->disks = gpm_disks_new ();
 	manager->priv->conf = gconf_client_get_default ();
 	manager->priv->client = dkp_client_new ();
 	g_signal_connect (manager->priv->client, "changed",
@@ -1512,7 +1487,9 @@ gpm_manager_init (GpmManager *manager)
 	}
 
 	/* coldplug so we are in the correct state at startup */
-	manager->priv->on_battery = dkp_client_on_battery (manager->priv->client);
+	g_object_get (manager->priv->client,
+		      "on-battery", &manager->priv->on_battery,
+		      NULL);
 
 	manager->priv->button = gpm_button_new ();
 	g_signal_connect (manager->priv->button, "button-pressed",
@@ -1532,14 +1509,6 @@ gpm_manager_init (GpmManager *manager)
 		dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH_BACKLIGHT,
 						     G_OBJECT (manager->priv->backlight));
 	}
-
-	/* use a visual widget */
-	manager->priv->feedback_kbd = gpm_feedback_new ();
-	gpm_feedback_set_icon_name (manager->priv->feedback_kbd, GPM_STOCK_BRIGHTNESS_KBD);
-
-	manager->priv->brightness_kbd = gpm_brightness_kbd_new ();
-	g_signal_connect (manager->priv->brightness_kbd, "brightness-changed",
-			  G_CALLBACK (brightness_kbd_changed_cb), manager);
 
 	manager->priv->idle = gpm_idle_new ();
 	g_signal_connect (manager->priv->idle, "idle-changed",
@@ -1590,6 +1559,10 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect (manager->priv->engine, "charge-action",
 			  G_CALLBACK (gpm_engine_charge_action_cb), manager);
 
+	/* set disk spindown threshold */
+	timeout = gpm_manager_get_spindown_timeout (manager);
+	gpm_disks_set_spindown_timeout (manager->priv->disks, timeout);
+
 	/* update ac throttle */
 	update_ac_throttle (manager);
 }
@@ -1613,6 +1586,7 @@ gpm_manager_finalize (GObject *object)
 	g_return_if_fail (manager->priv != NULL);
 
 	g_object_unref (manager->priv->conf);
+	g_object_unref (manager->priv->disks);
 	g_object_unref (manager->priv->dpms);
 	g_object_unref (manager->priv->idle);
 	g_object_unref (manager->priv->engine);
@@ -1621,9 +1595,7 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->notify);
 	g_object_unref (manager->priv->prefs_server);
 	g_object_unref (manager->priv->control);
-	g_object_unref (manager->priv->feedback_kbd);
 	g_object_unref (manager->priv->button);
-	g_object_unref (manager->priv->brightness_kbd);
 	g_object_unref (manager->priv->backlight);
 	g_object_unref (manager->priv->console);
 	g_object_unref (manager->priv->client);

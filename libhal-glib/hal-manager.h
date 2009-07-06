@@ -80,7 +80,6 @@ gboolean	 hal_manager_find_capability		(HalManager	*manager,
 							 const gchar	*capability,
 							 gchar     	***value,
 							 GError		**error);
-gboolean	 hal_manager_is_laptop			(HalManager	*manager);
 
 G_END_DECLS
 

@@ -33,8 +33,6 @@
 #include <gconf/gconf-client.h>
 #include <devkit-power-gobject/devicekit-power.h>
 
-#include <hal-manager.h>
-
 #include "gpm-tray-icon.h"
 #include "gpm-common.h"
 #include "gpm-prefs.h"
@@ -54,7 +52,6 @@ struct GpmPrefsPrivate
 	gboolean		 has_batteries;
 	gboolean		 has_lcd;
 	gboolean		 has_ups;
-	gboolean		 has_ambient;
 	gboolean		 has_button_lid;
 	gboolean		 has_button_suspend;
 	gboolean		 can_shutdown;
@@ -632,17 +629,15 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 		gtk_range_set_value (GTK_RANGE (widget), brightness);
 	}
 
-	if (strcmp (entry->key, GPM_CONF_LOWPOWER_AC) == 0) {
+	if (strcmp (entry->key, GPM_CONF_DISKS_SPINDOWN_ENABLE_AC) == 0) {
+		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "checkbutton_ac_spindown"));
 		enabled = gconf_value_get_bool (value);
-		egg_debug ("need to enable checkbox");
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), enabled);
 
-	} else if (strcmp (entry->key, GPM_CONF_LOWPOWER_UPS) == 0) {
+	} else if (strcmp (entry->key, GPM_CONF_DISKS_SPINDOWN_ENABLE_BATT) == 0) {
+		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "checkbutton_battery_spindown"));
 		enabled = gconf_value_get_bool (value);
-		egg_debug ("need to enable checkbox");
-
-	} else if (strcmp (entry->key, GPM_CONF_LOWPOWER_BATT) == 0) {
-		enabled = gconf_value_get_bool (value);
-		egg_debug ("need to enable checkbox");
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), enabled);
 	}
 }
 
@@ -755,6 +750,8 @@ prefs_setup_ac (GpmPrefs *prefs)
 
 	gpm_prefs_setup_checkbox (prefs, "checkbutton_ac_display_dim",
 				  GPM_CONF_BACKLIGHT_IDLE_DIM_AC);
+	gpm_prefs_setup_checkbox (prefs, "checkbutton_ac_spindown",
+				  GPM_CONF_DISKS_SPINDOWN_ENABLE_AC);
 
 	set_idle_hscale_stops (prefs, "hscale_ac_computer", prefs->priv->idle_delay);
 
@@ -813,9 +810,10 @@ prefs_setup_battery (GpmPrefs *prefs)
 	/* set up the battery reduce checkbox */
 	gpm_prefs_setup_checkbox (prefs, "checkbutton_battery_display_reduce",
 	  			  GPM_CONF_BACKLIGHT_BATTERY_REDUCE);
-
 	gpm_prefs_setup_checkbox (prefs, "checkbutton_battery_display_dim",
 				  GPM_CONF_BACKLIGHT_IDLE_DIM_BATT);
+	gpm_prefs_setup_checkbox (prefs, "checkbutton_battery_spindown",
+				  GPM_CONF_DISKS_SPINDOWN_ENABLE_BATT);
 
 	set_idle_hscale_stops (prefs, "hscale_battery_computer", prefs->priv->idle_delay);
 
@@ -966,13 +964,16 @@ gpm_prefs_init (GpmPrefs *prefs)
 	prefs->priv->has_batteries = ((caps & GPM_PREFS_SERVER_BATTERY) > 0);
 	prefs->priv->has_ups = ((caps & GPM_PREFS_SERVER_UPS) > 0);
 	prefs->priv->has_lcd = ((caps & GPM_PREFS_SERVER_BACKLIGHT) > 0);
-	prefs->priv->has_ambient = ((caps & GPM_PREFS_SERVER_AMBIENT) > 0);
 	prefs->priv->has_button_lid = ((caps & GPM_PREFS_SERVER_LID) > 0);
 	prefs->priv->has_button_suspend = TRUE;
 	prefs->priv->can_shutdown = TRUE;
-	prefs->priv->can_suspend = dkp_client_can_suspend (prefs->priv->client);
-	prefs->priv->can_hibernate = dkp_client_can_hibernate (prefs->priv->client);
 	egg_debug ("caps=%i", caps);
+
+	/* get values from DkpClient */
+	g_object_get (prefs->priv->client,
+		      "can-suspend", &prefs->priv->can_suspend,
+		      "can-hibernate", &prefs->priv->can_hibernate,
+		      NULL);
 
 	prefs->priv->builder = gtk_builder_new ();
 	retval = gtk_builder_add_from_file (prefs->priv->builder, GPM_DATA "/gpm-prefs.ui", &error);

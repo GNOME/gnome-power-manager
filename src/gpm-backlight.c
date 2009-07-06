@@ -42,8 +42,6 @@
 #include <gconf/gconf-client.h>
 #include <devkit-power-gobject/devicekit-power.h>
 
-#include <hal-manager.h>
-
 #include "gpm-button.h"
 #include "gpm-backlight.h"
 #include "gpm-brightness.h"
@@ -53,7 +51,6 @@
 #include "gpm-feedback-widget.h"
 #include "gpm-dpms.h"
 #include "gpm-idle.h"
-#include "gpm-light-sensor.h"
 #include "gpm-marshal.h"
 #include "gpm-stock-icons.h"
 #include "gpm-prefs-server.h"
@@ -70,13 +67,9 @@ struct GpmBacklightPrivate
 	GpmControl		*control;
 	GpmDpms			*dpms;
 	GpmIdle			*idle;
-	GpmLightSensor		*light_sensor;
 	gboolean		 can_dim;
-	gboolean		 can_sense;
-	gboolean		 is_laptop;
 	gboolean		 system_is_idle;
 	GTimer			*idle_timer;
-	gfloat			 ambient_sensor_value;
 	guint			 idle_dim_timeout;
 	guint			 master_percentage;
 };
@@ -218,8 +211,10 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	brightness = backlight->priv->master_percentage / 100.0f;
 	egg_debug ("1. main brightness %f", brightness);
 
-	/* get AC status */
-	on_battery = dkp_client_on_battery (backlight->priv->client);
+	/* get battery status */
+	g_object_get (backlight->priv->client,
+		      "on-battery", &on_battery,
+		      NULL);
 
 	/* reduce if on battery power if we should */
 	battery_reduce = gconf_client_get_bool (backlight->priv->conf, GPM_CONF_BACKLIGHT_BATTERY_REDUCE, NULL);
@@ -253,26 +248,6 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 		scale = 1.0f;
 	}
 	egg_debug ("3. idle scale %f, brightness %f", scale, brightness);
-
-	/* reduce if ambient is low */
-	enable_action = gconf_client_get_bool (backlight->priv->conf, GPM_CONF_AMBIENT_ENABLE, NULL);
-	if (backlight->priv->can_sense && enable_action) {
-		value = gconf_client_get_int (backlight->priv->conf, GPM_CONF_AMBIENT_SCALE, NULL);
-		scale = backlight->priv->ambient_sensor_value * (value / 100.0f);
-		value = gconf_client_get_int (backlight->priv->conf, GPM_CONF_AMBIENT_FACTOR, NULL);
-		scale = gpm_common_sum_scale (brightness, scale, value / 100.0f);
-		if (scale > 1.0f) {
-			scale = 1.0f;
-		}
-		if (scale < 0.80f) {
-			brightness *= scale;
-		} else {
-			scale = 1.0f;
-		}
-	} else {
-		scale = 1.0f;
-	}
-	egg_debug ("4. ambient scale %f, brightness %f", scale, brightness);
 
 	/* convert to percentage */
 	value = (guint) ((brightness * 100.0f) + 0.5);
@@ -312,7 +287,10 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 	if (value == NULL)
 		return;
 
-	on_battery = dkp_client_on_battery (backlight->priv->client);
+	/* get battery status */
+	g_object_get (backlight->priv->client,
+		      "on-battery", &on_battery,
+		      NULL);
 
 	if (!on_battery && strcmp (entry->key, GPM_CONF_BACKLIGHT_BRIGHTNESS_AC) == 0) {
 		backlight->priv->master_percentage = gconf_value_get_int (value);
@@ -322,9 +300,6 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 
 	} else if (strcmp (entry->key, GPM_CONF_BACKLIGHT_IDLE_DIM_AC) == 0 ||
-	         strcmp (entry->key, GPM_CONF_AMBIENT_ENABLE) == 0 ||
-	         strcmp (entry->key, GPM_CONF_AMBIENT_FACTOR) == 0 ||
-	         strcmp (entry->key, GPM_CONF_AMBIENT_SCALE) == 0 ||
 	         strcmp (entry->key, GPM_CONF_BACKLIGHT_ENABLE) == 0 ||
 	         strcmp (entry->key, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_BATT) == 0 ||
 	         strcmp (entry->key, GPM_CONF_BACKLIGHT_BATTERY_REDUCE) == 0 ||
@@ -518,7 +493,9 @@ idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *backlight)
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 
 		/* get the DPMS state we're supposed to use on the power state */
-		on_battery = dkp_client_on_battery (backlight->priv->client);
+		g_object_get (backlight->priv->client,
+			      "on-battery", &on_battery,
+			      NULL);
 		if (!on_battery)
 			dpms_method = gconf_client_get_string (backlight->priv->conf, GPM_CONF_BACKLIGHT_DPMS_METHOD_AC, NULL);
 		else
@@ -564,22 +541,6 @@ brightness_changed_cb (GpmBrightness *brightness, guint percentage, GpmBacklight
 }
 
 /**
- * brightness_changed_cb:
- * @brightness: The GpmBrightness class instance
- * @percentage: The new percentage brightness
- * @brightness: This class instance
- *
- * This callback is called when the brightness value changes.
- **/
-static void
-sensor_changed_cb (GpmLightSensor *sensor, guint percentage, GpmBacklight *backlight)
-{
-	egg_debug ("sensor changed! %i", percentage);
-	backlight->priv->ambient_sensor_value = percentage / 100.0f;
-	gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
-}
-
-/**
  * control_resume_cb:
  * @control: The control class instance
  * @power: This power class instance
@@ -615,7 +576,6 @@ gpm_backlight_finalize (GObject *object)
 
 	g_object_unref (backlight->priv->dpms);
 	g_object_unref (backlight->priv->control);
-	g_object_unref (backlight->priv->light_sensor);
 	g_object_unref (backlight->priv->feedback);
 	g_object_unref (backlight->priv->conf);
 	g_object_unref (backlight->priv->client);
@@ -659,8 +619,7 @@ gpm_backlight_class_init (GpmBacklightClass *klass)
 static void
 gpm_backlight_init (GpmBacklight *backlight)
 {
-	HalManager *hal_manager;
-	guint value;
+	gboolean lid_is_present = TRUE;
 	GpmPrefsServer *prefs_server;
 
 	backlight->priv = GPM_BACKLIGHT_GET_PRIVATE (backlight);
@@ -668,33 +627,32 @@ gpm_backlight_init (GpmBacklight *backlight)
 	/* record our idle time */
 	backlight->priv->idle_timer = g_timer_new ();
 
-	/* this has a delay.. */
-	backlight->priv->light_sensor = gpm_light_sensor_new ();
-	g_signal_connect (backlight->priv->light_sensor, "sensor-changed",
-			  G_CALLBACK (sensor_changed_cb), backlight);
-
 	/* watch for manual brightness changes (for the feedback widget) */
 	backlight->priv->brightness = gpm_brightness_new ();
 	g_signal_connect (backlight->priv->brightness, "brightness-changed",
 			  G_CALLBACK (brightness_changed_cb), backlight);
 
+	/* we use dkp_client for the ac-adapter-changed signal */
+	backlight->priv->client = dkp_client_new ();
+	g_signal_connect (backlight->priv->client, "changed",
+			  G_CALLBACK (gpm_backlight_client_changed_cb), backlight);
+
 	/* gets caps */
 	backlight->priv->can_dim = gpm_brightness_has_hw (backlight->priv->brightness);
-	backlight->priv->can_sense = gpm_light_sensor_has_hw (backlight->priv->light_sensor);
 
-	/* we use hal to see if we are a laptop */
-	hal_manager = hal_manager_new ();
-	backlight->priv->is_laptop = hal_manager_is_laptop (hal_manager);
-	g_object_unref (hal_manager);
+	/* we use DeviceKit-power to see if we should show the lid UI */
+#if DKP_CHECK_VERSION(0x009)
+	g_object_get (backlight->priv->client,
+		      "lid-is-present", &lid_is_present,
+		      NULL);
+#endif
 
 	/* expose ui in prefs program */
 	prefs_server = gpm_prefs_server_new ();
-	if (backlight->priv->is_laptop)
+	if (lid_is_present)
 		gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_LID);
 	if (backlight->priv->can_dim)
 		gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_BACKLIGHT);
-	if (backlight->priv->can_sense)
-		gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_AMBIENT);
 	g_object_unref (prefs_server);
 
 	/* watch for dim value changes */
@@ -714,11 +672,6 @@ gpm_backlight_init (GpmBacklight *backlight)
 	backlight->priv->button = gpm_button_new ();
 	g_signal_connect (backlight->priv->button, "button-pressed",
 			  G_CALLBACK (gpm_backlight_button_pressed_cb), backlight);
-
-	/* we use dkp_client for the ac-adapter-changed signal */
-	backlight->priv->client = dkp_client_new ();
-	g_signal_connect (backlight->priv->client, "changed",
-			  G_CALLBACK (gpm_backlight_client_changed_cb), backlight);
 
 	/* watch for idle mode changes */
 	backlight->priv->idle = gpm_idle_new ();
@@ -744,8 +697,6 @@ gpm_backlight_init (GpmBacklight *backlight)
 			  G_CALLBACK (control_resume_cb), backlight);
 
 	/* sync at startup */
-	gpm_light_sensor_get_absolute (backlight->priv->light_sensor, &value);
-	backlight->priv->ambient_sensor_value = value / 100.0f;
 	gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 }
 

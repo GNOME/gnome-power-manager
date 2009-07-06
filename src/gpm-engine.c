@@ -44,10 +44,6 @@ static void     gpm_engine_finalize   (GObject	  *object);
 #define GPM_ENGINE_WARN_ACCURACY	20
 #define GPM_USE_COMPOSITE		0
 
-/* Left to convert:
- * 1. Recall data
- */
-
 struct GpmEnginePrivate
 {
 	GConfClient		*conf;
@@ -569,6 +565,10 @@ gpm_engine_update_composite_device (GpmEngine *engine, DkpDevice *original_devic
 	DkpDevice *device;
 	DkpDeviceState state;
 	DkpDeviceType type;
+	gboolean debug;
+
+	/* are we printing to console? */
+	debug = egg_debug_enabled ();
 
 	/* update the composite device */
 	array = engine->priv->array;
@@ -584,8 +584,10 @@ gpm_engine_update_composite_device (GpmEngine *engine, DkpDevice *original_devic
 		if (type != DKP_DEVICE_TYPE_BATTERY)
 			continue;
 
-		egg_debug ("printing device %i", i);
-		dkp_device_print (device);
+		if (debug) {
+			egg_debug ("printing device %i", i);
+			dkp_device_print (device);
+		}
 
 		/* one of these will be charging or discharging */
 		if (state == DKP_DEVICE_STATE_CHARGING)
@@ -674,6 +676,7 @@ gpm_engine_device_add (GpmEngine *engine, DkpDevice *device)
 		      NULL);
 
 	/* add old state for transitions */
+	egg_debug ("adding %s with state %s", dkp_device_get_object_path (device), dkp_device_state_to_text (state));
 	g_object_set_data (G_OBJECT(device), "engine-state-old", GUINT_TO_POINTER(state));
 
 	if (type == DKP_DEVICE_TYPE_BATTERY) {
@@ -685,6 +688,44 @@ gpm_engine_device_add (GpmEngine *engine, DkpDevice *device)
 		g_object_get (composite, "state", &state, NULL);
 		g_object_set_data (G_OBJECT(composite), "engine-state-old", GUINT_TO_POINTER(state));
 	}
+}
+
+/**
+ * gpm_engine_check_recall:
+ **/
+static gboolean
+gpm_engine_check_recall (GpmEngine *engine, DkpDevice *device)
+{
+	DkpDeviceType type;
+	gboolean recall_notice = FALSE;
+	gchar *recall_vendor = NULL;
+	gchar *recall_url = NULL;
+
+	/* get device properties */
+	g_object_get (device,
+		      "type", &type,
+#if DKP_CHECK_VERSION(0x009)
+		      "recall-notice", &recall_notice,
+		      "recall-vendor", &recall_vendor,
+		      "recall-url", &recall_url,
+#endif
+		      NULL);
+
+	/* not battery */
+	if (type != DKP_DEVICE_TYPE_BATTERY)
+		goto out;
+
+	/* no recall data */
+	if (!recall_notice)
+		goto out;
+
+	/* emit signal for manager */
+	egg_debug ("** EMIT: perhaps-recall");
+	g_signal_emit (engine, signals [PERHAPS_RECALL], 0, device, recall_vendor, recall_url);
+out:
+	g_free (recall_vendor);
+	g_free (recall_url);
+	return recall_notice;
 }
 
 /**
@@ -740,6 +781,7 @@ gpm_engine_coldplug_idle_cb (GpmEngine *engine)
 	for (i=0;i<array->len;i++) {
 		device = g_ptr_array_index (engine->priv->array, i);
 		gpm_engine_device_add (engine, device);
+		gpm_engine_check_recall (engine, device);
 	}
 
 	/* never repeat */
@@ -754,6 +796,7 @@ gpm_engine_device_added_cb (DkpClient *client, DkpDevice *device, GpmEngine *eng
 {
 	/* add to list */
 	g_ptr_array_add (engine->priv->array, g_object_ref (device));
+	gpm_engine_check_recall (engine, device);
 
 	gpm_engine_recalculate_state (engine);
 }
@@ -772,6 +815,7 @@ gpm_engine_device_removed_cb (DkpClient *client, DkpDevice *device, GpmEngine *e
 	gpm_engine_recalculate_state (engine);
 }
 
+
 /**
  * gpm_engine_device_changed_cb:
  **/
@@ -789,6 +833,8 @@ gpm_engine_device_changed_cb (DkpClient *client, DkpDevice *device, GpmEngine *e
 		      "type", &type,
 		      "state", &state,
 		      NULL);
+
+	egg_debug ("%s state is now %s", dkp_device_get_object_path (device), dkp_device_state_to_text (state));
 
 	/* see if any interesting state changes have happened */
 	state_old = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(device), "engine-state-old"));

@@ -208,7 +208,7 @@ hal_manager_proxy_connect_more (HalManager *manager)
 
 	proxy = egg_dbus_proxy_get_proxy (manager->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		egg_warning ("proxy NULL!!");
+		g_warning ("proxy NULL!!");
 		return FALSE;
 	}
 
@@ -243,7 +243,7 @@ hal_manager_proxy_disconnect_more (HalManager *manager)
 
 	proxy = egg_dbus_proxy_get_proxy (manager->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		egg_warning ("proxy NULL!!");
+		g_warning ("proxy NULL!!");
 		return FALSE;
 	}
 
@@ -291,7 +291,7 @@ hal_manager_init (HalManager *manager)
 
 	manager->priv->connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (error) {
-		egg_warning ("%s", error->message);
+		g_warning ("%s", error->message);
 		g_error_free (error);
 	}
 
@@ -302,7 +302,7 @@ hal_manager_init (HalManager *manager)
 				       HAL_DBUS_SERVICE, HAL_DBUS_PATH_MANAGER,
 				       HAL_DBUS_INTERFACE_MANAGER);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		egg_warning ("Either HAL or DBUS are not working!");
+		g_warning ("Either HAL or DBUS are not working!");
 		exit (0);
 	}
 
@@ -313,42 +313,11 @@ hal_manager_init (HalManager *manager)
 	manager->priv->computer = hal_device_new();
 	ret = hal_device_set_udi (manager->priv->computer, HAL_ROOT_COMPUTER);
 	if (!ret) {
-		egg_warning ("failed to get Computer root object");
+		g_warning ("failed to get Computer root object");
 	}
 
 	/* blindly try to connect, assuming HAL is alive */
 	hal_manager_proxy_connect_more (manager);
-}
-
-/**
- * hal_manager_is_laptop:
- *
- * @manager: This class instance
- * Return value: TRUE is computer is identified as a laptop
- *
- * Returns true if system.formfactor is "laptop"
- **/
-gboolean
-hal_manager_is_laptop (HalManager *manager)
-{
-	gboolean ret = TRUE;
-	gchar *formfactor = NULL;
-
-	g_return_val_if_fail (HAL_IS_MANAGER (manager), FALSE);
-
-	/* always present */
-	hal_device_get_string (manager->priv->computer, "system.formfactor", &formfactor, NULL);
-	if (formfactor == NULL) {
-		/* no need to free */
-		return FALSE;
-	}
-	if (strcmp (formfactor, "laptop") != 0) {
-		egg_warning ("This machine is not identified as a laptop."
-			   "system.formfactor is %s.", formfactor);
-		ret = FALSE;
-	}
-	g_free (formfactor);
-	return ret;
 }
 
 /**

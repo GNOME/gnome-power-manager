@@ -7,6 +7,9 @@ AM_INIT_AUTOMAKE([foreign])
 AM_CONFIG_HEADER(config.h)
 AC_CONFIG_MACRO_DIR([m4])
 
+# enable nice build output on automake1.11
+m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
+
 AC_PROG_CC
 AM_PROG_CC_C_O
 
@@ -47,7 +50,7 @@ if test "$GCC" = "yes"; then
 	WARNINGFLAGS="$WARNINGFLAGS -Wignored-qualifiers"
 #	WARNINGFLAGS="$WARNINGFLAGS -Wsign-compare"
 	WARNINGFLAGS="$WARNINGFLAGS -Wtype-limits"
-	WARNINGFLAGS="$WARNINGFLAGS -Wuninitialized"
+#	WARNINGFLAGS="$WARNINGFLAGS -Wuninitialized"
 #	WARNINGFLAGS="$WARNINGFLAGS -Waggregate-return"
 	WARNINGFLAGS="$WARNINGFLAGS -Wdeclaration-after-statement"
 	WARNINGFLAGS="$WARNINGFLAGS -Wshadow"
@@ -238,24 +241,6 @@ have_checkfg=no
 if test x$enable_checkfg = xyes ; then
     have_checkfg=yes
     AC_DEFINE(HAVE_CHECK_FG, 1, [Define if we want to use check-foreground-console])
-    AC_MSG_RESULT(yes)
-else
-    AC_MSG_RESULT(no)
-fi
-
-dnl ---------------------------------------------------------------------------
-dnl - Respond to XEvents
-dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(legacy-buttons,
-              AS_HELP_STRING([--enable-legacy-buttons],
-                             [Support legacy buttons (button events from HAL)]),
-              enable_legacy_buttons=$enableval,enable_legacy_buttons=no)
-
-AC_MSG_CHECKING([whether to support legacy button events from hal])
-have_legacy_buttons=no
-if test x$enable_legacy_buttons = xyes ; then
-    have_legacy_buttons=yes
-    AC_DEFINE(HAVE_LEGACY_BUTTONS, 1, [Define if we use LEGACY_BUTTONS])
     AC_MSG_RESULT(yes)
 else
     AC_MSG_RESULT(no)
@@ -642,7 +627,6 @@ echo "
         cflags:                    ${CFLAGS}
         Building extra applets:    ${enable_applets}
         DPMS support:              ${have_dpms}
-        Legacy buttons support:    ${have_legacy_buttons}
         Self test support:         ${have_tests}
         GConf default support:     ${have_gconfdefaults}
         Docbook support:           ${enable_docbook_docs}

@@ -29,6 +29,7 @@ INCLUDES =						\
 	-DLIBDIR=\""$(libdir)"\" 			\
 	-DVERSION="\"$(VERSION)\"" 			\
 	-DGPM_DATA=\"$(pkgdatadir)\"			\
+	-DDKP_DISABLE_DEPRECATED			\
 	-DEGG_LOG_FILE=\""/tmp/gpm.log"\"		\
 	-DEGG_VERBOSE="\"GPM_VERBOSE\""			\
 	-DEGG_LOGGING="\"GPM_LOGGING\""			\
@@ -160,6 +161,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-idle.c					\
 	gpm-load.h					\
 	gpm-load.c					\
+	gpm-disks.h					\
+	gpm-disks.c					\
 	gpm-control.h					\
 	gpm-control.c					\
 	gpm-button.h					\
@@ -170,10 +173,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-brightness-hal.c				\
 	gpm-brightness-xrandr.h				\
 	gpm-brightness-xrandr.c				\
-	gpm-brightness-kbd.h				\
-	gpm-brightness-kbd.c				\
-	gpm-light-sensor.h				\
-	gpm-light-sensor.c				\
 	gpm-main.c					\
 	gpm-manager.h					\
 	gpm-manager.c					\

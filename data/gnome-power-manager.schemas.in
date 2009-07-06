@@ -2,66 +2,6 @@
   <schemalist>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/ambient/dim_policy</key>
-      <applyto>/apps/gnome-power-manager/ambient/dim_policy</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>string</type>
-      <default>none</default>
-      <locale name="C">
-        <short>Change the brightness automatically using the ambient light sensors</short>
-        <long>If the screen brightness should be changed automatically using the ambient light sensors. Valid is 'none', 'light' and 'dark'</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/ambient/poll_timeout</key>
-      <applyto>/apps/gnome-power-manager/ambient/poll_timeout</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>int</type>
-      <default>60</default>
-      <locale name="C">
-        <short>The interval the ambient light sensors should be polled</short>
-        <long>The interval the ambient light sensors should be polled in seconds.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/ambient/correction_factor</key>
-      <applyto>/apps/gnome-power-manager/ambient/correction_factor</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>int</type>
-      <default>50</default>
-      <locale name="C">
-        <short>The amount the light sensors should contribute to the brightness</short>
-        <long>The amount the light sensors should contribute to the brightness.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/ambient/correction_scale</key>
-      <applyto>/apps/gnome-power-manager/ambient/correction_scale</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>int</type>
-      <default>200</default>
-      <locale name="C">
-        <short>The calibration of the light sensors so that the screen is bright enough</short>
-        <long>The calibration of the light sensors so that the screen is bright enough, in percent.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/ambient/enable</key>
-      <applyto>/apps/gnome-power-manager/ambient/enable</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>false</default>
-      <locale name="C">
-        <short>Change the brightness automatically using the ambient light sensors</short>
-        <long>If the screen brightness should be changed automatically using the ambient light sensors.</long>
-      </locale>
-    </schema>
-
-    <schema>
       <key>/schemas/apps/gnome-power-manager/actions/sleep_type_battery</key>
       <applyto>/apps/gnome-power-manager/actions/sleep_type_battery</applyto>
       <type>string</type>
@@ -136,7 +76,7 @@
       <default>true</default>
       <locale name="C">
         <short>Allow backlight brightness adjustment</short>
-        <long>If the screen brightness can be changed when switching between AC and battery power and by ambient light sensors.</long>
+        <long>If the screen brightness should be changed when switching between AC and battery power.</long>
       </locale>
     </schema>
 
@@ -396,28 +336,6 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/keyboard/brightness_battery</key>
-      <applyto>/apps/gnome-power-manager/keyboard/brightness_battery</applyto>
-      <type>int</type>
-      <default>50</default>
-      <locale name="C">
-        <short>Keyboard brightness when on battery</short>
-        <long>The brightness of the keyboard when on battery power. Possible values are between 0 and 100.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/keyboard/brightness_ac</key>
-      <applyto>/apps/gnome-power-manager/keyboard/brightness_ac</applyto>
-      <type>int</type>
-      <default>100</default>
-      <locale name="C">
-        <short>Keyboard brightness when on AC</short>
-        <long>The brightness of the keyboard when on AC power. Possible values are between 0 and 100.</long>
-      </locale>
-    </schema>
-
-    <schema>
       <key>/schemas/apps/gnome-power-manager/lock/use_screensaver_settings</key>
       <applyto>/apps/gnome-power-manager/lock/use_screensaver_settings</applyto>
       <owner>gnome-power-manager</owner>
@@ -490,8 +408,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/lowpower/on_ac</key>
-      <applyto>/apps/gnome-power-manager/lowpower/on_ac</applyto>
+      <key>/schemas/apps/gnome-power-manager/disks/spindown_enable_ac</key>
+      <applyto>/apps/gnome-power-manager/disks/spindown_enable_ac</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
       <default>false</default>
@@ -502,26 +420,38 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/lowpower/on_ups</key>
-      <applyto>/apps/gnome-power-manager/lowpower/on_ups</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>true</default>
-      <locale name="C">
-        <short>If the low-power mode should be enabled when on UPS</short>
-        <long>If the system low-power mode should be enabled when on UPS power.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/lowpower/on_battery</key>
-      <applyto>/apps/gnome-power-manager/lowpower/on_battery</applyto>
+      <key>/schemas/apps/gnome-power-manager/disks/spindown_enable_battery</key>
+      <applyto>/apps/gnome-power-manager/disks/spindown_enable_battery</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
       <default>true</default>
       <locale name="C">
         <short>If the low-power mode should be enabled when on battery</short>
         <long>If the system low-power mode should be enabled when on laptop battery power.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/disks/spindown_timeout_ac</key>
+      <applyto>/apps/gnome-power-manager/disks/spindown_timeout_ac</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>int</type>
+      <default>600</default>
+      <locale name="C">
+        <short>Seconds of inactivity to spin down when on AC</short>
+        <long>The number of seconds of inactivity to spin down the disks when on AC power.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/disks/spindown_timeout_battery</key>
+      <applyto>/apps/gnome-power-manager/disks/spindown_timeout_battery</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>int</type>
+      <default>60</default>
+      <locale name="C">
+        <short>Seconds of inactivity to spin down when on battery</short>
+        <long>The number of seconds of inactivity to spin down the disks when on battery power.</long>
       </locale>
     </schema>
 

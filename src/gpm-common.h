@@ -26,6 +26,10 @@
 
 G_BEGIN_DECLS
 
+/* do this until we depend on DeviceKit-power 009 */
+#ifndef DKP_CHECK_VERSION
+#define DKP_CHECK_VERSION(o)	(0)
+#endif
 
 #define	GPM_DBUS_SERVICE		"org.freedesktop.PowerManagement"
 #define	GPM_DBUS_INTERFACE		"org.freedesktop.PowerManagement"
@@ -52,13 +56,6 @@ G_BEGIN_DECLS
 #define GPM_CONF_SCHEMA_ID	3
 
 #define GPM_CONF_DIR 				"/apps/gnome-power-manager"
-
-/* ambient */
-#define GPM_CONF_AMBIENT_ENABLE			GPM_CONF_DIR "/ambient/enable"
-#define GPM_CONF_AMBIENT_POLL			GPM_CONF_DIR "/ambient/poll_timeout"
-#define GPM_CONF_AMBIENT_FACTOR			GPM_CONF_DIR "/ambient/correction_factor"
-#define GPM_CONF_AMBIENT_SCALE			GPM_CONF_DIR "/ambient/correction_scale"
-#define GPM_CONF_AMBIENT_DIM_POLICY		GPM_CONF_DIR "/ambient/dim_policy"
 
 /* actions */
 #define GPM_CONF_ACTIONS_CRITICAL_UPS		GPM_CONF_DIR "/actions/critical_ups"
@@ -98,10 +95,6 @@ G_BEGIN_DECLS
 #define GPM_CONF_LAPTOP_USES_EXT_MON		GPM_CONF_DIR "/general/using_external_monitor"
 #define GPM_CONF_IGNORE_INHIBITS		GPM_CONF_DIR "/general/ignore_inhibit_requests"
 
-/* keyboard */
-#define GPM_CONF_KEYBOARD_BRIGHTNESS_AC		GPM_CONF_DIR "/keyboard/brightness_ac"
-#define GPM_CONF_KEYBOARD_BRIGHTNESS_BATT	GPM_CONF_DIR "/keyboard/brightness_battery"
-
 /* lock */
 #define GPM_CONF_LOCK_USE_SCREENSAVER		GPM_CONF_DIR "/lock/use_screensaver_settings"
 #define GPM_CONF_LOCK_ON_BLANK_SCREEN		GPM_CONF_DIR "/lock/blank_screen"
@@ -110,10 +103,11 @@ G_BEGIN_DECLS
 #define GPM_CONF_LOCK_GNOME_KEYRING_SUSPEND	GPM_CONF_DIR "/lock/gnome_keyring_suspend"
 #define GPM_CONF_LOCK_GNOME_KEYRING_HIBERNATE	GPM_CONF_DIR "/lock/gnome_keyring_hibernate"
 
-/* low power */
-#define GPM_CONF_LOWPOWER_AC			GPM_CONF_DIR "/lowpower/on_ac"
-#define GPM_CONF_LOWPOWER_BATT			GPM_CONF_DIR "/lowpower/on_battery"
-#define GPM_CONF_LOWPOWER_UPS			GPM_CONF_DIR "/lowpower/on_ups"
+/* disks */
+#define GPM_CONF_DISKS_SPINDOWN_ENABLE_AC	GPM_CONF_DIR "/disks/spindown_enable_ac"
+#define GPM_CONF_DISKS_SPINDOWN_ENABLE_BATT	GPM_CONF_DIR "/disks/spindown_enable_battery"
+#define GPM_CONF_DISKS_SPINDOWN_TIMEOUT_AC	GPM_CONF_DIR "/disks/spindown_timeout_ac"
+#define GPM_CONF_DISKS_SPINDOWN_TIMEOUT_BATT	GPM_CONF_DIR "/disks/spindown_timeout_battery"
 
 /* notify */
 #define GPM_CONF_NOTIFY_PERHAPS_RECALL		GPM_CONF_DIR "/notify/perhaps_recall"

@@ -31,16 +31,10 @@
 #include <X11/XF86keysym.h>
 #include <devkit-power-gobject/devicekit-power.h>
 
-#ifdef HAVE_LEGACY_BUTTONS
- #include <hal-manager.h>
- #include <hal-device.h>
- #include <hal-device-store.h>
-#endif
-
 #include "gpm-common.h"
 #include "gpm-button.h"
+
 #include "egg-debug.h"
-#include "gpm-marshal.h"
 
 static void     gpm_button_finalize   (GObject	      *object);
 
@@ -55,10 +49,6 @@ struct GpmButtonPrivate
 	GTimer			*timer;
 	gboolean		 lid_is_closed;
 	DkpClient		*client;
-#ifdef HAVE_LEGACY_BUTTONS
-	HalManager		*hal_manager; /* remove when input events is in the kernel */
-	HalDeviceStore		*hal_device_store;
-#endif
 };
 
 enum {
@@ -255,7 +245,7 @@ gpm_button_class_init (GpmButtonClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmButtonClass, button_pressed),
 			      NULL, NULL,
-			      gpm_marshal_VOID__STRING,
+			      g_cclosure_marshal_VOID__STRING,
 			      G_TYPE_NONE, 1, G_TYPE_STRING);
 }
 
@@ -283,240 +273,6 @@ gpm_button_reset_time (GpmButton *button)
 	return TRUE;
 }
 
-#ifdef HAVE_LEGACY_BUTTONS
-/**
- * emit_button_pressed:
- *
- * @udi: The HAL UDI
- * @details: The event details, or "" for unknown or invalid
- *				NOTE: details cannot be NULL
- *
- * Use when we want to emit a ButtonPressed event and we know the udi.
- * We can get two different types of ButtonPressed condition
- *   1. The old acpi hardware buttons
- *      udi="acpi_foo", details="";
- *      button.type="power"
- *   2. The new keyboard buttons
- *      udi="foo_Kbd_Port_logicaldev_input", details="sleep"
- *      button.type=""
- */
-static void
-emit_button_pressed (GpmButton *button, HalDevice *device, const gchar *details)
-{
-	gchar *type = NULL;
-	gboolean state;
-	const gchar *atype;
-
-	g_return_if_fail (device != NULL);
-	g_return_if_fail (details != NULL);
-
-	if (strcmp (details, "") == 0) {
-		/* no details about the event, so we get more info for type 1 buttons */
-		hal_device_get_string (device, "button.type", &type, NULL);
-		/* hal may no longer be there */
-		if (type == NULL) {
-			egg_warning ("cannot get button type for %s", hal_device_get_udi (device));
-			goto out;
-		}
-	} else {
-		type = g_strdup (details);
-	}
-	atype = type;
-
-	/* Buttons without state should default to true. */
-	state = TRUE;
-	/* we need to get the button state for lid buttons */
-	if (strcmp (type, "lid") == 0)
-		hal_device_get_bool (device, "button.state.value", &state, NULL);
-
-	/* abstact away that HAL has an extra parameter */
-	if (strcmp (type, GPM_BUTTON_LID_DEP) == 0 && state == FALSE)
-		atype = GPM_BUTTON_LID_OPEN;
-	else if (strcmp (type, GPM_BUTTON_LID_DEP) == 0 && state)
-		atype = GPM_BUTTON_LID_CLOSED;
-
-	/* filter out duplicate lid events */
-	if (strcmp (atype, GPM_BUTTON_LID_CLOSED) == 0) {
-		if (button->priv->lid_is_closed) {
-			egg_debug ("ignoring duplicate lid event");
-			return;
-		}
-		button->priv->lid_is_closed = TRUE;
-	}
-	if (strcmp (atype, GPM_BUTTON_LID_OPEN) == 0) {
-		if (button->priv->lid_is_closed == FALSE) {
-			egg_debug ("ignoring duplicate lid event");
-			return;
-		}
-		button->priv->lid_is_closed = FALSE;
-	}
-
-	/* we emit all buttons, even the ones we don't know */
-	gpm_button_emit_type (button, atype);
-out:
-	g_free (type);
-}
-
-/**
- * hal_device_property_modified_cb:
- *
- * @udi: The HAL UDI
- * @key: Property key
- * @is_added: If the key was added
- * @is_removed: If the key was removed
- *
- * Invoked when a property of a device in the Global Device List is
- * changed, and we have we have subscribed to changes for that device.
- */
-static void
-hal_device_property_modified_cb (HalDevice    *device,
-				 const gchar   *key,
-				 gboolean       is_added,
-				 gboolean       is_removed,
-				 gboolean       finally,
-				 GpmButton     *button)
-{
-	egg_debug ("key=%s, added=%i, removed=%i, finally=%i",
-		   key, is_added, is_removed, finally);
-
-	/* do not process keys that have been removed */
-	if (is_removed)
-		return;
-
-	/* only match button* values */
-	if (strncmp (key, "button", 6) == 0) {
-		egg_debug ("state of a button has changed : %s, %s", hal_device_get_udi (device), key);
-		emit_button_pressed (button, device, "");
-	}
-}
-
-/**
- * hal_device_condition_cb:
- *
- * @udi: Univerisal Device Id
- * @name: Name of condition
- * @details: D-BUS message with parameters
- *
- * Invoked when a property of a device in the Global Device List is
- * changed, and we have we have subscribed to changes for that device.
- */
-static void
-hal_device_condition_cb (HalDevice    *device,
-			 const gchar   *condition,
-			 const gchar   *details,
-			 GpmButton     *button)
-{
-	egg_debug ("condition=%s, details=%s", condition, details);
-
-	if (strcmp (condition, "ButtonPressed") == 0)
-		emit_button_pressed (button, device, details);
-}
-
-/**
- * watch_add_button:
- *
- * @udi: The HAL UDI
- */
-static void
-watch_add_button (GpmButton *button,
-		  const gchar   *udi)
-{
-	HalDevice *device;
-
-	device = hal_device_new ();
-	hal_device_set_udi (device, udi);
-	hal_device_watch_condition (device);
-	hal_device_watch_property_modified (device);
-
-	g_signal_connect (device, "property-modified",
-			  G_CALLBACK (hal_device_property_modified_cb), button);
-	g_signal_connect (device, "device-condition",
-			  G_CALLBACK (hal_device_condition_cb), button);
-
-	/* when added to the device_store, devices are automatically unref'ed */
-	hal_device_store_insert (button->priv->hal_device_store, device);
-}
-
-/**
- * coldplug_buttons:
- **/
-static void
-coldplug_buttons (GpmButton *button)
-{
-	int i;
-	char **device_names = NULL;
-	gboolean ret;
-	GError *error = NULL;
-
-	/* devices of type button */
-	ret = hal_manager_find_capability (button->priv->hal_manager, "button", &device_names, &error);
-	if (!ret) {
-		egg_warning ("Couldn't obtain list of buttons: %s", error->message);
-		g_error_free (error);
-		return;
-	}
-	if (device_names[0] != NULL) {
-		/* we have found buttons */
-		for (i = 0; device_names[i]; i++) {
-			watch_add_button (button, device_names[i]);
-			egg_debug ("Watching %s", device_names[i]);
-		}
-	} else {
-		egg_debug ("Couldn't obtain list of buttons");
-	}
-
-	g_strfreev (device_names);
-}
-
-/**
- * hal_daemon_start_cb:
- **/
-static void
-hal_daemon_start_cb (HalManager *hal_manager,
-		     GpmButton   *button)
-{
-	/* get new devices, hal has come back up */
-	if (button->priv->hal_device_store == NULL) {
-		button->priv->hal_device_store = hal_device_store_new ();
-		coldplug_buttons (button);
-	}
-}
-
-/**
- * hal_daemon_stop_cb:
- **/
-static void
-hal_daemon_stop_cb (HalManager *hal_manager,
-		    GpmButton   *button)
-{
-	/* clear devices, HAL is going down */
-	if (button->priv->hal_device_store != NULL) {
-		g_object_unref (button->priv->hal_device_store);
-		button->priv->hal_device_store = NULL;
-	}
-}
-
-/**
- * hal_daemon_new_device_cb
- **/
-static void
-hal_daemon_new_device_cb (HalManager *hal_manager, const gchar *udi, GpmButton *button)
-
-{
-	gboolean is_button;
-	HalDevice *device;
-
-	device = hal_device_new ();
-	hal_device_set_udi (device, udi);
-	hal_device_query_capability (device, "button", &is_button, NULL);
-	if (is_button == TRUE) {
-		egg_debug ("Watching %s", udi);
-		watch_add_button (button, udi);
-	}
-	g_object_unref (device);
-}
-#endif
-
 /**
  * gpm_button_client_changed_cb
  **/
@@ -526,7 +282,9 @@ gpm_button_client_changed_cb (DkpClient *client, GpmButton *button)
 	gboolean lid_is_closed;
 
 	/* get new state */
-	lid_is_closed = dkp_client_lid_is_closed (client);
+	g_object_get (client,
+		      "lid-is-closed", &lid_is_closed,
+		      NULL);
 
 	/* same state */
 	if (button->priv->lid_is_closed == lid_is_closed)
@@ -585,20 +343,6 @@ gpm_button_init (GpmButton *button)
 	/* use global filter */
 	gdk_window_add_filter (button->priv->window,
 			       gpm_button_filter_x_events, (gpointer) button);
-
-#ifdef HAVE_LEGACY_BUTTONS
-	/* remove when button support is out of HAL */
-	button->priv->hal_manager = hal_manager_new ();
-	g_signal_connect (button->priv->hal_manager, "daemon-start",
-			  G_CALLBACK (hal_daemon_start_cb), button);
-	g_signal_connect (button->priv->hal_manager, "daemon-stop",
-			  G_CALLBACK (hal_daemon_stop_cb), button);
-	g_signal_connect (button->priv->hal_manager, "device-added",
-			  G_CALLBACK (hal_daemon_new_device_cb), button);
-	button->priv->hal_device_store = hal_device_store_new ();
-
-	coldplug_buttons (button);
-#endif
 }
 
 /**
@@ -616,10 +360,6 @@ gpm_button_finalize (GObject *object)
 	button->priv = GPM_BUTTON_GET_PRIVATE (button);
 
 	g_object_unref (button->priv->client);
-#ifdef HAVE_LEGACY_BUTTONS
-	g_object_unref (button->priv->hal_manager);
-	g_object_unref (button->priv->hal_device_store);
-#endif
 	g_free (button->priv->last_button);
 	g_timer_destroy (button->priv->timer);
 
