@@ -43,11 +43,6 @@
 #include <gconf/gconf-client.h>
 #include <devkit-power-gobject/devicekit-power.h>
 
-#ifdef HAVE_POLKIT
-#include <polkit/polkit.h>
-#include <polkit-dbus/polkit-dbus.h>
-#endif
-
 #include "egg-debug.h"
 #include "egg-console-kit.h"
 
@@ -88,29 +83,6 @@ gpm_control_error_quark (void)
 	if (!quark)
 		quark = g_quark_from_static_string ("gpm_control_error");
 	return quark;
-}
-
-/**
- * gpm_control_is_user_privileged:
- * @polkit: This polkit class instance
- * Return value: Success value.
- **/
-static gboolean
-gpm_control_is_user_privileged (GpmControl *control, const gchar *privilege)
-{
-	gboolean ret = TRUE;
-#ifdef HAVE_POLKIT
-	polkit_uint64_t mask;
-	pid_t pid;
-
-	pid = getpid ();
-	mask = polkit_check_auth (pid, privilege, NULL);
-	if (mask == 0) {
-		egg_warning ("failed to authorise for privilege %s", privilege);
-		ret = FALSE;
-	}
-#endif
-	return ret;
 }
 
 /**
@@ -158,7 +130,6 @@ gboolean
 gpm_control_allowed_suspend (GpmControl *control, gboolean *can, GError **error)
 {
 	gboolean conf_ok;
-	gboolean polkit_ok;
 	gboolean hardware_ok;
 	gboolean fg;
 	g_return_val_if_fail (can, FALSE);
@@ -171,11 +142,13 @@ gpm_control_allowed_suspend (GpmControl *control, gboolean *can, GError **error)
 		      NULL);
 
 	conf_ok = gconf_client_get_bool (control->priv->conf, GPM_CONF_CAN_SUSPEND, NULL);
-	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.devicekit.power.suspend");
+	g_object_get (control->priv->client,
+		      "can-suspend", &hardware_ok,
+		      NULL);
 	fg = gpm_control_check_foreground_console (control);
-	if (conf_ok && hardware_ok && polkit_ok && fg)
+	if (conf_ok && hardware_ok && fg)
 		*can = TRUE;
-	egg_debug ("conf=%i, polkit=%i, fg=%i, can=%i", conf_ok, polkit_ok, fg, *can);
+	egg_debug ("conf=%i, fg=%i, can=%i", conf_ok, fg, *can);
 	return TRUE;
 }
 
@@ -191,7 +164,6 @@ gboolean
 gpm_control_allowed_hibernate (GpmControl *control, gboolean *can, GError **error)
 {
 	gboolean conf_ok;
-	gboolean polkit_ok;
 	gboolean hardware_ok;
 	gboolean fg;
 	g_return_val_if_fail (can, FALSE);
@@ -204,10 +176,12 @@ gpm_control_allowed_hibernate (GpmControl *control, gboolean *can, GError **erro
 	*can = FALSE;
 	conf_ok = gconf_client_get_bool (control->priv->conf, GPM_CONF_CAN_HIBERNATE, NULL);
 	fg = gpm_control_check_foreground_console (control);
-	polkit_ok = gpm_control_is_user_privileged (control, "org.freedesktop.devicekit.power.hibernate");
-	if (conf_ok && hardware_ok && polkit_ok && fg)
+	g_object_get (control->priv->client,
+		      "can-hibernate", &hardware_ok,
+		      NULL);
+	if (conf_ok && hardware_ok && fg)
 		*can = TRUE;
-	egg_debug ("conf=%i, polkit=%i, fg=%i, can=%i", conf_ok, polkit_ok, fg, *can);
+	egg_debug ("conf=%i, fg=%i, can=%i", conf_ok, fg, *can);
 	return TRUE;
 }
 
