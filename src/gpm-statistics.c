@@ -593,6 +593,12 @@ gpm_stats_update_info_page_history (DkpDevice *device)
 			point->color = egg_color_from_rgb (255, 0, 0);
 		else if (hobj->state == DKP_DEVICE_STATE_DISCHARGING)
 			point->color = egg_color_from_rgb (0, 0, 255);
+#if DKP_CHECK_VERSION(0x009)
+		else if (hobj->state == DKP_DEVICE_STATE_PENDING_CHARGE)
+			point->color = egg_color_from_rgb (200, 0, 0);
+		else if (hobj->state == DKP_DEVICE_STATE_PENDING_DISCHARGE)
+			point->color = egg_color_from_rgb (0, 0, 200);
+#endif
 		else {
 			if (strcmp (history_type, GPM_HISTORY_RATE_VALUE) == 0)
 				point->color = egg_color_from_rgb (255, 255, 255);

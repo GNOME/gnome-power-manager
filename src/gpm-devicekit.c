@@ -306,6 +306,19 @@ gpm_devicekit_get_object_summary (DkpDevice *device)
 						type_desc, percentage);
 		}
 
+#if DKP_CHECK_VERSION(0x009)
+	} else if (state == DKP_DEVICE_STATE_PENDING_DISCHARGE) {
+
+		/* TRANSLATORS: this is only shown for laptops with multiple batteries */
+		description = g_strdup_printf (_("%s waiting to discharge (%.1f%%)"),
+						type_desc, percentage);
+
+	} else if (state == DKP_DEVICE_STATE_PENDING_CHARGE) {
+
+		/* TRANSLATORS: this is only shown for laptops with multiple batteries */
+		description = g_strdup_printf (_("%s waiting to charge (%.1f%%)"), type_desc, percentage);
+#endif
+
 	} else {
 		egg_warning ("in an undefined state we are not charging or "
 			     "discharging and the batteries are also not charged");
