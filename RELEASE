@@ -1,12 +1,13 @@
 Follow http://developer.gnome.org/dotplan/for_maintainers.html
 
 • update configure.in, NEWS
-• Add translators to NEWS: maintainer.py -w -r GNOME_POWER_MANAGER_2_27_1
- or git shortlog GNOME_POWER_MANAGER_2_27_1.. | grep -i -v trivial | grep -v Merge > NEWS.new
+• Add translators to NEWS: maintainer.py -w -r GNOME_POWER_MANAGER_2_27_2
+ or git shortlog GNOME_POWER_MANAGER_2_27_2.. | grep -i -v trivial | grep -v Merge > NEWS.new
 • Run "make distcheck", correct any problems encountered
 • Commit all the changes and create a tag:
 
-git tag -s GNOME_POWER_MANAGER_2_27_2 -m "==== Version 2.27.2 ===="
+git commit -a -m "GNOME Power Manager 2.27.3"
+git tag -s GNOME_POWER_MANAGER_2_27_3 -m "==== Version 2.27.3 ===="
 git push --tags
 git push
 
@@ -30,5 +31,3 @@ git push
 GNOME Power Manager is a session daemon that makes it easy to manage the
 power on your laptop or desktop system.
 
-This stable release contains important fixes since 2.26.0 was released.
-Distributions should consider upgrading gnome-power-manager via errata packages if possible.
