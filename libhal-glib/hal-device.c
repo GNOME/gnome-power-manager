@@ -65,8 +65,6 @@ enum {
 	LAST_SIGNAL
 };
 
-static guint	     signals [LAST_SIGNAL] = { 0 };
-
 G_DEFINE_TYPE (HalDevice, hal_device, G_TYPE_OBJECT)
 
 /**
