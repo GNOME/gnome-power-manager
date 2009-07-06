@@ -164,6 +164,15 @@ gpm_devicekit_get_object_icon (DkpDevice *device)
 				index_str = gpm_devicekit_get_object_icon_index (device);
 				filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index_str);
 			}
+#else
+		} else if (state == DKP_DEVICE_STATE_PENDING_CHARGE) {
+			index_str = gpm_devicekit_get_object_icon_index (device);
+			/* FIXME: do new grey icons */
+			filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index_str);
+
+		} else if (state == DKP_DEVICE_STATE_PENDING_DISCHARGE) {
+			index_str = gpm_devicekit_get_object_icon_index (device);
+			filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 #endif
 		}
 
