@@ -1,4 +1,49 @@
 ==============
+Version 2.27.2
+==============
+
+Translations:
+ - Updated Estonian translation (Ivar Smolin)
+ - Updated Spanish translation (Jorge Gonzalez)
+ - Updated Norwegian bokmål translation (Kjartan Maraas)
+ - Updated Estonian translation (Mattias Põldaru)
+ - Updated Estonian translation (Priit Laes)
+ - Updated Bengali India Translation (Runa Bhattacharjee)
+ - Updated Tamil translation (drtvasudevan)
+
+Features:
+ - Enable pretty compiler output with new automake versions (Richard Hughes)
+ - Use composite battery mode by default to fix multi-battery laptops (Richard Hughes)
+ - Add manager policy to change the disk spindown based on timeouts set in GConf (Richard Hughes)
+ - Add GConf keys for the disk spindown functionality (Richard Hughes)
+ - Add preferences checkboxes for the disk spindown functionality (Richard Hughes)
+ - No longer support HAL legacy buttons (Richard Hughes)
+ - Add support for recall data provided by DeviceKit-power (Richard Hughes)
+
+Bugfixes:
+ - Prefix GTKBuilder files with gettext/glade (Claude Paroz)
+ - Use gtk_show_uri i.s.o. gnome-open (Jaap A. Haitsma)
+ - Remove -Wunitialized because it does not compile on Ubuntu Jaunty (Jaap A. Haitsma)
+ - Fix the category in the gnome-power-statistic desktop file. Fixes rh#489041 (Richard Hughes)
+ - Make minimum size of th statistics graphs smaller. Fixes rh#491426 (Richard Hughes)
+ - Don't show the feedback widget when the brightness changes, only on key press and when interactive (Richard Hughes)
+ - If we caught our idletime alarm, then remove from the filter (Richard Hughes)
+ - Take the battery capacity into account when using multiple batteries (Richard Hughes)
+ - Ignore capacity readings of less than 1% (Richard Hughes)
+ - Show a label to the user when there is no graph data (Richard Hughes)
+ - Add statistics devices in visually pleasing order (Richard Hughes)
+ - Use the composite device for getting the global system warning icon (Richard Hughes)
+ - Setup the reset event before we do the idle action, to finally fix blanking (Richard Hughes)
+ - Be more paranoid about setting idle in a race (Richard Hughes)
+ - Remove three unused GConf keys (Richard Hughes)
+ - Don't show the whole object path in the GUI, just show the ID (Richard Hughes)
+ - Only print the DeviceKit device if we are using --verbose (Richard Hughes)
+ - Remove a little bit more of our HAL dep, and use the lid-is-present DK-p property (Richard Hughes)
+ - Fix compile with DKP_DISABLE_DEPRECATED turned on (Richard Hughes)
+ - Remove ambient light sensor support, and keyboard backlight devices (Richard Hughes)
+ - Support DKP_DEVICE_STATE_PENDING_x in more places (Richard Hughes)
+
+==============
 Version 2.27.1
 ==============
 
