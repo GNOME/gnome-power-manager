@@ -1,6 +1,6 @@
 AC_PREREQ(2.60)
 
-AC_INIT(gnome-power-manager, 2.26.3)
+AC_INIT(gnome-power-manager, 2.26.4)
 AC_CONFIG_SRCDIR(src)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AM_CONFIG_HEADER(config.h)
