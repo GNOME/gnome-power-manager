@@ -332,8 +332,8 @@ msgid ""
 "If the screen brightness should be changed when switching between AC and "
 "battery power."
 msgstr ""
-"Geeft aan of de helderheid van het scherm kan worden gewijzigd wanneer er "
-"gewisseld wordt tussen netstroom en accustroom en door de lichtsensoren."
+"Geeft aan of de helderheid van het scherm moet worden gewijzigd wanneer er "
+"gewisseld wordt tussen netstroom en accustroom."
 
 #: ../data/gnome-power-manager.schemas.in.h:28
 msgid ""
@@ -995,6 +995,8 @@ msgstr "Details"
 msgid "Graph type:"
 msgstr "Type grafiek:"
 
+# vrij vertaald (Wouter Bolsterlee)
+# andere vertaling: Gebruik (cpu-gebruik, netwerk-gebruik geheugengebruik)Tino
 #: ../data/gpm-statistics.ui.h:5
 msgid "History"
 msgstr "Geschiedenis"
@@ -1228,8 +1230,6 @@ msgstr "%s aan het opladen (%.1f%%)"
 msgid "%s waiting to discharge (%.1f%%)"
 msgstr "%s wacht op ontladen (%.1f%%)"
 
-#. TRANSLATORS: this is only shown for laptops with multiple batteries
-#: ../src/gpm-devicekit.c:319
 #, c-format
 #| msgid "%s %s until charged (%.1f%%)"
 msgid "%s waiting to charge (%.1f%%)"
@@ -2395,6 +2395,9 @@ msgstr "_Pauzestand"
 msgid "Hi_bernate"
 msgstr "_Slaapstand"
 
+#~ msgid "Change the brightness automatically using the ambient light sensors"
+#~ msgstr "De helderheid automatisch wijzigen met behulp van de lichtsensoren"
+
 #~ msgid "If the low-power mode should be enabled when on UPS"
 #~ msgstr ""
 #~ "Geeft aan of de lage-stroom-modus ingeschakeld moet zijn tijdens UPS-"
@@ -2505,6 +2508,9 @@ msgstr "_Slaapstand"
 #~ msgid "Use _sound to notify in event of an error"
 #~ msgstr "Geluid af_spelen om te attenderen op een gebeurtenis of een fout"
 
+#~ msgid "Power Manager for the GNOME desktop"
+#~ msgstr "Energiebeheer voor de Gnome-werkomgeving"
+
 #~ msgid "%s has stopped the suspend from taking place: %s."
 #~ msgstr "%s heeft verhinderd dat de pauzestand kon worden ingeschakeld: %s"
 
@@ -2558,3 +2564,46 @@ msgstr "_Slaapstand"
 
 #~ msgid "Request to do timeout action"
 #~ msgstr "Verzoek tot uitvoeren tijdslimiet-actie"
+
+#~ msgid "Perform action anyway"
+#~ msgstr "Actie toch uitvoeren"
+
+#~ msgid ""
+#~ "After resume, gnome-power-manager will suppress policy actions for a "
+#~ "number of seconds to allow messages to settle and HAL to refresh. "
+#~ "Commonly five seconds is enough while not being so long that the user "
+#~ "gets confused."
+#~ msgstr ""
+#~ "Na de slaapstand zal gnome-power-manager een aantal acties verhinderen "
+#~ "voor enkele seconden, zodat berichten verwerkt kunnen worden en HAL "
+#~ "zichzelf kan verversen. Doorgaans is vijf seconden voldoende (zonder dat "
+#~ "de gebruiker er last van heeft)."
+
+#~ msgid "If extra debugging messages should be used"
+#~ msgstr ""
+#~ "Geeft aan of debugging-meldingen (voor foutopsporing) gebruikt moeten "
+#~ "worden"
+
+#~ msgid ""
+#~ "If extra debugging messages should be used. Only turn this on for "
+#~ "debugging."
+#~ msgstr ""
+#~ "Geeft aan of debugging-berichten moeten worden gebruikt. Schakel dit "
+#~ "alleen in bij foutopsporing."
+
+#~ msgid "Number of seconds to suppress policy after resume"
+#~ msgstr "Aantal seconden dat acties verhinderd worden na de slaapstand"
+
+#~ msgid "The invalid timeout for power actions"
+#~ msgstr "De wachttijd voor energiebeheeracties"
+
+#~ msgid ""
+#~ "The invalid timeout in ms for power actions. Set this longer if you get "
+#~ "'battery critical' messages when you unplug."
+#~ msgstr ""
+#~ "De wachttijd in milliseconden voor energiebeheeracties. Zet deze op een "
+#~ "hogere wachttijd als u meldingen krijgt dat de accu bijna leeg is als u "
+#~ "de laptop loskoppelt van de netstroom."
+
+#~ msgid "Device state could not be read at this time"
+#~ msgstr "Accustatus kan momenteel niet worden gelezen"
