@@ -7,7 +7,7 @@
 # Tino Meinen <tino.meinen@gmail.com>, 2005, 2006, 2009.
 # Wouter Bolsterlee <wbolster@gnome.org>, 2006–2009.
 # Rinse de Vries <rinsedevries@kde.nl>, 2007.
-# Reinout van Schouwen <reinouts@gnome.org>, 2008
+# Reinout van Schouwen <reinouts@gnome.org>, 2008, 2009
 #
 #
 # AC             - netstroom
@@ -23,8 +23,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&component=general\n"
 "POT-Creation-Date: 2009-07-06 15:16+0000\n"
-"PO-Revision-Date: 2009-04-18 04:10+0800\n"
-"Last-Translator: Tino Meinen <tino.meinen@gmail.com>\n"
+"PO-Revision-Date: 2009-07-09 13:09+0100\n"
+"Last-Translator: Reinout van Schouwen <reinouts@gnome.org>\n"
 "Language-Team: Nederlands <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -328,10 +328,6 @@ msgstr ""
 "Geeft aan of de lage-stroom-modus ingeschakeld moet zijn tijdens accu-gebruik"
 
 #: ../data/gnome-power-manager.schemas.in.h:27
-#, fuzzy
-#| msgid ""
-#| "If the screen brightness can be changed when switching between AC and "
-#| "battery power and by ambient light sensors."
 msgid ""
 "If the screen brightness should be changed when switching between AC and "
 "battery power."
@@ -535,27 +531,27 @@ msgstr "Achtergrondverlichting dimmen wanneer de computer op accustroom werkt"
 
 #: ../data/gnome-power-manager.schemas.in.h:63
 msgid "Seconds of inactivity to spin down when on AC"
-msgstr ""
+msgstr "Aantal seconden van inactiviteit vóór stilzetten wanneer op netstroom"
 
 #: ../data/gnome-power-manager.schemas.in.h:64
 msgid "Seconds of inactivity to spin down when on battery"
-msgstr ""
+msgstr "Aantal seconden van inactiviteit vóór stilzetten wanneer op accustroom"
 
 #: ../data/gnome-power-manager.schemas.in.h:65
 msgid "Sleep timeout computer when on AC"
-msgstr "Timeout voor de slaapstand wanneer netstroom gebruikt wordt"
+msgstr "Wachttijd voor de slaapstand wanneer netstroom gebruikt wordt"
 
 #: ../data/gnome-power-manager.schemas.in.h:66
 msgid "Sleep timeout computer when on battery"
-msgstr "Timeout voor de slaapstand wanneer de accu gebruikt wordt"
+msgstr "Wachttijd voor de slaapstand wanneer de accu gebruikt wordt"
 
 #: ../data/gnome-power-manager.schemas.in.h:67
 msgid "Sleep timeout display when on AC"
-msgstr "Timeout voor het scherm wanneer netstroom gebruikt wordt"
+msgstr "Slaapstand-wachttijd voor het scherm wanneer netstroom gebruikt wordt"
 
 #: ../data/gnome-power-manager.schemas.in.h:68
 msgid "Sleep timeout display when on battery"
-msgstr "Timeout voor het scherm wanneer de accu gebruikt wordt"
+msgstr "Slaapstand-wachttijd voor het scherm wanneer de accu gebruikt wordt"
 
 #: ../data/gnome-power-manager.schemas.in.h:69
 msgid "Suspend button action"
@@ -735,21 +731,17 @@ msgid "The maximum time displayed on the graph"
 msgstr "De maximale tijd die in de grafiek wordt getoond"
 
 #: ../data/gnome-power-manager.schemas.in.h:95
-#, fuzzy
-#| msgid "Dim the screen after a period of inactivity when on AC power"
 msgid ""
 "The number of seconds of inactivity to spin down the disks when on AC power."
 msgstr ""
-"Het scherm na een periode van inactiviteit dimmen wanneer aan netstroom"
+"Het aantal seconden van inactiviteit alvorens de schijven stil te zetten wanneer aan netstroom."
 
 #: ../data/gnome-power-manager.schemas.in.h:96
-#, fuzzy
-#| msgid "Dim the screen after a period of inactivity when on battery power"
 msgid ""
 "The number of seconds of inactivity to spin down the disks when on battery "
 "power."
 msgstr ""
-"Het scherm na een periode van inactiviteit dimmen wanneer aan accustroom"
+"Het aantal seconden van inactiviteit alvorens de schijven stil te zetten wanneer aan accustroom."
 
 #: ../data/gnome-power-manager.schemas.in.h:97
 msgid ""
@@ -1003,8 +995,6 @@ msgstr "Details"
 msgid "Graph type:"
 msgstr "Type grafiek:"
 
-# vrij vertaald (Wouter Bolsterlee)
-# andere vertaling: Gebruik (cpu-gebruik, netwerk-gebruik geheugengebruik)Tino
 #: ../data/gpm-statistics.ui.h:5
 msgid "History"
 msgstr "Geschiedenis"
@@ -1024,7 +1014,7 @@ msgstr "Statistieken"
 
 #: ../data/gpm-statistics.ui.h:10
 msgid "There is no data to display."
-msgstr ""
+msgstr "Er zijn geen gegevens om te tonen."
 
 #: ../data/gpm-statistics.ui.h:11
 msgid "Use smoothed line"
@@ -1233,17 +1223,17 @@ msgstr "%s aan het opladen (%.1f%%)"
 
 #. TRANSLATORS: this is only shown for laptops with multiple batteries
 #: ../src/gpm-devicekit.c:313
-#, fuzzy, c-format
+#, c-format
 #| msgid "%s discharging (%.1f%%)"
 msgid "%s waiting to discharge (%.1f%%)"
-msgstr "%s ontladen (%.1f%%)"
+msgstr "%s wacht op ontladen (%.1f%%)"
 
 #. TRANSLATORS: this is only shown for laptops with multiple batteries
 #: ../src/gpm-devicekit.c:319
-#, fuzzy, c-format
+#, c-format
 #| msgid "%s %s until charged (%.1f%%)"
 msgid "%s waiting to charge (%.1f%%)"
-msgstr "%s %s tot opgeladen (%.1f%%)"
+msgstr "%s wacht op opladen (%.1f%%)"
 
 #: ../src/gpm-devicekit.c:378
 #, c-format
@@ -1839,13 +1829,11 @@ msgid ""
 msgstr "De UPS is bijna leeg. Deze computer zal zo worden afgesloten."
 
 #: ../src/gpm-manager.c:1424
-#, fuzzy
 #| msgid "The lid has been closed on ac power."
 msgid "The lid has been found closed on ac power."
 msgstr "Het scherm is gesloten tijdens netstroomgebruik."
 
 #: ../src/gpm-manager.c:1430
-#, fuzzy
 #| msgid "The lid has been closed on battery power."
 msgid "The lid has been found closed on battery power."
 msgstr "Het scherm is gesloten tijdens accustroomgebruik."
@@ -1921,20 +1909,18 @@ msgstr ""
 "als het scherm wordt gesloten."
 
 #: ../src/gpm-notify.c:384
-#, fuzzy
 #| msgid "Battery Charged"
 msgid "Battery Charged"
 msgid_plural "Batteries Charged"
 msgstr[0] "Accu opgeladen"
-msgstr[1] "Accu opgeladen"
+msgstr[1] "Accu's opgeladen"
 
 #: ../src/gpm-notify.c:385
-#, fuzzy
 #| msgid "Your laptop battery is now fully charged"
 msgid "Your laptop battery is now fully charged"
 msgid_plural "Your laptop batteries are now fully charged"
-msgstr[0] "De accu is nu volledig opgeladen"
-msgstr[1] "De accu is nu volledig opgeladen"
+msgstr[0] "De accu van uw draagbare computer is nu volledig opgeladen"
+msgstr[1] "De accu's van uw draagbare computer zijn nu volledig opgeladen"
 
 #: ../src/gpm-notify.c:412
 msgid "Battery Discharging"
@@ -2409,9 +2395,6 @@ msgstr "_Pauzestand"
 msgid "Hi_bernate"
 msgstr "_Slaapstand"
 
-#~ msgid "Change the brightness automatically using the ambient light sensors"
-#~ msgstr "De helderheid automatisch wijzigen met behulp van de lichtsensoren"
-
 #~ msgid "If the low-power mode should be enabled when on UPS"
 #~ msgstr ""
 #~ "Geeft aan of de lage-stroom-modus ingeschakeld moet zijn tijdens UPS-"
@@ -2522,9 +2505,6 @@ msgstr "_Slaapstand"
 #~ msgid "Use _sound to notify in event of an error"
 #~ msgstr "Geluid af_spelen om te attenderen op een gebeurtenis of een fout"
 
-#~ msgid "Power Manager for the GNOME desktop"
-#~ msgstr "Energiebeheer voor de Gnome-werkomgeving"
-
 #~ msgid "%s has stopped the suspend from taking place: %s."
 #~ msgstr "%s heeft verhinderd dat de pauzestand kon worden ingeschakeld: %s"
 
@@ -2578,46 +2558,3 @@ msgstr "_Slaapstand"
 
 #~ msgid "Request to do timeout action"
 #~ msgstr "Verzoek tot uitvoeren tijdslimiet-actie"
-
-#~ msgid "Perform action anyway"
-#~ msgstr "Actie toch uitvoeren"
-
-#~ msgid ""
-#~ "After resume, gnome-power-manager will suppress policy actions for a "
-#~ "number of seconds to allow messages to settle and HAL to refresh. "
-#~ "Commonly five seconds is enough while not being so long that the user "
-#~ "gets confused."
-#~ msgstr ""
-#~ "Na de slaapstand zal gnome-power-manager een aantal acties verhinderen "
-#~ "voor enkele seconden, zodat berichten verwerkt kunnen worden en HAL "
-#~ "zichzelf kan verversen. Doorgaans is vijf seconden voldoende (zonder dat "
-#~ "de gebruiker er last van heeft)."
-
-#~ msgid "If extra debugging messages should be used"
-#~ msgstr ""
-#~ "Geeft aan of debugging-meldingen (voor foutopsporing) gebruikt moeten "
-#~ "worden"
-
-#~ msgid ""
-#~ "If extra debugging messages should be used. Only turn this on for "
-#~ "debugging."
-#~ msgstr ""
-#~ "Geeft aan of debugging-berichten moeten worden gebruikt. Schakel dit "
-#~ "alleen in bij foutopsporing."
-
-#~ msgid "Number of seconds to suppress policy after resume"
-#~ msgstr "Aantal seconden dat acties verhinderd worden na de slaapstand"
-
-#~ msgid "The invalid timeout for power actions"
-#~ msgstr "De wachttijd voor energiebeheeracties"
-
-#~ msgid ""
-#~ "The invalid timeout in ms for power actions. Set this longer if you get "
-#~ "'battery critical' messages when you unplug."
-#~ msgstr ""
-#~ "De wachttijd in milliseconden voor energiebeheeracties. Zet deze op een "
-#~ "hogere wachttijd als u meldingen krijgt dat de accu bijna leeg is als u "
-#~ "de laptop loskoppelt van de netstroom."
-
-#~ msgid "Device state could not be read at this time"
-#~ msgstr "Accustatus kan momenteel niet worden gelezen"
