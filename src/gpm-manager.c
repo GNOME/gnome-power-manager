@@ -1025,7 +1025,7 @@ static void
 gpm_engine_fully_charged_cb (GpmEngine *engine, DkpDevice *device, GpmManager *manager)
 {
 	DkpDeviceType type;
-	gchar *native_path;
+	gchar *native_path = NULL;
 	gboolean ret;
 	guint plural = 1;
 
@@ -1033,7 +1033,7 @@ gpm_engine_fully_charged_cb (GpmEngine *engine, DkpDevice *device, GpmManager *m
 	ret = gconf_client_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_FULLY_CHARGED, NULL);
 	if (!ret) {
 		egg_debug ("no notification");
-		return;
+		goto out;
 	}
 
 	/* get device properties */
@@ -1048,6 +1048,7 @@ gpm_engine_fully_charged_cb (GpmEngine *engine, DkpDevice *device, GpmManager *m
 			plural = 2;
 		gpm_notify_fully_charged_primary (manager->priv->notify, plural);
 	}
+out:
 	g_free (native_path);
 }
 
