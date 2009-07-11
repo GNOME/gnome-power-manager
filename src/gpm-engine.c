@@ -1104,7 +1104,7 @@ gpm_engine_class_init (GpmEngineClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmEngineClass, fully_charged),
-			      NULL, NULL, g_cclosure_marshal_VOID__UINT,
+			      NULL, NULL, g_cclosure_marshal_VOID__POINTER,
 			      G_TYPE_NONE, 1, G_TYPE_POINTER);
 	signals [DISCHARGING] =
 		g_signal_new ("discharging",
