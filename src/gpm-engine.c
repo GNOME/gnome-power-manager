@@ -831,6 +831,14 @@ gpm_engine_device_changed_cb (DkpClient *client, DkpDevice *device, GpmEngine *e
 	/* get device properties */
 	g_object_get (device,
 		      "type", &type,
+		      NULL);
+
+	/* if battery then use composite device to cope with multiple batteries */
+	if (type == DKP_DEVICE_TYPE_BATTERY)
+		device = gpm_engine_update_composite_device (engine, device);
+
+	/* get device properties */
+	g_object_get (device,
 		      "state", &state,
 		      NULL);
 
@@ -850,10 +858,6 @@ gpm_engine_device_changed_cb (DkpClient *client, DkpDevice *device, GpmEngine *e
 		/* save new state */
 		g_object_set_data (G_OBJECT(device), "engine-state-old", GUINT_TO_POINTER(state));
 	}
-
-	/* if battery then use composite device to cope with multiple batteries */
-	if (type == DKP_DEVICE_TYPE_BATTERY)
-		device = gpm_engine_update_composite_device (engine, device);
 
 	/* check the warning state has not changed */
 	warning_old = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(device), "engine-warning-old"));
