@@ -560,7 +560,7 @@ gpm_engine_update_composite_device (GpmEngine *engine, DkpDevice *original_devic
 	guint battery_devices = 0;
 	gboolean is_charging = FALSE;
 	gboolean is_discharging = FALSE;
-	gboolean is_fully_charged = FALSE;
+	gboolean is_fully_charged = TRUE;
 	GPtrArray *array;
 	DkpDevice *device;
 	DkpDeviceState state;
@@ -594,8 +594,8 @@ gpm_engine_update_composite_device (GpmEngine *engine, DkpDevice *original_devic
 			is_charging = TRUE;
 		if (state == DKP_DEVICE_STATE_DISCHARGING)
 			is_discharging = TRUE;
-		if (state == DKP_DEVICE_STATE_FULLY_CHARGED)
-			is_fully_charged = TRUE;
+		if (state != DKP_DEVICE_STATE_FULLY_CHARGED)
+			is_fully_charged = FALSE;
 
 		/* sum up composite */
 		energy_total += energy;
