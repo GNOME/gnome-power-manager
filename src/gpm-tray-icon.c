@@ -47,7 +47,6 @@
 #include "gpm-engine.h"
 #include "gpm-control.h"
 #include "gpm-common.h"
-#include "gpm-notify.h"
 #include "gpm-stock-icons.h"
 #include "gpm-tray-icon.h"
 
@@ -60,7 +59,6 @@ struct GpmTrayIconPrivate
 {
 	GConfClient		*conf;
 	GpmControl		*control;
-	GpmNotify		*notify;
 	GpmEngine		*engine;
 	GtkStatusIcon		*status_icon;
 	gboolean		 show_suspend;
@@ -138,6 +136,16 @@ gpm_tray_icon_set_tooltip (GpmTrayIcon *icon, const gchar *tooltip)
 	gtk_status_icon_set_tooltip (icon->priv->status_icon, tooltip);
 #endif
 	return TRUE;
+}
+
+/**
+ * gpm_tray_icon_get_status_icon:
+ **/
+GtkStatusIcon *
+gpm_tray_icon_get_status_icon (GpmTrayIcon *icon)
+{
+	g_return_val_if_fail (GPM_IS_TRAY_ICON (icon), NULL);
+	return g_object_ref (icon->priv->status_icon);
 }
 
 /**
@@ -614,18 +622,6 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 }
 
 /**
- * gpm_tray_status_icon_handler_cb:
- *
- * This attaches any future notifications to the status icon if it exists
- **/
-static gboolean
-gpm_tray_status_icon_handler_cb (GpmTrayIcon *icon)
-{
-	gpm_notify_use_status_icon (icon->priv->notify, icon->priv->status_icon);
-	return FALSE;
-}
-
-/**
  * gpm_tray_icon_init:
  *
  * Initialise the tray object
@@ -639,9 +635,6 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 	icon->priv = GPM_TRAY_ICON_GET_PRIVATE (icon);
 
 	icon->priv->engine = gpm_engine_new ();
-
-	/* use libnotify */
-	icon->priv->notify = gpm_notify_new ();
 
 	/* use the policy object */
 	icon->priv->control = gpm_control_new ();
@@ -663,9 +656,6 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 				 "activate",
 				 G_CALLBACK (gpm_tray_icon_activate_cb),
 				 icon, 0);
-
-	/* attach the status icon after a few seconds to allow for the session to load properly */
-	g_timeout_add_seconds (GPM_TRAY_ICON_CONNECT_TIMEOUT, (GSourceFunc) gpm_tray_status_icon_handler_cb, icon);
 
 	/* only show the suspend and hibernate icons if we can do the action,
 	   and the policy allows the actions in the menu */
@@ -693,8 +683,6 @@ gpm_tray_icon_finalize (GObject *object)
 
 	tray_icon = GPM_TRAY_ICON (object);
 
-	if (tray_icon->priv->notify != NULL)
-		g_object_unref (tray_icon->priv->notify);
 	g_object_unref (tray_icon->priv->control);
 	g_object_unref (tray_icon->priv->status_icon);
 	g_object_unref (tray_icon->priv->engine);

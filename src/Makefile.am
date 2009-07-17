@@ -149,8 +149,6 @@ gnome_power_manager_SOURCES =				\
 	egg-idletime.c					\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
-	gpm-notify.h					\
-	gpm-notify.c					\
 	gpm-phone.h					\
 	gpm-phone.c					\
 	gpm-backlight.h					\
@@ -250,8 +248,6 @@ gnome_power_self_test_SOURCES =				\
 	gpm-dpms.c					\
 	gpm-button.h					\
 	gpm-button.c					\
-	gpm-notify.h					\
-	gpm-notify.c					\
 	gpm-screensaver.h				\
 	gpm-screensaver.c				\
 	gpm-engine.h					\

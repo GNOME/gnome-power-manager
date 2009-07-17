@@ -41,6 +41,7 @@
 #include <gconf/gconf-client.h>
 #include <canberra-gtk.h>
 #include <devkit-power-gobject/devicekit-power.h>
+#include <libnotify/notify.h>
 
 #include "egg-debug.h"
 #include "egg-console-kit.h"
@@ -51,7 +52,6 @@
 #include "gpm-dpms.h"
 #include "gpm-idle.h"
 #include "gpm-manager.h"
-#include "gpm-notify.h"
 #include "gpm-prefs.h"
 #include "gpm-screensaver.h"
 #include "gpm-backlight.h"
@@ -70,7 +70,10 @@
 static void     gpm_manager_finalize	(GObject	 *object);
 
 #define GPM_MANAGER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_MANAGER, GpmManagerPrivate))
-#define GPM_MANAGER_RECALL_DELAY		10
+#define GPM_MANAGER_RECALL_DELAY		30 /* seconds */
+#define GPM_MANAGER_NOTIFY_TIMEOUT_NEVER	0 /* ms */
+#define GPM_MANAGER_NOTIFY_TIMEOUT_SHORT	10 * 1000 /* ms */
+#define GPM_MANAGER_NOTIFY_TIMEOUT_LONG		30 * 1000 /* ms */
 
 struct GpmManagerPrivate
 {
@@ -80,7 +83,6 @@ struct GpmManagerPrivate
 	GpmDpms			*dpms;
 	GpmIdle			*idle;
 	GpmPrefsServer		*prefs_server;
-	GpmNotify		*notify;
 	GpmControl		*control;
 	GpmScreensaver 		*screensaver;
 	GpmTrayIcon		*tray_icon;
@@ -92,6 +94,11 @@ struct GpmManagerPrivate
 	guint32         	 screensaver_lid_throttle_id;
 	DkpClient		*client;
 	gboolean		 on_battery;
+	GtkStatusIcon		*status_icon;
+	gboolean		 supports_notification_actions;
+	NotifyNotification	*notification;
+	NotifyNotification	*notification_discharging;
+	NotifyNotification	*notification_fully_charged;
 };
 
 typedef enum {
@@ -320,6 +327,81 @@ gpm_manager_unblank_screen (GpmManager *manager, GError **noerror)
 }
 
 /**
+ * gpm_manager_notify_close:
+ **/
+static gboolean
+gpm_manager_notify_close (GpmManager *manager, NotifyNotification *notification)
+{
+	gboolean ret = FALSE;
+	GError *error = NULL;
+
+	/* exists? */
+	if (notification == NULL)
+		goto out;
+
+	/* try to close */
+	ret = notify_notification_close (notification, &error);
+	if (!ret) {
+		egg_warning ("failed to close notification: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+out:
+	return ret;
+}
+
+/**
+ * gpm_manager_notification_closed_cb:
+ **/
+static void
+gpm_manager_notification_closed_cb (NotifyNotification *notification, GpmManager *manager)
+{
+	egg_debug ("caught notification closed signal %p", notification);
+	g_object_unref (notification);
+}
+
+/**
+ * gpm_manager_notify:
+ **/
+static gboolean
+gpm_manager_notify (GpmManager *manager, NotifyNotification **notification_class,
+		    const gchar *title, const gchar *message,
+		    guint timeout, const gchar *icon, NotifyUrgency urgency)
+{
+	gboolean ret;
+	GError *error = NULL;
+	NotifyNotification *notification;
+
+	/* close any existing notification of this class */
+	gpm_manager_notify_close (manager, notification);
+
+	/* if the status icon is hidden, don't point at it */
+	if (gtk_status_icon_get_visible (manager->priv->status_icon))
+		notification = notify_notification_new_with_status_icon (title, message, icon, manager->priv->status_icon);
+	else
+		notification = notify_notification_new (title, message, icon, NULL);
+	notify_notification_set_timeout (notification, timeout);
+	notify_notification_set_urgency (notification, urgency);
+	g_signal_connect (notification, "closed", G_CALLBACK (gpm_manager_notification_closed_cb), manager);
+
+	egg_debug ("notification %p: %s : %s", notification, title, message);
+
+	/* try to show */
+	ret = notify_notification_show (notification, &error);
+	if (!ret) {
+		egg_warning ("failed to show notification: %s", error->message);
+		g_error_free (error);
+		g_object_unref (notification);
+		goto out;
+	}
+
+	/* save this local instance as the class instance */
+	*notification_class = notification;
+out:
+	return ret;
+}
+
+/**
  * gpm_manager_action_suspend:
  **/
 static gboolean
@@ -332,12 +414,12 @@ gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 	allowed = gconf_client_get_bool (manager->priv->conf, GPM_CONF_CAN_SUSPEND, NULL);
 	if (allowed == FALSE) {
 		/* error msg as disabled in gconf */
-		gpm_notify_display (manager->priv->notify,
+		gpm_manager_notify (manager, &manager->priv->notification,
 				    _("Action disallowed"),
 				    _("Suspend support has been disabled. Contact your administrator for more details."),
-				    GPM_NOTIFY_TIMEOUT_SHORT,
+				    GPM_MANAGER_NOTIFY_TIMEOUT_SHORT,
 				    GPM_STOCK_APP_ICON,
-				    GPM_NOTIFY_URGENCY_NORMAL);
+				    NOTIFY_URGENCY_NORMAL);
 		return FALSE;
 	}
 
@@ -366,12 +448,12 @@ gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 	allowed = gconf_client_get_bool (manager->priv->conf, GPM_CONF_CAN_HIBERNATE, NULL);
 	if (allowed == FALSE) {
 		/* error msg as disabled in gconf */
-		gpm_notify_display (manager->priv->notify,
+		gpm_manager_notify (manager, &manager->priv->notification,
 				    _("Action disallowed"),
 				    _("Hibernate support has been disabled. Contact your administrator for more details."),
-				    GPM_NOTIFY_TIMEOUT_SHORT,
+				    GPM_MANAGER_NOTIFY_TIMEOUT_SHORT,
 				    GPM_STOCK_APP_ICON,
-				    GPM_NOTIFY_URGENCY_NORMAL);
+				    NOTIFY_URGENCY_NORMAL);
 		return FALSE;
 	}
 
@@ -748,12 +830,12 @@ button_pressed_cb (GpmButton *button, const gchar *type, GpmManager *manager)
 		lid_button_pressed (manager, TRUE);
 	else if (strcmp (type, GPM_BUTTON_BATTERY) == 0) {
 		message = gpm_engine_get_summary (manager->priv->engine);
-		gpm_notify_display (manager->priv->notify,
+		gpm_manager_notify (manager, &manager->priv->notification,
 				      _("Power Information"),
 				      message,
-				      GPM_NOTIFY_TIMEOUT_LONG,
+				      GPM_MANAGER_NOTIFY_TIMEOUT_LONG,
 				      GTK_STOCK_DIALOG_INFO,
-				      GPM_NOTIFY_URGENCY_NORMAL);
+				      NOTIFY_URGENCY_NORMAL);
 		g_free (message);
 	}
 
@@ -807,6 +889,12 @@ gpm_manager_client_changed_cb (DkpClient *client, GpmManager *manager)
 	if (on_battery == manager->priv->on_battery) {
 		egg_debug ("same state as before, ignoring");
 		return;
+	}
+
+	/* close any discharging notifications */
+	if (!on_battery) {
+		egg_debug ("clearing notify due ac being present");
+		gpm_manager_notify_close (manager, manager->priv->notification_discharging);
 	}
 
 	/* save in local cache */
@@ -954,18 +1042,79 @@ screensaver_auth_request_cb (GpmScreensaver *screensaver, gboolean auth_begin, G
 }
 
 /**
- * gpm_manager_perhaps_recall:
+ * gpm_manager_perhaps_recall_response_cb:
+ */
+static void
+gpm_manager_perhaps_recall_response_cb (GtkDialog *dialog, gint response_id, GpmManager *manager)
+{
+	GdkScreen *screen;
+	GtkWidget *dialog_error;
+	GError *error = NULL;
+	gboolean ret;
+	const gchar *website;
+
+	/* don't show this again */
+	if (response_id == GTK_RESPONSE_CANCEL) {
+		gconf_client_set_bool (manager->priv->conf, GPM_CONF_NOTIFY_PERHAPS_RECALL, FALSE, NULL);
+		goto out;
+	}
+
+	/* visit recall website */
+	if (response_id == GTK_RESPONSE_OK) {
+		screen = gdk_screen_get_default();
+		website = (const gchar *) g_object_get_data (G_OBJECT (manager), "recall-oem-website");
+		ret = gtk_show_uri (screen, website, gtk_get_current_event_time (), &error);
+		if (!ret) {
+			dialog_error = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
+							       "Failed to show url %s", error->message);
+			gtk_dialog_run (GTK_DIALOG (dialog_error));
+			g_error_free (error);
+		}
+		goto out;
+	}
+out:
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+	return;
+}
+
+/**
+ * gpm_manager_perhaps_recall_delay_cb:
  */
 static gboolean
-gpm_manager_perhaps_recall (GpmManager *manager)
+gpm_manager_perhaps_recall_delay_cb (GpmManager *manager)
 {
-	gchar *oem_vendor;
-	gchar *oem_website;
-	oem_vendor = (gchar *) g_object_get_data (G_OBJECT (manager), "recall-oem-vendor");
-	oem_website = (gchar *) g_object_get_data (G_OBJECT (manager), "recall-oem-website");
-	gpm_notify_perhaps_recall (manager->priv->notify, oem_vendor, oem_website);
-	g_free (oem_vendor);
-	g_free (oem_website);
+	const gchar *oem_vendor;
+	gchar *title = NULL;
+	gchar *message = NULL;
+	GtkWidget *dialog;
+
+	oem_vendor = (const gchar *) g_object_get_data (G_OBJECT (manager), "recall-oem-vendor");
+
+	/* TRANSLATORS: the battery may be recalled by it's vendor */
+	title = g_strdup_printf ("%s: %s", GPM_NAME, _("Battery may be recalled"));
+	message = g_strdup_printf (_("The battery in your computer may have been "
+				     "recalled by %s and you may be at risk.\n\n"
+				     "For more information visit the battery recall website."), oem_vendor);
+	dialog = gtk_message_dialog_new_with_markup (NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
+						     GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE,
+						     "<span size='larger'><b>%s</b></span>", title);
+
+	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog), "%s", message);
+
+	/* TRANSLATORS: button text, visit the manufacturers recall website */
+	gtk_dialog_add_button (GTK_DIALOG (dialog), _("Visit recall website"), GTK_RESPONSE_OK);
+
+	/* TRANSLATORS: button text, do not show this bubble again */
+	gtk_dialog_add_button (GTK_DIALOG (dialog), _("Do not show me this again"), GTK_RESPONSE_CANCEL);
+
+	/* wait async for response */
+	gtk_widget_show (dialog);
+	g_signal_connect (dialog, "response", G_CALLBACK (gpm_manager_perhaps_recall_response_cb), manager);
+
+	g_free (title);
+	g_free (message);
+
+	/* never repeat */
 	return FALSE;
 }
 
@@ -975,10 +1124,17 @@ gpm_manager_perhaps_recall (GpmManager *manager)
 static void
 gpm_engine_perhaps_recall_cb (GpmEngine *engine, DkpDevice *device, gchar *oem_vendor, gchar *website, GpmManager *manager)
 {
-	g_object_set_data (G_OBJECT (manager), "recall-oem-vendor", (gpointer) g_strdup (oem_vendor));
-	g_object_set_data (G_OBJECT (manager), "recall-oem-website", (gpointer) g_strdup (website));
+	/* don't show when running under GDM */
+	if (g_getenv ("RUNNING_UNDER_GDM") != NULL) {
+		egg_debug ("running under gdm, so no notification");
+		return;
+	}
+
+	g_object_set_data_full (G_OBJECT (manager), "recall-oem-vendor", (gpointer) g_strdup (oem_vendor), (GDestroyNotify) g_free);
+	g_object_set_data_full (G_OBJECT (manager), "recall-oem-website", (gpointer) g_strdup (website), (GDestroyNotify) g_free);
+
 	/* delay by a few seconds so the panel can load */
-	g_timeout_add_seconds (GPM_MANAGER_RECALL_DELAY, (GSourceFunc) gpm_manager_perhaps_recall, manager);
+	g_timeout_add_seconds (GPM_MANAGER_RECALL_DELAY, (GSourceFunc) gpm_manager_perhaps_recall_delay_cb, manager);
 }
 
 /**
@@ -1005,7 +1161,15 @@ gpm_engine_summary_changed_cb (GpmEngine *engine, gchar *summary, GpmManager *ma
 static void
 gpm_engine_low_capacity_cb (GpmEngine *engine, DkpDevice *device, GpmManager *manager)
 {
+	gchar *message = NULL;
+	const gchar *title;
 	gdouble capacity;
+
+	/* don't show when running under GDM */
+	if (g_getenv ("RUNNING_UNDER_GDM") != NULL) {
+		egg_debug ("running under gdm, so no notification");
+		goto out;
+	}
 
 	/* get device properties */
 	g_object_get (device,
@@ -1015,7 +1179,14 @@ gpm_engine_low_capacity_cb (GpmEngine *engine, DkpDevice *device, GpmManager *ma
 	/* We should notify the user if the battery has a low capacity,
 	 * where capacity is the ratio of the last_full capacity with that of
 	 * the design capacity. (#326740) */
-	gpm_notify_low_capacity (manager->priv->notify, capacity);
+
+	title = _("Battery may be broken");
+	message = g_strdup_printf (_("Your battery has a very low capacity (%1.1f%%), "
+				     "which means that it may be old or broken."), capacity);
+	gpm_manager_notify (manager, &manager->priv->notification, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_SHORT,
+			    GTK_STOCK_DIALOG_INFO, NOTIFY_URGENCY_LOW);
+out:
+	g_free (message);
 }
 
 /**
@@ -1028,11 +1199,19 @@ gpm_engine_fully_charged_cb (GpmEngine *engine, DkpDevice *device, GpmManager *m
 	gchar *native_path = NULL;
 	gboolean ret;
 	guint plural = 1;
+	const gchar *message;
+	const gchar *title;
 
 	/* only action this if specified in gconf */
 	ret = gconf_client_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_FULLY_CHARGED, NULL);
 	if (!ret) {
 		egg_debug ("no notification");
+		goto out;
+	}
+
+	/* don't show when running under GDM */
+	if (g_getenv ("RUNNING_UNDER_GDM") != NULL) {
+		egg_debug ("running under gdm, so no notification");
 		goto out;
 	}
 
@@ -1046,7 +1225,15 @@ gpm_engine_fully_charged_cb (GpmEngine *engine, DkpDevice *device, GpmManager *m
 		/* is this a dummy composite device, which is plural? */
 		if (g_str_has_prefix (native_path, "dummy"))
 			plural = 2;
-		gpm_notify_fully_charged_primary (manager->priv->notify, plural);
+
+		/* hide the discharging notification */
+		gpm_manager_notify_close (manager, manager->priv->notification_discharging);
+
+		/* show the fully charged notification */
+		title = ngettext ("Battery Charged", "Batteries Charged", plural);
+		message = ngettext ("Your laptop battery is now fully charged", "Your laptop batteries are now fully charged", plural);
+		gpm_manager_notify (manager, &manager->priv->notification_fully_charged, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_SHORT,
+				    GTK_STOCK_DIALOG_INFO, NOTIFY_URGENCY_LOW);
 	}
 out:
 	g_free (native_path);
@@ -1060,12 +1247,14 @@ gpm_engine_discharging_cb (GpmEngine *engine, DkpDevice *device, GpmManager *man
 {
 	DkpDeviceType type;
 	gboolean ret;
+	const gchar *title;
+	const gchar *message;
 
 	/* only action this if specified in gconf */
 	ret = gconf_client_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_DISCHARGING, NULL);
 	if (!ret) {
 		egg_debug ("no notification");
-		return;
+		goto out;
 	}
 
 	/* get device properties */
@@ -1073,10 +1262,22 @@ gpm_engine_discharging_cb (GpmEngine *engine, DkpDevice *device, GpmManager *man
 		      "type", &type,
 		      NULL);
 
-	if (type == DKP_DEVICE_TYPE_BATTERY)
-		gpm_notify_discharging_primary (manager->priv->notify);
-	else if (type == DKP_DEVICE_TYPE_UPS)
-		gpm_notify_discharging_ups (manager->priv->notify);
+	if (type == DKP_DEVICE_TYPE_BATTERY) {
+		title = _("Battery Discharging");
+		message = _("The AC power has been unplugged. The system is now using battery power.");
+	} else if (type == DKP_DEVICE_TYPE_UPS) {
+		title = _("UPS Discharging");
+		message = _("The AC power has been unplugged. The system is now using backup power.");
+	} else {
+		/* nothing else of interest */
+		goto out;
+	}
+
+	/* show the notification */
+	gpm_manager_notify (manager, &manager->priv->notification_discharging, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_LONG,
+			    GTK_STOCK_DIALOG_WARNING, NOTIFY_URGENCY_NORMAL);
+out:
+	return;
 }
 
 /**
@@ -1086,6 +1287,10 @@ static void
 control_sleep_failure_cb (GpmControl *control, GpmControlAction action, GpmManager *manager)
 {
 	gboolean show_sleep_failed;
+	gchar *message = NULL;
+	gchar *title = NULL;
+	const gchar *icon;
+	GtkWidget *dialog;
 
 	/* only show this if specified in gconf */
 	show_sleep_failed = gconf_client_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_SLEEP_FAILED, NULL);
@@ -1094,15 +1299,33 @@ control_sleep_failure_cb (GpmControl *control, GpmControlAction action, GpmManag
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_SUSPEND_ERROR, TRUE);
 
 	/* only emit if in GConf */
-	if (show_sleep_failed) {
-		if (action == GPM_CONTROL_ACTION_SUSPEND) {
-			egg_debug ("suspend failed");
-			gpm_notify_sleep_failed (manager->priv->notify, FALSE);
-		} else {
-			egg_debug ("hibernate failed");
-			gpm_notify_sleep_failed (manager->priv->notify, TRUE);
-		}
+	if (!show_sleep_failed)
+		goto out;
+
+	/* TRANSLATORS: window title: there wasa problem putting the machine to sleep */
+	title = g_strdup_printf ("%s: %s", GPM_NAME, _("Sleep problem"));
+	if (action == GPM_CONTROL_ACTION_SUSPEND) {
+		/* TRANSLATORS: message text */
+		message = g_strdup_printf ("%s\n%s", _("Your computer failed to suspend."), _("Check the help file for common problems."));
+		icon = GPM_STOCK_SUSPEND;
+	} else {
+		/* TRANSLATORS: message text */
+		message = g_strdup_printf ("%s\n%s", _("Your computer failed to hibernate."), _("Check the help file for common problems."));
+		icon = GPM_STOCK_HIBERNATE;
 	}
+
+	/* show modal dialog */
+	dialog = gtk_message_dialog_new_with_markup (NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
+						     GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE,
+						     "<span size='larger'><b>%s</b></span>", title);
+	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog), "%s", message);
+
+	/* wait async for close */
+	gtk_widget_show (dialog);
+	g_signal_connect_swapped (dialog, "response", G_CALLBACK (gtk_widget_destroy), dialog);
+out:
+	g_free (title);
+	g_free (message);
 }
 
 /**
@@ -1163,7 +1386,7 @@ gpm_engine_charge_low_cb (GpmEngine *engine, DkpDevice *device, GpmManager *mana
 
 	/* get correct icon */
 	icon = gpm_devicekit_get_object_icon (device);
-	gpm_notify_display (manager->priv->notify, title, message, GPM_NOTIFY_TIMEOUT_LONG, icon, GPM_NOTIFY_URGENCY_NORMAL);
+	gpm_manager_notify (manager, &manager->priv->notification, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_LONG, icon, NOTIFY_URGENCY_NORMAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
 out:
 	g_free (icon);
@@ -1272,7 +1495,7 @@ gpm_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, GpmManager 
 
 	/* get correct icon */
 	icon = gpm_devicekit_get_object_icon (device);
-	gpm_notify_display (manager->priv->notify, title, message, GPM_NOTIFY_TIMEOUT_LONG, icon, GPM_NOTIFY_URGENCY_CRITICAL);
+	gpm_manager_notify (manager, &manager->priv->notification, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_LONG, icon, NOTIFY_URGENCY_CRITICAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
 out:
 	g_free (icon);
@@ -1366,9 +1589,9 @@ gpm_engine_charge_action_cb (GpmEngine *engine, DkpDevice *device, GpmManager *m
 
 	/* get correct icon */
 	icon = gpm_devicekit_get_object_icon (device);
-	gpm_notify_display (manager->priv->notify,
-			    title, message, GPM_NOTIFY_TIMEOUT_LONG,
-			    icon, GPM_NOTIFY_URGENCY_CRITICAL);
+	gpm_manager_notify (manager, &manager->priv->notification,
+			    title, message, GPM_MANAGER_NOTIFY_TIMEOUT_LONG,
+			    icon, NOTIFY_URGENCY_CRITICAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
 out:
 	g_free (icon);
@@ -1432,6 +1655,37 @@ gpm_manager_console_kit_active_changed_cb (EggConsoleKit *console, gboolean acti
 }
 
 /**
+ * gpm_manager_supports_notification_actions:
+ **/
+static gboolean
+gpm_manager_supports_notification_actions ()
+{
+	gboolean ret = FALSE;
+	GList *caps;
+	GList *c;
+
+	/* get capabilities from the server */
+	caps = notify_get_server_caps ();
+	if (caps == NULL) {
+		egg_warning ("failed to get capabilities of notification daemon");
+		goto out;
+	}
+
+	/* find the actions parameter */
+	for (c = caps; c != NULL; c = c->next) {
+		if (g_strcmp0 ((gchar*)c->data, "actions") == 0 ) {
+			ret = TRUE;
+			break;
+		}
+	}
+
+	g_list_foreach (caps, (GFunc)g_free, NULL);
+	g_list_free (caps);
+out:
+	return ret;
+}
+
+/**
  * gpm_manager_init:
  * @manager: This class instance
  **/
@@ -1460,12 +1714,18 @@ gpm_manager_init (GpmManager *manager)
 	/* this is a singleton, so we keep a master copy open here */
 	manager->priv->prefs_server = gpm_prefs_server_new ();
 
-	manager->priv->notify = gpm_notify_new ();
+	manager->priv->notification = NULL;
+	manager->priv->notification_discharging = NULL;
+	manager->priv->notification_fully_charged = NULL;
 	manager->priv->disks = gpm_disks_new ();
 	manager->priv->conf = gconf_client_get_default ();
 	manager->priv->client = dkp_client_new ();
 	g_signal_connect (manager->priv->client, "changed",
 			  G_CALLBACK (gpm_manager_client_changed_cb), manager);
+
+	/* use libnotify */
+	notify_init (GPM_NAME);
+	manager->priv->supports_notification_actions = gpm_manager_supports_notification_actions ();
 
 	/* watch gnome-power-manager keys */
 	gconf_client_add_dir (manager->priv->conf, GPM_CONF_DIR,
@@ -1477,13 +1737,13 @@ gpm_manager_init (GpmManager *manager)
 	/* check to see if the user has installed the schema properly */
 	version = gconf_client_get_int (manager->priv->conf, GPM_CONF_SCHEMA_VERSION, NULL);
 	if (version != GPM_CONF_SCHEMA_ID) {
-		gpm_notify_display (manager->priv->notify,
+		gpm_manager_notify (manager, &manager->priv->notification,
 				    _("Install problem!"),
 				    _("The configuration defaults for GNOME Power Manager have not been installed correctly.\n"
 				      "Please contact your computer administrator."),
-				    GPM_NOTIFY_TIMEOUT_LONG,
+				    GPM_MANAGER_NOTIFY_TIMEOUT_LONG,
 				    GTK_STOCK_DIALOG_WARNING,
-				    GPM_NOTIFY_URGENCY_NORMAL);
+				    NOTIFY_URGENCY_NORMAL);
 		egg_error ("no gconf schema installed!");
 	}
 
@@ -1538,6 +1798,9 @@ gpm_manager_init (GpmManager *manager)
 				 "hibernate", G_CALLBACK (gpm_manager_tray_icon_hibernate),
 				 manager, G_CONNECT_SWAPPED);
 
+	/* keep a reference for the notifications */
+	manager->priv->status_icon = gpm_tray_icon_get_status_icon (manager->priv->tray_icon);
+
 	gpm_manager_sync_policy_sleep (manager);
 
 	manager->priv->engine = gpm_engine_new ();
@@ -1586,6 +1849,14 @@ gpm_manager_finalize (GObject *object)
 
 	g_return_if_fail (manager->priv != NULL);
 
+	/* close any notifications (also unrefs them) */
+	if (manager->priv->notification != NULL)
+		gpm_manager_notify_close (manager, manager->priv->notification);
+	if (manager->priv->notification_discharging != NULL)
+		gpm_manager_notify_close (manager, manager->priv->notification_discharging);
+	if (manager->priv->notification_fully_charged != NULL)
+		gpm_manager_notify_close (manager, manager->priv->notification_fully_charged);
+
 	g_object_unref (manager->priv->conf);
 	g_object_unref (manager->priv->disks);
 	g_object_unref (manager->priv->dpms);
@@ -1593,13 +1864,13 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->engine);
 	g_object_unref (manager->priv->tray_icon);
 	g_object_unref (manager->priv->screensaver);
-	g_object_unref (manager->priv->notify);
 	g_object_unref (manager->priv->prefs_server);
 	g_object_unref (manager->priv->control);
 	g_object_unref (manager->priv->button);
 	g_object_unref (manager->priv->backlight);
 	g_object_unref (manager->priv->console);
 	g_object_unref (manager->priv->client);
+	g_object_unref (manager->priv->status_icon);
 
 	G_OBJECT_CLASS (gpm_manager_parent_class)->finalize (object);
 }
