@@ -373,7 +373,7 @@ gpm_manager_notify (GpmManager *manager, NotifyNotification **notification_class
 	NotifyNotification *notification;
 
 	/* close any existing notification of this class */
-	gpm_manager_notify_close (manager, notification);
+	gpm_manager_notify_close (manager, *notification_class);
 
 	/* if the status icon is hidden, don't point at it */
 	if (gtk_status_icon_get_visible (manager->priv->status_icon))
