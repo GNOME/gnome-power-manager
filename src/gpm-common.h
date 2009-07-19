@@ -137,8 +137,10 @@ G_BEGIN_DECLS
 /* timeout */
 #define GPM_CONF_TIMEOUT_SLEEP_COMPUTER_AC	GPM_CONF_DIR "/timeout/sleep_computer_ac"
 #define GPM_CONF_TIMEOUT_SLEEP_COMPUTER_BATT	GPM_CONF_DIR "/timeout/sleep_computer_battery"
+#define GPM_CONF_TIMEOUT_SLEEP_COMPUTER_UPS	GPM_CONF_DIR "/timeout/sleep_computer_ups"
 #define GPM_CONF_TIMEOUT_SLEEP_DISPLAY_AC	GPM_CONF_DIR "/timeout/sleep_display_ac"
 #define GPM_CONF_TIMEOUT_SLEEP_DISPLAY_BATT	GPM_CONF_DIR "/timeout/sleep_display_battery"
+#define GPM_CONF_TIMEOUT_SLEEP_DISPLAY_UPS	GPM_CONF_DIR "/timeout/sleep_display_ups"
 
 /* ui */
 #define GPM_CONF_UI_ICON_POLICY			GPM_CONF_DIR "/ui/icon_policy"

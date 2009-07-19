@@ -706,6 +706,17 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/timeout/sleep_computer_ups</key>
+      <applyto>/apps/gnome-power-manager/timeout/sleep_computer_ups</applyto>
+      <type>int</type>
+      <default>0</default>
+      <locale name="C">
+        <short>Sleep timeout computer when on UPS</short>
+        <long>The amount of time in seconds the computer on UPS power needs to be inactive before it goes to sleep.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/timeout/sleep_display_ac</key>
       <applyto>/apps/gnome-power-manager/timeout/sleep_display_ac</applyto>
       <type>int</type>
@@ -720,10 +731,21 @@
       <key>/schemas/apps/gnome-power-manager/timeout/sleep_display_battery</key>
       <applyto>/apps/gnome-power-manager/timeout/sleep_display_battery</applyto>
       <type>int</type>
-      <default>300</default>
+      <default>600</default>
       <locale name="C">
         <short>Sleep timeout display when on battery</short>
         <long>The amount of time in seconds the computer on battery power needs to be inactive before the display goes to sleep.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/timeout/sleep_display_ups</key>
+      <applyto>/apps/gnome-power-manager/timeout/sleep_display_ups</applyto>
+      <type>int</type>
+      <default>600</default>
+      <locale name="C">
+        <short>Sleep timeout display when on UPS</short>
+        <long>The amount of time in seconds the computer on UPS power needs to be inactive before the display goes to sleep.</long>
       </locale>
     </schema>
 
