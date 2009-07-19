@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: Gnome Power Manager HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&component=general\n"
-"POT-Creation-Date: 2009-06-25 11:25+0000\n"
-"PO-Revision-Date: 2009-06-26 08:54+0300\n"
+"POT-Creation-Date: 2009-07-06 14:36+0000\n"
+"PO-Revision-Date: 2009-07-16 10:46+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -137,9 +137,6 @@ msgstr "Taustavalguse heleduse sättimise lubamine"
 msgid "Battery critical low action"
 msgstr "Aku kriitilise täituvustaseme tegevus"
 
-msgid "Change the brightness automatically using the ambient light sensors"
-msgstr "Heleduse automaatne muutmine valgussensorite andmete põhjal"
-
 msgid "Check CPU load before sleeping"
 msgstr "Enne puhkerežiimi siirdumist kontrollitakse protsessori koormust"
 
@@ -239,32 +236,14 @@ msgstr ""
 msgid "If the low-power mode should be enabled when on AC"
 msgstr "Kas madala täituvuse režiim peab võrgutoite korral olema lubatud"
 
-msgid "If the low-power mode should be enabled when on UPS"
-msgstr "Kas madala täituvuse režiim peab UPS-itoite korral olema lubatud"
-
 msgid "If the low-power mode should be enabled when on battery"
 msgstr "Kas madala täituvuse režiim peab akutoite korral olema lubatud"
 
 msgid ""
-"If the screen brightness can be changed when switching between AC and "
-"battery power and by ambient light sensors."
+"If the screen brightness should be changed when switching between AC and "
+"battery power."
 msgstr ""
-"Kas ekraani taustavalgust võib voolu- ja akutoite vahel lülitades või "
-"valgussensorite andmete põhjal muuta."
-
-msgid ""
-"If the screen brightness should be changed automatically using the ambient "
-"light sensors."
-msgstr ""
-"Kas ekraani taustavalgust tuleb valgussensorite andmete põhjal automaatselt "
-"muuta."
-
-msgid ""
-"If the screen brightness should be changed automatically using the ambient "
-"light sensors. Valid is 'none', 'light' and 'dark'"
-msgstr ""
-"Kas ekraani taustavalgust võib valgussensorite andmete põhjal automaatselt "
-"muuta või mitte. Võimalikud väärtused on 'none', 'light' ja 'dark'"
+"Kas ekraani taustavalgust tuleb võrgu- ja akutoite vahel lülitades muuta."
 
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
@@ -288,10 +267,6 @@ msgstr "Kas akutoite korral tuleb ekraani heledust vähendada."
 msgid "If the system low-power mode should be enabled when on AC power."
 msgstr ""
 "Kas süsteemne madala täituvuse režiim peab võrgutoite korral olema lubatud"
-
-msgid "If the system low-power mode should be enabled when on UPS power."
-msgstr ""
-"Kas süsteemne madala täituvuse režiim peab UPS-itoite korral olema lubatud"
 
 msgid ""
 "If the system low-power mode should be enabled when on laptop battery power."
@@ -346,12 +321,6 @@ msgid ""
 msgstr ""
 "Kas kuvada hoiatus, kui on kehtiv vooluhalduri piirang ja arvuti on "
 "seadistatud uinakule kaane sulgemise korral."
-
-msgid "Keyboard brightness when on AC"
-msgstr "Klaviatuuri heledus võrgutoite korral"
-
-msgid "Keyboard brightness when on battery"
-msgstr "Klaviatuuri heledus akutoite korral"
 
 msgid "LCD brightness when on AC"
 msgstr "LCD heledus võrgutoite korral"
@@ -412,6 +381,16 @@ msgstr "Voolunupu tegevus"
 
 msgid "Reduce the backlight brightness when on battery power"
 msgstr "Taustavalguse heleduse vähendamine akutoite korral"
+
+msgid "Seconds of inactivity to spin down when on AC"
+msgstr ""
+"Võrgutoite korral jõudeoleku kestus sekundites enne kõvaketta pöörete "
+"vähendamist"
+
+msgid "Seconds of inactivity to spin down when on battery"
+msgstr ""
+"Akutoite korral jõudeoleku kestus sekundites enne kõvaketta pöörete "
+"vähendamist"
 
 msgid "Sleep timeout computer when on AC"
 msgstr "Uinaku alguse viivitus võrgutoitel"
@@ -543,12 +522,6 @@ msgstr ""
 "Viivitus sekundites, mille järel ekraan lülitatakse välja, kui arvutit pole "
 "kasutatud ja see on akutoitel."
 
-msgid "The amount the light sensors should contribute to the brightness"
-msgstr "Kui palju peaksid valgustatuse sensorid mõjutama ekraani heledust"
-
-msgid "The amount the light sensors should contribute to the brightness."
-msgstr "Kui palju peaksid valgustatuse sensorid mõjutama ekraani heledust."
-
 msgid ""
 "The amount to dim the brightness of the display when on battery power. "
 "Possible values are between 0 and 100."
@@ -563,33 +536,8 @@ msgstr ""
 "Kuva heledusaste võrgutoite korral. Võimalikud väärtused on arvud nullist "
 "sajani."
 
-msgid ""
-"The brightness of the keyboard when on AC power. Possible values are between "
-"0 and 100."
-msgstr ""
-"Klaviatuuri heledusaste võrgutoite korral. Võimalikud väärtused on arvud "
-"nullist sajani."
-
-msgid ""
-"The brightness of the keyboard when on battery power. Possible values are "
-"between 0 and 100."
-msgstr ""
-"Klaviatuuri heledusaste akutoite korral. Võimalikud väärtused on arvud "
-"nullist sajani."
-
 msgid "The brightness of the screen when idle"
 msgstr "Ekraani heledus jõudeoleku korral"
-
-msgid ""
-"The calibration of the light sensors so that the screen is bright enough"
-msgstr "Valgustatuse sensorite kalibreerimine, et ekraan oleks piisavalt hele"
-
-msgid ""
-"The calibration of the light sensors so that the screen is bright enough, in "
-"percent."
-msgstr ""
-"Valgustatuse sensorite kalibreerimine, et ekraan oleks piisavalt hele, "
-"protsentides."
 
 msgid "The default amount of time to dim the screen after idle"
 msgstr "Ekraani tuhmistamiseks vajalik jõudeoleku vaikimisi aeg"
@@ -607,19 +555,24 @@ msgstr "Vaikimisi graafiku tüüp statistikaaknas"
 msgid "The default graph type to show in the statistics window."
 msgstr "Vaikimisi graafiku tüüp statistikaaknas."
 
-msgid "The interval the ambient light sensors should be polled"
-msgstr "Valgussensorite andmete hankimise intervall"
-
-msgid "The interval the ambient light sensors should be polled in seconds."
-msgstr ""
-"Mitme sekundilise vahega hangitakse valgussensoritelt andmeidSekunditest "
-"määratud intervall, mille järel tuleb valgussensorite andmeid lugeda."
-
 msgid "The maximum duration of time displayed on the x-axis of the graph."
 msgstr "Graafiku X-teljel näidatav suurim kestus."
 
 msgid "The maximum time displayed on the graph"
 msgstr "Graafikus näidatav suurim kestus"
+
+msgid ""
+"The number of seconds of inactivity to spin down the disks when on AC power."
+msgstr "Ekraani tuhmistamine teatud jõudeaja järel, kui ollakse võrgutoitel"
+"Jõudeaeg sekunidites, pärast mida vähendatakse võrgutoite korral kõvaketta "
+"pööredeid."
+
+msgid ""
+"The number of seconds of inactivity to spin down the disks when on battery "
+"power."
+msgstr ""
+"Jõudeaeg sekunidites, pärast mida vähendatakse akutoite korral kõvaketta "
+"pööredeid."
 
 msgid ""
 "The percentage of the battery when it is considered critical. Only valid "
@@ -876,6 +829,9 @@ msgstr "A_rvuti viiakse puhkerežiimi, kui ollakse tegevuseta:"
 msgid "Set display _brightness to:"
 msgstr "Kuva _heledustase:"
 
+msgid "Sp_in down hard disks when possible"
+msgstr "Võimaluse korral vähendatakse _kõvaketta pöördeid"
+
 msgid "When UPS power is _critically low:"
 msgstr "Kui UPS-itoide on k_riitiliselt madal:"
 
@@ -974,6 +930,16 @@ msgstr "%s täislaadimiseni kulub %s (%.1f%%)"
 #, c-format
 msgid "%s charging (%.1f%%)"
 msgstr "%s laadimine (%.1f%%)"
+
+#. TRANSLATORS: this is only shown for laptops with multiple batteries
+#, c-format
+msgid "%s waiting to discharge (%.1f%%)"
+msgstr "%s ootab tühjendamist (%.1f%%)"
+
+#. TRANSLATORS: this is only shown for laptops with multiple batteries
+#, c-format
+msgid "%s waiting to charge (%.1f%%)"
+msgstr "%s ootab laadimist (%.1f%%)"
 
 #, c-format
 msgid "<b>Product:</b> %s\n"
@@ -1855,6 +1821,77 @@ msgstr "_Uinak"
 
 msgid "Hi_bernate"
 msgstr "_Talveuni"
+
+#~ msgid "Change the brightness automatically using the ambient light sensors"
+#~ msgstr "Heleduse automaatne muutmine valgussensorite andmete põhjal"
+
+#~ msgid "If the low-power mode should be enabled when on UPS"
+#~ msgstr "Kas madala täituvuse režiim peab UPS-itoite korral olema lubatud"
+
+#~ msgid ""
+#~ "If the screen brightness should be changed automatically using the "
+#~ "ambient light sensors."
+#~ msgstr ""
+#~ "Kas ekraani taustavalgust tuleb valgussensorite andmete põhjal "
+#~ "automaatselt muuta."
+
+#~ msgid ""
+#~ "If the screen brightness should be changed automatically using the "
+#~ "ambient light sensors. Valid is 'none', 'light' and 'dark'"
+#~ msgstr ""
+#~ "Kas ekraani taustavalgust võib valgussensorite andmete põhjal "
+#~ "automaatselt muuta või mitte. Võimalikud väärtused on 'none', 'light' ja "
+#~ "'dark'"
+
+#~ msgid "If the system low-power mode should be enabled when on UPS power."
+#~ msgstr ""
+#~ "Kas süsteemne madala täituvuse režiim peab UPS-itoite korral olema lubatud"
+
+#~ msgid "Keyboard brightness when on AC"
+#~ msgstr "Klaviatuuri heledus võrgutoite korral"
+
+#~ msgid "Keyboard brightness when on battery"
+#~ msgstr "Klaviatuuri heledus akutoite korral"
+
+#~ msgid "The amount the light sensors should contribute to the brightness"
+#~ msgstr "Kui palju peaksid valgustatuse sensorid mõjutama ekraani heledust"
+
+#~ msgid "The amount the light sensors should contribute to the brightness."
+#~ msgstr "Kui palju peaksid valgustatuse sensorid mõjutama ekraani heledust."
+
+#~ msgid ""
+#~ "The brightness of the keyboard when on AC power. Possible values are "
+#~ "between 0 and 100."
+#~ msgstr ""
+#~ "Klaviatuuri heledusaste võrgutoite korral. Võimalikud väärtused on arvud "
+#~ "nullist sajani."
+
+#~ msgid ""
+#~ "The brightness of the keyboard when on battery power. Possible values are "
+#~ "between 0 and 100."
+#~ msgstr ""
+#~ "Klaviatuuri heledusaste akutoite korral. Võimalikud väärtused on arvud "
+#~ "nullist sajani."
+
+#~ msgid ""
+#~ "The calibration of the light sensors so that the screen is bright enough"
+#~ msgstr ""
+#~ "Valgustatuse sensorite kalibreerimine, et ekraan oleks piisavalt hele"
+
+#~ msgid ""
+#~ "The calibration of the light sensors so that the screen is bright enough, "
+#~ "in percent."
+#~ msgstr ""
+#~ "Valgustatuse sensorite kalibreerimine, et ekraan oleks piisavalt hele, "
+#~ "protsentides."
+
+#~ msgid "The interval the ambient light sensors should be polled"
+#~ msgstr "Valgussensorite andmete hankimise intervall"
+
+#~ msgid "The interval the ambient light sensors should be polled in seconds."
+#~ msgstr ""
+#~ "Mitme sekundilise vahega hangitakse valgussensoritelt andmeidSekunditest "
+#~ "määratud intervall, mille järel tuleb valgussensorite andmeid lugeda."
 
 #~ msgid "Always sleep when the lid is _closed"
 #~ msgstr "Kaane _sulgemisel tehakse uinak"
