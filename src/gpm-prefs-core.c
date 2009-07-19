@@ -262,7 +262,7 @@ static void
 gpm_prefs_action_combo_changed_cb (GtkWidget *widget, GpmPrefs *prefs)
 {
 	gchar *value;
-	const gchar *action;
+	const gchar *action = NULL;
 	gchar *gpm_pref_key;
 
 	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
@@ -282,6 +282,13 @@ gpm_prefs_action_combo_changed_cb (GtkWidget *widget, GpmPrefs *prefs)
 	}
 
 	g_free (value);
+
+	/* nothing matched */
+	if (action == NULL) {
+		egg_warning ("could not match %s", value);
+		return;
+	}
+
 	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (widget), "conf_key");
 	egg_debug ("Changing %s to %s", gpm_pref_key, action);
 	gconf_client_set_string (prefs->priv->conf, gpm_pref_key, action, NULL);
