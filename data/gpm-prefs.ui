@@ -70,7 +70,7 @@
               <object class="GtkVBox" id="vbox_ac">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
-                <property name="spacing">9</property>
+                <property name="spacing">12</property>
                 <child>
                   <object class="GtkVBox" id="vbox_ac_actions">
                     <property name="visible">True</property>
@@ -95,7 +95,7 @@
                         <child>
                           <object class="GtkVBox" id="vbox79">
                             <property name="visible">True</property>
-                            <property name="spacing">5</property>
+                            <property name="spacing">6</property>
                             <child>
                               <object class="GtkHBox" id="hbox_ac_computer">
                                 <property name="visible">True</property>
@@ -107,7 +107,6 @@
                                     <property name="xalign">0</property>
                                     <property name="label" translatable="yes">Put computer to _sleep when inactive for:</property>
                                     <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">hscale_ac_computer</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -115,13 +114,8 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkHScale" id="hscale_ac_computer">
-                                    <property name="width_request">200</property>
+                                  <object class="GtkComboBox" id="combobox_ac_computer">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="adjustment">adjustment1</property>
-                                    <property name="digits">0</property>
-                                    <property name="value_pos">bottom</property>
                                   </object>
                                   <packing>
                                     <property name="position">1</property>
@@ -229,7 +223,6 @@
                                     <property name="xalign">0</property>
                                     <property name="label" translatable="yes">Put _display to sleep when inactive for:</property>
                                     <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">hscale_ac_display</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -237,12 +230,8 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkHScale" id="hscale_ac_display">
+                                  <object class="GtkComboBox" id="combobox_ac_display">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="adjustment">adjustment2</property>
-                                    <property name="digits">0</property>
-                                    <property name="value_pos">bottom</property>
                                   </object>
                                   <packing>
                                     <property name="position">1</property>
@@ -331,7 +320,7 @@
               <object class="GtkVBox" id="vbox_battery">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
-                <property name="spacing">9</property>
+                <property name="spacing">12</property>
                 <child>
                   <object class="GtkVBox" id="vbox_battery_actions">
                     <property name="visible">True</property>
@@ -356,7 +345,7 @@
                         <child>
                           <object class="GtkVBox" id="vbox86">
                             <property name="visible">True</property>
-                            <property name="spacing">5</property>
+                            <property name="spacing">6</property>
                             <child>
                               <object class="GtkHBox" id="hbox_battery_computer">
                                 <property name="visible">True</property>
@@ -368,7 +357,6 @@
                                     <property name="xalign">0</property>
                                     <property name="label" translatable="yes">Put computer to _sleep when inactive for:</property>
                                     <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">hscale_battery_computer</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -376,13 +364,8 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkHScale" id="hscale_battery_computer">
-                                    <property name="width_request">200</property>
+                                  <object class="GtkComboBox" id="combobox_battery_computer">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="adjustment">adjustment4</property>
-                                    <property name="digits">0</property>
-                                    <property name="value_pos">bottom</property>
                                   </object>
                                   <packing>
                                     <property name="position">1</property>
@@ -520,7 +503,6 @@
                                     <property name="xalign">0</property>
                                     <property name="label" translatable="yes">Put _display to sleep when inactive for:</property>
                                     <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">hscale_battery_display</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -528,12 +510,8 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkHScale" id="hscale_battery_display">
+                                  <object class="GtkComboBox" id="combobox_battery_display">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="adjustment">adjustment5</property>
-                                    <property name="digits">0</property>
-                                    <property name="value_pos">bottom</property>
                                   </object>
                                   <packing>
                                     <property name="position">1</property>
@@ -606,7 +584,7 @@
               <object class="GtkVBox" id="vbox_ups">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
-                <property name="spacing">6</property>
+                <property name="spacing">12</property>
                 <child>
                   <object class="GtkVBox" id="vbox_ups_actions">
                     <property name="visible">True</property>
@@ -631,7 +609,7 @@
                         <child>
                           <object class="GtkVBox" id="vbox91">
                             <property name="visible">True</property>
-                            <property name="spacing">5</property>
+                            <property name="spacing">6</property>
                             <child>
                               <object class="GtkHBox" id="hbox_ups_computer">
                                 <property name="visible">True</property>
@@ -643,7 +621,6 @@
                                     <property name="xalign">0</property>
                                     <property name="label" translatable="yes">Put computer to _sleep when inactive for:</property>
                                     <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">hscale_ups_computer</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -651,13 +628,8 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkHScale" id="hscale_ups_computer">
-                                    <property name="width_request">200</property>
+                                  <object class="GtkComboBox" id="combobox_ups_computer">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="adjustment">adjustment6</property>
-                                    <property name="digits">0</property>
-                                    <property name="value_pos">bottom</property>
                                   </object>
                                   <packing>
                                     <property name="position">1</property>
@@ -780,7 +752,6 @@
                                     <property name="xalign">0</property>
                                     <property name="label" translatable="yes">Put _display to sleep when inactive for:</property>
                                     <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">hscale_ups_display</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -788,12 +759,8 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkHScale" id="hscale_ups_display">
+                                  <object class="GtkComboBox" id="combobox_ups_display">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="adjustment">adjustment7</property>
-                                    <property name="digits">0</property>
-                                    <property name="value_pos">bottom</property>
                                   </object>
                                   <packing>
                                     <property name="position">1</property>
@@ -836,7 +803,7 @@
               <object class="GtkVBox" id="vbox_general">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
-                <property name="spacing">6</property>
+                <property name="spacing">12</property>
                 <child>
                   <object class="GtkVBox" id="vbox75">
                     <property name="visible">True</property>
@@ -861,7 +828,7 @@
                         <child>
                           <object class="GtkVBox" id="vbox76">
                             <property name="visible">True</property>
-                            <property name="spacing">5</property>
+                            <property name="spacing">6</property>
                             <child>
                               <object class="GtkHBox" id="hbox_general_power">
                                 <property name="visible">True</property>
