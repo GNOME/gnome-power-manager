@@ -4,6 +4,7 @@ INCLUDES =							\
 	$(HAL_CFLAGS)						\
 	$(DBUS_CFLAGS)						\
 	$(GNOME_CFLAGS)						\
+	$(PANEL_CFLAGS)						\
 	$(LIBNOTIFY_CFLAGS)					\
 	$(GTKUNIQUE_CFLAGS)					\
 	-DBINDIR=\"$(bindir)\"			 		\
@@ -34,7 +35,8 @@ gnome_inhibit_applet_SOURCES =					\
 
 gnome_inhibit_applet_LDADD =					\
 	$(DBUS_LIBS)						\
-	$(GNOME_LIBS)
+	$(GNOME_LIBS)						\
+	$(PANEL_LIBS)
 
 serverdir       = $(libdir)/bonobo/servers
 server_in_files = GNOME_InhibitApplet.server.in
