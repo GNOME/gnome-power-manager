@@ -81,41 +81,40 @@ gpm_get_timestring (guint time_secs)
 GpmIconPolicy
 gpm_tray_icon_mode_from_string (const gchar *str)
 {
-	if (str == NULL) {
+	if (str == NULL)
 		return GPM_ICON_POLICY_NEVER;
-	}
 
-	if (strcmp (str, "always") == 0) {
+	if (strcmp (str, "always") == 0)
 		return GPM_ICON_POLICY_ALWAYS;
-	} else if (strcmp (str, "present") == 0) {
+	if (strcmp (str, "present") == 0)
 		return GPM_ICON_POLICY_PRESENT;
-	} else if (strcmp (str, "charge") == 0) {
+	if (strcmp (str, "charge") == 0)
 		return GPM_ICON_POLICY_CHARGE;
-	} else if (strcmp (str, "critical") == 0) {
+	if (strcmp (str, "low") == 0)
+		return GPM_ICON_POLICY_LOW;
+	if (strcmp (str, "critical") == 0)
 		return GPM_ICON_POLICY_CRITICAL;
-	} else if (strcmp (str, "never") == 0) {
+	if (strcmp (str, "never") == 0)
 		return GPM_ICON_POLICY_NEVER;
-	} else {
-		return GPM_ICON_POLICY_NEVER;
-	}
+	return GPM_ICON_POLICY_NEVER;
 }
 
 const gchar *
 gpm_tray_icon_mode_to_string (GpmIconPolicy mode)
 {
-	if (mode == GPM_ICON_POLICY_ALWAYS) {
+	if (mode == GPM_ICON_POLICY_ALWAYS)
 		return "always";
-	} else if (mode == GPM_ICON_POLICY_PRESENT) {
+	if (mode == GPM_ICON_POLICY_PRESENT)
 		return "present";
-	} else if (mode == GPM_ICON_POLICY_CHARGE) {
+	if (mode == GPM_ICON_POLICY_CHARGE)
 		return "charge";
-	} else if (mode == GPM_ICON_POLICY_CRITICAL) {
+	if (mode == GPM_ICON_POLICY_LOW)
+		return "low";
+	if (mode == GPM_ICON_POLICY_CRITICAL)
 		return "critical";
-	} else if (mode == GPM_ICON_POLICY_NEVER) {
+	if (mode == GPM_ICON_POLICY_NEVER)
 		return "never";
-	} else {
-		return "never";
-	}
+	return "never";
 }
 
 /**

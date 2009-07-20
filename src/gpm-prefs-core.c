@@ -581,7 +581,7 @@ prefs_setup_notification (GpmPrefs *prefs)
 	GtkWidget *radiobutton_icon_always;
 	GtkWidget *radiobutton_icon_present;
 	GtkWidget *radiobutton_icon_charge;
-	GtkWidget *radiobutton_icon_critical;
+	GtkWidget *radiobutton_icon_low;
 	GtkWidget *radiobutton_icon_never;
 	gboolean is_writable;
 
@@ -595,8 +595,8 @@ prefs_setup_notification (GpmPrefs *prefs)
 					       "radiobutton_notification_present"));
 	radiobutton_icon_charge = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder,
 					      "radiobutton_notification_charge"));
-	radiobutton_icon_critical = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder,
-					      "radiobutton_notification_critical"));
+	radiobutton_icon_low = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder,
+					   "radiobutton_notification_low"));
 	radiobutton_icon_never = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder,
 					     "radiobutton_notification_never"));
 
@@ -604,7 +604,7 @@ prefs_setup_notification (GpmPrefs *prefs)
 	gtk_widget_set_sensitive (radiobutton_icon_always, is_writable);
 	gtk_widget_set_sensitive (radiobutton_icon_present, is_writable);
 	gtk_widget_set_sensitive (radiobutton_icon_charge, is_writable);
-	gtk_widget_set_sensitive (radiobutton_icon_critical, is_writable);
+	gtk_widget_set_sensitive (radiobutton_icon_low, is_writable);
 	gtk_widget_set_sensitive (radiobutton_icon_never, is_writable);
 
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_always),
@@ -613,8 +613,8 @@ prefs_setup_notification (GpmPrefs *prefs)
 				      icon_policy == GPM_ICON_POLICY_PRESENT);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_charge),
 				      icon_policy == GPM_ICON_POLICY_CHARGE);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_critical),
-				      icon_policy == GPM_ICON_POLICY_CRITICAL);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_low),
+				      icon_policy == GPM_ICON_POLICY_LOW);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_never),
 				      icon_policy == GPM_ICON_POLICY_NEVER);
 
@@ -624,8 +624,8 @@ prefs_setup_notification (GpmPrefs *prefs)
 			   GINT_TO_POINTER (GPM_ICON_POLICY_PRESENT));
 	g_object_set_data (G_OBJECT (radiobutton_icon_charge), "policy",
 			   GINT_TO_POINTER (GPM_ICON_POLICY_CHARGE));
-	g_object_set_data (G_OBJECT (radiobutton_icon_critical), "policy",
-			   GINT_TO_POINTER (GPM_ICON_POLICY_CRITICAL));
+	g_object_set_data (G_OBJECT (radiobutton_icon_low), "policy",
+			   GINT_TO_POINTER (GPM_ICON_POLICY_LOW));
 	g_object_set_data (G_OBJECT (radiobutton_icon_never), "policy",
 			   GINT_TO_POINTER (GPM_ICON_POLICY_NEVER));
 
@@ -637,7 +637,7 @@ prefs_setup_notification (GpmPrefs *prefs)
 			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
 	g_signal_connect (radiobutton_icon_charge, "clicked",
 			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
-	g_signal_connect (radiobutton_icon_critical, "clicked",
+	g_signal_connect (radiobutton_icon_low, "clicked",
 			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
 	g_signal_connect (radiobutton_icon_never, "clicked",
 			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
@@ -649,7 +649,7 @@ prefs_setup_notification (GpmPrefs *prefs)
 	if (prefs->priv->has_batteries == FALSE) {
 		/* Hide battery radio options if we have no batteries */
 		gtk_widget_hide_all (radiobutton_icon_charge);
-		gtk_widget_hide_all (radiobutton_icon_critical);
+		gtk_widget_hide_all (radiobutton_icon_low);
 	}
 	if (prefs->priv->has_batteries == FALSE && prefs->priv->has_ups == FALSE) {
 		/* Hide battery present option if no ups or primary */

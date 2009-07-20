@@ -130,9 +130,9 @@ gpm_engine_get_warning_percentage (GpmEngine *engine, DkpDevice *device)
 	}
 	if (percentage <= engine->priv->action_percentage)
 		return GPM_ENGINE_WARNING_ACTION;
-	else if (percentage <= engine->priv->critical_percentage)
+	if (percentage <= engine->priv->critical_percentage)
 		return GPM_ENGINE_WARNING_CRITICAL;
-	else if (percentage <= engine->priv->low_percentage)
+	if (percentage <= engine->priv->low_percentage)
 		return GPM_ENGINE_WARNING_LOW;
 	return GPM_ENGINE_WARNING_NONE;
 }
@@ -160,9 +160,9 @@ gpm_engine_get_warning_time (GpmEngine *engine, DkpDevice *device)
 
 	if (time_to_empty <= engine->priv->action_time)
 		return GPM_ENGINE_WARNING_ACTION;
-	else if (time_to_empty <= engine->priv->critical_time)
+	if (time_to_empty <= engine->priv->critical_time)
 		return GPM_ENGINE_WARNING_CRITICAL;
-	else if (time_to_empty <= engine->priv->low_time)
+	if (time_to_empty <= engine->priv->low_time)
 		return GPM_ENGINE_WARNING_LOW;
 	return GPM_ENGINE_WARNING_NONE;
 }
@@ -345,6 +345,26 @@ gpm_engine_get_icon (GpmEngine *engine)
 	/* policy */
 	if (engine->priv->icon_policy == GPM_ICON_POLICY_CRITICAL) {
 		egg_debug ("no devices critical, so no icon will be displayed.");
+		return NULL;
+	}
+
+	/* we try CRITICAL: BATTERY, UPS, MOUSE, KEYBOARD */
+	icon = gpm_engine_get_icon_priv (engine, DKP_DEVICE_TYPE_BATTERY, GPM_ENGINE_WARNING_LOW, FALSE);
+	if (icon != NULL)
+		return icon;
+	icon = gpm_engine_get_icon_priv (engine, DKP_DEVICE_TYPE_UPS, GPM_ENGINE_WARNING_LOW, FALSE);
+	if (icon != NULL)
+		return icon;
+	icon = gpm_engine_get_icon_priv (engine, DKP_DEVICE_TYPE_MOUSE, GPM_ENGINE_WARNING_LOW, FALSE);
+	if (icon != NULL)
+		return icon;
+	icon = gpm_engine_get_icon_priv (engine, DKP_DEVICE_TYPE_KEYBOARD, GPM_ENGINE_WARNING_LOW, FALSE);
+	if (icon != NULL)
+		return icon;
+
+	/* policy */
+	if (engine->priv->icon_policy == GPM_ICON_POLICY_LOW) {
+		egg_debug ("no devices low, so no icon will be displayed.");
 		return NULL;
 	}
 
