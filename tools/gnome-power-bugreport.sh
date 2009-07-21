@@ -72,6 +72,9 @@ lshal | grep "battery\."
 
 OS=`uname -s`
 
+echo "DeviceKit data:"
+devkit-power --dump
+
 echo "GNOME Power Manager Process Information:"
 if [ "$OS" = "SunOS" ]; then
 	ptree -a `pgrep power`
