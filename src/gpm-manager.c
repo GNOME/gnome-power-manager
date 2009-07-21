@@ -354,10 +354,11 @@ out:
  * gpm_manager_notification_closed_cb:
  **/
 static void
-gpm_manager_notification_closed_cb (NotifyNotification *notification, GpmManager *manager)
+gpm_manager_notification_closed_cb (NotifyNotification *notification, NotifyNotification **notification_class)
 {
 	egg_debug ("caught notification closed signal %p", notification);
-	g_object_unref (notification);
+	/* the object is already unreffed in _close_signal_handler */
+	*notification_class = NULL;
 }
 
 /**
@@ -383,7 +384,7 @@ gpm_manager_notify (GpmManager *manager, NotifyNotification **notification_class
 		notification = notify_notification_new (title, message, icon, NULL);
 	notify_notification_set_timeout (notification, timeout);
 	notify_notification_set_urgency (notification, urgency);
-	g_signal_connect (notification, "closed", G_CALLBACK (gpm_manager_notification_closed_cb), manager);
+	g_signal_connect (notification, "closed", G_CALLBACK (gpm_manager_notification_closed_cb), notification_class);
 
 	egg_debug ("notification %p: %s : %s", notification, title, message);
 
