@@ -408,6 +408,7 @@ gpm_manager_notify (GpmManager *manager, NotifyNotification **notification_class
 	}
 
 	/* save this local instance as the class instance */
+	g_object_add_weak_pointer (G_OBJECT (notification), (gpointer) &notification);
 	*notification_class = notification;
 out:
 	return ret;
