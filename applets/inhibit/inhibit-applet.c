@@ -2,7 +2,7 @@
  *
  * GNOME Power Manager Inhibit Applet
  * Copyright (C) 2006 Benjamin Canou <bookeldor@gmail.com>
- * Copyright (C) 2006-2007 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2006-2009 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -65,6 +65,9 @@ typedef struct{
 
 GType                gpm_inhibit_applet_get_type  (void);
 
+#define GS_DBUS_SERVICE		"org.gnome.SessionManager"
+#define GS_DBUS_PATH		"/org/gnome/SessionManager"
+#define GS_DBUS_INTERFACE	"org.gnome.SessionManager"
 
 static void      gpm_inhibit_applet_class_init (GpmInhibitAppletClass *klass);
 static void      gpm_inhibit_applet_init       (GpmInhibitApplet *applet);
@@ -110,7 +113,9 @@ gpm_applet_inhibit (GpmInhibitApplet *applet,
 
 	ret = dbus_g_proxy_call (applet->proxy, "Inhibit", &error,
 				 G_TYPE_STRING, appname,
+				 G_TYPE_UINT, 0, /* xid */
 				 G_TYPE_STRING, reason,
+				 G_TYPE_UINT, 1+2+4, /* logoff, switch and suspend */
 				 G_TYPE_INVALID,
 				 G_TYPE_UINT, cookie,
 				 G_TYPE_INVALID);
@@ -139,7 +144,7 @@ gpm_applet_uninhibit (GpmInhibitApplet *applet,
 		return FALSE;
 	}
 
-	ret = dbus_g_proxy_call (applet->proxy, "UnInhibit", &error,
+	ret = dbus_g_proxy_call (applet->proxy, "Uninhibit", &error,
 				 G_TYPE_UINT, cookie,
 				 G_TYPE_INVALID,
 				 G_TYPE_INVALID);
@@ -149,7 +154,7 @@ gpm_applet_uninhibit (GpmInhibitApplet *applet,
 	}
 	if (!ret) {
 		/* abort as the DBUS method failed */
-		g_warning ("UnInhibit failed!");
+		g_warning ("Uninhibit failed!");
 	}
 
 	return ret;
@@ -517,9 +522,9 @@ gpm_inhibit_applet_dbus_connect (GpmInhibitApplet *applet)
 		egg_debug ("get proxy\n");
 		g_clear_error (&error);
 		applet->proxy = dbus_g_proxy_new_for_name_owner (applet->connection,
-							 GPM_DBUS_SERVICE,
-							 GPM_DBUS_PATH_INHIBIT,
-							 GPM_DBUS_INTERFACE_INHIBIT,
+							 GS_DBUS_SERVICE,
+							 GS_DBUS_PATH,
+							 GS_DBUS_INTERFACE,
 							 &error);
 		if (error != NULL) {
 			egg_warning ("Cannot connect, maybe the daemon is not running: %s\n", error->message);
@@ -595,7 +600,7 @@ gpm_inhibit_applet_init (GpmInhibitApplet *applet)
 	g_signal_connect (applet->monitor, "connection-changed",
 			  G_CALLBACK (monitor_connection_cb), applet);
 	connection = dbus_g_bus_get (DBUS_BUS_SESSION, NULL);
-	egg_dbus_monitor_assign (applet->monitor, connection, GPM_DBUS_SERVICE);
+	egg_dbus_monitor_assign (applet->monitor, connection, GS_DBUS_SERVICE);
 	gpm_inhibit_applet_dbus_connect (applet);
 
 	/* prepare */
