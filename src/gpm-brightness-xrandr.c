@@ -91,7 +91,7 @@ gpm_brightness_xrandr_output_get_internal (GpmBrightnessXRandR *brightness, RROu
 {
 	unsigned long nitems;
 	unsigned long bytes_after;
-	unsigned char *prop;
+	guint *prop;
 	Atom actual_type;
 	int actual_format;
 	gboolean ret = FALSE;
@@ -101,7 +101,7 @@ gpm_brightness_xrandr_output_get_internal (GpmBrightnessXRandR *brightness, RROu
 	if (XRRGetOutputProperty (brightness->priv->dpy, output, brightness->priv->backlight,
 				  0, 4, False, False, None,
 				  &actual_type, &actual_format,
-				  &nitems, &bytes_after, &prop) != Success) {
+				  &nitems, &bytes_after, ((unsigned char **)&prop)) != Success) {
 		egg_debug ("failed to get property");
 		return FALSE;
 	}
