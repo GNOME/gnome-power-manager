@@ -50,7 +50,8 @@ bin_PROGRAMS =						\
 check_PROGRAMS =					\
 	gnome-power-self-test
 
-gnome_power_statistics_SOURCES =			\
+noinst_LIBRARIES = libgpmshared.a
+libgpmshared_a_SOURCES =				\
 	egg-color.c					\
 	egg-color.h					\
 	egg-debug.h					\
@@ -63,11 +64,24 @@ gnome_power_statistics_SOURCES =			\
 	egg-array-float.h				\
 	egg-idletime.h					\
 	egg-idletime.c					\
+	egg-dbus-proxy.h				\
+	egg-dbus-proxy.c				\
+	egg-dbus-monitor.h				\
+	egg-dbus-monitor.c				\
+	egg-discrete.h					\
+	egg-discrete.c					\
+	egg-console-kit.h				\
+	egg-console-kit.c				\
 	gpm-common.h					\
 	gpm-common.c					\
-	gpm-statistics.c				\
+	gpm-marshal.h					\
+	gpm-marshal.c					\
 	gpm-devicekit.c					\
 	gpm-devicekit.h					\
+	$(NULL)
+
+gnome_power_statistics_SOURCES =			\
+	gpm-statistics.c				\
 	gpm-point-obj.c					\
 	gpm-point-obj.h					\
 	gpm-graph-widget.h				\
@@ -75,6 +89,7 @@ gnome_power_statistics_SOURCES =			\
 	$(NULL)
 
 gnome_power_statistics_LDADD =				\
+	libgpmshared.a					\
 	$(GLIB_LIBS)					\
 	$(DEVKIT_LIBS)					\
 	$(GNOME_LIBS)					\
@@ -87,36 +102,13 @@ gnome_power_statistics_CFLAGS =				\
 	$(NULL)
 
 gnome_power_preferences_SOURCES =			\
-	egg-debug.h					\
-	egg-debug.c					\
-	egg-unique.h					\
-	egg-unique.c					\
-	egg-dbus-proxy.h				\
-	egg-dbus-proxy.c				\
-	egg-dbus-monitor.h				\
-	egg-dbus-monitor.c				\
-	egg-idletime.h					\
-	egg-idletime.c					\
-	gpm-dpms.h					\
-	gpm-dpms.c					\
-	gpm-idle.h					\
-	gpm-idle.c					\
-	gpm-session.h					\
-	gpm-session.c					\
-	gpm-load.h					\
-	gpm-load.c					\
 	gpm-prefs.c					\
 	gpm-prefs-core.h				\
 	gpm-prefs-core.c				\
-	gpm-marshal.h					\
-	gpm-marshal.c					\
-	gpm-common.h					\
-	gpm-common.c					\
-	gpm-screensaver.h				\
-	gpm-screensaver.c				\
 	$(NULL)
 
 gnome_power_preferences_LDADD =				\
+	libgpmshared.a					\
 	$(GLIB_LIBS)					\
 	$(GNOME_LIBS)					\
 	$(HAL_LIBS)					\
@@ -132,20 +124,6 @@ gnome_power_preferences_CFLAGS =			\
 	$(NULL)
 
 gnome_power_manager_SOURCES =				\
-	egg-debug.h					\
-	egg-debug.c					\
-	egg-dbus-monitor.h				\
-	egg-dbus-monitor.c				\
-	egg-dbus-proxy.h				\
-	egg-dbus-proxy.c				\
-	egg-precision.h					\
-	egg-precision.c					\
-	egg-discrete.h					\
-	egg-discrete.c					\
-	egg-console-kit.h				\
-	egg-console-kit.c				\
-	egg-idletime.h					\
-	egg-idletime.c					\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
 	gpm-phone.h					\
@@ -175,10 +153,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-manager.c					\
 	gpm-tray-icon.h					\
 	gpm-tray-icon.c					\
-	gpm-marshal.h					\
-	gpm-marshal.c					\
-	gpm-common.h					\
-	gpm-common.c					\
 	gpm-screensaver.h				\
 	gpm-screensaver.c				\
 	gpm-session.h					\
@@ -188,16 +162,12 @@ gnome_power_manager_SOURCES =				\
 	gpm-stock-icons.h				\
 	gpm-feedback-widget.h				\
 	gpm-feedback-widget.c				\
-	$(NULL)
-
-gnome_power_manager_SOURCES +=				\
 	gpm-engine.h					\
 	gpm-engine.c					\
-	gpm-devicekit.h					\
-	gpm-devicekit.c					\
 	$(NULL)
 
 gnome_power_manager_LDADD =				\
+	libgpmshared.a					\
 	$(GLIB_LIBS)					\
 	$(GSTREAMER_LIBS)				\
 	$(GNOME_LIBS)					\
