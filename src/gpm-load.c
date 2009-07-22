@@ -40,7 +40,6 @@
 #include <glib/gi18n.h>
 
 #include "gpm-common.h"
-#include "gpm-prefs.h"
 #include "gpm-marshal.h"
 #include "egg-debug.h"
 

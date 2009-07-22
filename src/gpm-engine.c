@@ -516,7 +516,7 @@ gpm_engine_conf_key_changed_cb (GConfClient *conf, guint cnxn_id, GConfEntry *en
 
 		/* do we want to display the icon in the tray */
 		icon_policy = gconf_client_get_string (conf, GPM_CONF_UI_ICON_POLICY, NULL);
-		engine->priv->icon_policy = gpm_tray_icon_mode_from_string (icon_policy);
+		engine->priv->icon_policy = gpm_icon_policy_from_string (icon_policy);
 		g_free (icon_policy);
 
 		/* perhaps change icon */
@@ -1060,7 +1060,7 @@ gpm_engine_init (GpmEngine *engine)
 
 	/* do we want to display the icon in the tray */
 	icon_policy = gconf_client_get_string (engine->priv->conf, GPM_CONF_UI_ICON_POLICY, NULL);
-	engine->priv->icon_policy = gpm_tray_icon_mode_from_string (icon_policy);
+	engine->priv->icon_policy = gpm_icon_policy_from_string (icon_policy);
 	g_free (icon_policy);
 
 	/* get percentage policy */

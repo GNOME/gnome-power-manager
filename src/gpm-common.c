@@ -78,43 +78,88 @@ gpm_get_timestring (guint time_secs)
 	return timestring;
 }
 
+/**
+ * gpm_icon_policy_from_string:
+ **/
 GpmIconPolicy
-gpm_tray_icon_mode_from_string (const gchar *str)
+gpm_icon_policy_from_string (const gchar *policy)
 {
-	if (str == NULL)
+	if (policy == NULL)
 		return GPM_ICON_POLICY_NEVER;
-
-	if (strcmp (str, "always") == 0)
+	if (g_strcmp0 (policy, "always") == 0)
 		return GPM_ICON_POLICY_ALWAYS;
-	if (strcmp (str, "present") == 0)
+	if (g_strcmp0 (policy, "present") == 0)
 		return GPM_ICON_POLICY_PRESENT;
-	if (strcmp (str, "charge") == 0)
+	if (g_strcmp0 (policy, "charge") == 0)
 		return GPM_ICON_POLICY_CHARGE;
-	if (strcmp (str, "low") == 0)
+	if (g_strcmp0 (policy, "low") == 0)
 		return GPM_ICON_POLICY_LOW;
-	if (strcmp (str, "critical") == 0)
+	if (g_strcmp0 (policy, "critical") == 0)
 		return GPM_ICON_POLICY_CRITICAL;
-	if (strcmp (str, "never") == 0)
+	if (g_strcmp0 (policy, "never") == 0)
 		return GPM_ICON_POLICY_NEVER;
 	return GPM_ICON_POLICY_NEVER;
 }
 
+/**
+ * gpm_icon_policy_to_string:
+ **/
 const gchar *
-gpm_tray_icon_mode_to_string (GpmIconPolicy mode)
+gpm_icon_policy_to_string (GpmIconPolicy policy)
 {
-	if (mode == GPM_ICON_POLICY_ALWAYS)
+	if (policy == GPM_ICON_POLICY_ALWAYS)
 		return "always";
-	if (mode == GPM_ICON_POLICY_PRESENT)
+	if (policy == GPM_ICON_POLICY_PRESENT)
 		return "present";
-	if (mode == GPM_ICON_POLICY_CHARGE)
+	if (policy == GPM_ICON_POLICY_CHARGE)
 		return "charge";
-	if (mode == GPM_ICON_POLICY_LOW)
+	if (policy == GPM_ICON_POLICY_LOW)
 		return "low";
-	if (mode == GPM_ICON_POLICY_CRITICAL)
+	if (policy == GPM_ICON_POLICY_CRITICAL)
 		return "critical";
-	if (mode == GPM_ICON_POLICY_NEVER)
+	if (policy == GPM_ICON_POLICY_NEVER)
 		return "never";
 	return "never";
+}
+
+/**
+ * gpm_action_policy_from_string:
+ **/
+GpmActionPolicy
+gpm_action_policy_from_string (const gchar *policy)
+{
+	if (policy == NULL)
+		return GPM_ACTION_POLICY_NOTHING;
+	if (g_strcmp0 (policy, "blank") == 0)
+		return GPM_ACTION_POLICY_BLANK;
+	if (g_strcmp0 (policy, "shutdown") == 0)
+		return GPM_ACTION_POLICY_SHUTDOWN;
+	if (g_strcmp0 (policy, "suspend") == 0)
+		return GPM_ACTION_POLICY_SUSPEND;
+	if (g_strcmp0 (policy, "hibernate") == 0)
+		return GPM_ACTION_POLICY_HIBERNATE;
+	if (g_strcmp0 (policy, "interactive") == 0)
+		return GPM_ACTION_POLICY_INTERACTIVE;
+	return GPM_ACTION_POLICY_NOTHING;
+}
+
+/**
+ * gpm_action_policy_to_string:
+ **/
+const gchar *
+gpm_action_policy_to_string (GpmActionPolicy policy)
+{
+	if (policy == GPM_ACTION_POLICY_BLANK)
+		return "blank";
+	if (policy == GPM_ACTION_POLICY_SHUTDOWN)
+		return "shutdown";
+	if (policy == GPM_ACTION_POLICY_SUSPEND)
+		return "suspend";
+	if (policy == GPM_ACTION_POLICY_HIBERNATE)
+		return "hibernate";
+	if (policy == GPM_ACTION_POLICY_INTERACTIVE)
+		return "interactive";
+	return "nothing";
 }
 
 /**

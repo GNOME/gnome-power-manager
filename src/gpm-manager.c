@@ -52,7 +52,6 @@
 #include "gpm-dpms.h"
 #include "gpm-idle.h"
 #include "gpm-manager.h"
-#include "gpm-prefs.h"
 #include "gpm-screensaver.h"
 #include "gpm-backlight.h"
 #include "gpm-screensaver.h"
@@ -484,7 +483,7 @@ gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 }
 
 /**
- * manager_policy_do:
+ * gpm_manager_perform_policy:
  * @manager: This class instance
  * @policy: The policy that we should do, e.g. "suspend"
  * @reason: The reason we are performing the policy action, e.g. "battery critical"
@@ -492,35 +491,35 @@ gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
  * Does one of the policy actions specified in gconf.
  **/
 static gboolean
-manager_policy_do (GpmManager  *manager, const gchar *policy, const gchar *reason)
+gpm_manager_perform_policy (GpmManager  *manager, const gchar *policy_key, const gchar *reason)
 {
 	gchar *action = NULL;
+	GpmActionPolicy policy;
 
 	/* are we inhibited? */
 	if (gpm_manager_is_inhibit_valid (manager, FALSE, "policy action") == FALSE)
 		return FALSE;
 
-	egg_debug ("policy: %s", policy);
-	action = gconf_client_get_string (manager->priv->conf, policy, NULL);
-	if (action == NULL)
-		return FALSE;
+	action = gconf_client_get_string (manager->priv->conf, policy_key, NULL);
+	egg_debug ("action: %s set to %s (%s)", policy_key, action, reason);
+	policy = gpm_action_policy_from_string (action);
 
-	if (strcmp (action, ACTION_NOTHING) == 0) {
+	if (policy == GPM_ACTION_POLICY_NOTHING) {
 		egg_debug ("doing nothing, reason: %s", reason);
-	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
+	} else if (policy == GPM_ACTION_POLICY_SUSPEND) {
 		gpm_manager_action_suspend (manager, reason);
 
-	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
+	} else if (policy == GPM_ACTION_POLICY_HIBERNATE) {
 		gpm_manager_action_hibernate (manager, reason);
 
-	} else if (strcmp (action, ACTION_BLANK) == 0) {
+	} else if (policy == GPM_ACTION_POLICY_BLANK) {
 		gpm_manager_blank_screen (manager, NULL);
 
-	} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
+	} else if (policy == GPM_ACTION_POLICY_SHUTDOWN) {
 		egg_debug ("shutting down, reason: %s", reason);
 		gpm_control_shutdown (manager->priv->control, NULL);
 
-	} else if (strcmp (action, ACTION_INTERACTIVE) == 0) {
+	} else if (policy == GPM_ACTION_POLICY_INTERACTIVE) {
 		GpmSession *session;
 		egg_debug ("logout, reason: %s", reason);
 		session = gpm_session_new ();
@@ -638,21 +637,18 @@ idle_do_sleep (GpmManager *manager)
 	gchar *action = NULL;
 	gboolean ret;
 	GError *error = NULL;
+	GpmActionPolicy policy;
 
 	if (!manager->priv->on_battery)
 		action = gconf_client_get_string (manager->priv->conf, GPM_CONF_ACTIONS_SLEEP_TYPE_AC, NULL);
 	else
 		action = gconf_client_get_string (manager->priv->conf, GPM_CONF_ACTIONS_SLEEP_TYPE_BATT, NULL);
+	policy = gpm_action_policy_from_string (action);
 
-	if (action == NULL) {
-		egg_warning ("action NULL, gconf error");
-		return;
-	}
-
-	if (strcmp (action, ACTION_NOTHING) == 0) {
+	if (policy == GPM_ACTION_POLICY_NOTHING) {
 		egg_debug ("doing nothing as system idle action");
 
-	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
+	} else if (policy == GPM_ACTION_POLICY_SUSPEND) {
 		egg_debug ("suspending, reason: System idle");
 		ret = gpm_control_suspend (manager->priv->control, &error);
 		if (!ret) {
@@ -666,7 +662,7 @@ idle_do_sleep (GpmManager *manager)
 			}
 		}
 
-	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
+	} else if (policy == GPM_ACTION_POLICY_HIBERNATE) {
 		egg_debug ("hibernating, reason: System idle");
 		ret = gpm_control_hibernate (manager->priv->control, &error);
 		if (!ret) {
@@ -744,13 +740,13 @@ lid_button_pressed (GpmManager *manager, gboolean pressed)
 
 	if (!manager->priv->on_battery) {
 		egg_debug ("Performing AC policy");
-		manager_policy_do (manager, GPM_CONF_BUTTON_LID_AC,
+		gpm_manager_perform_policy (manager, GPM_CONF_BUTTON_LID_AC,
 				   _("The lid has been closed on ac power."));
 		return;
 	}
 
 	egg_debug ("Performing battery policy");
-	manager_policy_do (manager, GPM_CONF_BUTTON_LID_BATT,
+	gpm_manager_perform_policy (manager, GPM_CONF_BUTTON_LID_BATT,
 			   _("The lid has been closed on battery power."));
 }
 
@@ -830,19 +826,19 @@ button_pressed_cb (GpmButton *button, const gchar *type, GpmManager *manager)
 		return;
 	}
 
-	if (strcmp (type, GPM_BUTTON_POWER) == 0)
-		manager_policy_do (manager, GPM_CONF_BUTTON_POWER, _("The power button has been pressed."));
-	else if (strcmp (type, GPM_BUTTON_SLEEP) == 0)
-		manager_policy_do (manager, GPM_CONF_BUTTON_SUSPEND, _("The suspend button has been pressed."));
-	else if (strcmp (type, GPM_BUTTON_SUSPEND) == 0)
-		manager_policy_do (manager, GPM_CONF_BUTTON_SUSPEND, _("The suspend button has been pressed."));
-	else if (strcmp (type, GPM_BUTTON_HIBERNATE) == 0)
-		manager_policy_do (manager, GPM_CONF_BUTTON_HIBERNATE, _("The hibernate button has been pressed."));
-	else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0)
+	if (g_strcmp0 (type, GPM_BUTTON_POWER) == 0)
+		gpm_manager_perform_policy (manager, GPM_CONF_BUTTON_POWER, _("The power button has been pressed."));
+	else if (g_strcmp0 (type, GPM_BUTTON_SLEEP) == 0)
+		gpm_manager_perform_policy (manager, GPM_CONF_BUTTON_SUSPEND, _("The suspend button has been pressed."));
+	else if (g_strcmp0 (type, GPM_BUTTON_SUSPEND) == 0)
+		gpm_manager_perform_policy (manager, GPM_CONF_BUTTON_SUSPEND, _("The suspend button has been pressed."));
+	else if (g_strcmp0 (type, GPM_BUTTON_HIBERNATE) == 0)
+		gpm_manager_perform_policy (manager, GPM_CONF_BUTTON_HIBERNATE, _("The hibernate button has been pressed."));
+	else if (g_strcmp0 (type, GPM_BUTTON_LID_OPEN) == 0)
 		lid_button_pressed (manager, FALSE);
-	else if (strcmp (type, GPM_BUTTON_LID_CLOSED) == 0)
+	else if (g_strcmp0 (type, GPM_BUTTON_LID_CLOSED) == 0)
 		lid_button_pressed (manager, TRUE);
-	else if (strcmp (type, GPM_BUTTON_BATTERY) == 0) {
+	else if (g_strcmp0 (type, GPM_BUTTON_BATTERY) == 0) {
 		message = gpm_engine_get_summary (manager->priv->engine);
 		gpm_manager_notify (manager, &manager->priv->notification,
 				      _("Power Information"),
@@ -854,13 +850,13 @@ button_pressed_cb (GpmButton *button, const gchar *type, GpmManager *manager)
 	}
 
 	/* really belongs in gnome-manager */
-	if (strcmp (type, GPM_BUTTON_LOCK) == 0)
+	if (g_strcmp0 (type, GPM_BUTTON_LOCK) == 0)
 		gpm_screensaver_lock (manager->priv->screensaver);
 	/* Disable or enable the fancy manager, as we don't want
 	 * this starting when the lid is shut */
-	if (strcmp (type, GPM_BUTTON_LID_CLOSED) == 0)
+	if (g_strcmp0 (type, GPM_BUTTON_LID_CLOSED) == 0)
 		update_lid_throttle (manager, TRUE);
-	else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0)
+	else if (g_strcmp0 (type, GPM_BUTTON_LID_OPEN) == 0)
 		update_lid_throttle (manager, FALSE);
 }
 
@@ -947,7 +943,7 @@ gpm_manager_client_changed_cb (DkpClient *client, GpmManager *manager)
 	   lid close on battery action if the ac adapter is removed when the laptop
 	   is closed. Fixes #331655 */
 	if (event_when_closed && on_battery && gpm_button_is_lid_closed (manager->priv->button)) {
-		manager_policy_do (manager, GPM_CONF_BUTTON_LID_BATT,
+		gpm_manager_perform_policy (manager, GPM_CONF_BUTTON_LID_BATT,
 				   _("The lid has been closed, and the ac adapter "
 				     "removed (and gconf is okay)."));
 	}
@@ -965,7 +961,7 @@ gpm_manager_client_changed_cb (DkpClient *client, GpmManager *manager)
 static gboolean
 manager_critical_action_do (GpmManager *manager)
 {
-	manager_policy_do (manager, GPM_CONF_ACTIONS_CRITICAL_BATT, _("Battery is critically low."));
+	gpm_manager_perform_policy (manager, GPM_CONF_ACTIONS_CRITICAL_BATT, _("Battery is critically low."));
 	return FALSE;
 }
 
@@ -995,10 +991,10 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 	if (value == NULL)
 		return;
 
-	if (strcmp (entry->key, GPM_CONF_TIMEOUT_SLEEP_COMPUTER_BATT) == 0 ||
-	    strcmp (entry->key, GPM_CONF_TIMEOUT_SLEEP_COMPUTER_AC) == 0 ||
-	    strcmp (entry->key, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_BATT) == 0 ||
-	    strcmp (entry->key, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_AC) == 0)
+	if (g_strcmp0 (entry->key, GPM_CONF_TIMEOUT_SLEEP_COMPUTER_BATT) == 0 ||
+	    g_strcmp0 (entry->key, GPM_CONF_TIMEOUT_SLEEP_COMPUTER_AC) == 0 ||
+	    g_strcmp0 (entry->key, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_BATT) == 0 ||
+	    g_strcmp0 (entry->key, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_AC) == 0)
 		gpm_manager_sync_policy_sleep (manager);
 }
 
@@ -1433,6 +1429,7 @@ gpm_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, GpmManager 
 	DkpDeviceType type;
 	gdouble percentage;
 	gint64 time_to_empty;
+	GpmActionPolicy policy;
 
 	/* get device properties */
 	g_object_get (device,
@@ -1456,19 +1453,16 @@ gpm_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, GpmManager 
 
 		/* we have to do different warnings depending on the policy */
 		action = gconf_client_get_string (manager->priv->conf, GPM_CONF_ACTIONS_CRITICAL_BATT, NULL);
-		if (action == NULL) {
-			egg_warning ("schema invalid!");
-			action = g_strdup (ACTION_NOTHING);
-		}
+		policy = gpm_action_policy_from_string (action);
 
 		/* use different text for different actions */
-		if (strcmp (action, ACTION_NOTHING) == 0)
+		if (policy == GPM_ACTION_POLICY_NOTHING)
 			action_text = g_strdup (_("Plug in your AC adapter to avoid losing data."));
-		else if (strcmp (action, ACTION_SUSPEND) == 0)
+		else if (policy == GPM_ACTION_POLICY_SUSPEND)
 			action_text = g_strdup_printf (_("This computer will suspend in %s if the AC is not connected."), time_text);
-		else if (strcmp (action, ACTION_HIBERNATE) == 0)
+		else if (policy == GPM_ACTION_POLICY_HIBERNATE)
 			action_text = g_strdup_printf (_("This computer will hibernate in %s if the AC is not connected."), time_text);
-		else if (strcmp (action, ACTION_SHUTDOWN) == 0)
+		else if (policy == GPM_ACTION_POLICY_SHUTDOWN)
 			action_text = g_strdup_printf (_("This computer will shutdown in %s if the AC is not connected."), time_text);
 
 		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%.1f%%). %s"),
@@ -1527,6 +1521,7 @@ gpm_engine_charge_action_cb (GpmEngine *engine, DkpDevice *device, GpmManager *m
 	gchar *message = NULL;
 	gchar *icon = NULL;
 	DkpDeviceType type;
+	GpmActionPolicy policy;
 
 	/* get device properties */
 	g_object_get (device,
@@ -1546,24 +1541,25 @@ gpm_engine_charge_action_cb (GpmEngine *engine, DkpDevice *device, GpmManager *m
 
 		/* we have to do different warnings depending on the policy */
 		action = gconf_client_get_string (manager->priv->conf, GPM_CONF_ACTIONS_CRITICAL_BATT, NULL);
+		policy = gpm_action_policy_from_string (action);
 
 		/* use different text for different actions */
-		if (strcmp (action, ACTION_NOTHING) == 0) {
+		if (policy == GPM_ACTION_POLICY_NOTHING) {
 			message = g_strdup (_("The battery is below the critical level and "
 					      "this computer will <b>power-off</b> when the "
 					      "battery becomes completely empty."));
 
-		} else if (strcmp (action, ACTION_SUSPEND) == 0) {
+		} else if (policy == GPM_ACTION_POLICY_SUSPEND) {
 			message = g_strdup (_("The battery is below the critical level and "
 					      "this computer is about to suspend.<br>"
 					      "<b>NOTE:</b> A small amount of power is required "
 					      "to keep your computer in a suspended state."));
 
-		} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
+		} else if (policy == GPM_ACTION_POLICY_HIBERNATE) {
 			message = g_strdup (_("The battery is below the critical level and "
 					      "this computer is about to hibernate."));
 
-		} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
+		} else if (policy == GPM_ACTION_POLICY_SHUTDOWN) {
 			message = g_strdup (_("The battery is below the critical level and "
 					      "this computer is about to shutdown."));
 		}
@@ -1580,16 +1576,16 @@ gpm_engine_charge_action_cb (GpmEngine *engine, DkpDevice *device, GpmManager *m
 		action = gconf_client_get_string (manager->priv->conf, GPM_CONF_ACTIONS_CRITICAL_UPS, NULL);
 
 		/* use different text for different actions */
-		if (strcmp (action, ACTION_NOTHING) == 0) {
+		if (policy == GPM_ACTION_POLICY_NOTHING) {
 			message = g_strdup (_("The UPS is below the critical level and "
 				              "this computer will <b>power-off</b> when the "
 				              "UPS becomes completely empty."));
 
-		} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
+		} else if (policy == GPM_ACTION_POLICY_HIBERNATE) {
 			message = g_strdup (_("The UPS is below the critical level and "
 				              "this computer is about to hibernate."));
 
-		} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
+		} else if (policy == GPM_ACTION_POLICY_SHUTDOWN) {
 			message = g_strdup (_("The UPS is below the critical level and "
 				              "this computer is about to shutdown."));
 		}
@@ -1658,13 +1654,13 @@ gpm_manager_console_kit_active_changed_cb (EggConsoleKit *console, gboolean acti
 	/* get ac state */
 	if (!manager->priv->on_battery) {
 		egg_debug ("Performing AC policy as become active when lid down");
-		manager_policy_do (manager, GPM_CONF_BUTTON_LID_AC,
+		gpm_manager_perform_policy (manager, GPM_CONF_BUTTON_LID_AC,
 				   _("The lid has been found closed on ac power."));
 		return;
 	}
 
 	egg_debug ("Performing battery policy as become active when lid down");
-	manager_policy_do (manager, GPM_CONF_BUTTON_LID_BATT,
+	gpm_manager_perform_policy (manager, GPM_CONF_BUTTON_LID_BATT,
 			   _("The lid has been found closed on battery power."));
 }
 

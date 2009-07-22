@@ -179,9 +179,20 @@ typedef enum {
 	GPM_ICON_POLICY_NEVER
 } GpmIconPolicy;
 
+typedef enum {
+	GPM_ACTION_POLICY_BLANK,
+	GPM_ACTION_POLICY_SUSPEND,
+	GPM_ACTION_POLICY_SHUTDOWN,
+	GPM_ACTION_POLICY_HIBERNATE,
+	GPM_ACTION_POLICY_INTERACTIVE,
+	GPM_ACTION_POLICY_NOTHING
+} GpmActionPolicy;
+
 gchar		*gpm_get_timestring				(guint		 time);
-GpmIconPolicy	 gpm_tray_icon_mode_from_string			(const gchar	*mode);
-const gchar	*gpm_tray_icon_mode_to_string			(GpmIconPolicy	 mode);
+GpmIconPolicy	 gpm_icon_policy_from_string			(const gchar	*policy);
+const gchar	*gpm_icon_policy_to_string			(GpmIconPolicy	 policy);
+GpmActionPolicy	 gpm_action_policy_from_string			(const gchar	*policy);
+const gchar	*gpm_action_policy_to_string			(GpmActionPolicy  policy);
 void 		 gpm_help_display				(const gchar	*link_id);
 #ifdef EGG_TEST
 void		 gpm_common_test				(gpointer	 data);
