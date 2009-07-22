@@ -4,8 +4,8 @@ AUTOMAKE_OPTIONS = 1.7
 NULL =
 
 EXTRA_DIST =						\
-	org.gnome.PowerManager.xml		\
-	org.gnome.PowerManager.Backlight.xml	\
+	org.gnome.PowerManager.xml			\
+	org.gnome.PowerManager.Backlight.xml		\
 	gpm-marshal.list				\
 	$(NULL)
 
@@ -251,8 +251,8 @@ gnome_power_self_test_LDADD =				\
 gnome_power_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS) $(WARNINGFLAGS)
 
 BUILT_SOURCES = 					\
-	org.gnome.PowerManager.h		\
-	org.gnome.PowerManager.Backlight.h	\
+	org.gnome.PowerManager.h			\
+	org.gnome.PowerManager.Backlight.h		\
 	gpm-marshal.c					\
 	gpm-marshal.h					\
 	$(NULL)
@@ -268,7 +268,7 @@ org.gnome.PowerManager.h: org.gnome.PowerManager.xml
 	libtool --mode=execute dbus-binding-tool	\
 		--prefix=gpm_manager			\
 		--mode=glib-server			\
-		--output=org.gnome.PowerManager.h		\
+		--output=org.gnome.PowerManager.h	\
 		$(srcdir)/org.gnome.PowerManager.xml
 
 org.gnome.PowerManager.Backlight.h: org.gnome.PowerManager.Backlight.xml
