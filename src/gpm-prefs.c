@@ -107,7 +107,7 @@ main (int argc, char **argv)
 
 	/* are we already activated? */
 	egg_unique = egg_unique_new ();
-	ret = egg_unique_assign (egg_unique, "org.freedesktop.PowerManagement.Preferences");
+	ret = egg_unique_assign (egg_unique, "org.gnome.PowerManager.Preferences");
 	if (!ret) {
 		goto unique_out;
 	}

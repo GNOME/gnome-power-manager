@@ -26,9 +26,9 @@
 #include <glib-object.h>
 #include <dbus/dbus-glib.h>
 
-#define	GPM_DBUS_SERVICE		"org.freedesktop.PowerManagement"
-#define	GPM_DBUS_PATH			"/org/freedesktop/PowerManagement"
-#define	GPM_DBUS_INTERFACE		"org.freedesktop.PowerManagement"
+#define	GPM_DBUS_SERVICE		"org.gnome.PowerManager"
+#define	GPM_DBUS_PATH			"/org.gnome.PowerManager"
+#define	GPM_DBUS_INTERFACE		"org.gnome.PowerManager"
 
 G_BEGIN_DECLS
 

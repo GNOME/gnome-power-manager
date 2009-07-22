@@ -64,7 +64,7 @@
 #include "gpm-disks.h"
 #include "gpm-feedback-widget.h"
 
-#include "org.freedesktop.PowerManagement.Backlight.h"
+#include "org.gnome.PowerManager.Backlight.h"
 
 static void     gpm_manager_finalize	(GObject	 *object);
 

@@ -41,7 +41,7 @@
 #include "gpm-manager.h"
 #include "gpm-session.h"
 
-#include "org.freedesktop.PowerManagement.h"
+#include "org.gnome.PowerManager.h"
 
 #include "egg-debug.h"
 
@@ -50,7 +50,7 @@
  * @connection: What we want to register to
  * @object: The GObject we want to register
  *
- * Register org.freedesktop.PowerManagement on the session bus.
+ * Register org.gnome.PowerManager on the session bus.
  * This function MUST be called before DBUS service will work.
  *
  * Return value: success

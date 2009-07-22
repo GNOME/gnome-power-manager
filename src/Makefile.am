@@ -4,8 +4,8 @@ AUTOMAKE_OPTIONS = 1.7
 NULL =
 
 EXTRA_DIST =						\
-	org.freedesktop.PowerManagement.xml		\
-	org.freedesktop.PowerManagement.Backlight.xml	\
+	org.gnome.PowerManager.xml		\
+	org.gnome.PowerManager.Backlight.xml	\
 	gpm-marshal.list				\
 	$(NULL)
 
@@ -281,8 +281,8 @@ gnome_power_self_test_LDADD =				\
 gnome_power_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS) $(WARNINGFLAGS)
 
 BUILT_SOURCES = 					\
-	org.freedesktop.PowerManagement.h		\
-	org.freedesktop.PowerManagement.Backlight.h	\
+	org.gnome.PowerManager.h		\
+	org.gnome.PowerManager.Backlight.h	\
 	gpm-marshal.c					\
 	gpm-marshal.h					\
 	$(NULL)
@@ -294,19 +294,19 @@ gpm-marshal.c: gpm-marshal.list
 gpm-marshal.h: gpm-marshal.list
 	@GLIB_GENMARSHAL@ $< --prefix=gpm_marshal --header > $@
 
-org.freedesktop.PowerManagement.h: org.freedesktop.PowerManagement.xml
+org.gnome.PowerManager.h: org.gnome.PowerManager.xml
 	libtool --mode=execute dbus-binding-tool	\
 		--prefix=gpm_manager			\
 		--mode=glib-server			\
-		--output=org.freedesktop.PowerManagement.h		\
-		$(srcdir)/org.freedesktop.PowerManagement.xml
+		--output=org.gnome.PowerManager.h		\
+		$(srcdir)/org.gnome.PowerManager.xml
 
-org.freedesktop.PowerManagement.Backlight.h: org.freedesktop.PowerManagement.Backlight.xml
+org.gnome.PowerManager.Backlight.h: org.gnome.PowerManager.Backlight.xml
 	libtool --mode=execute dbus-binding-tool	\
 		--prefix=gpm_backlight			\
 		--mode=glib-server			\
-		--output=org.freedesktop.PowerManagement.Backlight.h	\
-		$(srcdir)/org.freedesktop.PowerManagement.Backlight.xml
+		--output=org.gnome.PowerManager.Backlight.h	\
+		$(srcdir)/org.gnome.PowerManager.Backlight.xml
 
 clean-local:
 	rm -f *~
