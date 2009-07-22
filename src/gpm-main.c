@@ -164,6 +164,7 @@ main (int argc, char *argv[])
 	GpmManager *manager = NULL;
 	GError *error = NULL;
 	GOptionContext *context;
+	gint ret;
 
 	const GOptionEntry options[] = {
 		{ "verbose", '\0', 0, G_OPTION_ARG_NONE, &verbose,
@@ -249,6 +250,20 @@ main (int argc, char *argv[])
 		egg_error ("%s is already running in this session.", GPM_NAME);
 		return 0;
 	}
+
+	ret = dbus_bus_request_name(dbus_g_connection_get_connection(system_connection),
+				    "org.freedesktop.Policy.Power",
+				    DBUS_NAME_FLAG_REPLACE_EXISTING, NULL);
+	switch (ret) {
+	case DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER:
+		egg_debug ("Successfully acquired interface org.freedesktop.Policy.Power.");
+		break;
+	case DBUS_REQUEST_NAME_REPLY_IN_QUEUE:
+		egg_debug ("Queued for interface org.freedesktop.Policy.Power.");
+		break;
+	default:
+		break;
+	};
 
 	/* Only timeout and close the mainloop if we have specified it
 	 * on the command line */
