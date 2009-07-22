@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <node name="/">
   <interface name="org.freedesktop.PowerManagement">
-    <method name="Suspend"></method>
-    <method name="Hibernate"></method>
-    <method name="CanSuspend">
-      <arg type="b" name="can_suspend" direction="out"/>
-    </method>
-    <method name="CanHibernate">
-      <arg type="b" name="can_hibernate" direction="out"/>
-    </method>
-    <!-- G-P-M SPECIFIC -->
     <method name="GetPreferencesOptions">
       <arg type="i" name="capability" direction="out"/>
     </method>
