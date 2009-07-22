@@ -1574,6 +1574,7 @@ gpm_engine_charge_action_cb (GpmEngine *engine, DkpDevice *device, GpmManager *m
 
 		/* we have to do different warnings depending on the policy */
 		action = gconf_client_get_string (manager->priv->conf, GPM_CONF_ACTIONS_CRITICAL_UPS, NULL);
+		policy = gpm_action_policy_from_string (action);
 
 		/* use different text for different actions */
 		if (policy == GPM_ACTION_POLICY_NOTHING) {
