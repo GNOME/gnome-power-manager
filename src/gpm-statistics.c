@@ -1489,7 +1489,7 @@ main (int argc, char *argv[])
 
 	/* are we already activated? */
 	egg_unique = egg_unique_new ();
-	ret = egg_unique_assign (egg_unique, "org.freedesktop.DeviceKit.Gnome");
+	ret = egg_unique_assign (egg_unique, "org.gnome.PowerManager.Statistics");
 	if (!ret)
 		goto unique_out;
 	g_signal_connect (egg_unique, "activated",

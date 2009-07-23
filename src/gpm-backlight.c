@@ -161,7 +161,7 @@ gpm_backlight_set_brightness (GpmBacklight *backlight, guint percentage, GError 
 	/* we emit a signal for the brightness applet */
 	if (ret && hw_changed) {
 		egg_debug ("emitting brightness-changed : %i", percentage);
-//		g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, percentage);
+		g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, percentage);
 	}
 	return ret;
 }
@@ -360,7 +360,7 @@ gpm_backlight_button_pressed_cb (GpmButton *button, const gchar *type, GpmBackli
 		/* we emit a signal for the brightness applet */
 		if (ret && hw_changed) {
 			egg_debug ("emitting brightness-changed : %i", percentage);
-//			g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, percentage);
+			g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, percentage);
 		}
 	} else if (strcmp (type, GPM_BUTTON_BRIGHT_DOWN) == 0) {
 		/* go up down step */
@@ -377,7 +377,7 @@ gpm_backlight_button_pressed_cb (GpmButton *button, const gchar *type, GpmBackli
 		/* we emit a signal for the brightness applet */
 		if (ret && hw_changed) {
 			egg_debug ("emitting brightness-changed : %i", percentage);
-//			g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, percentage);
+			g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, percentage);
 		}
 	} else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0) {
 		/* make sure we undim when we lift the lid */
