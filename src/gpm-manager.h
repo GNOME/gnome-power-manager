@@ -26,10 +26,6 @@
 #include <glib-object.h>
 #include <dbus/dbus-glib.h>
 
-#define	GPM_DBUS_SERVICE		"org.gnome.PowerManager"
-#define	GPM_DBUS_PATH			"/org.gnome.PowerManager"
-#define	GPM_DBUS_INTERFACE		"org.gnome.PowerManager"
-
 G_BEGIN_DECLS
 
 #define GPM_TYPE_MANAGER	 (gpm_manager_get_type ())

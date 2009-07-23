@@ -160,8 +160,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-networkmanager.h				\
 	gpm-networkmanager.c				\
 	gpm-stock-icons.h				\
-	gpm-feedback-widget.h				\
-	gpm-feedback-widget.c				\
+	gpm-popup-window.h				\
+	gpm-popup-window.c				\
 	gpm-engine.h					\
 	gpm-engine.c					\
 	$(NULL)

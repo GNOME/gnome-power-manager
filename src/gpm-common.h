@@ -33,15 +33,9 @@ G_BEGIN_DECLS
 
 #define	GPM_DBUS_SERVICE		"org.gnome.PowerManager"
 #define	GPM_DBUS_INTERFACE		"org.gnome.PowerManager"
-#define	GPM_DBUS_INTERFACE_WIDGET	"org.gnome.PowerManager.Widget"
 #define	GPM_DBUS_INTERFACE_BACKLIGHT	"org.gnome.PowerManager.Backlight"
-#define	GPM_DBUS_INTERFACE_STATS	"org.gnome.PowerManager.Statistics"
-#define	GPM_DBUS_INTERFACE_INHIBIT	"org.gnome.PowerManager.Inhibit"
-#define	GPM_DBUS_PATH			"/org.gnome.PowerManager"
-#define	GPM_DBUS_PATH_BACKLIGHT		"/org.gnome.PowerManager/Backlight"
-#define	GPM_DBUS_PATH_WIDGET		"/org.gnome.PowerManager/Widget"
-#define	GPM_DBUS_PATH_STATS		"/org.gnome.PowerManager/Statistics"
-#define	GPM_DBUS_PATH_INHIBIT		"/org.gnome.PowerManager/Inhibit"
+#define	GPM_DBUS_PATH			"/org/gnome/PowerManager"
+#define	GPM_DBUS_PATH_BACKLIGHT		"/org/gnome/PowerManager/Backlight"
 
 /* common descriptions of this program */
 #define GPM_NAME 			_("Power Manager")

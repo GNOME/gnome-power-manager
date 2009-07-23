@@ -251,6 +251,7 @@ main (int argc, char *argv[])
 		return 0;
 	}
 
+	/* register to be a policy agent, just like kpackagekit does */
 	ret = dbus_bus_request_name(dbus_g_connection_get_connection(system_connection),
 				    "org.freedesktop.Policy.Power",
 				    DBUS_NAME_FLAG_REPLACE_EXISTING, NULL);

@@ -48,7 +48,7 @@
 #include "gpm-control.h"
 #include "gpm-common.h"
 #include "egg-debug.h"
-#include "gpm-feedback-widget.h"
+#include "gpm-popup-window.h"
 #include "gpm-dpms.h"
 #include "gpm-idle.h"
 #include "gpm-marshal.h"
@@ -63,7 +63,7 @@ struct GpmBacklightPrivate
 	GpmBrightness		*brightness;
 	GpmButton		*button;
 	GConfClient		*conf;
-	GpmFeedback		*feedback;
+	GtkWidget		*popup;
 	GpmControl		*control;
 	GpmDpms			*dpms;
 	GpmIdle			*idle;
@@ -260,8 +260,10 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	}
 
 	/* only show dialog if interactive */
-	if (interactive)
-		gpm_feedback_display_value (backlight->priv->feedback, (float) brightness);
+	if (interactive) {
+		gpm_popup_window_set_value (GPM_POPUP_WINDOW (backlight->priv->popup), (float) brightness);
+		gtk_widget_show (backlight->priv->popup);
+	}
 
 	ret = gpm_brightness_set (backlight->priv->brightness, value, &hw_changed);
 	/* we emit a signal for the brightness applet */
@@ -350,7 +352,8 @@ gpm_backlight_button_pressed_cb (GpmButton *button, const gchar *type, GpmBackli
 		/* show the new value */
 		if (ret) {
 			gpm_brightness_get (backlight->priv->brightness, &percentage);
-			gpm_feedback_display_value (backlight->priv->feedback, (float) percentage/100.0f);
+			gpm_popup_window_set_value (GPM_POPUP_WINDOW (backlight->priv->popup), (gfloat) percentage/100.0f);
+			gtk_widget_show (backlight->priv->popup);
 			/* save the new percentage */
 			backlight->priv->master_percentage = percentage;
 		}
@@ -366,7 +369,8 @@ gpm_backlight_button_pressed_cb (GpmButton *button, const gchar *type, GpmBackli
 		/* show the new value */
 		if (ret) {
 			gpm_brightness_get (backlight->priv->brightness, &percentage);
-			gpm_feedback_display_value (backlight->priv->feedback, (float) percentage/100.0f);
+			gpm_popup_window_set_value (GPM_POPUP_WINDOW (backlight->priv->popup), (gfloat) percentage/100.0f);
+			gtk_widget_show (backlight->priv->popup);
 			/* save the new percentage */
 			backlight->priv->master_percentage = percentage;
 		}
@@ -573,10 +577,10 @@ gpm_backlight_finalize (GObject *object)
 	backlight = GPM_BACKLIGHT (object);
 
 	g_timer_destroy (backlight->priv->idle_timer);
+	gtk_widget_destroy (backlight->priv->popup);
 
 	g_object_unref (backlight->priv->dpms);
 	g_object_unref (backlight->priv->control);
-	g_object_unref (backlight->priv->feedback);
 	g_object_unref (backlight->priv->conf);
 	g_object_unref (backlight->priv->client);
 	g_object_unref (backlight->priv->button);
@@ -627,7 +631,7 @@ gpm_backlight_init (GpmBacklight *backlight)
 	/* record our idle time */
 	backlight->priv->idle_timer = g_timer_new ();
 
-	/* watch for manual brightness changes (for the feedback widget) */
+	/* watch for manual brightness changes (for the popup widget) */
 	backlight->priv->brightness = gpm_brightness_new ();
 	g_signal_connect (backlight->priv->brightness, "brightness-changed",
 			  G_CALLBACK (brightness_changed_cb), backlight);
@@ -684,9 +688,10 @@ gpm_backlight_init (GpmBacklight *backlight)
 	gpm_idle_set_timeout_dim (backlight->priv->idle, backlight->priv->idle_dim_timeout);
 
 	/* use a visual widget */
-	backlight->priv->feedback = gpm_feedback_new ();
-	gpm_feedback_set_icon_name (backlight->priv->feedback,
-				    GPM_STOCK_BRIGHTNESS_LCD);
+	backlight->priv->popup = gpm_popup_window_new ();
+        gtk_window_set_position (GTK_WINDOW (backlight->priv->popup), GTK_WIN_POS_NONE);
+	gpm_popup_window_set_icon_name (GPM_POPUP_WINDOW (backlight->priv->popup),
+					GPM_STOCK_BRIGHTNESS_LCD);
 
 	/* DPMS mode poll class */
 	backlight->priv->dpms = gpm_dpms_new ();
