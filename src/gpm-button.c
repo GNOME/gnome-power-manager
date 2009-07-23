@@ -147,7 +147,7 @@ gpm_button_filter_x_events (GdkXEvent *xevent, GdkEvent *event, gpointer data)
 static gboolean
 gpm_button_grab_keystring (GpmButton *button, guint64 keycode)
 {
-	guint modmask = 0;
+	guint modmask = AnyModifier;
 	Display *display;
 	gint ret;
 
