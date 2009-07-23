@@ -62,7 +62,6 @@
 #include "gpm-engine.h"
 #include "gpm-devicekit.h"
 #include "gpm-disks.h"
-#include "gpm-feedback-widget.h"
 
 #include "org.gnome.PowerManager.Backlight.h"
 
