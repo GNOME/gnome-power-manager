@@ -528,6 +528,18 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/notify/sleep_failed_uri</key>
+      <applyto>/apps/gnome-power-manager/notify/sleep_failed_uri</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>string</type>
+      <default>http://people.freedesktop.org/~hughsient/quirk/</default>
+      <locale name="C">
+        <short>The URI to show to the user on sleep failure</short>
+        <long>When sleep fails we can show the user a button to help fix the situation. Leave this blank if the button should not be shown.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/notify/low_power</key>
       <applyto>/apps/gnome-power-manager/notify/low_power</applyto>
       <owner>gnome-power-manager</owner>

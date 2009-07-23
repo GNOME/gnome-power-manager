@@ -115,6 +115,7 @@ G_BEGIN_DECLS
 #define GPM_CONF_NOTIFY_DISCHARGING		GPM_CONF_DIR "/notify/discharging"
 #define GPM_CONF_NOTIFY_FULLY_CHARGED		GPM_CONF_DIR "/notify/fully_charged"
 #define GPM_CONF_NOTIFY_SLEEP_FAILED		GPM_CONF_DIR "/notify/sleep_failed"
+#define GPM_CONF_NOTIFY_SLEEP_FAILED_URI	GPM_CONF_DIR "/notify/sleep_failed_uri"
 #define GPM_CONF_NOTIFY_LOW_POWER		GPM_CONF_DIR "/notify/low_power"
 #define GPM_CONF_NOTIFY_ESTIMATED_DATA		GPM_CONF_DIR "/notify/estimated_data"
 #define GPM_CONF_NOTIFY_INHIBIT_LID		GPM_CONF_DIR "/notify/inhibit_lid"

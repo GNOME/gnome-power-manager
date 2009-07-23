@@ -1211,14 +1211,44 @@ out:
 }
 
 /**
- * control_sleep_failure_cb:
+ * gpm_manager_sleep_failure_response_cb:
  **/
 static void
-control_sleep_failure_cb (GpmControl *control, GpmControlAction action, GpmManager *manager)
+gpm_manager_sleep_failure_response_cb (GtkDialog *dialog, gint response_id, GpmManager *manager)
+{
+	GdkScreen *screen;
+	GtkWidget *dialog_error;
+	GError *error = NULL;
+	gboolean ret;
+	gchar *uri = NULL;
+
+	/* user clicked the help button */
+	if (response_id == GTK_RESPONSE_HELP) {
+		uri = gconf_client_get_string (manager->priv->conf, GPM_CONF_NOTIFY_SLEEP_FAILED_URI, NULL);
+		screen = gdk_screen_get_default();
+		ret = gtk_show_uri (screen, uri, gtk_get_current_event_time (), &error);
+		if (!ret) {
+			dialog_error = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
+							       "Failed to show uri %s", error->message);
+			gtk_dialog_run (GTK_DIALOG (dialog_error));
+			g_error_free (error);
+		}
+	}
+
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+	g_free (uri);
+}
+
+/**
+ * gpm_manager_sleep_failure_cb:
+ **/
+static void
+gpm_manager_sleep_failure_cb (GpmControl *control, GpmControlAction action, GpmManager *manager)
 {
 	gboolean show_sleep_failed;
 	gchar *message = NULL;
 	gchar *title = NULL;
+	gchar *uri = NULL;
 	const gchar *icon;
 	GtkWidget *dialog;
 
@@ -1250,10 +1280,18 @@ control_sleep_failure_cb (GpmControl *control, GpmControlAction action, GpmManag
 						     "<span size='larger'><b>%s</b></span>", title);
 	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog), "%s", message);
 
+	/* show a button? */
+	uri = gconf_client_get_string (manager->priv->conf, GPM_CONF_NOTIFY_SLEEP_FAILED_URI, NULL);
+	if (uri != NULL && uri[0] != '\0') {
+		/* TRANSLATORS: button text, visit the suspend help website */
+		gtk_dialog_add_button (GTK_DIALOG (dialog), _("Visit help page"), GTK_RESPONSE_HELP);
+	}
+
 	/* wait async for close */
 	gtk_widget_show (dialog);
-	g_signal_connect_swapped (dialog, "response", G_CALLBACK (gtk_widget_destroy), dialog);
+	g_signal_connect (dialog, "response", G_CALLBACK (gpm_manager_sleep_failure_response_cb), manager);
 out:
+	g_free (uri);
 	g_free (title);
 	g_free (message);
 }
@@ -1718,7 +1756,7 @@ gpm_manager_init (GpmManager *manager)
 	egg_debug ("creating new control instance");
 	manager->priv->control = gpm_control_new ();
 	g_signal_connect (manager->priv->control, "sleep-failure",
-			  G_CALLBACK (control_sleep_failure_cb), manager);
+			  G_CALLBACK (gpm_manager_sleep_failure_cb), manager);
 
 	egg_debug ("creating new tray icon");
 	manager->priv->tray_icon = gpm_tray_icon_new ();
