@@ -40,7 +40,6 @@
 #ifdef HAVE_DPMS_EXTENSION
 #include <X11/Xproto.h>
 #include <X11/extensions/dpms.h>
-#include <X11/extensions/dpmsstr.h>
 #endif
 
 #include "egg-debug.h"
