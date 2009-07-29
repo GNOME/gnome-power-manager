@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2008 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2008-2009 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -29,7 +29,6 @@
 #include "gpm-session.h"
 #include "gpm-common.h"
 #include "egg-debug.h"
-#include "egg-dbus-proxy.h"
 
 static void     gpm_session_finalize   (GObject		*object);
 
