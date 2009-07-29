@@ -1056,9 +1056,18 @@ gpm_manager_perhaps_recall_delay_cb (GpmManager *manager)
 static void
 gpm_engine_perhaps_recall_cb (GpmEngine *engine, DkpDevice *device, gchar *oem_vendor, gchar *website, GpmManager *manager)
 {
+	gboolean ret;
+
 	/* don't show when running under GDM */
 	if (g_getenv ("RUNNING_UNDER_GDM") != NULL) {
 		egg_debug ("running under gdm, so no notification");
+		return;
+	}
+
+	/* already shown, and dismissed */
+	ret = gconf_client_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_PERHAPS_RECALL, NULL);
+	if (!ret) {
+		egg_debug ("GConf prevents notification: %s", GPM_CONF_NOTIFY_PERHAPS_RECALL);
 		return;
 	}
 
