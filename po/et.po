@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: Gnome Power Manager HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&component=general\n"
-"POT-Creation-Date: 2009-07-06 14:36+0000\n"
-"PO-Revision-Date: 2009-07-16 10:46+0300\n"
+"POT-Creation-Date: 2009-07-23 07:16+0000\n"
+"PO-Revision-Date: 2009-07-29 16:24+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -147,13 +147,13 @@ msgid "Dim the screen after a period of inactivity when on battery power"
 msgstr "Ekraani tuhmistamine teatud jõudeaja järel, kui ollakse akutoitel"
 
 msgid ""
-"Display options for the notification icon. Valid options are \"never\", "
-"\"critical\", \"charge\", \"present\" and \"always\"."
+"Display options for the notification icon. Valid options are \"never\", \"low"
+"\", \"critical\", \"charge\", \"present\" and \"always\"."
 msgstr ""
 "Millal teavitusikooni kuvatakse. Võimalikud variandid on \"never\" (ei "
-"kuvata kunagi), \"critical\" (kriitilise täituvuse korral), \"charge"
-"\" (laadimise ajal), \"present\" (aku olemasolu korral) ja \"always"
-"\" (alati)."
+"kuvata kunagi), \"critical\" (kriitilise täituvuse korral), \"low\" (aku "
+"madala täituvuse korral), \"charge\" (laadimise ajal), \"present\" (aku "
+"olemasolu korral) ja \"always\" (alati)."
 
 msgid "Hibernate button action"
 msgstr "Talveune nupu tegevus"
@@ -395,11 +395,17 @@ msgstr ""
 msgid "Sleep timeout computer when on AC"
 msgstr "Uinaku alguse viivitus võrgutoitel"
 
+msgid "Sleep timeout computer when on UPS"
+msgstr "Uinaku alguse viivitus UPS-itoitel"
+
 msgid "Sleep timeout computer when on battery"
 msgstr "Uinaku alguse viivitus akutoitel"
 
 msgid "Sleep timeout display when on AC"
 msgstr "Ekraani väljalülitamise viivitus võrgutoitel"
+
+msgid "Sleep timeout display when on UPS"
+msgstr "Ekraani väljalülitamise viivitus UPS-itoitel"
 
 msgid "Sleep timeout display when on battery"
 msgstr "Ekraani väljalülitamise viivitus akutoitel"
@@ -425,6 +431,9 @@ msgstr ""
 "Akutoitel töötamisel ekraani tühjendamiseks kasutatav DPMS-meetod. "
 "Võimalikud väärtused on \"standby\" (ooterežiim), \"suspend\" (uinak) ja "
 "\"off\" (midagi ei tehta)."
+
+msgid "The URI to show to the user on sleep failure"
+msgstr "Uinaku nurjumise korral kasutajale näidatav URI"
 
 msgid ""
 "The action to take when the UPS is critically low. Possible values are "
@@ -509,6 +518,20 @@ msgstr ""
 "seda pole kasutatud."
 
 msgid ""
+"The amount of time in seconds the computer on UPS power needs to be inactive "
+"before it goes to sleep."
+msgstr ""
+"Viivitus sekundites, mille järel UPS-itoitel arvuti alustab uinakut, kui "
+"seda pole kasutatud."
+
+msgid ""
+"The amount of time in seconds the computer on UPS power needs to be inactive "
+"before the display goes to sleep."
+msgstr ""
+"Viivitus sekundites, mille järel ekraan lülitatakse välja, kui arvutit pole "
+"kasutatud ja see on UPS-itoitel."
+
+msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before it goes to sleep."
 msgstr ""
@@ -563,9 +586,9 @@ msgstr "Graafikus näidatav suurim kestus"
 
 msgid ""
 "The number of seconds of inactivity to spin down the disks when on AC power."
-msgstr "Ekraani tuhmistamine teatud jõudeaja järel, kui ollakse võrgutoitel"
-"Jõudeaeg sekunidites, pärast mida vähendatakse võrgutoite korral kõvaketta "
-"pööredeid."
+msgstr ""
+"Ekraani tuhmistamine teatud jõudeaja järel, kui ollakse võrgutoitelJõudeaeg "
+"sekunidites, pärast mida vähendatakse võrgutoite korral kõvaketta pööredeid."
 
 msgid ""
 "The number of seconds of inactivity to spin down the disks when on battery "
@@ -655,6 +678,14 @@ msgstr "UPS-i madala täituvustaseme tegevus"
 
 msgid "Use gnome-screensaver lock setting"
 msgstr "Gnome-ekraanisäästja lukustussätete kasutamine"
+
+msgid ""
+"When sleep fails we can show the user a button to help fix the situation. "
+"Leave this blank if the button should not be shown."
+msgstr ""
+"Uinaku nurjumise korral võib kasutajale näidata nuppu, mis aitab teda "
+"olukorra lahendamisel. Kui seda nuppu ei pea kuvama, siis jäta käesolev "
+"väärtus tühjaks."
 
 msgid "When to show the notification icon"
 msgstr "Millal tuleb teavitusikooni näidata."
@@ -802,6 +833,9 @@ msgstr "_Jõudeolekus kuva tuhmistatakse"
 msgid "General"
 msgstr "Üldine"
 
+msgid "Make Default"
+msgstr "Määra vaikimisi"
+
 msgid "On AC Power"
 msgstr "Võrgutoitel"
 
@@ -856,8 +890,8 @@ msgstr "_Ikooni kuvatakse alati"
 msgid "_Never display an icon"
 msgstr "Ikooni ei kuvata _mitte kunagi"
 
-msgid "_Only display an icon when battery power is critically low"
-msgstr "_Kuvatakse ainult juhul, kui aku täituvus on alla kriitilise piiri"
+msgid "_Only display an icon when battery power is low"
+msgstr "_Kuvatakse ainult juhul, kui aku täituvus on madal"
 
 msgid "_Reduce backlight brightness"
 msgstr "_Taustavalgustuse heledust vähendatakse"
@@ -1249,6 +1283,85 @@ msgstr "Aku on kriitiliselt tühi."
 msgid "User clicked on tray"
 msgstr "Kasutaja klõpsas salveikoonil"
 
+#. TRANSLATORS: the battery may be recalled by it's vendor
+msgid "Battery may be recalled"
+msgstr "Aku võib olla ümbervahetamiseks tagasi kutsutud"
+
+#, c-format
+msgid ""
+"The battery in your computer may have been recalled by %s and you may be at "
+"risk.\n"
+"\n"
+"For more information visit the battery recall website."
+msgstr ""
+"Sinu arvutis olev aku võib olla ohtlik ning %s palub selle tagastamist.\n"
+"\n"
+"Täpsemat infot leiab akutagastuse veebilehelt."
+
+#. TRANSLATORS: button text, visit the manufacturers recall website
+msgid "Visit recall website"
+msgstr "Külasta akutagastuse veebisaiti"
+
+#. TRANSLATORS: button text, do not show this bubble again
+msgid "Do not show me this again"
+msgstr "Seda rohkem ei näidata"
+
+#. We should notify the user if the battery has a low capacity,
+#. * where capacity is the ratio of the last_full capacity with that of
+#. * the design capacity. (#326740)
+msgid "Battery may be broken"
+msgstr "Aku võib katki olla"
+
+#, c-format
+msgid ""
+"Your battery has a very low capacity (%1.1f%%), which means that it may be "
+"old or broken."
+msgstr ""
+"Sinu arvuti aku mahtuvus on väga väike (%1.1f%%), mis tähendab, se see võib "
+"olla kas vana või vigane."
+
+#. show the fully charged notification
+msgid "Battery Charged"
+msgid_plural "Batteries Charged"
+msgstr[0] "Aku on laetud"
+msgstr[1] "Akud on laetud"
+
+msgid "Your laptop battery is now fully charged"
+msgid_plural "Your laptop batteries are now fully charged"
+msgstr[0] "Sinu sülearvuti aku on nüüd täis laetud"
+msgstr[1] "Sinu sülearvuti akud on nüüd täis laetud"
+
+msgid "Battery Discharging"
+msgstr "Aku tühjenemine"
+
+msgid "The AC power has been unplugged. The system is now using battery power."
+msgstr "Võrgutoide on kadunud. Süsteem on nüüd akutoitel."
+
+msgid "UPS Discharging"
+msgstr "UPS-i tühjenemine"
+
+msgid "The AC power has been unplugged. The system is now using backup power."
+msgstr "Võrgutoide on kadunud. Süsteem on nüüd varutoitel."
+
+#. TRANSLATORS: window title: there wasa problem putting the machine to sleep
+msgid "Sleep problem"
+msgstr "Viga uinumisel"
+
+#. TRANSLATORS: message text
+msgid "Your computer failed to suspend."
+msgstr "Sinu arvuti ei suutnud uinuda."
+
+msgid "Check the help file for common problems."
+msgstr "Sagedasematele probleemidele leiad lahenduse abiteabe failist."
+
+#. TRANSLATORS: message text
+msgid "Your computer failed to hibernate."
+msgstr "Sinu arvuti ei suutnud jääda talveunne."
+
+#. TRANSLATORS: button text, visit the suspend help website
+msgid "Visit help page"
+msgstr "Külasta kodulehte"
+
 msgid "Laptop battery low"
 msgstr "Sülearvuti aku on peaaegu tühi"
 
@@ -1416,104 +1529,14 @@ msgstr ""
 "GNOME vooluhalduri sätete vaikeväärtused pole korralikult paigaldatud.\n"
 "Palun võta ühendust oma arvuti haldajaga."
 
-#. save in state
-msgid "Battery may be recalled"
-msgstr "Aku võib olla ümbervahetamiseks tagasi kutsutud"
-
-#, c-format
-msgid ""
-"The battery in your computer may have been recalled by %s and you may be at "
-"risk.\n"
-"\n"
-"For more information visit the %s battery recall website."
-msgstr ""
-"Sinu arvutis olev aku võib olla ohtlik ning %s palub selle tagastamist.\n"
-"\n"
-"Täpsemat infot leiab %s akutagastuse veebilehelt."
-
-msgid "Visit recall website"
-msgstr "Külasta tagasikutsumise veebisaiti"
-
-msgid "Do not show me this again"
-msgstr "Seda rohkem ei näidata"
-
-msgid "Battery may be broken"
-msgstr "Aku võib katki olla"
-
-#, c-format
-msgid ""
-"Your battery has a very low capacity (%i%%), which means that it may be old "
-"or broken."
-msgstr ""
-"Sinu arvuti aku mahtuvus on väga väike (%i%%), mis tähendab, se see võib "
-"olla vana või vigane."
-
-msgid "Sleep warning"
-msgstr "Uinaku hoiatus"
-
-msgid ""
-"Your laptop will not sleep if you shut the lid as a running program has "
-"prevented this.\n"
-"Some laptops can overheat if they do not sleep when the lid is closed."
-msgstr ""
-"Sinu sülearvuti ei saa uinuda kaane sulgemisel, mingi rakendus takistab "
-"seda.\n"
-"Mõned sülearvutid võivad üle kuumeneda, kui need töötavad suletud kaanega."
-
-msgid "Battery Charged"
-msgid_plural "Batteries Charged"
-msgstr[0] "Aku on laetud"
-msgstr[1] "Akud on laetud"
-
-msgid "Your laptop battery is now fully charged"
-msgid_plural "Your laptop batteries are now fully charged"
-msgstr[0] "Sinu sülearvuti aku on nüüd täis laetud"
-msgstr[1] "Sinu sülearvuti akud on nüüd täis laetud"
-
-msgid "Battery Discharging"
-msgstr "Aku tühjenemine"
-
-msgid "The AC power has been unplugged. The system is now using battery power."
-msgstr "Võrgutoide on kadunud. Süsteem on nüüd akutoitel."
-
-msgid "UPS Discharging"
-msgstr "UPS-i tühjenemine"
-
-msgid "The AC power has been unplugged. The system is now using backup power."
-msgstr "Võrgutoide on kadunud. Süsteem on nüüd varutoitel."
-
-msgid "Sleep Problem"
-msgstr "Viga uinumisel"
-
-msgid ""
-"Your computer failed to hibernate.\n"
-"Check the help file for common problems."
-msgstr ""
-"Sinu arvuti ei suutnud jääda talveunne.\n"
-"Sagedasematele probleemidele leiad  lahenduse abifailist."
-
-msgid ""
-"Your computer failed to suspend.\n"
-"Check the help file for common problems."
-msgstr ""
-"Sinu arvuti ei suutnud uinuda.\n"
-"Sagedasematele probleemidele leiad  lahenduse abifailist."
-
-msgid "Visit quirk website"
-msgstr "Külasta quirk'i veebilehte"
-
 msgid "GNOME Power Preferences"
 msgstr "GNOME voolutarbimiseelistused"
 
-#. The text that should appear in the action combo boxes
-msgid "Ask me"
-msgstr "Küsitakse kasutajalt"
+msgid "Shutdown"
+msgstr "Lülitatakse arvuti välja"
 
 msgid "Suspend"
 msgstr "Alustatakse uinakut"
-
-msgid "Shutdown"
-msgstr "Lülitatakse arvuti välja"
 
 msgid "Hibernate"
 msgstr "Alustatakse talveund"
@@ -1521,14 +1544,14 @@ msgstr "Alustatakse talveund"
 msgid "Blank screen"
 msgstr "Tühjendatakse ekraan"
 
+msgid "Ask me"
+msgstr "Küsitakse kasutajalt"
+
 msgid "Do nothing"
 msgstr "Ei tehta midagi"
 
 msgid "Never"
 msgstr "Mitte kunagi"
-
-msgid "Make Default"
-msgstr "Määra vaikimisi"
 
 msgid "Rate"
 msgstr "Kiirus"
@@ -1821,6 +1844,21 @@ msgstr "_Uinak"
 
 msgid "Hi_bernate"
 msgstr "_Talveuni"
+
+#~ msgid "Sleep warning"
+#~ msgstr "Uinaku hoiatus"
+
+#~ msgid ""
+#~ "Your laptop will not sleep if you shut the lid as a running program has "
+#~ "prevented this.\n"
+#~ "Some laptops can overheat if they do not sleep when the lid is closed."
+#~ msgstr ""
+#~ "Sinu sülearvuti ei saa uinuda kaane sulgemisel, mingi rakendus takistab "
+#~ "seda.\n"
+#~ "Mõned sülearvutid võivad üle kuumeneda, kui need töötavad suletud kaanega."
+
+#~ msgid "Visit quirk website"
+#~ msgstr "Külasta quirk'i veebilehte"
 
 #~ msgid "Change the brightness automatically using the ambient light sensors"
 #~ msgstr "Heleduse automaatne muutmine valgussensorite andmete põhjal"
