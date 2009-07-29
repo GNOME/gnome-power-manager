@@ -132,8 +132,8 @@ gpm_session_presence_status_changed_cb (DBusGProxy *proxy, guint status, GpmSess
 	is_idle = (status == GPM_SESSION_STATUS_ENUM_IDLE);
 	if (is_idle != session->priv->is_idle_old) {
 		egg_debug ("emitting idle-changed : (%i)", is_idle);
-		g_signal_emit (session, signals [IDLE_CHANGED], 0, is_idle);
 		session->priv->is_idle_old = is_idle;
+		g_signal_emit (session, signals [IDLE_CHANGED], 0, is_idle);
 	}
 }
 
@@ -339,8 +339,8 @@ gpm_session_inhibit_changed_cb (DBusGProxy *proxy, const gchar *id, GpmSession *
 	is_inhibited = gpm_session_is_inhibited (session);
 	if (is_inhibited != session->priv->is_inhibited_old) {
 		egg_debug ("emitting inhibited-changed : (%i)", is_inhibited);
-		g_signal_emit (session, signals [INHIBITED_CHANGED], 0, is_inhibited);
 		session->priv->is_inhibited_old = is_inhibited;
+		g_signal_emit (session, signals [INHIBITED_CHANGED], 0, is_inhibited);
 	}
 }
 
