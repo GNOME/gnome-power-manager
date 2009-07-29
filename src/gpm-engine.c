@@ -84,6 +84,7 @@ static gpointer gpm_engine_object = NULL;
 
 G_DEFINE_TYPE (GpmEngine, gpm_engine, G_TYPE_OBJECT)
 
+static DkpDevice *gpm_engine_get_composite_device (GpmEngine *engine, DkpDevice *original_device);
 static DkpDevice *gpm_engine_update_composite_device (GpmEngine *engine, DkpDevice *original_device);
 
 typedef enum {
@@ -290,7 +291,7 @@ gpm_engine_get_icon_priv (GpmEngine *engine, DkpDeviceType device_type, GpmEngin
 
 		/* if battery then use composite device to cope with multiple batteries */
 		if (type == DKP_DEVICE_TYPE_BATTERY)
-			device = gpm_engine_update_composite_device (engine, device);
+			device = gpm_engine_get_composite_device (engine, device);
 
 		warning_temp = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(device), "engine-warning-old"));
 		if (type == device_type && is_present) {
@@ -562,6 +563,43 @@ gpm_engine_device_check_capacity (GpmEngine *engine, DkpDevice *device)
 }
 
 /**
+ * gpm_engine_get_composite_device:
+ **/
+static DkpDevice *
+gpm_engine_get_composite_device (GpmEngine *engine, DkpDevice *original_device)
+{
+	guint battery_devices = 0;
+	GPtrArray *array;
+	DkpDevice *device;
+	DkpDeviceType type;
+	guint i;
+
+	/* find out how many batteries in the system */
+	array = engine->priv->array;
+	for (i=0;i<array->len;i++) {
+		device = g_ptr_array_index (engine->priv->array, i);
+		g_object_get (device,
+			      "type", &type,
+			      NULL);
+		if (type == DKP_DEVICE_TYPE_BATTERY)
+			battery_devices++;
+	}
+
+	/* just use the original device if only one primary battery */
+	if (battery_devices <= 1) {
+		egg_debug ("using original device as only one primary battery");
+		device = original_device;
+		goto out;
+	}
+
+	/* use the composite device */
+	device = engine->priv->battery_composite;
+out:
+	/* return composite device or original device */
+	return device;
+}
+
+/**
  * gpm_engine_update_composite_device:
  **/
 static DkpDevice *
@@ -700,6 +738,7 @@ gpm_engine_device_add (GpmEngine *engine, DkpDevice *device)
 	g_object_set_data (G_OBJECT(device), "engine-state-old", GUINT_TO_POINTER(state));
 
 	if (type == DKP_DEVICE_TYPE_BATTERY) {
+		egg_debug ("updating because we added a device");
 		composite = gpm_engine_update_composite_device (engine, device);
 
 		/* get the same values for the composite device */
@@ -854,10 +893,12 @@ gpm_engine_device_changed_cb (DkpClient *client, DkpDevice *device, GpmEngine *e
 		      NULL);
 
 	/* if battery then use composite device to cope with multiple batteries */
-	if (type == DKP_DEVICE_TYPE_BATTERY)
+	if (type == DKP_DEVICE_TYPE_BATTERY) {
+		egg_debug ("updating because %s changed", dkp_device_get_object_path (device));
 		device = gpm_engine_update_composite_device (engine, device);
+	}
 
-	/* get device properties */
+	/* get device properties (may be composite) */
 	g_object_get (device,
 		      "state", &state,
 		      NULL);
