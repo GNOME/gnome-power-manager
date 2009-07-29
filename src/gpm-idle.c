@@ -35,6 +35,7 @@
 #endif /* HAVE_UNISTD_H */
 
 #include <glib.h>
+#include <gtk/gtk.h>
 
 #include "egg-debug.h"
 #include "egg-idletime.h"
@@ -53,6 +54,7 @@
 
 struct GpmIdlePrivate
 {
+	GtkStatusIcon	*status_icon;
 	EggIdletime	*idletime;
 	GpmLoad		*load;
 	GpmSession	*session;
@@ -95,13 +97,38 @@ gpm_idle_mode_to_text (GpmIdleMode mode)
 }
 
 /**
+ * gpm_idle_mode_to_icon_name:
+ **/
+static const gchar *
+gpm_idle_mode_to_icon_name (GpmIdleMode mode)
+{
+	if (mode == GPM_IDLE_MODE_NORMAL)
+		return "computer";
+	if (mode == GPM_IDLE_MODE_DIM)
+		return "video-display";
+	if (mode == GPM_IDLE_MODE_BLANK)
+		return "view-fullscreen";
+	if (mode == GPM_IDLE_MODE_SLEEP)
+		return "system-log-out";
+	return "unknown";
+}
+
+/**
  * gpm_idle_set_mode:
  * @mode: The new mode, e.g. GPM_IDLE_MODE_SLEEP
  **/
 static void
 gpm_idle_set_mode (GpmIdle *idle, GpmIdleMode mode)
 {
+	const gchar *icon_name;
+
 	g_return_if_fail (GPM_IS_IDLE (idle));
+
+	/* debug */
+	if (idle->priv->status_icon != NULL) {
+		icon_name = gpm_idle_mode_to_icon_name (mode);
+		gtk_status_icon_set_from_icon_name (idle->priv->status_icon, icon_name);
+	}
 
 	if (mode != idle->priv->mode) {
 		idle->priv->mode = mode;
@@ -184,10 +211,18 @@ gpm_idle_evaluate (GpmIdle *idle)
 {
 	gboolean is_idle;
 	gboolean is_inhibited;
+	gchar *tooltip;
 
 	is_idle = gpm_session_get_idle (idle->priv->session);
 	is_inhibited = gpm_session_get_inhibited (idle->priv->session);
-	egg_debug ("is_idle=%i, is_inhibited=%i", is_idle, is_inhibited);
+	egg_debug ("session_idle=%i, session_inhibited=%i, x_idle=%i", is_idle, is_inhibited, idle->priv->x_idle);
+
+	/* debug */
+	if (idle->priv->status_icon != NULL) {
+		tooltip = g_strdup_printf ("session_idle=%i, session_inhibited=%i, x_idle=%i", is_idle, is_inhibited, idle->priv->x_idle);
+		gtk_status_icon_set_tooltip_text (idle->priv->status_icon, tooltip);
+		g_free (tooltip);
+	}
 
 	/* check we are really idle */
 	if (!idle->priv->x_idle) {
@@ -388,6 +423,10 @@ gpm_idle_finalize (GObject *object)
 	if (idle->priv->timeout_sleep_id != 0)
 		g_source_remove (idle->priv->timeout_sleep_id);
 
+	/* for debugging */
+	if (idle->priv->status_icon != NULL)
+		g_object_unref (idle->priv->status_icon);
+
 	g_timer_destroy (idle->priv->timer);
 	g_object_unref (idle->priv->load);
 	g_object_unref (idle->priv->session);
@@ -432,6 +471,7 @@ gpm_idle_init (GpmIdle *idle)
 {
 	idle->priv = GPM_IDLE_GET_PRIVATE (idle);
 
+	idle->priv->status_icon = NULL;
 	idle->priv->timeout_dim = G_MAXUINT;
 	idle->priv->timeout_blank = G_MAXUINT;
 	idle->priv->timeout_sleep = G_MAXUINT;
@@ -447,6 +487,13 @@ gpm_idle_init (GpmIdle *idle)
 	idle->priv->idletime = egg_idletime_new ();
 	g_signal_connect (idle->priv->idletime, "reset", G_CALLBACK (gpm_idle_idletime_reset_cb), idle);
 	g_signal_connect (idle->priv->idletime, "alarm-expired", G_CALLBACK (gpm_idle_idletime_alarm_expired_cb), idle);
+
+	/* only used for debugging */
+	if (g_getenv ("GPMIDLEDEBUG") != NULL) {
+		idle->priv->status_icon = gtk_status_icon_new ();
+		gtk_status_icon_set_from_icon_name (idle->priv->status_icon, "edit-find");
+		gtk_status_icon_set_visible (idle->priv->status_icon, TRUE);
+	}
 
 	gpm_idle_evaluate (idle);
 }
