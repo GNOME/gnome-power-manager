@@ -447,15 +447,15 @@ gpm_session_init (GpmSession *session)
 	}
 
 	/* get StatusChanged */
-	dbus_g_proxy_add_signal (session->priv->proxy_presence, "StatusChanged", G_TYPE_INVALID);
+	dbus_g_proxy_add_signal (session->priv->proxy_presence, "StatusChanged", G_TYPE_UINT, G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (session->priv->proxy_presence, "StatusChanged", G_CALLBACK (gpm_session_presence_status_changed_cb), session, NULL);
 
 	/* get InhibitorAdded */
-	dbus_g_proxy_add_signal (session->priv->proxy, "InhibitorAdded", G_TYPE_INVALID);
+	dbus_g_proxy_add_signal (session->priv->proxy, "InhibitorAdded", DBUS_TYPE_G_OBJECT_PATH, G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (session->priv->proxy, "InhibitorAdded", G_CALLBACK (gpm_session_inhibit_changed_cb), session, NULL);
 
 	/* get InhibitorRemoved */
-	dbus_g_proxy_add_signal (session->priv->proxy, "InhibitorRemoved", G_TYPE_INVALID);
+	dbus_g_proxy_add_signal (session->priv->proxy, "InhibitorRemoved", DBUS_TYPE_G_OBJECT_PATH, G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (session->priv->proxy, "InhibitorRemoved", G_CALLBACK (gpm_session_inhibit_changed_cb), session, NULL);
 
 	/* coldplug */
