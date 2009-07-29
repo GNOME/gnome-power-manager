@@ -158,6 +158,7 @@ gpm_manager_play (GpmManager *manager, GpmManagerSound action, gboolean force)
 	const gchar *id = NULL;
 	const gchar *desc = NULL;
 	gboolean ret;
+	gint retval;
 
 	ret = gconf_client_get_bool (manager->priv->conf, GPM_CONF_UI_ENABLE_SOUND, NULL);
 	if (!ret && !force) {
@@ -214,9 +215,11 @@ gpm_manager_play (GpmManager *manager, GpmManagerSound action, gboolean force)
 	}
 
 	/* play the sound, using sounds from the naming spec */
-	ca_context_play (ca_gtk_context_get (), 0,
-			 CA_PROP_EVENT_ID, id,
-			 CA_PROP_EVENT_DESCRIPTION, desc, NULL);
+	retval = ca_context_play (ca_gtk_context_get (), 0,
+				  CA_PROP_EVENT_ID, id,
+				  CA_PROP_EVENT_DESCRIPTION, desc, NULL);
+	if (retval < 0)
+		egg_warning ("failed to play %s: %s", id, ca_strerror (retval));
 	return TRUE;
 }
 
