@@ -262,10 +262,12 @@ gpm_tray_icon_suspend_cb (GtkMenuItem *item, gpointer data)
 static void
 gpm_tray_icon_show_statistics_cb (GtkMenuItem *item, gpointer data)
 {
-	const gchar *command = "gnome-power-statistics";
+	gchar *path;
 
-	if (g_spawn_command_line_async (command, NULL) == FALSE)
-		egg_warning ("Couldn't execute command: %s", command);
+	path = g_build_filename (BINDIR, "gnome-power-statistics", NULL);
+	if (g_spawn_command_line_async (path, NULL) == FALSE)
+		egg_warning ("Couldn't execute command: %s", path);
+	g_free (path);
 }
 
 /**
@@ -407,6 +409,8 @@ gpm_tray_icon_popup_menu_cb (GtkStatusIcon *status_icon, guint button, guint32 t
 	GtkMenu *menu = (GtkMenu*) gtk_menu_new ();
 	GtkWidget *item;
 	GtkWidget *image;
+	gchar *path;
+	gboolean ret;
 
 	egg_debug ("icon right clicked");
 
@@ -421,15 +425,22 @@ gpm_tray_icon_popup_menu_cb (GtkStatusIcon *status_icon, guint button, guint32 t
 			  G_CALLBACK (gpm_tray_icon_show_preferences_cb), icon);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
-	/* statistics */
-	item = gtk_image_menu_item_new_with_mnemonic (_("Power _History"));
-	image = gtk_image_new_from_icon_name (GPM_STOCK_STATISTICS, GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-	g_signal_connect (G_OBJECT (item), "activate",
-			  G_CALLBACK (gpm_tray_icon_show_statistics_cb), icon);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	/* this program is optional, and may be in an uninstalled subpackage */
+	path = g_build_filename (BINDIR, "gnome-power-statistics", NULL);
+	ret = g_file_test (path, G_FILE_TEST_EXISTS);
+	g_free (path);
 
-	/* separator for HIG? */
+	/* statistics */
+	if (ret) {
+		item = gtk_image_menu_item_new_with_mnemonic (_("Power _History"));
+		image = gtk_image_new_from_icon_name (GPM_STOCK_STATISTICS, GTK_ICON_SIZE_MENU);
+		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+		g_signal_connect (G_OBJECT (item), "activate",
+				  G_CALLBACK (gpm_tray_icon_show_statistics_cb), icon);
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	}
+
+	/* separator for HIG */
 	item = gtk_separator_menu_item_new ();
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
