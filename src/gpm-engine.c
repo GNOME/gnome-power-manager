@@ -704,6 +704,9 @@ gpm_engine_update_composite_device (GpmEngine *engine, DkpDevice *original_devic
 		      "state", state,
 		      NULL);
 	dkp_device_print (device);
+
+	/* force update of icon */
+	gpm_engine_recalculate_state_icon (engine);
 out:
 	/* return composite device or original device */
 	return device;
