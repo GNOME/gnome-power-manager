@@ -310,6 +310,15 @@ gpm_prefs_set_combo_simple_text (GtkWidget *combo_box)
 }
 
 /**
+ * gpm_prefs_actions_destroy_cb:
+ **/
+static void
+gpm_prefs_actions_destroy_cb (GpmActionPolicy *array)
+{
+	g_free (array);
+}
+
+/**
  * gpm_prefs_setup_action_combo:
  * @prefs: This prefs class instance
  * @widget_name: The GtkWidget name
@@ -327,6 +336,8 @@ gpm_prefs_setup_action_combo (GpmPrefs *prefs, const gchar *widget_name,
 	GtkWidget *widget;
 	GpmActionPolicy policy;
 	GpmActionPolicy	value;
+	GPtrArray *array;
+	GpmActionPolicy *actions_added;
 
 	widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, widget_name));
 	gpm_prefs_set_combo_simple_text (widget);
@@ -337,8 +348,8 @@ gpm_prefs_setup_action_combo (GpmPrefs *prefs, const gchar *widget_name,
 
 	gtk_widget_set_sensitive (widget, is_writable);
 
+	array = g_ptr_array_new ();
 	g_object_set_data (G_OBJECT (widget), "conf_key", (gpointer) gpm_pref_key);
-	g_object_set_data (G_OBJECT (widget), "actions", (gpointer) actions);
 	g_signal_connect (G_OBJECT (widget), "changed",
 			  G_CALLBACK (gpm_prefs_action_combo_changed_cb), prefs);
 
@@ -348,6 +359,7 @@ gpm_prefs_setup_action_combo (GpmPrefs *prefs, const gchar *widget_name,
 			egg_debug ("Cannot add option, as cannot shutdown.");
 		} else if (policy == GPM_ACTION_POLICY_SHUTDOWN && prefs->priv->can_shutdown) {
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Shutdown"));
+			g_ptr_array_add (array, GINT_TO_POINTER (policy));
 			n_added++;
 		} else if (policy == GPM_ACTION_POLICY_SUSPEND && !prefs->priv->can_suspend) {
 			egg_debug ("Cannot add option, as cannot suspend.");
@@ -355,28 +367,43 @@ gpm_prefs_setup_action_combo (GpmPrefs *prefs, const gchar *widget_name,
 			egg_debug ("Cannot add option, as cannot hibernate.");
 		} else if (policy == GPM_ACTION_POLICY_SUSPEND && prefs->priv->can_suspend) {
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Suspend"));
+			g_ptr_array_add (array, GINT_TO_POINTER (policy));
 			n_added++;
 		} else if (policy == GPM_ACTION_POLICY_HIBERNATE && prefs->priv->can_hibernate) {
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Hibernate"));
+			g_ptr_array_add (array, GINT_TO_POINTER (policy));
 			n_added++;
 		} else if (policy == GPM_ACTION_POLICY_BLANK) {
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Blank screen"));
+			g_ptr_array_add (array, GINT_TO_POINTER (policy));
 			n_added++;
 		} else if (policy == GPM_ACTION_POLICY_INTERACTIVE) {
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Ask me"));
+			g_ptr_array_add (array, GINT_TO_POINTER (policy));
 			n_added++;
 		} else if (policy == GPM_ACTION_POLICY_NOTHING) {
 			/* we only add do nothing in the GUI if the user has explicitly specified this in GConf */
 			if (value == GPM_ACTION_POLICY_NOTHING) {
 				gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Do nothing"));
+				g_ptr_array_add (array, GINT_TO_POINTER (policy));
 				n_added++;
 			}
 		} else {
 			egg_warning ("Unknown action read from conf: %i", policy);
 		}
+	}
 
+	/* save as array _only_ the actions we could add */
+	actions_added = (GpmActionPolicy *) g_ptr_array_free (array, FALSE);
+	actions_added[n_added] = -1;
+	g_object_set_data_full (G_OBJECT (widget), "actions", (gpointer) actions_added, (GDestroyNotify) gpm_prefs_actions_destroy_cb);
+
+	/* set what we have in GConf */
+	for (i=0; actions_added[i] != -1; i++) {
+		policy = actions_added[i];
+		egg_debug ("added: %s", gpm_action_policy_to_string (policy));
 		if (value == policy)
-			 gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added - 1);
+			 gtk_combo_box_set_active (GTK_COMBO_BOX (widget), i);
 	}
 
 	g_free (value_txt);
@@ -631,7 +658,7 @@ static void
 prefs_setup_ac (GpmPrefs *prefs)
 {
 	GtkWidget *widget;
-	static const GpmActionPolicy button_lid_actions[] =
+	const GpmActionPolicy button_lid_actions[] =
 				{GPM_ACTION_POLICY_NOTHING,
 				 GPM_ACTION_POLICY_BLANK,
 				 GPM_ACTION_POLICY_SUSPEND,
@@ -693,14 +720,14 @@ prefs_setup_battery (GpmPrefs *prefs)
 	GtkNotebook *notebook;
 	gint page;
 
-	static const GpmActionPolicy button_lid_actions[] =
+	const GpmActionPolicy button_lid_actions[] =
 				{GPM_ACTION_POLICY_NOTHING,
 				 GPM_ACTION_POLICY_BLANK,
 				 GPM_ACTION_POLICY_SUSPEND,
 				 GPM_ACTION_POLICY_HIBERNATE,
 				 GPM_ACTION_POLICY_SHUTDOWN,
 				 -1};
-	static const GpmActionPolicy battery_critical_actions[] =
+	const GpmActionPolicy battery_critical_actions[] =
 				{GPM_ACTION_POLICY_NOTHING,
 				 GPM_ACTION_POLICY_SUSPEND,
 				 GPM_ACTION_POLICY_HIBERNATE,
@@ -770,7 +797,7 @@ prefs_setup_ups (GpmPrefs *prefs)
 	GtkNotebook *notebook;
 	gint page;
 
-	static const GpmActionPolicy ups_low_actions[] =
+	const GpmActionPolicy ups_low_actions[] =
 				{GPM_ACTION_POLICY_NOTHING,
 				 GPM_ACTION_POLICY_HIBERNATE,
 				 GPM_ACTION_POLICY_SHUTDOWN,
@@ -819,13 +846,13 @@ static void
 prefs_setup_general (GpmPrefs *prefs)
 {
 	GtkWidget *widget;
-	static const GpmActionPolicy power_button_actions[] =
+	const GpmActionPolicy power_button_actions[] =
 				{GPM_ACTION_POLICY_INTERACTIVE,
 				 GPM_ACTION_POLICY_SUSPEND,
 				 GPM_ACTION_POLICY_HIBERNATE,
 				 GPM_ACTION_POLICY_SHUTDOWN,
 				 -1};
-	static const GpmActionPolicy suspend_button_actions[] =
+	const GpmActionPolicy suspend_button_actions[] =
 				{GPM_ACTION_POLICY_NOTHING,
 				 GPM_ACTION_POLICY_SUSPEND,
 				 GPM_ACTION_POLICY_HIBERNATE,
