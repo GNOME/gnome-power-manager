@@ -1,4 +1,23 @@
 ==============
+Version 2.26.4
+==============
+
+Fixed:
+ - Make hotkeys work with modifiers (Martin Pitt)
+ - gnome-power-bugreport.sh: add missing hasbang (Martin Pitt)
+ - Fix pointer alignment, to build on sparc (Martin Pitt)
+ - Only use libpanel-applet flags to build applets (Vincent Untz)
+ - Remove the depricated Encoding= lines from the desktop files. Fixes #590612 (Richard Hughes)
+ - Make the orange icons yellower. Fixes rh#512962 (Richard Hughes)
+ - Add a bodge to reset the idletime XAlarm when we are no longer inhibited. (Richard Hughes)
+ - Only show gnome-power-statistics in the context menu if it is installed. Fixes rh#514249 (Richard Hughes)
+ - Save the caches value before we emit the inhibit and idle signals (Richard Hughes)
+ - Use the correct DBus signal types when watching gnome-session (Richard Hughes)
+ - Inhibit gnome-session in the applet, not gnome-power-manager (Richard Hughes)
+ - Add DeviceKit data to the bugreport script (Richard Hughes)
+ - Backport a fix from master to fix notification on AC power (Richard Hughes)
+
+==============
 Version 2.26.3
 ==============
 
