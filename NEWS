@@ -1,3 +1,55 @@
+Version 2.27.5
+~~~~~~~~~~~~~~
+Released: 2009-08-03
+
+* Translations
+ - Updated Traditional Chinese translation (Chao-Hsiung Liao)
+ - Updated Swedish translation (Daniel Nylander)
+ - Updated Finnish translation (Ilkka Tuohela)
+ - Updated Estonian translation (Ivar Smolin)
+ - Updated Spanish translation (Jorge González)
+ - Updated Ukrainian translation (Maxim V. Dziumanenko)
+ - Updated Irish translation (Seán de Búrca)
+ - Updated Dutch translation (Tino Meinen)
+ - Updated Tamil translation (drtvasudevan)
+
+* New Features:
+ - Claim org.freedesktop.Policy.Power on D-BUS (Martin Pitt)
+ - Remove PolkitGnome code completely as PolicyKit 1.0 doesn't need this (Matthias Clasen)
+ - Add a bodge to reset the idletime XAlarm when we are no longer inhibited (Richard Hughes)
+ - Add functionality to debug the idle code by setting GPMIDLEDEBUG on the command line (Richard Hughes)
+ - Use the same composited OSD for brightness notification. Fixes rh#512968 (Richard Hughes)
+ - Add DeviceKit data to the bugreport script (Richard Hughes)
+
+* Bugfix:
+ - Fix pointer alignment to build on sparc (Martin Pitt)
+ - gnome-power-bugreport.sh: add missing hasbang (Martin Pitt)
+ - Show .desktop files in XFCE (Martin Pitt)
+ - Make hotkeys work with modifiers (Martin Pitt)
+ - Remove an unused include to fix compile (Matthias Clasen)
+ - Be more paranoid about setting idle in a race (Richard Hughes)
+ - Remove some UI elements after UI review (Richard Hughes)
+ - Correct the type of the fully-charged signal. Fixes #588259 (Richard Hughes)
+ - Don't ever fallback to the warning icon in the tray when batteries are invalid (Richard Hughes)
+ - Don't show a discharging battery notification on each battery, just the global battery (Richard Hughes)
+ - The composite battery is only fully charged if all batteries are fully charged (Richard Hughes)
+ - Remove GpmNotify, and do the notifications in a more sane way. Fixes #423186 (Richard Hughes)
+ - Constrain the user to a dropdown selection of times, as freeform sliders are bad UI (Richard Hughes)
+ - Add policy to show icon when low, rather than critically low. Fixes #589125 (Richard Hughes)
+ - Inhibit gnome-session in the applet, not gnome-power-manager (Richard Hughes)
+ - Change the default to hibernate when critically low on battery power (Richard Hughes)
+ - When libnotify fails, fall back to modal dialogs (Richard Hughes)
+ - Use enumerated values for the policy actions, and hide 'Do nothing' unless specified in GConf (Richard Hughes)
+ - Finally remove the CanSuspend and CanHibernate options, now that gnome-session is ported (Richard Hughes)
+ - Switch back to org.gnome.PowerManager as we don't adhere to the shared spec anymore (Richard Hughes)
+ - Compile common code with a noinst library to make compile quicker, and reduce the compressed package size by 100kB (Richard Hughes)
+ - Add a GConf key to show or hide the sleep quirk site (Richard Hughes)
+ - Make the orange icons yellower. Fixes rh#512962 (Richard Hughes)
+ - Use the correct DBus signal types when watching gnome-session (Richard Hughes)
+ - Save the caches value before we emit the inhibit and idle signals (Richard Hughes)
+ - Only show gnome-power-statistics in the context menu if it is installed. Fixes rh#514249 (Richard Hughes)
+ - Only use libpanel-applet flags to build applets (Vincent Untz)
+
 ==============
 Version 2.27.2
 ==============
