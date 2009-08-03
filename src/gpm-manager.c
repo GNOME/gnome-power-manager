@@ -1253,7 +1253,17 @@ gpm_engine_charge_low_cb (GpmEngine *engine, DkpObject *obj, GpmManager *manager
 	const gchar *title = NULL;
 	gchar *message = NULL;
 	gchar *remaining_text;
-	gchar *icon;
+	gchar *icon = NULL;
+	gboolean on_ac;
+
+	/* check to see if we are on AC */
+	if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
+		on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
+		if (on_ac) {
+			egg_warning ("ignoring low message as we are not on battery power");
+			goto out;
+		}
+	}
 
 	if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
 		title = _("Laptop battery low");
@@ -1286,6 +1296,7 @@ gpm_engine_charge_low_cb (GpmEngine *engine, DkpObject *obj, GpmManager *manager
 	icon = gpm_devicekit_get_object_icon (obj);
 	gpm_notify_display (manager->priv->notify, title, message, GPM_NOTIFY_TIMEOUT_LONG, icon, GPM_NOTIFY_URGENCY_NORMAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
+out:
 	g_free (icon);
 	g_free (message);
 }
@@ -1311,8 +1322,18 @@ gpm_engine_charge_critical_cb (GpmEngine *engine, DkpObject *obj, GpmManager *ma
 	gchar *action_text = NULL;
 	gchar *remaining_text;
 	gchar *action;
-	gchar *icon;
+	gchar *icon = NULL;
 	gchar *time_text;
+	gboolean on_ac;
+
+	/* check to see if we are on AC */
+	if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
+		on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
+		if (on_ac) {
+			egg_warning ("ignoring critically low message as we are not on battery power");
+			goto out;
+		}
+	}
 
 	if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
 		title = _("Laptop battery critically low");
@@ -1376,6 +1397,7 @@ gpm_engine_charge_critical_cb (GpmEngine *engine, DkpObject *obj, GpmManager *ma
 	icon = gpm_devicekit_get_object_icon (obj);
 	gpm_notify_display (manager->priv->notify, title, message, GPM_NOTIFY_TIMEOUT_LONG, icon, GPM_NOTIFY_URGENCY_CRITICAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
+out:
 	g_free (icon);
 	g_free (message);
 }
@@ -1389,8 +1411,17 @@ gpm_engine_charge_action_cb (GpmEngine *engine, DkpObject *obj, GpmManager *mana
 	const gchar *title = NULL;
 	gchar *action;
 	gchar *message = NULL;
-	gchar *icon;
+	gchar *icon = NULL;
+	gboolean on_ac;
 
+	/* check to see if we are on AC */
+	if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
+		on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
+		if (on_ac) {
+			egg_warning ("ignoring action signal as we are not on battery power");
+			goto out;
+		}
+	}
 	if (obj->type == DKP_DEVICE_TYPE_BATTERY) {
 		title = _("Laptop battery critically low");
 
@@ -1457,6 +1488,7 @@ gpm_engine_charge_action_cb (GpmEngine *engine, DkpObject *obj, GpmManager *mana
 			    title, message, GPM_NOTIFY_TIMEOUT_LONG,
 			    icon, GPM_NOTIFY_URGENCY_CRITICAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
+out:
 	g_free (icon);
 	g_free (message);
 }
