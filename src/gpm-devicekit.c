@@ -246,8 +246,10 @@ gpm_devicekit_get_object_summary (DkpDevice *device)
 
 	/* we care if we are on AC */
 	if (type == DKP_DEVICE_TYPE_PHONE) {
-		if (state == DKP_DEVICE_STATE_CHARGING || !state == DKP_DEVICE_STATE_DISCHARGING)
-			return g_strdup_printf ("%s charging (%.1f%%)", type_desc, percentage);
+		if (state == DKP_DEVICE_STATE_CHARGING || !state == DKP_DEVICE_STATE_DISCHARGING) {
+			/* TRANSLATORS: a phone is charging */
+			return g_strdup_printf (_("%s charging (%.1f%%)"), type_desc, percentage);
+		}
 		return g_strdup_printf ("%s (%.1f%%)", type_desc, percentage);
 	}
 
@@ -260,23 +262,25 @@ gpm_devicekit_get_object_summary (DkpDevice *device)
 
 		if (type == DKP_DEVICE_TYPE_BATTERY && time_to_empty_round > GPM_DKP_TEXT_MIN_TIME) {
 			time_to_empty_str = gpm_get_timestring (time_to_empty_round);
-			description = g_strdup_printf (_("%s fully charged (%.1f%%)\nProvides %s battery runtime"),
-							type_desc, percentage, time_to_empty_str);
+			/* TRANSLATORS: The laptop battery is fully charged, and we know a time */
+			description = g_strdup_printf (_("Battery is fully charged.\nProvides %s laptop runtime"),
+							time_to_empty_str);
 			g_free (time_to_empty_str);
 		} else {
-			description = g_strdup_printf (_("%s fully charged (%.1f%%)"),
-							type_desc, percentage);
+			/* TRANSLATORS: the device is fully charged */
+			description = g_strdup_printf (_("%s is fully charged"), type_desc);
 		}
 
 	} else if (state == DKP_DEVICE_STATE_DISCHARGING) {
 
 		if (time_to_empty_round > GPM_DKP_TEXT_MIN_TIME) {
 			time_to_empty_str = gpm_get_timestring (time_to_empty_round);
+			/* TRANSLATORS: the device is discharging, and we have a time remaining */
 			description = g_strdup_printf (_("%s %s remaining (%.1f%%)"),
 							type_desc, time_to_empty_str, percentage);
 			g_free (time_to_empty_str);
 		} else {
-			/* don't display "Unknown remaining" */
+			/* TRANSLATORS: the device is discharging, but we only have a percentage */
 			description = g_strdup_printf (_("%s discharging (%.1f%%)"),
 							type_desc, percentage);
 		}
@@ -289,6 +293,8 @@ gpm_devicekit_get_object_summary (DkpDevice *device)
 			/* display both discharge and charge time */
 			time_to_full_str = gpm_get_timestring (time_to_full_round);
 			time_to_empty_str = gpm_get_timestring (time_to_empty_round);
+
+			/* TRANSLATORS: the device is charging, and we have a time to full and empty */
 			description = g_strdup_printf (_("%s %s until charged (%.1f%%)\nProvides %s battery runtime"),
 							type_desc, time_to_full_str, percentage, time_to_empty_str);
 			g_free (time_to_full_str);
@@ -298,12 +304,14 @@ gpm_devicekit_get_object_summary (DkpDevice *device)
 
 			/* display only charge time */
 			time_to_full_str = gpm_get_timestring (time_to_full_round);
+
+			/* TRANSLATORS: device is charging, and we have a time to full and a percentage */
 			description = g_strdup_printf (_("%s %s until charged (%.1f%%)"),
 						type_desc, time_to_full_str, percentage);
 			g_free (time_to_full_str);
 		} else {
 
-			/* don't display "Unknown remaining" */
+			/* TRANSLATORS: device is charging, but we only have a percentage */
 			description = g_strdup_printf (_("%s charging (%.1f%%)"),
 						type_desc, percentage);
 		}
@@ -377,41 +385,60 @@ gpm_devicekit_get_object_description (DkpDevice *device)
 
 	details = g_string_new ("");
 	text = gpm_device_type_to_localised_text (type, 1);
-	g_string_append_printf (details, _("<b>Product:</b> %s\n"), text);
-	if (!is_present)
-		g_string_append_printf (details, _("<b>Status:</b> %s\n"), _("Missing"));
-	else if (state == DKP_DEVICE_STATE_FULLY_CHARGED)
-		g_string_append_printf (details, _("<b>Status:</b> %s\n"), _("Charged"));
-	else if (state == DKP_DEVICE_STATE_CHARGING)
-		g_string_append_printf (details, _("<b>Status:</b> %s\n"), _("Charging"));
-	else if (state == DKP_DEVICE_STATE_DISCHARGING)
-		g_string_append_printf (details, _("<b>Status:</b> %s\n"), _("Discharging"));
-	if (percentage >= 0)
-		g_string_append_printf (details, _("<b>Percentage charge:</b> %.1f%%\n"), percentage);
-	if (vendor)
-		g_string_append_printf (details, _("<b>Vendor:</b> %s\n"), vendor);
+	/* TRANSLATORS: the type of data, e.g. Laptop battery */
+	g_string_append_printf (details, "<b>%s</b> %s\n", _("Product:"), text);
+
+	if (!is_present) {
+		/* TRANSLATORS: device is missing */
+		g_string_append_printf (details, "<b>%s</b> %s\n", _("Status:"), _("Missing"));
+	} else if (state == DKP_DEVICE_STATE_FULLY_CHARGED) {
+		/* TRANSLATORS: device is charged */
+		g_string_append_printf (details, "<b>%s</b> %s\n", _("Status:"), _("Charged"));
+	} else if (state == DKP_DEVICE_STATE_CHARGING) {
+		/* TRANSLATORS: device is charging */
+		g_string_append_printf (details, "<b>%s</b> %s\n", _("Status:"), _("Charging"));
+	} else if (state == DKP_DEVICE_STATE_DISCHARGING) {
+		/* TRANSLATORS: device is discharging */
+		g_string_append_printf (details, "<b>%s</b> %s\n", _("Status:"), _("Discharging"));
+	}
+
+	if (percentage >= 0) {
+		/* TRANSLATORS: percentage */
+		g_string_append_printf (details, "<b>%s</b> %.1f%%\n", _("Percentage charge:"), percentage);
+	}
+	if (vendor) {
+		/* TRANSLATORS: manufacturer */
+		g_string_append_printf (details, "<b>%s</b> %s\n", _("Vendor:"), vendor);
+	}
 	if (technology != DKP_DEVICE_TECHNOLOGY_UNKNOWN) {
 		text = gpm_device_technology_to_localised_text (technology);
-		g_string_append_printf (details, _("<b>Technology:</b> %s\n"), text);
+		/* TRANSLATORS: how the battery is made, e.g. Lithium Ion */
+		g_string_append_printf (details, "<b>%s</b> %s\n", _("Technology:"), text);
 	}
-	if (serial)
-		g_string_append_printf (details, _("<b>Serial number:</b> %s\n"), serial);
-	if (model)
-		g_string_append_printf (details, _("<b>Model:</b> %s\n"), model);
+	if (serial) {
+		/* TRANSLATORS: serial number of the battery */
+		g_string_append_printf (details, "<b>%s</b> %s\n", _("Serial number:"), serial);
+	}
+	if (model) {
+		/* TRANSLATORS: model number of the battery */
+		g_string_append_printf (details, "<b>%s</b> %s\n", _("Model:"), model);
+	}
 	if (time_to_full > 0) {
 		time_str = gpm_get_timestring (time_to_full);
-		g_string_append_printf (details, _("<b>Charge time:</b> %s\n"), time_str);
+		/* TRANSLATORS: time to fully charged */
+		g_string_append_printf (details, "<b>%s</b> %s\n", _("Charge time:"), time_str);
 		g_free (time_str);
 	}
 	if (time_to_empty > 0) {
 		time_str = gpm_get_timestring (time_to_empty);
-		g_string_append_printf (details, _("<b>Discharge time:</b> %s\n"), time_str);
+		/* TRANSLATORS: time to empty */
+		g_string_append_printf (details, "<b>%s</b> %s\n", _("Discharge time:"), time_str);
 		g_free (time_str);
 	}
 	if (capacity > 0) {
 		const gchar *condition;
 		if (capacity > 99) {
-			/* Translators: Excellent, Good, Fair and Poor are all related to battery Capacity */
+			/* TRANSLATORS: Excellent, Good, Fair and Poor are all related to battery Capacity */
 			condition = _("Excellent");
 		} else if (capacity > 90) {
 			condition = _("Good");
@@ -420,34 +447,46 @@ gpm_devicekit_get_object_description (DkpDevice *device)
 		} else {
 			condition = _("Poor");
 		}
-		/* Translators: %.1f is a percentage and %s the condition (Excellent, Good, ...) */
-		g_string_append_printf (details, _("<b>Capacity:</b> %.1f%% (%s)\n"),
-					capacity, condition);
+		/* TRANSLATORS: %.1f is a percentage and %s the condition (Excellent, Good, ...) */
+		g_string_append_printf (details, "<b>%s</b> %.1f%% (%s)\n",
+					_("Capacity:"), capacity, condition);
 	}
 	if (type == DKP_DEVICE_TYPE_BATTERY) {
-		if (energy > 0)
-			g_string_append_printf (details, _("<b>Current charge:</b> %.1f Wh\n"),
-						energy);
+		if (energy > 0) {
+			/* TRANSLATORS: current charge */
+			g_string_append_printf (details, "<b>%s</b> %.1f Wh\n",
+						_("Current charge:"), energy);
+		}
 		if (energy_full > 0 &&
-		    energy_full_design != energy_full)
-			g_string_append_printf (details, _("<b>Last full charge:</b> %.1f Wh\n"),
-						energy_full);
-		if (energy_full_design > 0)
-			/* Translators: Design charge is the amount of charge the battery is designed to have when brand new */
-			g_string_append_printf (details, _("<b>Design charge:</b> %.1f Wh\n"),
-						energy_full_design);
-		if (energy_rate > 0)
-			g_string_append_printf (details, _("<b>Charge rate:</b> %.1f W\n"),
-						energy_rate);
+		    energy_full_design != energy_full) {
+			/* TRANSLATORS: last full is the charge the battery was seen to charge to */
+			g_string_append_printf (details, "<b>%s</b> %.1f Wh\n",
+						_("Last full charge:"), energy_full);
+		}
+		if (energy_full_design > 0) {
+			/* Translators:  */
+			/* TRANSLATORS: Design charge is the amount of charge the battery is designed to have when brand new */
+			g_string_append_printf (details, "<b>%s</b> %.1f Wh\n",
+						_("Design charge:"), energy_full_design);
+		}
+		if (energy_rate > 0) {
+			/* TRANSLATORS: the charge or discharge rate */
+			g_string_append_printf (details, "<b>%s</b> %.1f W\n",
+						_("Charge rate:"), energy_rate);
+		}
 	}
 	if (type == DKP_DEVICE_TYPE_MOUSE ||
 	    type == DKP_DEVICE_TYPE_KEYBOARD) {
-		if (energy > 0)
-			g_string_append_printf (details, _("<b>Current charge:</b> %.0f/7\n"),
-						energy);
-		if (energy_full_design > 0)
-			g_string_append_printf (details, _("<b>Design charge:</b> %.0f/7\n"),
-						energy_full_design);
+		if (energy > 0) {
+			/* TRANSLATORS: the current charge for CSR devices */
+			g_string_append_printf (details, "<b>%s</b> %.0f/7\n",
+						_("Current charge:"), energy);
+		}
+		if (energy_full_design > 0) {
+			/* TRANSLATORS: the design charge for CSR devices */
+			g_string_append_printf (details, "<b>%s</b> %.0f/7\n",
+						_("Design charge:"), energy_full_design);
+		}
 	}
 	/* remove the last \n */
 	g_string_truncate (details, details->len-1);
@@ -467,27 +506,35 @@ gpm_device_type_to_localised_text (DkpDeviceType type, guint number)
 	const gchar *text = NULL;
 	switch (type) {
 	case DKP_DEVICE_TYPE_LINE_POWER:
+		/* TRANSLATORS: system power cord */
 		text = ngettext ("AC adapter", "AC adapters", number);
 		break;
 	case DKP_DEVICE_TYPE_BATTERY:
+		/* TRANSLATORS: laptop primary battery */
 		text = ngettext ("Laptop battery", "Laptop batteries", number);
 		break;
 	case DKP_DEVICE_TYPE_UPS:
+		/* TRANSLATORS: battery-backed AC power source */
 		text = ngettext ("UPS", "UPSs", number);
 		break;
 	case DKP_DEVICE_TYPE_MONITOR:
+		/* TRANSLATORS: a monitor is a device to measure voltage and current */
 		text = ngettext ("Monitor", "Monitors", number);
 		break;
 	case DKP_DEVICE_TYPE_MOUSE:
+		/* TRANSLATORS: wireless mice with internal batteries */
 		text = ngettext ("Wireless mouse", "Wireless mice", number);
 		break;
 	case DKP_DEVICE_TYPE_KEYBOARD:
+		/* TRANSLATORS: wireless keyboard with internal battery */
 		text = ngettext ("Wireless keyboard", "Wireless keyboards", number);
 		break;
 	case DKP_DEVICE_TYPE_PDA:
+		/* TRANSLATORS: portable device */
 		text = ngettext ("PDA", "PDAs", number);
 		break;
 	case DKP_DEVICE_TYPE_PHONE:
+		/* TRANSLATORS: cell phone (mobile...) */
 		text = ngettext ("Cell phone", "Cell phones", number);
 		break;
 	default:
@@ -545,24 +592,31 @@ gpm_device_technology_to_localised_text (DkpDeviceTechnology technology_enum)
 	const gchar *technology = NULL;
 	switch (technology_enum) {
 	case DKP_DEVICE_TECHNOLOGY_LITHIUM_ION:
+		/* TRANSLATORS: battery technology */
 		technology = _("Lithium Ion");
 		break;
 	case DKP_DEVICE_TECHNOLOGY_LITHIUM_POLYMER:
+		/* TRANSLATORS: battery technology */
 		technology = _("Lithium Polymer");
 		break;
 	case DKP_DEVICE_TECHNOLOGY_LITHIUM_IRON_PHOSPHATE:
+		/* TRANSLATORS: battery technology */
 		technology = _("Lithium Iron Phosphate");
 		break;
 	case DKP_DEVICE_TECHNOLOGY_LEAD_ACID:
+		/* TRANSLATORS: battery technology */
 		technology = _("Lead acid");
 		break;
 	case DKP_DEVICE_TECHNOLOGY_NICKEL_CADMIUM:
+		/* TRANSLATORS: battery technology */
 		technology = _("Nickel Cadmium");
 		break;
 	case DKP_DEVICE_TECHNOLOGY_NICKEL_METAL_HYDRIDE:
+		/* TRANSLATORS: battery technology */
 		technology = _("Nickel metal hydride");
 		break;
 	case DKP_DEVICE_TECHNOLOGY_UNKNOWN:
+		/* TRANSLATORS: battery technology */
 		technology = _("Unknown technology");
 		break;
 	default:
