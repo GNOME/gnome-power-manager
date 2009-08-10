@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&component=general\n"
-"POT-Creation-Date: 2009-08-10 11:23+0000\n"
-"PO-Revision-Date: 2009-08-10 20:18+0200\n"
+"POT-Creation-Date: 2009-08-10 18:20+0000\n"
+"PO-Revision-Date: 2009-08-10 21:12+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1198,9 +1198,6 @@ msgstr "%s cargando (%.1f%%)"
 #. TRANSLATORS: The laptop battery is fully charged, and we know a time
 #: ../src/gpm-devicekit.c:266
 #, c-format
-#| msgid ""
-#| "%s fully charged (%.1f%%)\n"
-#| "Provides %s battery runtime"
 msgid ""
 "Battery is fully charged.\n"
 "Provides %s laptop runtime"
@@ -1211,7 +1208,6 @@ msgstr ""
 #. TRANSLATORS: the device is fully charged
 #: ../src/gpm-devicekit.c:271
 #, c-format
-#| msgid "%s fully charged (%.1f%%)"
 msgid "%s is fully charged"
 msgstr "%s totalmente cargada"
 
@@ -1266,10 +1262,9 @@ msgstr "Producto:"
 #. TRANSLATORS: device is discharging
 #: ../src/gpm-devicekit.c:393 ../src/gpm-devicekit.c:396
 #: ../src/gpm-devicekit.c:399 ../src/gpm-devicekit.c:402
-#, fuzzy
 #| msgid "State"
 msgid "Status:"
-msgstr "Estado"
+msgstr "Estado:"
 
 #: ../src/gpm-devicekit.c:393
 msgid "Missing"
@@ -1289,52 +1284,45 @@ msgstr "Descargando"
 
 #. TRANSLATORS: percentage
 #: ../src/gpm-devicekit.c:407
-#, fuzzy
 #| msgid "Percentage"
 msgid "Percentage charge:"
-msgstr "Porcentaje"
+msgstr "Porcentaje de carga:"
 
 #. TRANSLATORS: manufacturer
 #: ../src/gpm-devicekit.c:411
-#, fuzzy
 #| msgid "Vendor"
 msgid "Vendor:"
-msgstr "Fabricante"
+msgstr "Fabricante:"
 
 #. TRANSLATORS: how the battery is made, e.g. Lithium Ion
 #: ../src/gpm-devicekit.c:416
-#, fuzzy
 #| msgid "Technology"
 msgid "Technology:"
-msgstr "Tecnología"
+msgstr "Tecnología:"
 
 #. TRANSLATORS: serial number of the battery
 #: ../src/gpm-devicekit.c:420
-#, fuzzy
 #| msgid "Serial number"
 msgid "Serial number:"
-msgstr "Número de serie"
+msgstr "Número de serie:"
 
 #. TRANSLATORS: model number of the battery
 #: ../src/gpm-devicekit.c:424
-#, fuzzy
 #| msgid "Model"
 msgid "Model:"
-msgstr "Modelo"
+msgstr "Modelo:"
 
 #. TRANSLATORS: time to fully charged
 #: ../src/gpm-devicekit.c:429
-#, fuzzy
 #| msgid "Charge profile"
 msgid "Charge time:"
-msgstr "Perfil de carga"
+msgstr "Tiempo de carga:"
 
 #. TRANSLATORS: time to empty
 #: ../src/gpm-devicekit.c:435
-#, fuzzy
 #| msgid "Discharge profile"
 msgid "Discharge time:"
-msgstr "Perfil descarga"
+msgstr "Tiempo de descarga:"
 
 #. TRANSLATORS: Excellent, Good, Fair and Poor are all related to battery Capacity
 #: ../src/gpm-devicekit.c:442
@@ -1354,34 +1342,29 @@ msgid "Poor"
 msgstr "Pobre"
 
 #: ../src/gpm-devicekit.c:452
-#, fuzzy
 #| msgid "Capacity"
 msgid "Capacity:"
-msgstr "Capacidad"
+msgstr "Capacidad:"
 
 #: ../src/gpm-devicekit.c:458 ../src/gpm-devicekit.c:483
-#, fuzzy
 #| msgid "<b>Current charge:</b> %i/7\n"
 msgid "Current charge:"
-msgstr "<b>Carga actual:</b> %i/7\n"
+msgstr "Carga actual:"
 
 #: ../src/gpm-devicekit.c:464
-#, fuzzy
 #| msgid "<b>Last full charge:</b> %.1f Wh\n"
 msgid "Last full charge:"
-msgstr "<b>Última carga completa:</b> %.1f Wh\n"
+msgstr "Última carga completa:"
 
 #: ../src/gpm-devicekit.c:470 ../src/gpm-devicekit.c:488
-#, fuzzy
 #| msgid "<b>Design charge:</b> %i/7\n"
 msgid "Design charge:"
-msgstr "<b>Carga de diseño:</b> %i/7\n"
+msgstr "Carga de diseño:"
 
 #: ../src/gpm-devicekit.c:475
-#, fuzzy
 #| msgid "Charge profile"
 msgid "Charge rate:"
-msgstr "Perfil de carga"
+msgstr "Tasa de carga:"
 
 #. TRANSLATORS: system power cord
 #: ../src/gpm-devicekit.c:510
@@ -1545,7 +1528,6 @@ msgstr "Sesión activa"
 
 #. TRANSLATORS: has something inhibited the session
 #: ../src/gpm-idle.c:225
-#| msgid "Inhibit"
 msgid "(Inhibited)"
 msgstr "(Inhibida)"
 
@@ -1718,8 +1700,6 @@ msgstr ""
 
 #. TRANSLATORS: show the fully charged notification
 #: ../src/gpm-manager.c:1183
-#| msgid "Battery Charged"
-#| msgid_plural "Batteries Charged"
 msgid "Battery Fully Charged"
 msgid_plural "Batteries Fully Charged"
 msgstr[0] "Batería completamente cargada"
@@ -1733,7 +1713,6 @@ msgstr "Descargando la batería"
 #. TRANSLATORS: tell the user how much time they have got
 #: ../src/gpm-manager.c:1227
 #, c-format
-#| msgid "%s %s remaining (%.1f%%)"
 msgid "%s of battery power remaining (%.1f%%)"
 msgstr "%s de energía batería restante (%.1f%%)"
 
@@ -1744,10 +1723,10 @@ msgstr "Descargando el SAI"
 
 #. TRANSLATORS: tell the user how much time they have got
 #: ../src/gpm-manager.c:1233
-#, fuzzy, c-format
+#, c-format
 #| msgid "%s %s remaining (%.1f%%)"
 msgid "%s of UPS backup power remaining (%.1f%%)"
-msgstr "%s %s restantes (%.1f%%)"
+msgstr "%s de energía de respaldo del SAI restante (%.1f%%)"
 
 #. TRANSLATORS: window title: there wasa problem putting the machine to sleep
 #: ../src/gpm-manager.c:1301
@@ -1775,7 +1754,6 @@ msgstr "Visitar la página de ayuda"
 
 #. TRANSLATORS: laptop battery low, and we only have one battery
 #: ../src/gpm-manager.c:1397
-#, fuzzy
 #| msgid "Battery is low"
 msgid "Battery low"
 msgstr "La batería está baja"
@@ -1787,10 +1765,10 @@ msgstr "Batería del portátil baja"
 
 #. TRANSLATORS: tell the user how much time they have got
 #: ../src/gpm-manager.c:1406
-#, fuzzy, c-format
+#, c-format
 #| msgid "You have approximately <b>%s</b> of remaining battery life (%.1f%%)"
 msgid "Approximately <b>%s</b> remaining (%.1f%%)"
-msgstr "Tiene aproximadamente <b>%s</b> de batería restante (%.1f%%)"
+msgstr "Le queda aproximadamente <b>%s</b> (%.1f%%)"
 
 #. TRANSLATORS: UPS is starting to get a little low
 #: ../src/gpm-manager.c:1410
@@ -1859,10 +1837,9 @@ msgstr ""
 
 #. TRANSLATORS: laptop battery critically low, and only have one type of battery
 #: ../src/gpm-manager.c:1503
-#, fuzzy
 #| msgid "Battery is critically low."
 msgid "Battery critically low"
-msgstr "La batería está críticamente baja."
+msgstr "La batería está críticamente baja"
 
 #. TRANSLATORS: laptop battery critically low, and we have more than one type of battery
 #. TRANSLATORS: laptop battery is really, really, low
@@ -1878,25 +1855,24 @@ msgstr ""
 
 #. TRANSLATORS: give the user a ultimatum
 #: ../src/gpm-manager.c:1523
-#, fuzzy, c-format
+#, c-format
 #| msgid "Your computer failed to suspend."
 msgid "Computer will suspend in %s."
-msgstr "Su equipo falló al suspender."
+msgstr "El equipo se suspenderá en %s."
 
 #. TRANSLATORS: give the user a ultimatum
 #: ../src/gpm-manager.c:1527
-#, fuzzy, c-format
+#, c-format
 #| msgid "Your computer failed to hibernate."
 msgid "Computer will hibernate in %s."
-msgstr "Su equipo falló al hibernar."
+msgstr "El equipo hibernará en %s."
 
 #. TRANSLATORS: give the user a ultimatum
 #: ../src/gpm-manager.c:1531
-#, fuzzy, c-format
+#, c-format
 #| msgid "This computer will shutdown in %s if the AC is not connected."
 msgid "Computer will shutdown in %s."
-msgstr ""
-"Este equipo se apagará en %s si el adaptador de corriente no se conecta."
+msgstr "El equipo se apagará en %s."
 
 #. TRANSLATORS: the UPS is very low
 #. TRANSLATORS: UPS is really, really, low
