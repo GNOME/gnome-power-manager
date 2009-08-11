@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-power-manager HEAD\n"
+"Project-Id-Version: gnome-power-manager.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-05 23:42-0600\n"
-"PO-Revision-Date: 2009-08-06 00:13-0600\n"
+"POT-Creation-Date: 2009-08-10 18:41-0600\n"
+"PO-Revision-Date: 2009-08-10 19:21-0600\n"
 "Last-Translator: Seán de Búrca <leftmostcat@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -23,12 +23,12 @@ msgstr "Feidhmchláirín Ghile Bhainisteoir Cumhachta"
 
 #: ../applets/brightness/brightness-applet.c:106
 msgid "Adjusts laptop panel brightness."
-msgstr "Coigeartaíonn seo gile an phainéil ríomhaire glúine."
+msgstr "Coigeartaíonn sé seo gile an phainéil ríomhaire glúine."
 
 #: ../applets/brightness/brightness-applet.c:354
 #: ../applets/inhibit/inhibit-applet.c:353
 msgid "Cannot connect to gnome-power-manager"
-msgstr "Ní féidir nascadh le gnome-power-manager"
+msgstr "Ní féidir nasc le gnome-power-manager"
 
 #: ../applets/brightness/brightness-applet.c:356
 msgid "Cannot get laptop panel brightness"
@@ -42,7 +42,7 @@ msgstr "Gile LCD : %d%%"
 #: ../applets/brightness/brightness-applet.c:747
 #: ../applets/inhibit/inhibit-applet.c:422 ../src/gpm-tray-icon.c:316
 msgid "Licensed under the GNU General Public License Version 2"
-msgstr ""
+msgstr "Ceadúnaítear faoin GNU General Public License Leagan 2"
 
 #: ../applets/brightness/brightness-applet.c:748
 #: ../applets/inhibit/inhibit-applet.c:423 ../src/gpm-tray-icon.c:317
@@ -52,6 +52,10 @@ msgid ""
 "as published by the Free Software Foundation; either version 2\n"
 "of the License, or (at your option) any later version."
 msgstr ""
+"Is bogearraí saor é Bainisteoir Cumhachta; is féidir leat é a athdháileadh "
+"nó a athrú faoi théarmaí an GNU General Public License mar foilsíodh é ag an "
+"Free Software Foundation; leagan 2 an License, nó (de do rogha) aon leagan "
+"níos déanaí."
 
 #: ../applets/brightness/brightness-applet.c:752
 #: ../applets/inhibit/inhibit-applet.c:427 ../src/gpm-tray-icon.c:321
@@ -61,6 +65,10 @@ msgid ""
 "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
 "GNU General Public License for more details."
 msgstr ""
+"Dáileadh Bainisteoir Cumhachta le súil go mbeidh sé úsáideach, ach GAN AON "
+"BHARÁNTA; gan an baránta intuigthe INDÍOLTÓIREACHTA nó OIRIÚNACHTA D'FHEIDHM "
+"ÁIRITHE fiú. Féach an GNU General Public License le haghaidh tuilleadh "
+"mionsonraí."
 
 #: ../applets/brightness/brightness-applet.c:756
 #: ../applets/inhibit/inhibit-applet.c:431 ../src/gpm-tray-icon.c:325
@@ -70,6 +78,9 @@ msgid ""
 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
 "02110-1301, USA."
 msgstr ""
+"Ba chóir go bhfuair tú cóip an GNU General Public License in éineacht leis "
+"an gclár seo; mura bhfuair tú é, scríobh chuig an Free Software Foundation, "
+"Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA."
 
 #: ../applets/brightness/brightness-applet.c:770
 msgid "Copyright © 2006 Benjamin Canou"
@@ -77,7 +88,7 @@ msgstr "Cóipcheart © 2006 Benjamin Canou"
 
 #: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:1
 msgid "Adjusts Laptop panel brightness"
-msgstr "Coigeartaíonn seo gile an phainéil ríomhaire glúine"
+msgstr "Coigeartaíonn sé seo gile an phainéil ríomhaire glúine"
 
 #: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:2
 msgid "Brightness Applet"
@@ -1012,32 +1023,43 @@ msgstr[2] "nóiméad"
 msgstr[3] "nóiméad"
 msgstr[4] "nóiméad"
 
-#: ../src/gpm-devicekit.c:263
+#. TRANSLATORS: a phone is charging
+#. TRANSLATORS: device is charging, but we only have a percentage
+#: ../src/gpm-devicekit.c:251 ../src/gpm-devicekit.c:315
+#, c-format
+msgid "%s charging (%.1f%%)"
+msgstr "Tá %s á luchtú (%.1f%%)"
+
+#. TRANSLATORS: The laptop battery is fully charged, and we know a time
+#: ../src/gpm-devicekit.c:266
 #, c-format
 msgid ""
-"%s fully charged (%.1f%%)\n"
-"Provides %s battery runtime"
+"Battery is fully charged.\n"
+"Provides %s laptop runtime"
 msgstr ""
-"Tá %s luchtaithe go hiomlán (%.1f%%)\n"
-"Soláthraíonn sé %s am rite cadhnra"
+"Tá an cadhnra luchtaithe go hiomlán.\n"
+"Soláthraíonn sé %s am rite ríomhaire glúine"
 
-#: ../src/gpm-devicekit.c:267
+#. TRANSLATORS: the device is fully charged
+#: ../src/gpm-devicekit.c:271
 #, c-format
-msgid "%s fully charged (%.1f%%)"
-msgstr "Tá %s luchtaithe go hiomlán (%.1f%%)"
+msgid "%s is fully charged"
+msgstr "Tá %s luchtaithe go hiomlán"
 
-#: ../src/gpm-devicekit.c:275
+#. TRANSLATORS: the device is discharging, and we have a time remaining
+#: ../src/gpm-devicekit.c:279
 #, c-format
 msgid "%s %s remaining (%.1f%%)"
 msgstr "%s %s fágtha (%.1f%%)"
 
-#. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:280
+#. TRANSLATORS: the device is discharging, but we only have a percentage
+#: ../src/gpm-devicekit.c:284
 #, c-format
 msgid "%s discharging (%.1f%%)"
 msgstr "Tá %s á dhíluchtú (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:292
+#. TRANSLATORS: the device is charging, and we have a time to full and empty
+#: ../src/gpm-devicekit.c:298
 #, c-format
 msgid ""
 "%s %s until charged (%.1f%%)\n"
@@ -1046,146 +1068,128 @@ msgstr ""
 "%s %s go dtí luchtaithe (%.1f%%)\n"
 "Soláthraíonn sé %s am rite cadhnra"
 
-#: ../src/gpm-devicekit.c:301
+#. TRANSLATORS: device is charging, and we have a time to full and a percentage
+#: ../src/gpm-devicekit.c:309
 #, c-format
 msgid "%s %s until charged (%.1f%%)"
 msgstr "%s %s go dtí luchtaithe (%.1f%%)"
 
-#. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:307
-#, c-format
-msgid "%s charging (%.1f%%)"
-msgstr "Tá %s á luchtú (%.1f%%)"
-
 #. TRANSLATORS: this is only shown for laptops with multiple batteries
-#: ../src/gpm-devicekit.c:315
+#: ../src/gpm-devicekit.c:323
 #, c-format
 msgid "%s waiting to discharge (%.1f%%)"
 msgstr "Tá %s ag feitheamh le díluchtú (%.1f%%)"
 
 #. TRANSLATORS: this is only shown for laptops with multiple batteries
-#: ../src/gpm-devicekit.c:321
+#: ../src/gpm-devicekit.c:329
 #, c-format
 msgid "%s waiting to charge (%.1f%%)"
 msgstr "Tá %s ag feitheamh le luchtú (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:380
-#, c-format
-msgid "<b>Product:</b> %s\n"
-msgstr "<b>Táirge:</b> %s\n"
+#. TRANSLATORS: the type of data, e.g. Laptop battery
+#: ../src/gpm-devicekit.c:389
+msgid "Product:"
+msgstr "Táirge:"
 
-#: ../src/gpm-devicekit.c:382 ../src/gpm-devicekit.c:384
-#: ../src/gpm-devicekit.c:386 ../src/gpm-devicekit.c:388
-#, c-format
-msgid "<b>Status:</b> %s\n"
-msgstr "<b>Stádas:</b> %s\n"
+#. TRANSLATORS: device is missing
+#. TRANSLATORS: device is charged
+#. TRANSLATORS: device is charging
+#. TRANSLATORS: device is discharging
+#: ../src/gpm-devicekit.c:393 ../src/gpm-devicekit.c:396
+#: ../src/gpm-devicekit.c:399 ../src/gpm-devicekit.c:402
+msgid "Status:"
+msgstr "Stádas:"
 
-#: ../src/gpm-devicekit.c:382
+#: ../src/gpm-devicekit.c:393
 msgid "Missing"
 msgstr "Ar iarraidh"
 
-#: ../src/gpm-devicekit.c:384
+#: ../src/gpm-devicekit.c:396
 msgid "Charged"
 msgstr "Luchtaithe"
 
-#: ../src/gpm-devicekit.c:386
+#: ../src/gpm-devicekit.c:399
 msgid "Charging"
 msgstr "Á luchtú"
 
-#: ../src/gpm-devicekit.c:388
+#: ../src/gpm-devicekit.c:402
 msgid "Discharging"
 msgstr "Á díluchtú"
 
-#: ../src/gpm-devicekit.c:390
-#, c-format
-msgid "<b>Percentage charge:</b> %.1f%%\n"
-msgstr "<b>Céatadán luchta:</b> %.1f%%\n"
+#. TRANSLATORS: percentage
+#: ../src/gpm-devicekit.c:407
+msgid "Percentage charge:"
+msgstr "Céatadán luchta:"
 
-#: ../src/gpm-devicekit.c:392
-#, c-format
-msgid "<b>Vendor:</b> %s\n"
-msgstr "<b>Díoltóir:</b> %s\n"
+#. TRANSLATORS: manufacturer
+#: ../src/gpm-devicekit.c:411
+msgid "Vendor:"
+msgstr "Díoltóir:"
 
-#: ../src/gpm-devicekit.c:395
-#, c-format
-msgid "<b>Technology:</b> %s\n"
-msgstr "<b>Teicneolaíocht:</b> %s\n"
+#. TRANSLATORS: how the battery is made, e.g. Lithium Ion
+#: ../src/gpm-devicekit.c:416
+msgid "Technology:"
+msgstr "Teicneolaíocht:"
 
-#: ../src/gpm-devicekit.c:398
-#, c-format
-msgid "<b>Serial number:</b> %s\n"
-msgstr "<b>Sraithuimhir:</b> %s\n"
+#. TRANSLATORS: serial number of the battery
+#: ../src/gpm-devicekit.c:420
+msgid "Serial number:"
+msgstr "Sraithuimhir:"
 
-#: ../src/gpm-devicekit.c:400
-#, c-format
-msgid "<b>Model:</b> %s\n"
-msgstr "<b>Samhail:</b> %s\n"
+#. TRANSLATORS: model number of the battery
+#: ../src/gpm-devicekit.c:424
+msgid "Model:"
+msgstr "Samhail:"
 
-#: ../src/gpm-devicekit.c:403
-#, c-format
-msgid "<b>Charge time:</b> %s\n"
-msgstr "<b>Am luchta:</b> %s\n"
+#. TRANSLATORS: time to fully charged
+#: ../src/gpm-devicekit.c:429
+msgid "Charge time:"
+msgstr "Am luchtaithe:"
 
-#: ../src/gpm-devicekit.c:408
-#, c-format
-msgid "<b>Discharge time:</b> %s\n"
-msgstr "<b>Am díluchta:</b> %s\n"
+#. TRANSLATORS: time to empty
+#: ../src/gpm-devicekit.c:435
+msgid "Discharge time:"
+msgstr "Am díluchtaithe:"
 
-#. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
-#: ../src/gpm-devicekit.c:415
+#. TRANSLATORS: Excellent, Good, Fair and Poor are all related to battery Capacity
+#: ../src/gpm-devicekit.c:442
 msgid "Excellent"
 msgstr "Sármhaith"
 
-#: ../src/gpm-devicekit.c:417
+#: ../src/gpm-devicekit.c:444
 msgid "Good"
 msgstr "Maith"
 
-#: ../src/gpm-devicekit.c:419
+#: ../src/gpm-devicekit.c:446
 msgid "Fair"
 msgstr "Cóir"
 
-#: ../src/gpm-devicekit.c:421
+#: ../src/gpm-devicekit.c:448
 msgid "Poor"
 msgstr "Bocht"
 
-#. Translators: %.1f is a percentage and %s the condition (Excellent, Good, ...)
-#: ../src/gpm-devicekit.c:424
-#, c-format
-msgid "<b>Capacity:</b> %.1f%% (%s)\n"
-msgstr "<b>Toilleadh:</b> %.1f%% (%s)\n"
+#: ../src/gpm-devicekit.c:452
+msgid "Capacity:"
+msgstr "Toilleadh:"
 
-#: ../src/gpm-devicekit.c:429
-#, c-format
-msgid "<b>Current charge:</b> %.1f Wh\n"
-msgstr "<b>Lucht reatha:</b> %.1f Wh\n"
+#: ../src/gpm-devicekit.c:458 ../src/gpm-devicekit.c:483
+msgid "Current charge:"
+msgstr "Lucht reatha:"
 
-#: ../src/gpm-devicekit.c:433
-#, c-format
-msgid "<b>Last full charge:</b> %.1f Wh\n"
-msgstr "<b>Lucht iomlán is déanaí:</b> %.1f Wh\n"
+#: ../src/gpm-devicekit.c:464
+msgid "Last full charge:"
+msgstr "Lucht iomlán is déanaí:"
 
-#. Translators: Design charge is the amount of charge the battery is designed to have when brand new
-#: ../src/gpm-devicekit.c:437
-#, c-format
-msgid "<b>Design charge:</b> %.1f Wh\n"
-msgstr "<b>Lucht deartha:</b> %.1f Wh\n"
+#: ../src/gpm-devicekit.c:470 ../src/gpm-devicekit.c:488
+msgid "Design charge:"
+msgstr "Lucht deartha:"
 
-#: ../src/gpm-devicekit.c:440
-#, c-format
-msgid "<b>Charge rate:</b> %.1f W\n"
-msgstr "<b>Ráta luchta:</b> %.1f W\n"
+#: ../src/gpm-devicekit.c:475
+msgid "Charge rate:"
+msgstr "Ráta luchtaithe:"
 
-#: ../src/gpm-devicekit.c:446
-#, c-format
-msgid "<b>Current charge:</b> %.0f/7\n"
-msgstr "<b>Lucht reatha:</b> %.0f/7\n"
-
-#: ../src/gpm-devicekit.c:449
-#, c-format
-msgid "<b>Design charge:</b> %.0f/7\n"
-msgstr "<b>Lucht deartha:</b> %.0f/7\n"
-
-#: ../src/gpm-devicekit.c:470
+#. TRANSLATORS: system power cord
+#: ../src/gpm-devicekit.c:510
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "Cuibheoir SA"
@@ -1194,7 +1198,8 @@ msgstr[2] "Cuibheoirí SA"
 msgstr[3] "Cuibheoirí SA"
 msgstr[4] "Cuibheoirí SA"
 
-#: ../src/gpm-devicekit.c:473
+#. TRANSLATORS: laptop primary battery
+#: ../src/gpm-devicekit.c:514
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "Cadhnra ríomhaire glúine"
@@ -1203,7 +1208,8 @@ msgstr[2] "Cadhnraí ríomhaire glúine"
 msgstr[3] "Cadhnraí ríomhaire glúine"
 msgstr[4] "Cadhnraí ríomhaire glúine"
 
-#: ../src/gpm-devicekit.c:476
+#. TRANSLATORS: battery-backed AC power source
+#: ../src/gpm-devicekit.c:518
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "UPS"
@@ -1212,7 +1218,8 @@ msgstr[2] "UPSanna"
 msgstr[3] "UPSanna"
 msgstr[4] "UPSanna"
 
-#: ../src/gpm-devicekit.c:479
+#. TRANSLATORS: a monitor is a device to measure voltage and current
+#: ../src/gpm-devicekit.c:522
 msgid "Monitor"
 msgid_plural "Monitors"
 msgstr[0] "Monatóir"
@@ -1221,7 +1228,8 @@ msgstr[2] "Monatóirí"
 msgstr[3] "Monatóirí"
 msgstr[4] "Monatóirí"
 
-#: ../src/gpm-devicekit.c:482
+#. TRANSLATORS: wireless mice with internal batteries
+#: ../src/gpm-devicekit.c:526
 msgid "Wireless mouse"
 msgid_plural "Wireless mice"
 msgstr[0] "Luch gan sreang"
@@ -1230,7 +1238,8 @@ msgstr[2] "Lucha gan sreang"
 msgstr[3] "Lucha gan sreang"
 msgstr[4] "Lucha gan sreang"
 
-#: ../src/gpm-devicekit.c:485
+#. TRANSLATORS: wireless keyboard with internal battery
+#: ../src/gpm-devicekit.c:530
 msgid "Wireless keyboard"
 msgid_plural "Wireless keyboards"
 msgstr[0] "Méarchlár gan sreang"
@@ -1239,7 +1248,8 @@ msgstr[2] "Méarchláir gan sreang"
 msgstr[3] "Méarchláir gan sreang"
 msgstr[4] "Méarchláir gan sreang"
 
-#: ../src/gpm-devicekit.c:488
+#. TRANSLATORS: portable device
+#: ../src/gpm-devicekit.c:534
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "PDA"
@@ -1248,7 +1258,8 @@ msgstr[2] "PDAanna"
 msgstr[3] "PDAanna"
 msgstr[4] "PDAanna"
 
-#: ../src/gpm-devicekit.c:491
+#. TRANSLATORS: cell phone (mobile...)
+#: ../src/gpm-devicekit.c:538
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "Fón póca"
@@ -1257,31 +1268,38 @@ msgstr[2] "Fóin póca"
 msgstr[3] "Fóin póca"
 msgstr[4] "Fóin póca"
 
-#: ../src/gpm-devicekit.c:548
+#. TRANSLATORS: battery technology
+#: ../src/gpm-devicekit.c:596
 msgid "Lithium Ion"
 msgstr "Ian Litiam"
 
-#: ../src/gpm-devicekit.c:551
+#. TRANSLATORS: battery technology
+#: ../src/gpm-devicekit.c:600
 msgid "Lithium Polymer"
 msgstr "Polaiméir Litiam"
 
-#: ../src/gpm-devicekit.c:554
+#. TRANSLATORS: battery technology
+#: ../src/gpm-devicekit.c:604
 msgid "Lithium Iron Phosphate"
 msgstr "Fosfáit Litiam Iarainn"
 
-#: ../src/gpm-devicekit.c:557
+#. TRANSLATORS: battery technology
+#: ../src/gpm-devicekit.c:608
 msgid "Lead acid"
 msgstr "Luaidhe-aigéadach"
 
-#: ../src/gpm-devicekit.c:560
+#. TRANSLATORS: battery technology
+#: ../src/gpm-devicekit.c:612
 msgid "Nickel Cadmium"
 msgstr "Caidmiam Nicile"
 
-#: ../src/gpm-devicekit.c:563
+#. TRANSLATORS: battery technology
+#: ../src/gpm-devicekit.c:616
 msgid "Nickel metal hydride"
 msgstr "Hidríd mhiotail nicile"
 
-#: ../src/gpm-devicekit.c:566
+#. TRANSLATORS: battery technology
+#: ../src/gpm-devicekit.c:620
 msgid "Unknown technology"
 msgstr "Teicneolaíocht anaithnid"
 
@@ -1344,6 +1362,29 @@ msgstr "%.1fW"
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fV"
+
+#. TRANSLATORS: this is for debugging, if the session is idle
+#: ../src/gpm-idle.c:223
+msgid "Session idle"
+msgstr "Seisiún díomhaoin"
+
+#: ../src/gpm-idle.c:223
+msgid "Session active"
+msgstr "Seisiún gníomhach"
+
+#. TRANSLATORS: has something inhibited the session
+#: ../src/gpm-idle.c:225
+msgid "(Inhibited)"
+msgstr "(Coiscthe)"
+
+#. TRANSLATORS: is the screen idle or awake
+#: ../src/gpm-idle.c:227
+msgid "Screen idle"
+msgstr "Scáileán díomhaoin"
+
+#: ../src/gpm-idle.c:227
+msgid "Screen awake"
+msgstr "Scáileán múscailte"
 
 #. TRANSLATORS: show verbose debugging
 #: ../src/gpm-main.c:171 ../src/gpm-prefs.c:90 ../src/gpm-statistics.c:1465
@@ -1416,77 +1457,49 @@ msgstr "Athdhúisithe"
 msgid "Suspend failed"
 msgstr "Fionraí teipthe"
 
-#: ../src/gpm-manager.c:433 ../src/gpm-manager.c:467
+#. TRANSLATORS: the action was not done
+#: ../src/gpm-manager.c:434 ../src/gpm-manager.c:470
 msgid "Action disallowed"
 msgstr ""
 
-#: ../src/gpm-manager.c:434
+#. TRANSLATORS: admin has disabled ability to do this
+#: ../src/gpm-manager.c:436
 msgid ""
 "Suspend support has been disabled. Contact your administrator for more "
 "details."
 msgstr ""
 
-#: ../src/gpm-manager.c:468
+#. TRANSLATORS: admin has disabled ability to do this
+#: ../src/gpm-manager.c:472
 msgid ""
 "Hibernate support has been disabled. Contact your administrator for more "
 "details."
 msgstr ""
 
-#: ../src/gpm-manager.c:666
-msgid "The lid has been closed on ac power."
-msgstr ""
-
-#: ../src/gpm-manager.c:672
-msgid "The lid has been closed on battery power."
-msgstr ""
-
-#: ../src/gpm-manager.c:692
+#. TRANSLATORS: this is the gnome-screensaver throttle
+#: ../src/gpm-manager.c:697
 msgid "Display DPMS activated"
 msgstr ""
 
-#: ../src/gpm-manager.c:710
+#. TRANSLATORS: this is the gnome-screensaver throttle
+#: ../src/gpm-manager.c:716
 msgid "On battery power"
 msgstr "Ar chumhacht chadhnra"
 
-#: ../src/gpm-manager.c:728
+#: ../src/gpm-manager.c:734
 msgid "Laptop lid is closed"
 msgstr ""
 
-#: ../src/gpm-manager.c:752
-msgid "The power button has been pressed."
-msgstr ""
-
-#: ../src/gpm-manager.c:754 ../src/gpm-manager.c:756
-msgid "The suspend button has been pressed."
-msgstr ""
-
-#: ../src/gpm-manager.c:758
-msgid "The hibernate button has been pressed."
-msgstr ""
-
-#: ../src/gpm-manager.c:766
+#: ../src/gpm-manager.c:772
 msgid "Power Information"
 msgstr "Faisnéis Chumhachta"
 
-#: ../src/gpm-manager.c:869
-msgid ""
-"The lid has been closed, and the ac adapter removed (and gconf is okay)."
-msgstr ""
-
-#: ../src/gpm-manager.c:886
-msgid "Battery is critically low."
-msgstr ""
-
-#: ../src/gpm-manager.c:934 ../src/gpm-manager.c:948
-msgid "User clicked on tray"
-msgstr ""
-
 #. TRANSLATORS: the battery may be recalled by it's vendor
-#: ../src/gpm-manager.c:1026
+#: ../src/gpm-manager.c:1033
 msgid "Battery may be recalled"
 msgstr ""
 
-#: ../src/gpm-manager.c:1027
+#: ../src/gpm-manager.c:1034
 #, c-format
 msgid ""
 "The battery in your computer may have been recalled by %s and you may be at "
@@ -1496,264 +1509,298 @@ msgid ""
 msgstr ""
 
 #. TRANSLATORS: button text, visit the manufacturers recall website
-#: ../src/gpm-manager.c:1037
+#: ../src/gpm-manager.c:1044
 msgid "Visit recall website"
 msgstr ""
 
 #. TRANSLATORS: button text, do not show this bubble again
-#: ../src/gpm-manager.c:1040
+#: ../src/gpm-manager.c:1047
 msgid "Do not show me this again"
 msgstr ""
 
 #. We should notify the user if the battery has a low capacity,
 #. * where capacity is the ratio of the last_full capacity with that of
 #. * the design capacity. (#326740)
-#: ../src/gpm-manager.c:1124
+#. TRANSLATORS: battery is old or broken
+#: ../src/gpm-manager.c:1132
 msgid "Battery may be broken"
 msgstr ""
 
-#: ../src/gpm-manager.c:1125
+#. TRANSLATORS: notify the user that that battery is broken as the capacity is very low
+#: ../src/gpm-manager.c:1135
 #, c-format
 msgid ""
 "Your battery has a very low capacity (%1.1f%%), which means that it may be "
 "old or broken."
 msgstr ""
 
-#. show the fully charged notification
-#: ../src/gpm-manager.c:1174
-msgid "Battery Charged"
-msgid_plural "Batteries Charged"
-msgstr[0] "Cadhnra Luchtaithe"
-msgstr[1] "Cadhnraí Luchtaithe"
-msgstr[2] "Cadhnraí Luchtaithe"
-msgstr[3] "Cadhnraí Luchtaithe"
-msgstr[4] "Cadhnraí Luchtaithe"
+#. TRANSLATORS: show the fully charged notification
+#: ../src/gpm-manager.c:1183
+msgid "Battery Fully Charged"
+msgid_plural "Batteries Fully Charged"
+msgstr[0] "Cadhnra Luchtaithe go hIomlán"
+msgstr[1] "Cadhnraí Luchtaithe go hIomlán"
+msgstr[2] "Cadhnraí Luchtaithe go hIomlán"
+msgstr[3] "Cadhnraí Luchtaithe go hIomlán"
+msgstr[4] "Cadhnraí Luchtaithe go hIomlán"
 
-#: ../src/gpm-manager.c:1175
-msgid "Your laptop battery is now fully charged"
-msgid_plural "Your laptop batteries are now fully charged"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-
-#: ../src/gpm-manager.c:1207
+#. TRANSLATORS: laptop battery is now discharging
+#: ../src/gpm-manager.c:1224
 msgid "Battery Discharging"
 msgstr ""
 
-#: ../src/gpm-manager.c:1208
-msgid "The AC power has been unplugged. The system is now using battery power."
-msgstr ""
+#. TRANSLATORS: tell the user how much time they have got
+#: ../src/gpm-manager.c:1227
+#, c-format
+msgid "%s of battery power remaining (%.1f%%)"
+msgstr "%s cumhacht cadhnra fágtha (%.1f%%)"
 
-#: ../src/gpm-manager.c:1210
+#. TRANSLATORS: UPS is now discharging
+#: ../src/gpm-manager.c:1230
 msgid "UPS Discharging"
 msgstr ""
 
-#: ../src/gpm-manager.c:1211
-msgid "The AC power has been unplugged. The system is now using backup power."
-msgstr ""
+#. TRANSLATORS: tell the user how much time they have got
+#: ../src/gpm-manager.c:1233
+#, c-format
+msgid "%s of UPS backup power remaining (%.1f%%)"
+msgstr "%s cumhacht cúnta UPS fágtha (%.1f%%)"
 
 #. TRANSLATORS: window title: there wasa problem putting the machine to sleep
-#: ../src/gpm-manager.c:1277
+#: ../src/gpm-manager.c:1301
 msgid "Sleep problem"
 msgstr "Fadhb chodlata"
 
 #. TRANSLATORS: message text
-#: ../src/gpm-manager.c:1280
+#: ../src/gpm-manager.c:1304
 msgid "Your computer failed to suspend."
 msgstr ""
 
-#: ../src/gpm-manager.c:1280 ../src/gpm-manager.c:1284
+#: ../src/gpm-manager.c:1304 ../src/gpm-manager.c:1308
 msgid "Check the help file for common problems."
 msgstr ""
 
 #. TRANSLATORS: message text
-#: ../src/gpm-manager.c:1284
+#: ../src/gpm-manager.c:1308
 msgid "Your computer failed to hibernate."
 msgstr ""
 
 #. TRANSLATORS: button text, visit the suspend help website
-#: ../src/gpm-manager.c:1298
+#: ../src/gpm-manager.c:1322
 msgid "Visit help page"
 msgstr ""
 
-#: ../src/gpm-manager.c:1340
+#. TRANSLATORS: laptop battery low, and we only have one battery
+#: ../src/gpm-manager.c:1397
+msgid "Battery low"
+msgstr "Cadhnra gann"
+
+#. TRANSLATORS: laptop battery low, and we have more than one type of battery
+#: ../src/gpm-manager.c:1400
 msgid "Laptop battery low"
-msgstr ""
+msgstr "Cadhnra ríomhaire glúine gann"
 
-#: ../src/gpm-manager.c:1342
+#. TRANSLATORS: tell the user how much time they have got
+#: ../src/gpm-manager.c:1406
 #, c-format
-msgid "You have approximately <b>%s</b> of remaining battery life (%.1f%%)"
-msgstr ""
+msgid "Approximately <b>%s</b> remaining (%.1f%%)"
+msgstr "Timpeall <b>%s</b> fágtha (%.1f%%)"
 
-#: ../src/gpm-manager.c:1345
+#. TRANSLATORS: UPS is starting to get a little low
+#: ../src/gpm-manager.c:1410
 msgid "UPS low"
 msgstr "UPS íseal"
 
-#: ../src/gpm-manager.c:1347
+#. TRANSLATORS: tell the user how much time they have got
+#: ../src/gpm-manager.c:1414
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"
 msgstr ""
 
-#: ../src/gpm-manager.c:1350 ../src/gpm-manager.c:1452
+#. TRANSLATORS: mouse is getting a little low
+#. TRANSLATORS: the mouse battery is very low
+#: ../src/gpm-manager.c:1418 ../src/gpm-manager.c:1549
 msgid "Mouse battery low"
-msgstr ""
+msgstr "Cadhnra na luiche gann"
 
-#: ../src/gpm-manager.c:1351
+#. TRANSLATORS: tell user more details
+#: ../src/gpm-manager.c:1421
 #, c-format
 msgid "The wireless mouse attached to this computer is low in power (%.1f%%)"
 msgstr ""
 
-#: ../src/gpm-manager.c:1354 ../src/gpm-manager.c:1457
+#. TRANSLATORS: keyboard is getting a little low
+#. TRANSLATORS: the keyboard battery is very low
+#: ../src/gpm-manager.c:1425 ../src/gpm-manager.c:1557
 msgid "Keyboard battery low"
-msgstr ""
+msgstr "Cadhnra méarchláir gann"
 
-#: ../src/gpm-manager.c:1355
+#. TRANSLATORS: tell user more details
+#: ../src/gpm-manager.c:1428
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is low in power (%.1f%%)"
 msgstr ""
 
-#: ../src/gpm-manager.c:1358 ../src/gpm-manager.c:1462
+#. TRANSLATORS: PDA is getting a little low
+#. TRANSLATORS: the PDA battery is very low
+#: ../src/gpm-manager.c:1432 ../src/gpm-manager.c:1566
 msgid "PDA battery low"
-msgstr ""
+msgstr "Cadhnra PDA gann"
 
-#: ../src/gpm-manager.c:1359
+#. TRANSLATORS: tell user more details
+#: ../src/gpm-manager.c:1435
 #, c-format
 msgid "The PDA attached to this computer is low in power (%.1f%%)"
 msgstr ""
 
-#: ../src/gpm-manager.c:1362 ../src/gpm-manager.c:1467
+#. TRANSLATORS: cell phone (mobile) is getting a little low
+#. TRANSLATORS: the cell battery is very low
+#: ../src/gpm-manager.c:1439 ../src/gpm-manager.c:1575
 msgid "Cell phone battery low"
-msgstr ""
+msgstr "Cadhnra fóin siúl gann"
 
-#: ../src/gpm-manager.c:1363
+#. TRANSLATORS: tell user more details
+#: ../src/gpm-manager.c:1442
 #, c-format
 msgid "The cell phone attached to this computer is low in power (%.1f%%)"
 msgstr ""
 
-#: ../src/gpm-manager.c:1419 ../src/gpm-manager.c:1509
-msgid "Laptop battery critically low"
-msgstr ""
+#. TRANSLATORS: laptop battery critically low, and only have one type of battery
+#: ../src/gpm-manager.c:1503
+msgid "Battery critically low"
+msgstr "Cadhnra gann go criticiúil"
 
-#: ../src/gpm-manager.c:1429
+#. TRANSLATORS: laptop battery critically low, and we have more than one type of battery
+#. TRANSLATORS: laptop battery is really, really, low
+#: ../src/gpm-manager.c:1506 ../src/gpm-manager.c:1621
+msgid "Laptop battery critically low"
+msgstr "Cadhnra ríomhaire glúine gann go criticiúil"
+
+#. TRANSLATORS: tell the use to insert the plug, as we're not going to do anything
+#: ../src/gpm-manager.c:1519
 msgid "Plug in your AC adapter to avoid losing data."
 msgstr ""
 
-#: ../src/gpm-manager.c:1431
+#. TRANSLATORS: give the user a ultimatum
+#: ../src/gpm-manager.c:1523
 #, c-format
-msgid "This computer will suspend in %s if the AC is not connected."
+msgid "Computer will suspend in %s."
 msgstr ""
 
-#: ../src/gpm-manager.c:1433
+#. TRANSLATORS: give the user a ultimatum
+#: ../src/gpm-manager.c:1527
 #, c-format
-msgid "This computer will hibernate in %s if the AC is not connected."
+msgid "Computer will hibernate in %s."
 msgstr ""
 
-#: ../src/gpm-manager.c:1435
+#. TRANSLATORS: give the user a ultimatum
+#: ../src/gpm-manager.c:1531
 #, c-format
-msgid "This computer will shutdown in %s if the AC is not connected."
+msgid "Computer will shutdown in %s."
 msgstr ""
 
-#: ../src/gpm-manager.c:1437
-#, c-format
-msgid "You have approximately <b>%s</b> of remaining battery life (%.1f%%). %s"
-msgstr ""
-
-#: ../src/gpm-manager.c:1445 ../src/gpm-manager.c:1542
+#. TRANSLATORS: the UPS is very low
+#. TRANSLATORS: UPS is really, really, low
+#: ../src/gpm-manager.c:1539 ../src/gpm-manager.c:1659
 msgid "UPS critically low"
-msgstr ""
+msgstr "UPS gann go criticiúil"
 
-#: ../src/gpm-manager.c:1447
+#. TRANSLATORS: give the user a ultimatum
+#: ../src/gpm-manager.c:1543
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%.1f%%). Restore AC "
 "power to your computer to avoid losing data."
 msgstr ""
 
-#: ../src/gpm-manager.c:1453
+#. TRANSLATORS: the device is just going to stop working
+#: ../src/gpm-manager.c:1552
 #, c-format
 msgid ""
 "The wireless mouse attached to this computer is very low in power (%.1f%%). "
 "This device will soon stop functioning if not charged."
 msgstr ""
 
-#: ../src/gpm-manager.c:1458
+#. TRANSLATORS: the device is just going to stop working
+#: ../src/gpm-manager.c:1560
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is very low in power (%.1f%"
 "%). This device will soon stop functioning if not charged."
 msgstr ""
 
-#: ../src/gpm-manager.c:1463
+#. TRANSLATORS: the device is just going to stop working
+#: ../src/gpm-manager.c:1569
 #, c-format
 msgid ""
 "The PDA attached to this computer is very low in power (%.1f%%). This device "
 "will soon stop functioning if not charged."
 msgstr ""
 
-#: ../src/gpm-manager.c:1468
+#. TRANSLATORS: the device is just going to stop working
+#: ../src/gpm-manager.c:1578
 #, c-format
 msgid ""
 "Your cell phone is very low in power (%.1f%%). This device will soon stop "
 "functioning if not charged."
 msgstr ""
 
-#: ../src/gpm-manager.c:1517
+#. TRANSLATORS: computer will shutdown without saving data
+#: ../src/gpm-manager.c:1630
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
 msgstr ""
 
-#: ../src/gpm-manager.c:1522
+#. TRANSLATORS: computer will suspend
+#: ../src/gpm-manager.c:1636
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
 "computer in a suspended state."
 msgstr ""
 
-#: ../src/gpm-manager.c:1528
+#. TRANSLATORS: computer will hibernate
+#: ../src/gpm-manager.c:1643
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr ""
 
-#: ../src/gpm-manager.c:1532
+#. TRANSLATORS: computer will just shutdown
+#: ../src/gpm-manager.c:1648
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr ""
 
-#: ../src/gpm-manager.c:1550
+#. TRANSLATORS: computer will shutdown without saving data
+#: ../src/gpm-manager.c:1668
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
 msgstr ""
 
-#: ../src/gpm-manager.c:1555
+#. TRANSLATORS: computer will hibernate
+#: ../src/gpm-manager.c:1674
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr ""
 
-#: ../src/gpm-manager.c:1559
+#. TRANSLATORS: computer will just shutdown
+#: ../src/gpm-manager.c:1679
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr ""
 
-#: ../src/gpm-manager.c:1628
-msgid "The lid has been found closed on ac power."
-msgstr ""
-
-#: ../src/gpm-manager.c:1634
-msgid "The lid has been found closed on battery power."
-msgstr ""
-
-#: ../src/gpm-manager.c:1721
+#. TRANSLATORS: there was in install problem
+#: ../src/gpm-manager.c:1842
 msgid "Install problem!"
 msgstr "Fadhb shuiteála!"
 
-#: ../src/gpm-manager.c:1722
+#. TRANSLATORS: the GConf schema was not installed properly
+#: ../src/gpm-manager.c:1844
 msgid ""
 "The configuration defaults for GNOME Power Manager have not been installed "
 "correctly.\n"
@@ -1966,17 +2013,17 @@ msgstr "Gan sonraí"
 #. TRANSLATORS: kernel module, usually a device driver
 #: ../src/gpm-statistics.c:806 ../src/gpm-statistics.c:811
 msgid "Kernel module"
-msgstr ""
+msgstr "Modúl eithne"
 
 #. TRANSLATORS: kernel housekeeping
 #: ../src/gpm-statistics.c:816
 msgid "Kernel core"
-msgstr ""
+msgstr "Croí eithne"
 
 #. TRANSLATORS: interrupt between processors
 #: ../src/gpm-statistics.c:821
 msgid "Interprocessor interrupt"
-msgstr ""
+msgstr "Idirbhriseadh idirphróiseálaí"
 
 #. TRANSLATORS: unknown interrupt
 #: ../src/gpm-statistics.c:826
@@ -1986,7 +2033,7 @@ msgstr "Idirbhriseadh"
 #. TRANSLATORS: the keyboard and mouse device event
 #: ../src/gpm-statistics.c:869
 msgid "PS/2 keyboard/mouse/touchpad"
-msgstr ""
+msgstr "Méarchlár/luch/ceap tadhaill PS/2"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
 #: ../src/gpm-statistics.c:872
