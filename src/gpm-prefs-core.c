@@ -331,7 +331,6 @@ gpm_prefs_setup_action_combo (GpmPrefs *prefs, const gchar *widget_name,
 {
 	gchar *value_txt;
 	gint i;
-	gint n_added = 0;
 	gboolean is_writable;
 	GtkWidget *widget;
 	GpmActionPolicy policy;
@@ -360,7 +359,6 @@ gpm_prefs_setup_action_combo (GpmPrefs *prefs, const gchar *widget_name,
 		} else if (policy == GPM_ACTION_POLICY_SHUTDOWN && prefs->priv->can_shutdown) {
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Shutdown"));
 			g_ptr_array_add (array, GINT_TO_POINTER (policy));
-			n_added++;
 		} else if (policy == GPM_ACTION_POLICY_SUSPEND && !prefs->priv->can_suspend) {
 			egg_debug ("Cannot add option, as cannot suspend.");
 		} else if (policy == GPM_ACTION_POLICY_HIBERNATE && !prefs->priv->can_hibernate) {
@@ -368,25 +366,20 @@ gpm_prefs_setup_action_combo (GpmPrefs *prefs, const gchar *widget_name,
 		} else if (policy == GPM_ACTION_POLICY_SUSPEND && prefs->priv->can_suspend) {
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Suspend"));
 			g_ptr_array_add (array, GINT_TO_POINTER (policy));
-			n_added++;
 		} else if (policy == GPM_ACTION_POLICY_HIBERNATE && prefs->priv->can_hibernate) {
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Hibernate"));
 			g_ptr_array_add (array, GINT_TO_POINTER (policy));
-			n_added++;
 		} else if (policy == GPM_ACTION_POLICY_BLANK) {
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Blank screen"));
 			g_ptr_array_add (array, GINT_TO_POINTER (policy));
-			n_added++;
 		} else if (policy == GPM_ACTION_POLICY_INTERACTIVE) {
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Ask me"));
 			g_ptr_array_add (array, GINT_TO_POINTER (policy));
-			n_added++;
 		} else if (policy == GPM_ACTION_POLICY_NOTHING) {
 			/* we only add do nothing in the GUI if the user has explicitly specified this in GConf */
 			if (value == GPM_ACTION_POLICY_NOTHING) {
 				gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Do nothing"));
 				g_ptr_array_add (array, GINT_TO_POINTER (policy));
-				n_added++;
 			}
 		} else {
 			egg_warning ("Unknown action read from conf: %i", policy);
@@ -394,8 +387,11 @@ gpm_prefs_setup_action_combo (GpmPrefs *prefs, const gchar *widget_name,
 	}
 
 	/* save as array _only_ the actions we could add */
-	actions_added = (GpmActionPolicy *) g_ptr_array_free (array, FALSE);
-	actions_added[n_added] = -1;
+	actions_added = g_new0 (GpmActionPolicy, array->len+1);
+	for (i=0; i<array->len; i++)
+		actions_added[i] = GPOINTER_TO_INT (g_ptr_array_index (array, i));
+	actions_added[i] = -1;
+
 	g_object_set_data_full (G_OBJECT (widget), "actions", (gpointer) actions_added, (GDestroyNotify) gpm_prefs_actions_destroy_cb);
 
 	/* set what we have in GConf */
@@ -406,6 +402,7 @@ gpm_prefs_setup_action_combo (GpmPrefs *prefs, const gchar *widget_name,
 			 gtk_combo_box_set_active (GTK_COMBO_BOX (widget), i);
 	}
 
+	g_ptr_array_free (array, TRUE);
 	g_free (value_txt);
 }
 
