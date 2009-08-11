@@ -14,9 +14,9 @@ msgstr ""
 "Project-Id-Version: Gnome Power Manager HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&component=general\n"
-"POT-Creation-Date: 2009-08-10 09:06+0000\n"
-"PO-Revision-Date: 2009-08-10 14:29+0300\n"
-"Last-Translator: Ivar Smolin <okul@linux.ee>\n"
+"POT-Creation-Date: 2009-08-10 18:20+0000\n"
+"PO-Revision-Date: 2009-08-10 22:03+0300\n"
+"Last-Translator: Mattias Põldaru <mahfiaz gmail com>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -93,34 +93,34 @@ msgid "Factory for Brightness Applet"
 msgstr "Heleduse rakendi factory"
 
 msgid "Power Manager Inhibit Applet"
-msgstr "Vooluhalduri piirangute rakend"
+msgstr "Vooluhalduri takistamise rakend"
 
 msgid "Allows user to inhibit automatic power saving."
-msgstr "Voolusäästmisele kasutajapoolsete piirangute seadmine."
+msgstr "Voolusäästmisele kasutajapoolsete takistuste seadmine."
 
 msgid "Automatic sleep inhibited"
-msgstr "Automaatne uinumine on keelatud"
+msgstr "Automaatne uinumine on takistatud"
 
 msgid "Automatic sleep enabled"
 msgstr "Automaatne uinumine on lubatud"
 
 msgid "Manual inhibit"
-msgstr "Vooluhalduri käsitsipiirang"
+msgstr "Vooluhalduri käsitsitakistused"
 
 msgid "Copyright © 2006-2007 Richard Hughes"
 msgstr "Autoriõigused © 2006-2007 Richard Hughes"
 
 msgid "Allows user to inhibit automatic power saving"
-msgstr "Voolusäästmisele kasutajapoolsete piirangute seadmine"
+msgstr "Voolusäästmisele kasutajapoolsete takistuste seadmine"
 
 msgid "Factory for Inhibit Applet"
-msgstr "Vooluhalduri piirangute rakendi factory"
+msgstr "Vooluhalduri takistamise rakendi factory"
 
 msgid "Inhibit Applet"
-msgstr "Vooluhalduri piirangute rakend"
+msgstr "Vooluhalduri takistamise rakend"
 
 msgid "Inhibit Applet Factory"
-msgstr "Vooluhalduri piirangute rakendi factory"
+msgstr "Vooluhalduri takistamise rakendi factory"
 
 msgid "Power Manager"
 msgstr "Vooluhaldur"
@@ -163,10 +163,10 @@ msgstr "Talveuni on lubatud"
 
 msgid "If DBUS inhibit requests should be ignored from other programs."
 msgstr ""
-"Kas teiste programmide DBUS'i vooluhalduri piiramise nõudeid tuleb eirata."
+"Kas teiste programmide DBUS'i vooluhalduri takistamise nõudeid tuleb eirata."
 
 msgid "If DBUS inhibit requests should be ignored."
-msgstr "Kas DBUS'i vooluhalduri piiramise nõudeid peaks eirama."
+msgstr "Kas DBUS-i vooluhalduri takistamise nõudeid peaks eirama."
 
 msgid ""
 "If a notification message should be displayed after suspend or hibernate "
@@ -199,7 +199,7 @@ msgid ""
 "requests have stopped the policy action."
 msgstr ""
 "Kas kasutatakse heliteadet kriitilise akutäituvuse korral või kui "
-"piirangunõue peatab tegevuse."
+"takistusnõue peatab tegevuse."
 
 msgid "If the CPU load should be checked before doing the idle action."
 msgstr "Kas enne uinumist peaks kontrollima CPU kasutust."
@@ -312,15 +312,15 @@ msgid ""
 "If we should show the warning when we have a valid inhibit and configured to "
 "sleep on lid close"
 msgstr ""
-"Kas kuvada hoiatus, kui on kehtiv vooluhalduri piirang ja arvuti on "
-"seadistatud uinakule kaane sulgemise korral"
+"Kas kuvada hoiatus, kui vooluhaldur on takistatud ja arvuti on seadistatud "
+"uinakule kaane sulgemise korral"
 
 msgid ""
 "If we should show the warning when we have a valid inhibit and configured to "
 "sleep on lid close."
 msgstr ""
-"Kas kuvada hoiatus, kui on kehtiv vooluhalduri piirang ja arvuti on "
-"seadistatud uinakule kaane sulgemise korral."
+"Kas kuvada hoiatus, kui vooluhaldur on takistatud ja arvuti on seadistatud "
+"uinakule kaane sulgemise korral."
 
 msgid "LCD brightness when on AC"
 msgstr "LCD heledus võrgutoite korral"
@@ -1006,7 +1006,7 @@ msgstr "Tühjenemine"
 
 #. TRANSLATORS: percentage
 msgid "Percentage charge:"
-msgstr ""
+msgstr "Laaditusprotsent:"
 
 #. TRANSLATORS: manufacturer
 msgid "Vendor:"
@@ -1058,7 +1058,7 @@ msgid "Design charge:"
 msgstr "Tehasetäituvus:"
 
 msgid "Charge rate:"
-msgstr ""
+msgstr "Laadimise kiirus:"
 
 #. TRANSLATORS: system power cord
 msgid "AC adapter"
@@ -1185,6 +1185,24 @@ msgstr "%.1fW"
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fV"
+
+#. TRANSLATORS: this is for debugging, if the session is idle
+msgid "Session idle"
+msgstr "Sessioon puhkab"
+
+msgid "Session active"
+msgstr "Sessioon aktiivne"
+
+#. TRANSLATORS: has something inhibited the session
+msgid "(Inhibited)"
+msgstr "(Takistatud)"
+
+#. TRANSLATORS: is the screen idle or awake
+msgid "Screen idle"
+msgstr "Ekraan puhkab"
+
+msgid "Screen awake"
+msgstr "Ekraan on ärkvel"
 
 #. TRANSLATORS: show verbose debugging
 msgid "Show extra debugging information"
@@ -1322,20 +1340,18 @@ msgid "Battery Discharging"
 msgstr "Aku tühjenemine"
 
 #. TRANSLATORS: tell the user how much time they have got
-#, fuzzy, c-format
-#| msgid "%s %s remaining (%.1f%%)"
+#, c-format
 msgid "%s of battery power remaining (%.1f%%)"
-msgstr "%s %s lõpuni (%.1f%%)"
+msgstr "Aku suudab toita veel %s (%.1f%%)"
 
 #. TRANSLATORS: UPS is now discharging
 msgid "UPS Discharging"
 msgstr "UPS-i tühjenemine"
 
 #. TRANSLATORS: tell the user how much time they have got
-#, fuzzy, c-format
-#| msgid "%s %s remaining (%.1f%%)"
+#, c-format
 msgid "%s of UPS backup power remaining (%.1f%%)"
-msgstr "%s %s lõpuni (%.1f%%)"
+msgstr "UPS suudab toita veel %s (%.1f%%)"
 
 #. TRANSLATORS: window title: there wasa problem putting the machine to sleep
 msgid "Sleep problem"
@@ -1365,10 +1381,9 @@ msgid "Laptop battery low"
 msgstr "Sülearvuti aku on peaaegu tühi"
 
 #. TRANSLATORS: tell the user how much time they have got
-#, fuzzy, c-format
-#| msgid "You have approximately <b>%s</b> of remaining battery life (%.1f%%)"
+#, c-format
 msgid "Approximately <b>%s</b> remaining (%.1f%%)"
-msgstr "Arvuti aku suudab arvutit toita veel ligikaudu <b>%s</b> (%.1f%%)"
+msgstr "Ligikaudu <b>%s</b> jäänud (%.1f%%)"
 
 #. TRANSLATORS: UPS is starting to get a little low
 msgid "UPS low"
@@ -1435,22 +1450,19 @@ msgid "Plug in your AC adapter to avoid losing data."
 msgstr "Andmete kaotsimineku vältimiseks ühenda arvuti vooluvõrku."
 
 #. TRANSLATORS: give the user a ultimatum
-#, fuzzy, c-format
-#| msgid "Your computer failed to suspend."
+#, c-format
 msgid "Computer will suspend in %s."
-msgstr "Sinu arvuti ei suutnud uinuda."
+msgstr "Arvuti uinaku alguseni on jäänud %s."
 
 #. TRANSLATORS: give the user a ultimatum
-#, fuzzy, c-format
-#| msgid "Your computer failed to hibernate."
+#, c-format
 msgid "Computer will hibernate in %s."
-msgstr "Sinu arvuti ei suutnud jääda talveunne."
+msgstr "Arvuti talveune alguseni on jäänud %s."
 
 #. TRANSLATORS: give the user a ultimatum
-#, fuzzy, c-format
-#| msgid "This computer will shutdown in %s if the AC is not connected."
+#, c-format
 msgid "Computer will shutdown in %s."
-msgstr "Arvuti väljalülitamiseni on aega %s, kui seda vooluvõrku ei ühendata."
+msgstr "Arvuti väljalülitumiseni on jäänud %s."
 
 #. TRANSLATORS: the UPS is very low
 #. TRANSLATORS: UPS is really, really, low
@@ -1877,218 +1889,3 @@ msgstr "_Uinak"
 
 msgid "Hi_bernate"
 msgstr "_Talveuni"
-
-#~ msgid "<b>Product:</b> %s\n"
-#~ msgstr "<b>Toode:</b> %s\n"
-
-#~ msgid "<b>Status:</b> %s\n"
-#~ msgstr "<b>Olek:</b> %s\n"
-
-#~ msgid "<b>Percentage charge:</b> %.1f%%\n"
-#~ msgstr "<b>Täituvusprotsent:</b> %.1f%%\n"
-
-#~ msgid "<b>Vendor:</b> %s\n"
-#~ msgstr "<b>Tootja:</b> %s\n"
-
-#~ msgid "<b>Technology:</b> %s\n"
-#~ msgstr "<b>Tehnoloogia:</b> %s\n"
-
-#~ msgid "<b>Serial number:</b> %s\n"
-#~ msgstr "<b>Seerianumber:</b> %s\n"
-
-#~ msgid "<b>Model:</b> %s\n"
-#~ msgstr "<b>Mudel:</b> %s\n"
-
-#~ msgid "<b>Charge time:</b> %s\n"
-#~ msgstr "<b>Laadimisaeg:</b> %s\n"
-
-#~ msgid "<b>Discharge time:</b> %s\n"
-#~ msgstr "<b>Tühjenemisaeg:</b> %s\n"
-
-#~ msgid "<b>Capacity:</b> %.1f%% (%s)\n"
-#~ msgstr "<b>Mahtuvus:</b> %.1f%% (%s)\n"
-
-#~ msgid "<b>Current charge:</b> %.1f Wh\n"
-#~ msgstr "<b>Praegune täituvus:</b> %.1f Wh\n"
-
-#~ msgid "<b>Design charge:</b> %.1f Wh\n"
-#~ msgstr "<b>Tehasetäituvus:</b> %.1f Wh\n"
-
-#~ msgid "<b>Charge rate:</b> %.1f W\n"
-#~ msgstr "<b>Täituvus:</b> %.1f W\n"
-
-#~ msgid "<b>Current charge:</b> %.0f/7\n"
-#~ msgstr "<b>Praegune täituvus:</b> %.0f/7\n"
-
-#~ msgid "The lid has been closed on ac power."
-#~ msgstr "Kaas suleti ajal, mil vooluadapter oli ühendatud."
-
-#~ msgid "The lid has been closed on battery power."
-#~ msgstr "Kaas suleti ajal, mil arvuti oli akutoitel."
-
-#~ msgid "The power button has been pressed."
-#~ msgstr "Vajutati voolunuppu."
-
-#~ msgid "The suspend button has been pressed."
-#~ msgstr "Vajutati uinaku nuppu."
-
-#~ msgid "The hibernate button has been pressed."
-#~ msgstr "Vajutati talveune nuppu."
-
-#~ msgid ""
-#~ "The lid has been closed, and the ac adapter removed (and gconf is okay)."
-#~ msgstr "Kaas on suletud ja vooluadapter eemaldatud (ja gconf on töökorras)"
-
-#~ msgid "User clicked on tray"
-#~ msgstr "Kasutaja klõpsas salveikoonil"
-
-#~ msgid "Your laptop battery is now fully charged"
-#~ msgid_plural "Your laptop batteries are now fully charged"
-#~ msgstr[0] "Sinu sülearvuti aku on nüüd täis laetud"
-#~ msgstr[1] "Sinu sülearvuti akud on nüüd täis laetud"
-
-#~ msgid ""
-#~ "The AC power has been unplugged. The system is now using battery power."
-#~ msgstr "Võrgutoide on kadunud. Süsteem on nüüd akutoitel."
-
-#~ msgid ""
-#~ "The AC power has been unplugged. The system is now using backup power."
-#~ msgstr "Võrgutoide on kadunud. Süsteem on nüüd varutoitel."
-
-#~ msgid "This computer will suspend in %s if the AC is not connected."
-#~ msgstr "Arvuti uinumiseni on aega %s, kui seda vooluvõrku ei ühendata."
-
-#~ msgid "This computer will hibernate in %s if the AC is not connected."
-#~ msgstr "Talveune alguseni on aega %s, kui arvutit vooluvõrku ei ühendata."
-
-#~ msgid ""
-#~ "You have approximately <b>%s</b> of remaining battery life (%.1f%%). %s"
-#~ msgstr "Aku suudab arvutit toita veel ligikaudu <b>%s</b> (%.1f%%). %s"
-
-#~ msgid "The lid has been found closed on ac power."
-#~ msgstr "Kaas suleti ajal, mil vooluadapter oli ühendatud."
-
-#~ msgid "The lid has been found closed on battery power."
-#~ msgstr "Kaas suleti ajal, mil arvuti oli akutoitel."
-
-#~ msgid "Sleep warning"
-#~ msgstr "Uinaku hoiatus"
-
-#~ msgid ""
-#~ "Your laptop will not sleep if you shut the lid as a running program has "
-#~ "prevented this.\n"
-#~ "Some laptops can overheat if they do not sleep when the lid is closed."
-#~ msgstr ""
-#~ "Sinu sülearvuti ei saa uinuda kaane sulgemisel, mingi rakendus takistab "
-#~ "seda.\n"
-#~ "Mõned sülearvutid võivad üle kuumeneda, kui need töötavad suletud kaanega."
-
-#~ msgid "Visit quirk website"
-#~ msgstr "Külasta quirk'i veebilehte"
-
-#~ msgid "Change the brightness automatically using the ambient light sensors"
-#~ msgstr "Heleduse automaatne muutmine valgussensorite andmete põhjal"
-
-#~ msgid "If the low-power mode should be enabled when on UPS"
-#~ msgstr "Kas madala täituvuse režiim peab UPS-itoite korral olema lubatud"
-
-#~ msgid ""
-#~ "If the screen brightness should be changed automatically using the "
-#~ "ambient light sensors."
-#~ msgstr ""
-#~ "Kas ekraani taustavalgust tuleb valgussensorite andmete põhjal "
-#~ "automaatselt muuta."
-
-#~ msgid ""
-#~ "If the screen brightness should be changed automatically using the "
-#~ "ambient light sensors. Valid is 'none', 'light' and 'dark'"
-#~ msgstr ""
-#~ "Kas ekraani taustavalgust võib valgussensorite andmete põhjal "
-#~ "automaatselt muuta või mitte. Võimalikud väärtused on 'none', 'light' ja "
-#~ "'dark'"
-
-#~ msgid "If the system low-power mode should be enabled when on UPS power."
-#~ msgstr ""
-#~ "Kas süsteemne madala täituvuse režiim peab UPS-itoite korral olema lubatud"
-
-#~ msgid "Keyboard brightness when on AC"
-#~ msgstr "Klaviatuuri heledus võrgutoite korral"
-
-#~ msgid "Keyboard brightness when on battery"
-#~ msgstr "Klaviatuuri heledus akutoite korral"
-
-#~ msgid "The amount the light sensors should contribute to the brightness"
-#~ msgstr "Kui palju peaksid valgustatuse sensorid mõjutama ekraani heledust"
-
-#~ msgid "The amount the light sensors should contribute to the brightness."
-#~ msgstr "Kui palju peaksid valgustatuse sensorid mõjutama ekraani heledust."
-
-#~ msgid ""
-#~ "The brightness of the keyboard when on AC power. Possible values are "
-#~ "between 0 and 100."
-#~ msgstr ""
-#~ "Klaviatuuri heledusaste võrgutoite korral. Võimalikud väärtused on arvud "
-#~ "nullist sajani."
-
-#~ msgid ""
-#~ "The brightness of the keyboard when on battery power. Possible values are "
-#~ "between 0 and 100."
-#~ msgstr ""
-#~ "Klaviatuuri heledusaste akutoite korral. Võimalikud väärtused on arvud "
-#~ "nullist sajani."
-
-#~ msgid ""
-#~ "The calibration of the light sensors so that the screen is bright enough"
-#~ msgstr ""
-#~ "Valgustatuse sensorite kalibreerimine, et ekraan oleks piisavalt hele"
-
-#~ msgid ""
-#~ "The calibration of the light sensors so that the screen is bright enough, "
-#~ "in percent."
-#~ msgstr ""
-#~ "Valgustatuse sensorite kalibreerimine, et ekraan oleks piisavalt hele, "
-#~ "protsentides."
-
-#~ msgid "The interval the ambient light sensors should be polled"
-#~ msgstr "Valgussensorite andmete hankimise intervall"
-
-#~ msgid "The interval the ambient light sensors should be polled in seconds."
-#~ msgstr ""
-#~ "Mitme sekundilise vahega hangitakse valgussensoritelt andmeidSekunditest "
-#~ "määratud intervall, mille järel tuleb valgussensorite andmeid lugeda."
-
-#~ msgid "Always sleep when the lid is _closed"
-#~ msgstr "Kaane _sulgemisel tehakse uinak"
-
-#~ msgid "Enable UPS discharge _alarm"
-#~ msgstr "_UPS'i tühejenemise alarmi lubamine"
-
-#~ msgid "Turn on keyboard light when light level is low"
-#~ msgstr "Puuduliku valguse korral lülitatakse klaviatuuri tuled sisse"
-
-#~ msgid "Use _ambient light to adjust LCD brightness"
-#~ msgstr "_Taustavalguse sensori kasutamine LCD heleduse valimisel"
-
-#~ msgid "Use _sound to notify in event of an error"
-#~ msgstr "Sündmusest või veast teavitamiseks kasutatakse _heli"
-
-#~ msgid "Burning DVD, titled \"My Photos\""
-#~ msgstr "DVD salvestamine, pealkirjaga \"Minu fotod\""
-
-#~ msgid "Inhibit"
-#~ msgstr "Piira"
-
-#~ msgid "Inhibit Tester"
-#~ msgstr "Piirangutester"
-
-#~ msgid "Reason:"
-#~ msgstr "Põhjus:"
-
-#~ msgid "UnInhibit"
-#~ msgstr "Eemalda piirang"
-
-#~ msgid "Vendor Acme Foo"
-#~ msgstr "Lihtsalt üks rakendus"
-
-#~ msgid "Power Manager for the GNOME desktop"
-#~ msgstr "Vooluhaldur GNOME töölauale"
