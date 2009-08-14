@@ -51,6 +51,11 @@
 #define GPM_IDLE_TIMEOUT_IGNORE_DPMS_CHANGE	1.0f /* seconds */
 #define	GPM_IDLE_IDLETIME_ID			1
 
+/* XSync seems to be unreliable when setting small values of time.
+ * Ideally we want this to be 1ms (or smaller!) to reduce the chance of a race,
+ * but this fails to trigger on some systems. */
+#define GPM_IDLE_SMALLEST_RESET_VALUE		500 /* ms */
+
 struct GpmIdlePrivate
 {
 	EggIdletime	*idletime;
@@ -366,8 +371,8 @@ gpm_idle_idletime_reset_cb (EggIdletime *idletime, GpmIdle *idle)
 	if (idle->priv->mode == GPM_IDLE_MODE_BLANK &&
 	    elapsed < GPM_IDLE_TIMEOUT_IGNORE_DPMS_CHANGE) {
 		egg_debug ("ignoring reset, as we've just done a state change");
-		/* make sure we trigger a short 1ms timeout so we can get the expired signal */
-		egg_idletime_alarm_set (idle->priv->idletime, GPM_IDLE_IDLETIME_ID, 1);
+		/* make sure we trigger a short timeout so we can get the expired signal */
+		egg_idletime_alarm_set (idle->priv->idletime, GPM_IDLE_IDLETIME_ID, GPM_IDLE_SMALLEST_RESET_VALUE);
 		return;
 	}
 
