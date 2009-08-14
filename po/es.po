@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&component=general\n"
-"POT-Creation-Date: 2009-08-10 18:20+0000\n"
-"PO-Revision-Date: 2009-08-10 21:12+0200\n"
+"POT-Creation-Date: 2009-08-14 10:19+0000\n"
+"PO-Revision-Date: 2009-08-14 14:44+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1262,7 +1262,6 @@ msgstr "Producto:"
 #. TRANSLATORS: device is discharging
 #: ../src/gpm-devicekit.c:393 ../src/gpm-devicekit.c:396
 #: ../src/gpm-devicekit.c:399 ../src/gpm-devicekit.c:402
-#| msgid "State"
 msgid "Status:"
 msgstr "Estado:"
 
@@ -1284,43 +1283,36 @@ msgstr "Descargando"
 
 #. TRANSLATORS: percentage
 #: ../src/gpm-devicekit.c:407
-#| msgid "Percentage"
 msgid "Percentage charge:"
 msgstr "Porcentaje de carga:"
 
 #. TRANSLATORS: manufacturer
 #: ../src/gpm-devicekit.c:411
-#| msgid "Vendor"
 msgid "Vendor:"
 msgstr "Fabricante:"
 
 #. TRANSLATORS: how the battery is made, e.g. Lithium Ion
 #: ../src/gpm-devicekit.c:416
-#| msgid "Technology"
 msgid "Technology:"
 msgstr "Tecnología:"
 
 #. TRANSLATORS: serial number of the battery
 #: ../src/gpm-devicekit.c:420
-#| msgid "Serial number"
 msgid "Serial number:"
 msgstr "Número de serie:"
 
 #. TRANSLATORS: model number of the battery
 #: ../src/gpm-devicekit.c:424
-#| msgid "Model"
 msgid "Model:"
 msgstr "Modelo:"
 
 #. TRANSLATORS: time to fully charged
 #: ../src/gpm-devicekit.c:429
-#| msgid "Charge profile"
 msgid "Charge time:"
 msgstr "Tiempo de carga:"
 
 #. TRANSLATORS: time to empty
 #: ../src/gpm-devicekit.c:435
-#| msgid "Discharge profile"
 msgid "Discharge time:"
 msgstr "Tiempo de descarga:"
 
@@ -1342,27 +1334,22 @@ msgid "Poor"
 msgstr "Pobre"
 
 #: ../src/gpm-devicekit.c:452
-#| msgid "Capacity"
 msgid "Capacity:"
 msgstr "Capacidad:"
 
 #: ../src/gpm-devicekit.c:458 ../src/gpm-devicekit.c:483
-#| msgid "<b>Current charge:</b> %i/7\n"
 msgid "Current charge:"
 msgstr "Carga actual:"
 
 #: ../src/gpm-devicekit.c:464
-#| msgid "<b>Last full charge:</b> %.1f Wh\n"
 msgid "Last full charge:"
 msgstr "Última carga completa:"
 
 #: ../src/gpm-devicekit.c:470 ../src/gpm-devicekit.c:488
-#| msgid "<b>Design charge:</b> %i/7\n"
 msgid "Design charge:"
 msgstr "Carga de diseño:"
 
 #: ../src/gpm-devicekit.c:475
-#| msgid "Charge profile"
 msgid "Charge rate:"
 msgstr "Tasa de carga:"
 
@@ -1517,28 +1504,51 @@ msgstr "%.1fW"
 msgid "%.1fV"
 msgstr "%.1fV"
 
+#. TRANSLATORS: this is what the user should read for more information about the blanking problem (%s is a URL)
+#: ../src/gpm-idle.c:228
+#, c-format
+msgid "Please see %s for more information."
+msgstr "Para obtener más información consulte %s"
+
+#. TRANSLATORS: this is telling the user that thier X server is broken, and needs to be fixed
+#: ../src/gpm-idle.c:232
+msgid ""
+"If you can see this text, your display server is broken and you should "
+"notify your distributor."
+msgstr ""
+"Si puede ver este texto su servidor de pantalla está roto y debería "
+"notificárselo a su distribuidor."
+
 #. TRANSLATORS: this is for debugging, if the session is idle
-#: ../src/gpm-idle.c:223
+#: ../src/gpm-idle.c:238
 msgid "Session idle"
 msgstr "Sesión inactiva"
 
-#: ../src/gpm-idle.c:223
+#: ../src/gpm-idle.c:238
 msgid "Session active"
 msgstr "Sesión activa"
 
 #. TRANSLATORS: has something inhibited the session
-#: ../src/gpm-idle.c:225
-msgid "(Inhibited)"
-msgstr "(Inhibida)"
+#: ../src/gpm-idle.c:240
+#| msgid "(Inhibited)"
+msgid "inhibited"
+msgstr "Inhibida"
+
+#: ../src/gpm-idle.c:240
+#| msgid "Manual inhibit"
+msgid "not inhibited"
+msgstr "sin inhibir"
 
 #. TRANSLATORS: is the screen idle or awake
-#: ../src/gpm-idle.c:227
-msgid "Screen idle"
-msgstr "Pantalla inactiva"
+#: ../src/gpm-idle.c:242
+#| msgid "Screen idle"
+msgid "screen idle"
+msgstr "pantalla inactiva"
 
-#: ../src/gpm-idle.c:227
-msgid "Screen awake"
-msgstr "Pantalla despertada"
+#: ../src/gpm-idle.c:242
+#| msgid "Screen awake"
+msgid "screen awake"
+msgstr "pantalla despertada"
 
 #. TRANSLATORS: show verbose debugging
 #: ../src/gpm-main.c:171 ../src/gpm-prefs.c:90 ../src/gpm-statistics.c:1465
@@ -1724,7 +1734,6 @@ msgstr "Descargando el SAI"
 #. TRANSLATORS: tell the user how much time they have got
 #: ../src/gpm-manager.c:1233
 #, c-format
-#| msgid "%s %s remaining (%.1f%%)"
 msgid "%s of UPS backup power remaining (%.1f%%)"
 msgstr "%s de energía de respaldo del SAI restante (%.1f%%)"
 
@@ -1754,7 +1763,6 @@ msgstr "Visitar la página de ayuda"
 
 #. TRANSLATORS: laptop battery low, and we only have one battery
 #: ../src/gpm-manager.c:1397
-#| msgid "Battery is low"
 msgid "Battery low"
 msgstr "La batería está baja"
 
@@ -1766,7 +1774,6 @@ msgstr "Batería del portátil baja"
 #. TRANSLATORS: tell the user how much time they have got
 #: ../src/gpm-manager.c:1406
 #, c-format
-#| msgid "You have approximately <b>%s</b> of remaining battery life (%.1f%%)"
 msgid "Approximately <b>%s</b> remaining (%.1f%%)"
 msgstr "Le queda aproximadamente <b>%s</b> (%.1f%%)"
 
@@ -1837,7 +1844,6 @@ msgstr ""
 
 #. TRANSLATORS: laptop battery critically low, and only have one type of battery
 #: ../src/gpm-manager.c:1503
-#| msgid "Battery is critically low."
 msgid "Battery critically low"
 msgstr "La batería está críticamente baja"
 
@@ -1856,21 +1862,18 @@ msgstr ""
 #. TRANSLATORS: give the user a ultimatum
 #: ../src/gpm-manager.c:1523
 #, c-format
-#| msgid "Your computer failed to suspend."
 msgid "Computer will suspend in %s."
 msgstr "El equipo se suspenderá en %s."
 
 #. TRANSLATORS: give the user a ultimatum
 #: ../src/gpm-manager.c:1527
 #, c-format
-#| msgid "Your computer failed to hibernate."
 msgid "Computer will hibernate in %s."
 msgstr "El equipo hibernará en %s."
 
 #. TRANSLATORS: give the user a ultimatum
 #: ../src/gpm-manager.c:1531
 #, c-format
-#| msgid "This computer will shutdown in %s if the AC is not connected."
 msgid "Computer will shutdown in %s."
 msgstr "El equipo se apagará en %s."
 
@@ -2011,31 +2014,31 @@ msgstr ""
 msgid "GNOME Power Preferences"
 msgstr "Preferencias de energía de GNOME"
 
-#: ../src/gpm-prefs-core.c:361
+#: ../src/gpm-prefs-core.c:360
 msgid "Shutdown"
 msgstr "Apagar"
 
-#: ../src/gpm-prefs-core.c:369
+#: ../src/gpm-prefs-core.c:367
 msgid "Suspend"
 msgstr "Suspender"
 
-#: ../src/gpm-prefs-core.c:373
+#: ../src/gpm-prefs-core.c:370
 msgid "Hibernate"
 msgstr "Hibernar"
 
-#: ../src/gpm-prefs-core.c:377
+#: ../src/gpm-prefs-core.c:373
 msgid "Blank screen"
 msgstr "Oscurecer pantalla"
 
-#: ../src/gpm-prefs-core.c:381
+#: ../src/gpm-prefs-core.c:376
 msgid "Ask me"
 msgstr "Preguntarme"
 
-#: ../src/gpm-prefs-core.c:387
+#: ../src/gpm-prefs-core.c:381
 msgid "Do nothing"
 msgstr "No hacer nada"
 
-#: ../src/gpm-prefs-core.c:448
+#: ../src/gpm-prefs-core.c:445
 msgid "Never"
 msgstr "Nunca"
 
