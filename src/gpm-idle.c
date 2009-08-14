@@ -359,14 +359,6 @@ static void
 gpm_idle_session_inhibited_changed_cb (GpmSession *session, gboolean is_inhibited, GpmIdle *idle)
 {
 	egg_debug ("Received gnome session inhibited changed: %i", is_inhibited);
-
-	/* gnome-session IDLETIME bug -- For more details see:
-	 * http://blogs.gnome.org/hughsie/2009/07/30/accidental-blanking-and-gnome-power-manager/ */
-	if (!is_inhibited) {
-		egg_warning ("performing gnome-session IDLETIME bodge");
-		egg_idletime_alarm_reset_all (idle->priv->idletime);
-	}
-
 	gpm_idle_evaluate (idle);
 }
 
