@@ -1,14 +1,14 @@
 # Irish translations for gnome-power-manager package.
 # Copyright (C) 2007-2009 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnome-power-manager package.
-# Seán de Búrca <leftmostcat@gmail.com>, 2007-2009.
+# Seán de Búrca <leftmostcat@gmail.com>, 2007, 2008, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-10 18:41-0600\n"
-"PO-Revision-Date: 2009-08-10 19:21-0600\n"
+"POT-Creation-Date: 2009-08-15 04:29-0600\n"
+"PO-Revision-Date: 2009-08-15 04:56-0600\n"
 "Last-Translator: Seán de Búrca <leftmostcat@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -908,11 +908,11 @@ msgstr "Ar Chumhacht UPS"
 
 #: ../data/gpm-prefs.ui.h:10
 msgid "Only display an icon when a battery is p_resent"
-msgstr ""
+msgstr "Taispeáin deilbhín agus cadhnra _ann amháin"
 
 #: ../data/gpm-prefs.ui.h:11
 msgid "Only display an icon when charging or _discharging"
-msgstr ""
+msgstr "Taispeáin deilbhín nuair agus á luchtú nó á _dhíluchtú amháin"
 
 #: ../data/gpm-prefs.ui.h:12
 msgid "Power Management Preferences"
@@ -936,27 +936,27 @@ msgstr ""
 
 #: ../data/gpm-prefs.ui.h:17
 msgid "When UPS power is _critically low:"
-msgstr ""
+msgstr "Agus cumhacht UPS gann go _criticiúil:"
 
 #: ../data/gpm-prefs.ui.h:18
 msgid "When UPS power is l_ow:"
-msgstr ""
+msgstr "Agus cumhacht UPS _gann:"
 
 #: ../data/gpm-prefs.ui.h:19
 msgid "When battery po_wer is critically low:"
-msgstr ""
+msgstr "Agus cu_mhacht cadhnra gann go criticiúil:"
 
 #: ../data/gpm-prefs.ui.h:20
 msgid "When laptop lid is cl_osed:"
-msgstr "Agus claibín an _ríomhaire glúine dúnta:"
+msgstr "Nuair a dhúntar clúdach an ríomhaire glúine:"
 
 #: ../data/gpm-prefs.ui.h:21
 msgid "When the _suspend button is pressed:"
-msgstr "Agus an cnaipe _fionraí brúite:"
+msgstr "Nuair a bhrúitear an cnaipe _fionraí:"
 
 #: ../data/gpm-prefs.ui.h:22
 msgid "When the power _button is pressed:"
-msgstr "Agus an cnaipe _cumhachta brúite:"
+msgstr "Nuair a bhrúitear an cnaipe _cumhachta:"
 
 #: ../data/gpm-prefs.ui.h:23
 msgid "_Always display an icon"
@@ -968,7 +968,7 @@ msgstr "_Ná taispeáin deilbhín riamh"
 
 #: ../data/gpm-prefs.ui.h:25
 msgid "_Only display an icon when battery power is low"
-msgstr ""
+msgstr "_Taispeáin deilbhín agus cumhacht cadhnra gann amháin"
 
 #: ../data/gpm-prefs.ui.h:26
 msgid "_Reduce backlight brightness"
@@ -1363,28 +1363,45 @@ msgstr "%.1fW"
 msgid "%.1fV"
 msgstr "%.1fV"
 
+#. TRANSLATORS: this is what the user should read for more information about the blanking problem (%s is a URL)
+#: ../src/gpm-idle.c:228
+#, c-format
+msgid "Please see %s for more information."
+msgstr "Féach %s le haghaidh tuilleadh eolais, le do thoil."
+
+#. TRANSLATORS: this is telling the user that thier X server is broken, and needs to be fixed
+#: ../src/gpm-idle.c:232
+msgid ""
+"If you can see this text, your display server is broken and you should "
+"notify your distributor."
+msgstr ""
+
 #. TRANSLATORS: this is for debugging, if the session is idle
-#: ../src/gpm-idle.c:223
+#: ../src/gpm-idle.c:238
 msgid "Session idle"
 msgstr "Seisiún díomhaoin"
 
-#: ../src/gpm-idle.c:223
+#: ../src/gpm-idle.c:238
 msgid "Session active"
 msgstr "Seisiún gníomhach"
 
 #. TRANSLATORS: has something inhibited the session
-#: ../src/gpm-idle.c:225
-msgid "(Inhibited)"
-msgstr "(Coiscthe)"
+#: ../src/gpm-idle.c:240
+msgid "inhibited"
+msgstr "coiscthe"
+
+#: ../src/gpm-idle.c:240
+msgid "not inhibited"
+msgstr "gan chosc"
 
 #. TRANSLATORS: is the screen idle or awake
-#: ../src/gpm-idle.c:227
-msgid "Screen idle"
-msgstr "Scáileán díomhaoin"
+#: ../src/gpm-idle.c:242
+msgid "screen idle"
+msgstr "scáileán díomhaoin"
 
-#: ../src/gpm-idle.c:227
-msgid "Screen awake"
-msgstr "Scáileán múscailte"
+#: ../src/gpm-idle.c:242
+msgid "screen awake"
+msgstr "scáileán múscailte"
 
 #. TRANSLATORS: show verbose debugging
 #: ../src/gpm-main.c:171 ../src/gpm-prefs.c:90 ../src/gpm-statistics.c:1465
@@ -1420,27 +1437,27 @@ msgstr "Cumhacht díphlugáilte"
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:180
 msgid "Lid has opened"
-msgstr "Clúdach oscailte"
+msgstr "Osclaíodh an clúdach"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:184
 msgid "Lid has closed"
-msgstr "Clúdach dúnta"
+msgstr "Dúnadh an clúdach"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:188
 msgid "Battery is low"
-msgstr "Cadhnra íseal"
+msgstr "Tá an cadhnra gann"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:192
 msgid "Battery is very low"
-msgstr "Cadhnra an-íseal"
+msgstr "Tá an cadhnra an-ghann"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:196
 msgid "Battery is full"
-msgstr "Cadhnra lán"
+msgstr "Tá an cadhnra lán"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:200
@@ -1460,7 +1477,7 @@ msgstr "Fionraí teipthe"
 #. TRANSLATORS: the action was not done
 #: ../src/gpm-manager.c:434 ../src/gpm-manager.c:470
 msgid "Action disallowed"
-msgstr ""
+msgstr "Dícheadaíodh an gníomh"
 
 #. TRANSLATORS: admin has disabled ability to do this
 #: ../src/gpm-manager.c:436
@@ -1479,7 +1496,7 @@ msgstr ""
 #. TRANSLATORS: this is the gnome-screensaver throttle
 #: ../src/gpm-manager.c:697
 msgid "Display DPMS activated"
-msgstr ""
+msgstr "Cumasaíodh DPMS taispeána"
 
 #. TRANSLATORS: this is the gnome-screensaver throttle
 #: ../src/gpm-manager.c:716
@@ -1488,7 +1505,7 @@ msgstr "Ar chumhacht chadhnra"
 
 #: ../src/gpm-manager.c:734
 msgid "Laptop lid is closed"
-msgstr ""
+msgstr "Tá clúdach an ríomhaire glúine dúnta"
 
 #: ../src/gpm-manager.c:772
 msgid "Power Information"
@@ -1516,7 +1533,7 @@ msgstr ""
 #. TRANSLATORS: button text, do not show this bubble again
 #: ../src/gpm-manager.c:1047
 msgid "Do not show me this again"
-msgstr ""
+msgstr "Ná taispeáin é seo dom arís"
 
 #. We should notify the user if the battery has a low capacity,
 #. * where capacity is the ratio of the last_full capacity with that of
@@ -1524,7 +1541,7 @@ msgstr ""
 #. TRANSLATORS: battery is old or broken
 #: ../src/gpm-manager.c:1132
 msgid "Battery may be broken"
-msgstr ""
+msgstr "Is féidir go bhfuil an cadhnra briste"
 
 #. TRANSLATORS: notify the user that that battery is broken as the capacity is very low
 #: ../src/gpm-manager.c:1135
@@ -1547,7 +1564,7 @@ msgstr[4] "Cadhnraí Luchtaithe go hIomlán"
 #. TRANSLATORS: laptop battery is now discharging
 #: ../src/gpm-manager.c:1224
 msgid "Battery Discharging"
-msgstr ""
+msgstr "Cadhnra á Dhíluchtú"
 
 #. TRANSLATORS: tell the user how much time they have got
 #: ../src/gpm-manager.c:1227
@@ -1558,7 +1575,7 @@ msgstr "%s cumhacht cadhnra fágtha (%.1f%%)"
 #. TRANSLATORS: UPS is now discharging
 #: ../src/gpm-manager.c:1230
 msgid "UPS Discharging"
-msgstr ""
+msgstr "UPS á Dhíluchtú"
 
 #. TRANSLATORS: tell the user how much time they have got
 #: ../src/gpm-manager.c:1233
@@ -1574,21 +1591,21 @@ msgstr "Fadhb chodlata"
 #. TRANSLATORS: message text
 #: ../src/gpm-manager.c:1304
 msgid "Your computer failed to suspend."
-msgstr ""
+msgstr "Theip ar chur do ríomhaire ar fionraí."
 
 #: ../src/gpm-manager.c:1304 ../src/gpm-manager.c:1308
 msgid "Check the help file for common problems."
-msgstr ""
+msgstr "Lorg fadhbanna coitianta sa chomhad cabhrach."
 
 #. TRANSLATORS: message text
 #: ../src/gpm-manager.c:1308
 msgid "Your computer failed to hibernate."
-msgstr ""
+msgstr "Theip do ríomhaire ar gheimhriú."
 
 #. TRANSLATORS: button text, visit the suspend help website
 #: ../src/gpm-manager.c:1322
 msgid "Visit help page"
-msgstr ""
+msgstr "Tabhair cuairt ar an leathanach cabhrach"
 
 #. TRANSLATORS: laptop battery low, and we only have one battery
 #: ../src/gpm-manager.c:1397
@@ -1686,19 +1703,19 @@ msgstr ""
 #: ../src/gpm-manager.c:1523
 #, c-format
 msgid "Computer will suspend in %s."
-msgstr ""
+msgstr "Cuirfear an ríomhaire ar fionraí i gceann %s."
 
 #. TRANSLATORS: give the user a ultimatum
 #: ../src/gpm-manager.c:1527
 #, c-format
 msgid "Computer will hibernate in %s."
-msgstr ""
+msgstr "Geimhreoidh an ríomhaire i gceann %s."
 
 #. TRANSLATORS: give the user a ultimatum
 #: ../src/gpm-manager.c:1531
 #, c-format
 msgid "Computer will shutdown in %s."
-msgstr ""
+msgstr "Múchfaidh an ríomhaire i gceann %s."
 
 #. TRANSLATORS: the UPS is very low
 #. TRANSLATORS: UPS is really, really, low
@@ -1811,31 +1828,31 @@ msgstr ""
 msgid "GNOME Power Preferences"
 msgstr "Sainroghanna Cumhachta GNOME"
 
-#: ../src/gpm-prefs-core.c:361
+#: ../src/gpm-prefs-core.c:360
 msgid "Shutdown"
 msgstr "Múch"
 
-#: ../src/gpm-prefs-core.c:369
+#: ../src/gpm-prefs-core.c:367
 msgid "Suspend"
 msgstr "Cuir ar fionraí"
 
-#: ../src/gpm-prefs-core.c:373
+#: ../src/gpm-prefs-core.c:370
 msgid "Hibernate"
 msgstr "Geimhrigh"
 
-#: ../src/gpm-prefs-core.c:377
+#: ../src/gpm-prefs-core.c:373
 msgid "Blank screen"
 msgstr "Bánaigh scáileán"
 
-#: ../src/gpm-prefs-core.c:381
+#: ../src/gpm-prefs-core.c:376
 msgid "Ask me"
 msgstr "Fiafraigh díom"
 
-#: ../src/gpm-prefs-core.c:387
+#: ../src/gpm-prefs-core.c:381
 msgid "Do nothing"
 msgstr "Ná déan faic"
 
-#: ../src/gpm-prefs-core.c:448
+#: ../src/gpm-prefs-core.c:445
 msgid "Never"
 msgstr "Riamh"
 
@@ -2048,12 +2065,12 @@ msgstr "ATA Srathach"
 #. TRANSLATORS: this is the old-style ATA interface
 #: ../src/gpm-statistics.c:878
 msgid "ATA host controller"
-msgstr ""
+msgstr "Óstrialtán ATA"
 
 #. TRANSLATORS: 802.11 wireless adaptor
 #: ../src/gpm-statistics.c:881
 msgid "Intel wireless adaptor"
-msgstr ""
+msgstr "Cuibheoir gan sreang Intel"
 
 #. TRANSLATORS: a timer is something that fires periodically
 #: ../src/gpm-statistics.c:886 ../src/gpm-statistics.c:889
@@ -2091,7 +2108,7 @@ msgstr "Ciú oibre %s"
 #: ../src/gpm-statistics.c:916
 #, c-format
 msgid "Network route flush %s"
-msgstr ""
+msgstr "Sruthlú ród líonra %s"
 
 #. TRANSLATORS: activity on the USB bus
 #: ../src/gpm-statistics.c:919
@@ -2180,7 +2197,7 @@ msgstr "Eolas faoin ngléas"
 
 #: ../src/gpm-tray-icon.c:200
 msgid "There is no detailed information for this device"
-msgstr ""
+msgstr "Níl aon mhioneolas ann don ghléas seo"
 
 #: ../src/gpm-tray-icon.c:330
 msgid "translator-credits"
