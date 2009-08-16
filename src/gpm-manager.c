@@ -1297,7 +1297,7 @@ gpm_manager_sleep_failure_cb (GpmControl *control, GpmControlAction action, GpmM
 	if (!show_sleep_failed)
 		goto out;
 
-	/* TRANSLATORS: window title: there wasa problem putting the machine to sleep */
+	/* TRANSLATORS: window title: there was a problem putting the machine to sleep */
 	title = g_strdup_printf ("%s: %s", GPM_NAME, _("Sleep problem"));
 	if (action == GPM_CONTROL_ACTION_SUSPEND) {
 		/* TRANSLATORS: message text */
