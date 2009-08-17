@@ -326,7 +326,7 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 static void
 gpm_backlight_client_changed_cb (DkpClient *client, GpmBacklight *backlight)
 {
-	gpm_backlight_brightness_evaluate_and_set (backlight, TRUE);
+	gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 }
 
 /**
