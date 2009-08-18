@@ -41,13 +41,11 @@ static void     egg_idletime_finalize   (GObject       *object);
 
 struct EggIdletimePrivate
 {
-	int			 sync_event;
-	guint			 last_event;
+	gint			 sync_event;
 	gboolean		 reset_set;
 	XSyncCounter		 idle_counter;
 	GPtrArray		*array;
 	Display			*dpy;
-	guint			 emit_idle_id;
 };
 
 typedef struct
@@ -203,7 +201,7 @@ egg_idletime_set_reset_alarm (EggIdletime *idletime, XSyncAlarmNotifyEvent *alar
 		 * idletime->priv->idle_counter < the current counter value */
 		egg_idletime_xsync_alarm_set (idletime, alarm, EGG_IDLETIME_ALARM_TYPE_NEGATIVE);
 
-		/* don't try to set this again if multiple timers are doing off in sequence */
+		/* don't try to set this again if multiple timers are going off in sequence */
 		idletime->priv->reset_set = TRUE;
 	}
 }
@@ -225,25 +223,6 @@ egg_idletime_alarm_find_event (EggIdletime *idletime, XSyncAlarmNotifyEvent *ala
 }
 
 /**
- * egg_idletime_emit_idle_cb:
- */
-static gboolean
-egg_idletime_emit_idle_cb (EggIdletimeAlarm *alarm)
-{
-	g_return_val_if_fail (alarm != NULL, FALSE);
-	g_return_val_if_fail (EGG_IS_IDLETIME (alarm->idletime), FALSE);
-
-	/* emit */
-	g_signal_emit (alarm->idletime, signals [SIGNAL_ALARM_EXPIRED], 0, alarm->id);
-
-	/* clear event */
-	alarm->idletime->priv->emit_idle_id = 0;
-
-	/* never repeat */
-	return FALSE;
-}
-
-/**
  * egg_idletime_event_filter_cb:
  */
 static GdkFilterReturn
@@ -262,36 +241,23 @@ egg_idletime_event_filter_cb (GdkXEvent *gdkxevent, GdkEvent *event, gpointer da
 
 	/* did we match one of our alarms? */
 	alarm = egg_idletime_alarm_find_event (idletime, alarm_event);
-	if (alarm != NULL) {
-		/* save the last state we triggered */
-		idletime->priv->last_event = alarm->id;
+	if (alarm == NULL)
+		return GDK_FILTER_CONTINUE;
 
-		/* are we not the reset symbol */
-		if (alarm->id != 0) {
-			/* emit signal idle, as we don't want to miss the
-			 * expired signal when we are actually dimming */
-			idletime->priv->emit_idle_id = g_idle_add ((GSourceFunc) egg_idletime_emit_idle_cb, alarm);
-
-			/* we need the first alarm to go off to set the reset alarm */
-			egg_idletime_set_reset_alarm (idletime, alarm_event);
-
-			return GDK_FILTER_REMOVE;
-		}
-
-		/* we have queued an idle event, so unqueue it */
-		if (idletime->priv->emit_idle_id > 0) {
-			g_source_remove (idletime->priv->emit_idle_id);
-			idletime->priv->emit_idle_id = 0;
-		}
-
-		/* do the reset callback */
+	/* are we the reset alarm? */
+	if (alarm->id == 0) {
 		egg_idletime_alarm_reset_all (idletime);
-
-		/* don't propagate */
-		return GDK_FILTER_REMOVE;
+		goto out;
 	}
 
-	return GDK_FILTER_CONTINUE;
+	/* emit */
+	g_signal_emit (alarm->idletime, signals [SIGNAL_ALARM_EXPIRED], 0, alarm->id);
+
+	/* we need the first alarm to go off to set the reset alarm */
+	egg_idletime_set_reset_alarm (idletime, alarm_event);
+out:
+	/* don't propagate */
+	return GDK_FILTER_REMOVE;
 }
 
 /**
@@ -419,10 +385,9 @@ egg_idletime_init (EggIdletime *idletime)
 
 	idletime->priv->array = g_ptr_array_new ();
 
+	idletime->priv->reset_set = FALSE;
 	idletime->priv->idle_counter = None;
-	idletime->priv->last_event = 0;
 	idletime->priv->sync_event = 0;
-	idletime->priv->emit_idle_id = 0;
 	idletime->priv->dpy = GDK_DISPLAY ();
 
 	/* get the sync event */
@@ -444,8 +409,6 @@ egg_idletime_init (EggIdletime *idletime)
 		g_warning ("No idle counter.");
 		return;
 	}
-
-	idletime->priv->reset_set = FALSE;
 
 	/* catch the timer alarm */
 	gdk_window_add_filter (NULL, egg_idletime_event_filter_cb, idletime);
@@ -588,10 +551,10 @@ egg_idletime_test (gpointer data)
 
 	/************************************************************/
 	egg_test_title (test, "check if we are alarm zero with no alarms");
-	if (idletime->priv->last_event == 0) {
+	if (last_alarm == 0) {
 		egg_test_success (test, NULL);
 	} else {
-		egg_test_failed (test, "alarm %i set!", idletime->priv->last_event);
+		egg_test_failed (test, "alarm %i set!", last_alarm);
 	}
 
 	/************************************************************/
@@ -647,10 +610,10 @@ egg_idletime_test (gpointer data)
 
 		/************************************************************/
 		egg_test_title (test, "check if correct alarm has gone off");
-		if (idletime->priv->last_event == 101) {
+		if (last_alarm == 101) {
 			egg_test_success (test, "correct alarm");
 		} else {
-			egg_test_failed (test, "alarm %i set!", idletime->priv->last_event);
+			egg_test_failed (test, "alarm %i set!", last_alarm);
 		}
 
 		/************************************************************/
@@ -658,7 +621,7 @@ egg_idletime_test (gpointer data)
 		if (event_time > 3000 && event_time < 6000) {
 			egg_test_success (test, "correct, timeout ideally %ims (we did after %ims)", 5000, event_time);
 		} else {
-			egg_test_failed (test, "alarm %i did not timeout correctly !", idletime->priv->last_event);
+			egg_test_failed (test, "alarm %i did not timeout correctly !", last_alarm);
 		}
 	}
 

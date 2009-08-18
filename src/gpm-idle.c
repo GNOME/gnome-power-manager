@@ -50,13 +50,7 @@
 /* Sets the idle percent limit, i.e. how hard the computer can work
    while considered "at idle" */
 #define GPM_IDLE_CPU_LIMIT			5
-#define GPM_IDLE_TIMEOUT_IGNORE_DPMS_CHANGE	1.0f /* seconds */
 #define	GPM_IDLE_IDLETIME_ID			1
-
-/* XSync seems to be unreliable when setting small values of time.
- * Ideally we want this to be 1ms (or smaller!) to reduce the chance of a race,
- * but this fails to trigger on some systems. */
-#define GPM_IDLE_SMALLEST_RESET_VALUE		500 /* ms */
 
 struct GpmIdlePrivate
 {
@@ -72,7 +66,6 @@ struct GpmIdlePrivate
 	guint		 timeout_sleep_id;
 	gboolean	 x_idle;
 	gboolean	 check_type_cpu;
-	GTimer		*timer;
 };
 
 enum {
@@ -137,11 +130,6 @@ gpm_idle_set_mode (GpmIdle *idle, GpmIdleMode mode)
 
 	if (mode != idle->priv->mode) {
 		idle->priv->mode = mode;
-
-		/* we save the time of the last state, so we can ignore the X11
-		 * timer reset when we change brightness or do DPMS actions */
-		g_timer_reset (idle->priv->timer);
-
 		egg_debug ("Doing a state transition: %s", gpm_idle_mode_to_text (mode));
 		g_signal_emit (idle, signals [IDLE_CHANGED], 0, mode);
 	}
@@ -226,7 +214,7 @@ gpm_idle_evaluate (GpmIdle *idle)
 
 	/* TRANSLATORS: this is what the user should read for more information about the blanking problem (%s is a URL) */
 	what_to_do = g_strdup_printf (_("Please see %s for more information."),
-				      "http://blogs.gnome.org/hughsie/2009/08/14/blanking-in-gnome-power-manager-fixed/");
+				      "http://blogs.gnome.org/hughsie/2009/08/17/gnome-power-manager-and-blanking-removal-of-bodges/");
 
 	/* TRANSLATORS: this is telling the user that thier X server is broken, and needs to be fixed */
 	nag_message = g_strdup_printf ("%s\n%s", _("If you can see this text, your display server is broken and you should notify your distributor."),
@@ -388,10 +376,7 @@ gpm_idle_session_inhibited_changed_cb (GpmSession *session, gboolean is_inhibite
 static void
 gpm_idle_idletime_alarm_expired_cb (EggIdletime *idletime, guint alarm_id, GpmIdle *idle)
 {
-	egg_warning ("idletime alarm: %i", alarm_id);
-
-	/* reset time to dim default (could be 1ms) */
-	egg_idletime_alarm_set (idle->priv->idletime, GPM_IDLE_IDLETIME_ID, idle->priv->timeout_dim * 1000);
+	egg_debug ("idletime alarm: %i", alarm_id);
 
 	/* set again */
 	idle->priv->x_idle = TRUE;
@@ -406,19 +391,7 @@ gpm_idle_idletime_alarm_expired_cb (EggIdletime *idletime, guint alarm_id, GpmId
 static void
 gpm_idle_idletime_reset_cb (EggIdletime *idletime, GpmIdle *idle)
 {
-	gdouble elapsed;
-	elapsed = g_timer_elapsed (idle->priv->timer, NULL);
-
-	egg_warning ("idletime reset");
-
-	/* have we just chaged state? */
-	if (idle->priv->mode == GPM_IDLE_MODE_BLANK &&
-	    elapsed < GPM_IDLE_TIMEOUT_IGNORE_DPMS_CHANGE) {
-		egg_debug ("ignoring reset, as we've just done a state change");
-		/* make sure we trigger a short timeout so we can get the expired signal */
-		egg_idletime_alarm_set (idle->priv->idletime, GPM_IDLE_IDLETIME_ID, GPM_IDLE_SMALLEST_RESET_VALUE);
-		return;
-	}
+	egg_debug ("idletime reset");
 
 	idle->priv->x_idle = FALSE;
 	gpm_idle_evaluate (idle);
@@ -448,7 +421,6 @@ gpm_idle_finalize (GObject *object)
 	/* for debugging */
 	g_object_unref (idle->priv->status_icon);
 
-	g_timer_destroy (idle->priv->timer);
 	g_object_unref (idle->priv->load);
 	g_object_unref (idle->priv->session);
 
@@ -498,7 +470,6 @@ gpm_idle_init (GpmIdle *idle)
 	idle->priv->timeout_blank_id = 0;
 	idle->priv->timeout_sleep_id = 0;
 	idle->priv->x_idle = FALSE;
-	idle->priv->timer = g_timer_new ();
 	idle->priv->load = gpm_load_new ();
 	idle->priv->session = gpm_session_new ();
 	g_signal_connect (idle->priv->session, "idle-changed", G_CALLBACK (gpm_idle_session_idle_changed_cb), idle);
