@@ -107,6 +107,60 @@ egg_console_kit_stop (EggConsoleKit *console, GError **error)
 }
 
 /**
+ * egg_console_kit_can_stop:
+ **/
+gboolean
+egg_console_kit_can_stop (EggConsoleKit *console, gboolean *can_stop, GError **error)
+{
+	gboolean ret;
+	GError *error_local = NULL;
+
+	g_return_val_if_fail (EGG_IS_CONSOLE_KIT (console), FALSE);
+	g_return_val_if_fail (console->priv->proxy_manager != NULL, FALSE);
+
+	ret = dbus_g_proxy_call (console->priv->proxy_manager, "CanStop", &error_local,
+				 G_TYPE_INVALID,
+				 G_TYPE_BOOLEAN, can_stop, G_TYPE_INVALID);
+	if (!ret) {
+		egg_warning ("Couldn't do CanStop: %s", error_local->message);
+		if (error != NULL)
+			*error = g_error_new (1, 0, "%s", error_local->message);
+		g_error_free (error_local);
+		/* CanStop was only added in new versions of ConsoleKit,
+		 * so assume true if this failed */
+		*can_stop = TRUE;
+	}
+	return ret;
+}
+
+/**
+ * egg_console_kit_can_restart:
+ **/
+gboolean
+egg_console_kit_can_restart (EggConsoleKit *console, gboolean *can_restart, GError **error)
+{
+	gboolean ret;
+	GError *error_local = NULL;
+
+	g_return_val_if_fail (EGG_IS_CONSOLE_KIT (console), FALSE);
+	g_return_val_if_fail (console->priv->proxy_manager != NULL, FALSE);
+
+	ret = dbus_g_proxy_call (console->priv->proxy_manager, "CanRestart", &error_local,
+				 G_TYPE_INVALID,
+				 G_TYPE_BOOLEAN, can_restart, G_TYPE_INVALID);
+	if (!ret) {
+		egg_warning ("Couldn't do CanRestart: %s", error_local->message);
+		if (error != NULL)
+			*error = g_error_new (1, 0, "%s", error_local->message);
+		g_error_free (error_local);
+		/* CanRestart was only added in new versions of ConsoleKit,
+		 * so assume true if this failed */
+		*can_restart = TRUE;
+	}
+	return ret;
+}
+
+/**
  * egg_console_kit_is_local:
  *
  * Return value: Returns whether the session is local
