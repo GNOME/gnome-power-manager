@@ -33,10 +33,12 @@
 #include <gconf/gconf-client.h>
 #include <devkit-power-gobject/devicekit-power.h>
 
+#include "egg-debug.h"
+#include "egg-console-kit.h"
+
 #include "gpm-tray-icon.h"
 #include "gpm-common.h"
 #include "gpm-prefs-core.h"
-#include "egg-debug.h"
 #include "gpm-stock-icons.h"
 #include "gpm-prefs-server.h"
 
@@ -58,6 +60,7 @@ struct GpmPrefsPrivate
 	gboolean		 can_hibernate;
 	guint			 idle_delay;
 	GConfClient		*conf;
+	EggConsoleKit		*console;
 };
 
 enum {
@@ -929,6 +932,7 @@ gpm_prefs_init (GpmPrefs *prefs)
 	prefs->priv = GPM_PREFS_GET_PRIVATE (prefs);
 
 	prefs->priv->client = dkp_client_new ();
+	prefs->priv->console = egg_console_kit_new ();
 	prefs->priv->conf = gconf_client_get_default ();
 	/* watch gnome-power-manager keys */
 	gconf_client_add_dir (prefs->priv->conf, GPM_CONF_DIR,
@@ -941,13 +945,18 @@ gpm_prefs_init (GpmPrefs *prefs)
 	prefs->priv->idle_delay = gconf_client_get_int (prefs->priv->conf, GPM_CONF_IDLE_DELAY, NULL);
 
 	caps = gpm_dbus_get_caps (prefs);
+	egg_debug ("caps=%i", caps);
+
+	/* get properties from gnome-power-manager */
 	prefs->priv->has_batteries = ((caps & GPM_PREFS_SERVER_BATTERY) > 0);
 	prefs->priv->has_ups = ((caps & GPM_PREFS_SERVER_UPS) > 0);
 	prefs->priv->has_lcd = ((caps & GPM_PREFS_SERVER_BACKLIGHT) > 0);
 	prefs->priv->has_button_lid = ((caps & GPM_PREFS_SERVER_LID) > 0);
 	prefs->priv->has_button_suspend = TRUE;
+
+	/* are we allowed to shutdown? */
 	prefs->priv->can_shutdown = TRUE;
-	egg_debug ("caps=%i", caps);
+	egg_console_kit_can_stop (prefs->priv->console, &prefs->priv->can_shutdown, NULL);
 
 	/* get values from DkpClient */
 	g_object_get (prefs->priv->client,
@@ -1013,6 +1022,7 @@ gpm_prefs_finalize (GObject *object)
 
 	g_object_unref (prefs->priv->conf);
 	g_object_unref (prefs->priv->client);
+	g_object_unref (prefs->priv->console);
 
 	G_OBJECT_CLASS (gpm_prefs_parent_class)->finalize (object);
 }
