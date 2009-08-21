@@ -264,18 +264,6 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/general/ignore_inhibit_requests</key>
-      <applyto>/apps/gnome-power-manager/general/ignore_inhibit_requests</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>false</default>
-      <locale name="C">
-        <short>If DBUS inhibit requests should be ignored.</short>
-        <long>If DBUS inhibit requests should be ignored from other programs.</long>
-      </locale>
-    </schema>
-
-    <schema>
       <key>/schemas/apps/gnome-power-manager/general/use_time_for_policy</key>
       <applyto>/apps/gnome-power-manager/general/use_time_for_policy</applyto>
       <owner>gnome-power-manager</owner>
@@ -468,18 +456,6 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/notify/inhibit_lid</key>
-      <applyto>/apps/gnome-power-manager/notify/inhibit_lid</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>false</default>
-      <locale name="C">
-        <short>If we should show the warning when we have a valid inhibit and configured to sleep on lid close</short>
-        <long>If we should show the warning when we have a valid inhibit and configured to sleep on lid close.</long>
-      </locale>
-    </schema>
-
-    <schema>
       <key>/schemas/apps/gnome-power-manager/notify/low_capacity</key>
       <applyto>/apps/gnome-power-manager/notify/low_capacity</applyto>
       <owner>gnome-power-manager</owner>
@@ -548,18 +524,6 @@
       <locale name="C">
         <short>Notify on a low power</short>
         <long>If a notification message should be displayed when the battery is getting low.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/notify/estimated_data</key>
-      <applyto>/apps/gnome-power-manager/notify/estimated_data</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>true</default>
-      <locale name="C">
-        <short>Notify when the profile data is guessed</short>
-        <long>If a notification message should be displayed when the profile data is guessed.</long>
       </locale>
     </schema>
 

@@ -87,7 +87,6 @@ G_BEGIN_DECLS
 #define GPM_CONF_NETWORKMANAGER_SLEEP		GPM_CONF_DIR "/general/network_sleep"
 #define GPM_CONF_IDLE_CHECK_CPU			GPM_CONF_DIR "/general/check_type_cpu"
 #define GPM_CONF_LAPTOP_USES_EXT_MON		GPM_CONF_DIR "/general/using_external_monitor"
-#define GPM_CONF_IGNORE_INHIBITS		GPM_CONF_DIR "/general/ignore_inhibit_requests"
 
 /* lock */
 #define GPM_CONF_LOCK_USE_SCREENSAVER		GPM_CONF_DIR "/lock/use_screensaver_settings"
@@ -111,8 +110,6 @@ G_BEGIN_DECLS
 #define GPM_CONF_NOTIFY_SLEEP_FAILED		GPM_CONF_DIR "/notify/sleep_failed"
 #define GPM_CONF_NOTIFY_SLEEP_FAILED_URI	GPM_CONF_DIR "/notify/sleep_failed_uri"
 #define GPM_CONF_NOTIFY_LOW_POWER		GPM_CONF_DIR "/notify/low_power"
-#define GPM_CONF_NOTIFY_ESTIMATED_DATA		GPM_CONF_DIR "/notify/estimated_data"
-#define GPM_CONF_NOTIFY_INHIBIT_LID		GPM_CONF_DIR "/notify/inhibit_lid"
 
 /* statistics */
 #define GPM_CONF_STATS_SHOW_AXIS_LABELS		GPM_CONF_DIR "/statistics/show_axis_labels"
@@ -139,13 +136,9 @@ G_BEGIN_DECLS
 
 /* ui */
 #define GPM_CONF_UI_ICON_POLICY			GPM_CONF_DIR "/ui/icon_policy"
-#define GPM_CONF_UI_SHOW_CPUFREQ		GPM_CONF_DIR "/ui/cpufreq_show"
 #define GPM_CONF_UI_SHOW_ACTIONS_IN_MENU	GPM_CONF_DIR "/ui/show_actions_in_menu"
 #define GPM_CONF_UI_ENABLE_SOUND		GPM_CONF_DIR "/ui/enable_sound"
 #define GPM_CONF_UI_SHOW_CONTEXT_MENU		GPM_CONF_DIR "/ui/show_context_menu"
-
-/* we use the gnome-session key now */
-#define GPM_CONF_SESSION_REQUEST_SAVE		"/apps/gnome-session/options/auto_save_session"
 
 /* new info binary */
 #define GPM_CONF_INFO_HISTORY_TIME		"/apps/gnome-power-manager/info/history_time"
