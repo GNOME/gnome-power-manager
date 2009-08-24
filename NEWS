@@ -1,3 +1,37 @@
+Version 2.27.91
+~~~~~~~~~~~~~~~
+Released: 2009-08-24
+
+* Translations
+ - Updated Bulgarian translation (Alexander Shopov)
+ - Updated Galician translation (Antón Méixome)
+ - Update Korean translation (Changwoo Ryu)
+ - Updated Traditional Chinese translation (Chao-Hsiung Liao)
+ - Updated French translation (Claude Paroz)
+ - Updated Swedish translation (Daniel Nylander)
+ - Updated Brazilian Portuguese translation (Djavan Fagundes)
+ - Updating Estonian translation (Ivar Smolin)
+ - Updated Spanish translation (Jorge González)
+ - Updated Norwegian bokmål translation (Kjartan Maraas)
+ - Updated Oriya Translation (Manoj Kumar Giri)
+ - Updated German translation (Mario Blättermann)
+ - Updated Hebrew translation (Mark Krapivner)
+ - Updating Estonian translation (Mattias Põldaru)
+ - Updated Irish translation (Seán de Búrca)
+ - Updated Thai translation (Theppitak Karoonboonyanan)
+ - Updated Polish translation (Tomasz Dominikowski)
+ - Updated Finnish translation (Tommi Vainikainen)
+
+* Bugfix:
+ - Remove the depricated Encoding= lines from the desktop files. Fixes #590612 (Richard Hughes)
+ - Fix up quite a few translations, inspired by a patch from Scott Howard (Richard Hughes)
+ - Add the enumerated actions in a 64bit safe way. Fixes #590991 (Richard Hughes)
+ - Don't show the brightness OSD when system AC state changes (Richard Hughes)
+ - Remove all the bodges from the IDLETIMER code now X is fixed (Richard Hughes)
+ - Only show shutdown in the prefs GUI if ConsoleKit allows it (Richard Hughes)
+ - Always show the battery status icons in the left click action (Richard Hughes)
+ - Change the notification default for fully charged to FALSE for #592613 (Richard Hughes)
+
 Version 2.27.5
 ~~~~~~~~~~~~~~
 Released: 2009-08-03
