@@ -1,0 +1,2616 @@
+# translation of gnome-power-manager.gnome-2-26.po to catalan
+# Catalan translations for gnome-power-manager package
+# Traduccions al català del paquet «gnome-power-manager».
+# Copyright © 2005, 2006, 2007, 2009 The Free Software Foundation, Inc.
+# This file is distributed under the same license as the
+# gnome-power-manager package.
+#
+# Sleep: mode de baix consum
+# - Hibernation: hibernació
+# - Suspend: aturada temporal
+#
+# Resume: reprendre
+# Shutdown, power off: aturar
+# Standby: en espera
+# Idle: inactiu / inactiva
+# Off: apagat / apagada
+# Power button: botó d'arrencada
+# Suspend button: botó d'aturada temporal
+# Hibernate button: botó d'hibernació
+# Policy action: acció de directiva (de gestió de l'energia)
+# Timeout action: acció de temporització
+#
+# Per a més informació, consulteu els llocs web següents:
+#
+# Josep Puigdemont <josep.puigdemont@gmail.com>, 2005, 2006.
+# Esteve Blanch <anakinjinn@gmail.com>, 2006.
+# David Planella <david.planella@gmail.com>, 2007, 2008, 2009.
+# Carles Ferrando Garcia <carles.ferrando@gmail.com>, 2009.
+# http://live.gnome.org/GnomePowerManager/SleepNames
+# http://svn.gnome.org/viewcvs/*checkout*/gnome-power-manager/docs/sleep-names.html
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-power-manager.gnome-2-26\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-08-24 20:58+0200\n"
+"PO-Revision-Date: 2009-08-20 15:45+0200\n"
+"Last-Translator: Carles Ferrando Garcia <carles.ferrando@gmail.com>\n"
+"Language-Team: catalan <tradgnome@softcatala.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n!=1;\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: ../applets/brightness/brightness-applet.c:105
+msgid "Power Manager Brightness Applet"
+msgstr "Miniaplicació de la brillantor del gestor d'energia"
+
+#: ../applets/brightness/brightness-applet.c:106
+msgid "Adjusts laptop panel brightness."
+msgstr "Ajusta la brillantor de la pantalla de l'ordinador portàtil."
+
+#: ../applets/brightness/brightness-applet.c:354
+#: ../applets/inhibit/inhibit-applet.c:353
+msgid "Cannot connect to gnome-power-manager"
+msgstr "No s'ha pogut establir la connexió amb el gestor d'energia del GNOME"
+
+#: ../applets/brightness/brightness-applet.c:356
+msgid "Cannot get laptop panel brightness"
+msgstr ""
+"No s'ha pogut obtindre la brillantor de la pantalla de l'ordinador portàtil"
+
+#: ../applets/brightness/brightness-applet.c:358
+#, c-format
+msgid "LCD brightness : %d%%"
+msgstr "Brillantor de la pantalla LCD: %d%%"
+
+#: ../applets/brightness/brightness-applet.c:747
+#: ../applets/inhibit/inhibit-applet.c:422 ../src/gpm-tray-icon.c:309
+msgid "Licensed under the GNU General Public License Version 2"
+msgstr "Sota la Llicència Pública General GNU, versió 2"
+
+#: ../applets/brightness/brightness-applet.c:748
+#: ../applets/inhibit/inhibit-applet.c:423 ../src/gpm-tray-icon.c:310
+msgid ""
+"Power Manager is free software; you can redistribute it and/or\n"
+"modify it under the terms of the GNU General Public License\n"
+"as published by the Free Software Foundation; either version 2\n"
+"of the License, or (at your option) any later version."
+msgstr ""
+"El gestor d'energia és programari lliure; el podeu redistribuir i/o\n"
+"modificar sota els termes de la Llicència Publica General GNU tal i com ha\n"
+"estat publicada per la Free Software Foundation; ja siga la versió 2 de la\n"
+"llicència, o (si ho preferiu) qualsevol versió posterior."
+
+#: ../applets/brightness/brightness-applet.c:752
+#: ../applets/inhibit/inhibit-applet.c:427 ../src/gpm-tray-icon.c:314
+msgid ""
+"Power Manager is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+"GNU General Public License for more details."
+msgstr ""
+"El gestor d'energia es distribueix amb l'expectativa que serà útil, \n"
+"però SENSE CAP GARANTIA; ni tan sols la garantia implícita\n"
+"de COMERCIALITZACIÓ o ADEQUACIÓ PER A UN PROPÒSIT PARTICULAR.\n"
+"Vegeu la Llicència Publica General GNU per a obtindre'n més detalls."
+
+#: ../applets/brightness/brightness-applet.c:756
+#: ../applets/inhibit/inhibit-applet.c:431 ../src/gpm-tray-icon.c:318
+msgid ""
+"You should have received a copy of the GNU General Public License\n"
+"along with this program; if not, write to the Free Software\n"
+"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
+"02110-1301, USA."
+msgstr ""
+"Hauríeu d'haver rebut una còpia de la Llicència Pública General GNU\n"
+"juntament amb el gestor d'energia del GNOME; en cas contrari, escriviu a la\n"
+"Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,\n"
+"MA 02110-1301, USA."
+
+#: ../applets/brightness/brightness-applet.c:770
+msgid "Copyright © 2006 Benjamin Canou"
+msgstr "Copyright © 2006 Benjamin Canou"
+
+#: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:1
+msgid "Adjusts Laptop panel brightness"
+msgstr "Ajusta la brillantor de la pantalla de l'ordinador portàtil."
+
+#: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:2
+msgid "Brightness Applet"
+msgstr "Miniaplicació de la brillantor"
+
+#: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:3
+msgid "Brightness Applet Factory"
+msgstr "Factoria de la Miniaplicació de la brillantor"
+
+#: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:4
+msgid "Factory for Brightness Applet"
+msgstr "Factoria per a la Miniaplicació de la brillantor"
+
+#: ../applets/inhibit/inhibit-applet.c:91
+msgid "Power Manager Inhibit Applet"
+msgstr "Miniaplicació d'inhabilitació del gestor d'energia"
+
+#: ../applets/inhibit/inhibit-applet.c:92
+msgid "Allows user to inhibit automatic power saving."
+msgstr "Permet que l'usuari inhabilite la gestió automàtica de l'energia."
+
+#: ../applets/inhibit/inhibit-applet.c:356
+msgid "Automatic sleep inhibited"
+msgstr "Mode de baix consum automàtic inhabilitat"
+
+#: ../applets/inhibit/inhibit-applet.c:358
+msgid "Automatic sleep enabled"
+msgstr "Mode de baix consum automàtic habilitat"
+
+#: ../applets/inhibit/inhibit-applet.c:386
+msgid "Manual inhibit"
+msgstr "Inhabilitació manual"
+
+#: ../applets/inhibit/inhibit-applet.c:445
+msgid "Copyright © 2006-2007 Richard Hughes"
+msgstr "Copyright © 2006-2007 Richard Hughes"
+
+#: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:1
+msgid "Allows user to inhibit automatic power saving"
+msgstr "Permet que l'usuari inhabilite la gestió automàtica de l'energia"
+
+#: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:2
+msgid "Factory for Inhibit Applet"
+msgstr "Factoria per a la Miniaplicació d'inhabilitació"
+
+#: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:3
+msgid "Inhibit Applet"
+msgstr "Miniaplicació d'inhabilitació"
+
+#: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:4
+msgid "Inhibit Applet Factory"
+msgstr "Factoria de la Miniaplicació d'inhabilitació"
+
+#. common descriptions of this program
+#: ../data/gnome-power-manager.desktop.in.in.h:1 ../src/gpm-common.h:43
+msgid "Power Manager"
+msgstr "Gestor d'energia"
+
+#: ../data/gnome-power-manager.desktop.in.in.h:2
+msgid "Power management daemon"
+msgstr "Dimoni del gestor d'energia"
+
+#: ../data/gnome-power-manager.schemas.in.h:1
+msgid ""
+"After resume, gnome-power-manager will suppress policy actions for a number "
+"of seconds to allow messages to settle and HAL to refresh. Commonly five "
+"seconds is enough while not being so long that the user gets confused."
+msgstr ""
+"Després de reprendre, el gestor d'energia del GNOME inhabilitarà les accions "
+"de les directives de gestió de l'energia durant uns segons per a permetre "
+"que els missatges s'estabilitzen i que el HAL es refresque. Normalment cinc "
+"segons són suficients per a dur a terme estos processos i no es fan prou "
+"llargs per a confondre l'usuari."
+
+#: ../data/gnome-power-manager.schemas.in.h:2
+msgid "Allow Suspend and Hibernate in the menu"
+msgstr "Permet aturar temporalment i hibernar des del menú"
+
+#: ../data/gnome-power-manager.schemas.in.h:3
+msgid "Allow backlight brightness adjustment"
+msgstr "Permet l'ajust de la brillantor de la pantalla"
+
+#: ../data/gnome-power-manager.schemas.in.h:4
+msgid "Battery critical low action"
+msgstr "Acció quan la càrrega de la bateria siga críticament baixa"
+
+#: ../data/gnome-power-manager.schemas.in.h:5
+msgid "Change the brightness automatically using the ambient light sensors"
+msgstr ""
+"Canvia la brillantor automàticament fent ús dels sensors de llum natural"
+
+#: ../data/gnome-power-manager.schemas.in.h:6
+msgid "Check CPU load before sleeping"
+msgstr "Comprova la càrrega de la CPU abans d'entrar al mode de baix consum"
+
+#: ../data/gnome-power-manager.schemas.in.h:7
+msgid "Dim the screen after a period of inactivity when on AC power"
+msgstr ""
+"Atenua la pantalla després d'un període d'inactivitat quan s'estiga "
+"connectat a la xarxa elèctrica"
+
+#: ../data/gnome-power-manager.schemas.in.h:8
+msgid "Dim the screen after a period of inactivity when on battery power"
+msgstr ""
+"Atenua la pantalla després d'un període d'inactivitat quan s'estiga "
+"utilitzant la bateria"
+
+#: ../data/gnome-power-manager.schemas.in.h:9
+msgid ""
+"Display options for the notification icon. Valid options are \"never\", "
+"\"critical\", \"charge\", \"present\" and \"always\"."
+msgstr ""
+"Mostra opcions a la icona de notificació. Les opcions vàlides són "
+"«never» (mai), «critical» (crític), «charge» (càrrega), «present» (present), i "
+"«always» (sempre)."
+
+#: ../data/gnome-power-manager.schemas.in.h:10
+msgid "Hibernate button action"
+msgstr "Acció del botó d'hibernació"
+
+#: ../data/gnome-power-manager.schemas.in.h:11
+msgid "Hibernate enabled"
+msgstr "Hibernació habilitada"
+
+#: ../data/gnome-power-manager.schemas.in.h:12
+msgid "If DBUS inhibit requests should be ignored from other programs."
+msgstr ""
+"Indica si les peticions d'inhibició d'altres programes a través del DBUS "
+"s'han d'ignorar."
+
+#: ../data/gnome-power-manager.schemas.in.h:13
+msgid "If DBUS inhibit requests should be ignored."
+msgstr "Indica si les peticions d'inhibició a través del DBUS s'han d'ignorar."
+
+#: ../data/gnome-power-manager.schemas.in.h:14
+msgid ""
+"If a notification message should be displayed after suspend or hibernate "
+"failed."
+msgstr ""
+"Si s'ha de mostrar una notificació després que l'aturada temporal o la "
+"hibernació hagen fallat."
+
+#: ../data/gnome-power-manager.schemas.in.h:15
+msgid ""
+"If a notification message should be displayed when the battery is fully "
+"charged."
+msgstr ""
+"Si s'ha de mostrar una notificació quan la bateria estiga carregada del tot."
+
+#: ../data/gnome-power-manager.schemas.in.h:16
+msgid ""
+"If a notification message should be displayed when the battery is getting "
+"low."
+msgstr ""
+"Si s'ha de mostrar una notificació quan la càrrega de la bateria siga baixa."
+
+#: ../data/gnome-power-manager.schemas.in.h:17
+msgid ""
+"If a notification message should be displayed when the profile data is "
+"guessed."
+msgstr ""
+"Si s'ha de mostrar una notificació quan les dades del perfil han estat "
+"estimades."
+
+#: ../data/gnome-power-manager.schemas.in.h:18
+msgid "If extra debugging messages should be used"
+msgstr "Indica si s'han d'utilitzar missatges de depuració addicionals"
+
+#: ../data/gnome-power-manager.schemas.in.h:19
+msgid ""
+"If extra debugging messages should be used. Only turn this on for debugging."
+msgstr ""
+"Indica si s'han d'utilitzar missatges de depuració addicionals. Activeu-ho "
+"només si esteu depurant l'aplicació."
+
+#: ../data/gnome-power-manager.schemas.in.h:20
+msgid "If preferences should be shown"
+msgstr "Indica si s'han de mostrar les preferències"
+
+#: ../data/gnome-power-manager.schemas.in.h:21
+msgid "If sounds should be used"
+msgstr "Indica si s'han d'utilitzar sons"
+
+#: ../data/gnome-power-manager.schemas.in.h:22
+msgid ""
+"If sounds should be used when the power is critically low, or inhibit "
+"requests have stopped the policy action."
+msgstr ""
+"Indica si s'han d'utilitzar sons per a notificar que el nivell de càrrega de "
+"la bateria és críticament baix, o per a indicar si les peticions d'inhibició "
+"han aturat l'acció de la directiva."
+
+#: ../data/gnome-power-manager.schemas.in.h:23
+msgid "If the CPU load should be checked before doing the idle action."
+msgstr ""
+"Indica si s'ha de comprovar la càrrega de la CPU abans de realitzar l'acció "
+"per inactivitat."
+
+#: ../data/gnome-power-manager.schemas.in.h:24
+msgid ""
+"If the Suspend and Hibernate options should be allowed in the notification "
+"area drop down menu."
+msgstr ""
+"Indica si les opcions d'aturar temporalment i d'hibernar estan permeses en "
+"el menú desplegable de l'àrea de notificació."
+
+#: ../data/gnome-power-manager.schemas.in.h:25
+msgid ""
+"If the battery event should occur when the lid is shut and the power "
+"disconnected"
+msgstr ""
+"Indica si s'ha de produir un esdeveniment de bateria quan la tapa estiga "
+"plegada i posteriorment es desconnecte l'energia de la xarxa elèctrica"
+
+#: ../data/gnome-power-manager.schemas.in.h:26
+msgid ""
+"If the battery lid close event should occur (for example 'Suspend when lid "
+"closed on battery') when the lid is previously shut and the AC power "
+"disconnected at a later time."
+msgstr ""
+"Indica si l'esdeveniment de tancament de la tapa hauria d'ocórrer (per "
+"exemple «atura temporalment en plegar la tapa quan s'estiga utilitzant la "
+"bateria») quan la tapa ja estiga plegada i es desconnecte l'energia de la "
+"xarxa posteriorment."
+
+#: ../data/gnome-power-manager.schemas.in.h:27
+msgid "If the learnt profile should be used to calculate the time remaining"
+msgstr ""
+"Indica si s'ha d'utilitzar el perfil aprés per a calcular el temps restant"
+
+#: ../data/gnome-power-manager.schemas.in.h:28
+msgid ""
+"If the learnt profile should be used to calculate the time remaining. Only "
+"turn this off for debugging."
+msgstr ""
+"Indica si s'ha d'utilitzar el perfil aprés per a calcular el temps restant. "
+"Activeu-ho només si esteu depurant l'aplicació."
+
+#: ../data/gnome-power-manager.schemas.in.h:29
+msgid "If the low-power mode should be enabled when on AC"
+msgstr ""
+"Indica si s'ha d'habilitar el mode de baix consum quan s'estiga connectat a "
+"la xarxa elèctrica"
+
+#: ../data/gnome-power-manager.schemas.in.h:30
+msgid "If the low-power mode should be enabled when on UPS"
+msgstr ""
+"Indica si s'ha d'habilitar el mode de baix consum quan s'estiga connectat a "
+"un SAI"
+
+#: ../data/gnome-power-manager.schemas.in.h:31
+msgid "If the low-power mode should be enabled when on battery"
+msgstr ""
+"Indica si s'ha d'habilitar el mode de baix consum quan s'estiga utilitzant "
+"la bateria"
+
+# FIXME: s'hauria d'enviar un informe d'error. La cadena original fa pena... (dpm)
+#: ../data/gnome-power-manager.schemas.in.h:32
+msgid ""
+"If the screen brightness can be changed when switching between AC and "
+"battery power and by ambient light sensors."
+msgstr ""
+"Indica si es pot modificar la brillantor de la pantalla en commutar de la "
+"xarxa elèctrica a bateria i a l'inrevés, i per sensors de llum natural."
+
+#: ../data/gnome-power-manager.schemas.in.h:33
+msgid ""
+"If the screen brightness should be changed automatically using the ambient "
+"light sensors."
+msgstr ""
+"Indica si la brillantor de la pantalla s'ha d'ajustar de manera automàtica "
+"fent ús dels sensors de llum natural"
+
+#: ../data/gnome-power-manager.schemas.in.h:34
+msgid ""
+"If the screen brightness should be changed automatically using the ambient "
+"light sensors. Valid is 'none', 'light' and 'dark'"
+msgstr ""
+"Indica si la brillantor de la pantalla s'ha d'ajustar de manera automàtica "
+"fent ús dels sensors de llum natural. Els valors permesos són «none» (cap), "
+"«light» (clar) i «dark» (fosc)"
+
+#: ../data/gnome-power-manager.schemas.in.h:35
+msgid ""
+"If the screen should be dimmed to save power when the computer is idle when "
+"on AC power."
+msgstr ""
+"Indica si s'ha de reduir la brillantor de la pantalla per a estalviar "
+"energia quan l'ordinador estiga inactiu i connectat a la xarxa elèctrica."
+
+#: ../data/gnome-power-manager.schemas.in.h:36
+msgid ""
+"If the screen should be dimmed to save power when the computer is idle when "
+"on battery power."
+msgstr ""
+"Indica si s'ha de reduir la brillantor de la pantalla per a estalviar "
+"energia quan l'ordinador estiga inactiu i utilitzant la bateria."
+
+#: ../data/gnome-power-manager.schemas.in.h:37
+msgid ""
+"If the screen should be reduced in brightness when the computer is on "
+"battery power."
+msgstr ""
+"Indica si s'ha de reduir la brillantor de la pantalla quan l'ordinador "
+"estiga utilitzant la bateria."
+
+#: ../data/gnome-power-manager.schemas.in.h:38
+msgid "If the system low-power mode should be enabled when on AC power."
+msgstr ""
+"Indica si s'ha d'habilitar el mode de baix consum del sistema quan s'està "
+"connectat a la xarxa elèctrica."
+
+#: ../data/gnome-power-manager.schemas.in.h:39
+msgid "If the system low-power mode should be enabled when on UPS power."
+msgstr ""
+"Indica si s'ha d'habilitar el mode de baix consum del sistema quan s'està "
+"connectat a un SAI."
+
+#: ../data/gnome-power-manager.schemas.in.h:40
+msgid ""
+"If the system low-power mode should be enabled when on laptop battery power."
+msgstr ""
+"Indica si s'ha d'habilitar el mode de baix consum del sistema quan s'està "
+"utilitzant la bateria de l'ordinador portàtil."
+
+#: ../data/gnome-power-manager.schemas.in.h:41
+msgid "If the user is authorized to hibernate the computer."
+msgstr "Indica si l'usuari està autoritzat a hibernar l'ordinador."
+
+#: ../data/gnome-power-manager.schemas.in.h:42
+msgid "If the user is authorized to suspend the computer."
+msgstr "Indica si l'usuari està autoritzat a aturar temporalment l'ordinador."
+
+#: ../data/gnome-power-manager.schemas.in.h:43
+msgid "If the user should be notified when the AC adapter is disconnected."
+msgstr ""
+"Indica si s'ha de notificar l'usuari quan es desconnecte de la xarxa "
+"elèctrica."
+
+#: ../data/gnome-power-manager.schemas.in.h:44
+msgid ""
+"If time based notifications should be used. If set to false, then the "
+"percentage change is used instead, which may fix a broken ACPI BIOS."
+msgstr ""
+"Indica si s'han d'utilitzar les notificacions basades en temps. Si és fals, "
+"aleshores s'utilitza el canvi de percentatge, cosa que pot solucionar alguns "
+"problemes amb BIOS ACPI defectuoses."
+
+# FIXME: les dues cadenes només difereixen en el punt. S'hauria d'enviar un informe d'error
+#: ../data/gnome-power-manager.schemas.in.h:45
+msgid "If we should show the low capacity warning for a broken battery"
+msgstr ""
+"Indica si s'ha de mostrar l'avís de bateria baixa per a una bateria "
+"defectuosa"
+
+#: ../data/gnome-power-manager.schemas.in.h:46
+msgid "If we should show the low capacity warning for a broken battery."
+msgstr ""
+"Indica si s'ha de mostrar l'avís de bateria baixa per a una bateria "
+"defectuosa."
+
+#: ../data/gnome-power-manager.schemas.in.h:47
+msgid "If we should show the recalled battery warning for a broken battery"
+msgstr ""
+"Indica si s'ha de mostrar l'avís de bateria reclamada per a una bateria "
+"defectuosa"
+
+#: ../data/gnome-power-manager.schemas.in.h:48
+msgid ""
+"If we should show the recalled battery warning for a broken battery. Set "
+"this to false only if you know your battery is okay."
+msgstr ""
+"Indica si s'ha de mostrar l'avís de bateria reclamada per a una bateria "
+"defectuosa. Establiu-ho com a «false» (fals) només si és que esteu segurs que "
+"la bateria està en bones condicions."
+
+# FIXME: un altre original certament ambigu (dpm)
+#: ../data/gnome-power-manager.schemas.in.h:49
+msgid ""
+"If we should show the warning when we have a valid inhibit and configured to "
+"sleep on lid close"
+msgstr ""
+"Indica si s'ha de mostrar l'avís en tindre una inhabilitació vàlida definida "
+"amb la configuració per a entrar en mode de baix consum en plegar la tapa "
+"del portàtil"
+
+# FIXME: tres quarts del mateix... (dpm)
+#: ../data/gnome-power-manager.schemas.in.h:50
+msgid ""
+"If we should show the warning when we have a valid inhibit and configured to "
+"sleep on lid close."
+msgstr ""
+"Indica si s'ha de mostrar l'avís en tindre una inhabilitació vàlida definida "
+"amb la configuració per a entrar en mode de baix consum en plegar la tapa "
+"del portàtil."
+
+#: ../data/gnome-power-manager.schemas.in.h:51
+msgid "Keyboard brightness when on AC"
+msgstr "Brillantor del teclat quan s'està connectat a la xarxa elèctrica"
+
+#: ../data/gnome-power-manager.schemas.in.h:52
+msgid "Keyboard brightness when on battery"
+msgstr "Brillantor del teclat quan s'està utilitzant la bateria"
+
+#: ../data/gnome-power-manager.schemas.in.h:53
+msgid "LCD brightness when on AC"
+msgstr ""
+"Brillantor de la pantalla LCD quan s'està connectat a la xarxa elèctrica"
+
+#: ../data/gnome-power-manager.schemas.in.h:54
+msgid "LCD dimming amount when on battery"
+msgstr ""
+"Reducció de la brillantor de la pantalla LCD quan s'està utilitzant la "
+"bateria"
+
+#: ../data/gnome-power-manager.schemas.in.h:55
+msgid "Laptop lid close action on battery"
+msgstr "Acció en plegar la tapa del portàtil quan s'està utilitzant la bateria"
+
+#: ../data/gnome-power-manager.schemas.in.h:56
+msgid "Laptop lid close action when on AC"
+msgstr ""
+"Acció en plegar la tapa del portàtil quan s'està connectat a la xarxa "
+"elèctrica"
+
+#: ../data/gnome-power-manager.schemas.in.h:57
+msgid "Lock GNOME keyring on sleep"
+msgstr "Bloca l'anell de claus del GNOME en entrar en el mode de baix consum"
+
+#: ../data/gnome-power-manager.schemas.in.h:58
+msgid "Lock screen on hibernate"
+msgstr "Bloca la pantalla en hibernar"
+
+#: ../data/gnome-power-manager.schemas.in.h:59
+msgid "Lock screen on suspend"
+msgstr "Bloca la pantalla en aturar temporalment"
+
+#: ../data/gnome-power-manager.schemas.in.h:60
+msgid "Lock screen when blanked"
+msgstr "Bloca la pantalla en enfosquir-la"
+
+#: ../data/gnome-power-manager.schemas.in.h:61
+msgid "Method used to blank screen on AC"
+msgstr ""
+"Mètode utilitzat per a enfosquir la pantalla quan s'està connectat a la "
+"xarxa elèctrica"
+
+#: ../data/gnome-power-manager.schemas.in.h:62
+msgid "Method used to blank screen on battery"
+msgstr ""
+"Mètode utilitzat per enfosquir la pantalla quan s'està utilitzant la bateria"
+
+#: ../data/gnome-power-manager.schemas.in.h:63
+msgid "Notify on a low power"
+msgstr "Notifica en una situació de baix nivell d'energia"
+
+#: ../data/gnome-power-manager.schemas.in.h:64
+msgid "Notify on a sleep failure"
+msgstr "Notifica en una fallada del mode de baix consum"
+
+#: ../data/gnome-power-manager.schemas.in.h:65
+msgid "Notify when AC adapter is disconnected"
+msgstr "Notifica en desconnectar-se de la xarxa elèctrica"
+
+#: ../data/gnome-power-manager.schemas.in.h:66
+msgid "Notify when fully charged"
+msgstr "Notifica quan estiga del tot carregada"
+
+#: ../data/gnome-power-manager.schemas.in.h:67
+msgid "Notify when the profile data is guessed"
+msgstr "Notifica quan les dades del perfil són estimades"
+
+#: ../data/gnome-power-manager.schemas.in.h:68
+msgid "Number of seconds to suppress policy after resume"
+msgstr ""
+"Nombre de segons durant els quals s'inhabilitaran les directives de gestió "
+"de l'energia després de reprendre"
+
+#: ../data/gnome-power-manager.schemas.in.h:69
+msgid "Percentage action is taken"
+msgstr "Percentatge en el qual es durà l'acció a terme"
+
+#: ../data/gnome-power-manager.schemas.in.h:70
+msgid "Percentage considered critical"
+msgstr "Percentatge considerat crític"
+
+#: ../data/gnome-power-manager.schemas.in.h:71
+msgid "Percentage considered low"
+msgstr "Percentatge considerat baix"
+
+#: ../data/gnome-power-manager.schemas.in.h:72
+msgid "Power button action"
+msgstr "Acció del botó d'arrencada"
+
+#: ../data/gnome-power-manager.schemas.in.h:73
+msgid "Reduce the backlight brightness when on battery power"
+msgstr "Redueix la brillantor de la pantalla quan s'està utilitzant la bateria"
+
+#: ../data/gnome-power-manager.schemas.in.h:74
+msgid "Sleep timeout computer when on AC"
+msgstr ""
+"Temps d'espera del mode de baix consum de l'ordinador quan s'estiga "
+"connectat a la xarxa elèctrica"
+
+#: ../data/gnome-power-manager.schemas.in.h:75
+msgid "Sleep timeout computer when on battery"
+msgstr ""
+"Temps d'espera del mode de baix consum de l'ordinador quan s'estiga "
+"utilitzant la bateria"
+
+#: ../data/gnome-power-manager.schemas.in.h:76
+msgid "Sleep timeout display when on AC"
+msgstr ""
+"Temps d'espera del mode de baix consum de la pantalla quan s'estiga "
+"connectat a la xarxa elèctrica"
+
+#: ../data/gnome-power-manager.schemas.in.h:77
+msgid "Sleep timeout display when on battery"
+msgstr ""
+"Temps d'espera del mode de baix consum de la pantalla quan s'estiga "
+"utilitzant la bateria"
+
+#: ../data/gnome-power-manager.schemas.in.h:78
+msgid "Suspend button action"
+msgstr "Acció del botó d'aturada temporal"
+
+#: ../data/gnome-power-manager.schemas.in.h:79
+msgid "Suspend enabled"
+msgstr "Aturada temporal habilitada"
+
+#: ../data/gnome-power-manager.schemas.in.h:80
+msgid ""
+"The DPMS method used to blank the screen when on AC power. Possible values "
+"are \"default\", \"standby\", \"suspend\" and \"off\"."
+msgstr ""
+"El mètode DPMS utilitzat per a enfosquir la pantalla quan s'estiga connectat "
+"a la xarxa elèctrica. Els valors possibles són «default» (per defecte), "
+"«standby» (en espera), i «off» (apagada)."
+
+#: ../data/gnome-power-manager.schemas.in.h:81
+msgid ""
+"The DPMS method used to blank the screen when on battery power. Possible "
+"values are \"default\", \"standby\", \"suspend\" and \"off\"."
+msgstr ""
+"El mètode DPMS utilitzat per a enfosquir la pantalla quan s'estiga "
+"utilitzant la bateria. Els valors possibles són «default» (per defecte), "
+"«standby» (en espera), «suspend» (aturada temporal), i «off» (apagada)."
+
+#: ../data/gnome-power-manager.schemas.in.h:82
+msgid ""
+"The action to take when the UPS is critically low. Possible values are "
+"\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
+msgstr ""
+"L'acció a dur a terme quan la càrrega del SAI siga críticament baixa. Els "
+"valors possibles són «hibernate» (hibernar), «suspend» (aturar temporalment), "
+"«shutdown» (aturar), i «nothing» (res)."
+
+#: ../data/gnome-power-manager.schemas.in.h:83
+msgid ""
+"The action to take when the UPS is low. Possible values are \"hibernate\", "
+"\"suspend\", \"shutdown\" and \"nothing\"."
+msgstr ""
+"L'acció a dur a terme quan la càrrega del SAI siga baixa. Els valors "
+"possibles són «hibernate» (hibernar), «shutdown» (aturar), i «nothing» (res)."
+
+#: ../data/gnome-power-manager.schemas.in.h:84
+msgid ""
+"The action to take when the battery is critically low. Possible values are "
+"\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
+msgstr ""
+"L'acció a dur a terme quan la càrrega de la bateria siga críticament baixa. "
+"Els valors possibles són «hibernate» (hibernar), «suspend» (aturar "
+"temporalment), «shutdown» (aturar), i «nothing» (res)."
+
+#: ../data/gnome-power-manager.schemas.in.h:85
+msgid ""
+"The action to take when the laptop lid is closed and the laptop is on AC "
+"power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
+"\"nothing\"."
+msgstr ""
+"L'acció a dur a terme quan es plegue la tapa de l'ordinador portàtil mentre "
+"s'estiga connectat a la xarxa elèctrica. Els possibles valors són "
+"«suspend» (aturar temporalment), «hibernate» (hibernar), «blank» (enfosquir la "
+"pantalla), i «nothing» (res)."
+
+#: ../data/gnome-power-manager.schemas.in.h:86
+msgid ""
+"The action to take when the laptop lid is closed and the laptop is on "
+"battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
+"and \"nothing\"."
+msgstr ""
+"L'acció a dur a terme quan es plegue la tapa de l'ordinador portàtil mentre "
+"s'estiga utilitzant la bateria. Els possibles valors són «suspend» (aturar "
+"temporalment), «hibernate» (hibernar), «blank» (enfosquir la pantalla), i "
+"«nothing» (res)."
+
+#: ../data/gnome-power-manager.schemas.in.h:87
+msgid ""
+"The action to take when the system hibernate button is pressed. Possible "
+"values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
+"\"nothing\"."
+msgstr ""
+"L'acció a dur a terme quan es prema el botó d'hibernació. Els possibles "
+"valors són «suspend» (aturar temporalment), «hibernate» (hibernar), "
+"«interactive» (interactiu), «shutdown» (aturar), i «nothing» (res)."
+
+#: ../data/gnome-power-manager.schemas.in.h:88
+msgid ""
+"The action to take when the system power button is pressed. Possible values "
+"are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
+"\"."
+msgstr ""
+"L'acció a dur a terme quan es prema el botó d'arrencada. Els possibles "
+"valors són «suspend» (aturar temporalment), «hibernate» (hibernar), "
+"«interactive» (interactiu), «shutdown» (aturar), i «nothing» (res)."
+
+#: ../data/gnome-power-manager.schemas.in.h:89
+msgid ""
+"The action to take when the system suspend button is pressed. Possible "
+"values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
+"\"nothing\"."
+msgstr ""
+"L'acció a dur a terme quan es prema el botó d'aturada temporal. Els "
+"possibles valors són «suspend» (aturar temporalment), «hibernate» (hibernar), "
+"«interactive» (interactiu), «shutdown» (aturar), i «nothing» (res)."
+
+# FIXME
+#: ../data/gnome-power-manager.schemas.in.h:90
+msgid ""
+"The amount of time in seconds before the display goes to sleep when the "
+"computer is on AC power."
+msgstr ""
+"El temps d'inactivitat en segons abans que la pantalla entre en el mode de "
+"baix consum quan l'ordinador estiga connectat a la xarxa elèctrica."
+
+#: ../data/gnome-power-manager.schemas.in.h:91
+msgid ""
+"The amount of time in seconds the computer on AC power needs to be inactive "
+"before it goes to sleep."
+msgstr ""
+"El temps d'inactivitat de l'ordinador (en segons) abans d'entrar en el mode "
+"de baix consum quan s'està connectat a la xarxa elèctrica."
+
+#: ../data/gnome-power-manager.schemas.in.h:92
+msgid ""
+"The amount of time in seconds the computer on battery power needs to be "
+"inactive before it goes to sleep."
+msgstr ""
+"El temps d'inactivitat en segons abans que l'ordinador entre en el mode de "
+"baix consum quan s'estiga utilitzant la bateria."
+
+#: ../data/gnome-power-manager.schemas.in.h:93
+msgid ""
+"The amount of time in seconds the computer on battery power needs to be "
+"inactive before the display goes to sleep."
+msgstr ""
+"El temps d'inactivitat en segons abans que la pantalla entre en el mode de "
+"baix consum quan l'ordinador estiga utilitzant la bateria."
+
+#: ../data/gnome-power-manager.schemas.in.h:94
+msgid "The amount the light sensors should contribute to the brightness"
+msgstr ""
+"La quantitat en la qual els sensors de llum contribuiran en la brillantor"
+
+#: ../data/gnome-power-manager.schemas.in.h:95
+msgid "The amount the light sensors should contribute to the brightness."
+msgstr ""
+"La quantitat en la qual els sensors de llum contribuiran en la brillantor."
+
+#: ../data/gnome-power-manager.schemas.in.h:96
+msgid ""
+"The amount to dim the brightness of the display when on battery power. "
+"Possible values are between 0 and 100."
+msgstr ""
+"La quantitat per la qual es reduirà la brillantor de la pantalla quan "
+"s'estiga utilitzant la bateria. Els possibles valors estan entre 0 i 100."
+
+#: ../data/gnome-power-manager.schemas.in.h:97
+msgid ""
+"The brightness of the display when on AC power. Possible values are between "
+"0 and 100."
+msgstr ""
+"Lluminositat de la pantalla quan s'estiga connectat a la xarxa elèctrica. "
+"Els possibles valors estan entre 0 i 100."
+
+#: ../data/gnome-power-manager.schemas.in.h:98
+msgid ""
+"The brightness of the keyboard when on AC power. Possible values are between "
+"0 and 100."
+msgstr ""
+"La lluminositat del teclat quan s'estiga connectat a la xarxa elèctrica. Els "
+"possibles valors estan entre 0 i 100."
+
+#: ../data/gnome-power-manager.schemas.in.h:99
+msgid ""
+"The brightness of the keyboard when on battery power. Possible values are "
+"between 0 and 100."
+msgstr ""
+"Lluminositat del teclat quan s'utilitze la bateria. Els possibles valors "
+"estan entre 0 i 100."
+
+#: ../data/gnome-power-manager.schemas.in.h:100
+msgid "The brightness of the screen when idle"
+msgstr "Lluminositat de la pantalla quan l'ordinador està inactiu"
+
+#: ../data/gnome-power-manager.schemas.in.h:101
+msgid ""
+"The calibration of the light sensors so that the screen is bright enough"
+msgstr ""
+"La calibració dels sensors de llum de manera que la brillantor de la "
+"pantalla siga suficient"
+
+#: ../data/gnome-power-manager.schemas.in.h:102
+msgid ""
+"The calibration of the light sensors so that the screen is bright enough, in "
+"percent."
+msgstr ""
+"La calibració dels sensors de llum de manera que la brillantor de la "
+"pantalla siga suficient, en percentatge."
+
+#: ../data/gnome-power-manager.schemas.in.h:103
+msgid "The default amount of time to dim the screen after idle"
+msgstr ""
+"El temps per defecte que es trigarà a reduir la brillantor de la pantalla en "
+"passar a l'estat inactiu"
+
+#: ../data/gnome-power-manager.schemas.in.h:104
+msgid "The default amount of time to dim the screen after idle."
+msgstr ""
+"El temps per defecte que es trigarà a reduir la brillantor de la pantalla en "
+"passar a l'estat inactiu."
+
+#: ../data/gnome-power-manager.schemas.in.h:105
+msgid "The default configuration version."
+msgstr "La versió de la configuració per defecte."
+
+#: ../data/gnome-power-manager.schemas.in.h:106
+msgid "The default graph type to show in the statistics window"
+msgstr ""
+"El tipus de diagrama per defecte que es mostrarà a la finestra "
+"d'estadístiques"
+
+#: ../data/gnome-power-manager.schemas.in.h:107
+msgid "The default graph type to show in the statistics window."
+msgstr ""
+"El tipus de diagrama per defecte que es mostrarà a la finestra "
+"d'estadístiques."
+
+#: ../data/gnome-power-manager.schemas.in.h:108
+msgid "The interval the ambient light sensors should be polled"
+msgstr "L'interval de temps entre sondejos dels sensors de llum natural"
+
+#: ../data/gnome-power-manager.schemas.in.h:109
+msgid "The interval the ambient light sensors should be polled in seconds."
+msgstr "L'interval de temps entre sondejos dels sensors de llum natural."
+
+#: ../data/gnome-power-manager.schemas.in.h:110
+msgid "The invalid timeout for power actions"
+msgstr "El temps d'espera no vàlid per a accions del gestor d'energia"
+
+#: ../data/gnome-power-manager.schemas.in.h:111
+msgid ""
+"The invalid timeout in ms for power actions. Set this longer if you get "
+"'battery critical' messages when you unplug."
+msgstr ""
+"El temps d'espera no vàlid, en mil·lisegons, per a les accions del gestor "
+"d'energia. Feu-lo més gran si és que se vos mostren missatges del tipus "
+"«nivell crític de bateria» en desconnectar l'ordinador."
+
+#: ../data/gnome-power-manager.schemas.in.h:112
+msgid "The maximum duration of time displayed on the x-axis of the graph."
+msgstr "El màxim interval de temps que es mostrarà a l'eix x del gràfic."
+
+#: ../data/gnome-power-manager.schemas.in.h:113
+msgid "The maximum time displayed on the graph"
+msgstr "El temps màxim que es mostrarà al gràfic"
+
+#: ../data/gnome-power-manager.schemas.in.h:114
+msgid ""
+"The percentage of the battery when it is considered critical. Only valid "
+"when use_time_for_policy is false."
+msgstr ""
+"El tant per cent de bateria quan es considera crítica. Només vàlid quan "
+"use_time_for_policy és «false» (fals)."
+
+#: ../data/gnome-power-manager.schemas.in.h:115
+msgid ""
+"The percentage of the battery when it is considered low. Only valid when "
+"use_time_for_policy is false."
+msgstr ""
+"El tant per cent de bateria quan es considera baixa. Només vàlid quan "
+"use_time_for_policy és «false» (fals)."
+
+#: ../data/gnome-power-manager.schemas.in.h:116
+msgid ""
+"The percentage of the battery when the critical action is performed. Only "
+"valid when use_time_for_policy is false."
+msgstr ""
+"El tant per cent de bateria quan l'acció de bateria crítica es du a terme. "
+"Només vàlid quan use_time_for_policy és «false» (fals)."
+
+#: ../data/gnome-power-manager.schemas.in.h:117
+msgid ""
+"The time remaining in seconds of the battery when critical action is taken. "
+"Only valid when use_time_for_policy is true."
+msgstr ""
+"El temps restant de bateria (en segons) quan l'acció de bateria crítica es "
+"du a terme. Només vàlid quan use_time_for_policy és cert."
+
+#: ../data/gnome-power-manager.schemas.in.h:118
+msgid ""
+"The time remaining in seconds of the battery when it is considered critical. "
+"Only valid when use_time_for_policy is true."
+msgstr ""
+"El temps restant de bateria (en segons) quan es considera crítica. Només "
+"vàlid quan use_time_for_policy és cert."
+
+#: ../data/gnome-power-manager.schemas.in.h:119
+msgid ""
+"The time remaining in seconds of the battery when it is considered low. Only "
+"valid when use_time_for_policy is true."
+msgstr ""
+"El temps restant de bateria (en segons) quan es considera baixa. Només vàlid "
+"quan use_time_for_policy és cert."
+
+#: ../data/gnome-power-manager.schemas.in.h:120
+msgid "The time remaining when action is taken"
+msgstr "El temps restant quan es durà a terme una acció"
+
+#: ../data/gnome-power-manager.schemas.in.h:121
+msgid "The time remaining when critical"
+msgstr "El temps restant quan la càrrega és crítica"
+
+#: ../data/gnome-power-manager.schemas.in.h:122
+msgid "The time remaining when low"
+msgstr "El temps restant quan la càrrega és baixa"
+
+#: ../data/gnome-power-manager.schemas.in.h:123
+msgid ""
+"The type of sleeping that should be performed when the computer is inactive. "
+"Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
+msgstr ""
+"El tipus de mode de baix consum al qual s'ha d'entrar quan l'ordinador està "
+"inactiu. Els possibles valors són «hibernate» (hibernar), «suspend» (aturar "
+"temporalment), i «nothing» (no fer res)."
+
+#: ../data/gnome-power-manager.schemas.in.h:124
+msgid ""
+"The version of the installed version of the schema. Do not edit this value, "
+"it is used so that configure changes between versions can be detected."
+msgstr ""
+"La versió instal·lada de l'esquema. No modifiqueu este valor. S'utilitza per "
+"a poder detectar els canvis de configuració entre versions."
+
+#: ../data/gnome-power-manager.schemas.in.h:125
+msgid ""
+"This is the laptop panel screen brightness used when the session is idle. "
+"Only valid when use_time_for_policy is true."
+msgstr ""
+"Este és el valor de la brillantor de la pantalla de l'ordinador portàtil "
+"quan la sessió és inactiva. Només vàlid quan l'use_time_for_policy és cert."
+
+#: ../data/gnome-power-manager.schemas.in.h:126
+msgid "UPS critical low action"
+msgstr "Acció quan la càrrega del SAI siga críticament baixa"
+
+#: ../data/gnome-power-manager.schemas.in.h:127
+msgid "UPS low power action"
+msgstr "Acció quan la càrrega del SAI siga críticament baixa"
+
+#: ../data/gnome-power-manager.schemas.in.h:128
+msgid "Use gnome-screensaver lock setting"
+msgstr "Utilitza les opcions de blocatge de l'estalvi de pantalla del GNOME"
+
+#: ../data/gnome-power-manager.schemas.in.h:129
+msgid "When to show the notification icon"
+msgstr "Quan s'ha de mostrar la icona de notificació"
+
+#: ../data/gnome-power-manager.schemas.in.h:130
+msgid "Whether NetworkManager should be connected and disconnected on sleep."
+msgstr ""
+"Indica si el NetworkManager s'ha de connectar i desconnectar en el mode de "
+"baix consum."
+
+#: ../data/gnome-power-manager.schemas.in.h:131
+msgid ""
+"Whether NetworkManager should disconnect before suspending or hibernating "
+"and connect on resume."
+msgstr ""
+"Indica si el NetworkManager s'ha de desconnectar abans d'aturar temporalment "
+"o d'hibernar, i connectar-se de nou en reprendre."
+
+#: ../data/gnome-power-manager.schemas.in.h:132
+msgid ""
+"Whether the GNOME keyring is locked before the computer enters hibernate. "
+"This means the keyring will have to be unlocked on resume."
+msgstr ""
+"Indica si l'anell de claus del GNOME s'ha de blocar abans que l'ordinador "
+"entre en l'estat d'hibernació. Això implica que l'anell de claus s'haurà de "
+"desblocar en reprendre."
+
+#: ../data/gnome-power-manager.schemas.in.h:133
+msgid ""
+"Whether the GNOME keyring is locked before the computer enters suspend. This "
+"means the keyring will have to be unlocked on resume."
+msgstr ""
+"Indica si l'anell de claus del GNOME s'ha de blocar abans que l'ordinador "
+"entre en l'estat d'aturada temporal. Això implica que l'anell de claus "
+"s'haurà de desblocar en reprendre."
+
+#: ../data/gnome-power-manager.schemas.in.h:134
+msgid ""
+"Whether the screen is locked when the computer wakes up from a hibernate. "
+"Only used if lock_use_screensaver_settings is false."
+msgstr ""
+"Indica si s'ha de blocar la pantalla quan l'ordinador es reactiva després "
+"d'una hibernació. Només s'utilitza quan «lock_use_screensaver_settings» és "
+"fals."
+
+#: ../data/gnome-power-manager.schemas.in.h:135
+msgid ""
+"Whether the screen is locked when the computer wakes up from a suspend. Only "
+"used if lock_use_screensaver_settings is false."
+msgstr ""
+"Indica si s'ha de blocar la pantalla quan l'ordinador es reactiva després "
+"d'una aturada temporal. Només s'utilitza quan «lock_use_screensaver_settings» "
+"és fals."
+
+#: ../data/gnome-power-manager.schemas.in.h:136
+msgid ""
+"Whether the screen is locked when the screen is turned off. Only used if "
+"lock_use_screensaver_settings is false."
+msgstr ""
+"Indica si s'ha de blocar la pantalla en apagar-la. Només s'utilitza si "
+"«lock_use_screensaver_settings» és fals."
+
+#: ../data/gnome-power-manager.schemas.in.h:137
+msgid "Whether to hibernate, suspend or do nothing when inactive"
+msgstr ""
+"Indica si en entrar en un període d'inactivitat s'ha d'hibernar, aturar "
+"temporalment o no fer res"
+
+#: ../data/gnome-power-manager.schemas.in.h:138
+msgid ""
+"Whether to use the screen lock setting of gnome-screensaver to decide if the "
+"screen is locked after a hibernate, suspend or blank screen."
+msgstr ""
+"Indica si s'utilitzen els paràmetres de blocatge de pantalla de l'estalvi de "
+"pantalla del GNOME per a decidir si s'ha de blocar la pantalla després d'una "
+"hibernació, d'una aturada temporal o d'un enfosquiment de la pantalla."
+
+#: ../data/gnome-power-manager.schemas.in.h:139
+msgid "Whether to use time-based notifications"
+msgstr "Si s'han d'utilitzar notificacions basades en temps"
+
+#: ../data/gnome-power-manager.schemas.in.h:140
+msgid "Whether we should show the axis labels in the statistics window"
+msgstr ""
+"Indica si s'han de mostrar les etiquetes dels eixos dels diagrames a la "
+"finestra d'estadístiques"
+
+#: ../data/gnome-power-manager.schemas.in.h:141
+msgid "Whether we should show the axis labels in the statistics window."
+msgstr ""
+"Indica si s'han de mostrar les etiquetes dels eixos dels diagrames a la "
+"finestra d'estadístiques."
+
+#: ../data/gnome-power-manager.schemas.in.h:142
+msgid "Whether we should show the events in the statistics window"
+msgstr ""
+"Indica si s'han de mostrar els esdeveniments a la finestra d'estadístiques"
+
+#: ../data/gnome-power-manager.schemas.in.h:143
+msgid "Whether we should show the events in the statistics window."
+msgstr ""
+"Indica si s'han de mostrar els esdeveniments a la finestra d'estadístiques."
+
+#: ../data/gnome-power-manager.schemas.in.h:144
+msgid "Whether we should smooth the data in the graph"
+msgstr "Indica si s'han d'allisar les dades del diagrama"
+
+#: ../data/gnome-power-manager.schemas.in.h:145
+msgid "Whether we should smooth the data in the graph."
+msgstr "Indica si s'han d'allisar les dades del diagrama."
+
+#: ../data/gnome-power-preferences.desktop.in.in.h:1
+msgid "Configure power management"
+msgstr "Configureu la gestió d'energia"
+
+#: ../data/gnome-power-preferences.desktop.in.in.h:2
+msgid "Power Management"
+msgstr "Gestor d'energia"
+
+#: ../data/gnome-power-statistics.desktop.in.in.h:1
+msgid "Observe power management"
+msgstr "Observeu la gestió d'energia"
+
+#. TRANSLATORS: shown on the titlebar
+#. TRANSLATORS: the program name
+#: ../data/gnome-power-statistics.desktop.in.in.h:2
+#: ../data/gpm-statistics.glade.h:6 ../src/gpm-statistics.c:927
+#: ../src/gpm-statistics.c:1349
+msgid "Power Statistics"
+msgstr "Estadístiques de l'energia"
+
+#: ../data/gpm-feedback-widget.glade.h:1
+msgid "Brightness"
+msgstr "Brillantor"
+
+#: ../data/gpm-statistics.glade.h:1
+msgid "0"
+msgstr "0"
+
+#: ../data/gpm-statistics.glade.h:2
+msgid "Data length:"
+msgstr "Llargada de les dades:"
+
+#: ../data/gpm-statistics.glade.h:3 ../src/gpm-statistics.c:211
+msgid "Details"
+msgstr "Detalls"
+
+#: ../data/gpm-statistics.glade.h:4
+msgid "Graph type:"
+msgstr "Tipus de diagrama:"
+
+#: ../data/gpm-statistics.glade.h:5
+msgid "History"
+msgstr "Historial"
+
+#: ../data/gpm-statistics.glade.h:7
+msgid "Processor wakeups per second:"
+msgstr "Despertaments del processador per segon:"
+
+#: ../data/gpm-statistics.glade.h:8
+msgid "Show data points"
+msgstr "Mostra els punts de dades"
+
+#: ../data/gpm-statistics.glade.h:9
+msgid "Statistics"
+msgstr "Estadístiques"
+
+#: ../data/gpm-statistics.glade.h:10
+msgid "Use smoothed line"
+msgstr "Utilitza una línia suavitzada"
+
+#: ../data/gpm-statistics.glade.h:11 ../src/gpm-statistics.c:197
+msgid "Wakeups"
+msgstr "Despertaments"
+
+#: ../data/gpm-inhibit-test.glade.h:1
+msgid "Application:"
+msgstr "Aplicació:"
+
+#: ../data/gpm-inhibit-test.glade.h:2
+msgid "Burning DVD, titled \"My Photos\""
+msgstr "S'està gravant un DVD titulat «Les meues fotografies»"
+
+#: ../data/gpm-inhibit-test.glade.h:3
+msgid "Inhibit"
+msgstr "Inhabilita"
+
+#: ../data/gpm-inhibit-test.glade.h:4
+msgid "Inhibit Tester"
+msgstr "Test de l'inhabilitador"
+
+#: ../data/gpm-inhibit-test.glade.h:5
+msgid "Reason:"
+msgstr "Raó:"
+
+#: ../data/gpm-inhibit-test.glade.h:6
+msgid "UnInhibit"
+msgstr "Habilita"
+
+#: ../data/gpm-inhibit-test.glade.h:7
+msgid "Vendor Acme Foo"
+msgstr "Proveïdor Acme Foo"
+
+#: ../data/gpm-prefs.glade.h:1
+msgid "<b>Actions</b>"
+msgstr "<b>Accions</b>"
+
+#: ../data/gpm-prefs.glade.h:2
+msgid "<b>Display</b>"
+msgstr "<b>Pantalla</b>"
+
+#: ../data/gpm-prefs.glade.h:3
+msgid "<b>Extras</b>"
+msgstr "<b>Extres</b>"
+
+#: ../data/gpm-prefs.glade.h:4
+msgid "<b>Notification Area</b>"
+msgstr "<b>Àrea de notificació</b>"
+
+#: ../data/gpm-prefs.glade.h:5
+msgid "Always sleep when the lid is _closed"
+msgstr "Posa _sempre en baix consum en plegar la tapa"
+
+#: ../data/gpm-prefs.glade.h:6
+msgid "Di_m display when idle"
+msgstr "Ate_nua la pantalla quan estiga inactiu"
+
+#: ../data/gpm-prefs.glade.h:7
+msgid "Enable UPS discharge _alarm"
+msgstr "Habilita l'_alarma de descàrrega del SAI"
+
+#: ../data/gpm-prefs.glade.h:8
+msgid "General"
+msgstr "General"
+
+#: ../data/gpm-prefs.glade.h:9
+msgid "On AC Power"
+msgstr "Connectat a la xarxa elèctrica"
+
+#: ../data/gpm-prefs.glade.h:10
+msgid "On Battery Power"
+msgstr "Utilitzant la bateria"
+
+#: ../data/gpm-prefs.glade.h:11
+msgid "On UPS Power"
+msgstr "Utilitzant un SAI"
+
+#: ../data/gpm-prefs.glade.h:12
+msgid "Only display an icon when a battery is p_resent"
+msgstr "Mostra la icona només si hi ha una bateria _present"
+
+#: ../data/gpm-prefs.glade.h:13
+msgid "Only display an icon when charging or _discharging"
+msgstr "Mostra la icona en carregar o _descarregar la bateria"
+
+#: ../data/gpm-prefs.glade.h:14
+msgid "Power Management Preferences"
+msgstr "Preferències del gestor d'energia"
+
+#: ../data/gpm-prefs.glade.h:15
+msgid "Put _display to sleep when inactive for:"
+msgstr "Posa la _pantalla en baix consum quan s'haja estat inactiu durant:"
+
+#: ../data/gpm-prefs.glade.h:16
+msgid "Put computer to _sleep when inactive for:"
+msgstr "Posa l'_ordinador en baix consum quan s'haja estat inactiu durant:"
+
+#: ../data/gpm-prefs.glade.h:17
+msgid "Set display _brightness to:"
+msgstr "Estableix la _brillantor de la pantalla a:"
+
+#: ../data/gpm-prefs.glade.h:18
+msgid "Turn on keyboard light when light level is low"
+msgstr "Activa la llum del teclat quan el nivell d'il·luminació siga baix"
+
+#: ../data/gpm-prefs.glade.h:19
+msgid "Use _ambient light to adjust LCD brightness"
+msgstr ""
+"Utilitza la llum n_atural per a ajustar la brillantor de la pantalla LCD"
+
+#: ../data/gpm-prefs.glade.h:20
+msgid "Use _sound to notify in event of an error"
+msgstr "Utilitza un _so per a notificar d'un error"
+
+#: ../data/gpm-prefs.glade.h:21
+msgid "When UPS power is _critically low:"
+msgstr "Quan l'energia del SAI siga _críticament baixa:"
+
+#: ../data/gpm-prefs.glade.h:22
+msgid "When UPS power is l_ow:"
+msgstr "Quan l'energia del SAI siga b_aixa:"
+
+#: ../data/gpm-prefs.glade.h:23
+msgid "When battery po_wer is critically low:"
+msgstr "Quan l'e_nergia de la bateria siga críticament baixa:"
+
+#: ../data/gpm-prefs.glade.h:24
+msgid "When laptop lid is cl_osed:"
+msgstr "_Quan es plegue la tapa de l'ordinador portàtil:"
+
+#: ../data/gpm-prefs.glade.h:25
+msgid "When the _suspend button is pressed:"
+msgstr "En prémer el _botó d'aturada temporal:"
+
+#: ../data/gpm-prefs.glade.h:26
+msgid "When the power _button is pressed:"
+msgstr "En p_rémer el botó d'arrencada:"
+
+#: ../data/gpm-prefs.glade.h:27
+msgid "_Always display an icon"
+msgstr "Mostr_a sempre la icona"
+
+#: ../data/gpm-prefs.glade.h:28
+msgid "_Never display an icon"
+msgstr "_No mostres mai la icona"
+
+#: ../data/gpm-prefs.glade.h:29
+msgid "_Only display an icon when battery power is critically low"
+msgstr "Mostra només quan el nivell de la bateria siga _críticament baix"
+
+#: ../data/gpm-prefs.glade.h:30
+msgid "_Reduce backlight brightness"
+msgstr "_Redueix la brillantor de la pantalla"
+
+#: ../src/gpm-common.c:53
+msgid "Unknown time"
+msgstr "Temps desconegut"
+
+#: ../src/gpm-common.c:58
+#, c-format
+msgid "%i minute"
+msgid_plural "%i minutes"
+msgstr[0] "%i minut"
+msgstr[1] "%i minuts"
+
+#: ../src/gpm-common.c:69
+#, c-format
+msgid "%i hour"
+msgid_plural "%i hours"
+msgstr[0] "%i hora"
+msgstr[1] "%i hores"
+
+#. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
+#. * Swap order with "%2$s %2$i %1$s %1$i if needed
+#: ../src/gpm-common.c:75
+#, c-format
+msgid "%i %s %i %s"
+msgstr "%i %s %i %s"
+
+#: ../src/gpm-common.c:76
+msgid "hour"
+msgid_plural "hours"
+msgstr[0] "hora"
+msgstr[1] "hores"
+
+#: ../src/gpm-common.c:77
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] "minut"
+msgstr[1] "minuts"
+
+#: ../src/gpm-common.h:44
+msgid "Power Manager for the GNOME desktop"
+msgstr "Gestor d'energia per a l'escriptori GNOME"
+
+#: ../src/gpm-devicekit.c:194
+#, c-format
+msgid ""
+"%s fully charged (%.1f%%)\n"
+"Provides %s battery runtime"
+msgstr ""
+"%s del tot carregada (%.1f%%)\n"
+"Això vos ofereix %s de durada de la bateria"
+
+#: ../src/gpm-devicekit.c:198
+#, c-format
+msgid "%s fully charged (%.1f%%)"
+msgstr "%s del tot carregada (%.1f%%)"
+
+#: ../src/gpm-devicekit.c:206
+#, c-format
+msgid "%s %s remaining (%.1f%%)"
+msgstr "%s %s restant (%.1f%%)"
+
+#. don't display "Unknown remaining"
+#: ../src/gpm-devicekit.c:211
+#, c-format
+msgid "%s discharging (%.1f%%)"
+msgstr "%s descarregant-se (%.1f%%)"
+
+#: ../src/gpm-devicekit.c:223
+#, c-format
+msgid ""
+"%s %s until charged (%.1f%%)\n"
+"Provides %s battery runtime"
+msgstr ""
+"%s %s per a estar carregada (%.1f%%)\n"
+"Això vos ofereix %s de durada de la bateria"
+
+#: ../src/gpm-devicekit.c:232
+#, c-format
+msgid "%s %s until charged (%.1f%%)"
+msgstr "%s %s per a estar carregada (%.1f%%)"
+
+#. don't display "Unknown remaining"
+#: ../src/gpm-devicekit.c:238
+#, c-format
+msgid "%s charging (%.1f%%)"
+msgstr "%s carregant-se (%.1f%%)"
+
+#: ../src/gpm-devicekit.c:264
+#, c-format
+msgid "<b>Product:</b> %s\n"
+msgstr "<b>Producte:</b> %s\n"
+
+#: ../src/gpm-devicekit.c:266 ../src/gpm-devicekit.c:268
+#: ../src/gpm-devicekit.c:270 ../src/gpm-devicekit.c:272
+#, c-format
+msgid "<b>Status:</b> %s\n"
+msgstr "<b>Estat:</b> %s\n"
+
+#: ../src/gpm-devicekit.c:266
+msgid "Missing"
+msgstr "Manca"
+
+#: ../src/gpm-devicekit.c:268
+msgid "Charged"
+msgstr "Carregada"
+
+#: ../src/gpm-devicekit.c:270
+msgid "Charging"
+msgstr "Carregant-se"
+
+#: ../src/gpm-devicekit.c:272
+msgid "Discharging"
+msgstr "Descarregant-se"
+
+#: ../src/gpm-devicekit.c:274
+#, c-format
+msgid "<b>Percentage charge:</b> %.1f%%\n"
+msgstr "<b>Percentatge de càrrega:</b> %.1f%%\n"
+
+#: ../src/gpm-devicekit.c:276
+#, c-format
+msgid "<b>Vendor:</b> %s\n"
+msgstr "<b>Fabricant:</b> %s\n"
+
+#: ../src/gpm-devicekit.c:279
+#, c-format
+msgid "<b>Technology:</b> %s\n"
+msgstr "<b>Tecnologia:</b> %s\n"
+
+#: ../src/gpm-devicekit.c:282
+#, c-format
+msgid "<b>Serial number:</b> %s\n"
+msgstr "<b>Número de sèrie:</b> %s\n"
+
+#: ../src/gpm-devicekit.c:284
+#, c-format
+msgid "<b>Model:</b> %s\n"
+msgstr "<b>Model:</b> %s\n"
+
+#: ../src/gpm-devicekit.c:287
+#, c-format
+msgid "<b>Charge time:</b> %s\n"
+msgstr "<b>Temps de càrrega:</b> %s\n"
+
+#: ../src/gpm-devicekit.c:292
+#, c-format
+msgid "<b>Discharge time:</b> %s\n"
+msgstr "<b>Temps de descàrrega:</b> %s\n"
+
+#. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
+#: ../src/gpm-devicekit.c:299
+msgid "Excellent"
+msgstr "Excel·lent"
+
+#: ../src/gpm-devicekit.c:301
+msgid "Good"
+msgstr "Bona"
+
+#: ../src/gpm-devicekit.c:303
+msgid "Fair"
+msgstr "Regular"
+
+#: ../src/gpm-devicekit.c:305
+msgid "Poor"
+msgstr "Dolenta"
+
+#. Translators: %.1f is a percentage and %s the condition (Excellent, Good, ...)
+#: ../src/gpm-devicekit.c:308
+#, c-format
+msgid "<b>Capacity:</b> %.1f%% (%s)\n"
+msgstr "<b>Capacitat:</b> %.1f%% (%s)\n"
+
+#: ../src/gpm-devicekit.c:313
+#, c-format
+msgid "<b>Current charge:</b> %.1f Wh\n"
+msgstr "<b>Càrrega actual:</b> %.1f Wh\n"
+
+#: ../src/gpm-devicekit.c:317
+#, c-format
+msgid "<b>Last full charge:</b> %.1f Wh\n"
+msgstr "<b>Darrera càrrega completa:</b> %.1f Wh\n"
+
+#. Translators: Design charge is the amount of charge the battery is designed to have when brand new
+#: ../src/gpm-devicekit.c:321
+#, c-format
+msgid "<b>Design charge:</b> %.1f Wh\n"
+msgstr "<b>Càrrega de disseny:</b> %.1f Wh\n"
+
+#: ../src/gpm-devicekit.c:324
+#, c-format
+msgid "<b>Charge rate:</b> %.1f W\n"
+msgstr "<b>Taxa de càrrega:</b> %.1f W\n"
+
+#: ../src/gpm-devicekit.c:330
+#, c-format
+msgid "<b>Current charge:</b> %.0f/7\n"
+msgstr "<b>Càrrega actual:</b> %.0f/7\n"
+
+#: ../src/gpm-devicekit.c:333
+#, c-format
+msgid "<b>Design charge:</b> %.0f/7\n"
+msgstr "<b>Càrrega de disseny:</b> %.0f/7\n"
+
+#: ../src/gpm-devicekit.c:351
+msgid "AC adapter"
+msgid_plural "AC adapters"
+msgstr[0] "Adaptador de la xarxa elèctrica"
+msgstr[1] "Adaptadors de la xarxa elèctrica"
+
+#: ../src/gpm-devicekit.c:354
+msgid "Laptop battery"
+msgid_plural "Laptop batteries"
+msgstr[0] "Bateria d'ordinador portàtil"
+msgstr[1] "Bateries d'ordinador portàtil"
+
+#: ../src/gpm-devicekit.c:357
+msgid "UPS"
+msgid_plural "UPSs"
+msgstr[0] "SAI"
+msgstr[1] "SAI"
+
+#: ../src/gpm-devicekit.c:360
+msgid "Monitor"
+msgid_plural "Monitors"
+msgstr[0] "Monitor"
+msgstr[1] "Monitors"
+
+#: ../src/gpm-devicekit.c:363
+msgid "Wireless mouse"
+msgid_plural "Wireless mice"
+msgstr[0] "Ratolí sense fil"
+msgstr[1] "Ratolins sense fil"
+
+#: ../src/gpm-devicekit.c:366
+msgid "Wireless keyboard"
+msgid_plural "Wireless keyboards"
+msgstr[0] "Teclat sense fil"
+msgstr[1] "Teclats sense fil"
+
+#: ../src/gpm-devicekit.c:369
+msgid "PDA"
+msgid_plural "PDAs"
+msgstr[0] "PDA"
+msgstr[1] "PDA"
+
+#: ../src/gpm-devicekit.c:372
+msgid "Cell phone"
+msgid_plural "Cell phones"
+msgstr[0] "Telèfon mòbil"
+msgstr[1] "Telèfons mòbils"
+
+#: ../src/gpm-devicekit.c:429
+msgid "Lithium Ion"
+msgstr "Ió liti"
+
+#: ../src/gpm-devicekit.c:432
+msgid "Lithium Polymer"
+msgstr "Polímer de liti"
+
+# Una altra opció seria ««Ió liti, de fosfat de ferro», atès que de fet
+# es tracta de bateries de ió liti amb el càtode de fosfat de liti i
+# ferro. Vegeu http://en.wikipedia.org/wiki/Lithium_iron_phosphate_battery
+# i http://www.iec.cat/diec1/entrada/fitxa_DIEC.asp?MOCODI=83379&Page=avancada
+#: ../src/gpm-devicekit.c:435
+msgid "Lithium Iron Phosphate"
+msgstr "Fosfat de liti i ferro"
+
+#: ../src/gpm-devicekit.c:438
+msgid "Lead acid"
+msgstr "Plom i àcid"
+
+#: ../src/gpm-devicekit.c:441
+msgid "Nickel Cadmium"
+msgstr "Níquel cadmi"
+
+#: ../src/gpm-devicekit.c:444
+msgid "Nickel metal hydride"
+msgstr "Níquel-hidrur metàl·lic"
+
+#: ../src/gpm-devicekit.c:447
+msgid "Unknown technology"
+msgstr "Tecnologia desconeguda"
+
+#. Translators: This is %i days
+#: ../src/gpm-graph-widget.c:297
+#, c-format
+msgid "%id"
+msgstr "%id"
+
+#. Translators: This is %i days %02i hours
+#: ../src/gpm-graph-widget.c:300
+#, c-format
+msgid "%id%02ih"
+msgstr "%id%02ih"
+
+#. Translators: This is %i hours
+#: ../src/gpm-graph-widget.c:305
+#, c-format
+msgid "%ih"
+msgstr "%ih"
+
+#. Translators: This is %i hours %02i minutes
+#: ../src/gpm-graph-widget.c:308
+#, c-format
+msgid "%ih%02im"
+msgstr "%ih%02im"
+
+#. Translators: This is %2i minutes
+#: ../src/gpm-graph-widget.c:313
+#, c-format
+msgid "%2im"
+msgstr "%2im"
+
+#. Translators: This is %2i minutes %02i seconds
+#: ../src/gpm-graph-widget.c:316
+#, c-format
+msgid "%2im%02i"
+msgstr "%2im%02i"
+
+#. Translators: This is %2i seconds
+#: ../src/gpm-graph-widget.c:320
+#, c-format
+msgid "%2is"
+msgstr "%2is"
+
+#. Translators: This is %i Percentage
+#: ../src/gpm-graph-widget.c:324
+#, c-format
+msgid "%i%%"
+msgstr "%i%%"
+
+#. Translators: This is %.1f Watts
+#: ../src/gpm-graph-widget.c:327
+#, c-format
+msgid "%.1fW"
+msgstr "%.1f W"
+
+#. Translators: This is %.1f Volts
+#: ../src/gpm-graph-widget.c:332
+#, c-format
+msgid "%.1fV"
+msgstr "%.1f V"
+
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:371
+#, c-format
+msgid "%s has stopped the suspend from taking place: %s."
+msgstr "%s ha evitat l'aturada temporal: %s."
+
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:376
+#, c-format
+msgid "%s has stopped the hibernate from taking place: %s."
+msgstr "%s ha evitat la hibernació: %s."
+
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:381
+#, c-format
+msgid "%s has stopped the policy action from taking place: %s."
+msgstr "%s ha evitat l'acció de directiva: %s."
+
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:386
+#, c-format
+msgid "%s has stopped the reboot from taking place: %s."
+msgstr "%s ha evitat l'arrencada de nou: %s."
+
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:391
+#, c-format
+msgid "%s has stopped the shutdown from taking place: %s."
+msgstr "%s ha evitat l'aturada: %s."
+
+#. Translators: first %s is an application name, second %s is the reason
+#: ../src/gpm-inhibit.c:396
+#, c-format
+msgid "%s has stopped the timeout action from taking place: %s."
+msgstr "%s ha evitat l'acció de temporització: %s."
+
+#: ../src/gpm-inhibit.c:405 ../src/gpm-inhibit.c:420
+msgid "Multiple applications have stopped the suspend from taking place."
+msgstr "Múltiples aplicacions han aturat l'execució de l'aturada temporal."
+
+#: ../src/gpm-inhibit.c:408
+msgid "Multiple applications have stopped the hibernate from taking place."
+msgstr "Múltiples aplicacions han aturat l'execució de la hibernació."
+
+#: ../src/gpm-inhibit.c:411
+msgid "Multiple applications have stopped the policy action from taking place."
+msgstr "Múltiples aplicacions han aturat l'execució de l'acció de directiva."
+
+#: ../src/gpm-inhibit.c:414
+msgid "Multiple applications have stopped the reboot from taking place."
+msgstr "Múltiples aplicacions han aturat l'execució de l'arrencada de nou."
+
+#: ../src/gpm-inhibit.c:417
+msgid "Multiple applications have stopped the shutdown from taking place."
+msgstr "Múltiples aplicacions han aturat l'execució de l'aturada."
+
+#. TRANSLATORS: show verbose debugging
+#: ../src/gpm-main.c:171 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1332
+msgid "Show extra debugging information"
+msgstr "Mostra informació extra de depuració"
+
+#: ../src/gpm-main.c:173
+msgid "Show version of installed program and exit"
+msgstr "Mostra la versió instal·lada del programa i ix"
+
+#: ../src/gpm-main.c:175
+msgid "Exit after a small delay (for debugging)"
+msgstr "Ix al cap d'una estona (per a depurar)"
+
+# FIXME: msgid erroni
+#: ../src/gpm-main.c:177
+msgid "Exit after the manager has loaded (for debugging)"
+msgstr "Ix després que s'haja carregat el gestor (per a la depuració)"
+
+#: ../src/gpm-main.c:191 ../src/gpm-main.c:195
+msgid "GNOME Power Manager"
+msgstr "Gestor d'energia del GNOME"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:181
+msgid "Power plugged in"
+msgstr "Connexió a la xarxa elèctrica"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:185
+msgid "Power unplugged"
+msgstr "Desconnexió de la xarxa elèctrica"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:189
+msgid "Lid has opened"
+msgstr "S'ha desplegat la tapa"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:193
+msgid "Lid has closed"
+msgstr "S'ha plegat la tapa"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:197
+msgid "Battery is low"
+msgstr "La càrrega de la bateria és baixa"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:201
+msgid "Battery is very low"
+msgstr "La càrrega de la bateria és molt baixa"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:205
+msgid "Battery is full"
+msgstr "La bateria està totalment carregada"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:209
+msgid "Suspend started"
+msgstr "S'ha iniciat l'aturada temporal"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:213
+msgid "Resumed"
+msgstr "S'ha représ"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:217
+msgid "Suspend failed"
+msgstr "No s'ha pogut aturar temporalment"
+
+#: ../src/gpm-manager.c:261
+msgid "Request to suspend"
+msgstr "Sol·licitud d'aturada temporal"
+
+#: ../src/gpm-manager.c:263
+msgid "Request to hibernate"
+msgstr "Sol·licitud d'hibernació"
+
+#: ../src/gpm-manager.c:265
+msgid "Request to do policy action"
+msgstr "Sol·licitud d'execució d'acció de directiva"
+
+#: ../src/gpm-manager.c:267
+msgid "Request to do timeout action"
+msgstr "Sol·licitud d'acció de temporització"
+
+#. I want this translated
+#: ../src/gpm-manager.c:277
+msgid "Perform action anyway"
+msgstr "Realitza l'acció de totes maneres"
+
+#: ../src/gpm-manager.c:394 ../src/gpm-manager.c:428
+msgid "Action disallowed"
+msgstr "Acció no permesa"
+
+#: ../src/gpm-manager.c:395
+msgid ""
+"Suspend support has been disabled. Contact your administrator for more "
+"details."
+msgstr ""
+"S'ha inhabilitat l'aturada temporal. Contacteu el vostre administrador per a "
+"més detalls."
+
+#: ../src/gpm-manager.c:429
+msgid ""
+"Hibernate support has been disabled. Contact your administrator for more "
+"details."
+msgstr ""
+"S'ha inhabilitat la hibernació. Contacteu el vostre administrador per a més "
+"detalls."
+
+#: ../src/gpm-manager.c:779
+msgid "The lid has been closed on ac power."
+msgstr "S'ha tancat la tapa amb connexió a la xarxa elèctrica."
+
+#: ../src/gpm-manager.c:808
+msgid "The lid has been closed on battery power."
+msgstr "S'ha tancat la tapa en funcionament amb bateria."
+
+#: ../src/gpm-manager.c:828
+msgid "Display DPMS activated"
+msgstr "El monitor s'ha activat per DPMS"
+
+#: ../src/gpm-manager.c:846
+msgid "On battery power"
+msgstr "S'està utilitzant la bateria"
+
+#: ../src/gpm-manager.c:864
+msgid "Laptop lid is closed"
+msgstr "La tapa de l'ordinador portàtil està plegada"
+
+#: ../src/gpm-manager.c:888
+msgid "The power button has been pressed."
+msgstr "S'ha premut el botó d'arrencada."
+
+#: ../src/gpm-manager.c:890 ../src/gpm-manager.c:892
+msgid "The suspend button has been pressed."
+msgstr "S'ha premut el botó d'aturada temporal."
+
+#: ../src/gpm-manager.c:894
+msgid "The hibernate button has been pressed."
+msgstr "S'ha premut el botó d'hibernació."
+
+#: ../src/gpm-manager.c:902
+msgid "Power Information"
+msgstr "Informació d'energia"
+
+#: ../src/gpm-manager.c:991
+msgid ""
+"The lid has been closed, and the ac adapter removed (and gconf is okay)."
+msgstr ""
+"S'ha tancat la tapa, i l'ordinador ha estat desconnectat de la xarxa "
+"elèctrica (i el gconf és correcte)."
+
+#: ../src/gpm-manager.c:1008
+msgid "Battery is critically low."
+msgstr "La càrrega de la bateria és críticament baixa."
+
+# FIXME: [l10n-bug] tray -> notification area
+#: ../src/gpm-manager.c:1095 ../src/gpm-manager.c:1109
+msgid "User clicked on tray"
+msgstr "L'usuari ha fet clic a l'àrea de notificació"
+
+#: ../src/gpm-manager.c:1269
+msgid "Laptop battery low"
+msgstr "La càrrega de la bateria del portàtil és baixa"
+
+#: ../src/gpm-manager.c:1271
+#, c-format
+msgid "You have approximately <b>%s</b> of remaining battery life (%.1f%%)"
+msgstr "La bateria disposa d'aproximadament <b>%s</b> de vida (%.1f%%)"
+
+#: ../src/gpm-manager.c:1274
+msgid "UPS low"
+msgstr "La càrrega del SAI és baixa"
+
+#: ../src/gpm-manager.c:1276
+#, c-format
+msgid "You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"
+msgstr "El SAI disposa d'aproximadament <b>%s</b> de vida (%.1f%%)"
+
+#: ../src/gpm-manager.c:1279 ../src/gpm-manager.c:1375
+msgid "Mouse battery low"
+msgstr "La càrrega de la bateria del ratolí és baixa"
+
+#: ../src/gpm-manager.c:1280
+#, c-format
+msgid "The wireless mouse attached to this computer is low in power (%.1f%%)"
+msgstr ""
+"El ratolí sense fil connectat a l'ordinador té l'energia baixa (%.1f%%)"
+
+#: ../src/gpm-manager.c:1283 ../src/gpm-manager.c:1380
+msgid "Keyboard battery low"
+msgstr "La càrrega de la bateria del teclat és baixa"
+
+#: ../src/gpm-manager.c:1284
+#, c-format
+msgid ""
+"The wireless keyboard attached to this computer is low in power (%.1f%%)"
+msgstr ""
+"El teclat sense fil connectat a l'ordinador té l'energia baixa (%.1f%%)"
+
+#: ../src/gpm-manager.c:1287 ../src/gpm-manager.c:1385
+msgid "PDA battery low"
+msgstr "La càrrega de la bateria del PDA és baixa"
+
+#: ../src/gpm-manager.c:1288
+#, c-format
+msgid "The PDA attached to this computer is low in power (%.1f%%)"
+msgstr "El nivell d'energia del PDA connectat a l'ordinador és baix (%.1f%%)"
+
+#: ../src/gpm-manager.c:1291 ../src/gpm-manager.c:1390
+msgid "Cell phone battery low"
+msgstr "El nivell de càrrega del telèfon mòbil és baix"
+
+#: ../src/gpm-manager.c:1292
+#, c-format
+msgid "The cell phone attached to this computer is low in power (%.1f%%)"
+msgstr ""
+"El nivell d'energia del telèfon mòbil connectat a l'ordinador és baix (%.1f%"
+"%)"
+
+#: ../src/gpm-manager.c:1339 ../src/gpm-manager.c:1426
+msgid "Laptop battery critically low"
+msgstr "El nivell de càrrega de la bateria del portàtil és críticament baix"
+
+#: ../src/gpm-manager.c:1352
+msgid "Plug in your AC adapter to avoid losing data."
+msgstr ""
+"Hauríeu de connectar-vos a la xarxa elèctrica per a evitar la pèrdua de "
+"dades."
+
+#: ../src/gpm-manager.c:1354
+#, c-format
+msgid "This computer will suspend in %s if the AC is not connected."
+msgstr ""
+"Este ordinador s'aturarà temporalment d'ací a %s si no es connecta a la "
+"xarxa elèctrica."
+
+#: ../src/gpm-manager.c:1356
+#, c-format
+msgid "This computer will hibernate in %s if the AC is not connected."
+msgstr ""
+"Este ordinador hibernarà d'ací a %s si no es connecta a la xarxa elèctrica."
+
+#: ../src/gpm-manager.c:1358
+#, c-format
+msgid "This computer will shutdown in %s if the AC is not connected."
+msgstr ""
+"Este ordinador s'aturarà d'ací a %s si no es connecta a la xarxa elèctrica."
+
+#: ../src/gpm-manager.c:1360
+#, c-format
+msgid "You have approximately <b>%s</b> of remaining battery life (%.1f%%). %s"
+msgstr "La bateria disposa d'aproximadament <b>%s</b> de vida (%.1f%%). %s"
+
+#: ../src/gpm-manager.c:1368 ../src/gpm-manager.c:1458
+msgid "UPS critically low"
+msgstr "El nivell de càrrega del SAI és críticament baix"
+
+#: ../src/gpm-manager.c:1370
+#, c-format
+msgid ""
+"You have approximately <b>%s</b> of remaining UPS power (%.1f%%). Restore AC "
+"power to your computer to avoid losing data."
+msgstr ""
+"El SAI disposa d'aproximadament <b>%s</b> de vida (%.1f%%). Connecteu "
+"l'ordinador a la xarxa elèctrica per a evitar perdre dades."
+
+#: ../src/gpm-manager.c:1376
+#, c-format
+msgid ""
+"The wireless mouse attached to this computer is very low in power (%.1f%%). "
+"This device will soon stop functioning if not charged."
+msgstr ""
+"El ratolí sense fil connectat a l'ordinador té l'energia molt baixa (%.1f%"
+"%). Este dispositiu prompte deixarà de funcionar si no el carregueu."
+
+#: ../src/gpm-manager.c:1381
+#, c-format
+msgid ""
+"The wireless keyboard attached to this computer is very low in power (%.1f%"
+"%). This device will soon stop functioning if not charged."
+msgstr ""
+"El teclat sense fil connectat a l'ordinador té l'energia molt baixa (%.1f%"
+"%). Este dispositiu prompte deixarà de funcionar si no el carregueu."
+
+#: ../src/gpm-manager.c:1386
+#, c-format
+msgid ""
+"The PDA attached to this computer is very low in power (%.1f%%). This device "
+"will soon stop functioning if not charged."
+msgstr ""
+"El PDA connectat a l'ordinador té l'energia molt baixa (%.1f%%). Este "
+"dispositiu prompte deixarà de funcionar si no el carregueu."
+
+#: ../src/gpm-manager.c:1391
+#, c-format
+msgid ""
+"Your cell phone is very low in power (%.1f%%). This device will soon stop "
+"functioning if not charged."
+msgstr ""
+"El telèfon mòbil connectat a l'ordinador té l'energia molt baixa (%.1f%%). "
+"Este dispositiu prompte deixarà de funcionar si no el carregueu."
+
+#: ../src/gpm-manager.c:1433
+msgid ""
+"The battery is below the critical level and this computer will <b>power-off</"
+"b> when the battery becomes completely empty."
+msgstr ""
+"La bateria està per sota el nivell crític i l'ordinador <b>s'aturarà</b> "
+"quan la bateria quede completament buida"
+
+#: ../src/gpm-manager.c:1438
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
+"computer in a suspended state."
+msgstr ""
+"La bateria està per sota el nivell crític i l'ordinador s'aturarà "
+"temporalment.<br><b>NOTA:</b> Es necessita una mica d'energia per a poder "
+"mantindre l'ordinador en estat d'aturada temporal."
+
+#: ../src/gpm-manager.c:1444
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"hibernate."
+msgstr ""
+"La bateria està per sota el nivell crític i l'ordinador entrarà en "
+"hibernació."
+
+#: ../src/gpm-manager.c:1448
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"shutdown."
+msgstr "La bateria està per sota el nivell crític i l'ordinador s'aturarà."
+
+#: ../src/gpm-manager.c:1465
+msgid ""
+"The UPS is below the critical level and this computer will <b>power-off</b> "
+"when the UPS becomes completely empty."
+msgstr ""
+"El SAI està per sota el nivell crític i l'ordinador <b>s'aturarà</b> quan el "
+"SAI quede completament buit."
+
+#: ../src/gpm-manager.c:1470
+msgid ""
+"The UPS is below the critical level and this computer is about to hibernate."
+msgstr ""
+"El SAI està sota el nivell crític i l'ordinador entrarà en estat "
+"d'hibernació."
+
+#: ../src/gpm-manager.c:1474
+msgid ""
+"The UPS is below the critical level and this computer is about to shutdown."
+msgstr ""
+"El SAI està sota el nivell crític i l'ordinador està apunt d'aturar-se."
+
+#: ../src/gpm-manager.c:1628
+msgid "Install problem!"
+msgstr "S'ha produït un problema d'instal·lació"
+
+#: ../src/gpm-manager.c:1629
+msgid ""
+"The configuration defaults for GNOME Power Manager have not been installed "
+"correctly.\n"
+"Please contact your computer administrator."
+msgstr ""
+"La configuració per defecte del gestor d'energia del GNOME no ha estat "
+"instal·lada correctament.\n"
+"Hauríeu de contactar l'administrador de l'ordinador."
+
+#. save in state
+#: ../src/gpm-notify.c:281
+msgid "Battery may be recalled"
+msgstr "Pot ser que s'haja de reemplaçar la bateria"
+
+#: ../src/gpm-notify.c:282
+#, c-format
+msgid ""
+"The battery in your computer may have been recalled by %s and you may be at "
+"risk.\n"
+"\n"
+"For more information visit the %s battery recall website."
+msgstr ""
+"Pot ser que la bateria de l'ordinador haja estat reclamada per %s per a ser "
+"reemplaçada i que estigueu corrent un risc fent-la servir.\n"
+"\n"
+"Per a més informació visiteu el lloc web de reclamació de bateries de %s."
+
+#: ../src/gpm-notify.c:296
+msgid "Visit recall website"
+msgstr "Vés al lloc web de reclamació de bateries"
+
+#: ../src/gpm-notify.c:302 ../src/gpm-notify.c:340 ../src/gpm-notify.c:378
+#: ../src/gpm-notify.c:407 ../src/gpm-notify.c:435 ../src/gpm-notify.c:463
+#: ../src/gpm-notify.c:497
+msgid "Do not show me this again"
+msgstr "No tornes a mostrar este missatge"
+
+#: ../src/gpm-notify.c:327
+msgid "Battery may be broken"
+msgstr "Pot ser que la bateria estiga malmesa"
+
+#: ../src/gpm-notify.c:328
+#, c-format
+msgid ""
+"Your battery has a very low capacity (%i%%), which means that it may be old "
+"or broken."
+msgstr ""
+"La bateria té una capacitat molt baixa (%i%%), fet que podria indicar que és "
+"vella o bé que està malmesa."
+
+#: ../src/gpm-notify.c:364
+msgid "Sleep warning"
+msgstr "Avís de mode de baix consum"
+
+#: ../src/gpm-notify.c:365
+msgid ""
+"Your laptop will not sleep if you shut the lid as a running program has "
+"prevented this.\n"
+"Some laptops can overheat if they do not sleep when the lid is closed."
+msgstr ""
+"L'ordinador portàtil no entrarà en el mode de baix consum si en plegueu la "
+"tapa, atès que un programa en execució no ho permet.\n"
+"Certs ordinadors portàtils es poden sobreescalfar si no entren en el mode de "
+"baix consum en plegar la tapa."
+
+#: ../src/gpm-notify.c:396
+msgid "Battery Charged"
+msgstr "Bateria carregada"
+
+#: ../src/gpm-notify.c:397
+msgid "Your laptop battery is now fully charged"
+msgstr "La bateria de l'ordinador portàtil està carregada completament"
+
+#: ../src/gpm-notify.c:424
+msgid "Battery Discharging"
+msgstr "S'està descarregant la bateria"
+
+#: ../src/gpm-notify.c:425
+msgid "The AC power has been unplugged. The system is now using battery power."
+msgstr ""
+"L'ordinador s'ha desconnectat de la xarxa elèctrica. El sistema utilitza "
+"l'energia de la bateria."
+
+#: ../src/gpm-notify.c:452
+msgid "UPS Discharging"
+msgstr "S'està descarregant el SAI"
+
+#: ../src/gpm-notify.c:453
+msgid "The AC power has been unplugged. The system is now using backup power."
+msgstr ""
+"L'ordinador s'ha desconnectat de la xarxa elèctrica. El sistema utilitza "
+"l'energia auxiliar."
+
+#: ../src/gpm-notify.c:481
+msgid "Sleep Problem"
+msgstr "S'ha produït un problema en passar al mode de baix consum"
+
+#: ../src/gpm-notify.c:483
+msgid ""
+"Your computer failed to hibernate.\n"
+"Check the help file for common problems."
+msgstr ""
+"L'ordinador no ha pogut hibernar.\n"
+"Comproveu l'ajuda per a solucions a problemes habituals."
+
+#: ../src/gpm-notify.c:486
+msgid ""
+"Your computer failed to suspend.\n"
+"Check the help file for common problems."
+msgstr ""
+"L'ordinador no ha pogut aturar temporalment.\n"
+"Comproveu l'ajuda per a solucions a problemes habituals."
+
+# FIXME: «peculiaritats» no acaba de ser 100% el significat de
+# l'original, però s'hi acosta prou (dpm).
+#: ../src/gpm-notify.c:510
+msgid "Visit quirk website"
+msgstr "Vés al lloc web de peculiaritats"
+
+#: ../src/gpm-prefs.c:95 ../test/gpm-inhibit-test.c:186
+msgid "GNOME Power Preferences"
+msgstr "Preferències de l'energia del GNOME"
+
+#. The text that should appear in the action combo boxes
+#: ../src/gpm-prefs-core.c:84
+msgid "Ask me"
+msgstr "Demana'm què vull fer"
+
+#: ../src/gpm-prefs-core.c:85
+msgid "Suspend"
+msgstr "Atura temporalment"
+
+#: ../src/gpm-prefs-core.c:86
+msgid "Shutdown"
+msgstr "Atura"
+
+#: ../src/gpm-prefs-core.c:87
+msgid "Hibernate"
+msgstr "Hiberna"
+
+#: ../src/gpm-prefs-core.c:88
+msgid "Blank screen"
+msgstr "Enfosqueix la pantalla"
+
+# Escalat de la freqüència (dpm)
+#: ../src/gpm-prefs-core.c:89
+msgid "Do nothing"
+msgstr "No faces res"
+
+#: ../src/gpm-prefs-core.c:285
+msgid "Never"
+msgstr "Mai"
+
+#: ../src/gpm-prefs-core.c:1028
+msgid "Make Default"
+msgstr "Marca com a predeterminat"
+
+# FIXME S'ha de comprovar exactament a què es refereix (dpm)
+#: ../src/gpm-statistics.c:85 ../src/gpm-statistics.c:377
+msgid "Rate"
+msgstr "Velocitat de refresc"
+
+#: ../src/gpm-statistics.c:86
+msgid "Charge"
+msgstr "Càrrega"
+
+#: ../src/gpm-statistics.c:87 ../src/gpm-statistics.c:391
+msgid "Time to full"
+msgstr "Temps fins a carregar completament"
+
+#: ../src/gpm-statistics.c:88 ../src/gpm-statistics.c:396
+msgid "Time to empty"
+msgstr "Temps fins a descarregar completament"
+
+#: ../src/gpm-statistics.c:95
+msgid "10 minutes"
+msgstr "10 minuts"
+
+#: ../src/gpm-statistics.c:96
+msgid "2 hours"
+msgstr "2 hores"
+
+#: ../src/gpm-statistics.c:97
+msgid "1 day"
+msgstr "1 dia"
+
+#: ../src/gpm-statistics.c:98
+msgid "1 week"
+msgstr "1 setmana"
+
+#: ../src/gpm-statistics.c:105
+msgid "Charge profile"
+msgstr "Perfil de la càrrega"
+
+#: ../src/gpm-statistics.c:106
+msgid "Charge accuracy"
+msgstr "Precisió de la càrrega"
+
+#: ../src/gpm-statistics.c:107
+msgid "Discharge profile"
+msgstr "Perfil de la descàrrega"
+
+#: ../src/gpm-statistics.c:108
+msgid "Discharge accuracy"
+msgstr "Precisió de la descàrrega"
+
+#: ../src/gpm-statistics.c:135
+msgid "Attribute"
+msgstr "Atribut"
+
+#: ../src/gpm-statistics.c:142
+msgid "Value"
+msgstr "Valor"
+
+#: ../src/gpm-statistics.c:159
+msgid "Image"
+msgstr "Imatge"
+
+#: ../src/gpm-statistics.c:165
+msgid "Description"
+msgstr "Descripció"
+
+#: ../src/gpm-statistics.c:184 ../src/gpm-statistics.c:334
+msgid "Type"
+msgstr "Tipus"
+
+#: ../src/gpm-statistics.c:190
+msgid "ID"
+msgstr "Identificador"
+
+#: ../src/gpm-statistics.c:204
+msgid "Command"
+msgstr "Orde"
+
+#: ../src/gpm-statistics.c:309
+msgid "Yes"
+msgstr "Sí"
+
+#: ../src/gpm-statistics.c:309
+msgid "No"
+msgstr "No"
+
+#: ../src/gpm-statistics.c:333
+msgid "Device"
+msgstr "Dispositiu"
+
+#: ../src/gpm-statistics.c:336
+msgid "Vendor"
+msgstr "Fabricant"
+
+#: ../src/gpm-statistics.c:338
+msgid "Model"
+msgstr "Model"
+
+#: ../src/gpm-statistics.c:340
+msgid "Serial number"
+msgstr "Número de sèrie"
+
+#: ../src/gpm-statistics.c:341
+msgid "Supply"
+msgstr "Xarxa elèctrica"
+
+#: ../src/gpm-statistics.c:343
+#, c-format
+msgid "%d seconds"
+msgstr "%d segons"
+
+#: ../src/gpm-statistics.c:344
+msgid "Refreshed"
+msgstr "Refrescada"
+
+#: ../src/gpm-statistics.c:351
+msgid "Present"
+msgstr "Present"
+
+#: ../src/gpm-statistics.c:355
+msgid "Rechargeable"
+msgstr "Recarregable"
+
+#: ../src/gpm-statistics.c:359
+msgid "State"
+msgstr "Estat"
+
+#: ../src/gpm-statistics.c:362
+msgid "Energy"
+msgstr "Energia"
+
+#: ../src/gpm-statistics.c:365
+msgid "Energy when empty"
+msgstr "Energia en estar descarregada"
+
+#: ../src/gpm-statistics.c:368
+msgid "Energy when full"
+msgstr "Energia en estar carregada"
+
+#: ../src/gpm-statistics.c:371
+msgid "Energy (design)"
+msgstr "Energia (de disseny)"
+
+#: ../src/gpm-statistics.c:384
+msgid "Voltage"
+msgstr "Tensió"
+
+#: ../src/gpm-statistics.c:405
+msgid "Percentage"
+msgstr "Percentatge"
+
+#: ../src/gpm-statistics.c:410
+msgid "Capacity"
+msgstr "Capacitat"
+
+#: ../src/gpm-statistics.c:414
+msgid "Technology"
+msgstr "Tecnologia"
+
+#: ../src/gpm-statistics.c:416
+msgid "Online"
+msgstr "En línia"
+
+#. TRANSLATORS: the command line was not provided
+#: ../src/gpm-statistics.c:678
+msgid "No data"
+msgstr "Cap dada"
+
+#. TRANSLATORS: kernel module, usually a device driver
+#: ../src/gpm-statistics.c:685 ../src/gpm-statistics.c:690
+msgid "Kernel module"
+msgstr "Mòdul del nucli"
+
+#. TRANSLATORS: kernel housekeeping
+#: ../src/gpm-statistics.c:695
+msgid "Kernel core"
+msgstr "Ànima del nucli"
+
+#. TRANSLATORS: interrupt between processors
+#: ../src/gpm-statistics.c:700
+msgid "Interprocessor interrupt"
+msgstr "Interrupció entre processadors"
+
+#. TRANSLATORS: unknown interrupt
+#: ../src/gpm-statistics.c:705
+msgid "Interrupt"
+msgstr "Interrupció"
+
+#. TRANSLATORS: the keyboard and mouse device event
+#: ../src/gpm-statistics.c:748
+msgid "PS/2 keyboard/mouse/touchpad"
+msgstr "teclat/ratolí/ratolí tàctil PS/2"
+
+#. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
+#: ../src/gpm-statistics.c:751
+msgid "ACPI"
+msgstr "ACPI"
+
+#. TRANSLATORS: serial ATA is a new style of hard disk interface
+#: ../src/gpm-statistics.c:754
+msgid "Serial ATA"
+msgstr "ATA en sèrie (SATA)"
+
+#. TRANSLATORS: this is the old-style ATA interface
+#: ../src/gpm-statistics.c:757
+msgid "ATA host controller"
+msgstr "Controlador d'amfitrió ATA"
+
+#. TRANSLATORS: 802.11 wireless adaptor
+#: ../src/gpm-statistics.c:760
+msgid "Intel wireless adaptor"
+msgstr "Adaptador de xarxa sense fil d'Intel"
+
+#. TRANSLATORS: a timer is something that fires periodically
+#: ../src/gpm-statistics.c:765 ../src/gpm-statistics.c:768
+#: ../src/gpm-statistics.c:771 ../src/gpm-statistics.c:774
+#: ../src/gpm-statistics.c:777
+#, c-format
+msgid "Timer %s"
+msgstr "Temporitzador %s"
+
+#. TRANSLATORS: this is a task that's woken up from sleeping
+#: ../src/gpm-statistics.c:780
+#, c-format
+msgid "Sleep %s"
+msgstr "Adormida %s"
+
+#. TRANSLATORS: this is a new realtime task
+#: ../src/gpm-statistics.c:783
+#, c-format
+msgid "New task %s"
+msgstr "Tasca nova %s"
+
+#. TRANSLATORS: this is a task thats woken to check state
+#: ../src/gpm-statistics.c:786
+#, c-format
+msgid "Wait %s"
+msgstr "En espera %s"
+
+#. TRANSLATORS: a work queue is a list of work that has to be done
+#: ../src/gpm-statistics.c:789 ../src/gpm-statistics.c:792
+#, c-format
+msgid "Work queue %s"
+msgstr "Cua de treball %s"
+
+#. TRANSLATORS: this is when the networking subsystem clears out old entries
+#: ../src/gpm-statistics.c:795
+#, c-format
+msgid "Network route flush %s"
+msgstr "Neteja de rutes de xarxa %s"
+
+#. TRANSLATORS: activity on the USB bus
+#: ../src/gpm-statistics.c:798
+#, c-format
+msgid "USB activity %s"
+msgstr "Activitat als USB %s"
+
+#. TRANSLATORS: we've timed out of an aligned timer
+#: ../src/gpm-statistics.c:801
+#, c-format
+msgid "Wakeup %s"
+msgstr "Es desperta %s"
+
+#. TRANSLATORS: interupts on the system required for basic operation
+#: ../src/gpm-statistics.c:804
+msgid "Local interrupts"
+msgstr "Interrupcions locals"
+
+#. TRANSLATORS: interrupts when a task gets moved from one core to another
+#: ../src/gpm-statistics.c:807
+msgid "Rescheduling interrupts"
+msgstr "Re-planificació de les interrupcions"
+
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:917
+msgid "Device Information"
+msgstr "Informació del dispositiu"
+
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:919
+msgid "Device History"
+msgstr "Historial del dispositiu"
+
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:921
+msgid "Device Profile"
+msgstr "Perfil del dispositiu"
+
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:923
+msgid "Processor Wakeups"
+msgstr "Despertaments del processador"
+
+#. TRANSLATORS: this is the X axis on the graph
+#: ../src/gpm-statistics.c:1141 ../src/gpm-statistics.c:1147
+#: ../src/gpm-statistics.c:1153 ../src/gpm-statistics.c:1159
+msgid "Time elapsed"
+msgstr "Temps transcorregut"
+
+#. TRANSLATORS: this is the Y axis on the graph
+#: ../src/gpm-statistics.c:1143
+msgid "Power"
+msgstr "Potència"
+
+#. TRANSLATORS: this is the Y axis on the graph
+#. TRANSLATORS: this is the X axis on the graph
+#: ../src/gpm-statistics.c:1149 ../src/gpm-statistics.c:1192
+#: ../src/gpm-statistics.c:1198 ../src/gpm-statistics.c:1204
+#: ../src/gpm-statistics.c:1210
+msgid "Cell charge"
+msgstr "Càrrega de la cel·la"
+
+#. TRANSLATORS: this is the Y axis on the graph
+#: ../src/gpm-statistics.c:1155 ../src/gpm-statistics.c:1161
+msgid "Predicted time"
+msgstr "Temps predit"
+
+#. TRANSLATORS: this is the Y axis on the graph
+#: ../src/gpm-statistics.c:1194 ../src/gpm-statistics.c:1206
+msgid "Correction factor"
+msgstr "Factor de correcció"
+
+#. TRANSLATORS: this is the Y axis on the graph
+#: ../src/gpm-statistics.c:1200 ../src/gpm-statistics.c:1212
+msgid "Prediction accuracy"
+msgstr "Precisió de la predicció"
+
+#. TRANSLATORS: the icon for the CPU
+#: ../src/gpm-statistics.c:1557
+msgid "Processor"
+msgstr "Processador"
+
+#: ../src/gpm-tray-icon.c:190 ../src/gpm-tray-icon.c:209
+msgid "Device information"
+msgstr "Informació del dispositiu"
+
+#: ../src/gpm-tray-icon.c:192
+msgid "There is no detailed information for this device"
+msgstr "No hi ha informació detallada sobre este dispositiu"
+
+#: ../src/gpm-tray-icon.c:323
+msgid "translator-credits"
+msgstr ""
+"Josep Puigdemont <josep.puigdemont@gmail.com>\n"
+"Esteve Blanch <anakinjinn@gmail.com>\n"
+"David Planella <david.planella@gmail.com>"
+
+#: ../src/gpm-tray-icon.c:338
+msgid "GNOME Power Manager Website"
+msgstr "Lloc web del gestor d'energia del GNOME"
+
+#. preferences
+#: ../src/gpm-tray-icon.c:414
+msgid "_Preferences"
+msgstr "_Preferències"
+
+#: ../src/gpm-tray-icon.c:428
+msgid "Power _History"
+msgstr "_Historial d'energia"
+
+#. help
+#: ../src/gpm-tray-icon.c:441
+#: ../applets/brightness/GNOME_BrightnessApplet.xml.h:2
+#: ../applets/inhibit/GNOME_InhibitApplet.xml.h:2
+msgid "_Help"
+msgstr "A_juda"
+
+#. about
+#: ../src/gpm-tray-icon.c:449
+#: ../applets/brightness/GNOME_BrightnessApplet.xml.h:1
+#: ../applets/inhibit/GNOME_InhibitApplet.xml.h:1
+msgid "_About"
+msgstr "_Quant a"
+
+#: ../src/gpm-tray-icon.c:555
+msgid "_Suspend"
+msgstr "Atura _temporalment"
+
+#: ../src/gpm-tray-icon.c:565
+msgid "Hi_bernate"
+msgstr "Hi_berna"
