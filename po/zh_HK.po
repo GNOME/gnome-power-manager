@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 2.27.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-22 15:20+0800\n"
+"POT-Creation-Date: 2009-08-24 11:05+0100\n"
 "PO-Revision-Date: 2009-08-22 15:20+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Hong Kong) <community@linuxhall.org>\n"
@@ -177,7 +177,10 @@ msgstr "電池電源下一段時間未使用就把螢幕調暗"
 msgid ""
 "Display options for the notification icon. Valid options are \"never\", \"low"
 "\", \"critical\", \"charge\", \"present\" and \"always\"."
-msgstr "通知圖示的顯示選項。有效的數值為「never」（永不）、「low」（低電量）、「critical」（電源極低時）、「charge」（充電時）、「present」（電池存在時）和「always」（總是)。"
+msgstr ""
+"通知圖示的顯示選項。有效的數值為「never」（永不）、「low」（低電量）、"
+"「critical」（電源極低時）、「charge」（充電時）、「present」（電池存在時）和"
+"「always」（總是)。"
 
 #: ../data/gnome-power-manager.schemas.in.h:8
 msgid "Hibernate button action"
@@ -240,7 +243,9 @@ msgid ""
 "If the battery lid close event should occur (for example 'Suspend when lid "
 "closed on battery') when the lid is previously shut and the AC power "
 "disconnected at a later time."
-msgstr "關上上蓋及有使用交流電時，是否執行上蓋關上事件（如「關上上蓋時進入暫停模式」）。"
+msgstr ""
+"關上上蓋及有使用交流電時，是否執行上蓋關上事件（如「關上上蓋時進入暫停模"
+"式」）。"
 
 #: ../data/gnome-power-manager.schemas.in.h:20
 msgid "If the learnt profile should be used to calculate the time remaining"
@@ -250,7 +255,8 @@ msgstr "是否由經過學習的讀數表去計算剩餘的使用時間"
 msgid ""
 "If the learnt profile should be used to calculate the time remaining. Only "
 "turn this off for debugging."
-msgstr "是否由經過學習的讀數表去計算剩餘的使用時間。只有在偵錯狀態時才將此功能關閉。"
+msgstr ""
+"是否由經過學習的讀數表去計算剩餘的使用時間。只有在偵錯狀態時才將此功能關閉。"
 
 #: ../data/gnome-power-manager.schemas.in.h:22
 msgid "If the low-power mode should be enabled when on AC"
@@ -309,7 +315,9 @@ msgstr "當使用者拔除整流器時應否發出通知"
 msgid ""
 "If time based notifications should be used. If set to false, then the "
 "percentage change is used instead, which may fix a broken ACPI BIOS."
-msgstr "是否使用以時間為基準的通知。如設為‘false’，會以百分更改來取代，這樣可能能解決一些有修正 ACPI BIOS 的問題。"
+msgstr ""
+"是否使用以時間為基準的通知。如設為‘false’，會以百分更改來取代，這樣可能能解決"
+"一些有修正 ACPI BIOS 的問題。"
 
 #: ../data/gnome-power-manager.schemas.in.h:34
 msgid "If we should show the low capacity warning for a broken battery"
@@ -327,7 +335,9 @@ msgstr "是否應對損壞的電池顯示電池回廠警示"
 msgid ""
 "If we should show the recalled battery warning for a broken battery. Set "
 "this to false only if you know your battery is okay."
-msgstr "是否應對損壞的電池顯示電池回收警示。如果確定你的電池正常，請將此項設為 false。"
+msgstr ""
+"是否應對損壞的電池顯示電池回收警示。如果確定你的電池正常，請將此項設為 "
+"false。"
 
 #: ../data/gnome-power-manager.schemas.in.h:38
 msgid "LCD brightness when on AC"
@@ -449,13 +459,17 @@ msgstr "已啟用暫停模式"
 msgid ""
 "The DPMS method used to blank the screen when on AC power. Possible values "
 "are \"standby\", \"suspend\" and \"off\"."
-msgstr "使用交流電時，DPMS 將螢幕變黑的方式。可用的數值為：“default”，“standby”，“suspend”及“off”。"
+msgstr ""
+"使用交流電時，DPMS 將螢幕變黑的方式。可用的數值"
+"為：“default”，“standby”，“suspend”及“off”。"
 
 #: ../data/gnome-power-manager.schemas.in.h:68
 msgid ""
 "The DPMS method used to blank the screen when on battery power. Possible "
 "values are \"standby\", \"suspend\" and \"off\"."
-msgstr "使用電池電源時 DPMS 將螢幕變黑的方式。可用的數值為：“default”，“standby”，“suspend”及“off”。"
+msgstr ""
+"使用電池電源時 DPMS 將螢幕變黑的方式。可用的數值"
+"為：“default”，“standby”，“suspend”及“off”。"
 
 #: ../data/gnome-power-manager.schemas.in.h:69
 msgid "The URI to show to the user on sleep failure"
@@ -465,54 +479,72 @@ msgstr "睡眠失敗時顯示給使用者的 URI"
 msgid ""
 "The action to take when the UPS is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
-msgstr "當不斷電系統電量極低時採取的動作。可用的數值為：“hibernate”（休眠），“suspend”（暫停），“shutdown”（關機）及“nothing”（不做任何事）。"
+msgstr ""
+"當不斷電系統電量極低時採取的動作。可用的數值為：“hibernate”（休"
+"眠），“suspend”（暫停），“shutdown”（關機）及“nothing”（不做任何事）。"
 
 #: ../data/gnome-power-manager.schemas.in.h:71
 msgid ""
 "The action to take when the UPS is low. Possible values are \"hibernate\", "
 "\"suspend\", \"shutdown\" and \"nothing\"."
-msgstr "當 UPS 低電量時要採取的動作。可用的數值有“hibernate(休眠)”、“suspend(待命)”、“shutdown(關機)”和“nothing(不使用)”。"
+msgstr ""
+"當 UPS 低電量時要採取的動作。可用的數值有“hibernate(休眠)”、“suspend(待"
+"命)”、“shutdown(關機)”和“nothing(不使用)”。"
 
 #: ../data/gnome-power-manager.schemas.in.h:72
 msgid ""
 "The action to take when the battery is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
-msgstr "當電池電量極低時採取的動作。可用的數值為：“hibernate”（休眠），“suspend”（暫停），“shutdown”（關機）及“nothing”（不做任何事）。"
+msgstr ""
+"當電池電量極低時採取的動作。可用的數值為：“hibernate”（休眠），“suspend”（暫"
+"停），“shutdown”（關機）及“nothing”（不做任何事）。"
 
 #: ../data/gnome-power-manager.schemas.in.h:73
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on AC "
 "power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
 "\"nothing\"."
-msgstr "當關閉手提電腦上蓋及電腦正以交流電運行時採取的動作。可用的數值為：“suspend”（暫停），“hibernate”（休眠），“blank”（螢幕變黑）及“nothing”（不做任何事）。"
+msgstr ""
+"當關閉手提電腦上蓋及電腦正以交流電運行時採取的動作。可用的數值"
+"為：“suspend”（暫停），“hibernate”（休眠），“blank”（螢幕變黑）"
+"及“nothing”（不做任何事）。"
 
 #: ../data/gnome-power-manager.schemas.in.h:74
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on "
 "battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
 "and \"nothing\"."
-msgstr "當關閉手提電腦上蓋及電腦正以電池運行時採取的動作。可用的數值為：“suspend”（暫停），“hibernate”（休眠），“blank”（螢幕變黑）及“nothing”（不做任何事）。"
+msgstr ""
+"當關閉手提電腦上蓋及電腦正以電池運行時採取的動作。可用的數值為：“suspend”（暫"
+"停），“hibernate”（休眠），“blank”（螢幕變黑）及“nothing”（不做任何事）。"
 
 #: ../data/gnome-power-manager.schemas.in.h:75
 msgid ""
 "The action to take when the system hibernate button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
 "\"nothing\"."
-msgstr "按下休眠按鈕時採取的動作。可用的數值為：“suspend”（暫停），“hibernate”（休眠），“interactive”（互動）“shutdown”（關機）及“nothing”（不做任何事）。"
+msgstr ""
+"按下休眠按鈕時採取的動作。可用的數值為：“suspend”（暫停），“hibernate”（休"
+"眠），“interactive”（互動）“shutdown”（關機）及“nothing”（不做任何事）。"
 
 #: ../data/gnome-power-manager.schemas.in.h:76
 msgid ""
 "The action to take when the system power button is pressed. Possible values "
 "are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
 "\"."
-msgstr "按下電源開關按鈕時採取的動作。可用的數值為：“suspend”（暫停），“hibernate”（休眠），“interactive”（互動）“shutdown”（關機）及“nothing”（不做任何事）。"
+msgstr ""
+"按下電源開關按鈕時採取的動作。可用的數值為：“suspend”（暫"
+"停），“hibernate”（休眠），“interactive”（互動）“shutdown”（關機）"
+"及“nothing”（不做任何事）。"
 
 #: ../data/gnome-power-manager.schemas.in.h:77
 msgid ""
 "The action to take when the system suspend button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
 "\"nothing\"."
-msgstr "按下暫停按鈕時採取的動作。可用的數值為：“suspend”（暫停），“hibernate”（休眠），“interactive”（互動）“shutdown”（關機）及“nothing”（不做任何事）。"
+msgstr ""
+"按下暫停按鈕時採取的動作。可用的數值為：“suspend”（暫停），“hibernate”（休"
+"眠），“interactive”（互動）“shutdown”（關機）及“nothing”（不做任何事）。"
 
 #: ../data/gnome-power-manager.schemas.in.h:78
 msgid ""
@@ -609,37 +641,49 @@ msgstr "電池電源下幾秒鐘不使用就停止硬碟馬達。"
 msgid ""
 "The percentage of the battery when it is considered critical. Only valid "
 "when use_time_for_policy is false."
-msgstr "電池剩餘多少百分比的電量定義為極低電量，只有在 use_time_for_policy 設定為‘false’時才有效。"
+msgstr ""
+"電池剩餘多少百分比的電量定義為極低電量，只有在 use_time_for_policy 設定"
+"為‘false’時才有效。"
 
 #: ../data/gnome-power-manager.schemas.in.h:97
 msgid ""
 "The percentage of the battery when it is considered low. Only valid when "
 "use_time_for_policy is false."
-msgstr "電池剩餘多少百分比的電量定義為低電量，只有在 use_time_for_policy 設定為‘false’時才有效。"
+msgstr ""
+"電池剩餘多少百分比的電量定義為低電量，只有在 use_time_for_policy 設定"
+"為‘false’時才有效。"
 
 #: ../data/gnome-power-manager.schemas.in.h:98
 msgid ""
 "The percentage of the battery when the critical action is performed. Only "
 "valid when use_time_for_policy is false."
-msgstr "電池剩餘多少百分比的電量時執行的緊急動作，只有在 use_time_for_policy 設定為‘false’時才有效。"
+msgstr ""
+"電池剩餘多少百分比的電量時執行的緊急動作，只有在 use_time_for_policy 設定"
+"為‘false’時才有效。"
 
 #: ../data/gnome-power-manager.schemas.in.h:99
 msgid ""
 "The time remaining in seconds of the battery when critical action is taken. "
 "Only valid when use_time_for_policy is true."
-msgstr "電池剩餘多少秒的使用時間時執行的緊急動作，只有在 use_time_for_policy 設定為‘true’時才有效。"
+msgstr ""
+"電池剩餘多少秒的使用時間時執行的緊急動作，只有在 use_time_for_policy 設定"
+"為‘true’時才有效。"
 
 #: ../data/gnome-power-manager.schemas.in.h:100
 msgid ""
 "The time remaining in seconds of the battery when it is considered critical. "
 "Only valid when use_time_for_policy is true."
-msgstr "電池剩餘多少秒的使用時間時定義為極低，只有在 use_time_for_policy 設定為‘true’時才有效。"
+msgstr ""
+"電池剩餘多少秒的使用時間時定義為極低，只有在 use_time_for_policy 設定"
+"為‘true’時才有效。"
 
 #: ../data/gnome-power-manager.schemas.in.h:101
 msgid ""
 "The time remaining in seconds of the battery when it is considered low. Only "
 "valid when use_time_for_policy is true."
-msgstr "電池剩餘多少秒的使用時間時定義為低，只有在 use_time_for_policy 設定為‘true’時才有效。"
+msgstr ""
+"電池剩餘多少秒的使用時間時定義為低，只有在 use_time_for_policy 設定為‘true’時"
+"才有效。"
 
 #: ../data/gnome-power-manager.schemas.in.h:102
 msgid "The time remaining when action is taken"
@@ -657,7 +701,9 @@ msgstr "剩餘多少時間為低電量"
 msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
 "Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
-msgstr "電腦閒置時睡眠模式的類型，可用的數值為：“hibernate”（休眠），“suspend”（暫停）及“nothing”（不做任何事）。"
+msgstr ""
+"電腦閒置時睡眠模式的類型，可用的數值為：“hibernate”（休眠），“suspend”（暫"
+"停）及“nothing”（不做任何事）。"
 
 #: ../data/gnome-power-manager.schemas.in.h:106
 msgid ""
@@ -669,7 +715,9 @@ msgstr "已安裝基模的版本。不要編輯這個數值，它是用來測定
 msgid ""
 "This is the laptop panel screen brightness used when the session is idle. "
 "Only valid when use_time_for_policy is true."
-msgstr "在這裏設定當作業階段閒置時筆記本型電腦螢幕的亮度。只有在 use_time_for_policy 設定為‘true’時才有效。"
+msgstr ""
+"在這裏設定當作業階段閒置時筆記本型電腦螢幕的亮度。只有在 use_time_for_policy "
+"設定為‘true’時才有效。"
 
 #: ../data/gnome-power-manager.schemas.in.h:108
 msgid "UPS critical low action"
@@ -687,7 +735,9 @@ msgstr "使用 gnome-screensaver 螢幕鎖定設定"
 msgid ""
 "When sleep fails we can show the user a button to help fix the situation. "
 "Leave this blank if the button should not be shown."
-msgstr "當睡眠失敗時可以顯示按鈕協助使用者修正此狀況。如果不想顯示此按鈕就讓此項留空。"
+msgstr ""
+"當睡眠失敗時可以顯示按鈕協助使用者修正此狀況。如果不想顯示此按鈕就讓此項留"
+"空。"
 
 #: ../data/gnome-power-manager.schemas.in.h:112
 msgid "When to show the notification icon"
@@ -707,31 +757,41 @@ msgstr "網絡管理程式是否應在暫停或休眠前斷線，待喚醒後連
 msgid ""
 "Whether the GNOME keyring is locked before the computer enters hibernate. "
 "This means the keyring will have to be unlocked on resume."
-msgstr "是否當電腦在進入休眠狀態前鎖住 GNOME 密碼匙圈。這表示當電腦回復時密碼匙圈要重新解鎖。"
+msgstr ""
+"是否當電腦在進入休眠狀態前鎖住 GNOME 密碼匙圈。這表示當電腦回復時密碼匙圈要重"
+"新解鎖。"
 
 #: ../data/gnome-power-manager.schemas.in.h:116
 msgid ""
 "Whether the GNOME keyring is locked before the computer enters suspend. This "
 "means the keyring will have to be unlocked on resume."
-msgstr "是否當電腦在進入暫停狀態前鎖住 GNOME 密碼匙圈。這表示當電腦回復時密碼匙圈要重新解鎖。"
+msgstr ""
+"是否當電腦在進入暫停狀態前鎖住 GNOME 密碼匙圈。這表示當電腦回復時密碼匙圈要重"
+"新解鎖。"
 
 #: ../data/gnome-power-manager.schemas.in.h:117
 msgid ""
 "Whether the screen is locked when the computer wakes up from a hibernate. "
 "Only used if lock_use_screensaver_settings is false."
-msgstr "是否電腦從休眠模式中喚醒時鎖上畫面。只有在 lock_use_screensaver_settings 設定為 ‘false’ 才使用。"
+msgstr ""
+"是否電腦從休眠模式中喚醒時鎖上畫面。只有在 lock_use_screensaver_settings 設定"
+"為 ‘false’ 才使用。"
 
 #: ../data/gnome-power-manager.schemas.in.h:118
 msgid ""
 "Whether the screen is locked when the computer wakes up from a suspend. Only "
 "used if lock_use_screensaver_settings is false."
-msgstr "是否電腦從暫停模式中喚醒時鎖上畫面。只有在 lock_use_screensaver_settings 設定為 ‘false’ 才使用。"
+msgstr ""
+"是否電腦從暫停模式中喚醒時鎖上畫面。只有在 lock_use_screensaver_settings 設定"
+"為 ‘false’ 才使用。"
 
 #: ../data/gnome-power-manager.schemas.in.h:119
 msgid ""
 "Whether the screen is locked when the screen is turned off. Only used if "
 "lock_use_screensaver_settings is false."
-msgstr "是否當螢幕關閉時鎖上畫面。只有在 lock_use_screensaver_settings 設定為 ‘false’ 才使用。"
+msgstr ""
+"是否當螢幕關閉時鎖上畫面。只有在 lock_use_screensaver_settings 設定為 "
+"‘false’ 才使用。"
 
 #: ../data/gnome-power-manager.schemas.in.h:120
 msgid "Whether to hibernate, suspend or do nothing when inactive"
@@ -741,7 +801,9 @@ msgstr "不使用時應否休眠、暫停或不做任何事"
 msgid ""
 "Whether to use the screen lock setting of gnome-screensaver to decide if the "
 "screen is locked after a hibernate, suspend or blank screen."
-msgstr "是否使用 gnome-screensaver 的螢幕鎖定來決定在休眠、暫停及畫面變黑後將螢幕鎖上。"
+msgstr ""
+"是否使用 gnome-screensaver 的螢幕鎖定來決定在休眠、暫停及畫面變黑後將螢幕鎖"
+"上。"
 
 #: ../data/gnome-power-manager.schemas.in.h:122
 msgid "Whether to use time-based notifications"
@@ -1295,7 +1357,9 @@ msgstr "請查閱 %s 以獲得更多資訊。"
 msgid ""
 "If you can see this text, your display server is broken and you should "
 "notify your distributor."
-msgstr "If you can see this text, your display server is broken and you should notify your distributor."
+msgstr ""
+"If you can see this text, your display server is broken and you should "
+"notify your distributor."
 
 #. TRANSLATORS: this is for debugging, if the session is idle
 #: ../src/gpm-idle.c:226
@@ -1649,7 +1713,9 @@ msgstr "不斷電系統的電量極低"
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%.1f%%). Restore AC "
 "power to your computer to avoid losing data."
-msgstr "你大約剩下 <b>%s</b> 的 UPS 電力 (%.1f%%)。請回復電腦的 AC 電源以避免遺失資料。"
+msgstr ""
+"你大約剩下 <b>%s</b> 的 UPS 電力 (%.1f%%)。請回復電腦的 AC 電源以避免遺失資"
+"料。"
 
 #. TRANSLATORS: the device is just going to stop working
 #: ../src/gpm-manager.c:1552
@@ -1696,7 +1762,9 @@ msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
 "computer in a suspended state."
-msgstr "電池電量已在極低的程度之下，這台電腦將會進入暫停模式。<br><b>注意：</b>將電腦進入暫停模式仍需要少量的電力。"
+msgstr ""
+"電池電量已在極低的程度之下，這台電腦將會進入暫停模式。<br><b>注意：</b>將電腦"
+"進入暫停模式仍需要少量的電力。"
 
 #. TRANSLATORS: computer will hibernate
 #: ../src/gpm-manager.c:1643
@@ -1717,7 +1785,8 @@ msgstr "電池電量已在極低的程度之下，這台電腦即將關機。"
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
-msgstr "不斷電系統的電量已處於極低的程度，在電用完的時候這台電腦亦會立即<b>關閉</b>。"
+msgstr ""
+"不斷電系統的電量已處於極低的程度，在電用完的時候這台電腦亦會立即<b>關閉</b>。"
 
 #. TRANSLATORS: computer will hibernate
 #: ../src/gpm-manager.c:1674

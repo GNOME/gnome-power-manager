@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-10 11:51+0200\n"
+"POT-Creation-Date: 2009-08-24 11:05+0100\n"
 "PO-Revision-Date: 2009-03-21 00:35+0100\n"
 "Last-Translator: Miloš Popović <gpopac@gmail.com>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -29,7 +29,7 @@ msgid "Adjusts laptop panel brightness."
 msgstr "Šteluje osvetljenost ekrana prenosnog uređaja."
 
 #: ../applets/brightness/brightness-applet.c:354
-#: ../applets/inhibit/inhibit-applet.c:348
+#: ../applets/inhibit/inhibit-applet.c:353
 msgid "Cannot connect to gnome-power-manager"
 msgstr "Ne mogu da se povežem na Gnomov upravnik potrošnje."
 
@@ -43,12 +43,12 @@ msgid "LCD brightness : %d%%"
 msgstr "Osvetljenost tankog ekrana : %d%%"
 
 #: ../applets/brightness/brightness-applet.c:747
-#: ../applets/inhibit/inhibit-applet.c:417 ../src/gpm-tray-icon.c:307
+#: ../applets/inhibit/inhibit-applet.c:422 ../src/gpm-tray-icon.c:316
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Objavljeno pod uslovima Opšte Javne Licence verzije 2"
 
 #: ../applets/brightness/brightness-applet.c:748
-#: ../applets/inhibit/inhibit-applet.c:418 ../src/gpm-tray-icon.c:308
+#: ../applets/inhibit/inhibit-applet.c:423 ../src/gpm-tray-icon.c:317
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -62,7 +62,7 @@ msgstr ""
 "bilo koje novije verzije."
 
 #: ../applets/brightness/brightness-applet.c:752
-#: ../applets/inhibit/inhibit-applet.c:422 ../src/gpm-tray-icon.c:312
+#: ../applets/inhibit/inhibit-applet.c:427 ../src/gpm-tray-icon.c:321
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -75,7 +75,7 @@ msgstr ""
 "NAMENI. Vidite GNU Opštu Javnu Licencu za više detalja."
 
 #: ../applets/brightness/brightness-applet.c:756
-#: ../applets/inhibit/inhibit-applet.c:426 ../src/gpm-tray-icon.c:316
+#: ../applets/inhibit/inhibit-applet.c:431 ../src/gpm-tray-icon.c:325
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -107,27 +107,27 @@ msgstr "Štelovanje osvetljenosti ekrana"
 msgid "Factory for Brightness Applet"
 msgstr "Programče za štelovanje osvetljenosti ekrana"
 
-#: ../applets/inhibit/inhibit-applet.c:88
+#: ../applets/inhibit/inhibit-applet.c:91
 msgid "Power Manager Inhibit Applet"
 msgstr "Programče za onemogućavanje uštede energije"
 
-#: ../applets/inhibit/inhibit-applet.c:89
+#: ../applets/inhibit/inhibit-applet.c:92
 msgid "Allows user to inhibit automatic power saving."
 msgstr "Dozvoljava korisnicima da onemoguće uštedu potrošnje energije."
 
-#: ../applets/inhibit/inhibit-applet.c:351
+#: ../applets/inhibit/inhibit-applet.c:356
 msgid "Automatic sleep inhibited"
 msgstr "Uspavljivanje je onemogućeno"
 
-#: ../applets/inhibit/inhibit-applet.c:353
+#: ../applets/inhibit/inhibit-applet.c:358
 msgid "Automatic sleep enabled"
 msgstr "Uspavljivanje je omogućeno"
 
-#: ../applets/inhibit/inhibit-applet.c:381
+#: ../applets/inhibit/inhibit-applet.c:386
 msgid "Manual inhibit"
 msgstr "Ručno onemogućavanje"
 
-#: ../applets/inhibit/inhibit-applet.c:440
+#: ../applets/inhibit/inhibit-applet.c:445
 msgid "Copyright © 2006-2007 Richard Hughes"
 msgstr "Sva prava zadržana, 2006-2007, Ričard Hjuz"
 
@@ -147,8 +147,7 @@ msgstr "Programče za onemogućavanje uštede"
 msgid "Inhibit Applet Factory"
 msgstr "Programče za onemogućavanje uštede"
 
-#. common descriptions of this program
-#: ../data/gnome-power-manager.desktop.in.in.h:1 ../src/gpm-common.h:43
+#: ../data/gnome-power-manager.desktop.in.in.h:1
 msgid "Power Manager"
 msgstr "Upravnik potrošnjom električne energije"
 
@@ -169,84 +168,65 @@ msgid "Battery critical low action"
 msgstr "Radnja kada je baterija skoro prazna"
 
 #: ../data/gnome-power-manager.schemas.in.h:4
-msgid "Change the brightness automatically using the ambient light sensors"
-msgstr "Sam promeni osvetljenost prema okolnom svetlu"
-
-#: ../data/gnome-power-manager.schemas.in.h:5
 msgid "Check CPU load before sleeping"
 msgstr "Proveri zaposlenost procesora pre uspavljivanja"
 
-#: ../data/gnome-power-manager.schemas.in.h:6
+#: ../data/gnome-power-manager.schemas.in.h:5
 msgid "Dim the screen after a period of inactivity when on AC power"
 msgstr ""
 "Zamagli ekran nakon nekog vremena neaktivnosti pri napajanju iz električne "
 "mreže"
 
-#: ../data/gnome-power-manager.schemas.in.h:7
+#: ../data/gnome-power-manager.schemas.in.h:6
 msgid "Dim the screen after a period of inactivity when on battery power"
 msgstr ""
 "Zamagli ekran nakon nekog vremena neaktivnosti pri napajalju iz baterije"
 
-#: ../data/gnome-power-manager.schemas.in.h:8
+#: ../data/gnome-power-manager.schemas.in.h:7
+#, fuzzy
 msgid ""
-"Display options for the notification icon. Valid options are \"never\", "
-"\"critical\", \"charge\", \"present\" and \"always\"."
+"Display options for the notification icon. Valid options are \"never\", \"low"
+"\", \"critical\", \"charge\", \"present\" and \"always\"."
 msgstr ""
-"Način pojavljivanja obaveštajne ikonice. Moguće vrednosti su „never“ (nikad), "
-"„critical“ (kada je kritično prazna), „charge“ (kada se puni), "
-"„present“ (kada se napaja iz električne mreže) i „always“ (uvek)."
+"Način pojavljivanja obaveštajne ikonice. Moguće vrednosti su "
+"„never“ (nikad), „critical“ (kada je kritično prazna), „charge“ (kada se "
+"puni), „present“ (kada se napaja iz električne mreže) i „always“ (uvek)."
 
-#: ../data/gnome-power-manager.schemas.in.h:9
+#: ../data/gnome-power-manager.schemas.in.h:8
 msgid "Hibernate button action"
 msgstr "Radnja koja se preduzima nakon pritiska na dugme za zamrzavanje"
 
-#: ../data/gnome-power-manager.schemas.in.h:10
+#: ../data/gnome-power-manager.schemas.in.h:9
 msgid "Hibernate enabled"
 msgstr "Zamrzavanje je omogućeno"
 
-#: ../data/gnome-power-manager.schemas.in.h:11
-msgid "If DBUS inhibit requests should be ignored from other programs."
-msgstr ""
-"Da li da ostali programi zanemare zahteve za onemogućavanje postavljene na "
-"DBUS magistralu."
-
-#: ../data/gnome-power-manager.schemas.in.h:12
-msgid "If DBUS inhibit requests should be ignored."
-msgstr "Zanemari zahteve za onemogućavanje postavljene na DBUS magistralu"
-
-#: ../data/gnome-power-manager.schemas.in.h:13
+#: ../data/gnome-power-manager.schemas.in.h:10
 msgid ""
 "If a notification message should be displayed after suspend or hibernate "
 "failed."
 msgstr "Obevesti korisnika prilikom neuspešnog obustavljanja ili zamrzavanja."
 
-#: ../data/gnome-power-manager.schemas.in.h:14
+#: ../data/gnome-power-manager.schemas.in.h:11
 msgid ""
 "If a notification message should be displayed when the battery is fully "
 "charged."
 msgstr "Obavesti korisnika kada je baterija dopunjena do kraja."
 
-#: ../data/gnome-power-manager.schemas.in.h:15
+#: ../data/gnome-power-manager.schemas.in.h:12
 msgid ""
 "If a notification message should be displayed when the battery is getting "
 "low."
 msgstr "Obavesti korisnika kada je baterija skoro prazna."
 
-#: ../data/gnome-power-manager.schemas.in.h:16
-msgid ""
-"If a notification message should be displayed when the profile data is "
-"guessed."
-msgstr "Obavesti korisnika o pravljenju procene profila potrošnje."
-
-#: ../data/gnome-power-manager.schemas.in.h:17
+#: ../data/gnome-power-manager.schemas.in.h:13
 msgid "If preferences should be shown"
 msgstr "Prikazuje postavke"
 
-#: ../data/gnome-power-manager.schemas.in.h:18
+#: ../data/gnome-power-manager.schemas.in.h:14
 msgid "If sounds should be used"
 msgstr "Koristi zvučno obaveštavanje"
 
-#: ../data/gnome-power-manager.schemas.in.h:19
+#: ../data/gnome-power-manager.schemas.in.h:15
 msgid ""
 "If sounds should be used when the power is critically low, or inhibit "
 "requests have stopped the policy action."
@@ -254,12 +234,12 @@ msgstr ""
 "Koristi zvučno obaveštavanje kada je baterija skoro prazna, ili kada su "
 "zahtevi za onemogućavanje zaustavili predviđenu radnju."
 
-#: ../data/gnome-power-manager.schemas.in.h:20
+#: ../data/gnome-power-manager.schemas.in.h:16
 msgid "If the CPU load should be checked before doing the idle action."
 msgstr ""
 "Proveri uposlenost procesora pre poziva radnje kada korisnik ništa ne radi."
 
-#: ../data/gnome-power-manager.schemas.in.h:21
+#: ../data/gnome-power-manager.schemas.in.h:17
 msgid ""
 "If the Suspend and Hibernate options should be allowed in the notification "
 "area drop down menu."
@@ -267,29 +247,30 @@ msgstr ""
 "Prikaži stavke za obustavljanje i zamrzavanje u padajućem meniju prostora za "
 "obaveštavanje."
 
-#: ../data/gnome-power-manager.schemas.in.h:22
+#: ../data/gnome-power-manager.schemas.in.h:18
 msgid ""
 "If the battery event should occur when the lid is shut and the power "
 "disconnected"
 msgstr ""
-"Pokreni baterijski događaj kada se poklopac zatvori i kabl za napajanje izvuče"
+"Pokreni baterijski događaj kada se poklopac zatvori i kabl za napajanje "
+"izvuče"
 
-#: ../data/gnome-power-manager.schemas.in.h:23
+#: ../data/gnome-power-manager.schemas.in.h:19
 msgid ""
 "If the battery lid close event should occur (for example 'Suspend when lid "
 "closed on battery') when the lid is previously shut and the AC power "
 "disconnected at a later time."
 msgstr ""
-"Reaguj pri zatvaranju poklopca (npr. obustavi) kada je poklopac prethodno bio "
-"zatvoren i isčupan kabl iz struje u vremenu nakon toga."
+"Reaguj pri zatvaranju poklopca (npr. obustavi) kada je poklopac prethodno "
+"bio zatvoren i isčupan kabl iz struje u vremenu nakon toga."
 
-#: ../data/gnome-power-manager.schemas.in.h:24
+#: ../data/gnome-power-manager.schemas.in.h:20
 msgid "If the learnt profile should be used to calculate the time remaining"
 msgstr ""
 "Koristi protekli profil potrošnje za proračun preostalog vremena trajanja "
 "baterije"
 
-#: ../data/gnome-power-manager.schemas.in.h:25
+#: ../data/gnome-power-manager.schemas.in.h:21
 msgid ""
 "If the learnt profile should be used to calculate the time remaining. Only "
 "turn this off for debugging."
@@ -297,45 +278,26 @@ msgstr ""
 "Koristi protekli profil potrošnje za proračun preostalog vremena trajanja "
 "baterije. Isključite ovo samo ako tražite greške u programu."
 
-#: ../data/gnome-power-manager.schemas.in.h:26
+#: ../data/gnome-power-manager.schemas.in.h:22
 msgid "If the low-power mode should be enabled when on AC"
-msgstr "Omogući režim niske potrošnje ako se računar napaja iz električne mreže"
+msgstr ""
+"Omogući režim niske potrošnje ako se računar napaja iz električne mreže"
 
-#: ../data/gnome-power-manager.schemas.in.h:27
-msgid "If the low-power mode should be enabled when on UPS"
-msgstr "Omogući režim niske potrošnje ako računar radi na rezervnom napajanju"
-
-#: ../data/gnome-power-manager.schemas.in.h:28
+#: ../data/gnome-power-manager.schemas.in.h:23
 msgid "If the low-power mode should be enabled when on battery"
 msgstr "Omogući režim niske potrošnje ako se računar napaja iz baterije"
 
-#: ../data/gnome-power-manager.schemas.in.h:29
+#: ../data/gnome-power-manager.schemas.in.h:24
+#, fuzzy
 msgid ""
-"If the screen brightness can be changed when switching between AC and "
-"battery power and by ambient light sensors."
+"If the screen brightness should be changed when switching between AC and "
+"battery power."
 msgstr ""
 "Promeni osvetljenje ekrana pri prelasku sa baterijskog na napajanje iz "
-"električne mreže i obrnuto, kao i prema očitavanju senzora za merenje okolnog "
-"svetla."
+"električne mreže i obrnuto, kao i prema očitavanju senzora za merenje "
+"okolnog svetla."
 
-#: ../data/gnome-power-manager.schemas.in.h:30
-msgid ""
-"If the screen brightness should be changed automatically using the ambient "
-"light sensors."
-msgstr ""
-"Prilagodi osvetljenje ekrana u zavisnosti od očitavanja senzora okolnog "
-"osvetljenja."
-
-#: ../data/gnome-power-manager.schemas.in.h:31
-msgid ""
-"If the screen brightness should be changed automatically using the ambient "
-"light sensors. Valid is 'none', 'light' and 'dark'"
-msgstr ""
-"Sam prilagodi osvetljenje ekrana u zavisnosti od očitavanja senzora okolnog "
-"osvetljenja. Ispravne opcije su „none“ (ništa), „light“ (svetlo) i "
-"„dark“ (tamno)"
-
-#: ../data/gnome-power-manager.schemas.in.h:32
+#: ../data/gnome-power-manager.schemas.in.h:25
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on AC power."
@@ -343,7 +305,7 @@ msgstr ""
 "Zamagli ekran, radi uštede energije, kada se računar ne koristi a napajanje "
 "se obezbeđuje iz električne mreže."
 
-#: ../data/gnome-power-manager.schemas.in.h:33
+#: ../data/gnome-power-manager.schemas.in.h:26
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on battery power."
@@ -351,7 +313,7 @@ msgstr ""
 "Zamagli ekran, radi uštede energije, kada se računar ne koristi a napajanje "
 "se obezbeđuje iz baterija."
 
-#: ../data/gnome-power-manager.schemas.in.h:34
+#: ../data/gnome-power-manager.schemas.in.h:27
 msgid ""
 "If the screen should be reduced in brightness when the computer is on "
 "battery power."
@@ -359,34 +321,30 @@ msgstr ""
 "Zamagljivanje ekrana, radi uštede energije, kada se računar ne koristi a "
 "napajanje se obezbeđuje iz baterija."
 
-#: ../data/gnome-power-manager.schemas.in.h:35
+#: ../data/gnome-power-manager.schemas.in.h:28
 msgid "If the system low-power mode should be enabled when on AC power."
 msgstr ""
 "Uključi režim niske potrošnje ako se ostvaruje napajanje iz električne mreže"
 
-#: ../data/gnome-power-manager.schemas.in.h:36
-msgid "If the system low-power mode should be enabled when on UPS power."
-msgstr "Uključi režim niske potrošnje ako se koristi rezervno napajanje"
-
-#: ../data/gnome-power-manager.schemas.in.h:37
+#: ../data/gnome-power-manager.schemas.in.h:29
 msgid ""
 "If the system low-power mode should be enabled when on laptop battery power."
 msgstr "Uključi režim niske potrošnje ako se koristi baterijsko napajanje"
 
-#: ../data/gnome-power-manager.schemas.in.h:38
+#: ../data/gnome-power-manager.schemas.in.h:30
 msgid "If the user is authorized to hibernate the computer."
 msgstr "Daj oblašćenja korisniku da zamrzne računar."
 
-#: ../data/gnome-power-manager.schemas.in.h:39
+#: ../data/gnome-power-manager.schemas.in.h:31
 msgid "If the user is authorized to suspend the computer."
 msgstr "Daj ovlašćenjakorisniku da obustavi rad računara."
 
-#: ../data/gnome-power-manager.schemas.in.h:40
+#: ../data/gnome-power-manager.schemas.in.h:32
 msgid "If the user should be notified when the AC adapter is disconnected."
 msgstr ""
 "Obavesti korisnika kada se ukloni kabl za napajanje iz električne mreže."
 
-#: ../data/gnome-power-manager.schemas.in.h:41
+#: ../data/gnome-power-manager.schemas.in.h:33
 msgid ""
 "If time based notifications should be used. If set to false, then the "
 "percentage change is used instead, which may fix a broken ACPI BIOS."
@@ -395,21 +353,23 @@ msgstr ""
 "(netačno), tada se prati procentualno stanje, što ponekad popravlja netačan "
 "ACPI/BIOS odziv."
 
-#: ../data/gnome-power-manager.schemas.in.h:42
+#: ../data/gnome-power-manager.schemas.in.h:34
 msgid "If we should show the low capacity warning for a broken battery"
 msgstr ""
-"Prikaži upozorenje o ispražnjenoj bateriji i kada joj se stanje ne može očitati"
+"Prikaži upozorenje o ispražnjenoj bateriji i kada joj se stanje ne može "
+"očitati"
 
-#: ../data/gnome-power-manager.schemas.in.h:43
+#: ../data/gnome-power-manager.schemas.in.h:35
 msgid "If we should show the low capacity warning for a broken battery."
 msgstr ""
-"Prikaži upozorenje o ispražnjenoj bateriji i kada joj se stanje ne može očitati"
+"Prikaži upozorenje o ispražnjenoj bateriji i kada joj se stanje ne može "
+"očitati"
 
-#: ../data/gnome-power-manager.schemas.in.h:44
+#: ../data/gnome-power-manager.schemas.in.h:36
 msgid "If we should show the recalled battery warning for a broken battery"
 msgstr "Ponavljaj upozorenje o bateriji i kada joj se stanje ne može očitati"
 
-#: ../data/gnome-power-manager.schemas.in.h:45
+#: ../data/gnome-power-manager.schemas.in.h:37
 msgid ""
 "If we should show the recalled battery warning for a broken battery. Set "
 "this to false only if you know your battery is okay."
@@ -418,160 +378,159 @@ msgstr ""
 "očitati. Postavite ovu vrednost na false (netačno) samo ako znate da je vaša "
 "baterija ispravna."
 
-#: ../data/gnome-power-manager.schemas.in.h:46
-msgid ""
-"If we should show the warning when we have a valid inhibit and configured to "
-"sleep on lid close"
-msgstr ""
-"Prikaži upozorenje kada je pokrenuto onemogućavanje uštede i podešavanja za "
-"uspavljivanje pri zatvaranju poklopca"
-
-#: ../data/gnome-power-manager.schemas.in.h:47
-msgid ""
-"If we should show the warning when we have a valid inhibit and configured to "
-"sleep on lid close."
-msgstr ""
-"Prikaži upozorenje kada je pokrenuto onemogućavanje uštede i podešavanja za "
-"uspavljivanje pri zatvaranju poklopca"
-
-#: ../data/gnome-power-manager.schemas.in.h:48
-msgid "Keyboard brightness when on AC"
-msgstr "Vrednost osvetljenja tastature pri napajanju iz električne mreže"
-
-#: ../data/gnome-power-manager.schemas.in.h:49
-msgid "Keyboard brightness when on battery"
-msgstr "Vrednost osvetljenja tastature pri baterijskom napajanju"
-
-#: ../data/gnome-power-manager.schemas.in.h:50
+#: ../data/gnome-power-manager.schemas.in.h:38
 msgid "LCD brightness when on AC"
 msgstr "Vrednost osvetljenja tankog ekrana pri napajanju iz električne mreže"
 
-#: ../data/gnome-power-manager.schemas.in.h:51
+#: ../data/gnome-power-manager.schemas.in.h:39
 msgid "LCD dimming amount when on battery"
 msgstr "Zamagljenje tankog ekrana pri baterijskom napajanju"
 
-#: ../data/gnome-power-manager.schemas.in.h:52
+#: ../data/gnome-power-manager.schemas.in.h:40
 msgid "Laptop lid close action on battery"
 msgstr ""
 "Radnja koja se obavlja kada se poklopac prenosnog računara zatvori pri "
 "baterijskom napajanju"
 
-#: ../data/gnome-power-manager.schemas.in.h:53
+#: ../data/gnome-power-manager.schemas.in.h:41
 msgid "Laptop lid close action when on AC"
 msgstr ""
 "Radnja koja se obavlja kada se poklopac prenosnog računara zatvori pri "
 "napajanju iz električne mreže "
 
-#: ../data/gnome-power-manager.schemas.in.h:54
+#: ../data/gnome-power-manager.schemas.in.h:42
 msgid "Lock GNOME keyring on sleep"
 msgstr "Zaključava Gnomov privezak za ključeve pri uspavljivanju"
 
-#: ../data/gnome-power-manager.schemas.in.h:55
+#: ../data/gnome-power-manager.schemas.in.h:43
 msgid "Lock screen on hibernate"
 msgstr "Zaključava ekran kada korisnik zamrzne računar"
 
-#: ../data/gnome-power-manager.schemas.in.h:56
+#: ../data/gnome-power-manager.schemas.in.h:44
 msgid "Lock screen on suspend"
 msgstr "Zaključava ekran kada korisnik obustavi rad računara"
 
-#: ../data/gnome-power-manager.schemas.in.h:57
+#: ../data/gnome-power-manager.schemas.in.h:45
 msgid "Lock screen when blanked"
 msgstr "Zaključava ekran kada korisnik zatamni ekran"
 
-#: ../data/gnome-power-manager.schemas.in.h:58
+#: ../data/gnome-power-manager.schemas.in.h:46
 msgid "Method used to blank screen on AC"
 msgstr "Metod za zatamnjenje ekrana kada je napajanje iz električne mreže"
 
-#: ../data/gnome-power-manager.schemas.in.h:59
+#: ../data/gnome-power-manager.schemas.in.h:47
 msgid "Method used to blank screen on battery"
 msgstr "Metod za zatamnjenje ekrana kada je napajanje baterijsko"
 
-#: ../data/gnome-power-manager.schemas.in.h:60
+#: ../data/gnome-power-manager.schemas.in.h:48
 msgid "Notify on a low power"
 msgstr "Obavesti ako je baterija prazna"
 
-#: ../data/gnome-power-manager.schemas.in.h:61
+#: ../data/gnome-power-manager.schemas.in.h:49
 msgid "Notify on a sleep failure"
 msgstr "Obavesti pri neuspelom uspavljivanju"
 
-#: ../data/gnome-power-manager.schemas.in.h:62
+#: ../data/gnome-power-manager.schemas.in.h:50
 msgid "Notify when AC adapter is disconnected"
 msgstr "Obavesti pri gubitku napajanja iz električne mreže"
 
-#: ../data/gnome-power-manager.schemas.in.h:63
+#: ../data/gnome-power-manager.schemas.in.h:51
 msgid "Notify when fully charged"
 msgstr "Obavesti kada je baterija napunjena do kraja"
 
-#: ../data/gnome-power-manager.schemas.in.h:64
-msgid "Notify when the profile data is guessed"
-msgstr "Obavesti kada se procenjuje profil potrošnje"
-
-#: ../data/gnome-power-manager.schemas.in.h:65
+#: ../data/gnome-power-manager.schemas.in.h:52
 msgid "Percentage action is taken"
 msgstr "Radnja vezana za procenat napunjenosti je sprovedena"
 
-#: ../data/gnome-power-manager.schemas.in.h:66
+#: ../data/gnome-power-manager.schemas.in.h:53
 msgid "Percentage considered critical"
 msgstr "Procenat koji se smatra kritičnim"
 
-#: ../data/gnome-power-manager.schemas.in.h:67
+#: ../data/gnome-power-manager.schemas.in.h:54
 msgid "Percentage considered low"
 msgstr "Procenat koji se smatra niskim"
 
-#: ../data/gnome-power-manager.schemas.in.h:68
+#: ../data/gnome-power-manager.schemas.in.h:55
 msgid "Power button action"
 msgstr ""
 "Radnja koja se preduzima nakon pritiska na dugme za paljenje/gašenje računara"
 
-#: ../data/gnome-power-manager.schemas.in.h:69
+#: ../data/gnome-power-manager.schemas.in.h:56
 msgid "Reduce the backlight brightness when on battery power"
 msgstr "Smanjuje pozadinsko osvetljenje pri baterijskom napajanju"
 
-#: ../data/gnome-power-manager.schemas.in.h:70
+#: ../data/gnome-power-manager.schemas.in.h:57
+msgid "Seconds of inactivity to spin down when on AC"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:58
+msgid "Seconds of inactivity to spin down when on battery"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:59
 msgid "Sleep timeout computer when on AC"
 msgstr ""
-"Vreme za uspavljivanje računara kada se ostvaruje napajanje iz električne mreže"
+"Vreme za uspavljivanje računara kada se ostvaruje napajanje iz električne "
+"mreže"
 
-#: ../data/gnome-power-manager.schemas.in.h:71
+#: ../data/gnome-power-manager.schemas.in.h:60
+#, fuzzy
+msgid "Sleep timeout computer when on UPS"
+msgstr ""
+"Vreme za uspavljivanje računara kada se ostvaruje napajanje iz električne "
+"mreže"
+
+#: ../data/gnome-power-manager.schemas.in.h:61
 msgid "Sleep timeout computer when on battery"
-msgstr "Vreme za uspavljivanje računara kada se ostvaruje napajanje iz baterija"
+msgstr ""
+"Vreme za uspavljivanje računara kada se ostvaruje napajanje iz baterija"
 
-#: ../data/gnome-power-manager.schemas.in.h:72
+#: ../data/gnome-power-manager.schemas.in.h:62
 msgid "Sleep timeout display when on AC"
 msgstr ""
 "Vreme za uspavljivanje ekrana kada se ostvaruje napajanje iz električne mreže"
 
-#: ../data/gnome-power-manager.schemas.in.h:73
+#: ../data/gnome-power-manager.schemas.in.h:63
+#, fuzzy
+msgid "Sleep timeout display when on UPS"
+msgstr ""
+"Vreme za uspavljivanje ekrana kada se ostvaruje napajanje iz električne mreže"
+
+#: ../data/gnome-power-manager.schemas.in.h:64
 msgid "Sleep timeout display when on battery"
 msgstr "Vreme za uspavljivanje ekrana kada se ostvaruje napajanje iz baterija"
 
-#: ../data/gnome-power-manager.schemas.in.h:74
+#: ../data/gnome-power-manager.schemas.in.h:65
 msgid "Suspend button action"
 msgstr "Naredba dugmeta za obustavljanje"
 
-#: ../data/gnome-power-manager.schemas.in.h:75
+#: ../data/gnome-power-manager.schemas.in.h:66
 msgid "Suspend enabled"
 msgstr "Obustavljanje je omogućeno"
 
-#: ../data/gnome-power-manager.schemas.in.h:76
+#: ../data/gnome-power-manager.schemas.in.h:67
 msgid ""
 "The DPMS method used to blank the screen when on AC power. Possible values "
 "are \"standby\", \"suspend\" and \"off\"."
 msgstr ""
 "DPMS metod koji se koristi za zatamnjenje ekrana pri napajanju iz električne "
-"mreže. Moguće vrednosti su „standby“ (u pripravnosti), „suspend“ (obustavljeno) "
-"i „off (ugašeno)."
+"mreže. Moguće vrednosti su „standby“ (u pripravnosti), "
+"„suspend“ (obustavljeno) i „off (ugašeno)."
 
-#: ../data/gnome-power-manager.schemas.in.h:77
+#: ../data/gnome-power-manager.schemas.in.h:68
 msgid ""
 "The DPMS method used to blank the screen when on battery power. Possible "
 "values are \"standby\", \"suspend\" and \"off\"."
 msgstr ""
 "DPMS metod koji se koristi za zatamnjenje ekrana pri baterijskom napajanju. "
-"Moguće vrednosti su „standby“ (u pripravnosti), "
-"„suspend“ (obustavljeno) i „off“ (ugašeno)."
+"Moguće vrednosti su „standby“ (u pripravnosti), „suspend“ (obustavljeno) i "
+"„off“ (ugašeno)."
 
-#: ../data/gnome-power-manager.schemas.in.h:78
+#: ../data/gnome-power-manager.schemas.in.h:69
+msgid "The URI to show to the user on sleep failure"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:70
 msgid ""
 "The action to take when the UPS is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
@@ -580,7 +539,7 @@ msgstr ""
 "vrednosti su „hibernate“ (zamrzni), „suspend“ (obustavi), „shutdown“ (ugasi "
 "računar) i „nothing“ (ne radi ništa)."
 
-#: ../data/gnome-power-manager.schemas.in.h:79
+#: ../data/gnome-power-manager.schemas.in.h:71
 msgid ""
 "The action to take when the UPS is low. Possible values are \"hibernate\", "
 "\"suspend\", \"shutdown\" and \"nothing\"."
@@ -589,7 +548,7 @@ msgstr ""
 "vrednosti su „hibernate“ (zamrzni), „suspend“, (obustavi), „shutdown“ (ugasi "
 "računar) i „nothing“ (ne radi ništa)."
 
-#: ../data/gnome-power-manager.schemas.in.h:80
+#: ../data/gnome-power-manager.schemas.in.h:72
 msgid ""
 "The action to take when the battery is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
@@ -598,7 +557,7 @@ msgstr ""
 "vrednosti su „hibernate“ (zamrzni), „suspend“ (obustavi), „shutdown“ (ugasi "
 "računar) i „nothing“ (ne radi ništa)."
 
-#: ../data/gnome-power-manager.schemas.in.h:81
+#: ../data/gnome-power-manager.schemas.in.h:73
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on AC "
 "power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
@@ -608,7 +567,7 @@ msgstr ""
 "se on napaja iz električne mreže. Moguće vrednosti su „hibernate“ zamrzni, "
 "„suspend“ (obustavi), „blank“ (ugasi ekran) i „nothing“ (ne radi ništa)."
 
-#: ../data/gnome-power-manager.schemas.in.h:82
+#: ../data/gnome-power-manager.schemas.in.h:74
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on "
 "battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
@@ -618,7 +577,7 @@ msgstr ""
 "se on napaja iz baterije. Moguće vrednosti su „hibernate“ (zamrzni), "
 "„suspend“ (obustavi), „blank“ (ugasi ekran) i „nothing“ (ne radi ništa)."
 
-#: ../data/gnome-power-manager.schemas.in.h:83
+#: ../data/gnome-power-manager.schemas.in.h:75
 msgid ""
 "The action to take when the system hibernate button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
@@ -628,17 +587,17 @@ msgstr ""
 "Moguće vrednosti su „suspend“ (obustavi), „hibernate“ (zamrzni), "
 "„interactive“ (pitaj), „shutdown“ (ugasi računar) i „nothing“ ne radi ništa."
 
-#: ../data/gnome-power-manager.schemas.in.h:84
+#: ../data/gnome-power-manager.schemas.in.h:76
 msgid ""
 "The action to take when the system power button is pressed. Possible values "
 "are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
 "\"."
 msgstr ""
-"Radnja koja se obavlja kada se pritisne na dugme za paljenje/gašenje računara. "
-"Moguće vrednosti su „suspend“ (obustavi), „hibernate“ (zamrzni), "
+"Radnja koja se obavlja kada se pritisne na dugme za paljenje/gašenje "
+"računara. Moguće vrednosti su „suspend“ (obustavi), „hibernate“ (zamrzni), "
 "„interactive“ (pitaj), „shutdown“ (ugasi računar) i „nothing“ ne radi ništa."
 
-#: ../data/gnome-power-manager.schemas.in.h:85
+#: ../data/gnome-power-manager.schemas.in.h:77
 msgid ""
 "The action to take when the system suspend button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
@@ -649,7 +608,7 @@ msgstr ""
 "„hibernate“ (zamrzni), „interactive“ (pitaj), „shutdown“ (ugasi) i "
 "„nothing“ (ne radi ništa)."
 
-#: ../data/gnome-power-manager.schemas.in.h:86
+#: ../data/gnome-power-manager.schemas.in.h:78
 msgid ""
 "The amount of time in seconds before the display goes to sleep when the "
 "computer is on AC power."
@@ -657,7 +616,7 @@ msgstr ""
 "Vreme neaktivnosti u sekundama pre uspavljivanja ekrana kada je "
 "računarpriključen na električnu mrežu."
 
-#: ../data/gnome-power-manager.schemas.in.h:87
+#: ../data/gnome-power-manager.schemas.in.h:79
 msgid ""
 "The amount of time in seconds the computer on AC power needs to be inactive "
 "before it goes to sleep."
@@ -665,43 +624,49 @@ msgstr ""
 "Vreme u sekundama za koje računar priključen na električnu mrežu treba da ne "
 "bude korišćen pre pokušaja uspavljivanja."
 
-#: ../data/gnome-power-manager.schemas.in.h:88
+#: ../data/gnome-power-manager.schemas.in.h:80
+#, fuzzy
+msgid ""
+"The amount of time in seconds the computer on UPS power needs to be inactive "
+"before it goes to sleep."
+msgstr ""
+"Vreme u sekundama za koje računar priključen na električnu mrežu treba da ne "
+"bude korišćen pre pokušaja uspavljivanja."
+
+#: ../data/gnome-power-manager.schemas.in.h:81
+#, fuzzy
+msgid ""
+"The amount of time in seconds the computer on UPS power needs to be inactive "
+"before the display goes to sleep."
+msgstr ""
+"Vreme u sekundama za koje računar priključen na baterijsko napajanje treba "
+"da ne bude korišćen pre pokušaja uspavljivanja ekrana."
+
+#: ../data/gnome-power-manager.schemas.in.h:82
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before it goes to sleep."
 msgstr ""
-"Vreme u sekundama za koje računar priključen na baterijsko napajanje treba da "
-"ne bude korišćen pre pokušaja uspavljivanja."
+"Vreme u sekundama za koje računar priključen na baterijsko napajanje treba "
+"da ne bude korišćen pre pokušaja uspavljivanja."
 
-#: ../data/gnome-power-manager.schemas.in.h:89
+#: ../data/gnome-power-manager.schemas.in.h:83
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before the display goes to sleep."
 msgstr ""
-"Vreme u sekundama za koje računar priključen na baterijsko napajanje treba da "
-"ne bude korišćen pre pokušaja uspavljivanja ekrana."
+"Vreme u sekundama za koje računar priključen na baterijsko napajanje treba "
+"da ne bude korišćen pre pokušaja uspavljivanja ekrana."
 
-#: ../data/gnome-power-manager.schemas.in.h:90
-msgid "The amount the light sensors should contribute to the brightness"
-msgstr ""
-"Količina svetlosti pri kojoj će senzori okolnog osvetljenja povećati "
-"osvetljenost"
-
-#: ../data/gnome-power-manager.schemas.in.h:91
-msgid "The amount the light sensors should contribute to the brightness."
-msgstr ""
-"Količina svetlosti pri kojoj će senzori okolnog osvetljenja povećati "
-"osvetljenost."
-
-#: ../data/gnome-power-manager.schemas.in.h:92
+#: ../data/gnome-power-manager.schemas.in.h:84
 msgid ""
 "The amount to dim the brightness of the display when on battery power. "
 "Possible values are between 0 and 100."
 msgstr ""
-"Zamagljenost ekrana kada se računar napaja iz baterije. Moguće vrednosti leže "
-"su između 0 i 100."
+"Zamagljenost ekrana kada se računar napaja iz baterije. Moguće vrednosti "
+"leže su između 0 i 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:93
+#: ../data/gnome-power-manager.schemas.in.h:85
 msgid ""
 "The brightness of the display when on AC power. Possible values are between "
 "0 and 100."
@@ -709,77 +674,55 @@ msgstr ""
 "Osvetljenost ekrana kada se računar napraja iz električne mreže. Moguće "
 "vrednosti su između 0 i 100"
 
-#: ../data/gnome-power-manager.schemas.in.h:94
-msgid ""
-"The brightness of the keyboard when on AC power. Possible values are between "
-"0 and 100."
-msgstr ""
-"Osvetljenost tastature kada se računar napaja iz električne mreže. Moguće "
-"vrednosti su između 0 i 100."
-
-#: ../data/gnome-power-manager.schemas.in.h:95
-msgid ""
-"The brightness of the keyboard when on battery power. Possible values are "
-"between 0 and 100."
-msgstr ""
-"Osvetljenost tastature kada se računar napaja iz baterija. Moguće vrednosti "
-"su između 0 i 100"
-
-#: ../data/gnome-power-manager.schemas.in.h:96
+#: ../data/gnome-power-manager.schemas.in.h:86
 msgid "The brightness of the screen when idle"
 msgstr "Osvetljenost ekrana ako korisnik ništa ne radi"
 
-#: ../data/gnome-power-manager.schemas.in.h:97
-msgid ""
-"The calibration of the light sensors so that the screen is bright enough"
-msgstr ""
-"Štelovanja senzora spoljnog osvetljenja radi nalaženja prave osvetljenosti ekrana"
-
-#: ../data/gnome-power-manager.schemas.in.h:98
-msgid ""
-"The calibration of the light sensors so that the screen is bright enough, in "
-"percent."
-msgstr ""
-"Štelovanja senzora spoljnog osvetljenja radi nalaženja prave osvetljenosti ekrana, "
-"u procentima"
-
-#: ../data/gnome-power-manager.schemas.in.h:99
+#: ../data/gnome-power-manager.schemas.in.h:87
 msgid "The default amount of time to dim the screen after idle"
 msgstr "Vreme neaktivnosti pre nego što zamaglim ekran"
 
-#: ../data/gnome-power-manager.schemas.in.h:100
+#: ../data/gnome-power-manager.schemas.in.h:88
 msgid "The default amount of time to dim the screen after idle."
 msgstr "Vreme neaktivnosti pre nego što zamaglim ekran."
 
-#: ../data/gnome-power-manager.schemas.in.h:101
+#: ../data/gnome-power-manager.schemas.in.h:89
 msgid "The default configuration version."
 msgstr "Podrazumevana verzija postavki."
 
-#: ../data/gnome-power-manager.schemas.in.h:102
+#: ../data/gnome-power-manager.schemas.in.h:90
 msgid "The default graph type to show in the statistics window"
 msgstr "Podrazumevani tip grafika koji se prikazuje u prozoru za statistiku"
 
-#: ../data/gnome-power-manager.schemas.in.h:103
+#: ../data/gnome-power-manager.schemas.in.h:91
 msgid "The default graph type to show in the statistics window."
 msgstr "Podrazumevani tip grafika koji se prikazuje u prozoru za statistiku."
 
-#: ../data/gnome-power-manager.schemas.in.h:104
-msgid "The interval the ambient light sensors should be polled"
-msgstr "Interval poziva senzora okolne svetlosti"
-
-#: ../data/gnome-power-manager.schemas.in.h:105
-msgid "The interval the ambient light sensors should be polled in seconds."
-msgstr "Interval poziva senzora za merenje okolne svetlosti u sekundama."
-
-#: ../data/gnome-power-manager.schemas.in.h:106
+#: ../data/gnome-power-manager.schemas.in.h:92
 msgid "The maximum duration of time displayed on the x-axis of the graph."
 msgstr "Maksimalni vremenski podeok prikazan na apscisi grafika."
 
-#: ../data/gnome-power-manager.schemas.in.h:107
+#: ../data/gnome-power-manager.schemas.in.h:93
 msgid "The maximum time displayed on the graph"
 msgstr "Maksimalni vremenski podeok prikazan na grafiku"
 
-#: ../data/gnome-power-manager.schemas.in.h:108
+#: ../data/gnome-power-manager.schemas.in.h:94
+#, fuzzy
+msgid ""
+"The number of seconds of inactivity to spin down the disks when on AC power."
+msgstr ""
+"Zamagli ekran nakon nekog vremena neaktivnosti pri napajanju iz električne "
+"mreže"
+
+#: ../data/gnome-power-manager.schemas.in.h:95
+#, fuzzy
+msgid ""
+"The number of seconds of inactivity to spin down the disks when on battery "
+"power."
+msgstr ""
+"Zamagli ekran nakon nekog vremena neaktivnosti pri napajalju iz baterije"
+
+#: ../data/gnome-power-manager.schemas.in.h:96
 msgid ""
 "The percentage of the battery when it is considered critical. Only valid "
 "when use_time_for_policy is false."
@@ -788,7 +731,7 @@ msgstr ""
 "Ova vrednost se koristi samo ako je use_time_for_policy (koristi vreme za "
 "pravilo) isključen."
 
-#: ../data/gnome-power-manager.schemas.in.h:109
+#: ../data/gnome-power-manager.schemas.in.h:97
 msgid ""
 "The percentage of the battery when it is considered low. Only valid when "
 "use_time_for_policy is false."
@@ -797,16 +740,16 @@ msgstr ""
 "vrednost se koristi samo ako je use_time_for_policy (koristi vreme za "
 "pravilo) isključen."
 
-#: ../data/gnome-power-manager.schemas.in.h:110
+#: ../data/gnome-power-manager.schemas.in.h:98
 msgid ""
 "The percentage of the battery when the critical action is performed. Only "
 "valid when use_time_for_policy is false."
 msgstr ""
-"Procenat napunjenosti baterije nakon koga se izvršava radnja kritičnog stanja. "
-"Ova vrednost se koristi samo ako je use_time_for_policy (koristi vreme za "
-"pravilo) isključen."
+"Procenat napunjenosti baterije nakon koga se izvršava radnja kritičnog "
+"stanja. Ova vrednost se koristi samo ako je use_time_for_policy (koristi "
+"vreme za pravilo) isključen."
 
-#: ../data/gnome-power-manager.schemas.in.h:111
+#: ../data/gnome-power-manager.schemas.in.h:99
 msgid ""
 "The time remaining in seconds of the battery when critical action is taken. "
 "Only valid when use_time_for_policy is true."
@@ -815,7 +758,7 @@ msgstr ""
 "kritičnog stanja. Ova vrednost se koristi samo ako je use_time_for_policy "
 "(koristi vreme za pravilo) uključen."
 
-#: ../data/gnome-power-manager.schemas.in.h:112
+#: ../data/gnome-power-manager.schemas.in.h:100
 msgid ""
 "The time remaining in seconds of the battery when it is considered critical. "
 "Only valid when use_time_for_policy is true."
@@ -824,7 +767,7 @@ msgstr ""
 "praznom. Ova vrednost se koristi samo ako je use_time_for_policy (koristi "
 "vreme za pravilo) uključen."
 
-#: ../data/gnome-power-manager.schemas.in.h:113
+#: ../data/gnome-power-manager.schemas.in.h:101
 msgid ""
 "The time remaining in seconds of the battery when it is considered low. Only "
 "valid when use_time_for_policy is true."
@@ -833,19 +776,19 @@ msgstr ""
 "praznom. Ova vrednost se koristi samo ako je use_time_for_policy (koristi "
 "vreme za pravilo) uključen."
 
-#: ../data/gnome-power-manager.schemas.in.h:114
+#: ../data/gnome-power-manager.schemas.in.h:102
 msgid "The time remaining when action is taken"
 msgstr "Vreme nakon koga se preduzima radnja"
 
-#: ../data/gnome-power-manager.schemas.in.h:115
+#: ../data/gnome-power-manager.schemas.in.h:103
 msgid "The time remaining when critical"
 msgstr "Vreme nakon koga je baterija kritično prazna"
 
-#: ../data/gnome-power-manager.schemas.in.h:116
+#: ../data/gnome-power-manager.schemas.in.h:104
 msgid "The time remaining when low"
 msgstr "Vreme nakon koga je baterija skoro prazna"
 
-#: ../data/gnome-power-manager.schemas.in.h:117
+#: ../data/gnome-power-manager.schemas.in.h:105
 msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
 "Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
@@ -854,7 +797,7 @@ msgstr ""
 "vrednosti su „hibernate“ (zamrzni), „suspend“ (obustavi) i „nothing“ (ne "
 "radi ništa)."
 
-#: ../data/gnome-power-manager.schemas.in.h:118
+#: ../data/gnome-power-manager.schemas.in.h:106
 msgid ""
 "The version of the installed version of the schema. Do not edit this value, "
 "it is used so that configure changes between versions can be detected."
@@ -862,7 +805,7 @@ msgstr ""
 "Ova verzija instalirane verzije šeme. Ne menjajte ovu vrednost, ona se "
 "koristi za otkrivanje promena podešavanja pri promeni verzije programa."
 
-#: ../data/gnome-power-manager.schemas.in.h:119
+#: ../data/gnome-power-manager.schemas.in.h:107
 msgid ""
 "This is the laptop panel screen brightness used when the session is idle. "
 "Only valid when use_time_for_policy is true."
@@ -871,83 +814,89 @@ msgstr ""
 "računar ne koristi a uključen je. Ova vrednost se koristi jedino ako je "
 "use_time_for_policy (koristi vreme za pravilo) uključen."
 
-#: ../data/gnome-power-manager.schemas.in.h:120
+#: ../data/gnome-power-manager.schemas.in.h:108
 msgid "UPS critical low action"
 msgstr "Radnja kada je rezervno napajanje kritično prazno"
 
-#: ../data/gnome-power-manager.schemas.in.h:121
+#: ../data/gnome-power-manager.schemas.in.h:109
 msgid "UPS low power action"
 msgstr "Radnja kada je rezervno napajanje skoro prazno"
 
-#: ../data/gnome-power-manager.schemas.in.h:122
+#: ../data/gnome-power-manager.schemas.in.h:110
 msgid "Use gnome-screensaver lock setting"
 msgstr "Koristi podešavanja zaključavanja Čuvara ekrana"
 
-#: ../data/gnome-power-manager.schemas.in.h:123
+#: ../data/gnome-power-manager.schemas.in.h:111
+msgid ""
+"When sleep fails we can show the user a button to help fix the situation. "
+"Leave this blank if the button should not be shown."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:112
 msgid "When to show the notification icon"
 msgstr "Kada da prikažem obaveštajnu ikonicu"
 
-#: ../data/gnome-power-manager.schemas.in.h:124
+#: ../data/gnome-power-manager.schemas.in.h:113
 msgid "Whether NetworkManager should be connected and disconnected on sleep."
 msgstr "Poveži/otkačit Otpravnika Mreže prilikom uspavljivanja računara."
 
-#: ../data/gnome-power-manager.schemas.in.h:125
+#: ../data/gnome-power-manager.schemas.in.h:114
 msgid ""
 "Whether NetworkManager should disconnect before suspending or hibernating "
 "and connect on resume."
 msgstr ""
-"Da li Otpravnik Mreže treba da prekine vezu pre obustavljanja ili zamrzavanja i "
-"uspostavi vezu nakon povratka."
+"Da li Otpravnik Mreže treba da prekine vezu pre obustavljanja ili "
+"zamrzavanja i uspostavi vezu nakon povratka."
 
-#: ../data/gnome-power-manager.schemas.in.h:126
+#: ../data/gnome-power-manager.schemas.in.h:115
 msgid ""
 "Whether the GNOME keyring is locked before the computer enters hibernate. "
 "This means the keyring will have to be unlocked on resume."
 msgstr ""
-"Zaključaj Gnomov privezak za ključeve pre nego što zamrzneš računar. Ovo znači "
-"da ćete morati da otključate priveske nakon odmrzavanja."
+"Zaključaj Gnomov privezak za ključeve pre nego što zamrzneš računar. Ovo "
+"znači da ćete morati da otključate priveske nakon odmrzavanja."
 
-#: ../data/gnome-power-manager.schemas.in.h:127
+#: ../data/gnome-power-manager.schemas.in.h:116
 msgid ""
 "Whether the GNOME keyring is locked before the computer enters suspend. This "
 "means the keyring will have to be unlocked on resume."
 msgstr ""
-"Zaključaj Gnomov privezak za ključeve pre nego što obustaviš rad računara. Ovo "
-"znači da ćete morati da otključate priveske nakon povratka iz stanja "
+"Zaključaj Gnomov privezak za ključeve pre nego što obustaviš rad računara. "
+"Ovo znači da ćete morati da otključate priveske nakon povratka iz stanja "
 "pripravnosti."
 
-#: ../data/gnome-power-manager.schemas.in.h:128
+#: ../data/gnome-power-manager.schemas.in.h:117
 msgid ""
 "Whether the screen is locked when the computer wakes up from a hibernate. "
 "Only used if lock_use_screensaver_settings is false."
 msgstr ""
 "Zaključaj ekran kada se računar probudi iz zamrznutog stanja. Jedino se "
-"koristi ako je lock_use_screensaver_settings (zaključaj korišćenje postastavki "
-"čuvara ekrana) isključen."
+"koristi ako je lock_use_screensaver_settings (zaključaj korišćenje "
+"postastavki čuvara ekrana) isključen."
 
-#: ../data/gnome-power-manager.schemas.in.h:129
+#: ../data/gnome-power-manager.schemas.in.h:118
 msgid ""
 "Whether the screen is locked when the computer wakes up from a suspend. Only "
 "used if lock_use_screensaver_settings is false."
 msgstr ""
 "Zaključaj ekran kada se računar vrati iz obustavljenog stanja. Jedino se "
-"koristi ako je lock_use_screensaver_settings (zaključaj korišćenje postastavki "
-"čuvara ekrana) isključen."
+"koristi ako je lock_use_screensaver_settings (zaključaj korišćenje "
+"postastavki čuvara ekrana) isključen."
 
-#: ../data/gnome-power-manager.schemas.in.h:130
+#: ../data/gnome-power-manager.schemas.in.h:119
 msgid ""
 "Whether the screen is locked when the screen is turned off. Only used if "
 "lock_use_screensaver_settings is false."
 msgstr ""
 "Zaključaj ekran prilikom njegovog isključivanja. Jedino se koristi ako je "
-"lock_use_screensaver_settings (zaključaj korišćenje postastavki čuvara ekrana) "
-"isključen."
+"lock_use_screensaver_settings (zaključaj korišćenje postastavki čuvara "
+"ekrana) isključen."
 
-#: ../data/gnome-power-manager.schemas.in.h:131
+#: ../data/gnome-power-manager.schemas.in.h:120
 msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr "Zamrzni, obustavi ili da ne radi ništa prilikom neaktivnosti"
 
-#: ../data/gnome-power-manager.schemas.in.h:132
+#: ../data/gnome-power-manager.schemas.in.h:121
 msgid ""
 "Whether to use the screen lock setting of gnome-screensaver to decide if the "
 "screen is locked after a hibernate, suspend or blank screen."
@@ -956,31 +905,31 @@ msgstr ""
 "zaključavanju nakon povratka iz zamrznutog ili obustavljenog stanja i nakon "
 "zatamnjenja ekrana."
 
-#: ../data/gnome-power-manager.schemas.in.h:133
+#: ../data/gnome-power-manager.schemas.in.h:122
 msgid "Whether to use time-based notifications"
 msgstr "Prikazuj obaveštenja na osnovu proteklog vremena"
 
-#: ../data/gnome-power-manager.schemas.in.h:134
+#: ../data/gnome-power-manager.schemas.in.h:123
 msgid "Whether we should show the axis labels in the statistics window"
 msgstr "Prikži natpise uz ose u prozoru za statistiku"
 
-#: ../data/gnome-power-manager.schemas.in.h:135
+#: ../data/gnome-power-manager.schemas.in.h:124
 msgid "Whether we should show the axis labels in the statistics window."
 msgstr "Prikaži natpise uz ose u prozoru za statistiku."
 
-#: ../data/gnome-power-manager.schemas.in.h:136
+#: ../data/gnome-power-manager.schemas.in.h:125
 msgid "Whether we should show the events in the statistics window"
 msgstr "Prikaži događaje u prozoru za statistiku"
 
-#: ../data/gnome-power-manager.schemas.in.h:137
+#: ../data/gnome-power-manager.schemas.in.h:126
 msgid "Whether we should show the events in the statistics window."
 msgstr "Prikaži događaje u prozoru za statistiku."
 
-#: ../data/gnome-power-manager.schemas.in.h:138
+#: ../data/gnome-power-manager.schemas.in.h:127
 msgid "Whether we should smooth the data in the graph"
 msgstr "Prikaži izglađene podatke u grafiku"
 
-#: ../data/gnome-power-manager.schemas.in.h:139
+#: ../data/gnome-power-manager.schemas.in.h:128
 msgid "Whether we should smooth the data in the graph."
 msgstr "Prikaži izglađene podatke u grafiku."
 
@@ -1000,201 +949,162 @@ msgstr "Posmatranje potrošnje električne energije"
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.glade.h:6 ../src/gpm-statistics.c:929
-#: ../src/gpm-statistics.c:1351
+#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1048
+#: ../src/gpm-statistics.c:1482
 msgid "Power Statistics"
 msgstr "Dijagram potrošnje električne energije"
 
-#: ../data/gpm-feedback-widget.glade.h:1
+#: ../data/gpm-feedback-widget.ui.h:1
 msgid "Brightness"
 msgstr "Osvetljenost"
 
-#: ../data/gpm-statistics.glade.h:1
+#: ../data/gpm-statistics.ui.h:1
 msgid "0"
 msgstr "0"
 
-#: ../data/gpm-statistics.glade.h:2
+#: ../data/gpm-statistics.ui.h:2
 msgid "Data length:"
 msgstr "Dužina podataka:"
 
-#: ../data/gpm-statistics.glade.h:3 ../src/gpm-statistics.c:211
+#: ../data/gpm-statistics.ui.h:3 ../src/gpm-statistics.c:206
 msgid "Details"
 msgstr "Detalji"
 
-#: ../data/gpm-statistics.glade.h:4
+#: ../data/gpm-statistics.ui.h:4
 msgid "Graph type:"
 msgstr "Tip grafika:"
 
-#: ../data/gpm-statistics.glade.h:5
+#: ../data/gpm-statistics.ui.h:5
 msgid "History"
 msgstr "Istorijat"
 
-#: ../data/gpm-statistics.glade.h:7
+#: ../data/gpm-statistics.ui.h:7
 msgid "Processor wakeups per second:"
 msgstr "Broj buđenja procesora u sekundi:"
 
-#: ../data/gpm-statistics.glade.h:8
+#: ../data/gpm-statistics.ui.h:8
 msgid "Show data points"
 msgstr "Prikaži tačke sa podacima"
 
 # bug(slobo): potrošnja se posmatra preko dijagrama potrošnje promeni statistika u dijagram potrošnje na svim mestima
-#: ../data/gpm-statistics.glade.h:9
+#: ../data/gpm-statistics.ui.h:9
 msgid "Statistics"
 msgstr "Statistika"
 
-#: ../data/gpm-statistics.glade.h:10
+#: ../data/gpm-statistics.ui.h:10
+msgid "There is no data to display."
+msgstr ""
+
+#: ../data/gpm-statistics.ui.h:11
 msgid "Use smoothed line"
 msgstr "Koristi uglađenu liniju"
 
-#: ../data/gpm-statistics.glade.h:11 ../src/gpm-statistics.c:197
+#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:192
 msgid "Wakeups"
 msgstr "Buđenja"
 
-#: ../data/gpm-inhibit-test.glade.h:1
-msgid "Application:"
-msgstr "Program:"
-
-#: ../data/gpm-inhibit-test.glade.h:2
-msgid "Burning DVD, titled \"My Photos\""
-msgstr "Upisujem na DVD pod naslovom „Moje slike“"
-
-#: ../data/gpm-inhibit-test.glade.h:3
-msgid "Inhibit"
-msgstr "Onemogućavanje uštede"
-
-#: ../data/gpm-inhibit-test.glade.h:4
-msgid "Inhibit Tester"
-msgstr "Proba onemogućavanja"
-
-#: ../data/gpm-inhibit-test.glade.h:5
-msgid "Reason:"
-msgstr "Razlog:"
-
-#: ../data/gpm-inhibit-test.glade.h:6
-msgid "UnInhibit"
-msgstr "Opozovi onemogućavanje uštede"
-
-#: ../data/gpm-inhibit-test.glade.h:7
-msgid "Vendor Acme Foo"
-msgstr "Proizvođač Feromonting"
-
-#: ../data/gpm-prefs.glade.h:1
+#: ../data/gpm-prefs.ui.h:1
 msgid "<b>Actions</b>"
 msgstr "<b>Naredbe</b>"
 
-#: ../data/gpm-prefs.glade.h:2
+#: ../data/gpm-prefs.ui.h:2
 msgid "<b>Display</b>"
 msgstr "<b>Ekran</b>"
 
-#: ../data/gpm-prefs.glade.h:3
-msgid "<b>Extras</b>"
-msgstr "<b>Dodatno</b>"
-
-#: ../data/gpm-prefs.glade.h:4
+#: ../data/gpm-prefs.ui.h:3
 msgid "<b>Notification Area</b>"
 msgstr "<b>Oblast za obaveštenja</b>"
 
-#: ../data/gpm-prefs.glade.h:5
-msgid "Always sleep when the lid is _closed"
-msgstr "Uspavaj uvek kada se poklopac p_renosnog računara zatvori"
-
-#: ../data/gpm-prefs.glade.h:6
+#: ../data/gpm-prefs.ui.h:4
 msgid "Di_m display when idle"
 msgstr "Za_magli ekran nakon neaktivnosti"
 
-#: ../data/gpm-prefs.glade.h:7
-msgid "Enable UPS discharge _alarm"
-msgstr "Omogući _alarm pražnjenja rezervnog napajanja"
-
-#: ../data/gpm-prefs.glade.h:8
+#: ../data/gpm-prefs.ui.h:5
 msgid "General"
 msgstr "Opšte"
 
-#: ../data/gpm-prefs.glade.h:9
+#: ../data/gpm-prefs.ui.h:6
+msgid "Make Default"
+msgstr "Postavi kao podrazumevano"
+
+#: ../data/gpm-prefs.ui.h:7
 msgid "On AC Power"
 msgstr "Napajanje preko električne mreže"
 
-#: ../data/gpm-prefs.glade.h:10
+#: ../data/gpm-prefs.ui.h:8
 msgid "On Battery Power"
 msgstr "Napajanje preko baterije"
 
-#: ../data/gpm-prefs.glade.h:11
+#: ../data/gpm-prefs.ui.h:9
 msgid "On UPS Power"
 msgstr "Napajanje preko rezervnog izvora"
 
-#: ../data/gpm-prefs.glade.h:12
+#: ../data/gpm-prefs.ui.h:10
 msgid "Only display an icon when a battery is p_resent"
 msgstr "Jedino prikaži ikonicu kada je _prisutna baterija"
 
-#: ../data/gpm-prefs.glade.h:13
+#: ../data/gpm-prefs.ui.h:11
 msgid "Only display an icon when charging or _discharging"
 msgstr "Jedino prikaži ikonicu pri punjenju i_li pražnjenju"
 
-#: ../data/gpm-prefs.glade.h:14
+#: ../data/gpm-prefs.ui.h:12
 msgid "Power Management Preferences"
 msgstr "Postavke upravljanja potrošnjom"
 
-#: ../data/gpm-prefs.glade.h:15
+#: ../data/gpm-prefs.ui.h:13
 msgid "Put _display to sleep when inactive for:"
 msgstr "Uspavaj _ekran (ako se ne koristi) nakon:"
 
-#: ../data/gpm-prefs.glade.h:16
+#: ../data/gpm-prefs.ui.h:14
 msgid "Put computer to _sleep when inactive for:"
 msgstr "Uspavaj _računar (ako se ne koristi) nakon:"
 
-#: ../data/gpm-prefs.glade.h:17
+#: ../data/gpm-prefs.ui.h:15
 msgid "Set display _brightness to:"
 msgstr "Postavi osvetljenje e_krana na:"
 
-#: ../data/gpm-prefs.glade.h:18
-msgid "Turn on keyboard light when light level is low"
-msgstr "Uključi osvetljenje tastature pri slaboj svetlosti"
+#: ../data/gpm-prefs.ui.h:16
+msgid "Sp_in down hard disks when possible"
+msgstr ""
 
-#: ../data/gpm-prefs.glade.h:19
-msgid "Use _ambient light to adjust LCD brightness"
-msgstr "Koristi _okolnu svetlost za štelovanje osvetljenosti tankog ekrana"
-
-#: ../data/gpm-prefs.glade.h:20
-msgid "Use _sound to notify in event of an error"
-msgstr "Koristi _zvučno obaveštenje kada se dogodi greška"
-
-#: ../data/gpm-prefs.glade.h:21
+#: ../data/gpm-prefs.ui.h:17
 msgid "When UPS power is _critically low:"
 msgstr "Kada je rezervno napajanje _kritično prazno:"
 
-#: ../data/gpm-prefs.glade.h:22
+#: ../data/gpm-prefs.ui.h:18
 msgid "When UPS power is l_ow:"
 msgstr "Kada je rezervno napajanje _skoro prazno:"
 
-#: ../data/gpm-prefs.glade.h:23
+#: ../data/gpm-prefs.ui.h:19
 msgid "When battery po_wer is critically low:"
 msgstr "Kada je baterija _kritično prazna:"
 
-#: ../data/gpm-prefs.glade.h:24
+#: ../data/gpm-prefs.ui.h:20
 msgid "When laptop lid is cl_osed:"
 msgstr "Kada se _poklopac prenosnog računara zatvori:"
 
-#: ../data/gpm-prefs.glade.h:25
+#: ../data/gpm-prefs.ui.h:21
 msgid "When the _suspend button is pressed:"
 msgstr "Kada je pritisnuto _dugme za obustavljanje:"
 
-#: ../data/gpm-prefs.glade.h:26
+#: ../data/gpm-prefs.ui.h:22
 msgid "When the power _button is pressed:"
 msgstr "Kada je pritisnuto d_ugme za paljenje/gašenje:"
 
-#: ../data/gpm-prefs.glade.h:27
+#: ../data/gpm-prefs.ui.h:23
 msgid "_Always display an icon"
 msgstr "_Uvek prikaži ikonicu"
 
-#: ../data/gpm-prefs.glade.h:28
+#: ../data/gpm-prefs.ui.h:24
 msgid "_Never display an icon"
 msgstr "_Nikad ne prikazuj ikonicu"
 
-#: ../data/gpm-prefs.glade.h:29
-msgid "_Only display an icon when battery power is critically low"
+#: ../data/gpm-prefs.ui.h:25
+#, fuzzy
+msgid "_Only display an icon when battery power is low"
 msgstr "_Jedino prikaži ikonicu kada je baterija kritično prazna"
 
-#: ../data/gpm-prefs.glade.h:30
+#: ../data/gpm-prefs.ui.h:26
 msgid "_Reduce backlight brightness"
 msgstr "_Smanji pozadinsko osvetljenje"
 
@@ -1239,36 +1149,43 @@ msgstr[0] "minuta"
 msgstr[1] "minuta"
 msgstr[2] "minuta"
 
-#: ../src/gpm-common.h:44
-msgid "Power Manager for the GNOME desktop"
-msgstr "Upravnik potrošnjom energije za okruženje Gnom"
-
-#: ../src/gpm-devicekit.c:187
+#. TRANSLATORS: a phone is charging
+#. TRANSLATORS: device is charging, but we only have a percentage
+#: ../src/gpm-devicekit.c:251 ../src/gpm-devicekit.c:315
 #, c-format
+msgid "%s charging (%.1f%%)"
+msgstr "%s se puni (%.1f%%)"
+
+#. TRANSLATORS: The laptop battery is fully charged, and we know a time
+#: ../src/gpm-devicekit.c:266
+#, fuzzy, c-format
 msgid ""
-"%s fully charged (%.1f%%)\n"
-"Provides %s battery runtime"
+"Battery is fully charged.\n"
+"Provides %s laptop runtime"
 msgstr ""
 "%s je potpuno napunjen (%.1f%%)\n"
 "Obezbeđuje %s trajanja baterije"
 
-#: ../src/gpm-devicekit.c:191
-#, c-format
-msgid "%s fully charged (%.1f%%)"
+#. TRANSLATORS: the device is fully charged
+#: ../src/gpm-devicekit.c:271
+#, fuzzy, c-format
+msgid "%s is fully charged"
 msgstr "%s potpuno napunjen (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:199
+#. TRANSLATORS: the device is discharging, and we have a time remaining
+#: ../src/gpm-devicekit.c:279
 #, c-format
 msgid "%s %s remaining (%.1f%%)"
 msgstr "%s %s preostalo (%.1f%%)"
 
-#. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:204
+#. TRANSLATORS: the device is discharging, but we only have a percentage
+#: ../src/gpm-devicekit.c:284
 #, c-format
 msgid "%s discharging (%.1f%%)"
 msgstr "%s se prazni (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:216
+#. TRANSLATORS: the device is charging, and we have a time to full and empty
+#: ../src/gpm-devicekit.c:298
 #, c-format
 msgid ""
 "%s %s until charged (%.1f%%)\n"
@@ -1277,430 +1194,418 @@ msgstr ""
 "%s %s dok se ne napuni (%.1f%%)\n"
 "Obezbeđuje %s trajanja baterije"
 
-#: ../src/gpm-devicekit.c:225
+#. TRANSLATORS: device is charging, and we have a time to full and a percentage
+#: ../src/gpm-devicekit.c:309
 #, c-format
 msgid "%s %s until charged (%.1f%%)"
 msgstr "%s %s dok se ne napuni (%.1f%%)"
 
-#. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:231
-#, c-format
-msgid "%s charging (%.1f%%)"
-msgstr "%s se puni (%.1f%%)"
+#. TRANSLATORS: this is only shown for laptops with multiple batteries
+#: ../src/gpm-devicekit.c:323
+#, fuzzy, c-format
+msgid "%s waiting to discharge (%.1f%%)"
+msgstr "%s se prazni (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:257
-#, c-format
-msgid "<b>Product:</b> %s\n"
-msgstr "<b>Proizvod:</b> %s\n"
+#. TRANSLATORS: this is only shown for laptops with multiple batteries
+#: ../src/gpm-devicekit.c:329
+#, fuzzy, c-format
+msgid "%s waiting to charge (%.1f%%)"
+msgstr "%s %s dok se ne napuni (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:259 ../src/gpm-devicekit.c:261
-#: ../src/gpm-devicekit.c:263 ../src/gpm-devicekit.c:265
-#, c-format
-msgid "<b>Status:</b> %s\n"
-msgstr "<b>Stanje:</b> %s\n"
+#. TRANSLATORS: the type of data, e.g. Laptop battery
+#: ../src/gpm-devicekit.c:389
+msgid "Product:"
+msgstr ""
 
-#: ../src/gpm-devicekit.c:259
+#. TRANSLATORS: device is missing
+#. TRANSLATORS: device is charged
+#. TRANSLATORS: device is charging
+#. TRANSLATORS: device is discharging
+#: ../src/gpm-devicekit.c:393 ../src/gpm-devicekit.c:396
+#: ../src/gpm-devicekit.c:399 ../src/gpm-devicekit.c:402
+#, fuzzy
+msgid "Status:"
+msgstr "Stanje"
+
+#: ../src/gpm-devicekit.c:393
 msgid "Missing"
 msgstr "Nedostaje"
 
-#: ../src/gpm-devicekit.c:261
+#: ../src/gpm-devicekit.c:396
 msgid "Charged"
 msgstr "Napunjeno"
 
-#: ../src/gpm-devicekit.c:263
+#: ../src/gpm-devicekit.c:399
 msgid "Charging"
 msgstr "Puni se"
 
-#: ../src/gpm-devicekit.c:265
+#: ../src/gpm-devicekit.c:402
 msgid "Discharging"
 msgstr "Prazni se"
 
-#: ../src/gpm-devicekit.c:267
-#, c-format
-msgid "<b>Percentage charge:</b> %.1f%%\n"
-msgstr "<b>Napunjenost u procentima:</b> %.1f%%\n"
+#. TRANSLATORS: percentage
+#: ../src/gpm-devicekit.c:407
+#, fuzzy
+msgid "Percentage charge:"
+msgstr "Trenutna napunjenost:"
 
-#: ../src/gpm-devicekit.c:269
-#, c-format
-msgid "<b>Vendor:</b> %s\n"
-msgstr "<b>Proizvođač:</b> %s\n"
+#. TRANSLATORS: manufacturer
+#: ../src/gpm-devicekit.c:411
+#, fuzzy
+msgid "Vendor:"
+msgstr "Proizvođač"
 
-#: ../src/gpm-devicekit.c:272
-#, c-format
-msgid "<b>Technology:</b> %s\n"
-msgstr "<b>Tehnologija:</b> %s\n"
+#. TRANSLATORS: how the battery is made, e.g. Lithium Ion
+#: ../src/gpm-devicekit.c:416
+#, fuzzy
+msgid "Technology:"
+msgstr "Tehnologija"
 
-#: ../src/gpm-devicekit.c:275
-#, c-format
-msgid "<b>Serial number:</b> %s\n"
-msgstr "<b>Serjiski broj:</b> %s\n"
+#. TRANSLATORS: serial number of the battery
+#: ../src/gpm-devicekit.c:420
+#, fuzzy
+msgid "Serial number:"
+msgstr "Serijski broj"
 
-#: ../src/gpm-devicekit.c:277
-#, c-format
-msgid "<b>Model:</b> %s\n"
-msgstr "<b>Model:</b> %s\n"
+#. TRANSLATORS: model number of the battery
+#: ../src/gpm-devicekit.c:424
+#, fuzzy
+msgid "Model:"
+msgstr "Model"
 
-#: ../src/gpm-devicekit.c:280
-#, c-format
-msgid "<b>Charge time:</b> %s\n"
-msgstr "<b>Vreme punjenja:</b> %s\n"
+#. TRANSLATORS: time to fully charged
+#: ../src/gpm-devicekit.c:429
+#, fuzzy
+msgid "Charge time:"
+msgstr "Profil punjenja"
 
-#: ../src/gpm-devicekit.c:285
-#, c-format
-msgid "<b>Discharge time:</b> %s\n"
-msgstr "<b>Vreme pražnjenja:</b> %s\n"
+#. TRANSLATORS: time to empty
+#: ../src/gpm-devicekit.c:435
+#, fuzzy
+msgid "Discharge time:"
+msgstr "Profil pražnjenja"
 
-#. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
-#: ../src/gpm-devicekit.c:292
+#. TRANSLATORS: Excellent, Good, Fair and Poor are all related to battery Capacity
+#: ../src/gpm-devicekit.c:442
 msgid "Excellent"
 msgstr "Odlično"
 
-#: ../src/gpm-devicekit.c:294
+#: ../src/gpm-devicekit.c:444
 msgid "Good"
 msgstr "Dobro"
 
-#: ../src/gpm-devicekit.c:296
+#: ../src/gpm-devicekit.c:446
 msgid "Fair"
 msgstr "Upotrebljivo"
 
-#: ../src/gpm-devicekit.c:298
+#: ../src/gpm-devicekit.c:448
 msgid "Poor"
 msgstr "Jedva upotrebljivo"
 
-#. Translators: %.1f is a percentage and %s the condition (Excellent, Good, ...)
-#: ../src/gpm-devicekit.c:301
-#, c-format
-msgid "<b>Capacity:</b> %.1f%% (%s)\n"
-msgstr "<b>Kapacitet:</b> %.1f%% (%s)\n"
+#: ../src/gpm-devicekit.c:452
+#, fuzzy
+msgid "Capacity:"
+msgstr "Kapacitet"
 
-#: ../src/gpm-devicekit.c:306
-#, c-format
-msgid "<b>Current charge:</b> %.1f Wh\n"
-msgstr "<b>Trenutna napunjenost:</b> %.1f Wh\n"
+#: ../src/gpm-devicekit.c:458 ../src/gpm-devicekit.c:483
+msgid "Current charge:"
+msgstr "Trenutna napunjenost:"
 
-#: ../src/gpm-devicekit.c:310
-#, c-format
-msgid "<b>Last full charge:</b> %.1f Wh\n"
+#: ../src/gpm-devicekit.c:464
+#, fuzzy
+msgid "Last full charge:"
 msgstr "<b>Poslednja potpuna napunjenost:</b> %.1f Wh\n"
 
-#. Translators: Design charge is the amount of charge the battery is designed to have when brand new
-#: ../src/gpm-devicekit.c:314
-#, c-format
-msgid "<b>Design charge:</b> %.1f Wh\n"
-msgstr "<b>Fabrička napunjenost:</b> %.1f Wh\n"
+#: ../src/gpm-devicekit.c:470 ../src/gpm-devicekit.c:488
+msgid "Design charge:"
+msgstr "Fabrički kapacitet:"
 
-#: ../src/gpm-devicekit.c:317
-#, c-format
-msgid "<b>Charge rate:</b> %.1f W\n"
-msgstr "<b>Stopa punjenja:</b> %.1f W\n"
+#: ../src/gpm-devicekit.c:475
+#, fuzzy
+msgid "Charge rate:"
+msgstr "Profil punjenja"
 
-#: ../src/gpm-devicekit.c:323
-#, c-format
-msgid "<b>Current charge:</b> %.0f/7\n"
-msgstr "<b>Trenutna napunjenost:</b> %.0f/7\n"
-
-#: ../src/gpm-devicekit.c:326
-#, c-format
-msgid "<b>Design charge:</b> %.0f/7\n"
-msgstr "<b>Fabrička napunjenost:</b> %.0f/7\n"
-
-#: ../src/gpm-devicekit.c:344
+#. TRANSLATORS: system power cord
+#: ../src/gpm-devicekit.c:510
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "Napajanje iz električne mreže"
 msgstr[1] "Napajanja iz električne mreže"
 msgstr[2] "Napajanja iz električne mreže"
 
-#: ../src/gpm-devicekit.c:347
+#. TRANSLATORS: laptop primary battery
+#: ../src/gpm-devicekit.c:514
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "Baterija računara"
 msgstr[1] "Baterije računara"
 msgstr[2] "Baterije računara"
 
-#: ../src/gpm-devicekit.c:350
+#. TRANSLATORS: battery-backed AC power source
+#: ../src/gpm-devicekit.c:518
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "Rezervno napajanje"
 msgstr[1] "Rezervna napajanja"
 msgstr[2] "Rezervna napajanja"
 
-#: ../src/gpm-devicekit.c:353
+#. TRANSLATORS: a monitor is a device to measure voltage and current
+#: ../src/gpm-devicekit.c:522
 msgid "Monitor"
 msgid_plural "Monitors"
 msgstr[0] "Monitor"
 msgstr[1] "Monitori"
 msgstr[2] "Monitori"
 
-#: ../src/gpm-devicekit.c:356
+#. TRANSLATORS: wireless mice with internal batteries
+#: ../src/gpm-devicekit.c:526
 msgid "Wireless mouse"
 msgid_plural "Wireless mice"
 msgstr[0] "Bežični miš"
 msgstr[1] "Bežični miševi"
 msgstr[2] "Bežični miševi"
 
-#: ../src/gpm-devicekit.c:359
+#. TRANSLATORS: wireless keyboard with internal battery
+#: ../src/gpm-devicekit.c:530
 msgid "Wireless keyboard"
 msgid_plural "Wireless keyboards"
 msgstr[0] "Bežična tastatura"
 msgstr[1] "Bežične tastature"
 msgstr[2] "Bežične tastature"
 
-#: ../src/gpm-devicekit.c:362
+#. TRANSLATORS: portable device
+#: ../src/gpm-devicekit.c:534
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "PDA uređaj"
 msgstr[1] "PDA uređaji"
 msgstr[2] "PDA uređaji"
 
-#: ../src/gpm-devicekit.c:365
+#. TRANSLATORS: cell phone (mobile...)
+#: ../src/gpm-devicekit.c:538
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "Mobilni telefon"
 msgstr[1] "Mobilni teltfoni"
 msgstr[2] "Mobilni telefoni"
 
-#: ../src/gpm-devicekit.c:422
+#. TRANSLATORS: battery technology
+#: ../src/gpm-devicekit.c:596
 msgid "Lithium Ion"
 msgstr "Litijum jonska"
 
-#: ../src/gpm-devicekit.c:425
+#. TRANSLATORS: battery technology
+#: ../src/gpm-devicekit.c:600
 msgid "Lithium Polymer"
 msgstr "Litijum polimerna"
 
-#: ../src/gpm-devicekit.c:428
+#. TRANSLATORS: battery technology
+#: ../src/gpm-devicekit.c:604
 msgid "Lithium Iron Phosphate"
 msgstr "Litijum gvožđe-fosfatna"
 
-#: ../src/gpm-devicekit.c:431
+#. TRANSLATORS: battery technology
+#: ../src/gpm-devicekit.c:608
 msgid "Lead acid"
 msgstr "Olovni akumulator"
 
-#: ../src/gpm-devicekit.c:434
+#. TRANSLATORS: battery technology
+#: ../src/gpm-devicekit.c:612
 msgid "Nickel Cadmium"
 msgstr "Nikal kadminumska"
 
-#: ../src/gpm-devicekit.c:437
+#. TRANSLATORS: battery technology
+#: ../src/gpm-devicekit.c:616
 msgid "Nickel metal hydride"
 msgstr "Nikal metal-hidridna"
 
-#: ../src/gpm-devicekit.c:440
+#. TRANSLATORS: battery technology
+#: ../src/gpm-devicekit.c:620
 msgid "Unknown technology"
 msgstr "Nepoznata tehnologija"
 
 #. Translators: This is %i days
-#: ../src/gpm-graph-widget.c:297
+#: ../src/gpm-graph-widget.c:443
 #, c-format
 msgid "%id"
 msgstr "%id"
 
 #. Translators: This is %i days %02i hours
-#: ../src/gpm-graph-widget.c:300
+#: ../src/gpm-graph-widget.c:446
 #, c-format
 msgid "%id%02ih"
 msgstr "%id%02ih"
 
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:305
+#: ../src/gpm-graph-widget.c:451
 #, c-format
 msgid "%ih"
 msgstr "%ih"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:308
+#: ../src/gpm-graph-widget.c:454
 #, c-format
 msgid "%ih%02im"
 msgstr "%ih%02im"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:313
+#: ../src/gpm-graph-widget.c:459
 #, c-format
 msgid "%2im"
 msgstr "%2im"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:316
+#: ../src/gpm-graph-widget.c:462
 #, c-format
 msgid "%2im%02i"
 msgstr "%2im%02i"
 
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:320
+#: ../src/gpm-graph-widget.c:466
 #, c-format
 msgid "%2is"
 msgstr "%2is"
 
 #. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:324
+#: ../src/gpm-graph-widget.c:470
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. Translators: This is %.1f Watts
-#: ../src/gpm-graph-widget.c:327
+#: ../src/gpm-graph-widget.c:473
 #, c-format
 msgid "%.1fW"
 msgstr "%.1fW"
 
 #. Translators: This is %.1f Volts
-#: ../src/gpm-graph-widget.c:332
+#: ../src/gpm-graph-widget.c:478
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fV"
 
-#. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:371
+#. TRANSLATORS: this is what the user should read for more information about the blanking problem (%s is a URL)
+#: ../src/gpm-idle.c:216
 #, c-format
-msgid "%s has stopped the suspend from taking place: %s."
-msgstr "%s je onemogućio obustavljanje: %s."
+msgid "Please see %s for more information."
+msgstr ""
 
-#. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:376
-#, c-format
-msgid "%s has stopped the hibernate from taking place: %s."
-msgstr "%s je onemogućio zamrzavanje: %s."
+#. TRANSLATORS: this is telling the user that thier X server is broken, and needs to be fixed
+#: ../src/gpm-idle.c:220
+msgid ""
+"If you can see this text, your display server is broken and you should "
+"notify your distributor."
+msgstr ""
 
-#. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:381
-#, c-format
-msgid "%s has stopped the policy action from taking place: %s."
-msgstr "%s je onemogućio predviđene radnje: %s."
+#. TRANSLATORS: this is for debugging, if the session is idle
+#: ../src/gpm-idle.c:226
+msgid "Session idle"
+msgstr "Sesija neaktivnosti"
 
-#. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:386
-#, c-format
-msgid "%s has stopped the reboot from taking place: %s."
-msgstr "%s je onemogućio ponovno pokretanje računara: %s."
+#: ../src/gpm-idle.c:226
+msgid "Session active"
+msgstr "Sesija aktivnosti"
 
-#. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:391
-#, c-format
-msgid "%s has stopped the shutdown from taking place: %s."
-msgstr "%s je onemogućio gašenje računara: %s."
+#. TRANSLATORS: has something inhibited the session
+#: ../src/gpm-idle.c:228
+#, fuzzy
+msgid "inhibited"
+msgstr "Onemogućavanje uštede"
 
-#. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:396
-#, c-format
-msgid "%s has stopped the timeout action from taking place: %s."
-msgstr "%s je onemogućio izvršenje radnje nakon određenog vremena: %s."
+#: ../src/gpm-idle.c:228
+#, fuzzy
+msgid "not inhibited"
+msgstr "Ručno onemogućavanje"
 
-#: ../src/gpm-inhibit.c:405 ../src/gpm-inhibit.c:420
-msgid "Multiple applications have stopped the suspend from taking place."
-msgstr "Više programa je onemogućilo obustavljanje rada računara."
+#. TRANSLATORS: is the screen idle or awake
+#: ../src/gpm-idle.c:230
+#, fuzzy
+msgid "screen idle"
+msgstr "Sesija neaktivnosti"
 
-#: ../src/gpm-inhibit.c:408
-msgid "Multiple applications have stopped the hibernate from taking place."
-msgstr "Više programa je onemogućilo zamrzavanje računara."
-
-#: ../src/gpm-inhibit.c:411
-msgid "Multiple applications have stopped the policy action from taking place."
-msgstr "Više programa je onemogućilo izvršavanje predviđene radnje."
-
-#: ../src/gpm-inhibit.c:414
-msgid "Multiple applications have stopped the reboot from taking place."
-msgstr "Više programa je onemogućilo ponovno pokretanje računara."
-
-#: ../src/gpm-inhibit.c:417
-msgid "Multiple applications have stopped the shutdown from taking place."
-msgstr "Više programa je onemogućilo gašenje računara."
+#: ../src/gpm-idle.c:230
+#, fuzzy
+msgid "screen awake"
+msgstr "Zaključava ekran kada korisnik zatamni ekran"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-main.c:139 ../src/gpm-prefs.c:91 ../src/gpm-statistics.c:1334
+#: ../src/gpm-main.c:171 ../src/gpm-prefs.c:90 ../src/gpm-statistics.c:1465
 msgid "Show extra debugging information"
 msgstr "Prikaži dodatne informacije za traženje grešaka"
 
-#: ../src/gpm-main.c:141
+#: ../src/gpm-main.c:173
 msgid "Show version of installed program and exit"
 msgstr "Ispiši instaliranu verziju programa i izađi"
 
-#: ../src/gpm-main.c:143
+#: ../src/gpm-main.c:175
 msgid "Exit after a small delay (for debugging)"
 msgstr "Izađi nakon jedne male pauze (radi traženja grešaka)"
 
-#: ../src/gpm-main.c:145
+#: ../src/gpm-main.c:177
 msgid "Exit after the manager has loaded (for debugging)"
 msgstr "Izađi nakon učitavanja upravnika (radi traženja grešaka)"
 
-#: ../src/gpm-main.c:159 ../src/gpm-main.c:163
+#: ../src/gpm-main.c:191 ../src/gpm-main.c:195
 msgid "GNOME Power Manager"
 msgstr "Gnomov upravnik potrošnjom energije"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:180
+#: ../src/gpm-manager.c:172
 msgid "Power plugged in"
 msgstr "Uključen u struju"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:184
+#: ../src/gpm-manager.c:176
 msgid "Power unplugged"
 msgstr "Isključen iz struje"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:188
+#: ../src/gpm-manager.c:180
 msgid "Lid has opened"
 msgstr "Otvoren poklopac"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:192
+#: ../src/gpm-manager.c:184
 msgid "Lid has closed"
 msgstr "Zatvoren poklopac"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:196
+#: ../src/gpm-manager.c:188
 msgid "Battery is low"
 msgstr "Baterija skoro prazna"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:200
+#: ../src/gpm-manager.c:192
 msgid "Battery is very low"
 msgstr "Baterija kritično prazna"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:204
+#: ../src/gpm-manager.c:196
 msgid "Battery is full"
 msgstr "Baterija puna"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:208
+#: ../src/gpm-manager.c:200
 msgid "Suspend started"
 msgstr "Računar obustavljen"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:212
+#: ../src/gpm-manager.c:204
 msgid "Resumed"
 msgstr "Nastavljeno"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:216
+#: ../src/gpm-manager.c:208
 msgid "Suspend failed"
 msgstr "Neuspelo obustavljanje"
 
-#: ../src/gpm-manager.c:258
-msgid "Request to suspend"
-msgstr "Zahtev za obustavljanje"
-
-#: ../src/gpm-manager.c:260
-msgid "Request to hibernate"
-msgstr "Zahtev za zamrzavanje"
-
-#: ../src/gpm-manager.c:262
-msgid "Request to do policy action"
-msgstr "Zahtev za izvođenje radnje pravila"
-
-#: ../src/gpm-manager.c:264
-msgid "Request to do timeout action"
-msgstr "Zahtev za izvršavanje radnje nakon određenog vremena"
-
-#. I want this translated
-#: ../src/gpm-manager.c:274
-msgid "Perform action anyway"
-msgstr "Svejedno izvrši radnju"
-
-#: ../src/gpm-manager.c:391 ../src/gpm-manager.c:425
+#. TRANSLATORS: the action was not done
+#: ../src/gpm-manager.c:434 ../src/gpm-manager.c:470
 msgid "Action disallowed"
 msgstr "Nedozvoljena radnja"
 
-#: ../src/gpm-manager.c:392
+#. TRANSLATORS: admin has disabled ability to do this
+#: ../src/gpm-manager.c:436
 msgid ""
 "Suspend support has been disabled. Contact your administrator for more "
 "details."
@@ -1708,7 +1613,8 @@ msgstr ""
 "Podrška za obustavljanje je onemogućena. Za više podataka pitajte Vašeg "
 "sistemskog administratora."
 
-#: ../src/gpm-manager.c:426
+#. TRANSLATORS: admin has disabled ability to do this
+#: ../src/gpm-manager.c:472
 msgid ""
 "Hibernate support has been disabled. Contact your administrator for more "
 "details."
@@ -1716,182 +1622,292 @@ msgstr ""
 "Podrška za zamrzavanje je onemogućena. Za više podataka pitajte Vašeg "
 "sistemskog administratora."
 
-#: ../src/gpm-manager.c:776
-msgid "The lid has been closed on ac power."
-msgstr ""
-"Poklopac prenosnog računara je zatvoren pri napajanju iz električne mreže."
-
-#: ../src/gpm-manager.c:805
-msgid "The lid has been closed on battery power."
-msgstr "Poklopac prenosnog računara je zatvoren pri napajanju iz baterije."
-
-#: ../src/gpm-manager.c:825
+#. TRANSLATORS: this is the gnome-screensaver throttle
+#: ../src/gpm-manager.c:697
 msgid "Display DPMS activated"
 msgstr "Pokrenut je DPMS"
 
-#: ../src/gpm-manager.c:843
+#. TRANSLATORS: this is the gnome-screensaver throttle
+#: ../src/gpm-manager.c:716
 msgid "On battery power"
 msgstr "Napajanje iz baterije"
 
-#: ../src/gpm-manager.c:861
+#: ../src/gpm-manager.c:734
 msgid "Laptop lid is closed"
 msgstr "Poklopac prenosnog računara je zatvoren"
 
-#: ../src/gpm-manager.c:885
-msgid "The power button has been pressed."
-msgstr "Pritisnuto je dugme za paljenje računara."
-
-#: ../src/gpm-manager.c:887 ../src/gpm-manager.c:889
-msgid "The suspend button has been pressed."
-msgstr "Pritisnuto je dugme za obustavljanje rada računara."
-
-#: ../src/gpm-manager.c:891
-msgid "The hibernate button has been pressed."
-msgstr "Pritisnuto je dugme za zamrzavanje računara."
-
-#: ../src/gpm-manager.c:899
+#: ../src/gpm-manager.c:772
 msgid "Power Information"
 msgstr "Podaci o potrošnji"
 
-#: ../src/gpm-manager.c:988
+#. TRANSLATORS: the battery may be recalled by it's vendor
+#: ../src/gpm-manager.c:1033
+msgid "Battery may be recalled"
+msgstr "Baterija vašeg prenosnog računara se više ne proizvodi"
+
+#: ../src/gpm-manager.c:1034
+#, fuzzy, c-format
 msgid ""
-"The lid has been closed, and the ac adapter removed (and gconf is okay)."
+"The battery in your computer may have been recalled by %s and you may be at "
+"risk.\n"
+"\n"
+"For more information visit the battery recall website."
 msgstr ""
-"Poklopac prenosnog računara je zatvoren i uređaj isključen iz struje (gconf "
-"je u redu)."
+"%s više ne proizvodi baterije za Vaš prenosni uređaj pa možete rizikovati "
+"ako nastavite da je koristite.\n"
+"\n"
+"Za više informacija molim posetite %s internet stranu za zamenu baterije."
 
-#: ../src/gpm-manager.c:1005
-msgid "Battery is critically low."
-msgstr "Baterija je kritično prazna."
+#. TRANSLATORS: button text, visit the manufacturers recall website
+#: ../src/gpm-manager.c:1044
+msgid "Visit recall website"
+msgstr "Posetite internet stranu za zamenu baterije"
 
-# ne znam šta je ovo! Gad demit.
-#: ../src/gpm-manager.c:1092 ../src/gpm-manager.c:1106
-msgid "User clicked on tray"
-msgstr "Korisnik je kliknuo na ikonicu"
+#. TRANSLATORS: button text, do not show this bubble again
+#: ../src/gpm-manager.c:1047
+msgid "Do not show me this again"
+msgstr "Ne prikazuj mi ovo ponovo"
 
-#: ../src/gpm-manager.c:1256
+#. We should notify the user if the battery has a low capacity,
+#. * where capacity is the ratio of the last_full capacity with that of
+#. * the design capacity. (#326740)
+#. TRANSLATORS: battery is old or broken
+#: ../src/gpm-manager.c:1132
+msgid "Battery may be broken"
+msgstr "Možda je baterija neispravna"
+
+#. TRANSLATORS: notify the user that that battery is broken as the capacity is very low
+#: ../src/gpm-manager.c:1135
+#, fuzzy, c-format
+msgid ""
+"Your battery has a very low capacity (%1.1f%%), which means that it may be "
+"old or broken."
+msgstr ""
+"Vaša baterija ima veoma nizak kapacitet (%i%%), što može da znači da je "
+"stara ili pokvarena."
+
+#. TRANSLATORS: show the fully charged notification
+#: ../src/gpm-manager.c:1183
+#, fuzzy
+msgid "Battery Fully Charged"
+msgid_plural "Batteries Fully Charged"
+msgstr[0] "Baterija je napunjena"
+msgstr[1] "Baterija je napunjena"
+msgstr[2] "Baterija je napunjena"
+
+#. TRANSLATORS: laptop battery is now discharging
+#: ../src/gpm-manager.c:1224
+msgid "Battery Discharging"
+msgstr "Pražnjenje baterije"
+
+#. TRANSLATORS: tell the user how much time they have got
+#: ../src/gpm-manager.c:1227
+#, fuzzy, c-format
+msgid "%s of battery power remaining (%.1f%%)"
+msgstr "%s %s preostalo (%.1f%%)"
+
+#. TRANSLATORS: UPS is now discharging
+#: ../src/gpm-manager.c:1230
+msgid "UPS Discharging"
+msgstr "Pražnjenje rezervnog napajanja"
+
+#. TRANSLATORS: tell the user how much time they have got
+#: ../src/gpm-manager.c:1233
+#, fuzzy, c-format
+msgid "%s of UPS backup power remaining (%.1f%%)"
+msgstr "%s %s preostalo (%.1f%%)"
+
+#. TRANSLATORS: window title: there was a problem putting the machine to sleep
+#: ../src/gpm-manager.c:1301
+#, fuzzy
+msgid "Sleep problem"
+msgstr "Problem prilikom prevoda u stanje pripravnosti"
+
+#. TRANSLATORS: message text
+#: ../src/gpm-manager.c:1304
+#, fuzzy
+msgid "Your computer failed to suspend."
+msgstr ""
+"Vaš računar nije uspeo da obustavi rad.\n"
+"Pogledajte pomoć za spisak najčešćih problema."
+
+#: ../src/gpm-manager.c:1304 ../src/gpm-manager.c:1308
+#, fuzzy
+msgid "Check the help file for common problems."
+msgstr ""
+"Vaš računar nije uspeo da obustavi rad.\n"
+"Pogledajte pomoć za spisak najčešćih problema."
+
+#. TRANSLATORS: message text
+#: ../src/gpm-manager.c:1308
+#, fuzzy
+msgid "Your computer failed to hibernate."
+msgstr ""
+"Vaš računar nije uspeo da se zamrzne.\n"
+"Pogledajte pomoć za spisak najčešćih problema."
+
+#. TRANSLATORS: button text, visit the suspend help website
+#: ../src/gpm-manager.c:1322
+msgid "Visit help page"
+msgstr ""
+
+#. TRANSLATORS: laptop battery low, and we only have one battery
+#: ../src/gpm-manager.c:1397
+#, fuzzy
+msgid "Battery low"
+msgstr "Baterija skoro prazna"
+
+#. TRANSLATORS: laptop battery low, and we have more than one type of battery
+#: ../src/gpm-manager.c:1400
 msgid "Laptop battery low"
 msgstr "Baterija prenosnog računara je skoro prazna"
 
-#: ../src/gpm-manager.c:1258
-#, c-format
-msgid "You have approximately <b>%s</b> of remaining battery life (%.1f%%)"
+#. TRANSLATORS: tell the user how much time they have got
+#: ../src/gpm-manager.c:1406
+#, fuzzy, c-format
+msgid "Approximately <b>%s</b> remaining (%.1f%%)"
 msgstr ""
 "Imate približno još <b>%s</b> preostalog vremena trajanja baterije (%.1f%%)"
 
-#: ../src/gpm-manager.c:1261
+#. TRANSLATORS: UPS is starting to get a little low
+#: ../src/gpm-manager.c:1410
 msgid "UPS low"
 msgstr "Rezervno napajanje je skoro prazno"
 
-#: ../src/gpm-manager.c:1263
+#. TRANSLATORS: tell the user how much time they have got
+#: ../src/gpm-manager.c:1414
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"
 msgstr ""
-"Imate približno još <b>%s</b> preostalog kapaciteta rezervnog napajanja (%.1f%"
-"%)"
+"Imate približno još <b>%s</b> preostalog kapaciteta rezervnog napajanja (%.1f"
+"%%)"
 
-#: ../src/gpm-manager.c:1266 ../src/gpm-manager.c:1351
+#. TRANSLATORS: mouse is getting a little low
+#. TRANSLATORS: the mouse battery is very low
+#: ../src/gpm-manager.c:1418 ../src/gpm-manager.c:1549
 msgid "Mouse battery low"
 msgstr "Baterija miša je skoro prazna"
 
-#: ../src/gpm-manager.c:1267
+#. TRANSLATORS: tell user more details
+#: ../src/gpm-manager.c:1421
 #, c-format
 msgid "The wireless mouse attached to this computer is low in power (%.1f%%)"
 msgstr ""
 "Bežičnom mišu priključenom na ovaj računar su oslabile baterije (%.1f%%)"
 
-#: ../src/gpm-manager.c:1270 ../src/gpm-manager.c:1356
+#. TRANSLATORS: keyboard is getting a little low
+#. TRANSLATORS: the keyboard battery is very low
+#: ../src/gpm-manager.c:1425 ../src/gpm-manager.c:1557
 msgid "Keyboard battery low"
 msgstr "Baterija tastature je skoro prazna"
 
-#: ../src/gpm-manager.c:1271
+#. TRANSLATORS: tell user more details
+#: ../src/gpm-manager.c:1428
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is low in power (%.1f%%)"
 msgstr ""
 "Bežičnoj tastaturi priključenoj na ovaj računar su oslabile baterije (%.1f%%)"
 
-#: ../src/gpm-manager.c:1274 ../src/gpm-manager.c:1361
+#. TRANSLATORS: PDA is getting a little low
+#. TRANSLATORS: the PDA battery is very low
+#: ../src/gpm-manager.c:1432 ../src/gpm-manager.c:1566
 msgid "PDA battery low"
 msgstr "Baterija PDA uređaja je skoro prazna"
 
-#: ../src/gpm-manager.c:1275
+#. TRANSLATORS: tell user more details
+#: ../src/gpm-manager.c:1435
 #, c-format
 msgid "The PDA attached to this computer is low in power (%.1f%%)"
 msgstr "PDA uređaju priključenom na ovaj računar su oslabile baterije (%.1f%%)"
 
-#: ../src/gpm-manager.c:1278 ../src/gpm-manager.c:1366
+#. TRANSLATORS: cell phone (mobile) is getting a little low
+#. TRANSLATORS: the cell battery is very low
+#: ../src/gpm-manager.c:1439 ../src/gpm-manager.c:1575
 msgid "Cell phone battery low"
 msgstr "Baterija mobilnog telefona je skoro prazna"
 
-#: ../src/gpm-manager.c:1279
+#. TRANSLATORS: tell user more details
+#: ../src/gpm-manager.c:1442
 #, c-format
 msgid "The cell phone attached to this computer is low in power (%.1f%%)"
 msgstr ""
 "Mobilnom telefonu priključenom na ovaj računar su oslabile baterije (%.1f%%)"
 
-#: ../src/gpm-manager.c:1315 ../src/gpm-manager.c:1392
+#. TRANSLATORS: laptop battery critically low, and only have one type of battery
+#: ../src/gpm-manager.c:1503
+#, fuzzy
+msgid "Battery critically low"
+msgstr "Baterija je kritično prazna."
+
+#. TRANSLATORS: laptop battery critically low, and we have more than one type of battery
+#. TRANSLATORS: laptop battery is really, really, low
+#: ../src/gpm-manager.c:1506 ../src/gpm-manager.c:1621
 msgid "Laptop battery critically low"
 msgstr "Baterija prenosnog uređaja je skoro prazna"
 
-#: ../src/gpm-manager.c:1328
+#. TRANSLATORS: tell the use to insert the plug, as we're not going to do anything
+#: ../src/gpm-manager.c:1519
 msgid "Plug in your AC adapter to avoid losing data."
 msgstr "Priključite kabl napajanja kako bi izbegli gubitak podataka."
 
-#: ../src/gpm-manager.c:1330
-#, c-format
-msgid "This computer will suspend in %s if the AC is not connected."
+#. TRANSLATORS: give the user a ultimatum
+#: ../src/gpm-manager.c:1523
+#, fuzzy, c-format
+msgid "Computer will suspend in %s."
 msgstr "Računar će obustviti rad za %s ukoliko ga ne uključite u struju."
 
-#: ../src/gpm-manager.c:1332
-#, c-format
-msgid "This computer will hibernate in %s if the AC is not connected."
+#. TRANSLATORS: give the user a ultimatum
+#: ../src/gpm-manager.c:1527
+#, fuzzy, c-format
+msgid "Computer will hibernate in %s."
 msgstr "Računar će se zamrznuti za %s ukoliko ga ne uključite u struju."
 
-#: ../src/gpm-manager.c:1334
-#, c-format
-msgid "This computer will shutdown in %s if the AC is not connected."
+#. TRANSLATORS: give the user a ultimatum
+#: ../src/gpm-manager.c:1531
+#, fuzzy, c-format
+msgid "Computer will shutdown in %s."
 msgstr "Računar će se ugasiti za %s ukoliko ga ne uključite u struju."
 
-#: ../src/gpm-manager.c:1336
-#, c-format
-msgid "You have approximately <b>%s</b> of remaining battery life (%.1f%%). %s"
-msgstr ""
-"Imate približno još <b>%s</b> preostalog vremena trajanja baterije (%.1f%%). %"
-"s"
-
-#: ../src/gpm-manager.c:1344 ../src/gpm-manager.c:1424
+#. TRANSLATORS: the UPS is very low
+#. TRANSLATORS: UPS is really, really, low
+#: ../src/gpm-manager.c:1539 ../src/gpm-manager.c:1659
 msgid "UPS critically low"
 msgstr "Rezervno napajanje je kritično prazno"
 
-#: ../src/gpm-manager.c:1346
+#. TRANSLATORS: give the user a ultimatum
+#: ../src/gpm-manager.c:1543
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%.1f%%). Restore AC "
 "power to your computer to avoid losing data."
 msgstr ""
-"Imate približno još <b>%s</b> preostalog kapaciteta rezervnog napajanja (%.1f%"
-"%). Uključite ga u struju kako biste izbegli gubljenje podatke."
+"Imate približno još <b>%s</b> preostalog kapaciteta rezervnog napajanja (%.1f"
+"%%). Uključite ga u struju kako biste izbegli gubljenje podatke."
 
-#: ../src/gpm-manager.c:1352
+#. TRANSLATORS: the device is just going to stop working
+#: ../src/gpm-manager.c:1552
 #, c-format
 msgid ""
 "The wireless mouse attached to this computer is very low in power (%.1f%%). "
 "This device will soon stop functioning if not charged."
 msgstr ""
-"Bežičnom mišu priključenom na ovaj računar su kritično oslabile baterije (%.1f"
-"%%). On će uskoro prestati da radi ako mu ne dopunite baterije."
+"Bežičnom mišu priključenom na ovaj računar su kritično oslabile baterije "
+"(%.1f%%). On će uskoro prestati da radi ako mu ne dopunite baterije."
 
-#: ../src/gpm-manager.c:1357
+#. TRANSLATORS: the device is just going to stop working
+#: ../src/gpm-manager.c:1560
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is very low in power (%.1f%"
 "%). This device will soon stop functioning if not charged."
 msgstr ""
-"Bežičnoj tastaturi priključenoj na ovaj računar su kritično oslabile baterije "
-"(%.1f%%). Ona će uskoro prestati da radi ako mu ne dopunite baterije."
+"Bežičnoj tastaturi priključenoj na ovaj računar su kritično oslabile "
+"baterije (%.1f%%). Ona će uskoro prestati da radi ako mu ne dopunite "
+"baterije."
 
-#: ../src/gpm-manager.c:1362
+#. TRANSLATORS: the device is just going to stop working
+#: ../src/gpm-manager.c:1569
 #, c-format
 msgid ""
 "The PDA attached to this computer is very low in power (%.1f%%). This device "
@@ -1900,7 +1916,8 @@ msgstr ""
 "PDA uređaju priključenom na ovaj računar su kritično oslabile baterije (%.1f%"
 "%). On će uskoro prestati da radi ako mu ne dopunite baterije."
 
-#: ../src/gpm-manager.c:1367
+#. TRANSLATORS: the device is just going to stop working
+#: ../src/gpm-manager.c:1578
 #, c-format
 msgid ""
 "Your cell phone is very low in power (%.1f%%). This device will soon stop "
@@ -1909,7 +1926,8 @@ msgstr ""
 "Mobilnom telefonu priključenom na ovaj računar su kritično oslabile baterije "
 "(%.1f%%). On će uskoro prestati da radi ako mu ne dopunite baterije."
 
-#: ../src/gpm-manager.c:1399
+#. TRANSLATORS: computer will shutdown without saving data
+#: ../src/gpm-manager.c:1630
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
@@ -1917,29 +1935,33 @@ msgstr ""
 "Stanje baterije je ispod kritičnog nivoa i računar će biti <b>ugašen</b>kada "
 "se ona u potpunosti istroši."
 
-#: ../src/gpm-manager.c:1404
+#. TRANSLATORS: computer will suspend
+#: ../src/gpm-manager.c:1636
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
 "computer in a suspended state."
 msgstr ""
-"Stanje baterije je ispod kritičnog nivoa pa će računar biti preveden u stanje "
-"pripravnosti. <br><b>Napomena:</b> Potrebna je mala količina energije za "
-"održavanje računara u obustavljenom stanju."
+"Stanje baterije je ispod kritičnog nivoa pa će računar biti preveden u "
+"stanje pripravnosti. <br><b>Napomena:</b> Potrebna je mala količina energije "
+"za održavanje računara u obustavljenom stanju."
 
-#: ../src/gpm-manager.c:1410
+#. TRANSLATORS: computer will hibernate
+#: ../src/gpm-manager.c:1643
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr "Stanje baterije je ispod kritičnog nivoa pa će računar biti zamrznut."
 
-#: ../src/gpm-manager.c:1414
+#. TRANSLATORS: computer will just shutdown
+#: ../src/gpm-manager.c:1648
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr "Stanje baterije je ispod kritičnog nivoa pa će računar biti ugašen."
 
-#: ../src/gpm-manager.c:1431
+#. TRANSLATORS: computer will shutdown without saving data
+#: ../src/gpm-manager.c:1668
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
@@ -1947,24 +1969,28 @@ msgstr ""
 "Stanje rezervnog napajanja je ispod kritičnog nivoa pa će računar biti "
 "<b>ugašen</b> kada se rezervno napajanje potpuno istroši."
 
-#: ../src/gpm-manager.c:1436
+#. TRANSLATORS: computer will hibernate
+#: ../src/gpm-manager.c:1674
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr ""
 "Stanje rezervnog napajanja je ispod kritičnog nivoa pa će računar biti "
 "zamrznut."
 
-#: ../src/gpm-manager.c:1440
+#. TRANSLATORS: computer will just shutdown
+#: ../src/gpm-manager.c:1679
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr ""
 "Stanje rezervnog napajanja je ispod kritičnog nivoa i računar će biti ugašen."
 
-#: ../src/gpm-manager.c:1593
+#. TRANSLATORS: there was in install problem
+#: ../src/gpm-manager.c:1842
 msgid "Install problem!"
 msgstr "Problem pri instalaciji!"
 
-#: ../src/gpm-manager.c:1594
+#. TRANSLATORS: the GConf schema was not installed properly
+#: ../src/gpm-manager.c:1844
 msgid ""
 "The configuration defaults for GNOME Power Manager have not been installed "
 "correctly.\n"
@@ -1974,252 +2000,143 @@ msgstr ""
 "instalirane.\n"
 "Kontaktirajte Vašeg sistemskog administratora."
 
-#. save in state
-#: ../src/gpm-notify.c:281
-msgid "Battery may be recalled"
-msgstr "Baterija vašeg prenosnog računara se više ne proizvodi"
-
-#: ../src/gpm-notify.c:282
-#, c-format
-msgid ""
-"The battery in your computer may have been recalled by %s and you may be at "
-"risk.\n"
-"\n"
-"For more information visit the %s battery recall website."
-msgstr ""
-"%s više ne proizvodi baterije za Vaš prenosni uređaj pa možete rizikovati "
-"ako nastavite da je koristite.\n"
-"\n"
-"Za više informacija molim posetite %s internet stranu za zamenu baterije."
-
-#: ../src/gpm-notify.c:296
-msgid "Visit recall website"
-msgstr "Posetite internet stranu za zamenu baterije"
-
-#: ../src/gpm-notify.c:302 ../src/gpm-notify.c:340 ../src/gpm-notify.c:378
-#: ../src/gpm-notify.c:407 ../src/gpm-notify.c:435 ../src/gpm-notify.c:463
-#: ../src/gpm-notify.c:497
-msgid "Do not show me this again"
-msgstr "Ne prikazuj mi ovo ponovo"
-
-#: ../src/gpm-notify.c:327
-msgid "Battery may be broken"
-msgstr "Možda je baterija neispravna"
-
-#: ../src/gpm-notify.c:328
-#, c-format
-msgid ""
-"Your battery has a very low capacity (%i%%), which means that it may be old "
-"or broken."
-msgstr ""
-"Vaša baterija ima veoma nizak kapacitet (%i%%), što može da znači da je "
-"stara ili pokvarena."
-
-#: ../src/gpm-notify.c:364
-msgid "Sleep warning"
-msgstr "Upozorenje o uspavljivanju"
-
-#: ../src/gpm-notify.c:365
-msgid ""
-"Your laptop will not sleep if you shut the lid as a running program has "
-"prevented this.\n"
-"Some laptops can overheat if they do not sleep when the lid is closed."
-msgstr ""
-"Prenosni računar se neće uspavati ukoliko mu zatvorite poklopac jer mu neki "
-"tekući program to ne dozvoljava.\n"
-"Neki prenosni računari mogu da se pregreju ukoliko se ne uspavaju pri "
-"zatvaranju poklopca."
-
-#: ../src/gpm-notify.c:396
-msgid "Battery Charged"
-msgstr "Baterija je napunjena"
-
-#: ../src/gpm-notify.c:397
-msgid "Your laptop battery is now fully charged"
-msgstr "Baterija prenosnog računara je napunjena"
-
-#: ../src/gpm-notify.c:424
-msgid "Battery Discharging"
-msgstr "Pražnjenje baterije"
-
-#: ../src/gpm-notify.c:425
-msgid "The AC power has been unplugged. The system is now using battery power."
-msgstr "Kabl je isključen iz struje. Sistem sada koristi bateriju."
-
-#: ../src/gpm-notify.c:452
-msgid "UPS Discharging"
-msgstr "Pražnjenje rezervnog napajanja"
-
-#: ../src/gpm-notify.c:453
-msgid "The AC power has been unplugged. The system is now using backup power."
-msgstr "Kabl je isključen iz struje. Sistem sada koristi rezervno napajanje."
-
-#: ../src/gpm-notify.c:481
-msgid "Sleep Problem"
-msgstr "Problem prilikom prevoda u stanje pripravnosti"
-
-#: ../src/gpm-notify.c:483
-msgid ""
-"Your computer failed to hibernate.\n"
-"Check the help file for common problems."
-msgstr ""
-"Vaš računar nije uspeo da se zamrzne.\n"
-"Pogledajte pomoć za spisak najčešćih problema."
-
-#: ../src/gpm-notify.c:486
-msgid ""
-"Your computer failed to suspend.\n"
-"Check the help file for common problems."
-msgstr ""
-"Vaš računar nije uspeo da obustavi rad.\n"
-"Pogledajte pomoć za spisak najčešćih problema."
-
-#: ../src/gpm-notify.c:510
-msgid "Visit quirk website"
-msgstr "Posetite internet stranu za zamenu baterije"
-
-#: ../src/gpm-prefs.c:95 ../test/gpm-inhibit-test.c:186
+#: ../src/gpm-prefs.c:94
 msgid "GNOME Power Preferences"
 msgstr "Postavke potrošnje energije"
 
-#. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs-core.c:84
-msgid "Ask me"
-msgstr "Pitaj me"
-
-#: ../src/gpm-prefs-core.c:85
-msgid "Suspend"
-msgstr "Obustavi"
-
-#: ../src/gpm-prefs-core.c:86
+#: ../src/gpm-prefs-core.c:363
 msgid "Shutdown"
 msgstr "Ugasi"
 
-#: ../src/gpm-prefs-core.c:87
+#: ../src/gpm-prefs-core.c:370
+msgid "Suspend"
+msgstr "Obustavi"
+
+#: ../src/gpm-prefs-core.c:373
 msgid "Hibernate"
 msgstr "Zamrzni"
 
-#: ../src/gpm-prefs-core.c:88
+#: ../src/gpm-prefs-core.c:376
 msgid "Blank screen"
 msgstr "Zatamni ekran"
 
-#: ../src/gpm-prefs-core.c:89
+#: ../src/gpm-prefs-core.c:379
+msgid "Ask me"
+msgstr "Pitaj me"
+
+#: ../src/gpm-prefs-core.c:384
 msgid "Do nothing"
 msgstr "Ništa ne radi"
 
-#: ../src/gpm-prefs-core.c:285
+#: ../src/gpm-prefs-core.c:448
 msgid "Never"
 msgstr "Nikad"
 
-#: ../src/gpm-prefs-core.c:1026
-msgid "Make Default"
-msgstr "Postavi kao podrazumevano"
-
-#: ../src/gpm-statistics.c:85 ../src/gpm-statistics.c:379
+#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:444
 msgid "Rate"
 msgstr "Stopa"
 
-#: ../src/gpm-statistics.c:86
+#: ../src/gpm-statistics.c:81
 msgid "Charge"
 msgstr "Napunjeno"
 
-#: ../src/gpm-statistics.c:87 ../src/gpm-statistics.c:393
+#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:458
 msgid "Time to full"
 msgstr "Vreme do punjenja"
 
-#: ../src/gpm-statistics.c:88 ../src/gpm-statistics.c:398
+#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:463
 msgid "Time to empty"
 msgstr "Vreme do pražnjenja"
 
-#: ../src/gpm-statistics.c:95
+#: ../src/gpm-statistics.c:90
 msgid "10 minutes"
 msgstr "10 minuta"
 
-#: ../src/gpm-statistics.c:96
+#: ../src/gpm-statistics.c:91
 msgid "2 hours"
 msgstr "2 sata"
 
-#: ../src/gpm-statistics.c:97
+#: ../src/gpm-statistics.c:92
 msgid "1 day"
 msgstr "1 dan"
 
-#: ../src/gpm-statistics.c:98
+#: ../src/gpm-statistics.c:93
 msgid "1 week"
 msgstr "1 nedelja"
 
-#: ../src/gpm-statistics.c:105
+#: ../src/gpm-statistics.c:100
 msgid "Charge profile"
 msgstr "Profil punjenja"
 
-#: ../src/gpm-statistics.c:106
+#: ../src/gpm-statistics.c:101
 msgid "Charge accuracy"
 msgstr "Preciznosti punjenja"
 
-#: ../src/gpm-statistics.c:107
+#: ../src/gpm-statistics.c:102
 msgid "Discharge profile"
 msgstr "Profil pražnjenja"
 
-#: ../src/gpm-statistics.c:108
+#: ../src/gpm-statistics.c:103
 msgid "Discharge accuracy"
 msgstr "Preciznosti pražnjenja"
 
-#: ../src/gpm-statistics.c:135
+#: ../src/gpm-statistics.c:130
 msgid "Attribute"
 msgstr "Osobina"
 
-#: ../src/gpm-statistics.c:142
+#: ../src/gpm-statistics.c:137
 msgid "Value"
 msgstr "Vrednsot"
 
-#: ../src/gpm-statistics.c:159
+#: ../src/gpm-statistics.c:154
 msgid "Image"
 msgstr "Slika"
 
-#: ../src/gpm-statistics.c:165
+#: ../src/gpm-statistics.c:160
 msgid "Description"
 msgstr "Opis"
 
-#: ../src/gpm-statistics.c:184 ../src/gpm-statistics.c:335
+#: ../src/gpm-statistics.c:179 ../src/gpm-statistics.c:400
 msgid "Type"
 msgstr "Vrsta"
 
-#: ../src/gpm-statistics.c:190
+#: ../src/gpm-statistics.c:185
 msgid "ID"
 msgstr "IB"
 
-#: ../src/gpm-statistics.c:204
+#: ../src/gpm-statistics.c:199
 msgid "Command"
 msgstr "Naredba"
 
-#: ../src/gpm-statistics.c:309
+#: ../src/gpm-statistics.c:303
 msgid "Yes"
 msgstr "Da"
 
-#: ../src/gpm-statistics.c:309
+#: ../src/gpm-statistics.c:303
 msgid "No"
 msgstr "Ne"
 
-#: ../src/gpm-statistics.c:334
+#: ../src/gpm-statistics.c:397
 msgid "Device"
 msgstr "Uređaj"
 
-#: ../src/gpm-statistics.c:337
+#: ../src/gpm-statistics.c:402
 msgid "Vendor"
 msgstr "Proizvođač"
 
-#: ../src/gpm-statistics.c:339
+#: ../src/gpm-statistics.c:404
 msgid "Model"
 msgstr "Model"
 
-#: ../src/gpm-statistics.c:341
+#: ../src/gpm-statistics.c:406
 msgid "Serial number"
 msgstr "Serijski broj"
 
-#: ../src/gpm-statistics.c:342
+#: ../src/gpm-statistics.c:407
 msgid "Supply"
 msgstr "Zalihe"
 
-#: ../src/gpm-statistics.c:345
+#: ../src/gpm-statistics.c:410
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
@@ -2227,236 +2144,236 @@ msgstr[0] "%d sekunda"
 msgstr[1] "%d sekunde"
 msgstr[2] "%d sekundi"
 
-#: ../src/gpm-statistics.c:346
+#: ../src/gpm-statistics.c:411
 msgid "Refreshed"
 msgstr "Osveženo"
 
-#: ../src/gpm-statistics.c:353
+#: ../src/gpm-statistics.c:418
 msgid "Present"
 msgstr "Prisutno"
 
-#: ../src/gpm-statistics.c:357
+#: ../src/gpm-statistics.c:422
 msgid "Rechargeable"
 msgstr "Punjivo"
 
-#: ../src/gpm-statistics.c:361
+#: ../src/gpm-statistics.c:426
 msgid "State"
 msgstr "Stanje"
 
-#: ../src/gpm-statistics.c:364
+#: ../src/gpm-statistics.c:429
 msgid "Energy"
 msgstr "Energija"
 
-#: ../src/gpm-statistics.c:367
+#: ../src/gpm-statistics.c:432
 msgid "Energy when empty"
 msgstr "Energija kada je prazno"
 
-#: ../src/gpm-statistics.c:370
+#: ../src/gpm-statistics.c:435
 msgid "Energy when full"
 msgstr "Energija kada je puno"
 
-#: ../src/gpm-statistics.c:373
+#: ../src/gpm-statistics.c:438
 msgid "Energy (design)"
 msgstr "Energija (fabrički)"
 
-#: ../src/gpm-statistics.c:386
+#: ../src/gpm-statistics.c:451
 msgid "Voltage"
 msgstr "Napon"
 
-#: ../src/gpm-statistics.c:407
+#: ../src/gpm-statistics.c:472
 msgid "Percentage"
 msgstr "Procenat"
 
-#: ../src/gpm-statistics.c:412
+#: ../src/gpm-statistics.c:477
 msgid "Capacity"
 msgstr "Kapacitet"
 
-#: ../src/gpm-statistics.c:416
+#: ../src/gpm-statistics.c:481
 msgid "Technology"
 msgstr "Tehnologija"
 
-#: ../src/gpm-statistics.c:418
+#: ../src/gpm-statistics.c:483
 msgid "Online"
 msgstr "U mreži"
 
 #. TRANSLATORS: the command line was not provided
-#: ../src/gpm-statistics.c:680
+#: ../src/gpm-statistics.c:799
 msgid "No data"
 msgstr "Nema podataka"
 
 #. TRANSLATORS: kernel module, usually a device driver
-#: ../src/gpm-statistics.c:687 ../src/gpm-statistics.c:692
+#: ../src/gpm-statistics.c:806 ../src/gpm-statistics.c:811
 msgid "Kernel module"
 msgstr "Modul iz kernela"
 
 #. TRANSLATORS: kernel housekeeping
-#: ../src/gpm-statistics.c:697
+#: ../src/gpm-statistics.c:816
 msgid "Kernel core"
 msgstr "Jezgro kernela"
 
 #. TRANSLATORS: interrupt between processors
-#: ../src/gpm-statistics.c:702
+#: ../src/gpm-statistics.c:821
 msgid "Interprocessor interrupt"
 msgstr "Međuprocesorsko ometanje"
 
 #. TRANSLATORS: unknown interrupt
-#: ../src/gpm-statistics.c:707
+#: ../src/gpm-statistics.c:826
 msgid "Interrupt"
 msgstr "Ometanje"
 
 #. TRANSLATORS: the keyboard and mouse device event
-#: ../src/gpm-statistics.c:750
+#: ../src/gpm-statistics.c:869
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "PS/2 tastatura/miš/tačped"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
-#: ../src/gpm-statistics.c:753
+#: ../src/gpm-statistics.c:872
 msgid "ACPI"
 msgstr "ACPI"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
-#: ../src/gpm-statistics.c:756
+#: ../src/gpm-statistics.c:875
 msgid "Serial ATA"
 msgstr "Serijski ATA"
 
 #. TRANSLATORS: this is the old-style ATA interface
-#: ../src/gpm-statistics.c:759
+#: ../src/gpm-statistics.c:878
 msgid "ATA host controller"
 msgstr "ATA"
 
 #. TRANSLATORS: 802.11 wireless adaptor
-#: ../src/gpm-statistics.c:762
+#: ../src/gpm-statistics.c:881
 msgid "Intel wireless adaptor"
 msgstr "Intelov bežični adapter"
 
 #. TRANSLATORS: a timer is something that fires periodically
-#: ../src/gpm-statistics.c:767 ../src/gpm-statistics.c:770
-#: ../src/gpm-statistics.c:773 ../src/gpm-statistics.c:776
-#: ../src/gpm-statistics.c:779
+#: ../src/gpm-statistics.c:886 ../src/gpm-statistics.c:889
+#: ../src/gpm-statistics.c:892 ../src/gpm-statistics.c:895
+#: ../src/gpm-statistics.c:898
 #, c-format
 msgid "Timer %s"
 msgstr "Tajmer %s"
 
 #. TRANSLATORS: this is a task that's woken up from sleeping
-#: ../src/gpm-statistics.c:782
+#: ../src/gpm-statistics.c:901
 #, c-format
 msgid "Sleep %s"
 msgstr "Probuđen %s"
 
 #. TRANSLATORS: this is a new realtime task
-#: ../src/gpm-statistics.c:785
+#: ../src/gpm-statistics.c:904
 #, c-format
 msgid "New task %s"
 msgstr "Novi zadatak %s"
 
 #. TRANSLATORS: this is a task thats woken to check state
-#: ../src/gpm-statistics.c:788
+#: ../src/gpm-statistics.c:907
 #, c-format
 msgid "Wait %s"
 msgstr "Čeka %s"
 
 #. TRANSLATORS: a work queue is a list of work that has to be done
-#: ../src/gpm-statistics.c:791 ../src/gpm-statistics.c:794
+#: ../src/gpm-statistics.c:910 ../src/gpm-statistics.c:913
 #, c-format
 msgid "Work queue %s"
 msgstr "Zakazani poslovi %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
-#: ../src/gpm-statistics.c:797
+#: ../src/gpm-statistics.c:916
 #, c-format
 msgid "Network route flush %s"
 msgstr "Čišćenje mrežne rute %s"
 
 #. TRANSLATORS: activity on the USB bus
-#: ../src/gpm-statistics.c:800
+#: ../src/gpm-statistics.c:919
 #, c-format
 msgid "USB activity %s"
 msgstr "USB aktivnost %s"
 
 #. TRANSLATORS: we've timed out of an aligned timer
-#: ../src/gpm-statistics.c:803
+#: ../src/gpm-statistics.c:922
 #, c-format
 msgid "Wakeup %s"
 msgstr "Buđenje %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
-#: ../src/gpm-statistics.c:806
+#: ../src/gpm-statistics.c:925
 msgid "Local interrupts"
 msgstr "Lokalna ometanja"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
-#: ../src/gpm-statistics.c:809
+#: ../src/gpm-statistics.c:928
 msgid "Rescheduling interrupts"
 msgstr "Ometanja u prebacivanju"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:919
+#: ../src/gpm-statistics.c:1038
 msgid "Device Information"
 msgstr "Podaci o uređaju"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:921
+#: ../src/gpm-statistics.c:1040
 msgid "Device History"
 msgstr "Istorijat uređaja"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:923
+#: ../src/gpm-statistics.c:1042
 msgid "Device Profile"
 msgstr "Profil uređaja"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:925
+#: ../src/gpm-statistics.c:1044
 msgid "Processor Wakeups"
 msgstr "Buđenja procesora"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1143 ../src/gpm-statistics.c:1149
-#: ../src/gpm-statistics.c:1155 ../src/gpm-statistics.c:1161
+#: ../src/gpm-statistics.c:1250 ../src/gpm-statistics.c:1256
+#: ../src/gpm-statistics.c:1262 ../src/gpm-statistics.c:1268
 msgid "Time elapsed"
 msgstr "Preostalo vreme"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1145
+#: ../src/gpm-statistics.c:1252
 msgid "Power"
 msgstr "Električna energija"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1151 ../src/gpm-statistics.c:1194
-#: ../src/gpm-statistics.c:1200 ../src/gpm-statistics.c:1206
-#: ../src/gpm-statistics.c:1212
+#: ../src/gpm-statistics.c:1258 ../src/gpm-statistics.c:1301
+#: ../src/gpm-statistics.c:1307 ../src/gpm-statistics.c:1313
+#: ../src/gpm-statistics.c:1319
 msgid "Cell charge"
 msgstr "Napon ćelije"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1157 ../src/gpm-statistics.c:1163
+#: ../src/gpm-statistics.c:1264 ../src/gpm-statistics.c:1270
 msgid "Predicted time"
 msgstr "Procenjeno vreme"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1196 ../src/gpm-statistics.c:1208
+#: ../src/gpm-statistics.c:1303 ../src/gpm-statistics.c:1315
 msgid "Correction factor"
 msgstr "Faktor korekcije"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1202 ../src/gpm-statistics.c:1214
+#: ../src/gpm-statistics.c:1309 ../src/gpm-statistics.c:1321
 msgid "Prediction accuracy"
 msgstr "Tačnost predviđanja"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:1559
+#: ../src/gpm-statistics.c:1739
 msgid "Processor"
 msgstr "Procesor"
 
-#: ../src/gpm-tray-icon.c:190 ../src/gpm-tray-icon.c:209
+#: ../src/gpm-tray-icon.c:198 ../src/gpm-tray-icon.c:216
 msgid "Device information"
 msgstr "Informacije o uređaju"
 
-#: ../src/gpm-tray-icon.c:192
+#: ../src/gpm-tray-icon.c:200
 msgid "There is no detailed information for this device"
 msgstr "Nema iscrpnih podataka o ovom uređaju"
 
-#: ../src/gpm-tray-icon.c:321
+#: ../src/gpm-tray-icon.c:330
 msgid "translator-credits"
 msgstr ""
 "Slobodan D. Sredojević <slobo@akrep.be>\n"
@@ -2464,41 +2381,337 @@ msgstr ""
 "\n"
 "http://prevod.org — prevodi na srpski jezik"
 
-#: ../src/gpm-tray-icon.c:336
+#: ../src/gpm-tray-icon.c:345
 msgid "GNOME Power Manager Website"
 msgstr "Beb adresa Gnomovog upravnika potrošnje"
 
 #. preferences
-#: ../src/gpm-tray-icon.c:409
+#: ../src/gpm-tray-icon.c:421
 msgid "_Preferences"
 msgstr "_Postavke"
 
-#. statistics
-#: ../src/gpm-tray-icon.c:417
+#: ../src/gpm-tray-icon.c:435
 msgid "Power _History"
 msgstr "_Dijagram potrošnje"
 
 #. help
-#: ../src/gpm-tray-icon.c:429
+#: ../src/gpm-tray-icon.c:448
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:2
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:2
 msgid "_Help"
 msgstr "_Pomoć"
 
 #. about
-#: ../src/gpm-tray-icon.c:437
+#: ../src/gpm-tray-icon.c:456
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:1
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:1
 msgid "_About"
 msgstr "_O programu"
 
-#: ../src/gpm-tray-icon.c:543
+#: ../src/gpm-tray-icon.c:570
 msgid "_Suspend"
 msgstr "_Obustavi"
 
-#: ../src/gpm-tray-icon.c:553
+#: ../src/gpm-tray-icon.c:580
 msgid "Hi_bernate"
 msgstr "_Zamrzni"
+
+#~ msgid "Change the brightness automatically using the ambient light sensors"
+#~ msgstr "Sam promeni osvetljenost prema okolnom svetlu"
+
+#~ msgid "If DBUS inhibit requests should be ignored from other programs."
+#~ msgstr ""
+#~ "Da li da ostali programi zanemare zahteve za onemogućavanje postavljene "
+#~ "na DBUS magistralu."
+
+#~ msgid "If DBUS inhibit requests should be ignored."
+#~ msgstr "Zanemari zahteve za onemogućavanje postavljene na DBUS magistralu"
+
+#~ msgid ""
+#~ "If a notification message should be displayed when the profile data is "
+#~ "guessed."
+#~ msgstr "Obavesti korisnika o pravljenju procene profila potrošnje."
+
+#~ msgid "If the low-power mode should be enabled when on UPS"
+#~ msgstr ""
+#~ "Omogući režim niske potrošnje ako računar radi na rezervnom napajanju"
+
+#~ msgid ""
+#~ "If the screen brightness should be changed automatically using the "
+#~ "ambient light sensors."
+#~ msgstr ""
+#~ "Prilagodi osvetljenje ekrana u zavisnosti od očitavanja senzora okolnog "
+#~ "osvetljenja."
+
+#~ msgid ""
+#~ "If the screen brightness should be changed automatically using the "
+#~ "ambient light sensors. Valid is 'none', 'light' and 'dark'"
+#~ msgstr ""
+#~ "Sam prilagodi osvetljenje ekrana u zavisnosti od očitavanja senzora "
+#~ "okolnog osvetljenja. Ispravne opcije su „none“ (ništa), „light“ (svetlo) "
+#~ "i „dark“ (tamno)"
+
+#~ msgid "If the system low-power mode should be enabled when on UPS power."
+#~ msgstr "Uključi režim niske potrošnje ako se koristi rezervno napajanje"
+
+#~ msgid ""
+#~ "If we should show the warning when we have a valid inhibit and configured "
+#~ "to sleep on lid close"
+#~ msgstr ""
+#~ "Prikaži upozorenje kada je pokrenuto onemogućavanje uštede i podešavanja "
+#~ "za uspavljivanje pri zatvaranju poklopca"
+
+#~ msgid ""
+#~ "If we should show the warning when we have a valid inhibit and configured "
+#~ "to sleep on lid close."
+#~ msgstr ""
+#~ "Prikaži upozorenje kada je pokrenuto onemogućavanje uštede i podešavanja "
+#~ "za uspavljivanje pri zatvaranju poklopca"
+
+#~ msgid "Keyboard brightness when on AC"
+#~ msgstr "Vrednost osvetljenja tastature pri napajanju iz električne mreže"
+
+#~ msgid "Keyboard brightness when on battery"
+#~ msgstr "Vrednost osvetljenja tastature pri baterijskom napajanju"
+
+#~ msgid "Notify when the profile data is guessed"
+#~ msgstr "Obavesti kada se procenjuje profil potrošnje"
+
+#~ msgid "The amount the light sensors should contribute to the brightness"
+#~ msgstr ""
+#~ "Količina svetlosti pri kojoj će senzori okolnog osvetljenja povećati "
+#~ "osvetljenost"
+
+#~ msgid "The amount the light sensors should contribute to the brightness."
+#~ msgstr ""
+#~ "Količina svetlosti pri kojoj će senzori okolnog osvetljenja povećati "
+#~ "osvetljenost."
+
+#~ msgid ""
+#~ "The brightness of the keyboard when on AC power. Possible values are "
+#~ "between 0 and 100."
+#~ msgstr ""
+#~ "Osvetljenost tastature kada se računar napaja iz električne mreže. Moguće "
+#~ "vrednosti su između 0 i 100."
+
+#~ msgid ""
+#~ "The brightness of the keyboard when on battery power. Possible values are "
+#~ "between 0 and 100."
+#~ msgstr ""
+#~ "Osvetljenost tastature kada se računar napaja iz baterija. Moguće "
+#~ "vrednosti su između 0 i 100"
+
+#~ msgid ""
+#~ "The calibration of the light sensors so that the screen is bright enough"
+#~ msgstr ""
+#~ "Štelovanja senzora spoljnog osvetljenja radi nalaženja prave "
+#~ "osvetljenosti ekrana"
+
+#~ msgid ""
+#~ "The calibration of the light sensors so that the screen is bright enough, "
+#~ "in percent."
+#~ msgstr ""
+#~ "Štelovanja senzora spoljnog osvetljenja radi nalaženja prave "
+#~ "osvetljenosti ekrana, u procentima"
+
+#~ msgid "The interval the ambient light sensors should be polled"
+#~ msgstr "Interval poziva senzora okolne svetlosti"
+
+#~ msgid "The interval the ambient light sensors should be polled in seconds."
+#~ msgstr "Interval poziva senzora za merenje okolne svetlosti u sekundama."
+
+#~ msgid "Application:"
+#~ msgstr "Program:"
+
+#~ msgid "Burning DVD, titled \"My Photos\""
+#~ msgstr "Upisujem na DVD pod naslovom „Moje slike“"
+
+#~ msgid "Inhibit Tester"
+#~ msgstr "Proba onemogućavanja"
+
+#~ msgid "Reason:"
+#~ msgstr "Razlog:"
+
+#~ msgid "UnInhibit"
+#~ msgstr "Opozovi onemogućavanje uštede"
+
+#~ msgid "Vendor Acme Foo"
+#~ msgstr "Proizvođač Feromonting"
+
+#~ msgid "<b>Extras</b>"
+#~ msgstr "<b>Dodatno</b>"
+
+#~ msgid "Always sleep when the lid is _closed"
+#~ msgstr "Uspavaj uvek kada se poklopac p_renosnog računara zatvori"
+
+#~ msgid "Enable UPS discharge _alarm"
+#~ msgstr "Omogući _alarm pražnjenja rezervnog napajanja"
+
+#~ msgid "Turn on keyboard light when light level is low"
+#~ msgstr "Uključi osvetljenje tastature pri slaboj svetlosti"
+
+#~ msgid "Use _ambient light to adjust LCD brightness"
+#~ msgstr "Koristi _okolnu svetlost za štelovanje osvetljenosti tankog ekrana"
+
+#~ msgid "Use _sound to notify in event of an error"
+#~ msgstr "Koristi _zvučno obaveštenje kada se dogodi greška"
+
+#~ msgid "Power Manager for the GNOME desktop"
+#~ msgstr "Upravnik potrošnjom energije za okruženje Gnom"
+
+#~ msgid "<b>Product:</b> %s\n"
+#~ msgstr "<b>Proizvod:</b> %s\n"
+
+#~ msgid "<b>Status:</b> %s\n"
+#~ msgstr "<b>Stanje:</b> %s\n"
+
+#~ msgid "<b>Percentage charge:</b> %.1f%%\n"
+#~ msgstr "<b>Napunjenost u procentima:</b> %.1f%%\n"
+
+#~ msgid "<b>Vendor:</b> %s\n"
+#~ msgstr "<b>Proizvođač:</b> %s\n"
+
+#~ msgid "<b>Technology:</b> %s\n"
+#~ msgstr "<b>Tehnologija:</b> %s\n"
+
+#~ msgid "<b>Serial number:</b> %s\n"
+#~ msgstr "<b>Serjiski broj:</b> %s\n"
+
+#~ msgid "<b>Model:</b> %s\n"
+#~ msgstr "<b>Model:</b> %s\n"
+
+#~ msgid "<b>Charge time:</b> %s\n"
+#~ msgstr "<b>Vreme punjenja:</b> %s\n"
+
+#~ msgid "<b>Discharge time:</b> %s\n"
+#~ msgstr "<b>Vreme pražnjenja:</b> %s\n"
+
+#~ msgid "<b>Capacity:</b> %.1f%% (%s)\n"
+#~ msgstr "<b>Kapacitet:</b> %.1f%% (%s)\n"
+
+#~ msgid "<b>Current charge:</b> %.1f Wh\n"
+#~ msgstr "<b>Trenutna napunjenost:</b> %.1f Wh\n"
+
+#~ msgid "<b>Design charge:</b> %.1f Wh\n"
+#~ msgstr "<b>Fabrička napunjenost:</b> %.1f Wh\n"
+
+#~ msgid "<b>Charge rate:</b> %.1f W\n"
+#~ msgstr "<b>Stopa punjenja:</b> %.1f W\n"
+
+#~ msgid "<b>Current charge:</b> %.0f/7\n"
+#~ msgstr "<b>Trenutna napunjenost:</b> %.0f/7\n"
+
+#~ msgid "<b>Design charge:</b> %.0f/7\n"
+#~ msgstr "<b>Fabrička napunjenost:</b> %.0f/7\n"
+
+#~ msgid "%s has stopped the suspend from taking place: %s."
+#~ msgstr "%s je onemogućio obustavljanje: %s."
+
+#~ msgid "%s has stopped the hibernate from taking place: %s."
+#~ msgstr "%s je onemogućio zamrzavanje: %s."
+
+#~ msgid "%s has stopped the policy action from taking place: %s."
+#~ msgstr "%s je onemogućio predviđene radnje: %s."
+
+#~ msgid "%s has stopped the reboot from taking place: %s."
+#~ msgstr "%s je onemogućio ponovno pokretanje računara: %s."
+
+#~ msgid "%s has stopped the shutdown from taking place: %s."
+#~ msgstr "%s je onemogućio gašenje računara: %s."
+
+#~ msgid "%s has stopped the timeout action from taking place: %s."
+#~ msgstr "%s je onemogućio izvršenje radnje nakon određenog vremena: %s."
+
+#~ msgid "Multiple applications have stopped the suspend from taking place."
+#~ msgstr "Više programa je onemogućilo obustavljanje rada računara."
+
+#~ msgid "Multiple applications have stopped the hibernate from taking place."
+#~ msgstr "Više programa je onemogućilo zamrzavanje računara."
+
+#~ msgid ""
+#~ "Multiple applications have stopped the policy action from taking place."
+#~ msgstr "Više programa je onemogućilo izvršavanje predviđene radnje."
+
+#~ msgid "Multiple applications have stopped the reboot from taking place."
+#~ msgstr "Više programa je onemogućilo ponovno pokretanje računara."
+
+#~ msgid "Multiple applications have stopped the shutdown from taking place."
+#~ msgstr "Više programa je onemogućilo gašenje računara."
+
+#~ msgid "Request to suspend"
+#~ msgstr "Zahtev za obustavljanje"
+
+#~ msgid "Request to hibernate"
+#~ msgstr "Zahtev za zamrzavanje"
+
+#~ msgid "Request to do policy action"
+#~ msgstr "Zahtev za izvođenje radnje pravila"
+
+#~ msgid "Request to do timeout action"
+#~ msgstr "Zahtev za izvršavanje radnje nakon određenog vremena"
+
+#~ msgid "Perform action anyway"
+#~ msgstr "Svejedno izvrši radnju"
+
+#~ msgid "The lid has been closed on ac power."
+#~ msgstr ""
+#~ "Poklopac prenosnog računara je zatvoren pri napajanju iz električne mreže."
+
+#~ msgid "The lid has been closed on battery power."
+#~ msgstr "Poklopac prenosnog računara je zatvoren pri napajanju iz baterije."
+
+#~ msgid "The power button has been pressed."
+#~ msgstr "Pritisnuto je dugme za paljenje računara."
+
+#~ msgid "The suspend button has been pressed."
+#~ msgstr "Pritisnuto je dugme za obustavljanje rada računara."
+
+#~ msgid "The hibernate button has been pressed."
+#~ msgstr "Pritisnuto je dugme za zamrzavanje računara."
+
+#~ msgid ""
+#~ "The lid has been closed, and the ac adapter removed (and gconf is okay)."
+#~ msgstr ""
+#~ "Poklopac prenosnog računara je zatvoren i uređaj isključen iz struje "
+#~ "(gconf je u redu)."
+
+# ne znam šta je ovo! Gad demit.
+#~ msgid "User clicked on tray"
+#~ msgstr "Korisnik je kliknuo na ikonicu"
+
+#~ msgid ""
+#~ "You have approximately <b>%s</b> of remaining battery life (%.1f%%). %s"
+#~ msgstr ""
+#~ "Imate približno još <b>%s</b> preostalog vremena trajanja baterije (%.1f%"
+#~ "%). %s"
+
+#~ msgid "Sleep warning"
+#~ msgstr "Upozorenje o uspavljivanju"
+
+#~ msgid ""
+#~ "Your laptop will not sleep if you shut the lid as a running program has "
+#~ "prevented this.\n"
+#~ "Some laptops can overheat if they do not sleep when the lid is closed."
+#~ msgstr ""
+#~ "Prenosni računar se neće uspavati ukoliko mu zatvorite poklopac jer mu "
+#~ "neki tekući program to ne dozvoljava.\n"
+#~ "Neki prenosni računari mogu da se pregreju ukoliko se ne uspavaju pri "
+#~ "zatvaranju poklopca."
+
+#~ msgid "Your laptop battery is now fully charged"
+#~ msgstr "Baterija prenosnog računara je napunjena"
+
+#~ msgid ""
+#~ "The AC power has been unplugged. The system is now using battery power."
+#~ msgstr "Kabl je isključen iz struje. Sistem sada koristi bateriju."
+
+#~ msgid ""
+#~ "The AC power has been unplugged. The system is now using backup power."
+#~ msgstr ""
+#~ "Kabl je isključen iz struje. Sistem sada koristi rezervno napajanje."
+
+#~ msgid "Visit quirk website"
+#~ msgstr "Posetite internet stranu za zamenu baterije"
 
 #~ msgid ""
 #~ "After resume, gnome-power-manager will suppress policy actions for a "
@@ -2650,12 +2863,6 @@ msgstr "_Zamrzni"
 
 #~ msgid "Session powersave"
 #~ msgstr "Sesija čuvanja energije"
-
-#~ msgid "Session idle"
-#~ msgstr "Sesija neaktivnosti"
-
-#~ msgid "Session active"
-#~ msgstr "Sesija aktivnosti"
 
 #~ msgid "label shown on graph|Suspend"
 #~ msgstr "Obustavljanje"
@@ -2810,8 +3017,8 @@ msgstr "_Zamrzni"
 #~ "mechanism to switch up the frequency."
 #~ msgstr ""
 #~ "Ako se u proračun uključe procesi sa izmenjenim prioritetom, oni mogu "
-#~ "uzrokovati povećanje učestanosti čak iako njihova apsolutna vrednost ne bi "
-#~ "pokrenula mehanizam štelovanja da podigne učestanost."
+#~ "uzrokovati povećanje učestanosti čak iako njihova apsolutna vrednost ne "
+#~ "bi pokrenula mehanizam štelovanja da podigne učestanost."
 
 #~ msgid "If we should show the CPU frequency scaling in the UI"
 #~ msgstr "Omogući štelovanje učestanosti procesora kroz grafičko sučelje."
@@ -2834,8 +3041,8 @@ msgstr "_Zamrzni"
 #~ "The cpufreq performance value used to scale the processor when on AC "
 #~ "power."
 #~ msgstr ""
-#~ "Vrednost učestanosti procesora (cpufreq) koja se koristi za štelovanje pri "
-#~ "napajanju računara iz električne mreže."
+#~ "Vrednost učestanosti procesora (cpufreq) koja se koristi za štelovanje "
+#~ "pri napajanju računara iz električne mreže."
 
 #~ msgid ""
 #~ "The cpufreq performance value used to scale the processor when on battery "
@@ -2860,8 +3067,8 @@ msgstr "_Zamrzni"
 #~ "nothing."
 #~ msgstr ""
 #~ "Pravilo za promenu učestanosti procesora (cpufreq) koje će štelovati "
-#~ "učestanost pri napajanju računara iz električne mreže. Moguće vrednosti su "
-#~ "„ondemand“ (na zahtev), „conservative“ (na zahtev uz očuvanje), "
+#~ "učestanost pri napajanju računara iz električne mreže. Moguće vrednosti "
+#~ "su „ondemand“ (na zahtev), „conservative“ (na zahtev uz očuvanje), "
 #~ "„powersave“ (štednja energije), „userspace“ (promenljivo od strane "
 #~ "korisnika), „performance“ (najbolji učinak), „nothing“ (bez primene "
 #~ "pravila)."
@@ -2905,7 +3112,8 @@ msgstr "_Zamrzni"
 #~ msgid ""
 #~ "Policy timeout is not valid. Please wait a few seconds and try again."
 #~ msgstr ""
-#~ "Čekanje na pravilo nije dovoljno. Sačekajte par sekundi i pokušajte ponovo."
+#~ "Čekanje na pravilo nije dovoljno. Sačekajte par sekundi i pokušajte "
+#~ "ponovo."
 
 #~ msgid "<b>Status:</b> Charged\n"
 #~ msgstr "<b>Stanje:</b> Napunjena\n"
@@ -2915,12 +3123,6 @@ msgstr "_Zamrzni"
 
 #~ msgid "<b>Status:</b> Discharging\n"
 #~ msgstr "<b>Stanje:</b> Prazni se\n"
-
-#~ msgid "Current charge:"
-#~ msgstr "Trenutna napunjenost:"
-
-#~ msgid "Design charge:"
-#~ msgstr "Fabrički kapacitet:"
 
 #~ msgid "Based on processor load"
 #~ msgstr "Na osnovu procesorskog opterećenja"

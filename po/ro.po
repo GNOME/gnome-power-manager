@@ -9,15 +9,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager HEAD\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-power-manager&component=general\n"
-"POT-Creation-Date: 2009-02-15 22:22+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-08-24 11:05+0100\n"
 "PO-Revision-Date: 2009-02-17 23:51+0200\n"
 "Last-Translator: Adi Roiban <adi@roiban.ro>\n"
 "Language-Team: Gnome Romanian Team <gnomero-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n == 1 ? 0: (((n % 100 > 19) || ((n % 100 == 0) && (n != 0))) ? 2: 1));\n"
+"Plural-Forms: nplurals=3; plural=(n == 1 ? 0: (((n % 100 > 19) || ((n % 100 "
+"== 0) && (n != 0))) ? 2: 1));\n"
 
 #: ../applets/brightness/brightness-applet.c:105
 msgid "Power Manager Brightness Applet"
@@ -28,7 +29,7 @@ msgid "Adjusts laptop panel brightness."
 msgstr "Ajustează luminozitate ecran laptop."
 
 #: ../applets/brightness/brightness-applet.c:354
-#: ../applets/inhibit/inhibit-applet.c:348
+#: ../applets/inhibit/inhibit-applet.c:353
 msgid "Cannot connect to gnome-power-manager"
 msgstr "Nu este posibilă conectarea la gnome-power-manager"
 
@@ -42,14 +43,12 @@ msgid "LCD brightness : %d%%"
 msgstr "Luminozitate LCD: %d%%"
 
 #: ../applets/brightness/brightness-applet.c:747
-#: ../applets/inhibit/inhibit-applet.c:417
-#: ../src/gpm-tray-icon.c:307
+#: ../applets/inhibit/inhibit-applet.c:422 ../src/gpm-tray-icon.c:316
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Licențiat sub GNU General Public License Version 2"
 
 #: ../applets/brightness/brightness-applet.c:748
-#: ../applets/inhibit/inhibit-applet.c:418
-#: ../src/gpm-tray-icon.c:308
+#: ../applets/inhibit/inhibit-applet.c:423 ../src/gpm-tray-icon.c:317
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -58,12 +57,12 @@ msgid ""
 msgstr ""
 "Getionarul de consum este software liber; puteți să îl redistribuiți și/sau\n"
 "să îl modificați sub termenii GNU General Public License\n"
-"așa cum este publicată de către Free Software Foundation; sau versiunea a 2-a\n"
+"așa cum este publicată de către Free Software Foundation; sau versiunea a 2-"
+"a\n"
 "a Licenței, sau (la alegerea dumneavoastră) orice versiune ulterioară."
 
 #: ../applets/brightness/brightness-applet.c:752
-#: ../applets/inhibit/inhibit-applet.c:422
-#: ../src/gpm-tray-icon.c:312
+#: ../applets/inhibit/inhibit-applet.c:427 ../src/gpm-tray-icon.c:321
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -76,8 +75,7 @@ msgstr ""
 "GNU General Public License pentru mai multe detalii."
 
 #: ../applets/brightness/brightness-applet.c:756
-#: ../applets/inhibit/inhibit-applet.c:426
-#: ../src/gpm-tray-icon.c:316
+#: ../applets/inhibit/inhibit-applet.c:431 ../src/gpm-tray-icon.c:325
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -109,33 +107,36 @@ msgstr "Șablon miniaplicație de luminozitate"
 msgid "Factory for Brightness Applet"
 msgstr "Șablon pentru miniaplicația de luminozitate"
 
-#: ../applets/inhibit/inhibit-applet.c:88
+#: ../applets/inhibit/inhibit-applet.c:91
 msgid "Power Manager Inhibit Applet"
 msgstr "Miniaplicație de inhibare administrare consum"
 
-#: ../applets/inhibit/inhibit-applet.c:89
+#: ../applets/inhibit/inhibit-applet.c:92
 msgid "Allows user to inhibit automatic power saving."
-msgstr "Permite utilizatorului dezactivarea reducerii automate a consumului de energie."
+msgstr ""
+"Permite utilizatorului dezactivarea reducerii automate a consumului de "
+"energie."
 
-#: ../applets/inhibit/inhibit-applet.c:351
+#: ../applets/inhibit/inhibit-applet.c:356
 msgid "Automatic sleep inhibited"
 msgstr "Dezactivată adormirea automată a sistemului"
 
-#: ../applets/inhibit/inhibit-applet.c:353
+#: ../applets/inhibit/inhibit-applet.c:358
 msgid "Automatic sleep enabled"
 msgstr "Activată adormire automată a sistemului"
 
-#: ../applets/inhibit/inhibit-applet.c:381
+#: ../applets/inhibit/inhibit-applet.c:386
 msgid "Manual inhibit"
 msgstr "Dezactivare manuală"
 
-#: ../applets/inhibit/inhibit-applet.c:440
+#: ../applets/inhibit/inhibit-applet.c:445
 msgid "Copyright © 2006-2007 Richard Hughes"
 msgstr "Drepturi de autor © 2006-2007 Richard Hughes"
 
 #: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:1
 msgid "Allows user to inhibit automatic power saving"
-msgstr "Permite utilizatorului să dezactiveze economisirea automată a consumului"
+msgstr ""
+"Permite utilizatorului să dezactiveze economisirea automată a consumului"
 
 #: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:2
 msgid "Factory for Inhibit Applet"
@@ -149,9 +150,7 @@ msgstr "Miniaplicație de blocare"
 msgid "Inhibit Applet Factory"
 msgstr "Șablon miniaplicație de blocare"
 
-#. common descriptions of this program
 #: ../data/gnome-power-manager.desktop.in.in.h:1
-#: ../src/gpm-common.h:43
 msgid "Power Manager"
 msgstr "Administrare consum"
 
@@ -160,582 +159,785 @@ msgid "Power management daemon"
 msgstr "Serviciu de administrare consum"
 
 #: ../data/gnome-power-manager.schemas.in.h:1
-msgid "After resume, gnome-power-manager will suppress policy actions for a number of seconds to allow messages to settle and HAL to refresh. Commonly five seconds is enough while not being so long that the user gets confused."
-msgstr "După revenire, gnome-power-manager va opri actiunile protocoalelor pentru câteva secunde, pentru a permite stabilizarea mesajelor și reactualizarea HAL. De obicei 5 secunde sunt suficiente, astfel încât utilizatorul să nu fie derutat."
-
-#: ../data/gnome-power-manager.schemas.in.h:2
 msgid "Allow Suspend and Hibernate in the menu"
 msgstr "Permite suspendarea și hibernarea calculatorului din meniu."
 
-#: ../data/gnome-power-manager.schemas.in.h:3
+#: ../data/gnome-power-manager.schemas.in.h:2
 msgid "Allow backlight brightness adjustment"
 msgstr "Permite ajustarea luminozității luminii de fundal"
 
-#: ../data/gnome-power-manager.schemas.in.h:4
+#: ../data/gnome-power-manager.schemas.in.h:3
 msgid "Battery critical low action"
 msgstr "Acțiune pentru baterie aproape goală"
 
-#: ../data/gnome-power-manager.schemas.in.h:5
-msgid "Change the brightness automatically using the ambient light sensors"
-msgstr "Modifică luminozitatea ecranului automat folosind senzorii de lumină ambientală"
-
-#: ../data/gnome-power-manager.schemas.in.h:6
+#: ../data/gnome-power-manager.schemas.in.h:4
 msgid "Check CPU load before sleeping"
 msgstr "Verifică încărcarea CPU înainte de adormire"
 
-#: ../data/gnome-power-manager.schemas.in.h:7
+#: ../data/gnome-power-manager.schemas.in.h:5
 msgid "Dim the screen after a period of inactivity when on AC power"
-msgstr "Micește luminozitatea ecranului după o perioadă de inactivitate cand se folosește curent de la rețea."
+msgstr ""
+"Micește luminozitatea ecranului după o perioadă de inactivitate cand se "
+"folosește curent de la rețea."
+
+#: ../data/gnome-power-manager.schemas.in.h:6
+msgid "Dim the screen after a period of inactivity when on battery power"
+msgstr ""
+"Micește luminozitatea ecranului după o perioadă de inactivitate cand se "
+"folosește curent din acumulator."
+
+#: ../data/gnome-power-manager.schemas.in.h:7
+#, fuzzy
+msgid ""
+"Display options for the notification icon. Valid options are \"never\", \"low"
+"\", \"critical\", \"charge\", \"present\" and \"always\"."
+msgstr ""
+"Afișează opțiuni pentru pictograma de notificare. Opțiuni valide sunt „never"
+"\", „critical\", „charge\", „present\", „always\""
 
 #: ../data/gnome-power-manager.schemas.in.h:8
-msgid "Dim the screen after a period of inactivity when on battery power"
-msgstr "Micește luminozitatea ecranului după o perioadă de inactivitate cand se folosește curent din acumulator."
-
-#: ../data/gnome-power-manager.schemas.in.h:9
-msgid "Display options for the notification icon. Valid options are \"never\", \"critical\", \"charge\", \"present\" and \"always\"."
-msgstr "Afișează opțiuni pentru pictograma de notificare. Opțiuni valide sunt „never\", „critical\", „charge\", „present\", „always\""
-
-#: ../data/gnome-power-manager.schemas.in.h:10
 msgid "Hibernate button action"
 msgstr "Acțiune pentru butonul de hibernare"
 
-#: ../data/gnome-power-manager.schemas.in.h:11
+#: ../data/gnome-power-manager.schemas.in.h:9
 msgid "Hibernate enabled"
 msgstr "Hibernare activată"
 
+#: ../data/gnome-power-manager.schemas.in.h:10
+msgid ""
+"If a notification message should be displayed after suspend or hibernate "
+"failed."
+msgstr ""
+"Dacă un mesaj de notificare va fi afișat după suspendarea sau hibernarea "
+"eșuată."
+
+#: ../data/gnome-power-manager.schemas.in.h:11
+msgid ""
+"If a notification message should be displayed when the battery is fully "
+"charged."
+msgstr ""
+"Dacă să fie afișat un mesaj de notificare în cazul în care acumulatorul este "
+"pe deplin încărcat."
+
 #: ../data/gnome-power-manager.schemas.in.h:12
-msgid "If DBUS inhibit requests should be ignored from other programs."
-msgstr "Dacă DBUS inhibă cereri, atunci acest lucru ar trebui ignorat din alte programe."
+msgid ""
+"If a notification message should be displayed when the battery is getting "
+"low."
+msgstr ""
+"Dacă un mesaj de informare să apară când nivelul acumulatorului este mic."
 
 #: ../data/gnome-power-manager.schemas.in.h:13
-msgid "If DBUS inhibit requests should be ignored."
-msgstr "Dacă DBUS inhibă cereri, atunci acest lucru ar trebui ignorat."
-
-#: ../data/gnome-power-manager.schemas.in.h:14
-msgid "If a notification message should be displayed after suspend or hibernate failed."
-msgstr "Dacă un mesaj de notificare va fi afișat după suspendarea sau hibernarea eșuată."
-
-#: ../data/gnome-power-manager.schemas.in.h:15
-msgid "If a notification message should be displayed when the battery is fully charged."
-msgstr "Dacă să fie afișat un mesaj de notificare în cazul în care acumulatorul este pe deplin încărcat."
-
-#: ../data/gnome-power-manager.schemas.in.h:16
-msgid "If a notification message should be displayed when the battery is getting low."
-msgstr "Dacă un mesaj de informare să apară când nivelul acumulatorului este mic."
-
-#: ../data/gnome-power-manager.schemas.in.h:17
-msgid "If a notification message should be displayed when the profile data is guessed."
-msgstr "Dacă să fie afișată o notificare când datele profilului sunt ghicite."
-
-#: ../data/gnome-power-manager.schemas.in.h:18
-msgid "If extra debugging messages should be used"
-msgstr "Dacă să fie folosite mesaje de depanare suplimentare"
-
-#: ../data/gnome-power-manager.schemas.in.h:19
-msgid "If extra debugging messages should be used. Only turn this on for debugging."
-msgstr "Dacă să fie folosite mesaje de depanare suplimentare. Folosiți numai pentru depanare."
-
-#: ../data/gnome-power-manager.schemas.in.h:20
 msgid "If preferences should be shown"
 msgstr "Dacă să fie afișate preferințele"
 
-#: ../data/gnome-power-manager.schemas.in.h:21
+#: ../data/gnome-power-manager.schemas.in.h:14
 msgid "If sounds should be used"
 msgstr "Dacă sunetele trebuie folosite"
 
-#: ../data/gnome-power-manager.schemas.in.h:22
-msgid "If sounds should be used when the power is critically low, or inhibit requests have stopped the policy action."
-msgstr "Dacă sunetele ar trebui să fie folosite când curentul este foarte mic, sau cereri de inhibare au oprit acțiunea politicii."
+#: ../data/gnome-power-manager.schemas.in.h:15
+msgid ""
+"If sounds should be used when the power is critically low, or inhibit "
+"requests have stopped the policy action."
+msgstr ""
+"Dacă sunetele ar trebui să fie folosite când curentul este foarte mic, sau "
+"cereri de inhibare au oprit acțiunea politicii."
 
-#: ../data/gnome-power-manager.schemas.in.h:23
+#: ../data/gnome-power-manager.schemas.in.h:16
 msgid "If the CPU load should be checked before doing the idle action."
-msgstr "Dacă să fie verificată încarcarea procesorului înainte de efectuarea actiunii pentru inactivitate."
+msgstr ""
+"Dacă să fie verificată încarcarea procesorului înainte de efectuarea "
+"actiunii pentru inactivitate."
 
-#: ../data/gnome-power-manager.schemas.in.h:24
-msgid "If the Suspend and Hibernate options should be allowed in the notification area drop down menu."
-msgstr "Dacă să fie disponibile opțiunile de suspendare și hibernare în meniulul derulant al zonei de notificare."
+#: ../data/gnome-power-manager.schemas.in.h:17
+msgid ""
+"If the Suspend and Hibernate options should be allowed in the notification "
+"area drop down menu."
+msgstr ""
+"Dacă să fie disponibile opțiunile de suspendare și hibernare în meniulul "
+"derulant al zonei de notificare."
 
-#: ../data/gnome-power-manager.schemas.in.h:25
-msgid "If the battery event should occur when the lid is shut and the power disconnected"
-msgstr "Dacă să fie declanșat evenimentul acumulatoruli când capacul este închis și cablul de alimentare deconectat."
+#: ../data/gnome-power-manager.schemas.in.h:18
+msgid ""
+"If the battery event should occur when the lid is shut and the power "
+"disconnected"
+msgstr ""
+"Dacă să fie declanșat evenimentul acumulatoruli când capacul este închis și "
+"cablul de alimentare deconectat."
 
-#: ../data/gnome-power-manager.schemas.in.h:26
-msgid "If the battery lid close event should occur (for example 'Suspend when lid closed on battery') when the lid is previously shut and the AC power disconnected at a later time."
-msgstr "Dacă să fie declanșat evenimentul de capac închis în timpul funcționării pe baterie (ex „Suspendă cand e închis capacul în timpul funcționării pe acumulator”) când capacul este închis și ulterior cablul de alimentare este deconectat."
+#: ../data/gnome-power-manager.schemas.in.h:19
+msgid ""
+"If the battery lid close event should occur (for example 'Suspend when lid "
+"closed on battery') when the lid is previously shut and the AC power "
+"disconnected at a later time."
+msgstr ""
+"Dacă să fie declanșat evenimentul de capac închis în timpul funcționării pe "
+"baterie (ex „Suspendă cand e închis capacul în timpul funcționării pe "
+"acumulator”) când capacul este închis și ulterior cablul de alimentare este "
+"deconectat."
 
-#: ../data/gnome-power-manager.schemas.in.h:27
+#: ../data/gnome-power-manager.schemas.in.h:20
 msgid "If the learnt profile should be used to calculate the time remaining"
 msgstr "Dacă profilul memorat trebuie folosit pentru calculul timpului rămas."
 
+#: ../data/gnome-power-manager.schemas.in.h:21
+msgid ""
+"If the learnt profile should be used to calculate the time remaining. Only "
+"turn this off for debugging."
+msgstr ""
+"Dacă profilul memorat trebuie folosit pentru calculul timpului rămas. "
+"Folosiți numai pentru depanare."
+
+#: ../data/gnome-power-manager.schemas.in.h:22
+msgid "If the low-power mode should be enabled when on AC"
+msgstr ""
+"Dacă modul de consum scăzut de energie să fie activat când se folosește "
+"energia de la rețea"
+
+#: ../data/gnome-power-manager.schemas.in.h:23
+msgid "If the low-power mode should be enabled when on battery"
+msgstr ""
+"Dacă modul de consum scăzut energie să fie activat când se folosește "
+"acumulatorul"
+
+#: ../data/gnome-power-manager.schemas.in.h:24
+#, fuzzy
+msgid ""
+"If the screen brightness should be changed when switching between AC and "
+"battery power."
+msgstr ""
+"Dacă luminozitatea ecranului poate fi schimbată când se schimbă sursa de "
+"curent (rețea sau acumulator) și de către senzorii de lumină ambientală."
+
+#: ../data/gnome-power-manager.schemas.in.h:25
+msgid ""
+"If the screen should be dimmed to save power when the computer is idle when "
+"on AC power."
+msgstr ""
+"Dacă ecranul să se întunece pentru a salva energie în cazul în care "
+"calculatorul este nefolosit și alimentat la rețea."
+
+#: ../data/gnome-power-manager.schemas.in.h:26
+msgid ""
+"If the screen should be dimmed to save power when the computer is idle when "
+"on battery power."
+msgstr ""
+"Dacă ecranul să se întunece pentru a salva energie în cazul în care "
+"calculatorul este nefolosit și alimentat de la acumulator."
+
+#: ../data/gnome-power-manager.schemas.in.h:27
+msgid ""
+"If the screen should be reduced in brightness when the computer is on "
+"battery power."
+msgstr ""
+"Dacă ar trebui redusă luminozitatea ecranului atunci când calculatorul este "
+"alimentat de la acumulator."
+
 #: ../data/gnome-power-manager.schemas.in.h:28
-msgid "If the learnt profile should be used to calculate the time remaining. Only turn this off for debugging."
-msgstr "Dacă profilul memorat trebuie folosit pentru calculul timpului rămas. Folosiți numai pentru depanare."
+msgid "If the system low-power mode should be enabled when on AC power."
+msgstr ""
+"Dacă modul de consum scăzut de energie a sistemului să fie activat când se "
+"foloseste curent de la rețea."
 
 #: ../data/gnome-power-manager.schemas.in.h:29
-msgid "If the low-power mode should be enabled when on AC"
-msgstr "Dacă modul de consum scăzut de energie să fie activat când se folosește energia de la rețea"
+msgid ""
+"If the system low-power mode should be enabled when on laptop battery power."
+msgstr ""
+"Daca modul de consum scăzut de energie a sistemului să fie activat când se "
+"folosește acumulatorul."
 
 #: ../data/gnome-power-manager.schemas.in.h:30
-msgid "If the low-power mode should be enabled when on UPS"
-msgstr "Dacă modul de consum scăzut de energie să fie activat când se folosește o sursă de curent auxiliară (UPS)."
-
-#: ../data/gnome-power-manager.schemas.in.h:31
-msgid "If the low-power mode should be enabled when on battery"
-msgstr "Dacă modul de consum scăzut energie să fie activat când se folosește acumulatorul"
-
-#: ../data/gnome-power-manager.schemas.in.h:32
-msgid "If the screen brightness can be changed when switching between AC and battery power and by ambient light sensors."
-msgstr "Dacă luminozitatea ecranului poate fi schimbată când se schimbă sursa de curent (rețea sau acumulator) și de către senzorii de lumină ambientală."
-
-#: ../data/gnome-power-manager.schemas.in.h:33
-msgid "If the screen brightness should be changed automatically using the ambient light sensors."
-msgstr "Dacă luminozitatea ecranului ar trebui să se schimbe automat folosind senzorii de lumină ambientală."
-
-#: ../data/gnome-power-manager.schemas.in.h:34
-msgid "If the screen brightness should be changed automatically using the ambient light sensors. Valid is 'none', 'light' and 'dark'"
-msgstr "Dacă luminozitatea ecranului ar trebui să se modifice automat, folosind senzori de lumină ambientală. Valori valide sunt „none”, „light” și „dark”"
-
-#: ../data/gnome-power-manager.schemas.in.h:35
-msgid "If the screen should be dimmed to save power when the computer is idle when on AC power."
-msgstr "Dacă ecranul să se întunece pentru a salva energie în cazul în care calculatorul este nefolosit și alimentat la rețea."
-
-#: ../data/gnome-power-manager.schemas.in.h:36
-msgid "If the screen should be dimmed to save power when the computer is idle when on battery power."
-msgstr "Dacă ecranul să se întunece pentru a salva energie în cazul în care calculatorul este nefolosit și alimentat de la acumulator."
-
-#: ../data/gnome-power-manager.schemas.in.h:37
-msgid "If the screen should be reduced in brightness when the computer is on battery power."
-msgstr "Dacă ar trebui redusă luminozitatea ecranului atunci când calculatorul este alimentat de la acumulator."
-
-#: ../data/gnome-power-manager.schemas.in.h:38
-msgid "If the system low-power mode should be enabled when on AC power."
-msgstr "Dacă modul de consum scăzut de energie a sistemului să fie activat când se foloseste curent de la rețea."
-
-#: ../data/gnome-power-manager.schemas.in.h:39
-msgid "If the system low-power mode should be enabled when on UPS power."
-msgstr "Daca modul de consum scăzut de energie să fie activat când se folosește sursa de curent auxiliara (UPS)."
-
-#: ../data/gnome-power-manager.schemas.in.h:40
-msgid "If the system low-power mode should be enabled when on laptop battery power."
-msgstr "Daca modul de consum scăzut de energie a sistemului să fie activat când se folosește acumulatorul."
-
-#: ../data/gnome-power-manager.schemas.in.h:41
 msgid "If the user is authorized to hibernate the computer."
 msgstr "Dacă utilizatorul este autorizat să hiberneze calculatorul."
 
-#: ../data/gnome-power-manager.schemas.in.h:42
+#: ../data/gnome-power-manager.schemas.in.h:31
 msgid "If the user is authorized to suspend the computer."
 msgstr "Dacă utilizatorul este autorizat să suspende calculatorul."
 
-#: ../data/gnome-power-manager.schemas.in.h:43
+#: ../data/gnome-power-manager.schemas.in.h:32
 msgid "If the user should be notified when the AC adapter is disconnected."
-msgstr "Dacă utilizatorul să fie anunțat când este deconectat de la rețeau de energie electrică."
+msgstr ""
+"Dacă utilizatorul să fie anunțat când este deconectat de la rețeau de "
+"energie electrică."
 
-#: ../data/gnome-power-manager.schemas.in.h:44
-msgid "If time based notifications should be used. If set to false, then the percentage change is used instead, which may fix a broken ACPI BIOS."
-msgstr "Dacă să fie folosite notificări bazate pe timp. Dacă nu, atunci va fi folosit procentul schimbării, care ar putea repara un sistem BIOS cu probleme ACPI."
+#: ../data/gnome-power-manager.schemas.in.h:33
+msgid ""
+"If time based notifications should be used. If set to false, then the "
+"percentage change is used instead, which may fix a broken ACPI BIOS."
+msgstr ""
+"Dacă să fie folosite notificări bazate pe timp. Dacă nu, atunci va fi "
+"folosit procentul schimbării, care ar putea repara un sistem BIOS cu "
+"probleme ACPI."
 
-#: ../data/gnome-power-manager.schemas.in.h:45
+#: ../data/gnome-power-manager.schemas.in.h:34
 msgid "If we should show the low capacity warning for a broken battery"
-msgstr "Dacă să fie afișăt avertismentul de capacitate scăzută pentru un acumulator stricat"
+msgstr ""
+"Dacă să fie afișăt avertismentul de capacitate scăzută pentru un acumulator "
+"stricat"
 
-#: ../data/gnome-power-manager.schemas.in.h:46
+#: ../data/gnome-power-manager.schemas.in.h:35
 msgid "If we should show the low capacity warning for a broken battery."
-msgstr "Dacă să fie afișăt avertismentul de capacitate scăzută pentru un acumulator stricat."
+msgstr ""
+"Dacă să fie afișăt avertismentul de capacitate scăzută pentru un acumulator "
+"stricat."
 
-#: ../data/gnome-power-manager.schemas.in.h:47
+#: ../data/gnome-power-manager.schemas.in.h:36
 msgid "If we should show the recalled battery warning for a broken battery"
-msgstr "Dacă ar trebui să fie afișăt avertismentul de schimbare al acumulatorului pentru un acumulator deteriorat"
+msgstr ""
+"Dacă ar trebui să fie afișăt avertismentul de schimbare al acumulatorului "
+"pentru un acumulator deteriorat"
 
-#: ../data/gnome-power-manager.schemas.in.h:48
-msgid "If we should show the recalled battery warning for a broken battery. Set this to false only if you know your battery is okay."
-msgstr "Dacă ar trebui să fie afișăt avertismentul de schimbare al acumulatorului pentru un acumulator deteriorat. Definiți la „false” doar dacă știi că acumulatorul este bun."
+#: ../data/gnome-power-manager.schemas.in.h:37
+msgid ""
+"If we should show the recalled battery warning for a broken battery. Set "
+"this to false only if you know your battery is okay."
+msgstr ""
+"Dacă ar trebui să fie afișăt avertismentul de schimbare al acumulatorului "
+"pentru un acumulator deteriorat. Definiți la „false” doar dacă știi că "
+"acumulatorul este bun."
 
-#: ../data/gnome-power-manager.schemas.in.h:49
-msgid "If we should show the warning when we have a valid inhibit and configured to sleep on lid close"
-msgstr "Dacă să fie afișăt avertismentul când există o inhibare validă și configurată să adoarmă sistemul la închiderea capacului"
-
-#: ../data/gnome-power-manager.schemas.in.h:50
-msgid "If we should show the warning when we have a valid inhibit and configured to sleep on lid close."
-msgstr "Dacă să fie afișăt avertismentul când există o inhibare validă și configurată să adoarmă sistemul la închiderea capacului."
-
-#: ../data/gnome-power-manager.schemas.in.h:51
-msgid "Keyboard brightness when on AC"
-msgstr "Luminozitate tastatură când alimentarea este de la rețea"
-
-#: ../data/gnome-power-manager.schemas.in.h:52
-msgid "Keyboard brightness when on battery"
-msgstr "Luminozitate tastatură când alimentarea este de la acumulator"
-
-#: ../data/gnome-power-manager.schemas.in.h:53
+#: ../data/gnome-power-manager.schemas.in.h:38
 msgid "LCD brightness when on AC"
 msgstr "Luminozitatea LCD când alimentarea este de la rețea"
 
-#: ../data/gnome-power-manager.schemas.in.h:54
+#: ../data/gnome-power-manager.schemas.in.h:39
 msgid "LCD dimming amount when on battery"
 msgstr "Scăderea luminozității eranului când se alimentează de la acumulator"
 
-#: ../data/gnome-power-manager.schemas.in.h:55
+#: ../data/gnome-power-manager.schemas.in.h:40
 msgid "Laptop lid close action on battery"
 msgstr "Acțiune la închiderea capacului, când se alimentează de la acumulator"
 
-#: ../data/gnome-power-manager.schemas.in.h:56
+#: ../data/gnome-power-manager.schemas.in.h:41
 msgid "Laptop lid close action when on AC"
 msgstr "Acțiune închidere capac laptop, când acesta se alimentează de la rețea"
 
-#: ../data/gnome-power-manager.schemas.in.h:57
+#: ../data/gnome-power-manager.schemas.in.h:42
 msgid "Lock GNOME keyring on sleep"
 msgstr "Blochează inelul de chei GNOME la adormire"
 
-#: ../data/gnome-power-manager.schemas.in.h:58
+#: ../data/gnome-power-manager.schemas.in.h:43
 msgid "Lock screen on hibernate"
 msgstr "Blochează ecranul la hibernare"
 
-#: ../data/gnome-power-manager.schemas.in.h:59
+#: ../data/gnome-power-manager.schemas.in.h:44
 msgid "Lock screen on suspend"
 msgstr "Blochează ecranul la suspendare"
 
-#: ../data/gnome-power-manager.schemas.in.h:60
+#: ../data/gnome-power-manager.schemas.in.h:45
 msgid "Lock screen when blanked"
 msgstr "Blochează ecranul la golire"
 
-#: ../data/gnome-power-manager.schemas.in.h:61
+#: ../data/gnome-power-manager.schemas.in.h:46
 msgid "Method used to blank screen on AC"
-msgstr "Metodă folosită la golirea ecranului când este nefolosit și alimentat de la rețea"
+msgstr ""
+"Metodă folosită la golirea ecranului când este nefolosit și alimentat de la "
+"rețea"
 
-#: ../data/gnome-power-manager.schemas.in.h:62
+#: ../data/gnome-power-manager.schemas.in.h:47
 msgid "Method used to blank screen on battery"
-msgstr "Metodă folosită la golirea ecranului când este nefolosit și alimentat de la acumulator"
+msgstr ""
+"Metodă folosită la golirea ecranului când este nefolosit și alimentat de la "
+"acumulator"
 
-#: ../data/gnome-power-manager.schemas.in.h:63
+#: ../data/gnome-power-manager.schemas.in.h:48
 msgid "Notify on a low power"
 msgstr "Notifică când acumulatorul este scăzut"
 
-#: ../data/gnome-power-manager.schemas.in.h:64
+#: ../data/gnome-power-manager.schemas.in.h:49
 msgid "Notify on a sleep failure"
 msgstr "Notifică la adormire eșuată"
 
-#: ../data/gnome-power-manager.schemas.in.h:65
+#: ../data/gnome-power-manager.schemas.in.h:50
 msgid "Notify when AC adapter is disconnected"
 msgstr "Notifică când alimentarea s-a deconectat de la rețea"
 
-#: ../data/gnome-power-manager.schemas.in.h:66
+#: ../data/gnome-power-manager.schemas.in.h:51
 msgid "Notify when fully charged"
 msgstr "Notifică când e încărcat complet"
 
-#: ../data/gnome-power-manager.schemas.in.h:67
-msgid "Notify when the profile data is guessed"
-msgstr "Notifică atunci când datele profilului sunt ghicite"
-
-#: ../data/gnome-power-manager.schemas.in.h:68
-msgid "Number of seconds to suppress policy after resume"
-msgstr "Număr de secunde după care se suprimă politica, după reluarea activității"
-
-#: ../data/gnome-power-manager.schemas.in.h:69
+#: ../data/gnome-power-manager.schemas.in.h:52
 msgid "Percentage action is taken"
 msgstr "Procentaj la care să acționeze"
 
-#: ../data/gnome-power-manager.schemas.in.h:70
+#: ../data/gnome-power-manager.schemas.in.h:53
 msgid "Percentage considered critical"
 msgstr "Procentaj considerat critic"
 
-#: ../data/gnome-power-manager.schemas.in.h:71
+#: ../data/gnome-power-manager.schemas.in.h:54
 msgid "Percentage considered low"
 msgstr "Procentaj considerat scăzut"
 
-#: ../data/gnome-power-manager.schemas.in.h:72
+#: ../data/gnome-power-manager.schemas.in.h:55
 msgid "Power button action"
 msgstr "Acțiune buton pornire"
 
-#: ../data/gnome-power-manager.schemas.in.h:73
+#: ../data/gnome-power-manager.schemas.in.h:56
 msgid "Reduce the backlight brightness when on battery power"
 msgstr "Redu luminozitatea ecranului în timpul alimentării de la acumulator"
 
-#: ../data/gnome-power-manager.schemas.in.h:74
+#: ../data/gnome-power-manager.schemas.in.h:57
+msgid "Seconds of inactivity to spin down when on AC"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:58
+msgid "Seconds of inactivity to spin down when on battery"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:59
 msgid "Sleep timeout computer when on AC"
-msgstr "Timp dupa care se adoarme calculatorul când se folosește curent de la rețea"
+msgstr ""
+"Timp dupa care se adoarme calculatorul când se folosește curent de la rețea"
 
-#: ../data/gnome-power-manager.schemas.in.h:75
+#: ../data/gnome-power-manager.schemas.in.h:60
+#, fuzzy
+msgid "Sleep timeout computer when on UPS"
+msgstr ""
+"Timp dupa care se adoarme calculatorul când se folosește curent de la rețea"
+
+#: ../data/gnome-power-manager.schemas.in.h:61
 msgid "Sleep timeout computer when on battery"
-msgstr "Timp dupa care se adoarme calculatorul când se folosește curent de la acumulator"
+msgstr ""
+"Timp dupa care se adoarme calculatorul când se folosește curent de la "
+"acumulator"
 
-#: ../data/gnome-power-manager.schemas.in.h:76
+#: ../data/gnome-power-manager.schemas.in.h:62
 msgid "Sleep timeout display when on AC"
-msgstr "Timp după care ecranul devine inactiv când se folosește curent de la rețea"
+msgstr ""
+"Timp după care ecranul devine inactiv când se folosește curent de la rețea"
 
-#: ../data/gnome-power-manager.schemas.in.h:77
+#: ../data/gnome-power-manager.schemas.in.h:63
+#, fuzzy
+msgid "Sleep timeout display when on UPS"
+msgstr ""
+"Timp după care ecranul devine inactiv când se folosește curent de la rețea"
+
+#: ../data/gnome-power-manager.schemas.in.h:64
 msgid "Sleep timeout display when on battery"
-msgstr "Timp după care ecranul devine inactiv când se folosește curent de la acumulator"
+msgstr ""
+"Timp după care ecranul devine inactiv când se folosește curent de la "
+"acumulator"
 
-#: ../data/gnome-power-manager.schemas.in.h:78
+#: ../data/gnome-power-manager.schemas.in.h:65
 msgid "Suspend button action"
 msgstr "Acțiune buton supendare"
 
-#: ../data/gnome-power-manager.schemas.in.h:79
+#: ../data/gnome-power-manager.schemas.in.h:66
 msgid "Suspend enabled"
 msgstr "Suspendare activată"
 
+#: ../data/gnome-power-manager.schemas.in.h:67
+#, fuzzy
+msgid ""
+"The DPMS method used to blank the screen when on AC power. Possible values "
+"are \"standby\", \"suspend\" and \"off\"."
+msgstr ""
+"Metoda DPMS folosită pentru a goli ecranul când calculatorul este alimentat "
+"de la rețea. Valorile posibile sunt „default”, „standby”, „suspend” și „off”."
+
+#: ../data/gnome-power-manager.schemas.in.h:68
+#, fuzzy
+msgid ""
+"The DPMS method used to blank the screen when on battery power. Possible "
+"values are \"standby\", \"suspend\" and \"off\"."
+msgstr ""
+"Metoda DPMS folosită pentru a goli ecranul când calculatorul este alimentat "
+"de acumulator. Valorile posibile sunt  „default”, „standby”, „suspend” și "
+"„off”."
+
+#: ../data/gnome-power-manager.schemas.in.h:69
+msgid "The URI to show to the user on sleep failure"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:70
+msgid ""
+"The action to take when the UPS is critically low. Possible values are "
+"\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
+msgstr ""
+"Acțiunea ce va fi efectuată când sursa de curent auxiliara (UPS) este la "
+"nivelul critic. Valorii posibile sunt „hibernate”, „suspend”, „shutdown” și "
+"„nothing”."
+
+#: ../data/gnome-power-manager.schemas.in.h:71
+msgid ""
+"The action to take when the UPS is low. Possible values are \"hibernate\", "
+"\"suspend\", \"shutdown\" and \"nothing\"."
+msgstr ""
+"Acțiunea ce va fi efectuată când sursa de curent auxiliara (UPS) se apropie "
+"de epuizare. Valorii posibile sunt „hibernate”, „suspend”, „shutdown” și "
+"„nothing”."
+
+#: ../data/gnome-power-manager.schemas.in.h:72
+msgid ""
+"The action to take when the battery is critically low. Possible values are "
+"\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
+msgstr ""
+"Acțiunea ce va fi efectuată când acumulatorul este la nivelul critic. "
+"Valorii posibile sunt „hibernate”, „suspend”, „shutdown” și „nothing”."
+
+#: ../data/gnome-power-manager.schemas.in.h:73
+msgid ""
+"The action to take when the laptop lid is closed and the laptop is on AC "
+"power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
+"\"nothing\"."
+msgstr ""
+"Acțiunea ce va fi efectuată când capacul laptopului este închis și laptopul "
+"se alimentează de la rețea. Valorii posibile sunt „hibernate”, „suspend”, "
+"„shutdown” și „nothing”."
+
+#: ../data/gnome-power-manager.schemas.in.h:74
+msgid ""
+"The action to take when the laptop lid is closed and the laptop is on "
+"battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
+"and \"nothing\"."
+msgstr ""
+"Acțiunea ce va fi efectuată când capacul laptopului este închis și laptopul "
+"se alimentează de la acumulator. Valorii posibile sunt „hibernate”, "
+"„suspend”, „shutdown” și „nothing”."
+
+#: ../data/gnome-power-manager.schemas.in.h:75
+msgid ""
+"The action to take when the system hibernate button is pressed. Possible "
+"values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
+"\"nothing\"."
+msgstr ""
+"Acțiunea ce va fi efectuată când este apăsat butonul de hibernare sistem. "
+"Valorii posibile sunt „hibernate”, „suspend”, „shutdown” și „nothing”."
+
+#: ../data/gnome-power-manager.schemas.in.h:76
+msgid ""
+"The action to take when the system power button is pressed. Possible values "
+"are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
+"\"."
+msgstr ""
+"Acțiunea ce va fi efectuată când este apăsat butonul de oprire sistem. "
+"Valorii posibile sunt „hibernate”, „suspend”, „shutdown” și „nothing”."
+
+#: ../data/gnome-power-manager.schemas.in.h:77
+msgid ""
+"The action to take when the system suspend button is pressed. Possible "
+"values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
+"\"nothing\"."
+msgstr ""
+"Acțiunea ce va fi efectuată când este apăsat butonul de suspendare sistem. "
+"Valorii posibile sunt „hibernate”, „suspend”, „shutdown” și „nothing”."
+
+#: ../data/gnome-power-manager.schemas.in.h:78
+msgid ""
+"The amount of time in seconds before the display goes to sleep when the "
+"computer is on AC power."
+msgstr ""
+"Numărul de secunde ce trebuie să treaca dupa care ecranul să adoarmă, când "
+"calculatorul este alimentat de la rețeaua electrică."
+
+#: ../data/gnome-power-manager.schemas.in.h:79
+msgid ""
+"The amount of time in seconds the computer on AC power needs to be inactive "
+"before it goes to sleep."
+msgstr ""
+"Numărul de secunde pentru care calculatorul trebuie să fie inactiv înainte "
+"de a adormi, cănd se alimentează de la rețea."
+
 #: ../data/gnome-power-manager.schemas.in.h:80
-msgid "The DPMS method used to blank the screen when on AC power. Possible values are \"default\", \"standby\", \"suspend\" and \"off\"."
-msgstr "Metoda DPMS folosită pentru a goli ecranul când calculatorul este alimentat de la rețea. Valorile posibile sunt „default”, „standby”, „suspend” și „off”."
+#, fuzzy
+msgid ""
+"The amount of time in seconds the computer on UPS power needs to be inactive "
+"before it goes to sleep."
+msgstr ""
+"Numărul de secunde pentru care calculatorul trebuie să fie inactiv înainte "
+"de a adormi, cănd se alimentează de la rețea."
 
 #: ../data/gnome-power-manager.schemas.in.h:81
-msgid "The DPMS method used to blank the screen when on battery power. Possible values are \"default\", \"standby\", \"suspend\" and \"off\"."
-msgstr "Metoda DPMS folosită pentru a goli ecranul când calculatorul este alimentat de acumulator. Valorile posibile sunt  „default”, „standby”, „suspend” și „off”."
+#, fuzzy
+msgid ""
+"The amount of time in seconds the computer on UPS power needs to be inactive "
+"before the display goes to sleep."
+msgstr ""
+"Numărul de secunde pentru care calculatorul trebuie să fie inactiv înainte "
+"de a adormi, cănd se alimentează de la rețea."
 
 #: ../data/gnome-power-manager.schemas.in.h:82
-msgid "The action to take when the UPS is critically low. Possible values are \"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
-msgstr "Acțiunea ce va fi efectuată când sursa de curent auxiliara (UPS) este la nivelul critic. Valorii posibile sunt „hibernate”, „suspend”, „shutdown” și „nothing”."
+msgid ""
+"The amount of time in seconds the computer on battery power needs to be "
+"inactive before it goes to sleep."
+msgstr ""
+"Numărul de secunde pentru care calculatorul trebuie să fie inactiv înainte "
+"de a adormi, cănd se alimentează de la acumulator."
 
 #: ../data/gnome-power-manager.schemas.in.h:83
-msgid "The action to take when the UPS is low. Possible values are \"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
-msgstr "Acțiunea ce va fi efectuată când sursa de curent auxiliara (UPS) se apropie de epuizare. Valorii posibile sunt „hibernate”, „suspend”, „shutdown” și „nothing”."
+msgid ""
+"The amount of time in seconds the computer on battery power needs to be "
+"inactive before the display goes to sleep."
+msgstr ""
+"Numărul de secunde pentru care calculatorul trebuie să fie inactiv înainte "
+"de a adormi, cănd se alimentează de la rețea."
 
 #: ../data/gnome-power-manager.schemas.in.h:84
-msgid "The action to take when the battery is critically low. Possible values are \"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
-msgstr "Acțiunea ce va fi efectuată când acumulatorul este la nivelul critic. Valorii posibile sunt „hibernate”, „suspend”, „shutdown” și „nothing”."
+msgid ""
+"The amount to dim the brightness of the display when on battery power. "
+"Possible values are between 0 and 100."
+msgstr ""
+"Factorul de reducere a luminozității ecranului când sistemul folosește "
+"acumulatorul. Valorile posibile se situează între 0 și 100."
 
 #: ../data/gnome-power-manager.schemas.in.h:85
-msgid "The action to take when the laptop lid is closed and the laptop is on AC power. Possible values are \"suspend\", \"hibernate\", \"blank\" and \"nothing\"."
-msgstr "Acțiunea ce va fi efectuată când capacul laptopului este închis și laptopul se alimentează de la rețea. Valorii posibile sunt „hibernate”, „suspend”, „shutdown” și „nothing”."
+msgid ""
+"The brightness of the display when on AC power. Possible values are between "
+"0 and 100."
+msgstr ""
+"Luminozitatea ecranului când calculatorul ruleaza pe curent alternativ. "
+"Valorile posibile sunt între 0 și 100."
 
 #: ../data/gnome-power-manager.schemas.in.h:86
-msgid "The action to take when the laptop lid is closed and the laptop is on battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", and \"nothing\"."
-msgstr "Acțiunea ce va fi efectuată când capacul laptopului este închis și laptopul se alimentează de la acumulator. Valorii posibile sunt „hibernate”, „suspend”, „shutdown” și „nothing”."
-
-#: ../data/gnome-power-manager.schemas.in.h:87
-msgid "The action to take when the system hibernate button is pressed. Possible values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing\"."
-msgstr "Acțiunea ce va fi efectuată când este apăsat butonul de hibernare sistem. Valorii posibile sunt „hibernate”, „suspend”, „shutdown” și „nothing”."
-
-#: ../data/gnome-power-manager.schemas.in.h:88
-msgid "The action to take when the system power button is pressed. Possible values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing\"."
-msgstr "Acțiunea ce va fi efectuată când este apăsat butonul de oprire sistem. Valorii posibile sunt „hibernate”, „suspend”, „shutdown” și „nothing”."
-
-#: ../data/gnome-power-manager.schemas.in.h:89
-msgid "The action to take when the system suspend button is pressed. Possible values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing\"."
-msgstr "Acțiunea ce va fi efectuată când este apăsat butonul de suspendare sistem. Valorii posibile sunt „hibernate”, „suspend”, „shutdown” și „nothing”."
-
-#: ../data/gnome-power-manager.schemas.in.h:90
-msgid "The amount of time in seconds before the display goes to sleep when the computer is on AC power."
-msgstr "Numărul de secunde ce trebuie să treaca dupa care ecranul să adoarmă, când calculatorul este alimentat de la rețeaua electrică."
-
-#: ../data/gnome-power-manager.schemas.in.h:91
-msgid "The amount of time in seconds the computer on AC power needs to be inactive before it goes to sleep."
-msgstr "Numărul de secunde pentru care calculatorul trebuie să fie inactiv înainte de a adormi, cănd se alimentează de la rețea."
-
-#: ../data/gnome-power-manager.schemas.in.h:92
-msgid "The amount of time in seconds the computer on battery power needs to be inactive before it goes to sleep."
-msgstr "Numărul de secunde pentru care calculatorul trebuie să fie inactiv înainte de a adormi, cănd se alimentează de la acumulator."
-
-#: ../data/gnome-power-manager.schemas.in.h:93
-msgid "The amount of time in seconds the computer on battery power needs to be inactive before the display goes to sleep."
-msgstr "Numărul de secunde pentru care calculatorul trebuie să fie inactiv înainte de a adormi, cănd se alimentează de la rețea."
-
-#: ../data/gnome-power-manager.schemas.in.h:94
-msgid "The amount the light sensors should contribute to the brightness"
-msgstr "Cantitatea de senzori de lumină care să contribuie la luminozitate"
-
-#: ../data/gnome-power-manager.schemas.in.h:95
-msgid "The amount the light sensors should contribute to the brightness."
-msgstr "Cantitatea de senzori de lumină care să contribuie la luminozitate."
-
-#: ../data/gnome-power-manager.schemas.in.h:96
-msgid "The amount to dim the brightness of the display when on battery power. Possible values are between 0 and 100."
-msgstr "Factorul de reducere a luminozității ecranului când sistemul folosește acumulatorul. Valorile posibile se situează între 0 și 100."
-
-#: ../data/gnome-power-manager.schemas.in.h:97
-msgid "The brightness of the display when on AC power. Possible values are between 0 and 100."
-msgstr "Luminozitatea ecranului când calculatorul ruleaza pe curent alternativ. Valorile posibile sunt între 0 și 100."
-
-#: ../data/gnome-power-manager.schemas.in.h:98
-msgid "The brightness of the keyboard when on AC power. Possible values are between 0 and 100."
-msgstr "Intensitatea tastaturii când se folosește alimentarea de la rețeaua electrică. Valorile posibile sunt între 0 și 100."
-
-#: ../data/gnome-power-manager.schemas.in.h:99
-msgid "The brightness of the keyboard when on battery power. Possible values are between 0 and 100."
-msgstr "Intensitatea tastaturii când se folosește alimentarea de la acumulator. Valorile posibile sunt între 0 și 100."
-
-#: ../data/gnome-power-manager.schemas.in.h:100
 msgid "The brightness of the screen when idle"
 msgstr "Luminozitatea ecranului când calculatorul este inactiv"
 
-#: ../data/gnome-power-manager.schemas.in.h:101
-msgid "The calibration of the light sensors so that the screen is bright enough"
-msgstr "Calibrarea senzorilor de lumină, astfel ca ecranul să fie suficient de luminos"
-
-#: ../data/gnome-power-manager.schemas.in.h:102
-msgid "The calibration of the light sensors so that the screen is bright enough, in percent."
-msgstr "Calibrarea senzorilor de lumină, astfel ca ecranul să fie suficient de luminos, în procente."
-
-#: ../data/gnome-power-manager.schemas.in.h:103
+#: ../data/gnome-power-manager.schemas.in.h:87
 msgid "The default amount of time to dim the screen after idle"
-msgstr "Timpul implicit după care se reduce intensitatea ecranului în mod inactiv"
+msgstr ""
+"Timpul implicit după care se reduce intensitatea ecranului în mod inactiv"
 
-#: ../data/gnome-power-manager.schemas.in.h:104
+#: ../data/gnome-power-manager.schemas.in.h:88
 msgid "The default amount of time to dim the screen after idle."
-msgstr "Timpul implicit după care se reduce intensitatea ecranului în mod inactiv."
+msgstr ""
+"Timpul implicit după care se reduce intensitatea ecranului în mod inactiv."
 
-#: ../data/gnome-power-manager.schemas.in.h:105
+#: ../data/gnome-power-manager.schemas.in.h:89
 msgid "The default configuration version."
 msgstr "Versiunea de configurare implicită."
 
-#: ../data/gnome-power-manager.schemas.in.h:106
+#: ../data/gnome-power-manager.schemas.in.h:90
 msgid "The default graph type to show in the statistics window"
 msgstr "Tipul implicit de grafic afișat în fereastra de statistici"
 
-#: ../data/gnome-power-manager.schemas.in.h:107
+#: ../data/gnome-power-manager.schemas.in.h:91
 msgid "The default graph type to show in the statistics window."
 msgstr "Tipul implicit de grafic afișat în fereastra de statistici."
 
-#: ../data/gnome-power-manager.schemas.in.h:108
-msgid "The interval the ambient light sensors should be polled"
-msgstr "Intervalul în care senzorii de lumină ambientală trebuie sondați"
-
-#: ../data/gnome-power-manager.schemas.in.h:109
-msgid "The interval the ambient light sensors should be polled in seconds."
-msgstr "Intervalul în care senzorii de lumină ambientală trebuie sondați."
-
-#: ../data/gnome-power-manager.schemas.in.h:110
-msgid "The invalid timeout for power actions"
-msgstr "Limita de timp pentru acțiunile de energie"
-
-#: ../data/gnome-power-manager.schemas.in.h:111
-msgid "The invalid timeout in ms for power actions. Set this longer if you get 'battery critical' messages when you unplug."
-msgstr "Limita de timp pentru acțiunile de energie în ms. Definiți o valoare mai mare, dacă primiți mesajul „nivel critic acumulator” când deconectați de la rețeaua electrică."
-
-#: ../data/gnome-power-manager.schemas.in.h:112
+#: ../data/gnome-power-manager.schemas.in.h:92
 msgid "The maximum duration of time displayed on the x-axis of the graph."
 msgstr "Durata maximă afișată pe axa x a graficului."
 
-#: ../data/gnome-power-manager.schemas.in.h:113
+#: ../data/gnome-power-manager.schemas.in.h:93
 msgid "The maximum time displayed on the graph"
 msgstr "Timpul maxim afișat de grafic"
 
-#: ../data/gnome-power-manager.schemas.in.h:114
-msgid "The percentage of the battery when it is considered critical. Only valid when use_time_for_policy is false."
-msgstr "Procentajul acumulatorului considerat critic. Valid  doar când use_time_for_policy este „false”."
+#: ../data/gnome-power-manager.schemas.in.h:94
+#, fuzzy
+msgid ""
+"The number of seconds of inactivity to spin down the disks when on AC power."
+msgstr ""
+"Micește luminozitatea ecranului după o perioadă de inactivitate cand se "
+"folosește curent de la rețea."
 
-#: ../data/gnome-power-manager.schemas.in.h:115
-msgid "The percentage of the battery when it is considered low. Only valid when use_time_for_policy is false."
-msgstr "Procentajul acumulatorului considerat scăzut. Valid  doar când use_time_for_policy este „false”."
+#: ../data/gnome-power-manager.schemas.in.h:95
+#, fuzzy
+msgid ""
+"The number of seconds of inactivity to spin down the disks when on battery "
+"power."
+msgstr ""
+"Micește luminozitatea ecranului după o perioadă de inactivitate cand se "
+"folosește curent din acumulator."
 
-#: ../data/gnome-power-manager.schemas.in.h:116
-msgid "The percentage of the battery when the critical action is performed. Only valid when use_time_for_policy is false."
-msgstr "Procentajul acumulatorului când este executată acțiunea de nivel critic. Valid  doar când use_time_for_policy este „false”."
+#: ../data/gnome-power-manager.schemas.in.h:96
+msgid ""
+"The percentage of the battery when it is considered critical. Only valid "
+"when use_time_for_policy is false."
+msgstr ""
+"Procentajul acumulatorului considerat critic. Valid  doar când "
+"use_time_for_policy este „false”."
 
-#: ../data/gnome-power-manager.schemas.in.h:117
-msgid "The time remaining in seconds of the battery when critical action is taken. Only valid when use_time_for_policy is true."
-msgstr "Timpul rămas în secunde până când acțiunea critică este luată. Valid numai dacă use_time_for_policy este „true”."
+#: ../data/gnome-power-manager.schemas.in.h:97
+msgid ""
+"The percentage of the battery when it is considered low. Only valid when "
+"use_time_for_policy is false."
+msgstr ""
+"Procentajul acumulatorului considerat scăzut. Valid  doar când "
+"use_time_for_policy este „false”."
 
-#: ../data/gnome-power-manager.schemas.in.h:118
-msgid "The time remaining in seconds of the battery when it is considered critical. Only valid when use_time_for_policy is true."
-msgstr "Timpul rămas în secunde, când nivelul acumulatorului este considerat critic. Valid numai când use_time_for_policy este adevărat."
+#: ../data/gnome-power-manager.schemas.in.h:98
+msgid ""
+"The percentage of the battery when the critical action is performed. Only "
+"valid when use_time_for_policy is false."
+msgstr ""
+"Procentajul acumulatorului când este executată acțiunea de nivel critic. "
+"Valid  doar când use_time_for_policy este „false”."
 
-#: ../data/gnome-power-manager.schemas.in.h:119
-msgid "The time remaining in seconds of the battery when it is considered low. Only valid when use_time_for_policy is true."
-msgstr "Timpul rămas în secunde, când nivelul acumulatorului este considerat scăzut. Valid numai când use_time_for_policy este „true”."
+#: ../data/gnome-power-manager.schemas.in.h:99
+msgid ""
+"The time remaining in seconds of the battery when critical action is taken. "
+"Only valid when use_time_for_policy is true."
+msgstr ""
+"Timpul rămas în secunde până când acțiunea critică este luată. Valid numai "
+"dacă use_time_for_policy este „true”."
 
-#: ../data/gnome-power-manager.schemas.in.h:120
+#: ../data/gnome-power-manager.schemas.in.h:100
+msgid ""
+"The time remaining in seconds of the battery when it is considered critical. "
+"Only valid when use_time_for_policy is true."
+msgstr ""
+"Timpul rămas în secunde, când nivelul acumulatorului este considerat critic. "
+"Valid numai când use_time_for_policy este adevărat."
+
+#: ../data/gnome-power-manager.schemas.in.h:101
+msgid ""
+"The time remaining in seconds of the battery when it is considered low. Only "
+"valid when use_time_for_policy is true."
+msgstr ""
+"Timpul rămas în secunde, când nivelul acumulatorului este considerat scăzut. "
+"Valid numai când use_time_for_policy este „true”."
+
+#: ../data/gnome-power-manager.schemas.in.h:102
 msgid "The time remaining when action is taken"
 msgstr "Timpul rămas când acțiunea este efectuată"
 
-#: ../data/gnome-power-manager.schemas.in.h:121
+#: ../data/gnome-power-manager.schemas.in.h:103
 msgid "The time remaining when critical"
 msgstr "Timpul rămas când energia este critică"
 
-#: ../data/gnome-power-manager.schemas.in.h:122
+#: ../data/gnome-power-manager.schemas.in.h:104
 msgid "The time remaining when low"
 msgstr "Timpul rămas când energia este scăzută"
 
-#: ../data/gnome-power-manager.schemas.in.h:123
-msgid "The type of sleeping that should be performed when the computer is inactive. Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
-msgstr "Tipul de adormire care trebuie efectuată atunci când calculatorul este inactiv. Valorile posibile sunt „hibernate”, „suspend” și „nothing”."
+#: ../data/gnome-power-manager.schemas.in.h:105
+msgid ""
+"The type of sleeping that should be performed when the computer is inactive. "
+"Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
+msgstr ""
+"Tipul de adormire care trebuie efectuată atunci când calculatorul este "
+"inactiv. Valorile posibile sunt „hibernate”, „suspend” și „nothing”."
 
-#: ../data/gnome-power-manager.schemas.in.h:124
-msgid "The version of the installed version of the schema. Do not edit this value, it is used so that configure changes between versions can be detected."
-msgstr "Versiunea schemei instalate. Nu editați această valoare, se folosște pentru a detecta schimbările de configurare dintre versiuni."
+#: ../data/gnome-power-manager.schemas.in.h:106
+msgid ""
+"The version of the installed version of the schema. Do not edit this value, "
+"it is used so that configure changes between versions can be detected."
+msgstr ""
+"Versiunea schemei instalate. Nu editați această valoare, se folosște pentru "
+"a detecta schimbările de configurare dintre versiuni."
 
-#: ../data/gnome-power-manager.schemas.in.h:125
-msgid "This is the laptop panel screen brightness used when the session is idle. Only valid when use_time_for_policy is true."
-msgstr "Aceasta este luminozitatea ecranului folosită atunci când sesiunea este inactivă. Valid doar atunci când use_time_for policy este „true”."
+#: ../data/gnome-power-manager.schemas.in.h:107
+msgid ""
+"This is the laptop panel screen brightness used when the session is idle. "
+"Only valid when use_time_for_policy is true."
+msgstr ""
+"Aceasta este luminozitatea ecranului folosită atunci când sesiunea este "
+"inactivă. Valid doar atunci când use_time_for policy este „true”."
 
-#: ../data/gnome-power-manager.schemas.in.h:126
+#: ../data/gnome-power-manager.schemas.in.h:108
 msgid "UPS critical low action"
 msgstr "Acțiune nivel critic UPS"
 
-#: ../data/gnome-power-manager.schemas.in.h:127
+#: ../data/gnome-power-manager.schemas.in.h:109
 msgid "UPS low power action"
 msgstr "Acțiune nivel scăzut UPS"
 
-#: ../data/gnome-power-manager.schemas.in.h:128
+#: ../data/gnome-power-manager.schemas.in.h:110
 msgid "Use gnome-screensaver lock setting"
 msgstr "Folosește configurările de blocare din gnome-screensaver"
 
-#: ../data/gnome-power-manager.schemas.in.h:129
+#: ../data/gnome-power-manager.schemas.in.h:111
+msgid ""
+"When sleep fails we can show the user a button to help fix the situation. "
+"Leave this blank if the button should not be shown."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:112
 msgid "When to show the notification icon"
 msgstr "Când se afișează pictograma de notificare"
 
-#: ../data/gnome-power-manager.schemas.in.h:130
+#: ../data/gnome-power-manager.schemas.in.h:113
 msgid "Whether NetworkManager should be connected and disconnected on sleep."
 msgstr "Dacă NetworkManager ar trebui conectat și deconectat la adormire."
 
-#: ../data/gnome-power-manager.schemas.in.h:131
-msgid "Whether NetworkManager should disconnect before suspending or hibernating and connect on resume."
-msgstr "Dacă NetworkManger se deconectează înainte de suspendare sau hibernare și se conectează la revenire."
+#: ../data/gnome-power-manager.schemas.in.h:114
+msgid ""
+"Whether NetworkManager should disconnect before suspending or hibernating "
+"and connect on resume."
+msgstr ""
+"Dacă NetworkManger se deconectează înainte de suspendare sau hibernare și se "
+"conectează la revenire."
 
-#: ../data/gnome-power-manager.schemas.in.h:132
-msgid "Whether the GNOME keyring is locked before the computer enters hibernate. This means the keyring will have to be unlocked on resume."
-msgstr "Dacă inelul de chei GNOME este blocat înainte de intrarea calculatorului în hibernare. Aceasta înseamnă că inelul va trebui deblocat, la revenire."
+#: ../data/gnome-power-manager.schemas.in.h:115
+msgid ""
+"Whether the GNOME keyring is locked before the computer enters hibernate. "
+"This means the keyring will have to be unlocked on resume."
+msgstr ""
+"Dacă inelul de chei GNOME este blocat înainte de intrarea calculatorului în "
+"hibernare. Aceasta înseamnă că inelul va trebui deblocat, la revenire."
 
-#: ../data/gnome-power-manager.schemas.in.h:133
-msgid "Whether the GNOME keyring is locked before the computer enters suspend. This means the keyring will have to be unlocked on resume."
-msgstr "Dacă inelul de chei GNOME este blocat înainte de suspendarea calculatorului. Aceasta înseamnă că inelul va trebui deblocat, la revenire."
+#: ../data/gnome-power-manager.schemas.in.h:116
+msgid ""
+"Whether the GNOME keyring is locked before the computer enters suspend. This "
+"means the keyring will have to be unlocked on resume."
+msgstr ""
+"Dacă inelul de chei GNOME este blocat înainte de suspendarea calculatorului. "
+"Aceasta înseamnă că inelul va trebui deblocat, la revenire."
 
-#: ../data/gnome-power-manager.schemas.in.h:134
-msgid "Whether the screen is locked when the computer wakes up from a hibernate. Only used if lock_use_screensaver_settings is false."
-msgstr "Dacă ecranul este blocat când calculatorul revine din hibernare. Folosit numai dacă lock_use_screensaver_settings este „false”."
+#: ../data/gnome-power-manager.schemas.in.h:117
+msgid ""
+"Whether the screen is locked when the computer wakes up from a hibernate. "
+"Only used if lock_use_screensaver_settings is false."
+msgstr ""
+"Dacă ecranul este blocat când calculatorul revine din hibernare. Folosit "
+"numai dacă lock_use_screensaver_settings este „false”."
 
-#: ../data/gnome-power-manager.schemas.in.h:135
-msgid "Whether the screen is locked when the computer wakes up from a suspend. Only used if lock_use_screensaver_settings is false."
-msgstr "Dacă ecranul este blocat când calculatorul revine din suspendare. Folosit numai dacă lock_use_screensaver_settings este „false”."
+#: ../data/gnome-power-manager.schemas.in.h:118
+msgid ""
+"Whether the screen is locked when the computer wakes up from a suspend. Only "
+"used if lock_use_screensaver_settings is false."
+msgstr ""
+"Dacă ecranul este blocat când calculatorul revine din suspendare. Folosit "
+"numai dacă lock_use_screensaver_settings este „false”."
 
-#: ../data/gnome-power-manager.schemas.in.h:136
-msgid "Whether the screen is locked when the screen is turned off. Only used if lock_use_screensaver_settings is false."
-msgstr "Dacă ecranul să fie blocat atunci când este închis. Se folosește numai când locak_use_screensaver_settings este „false”."
+#: ../data/gnome-power-manager.schemas.in.h:119
+msgid ""
+"Whether the screen is locked when the screen is turned off. Only used if "
+"lock_use_screensaver_settings is false."
+msgstr ""
+"Dacă ecranul să fie blocat atunci când este închis. Se folosește numai când "
+"locak_use_screensaver_settings este „false”."
 
-#: ../data/gnome-power-manager.schemas.in.h:137
+#: ../data/gnome-power-manager.schemas.in.h:120
 msgid "Whether to hibernate, suspend or do nothing when inactive"
-msgstr "Dacă să fie hibernat, suspendat sau să nu se facă nimic în caz de inactivitate"
+msgstr ""
+"Dacă să fie hibernat, suspendat sau să nu se facă nimic în caz de "
+"inactivitate"
 
-#: ../data/gnome-power-manager.schemas.in.h:138
-msgid "Whether to use the screen lock setting of gnome-screensaver to decide if the screen is locked after a hibernate, suspend or blank screen."
-msgstr "Dacă să fie folosită configurarea de blocare a ecranului a gnome-screensaver pentru a decide dacă ecranul este blocat după hibernare, suspendare sau golire."
+#: ../data/gnome-power-manager.schemas.in.h:121
+msgid ""
+"Whether to use the screen lock setting of gnome-screensaver to decide if the "
+"screen is locked after a hibernate, suspend or blank screen."
+msgstr ""
+"Dacă să fie folosită configurarea de blocare a ecranului a gnome-screensaver "
+"pentru a decide dacă ecranul este blocat după hibernare, suspendare sau "
+"golire."
 
-#: ../data/gnome-power-manager.schemas.in.h:139
+#: ../data/gnome-power-manager.schemas.in.h:122
 msgid "Whether to use time-based notifications"
 msgstr "Dacă trebuie folosite notificări bazate pe timp."
 
-#: ../data/gnome-power-manager.schemas.in.h:140
+#: ../data/gnome-power-manager.schemas.in.h:123
 msgid "Whether we should show the axis labels in the statistics window"
-msgstr "Dacă trebuie să fie afișăte etichetele de axă în fereastra de statistici"
+msgstr ""
+"Dacă trebuie să fie afișăte etichetele de axă în fereastra de statistici"
 
-#: ../data/gnome-power-manager.schemas.in.h:141
+#: ../data/gnome-power-manager.schemas.in.h:124
 msgid "Whether we should show the axis labels in the statistics window."
-msgstr "Dacă trebuie să fie afișăte etichetele de axă în fereastra de statistici."
+msgstr ""
+"Dacă trebuie să fie afișăte etichetele de axă în fereastra de statistici."
 
-#: ../data/gnome-power-manager.schemas.in.h:142
+#: ../data/gnome-power-manager.schemas.in.h:125
 msgid "Whether we should show the events in the statistics window"
 msgstr "Dacă să foe afișăte evenimentele în fereastra de statistici"
 
-#: ../data/gnome-power-manager.schemas.in.h:143
+#: ../data/gnome-power-manager.schemas.in.h:126
 msgid "Whether we should show the events in the statistics window."
 msgstr "Dacă să fie afișăte evenimentele în fereastra de statistici."
 
-#: ../data/gnome-power-manager.schemas.in.h:144
+#: ../data/gnome-power-manager.schemas.in.h:127
 msgid "Whether we should smooth the data in the graph"
 msgstr "Dacă trebuie netezit graficul"
 
-#: ../data/gnome-power-manager.schemas.in.h:145
+#: ../data/gnome-power-manager.schemas.in.h:128
 msgid "Whether we should smooth the data in the graph."
 msgstr "Dacă trebuie netezit graficul."
 
@@ -754,203 +956,161 @@ msgstr "Observă administrare consum"
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.glade.h:6
-#: ../src/gpm-statistics.c:927
-#: ../src/gpm-statistics.c:1349
+#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1048
+#: ../src/gpm-statistics.c:1482
 msgid "Power Statistics"
 msgstr "Statistici consum"
 
-#: ../data/gpm-feedback-widget.glade.h:1
+#: ../data/gpm-feedback-widget.ui.h:1
 msgid "Brightness"
 msgstr "Luminozitate"
 
-#: ../data/gpm-statistics.glade.h:1
+#: ../data/gpm-statistics.ui.h:1
 msgid "0"
 msgstr "0"
 
-#: ../data/gpm-statistics.glade.h:2
+#: ../data/gpm-statistics.ui.h:2
 msgid "Data length:"
 msgstr "Lungime date:"
 
-#: ../data/gpm-statistics.glade.h:3
-#: ../src/gpm-statistics.c:211
+#: ../data/gpm-statistics.ui.h:3 ../src/gpm-statistics.c:206
 msgid "Details"
 msgstr "Detalii"
 
-#: ../data/gpm-statistics.glade.h:4
+#: ../data/gpm-statistics.ui.h:4
 msgid "Graph type:"
 msgstr "Tip grafic:"
 
-#: ../data/gpm-statistics.glade.h:5
+#: ../data/gpm-statistics.ui.h:5
 msgid "History"
 msgstr "Istoric"
 
-#: ../data/gpm-statistics.glade.h:7
+#: ../data/gpm-statistics.ui.h:7
 msgid "Processor wakeups per second:"
 msgstr "Treziri procesor pe secundă:"
 
-#: ../data/gpm-statistics.glade.h:8
+#: ../data/gpm-statistics.ui.h:8
 msgid "Show data points"
 msgstr "Afișare puncte date"
 
-#: ../data/gpm-statistics.glade.h:9
+#: ../data/gpm-statistics.ui.h:9
 msgid "Statistics"
 msgstr "Statistici"
 
-#: ../data/gpm-statistics.glade.h:10
+#: ../data/gpm-statistics.ui.h:10
+msgid "There is no data to display."
+msgstr ""
+
+#: ../data/gpm-statistics.ui.h:11
 msgid "Use smoothed line"
 msgstr "Folosește linie netezită"
 
-#: ../data/gpm-statistics.glade.h:11
-#: ../src/gpm-statistics.c:197
+#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:192
 msgid "Wakeups"
 msgstr "Treziri"
 
-#: ../data/gpm-inhibit-test.glade.h:1
-msgid "Application:"
-msgstr "Aplicație:"
-
-#: ../data/gpm-inhibit-test.glade.h:2
-msgid "Burning DVD, titled \"My Photos\""
-msgstr "Scriere DVD, numit „Fotografiile mele”"
-
-#: ../data/gpm-inhibit-test.glade.h:3
-msgid "Inhibit"
-msgstr "Blochează"
-
-#: ../data/gpm-inhibit-test.glade.h:4
-msgid "Inhibit Tester"
-msgstr "Testare blochare"
-
-#: ../data/gpm-inhibit-test.glade.h:5
-msgid "Reason:"
-msgstr "Motiv:"
-
-#: ../data/gpm-inhibit-test.glade.h:6
-msgid "UnInhibit"
-msgstr "Deblochează"
-
-#: ../data/gpm-inhibit-test.glade.h:7
-msgid "Vendor Acme Foo"
-msgstr "Producător Facem Tot "
-
-#: ../data/gpm-prefs.glade.h:1
+#: ../data/gpm-prefs.ui.h:1
 msgid "<b>Actions</b>"
 msgstr "<b>Acțiuni</b>"
 
-#: ../data/gpm-prefs.glade.h:2
+#: ../data/gpm-prefs.ui.h:2
 msgid "<b>Display</b>"
 msgstr "<b>Ecran</b>"
 
-#: ../data/gpm-prefs.glade.h:3
-msgid "<b>Extras</b>"
-msgstr "<b>Suplimente</b>"
-
-#: ../data/gpm-prefs.glade.h:4
+#: ../data/gpm-prefs.ui.h:3
 msgid "<b>Notification Area</b>"
 msgstr "<b>Zonă notificare</b>"
 
-#: ../data/gpm-prefs.glade.h:5
-msgid "Always sleep when the lid is _closed"
-msgstr "Întotdeauna intră în adormire cănd capacul este în_chis"
-
-#: ../data/gpm-prefs.glade.h:6
+#: ../data/gpm-prefs.ui.h:4
 msgid "Di_m display when idle"
 msgstr "Redu lu_minozitatea ecranului când este inactiv"
 
-#: ../data/gpm-prefs.glade.h:7
-msgid "Enable UPS discharge _alarm"
-msgstr "Activează _alarma descărcare UPS"
-
-#: ../data/gpm-prefs.glade.h:8
+#: ../data/gpm-prefs.ui.h:5
 msgid "General"
 msgstr "Generale"
 
-#: ../data/gpm-prefs.glade.h:9
+#: ../data/gpm-prefs.ui.h:6
+msgid "Make Default"
+msgstr "Configurează ca implicit"
+
+#: ../data/gpm-prefs.ui.h:7
 msgid "On AC Power"
 msgstr "Curent de la rețea"
 
-#: ../data/gpm-prefs.glade.h:10
+#: ../data/gpm-prefs.ui.h:8
 msgid "On Battery Power"
 msgstr "Curent de la acumulator"
 
-#: ../data/gpm-prefs.glade.h:11
+#: ../data/gpm-prefs.ui.h:9
 msgid "On UPS Power"
 msgstr "Curent de la UPS"
 
-#: ../data/gpm-prefs.glade.h:12
+#: ../data/gpm-prefs.ui.h:10
 msgid "Only display an icon when a battery is p_resent"
 msgstr "Afișează pictog_rama numai dacă este prezent un acumulator"
 
-#: ../data/gpm-prefs.glade.h:13
+#: ../data/gpm-prefs.ui.h:11
 msgid "Only display an icon when charging or _discharging"
 msgstr "Afișează pictograma doar la încărcare sau _descărcare"
 
-#: ../data/gpm-prefs.glade.h:14
+#: ../data/gpm-prefs.ui.h:12
 msgid "Power Management Preferences"
 msgstr "Preferințe pentru administrare consum"
 
-#: ../data/gpm-prefs.glade.h:15
+#: ../data/gpm-prefs.ui.h:13
 msgid "Put _display to sleep when inactive for:"
 msgstr "Oprește ecranul _dacă este inactiv pentru:"
 
-#: ../data/gpm-prefs.glade.h:16
+#: ../data/gpm-prefs.ui.h:14
 msgid "Put computer to _sleep when inactive for:"
 msgstr "Pune calculatorul în modul adormire dacă e_ste inactiv pentru:"
 
-#: ../data/gpm-prefs.glade.h:17
+#: ../data/gpm-prefs.ui.h:15
 msgid "Set display _brightness to:"
 msgstr "_Definește luminozitatea ecranului la:"
 
-#: ../data/gpm-prefs.glade.h:18
-msgid "Turn on keyboard light when light level is low"
-msgstr "Pornește luminarea tastaturii când nivelul de lumină este scăzut"
+#: ../data/gpm-prefs.ui.h:16
+msgid "Sp_in down hard disks when possible"
+msgstr ""
 
-#: ../data/gpm-prefs.glade.h:19
-msgid "Use _ambient light to adjust LCD brightness"
-msgstr "Folosește lumina _ambientală pentru a modifica luminozitatea LCD"
-
-#: ../data/gpm-prefs.glade.h:20
-msgid "Use _sound to notify in event of an error"
-msgstr "Folosește _sunet pentru a notifica o eroare"
-
-#: ../data/gpm-prefs.glade.h:21
+#: ../data/gpm-prefs.ui.h:17
 msgid "When UPS power is _critically low:"
 msgstr "Când nivelul UPS-ul a atins un nivel _critic:"
 
-#: ../data/gpm-prefs.glade.h:22
+#: ../data/gpm-prefs.ui.h:18
 msgid "When UPS power is l_ow:"
 msgstr "Când nivelul UPS-ul este _scăzut:"
 
-#: ../data/gpm-prefs.glade.h:23
+#: ../data/gpm-prefs.ui.h:19
 msgid "When battery po_wer is critically low:"
 msgstr "Când acumulatorul a atins un ni_vel critic:"
 
-#: ../data/gpm-prefs.glade.h:24
+#: ../data/gpm-prefs.ui.h:20
 msgid "When laptop lid is cl_osed:"
 msgstr "Când ecranul lapt_opului este închis:"
 
-#: ../data/gpm-prefs.glade.h:25
+#: ../data/gpm-prefs.ui.h:21
 msgid "When the _suspend button is pressed:"
 msgstr "Când butonul de _suspendare este apăsat:"
 
-#: ../data/gpm-prefs.glade.h:26
+#: ../data/gpm-prefs.ui.h:22
 msgid "When the power _button is pressed:"
 msgstr "Când _butonul de pornire este apăsat:"
 
-#: ../data/gpm-prefs.glade.h:27
+#: ../data/gpm-prefs.ui.h:23
 msgid "_Always display an icon"
 msgstr "_Afișează întotdeauna o pictogramă"
 
-#: ../data/gpm-prefs.glade.h:28
+#: ../data/gpm-prefs.ui.h:24
 msgid "_Never display an icon"
 msgstr "_Nu afișa niciodată o pictogramă"
 
-#: ../data/gpm-prefs.glade.h:29
-msgid "_Only display an icon when battery power is critically low"
+#: ../data/gpm-prefs.ui.h:25
+#, fuzzy
+msgid "_Only display an icon when battery power is low"
 msgstr "Arată pict_ograma doar când nivelu acumulatorului este critic"
 
-#: ../data/gpm-prefs.glade.h:30
+#: ../data/gpm-prefs.ui.h:26
 msgid "_Reduce backlight brightness"
 msgstr "_Redu luminozitatea ecranului"
 
@@ -995,36 +1155,43 @@ msgstr[0] "minut"
 msgstr[1] "minute"
 msgstr[2] "de minute"
 
-#: ../src/gpm-common.h:44
-msgid "Power Manager for the GNOME desktop"
-msgstr "Administrator de consum pentru mediul GNOME"
-
-#: ../src/gpm-devicekit.c:168
+#. TRANSLATORS: a phone is charging
+#. TRANSLATORS: device is charging, but we only have a percentage
+#: ../src/gpm-devicekit.c:251 ../src/gpm-devicekit.c:315
 #, c-format
+msgid "%s charging (%.1f%%)"
+msgstr "%s se încarcă (%.1f%%)"
+
+#. TRANSLATORS: The laptop battery is fully charged, and we know a time
+#: ../src/gpm-devicekit.c:266
+#, fuzzy, c-format
 msgid ""
-"%s fully charged (%.1f%%)\n"
-"Provides %s battery runtime"
+"Battery is fully charged.\n"
+"Provides %s laptop runtime"
 msgstr ""
 "%s încărcat complet (%.1f%%)\n"
 "Oferă %s timp de lucru pe acumulator"
 
-#: ../src/gpm-devicekit.c:172
-#, c-format
-msgid "%s fully charged (%.1f%%)"
+#. TRANSLATORS: the device is fully charged
+#: ../src/gpm-devicekit.c:271
+#, fuzzy, c-format
+msgid "%s is fully charged"
 msgstr "%s încărcat complet (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:180
+#. TRANSLATORS: the device is discharging, and we have a time remaining
+#: ../src/gpm-devicekit.c:279
 #, c-format
 msgid "%s %s remaining (%.1f%%)"
 msgstr "%s %s rămas (%.1f%%)"
 
-#. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:185
+#. TRANSLATORS: the device is discharging, but we only have a percentage
+#: ../src/gpm-devicekit.c:284
 #, c-format
 msgid "%s discharging (%.1f%%)"
 msgstr "%s se descarcă (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:197
+#. TRANSLATORS: the device is charging, and we have a time to full and empty
+#: ../src/gpm-devicekit.c:298
 #, c-format
 msgid ""
 "%s %s until charged (%.1f%%)\n"
@@ -1033,1147 +1200,1198 @@ msgstr ""
 "%s %s până la încărcarea completă (%.1f%%)\n"
 "Oferă %s timp de lucru pe acumulator"
 
-#: ../src/gpm-devicekit.c:206
+#. TRANSLATORS: device is charging, and we have a time to full and a percentage
+#: ../src/gpm-devicekit.c:309
 #, c-format
 msgid "%s %s until charged (%.1f%%)"
 msgstr "%s %s până la încărcarea completă (%.1f%%)"
 
-#. don't display "Unknown remaining"
-#: ../src/gpm-devicekit.c:212
-#, c-format
-msgid "%s charging (%.1f%%)"
-msgstr "%s se încarcă (%.1f%%)"
+#. TRANSLATORS: this is only shown for laptops with multiple batteries
+#: ../src/gpm-devicekit.c:323
+#, fuzzy, c-format
+msgid "%s waiting to discharge (%.1f%%)"
+msgstr "%s se descarcă (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:219
-msgid "Device state could not be read at this time"
-msgstr "Starea acumulatorului nu poate fi citită acum"
+#. TRANSLATORS: this is only shown for laptops with multiple batteries
+#: ../src/gpm-devicekit.c:329
+#, fuzzy, c-format
+msgid "%s waiting to charge (%.1f%%)"
+msgstr "%s %s până la încărcarea completă (%.1f%%)"
 
-#: ../src/gpm-devicekit.c:238
-#, c-format
-msgid "<b>Product:</b> %s\n"
-msgstr "<b>Produs:</b> %s\n"
+#. TRANSLATORS: the type of data, e.g. Laptop battery
+#: ../src/gpm-devicekit.c:389
+msgid "Product:"
+msgstr ""
 
-#: ../src/gpm-devicekit.c:240
-#: ../src/gpm-devicekit.c:242
-#: ../src/gpm-devicekit.c:244
-#: ../src/gpm-devicekit.c:246
-#, c-format
-msgid "<b>Status:</b> %s\n"
-msgstr "<b>Stare:</b> %s\n"
+#. TRANSLATORS: device is missing
+#. TRANSLATORS: device is charged
+#. TRANSLATORS: device is charging
+#. TRANSLATORS: device is discharging
+#: ../src/gpm-devicekit.c:393 ../src/gpm-devicekit.c:396
+#: ../src/gpm-devicekit.c:399 ../src/gpm-devicekit.c:402
+#, fuzzy
+msgid "Status:"
+msgstr "Stare"
 
-#: ../src/gpm-devicekit.c:240
+#: ../src/gpm-devicekit.c:393
 msgid "Missing"
 msgstr "Lipsește"
 
-#: ../src/gpm-devicekit.c:242
+#: ../src/gpm-devicekit.c:396
 msgid "Charged"
 msgstr "Încărcat"
 
-#: ../src/gpm-devicekit.c:244
+#: ../src/gpm-devicekit.c:399
 msgid "Charging"
 msgstr "Se încarcă"
 
-#: ../src/gpm-devicekit.c:246
+#: ../src/gpm-devicekit.c:402
 msgid "Discharging"
 msgstr "Se descarcă"
 
-#: ../src/gpm-devicekit.c:248
-#, c-format
-msgid "<b>Percentage charge:</b> %.1f%%\n"
-msgstr "<b>Procent încărcare:</b> %.1f%%\n"
+#. TRANSLATORS: percentage
+#: ../src/gpm-devicekit.c:407
+#, fuzzy
+msgid "Percentage charge:"
+msgstr "Procentaj"
 
-#: ../src/gpm-devicekit.c:250
-#, c-format
-msgid "<b>Vendor:</b> %s\n"
-msgstr "<b>Fabricant:</b> %s\n"
+#. TRANSLATORS: manufacturer
+#: ../src/gpm-devicekit.c:411
+#, fuzzy
+msgid "Vendor:"
+msgstr "Comerciant"
 
-#: ../src/gpm-devicekit.c:253
-#, c-format
-msgid "<b>Technology:</b> %s\n"
-msgstr "<b>Tehnologie:</b> %s\n"
+#. TRANSLATORS: how the battery is made, e.g. Lithium Ion
+#: ../src/gpm-devicekit.c:416
+#, fuzzy
+msgid "Technology:"
+msgstr "Tehnologie"
 
-#: ../src/gpm-devicekit.c:256
-#, c-format
-msgid "<b>Serial number:</b> %s\n"
-msgstr "<b>Număr serie:</b> %s\n"
+#. TRANSLATORS: serial number of the battery
+#: ../src/gpm-devicekit.c:420
+#, fuzzy
+msgid "Serial number:"
+msgstr "Număr serie"
 
-#: ../src/gpm-devicekit.c:258
-#, c-format
-msgid "<b>Model:</b> %s\n"
-msgstr "<b>Model:</b> %s\n"
+#. TRANSLATORS: model number of the battery
+#: ../src/gpm-devicekit.c:424
+#, fuzzy
+msgid "Model:"
+msgstr "Model"
 
-#: ../src/gpm-devicekit.c:261
-#, c-format
-msgid "<b>Charge time:</b> %s\n"
-msgstr "<b>Timp încărcare:</b> %s\n"
+#. TRANSLATORS: time to fully charged
+#: ../src/gpm-devicekit.c:429
+#, fuzzy
+msgid "Charge time:"
+msgstr "Profil încărcare"
 
-#: ../src/gpm-devicekit.c:266
-#, c-format
-msgid "<b>Discharge time:</b> %s\n"
-msgstr "<b>Timp descărcare:</b> %s\n"
+#. TRANSLATORS: time to empty
+#: ../src/gpm-devicekit.c:435
+#, fuzzy
+msgid "Discharge time:"
+msgstr "Profil descărcare"
 
-#. Translators: Excellent, Good, Fair and Poor are all related to battery Capacity
-#: ../src/gpm-devicekit.c:273
+#. TRANSLATORS: Excellent, Good, Fair and Poor are all related to battery Capacity
+#: ../src/gpm-devicekit.c:442
 msgid "Excellent"
 msgstr "Excelentă"
 
-#: ../src/gpm-devicekit.c:275
+#: ../src/gpm-devicekit.c:444
 msgid "Good"
 msgstr "Bună"
 
-#: ../src/gpm-devicekit.c:277
+#: ../src/gpm-devicekit.c:446
 msgid "Fair"
 msgstr "Rezonabilă"
 
-#: ../src/gpm-devicekit.c:279
+#: ../src/gpm-devicekit.c:448
 msgid "Poor"
 msgstr "Slabă"
 
-#. Translators: %.1f is a percentage and %s the condition (Excellent, Good, ...)
-#: ../src/gpm-devicekit.c:282
-#, c-format
-msgid "<b>Capacity:</b> %.1f%% (%s)\n"
-msgstr "<b>Capacitate:</b> %1f%% (%s)\n"
+#: ../src/gpm-devicekit.c:452
+#, fuzzy
+msgid "Capacity:"
+msgstr "Capacitate"
 
-#: ../src/gpm-devicekit.c:287
-#, c-format
-msgid "<b>Current charge:</b> %.1f Wh\n"
-msgstr "<b>Încărcarea curentă acumulator:</b> %.1f Wo\n"
+#: ../src/gpm-devicekit.c:458 ../src/gpm-devicekit.c:483
+#, fuzzy
+msgid "Current charge:"
+msgstr "Încărcare celulă"
 
-#: ../src/gpm-devicekit.c:291
-#, c-format
-msgid "<b>Last full charge:</b> %.1f Wh\n"
+#: ../src/gpm-devicekit.c:464
+#, fuzzy
+msgid "Last full charge:"
 msgstr "<b>Ultima încărcare completă acumulator:</b> %.1f\n"
 
-#. Translators: Design charge is the amount of charge the battery is designed to have when brand new
-#: ../src/gpm-devicekit.c:295
-#, c-format
-msgid "<b>Design charge:</b> %.1f Wh\n"
-msgstr "<b>Model încărcare:</b> %.1f Wo\n"
-
-#: ../src/gpm-devicekit.c:298
-#, c-format
-msgid "<b>Charge rate:</b> %.1f W\n"
-msgstr "<b>Rată de încărcare:</b> %.1f W\n"
-
-#: ../src/gpm-devicekit.c:304
-#, c-format
-msgid "<b>Current charge:</b> %.0f/7\n"
-msgstr "<b>Încărcare curentă acumulator:</b>%0f/7\n"
-
-#: ../src/gpm-devicekit.c:307
-#, c-format
-msgid "<b>Design charge:</b> %.0f/7\n"
+#: ../src/gpm-devicekit.c:470 ../src/gpm-devicekit.c:488
+#, fuzzy
+msgid "Design charge:"
 msgstr "<b>Model încărcare:</b>%0f/7\n"
 
-#: ../src/gpm-devicekit.c:325
+#: ../src/gpm-devicekit.c:475
+#, fuzzy
+msgid "Charge rate:"
+msgstr "Profil încărcare"
+
+#. TRANSLATORS: system power cord
+#: ../src/gpm-devicekit.c:510
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "Adaptor rețea electrică"
 msgstr[1] "Adaptoare rețea electrică"
 msgstr[2] "Adaptoare rețea electrică"
 
-#: ../src/gpm-devicekit.c:328
+#. TRANSLATORS: laptop primary battery
+#: ../src/gpm-devicekit.c:514
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "Acumulator laptop"
 msgstr[1] "Acumulatoare laptop"
 msgstr[2] "Acumulatoare laptop"
 
-#: ../src/gpm-devicekit.c:331
+#. TRANSLATORS: battery-backed AC power source
+#: ../src/gpm-devicekit.c:518
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "UPS"
 msgstr[1] "UPS-uri"
 msgstr[2] "UPS-uri"
 
-#: ../src/gpm-devicekit.c:334
+#. TRANSLATORS: a monitor is a device to measure voltage and current
+#: ../src/gpm-devicekit.c:522
 msgid "Monitor"
 msgid_plural "Monitors"
 msgstr[0] "Monitor"
 msgstr[1] "Monitoare"
 msgstr[2] "Monitoare"
 
-#: ../src/gpm-devicekit.c:337
+#. TRANSLATORS: wireless mice with internal batteries
+#: ../src/gpm-devicekit.c:526
 msgid "Wireless mouse"
 msgid_plural "Wireless mice"
 msgstr[0] "Maus fară fir"
 msgstr[1] "Mausuri fară fir"
 msgstr[2] "Mausuri fară fir"
 
-#: ../src/gpm-devicekit.c:340
+#. TRANSLATORS: wireless keyboard with internal battery
+#: ../src/gpm-devicekit.c:530
 msgid "Wireless keyboard"
 msgid_plural "Wireless keyboards"
 msgstr[0] "Tastatură fară fir"
 msgstr[1] "Tastaturi fară fir"
 msgstr[2] "Tastaturi fară fir"
 
-#: ../src/gpm-devicekit.c:343
+#. TRANSLATORS: portable device
+#: ../src/gpm-devicekit.c:534
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "PDA"
 msgstr[1] "PDA-uri"
 msgstr[2] "PDA-uri"
 
-#: ../src/gpm-devicekit.c:346
+#. TRANSLATORS: cell phone (mobile...)
+#: ../src/gpm-devicekit.c:538
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "Telefon mobil"
 msgstr[1] "Telefoane mobil"
 msgstr[2] "Telefoane mobil"
 
-#: ../src/gpm-devicekit.c:403
+#. TRANSLATORS: battery technology
+#: ../src/gpm-devicekit.c:596
 msgid "Lithium Ion"
 msgstr "Ioni litiu"
 
-#: ../src/gpm-devicekit.c:406
+#. TRANSLATORS: battery technology
+#: ../src/gpm-devicekit.c:600
 msgid "Lithium Polymer"
 msgstr "Polimer litiu"
 
-#: ../src/gpm-devicekit.c:409
+#. TRANSLATORS: battery technology
+#: ../src/gpm-devicekit.c:604
 msgid "Lithium Iron Phosphate"
 msgstr "Fostați fier litiu"
 
-#: ../src/gpm-devicekit.c:412
+#. TRANSLATORS: battery technology
+#: ../src/gpm-devicekit.c:608
 msgid "Lead acid"
 msgstr "Acizi plumb"
 
-#: ../src/gpm-devicekit.c:415
+#. TRANSLATORS: battery technology
+#: ../src/gpm-devicekit.c:612
 msgid "Nickel Cadmium"
 msgstr "Nichel Cadmiu"
 
-#: ../src/gpm-devicekit.c:418
+#. TRANSLATORS: battery technology
+#: ../src/gpm-devicekit.c:616
 msgid "Nickel metal hydride"
 msgstr "Metal hidrat de nichel"
 
-#: ../src/gpm-devicekit.c:421
+#. TRANSLATORS: battery technology
+#: ../src/gpm-devicekit.c:620
 msgid "Unknown technology"
 msgstr "Tehnologie necunoscută"
 
 #. Translators: This is %i days
-#: ../src/gpm-graph-widget.c:297
+#: ../src/gpm-graph-widget.c:443
 #, c-format
 msgid "%id"
 msgstr "%id"
 
 #. Translators: This is %i days %02i hours
-#: ../src/gpm-graph-widget.c:300
+#: ../src/gpm-graph-widget.c:446
 #, c-format
 msgid "%id%02ih"
 msgstr "%id%02ih"
 
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:305
+#: ../src/gpm-graph-widget.c:451
 #, c-format
 msgid "%ih"
 msgstr "%io"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:308
+#: ../src/gpm-graph-widget.c:454
 #, c-format
 msgid "%ih%02im"
 msgstr "%ih%02im"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:313
+#: ../src/gpm-graph-widget.c:459
 #, c-format
 msgid "%2im"
 msgstr "%2im"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:316
+#: ../src/gpm-graph-widget.c:462
 #, c-format
 msgid "%2im%02i"
 msgstr "%2im%02is"
 
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:320
+#: ../src/gpm-graph-widget.c:466
 #, c-format
 msgid "%2is"
 msgstr "%2is"
 
 #. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:324
+#: ../src/gpm-graph-widget.c:470
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. Translators: This is %.1f Watts
-#: ../src/gpm-graph-widget.c:327
+#: ../src/gpm-graph-widget.c:473
 #, c-format
 msgid "%.1fW"
 msgstr "%.1fW"
 
 #. Translators: This is %.1f Volts
-#: ../src/gpm-graph-widget.c:332
+#: ../src/gpm-graph-widget.c:478
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fV"
 
-#. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:358
+#. TRANSLATORS: this is what the user should read for more information about the blanking problem (%s is a URL)
+#: ../src/gpm-idle.c:216
 #, c-format
-msgid "%s has stopped the suspend from taking place: %s."
-msgstr "%s a oprit suspendare: %s."
+msgid "Please see %s for more information."
+msgstr ""
 
-#. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:363
-#, c-format
-msgid "%s has stopped the hibernate from taking place: %s."
-msgstr "%s a oprit hibernarea: %s."
+#. TRANSLATORS: this is telling the user that thier X server is broken, and needs to be fixed
+#: ../src/gpm-idle.c:220
+msgid ""
+"If you can see this text, your display server is broken and you should "
+"notify your distributor."
+msgstr ""
 
-#. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:368
-#, c-format
-msgid "%s has stopped the policy action from taking place: %s."
-msgstr "%s a oprit acțiunea definită să aibă loc: %s."
+#. TRANSLATORS: this is for debugging, if the session is idle
+#: ../src/gpm-idle.c:226
+msgid "Session idle"
+msgstr "Sesiune inactivă"
 
-#. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:373
-#, c-format
-msgid "%s has stopped the reboot from taking place: %s."
-msgstr "%s a oprit repornirea: %s."
+#: ../src/gpm-idle.c:226
+msgid "Session active"
+msgstr "Sesiune activă"
 
-#. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:378
-#, c-format
-msgid "%s has stopped the shutdown from taking place: %s."
-msgstr "%s a oprit închiderea: %s."
+#. TRANSLATORS: has something inhibited the session
+#: ../src/gpm-idle.c:228
+#, fuzzy
+msgid "inhibited"
+msgstr "Blochează"
 
-#. Translators: first %s is an application name, second %s is the reason
-#: ../src/gpm-inhibit.c:383
-#, c-format
-msgid "%s has stopped the timeout action from taking place: %s."
-msgstr "%s a oprit procesul acțiunii de timp limită: %s."
+#: ../src/gpm-idle.c:228
+#, fuzzy
+msgid "not inhibited"
+msgstr "Dezactivare manuală"
 
-#: ../src/gpm-inhibit.c:392
-#: ../src/gpm-inhibit.c:407
-msgid "Multiple applications have stopped the suspend from taking place."
-msgstr "Mai multe aplicații au oprit procesul de suspendare."
+#. TRANSLATORS: is the screen idle or awake
+#: ../src/gpm-idle.c:230
+#, fuzzy
+msgid "screen idle"
+msgstr "Sesiune inactivă"
 
-#: ../src/gpm-inhibit.c:395
-msgid "Multiple applications have stopped the hibernate from taking place."
-msgstr "Mai multe aplicații au oprit procesul de hibernare."
-
-#: ../src/gpm-inhibit.c:398
-msgid "Multiple applications have stopped the policy action from taking place."
-msgstr "Mai multe aplicații au oprit acțiunea definită în a avea loc."
-
-#: ../src/gpm-inhibit.c:401
-msgid "Multiple applications have stopped the reboot from taking place."
-msgstr "Aplicații multiple au oprit repornirea calculatorului."
-
-#: ../src/gpm-inhibit.c:404
-msgid "Multiple applications have stopped the shutdown from taking place."
-msgstr "Aplicații multiple au oprit închiderea calculatorului."
+#: ../src/gpm-idle.c:230
+#, fuzzy
+msgid "screen awake"
+msgstr "Blochează ecranul la golire"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-main.c:139
-#: ../src/gpm-prefs.c:91
-#: ../src/gpm-statistics.c:1332
+#: ../src/gpm-main.c:171 ../src/gpm-prefs.c:90 ../src/gpm-statistics.c:1465
 msgid "Show extra debugging information"
 msgstr "Afișează informații suplimentare de depanare"
 
-#: ../src/gpm-main.c:141
+#: ../src/gpm-main.c:173
 msgid "Show version of installed program and exit"
 msgstr "Afișează versiunea programului instalat și ieși"
 
-#: ../src/gpm-main.c:143
+#: ../src/gpm-main.c:175
 msgid "Exit after a small delay (for debugging)"
 msgstr "Iese după o mică pauză (pentru depanare)"
 
-#: ../src/gpm-main.c:145
+#: ../src/gpm-main.c:177
 msgid "Exit after the manager has loaded (for debugging)"
 msgstr "Iese după ce administratorul a fost încărcat (pentru depanare)"
 
-#: ../src/gpm-main.c:159
-#: ../src/gpm-main.c:163
+#: ../src/gpm-main.c:191 ../src/gpm-main.c:195
 msgid "GNOME Power Manager"
 msgstr "Administrator consum GNOME"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:180
+#: ../src/gpm-manager.c:172
 msgid "Power plugged in"
 msgstr "Alimentare rețea conectată"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:184
+#: ../src/gpm-manager.c:176
 msgid "Power unplugged"
 msgstr "Deconectare rețea electrică"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:188
+#: ../src/gpm-manager.c:180
 msgid "Lid has opened"
 msgstr "Capac deschis"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:192
+#: ../src/gpm-manager.c:184
 msgid "Lid has closed"
 msgstr "Capac închis"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:196
+#: ../src/gpm-manager.c:188
 msgid "Battery is low"
 msgstr "Acumulatorul este scăzut"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:200
+#: ../src/gpm-manager.c:192
 msgid "Battery is very low"
 msgstr "Acumulatorul este critic de scăzut"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:204
+#: ../src/gpm-manager.c:196
 msgid "Battery is full"
 msgstr "Acumulatorul este plin"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:208
+#: ../src/gpm-manager.c:200
 msgid "Suspend started"
 msgstr "Suspendare pornită"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:212
+#: ../src/gpm-manager.c:204
 msgid "Resumed"
 msgstr "Revenit"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:216
+#: ../src/gpm-manager.c:208
 msgid "Suspend failed"
 msgstr "Suspendare eșuată"
 
-#: ../src/gpm-manager.c:258
-msgid "Request to suspend"
-msgstr "Cerere de suspendare"
-
-#: ../src/gpm-manager.c:260
-msgid "Request to hibernate"
-msgstr "Cerere de hibernare"
-
-#: ../src/gpm-manager.c:262
-msgid "Request to do policy action"
-msgstr "Cerere de acționare a unei politici"
-
-#: ../src/gpm-manager.c:264
-msgid "Request to do timeout action"
-msgstr "Cerere de acțiune cu timp limită"
-
-#. I want this translated
-#: ../src/gpm-manager.c:274
-msgid "Perform action anyway"
-msgstr "Execută acțiunea oricum"
-
-#: ../src/gpm-manager.c:392
-#: ../src/gpm-manager.c:426
+#. TRANSLATORS: the action was not done
+#: ../src/gpm-manager.c:434 ../src/gpm-manager.c:470
 msgid "Action disallowed"
 msgstr "Acțiune nepermisă"
 
-#: ../src/gpm-manager.c:393
-msgid "Suspend support has been disabled. Contact your administrator for more details."
-msgstr "Suportul pentru suspendare a fost dezactivat. Contactați administratorul pentru mai multe detalii."
+#. TRANSLATORS: admin has disabled ability to do this
+#: ../src/gpm-manager.c:436
+msgid ""
+"Suspend support has been disabled. Contact your administrator for more "
+"details."
+msgstr ""
+"Suportul pentru suspendare a fost dezactivat. Contactați administratorul "
+"pentru mai multe detalii."
 
-#: ../src/gpm-manager.c:427
-msgid "Hibernate support has been disabled. Contact your administrator for more details."
-msgstr "Suportul pentru hibernare a fost dezactivat. Contactați administratorul pentru mai multe detalii."
+#. TRANSLATORS: admin has disabled ability to do this
+#: ../src/gpm-manager.c:472
+msgid ""
+"Hibernate support has been disabled. Contact your administrator for more "
+"details."
+msgstr ""
+"Suportul pentru hibernare a fost dezactivat. Contactați administratorul "
+"pentru mai multe detalii."
 
-#: ../src/gpm-manager.c:777
-msgid "The lid has been closed on ac power."
-msgstr "Capacul a fost închis pe alimentarea de la rețea."
-
-#: ../src/gpm-manager.c:806
-msgid "The lid has been closed on battery power."
-msgstr "Capacul a fost închis pe alimentarea de la acumulator."
-
-#: ../src/gpm-manager.c:826
+#. TRANSLATORS: this is the gnome-screensaver throttle
+#: ../src/gpm-manager.c:697
 msgid "Display DPMS activated"
 msgstr "DPMS ecran activat"
 
-#: ../src/gpm-manager.c:844
+#. TRANSLATORS: this is the gnome-screensaver throttle
+#: ../src/gpm-manager.c:716
 msgid "On battery power"
 msgstr "Pe energie acumulator"
 
-#: ../src/gpm-manager.c:862
+#: ../src/gpm-manager.c:734
 msgid "Laptop lid is closed"
 msgstr "Capacul laptopului este închis"
 
-#: ../src/gpm-manager.c:886
-msgid "The power button has been pressed."
-msgstr "Butonul de alimentare a fost apăsat."
-
-#: ../src/gpm-manager.c:888
-#: ../src/gpm-manager.c:890
-msgid "The suspend button has been pressed."
-msgstr "Butonul de suspendare a fost apăsat."
-
-#: ../src/gpm-manager.c:892
-msgid "The hibernate button has been pressed."
-msgstr "Butonul de hibernare a fost apăsat."
-
-#: ../src/gpm-manager.c:900
+#: ../src/gpm-manager.c:772
 msgid "Power Information"
 msgstr "Informații consum"
 
-#: ../src/gpm-manager.c:989
-msgid "The lid has been closed, and the ac adapter removed (and gconf is okay)."
-msgstr "Capacul a fost închis și alimentarea de la rețea întreruptă (și gcong este OK)."
-
-#: ../src/gpm-manager.c:1006
-msgid "Battery is critically low."
-msgstr "Acumulatorul este critic de scăzut."
-
-#: ../src/gpm-manager.c:1091
-#: ../src/gpm-manager.c:1105
-msgid "User clicked on tray"
-msgstr "Utilizatorul a dat un clic în zona de notificare"
-
-#: ../src/gpm-manager.c:1255
-msgid "Laptop battery low"
-msgstr "Nivel scăzut acumulator"
-
-#: ../src/gpm-manager.c:1257
-#, c-format
-msgid "You have approximately <b>%s</b> of remaining battery life (%.1f%%)"
-msgstr "Mai aveți aproximativ <b>%s</b> baterie rămasă (%.1f%%)"
-
-#: ../src/gpm-manager.c:1260
-msgid "UPS low"
-msgstr "UPS scăzut"
-
-#: ../src/gpm-manager.c:1262
-#, c-format
-msgid "You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"
-msgstr "Mai aveți aproximativ <b>%s</b> energie disponibilă în UPS (%.1f%%)"
-
-#: ../src/gpm-manager.c:1265
-#: ../src/gpm-manager.c:1350
-msgid "Mouse battery low"
-msgstr "Acumulator scăzut mouse"
-
-#: ../src/gpm-manager.c:1266
-#, c-format
-msgid "The wireless mouse attached to this computer is low in power (%.1f%%)"
-msgstr "Mausul fără fir atașat acestui calculator are acumulatorul pe terminate (%.1f%%)"
-
-#: ../src/gpm-manager.c:1269
-#: ../src/gpm-manager.c:1355
-msgid "Keyboard battery low"
-msgstr "Acumulator scăzut tastatură"
-
-#: ../src/gpm-manager.c:1270
-#, c-format
-msgid "The wireless keyboard attached to this computer is low in power (%.1f%%)"
-msgstr "Tastatura fără fir atașată acestui calculator are acumulatorul pe terminate (%.1f%%)"
-
-#: ../src/gpm-manager.c:1273
-#: ../src/gpm-manager.c:1360
-msgid "PDA battery low"
-msgstr "Acumulator scăzut PDA"
-
-#: ../src/gpm-manager.c:1274
-#, c-format
-msgid "The PDA attached to this computer is low in power (%.1f%%)"
-msgstr "PDA-ul atașat acestui calculator are acumulatorul pe terminate (%.1f%%)"
-
-#: ../src/gpm-manager.c:1277
-#: ../src/gpm-manager.c:1365
-msgid "Cell phone battery low"
-msgstr "Acumulator scăzut telefonul mobil"
-
-#: ../src/gpm-manager.c:1278
-#, c-format
-msgid "The cell phone attached to this computer is low in power (%.1f%%)"
-msgstr "Telefonul mobil atașat acestui calculator are acumulatorul pe terminate (%.1f%%)"
-
-#: ../src/gpm-manager.c:1314
-#: ../src/gpm-manager.c:1391
-msgid "Laptop battery critically low"
-msgstr "Acumulator laptop descărcată critic"
-
-#: ../src/gpm-manager.c:1327
-msgid "Plug in your AC adapter to avoid losing data."
-msgstr " Pentru a evita pierderea datelor conectați la rețeaua electrică."
-
-#: ../src/gpm-manager.c:1329
-#, c-format
-msgid "This computer will suspend in %s if the AC is not connected."
-msgstr "Dacă nu este conectat la rețeaua electrică, acest calculator va fi suspendat în %s."
-
-#: ../src/gpm-manager.c:1331
-#, c-format
-msgid "This computer will hibernate in %s if the AC is not connected."
-msgstr "Dacă nu este conectat la rețeaua electrică, acest calculator va intra în hibernare în %s."
-
-#: ../src/gpm-manager.c:1333
-#, c-format
-msgid "This computer will shutdown in %s if the AC is not connected."
-msgstr "Dacă nu este conectat la rețeaua electrică, acest calculator se va închide în %s."
-
-#: ../src/gpm-manager.c:1335
-#, c-format
-msgid "You have approximately <b>%s</b> of remaining battery life (%.1f%%). %s"
-msgstr "Mai aveți aproximativ <b>%s</b> din durată acumulator (%.1f%%). %s"
-
-#: ../src/gpm-manager.c:1343
-#: ../src/gpm-manager.c:1423
-msgid "UPS critically low"
-msgstr "Nivel UPS critic"
-
-#: ../src/gpm-manager.c:1345
-#, c-format
-msgid "You have approximately <b>%s</b> of remaining UPS power (%.1f%%). Restore AC power to your computer to avoid losing data."
-msgstr "Mai aveți aproximativ <b>%s</b> energie disponibilă în UPS (%.1f%%). Reluați alimentarea de la rețea a calculatorului pentru a evita pierderea datelor."
-
-#: ../src/gpm-manager.c:1351
-#, c-format
-msgid "The wireless mouse attached to this computer is very low in power (%.1f%%). This device will soon stop functioning if not charged."
-msgstr "Mausul fără fir atașat acestui calculator are acumulatorul foarte descărcat (%.1f%%). Acest dispozitiv nu va mai funcționa dacă nu îl încărcați."
-
-#: ../src/gpm-manager.c:1356
-#, c-format
-msgid "The wireless keyboard attached to this computer is very low in power (%.1f%%). This device will soon stop functioning if not charged."
-msgstr "Tastatura fără fir atașată acestui calculator are acumulatorul foarte descărcat (%.1f%%). Acest dispozitiv nu va mai funcționa dacă nu îl încărcați."
-
-#: ../src/gpm-manager.c:1361
-#, c-format
-msgid "The PDA attached to this computer is very low in power (%.1f%%). This device will soon stop functioning if not charged."
-msgstr "PDA-ul atașat acestui calculator are acumulatorul foarte descărcat (%.1f%%). Acest dispozitiv nu va mai funcționa dacă nu îl încărcați."
-
-#: ../src/gpm-manager.c:1366
-#, c-format
-msgid "Your cell phone is very low in power (%.1f%%). This device will soon stop functioning if not charged."
-msgstr "Telefonul mobil are acumulatorul foarte descărcat (%.1f%%). Acest dispozitiv nu va mai funcționa dacă nu îl încărcați."
-
-#: ../src/gpm-manager.c:1398
-msgid "The battery is below the critical level and this computer will <b>power-off</b> when the battery becomes completely empty."
-msgstr "Nivelul acumulatorului este sub cel critic și calculatorul va fi <b>oprit</b> când energia acumulatorul se va termina."
-
-#: ../src/gpm-manager.c:1403
-msgid "The battery is below the critical level and this computer is about to suspend.<br><b>NOTE:</b> A small amount of power is required to keep your computer in a suspended state."
-msgstr "Nivelul acumulatorului este sub cel critic și calculatorul a intrat în procesul de suspendare.<br><b>NOTĂ:</b> este nevoie de o mică cantitate de energie pentru a menține calculatorul în starea de suspendare."
-
-#: ../src/gpm-manager.c:1409
-msgid "The battery is below the critical level and this computer is about to hibernate."
-msgstr "Nivelul acumulatorului este sub cel critic și calculatorul a intrat în procesul de hibernare."
-
-#: ../src/gpm-manager.c:1413
-msgid "The battery is below the critical level and this computer is about to shutdown."
-msgstr "Nivelul acumulatorului este sub cel critic și calculatorul a intrat în procesul de oprire."
-
-#: ../src/gpm-manager.c:1430
-msgid "The UPS is below the critical level and this computer will <b>power-off</b> when the UPS becomes completely empty."
-msgstr "UPS-ul este sub nivelul critic și acest computer se va <b>opri</b> atunci când UPS devine complet descărcat."
-
-#: ../src/gpm-manager.c:1435
-msgid "The UPS is below the critical level and this computer is about to hibernate."
-msgstr "UPS-ul este sub nivelul critic și acest calculator va intra în hibernare."
-
-#: ../src/gpm-manager.c:1439
-msgid "The UPS is below the critical level and this computer is about to shutdown."
-msgstr "UPS-ul este sub nivelul critic și acest calculator se va închide."
-
-#: ../src/gpm-manager.c:1592
-msgid "Install problem!"
-msgstr "Problemă la instalare!"
-
-#: ../src/gpm-manager.c:1593
-msgid ""
-"The configuration defaults for GNOME Power Manager have not been installed correctly.\n"
-"Please contact your computer administrator."
-msgstr ""
-"Valorile implicite de configurare pentru Administrator consum GNOME nu au fost instalate corect.\n"
-"Contactați administratorul calculatorului dumneavoastră."
-
-#. save in state
-#: ../src/gpm-notify.c:281
+#. TRANSLATORS: the battery may be recalled by it's vendor
+#: ../src/gpm-manager.c:1033
 msgid "Battery may be recalled"
 msgstr "Acumulatorul ar putea fi defectat și cerut inapoi de către furnizor"
 
-#: ../src/gpm-notify.c:282
-#, c-format
+#: ../src/gpm-manager.c:1034
+#, fuzzy, c-format
 msgid ""
-"The battery in your computer may have been recalled by %s and you may be at risk.\n"
+"The battery in your computer may have been recalled by %s and you may be at "
+"risk.\n"
 "\n"
-"For more information visit the %s battery recall website."
+"For more information visit the battery recall website."
 msgstr ""
-"Acumulatorul din calculator ar fi putut fi fost anunțată pentru înlocuire de %s și vă puteți afla într-o situație riscantă.\n"
+"Acumulatorul din calculator ar fi putut fi fost anunțată pentru înlocuire de "
+"%s și vă puteți afla într-o situație riscantă.\n"
 "\n"
-"Pentru mai multe informații vizitați pagina web %s pentru înlocuirea bateriei."
+"Pentru mai multe informații vizitați pagina web %s pentru înlocuirea "
+"bateriei."
 
-#: ../src/gpm-notify.c:296
+#. TRANSLATORS: button text, visit the manufacturers recall website
+#: ../src/gpm-manager.c:1044
 msgid "Visit recall website"
 msgstr "Vizitează pagina de înlocuire"
 
-#: ../src/gpm-notify.c:302
-#: ../src/gpm-notify.c:340
-#: ../src/gpm-notify.c:378
-#: ../src/gpm-notify.c:407
-#: ../src/gpm-notify.c:435
-#: ../src/gpm-notify.c:463
-#: ../src/gpm-notify.c:497
+#. TRANSLATORS: button text, do not show this bubble again
+#: ../src/gpm-manager.c:1047
 msgid "Do not show me this again"
 msgstr "Nu îmi arăta din nou"
 
-#: ../src/gpm-notify.c:327
+#. We should notify the user if the battery has a low capacity,
+#. * where capacity is the ratio of the last_full capacity with that of
+#. * the design capacity. (#326740)
+#. TRANSLATORS: battery is old or broken
+#: ../src/gpm-manager.c:1132
 msgid "Battery may be broken"
 msgstr "Acumulatorul poate fi defect"
 
-#: ../src/gpm-notify.c:328
-#, c-format
-msgid "Your battery has a very low capacity (%i%%), which means that it may be old or broken."
-msgstr "Acumulatorul dumneavoastră are o capacitate foarte scăzută (%i%%), ceea ce înseamnă că poate fi vechi sau stricat."
-
-#: ../src/gpm-notify.c:364
-msgid "Sleep warning"
-msgstr "Avertizare de adormire"
-
-#: ../src/gpm-notify.c:365
+#. TRANSLATORS: notify the user that that battery is broken as the capacity is very low
+#: ../src/gpm-manager.c:1135
+#, fuzzy, c-format
 msgid ""
-"Your laptop will not sleep if you shut the lid as a running program has prevented this.\n"
-"Some laptops can overheat if they do not sleep when the lid is closed."
+"Your battery has a very low capacity (%1.1f%%), which means that it may be "
+"old or broken."
 msgstr ""
-"Calculatorul nu va fi suspendat la închiderea capacului deoarece un program a impiedicat acest lucru.\n"
-"Unele laptopuri se pot supraîncălzii dacă nu sunt suspendate la închiderea capacului."
+"Acumulatorul dumneavoastră are o capacitate foarte scăzută (%i%%), ceea ce "
+"înseamnă că poate fi vechi sau stricat."
 
-#: ../src/gpm-notify.c:396
-msgid "Battery Charged"
-msgstr "Acumulator încărcat"
+#. TRANSLATORS: show the fully charged notification
+#: ../src/gpm-manager.c:1183
+#, fuzzy
+msgid "Battery Fully Charged"
+msgid_plural "Batteries Fully Charged"
+msgstr[0] "Acumulator încărcat"
+msgstr[1] "Acumulator încărcat"
+msgstr[2] "Acumulator încărcat"
 
-#: ../src/gpm-notify.c:397
-msgid "Your laptop battery is now fully charged"
-msgstr "Acumulatoru laptopului este complet încărcat."
-
-#: ../src/gpm-notify.c:424
+#. TRANSLATORS: laptop battery is now discharging
+#: ../src/gpm-manager.c:1224
 msgid "Battery Discharging"
 msgstr "Acumulatorul se descarcă"
 
-#: ../src/gpm-notify.c:425
-msgid "The AC power has been unplugged. The system is now using battery power."
-msgstr "Laptopul a fost deconecatat de la rețeaua electrică. Sistemul folosește acum energia din acumulator."
+#. TRANSLATORS: tell the user how much time they have got
+#: ../src/gpm-manager.c:1227
+#, fuzzy, c-format
+msgid "%s of battery power remaining (%.1f%%)"
+msgstr "%s %s rămas (%.1f%%)"
 
-#: ../src/gpm-notify.c:452
+#. TRANSLATORS: UPS is now discharging
+#: ../src/gpm-manager.c:1230
 msgid "UPS Discharging"
 msgstr "Se descărcă UPS"
 
-#: ../src/gpm-notify.c:453
-msgid "The AC power has been unplugged. The system is now using backup power."
-msgstr "Alimentarea de la rețea a fost întreruptă. Sistemul folosește acum energie de rezervă."
+#. TRANSLATORS: tell the user how much time they have got
+#: ../src/gpm-manager.c:1233
+#, fuzzy, c-format
+msgid "%s of UPS backup power remaining (%.1f%%)"
+msgstr "%s %s rămas (%.1f%%)"
 
-#: ../src/gpm-notify.c:481
-msgid "Sleep Problem"
+#. TRANSLATORS: window title: there was a problem putting the machine to sleep
+#: ../src/gpm-manager.c:1301
+#, fuzzy
+msgid "Sleep problem"
 msgstr "Problemă adormire"
 
-#: ../src/gpm-notify.c:483
-msgid ""
-"Your computer failed to hibernate.\n"
-"Check the help file for common problems."
-msgstr ""
-"Calculatorul a eșuat la hibernare.\n"
-"Pentru probleme uzuale verificați fișierul de ajutor."
-
-#: ../src/gpm-notify.c:486
-msgid ""
-"Your computer failed to suspend.\n"
-"Check the help file for common problems."
+#. TRANSLATORS: message text
+#: ../src/gpm-manager.c:1304
+#, fuzzy
+msgid "Your computer failed to suspend."
 msgstr ""
 "Calculatorul a eșuat la suspendare.\n"
 "Pentru probleme uzuale verificați fișierul de ajutor."
 
-#: ../src/gpm-notify.c:510
-msgid "Visit quirk website"
-msgstr "Vizitați pagina web quirk"
+#: ../src/gpm-manager.c:1304 ../src/gpm-manager.c:1308
+#, fuzzy
+msgid "Check the help file for common problems."
+msgstr ""
+"Calculatorul a eșuat la suspendare.\n"
+"Pentru probleme uzuale verificați fișierul de ajutor."
 
-#: ../src/gpm-prefs.c:95
-#: ../test/gpm-inhibit-test.c:186
+#. TRANSLATORS: message text
+#: ../src/gpm-manager.c:1308
+#, fuzzy
+msgid "Your computer failed to hibernate."
+msgstr ""
+"Calculatorul a eșuat la hibernare.\n"
+"Pentru probleme uzuale verificați fișierul de ajutor."
+
+#. TRANSLATORS: button text, visit the suspend help website
+#: ../src/gpm-manager.c:1322
+msgid "Visit help page"
+msgstr ""
+
+#. TRANSLATORS: laptop battery low, and we only have one battery
+#: ../src/gpm-manager.c:1397
+#, fuzzy
+msgid "Battery low"
+msgstr "Acumulatorul este scăzut"
+
+#. TRANSLATORS: laptop battery low, and we have more than one type of battery
+#: ../src/gpm-manager.c:1400
+msgid "Laptop battery low"
+msgstr "Nivel scăzut acumulator"
+
+#. TRANSLATORS: tell the user how much time they have got
+#: ../src/gpm-manager.c:1406
+#, fuzzy, c-format
+msgid "Approximately <b>%s</b> remaining (%.1f%%)"
+msgstr "Mai aveți aproximativ <b>%s</b> baterie rămasă (%.1f%%)"
+
+#. TRANSLATORS: UPS is starting to get a little low
+#: ../src/gpm-manager.c:1410
+msgid "UPS low"
+msgstr "UPS scăzut"
+
+#. TRANSLATORS: tell the user how much time they have got
+#: ../src/gpm-manager.c:1414
+#, c-format
+msgid "You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"
+msgstr "Mai aveți aproximativ <b>%s</b> energie disponibilă în UPS (%.1f%%)"
+
+#. TRANSLATORS: mouse is getting a little low
+#. TRANSLATORS: the mouse battery is very low
+#: ../src/gpm-manager.c:1418 ../src/gpm-manager.c:1549
+msgid "Mouse battery low"
+msgstr "Acumulator scăzut mouse"
+
+#. TRANSLATORS: tell user more details
+#: ../src/gpm-manager.c:1421
+#, c-format
+msgid "The wireless mouse attached to this computer is low in power (%.1f%%)"
+msgstr ""
+"Mausul fără fir atașat acestui calculator are acumulatorul pe terminate (%.1f"
+"%%)"
+
+#. TRANSLATORS: keyboard is getting a little low
+#. TRANSLATORS: the keyboard battery is very low
+#: ../src/gpm-manager.c:1425 ../src/gpm-manager.c:1557
+msgid "Keyboard battery low"
+msgstr "Acumulator scăzut tastatură"
+
+#. TRANSLATORS: tell user more details
+#: ../src/gpm-manager.c:1428
+#, c-format
+msgid ""
+"The wireless keyboard attached to this computer is low in power (%.1f%%)"
+msgstr ""
+"Tastatura fără fir atașată acestui calculator are acumulatorul pe terminate "
+"(%.1f%%)"
+
+#. TRANSLATORS: PDA is getting a little low
+#. TRANSLATORS: the PDA battery is very low
+#: ../src/gpm-manager.c:1432 ../src/gpm-manager.c:1566
+msgid "PDA battery low"
+msgstr "Acumulator scăzut PDA"
+
+#. TRANSLATORS: tell user more details
+#: ../src/gpm-manager.c:1435
+#, c-format
+msgid "The PDA attached to this computer is low in power (%.1f%%)"
+msgstr ""
+"PDA-ul atașat acestui calculator are acumulatorul pe terminate (%.1f%%)"
+
+#. TRANSLATORS: cell phone (mobile) is getting a little low
+#. TRANSLATORS: the cell battery is very low
+#: ../src/gpm-manager.c:1439 ../src/gpm-manager.c:1575
+msgid "Cell phone battery low"
+msgstr "Acumulator scăzut telefonul mobil"
+
+#. TRANSLATORS: tell user more details
+#: ../src/gpm-manager.c:1442
+#, c-format
+msgid "The cell phone attached to this computer is low in power (%.1f%%)"
+msgstr ""
+"Telefonul mobil atașat acestui calculator are acumulatorul pe terminate (%.1f"
+"%%)"
+
+#. TRANSLATORS: laptop battery critically low, and only have one type of battery
+#: ../src/gpm-manager.c:1503
+#, fuzzy
+msgid "Battery critically low"
+msgstr "Acumulatorul este critic de scăzut."
+
+#. TRANSLATORS: laptop battery critically low, and we have more than one type of battery
+#. TRANSLATORS: laptop battery is really, really, low
+#: ../src/gpm-manager.c:1506 ../src/gpm-manager.c:1621
+msgid "Laptop battery critically low"
+msgstr "Acumulator laptop descărcată critic"
+
+#. TRANSLATORS: tell the use to insert the plug, as we're not going to do anything
+#: ../src/gpm-manager.c:1519
+msgid "Plug in your AC adapter to avoid losing data."
+msgstr " Pentru a evita pierderea datelor conectați la rețeaua electrică."
+
+#. TRANSLATORS: give the user a ultimatum
+#: ../src/gpm-manager.c:1523
+#, fuzzy, c-format
+msgid "Computer will suspend in %s."
+msgstr ""
+"Dacă nu este conectat la rețeaua electrică, acest calculator va fi suspendat "
+"în %s."
+
+#. TRANSLATORS: give the user a ultimatum
+#: ../src/gpm-manager.c:1527
+#, fuzzy, c-format
+msgid "Computer will hibernate in %s."
+msgstr ""
+"Dacă nu este conectat la rețeaua electrică, acest calculator va intra în "
+"hibernare în %s."
+
+#. TRANSLATORS: give the user a ultimatum
+#: ../src/gpm-manager.c:1531
+#, fuzzy, c-format
+msgid "Computer will shutdown in %s."
+msgstr ""
+"Dacă nu este conectat la rețeaua electrică, acest calculator se va închide "
+"în %s."
+
+#. TRANSLATORS: the UPS is very low
+#. TRANSLATORS: UPS is really, really, low
+#: ../src/gpm-manager.c:1539 ../src/gpm-manager.c:1659
+msgid "UPS critically low"
+msgstr "Nivel UPS critic"
+
+#. TRANSLATORS: give the user a ultimatum
+#: ../src/gpm-manager.c:1543
+#, c-format
+msgid ""
+"You have approximately <b>%s</b> of remaining UPS power (%.1f%%). Restore AC "
+"power to your computer to avoid losing data."
+msgstr ""
+"Mai aveți aproximativ <b>%s</b> energie disponibilă în UPS (%.1f%%). Reluați "
+"alimentarea de la rețea a calculatorului pentru a evita pierderea datelor."
+
+#. TRANSLATORS: the device is just going to stop working
+#: ../src/gpm-manager.c:1552
+#, c-format
+msgid ""
+"The wireless mouse attached to this computer is very low in power (%.1f%%). "
+"This device will soon stop functioning if not charged."
+msgstr ""
+"Mausul fără fir atașat acestui calculator are acumulatorul foarte descărcat "
+"(%.1f%%). Acest dispozitiv nu va mai funcționa dacă nu îl încărcați."
+
+#. TRANSLATORS: the device is just going to stop working
+#: ../src/gpm-manager.c:1560
+#, c-format
+msgid ""
+"The wireless keyboard attached to this computer is very low in power (%.1f%"
+"%). This device will soon stop functioning if not charged."
+msgstr ""
+"Tastatura fără fir atașată acestui calculator are acumulatorul foarte "
+"descărcat (%.1f%%). Acest dispozitiv nu va mai funcționa dacă nu îl "
+"încărcați."
+
+#. TRANSLATORS: the device is just going to stop working
+#: ../src/gpm-manager.c:1569
+#, c-format
+msgid ""
+"The PDA attached to this computer is very low in power (%.1f%%). This device "
+"will soon stop functioning if not charged."
+msgstr ""
+"PDA-ul atașat acestui calculator are acumulatorul foarte descărcat (%.1f%%). "
+"Acest dispozitiv nu va mai funcționa dacă nu îl încărcați."
+
+#. TRANSLATORS: the device is just going to stop working
+#: ../src/gpm-manager.c:1578
+#, c-format
+msgid ""
+"Your cell phone is very low in power (%.1f%%). This device will soon stop "
+"functioning if not charged."
+msgstr ""
+"Telefonul mobil are acumulatorul foarte descărcat (%.1f%%). Acest dispozitiv "
+"nu va mai funcționa dacă nu îl încărcați."
+
+#. TRANSLATORS: computer will shutdown without saving data
+#: ../src/gpm-manager.c:1630
+msgid ""
+"The battery is below the critical level and this computer will <b>power-off</"
+"b> when the battery becomes completely empty."
+msgstr ""
+"Nivelul acumulatorului este sub cel critic și calculatorul va fi <b>oprit</"
+"b> când energia acumulatorul se va termina."
+
+#. TRANSLATORS: computer will suspend
+#: ../src/gpm-manager.c:1636
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
+"computer in a suspended state."
+msgstr ""
+"Nivelul acumulatorului este sub cel critic și calculatorul a intrat în "
+"procesul de suspendare.<br><b>NOTĂ:</b> este nevoie de o mică cantitate de "
+"energie pentru a menține calculatorul în starea de suspendare."
+
+#. TRANSLATORS: computer will hibernate
+#: ../src/gpm-manager.c:1643
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"hibernate."
+msgstr ""
+"Nivelul acumulatorului este sub cel critic și calculatorul a intrat în "
+"procesul de hibernare."
+
+#. TRANSLATORS: computer will just shutdown
+#: ../src/gpm-manager.c:1648
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"shutdown."
+msgstr ""
+"Nivelul acumulatorului este sub cel critic și calculatorul a intrat în "
+"procesul de oprire."
+
+#. TRANSLATORS: computer will shutdown without saving data
+#: ../src/gpm-manager.c:1668
+msgid ""
+"The UPS is below the critical level and this computer will <b>power-off</b> "
+"when the UPS becomes completely empty."
+msgstr ""
+"UPS-ul este sub nivelul critic și acest computer se va <b>opri</b> atunci "
+"când UPS devine complet descărcat."
+
+#. TRANSLATORS: computer will hibernate
+#: ../src/gpm-manager.c:1674
+msgid ""
+"The UPS is below the critical level and this computer is about to hibernate."
+msgstr ""
+"UPS-ul este sub nivelul critic și acest calculator va intra în hibernare."
+
+#. TRANSLATORS: computer will just shutdown
+#: ../src/gpm-manager.c:1679
+msgid ""
+"The UPS is below the critical level and this computer is about to shutdown."
+msgstr "UPS-ul este sub nivelul critic și acest calculator se va închide."
+
+#. TRANSLATORS: there was in install problem
+#: ../src/gpm-manager.c:1842
+msgid "Install problem!"
+msgstr "Problemă la instalare!"
+
+#. TRANSLATORS: the GConf schema was not installed properly
+#: ../src/gpm-manager.c:1844
+msgid ""
+"The configuration defaults for GNOME Power Manager have not been installed "
+"correctly.\n"
+"Please contact your computer administrator."
+msgstr ""
+"Valorile implicite de configurare pentru Administrator consum GNOME nu au "
+"fost instalate corect.\n"
+"Contactați administratorul calculatorului dumneavoastră."
+
+#: ../src/gpm-prefs.c:94
 msgid "GNOME Power Preferences"
 msgstr "Preferințe consum GNOME"
 
-#. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs-core.c:84
-msgid "Ask me"
-msgstr "Întreabă"
-
-#: ../src/gpm-prefs-core.c:85
-msgid "Suspend"
-msgstr "Suspendă"
-
-#: ../src/gpm-prefs-core.c:86
+#: ../src/gpm-prefs-core.c:363
 msgid "Shutdown"
 msgstr "Oprește"
 
-#: ../src/gpm-prefs-core.c:87
+#: ../src/gpm-prefs-core.c:370
+msgid "Suspend"
+msgstr "Suspendă"
+
+#: ../src/gpm-prefs-core.c:373
 msgid "Hibernate"
 msgstr "Hibernează"
 
-#: ../src/gpm-prefs-core.c:88
+#: ../src/gpm-prefs-core.c:376
 msgid "Blank screen"
 msgstr "Golește ecran"
 
-#: ../src/gpm-prefs-core.c:89
+#: ../src/gpm-prefs-core.c:379
+msgid "Ask me"
+msgstr "Întreabă"
+
+#: ../src/gpm-prefs-core.c:384
 msgid "Do nothing"
 msgstr "Nu fă nimic"
 
-#: ../src/gpm-prefs-core.c:282
+#: ../src/gpm-prefs-core.c:448
 msgid "Never"
 msgstr "Niciodată"
 
-#: ../src/gpm-prefs-core.c:1016
-msgid "Make Default"
-msgstr "Configurează ca implicit"
-
-#: ../src/gpm-statistics.c:85
-#: ../src/gpm-statistics.c:377
+#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:444
 msgid "Rate"
 msgstr "Rată"
 
-#: ../src/gpm-statistics.c:86
+#: ../src/gpm-statistics.c:81
 msgid "Charge"
 msgstr "Încărcare"
 
-#: ../src/gpm-statistics.c:87
-#: ../src/gpm-statistics.c:391
+#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:458
 msgid "Time to full"
 msgstr "Timp până la încărcare"
 
-#: ../src/gpm-statistics.c:88
-#: ../src/gpm-statistics.c:396
+#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:463
 msgid "Time to empty"
 msgstr "Timp până la golire"
 
-#: ../src/gpm-statistics.c:95
+#: ../src/gpm-statistics.c:90
 msgid "10 minutes"
 msgstr "zece minute"
 
-#: ../src/gpm-statistics.c:96
+#: ../src/gpm-statistics.c:91
 msgid "2 hours"
 msgstr "două ore"
 
-#: ../src/gpm-statistics.c:97
+#: ../src/gpm-statistics.c:92
 msgid "1 day"
 msgstr "O zi"
 
-#: ../src/gpm-statistics.c:98
+#: ../src/gpm-statistics.c:93
 msgid "1 week"
 msgstr "O săptămână"
 
-#: ../src/gpm-statistics.c:105
+#: ../src/gpm-statistics.c:100
 msgid "Charge profile"
 msgstr "Profil încărcare"
 
-#: ../src/gpm-statistics.c:106
+#: ../src/gpm-statistics.c:101
 msgid "Charge accuracy"
 msgstr "Acuratețe încărcare"
 
-#: ../src/gpm-statistics.c:107
+#: ../src/gpm-statistics.c:102
 msgid "Discharge profile"
 msgstr "Profil descărcare"
 
-#: ../src/gpm-statistics.c:108
+#: ../src/gpm-statistics.c:103
 msgid "Discharge accuracy"
 msgstr "Acuratețe descărcare"
 
-#: ../src/gpm-statistics.c:135
+#: ../src/gpm-statistics.c:130
 msgid "Attribute"
 msgstr "Atribut"
 
-#: ../src/gpm-statistics.c:142
+#: ../src/gpm-statistics.c:137
 msgid "Value"
 msgstr "Valoare"
 
-#: ../src/gpm-statistics.c:159
+#: ../src/gpm-statistics.c:154
 msgid "Image"
 msgstr "Imagine"
 
-#: ../src/gpm-statistics.c:165
+#: ../src/gpm-statistics.c:160
 msgid "Description"
 msgstr "Descriere"
 
-#: ../src/gpm-statistics.c:184
-#: ../src/gpm-statistics.c:334
+#: ../src/gpm-statistics.c:179 ../src/gpm-statistics.c:400
 msgid "Type"
 msgstr "Tip"
 
-#: ../src/gpm-statistics.c:190
+#: ../src/gpm-statistics.c:185
 msgid "ID"
 msgstr "ID"
 
-#: ../src/gpm-statistics.c:204
+#: ../src/gpm-statistics.c:199
 msgid "Command"
 msgstr "Comandă"
 
-#: ../src/gpm-statistics.c:309
+#: ../src/gpm-statistics.c:303
 msgid "Yes"
 msgstr "Da"
 
-#: ../src/gpm-statistics.c:309
+#: ../src/gpm-statistics.c:303
 msgid "No"
 msgstr "Nu"
 
-#: ../src/gpm-statistics.c:333
+#: ../src/gpm-statistics.c:397
 msgid "Device"
 msgstr "Dispozitiv"
 
-#: ../src/gpm-statistics.c:336
+#: ../src/gpm-statistics.c:402
 msgid "Vendor"
 msgstr "Comerciant"
 
-#: ../src/gpm-statistics.c:338
+#: ../src/gpm-statistics.c:404
 msgid "Model"
 msgstr "Model"
 
-#: ../src/gpm-statistics.c:340
+#: ../src/gpm-statistics.c:406
 msgid "Serial number"
 msgstr "Număr serie"
 
-#: ../src/gpm-statistics.c:341
+#: ../src/gpm-statistics.c:407
 msgid "Supply"
 msgstr "Alimentare"
 
-#: ../src/gpm-statistics.c:343
-#, c-format
-msgid "%d seconds"
-msgstr "%d secunde"
+#: ../src/gpm-statistics.c:410
+#, fuzzy, c-format
+msgid "%d second"
+msgid_plural "%d seconds"
+msgstr[0] "%d secunde"
+msgstr[1] "%d secunde"
+msgstr[2] "%d secunde"
 
-#: ../src/gpm-statistics.c:344
+#: ../src/gpm-statistics.c:411
 msgid "Refreshed"
 msgstr "Reactualizat"
 
-#: ../src/gpm-statistics.c:351
+#: ../src/gpm-statistics.c:418
 msgid "Present"
 msgstr "Prezent"
 
-#: ../src/gpm-statistics.c:355
+#: ../src/gpm-statistics.c:422
 msgid "Rechargeable"
 msgstr "Reîncărcabil"
 
-#: ../src/gpm-statistics.c:359
+#: ../src/gpm-statistics.c:426
 msgid "State"
 msgstr "Stare"
 
-#: ../src/gpm-statistics.c:362
+#: ../src/gpm-statistics.c:429
 msgid "Energy"
 msgstr "Energie"
 
-#: ../src/gpm-statistics.c:365
+#: ../src/gpm-statistics.c:432
 msgid "Energy when empty"
 msgstr "Energie la golire"
 
-#: ../src/gpm-statistics.c:368
+#: ../src/gpm-statistics.c:435
 msgid "Energy when full"
 msgstr "Energie la încărcare completă"
 
-#: ../src/gpm-statistics.c:371
+#: ../src/gpm-statistics.c:438
 msgid "Energy (design)"
 msgstr "Energie (conceput)"
 
-#: ../src/gpm-statistics.c:384
+#: ../src/gpm-statistics.c:451
 msgid "Voltage"
 msgstr "Tensiune"
 
-#: ../src/gpm-statistics.c:405
+#: ../src/gpm-statistics.c:472
 msgid "Percentage"
 msgstr "Procentaj"
 
-#: ../src/gpm-statistics.c:410
+#: ../src/gpm-statistics.c:477
 msgid "Capacity"
 msgstr "Capacitate"
 
-#: ../src/gpm-statistics.c:414
+#: ../src/gpm-statistics.c:481
 msgid "Technology"
 msgstr "Tehnologie"
 
-#: ../src/gpm-statistics.c:416
+#: ../src/gpm-statistics.c:483
 msgid "Online"
 msgstr "Conectat"
 
 #. TRANSLATORS: the command line was not provided
-#: ../src/gpm-statistics.c:678
+#: ../src/gpm-statistics.c:799
 msgid "No data"
 msgstr "Lipsă date"
 
 #. TRANSLATORS: kernel module, usually a device driver
-#: ../src/gpm-statistics.c:685
-#: ../src/gpm-statistics.c:690
+#: ../src/gpm-statistics.c:806 ../src/gpm-statistics.c:811
 msgid "Kernel module"
 msgstr "Modul kernel"
 
 #. TRANSLATORS: kernel housekeeping
-#: ../src/gpm-statistics.c:695
+#: ../src/gpm-statistics.c:816
 msgid "Kernel core"
 msgstr "Kernel core"
 
 #. TRANSLATORS: interrupt between processors
-#: ../src/gpm-statistics.c:700
+#: ../src/gpm-statistics.c:821
 msgid "Interprocessor interrupt"
 msgstr "Intrerupere interprocesor"
 
 #. TRANSLATORS: unknown interrupt
-#: ../src/gpm-statistics.c:705
+#: ../src/gpm-statistics.c:826
 msgid "Interrupt"
 msgstr "Intrerupere"
 
 #. TRANSLATORS: the keyboard and mouse device event
-#: ../src/gpm-statistics.c:748
+#: ../src/gpm-statistics.c:869
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "Tastatură/maus/touchpad PS2"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
-#: ../src/gpm-statistics.c:751
+#: ../src/gpm-statistics.c:872
 msgid "ACPI"
 msgstr "ACPI"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
-#: ../src/gpm-statistics.c:754
+#: ../src/gpm-statistics.c:875
 msgid "Serial ATA"
 msgstr "Serial ATA"
 
 #. TRANSLATORS: this is the old-style ATA interface
-#: ../src/gpm-statistics.c:757
+#: ../src/gpm-statistics.c:878
 msgid "ATA host controller"
 msgstr "Controler gazdă ATA"
 
 #. TRANSLATORS: 802.11 wireless adaptor
-#: ../src/gpm-statistics.c:760
+#: ../src/gpm-statistics.c:881
 msgid "Intel wireless adaptor"
 msgstr "Adaptor fără fir Intel"
 
 #. TRANSLATORS: a timer is something that fires periodically
-#: ../src/gpm-statistics.c:765
-#: ../src/gpm-statistics.c:768
-#: ../src/gpm-statistics.c:771
-#: ../src/gpm-statistics.c:774
-#: ../src/gpm-statistics.c:777
+#: ../src/gpm-statistics.c:886 ../src/gpm-statistics.c:889
+#: ../src/gpm-statistics.c:892 ../src/gpm-statistics.c:895
+#: ../src/gpm-statistics.c:898
 #, c-format
 msgid "Timer %s"
 msgstr "Declanșator %s"
 
 #. TRANSLATORS: this is a task that's woken up from sleeping
-#: ../src/gpm-statistics.c:780
+#: ../src/gpm-statistics.c:901
 #, c-format
 msgid "Sleep %s"
 msgstr "Adomit %s"
 
 #. TRANSLATORS: this is a new realtime task
-#: ../src/gpm-statistics.c:783
+#: ../src/gpm-statistics.c:904
 #, c-format
 msgid "New task %s"
 msgstr "Sarcină nouă %s"
 
 #. TRANSLATORS: this is a task thats woken to check state
-#: ../src/gpm-statistics.c:786
+#: ../src/gpm-statistics.c:907
 #, c-format
 msgid "Wait %s"
 msgstr "Așteptare %s"
 
 #. TRANSLATORS: a work queue is a list of work that has to be done
-#: ../src/gpm-statistics.c:789
-#: ../src/gpm-statistics.c:792
+#: ../src/gpm-statistics.c:910 ../src/gpm-statistics.c:913
 #, c-format
 msgid "Work queue %s"
 msgstr "Coadă sarcini %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
-#: ../src/gpm-statistics.c:795
+#: ../src/gpm-statistics.c:916
 #, c-format
 msgid "Network route flush %s"
 msgstr "Golire rută rețea %s"
 
 #. TRANSLATORS: activity on the USB bus
-#: ../src/gpm-statistics.c:798
+#: ../src/gpm-statistics.c:919
 #, c-format
 msgid "USB activity %s"
 msgstr "Activitate USB %s"
 
 #. TRANSLATORS: we've timed out of an aligned timer
-#: ../src/gpm-statistics.c:801
+#: ../src/gpm-statistics.c:922
 #, c-format
 msgid "Wakeup %s"
 msgstr "Trezit %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
-#: ../src/gpm-statistics.c:804
+#: ../src/gpm-statistics.c:925
 msgid "Local interrupts"
 msgstr "Întreruper locale"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
-#: ../src/gpm-statistics.c:807
+#: ../src/gpm-statistics.c:928
 msgid "Rescheduling interrupts"
 msgstr "Se replanifică întreruperile"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:917
+#: ../src/gpm-statistics.c:1038
 msgid "Device Information"
 msgstr "Informații dispozitiv"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:919
+#: ../src/gpm-statistics.c:1040
 msgid "Device History"
 msgstr "Istoric dispozitiv"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:921
+#: ../src/gpm-statistics.c:1042
 msgid "Device Profile"
 msgstr "Profil dispozitiv"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:923
+#: ../src/gpm-statistics.c:1044
 msgid "Processor Wakeups"
 msgstr "Treziri procesor"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1141
-#: ../src/gpm-statistics.c:1147
-#: ../src/gpm-statistics.c:1153
-#: ../src/gpm-statistics.c:1159
+#: ../src/gpm-statistics.c:1250 ../src/gpm-statistics.c:1256
+#: ../src/gpm-statistics.c:1262 ../src/gpm-statistics.c:1268
 msgid "Time elapsed"
 msgstr "Timp trecut"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1143
+#: ../src/gpm-statistics.c:1252
 msgid "Power"
 msgstr "Putere"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1149
-#: ../src/gpm-statistics.c:1192
-#: ../src/gpm-statistics.c:1198
-#: ../src/gpm-statistics.c:1204
-#: ../src/gpm-statistics.c:1210
+#: ../src/gpm-statistics.c:1258 ../src/gpm-statistics.c:1301
+#: ../src/gpm-statistics.c:1307 ../src/gpm-statistics.c:1313
+#: ../src/gpm-statistics.c:1319
 msgid "Cell charge"
 msgstr "Încărcare celulă"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1155
-#: ../src/gpm-statistics.c:1161
+#: ../src/gpm-statistics.c:1264 ../src/gpm-statistics.c:1270
 msgid "Predicted time"
 msgstr "Timp estimat"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1194
-#: ../src/gpm-statistics.c:1206
+#: ../src/gpm-statistics.c:1303 ../src/gpm-statistics.c:1315
 msgid "Correction factor"
 msgstr "Factor corecție"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1200
-#: ../src/gpm-statistics.c:1212
+#: ../src/gpm-statistics.c:1309 ../src/gpm-statistics.c:1321
 msgid "Prediction accuracy"
 msgstr "Precizie predicție"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:1557
+#: ../src/gpm-statistics.c:1739
 msgid "Processor"
 msgstr "Procesor"
 
-#: ../src/gpm-tray-icon.c:190
-#: ../src/gpm-tray-icon.c:209
+#: ../src/gpm-tray-icon.c:198 ../src/gpm-tray-icon.c:216
 msgid "Device information"
 msgstr "Informații dispozitiv"
 
-#: ../src/gpm-tray-icon.c:192
+#: ../src/gpm-tray-icon.c:200
 msgid "There is no detailed information for this device"
 msgstr "Nu există informații detaliate pentru acest dispozitiv"
 
-#: ../src/gpm-tray-icon.c:321
+#: ../src/gpm-tray-icon.c:330
 msgid "translator-credits"
 msgstr ""
 "Alexandru Szasz <alexxed@gmail.com>\n"
@@ -2202,189 +2420,587 @@ msgstr ""
 "  elena m https://launchpad.net/~rozakia\n"
 "  marianvasile https://launchpad.net/~marianvasile-upcmail"
 
-#: ../src/gpm-tray-icon.c:336
+#: ../src/gpm-tray-icon.c:345
 msgid "GNOME Power Manager Website"
 msgstr "Pagina web GNOME Power Manager"
 
 #. preferences
-#: ../src/gpm-tray-icon.c:408
+#: ../src/gpm-tray-icon.c:421
 msgid "_Preferences"
 msgstr "_Preferințe"
 
-#. statistics
-#: ../src/gpm-tray-icon.c:416
+#: ../src/gpm-tray-icon.c:435
 msgid "Power _History"
 msgstr "_Istoric consum"
 
 #. help
-#: ../src/gpm-tray-icon.c:428
+#: ../src/gpm-tray-icon.c:448
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:2
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:2
 msgid "_Help"
 msgstr "_Ajutor"
 
 #. about
-#: ../src/gpm-tray-icon.c:436
+#: ../src/gpm-tray-icon.c:456
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:1
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:1
 msgid "_About"
 msgstr "_Despre"
 
-#: ../src/gpm-tray-icon.c:542
+#: ../src/gpm-tray-icon.c:570
 msgid "_Suspend"
 msgstr "_Suspendă"
 
-#: ../src/gpm-tray-icon.c:552
+#: ../src/gpm-tray-icon.c:580
 msgid "Hi_bernate"
 msgstr "Hi_bernează"
 
+#~ msgid ""
+#~ "After resume, gnome-power-manager will suppress policy actions for a "
+#~ "number of seconds to allow messages to settle and HAL to refresh. "
+#~ "Commonly five seconds is enough while not being so long that the user "
+#~ "gets confused."
+#~ msgstr ""
+#~ "După revenire, gnome-power-manager va opri actiunile protocoalelor pentru "
+#~ "câteva secunde, pentru a permite stabilizarea mesajelor și reactualizarea "
+#~ "HAL. De obicei 5 secunde sunt suficiente, astfel încât utilizatorul să nu "
+#~ "fie derutat."
+
+#~ msgid "Change the brightness automatically using the ambient light sensors"
+#~ msgstr ""
+#~ "Modifică luminozitatea ecranului automat folosind senzorii de lumină "
+#~ "ambientală"
+
+#~ msgid "If DBUS inhibit requests should be ignored from other programs."
+#~ msgstr ""
+#~ "Dacă DBUS inhibă cereri, atunci acest lucru ar trebui ignorat din alte "
+#~ "programe."
+
+#~ msgid "If DBUS inhibit requests should be ignored."
+#~ msgstr "Dacă DBUS inhibă cereri, atunci acest lucru ar trebui ignorat."
+
+#~ msgid ""
+#~ "If a notification message should be displayed when the profile data is "
+#~ "guessed."
+#~ msgstr ""
+#~ "Dacă să fie afișată o notificare când datele profilului sunt ghicite."
+
+#~ msgid "If extra debugging messages should be used"
+#~ msgstr "Dacă să fie folosite mesaje de depanare suplimentare"
+
+#~ msgid ""
+#~ "If extra debugging messages should be used. Only turn this on for "
+#~ "debugging."
+#~ msgstr ""
+#~ "Dacă să fie folosite mesaje de depanare suplimentare. Folosiți numai "
+#~ "pentru depanare."
+
+#~ msgid "If the low-power mode should be enabled when on UPS"
+#~ msgstr ""
+#~ "Dacă modul de consum scăzut de energie să fie activat când se folosește o "
+#~ "sursă de curent auxiliară (UPS)."
+
+#~ msgid ""
+#~ "If the screen brightness should be changed automatically using the "
+#~ "ambient light sensors."
+#~ msgstr ""
+#~ "Dacă luminozitatea ecranului ar trebui să se schimbe automat folosind "
+#~ "senzorii de lumină ambientală."
+
+#~ msgid ""
+#~ "If the screen brightness should be changed automatically using the "
+#~ "ambient light sensors. Valid is 'none', 'light' and 'dark'"
+#~ msgstr ""
+#~ "Dacă luminozitatea ecranului ar trebui să se modifice automat, folosind "
+#~ "senzori de lumină ambientală. Valori valide sunt „none”, „light” și „dark”"
+
+#~ msgid "If the system low-power mode should be enabled when on UPS power."
+#~ msgstr ""
+#~ "Daca modul de consum scăzut de energie să fie activat când se folosește "
+#~ "sursa de curent auxiliara (UPS)."
+
+#~ msgid ""
+#~ "If we should show the warning when we have a valid inhibit and configured "
+#~ "to sleep on lid close"
+#~ msgstr ""
+#~ "Dacă să fie afișăt avertismentul când există o inhibare validă și "
+#~ "configurată să adoarmă sistemul la închiderea capacului"
+
+#~ msgid ""
+#~ "If we should show the warning when we have a valid inhibit and configured "
+#~ "to sleep on lid close."
+#~ msgstr ""
+#~ "Dacă să fie afișăt avertismentul când există o inhibare validă și "
+#~ "configurată să adoarmă sistemul la închiderea capacului."
+
+#~ msgid "Keyboard brightness when on AC"
+#~ msgstr "Luminozitate tastatură când alimentarea este de la rețea"
+
+#~ msgid "Keyboard brightness when on battery"
+#~ msgstr "Luminozitate tastatură când alimentarea este de la acumulator"
+
+#~ msgid "Notify when the profile data is guessed"
+#~ msgstr "Notifică atunci când datele profilului sunt ghicite"
+
+#~ msgid "Number of seconds to suppress policy after resume"
+#~ msgstr ""
+#~ "Număr de secunde după care se suprimă politica, după reluarea activității"
+
+#~ msgid "The amount the light sensors should contribute to the brightness"
+#~ msgstr "Cantitatea de senzori de lumină care să contribuie la luminozitate"
+
+#~ msgid "The amount the light sensors should contribute to the brightness."
+#~ msgstr "Cantitatea de senzori de lumină care să contribuie la luminozitate."
+
+#~ msgid ""
+#~ "The brightness of the keyboard when on AC power. Possible values are "
+#~ "between 0 and 100."
+#~ msgstr ""
+#~ "Intensitatea tastaturii când se folosește alimentarea de la rețeaua "
+#~ "electrică. Valorile posibile sunt între 0 și 100."
+
+#~ msgid ""
+#~ "The brightness of the keyboard when on battery power. Possible values are "
+#~ "between 0 and 100."
+#~ msgstr ""
+#~ "Intensitatea tastaturii când se folosește alimentarea de la acumulator. "
+#~ "Valorile posibile sunt între 0 și 100."
+
+#~ msgid ""
+#~ "The calibration of the light sensors so that the screen is bright enough"
+#~ msgstr ""
+#~ "Calibrarea senzorilor de lumină, astfel ca ecranul să fie suficient de "
+#~ "luminos"
+
+#~ msgid ""
+#~ "The calibration of the light sensors so that the screen is bright enough, "
+#~ "in percent."
+#~ msgstr ""
+#~ "Calibrarea senzorilor de lumină, astfel ca ecranul să fie suficient de "
+#~ "luminos, în procente."
+
+#~ msgid "The interval the ambient light sensors should be polled"
+#~ msgstr "Intervalul în care senzorii de lumină ambientală trebuie sondați"
+
+#~ msgid "The interval the ambient light sensors should be polled in seconds."
+#~ msgstr "Intervalul în care senzorii de lumină ambientală trebuie sondați."
+
+#~ msgid "The invalid timeout for power actions"
+#~ msgstr "Limita de timp pentru acțiunile de energie"
+
+#~ msgid ""
+#~ "The invalid timeout in ms for power actions. Set this longer if you get "
+#~ "'battery critical' messages when you unplug."
+#~ msgstr ""
+#~ "Limita de timp pentru acțiunile de energie în ms. Definiți o valoare mai "
+#~ "mare, dacă primiți mesajul „nivel critic acumulator” când deconectați de "
+#~ "la rețeaua electrică."
+
+#~ msgid "Application:"
+#~ msgstr "Aplicație:"
+
+#~ msgid "Burning DVD, titled \"My Photos\""
+#~ msgstr "Scriere DVD, numit „Fotografiile mele”"
+
+#~ msgid "Inhibit Tester"
+#~ msgstr "Testare blochare"
+
+#~ msgid "Reason:"
+#~ msgstr "Motiv:"
+
+#~ msgid "UnInhibit"
+#~ msgstr "Deblochează"
+
+#~ msgid "Vendor Acme Foo"
+#~ msgstr "Producător Facem Tot "
+
+#~ msgid "<b>Extras</b>"
+#~ msgstr "<b>Suplimente</b>"
+
+#~ msgid "Always sleep when the lid is _closed"
+#~ msgstr "Întotdeauna intră în adormire cănd capacul este în_chis"
+
+#~ msgid "Enable UPS discharge _alarm"
+#~ msgstr "Activează _alarma descărcare UPS"
+
+#~ msgid "Turn on keyboard light when light level is low"
+#~ msgstr "Pornește luminarea tastaturii când nivelul de lumină este scăzut"
+
+#~ msgid "Use _ambient light to adjust LCD brightness"
+#~ msgstr "Folosește lumina _ambientală pentru a modifica luminozitatea LCD"
+
+#~ msgid "Use _sound to notify in event of an error"
+#~ msgstr "Folosește _sunet pentru a notifica o eroare"
+
+#~ msgid "Power Manager for the GNOME desktop"
+#~ msgstr "Administrator de consum pentru mediul GNOME"
+
+#~ msgid "Device state could not be read at this time"
+#~ msgstr "Starea acumulatorului nu poate fi citită acum"
+
+#~ msgid "<b>Product:</b> %s\n"
+#~ msgstr "<b>Produs:</b> %s\n"
+
+#~ msgid "<b>Status:</b> %s\n"
+#~ msgstr "<b>Stare:</b> %s\n"
+
+#~ msgid "<b>Percentage charge:</b> %.1f%%\n"
+#~ msgstr "<b>Procent încărcare:</b> %.1f%%\n"
+
+#~ msgid "<b>Vendor:</b> %s\n"
+#~ msgstr "<b>Fabricant:</b> %s\n"
+
+#~ msgid "<b>Technology:</b> %s\n"
+#~ msgstr "<b>Tehnologie:</b> %s\n"
+
+#~ msgid "<b>Serial number:</b> %s\n"
+#~ msgstr "<b>Număr serie:</b> %s\n"
+
+#~ msgid "<b>Model:</b> %s\n"
+#~ msgstr "<b>Model:</b> %s\n"
+
+#~ msgid "<b>Charge time:</b> %s\n"
+#~ msgstr "<b>Timp încărcare:</b> %s\n"
+
+#~ msgid "<b>Discharge time:</b> %s\n"
+#~ msgstr "<b>Timp descărcare:</b> %s\n"
+
+#~ msgid "<b>Capacity:</b> %.1f%% (%s)\n"
+#~ msgstr "<b>Capacitate:</b> %1f%% (%s)\n"
+
+#~ msgid "<b>Current charge:</b> %.1f Wh\n"
+#~ msgstr "<b>Încărcarea curentă acumulator:</b> %.1f Wo\n"
+
+#~ msgid "<b>Design charge:</b> %.1f Wh\n"
+#~ msgstr "<b>Model încărcare:</b> %.1f Wo\n"
+
+#~ msgid "<b>Charge rate:</b> %.1f W\n"
+#~ msgstr "<b>Rată de încărcare:</b> %.1f W\n"
+
+#~ msgid "<b>Current charge:</b> %.0f/7\n"
+#~ msgstr "<b>Încărcare curentă acumulator:</b>%0f/7\n"
+
+#~ msgid "%s has stopped the suspend from taking place: %s."
+#~ msgstr "%s a oprit suspendare: %s."
+
+#~ msgid "%s has stopped the hibernate from taking place: %s."
+#~ msgstr "%s a oprit hibernarea: %s."
+
+#~ msgid "%s has stopped the policy action from taking place: %s."
+#~ msgstr "%s a oprit acțiunea definită să aibă loc: %s."
+
+#~ msgid "%s has stopped the reboot from taking place: %s."
+#~ msgstr "%s a oprit repornirea: %s."
+
+#~ msgid "%s has stopped the shutdown from taking place: %s."
+#~ msgstr "%s a oprit închiderea: %s."
+
+#~ msgid "%s has stopped the timeout action from taking place: %s."
+#~ msgstr "%s a oprit procesul acțiunii de timp limită: %s."
+
+#~ msgid "Multiple applications have stopped the suspend from taking place."
+#~ msgstr "Mai multe aplicații au oprit procesul de suspendare."
+
+#~ msgid "Multiple applications have stopped the hibernate from taking place."
+#~ msgstr "Mai multe aplicații au oprit procesul de hibernare."
+
+#~ msgid ""
+#~ "Multiple applications have stopped the policy action from taking place."
+#~ msgstr "Mai multe aplicații au oprit acțiunea definită în a avea loc."
+
+#~ msgid "Multiple applications have stopped the reboot from taking place."
+#~ msgstr "Aplicații multiple au oprit repornirea calculatorului."
+
+#~ msgid "Multiple applications have stopped the shutdown from taking place."
+#~ msgstr "Aplicații multiple au oprit închiderea calculatorului."
+
+#~ msgid "Request to suspend"
+#~ msgstr "Cerere de suspendare"
+
+#~ msgid "Request to hibernate"
+#~ msgstr "Cerere de hibernare"
+
+#~ msgid "Request to do policy action"
+#~ msgstr "Cerere de acționare a unei politici"
+
+#~ msgid "Request to do timeout action"
+#~ msgstr "Cerere de acțiune cu timp limită"
+
+#~ msgid "Perform action anyway"
+#~ msgstr "Execută acțiunea oricum"
+
+#~ msgid "The lid has been closed on ac power."
+#~ msgstr "Capacul a fost închis pe alimentarea de la rețea."
+
+#~ msgid "The lid has been closed on battery power."
+#~ msgstr "Capacul a fost închis pe alimentarea de la acumulator."
+
+#~ msgid "The power button has been pressed."
+#~ msgstr "Butonul de alimentare a fost apăsat."
+
+#~ msgid "The suspend button has been pressed."
+#~ msgstr "Butonul de suspendare a fost apăsat."
+
+#~ msgid "The hibernate button has been pressed."
+#~ msgstr "Butonul de hibernare a fost apăsat."
+
+#~ msgid ""
+#~ "The lid has been closed, and the ac adapter removed (and gconf is okay)."
+#~ msgstr ""
+#~ "Capacul a fost închis și alimentarea de la rețea întreruptă (și gcong "
+#~ "este OK)."
+
+#~ msgid "User clicked on tray"
+#~ msgstr "Utilizatorul a dat un clic în zona de notificare"
+
+#~ msgid ""
+#~ "You have approximately <b>%s</b> of remaining battery life (%.1f%%). %s"
+#~ msgstr "Mai aveți aproximativ <b>%s</b> din durată acumulator (%.1f%%). %s"
+
+#~ msgid "Sleep warning"
+#~ msgstr "Avertizare de adormire"
+
+#~ msgid ""
+#~ "Your laptop will not sleep if you shut the lid as a running program has "
+#~ "prevented this.\n"
+#~ "Some laptops can overheat if they do not sleep when the lid is closed."
+#~ msgstr ""
+#~ "Calculatorul nu va fi suspendat la închiderea capacului deoarece un "
+#~ "program a impiedicat acest lucru.\n"
+#~ "Unele laptopuri se pot supraîncălzii dacă nu sunt suspendate la "
+#~ "închiderea capacului."
+
+#~ msgid "Your laptop battery is now fully charged"
+#~ msgstr "Acumulatoru laptopului este complet încărcat."
+
+#~ msgid ""
+#~ "The AC power has been unplugged. The system is now using battery power."
+#~ msgstr ""
+#~ "Laptopul a fost deconecatat de la rețeaua electrică. Sistemul folosește "
+#~ "acum energia din acumulator."
+
+#~ msgid ""
+#~ "The AC power has been unplugged. The system is now using backup power."
+#~ msgstr ""
+#~ "Alimentarea de la rețea a fost întreruptă. Sistemul folosește acum "
+#~ "energie de rezervă."
+
+#~ msgid "Visit quirk website"
+#~ msgstr "Vizitați pagina web quirk"
+
 #~ msgid "Add related _events"
 #~ msgstr "Adaugă _evenimente"
+
 #~ msgid "Time since startup"
 #~ msgstr "Durată de la pornire"
+
 #~ msgid "The message was not sent due to DBUS security rules"
 #~ msgstr ""
 #~ "Mesajul nu a fost trimis datorită unor reguli de securitate ale DBUS"
+
 #~ msgid "General failure"
 #~ msgstr "Eșuare generală"
+
 #~ msgid "Computer is running on backup power\n"
 #~ msgstr "Calculatorul folosește energie de rezervă\n"
+
 #~ msgid "Computer is running on AC power\n"
 #~ msgstr "Calculatorul este alimentat de la rețea\n"
+
 #~ msgid "Computer is running on battery power\n"
 #~ msgstr "Calculatorul este alimentat de la acumulator\n"
+
 #~ msgid "Battery discharge time is currently unknown\n"
 #~ msgstr "Timpul de descărcare al acumulatorului este momentan necunoscut\n"
+
 #~ msgid "Battery charge time is currently unknown\n"
 #~ msgstr "Timpul de încărcare al acumulatorului este momentan necunoscut\n"
+
 #~ msgid "Battery discharge time is estimated\n"
 #~ msgstr "Timpul de descărcare al acumulatorui este estimat\n"
+
 #~ msgid "Battery charge time is estimated\n"
 #~ msgstr "Timpul de încărcare al acumulatorului este estimat\n"
+
 #~ msgid "Unable to get data..."
 #~ msgstr "Nu s-au putut obține date..."
+
 #~ msgid "Reason: %s"
 #~ msgstr "Motiv: %s"
+
 #~ msgid "On AC"
 #~ msgstr "De la rețea"
+
 #~ msgid "On battery"
 #~ msgstr "De la acumulator"
+
 #~ msgid "Session powersave"
 #~ msgstr "Salvare consum sesiune"
-#~ msgid "Session idle"
-#~ msgstr "Sesiune inactivă"
-#~ msgid "Session active"
-#~ msgstr "Sesiune activă"
+
 #~ msgid "label shown on graph|Suspend"
 #~ msgstr "label shown on graph|Suspendare"
+
 #~ msgid "label shown on graph|Resume"
 #~ msgstr "label shown on graph|Restabilire"
+
 #~ msgid "label shown on graph|Hibernate"
 #~ msgstr "label shown on graph|Hibernare"
+
 #~ msgid "Notification"
 #~ msgstr "Notificare"
+
 #~ msgid "DPMS On"
 #~ msgstr "DPMS pornit"
+
 #~ msgid "DPMS Standby"
 #~ msgstr "DPMS în așteptare"
+
 #~ msgid "DPMS Suspend"
 #~ msgstr "Suspendare DPMS"
+
 #~ msgid "DPMS Off"
 #~ msgstr "DPMS închis"
+
 #~ msgid "Battery percentage"
 #~ msgstr "Procentaj acumulator"
+
 #~ msgid "Battery Voltage"
 #~ msgstr "Tensiune acumulator"
+
 #~ msgid "Accuracy of reading"
 #~ msgstr "Acuratețea citirii"
+
 #~ msgid "Trusted"
 #~ msgstr "De încredere"
+
 #~ msgid "Untrusted"
 #~ msgstr "Lipsit de încredere"
+
 #~ msgid "Valid data"
 #~ msgstr "Date valide"
+
 #~ msgid "Extrapolated data"
 #~ msgstr "Date extrapolate"
+
 #~ msgid "Stop point"
 #~ msgstr "Punct final"
+
 #~ msgid "AC adapter inserted"
 #~ msgstr "Introducere alimentare rețea"
+
 #~ msgid "The laptop lid has been closed"
 #~ msgstr "Capacul laptopului a fost închis"
+
 #~ msgid "The laptop lid has been re-opened"
 #~ msgstr "Capacul laptopului a fost redeschis"
+
 #~ msgid "idle mode ended"
 #~ msgstr "ieșire din mod inactiv"
+
 #~ msgid "idle mode started"
 #~ msgstr "intrare în mod inactiv"
+
 #~ msgid "powersave mode started"
 #~ msgstr "intrare în mod economisire energie"
+
 #~ msgid "dpms on"
 #~ msgstr "dpms activ"
+
 #~ msgid "dpms standby"
 #~ msgstr "dpms stare de veghe"
+
 #~ msgid "dpms suspend"
 #~ msgstr "dpms suspendare"
+
 #~ msgid "dpms off"
 #~ msgstr "dpms inactiv"
+
 #~ msgid "Resuming computer"
 #~ msgstr "Restabilire calculator"
+
 #~ msgid "Hibernate Problem"
 #~ msgstr "Problemă de hibernare"
+
 #~ msgid "Suspend Problem"
 #~ msgstr "Problemă la suspendare"
+
 #~ msgid "Do not daemonize"
 #~ msgstr "Nu rula ca serviciu"
+
 #~ msgid "Request to reboot"
 #~ msgstr "Cerere de repornire"
+
 #~ msgid "Request to shutdown"
 #~ msgstr "Cerere de oprire"
+
 #~ msgid "Action forbidden"
 #~ msgstr "Acțiune interzisă"
+
 #~ msgid "Suspend is not available on this computer."
 #~ msgstr "Suspendarea nu este disponibilă pe acest calculator."
+
 #~ msgid "Suspending computer."
 #~ msgstr "Se suspendă calculatorul."
+
 #~ msgid "Hibernate is not available on this computer."
 #~ msgstr "Hibernarea nu este disponibilă pe acest calculator."
+
 #~ msgid "Hibernating computer."
 #~ msgstr "Se hibernaează calculatorul."
+
 #~ msgid "Doing nothing."
 #~ msgstr "Nu se face nimic."
+
 #~ msgid "Shutting down computer."
 #~ msgstr "Se oprește calculatorul."
+
 #~ msgid "GNOME interactive logout."
 #~ msgstr "Ieșire interactivă GNOME."
+
 #~ msgid "System idle."
 #~ msgstr "Sistem inactiv."
+
 #~ msgid "a short time"
 #~ msgstr "un timp scurt"
+
 #~ msgid "Unknown"
 #~ msgstr "Nescunoscut"
+
 #~ msgid "Laptop batteries"
 #~ msgstr "Acumulatori laptop"
+
 #~ msgid "UPSs"
 #~ msgstr "UPS-uri"
+
 #~ msgid "Wireless mice"
 #~ msgstr "Mausuri fără fir"
+
 #~ msgid "Wireless keyboards"
 #~ msgstr "Tastaturi fără fir"
+
 #~ msgid "PDAs"
 #~ msgstr "PDA-uri"
+
 #~ msgid "Cell phones"
 #~ msgstr "Telefoane mobile"
+
 #~ msgid "GNOME Power Statistics"
 #~ msgstr "Statistici de consum GNOME"
+
 #~ msgid "Charge history"
 #~ msgstr "Istoric încărcare"
+
 #~ msgid "Power history"
 #~ msgstr "Istoric consum"
+
 #~ msgid "Voltage history"
 #~ msgstr "Istoric tensiune"
+
 #~ msgid "Estimated time history"
 #~ msgstr "Istoric timp estimat"
+
 #~ msgid "Could not connect to GNOME Power Manager."
 #~ msgstr "Nu s-a putut conecta la administratorul de energie GNOME."
+
 #~ msgid "Based on processor load"
 #~ msgstr "Bazat pe încărcarea procesorului"
-
