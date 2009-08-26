@@ -12,14 +12,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.master.ta\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-power-manager&component=general\n"
-"POT-Creation-Date: 2009-08-24 10:11+0000\n"
-"PO-Revision-Date: 2009-08-26 12:44+0530\n"
+"POT-Creation-Date: 2009-08-26 08:54+0000\n"
+"PO-Revision-Date: 2009-08-26 15:40+0530\n"
 "Last-Translator: I. Felix <ifelix@redhat.com>\n"
 "Language-Team: Tamil <fedora-trans-ta@redhat.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -1083,13 +1084,13 @@ msgstr "%s மின் சக்தியூட்டப்படுகிற�
 
 #. TRANSLATORS: The laptop battery is fully charged, and we know a time
 #: ../src/gpm-devicekit.c:266
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Battery is fully charged.\n"
 "Provides %s laptop runtime"
 msgstr ""
-"%s முழுதும் சக்தி ஊட்டப்பட்டது (%.1f%%)\n"
-"%s மின்கல இயங்கு நேரம் கிடைக்கும்"
+"பேட்டரி முழு சார்ஜில் உள்ளது.\n"
+"%s மடிக்கணினி இயக்க நேரத்தை கொடுக்கிறது"
 
 #. TRANSLATORS: the device is fully charged
 #: ../src/gpm-devicekit.c:271
@@ -1401,36 +1402,34 @@ msgstr "கூடுதல் தகவலுக்கு %s ஐ பார்க
 msgid ""
 "If you can see this text, your display server is broken and you should "
 "notify your distributor."
-msgstr ""
+msgstr "நீங்கள் இந்த உரையை பார்த்தால், உங்கள் காட்சி சேவையகம் விடுபட்டிருக்கும் மற்றும் உங்கள் விநியோகஸ்தருக்கு தெரிவிக்க வேண்டும்."
 
 #. TRANSLATORS: this is for debugging, if the session is idle
 #: ../src/gpm-idle.c:226
 msgid "Session idle"
-msgstr ""
+msgstr "அமர்வு வெறுமை"
 
 #: ../src/gpm-idle.c:226
 msgid "Session active"
-msgstr ""
+msgstr "அமர்வு செயலில்"
 
 #. TRANSLATORS: has something inhibited the session
 #: ../src/gpm-idle.c:228
 msgid "inhibited"
-msgstr ""
+msgstr "இன்ஹிப்பிடட்"
 
 #: ../src/gpm-idle.c:228
-#, fuzzy
 msgid "not inhibited"
-msgstr "கைமுறை பாதிப்பு"
+msgstr "இன்ஹிப்படிட் இல்லை"
 
 #. TRANSLATORS: is the screen idle or awake
 #: ../src/gpm-idle.c:230
 msgid "screen idle"
-msgstr ""
+msgstr "திரை வெறுமை"
 
 #: ../src/gpm-idle.c:230
-#, fuzzy
 msgid "screen awake"
-msgstr "வெற்றாகும் போது திரையை பூட்டு"
+msgstr "திரையை விழிப்பு"
 
 #. TRANSLATORS: show verbose debugging
 #: ../src/gpm-main.c:171 ../src/gpm-prefs.c:90 ../src/gpm-statistics.c:1465
@@ -1589,11 +1588,10 @@ msgstr ""
 
 #. TRANSLATORS: show the fully charged notification
 #: ../src/gpm-manager.c:1183
-#, fuzzy
 msgid "Battery Fully Charged"
 msgid_plural "Batteries Fully Charged"
-msgstr[0] "மின்கலம் ஏற்றப்பட்டது"
-msgstr[1] "மின்கலன்கள் ஏற்றப்பட்டன"
+msgstr[0] "பேட்டரி முழுவதும் ஏற்றப்பட்டது"
+msgstr[1] "பேட்டரிகள் முழுவதும் ஏற்றப்பட்டது"
 
 #. TRANSLATORS: laptop battery is now discharging
 #: ../src/gpm-manager.c:1224
@@ -1602,9 +1600,9 @@ msgstr "மின்கல சக்தி இறங்குகிறது"
 
 #. TRANSLATORS: tell the user how much time they have got
 #: ../src/gpm-manager.c:1227
-#, fuzzy, c-format
+#, c-format
 msgid "%s of battery power remaining (%.1f%%)"
-msgstr "%s %s மீதமுள்ளது (%.1f%%)"
+msgstr "%s பேட்டரி மின்சாரம் மீதமுள்ளது (%.1f%%)"
 
 #. TRANSLATORS: UPS is now discharging
 #: ../src/gpm-manager.c:1230
@@ -1613,9 +1611,9 @@ msgstr "யூபிஎஸ் மின் சக்தி இறங்குக
 
 #. TRANSLATORS: tell the user how much time they have got
 #: ../src/gpm-manager.c:1233
-#, fuzzy, c-format
+#, c-format
 msgid "%s of UPS backup power remaining (%.1f%%)"
-msgstr "%s %s மீதமுள்ளது (%.1f%%)"
+msgstr "%s UPS பேக்அப் மின்சாரம் மீதமுள்ளது (%.1f%%)"
 
 #. TRANSLATORS: window title: there was a problem putting the machine to sleep
 #: ../src/gpm-manager.c:1301
@@ -1653,9 +1651,9 @@ msgstr "மடிக்கணினி மின்கல சக்தி கு
 
 #. TRANSLATORS: tell the user how much time they have got
 #: ../src/gpm-manager.c:1406
-#, fuzzy, c-format
+#, c-format
 msgid "Approximately <b>%s</b> remaining (%.1f%%)"
-msgstr "உங்களுக்கு தோராயமாக <b>%s</b>  மீதம் மின்கல சக்தி (%.1f%%) உள்ளது."
+msgstr "தோராயமாக <b>%s</b> மீதமுள்ளது (%.1f%%)"
 
 #. TRANSLATORS: UPS is starting to get a little low
 #: ../src/gpm-manager.c:1410
@@ -1734,21 +1732,21 @@ msgstr "தரவை இழக்காதிருக்க ஏசி தகவ
 
 #. TRANSLATORS: give the user a ultimatum
 #: ../src/gpm-manager.c:1523
-#, fuzzy, c-format
+#, c-format
 msgid "Computer will suspend in %s."
-msgstr "உங்கள் கணினி இடை நிறுத்தாது போயிற்று."
+msgstr "%sஇல் கணினி இடை நிறுத்தப்படும்."
 
 #. TRANSLATORS: give the user a ultimatum
 #: ../src/gpm-manager.c:1527
-#, fuzzy, c-format
+#, c-format
 msgid "Computer will hibernate in %s."
-msgstr "உங்கள் கணினி உறங்காது போயிற்று."
+msgstr "%sஇல் கணினி உறங்கும்."
 
 #. TRANSLATORS: give the user a ultimatum
 #: ../src/gpm-manager.c:1531
-#, fuzzy, c-format
+#, c-format
 msgid "Computer will shutdown in %s."
-msgstr "ஏசி இணைக்கப்படவில்லையானால் %s இல் இந்த கணினி செயல் நிறுத்தம் செய்யும்"
+msgstr "கணினி %sஇல் பணிநிறுத்தம் செய்யப்படும்."
 
 #. TRANSLATORS: the UPS is very low
 #. TRANSLATORS: UPS is really, really, low
