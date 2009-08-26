@@ -1452,16 +1452,6 @@ out:
 }
 
 /**
- * gpm_manager_get_time_until_action_text:
- */
-static gchar *
-gpm_manager_get_time_until_action_text (GpmManager *manager)
-{
-	guint time_s = 0;
-	return gpm_get_timestring (time_s);
-}
-
-/**
  * gpm_manager_engine_charge_critical_cb:
  */
 static void
@@ -1472,7 +1462,6 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, Gpm
 	gchar *remaining_text;
 	gchar *action;
 	gchar *icon = NULL;
-	gchar *time_text;
 	DkpDeviceType type;
 	gdouble percentage;
 	gint64 time_to_empty;
@@ -1507,7 +1496,6 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, Gpm
 		}
 
 		remaining_text = gpm_get_timestring (time_to_empty);
-		time_text = gpm_manager_get_time_until_action_text (manager);
 
 		/* we have to do different warnings depending on the policy */
 		action = gconf_client_get_string (manager->priv->conf, GPM_CONF_ACTIONS_CRITICAL_BATT, NULL);
@@ -1520,20 +1508,19 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, Gpm
 
 		} else if (policy == GPM_ACTION_POLICY_SUSPEND) {
 			/* TRANSLATORS: give the user a ultimatum */
-			message = g_strdup_printf (_("Computer will suspend in %s."), time_text);
+			message = g_strdup_printf (_("Computer will suspend in %s."), remaining_text);
 
 		} else if (policy == GPM_ACTION_POLICY_HIBERNATE) {
 			/* TRANSLATORS: give the user a ultimatum */
-			message = g_strdup_printf (_("Computer will hibernate in %s."), time_text);
+			message = g_strdup_printf (_("Computer will hibernate in %s."), remaining_text);
 
 		} else if (policy == GPM_ACTION_POLICY_SHUTDOWN) {
 			/* TRANSLATORS: give the user a ultimatum */
-			message = g_strdup_printf (_("Computer will shutdown in %s."), time_text);
+			message = g_strdup_printf (_("Computer will shutdown in %s."), remaining_text);
 		}
 
 		g_free (action);
 		g_free (remaining_text);
-		g_free (time_text);
 	} else if (type == DKP_DEVICE_TYPE_UPS) {
 		/* TRANSLATORS: the UPS is very low */
 		title = _("UPS critically low");
