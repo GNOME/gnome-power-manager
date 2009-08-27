@@ -1,9 +1,7 @@
 # translation of gnome-power-manager.HEAD.po to Arabic
-#
-#
 # Yousef Raffah <yousef@raffah.com>, 2006.
 # Djihed Afifi <djihed@gmail.com>, 2006.
-# Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007, 2008.
+# Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007, 2008, 2009.
 # Mohamed Magdy <mohamed.m.k@gmail.com>, 2007.
 # Youssef Chahibi <chahibi@gmail.com>, 2007.
 # Anas Husseini <linux.anas@gmail.com>, 2007.
@@ -12,16 +10,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-24 11:05+0100\n"
-"PO-Revision-Date: 2008-05-26 15:22+0300\n"
+"POT-Creation-Date: 2009-08-27 16:41+0300\n"
+"PO-Revision-Date: 2009-08-27 16:39+0300\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Virtaal 0.4.0\n"
 
 #: ../applets/brightness/brightness-applet.c:105
 msgid "Power Manager Brightness Applet"
@@ -911,50 +910,47 @@ msgstr "السطوع"
 
 #: ../data/gpm-statistics.ui.h:1
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: ../data/gpm-statistics.ui.h:2
 msgid "Data length:"
-msgstr ""
+msgstr "طول البيانات:"
 
 #: ../data/gpm-statistics.ui.h:3 ../src/gpm-statistics.c:206
 msgid "Details"
-msgstr ""
+msgstr "التفاصيل"
 
 #: ../data/gpm-statistics.ui.h:4
 msgid "Graph type:"
 msgstr "نوع الرسم البياني:"
 
 #: ../data/gpm-statistics.ui.h:5
-#, fuzzy
 msgid "History"
-msgstr "تأريخ الطاقة"
+msgstr "التأريخ"
 
 #: ../data/gpm-statistics.ui.h:7
 msgid "Processor wakeups per second:"
-msgstr ""
+msgstr "استيقاظا المعالج في الثانية:"
 
 #: ../data/gpm-statistics.ui.h:8
-#, fuzzy
 msgid "Show data points"
-msgstr "نقطة البدء"
+msgstr "أظهر نقاط البيانات"
 
 #: ../data/gpm-statistics.ui.h:9
-#, fuzzy
 msgid "Statistics"
-msgstr "إحصاءات الطاقة"
+msgstr "الإحصائيّات"
 
 #: ../data/gpm-statistics.ui.h:10
 msgid "There is no data to display."
-msgstr ""
+msgstr "لا بيانات لعرضها"
 
 #: ../data/gpm-statistics.ui.h:11
 msgid "Use smoothed line"
-msgstr ""
+msgstr "استخدم خطا منعّما"
 
 #: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:192
 msgid "Wakeups"
-msgstr ""
+msgstr "الاستيقاظات"
 
 #: ../data/gpm-prefs.ui.h:1
 msgid "<b>Actions</b>"
@@ -1018,7 +1014,7 @@ msgstr "اجعل سطوع ال_شّاشة:"
 
 #: ../data/gpm-prefs.ui.h:16
 msgid "Sp_in down hard disks when possible"
-msgstr ""
+msgstr "_قلل دوران القرص الثلب متى أمكن"
 
 #: ../data/gpm-prefs.ui.h:17
 msgid "When UPS power is _critically low:"
@@ -1053,9 +1049,8 @@ msgid "_Never display an icon"
 msgstr "لا _تعرض الأيقونة أبدًا"
 
 #: ../data/gpm-prefs.ui.h:25
-#, fuzzy
 msgid "_Only display an icon when battery power is low"
-msgstr "ا_عرض الأيقونة فقط عندما تكون طاقة البطارية منخفضة بشكل حرج"
+msgstr "ا_عرض الأيقونة فقط عندما تكون طاقة البطارية منخفضة"
 
 #: ../data/gpm-prefs.ui.h:26
 msgid "_Reduce backlight brightness"
@@ -1117,70 +1112,70 @@ msgstr[5] "دقيقة"
 #. TRANSLATORS: a phone is charging
 #. TRANSLATORS: device is charging, but we only have a percentage
 #: ../src/gpm-devicekit.c:251 ../src/gpm-devicekit.c:315
-#, fuzzy, c-format
+#, c-format
 msgid "%s charging (%.1f%%)"
-msgstr "%s يجري الشحن (%Ii%%)\n"
+msgstr "‏%s يشحن (%.1f%%)"
 
 #. TRANSLATORS: The laptop battery is fully charged, and we know a time
 #: ../src/gpm-devicekit.c:266
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Battery is fully charged.\n"
 "Provides %s laptop runtime"
 msgstr ""
-"%s مشحونة بالكامل (%Ii%%)\n"
-"يعطي %s من تشغيل البطارية\n"
+"البطارية مشحونة بالكامل\n"
+"يعطي %s من تشغيل الحاسوب"
 
 #. TRANSLATORS: the device is fully charged
 #: ../src/gpm-devicekit.c:271
-#, fuzzy, c-format
+#, c-format
 msgid "%s is fully charged"
-msgstr "%s مشحونة بالكامل (%Ii%%)\n"
+msgstr "‏%s مشحونة بالكامل"
 
 #. TRANSLATORS: the device is discharging, and we have a time remaining
 #: ../src/gpm-devicekit.c:279
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s remaining (%.1f%%)"
-msgstr "%s باقي %s (%Ii%%)\n"
+msgstr "‏%s باقي %s (%.1f%%)"
 
 #. TRANSLATORS: the device is discharging, but we only have a percentage
 #: ../src/gpm-devicekit.c:284
-#, fuzzy, c-format
+#, c-format
 msgid "%s discharging (%.1f%%)"
-msgstr "%s تُفرّغ (%Ii%%)\n"
+msgstr "‏%s تُفرّغ (%.1f%%)"
 
 #. TRANSLATORS: the device is charging, and we have a time to full and empty
 #: ../src/gpm-devicekit.c:298
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s until charged (%.1f%%)\n"
 "Provides %s battery runtime"
 msgstr ""
-"%s %s حتى تشحن (%Ii%%)\n"
-"يعطي %s من تشغيل البطارية\n"
+"‏%s %s حتى تشحن (%.1f%%)\n"
+"يعطي %s من تشغيل البطارية"
 
 #. TRANSLATORS: device is charging, and we have a time to full and a percentage
 #: ../src/gpm-devicekit.c:309
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s until charged (%.1f%%)"
-msgstr "%s %s حتى تشحن (%Ii%%)\n"
+msgstr "‏%s %s حتى تشحن (%.1f%%)"
 
 #. TRANSLATORS: this is only shown for laptops with multiple batteries
 #: ../src/gpm-devicekit.c:323
-#, fuzzy, c-format
+#, c-format
 msgid "%s waiting to discharge (%.1f%%)"
-msgstr "%s تُفرّغ (%Ii%%)\n"
+msgstr "‏%s تنتظر لتُستخدم (%.1f%%)"
 
 #. TRANSLATORS: this is only shown for laptops with multiple batteries
 #: ../src/gpm-devicekit.c:329
-#, fuzzy, c-format
+#, c-format
 msgid "%s waiting to charge (%.1f%%)"
-msgstr "%s %s حتى تشحن (%Ii%%)\n"
+msgstr "‏%s تنتظر حتى تشحن (%.1f%%)"
 
 #. TRANSLATORS: the type of data, e.g. Laptop battery
 #: ../src/gpm-devicekit.c:389
 msgid "Product:"
-msgstr ""
+msgstr "المُمنتَج:"
 
 #. TRANSLATORS: device is missing
 #. TRANSLATORS: device is charged
@@ -1189,32 +1184,28 @@ msgstr ""
 #: ../src/gpm-devicekit.c:393 ../src/gpm-devicekit.c:396
 #: ../src/gpm-devicekit.c:399 ../src/gpm-devicekit.c:402
 msgid "Status:"
-msgstr ""
+msgstr "الحالة:"
 
 #: ../src/gpm-devicekit.c:393
 msgid "Missing"
-msgstr ""
+msgstr "مفقود"
 
 #: ../src/gpm-devicekit.c:396
-#, fuzzy
 msgid "Charged"
-msgstr "تم شحن البطارية"
+msgstr "مشحونة"
 
 #: ../src/gpm-devicekit.c:399
-#, fuzzy
 msgid "Charging"
-msgstr "يُفرّغ ال UPS"
+msgstr "تشحن"
 
 #: ../src/gpm-devicekit.c:402
-#, fuzzy
 msgid "Discharging"
-msgstr "يُفرّغ ال UPS"
+msgstr "تُفرّغ"
 
 #. TRANSLATORS: percentage
 #: ../src/gpm-devicekit.c:407
-#, fuzzy
 msgid "Percentage charge:"
-msgstr "النسبة المئوية"
+msgstr "النسبة المشحونة:"
 
 #. TRANSLATORS: manufacturer
 #: ../src/gpm-devicekit.c:411
@@ -1223,33 +1214,28 @@ msgstr "المُنتِج:"
 
 #. TRANSLATORS: how the battery is made, e.g. Lithium Ion
 #: ../src/gpm-devicekit.c:416
-#, fuzzy
 msgid "Technology:"
 msgstr "التقنية:"
 
 #. TRANSLATORS: serial number of the battery
 #: ../src/gpm-devicekit.c:420
-#, fuzzy
 msgid "Serial number:"
-msgstr "الرقم المسلسل:"
+msgstr "الرقم التسلسلي:"
 
 #. TRANSLATORS: model number of the battery
 #: ../src/gpm-devicekit.c:424
-#, fuzzy
 msgid "Model:"
 msgstr "الطراز:"
 
 #. TRANSLATORS: time to fully charged
 #: ../src/gpm-devicekit.c:429
-#, fuzzy
 msgid "Charge time:"
 msgstr "وقت الشحن:"
 
 #. TRANSLATORS: time to empty
 #: ../src/gpm-devicekit.c:435
-#, fuzzy
 msgid "Discharge time:"
-msgstr "وقت الشحن:"
+msgstr "وقت التفريغ:"
 
 #. TRANSLATORS: Excellent, Good, Fair and Poor are all related to battery Capacity
 #: ../src/gpm-devicekit.c:442
@@ -1269,70 +1255,51 @@ msgid "Poor"
 msgstr "فقير"
 
 #: ../src/gpm-devicekit.c:452
-#, fuzzy
 msgid "Capacity:"
 msgstr "السعة:"
 
 #: ../src/gpm-devicekit.c:458 ../src/gpm-devicekit.c:483
-#, fuzzy
 msgid "Current charge:"
 msgstr "الشحنة الحالية:"
 
 #: ../src/gpm-devicekit.c:464
-#, fuzzy
 msgid "Last full charge:"
 msgstr "آخر شحنة كاملة:"
 
 #: ../src/gpm-devicekit.c:470 ../src/gpm-devicekit.c:488
-#, fuzzy
 msgid "Design charge:"
 msgstr "شحنة التصميم:"
 
 #: ../src/gpm-devicekit.c:475
-#, fuzzy
 msgid "Charge rate:"
 msgstr "معدل الشحن:"
 
 #. TRANSLATORS: system power cord
 #: ../src/gpm-devicekit.c:510
-#, fuzzy
 msgid "AC adapter"
 msgid_plural "AC adapters"
-msgstr[0] "نُزِع مقبس الطاقة"
-msgstr[1] "نُزِع مقبس الطاقة"
-msgstr[2] "نُزِع مقبس الطاقة"
-msgstr[3] "نُزِع مقبس الطاقة"
-msgstr[4] "نُزِع مقبس الطاقة"
-msgstr[5] "نُزِع مقبس الطاقة"
+msgstr[0] "مقبس طاقة"
+msgstr[1] "مقبس طاقة"
+msgstr[2] "مقبسي طاقة"
+msgstr[3] "مقابس طاقة"
+msgstr[4] "مقابس طاقة"
+msgstr[5] "مقابس طاقة"
 
 #. TRANSLATORS: laptop primary battery
 #: ../src/gpm-devicekit.c:514
-#, fuzzy
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "بطارية حاسوب محمول"
 msgstr[1] "بطارية حاسوب محمول"
-msgstr[2] "بطارية حاسوب محمول"
-msgstr[3] "بطارية حاسوب محمول"
-msgstr[4] "بطارية حاسوب محمول"
-msgstr[5] "بطارية حاسوب محمول"
+msgstr[2] "بطاريتي حاسوب محمول"
+msgstr[3] "بطاريات حاسوب محمول"
+msgstr[4] "بطاريات حاسوب محمول"
+msgstr[5] "بطاريات حاسوب محمول"
 
 #. TRANSLATORS: battery-backed AC power source
 #: ../src/gpm-devicekit.c:518
-#, fuzzy
 msgid "UPS"
 msgid_plural "UPSs"
-msgstr[0] "UPS"
-msgstr[1] "UPS"
-msgstr[2] "UPS"
-msgstr[3] "UPS"
-msgstr[4] "UPS"
-msgstr[5] "UPS"
-
-#. TRANSLATORS: a monitor is a device to measure voltage and current
-#: ../src/gpm-devicekit.c:522
-msgid "Monitor"
-msgid_plural "Monitors"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
@@ -1340,33 +1307,41 @@ msgstr[3] ""
 msgstr[4] ""
 msgstr[5] ""
 
+#. TRANSLATORS: a monitor is a device to measure voltage and current
+#: ../src/gpm-devicekit.c:522
+msgid "Monitor"
+msgid_plural "Monitors"
+msgstr[0] "شاشة"
+msgstr[1] "شاشة"
+msgstr[2] "شاشتين"
+msgstr[3] "شاشات"
+msgstr[4] "شاشات"
+msgstr[5] "شاشات"
+
 #. TRANSLATORS: wireless mice with internal batteries
 #: ../src/gpm-devicekit.c:526
-#, fuzzy
 msgid "Wireless mouse"
 msgid_plural "Wireless mice"
 msgstr[0] "فأرة لاسلكية"
 msgstr[1] "فأرة لاسلكية"
-msgstr[2] "فأرة لاسلكية"
-msgstr[3] "فأرة لاسلكية"
-msgstr[4] "فأرة لاسلكية"
-msgstr[5] "فأرة لاسلكية"
+msgstr[2] "فأرتين لاسلكيتين"
+msgstr[3] "فأرات لاسلكية"
+msgstr[4] "فأرات لاسلكية"
+msgstr[5] "فأرات لاسلكية"
 
 #. TRANSLATORS: wireless keyboard with internal battery
 #: ../src/gpm-devicekit.c:530
-#, fuzzy
 msgid "Wireless keyboard"
 msgid_plural "Wireless keyboards"
 msgstr[0] "لوحة مفاتيح لاسلكية"
 msgstr[1] "لوحة مفاتيح لاسلكية"
-msgstr[2] "لوحة مفاتيح لاسلكية"
-msgstr[3] "لوحة مفاتيح لاسلكية"
-msgstr[4] "لوحة مفاتيح لاسلكية"
-msgstr[5] "لوحة مفاتيح لاسلكية"
+msgstr[2] "لوحتي مفاتيح لاسلكيتين"
+msgstr[3] "لوحات مفاتيح لاسلكية"
+msgstr[4] "لوحات مفاتيح لاسلكية"
+msgstr[5] "لوحات مفاتيح لاسلكية"
 
 #. TRANSLATORS: portable device
 #: ../src/gpm-devicekit.c:534
-#, fuzzy
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "مساعد رقمي"
@@ -1378,7 +1353,6 @@ msgstr[5] "مساعد رقمي"
 
 #. TRANSLATORS: cell phone (mobile...)
 #: ../src/gpm-devicekit.c:538
-#, fuzzy
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "هاتف محمول"
@@ -1390,21 +1364,18 @@ msgstr[5] "هاتف محمول"
 
 #. TRANSLATORS: battery technology
 #: ../src/gpm-devicekit.c:596
-#, fuzzy
 msgid "Lithium Ion"
 msgstr "أيونات ليثيوم"
 
 #. TRANSLATORS: battery technology
 #: ../src/gpm-devicekit.c:600
-#, fuzzy
 msgid "Lithium Polymer"
 msgstr "بوليمرات ليثيوم"
 
 #. TRANSLATORS: battery technology
 #: ../src/gpm-devicekit.c:604
-#, fuzzy
 msgid "Lithium Iron Phosphate"
-msgstr "أيونات ليثيوم"
+msgstr "فوسفات حديد الليثيوم"
 
 #. TRANSLATORS: battery technology
 #: ../src/gpm-devicekit.c:608
@@ -1414,7 +1385,7 @@ msgstr "حامض الرصاص"
 #. TRANSLATORS: battery technology
 #: ../src/gpm-devicekit.c:612
 msgid "Nickel Cadmium"
-msgstr ""
+msgstr "كادميوم نيكل"
 
 #. TRANSLATORS: battery technology
 #: ../src/gpm-devicekit.c:616
@@ -1423,21 +1394,20 @@ msgstr "هيدريد فلز النيكل"
 
 #. TRANSLATORS: battery technology
 #: ../src/gpm-devicekit.c:620
-#, fuzzy
 msgid "Unknown technology"
-msgstr "وقت غير معروف"
+msgstr "تقنية غير معروف"
 
 #. Translators: This is %i days
 #: ../src/gpm-graph-widget.c:443
-#, fuzzy, c-format
+#, c-format
 msgid "%id"
-msgstr "%Iiه"
+msgstr "%iي"
 
 #. Translators: This is %i days %02i hours
 #: ../src/gpm-graph-widget.c:446
-#, fuzzy, c-format
+#, c-format
 msgid "%id%02ih"
-msgstr "%Iiه%I02i"
+msgstr "%iي%02iس"
 
 #. Translators: This is %i hours
 #: ../src/gpm-graph-widget.c:451
@@ -1447,9 +1417,9 @@ msgstr "%Iiه"
 
 #. Translators: This is %i hours %02i minutes
 #: ../src/gpm-graph-widget.c:454
-#, fuzzy, c-format
+#, c-format
 msgid "%ih%02im"
-msgstr "%Iiه%I02i"
+msgstr "%iس%02iد"
 
 #. Translators: This is %2i minutes
 #: ../src/gpm-graph-widget.c:459
@@ -1491,7 +1461,7 @@ msgstr "%I.1fف"
 #: ../src/gpm-idle.c:216
 #, c-format
 msgid "Please see %s for more information."
-msgstr ""
+msgstr "طالع %s لمزيد من المعلومات"
 
 #. TRANSLATORS: this is telling the user that thier X server is broken, and needs to be fixed
 #: ../src/gpm-idle.c:220
@@ -1511,25 +1481,21 @@ msgstr "الجلسة نشطة"
 
 #. TRANSLATORS: has something inhibited the session
 #: ../src/gpm-idle.c:228
-#, fuzzy
 msgid "inhibited"
-msgstr "ثبّط"
+msgstr "ثُبّطت"
 
 #: ../src/gpm-idle.c:228
-#, fuzzy
 msgid "not inhibited"
-msgstr "تثبيط يدوي"
+msgstr "لم تُثبط"
 
 #. TRANSLATORS: is the screen idle or awake
 #: ../src/gpm-idle.c:230
-#, fuzzy
 msgid "screen idle"
-msgstr "الجلسة خاملة"
+msgstr "الشاشة خاملة"
 
 #: ../src/gpm-idle.c:230
-#, fuzzy
 msgid "screen awake"
-msgstr "أقفل الشاشة عند الإفراغ"
+msgstr "الشاشة نشطة"
 
 #. TRANSLATORS: show verbose debugging
 #: ../src/gpm-main.c:171 ../src/gpm-prefs.c:90 ../src/gpm-statistics.c:1465
@@ -1555,60 +1521,52 @@ msgstr "مدير طاقة جنوم"
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:172
 msgid "Power plugged in"
-msgstr ""
+msgstr "وصّل مقبس الطاقة"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:176
-#, fuzzy
 msgid "Power unplugged"
-msgstr "مدير الطاقة"
+msgstr "فصل مقبس الطاقة"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:180
-#, fuzzy
 msgid "Lid has opened"
-msgstr "الغطاء مفتوح"
+msgstr "فتح الغطاء"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:184
-#, fuzzy
 msgid "Lid has closed"
-msgstr "الغطاء مغلق"
+msgstr "أُغلق الغطاء"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:188
-#, fuzzy
 msgid "Battery is low"
-msgstr "قاربت بطاريتك على النفاذ."
+msgstr "طاقة البطارية منخفضة"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:192
-#, fuzzy
 msgid "Battery is very low"
-msgstr "قاربت بطاريتك على النفاذ."
+msgstr "طاقة البطارية منخفضة جدا"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:196
-#, fuzzy
 msgid "Battery is full"
-msgstr "قاربت بطاريتك على النفاذ."
+msgstr "البطارية مكتملة"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:200
-#, fuzzy
 msgid "Suspend started"
-msgstr "تفعيل التعليق"
+msgstr "بدأ التعليق"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:204
 msgid "Resumed"
-msgstr ""
+msgstr "استرجع من التعليق"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:208
-#, fuzzy
 msgid "Suspend failed"
-msgstr "تفعيل التعليق"
+msgstr "فشل التعليق"
 
 #. TRANSLATORS: the action was not done
 #: ../src/gpm-manager.c:434 ../src/gpm-manager.c:470
@@ -1653,7 +1611,7 @@ msgid "Battery may be recalled"
 msgstr "قد أُعيد نداء البطاريّة"
 
 #: ../src/gpm-manager.c:1034
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The battery in your computer may have been recalled by %s and you may be at "
 "risk.\n"
@@ -1662,7 +1620,7 @@ msgid ""
 msgstr ""
 "ربما أعاد %s طلب بطارية حاسوبك وقد تكون في خطر.\n"
 "\n"
-"لمعلومات أكثر زُر موقع إعادة البطارية %s."
+"لمعلومات أكثر زُر موقع إعادة البطارية."
 
 #. TRANSLATORS: button text, visit the manufacturers recall website
 #: ../src/gpm-manager.c:1044
@@ -1684,23 +1642,22 @@ msgstr "ربما البطاريّة معطوبة"
 
 #. TRANSLATORS: notify the user that that battery is broken as the capacity is very low
 #: ../src/gpm-manager.c:1135
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your battery has a very low capacity (%1.1f%%), which means that it may be "
 "old or broken."
-msgstr "سعة بطاريتك لديها جدًا (%Ii%%)، مما يعني أنها قد تكون قديمة أو معطوبة."
+msgstr "سعة بطاريتك منخفضة جدًا (%1.1f%%)، مما يعني أنها قد تكون قديمة أو معطوبة."
 
 #. TRANSLATORS: show the fully charged notification
 #: ../src/gpm-manager.c:1183
-#, fuzzy
 msgid "Battery Fully Charged"
 msgid_plural "Batteries Fully Charged"
-msgstr[0] "تم شحن البطارية"
-msgstr[1] "تم شحن البطارية"
-msgstr[2] "تم شحن البطارية"
-msgstr[3] "تم شحن البطارية"
-msgstr[4] "تم شحن البطارية"
-msgstr[5] "تم شحن البطارية"
+msgstr[0] "البطارية مشحونة تماما"
+msgstr[1] "البطارية مشحونة تماما"
+msgstr[2] "البطاريتين مشحونتين تماما"
+msgstr[3] "البطاريات مشحونة تماما"
+msgstr[4] "البطاريات مشحونة تماما"
+msgstr[5] "البطاريات مشحونة تماما"
 
 #. TRANSLATORS: laptop battery is now discharging
 #: ../src/gpm-manager.c:1224
@@ -1709,9 +1666,9 @@ msgstr "تُفرّغ البطارية"
 
 #. TRANSLATORS: tell the user how much time they have got
 #: ../src/gpm-manager.c:1227
-#, fuzzy, c-format
+#, c-format
 msgid "%s of battery power remaining (%.1f%%)"
-msgstr "%s باقي %s (%Ii%%)\n"
+msgstr "‏%s باقي  من طاقة البطارية (%.1f%%)"
 
 #. TRANSLATORS: UPS is now discharging
 #: ../src/gpm-manager.c:1230
@@ -1760,9 +1717,8 @@ msgstr ""
 
 #. TRANSLATORS: laptop battery low, and we only have one battery
 #: ../src/gpm-manager.c:1397
-#, fuzzy
 msgid "Battery low"
-msgstr "طاقة بطارية المساعد الرقمي منخفضة"
+msgstr "طاقة البطارية منخفضة"
 
 #. TRANSLATORS: laptop battery low, and we have more than one type of battery
 #: ../src/gpm-manager.c:1400
@@ -1771,9 +1727,9 @@ msgstr "بطارية الحاسوب المحمول منخفضة"
 
 #. TRANSLATORS: tell the user how much time they have got
 #: ../src/gpm-manager.c:1406
-#, fuzzy, c-format
+#, c-format
 msgid "Approximately <b>%s</b> remaining (%.1f%%)"
-msgstr "لديك تقريبًا <b>%s</b> متبقية من عمر البطارية (%Id%%)"
+msgstr "لديك تقريبًا <b>%s</b> متبقية (%.1f%%)"
 
 #. TRANSLATORS: UPS is starting to get a little low
 #: ../src/gpm-manager.c:1410
@@ -1782,152 +1738,151 @@ msgstr "طاقة UPS منخفضة"
 
 #. TRANSLATORS: tell the user how much time they have got
 #: ../src/gpm-manager.c:1414
-#, fuzzy, c-format
+#, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"
-msgstr "لديك تقريبًا <b>%s</b> متبقية من شحنة طاقة UPS (%Id%%)"
+msgstr "لديك تقريبًا <b>%s</b> متبقية من شحنة طاقة UPS (%.1f%%)"
 
 #. TRANSLATORS: mouse is getting a little low
 #. TRANSLATORS: the mouse battery is very low
-#: ../src/gpm-manager.c:1418 ../src/gpm-manager.c:1549
+#: ../src/gpm-manager.c:1418 ../src/gpm-manager.c:1536
 msgid "Mouse battery low"
 msgstr "بطارية الفأرة منخفضة"
 
 #. TRANSLATORS: tell user more details
 #: ../src/gpm-manager.c:1421
-#, fuzzy, c-format
+#, c-format
 msgid "The wireless mouse attached to this computer is low in power (%.1f%%)"
-msgstr "الفأرة اللاسلكية الموصولة بهذا الحاسوب طاقتها منخفضة (%Id%%)"
+msgstr "الفأرة اللاسلكية الموصولة بهذا الحاسوب طاقتها منخفضة (%.1f%%)"
 
 #. TRANSLATORS: keyboard is getting a little low
 #. TRANSLATORS: the keyboard battery is very low
-#: ../src/gpm-manager.c:1425 ../src/gpm-manager.c:1557
+#: ../src/gpm-manager.c:1425 ../src/gpm-manager.c:1544
 msgid "Keyboard battery low"
 msgstr "بطارية لوحة المفاتيح منخفضة"
 
 #. TRANSLATORS: tell user more details
 #: ../src/gpm-manager.c:1428
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The wireless keyboard attached to this computer is low in power (%.1f%%)"
-msgstr "لوحة المفاتيح اللاسلكية الموصولة بهذا الحاسوب طاقتها منخفضة (%Id%%)"
+msgstr "لوحة المفاتيح اللاسلكية الموصولة بهذا الحاسوب طاقتها منخفضة (%.1f%%)"
 
 #. TRANSLATORS: PDA is getting a little low
 #. TRANSLATORS: the PDA battery is very low
-#: ../src/gpm-manager.c:1432 ../src/gpm-manager.c:1566
+#: ../src/gpm-manager.c:1432 ../src/gpm-manager.c:1553
 msgid "PDA battery low"
 msgstr "طاقة بطارية المساعد الرقمي منخفضة"
 
 #. TRANSLATORS: tell user more details
 #: ../src/gpm-manager.c:1435
-#, fuzzy, c-format
+#, c-format
 msgid "The PDA attached to this computer is low in power (%.1f%%)"
-msgstr "المساعد الرقمي الموصول بهذا الحاسوب طاقته منخفضة (%Id%%)"
+msgstr "المساعد الرقمي الموصول بهذا الحاسوب طاقته منخفضة (%.1f%%)"
 
 #. TRANSLATORS: cell phone (mobile) is getting a little low
 #. TRANSLATORS: the cell battery is very low
-#: ../src/gpm-manager.c:1439 ../src/gpm-manager.c:1575
+#: ../src/gpm-manager.c:1439 ../src/gpm-manager.c:1562
 msgid "Cell phone battery low"
 msgstr "طاقة الهاتف المحمول منخفضة"
 
 #. TRANSLATORS: tell user more details
 #: ../src/gpm-manager.c:1442
-#, fuzzy, c-format
+#, c-format
 msgid "The cell phone attached to this computer is low in power (%.1f%%)"
-msgstr "الهاتف المحمول الموصول بهذا الحاسوب طاقته منخفضة (%d%%)"
+msgstr "الهاتف المحمول الموصول بهذا الحاسوب طاقته منخفضة (%.1f%%)"
 
 #. TRANSLATORS: laptop battery critically low, and only have one type of battery
-#: ../src/gpm-manager.c:1503
-#, fuzzy
+#: ../src/gpm-manager.c:1492
 msgid "Battery critically low"
-msgstr "قاربت بطاريتك على النفاذ."
+msgstr "البطارية منخفضة جدًا"
 
 #. TRANSLATORS: laptop battery critically low, and we have more than one type of battery
 #. TRANSLATORS: laptop battery is really, really, low
-#: ../src/gpm-manager.c:1506 ../src/gpm-manager.c:1621
+#: ../src/gpm-manager.c:1495 ../src/gpm-manager.c:1608
 msgid "Laptop battery critically low"
 msgstr "بطارية الحاسوب المحمول منخفضة جدًا"
 
 #. TRANSLATORS: tell the use to insert the plug, as we're not going to do anything
-#: ../src/gpm-manager.c:1519
+#: ../src/gpm-manager.c:1507
 msgid "Plug in your AC adapter to avoid losing data."
 msgstr "وصّل محوّل التيار لتتجنب فقدان البيانات."
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1523
-#, fuzzy, c-format
+#: ../src/gpm-manager.c:1511
+#, c-format
 msgid "Computer will suspend in %s."
-msgstr "سيتوقف هذا الحاسوب بعد %s إن لم يوصل بالتيار."
+msgstr "سيُعلّق هذا الحاسوب خلال %s."
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1527
-#, fuzzy, c-format
+#: ../src/gpm-manager.c:1515
+#, c-format
 msgid "Computer will hibernate in %s."
-msgstr "سيُسبت هذا الحاسوب بعد %s إن لم يوصل بالتيار."
+msgstr "سيُسبت هذا الحاسوب خلال %s."
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1531
-#, fuzzy, c-format
+#: ../src/gpm-manager.c:1519
+#, c-format
 msgid "Computer will shutdown in %s."
-msgstr "سيُطفأ هذا الحاسوب بعد %s إن لم يوصل بالتيار."
+msgstr "سيُطفأ هذا الحاسوب خلال %s."
 
 #. TRANSLATORS: the UPS is very low
 #. TRANSLATORS: UPS is really, really, low
-#: ../src/gpm-manager.c:1539 ../src/gpm-manager.c:1659
+#: ../src/gpm-manager.c:1526 ../src/gpm-manager.c:1646
 msgid "UPS critically low"
 msgstr "طاقة UPS منخفضة جدًا"
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1543
-#, fuzzy, c-format
+#: ../src/gpm-manager.c:1530
+#, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%.1f%%). Restore AC "
 "power to your computer to avoid losing data."
 msgstr ""
-"لديك تقريبًا <b>%s</b> متبقية من شحنة UPS (%Id%%). أرجع التيار للحاسوب لتتجنب "
-"ضياع البيانات."
+"لديك تقريبًا <b>%s</b> متبقية من شحنة UPS‏ (%.1f%%). أرجع التيار للحاسوب "
+"لتتجنب ضياع البيانات."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1552
-#, fuzzy, c-format
+#: ../src/gpm-manager.c:1539
+#, c-format
 msgid ""
 "The wireless mouse attached to this computer is very low in power (%.1f%%). "
 "This device will soon stop functioning if not charged."
 msgstr ""
-"الفأرة اللاسلكية الموصولة بهذا الحاسوب طاقتها ضعيفة (%Id%%). سيتوقف هذا "
-"الجهاز بعد قليل إن لم يتم شحنه."
+"الفأرة اللاسلكية الموصولة بهذا الحاسوب طاقتها ضعيفة (%.1f%%). ستتوقف بعد "
+"قليل إن لم تُشحن."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1560
-#, fuzzy, c-format
+#: ../src/gpm-manager.c:1547
+#, c-format
 msgid ""
 "The wireless keyboard attached to this computer is very low in power (%.1f%"
 "%). This device will soon stop functioning if not charged."
 msgstr ""
-"لوحة المفاتيح اللاسلكية الموصولة بهذا الحاسوب طاقتها ضعيفة (%Id%%). سيتوقف "
-"هذا الجهاز بعد قليل إن لم يتم شحنه."
+"لوحة المفاتيح اللاسلكية الموصولة بهذا الحاسوب طاقتها ضعيفة (%.1f%%). ستتوقف "
+"بعد قليل إن لم تُشحن."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1569
-#, fuzzy, c-format
+#: ../src/gpm-manager.c:1556
+#, c-format
 msgid ""
 "The PDA attached to this computer is very low in power (%.1f%%). This device "
 "will soon stop functioning if not charged."
 msgstr ""
-"جهاز المساعد الرقمي الموصول بهذا الحاسوب طاقته ضعيفة (%Id%%). سيتوقف هذا "
-"الجهاز بعد قليل إن لم يتم شحنه."
+"جهاز المساعد الرقمي الموصول بهذا الحاسوب طاقته ضعيفة (%.1f%%). سيتوقف هذا "
+"الجهاز بعد قليل إن لم يُشحن."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1578
-#, fuzzy, c-format
+#: ../src/gpm-manager.c:1565
+#, c-format
 msgid ""
 "Your cell phone is very low in power (%.1f%%). This device will soon stop "
 "functioning if not charged."
 msgstr ""
-"الهاتف المحمول الموصول بهذا الحاسوب طاقته ضعيفة (%Id%%). سيتوقف هذا الجهاز "
-"بعد قليل إن لم يتم شحنه."
+"الهاتف المحمول الموصول بهذا الحاسوب طاقته ضعيفة (%.1f%%). سيتوقف بعد قليل إن "
+"لم يُشحن."
 
 #. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1630
+#: ../src/gpm-manager.c:1617
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
@@ -1936,7 +1891,7 @@ msgstr ""
 "البطارية. "
 
 #. TRANSLATORS: computer will suspend
-#: ../src/gpm-manager.c:1636
+#: ../src/gpm-manager.c:1623
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1946,45 +1901,45 @@ msgstr ""
 "<br><b>ملاحظة:</b> تتطلب حالة الاستعداد كمية صغيرة من الطاقة."
 
 #. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1643
+#: ../src/gpm-manager.c:1630
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr "البطاريه دون المستوى الحرج وهذا الحاسوب على وشك الإسبات."
 
 #. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1648
+#: ../src/gpm-manager.c:1635
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr "البطاريه دون المستوى الحرج وهذا الحاسوب على وشك الإغلاق."
 
 #. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1668
+#: ../src/gpm-manager.c:1655
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
 msgstr "البطارية في حالة منخفضة، <b>سيتوقف</b> هذا الحاسوب عند فراغ البطارية."
 
 #. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1674
+#: ../src/gpm-manager.c:1661
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr "ال UPS دون المستوى الحرج وهذا الحاسوب على وشك الإسبات."
 
 #. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1679
+#: ../src/gpm-manager.c:1666
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr "ال UPS دون المستوى الحرج وهذا الحاسوب على وشك الإغلاق."
 
 #. TRANSLATORS: there was in install problem
-#: ../src/gpm-manager.c:1842
+#: ../src/gpm-manager.c:1829
 msgid "Install problem!"
 msgstr "مشكلة في التثبيتب!"
 
 #. TRANSLATORS: the GConf schema was not installed properly
-#: ../src/gpm-manager.c:1844
+#: ../src/gpm-manager.c:1831
 msgid ""
 "The configuration defaults for GNOME Power Manager have not been installed "
 "correctly.\n"
@@ -2027,161 +1982,150 @@ msgstr "أبدًا"
 
 #: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:444
 msgid "Rate"
-msgstr ""
+msgstr "المعدل"
 
 #: ../src/gpm-statistics.c:81
-#, fuzzy
 msgid "Charge"
-msgstr "تم شحن البطارية"
+msgstr "الشحن"
 
 #: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:458
 msgid "Time to full"
-msgstr ""
+msgstr "وقت الامتلاء"
 
 #: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:463
 msgid "Time to empty"
-msgstr ""
+msgstr "وقت التفريغ"
 
 #: ../src/gpm-statistics.c:90
-#, fuzzy
 msgid "10 minutes"
-msgstr "دقيقة"
+msgstr "10 دقائق"
 
 #: ../src/gpm-statistics.c:91
-#, fuzzy
 msgid "2 hours"
-msgstr "ساعة"
+msgstr "ساعتين"
 
 #: ../src/gpm-statistics.c:92
 msgid "1 day"
-msgstr ""
+msgstr "يوم واحد"
 
 #: ../src/gpm-statistics.c:93
 msgid "1 week"
-msgstr ""
+msgstr "أسبوع واحد"
 
 #: ../src/gpm-statistics.c:100
-#, fuzzy
 msgid "Charge profile"
-msgstr "لاحة وقت الشحن"
+msgstr "لاحة الشحن"
 
 #: ../src/gpm-statistics.c:101
-#, fuzzy
 msgid "Charge accuracy"
-msgstr "لاحة دقة وقت الشحن"
+msgstr "دقة الشحن"
 
 #: ../src/gpm-statistics.c:102
-#, fuzzy
 msgid "Discharge profile"
-msgstr "لاحة وقت التفريغ"
+msgstr "لاحة التفريغ"
 
 #: ../src/gpm-statistics.c:103
-#, fuzzy
 msgid "Discharge accuracy"
-msgstr "لاحة دقة وقت التفريغ"
+msgstr "دقة التفريغ"
 
 #: ../src/gpm-statistics.c:130
 msgid "Attribute"
-msgstr ""
+msgstr "الخاصية"
 
 #: ../src/gpm-statistics.c:137
 msgid "Value"
-msgstr ""
+msgstr "القيمة"
 
 #: ../src/gpm-statistics.c:154
 msgid "Image"
-msgstr ""
+msgstr "الصورة"
 
 #: ../src/gpm-statistics.c:160
 msgid "Description"
-msgstr ""
+msgstr "الوصف"
 
 #: ../src/gpm-statistics.c:179 ../src/gpm-statistics.c:400
 msgid "Type"
-msgstr ""
+msgstr "النوع"
 
 #: ../src/gpm-statistics.c:185
 msgid "ID"
-msgstr ""
+msgstr "المعرّف"
 
 #: ../src/gpm-statistics.c:199
 msgid "Command"
-msgstr ""
+msgstr "الأمر"
 
 #: ../src/gpm-statistics.c:303
 msgid "Yes"
-msgstr ""
+msgstr "نعم"
 
 #: ../src/gpm-statistics.c:303
 msgid "No"
-msgstr ""
+msgstr "لا"
 
 #: ../src/gpm-statistics.c:397
 msgid "Device"
-msgstr ""
+msgstr "الجهاز"
 
 #: ../src/gpm-statistics.c:402
-#, fuzzy
 msgid "Vendor"
-msgstr "المُنتِج:"
+msgstr "المُنتِج"
 
 #: ../src/gpm-statistics.c:404
-#, fuzzy
 msgid "Model"
-msgstr "الطراز:"
+msgstr "الطراز"
 
 #: ../src/gpm-statistics.c:406
-#, fuzzy
 msgid "Serial number"
-msgstr "الرقم المسلسل:"
+msgstr "الرقم التسلسلي"
 
 #: ../src/gpm-statistics.c:407
 msgid "Supply"
-msgstr ""
+msgstr "المصدر"
 
 #: ../src/gpm-statistics.c:410
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "الآن"
+msgstr[1] "ثانية واحدة"
+msgstr[2] "ثانيتين"
+msgstr[3] "%d ثوان"
+msgstr[4] "%d ثانية"
+msgstr[5] "%d ثانية"
 
 #: ../src/gpm-statistics.c:411
 msgid "Refreshed"
-msgstr ""
+msgstr "محدّث"
 
 #: ../src/gpm-statistics.c:418
 msgid "Present"
-msgstr ""
+msgstr "الحالي"
 
 #: ../src/gpm-statistics.c:422
-#, fuzzy
 msgid "Rechargeable"
-msgstr "معدل الشحن:"
+msgstr "قابلة لإعادة الشحن"
 
 #: ../src/gpm-statistics.c:426
 msgid "State"
-msgstr ""
+msgstr "الحالة"
 
 #: ../src/gpm-statistics.c:429
 msgid "Energy"
-msgstr ""
+msgstr "الطاقة"
 
 #: ../src/gpm-statistics.c:432
 msgid "Energy when empty"
-msgstr ""
+msgstr "الطاقة عندما تكون فارغة"
 
 #: ../src/gpm-statistics.c:435
 msgid "Energy when full"
-msgstr ""
+msgstr "الطاقة عندما تكون ممتلئة"
 
 #: ../src/gpm-statistics.c:438
 msgid "Energy (design)"
-msgstr ""
+msgstr "الطاقة (التصميم)"
 
 #: ../src/gpm-statistics.c:451
 msgid "Voltage"
@@ -2192,18 +2136,16 @@ msgid "Percentage"
 msgstr "النسبة المئوية"
 
 #: ../src/gpm-statistics.c:477
-#, fuzzy
 msgid "Capacity"
-msgstr "السعة:"
+msgstr "السعة"
 
 #: ../src/gpm-statistics.c:481
-#, fuzzy
 msgid "Technology"
-msgstr "التقنية:"
+msgstr "التقنية"
 
 #: ../src/gpm-statistics.c:483
 msgid "Online"
-msgstr ""
+msgstr "متصل"
 
 #. TRANSLATORS: the command line was not provided
 #: ../src/gpm-statistics.c:799
@@ -2213,79 +2155,79 @@ msgstr "لا بيانات"
 #. TRANSLATORS: kernel module, usually a device driver
 #: ../src/gpm-statistics.c:806 ../src/gpm-statistics.c:811
 msgid "Kernel module"
-msgstr ""
+msgstr "وحدة النواة"
 
 #. TRANSLATORS: kernel housekeeping
 #: ../src/gpm-statistics.c:816
 msgid "Kernel core"
-msgstr ""
+msgstr "لب النواة"
 
 #. TRANSLATORS: interrupt between processors
 #: ../src/gpm-statistics.c:821
 msgid "Interprocessor interrupt"
-msgstr ""
+msgstr "قاطِع بين المعالجات"
 
 #. TRANSLATORS: unknown interrupt
 #: ../src/gpm-statistics.c:826
 msgid "Interrupt"
-msgstr ""
+msgstr "قاطِع"
 
 #. TRANSLATORS: the keyboard and mouse device event
 #: ../src/gpm-statistics.c:869
 msgid "PS/2 keyboard/mouse/touchpad"
-msgstr ""
+msgstr "لوحة مفاتيح\\فأرة\\لوحة لمس PS/2"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
 #: ../src/gpm-statistics.c:872
 msgid "ACPI"
-msgstr ""
+msgstr "ACPI"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
 #: ../src/gpm-statistics.c:875
 msgid "Serial ATA"
-msgstr ""
+msgstr "‏ATA تسلسلي"
 
 #. TRANSLATORS: this is the old-style ATA interface
 #: ../src/gpm-statistics.c:878
 msgid "ATA host controller"
-msgstr ""
+msgstr "متحكم مستضيف ATA"
 
 #. TRANSLATORS: 802.11 wireless adaptor
 #: ../src/gpm-statistics.c:881
 msgid "Intel wireless adaptor"
-msgstr ""
+msgstr "محول لاسلكي إنتل"
 
 #. TRANSLATORS: a timer is something that fires periodically
 #: ../src/gpm-statistics.c:886 ../src/gpm-statistics.c:889
 #: ../src/gpm-statistics.c:892 ../src/gpm-statistics.c:895
 #: ../src/gpm-statistics.c:898
-#, fuzzy, c-format
+#, c-format
 msgid "Timer %s"
-msgstr "الوقت"
+msgstr "مؤقت %s"
 
 #. TRANSLATORS: this is a task that's woken up from sleeping
 #: ../src/gpm-statistics.c:901
 #, c-format
 msgid "Sleep %s"
-msgstr ""
+msgstr "نوم %s"
 
 #. TRANSLATORS: this is a new realtime task
 #: ../src/gpm-statistics.c:904
 #, c-format
 msgid "New task %s"
-msgstr ""
+msgstr "مهمّة جديدة %s"
 
 #. TRANSLATORS: this is a task thats woken to check state
 #: ../src/gpm-statistics.c:907
 #, c-format
 msgid "Wait %s"
-msgstr ""
+msgstr "انتظار %s"
 
 #. TRANSLATORS: a work queue is a list of work that has to be done
 #: ../src/gpm-statistics.c:910 ../src/gpm-statistics.c:913
 #, c-format
 msgid "Work queue %s"
-msgstr ""
+msgstr "طابور العمل %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
 #: ../src/gpm-statistics.c:916
@@ -2297,18 +2239,18 @@ msgstr ""
 #: ../src/gpm-statistics.c:919
 #, c-format
 msgid "USB activity %s"
-msgstr ""
+msgstr "نشاط USB ‏%s"
 
 #. TRANSLATORS: we've timed out of an aligned timer
 #: ../src/gpm-statistics.c:922
 #, c-format
 msgid "Wakeup %s"
-msgstr ""
+msgstr "استيقاظ %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
 #: ../src/gpm-statistics.c:925
 msgid "Local interrupts"
-msgstr ""
+msgstr "قاطِعات محلية"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
 #: ../src/gpm-statistics.c:928
@@ -2317,33 +2259,29 @@ msgstr ""
 
 #. TRANSLATORS: shown on the titlebar
 #: ../src/gpm-statistics.c:1038
-#, fuzzy
 msgid "Device Information"
 msgstr "معلومات الجهاز"
 
 #. TRANSLATORS: shown on the titlebar
 #: ../src/gpm-statistics.c:1040
-#, fuzzy
 msgid "Device History"
-msgstr "تأريخ الطاقة"
+msgstr "تأريخ الجهاز"
 
 #. TRANSLATORS: shown on the titlebar
 #: ../src/gpm-statistics.c:1042
-#, fuzzy
 msgid "Device Profile"
-msgstr "لاحة وقت التفريغ"
+msgstr "لاحة الجهاز"
 
 #. TRANSLATORS: shown on the titlebar
 #: ../src/gpm-statistics.c:1044
 msgid "Processor Wakeups"
-msgstr ""
+msgstr "استيقاظات المعالج"
 
 #. TRANSLATORS: this is the X axis on the graph
 #: ../src/gpm-statistics.c:1250 ../src/gpm-statistics.c:1256
 #: ../src/gpm-statistics.c:1262 ../src/gpm-statistics.c:1268
-#, fuzzy
 msgid "Time elapsed"
-msgstr "متوسط الوقت المنقضي"
+msgstr "الوقت المنقضي"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #: ../src/gpm-statistics.c:1252
@@ -2355,31 +2293,28 @@ msgstr "الطاقة"
 #: ../src/gpm-statistics.c:1258 ../src/gpm-statistics.c:1301
 #: ../src/gpm-statistics.c:1307 ../src/gpm-statistics.c:1313
 #: ../src/gpm-statistics.c:1319
-#, fuzzy
 msgid "Cell charge"
-msgstr "الشحنة الحالية:"
+msgstr "شحنة البطارية"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #: ../src/gpm-statistics.c:1264 ../src/gpm-statistics.c:1270
-#, fuzzy
 msgid "Predicted time"
-msgstr "الزمن المقدر"
+msgstr "الزمن المتوقع"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #: ../src/gpm-statistics.c:1303 ../src/gpm-statistics.c:1315
 msgid "Correction factor"
-msgstr ""
+msgstr "عامل التصحيح"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #: ../src/gpm-statistics.c:1309 ../src/gpm-statistics.c:1321
 msgid "Prediction accuracy"
-msgstr ""
+msgstr "دقة التوقع"
 
 #. TRANSLATORS: the icon for the CPU
 #: ../src/gpm-statistics.c:1739
-#, fuzzy
 msgid "Processor"
-msgstr "فقير"
+msgstr "المعالج"
 
 #: ../src/gpm-tray-icon.c:198 ../src/gpm-tray-icon.c:216
 msgid "Device information"
@@ -2387,7 +2322,7 @@ msgstr "معلومات الجهاز"
 
 #: ../src/gpm-tray-icon.c:200
 msgid "There is no detailed information for this device"
-msgstr ""
+msgstr "لا معلومات تفصيلية عن هذا الجهاز"
 
 #: ../src/gpm-tray-icon.c:330
 msgid "translator-credits"
