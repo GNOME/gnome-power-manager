@@ -172,10 +172,10 @@ gpm_help_display (const gchar *link_id)
 	GError *error = NULL;
 	gchar *uri;
 
-	if (link_id)
-		uri = g_strconcat ("ghelp:cheese?", link_id, NULL);
+	if (link_id != NULL)
+		uri = g_strconcat ("ghelp:gnome-power-manager?", link_id, NULL);
 	else
-		uri = g_strdup ("ghelp:cheese");
+		uri = g_strdup ("ghelp:gnome-power-manager");
 
 	gtk_show_uri (NULL, uri, GDK_CURRENT_TIME, &error);
 
