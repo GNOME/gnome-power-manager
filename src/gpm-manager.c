@@ -1201,8 +1201,9 @@ gpm_manager_engine_discharging_cb (GpmEngine *engine, DkpDevice *device, GpmMana
 	const gchar *message;
 	gdouble percentage;
 	gint64 time_to_empty;
-	gchar *remaining_text;
+	gchar *remaining_text = NULL;
 	gchar *icon = NULL;
+	const gchar *type_desc;
 
 	/* only action this if specified in gconf */
 	ret = gconf_client_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_DISCHARGING, NULL);
@@ -1217,20 +1218,36 @@ gpm_manager_engine_discharging_cb (GpmEngine *engine, DkpDevice *device, GpmMana
 		      "percentage", &percentage,
 		      "time-to-empty", &time_to_empty,
 		      NULL);
-	remaining_text = gpm_get_timestring (time_to_empty);
+
+	/* only show text if there is a valid time */
+	if (time_to_empty > 0)
+		remaining_text = gpm_get_timestring (time_to_empty);
+	type_desc = gpm_device_type_to_localised_text (type, 1);
 
 	if (type == DKP_DEVICE_TYPE_BATTERY) {
 		/* TRANSLATORS: laptop battery is now discharging */
 		title = _("Battery Discharging");
 
-		/* TRANSLATORS: tell the user how much time they have got */
-		message = g_strdup_printf (_("%s of battery power remaining (%.1f%%)"), remaining_text, percentage);
+		if (remaining_text != NULL) {
+			/* TRANSLATORS: tell the user how much time they have got */
+			message = g_strdup_printf (_("%s of battery power remaining (%.1f%%)"), remaining_text, percentage);
+		} else {
+			/* TRANSLATORS: the device is discharging, but we only have a percentage */
+			message = g_strdup_printf (_("%s discharging (%.1f%%)"),
+						   type_desc, percentage);
+		}
 	} else if (type == DKP_DEVICE_TYPE_UPS) {
 		/* TRANSLATORS: UPS is now discharging */
 		title = _("UPS Discharging");
 
-		/* TRANSLATORS: tell the user how much time they have got */
-		message = g_strdup_printf (_("%s of UPS backup power remaining (%.1f%%)"), remaining_text, percentage);
+		if (remaining_text != NULL) {
+			/* TRANSLATORS: tell the user how much time they have got */
+			message = g_strdup_printf (_("%s of UPS backup power remaining (%.1f%%)"), remaining_text, percentage);
+		} else {
+			/* TRANSLATORS: the device is discharging, but we only have a percentage */
+			message = g_strdup_printf (_("%s discharging (%.1f%%)"),
+						   type_desc, percentage);
+		}
 	} else {
 		/* nothing else of interest */
 		goto out;
@@ -1240,8 +1257,9 @@ gpm_manager_engine_discharging_cb (GpmEngine *engine, DkpDevice *device, GpmMana
 	/* show the notification */
 	gpm_manager_notify (manager, &manager->priv->notification_discharging, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_LONG,
 			    icon, NOTIFY_URGENCY_NORMAL);
-	g_free (icon);
 out:
+	g_free (icon);
+	g_free (remaining_text);
 	return;
 }
 
