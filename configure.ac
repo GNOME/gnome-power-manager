@@ -95,7 +95,6 @@ GTK_REQUIRED=2.11.0
 GDK_REQUIRED=2.11.0
 GCONF_REQUIRED=2.10.0
 GNOME_KEYRING_REQUIRED=0.6.0
-HAL_REQUIRED=0.5.8
 DBUS_REQUIRED=0.70
 LIBNOTIFY_REQUIRED=0.4.3
 LIBWNCK_REQUIRED=2.10.0
@@ -112,7 +111,6 @@ dnl ---------------------------------------------------------------------------
 AC_SUBST(GLIB_REQUIRED)
 AC_SUBST(GTK_REQUIRED)
 AC_SUBST(GDK_REQUIRED)
-AC_SUBST(HAL_REQUIRED)
 AC_SUBST(DBUS_REQUIRED)
 AC_SUBST(LIBNOTIFY_REQUIRED)
 AC_SUBST(LIBWNCK_REQUIRED)
@@ -127,10 +125,6 @@ dnl ---------------------------------------------------------------------------
 PKG_CHECK_MODULES(GLIB, glib-2.0 >= $GLIB_REQUIRED gobject-2.0)
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
-
-PKG_CHECK_MODULES(HAL, hal >= $HAL_REQUIRED)
-AC_SUBST(HAL_CFLAGS)
-AC_SUBST(HAL_LIBS)
 
 PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk >= $CANBERRA_REQUIRED)
 AC_SUBST(CANBERRA_CFLAGS)
@@ -232,6 +226,19 @@ dnl ---------------------------------------------------------------------------
 dnl - Require DeviceKit-power support
 dnl ---------------------------------------------------------------------------
 AC_PATH_PROG(DEVKIT_POWER, devkit-power)
+
+dnl ---------------------------------------------------------------------------
+dnl - HAL support
+dnl ---------------------------------------------------------------------------
+AC_ARG_ENABLE(hal, AS_HELP_STRING([--enable-hal],[Build using HAL support]),
+	      enable_hal=$enableval,enable_hal=yes)
+if test x$enable_hal = xyes; then
+	AC_DEFINE(HAVE_HAL, 1, [Define if we have HAL support])
+	PKG_CHECK_MODULES(HAL, hal >= 0.5.8)
+	AC_SUBST(HAL_CFLAGS)
+	AC_SUBST(HAL_LIBS)
+fi
+AM_CONDITIONAL([HAVE_HAL], [test $enable_hal = yes])
 
 dnl ---------------------------------------------------------------------------
 dnl - Use check-foreground-console (Ubuntu specific) support?
@@ -631,6 +638,7 @@ echo "
         compiler:                  ${CC}
         cflags:                    ${CFLAGS}
         Building extra applets:    ${enable_applets}
+        HAL support:               ${enable_hal}
         DPMS support:              ${have_dpms}
         Self test support:         ${have_tests}
         GConf default support:     ${have_gconfdefaults}

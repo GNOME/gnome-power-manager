@@ -38,8 +38,10 @@ INCLUDES =						\
 	-I$(top_srcdir)/libhal-glib			\
 	$(NULL)
 
+if HAVE_HAL
 LOCAL_LIBHAL_LIBS =					\
 	$(top_builddir)/libhal-glib/libhal.la
+endif
 
 bin_PROGRAMS =						\
 	gnome-power-manager				\
@@ -115,9 +117,12 @@ gnome_power_preferences_LDADD =				\
 	$(DBUS_LIBS)					\
 	$(UNIQUE_LIBS)					\
 	$(GPM_EXTRA_LIBS)				\
-	$(LOCAL_LIBHAL_LIBS)				\
 	$(DEVKIT_LIBS)					\
 	$(NULL)
+
+if HAVE_HAL
+gnome_power_preferences_LDADD += $(LOCAL_LIBHAL_LIBS)
+endif
 
 gnome_power_preferences_CFLAGS =			\
 	$(WARNINGFLAGS)					\
@@ -144,8 +149,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-button.c					\
 	gpm-brightness.h				\
 	gpm-brightness.c				\
-	gpm-brightness-hal.h				\
-	gpm-brightness-hal.c				\
 	gpm-brightness-xrandr.h				\
 	gpm-brightness-xrandr.c				\
 	gpm-main.c					\
@@ -166,6 +169,13 @@ gnome_power_manager_SOURCES =				\
 	gpm-engine.c					\
 	$(NULL)
 
+if HAVE_HAL
+gnome_power_manager_SOURCES += 				\
+	gpm-brightness-hal.h				\
+	gpm-brightness-hal.c				\
+	$(NULL)
+endif
+
 gnome_power_manager_LDADD =				\
 	libgpmshared.a					\
 	$(GLIB_LIBS)					\
@@ -177,9 +187,12 @@ gnome_power_manager_LDADD =				\
 	$(CANBERRA_LIBS)				\
 	$(LIBNOTIFY_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
-	$(LOCAL_LIBHAL_LIBS)				\
 	$(DEVKIT_LIBS)					\
 	$(NULL)
+
+if HAVE_HAL
+gnome_power_preferences_LDADD += $(LOCAL_LIBHAL_LIBS)
+endif
 
 gnome_power_manager_CFLAGS =				\
 	$(WARNINGFLAGS)					\
@@ -244,9 +257,12 @@ gnome_power_self_test_LDADD =				\
 	$(DEVKIT_LIBS)					\
 	$(DBUS_LIBS)					\
 	$(LIBNOTIFY_LIBS)				\
-	$(LOCAL_LIBHAL_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
 	$(NULL)
+
+if HAVE_HAL
+gnome_power_self_test_LDADD += $(LOCAL_LIBHAL_LIBS)
+endif
 
 gnome_power_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS) $(WARNINGFLAGS)
 

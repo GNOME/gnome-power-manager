@@ -2,7 +2,6 @@
 ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = 						\
-	libhal-glib					\
 	src						\
 	po						\
 	docs						\
@@ -13,6 +12,10 @@ SUBDIRS = 						\
 
 if HAVE_APPLETS
 SUBDIRS += applets
+endif
+
+if HAVE_HAL
+SUBDIRS += libhal-glib
 endif
 
 EXTRA_DIST =						\
