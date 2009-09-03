@@ -191,7 +191,7 @@ gnome_power_manager_LDADD =				\
 	$(NULL)
 
 if HAVE_HAL
-gnome_power_preferences_LDADD += $(LOCAL_LIBHAL_LIBS)
+gnome_power_manager_LDADD += $(LOCAL_LIBHAL_LIBS)
 endif
 
 gnome_power_manager_CFLAGS =				\
