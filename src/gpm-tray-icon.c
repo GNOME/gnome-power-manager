@@ -53,7 +53,6 @@
 static void     gpm_tray_icon_finalize   (GObject	   *object);
 
 #define GPM_TRAY_ICON_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_TRAY_ICON, GpmTrayIconPrivate))
-#define GPM_TRAY_ICON_CONNECT_TIMEOUT		10 /* s */
 
 struct GpmTrayIconPrivate
 {
