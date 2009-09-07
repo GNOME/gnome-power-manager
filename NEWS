@@ -1,3 +1,37 @@
+Version 2.27.92
+~~~~~~~~~~~~~~~
+Released: 2009-09-07
+
+* Translations
+ - Added Belarusian translation (Alexander Nyakhaychyk)
+ - Added Catalan (Valencian) translation (Carles Ferrando)
+ - Updated Turkish translation (Baris Cicek)
+ - Updated Portuguese translation (Duarte Loreto)
+ - Updated Lithuanian Translation (Gintautas Miliauskas)
+ - Updated Basque translation (Inaki Larranaga Murgoitio)
+ - Updated Bengali translation (Jamil Ahmed)
+ - Updated Arabic translation (Khaled Hosny)
+ - Updated Norwegian bokmål translation (Kjartan Maraas)
+ - Updated German translation (Mario Blättermann)
+ - Updated Estonian translation (Mattias Põldaru)
+ - Updated Serbian translation (Miloš Popović)
+ - Updated Bengali India Translations (Runa Bhattacharjee)
+ - Updated Gujarati Translations (Sweta Kothari)
+ - Updated Tamil Translations (ifelix)
+ - Updated Telugu Translations (krishnababu k)
+
+* Bugfix:
+ - When building with hal, link gnome-power-manager against libhal-glib (Frédéric Péters)
+ - Make notifications more reliable at session startup (Pramod Dematagoda)
+ - Fix a bug where the critical time was not displayed correctly (Richard Hughes)
+ - Don't crash g-p-s when there are no devices (Richard Hughes)
+ - Open the gnome-power-manager help, not the 'cheese' help (Richard Hughes)
+ - Never, never, show 'Unknown time'. Fixes rh#520999 (Richard Hughes)
+ - Allow compile without HAL. Inspired from a patch from Javier Jardón, many thanks (Richard Hughes)
+ - Remove small memory leak spotted using clang (Richard Hughes)
+ - Assign the correct icon when the sleep fails (Richard Hughes)
+ - Correct some shoddy error checking. Spotted by clang (Richard Hughes)
+
 Version 2.27.91
 ~~~~~~~~~~~~~~~
 Released: 2009-08-24
