@@ -1,7 +1,14 @@
 
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = 						\
+SUBDIRS =
+
+# we have to do this first
+if HAVE_HAL
+SUBDIRS += libhal-glib
+endif
+
+SUBDIRS += 						\
 	src						\
 	po						\
 	docs						\
