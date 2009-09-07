@@ -1332,6 +1332,7 @@ gpm_manager_sleep_failure_cb (GpmControl *control, GpmControlAction action, GpmM
 						     GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE,
 						     "<span size='larger'><b>%s</b></span>", title);
 	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog), "%s", message);
+	gtk_window_set_icon_name (GTK_WINDOW(dialog), icon);
 
 	/* show a button? */
 	uri = gconf_client_get_string (manager->priv->conf, GPM_CONF_NOTIFY_SLEEP_FAILED_URI, NULL);
