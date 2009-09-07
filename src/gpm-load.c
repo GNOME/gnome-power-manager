@@ -170,20 +170,31 @@ gpm_load_get_cpu_values (long unsigned *cpu_idle, long unsigned *cpu_total)
 	char str[80];
 	FILE *fd;
 	char *suc;
+	gboolean ret = FALSE;
 
+	/* open file */
 	fd = fopen("/proc/stat", "r");
 	if (!fd)
-		return FALSE;
+		goto out;
+
+	/* get data */
 	suc = fgets (str, 80, fd);
+	if (suc == NULL)
+		goto out;
+
+	/* parse */
 	len = sscanf (str, "%s %lu %lu %lu %lu", tmp,
 		      &cpu_user, &cpu_nice, &cpu_system, cpu_idle);
-	fclose (fd);
-	/*
-	 * Summing up all these times gives you the system uptime in jiffies.
-	 * This is what the uptime command does.
-	 */
+	if (len != 5)
+		goto out;
+
+	/* summing up all these times gives you the system uptime in jiffies */
 	*cpu_total = cpu_user + cpu_nice + cpu_system + *cpu_idle;
-	return TRUE;
+	ret = TRUE;
+out:
+	if (!fd)
+		fclose (fd);
+	return ret;
 }
 #endif /* sun & __SVR4 */
 
