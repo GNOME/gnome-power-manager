@@ -703,7 +703,8 @@ gpm_engine_update_composite_device (GpmEngine *engine, DkpDevice *original_devic
 		      "percentage", percentage,
 		      "state", state,
 		      NULL);
-	dkp_device_print (device);
+	if (debug)
+		dkp_device_print (device);
 
 	/* force update of icon */
 	gpm_engine_recalculate_state_icon (engine);
