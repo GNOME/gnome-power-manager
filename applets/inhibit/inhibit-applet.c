@@ -115,7 +115,7 @@ gpm_applet_inhibit (GpmInhibitApplet *applet,
 				 G_TYPE_STRING, appname,
 				 G_TYPE_UINT, 0, /* xid */
 				 G_TYPE_STRING, reason,
-				 G_TYPE_UINT, 1+2+4, /* logoff, switch and suspend */
+				 G_TYPE_UINT, 1+2+4+8, /* logoff, switch, suspend, and idle */
 				 G_TYPE_INVALID,
 				 G_TYPE_UINT, cookie,
 				 G_TYPE_INVALID);
