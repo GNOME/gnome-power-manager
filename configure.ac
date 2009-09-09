@@ -91,7 +91,7 @@ dnl ---------------------------------------------------------------------------
 dnl - Library dependencies
 dnl ---------------------------------------------------------------------------
 GLIB_REQUIRED=2.13.0
-GTK_REQUIRED=2.11.0
+GTK_REQUIRED=2.17.7
 GDK_REQUIRED=2.11.0
 GCONF_REQUIRED=2.10.0
 GNOME_KEYRING_REQUIRED=0.6.0

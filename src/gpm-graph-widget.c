@@ -1082,6 +1082,7 @@ gpm_graph_widget_legend_calculate_size (GpmGraphWidget *graph, cairo_t *cr,
 static void
 gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 {
+	GtkAllocation allocation;
 	gint legend_x = 0;
 	gint legend_y = 0;
 	guint legend_height = 0;
@@ -1105,16 +1106,17 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	graph->priv->box_x = gpm_graph_widget_get_y_label_max_width (graph, cr) + 10;
 	graph->priv->box_y = 5;
 
-	graph->priv->box_height = graph_widget->allocation.height - (20 + graph->priv->box_y);
+	gtk_widget_get_allocation (graph_widget, &allocation);
+	graph->priv->box_height = allocation.height - (20 + graph->priv->box_y);
 
 	/* make size adjustment for legend */
 	if (graph->priv->use_legend && legend_height > 0) {
-		graph->priv->box_width = graph_widget->allocation.width -
+		graph->priv->box_width = allocation.width -
 					 (3 + legend_width + 5 + graph->priv->box_x);
 		legend_x = graph->priv->box_x + graph->priv->box_width + 6;
 		legend_y = graph->priv->box_y;
 	} else {
-		graph->priv->box_width = graph_widget->allocation.width -
+		graph->priv->box_width = allocation.width -
 					 (3 + graph->priv->box_x);
 	}
 
@@ -1152,7 +1154,7 @@ gpm_graph_widget_expose (GtkWidget *graph, GdkEventExpose *event)
 	cairo_t *cr;
 
 	/* get a cairo_t */
-	cr = gdk_cairo_create (graph->window);
+	cr = gdk_cairo_create (gtk_widget_get_window (graph));
 	cairo_rectangle (cr,
 			 event->area.x, event->area.y,
 			 event->area.width, event->area.height);

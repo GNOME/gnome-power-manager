@@ -240,26 +240,29 @@ gpm_applet_get_icon (GpmInhibitApplet *applet)
 static void
 gpm_applet_check_size (GpmInhibitApplet *applet)
 {
+	GtkAllocation allocation;
+
 	/* we don't use the size function here, but the yet allocated size because the
 	   size value is false (kind of rounded) */
+	gtk_widget_get_allocation (GTK_WIDGET (applet), &allocation);
 	if (PANEL_APPLET_VERTICAL(panel_applet_get_orient (PANEL_APPLET (applet)))) {
-		if (applet->size != GTK_WIDGET(applet)->allocation.width) {
-			applet->size = GTK_WIDGET(applet)->allocation.width;
+		if (applet->size != allocation.width) {
+			applet->size = allocation.width;
 			gpm_applet_get_icon (applet);
 			gtk_widget_set_size_request (GTK_WIDGET(applet), applet->size, applet->icon_height + 2);
 		}
 		/* Adjusting incase the icon size has changed */
-		if (GTK_WIDGET(applet)->allocation.height < applet->icon_height + 2) {
+		if (allocation.height < applet->icon_height + 2) {
 			gtk_widget_set_size_request (GTK_WIDGET(applet), applet->size, applet->icon_height + 2);
 		}
 	} else {
-		if (applet->size != GTK_WIDGET(applet)->allocation.height) {
-			applet->size = GTK_WIDGET(applet)->allocation.height;
+		if (applet->size != allocation.height) {
+			applet->size = allocation.height;
 			gpm_applet_get_icon (applet);
 			gtk_widget_set_size_request (GTK_WIDGET(applet), applet->icon_width + 2, applet->size);
 		}
 		/* Adjusting incase the icon size has changed */
-		if (GTK_WIDGET(applet)->allocation.width < applet->icon_width + 2) {
+		if (allocation.width < applet->icon_width + 2) {
 			gtk_widget_set_size_request (GTK_WIDGET(applet), applet->icon_width + 2, applet->size);
 		}
 	}
@@ -278,13 +281,14 @@ gpm_applet_draw_cb (GpmInhibitApplet *applet)
 	GdkColor color;
 	GdkGC *gc;
 	GdkPixmap *background;
+	GtkAllocation allocation;
 
-	if (GTK_WIDGET(applet)->window == NULL) {
+	if (gtk_widget_get_window (GTK_WIDGET(applet)) == NULL) {
 		return FALSE;
 	}
 
 	/* Clear the window so we can draw on it later */
-	gdk_window_clear(GTK_WIDGET(applet)->window);
+	gdk_window_clear(gtk_widget_get_window (GTK_WIDGET (applet)));
 
 	/* retrieve applet size */
 	gpm_applet_get_icon (applet);
@@ -298,27 +302,28 @@ gpm_applet_draw_cb (GpmInhibitApplet *applet)
 		return FALSE;
 	}
 
-	w = GTK_WIDGET(applet)->allocation.width;
-	h = GTK_WIDGET(applet)->allocation.height;
+	gtk_widget_get_allocation (GTK_WIDGET (applet), &allocation);
+	w = allocation.width;
+	h = allocation.height;
 
-	gc = gdk_gc_new (GTK_WIDGET(applet)->window);
+	gc = gdk_gc_new (gtk_widget_get_window (GTK_WIDGET(applet)));
 
 	/* draw pixmap background */
 	bg_type = panel_applet_get_background (PANEL_APPLET (applet), &color, &background);
 	if (bg_type == PANEL_PIXMAP_BACKGROUND) {
 		/* fill with given background pixmap */
-		gdk_draw_drawable (GTK_WIDGET(applet)->window, gc, background, 0, 0, 0, 0, w, h);
+		gdk_draw_drawable (gtk_widget_get_window (GTK_WIDGET(applet)), gc, background, 0, 0, 0, 0, w, h);
 	}
 	
 	/* draw color background */
 	if (bg_type == PANEL_COLOR_BACKGROUND) {
 		gdk_gc_set_rgb_fg_color (gc,&color);
 		gdk_gc_set_fill (gc,GDK_SOLID);
-		gdk_draw_rectangle (GTK_WIDGET(applet)->window, gc, TRUE, 0, 0, w, h);
+		gdk_draw_rectangle (gtk_widget_get_window (GTK_WIDGET(applet)), gc, TRUE, 0, 0, w, h);
 	}
 
 	/* draw icon at center */
-	gdk_draw_pixbuf (GTK_WIDGET(applet)->window, gc, applet->icon,
+	gdk_draw_pixbuf (gtk_widget_get_window (GTK_WIDGET(applet)), gc, applet->icon,
 			 0, 0, (w - applet->icon_width)/2, (h - applet->icon_height)/2,
 			 applet->icon_width, applet->icon_height,
 			 GDK_RGB_DITHER_NONE, 0, 0);

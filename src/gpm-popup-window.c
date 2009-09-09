@@ -71,15 +71,17 @@ gpm_popup_window_fade_timeout_cb (GpmPopupWindow *popup)
 	} else {
 		GdkRectangle rect;
 		GtkWidget *widget = GTK_WIDGET (popup);
+		GtkAllocation allocation;
 
 		popup->priv->fade_out_alpha -= 0.10;
 
 		rect.x = 0;
 		rect.y = 0;
-		rect.width = widget->allocation.width;
-		rect.height = widget->allocation.height;
+		gtk_widget_get_allocation (widget, &allocation);
+		rect.width = allocation.width;
+		rect.height = allocation.height;
 
-		gdk_window_invalidate_rect (widget->window, &rect, FALSE);
+		gdk_window_invalidate_rect (gtk_widget_get_window (widget), &rect, FALSE);
 	}
 
 	return TRUE;
@@ -304,7 +306,7 @@ gpm_popup_window_draw_progress_bar (GpmPopupWindow *popup, cairo_t *cr, gdouble 
 	xw = width * percentage;
 
 	/* bar background */
-	color = GTK_WIDGET (popup)->style->dark [GTK_STATE_NORMAL];
+	color = gtk_widget_get_style (GTK_WIDGET (popup))->dark [GTK_STATE_NORMAL];
 	r = (float)color.red / 65535.0;
 	g = (float)color.green / 65535.0;
 	b = (float)color.blue / 65535.0;
@@ -313,7 +315,7 @@ gpm_popup_window_draw_progress_bar (GpmPopupWindow *popup, cairo_t *cr, gdouble 
 	cairo_fill (cr);
 
 	/* bar border */
-	color = GTK_WIDGET (popup)->style->dark [GTK_STATE_SELECTED];
+	color = gtk_widget_get_style (GTK_WIDGET (popup))->dark [GTK_STATE_SELECTED];
 	r = (float)color.red / 65535.0;
 	g = (float)color.green / 65535.0;
 	b = (float)color.blue / 65535.0;
@@ -323,7 +325,7 @@ gpm_popup_window_draw_progress_bar (GpmPopupWindow *popup, cairo_t *cr, gdouble 
 	cairo_stroke (cr);
 
 	/* bar progress */
-	color = GTK_WIDGET (popup)->style->bg [GTK_STATE_SELECTED];
+	color = gtk_widget_get_style (GTK_WIDGET (popup))->bg [GTK_STATE_SELECTED];
 	r = (float)color.red / 65535.0;
 	g = (float)color.green / 65535.0;
 	b = (float)color.blue / 65535.0;
@@ -390,7 +392,7 @@ gpm_popup_window_expose_event_cb (GtkWidget *widget, GdkEventExpose *event, GpmP
 	if (!popup->priv->is_composited)
 		goto out;
 
-	context = gdk_cairo_create (GTK_WIDGET (popup)->window);
+	context = gdk_cairo_create (gtk_widget_get_window (GTK_WIDGET (popup)));
 
 	cairo_set_operator (context, CAIRO_OPERATOR_SOURCE);
 	gtk_window_get_size (GTK_WINDOW (widget), &width, &height);
@@ -412,14 +414,14 @@ gpm_popup_window_expose_event_cb (GtkWidget *widget, GdkEventExpose *event, GpmP
 
 	/* draw a box */
 	gpm_popup_window_curved_rectangle (cr, 0.5, 0.5, width-1, height-1, height / 10);
-	color = GTK_WIDGET (popup)->style->bg [GTK_STATE_NORMAL];
+	color = gtk_widget_get_style (GTK_WIDGET (popup))->bg [GTK_STATE_NORMAL];
 	r = (float)color.red / 65535.0;
 	g = (float)color.green / 65535.0;
 	b = (float)color.blue / 65535.0;
 	cairo_set_source_rgba (cr, r, g, b, GPM_POPUP_WINDOW_BG_ALPHA);
 	cairo_fill_preserve (cr);
 
-	color = GTK_WIDGET (popup)->style->fg [GTK_STATE_NORMAL];
+	color = gtk_widget_get_style (GTK_WIDGET (popup))->fg [GTK_STATE_NORMAL];
 	r = (float)color.red / 65535.0;
 	g = (float)color.green / 65535.0;
 	b = (float)color.blue / 65535.0;
@@ -535,6 +537,7 @@ gpm_popup_window_hide (GtkWidget *widget)
 static void
 gpm_popup_window_realize (GtkWidget *widget)
 {
+	GtkAllocation allocation;
 	GdkColormap *colormap;
 	GdkBitmap *mask;
 	cairo_t *cr;
@@ -547,9 +550,10 @@ gpm_popup_window_realize (GtkWidget *widget)
 	if (GTK_WIDGET_CLASS (gpm_popup_window_parent_class)->realize)
 		GTK_WIDGET_CLASS (gpm_popup_window_parent_class)->realize (widget);
 
-	mask = gdk_pixmap_new (widget->window,
-			       widget->allocation.width,
-			       widget->allocation.height, 1);
+	gtk_widget_get_allocation (widget, &allocation);
+	mask = gdk_pixmap_new (gtk_widget_get_window (widget),
+			       allocation.width,
+			       allocation.height, 1);
 	cr = gdk_cairo_create (mask);
 
 	cairo_set_source_rgba (cr, 1.0f, 1.0f, 1.0f, 0.0f);
@@ -557,7 +561,7 @@ gpm_popup_window_realize (GtkWidget *widget)
 	cairo_paint (cr);
 
 	/* make the whole window ignore events */
-	gdk_window_input_shape_combine_mask (widget->window, mask, 0, 0);
+	gdk_window_input_shape_combine_mask (gtk_widget_get_window (widget), mask, 0, 0);
 	g_object_unref (mask);
 	cairo_destroy (cr);
 }

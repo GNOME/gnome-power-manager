@@ -224,17 +224,20 @@ gpm_applet_get_icon (GpmBrightnessApplet *applet)
 static void
 gpm_applet_check_size (GpmBrightnessApplet *applet)
 {
+	GtkAllocation allocation;
+
 	/* we don't use the size function here, but the yet allocated size because the
 	   size value is false (kind of rounded) */
+	gtk_widget_get_allocation (GTK_WIDGET (applet), &allocation);
 	if (PANEL_APPLET_VERTICAL(panel_applet_get_orient (PANEL_APPLET (applet)))) {
-		if (applet->size != GTK_WIDGET(applet)->allocation.width) {
-			applet->size = GTK_WIDGET(applet)->allocation.width;
+		if (applet->size != allocation.width) {
+			applet->size = allocation.width;
 			gpm_applet_get_icon (applet);
 			gtk_widget_set_size_request (GTK_WIDGET(applet), applet->size, applet->icon_height + 2);
 		}
 	} else {
-		if (applet->size != GTK_WIDGET(applet)->allocation.height) {
-			applet->size = GTK_WIDGET(applet)->allocation.height;
+		if (applet->size != allocation.height) {
+			applet->size = allocation.height;
 			gpm_applet_get_icon (applet);
 			gtk_widget_set_size_request (GTK_WIDGET(applet), applet->icon_width + 2, applet->size);
 		}
@@ -254,8 +257,9 @@ gpm_applet_draw_cb (GpmBrightnessApplet *applet)
 	GdkColor color;
 	GdkGC *gc;
 	GdkPixmap *background;
+	GtkAllocation allocation;
 
-	if (GTK_WIDGET(applet)->window == NULL) {
+	if (gtk_widget_get_window (GTK_WIDGET(applet)) == NULL) {
 		return FALSE;
 	}
 
@@ -271,23 +275,24 @@ gpm_applet_draw_cb (GpmBrightnessApplet *applet)
 		return FALSE;
 	}
 
-	w = GTK_WIDGET(applet)->allocation.width;
-	h = GTK_WIDGET(applet)->allocation.height;
+	gtk_widget_get_allocation (GTK_WIDGET (applet), &allocation);
+	w = allocation.width;
+	h = allocation.height;
 
-	gc = gdk_gc_new (GTK_WIDGET(applet)->window);
+	gc = gdk_gc_new (gtk_widget_get_window (GTK_WIDGET(applet)));
 
 	/* draw pixmap background */
 	bg_type = panel_applet_get_background (PANEL_APPLET (applet), &color, &background);
 	if (bg_type == PANEL_PIXMAP_BACKGROUND && !applet->popped) {
 		/* fill with given background pixmap */
-		gdk_draw_drawable (GTK_WIDGET(applet)->window, gc, background, 0, 0, 0, 0, w, h);
+		gdk_draw_drawable (gtk_widget_get_window (GTK_WIDGET(applet)), gc, background, 0, 0, 0, 0, w, h);
 	}
 	
 	/* draw color background */
 	if (bg_type == PANEL_COLOR_BACKGROUND && !applet->popped) {
 		gdk_gc_set_rgb_fg_color (gc,&color);
 		gdk_gc_set_fill (gc,GDK_SOLID);
-		gdk_draw_rectangle (GTK_WIDGET(applet)->window, gc, TRUE, 0, 0, w, h);
+		gdk_draw_rectangle (gtk_widget_get_window (GTK_WIDGET(applet)), gc, TRUE, 0, 0, w, h);
 	}
 
 	/* fill with selected color if popped */
@@ -295,11 +300,11 @@ gpm_applet_draw_cb (GpmBrightnessApplet *applet)
 		color = gtk_rc_get_style (GTK_WIDGET(applet))->bg[GTK_STATE_SELECTED];
 		gdk_gc_set_rgb_fg_color (gc,&color);
 		gdk_gc_set_fill (gc,GDK_SOLID);
-		gdk_draw_rectangle (GTK_WIDGET(applet)->window, gc, TRUE, 0, 0, w, h);
+		gdk_draw_rectangle (gtk_widget_get_window (GTK_WIDGET(applet)), gc, TRUE, 0, 0, w, h);
 	}
 
 	/* draw icon at center */
-	gdk_draw_pixbuf (GTK_WIDGET(applet)->window, gc, applet->icon,
+	gdk_draw_pixbuf (gtk_widget_get_window (GTK_WIDGET(applet)), gc, applet->icon,
 			 0, 0, (w - applet->icon_width)/2, (h - applet->icon_height)/2,
 			 applet->icon_width, applet->icon_height,
 			 GDK_RGB_DITHER_NONE, 0, 0);
@@ -605,6 +610,7 @@ gpm_applet_create_popup (GpmBrightnessApplet *applet)
 static gboolean
 gpm_applet_popup_cb (GpmBrightnessApplet *applet, GdkEventButton *event)
 {
+	GtkAllocation allocation, popup_allocation;
 	gint orientation, x, y;
 
 	/* react only to left mouse button */
@@ -644,36 +650,32 @@ gpm_applet_popup_cb (GpmBrightnessApplet *applet, GdkEventButton *event)
 
 	/* retrieve geometry parameters and move window appropriately */
 	orientation = panel_applet_get_orient (PANEL_APPLET (PANEL_APPLET (applet)));
-	gdk_window_get_origin (GTK_WIDGET(applet)->window, &x, &y);
+	gdk_window_get_origin (gtk_widget_get_window (GTK_WIDGET(applet)), &x, &y);
 
+	gtk_widget_get_allocation (GTK_WIDGET (applet), &allocation);
+	gtk_widget_get_allocation (GTK_WIDGET (applet->popup), &popup_allocation);
 	switch (orientation) {
 	case PANEL_APPLET_ORIENT_DOWN:
-		x += GTK_WIDGET(applet)->allocation.x
-			+ GTK_WIDGET(applet)->allocation.width/2;
-		y += GTK_WIDGET(applet)->allocation.y
-			+ GTK_WIDGET(applet)->allocation.height;
-		x -= applet->popup->allocation.width/2;
+		x += allocation.x + allocation.width/2;
+		y += allocation.y + allocation.height;
+		x -= popup_allocation.width/2;
 		break;
 	case PANEL_APPLET_ORIENT_UP:
-		x += GTK_WIDGET(applet)->allocation.x
-			+ GTK_WIDGET(applet)->allocation.width/2;
-		y += GTK_WIDGET(applet)->allocation.y;
-		x -= applet->popup->allocation.width/2;
-		y -= applet->popup->allocation.height;
+		x += allocation.x + allocation.width/2;
+		y += allocation.y;
+		x -= popup_allocation.width/2;
+		y -= popup_allocation.height;
 		break;
 	case PANEL_APPLET_ORIENT_RIGHT:
-		y += GTK_WIDGET(applet)->allocation.y
-			+ GTK_WIDGET(applet)->allocation.height/2;
-		x += GTK_WIDGET(applet)->allocation.x
-			+ GTK_WIDGET(applet)->allocation.width;
-		y -= applet->popup->allocation.height/2;
+		y += allocation.y + allocation.height/2;
+		x += allocation.x + allocation.width;
+		y -= popup_allocation.height/2;
 		break;
 	case PANEL_APPLET_ORIENT_LEFT:
-		y += GTK_WIDGET(applet)->allocation.y
-			+ GTK_WIDGET(applet)->allocation.height/2;
-		x += GTK_WIDGET(applet)->allocation.x;
-		x -= applet->popup->allocation.width;
-		y -= applet->popup->allocation.height/2;
+		y += allocation.y + allocation.height/2;
+		x += allocation.x;
+		x -= popup_allocation.width;
+		y -= popup_allocation.height/2;
 		break;
 	default:
 		g_assert_not_reached ();
@@ -684,12 +686,12 @@ gpm_applet_popup_cb (GpmBrightnessApplet *applet, GdkEventButton *event)
 	/* grab input */
 	gtk_widget_grab_focus (GTK_WIDGET(applet));
 	gtk_grab_add (GTK_WIDGET(applet));
-	gdk_pointer_grab (GTK_WIDGET(applet)->window, TRUE,
+	gdk_pointer_grab (gtk_widget_get_window (GTK_WIDGET(applet)), TRUE,
 			  GDK_BUTTON_PRESS_MASK |
 			  GDK_BUTTON_RELEASE_MASK |
 			  GDK_POINTER_MOTION_MASK,
 			  NULL, NULL, GDK_CURRENT_TIME);
-	gdk_keyboard_grab (GTK_WIDGET(applet)->window,
+	gdk_keyboard_grab (gtk_widget_get_window (GTK_WIDGET(applet)),
 			   TRUE, GDK_CURRENT_TIME);
 	gtk_widget_set_state (GTK_WIDGET(applet), GTK_STATE_SELECTED);
 
