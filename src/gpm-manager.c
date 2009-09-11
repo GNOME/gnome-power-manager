@@ -1358,7 +1358,7 @@ gpm_manager_engine_just_laptop_battery (GpmManager *manager)
 {
 	DkpDevice *device;
 	DkpDeviceType type;
-	const GPtrArray *array;
+	GPtrArray *array;
 	gboolean ret = TRUE;
 	guint i;
 
@@ -1373,7 +1373,7 @@ gpm_manager_engine_just_laptop_battery (GpmManager *manager)
 			break;
 		}
 	}
-
+	g_ptr_array_unref (array);
 	return ret;
 }
 

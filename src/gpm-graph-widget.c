@@ -315,7 +315,7 @@ gpm_graph_widget_init (GpmGraphWidget *graph)
 	graph->priv->stop_y = 100;
 	graph->priv->use_grid = TRUE;
 	graph->priv->use_legend = FALSE;
-	graph->priv->data_list = g_ptr_array_new ();
+	graph->priv->data_list = g_ptr_array_new_with_free_func ((GDestroyNotify) g_ptr_array_unref);
 	graph->priv->plot_list = g_ptr_array_new ();
 	graph->priv->key_data = NULL;
 	graph->priv->type_x = GPM_GRAPH_WIDGET_TYPE_TIME;
@@ -338,16 +338,7 @@ gpm_graph_widget_init (GpmGraphWidget *graph)
 gboolean
 gpm_graph_widget_data_clear (GpmGraphWidget *graph)
 {
-	guint i;
-	GPtrArray *array;
-
 	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
-
-	for (i=0; i<graph->priv->data_list->len; i++) {
-		array = g_ptr_array_index (graph->priv->data_list, i);
-		g_ptr_array_foreach (array, (GFunc) gpm_point_obj_free, NULL);
-		g_ptr_array_free (array, TRUE);
-	}
 
 	g_ptr_array_set_size (graph->priv->data_list, 0);
 	g_ptr_array_set_size (graph->priv->plot_list, 0);
@@ -370,8 +361,8 @@ gpm_graph_widget_finalize (GObject *object)
 	gpm_graph_widget_data_clear (graph);
 
 	/* free data */
-	g_ptr_array_free (graph->priv->data_list, TRUE);
-	g_ptr_array_free (graph->priv->plot_list, TRUE);
+	g_ptr_array_unref (graph->priv->data_list);
+	g_ptr_array_unref (graph->priv->plot_list);
 
 	context = pango_layout_get_context (graph->priv->layout);
 	g_object_unref (graph->priv->layout);
@@ -397,7 +388,7 @@ gpm_graph_widget_data_assign (GpmGraphWidget *graph, GpmGraphWidgetPlot plot, GP
 	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
 
 	/* make a deep copy */
-	copy = g_ptr_array_new ();
+	copy = g_ptr_array_new_with_free_func ((GDestroyNotify) gpm_point_obj_free);
 	for (i=0; i<data->len; i++) {
 		obj = gpm_point_obj_copy (g_ptr_array_index (data, i));
 		g_ptr_array_add (copy, obj);

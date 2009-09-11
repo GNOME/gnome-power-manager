@@ -253,7 +253,7 @@ gpm_stats_update_smooth_data (GPtrArray *list)
 	convolved = egg_array_float_convolve (outliers, gaussian);
 
 	/* add the smoothed data back into a new array */
-	new = g_ptr_array_new ();
+	new = g_ptr_array_new_with_free_func ((GDestroyNotify) gpm_point_obj_free);
 	for (i=0; i<list->len; i++) {
 		point = (GpmPointObj *) g_ptr_array_index (list, i);
 		point_new = g_new0 (GpmPointObj, 1);
@@ -510,8 +510,7 @@ gpm_stats_set_graph_data (GtkWidget *widget, GPtrArray *data, gboolean use_smoot
 		if (use_points)
 			gpm_graph_widget_data_assign (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_PLOT_POINTS, data);
 		gpm_graph_widget_data_assign (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_PLOT_LINE, smoothed);
-		g_ptr_array_foreach (smoothed, (GFunc) gpm_point_obj_free, NULL);
-		g_ptr_array_free (smoothed, TRUE);
+		g_ptr_array_unref (smoothed);
 	}
 
 	/* show */
@@ -535,7 +534,7 @@ gpm_stats_update_info_page_history (DkpDevice *device)
 	gint32 offset = 0;
 	GTimeVal timeval;
 
-	new = g_ptr_array_new ();
+	new = g_ptr_array_new_with_free_func ((GDestroyNotify) gpm_point_obj_free);
 	if (g_strcmp0 (history_type, GPM_HISTORY_CHARGE_VALUE) == 0) {
 		g_object_set (graph_history,
 			      "type-x", GPM_GRAPH_WIDGET_TYPE_TIME,
@@ -620,10 +619,8 @@ gpm_stats_update_info_page_history (DkpDevice *device)
 	/* present data to graph */
 	gpm_stats_set_graph_data (graph_history, new, checked, points);
 
-	g_ptr_array_foreach (array, (GFunc) dkp_history_obj_free, NULL);
-	g_ptr_array_free (array, TRUE);
-	g_ptr_array_foreach (new, (GFunc) gpm_point_obj_free, NULL);
-	g_ptr_array_free (new, TRUE);
+	g_ptr_array_unref (array);
+	g_ptr_array_unref (new);
 out:
 	return;
 }
@@ -645,7 +642,7 @@ gpm_stats_update_info_page_stats (DkpDevice *device)
 	gboolean use_data = FALSE;
 	const gchar *type = NULL;
 
-	new = g_ptr_array_new ();
+	new = g_ptr_array_new_with_free_func ((GDestroyNotify) gpm_point_obj_free);
 	if (g_strcmp0 (stats_type, GPM_STATS_CHARGE_DATA_VALUE) == 0) {
 		type = "charging";
 		use_data = TRUE;
@@ -713,10 +710,8 @@ gpm_stats_update_info_page_stats (DkpDevice *device)
 	/* present data to graph */
 	gpm_stats_set_graph_data (graph_statistics, new, checked, points);
 
-	g_ptr_array_foreach (array, (GFunc) dkp_stats_obj_free, NULL);
-	g_ptr_array_free (array, TRUE);
-	g_ptr_array_foreach (new, (GFunc) gpm_point_obj_free, NULL);
-	g_ptr_array_free (new, TRUE);
+	g_ptr_array_unref (array);
+	g_ptr_array_unref (new);
 out:
 	return;
 }
@@ -1027,8 +1022,7 @@ gpm_stats_update_wakeups_data (void)
 		obj = g_ptr_array_index (array, i);
 		gpm_stats_add_wakeups_obj (obj);
 	}
-	g_ptr_array_foreach (array, (GFunc) dkp_wakeups_obj_free, NULL);
-	g_ptr_array_free (array, TRUE);
+	g_ptr_array_unref (array);
 }
 
 static void
@@ -1760,9 +1754,7 @@ main (int argc, char *argv[])
 			gtk_tree_path_free (path);
 		}
 	}
-
-	g_ptr_array_foreach (devices, (GFunc) g_object_unref, NULL);
-	g_ptr_array_free (devices, TRUE);
+	g_ptr_array_unref (devices);
 
 	/* set axis */
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "combobox_history_type"));

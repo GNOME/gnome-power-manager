@@ -874,7 +874,6 @@ gpm_engine_device_removed_cb (DkpClient *client, DkpDevice *device, GpmEngine *e
 	ret = g_ptr_array_remove (engine->priv->array, device);
 	if (!ret)
 		return;
-	g_object_unref (device);
 	gpm_engine_recalculate_state (engine);
 }
 
@@ -947,20 +946,13 @@ gpm_engine_device_changed_cb (DkpClient *client, DkpDevice *device, GpmEngine *e
 
 /**
  * gpm_engine_get_devices:
+ *
+ * Return value: the DkpDevice array, free with g_ptr_array_unref()
  **/
-const GPtrArray *
+GPtrArray *
 gpm_engine_get_devices (GpmEngine *engine)
 {
-	guint i;
-	DkpDevice *device;
-	GPtrArray *array = engine->priv->array;
-
-	for (i=0; i<array->len; i++) {
-		device = g_ptr_array_index (array, i);
-		g_object_ref (G_OBJECT(device));
-	}
-
-	return engine->priv->array;
+	return g_ptr_array_ref (engine->priv->array);
 }
 
 /**
@@ -1010,7 +1002,6 @@ phone_device_removed_cb (GpmPhone *phone, guint idx, GpmEngine *engine)
 
 		if (type == DKP_DEVICE_TYPE_PHONE) {
 			g_ptr_array_remove_index (engine->priv->array, i);
-			g_object_unref (device);
 			break;
 		}
 	}
@@ -1068,7 +1059,7 @@ gpm_engine_init (GpmEngine *engine)
 
 	engine->priv = GPM_ENGINE_GET_PRIVATE (engine);
 
-	engine->priv->array = g_ptr_array_new ();
+	engine->priv->array = g_ptr_array_new_with_free_func (g_object_unref);
 	engine->priv->client = dkp_client_new ();
 	g_signal_connect (engine->priv->client, "device-added",
 			  G_CALLBACK (gpm_engine_device_added_cb), engine);
@@ -1220,9 +1211,7 @@ gpm_engine_finalize (GObject *object)
 	engine = GPM_ENGINE (object);
 	engine->priv = GPM_ENGINE_GET_PRIVATE (engine);
 
-	g_ptr_array_foreach (engine->priv->array, (GFunc) g_object_unref, NULL);
-	g_ptr_array_free (engine->priv->array, TRUE);
-
+	g_ptr_array_unref (engine->priv->array);
 	g_object_unref (engine->priv->client);
 	g_object_unref (engine->priv->phone);
 	g_object_unref (engine->priv->battery_composite);

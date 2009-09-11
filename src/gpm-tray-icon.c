@@ -541,7 +541,7 @@ gpm_tray_icon_activate_cb (GtkStatusIcon *status_icon, GpmTrayIcon *icon)
 	GtkWidget *item;
 	GtkWidget *image;
 	guint dev_cnt = 0;
-	const GPtrArray *array;
+	GPtrArray *array;
 	egg_debug ("icon left clicked");
 
 	/* add all device types to the drop down menu */
@@ -552,7 +552,7 @@ gpm_tray_icon_activate_cb (GtkStatusIcon *status_icon, GpmTrayIcon *icon)
 	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, DKP_DEVICE_TYPE_KEYBOARD);
 	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, DKP_DEVICE_TYPE_PDA);
 	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, DKP_DEVICE_TYPE_PHONE);
-	g_ptr_array_foreach ((GPtrArray*)array, (GFunc) g_object_unref, NULL);
+	g_ptr_array_unref (array);
 
 	/* nothing to display! */
 	if (dev_cnt == 0 && !icon->priv->show_suspend && !icon->priv->show_hibernate)

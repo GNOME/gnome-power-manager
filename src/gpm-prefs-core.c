@@ -405,7 +405,7 @@ gpm_prefs_setup_action_combo (GpmPrefs *prefs, const gchar *widget_name,
 			 gtk_combo_box_set_active (GTK_COMBO_BOX (widget), i);
 	}
 
-	g_ptr_array_free (array, TRUE);
+	g_ptr_array_unref (array);
 	g_free (value_txt);
 }
 

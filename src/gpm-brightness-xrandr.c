@@ -609,7 +609,6 @@ gpm_brightness_monitors_changed (GdkScreen *screen, GpmBrightnessXRandR *brightn
 static void
 gpm_brightness_xrandr_update_cache (GpmBrightnessXRandR *brightness)
 {
-	guint i;
 	guint length;
 	gint screen;
 	Window root;
@@ -621,13 +620,8 @@ gpm_brightness_xrandr_update_cache (GpmBrightnessXRandR *brightness)
 
 	/* invalidate and remove all the previous entries */
 	length = brightness->priv->resources->len;
-	for (i=0; i<length; i++) {
-		resource = (XRRScreenResources *) g_ptr_array_index (brightness->priv->resources, i);
-		egg_debug ("freeing resource %p", resource);
-		XRRFreeScreenResources (resource);
-	}
 	if (length > 0)
-		g_ptr_array_remove_range (brightness->priv->resources, 0, length);
+		g_ptr_array_set_size (brightness->priv->resources, 0);
 
 	/* do for each screen */
 	display = gdk_display_get_default ();
@@ -676,8 +670,7 @@ gpm_brightness_xrandr_finalize (GObject *object)
 	g_return_if_fail (GPM_IS_BRIGHTNESS_XRANDR (object));
 	brightness = GPM_BRIGHTNESS_XRANDR (object);
 
-	g_ptr_array_foreach (brightness->priv->resources, (GFunc) XRRFreeScreenResources, NULL);
-	g_ptr_array_free (brightness->priv->resources, FALSE);
+	g_ptr_array_unref (brightness->priv->resources);
 
 	G_OBJECT_CLASS (gpm_brightness_xrandr_parent_class)->finalize (object);
 }
@@ -716,7 +709,7 @@ gpm_brightness_xrandr_init (GpmBrightnessXRandR *brightness)
 
 	brightness->priv = GPM_BRIGHTNESS_XRANDR_GET_PRIVATE (brightness);
 	brightness->priv->hw_changed = FALSE;
-	brightness->priv->resources = g_ptr_array_new ();
+	brightness->priv->resources = g_ptr_array_new_with_free_func ((GDestroyNotify) XRRFreeScreenResources);
 
 	/* can we do this */
 	brightness->priv->has_extension = gpm_brightness_xrandr_setup_display (brightness);
