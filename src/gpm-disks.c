@@ -147,10 +147,11 @@ gpm_disks_init (GpmDisks *disks)
 
 	disks->priv->cookie = NULL;
 
-	/* get org.gnome.Session.ClientPrivate interface */
+	/* get proxy to interface */
 	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, NULL);
 	disks->priv->proxy = dbus_g_proxy_new_for_name_owner (connection,
-							      "org.freedesktop.DeviceKit.Disks", "/",
+							      "org.freedesktop.DeviceKit.Disks",
+							      "/org/freedesktop/DeviceKit/Disks",
 							      "org.freedesktop.DeviceKit.Disks", &error);
 	if (disks->priv->proxy == NULL) {
 		egg_warning ("DBUS error: %s", error->message);
