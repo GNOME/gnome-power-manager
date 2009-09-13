@@ -954,6 +954,7 @@ gpm_manager_tray_icon_suspend (GpmManager *manager, GpmTrayIcon *tray)
 	gpm_manager_action_suspend (manager, "User clicked on tray");
 }
 
+#if 0
 /**
  * gpm_manager_screensaver_auth_request_cb:
  * @manager: This manager class instance
@@ -978,6 +979,7 @@ gpm_manager_screensaver_auth_request_cb (GpmScreensaver *screensaver, gboolean a
 		}
 	}
 }
+#endif
 
 /**
  * gpm_manager_perhaps_recall_response_cb:
@@ -1865,8 +1867,10 @@ gpm_manager_init (GpmManager *manager)
 
 	/* try and start an interactive service */
 	manager->priv->screensaver = gpm_screensaver_new ();
+#if 0
 	g_signal_connect (manager->priv->screensaver, "auth-request",
 			  G_CALLBACK (gpm_manager_screensaver_auth_request_cb), manager);
+#endif
 
 	/* try an start an interactive service */
 	manager->priv->backlight = gpm_backlight_new ();

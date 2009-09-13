@@ -51,10 +51,14 @@ enum {
 	LAST_SIGNAL
 };
 
+#if 0
 static guint signals [LAST_SIGNAL] = { 0 };
+#endif
 static gpointer gpm_screensaver_object = NULL;
 
 G_DEFINE_TYPE (GpmScreensaver, gpm_screensaver, G_TYPE_OBJECT)
+
+#if 0
 
 /** Invoked when we get the AuthenticationRequestBegin from g-s when the user
  *  has moved their mouse and we are showing the authentication box.
@@ -123,6 +127,7 @@ gpm_screensaver_proxy_disconnect_more (GpmScreensaver *screensaver)
 	egg_debug ("gnome-screensaver disconnected from the session DBUS");
 	return TRUE;
 }
+#endif
 
 /**
  * gpm_screensaver_lock_enabled:
@@ -337,6 +342,7 @@ gpm_screensaver_class_init (GpmScreensaverClass *klass)
 	object_class->finalize = gpm_screensaver_finalize;
 	g_type_class_add_private (klass, sizeof (GpmScreensaverPrivate));
 
+#if 0
 	signals [AUTH_REQUEST] =
 		g_signal_new ("auth-request",
 			      G_TYPE_FROM_CLASS (object_class),
@@ -346,6 +352,7 @@ gpm_screensaver_class_init (GpmScreensaverClass *klass)
 			      NULL,
 			      g_cclosure_marshal_VOID__BOOLEAN,
 			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+#endif
 }
 
 /**
@@ -359,11 +366,13 @@ gpm_screensaver_proxy_status_cb (DBusGProxy *proxy, gboolean status, GpmScreensa
 {
 	g_return_if_fail (GPM_IS_SCREENSAVER (screensaver));
 
+#if 0
 	if (status) {
 		gpm_screensaver_proxy_connect_more (screensaver);
 	} else {
 		gpm_screensaver_proxy_disconnect_more (screensaver);
 	}
+#endif
 }
 
 /**
@@ -386,9 +395,10 @@ gpm_screensaver_init (GpmScreensaver *screensaver)
 	g_signal_connect (screensaver->priv->gproxy, "proxy-status",
 			  G_CALLBACK (gpm_screensaver_proxy_status_cb),
 			  screensaver);
-
+#if 0
 	if (proxy != NULL)
 		gpm_screensaver_proxy_connect_more (screensaver);
+#endif
 
 	screensaver->priv->conf = gconf_client_get_default ();
 }
@@ -407,7 +417,9 @@ gpm_screensaver_finalize (GObject *object)
 	screensaver = GPM_SCREENSAVER (object);
 	screensaver->priv = GPM_SCREENSAVER_GET_PRIVATE (screensaver);
 
+#if 0
 	gpm_screensaver_proxy_disconnect_more (screensaver);
+#endif
 	g_object_unref (screensaver->priv->conf);
 	g_object_unref (screensaver->priv->gproxy);
 
@@ -429,4 +441,59 @@ gpm_screensaver_new (void)
 	}
 	return GPM_SCREENSAVER (gpm_screensaver_object);
 }
+/***************************************************************************
+ ***                          MAKE CHECK TESTS                           ***
+ ***************************************************************************/
+#ifdef EGG_TEST
+#include "egg-test.h"
+
+#if 0
+static gboolean test_got_request = FALSE;
+static void
+gpm_screensaver_test_auth_request_cb (GpmScreensaver *screensaver, gboolean auth, EggTest *test)
+{
+	egg_debug ("auth request = %i", auth);
+	test_got_request = auth;
+
+	egg_test_loop_quit (test);
+}
+#endif
+
+void
+gpm_screensaver_test (gpointer data)
+{
+	GpmScreensaver *screensaver;
+//	guint value;
+	gboolean ret;
+	EggTest *test = (EggTest *) data;
+
+	if (egg_test_start (test, "GpmScreensaver") == FALSE)
+		return;
+
+	/************************************************************/
+	egg_test_title (test, "make sure we get a non null screensaver");
+	screensaver = gpm_screensaver_new ();
+	egg_test_assert (test, (screensaver != NULL));
+
+#if 0
+	/* connect signals */
+	g_signal_connect (screensaver, "auth-request",
+			  G_CALLBACK (gpm_screensaver_test_auth_request_cb), test);
+#endif
+	/************************************************************/
+	egg_test_title (test, "lock screensaver");
+	ret = gpm_screensaver_lock (screensaver);
+	egg_test_assert (test, ret);
+
+	/************************************************************/
+	egg_test_title (test, "poke screensaver");
+	ret = gpm_screensaver_poke (screensaver);
+	egg_test_assert (test, ret);
+
+	g_object_unref (screensaver);
+
+	egg_test_end (test);
+}
+
+#endif
 

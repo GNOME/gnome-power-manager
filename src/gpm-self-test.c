@@ -27,6 +27,8 @@
 #include "egg-test.h"
 #include "egg-debug.h"
 
+#include "gpm-screensaver.h"
+
 /* prototypes */
 void egg_precision_test (EggTest *test);
 void egg_discrete_test (EggTest *test);
@@ -55,6 +57,8 @@ main (int argc, char **argv)
 
 	/* needed for DPMS checks */
 	gtk_init (&argc, &argv);
+
+	gpm_screensaver_test (test);
 
 	/* tests go here */
 	egg_precision_test (test);
