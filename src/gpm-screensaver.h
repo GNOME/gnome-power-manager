@@ -44,10 +44,6 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
-	void		(* gs_delay_changed)		(GpmScreensaver	*screensaver,
-					    		 gint		 delay);
-	void		(* connection_changed)		(GpmScreensaver	*screensaver,
-					    		 gboolean	 connected);
 	void		(* auth_request)		(GpmScreensaver	*screensaver,
 					    		 gboolean	 auth);
 } GpmScreensaverClass;
@@ -57,8 +53,6 @@ GpmScreensaver	*gpm_screensaver_new			(void);
 
 gboolean	 gpm_screensaver_lock			(GpmScreensaver	*screensaver);
 gboolean	 gpm_screensaver_lock_enabled		(GpmScreensaver	*screensaver);
-gboolean	 gpm_screensaver_lock_set		(GpmScreensaver	*screensaver,
-							 gboolean	 lock);
 guint32 	 gpm_screensaver_add_throttle    	(GpmScreensaver	*screensaver,
 							 const gchar	*reason);
 gboolean 	 gpm_screensaver_remove_throttle    	(GpmScreensaver	*screensaver,

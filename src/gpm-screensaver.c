@@ -47,8 +47,6 @@ struct GpmScreensaverPrivate
 };
 
 enum {
-	GS_DELAY_CHANGED,
-	CONNECTION_CHANGED,
 	AUTH_REQUEST,
 	LAST_SIGNAL
 };
@@ -97,8 +95,6 @@ gpm_screensaver_proxy_connect_more (GpmScreensaver *screensaver)
 		return FALSE;
 	}
 
-	g_signal_emit (screensaver, signals [CONNECTION_CHANGED], 0, TRUE);
-
 	/* get AuthenticationRequestBegin */
 	dbus_g_proxy_add_signal (proxy, "AuthenticationRequestBegin", G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (proxy,
@@ -124,8 +120,6 @@ static gboolean
 gpm_screensaver_proxy_disconnect_more (GpmScreensaver *screensaver)
 {
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
-
-	g_signal_emit (screensaver, signals [CONNECTION_CHANGED], 0, FALSE);
 	egg_debug ("gnome-screensaver disconnected from the session DBUS");
 	return TRUE;
 }
@@ -140,23 +134,8 @@ gpm_screensaver_lock_enabled (GpmScreensaver *screensaver)
 {
 	gboolean enabled;
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
-
 	enabled = gconf_client_get_bool (screensaver->priv->conf, GS_PREF_LOCK_ENABLED, NULL);
-
 	return enabled;
-}
-
-/**
- * gpm_screensaver_lock_set:
- * @screensaver: This class instance
- * @lock: If gnome-screensaver should lock the screen on screensave
- **/
-gboolean
-gpm_screensaver_lock_set (GpmScreensaver *screensaver, gboolean lock)
-{
-	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
-	gconf_client_set_bool (screensaver->priv->conf, GS_PREF_LOCK_ENABLED, lock, NULL);
-	return TRUE;
 }
 
 /**
@@ -250,9 +229,11 @@ gpm_screensaver_add_throttle (GpmScreensaver *screensaver,
 	return cookie;
 }
 
+/**
+ * gpm_screensaver_remove_throttle:
+ **/
 gboolean
-gpm_screensaver_remove_throttle (GpmScreensaver *screensaver,
-				 guint           cookie)
+gpm_screensaver_remove_throttle (GpmScreensaver *screensaver, guint cookie)
 {
 	gboolean ret;
 	DBusGProxy *proxy;
@@ -356,26 +337,6 @@ gpm_screensaver_class_init (GpmScreensaverClass *klass)
 	object_class->finalize = gpm_screensaver_finalize;
 	g_type_class_add_private (klass, sizeof (GpmScreensaverPrivate));
 
-	signals [GS_DELAY_CHANGED] =
-		g_signal_new ("gs-delay-changed",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmScreensaverClass, gs_delay_changed),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__INT,
-			      G_TYPE_NONE, 1, G_TYPE_INT);
-
-	signals [CONNECTION_CHANGED] =
-		g_signal_new ("connection-changed",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmScreensaverClass, connection_changed),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
-
 	signals [AUTH_REQUEST] =
 		g_signal_new ("auth-request",
 			      G_TYPE_FROM_CLASS (object_class),
@@ -388,15 +349,13 @@ gpm_screensaver_class_init (GpmScreensaverClass *klass)
 }
 
 /**
- * proxy_status_cb:
+ * gpm_screensaver_proxy_status_cb:
  * @proxy: The dbus raw proxy
  * @status: The status of the service, where TRUE is connected
  * @screensaver: This class instance
  **/
 static void
-proxy_status_cb (DBusGProxy     *proxy,
-		 gboolean	 status,
-		 GpmScreensaver *screensaver)
+gpm_screensaver_proxy_status_cb (DBusGProxy *proxy, gboolean status, GpmScreensaver *screensaver)
 {
 	g_return_if_fail (GPM_IS_SCREENSAVER (screensaver));
 
@@ -414,21 +373,22 @@ proxy_status_cb (DBusGProxy     *proxy,
 static void
 gpm_screensaver_init (GpmScreensaver *screensaver)
 {
-//	DBusGProxy *proxy;
-//	DBusGConnection *connection;
+	DBusGProxy *proxy;
+	DBusGConnection *connection;
 
 	screensaver->priv = GPM_SCREENSAVER_GET_PRIVATE (screensaver);
 
 	screensaver->priv->gproxy = egg_dbus_proxy_new ();
-//	connection = dbus_g_bus_get (DBUS_BUS_SESSION, NULL);
-//	proxy = egg_dbus_proxy_assign (screensaver->priv->gproxy, connection, GS_LISTENER_SERVICE,
-//				       GS_LISTENER_PATH, GS_LISTENER_INTERFACE);
+	connection = dbus_g_bus_get (DBUS_BUS_SESSION, NULL);
+	proxy = egg_dbus_proxy_assign (screensaver->priv->gproxy, connection, GS_LISTENER_SERVICE,
+				       GS_LISTENER_PATH, GS_LISTENER_INTERFACE);
 
 	g_signal_connect (screensaver->priv->gproxy, "proxy-status",
-			  G_CALLBACK (proxy_status_cb),
+			  G_CALLBACK (gpm_screensaver_proxy_status_cb),
 			  screensaver);
 
-	gpm_screensaver_proxy_connect_more (screensaver);
+	if (proxy != NULL)
+		gpm_screensaver_proxy_connect_more (screensaver);
 
 	screensaver->priv->conf = gconf_client_get_default ();
 }
@@ -469,3 +429,4 @@ gpm_screensaver_new (void)
 	}
 	return GPM_SCREENSAVER (gpm_screensaver_object);
 }
+
