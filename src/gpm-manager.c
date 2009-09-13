@@ -54,7 +54,6 @@
 #include "gpm-manager.h"
 #include "gpm-screensaver.h"
 #include "gpm-backlight.h"
-#include "gpm-screensaver.h"
 #include "gpm-session.h"
 #include "gpm-stock-icons.h"
 #include "gpm-prefs-server.h"
