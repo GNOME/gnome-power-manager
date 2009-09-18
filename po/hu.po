@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-08 17:55+0200\n"
-"PO-Revision-Date: 2009-09-08 17:53+0200\n"
+"POT-Creation-Date: 2009-09-19 01:20+0200\n"
+"PO-Revision-Date: 2009-09-19 01:19+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
 "Language-Team: Hungarian <gnome at fsf dot hu>\n"
 "MIME-Version: 1.0\n"
@@ -27,27 +27,27 @@ msgstr "Energiakezelő fényerő kisalkalmazás"
 msgid "Adjusts laptop panel brightness."
 msgstr "A noteszgépkijelző fényerejét szabályozza."
 
-#: ../applets/brightness/brightness-applet.c:354
-#: ../applets/inhibit/inhibit-applet.c:353
+#: ../applets/brightness/brightness-applet.c:359
+#: ../applets/inhibit/inhibit-applet.c:358
 msgid "Cannot connect to gnome-power-manager"
 msgstr "Nem lehet csatlakozni a GNOME Energiakezelőhöz."
 
-#: ../applets/brightness/brightness-applet.c:356
+#: ../applets/brightness/brightness-applet.c:361
 msgid "Cannot get laptop panel brightness"
 msgstr "Nem kérhető le a noteszgép kijelzőjének fényereje"
 
-#: ../applets/brightness/brightness-applet.c:358
+#: ../applets/brightness/brightness-applet.c:363
 #, c-format
 msgid "LCD brightness : %d%%"
 msgstr "LCD fényerő: %d%%"
 
-#: ../applets/brightness/brightness-applet.c:747
-#: ../applets/inhibit/inhibit-applet.c:422 ../src/gpm-tray-icon.c:315
+#: ../applets/brightness/brightness-applet.c:749
+#: ../applets/inhibit/inhibit-applet.c:427 ../src/gpm-tray-icon.c:315
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "A GNU General Public License 2. változata szerint használható"
 
-#: ../applets/brightness/brightness-applet.c:748
-#: ../applets/inhibit/inhibit-applet.c:423 ../src/gpm-tray-icon.c:316
+#: ../applets/brightness/brightness-applet.c:750
+#: ../applets/inhibit/inhibit-applet.c:428 ../src/gpm-tray-icon.c:316
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -59,8 +59,8 @@ msgstr ""
 "General Public License második (vagy bármely későbbi)\n"
 "változatában foglaltak alapján."
 
-#: ../applets/brightness/brightness-applet.c:752
-#: ../applets/inhibit/inhibit-applet.c:427 ../src/gpm-tray-icon.c:320
+#: ../applets/brightness/brightness-applet.c:754
+#: ../applets/inhibit/inhibit-applet.c:432 ../src/gpm-tray-icon.c:320
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -73,8 +73,8 @@ msgstr ""
 "KÖZREADÁSRA vagy EGY BIZONYOS FELADAT ELVÉGZÉSÉRE.\n"
 "További részletekért tanulmányozza a GNU GPL licencet."
 
-#: ../applets/brightness/brightness-applet.c:756
-#: ../applets/inhibit/inhibit-applet.c:431 ../src/gpm-tray-icon.c:324
+#: ../applets/brightness/brightness-applet.c:758
+#: ../applets/inhibit/inhibit-applet.c:436 ../src/gpm-tray-icon.c:324
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -86,7 +86,7 @@ msgstr ""
 "Levélcímük: 51 Franklin Street, Fifth Floor, Boston, MA\n"
 "02110-1301, USA."
 
-#: ../applets/brightness/brightness-applet.c:770
+#: ../applets/brightness/brightness-applet.c:772
 msgid "Copyright © 2006 Benjamin Canou"
 msgstr "Copyright © 2006 Benjamin Canou"
 
@@ -114,19 +114,19 @@ msgstr "Energiagazdálkodás korlátozása"
 msgid "Allows user to inhibit automatic power saving."
 msgstr "Lehetővé teszi az automatikus energiatakarékosság korlátozását."
 
-#: ../applets/inhibit/inhibit-applet.c:356
+#: ../applets/inhibit/inhibit-applet.c:361
 msgid "Automatic sleep inhibited"
 msgstr "Automatikus energiatakarékosság korlátozva"
 
-#: ../applets/inhibit/inhibit-applet.c:358
+#: ../applets/inhibit/inhibit-applet.c:363
 msgid "Automatic sleep enabled"
 msgstr "Automatikus energiatakarékosság engedélyezve"
 
-#: ../applets/inhibit/inhibit-applet.c:386
+#: ../applets/inhibit/inhibit-applet.c:391
 msgid "Manual inhibit"
 msgstr "Kézi korlátozás"
 
-#: ../applets/inhibit/inhibit-applet.c:445
+#: ../applets/inhibit/inhibit-applet.c:450
 msgid "Copyright © 2006-2007 Richard Hughes"
 msgstr "Copyright © 2006-2007 Richard Hughes"
 
@@ -475,7 +475,8 @@ msgstr "Energiatakarékossági időkorlát hálózati tápellátás esetén"
 
 #: ../data/gnome-power-manager.schemas.in.h:60
 msgid "Sleep timeout computer when on UPS"
-msgstr "Számítógép energiatakarékossági időkorlátja UPS használatakor"
+msgstr ""
+"Számítógép energiatakarékossági időkorlátja szünetmentes táp használatakor"
 
 #: ../data/gnome-power-manager.schemas.in.h:61
 msgid "Sleep timeout computer when on battery"
@@ -488,7 +489,8 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:63
 msgid "Sleep timeout display when on UPS"
-msgstr "Kijelző energiatakarékossági időkorlátja UPS használatakor"
+msgstr ""
+"Kijelző energiatakarékossági időkorlátja szünetmentes táp használatakor"
 
 #: ../data/gnome-power-manager.schemas.in.h:64
 msgid "Sleep timeout display when on battery"
@@ -607,48 +609,48 @@ msgid ""
 "The amount of time in seconds before the display goes to sleep when the "
 "computer is on AC power."
 msgstr ""
-"Hálózati tápellátás esetén ennyi másodpercnyi tétlenség után alszik el a "
-"képernyő."
+"Hálózati tápellátás esetén ennyi másodpercnyi tétlenség után vált "
+"energiatakarékos módba a képernyő."
 
 #: ../data/gnome-power-manager.schemas.in.h:79
 msgid ""
 "The amount of time in seconds the computer on AC power needs to be inactive "
 "before it goes to sleep."
 msgstr ""
-"Hálózati tápellátás esetén ennyi másodpercnyi tétlenség után alszik el a "
-"számítógép."
+"Hálózati tápellátás esetén ennyi másodpercnyi tétlenség után vált "
+"energiatakarékos módba a számítógép."
 
 #: ../data/gnome-power-manager.schemas.in.h:80
 msgid ""
 "The amount of time in seconds the computer on UPS power needs to be inactive "
 "before it goes to sleep."
 msgstr ""
-"A szünetmentes táp használata esetén ennyi másodpercnyi tétlenség után "
-"alszik el a számítógép."
+"A szünetmentes táp használata esetén ennyi másodpercnyi tétlenség után vált "
+"energiatakarékos módba a számítógép."
 
 #: ../data/gnome-power-manager.schemas.in.h:81
 msgid ""
 "The amount of time in seconds the computer on UPS power needs to be inactive "
 "before the display goes to sleep."
 msgstr ""
-"A szünetmentes táp használata esetén ennyi másodpercnyi tétlenség után "
-"alszik el a képernyő."
+"A szünetmentes táp használata esetén ennyi másodpercnyi tétlenség után vált "
+"energiatakarékos módba a képernyő."
 
 #: ../data/gnome-power-manager.schemas.in.h:82
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before it goes to sleep."
 msgstr ""
-"Akkumulátoros tápellátás esetén ennyi másodpercnyi tétlenség után alszik el "
-"a számítógép."
+"Akkumulátoros tápellátás esetén ennyi másodpercnyi tétlenség után vált "
+"energiatakarékos módba a számítógép."
 
 #: ../data/gnome-power-manager.schemas.in.h:83
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before the display goes to sleep."
 msgstr ""
-"Akkumulátoros tápellátás esetén ennyi másodpercnyi tétlenség után alszik el "
-"a képernyő."
+"Akkumulátoros tápellátás esetén ennyi másodpercnyi tétlenség után vált "
+"energiatakarékos módba a képernyő."
 
 #: ../data/gnome-power-manager.schemas.in.h:84
 msgid ""
@@ -934,8 +936,8 @@ msgstr "Energiagazdálkodás megfigyelése"
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1050
-#: ../src/gpm-statistics.c:1484
+#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1044
+#: ../src/gpm-statistics.c:1478
 msgid "Power Statistics"
 msgstr "Energiastatisztika"
 
@@ -1159,8 +1161,8 @@ msgstr "%s: %s van hátra (%.1f%%)"
 
 # fixme
 #. TRANSLATORS: the device is discharging, but we only have a percentage
-#: ../src/gpm-devicekit.c:284 ../src/gpm-manager.c:1236
-#: ../src/gpm-manager.c:1248
+#: ../src/gpm-devicekit.c:284 ../src/gpm-manager.c:1237
+#: ../src/gpm-manager.c:1249
 #, c-format
 msgid "%s discharging (%.1f%%)"
 msgstr "%s: kisül (%.1f%%)"
@@ -1315,8 +1317,8 @@ msgstr[1] "Noteszgép-akkumulátorok"
 #: ../src/gpm-devicekit.c:518
 msgid "UPS"
 msgid_plural "UPSs"
-msgstr[0] "UPS"
-msgstr[1] "UPS-ek"
+msgstr[0] "Szünetmentes táp"
+msgstr[1] "Szünetmentes táp"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
 #: ../src/gpm-devicekit.c:522
@@ -1389,61 +1391,61 @@ msgid "Unknown technology"
 msgstr "Ismeretlen technológia"
 
 #. Translators: This is %i days
-#: ../src/gpm-graph-widget.c:443
+#: ../src/gpm-graph-widget.c:434
 #, c-format
 msgid "%id"
 msgstr "%in"
 
 #. Translators: This is %i days %02i hours
-#: ../src/gpm-graph-widget.c:446
+#: ../src/gpm-graph-widget.c:437
 #, c-format
 msgid "%id%02ih"
 msgstr "%dn %02ió"
 
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:451
+#: ../src/gpm-graph-widget.c:442
 #, c-format
 msgid "%ih"
 msgstr "%ió"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:454
+#: ../src/gpm-graph-widget.c:445
 #, c-format
 msgid "%ih%02im"
 msgstr "%ió %02im"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:459
+#: ../src/gpm-graph-widget.c:450
 #, c-format
 msgid "%2im"
 msgstr "%2ip"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:462
+#: ../src/gpm-graph-widget.c:453
 #, c-format
 msgid "%2im%02i"
 msgstr "%2ip %02i"
 
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:466
+#: ../src/gpm-graph-widget.c:457
 #, c-format
 msgid "%2is"
 msgstr "%2imp"
 
 #. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:470
+#: ../src/gpm-graph-widget.c:461
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. Translators: This is %.1f Watts
-#: ../src/gpm-graph-widget.c:473
+#: ../src/gpm-graph-widget.c:464
 #, c-format
 msgid "%.1fW"
 msgstr "%.1fW"
 
 #. Translators: This is %.1f Volts
-#: ../src/gpm-graph-widget.c:478
+#: ../src/gpm-graph-widget.c:469
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fV"
@@ -1491,7 +1493,7 @@ msgid "screen awake"
 msgstr "képernyő használatban"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-main.c:171 ../src/gpm-prefs.c:90 ../src/gpm-statistics.c:1467
+#: ../src/gpm-main.c:171 ../src/gpm-prefs.c:90 ../src/gpm-statistics.c:1461
 msgid "Show extra debugging information"
 msgstr "Extra hibakeresési információk megjelenítése"
 
@@ -1512,62 +1514,62 @@ msgid "GNOME Power Manager"
 msgstr "GNOME Energiakezelő"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:172
+#: ../src/gpm-manager.c:171
 msgid "Power plugged in"
 msgstr "Áramellátás bekapcsolva"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:176
+#: ../src/gpm-manager.c:175
 msgid "Power unplugged"
 msgstr "Áramellátás kikapcsolva"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:180
+#: ../src/gpm-manager.c:179
 msgid "Lid has opened"
 msgstr "Fedél kinyitva"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:184
+#: ../src/gpm-manager.c:183
 msgid "Lid has closed"
 msgstr "Fedél lezárva"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:188
+#: ../src/gpm-manager.c:187
 msgid "Battery is low"
 msgstr "Az akkumulátor gyenge"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:192
+#: ../src/gpm-manager.c:191
 msgid "Battery is very low"
 msgstr "Az akkumulátor nagyon gyenge"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:196
+#: ../src/gpm-manager.c:195
 msgid "Battery is full"
 msgstr "Az akkumulátor feltöltve"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:200
+#: ../src/gpm-manager.c:199
 msgid "Suspend started"
 msgstr "Felfüggesztés megkezdve"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:204
+#: ../src/gpm-manager.c:203
 msgid "Resumed"
 msgstr "Folytatás"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:208
+#: ../src/gpm-manager.c:207
 msgid "Suspend failed"
 msgstr "Felfüggesztés meghiúsult"
 
 #. TRANSLATORS: the action was not done
-#: ../src/gpm-manager.c:434 ../src/gpm-manager.c:470
+#: ../src/gpm-manager.c:433 ../src/gpm-manager.c:469
 msgid "Action disallowed"
 msgstr "A művelet nem engedélyezett"
 
 #. TRANSLATORS: admin has disabled ability to do this
-#: ../src/gpm-manager.c:436
+#: ../src/gpm-manager.c:435
 msgid ""
 "Suspend support has been disabled. Contact your administrator for more "
 "details."
@@ -1576,7 +1578,7 @@ msgstr ""
 "rendszergazdát."
 
 #. TRANSLATORS: admin has disabled ability to do this
-#: ../src/gpm-manager.c:472
+#: ../src/gpm-manager.c:471
 msgid ""
 "Hibernate support has been disabled. Contact your administrator for more "
 "details."
@@ -1585,29 +1587,29 @@ msgstr ""
 "rendszergazdát."
 
 #. TRANSLATORS: this is the gnome-screensaver throttle
-#: ../src/gpm-manager.c:697
+#: ../src/gpm-manager.c:696
 msgid "Display DPMS activated"
 msgstr "Képernyő DPMS aktiválva"
 
 #. TRANSLATORS: this is the gnome-screensaver throttle
-#: ../src/gpm-manager.c:716
+#: ../src/gpm-manager.c:715
 msgid "On battery power"
 msgstr "Akkumulátoron"
 
-#: ../src/gpm-manager.c:734
+#: ../src/gpm-manager.c:733
 msgid "Laptop lid is closed"
 msgstr "Noteszgép fedele lezárva"
 
-#: ../src/gpm-manager.c:772
+#: ../src/gpm-manager.c:771
 msgid "Power Information"
 msgstr "Tápellátási információ"
 
 #. TRANSLATORS: the battery may be recalled by it's vendor
-#: ../src/gpm-manager.c:1033
+#: ../src/gpm-manager.c:1034
 msgid "Battery may be recalled"
 msgstr "Az akkumulátort visszahívhatták"
 
-#: ../src/gpm-manager.c:1034
+#: ../src/gpm-manager.c:1035
 #, c-format
 msgid ""
 "The battery in your computer may have been recalled by %s and you may be at "
@@ -1621,12 +1623,12 @@ msgstr ""
 "További információkért lásd az akkumulátor-visszahívási webhelyet."
 
 #. TRANSLATORS: button text, visit the manufacturers recall website
-#: ../src/gpm-manager.c:1044
+#: ../src/gpm-manager.c:1045
 msgid "Visit recall website"
 msgstr "Visszahívási webhely felkeresése"
 
 #. TRANSLATORS: button text, do not show this bubble again
-#: ../src/gpm-manager.c:1047
+#: ../src/gpm-manager.c:1048
 msgid "Do not show me this again"
 msgstr "Ne mutassa ezt többször"
 
@@ -1634,12 +1636,12 @@ msgstr "Ne mutassa ezt többször"
 #. * where capacity is the ratio of the last_full capacity with that of
 #. * the design capacity. (#326740)
 #. TRANSLATORS: battery is old or broken
-#: ../src/gpm-manager.c:1132
+#: ../src/gpm-manager.c:1133
 msgid "Battery may be broken"
 msgstr "Az akkumulátor hibás lehet"
 
 #. TRANSLATORS: notify the user that that battery is broken as the capacity is very low
-#: ../src/gpm-manager.c:1135
+#: ../src/gpm-manager.c:1136
 #, c-format
 msgid ""
 "Your battery has a very low capacity (%1.1f%%), which means that it may be "
@@ -1649,7 +1651,7 @@ msgstr ""
 "régi vagy hibás."
 
 #. TRANSLATORS: show the fully charged notification
-#: ../src/gpm-manager.c:1183
+#: ../src/gpm-manager.c:1184
 msgid "Battery Fully Charged"
 msgid_plural "Batteries Fully Charged"
 msgstr[0] "Az akkumulátor teljesen feltöltve"
@@ -1657,88 +1659,89 @@ msgstr[1] "Az akkumulátorok teljesen feltöltve"
 
 # fixme
 #. TRANSLATORS: laptop battery is now discharging
-#: ../src/gpm-manager.c:1229
+#: ../src/gpm-manager.c:1230
 msgid "Battery Discharging"
 msgstr "Az akkumulátor kisül"
 
 #. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1233
+#: ../src/gpm-manager.c:1234
 #, c-format
 msgid "%s of battery power remaining (%.1f%%)"
 msgstr "%s akkumulátorkapacitás van hátra (%.1f%%)"
 
 # fixme
 #. TRANSLATORS: UPS is now discharging
-#: ../src/gpm-manager.c:1241
+#: ../src/gpm-manager.c:1242
 msgid "UPS Discharging"
-msgstr "Az UPS kisül"
+msgstr "A szünetmentes táp kisül"
 
 #. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1245
+#: ../src/gpm-manager.c:1246
 #, c-format
 msgid "%s of UPS backup power remaining (%.1f%%)"
 msgstr "%s szünetmentes tápellátás van hátra (%.1f%%)"
 
 #. TRANSLATORS: window title: there was a problem putting the machine to sleep
-#: ../src/gpm-manager.c:1319
+#: ../src/gpm-manager.c:1320
 msgid "Sleep problem"
 msgstr "Energiatakarékossági probléma"
 
 #. TRANSLATORS: message text
-#: ../src/gpm-manager.c:1322
+#: ../src/gpm-manager.c:1323
 msgid "Your computer failed to suspend."
 msgstr "A számítógép nem volt képes a felfüggesztés végrehajtására."
 
-#: ../src/gpm-manager.c:1322 ../src/gpm-manager.c:1326
+#: ../src/gpm-manager.c:1323 ../src/gpm-manager.c:1327
 msgid "Check the help file for common problems."
 msgstr "A gyakori hibákkal kapcsolatban tekintse meg a súgófájlt."
 
 #. TRANSLATORS: message text
-#: ../src/gpm-manager.c:1326
+#: ../src/gpm-manager.c:1327
 msgid "Your computer failed to hibernate."
 msgstr "A számítógép nem volt képes a hibernálás végrehajtására."
 
 #. TRANSLATORS: button text, visit the suspend help website
-#: ../src/gpm-manager.c:1341
+#: ../src/gpm-manager.c:1342
 msgid "Visit help page"
 msgstr "Súgóoldal felkeresése"
 
 #. TRANSLATORS: laptop battery low, and we only have one battery
-#: ../src/gpm-manager.c:1416
+#: ../src/gpm-manager.c:1417
 msgid "Battery low"
 msgstr "Az akkumulátor gyenge"
 
 #. TRANSLATORS: laptop battery low, and we have more than one type of battery
-#: ../src/gpm-manager.c:1419
+#: ../src/gpm-manager.c:1420
 msgid "Laptop battery low"
 msgstr "A noteszgép akkumulátora gyenge"
 
 #. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1425
+#: ../src/gpm-manager.c:1426
 #, c-format
 msgid "Approximately <b>%s</b> remaining (%.1f%%)"
 msgstr "Megközelítőleg <b>%s</b> van hátra (%.1lf%%)"
 
 #. TRANSLATORS: UPS is starting to get a little low
-#: ../src/gpm-manager.c:1429
+#: ../src/gpm-manager.c:1430
 msgid "UPS low"
 msgstr "A szünetmentes táp gyenge"
 
 #. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1433
+#: ../src/gpm-manager.c:1434
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"
 msgstr ""
-"Az UPS áthidalási idejéből még megközelítőleg <b>%s</b> van hátra (%.1f%%)"
+"A szünetmentes táp áthidalási idejéből még megközelítőleg <b>%s</b> van "
+"hátra (%.1f%%)"
 
 #. TRANSLATORS: mouse is getting a little low
 #. TRANSLATORS: the mouse battery is very low
-#: ../src/gpm-manager.c:1437 ../src/gpm-manager.c:1555
+#: ../src/gpm-manager.c:1438 ../src/gpm-manager.c:1556
 msgid "Mouse battery low"
 msgstr "Az egér akkumulátora gyenge"
 
 #. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1440
+#: ../src/gpm-manager.c:1441
 #, c-format
 msgid "The wireless mouse attached to this computer is low in power (%.1f%%)"
 msgstr ""
@@ -1746,12 +1749,12 @@ msgstr ""
 
 #. TRANSLATORS: keyboard is getting a little low
 #. TRANSLATORS: the keyboard battery is very low
-#: ../src/gpm-manager.c:1444 ../src/gpm-manager.c:1563
+#: ../src/gpm-manager.c:1445 ../src/gpm-manager.c:1564
 msgid "Keyboard battery low"
 msgstr "A billentyűzet akkumulátora gyenge"
 
 #. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1447
+#: ../src/gpm-manager.c:1448
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is low in power (%.1f%%)"
@@ -1761,81 +1764,82 @@ msgstr ""
 
 #. TRANSLATORS: PDA is getting a little low
 #. TRANSLATORS: the PDA battery is very low
-#: ../src/gpm-manager.c:1451 ../src/gpm-manager.c:1572
+#: ../src/gpm-manager.c:1452 ../src/gpm-manager.c:1573
 msgid "PDA battery low"
 msgstr "A PDA akkumulátora gyenge"
 
 #. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1454
+#: ../src/gpm-manager.c:1455
 #, c-format
 msgid "The PDA attached to this computer is low in power (%.1f%%)"
 msgstr "A számítógéphez csatlakozó PDA akkumulátora gyenge (%.1f%%)"
 
 #. TRANSLATORS: cell phone (mobile) is getting a little low
 #. TRANSLATORS: the cell battery is very low
-#: ../src/gpm-manager.c:1458 ../src/gpm-manager.c:1581
+#: ../src/gpm-manager.c:1459 ../src/gpm-manager.c:1582
 msgid "Cell phone battery low"
 msgstr "A mobiltelefon akkumulátora gyenge"
 
 #. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1461
+#: ../src/gpm-manager.c:1462
 #, c-format
 msgid "The cell phone attached to this computer is low in power (%.1f%%)"
 msgstr "A számítógéphez csatlakozó mobiltelefon akkumulátora gyenge (%.1f%%)"
 
 #. TRANSLATORS: laptop battery critically low, and only have one type of battery
-#: ../src/gpm-manager.c:1511
+#: ../src/gpm-manager.c:1512
 msgid "Battery critically low"
 msgstr "Az akkumulátor kritikusan gyenge"
 
 #. TRANSLATORS: laptop battery critically low, and we have more than one type of battery
 #. TRANSLATORS: laptop battery is really, really, low
-#: ../src/gpm-manager.c:1514 ../src/gpm-manager.c:1627
+#: ../src/gpm-manager.c:1515 ../src/gpm-manager.c:1628
 msgid "Laptop battery critically low"
 msgstr "A noteszgép akkumulátora kritikusan gyenge"
 
 #. TRANSLATORS: tell the use to insert the plug, as we're not going to do anything
-#: ../src/gpm-manager.c:1526
+#: ../src/gpm-manager.c:1527
 msgid "Plug in your AC adapter to avoid losing data."
 msgstr ""
 "Az adatvesztés elkerülése érdekében csatlakoztassa a hálózati csatlakozót."
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1530
+#: ../src/gpm-manager.c:1531
 #, c-format
 msgid "Computer will suspend in %s."
 msgstr "A számítógép %s múlva fel lesz függesztve."
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1534
+#: ../src/gpm-manager.c:1535
 #, c-format
 msgid "Computer will hibernate in %s."
 msgstr "A számítógép %s múlva hibernálva lesz."
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1538
+#: ../src/gpm-manager.c:1539
 #, c-format
 msgid "Computer will shutdown in %s."
 msgstr "A számítógép %s múlva leáll."
 
 #. TRANSLATORS: the UPS is very low
 #. TRANSLATORS: UPS is really, really, low
-#: ../src/gpm-manager.c:1545 ../src/gpm-manager.c:1665
+#: ../src/gpm-manager.c:1546 ../src/gpm-manager.c:1666
 msgid "UPS critically low"
 msgstr "A szünetmentes táp kritikusan gyenge"
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1549
+#: ../src/gpm-manager.c:1550
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%.1f%%). Restore AC "
 "power to your computer to avoid losing data."
 msgstr ""
-"Az UPS áthidalási idejéből még megközelítőleg <b>%s</b> van hátra (%.1f%%). "
-"Az adatvesztés elkerülése érdekében állítsa vissza a hálózati tápellátást."
+"A szünetmentes táp áthidalási idejéből még megközelítőleg <b>%s</b> van "
+"hátra (%.1f%%). Az adatvesztés elkerülése érdekében állítsa vissza a "
+"hálózati tápellátást."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1558
+#: ../src/gpm-manager.c:1559
 #, c-format
 msgid ""
 "The wireless mouse attached to this computer is very low in power (%.1f%%). "
@@ -1845,7 +1849,7 @@ msgstr ""
 "(%.1f%%). Ha nem tölti fel, az eszköz le fog állni."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1566
+#: ../src/gpm-manager.c:1567
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is very low in power (%.1f%"
@@ -1855,7 +1859,7 @@ msgstr ""
 "gyenge (%.1f%%). Ha nem tölti fel, az eszköz le fog állni."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1575
+#: ../src/gpm-manager.c:1576
 #, c-format
 msgid ""
 "The PDA attached to this computer is very low in power (%.1f%%). This device "
@@ -1865,7 +1869,7 @@ msgstr ""
 "fel, az eszköz le fog állni."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1584
+#: ../src/gpm-manager.c:1585
 #, c-format
 msgid ""
 "Your cell phone is very low in power (%.1f%%). This device will soon stop "
@@ -1875,7 +1879,7 @@ msgstr ""
 "tölti fel, az eszköz le fog állni."
 
 #. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1636
+#: ../src/gpm-manager.c:1637
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
@@ -1884,7 +1888,7 @@ msgstr ""
 "számítógép <b>ki fog kapcsolni</b>."
 
 #. TRANSLATORS: computer will suspend
-#: ../src/gpm-manager.c:1642
+#: ../src/gpm-manager.c:1643
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1895,7 +1899,7 @@ msgstr ""
 "számítógép felfüggesztett állapotban is fogyaszt áramot."
 
 #. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1649
+#: ../src/gpm-manager.c:1650
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
@@ -1904,7 +1908,7 @@ msgstr ""
 "készül."
 
 #. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1654
+#: ../src/gpm-manager.c:1655
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
@@ -1912,7 +1916,7 @@ msgstr ""
 "Az akkumulátor kapacitása a kritikus szint alá esett és a gép leállni készül."
 
 #. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1674
+#: ../src/gpm-manager.c:1675
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
@@ -1921,7 +1925,7 @@ msgstr ""
 "kiürülésekor a számítógép <b>ki fog kapcsolni</b>."
 
 #. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1680
+#: ../src/gpm-manager.c:1681
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr ""
@@ -1929,7 +1933,7 @@ msgstr ""
 "hibernálásra készül."
 
 #. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1685
+#: ../src/gpm-manager.c:1686
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr ""
@@ -1937,12 +1941,12 @@ msgstr ""
 "készül."
 
 #. TRANSLATORS: there was in install problem
-#: ../src/gpm-manager.c:1848
+#: ../src/gpm-manager.c:1849
 msgid "Install problem!"
 msgstr "Telepítési probléma"
 
 #. TRANSLATORS: the GConf schema was not installed properly
-#: ../src/gpm-manager.c:1850
+#: ../src/gpm-manager.c:1851
 msgid ""
 "The configuration defaults for GNOME Power Manager have not been installed "
 "correctly.\n"
@@ -2150,172 +2154,172 @@ msgid "Online"
 msgstr "Online"
 
 #. TRANSLATORS: the command line was not provided
-#: ../src/gpm-statistics.c:801
+#: ../src/gpm-statistics.c:796
 msgid "No data"
 msgstr "Nincs adat"
 
 #. TRANSLATORS: kernel module, usually a device driver
-#: ../src/gpm-statistics.c:808 ../src/gpm-statistics.c:813
+#: ../src/gpm-statistics.c:803 ../src/gpm-statistics.c:808
 msgid "Kernel module"
 msgstr "Rendszermagmodul"
 
 #. TRANSLATORS: kernel housekeeping
-#: ../src/gpm-statistics.c:818
+#: ../src/gpm-statistics.c:813
 msgid "Kernel core"
 msgstr "Rendszermag"
 
 #. TRANSLATORS: interrupt between processors
-#: ../src/gpm-statistics.c:823
+#: ../src/gpm-statistics.c:818
 msgid "Interprocessor interrupt"
 msgstr "Processzorközi megszakítás"
 
 #. TRANSLATORS: unknown interrupt
-#: ../src/gpm-statistics.c:828
+#: ../src/gpm-statistics.c:823
 msgid "Interrupt"
 msgstr "Megszakítás"
 
 #. TRANSLATORS: the keyboard and mouse device event
-#: ../src/gpm-statistics.c:871
+#: ../src/gpm-statistics.c:866
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "PS/2 billentyűzet/egér/érintőtábla"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
-#: ../src/gpm-statistics.c:874
+#: ../src/gpm-statistics.c:869
 msgid "ACPI"
 msgstr "ACPI"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
-#: ../src/gpm-statistics.c:877
+#: ../src/gpm-statistics.c:872
 msgid "Serial ATA"
 msgstr "Soros ATA"
 
 #. TRANSLATORS: this is the old-style ATA interface
-#: ../src/gpm-statistics.c:880
+#: ../src/gpm-statistics.c:875
 msgid "ATA host controller"
 msgstr "ATA gépvezérlő"
 
 #. TRANSLATORS: 802.11 wireless adaptor
-#: ../src/gpm-statistics.c:883
+#: ../src/gpm-statistics.c:878
 msgid "Intel wireless adaptor"
 msgstr "Intel vezeték nélküli csatoló"
 
 #. TRANSLATORS: a timer is something that fires periodically
-#: ../src/gpm-statistics.c:888 ../src/gpm-statistics.c:891
-#: ../src/gpm-statistics.c:894 ../src/gpm-statistics.c:897
-#: ../src/gpm-statistics.c:900
+#: ../src/gpm-statistics.c:883 ../src/gpm-statistics.c:886
+#: ../src/gpm-statistics.c:889 ../src/gpm-statistics.c:892
+#: ../src/gpm-statistics.c:895
 #, c-format
 msgid "Timer %s"
 msgstr "Időzítő: %s"
 
 #. TRANSLATORS: this is a task that's woken up from sleeping
-#: ../src/gpm-statistics.c:903
+#: ../src/gpm-statistics.c:898
 #, c-format
 msgid "Sleep %s"
 msgstr "Alvó: %s"
 
 #. TRANSLATORS: this is a new realtime task
-#: ../src/gpm-statistics.c:906
+#: ../src/gpm-statistics.c:901
 #, c-format
 msgid "New task %s"
 msgstr "Új feladat: %s"
 
 #. TRANSLATORS: this is a task thats woken to check state
-#: ../src/gpm-statistics.c:909
+#: ../src/gpm-statistics.c:904
 #, c-format
 msgid "Wait %s"
 msgstr "Várakozik: %s"
 
 #. TRANSLATORS: a work queue is a list of work that has to be done
-#: ../src/gpm-statistics.c:912 ../src/gpm-statistics.c:915
+#: ../src/gpm-statistics.c:907 ../src/gpm-statistics.c:910
 #, c-format
 msgid "Work queue %s"
 msgstr "Munkasor: %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
-#: ../src/gpm-statistics.c:918
+#: ../src/gpm-statistics.c:913
 #, c-format
 msgid "Network route flush %s"
 msgstr "Hálózati útválasztás ürítése: %s"
 
 #. TRANSLATORS: activity on the USB bus
-#: ../src/gpm-statistics.c:921
+#: ../src/gpm-statistics.c:916
 #, c-format
 msgid "USB activity %s"
 msgstr "USB tevékenység: %s"
 
 #. TRANSLATORS: we've timed out of an aligned timer
-#: ../src/gpm-statistics.c:924
+#: ../src/gpm-statistics.c:919
 #, c-format
 msgid "Wakeup %s"
 msgstr "Ébredések: %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
-#: ../src/gpm-statistics.c:927
+#: ../src/gpm-statistics.c:922
 msgid "Local interrupts"
 msgstr "Helyi megszakítások"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
-#: ../src/gpm-statistics.c:930
+#: ../src/gpm-statistics.c:925
 msgid "Rescheduling interrupts"
 msgstr "Átütemezett megszakítások"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1040
+#: ../src/gpm-statistics.c:1034
 msgid "Device Information"
 msgstr "Eszközinformációk"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1042
+#: ../src/gpm-statistics.c:1036
 msgid "Device History"
 msgstr "Eszköz előzményei"
 
 # fixme
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1044
+#: ../src/gpm-statistics.c:1038
 msgid "Device Profile"
 msgstr "Eszköz profilja"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1046
+#: ../src/gpm-statistics.c:1040
 msgid "Processor Wakeups"
 msgstr "Processzorébredések"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1252 ../src/gpm-statistics.c:1258
-#: ../src/gpm-statistics.c:1264 ../src/gpm-statistics.c:1270
+#: ../src/gpm-statistics.c:1246 ../src/gpm-statistics.c:1252
+#: ../src/gpm-statistics.c:1258 ../src/gpm-statistics.c:1264
 msgid "Time elapsed"
 msgstr "Eltelt idő"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1254
+#: ../src/gpm-statistics.c:1248
 msgid "Power"
 msgstr "Energia"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1260 ../src/gpm-statistics.c:1303
-#: ../src/gpm-statistics.c:1309 ../src/gpm-statistics.c:1315
-#: ../src/gpm-statistics.c:1321
+#: ../src/gpm-statistics.c:1254 ../src/gpm-statistics.c:1297
+#: ../src/gpm-statistics.c:1303 ../src/gpm-statistics.c:1309
+#: ../src/gpm-statistics.c:1315
 msgid "Cell charge"
 msgstr "Cellatöltés"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1266 ../src/gpm-statistics.c:1272
+#: ../src/gpm-statistics.c:1260 ../src/gpm-statistics.c:1266
 msgid "Predicted time"
 msgstr "Előrejelzett idő"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1305 ../src/gpm-statistics.c:1317
+#: ../src/gpm-statistics.c:1299 ../src/gpm-statistics.c:1311
 msgid "Correction factor"
 msgstr "Javítási tényező"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1311 ../src/gpm-statistics.c:1323
+#: ../src/gpm-statistics.c:1305 ../src/gpm-statistics.c:1317
 msgid "Prediction accuracy"
 msgstr "Előrejelzés pontossága"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:1743
+#: ../src/gpm-statistics.c:1737
 msgid "Processor"
 msgstr "Processzor"
 
