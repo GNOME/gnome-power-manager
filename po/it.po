@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&component=general\n"
 "POT-Creation-Date: 2009-09-13 10:27+0000\n"
-"PO-Revision-Date: 2009-09-06 22:15+0200\n"
+"PO-Revision-Date: 2009-09-20 11:06+0200\n"
 "Last-Translator: Milo Casagrande <milo@ubuntu.com>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -1193,12 +1193,14 @@ msgstr ""
 "La batteria è completamente carica.\n"
 "Fornisce %s di attività"
 
-# (ndt) dicono 'device'...
+# (ndt) qui c'è un problema: la stringa compare così:
+# Batteria del portatile completamente carica
+# ma a posto di "Batteria del portatile" ci potrebbe essere anche "UPS", "Mouse senza fili"...
 #. TRANSLATORS: the device is fully charged
 #: ../src/gpm-devicekit.c:271
 #, c-format
 msgid "%s is fully charged"
-msgstr "%s è completamente carica"
+msgstr "%s completamente carica"
 
 # (NdT) il primo indica cosa si sta usando: Batteria del portatile
 # il secondo il tempo: 6 ore e 10 minuti
