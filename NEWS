@@ -1,3 +1,37 @@
+Version 2.28.0
+~~~~~~~~~~~~~~~
+Released: 2009-09-21
+
+* Translations
+ - Added Ukrainian translation (Maxim V. Dziumanenko)
+ - Updated Italian translation (Milo Casagrande)
+ - Updated Czech translation (Pavel Sefranek, Petr Pulc & Lucas Lommer)
+ - Updated Marathi translation (Sandeep Shedmake)
+ - Updated Kannada(kn) translation (Shankar Prasad)
+ - Updated Gujarati translation (Sweta Kothari)
+ - Updated Telugu Translation (krishnababu k)
+ - Updated Punjabi translation (A S Alam)
+ - Updated Assamese translation (Amitakhya Phukan)
+ - Updated Malayalam translation (Ani)
+ - Updated Danish translation (Ask H. Larsen)
+ - Updated Asturian translation (Astur)
+ - Updated British English translation (Bruce Cowan)
+ - Updated Hungarian translation (Gabor Kelemen)
+ - Updated Romanian translation (Lucian Adrian Grijincu)
+ - Updated Oriya translation (Manoj Kumar Giri)
+ - Updated Hindi translation (Rajesh Ranjan)
+ - Updated Estonian translation (Mattias Põldaru)
+
+* Bugfix:
+ - Use accessor functions instead direct access (Javier Jardón)
+ - Only print the DeviceKit-power device data when debugging (Richard Hughes)
+ - Use the correct interface name for DeviceKit-disks (Richard Hughes)
+ - Use the correct gnome-screensaver path (Richard Hughes)
+ - Use g_ptr_array_unref() in more places, which also fixes a few small memory leaks (Richard Hughes)
+ - Comment out the AuthRequest signal handling (Richard Hughes)
+ - Change the default of show_actions_in_menu to FALSE (Richard Hughes)
+ - Inhibit applet now will inhibit the session from being marked IDLE. Fixes #593800 (Scott Howard)
+
 Version 2.27.92
 ~~~~~~~~~~~~~~~
 Released: 2009-09-07
