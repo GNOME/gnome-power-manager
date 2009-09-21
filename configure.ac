@@ -1,6 +1,6 @@
 AC_PREREQ(2.60)
 
-AC_INIT(gnome-power-manager, 2.27.93)
+AC_INIT(gnome-power-manager, 2.29.1)
 AC_CONFIG_SRCDIR(src)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AM_INIT_AUTOMAKE([foreign])
@@ -231,7 +231,7 @@ dnl ---------------------------------------------------------------------------
 dnl - HAL support
 dnl ---------------------------------------------------------------------------
 AC_ARG_ENABLE(hal, AS_HELP_STRING([--enable-hal],[Build using HAL support]),
-	      enable_hal=$enableval,enable_hal=yes)
+	      enable_hal=$enableval,enable_hal=no)
 if test x$enable_hal = xyes; then
 	AC_DEFINE(HAVE_HAL, 1, [Define if we have HAL support])
 	PKG_CHECK_MODULES(HAL, hal >= 0.5.8)
