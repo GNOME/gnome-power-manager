@@ -239,7 +239,6 @@ gpm_stats_update_smooth_data (GPtrArray *list)
 
 	/* convert the y data to a EggArrayFloat array */
 	raw = egg_array_float_new (list->len);
-	convolved = egg_array_float_new (list->len);
 	for (i=0; i<list->len; i++) {
 		point = (GpmPointObj *) g_ptr_array_index (list, i);
 		egg_array_float_set (raw, i, point->y);
@@ -1219,7 +1218,7 @@ gpm_stats_device_removed_cb (DkpClient *client, DkpDevice *device, gpointer user
 
 	/* search the list and remove the object path entry */
 	ret = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (list_store_devices), &iter);
-	do {
+	while (ret) {
 		gtk_tree_model_get (GTK_TREE_MODEL (list_store_devices), &iter, GPM_DEVICES_COLUMN_ID, &id, -1);
 		if (g_strcmp0 (id, object_path) == 0) {
 			gtk_list_store_remove (list_store_devices, &iter);
@@ -1227,7 +1226,7 @@ gpm_stats_device_removed_cb (DkpClient *client, DkpDevice *device, gpointer user
 		}
 		g_free (id);
 		ret = gtk_tree_model_iter_next (GTK_TREE_MODEL (list_store_devices), &iter);
-	} while (ret);
+	};
 }
 
 /**
@@ -1505,7 +1504,7 @@ main (int argc, char *argv[])
 	/* get UI */
 	builder = gtk_builder_new ();
 	retval = gtk_builder_add_from_file (builder, GPM_DATA "/gpm-statistics.ui", &error);
-	if (error != NULL) {
+	if (retval == 0) {
 		egg_warning ("failed to load ui: %s", error->message);
 		g_error_free (error);
 	}
@@ -1601,7 +1600,6 @@ main (int argc, char *argv[])
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "treeview_wakeups"));
 	gtk_tree_view_set_model (GTK_TREE_VIEW (widget),
 				 GTK_TREE_MODEL (list_store_wakeups));
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (widget));
 
 	/* add columns to the tree view */
 	gpm_stats_add_wakeups_columns (GTK_TREE_VIEW (widget));

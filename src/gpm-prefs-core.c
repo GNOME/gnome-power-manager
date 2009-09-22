@@ -468,11 +468,9 @@ gpm_prefs_checkbox_lock_cb (GtkWidget *widget, GpmPrefs *prefs)
 {
 	gboolean checked;
 	gchar *gpm_pref_key;
-	const gchar *widget_name;
 
 	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 
-	widget_name = gtk_widget_get_name (widget);
 	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (widget), "conf_key");
 	egg_debug ("Changing %s to %i", gpm_pref_key, checked);
 	gconf_client_set_bool (prefs->priv->conf, gpm_pref_key, checked, NULL);
@@ -966,7 +964,7 @@ gpm_prefs_init (GpmPrefs *prefs)
 
 	prefs->priv->builder = gtk_builder_new ();
 	retval = gtk_builder_add_from_file (prefs->priv->builder, GPM_DATA "/gpm-prefs.ui", &error);
-	if (error != NULL) {
+	if (retval == 0) {
 		egg_warning ("failed to load ui: %s", error->message);
 		g_error_free (error);
 	}

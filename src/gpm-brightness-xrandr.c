@@ -584,9 +584,7 @@ gpm_brightness_xrandr_filter_xevents (GdkXEvent *xevent, GdkEvent *event, gpoint
 	GpmBrightnessXRandR *brightness = GPM_BRIGHTNESS_XRANDR (data);
 	if (event->type == GDK_NOTHING)
 		return GDK_FILTER_CONTINUE;
-	egg_warning ("Type %i", event->type);
-	if (FALSE)
-		gpm_brightness_xrandr_may_have_changed (brightness);
+	gpm_brightness_xrandr_may_have_changed (brightness);
 	return GDK_FILTER_CONTINUE;
 }
 

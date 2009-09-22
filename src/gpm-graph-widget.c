@@ -94,13 +94,13 @@ static gboolean
 gpm_graph_widget_key_data_clear (GpmGraphWidget *graph)
 {
 	GpmGraphWidgetKeyData *keyitem;
-	guint a;
+	guint i;
 
 	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
 
 	/* remove items in list and free */
-	for (a=0; a<g_slist_length (graph->priv->key_data); a++) {
-		keyitem = (GpmGraphWidgetKeyData *) g_slist_nth_data (graph->priv->key_data, a);
+	for (i=0; i<g_slist_length (graph->priv->key_data); i++) {
+		keyitem = (GpmGraphWidgetKeyData *) g_slist_nth_data (graph->priv->key_data, i);
 		g_free (keyitem->desc);
 		g_free (keyitem);
 	}
@@ -483,7 +483,8 @@ gpm_get_axis_label (GpmGraphWidgetType axis, gfloat value)
 static void
 gpm_graph_widget_draw_grid (GpmGraphWidget *graph, cairo_t *cr)
 {
-	gfloat a, b;
+	guint i;
+	gfloat b;
 	gdouble dotted[] = {1., 2.};
 	gfloat divwidth  = (gfloat)graph->priv->box_width / 10.0f;
 	gfloat divheight = (gfloat)graph->priv->box_height / 10.0f;
@@ -495,16 +496,16 @@ gpm_graph_widget_draw_grid (GpmGraphWidget *graph, cairo_t *cr)
 
 	/* do vertical lines */
 	cairo_set_source_rgb (cr, 0.1, 0.1, 0.1);
-	for (a=1; a<10; a++) {
-		b = graph->priv->box_x + (a * divwidth);
+	for (i=1; i<10; i++) {
+		b = graph->priv->box_x + ((gfloat) i * divwidth);
 		cairo_move_to (cr, (gint)b + 0.5f, graph->priv->box_y);
 		cairo_line_to (cr, (gint)b + 0.5f, graph->priv->box_y + graph->priv->box_height);
 		cairo_stroke (cr);
 	}
 
 	/* do horizontal lines */
-	for (a=1; a<10; a++) {
-		b = graph->priv->box_y + (a * divheight);
+	for (i=1; i<10; i++) {
+		b = graph->priv->box_y + ((gfloat) i * divheight);
 		cairo_move_to (cr, graph->priv->box_x, (gint)b + 0.5f);
 		cairo_line_to (cr, graph->priv->box_x + graph->priv->box_width, (int)b + 0.5f);
 		cairo_stroke (cr);
@@ -523,7 +524,8 @@ gpm_graph_widget_draw_grid (GpmGraphWidget *graph, cairo_t *cr)
 static void
 gpm_graph_widget_draw_labels (GpmGraphWidget *graph, cairo_t *cr)
 {
-	gfloat a, b;
+	guint i;
+	gfloat b;
 	gchar *text;
 	gfloat value;
 	gfloat divwidth  = (gfloat)graph->priv->box_width / 10.0f;
@@ -538,17 +540,17 @@ gpm_graph_widget_draw_labels (GpmGraphWidget *graph, cairo_t *cr)
 
 	/* do x text */
 	cairo_set_source_rgb (cr, 0, 0, 0);
-	for (a=0; a<11; a++) {
-		b = graph->priv->box_x + (a * divwidth);
-		value = ((length_x / 10.0f) * (gfloat) a) + (gfloat) graph->priv->start_x;
+	for (i=0; i<11; i++) {
+		b = graph->priv->box_x + ((gfloat) i * divwidth);
+		value = ((length_x / 10.0f) * (gfloat) i) + (gfloat) graph->priv->start_x;
 		text = gpm_get_axis_label (graph->priv->type_x, value);
 
 		pango_layout_set_text (graph->priv->layout, text, -1);
 		pango_layout_get_pixel_extents (graph->priv->layout, &ink_rect, &logical_rect);
 		/* have data points 0 and 10 bounded, but 1..9 centered */
-		if (a == 0)
+		if (i == 0)
 			offsetx = 2.0;
-		else if (a == 10)
+		else if (i == 10)
 			offsetx = ink_rect.width;
 		else
 			offsetx = (ink_rect.width / 2.0f);
@@ -561,18 +563,18 @@ gpm_graph_widget_draw_labels (GpmGraphWidget *graph, cairo_t *cr)
 	}
 
 	/* do y text */
-	for (a=0; a<11; a++) {
-		b = graph->priv->box_y + (a * divheight);
-		value = ((gfloat) length_y / 10.0f) * (10 - a) + graph->priv->start_y;
+	for (i=0; i<11; i++) {
+		b = graph->priv->box_y + ((gfloat) i * divheight);
+		value = ((gfloat) length_y / 10.0f) * (10 - (gfloat) i) + graph->priv->start_y;
 		text = gpm_get_axis_label (graph->priv->type_y, value);
 
 		pango_layout_set_text (graph->priv->layout, text, -1);
 		pango_layout_get_pixel_extents (graph->priv->layout, &ink_rect, &logical_rect);
 
 		/* have data points 0 and 10 bounded, but 1..9 centered */
-		if (a == 10)
+		if (i == 10)
 			offsety = 0;
-		else if (a == 0)
+		else if (i == 0)
 			offsety = ink_rect.height;
 		else
 			offsety = (ink_rect.height / 2.0f);
@@ -596,18 +598,16 @@ gpm_graph_widget_draw_labels (GpmGraphWidget *graph, cairo_t *cr)
 static guint
 gpm_graph_widget_get_y_label_max_width (GpmGraphWidget *graph, cairo_t *cr)
 {
-	gfloat a, b;
+	guint i;
 	gchar *text;
 	gint value;
-	gfloat divheight = (gfloat)graph->priv->box_height / 10.0f;
 	gint length_y = graph->priv->stop_y - graph->priv->start_y;
 	PangoRectangle ink_rect, logical_rect;
 	guint biggest = 0;
 
 	/* do y text */
-	for (a=0; a<11; a++) {
-		b = graph->priv->box_y + (a * divheight);
-		value = (length_y / 10) * (10 - a) + graph->priv->start_y;
+	for (i=0; i<11; i++) {
+		value = (length_y / 10) * (10 - (gfloat) i) + graph->priv->start_y;
 		text = gpm_get_axis_label (graph->priv->type_y, value);
 		pango_layout_set_text (graph->priv->layout, text, -1);
 		pango_layout_get_pixel_extents (graph->priv->layout, &ink_rect, &logical_rect);
@@ -995,15 +995,15 @@ gpm_graph_widget_draw_legend (GpmGraphWidget *graph, gint x, gint y, gint width,
 {
 	cairo_t *cr = graph->priv->cr;
 	gint y_count;
-	guint a;
+	guint i;
 	GpmGraphWidgetKeyData *keydataitem;
 
 	gpm_graph_widget_draw_bounding_box (cr, x, y, width, height);
 	y_count = y + 10;
 
 	/* add the line colors to the legend */
-	for (a=0; a<g_slist_length (graph->priv->key_data); a++) {
-		keydataitem = (GpmGraphWidgetKeyData *) g_slist_nth_data (graph->priv->key_data, a);
+	for (i=0; i<g_slist_length (graph->priv->key_data); i++) {
+		keydataitem = (GpmGraphWidgetKeyData *) g_slist_nth_data (graph->priv->key_data, i);
 		if (keydataitem == NULL) {
 			/* this shouldn't ever happen */
 			egg_warning ("keydataitem NULL!");
@@ -1032,7 +1032,7 @@ static gboolean
 gpm_graph_widget_legend_calculate_size (GpmGraphWidget *graph, cairo_t *cr,
 					guint *width, guint *height)
 {
-	guint a;
+	guint i;
 	PangoRectangle ink_rect, logical_rect;
 	GpmGraphWidgetKeyData *keydataitem;
 
@@ -1043,8 +1043,8 @@ gpm_graph_widget_legend_calculate_size (GpmGraphWidget *graph, cairo_t *cr,
 	*height = 0;
 
 	/* add the line colors to the legend */
-	for (a=0; a<g_slist_length (graph->priv->key_data); a++) {
-		keydataitem = (GpmGraphWidgetKeyData *) g_slist_nth_data (graph->priv->key_data, a);
+	for (i=0; i<g_slist_length (graph->priv->key_data); i++) {
+		keydataitem = (GpmGraphWidgetKeyData *) g_slist_nth_data (graph->priv->key_data, i);
 		*height = *height + GPM_GRAPH_WIDGET_LEGEND_SPACING;
 		pango_layout_set_text (graph->priv->layout, keydataitem->desc, -1);
 		pango_layout_get_pixel_extents (graph->priv->layout, &ink_rect, &logical_rect);
