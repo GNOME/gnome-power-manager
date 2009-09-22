@@ -382,23 +382,18 @@ gpm_screensaver_proxy_status_cb (DBusGProxy *proxy, gboolean status, GpmScreensa
 static void
 gpm_screensaver_init (GpmScreensaver *screensaver)
 {
-	DBusGProxy *proxy;
 	DBusGConnection *connection;
 
 	screensaver->priv = GPM_SCREENSAVER_GET_PRIVATE (screensaver);
 
 	screensaver->priv->gproxy = egg_dbus_proxy_new ();
 	connection = dbus_g_bus_get (DBUS_BUS_SESSION, NULL);
-	proxy = egg_dbus_proxy_assign (screensaver->priv->gproxy, connection, GS_LISTENER_SERVICE,
-				       GS_LISTENER_PATH, GS_LISTENER_INTERFACE);
+	egg_dbus_proxy_assign (screensaver->priv->gproxy, connection, GS_LISTENER_SERVICE,
+			       GS_LISTENER_PATH, GS_LISTENER_INTERFACE);
 
 	g_signal_connect (screensaver->priv->gproxy, "proxy-status",
 			  G_CALLBACK (gpm_screensaver_proxy_status_cb),
 			  screensaver);
-#if 0
-	if (proxy != NULL)
-		gpm_screensaver_proxy_connect_more (screensaver);
-#endif
 
 	screensaver->priv->conf = gconf_client_get_default ();
 }
