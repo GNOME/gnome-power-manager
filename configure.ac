@@ -225,11 +225,6 @@ fi
 AC_SUBST(DOCDIR)
 
 dnl ---------------------------------------------------------------------------
-dnl - Require DeviceKit-power support
-dnl ---------------------------------------------------------------------------
-AC_PATH_PROG(DEVKIT_POWER, devkit-power)
-
-dnl ---------------------------------------------------------------------------
 dnl - HAL support
 dnl ---------------------------------------------------------------------------
 AC_ARG_ENABLE(hal, AS_HELP_STRING([--enable-hal],[Build using HAL support]),
