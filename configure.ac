@@ -233,24 +233,6 @@ fi
 AM_CONDITIONAL([HAVE_HAL], [test $enable_hal = yes])
 
 dnl ---------------------------------------------------------------------------
-dnl - Use check-foreground-console (Ubuntu specific) support?
-dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(checkfg,
-              AS_HELP_STRING([--enable-checkfg],
-                             [Use check-foreground-console (Ubuntu systems)]),
-              enable_checkfg=$enableval,enable_checkfg=no)
-
-AC_MSG_CHECKING([whether to use check-foreground-console])
-have_checkfg=no
-if test x$enable_checkfg = xyes ; then
-    have_checkfg=yes
-    AC_DEFINE(HAVE_CHECK_FG, 1, [Define if we want to use check-foreground-console])
-    AC_MSG_RESULT(yes)
-else
-    AC_MSG_RESULT(no)
-fi
-
-dnl ---------------------------------------------------------------------------
 dnl - Build self tests
 dnl ---------------------------------------------------------------------------
 AC_ARG_ENABLE(tests,
