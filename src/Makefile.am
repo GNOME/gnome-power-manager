@@ -11,7 +11,6 @@ EXTRA_DIST =						\
 
 INCLUDES =						\
 	$(GLIB_CFLAGS)					\
-	$(HAL_CFLAGS)					\
 	$(DBUS_CFLAGS)					\
 	$(GNOME_CFLAGS)					\
 	$(UNIQUE_CFLAGS)				\
@@ -113,7 +112,6 @@ gnome_power_preferences_LDADD =				\
 	libgpmshared.a					\
 	$(GLIB_LIBS)					\
 	$(GNOME_LIBS)					\
-	$(HAL_LIBS)					\
 	$(DBUS_LIBS)					\
 	$(UNIQUE_LIBS)					\
 	$(GPM_EXTRA_LIBS)				\
@@ -181,7 +179,6 @@ gnome_power_manager_LDADD =				\
 	$(GLIB_LIBS)					\
 	$(GSTREAMER_LIBS)				\
 	$(GNOME_LIBS)					\
-	$(HAL_LIBS)					\
 	$(DBUS_LIBS)					\
 	$(XRANDR_LIBS)					\
 	$(CANBERRA_LIBS)				\

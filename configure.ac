@@ -229,9 +229,6 @@ AC_ARG_ENABLE(hal, AS_HELP_STRING([--enable-hal],[Build using HAL support]),
 	      enable_hal=$enableval,enable_hal=no)
 if test x$enable_hal = xyes; then
 	AC_DEFINE(HAVE_HAL, 1, [Define if we have HAL support])
-	PKG_CHECK_MODULES(HAL, hal >= 0.5.8)
-	AC_SUBST(HAL_CFLAGS)
-	AC_SUBST(HAL_LIBS)
 fi
 AM_CONDITIONAL([HAVE_HAL], [test $enable_hal = yes])
 
