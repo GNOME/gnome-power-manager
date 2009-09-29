@@ -614,7 +614,7 @@ echo "
         compiler:                  ${CC}
         cflags:                    ${CFLAGS}
         Building extra applets:    ${enable_applets}
-        HAL support:               ${enable_hal}
+        HAL (brightness) support:  ${enable_hal}
         DPMS support:              ${have_dpms}
         Self test support:         ${have_tests}
         GConf default support:     ${have_gconfdefaults}
