@@ -636,20 +636,6 @@ prefs_setup_notification (GpmPrefs *prefs)
 			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
 	g_signal_connect (radiobutton_icon_never, "clicked",
 			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
-
-	if (prefs->priv->has_batteries) {
-		/* there's no use case for displaying this option */
-		gtk_widget_hide_all (radiobutton_icon_never);
-	}
-	if (prefs->priv->has_batteries == FALSE) {
-		/* Hide battery radio options if we have no batteries */
-		gtk_widget_hide_all (radiobutton_icon_charge);
-		gtk_widget_hide_all (radiobutton_icon_low);
-	}
-	if (prefs->priv->has_batteries == FALSE && prefs->priv->has_ups == FALSE) {
-		/* Hide battery present option if no ups or primary */
-		gtk_widget_hide_all (radiobutton_icon_present);
-	}
 }
 
 static void
