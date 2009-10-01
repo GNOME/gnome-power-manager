@@ -1490,6 +1490,9 @@ main (int argc, char *argv[])
 		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
 		  /* TRANSLATORS: show verbose debugging */
 		  N_("Show extra debugging information"), NULL },
+		{ "device", '\0', 0, G_OPTION_ARG_STRING, &last_device,
+		  /* TRANSLATORS: show a device by default */
+		  N_("Select this device at startup"), NULL },
 		{ NULL}
 	};
 
@@ -1754,7 +1757,8 @@ main (int argc, char *argv[])
 		current_device = g_strdup (dkp_device_get_object_path (device));
 	}
 
-	last_device = gconf_client_get_string (gconf_client, GPM_CONF_INFO_LAST_DEVICE, NULL);
+	if (last_device == NULL)
+		last_device = gconf_client_get_string (gconf_client, GPM_CONF_INFO_LAST_DEVICE, NULL);
 
 	/* has capability to measure wakeups */
 	ret = dkp_wakeups_has_capability (wakeups);
@@ -1793,5 +1797,6 @@ out:
 	g_object_unref (list_store_info);
 unique_out:
 	g_object_unref (egg_unique);
+	g_free (last_device);
 	return 0;
 }
