@@ -1430,6 +1430,39 @@ gpm_stats_set_combo_simple_text (GtkWidget *combo_box)
 }
 
 /**
+ * gpm_stats_highlight_device:
+ **/
+static void
+gpm_stats_highlight_device (const gchar *object_path)
+{
+	gboolean ret;
+	gchar *id = NULL;
+	gchar *path_str;
+	guint i;
+	GtkTreeIter iter;
+	GtkTreePath *path;
+	GtkWidget *widget;
+
+	/* we have to reuse the treeview data as it may be sorted */
+	ret = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (list_store_devices), &iter);
+	for (i=0; ret; i++) {
+		gtk_tree_model_get (GTK_TREE_MODEL (list_store_devices), &iter,
+				    GPM_DEVICES_COLUMN_ID, &id,
+				    -1);
+		if (g_strcmp0 (id, object_path) == 0) {
+			path_str = g_strdup_printf ("%i", i);
+			path = gtk_tree_path_new_from_string (path_str);
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "treeview_devices"));
+			gtk_tree_view_set_cursor_on_cell (GTK_TREE_VIEW (widget), path, NULL, NULL, FALSE);
+			g_free (path_str);
+			gtk_tree_path_free (path);
+		}
+		g_free (id);
+		ret = gtk_tree_model_iter_next (GTK_TREE_MODEL (list_store_devices), &iter);
+	}
+}
+
+/**
  * main:
  **/
 int
@@ -1448,9 +1481,8 @@ main (int argc, char *argv[])
 	DkpDeviceType type;
 	guint i;
 	gint page;
-	const gchar *object_path;
 	gboolean checked;
-	gchar *last_device;
+	gchar *last_device = NULL;
 	guint retval;
 	GError *error = NULL;
 
@@ -1737,21 +1769,9 @@ main (int argc, char *argv[])
 	}
 
 	/* set the correct focus on the last device */
-	for (i=0; i < devices->len; i++) {
-		object_path = (const gchar *) g_ptr_array_index (devices, i);
-		if (last_device == NULL || object_path == NULL)
-			break;
-		if (g_strcmp0 (last_device, object_path) == 0) {
-			GtkTreePath *path;
-			gchar *path_str;
-			path_str = g_strdup_printf ("%i", i);
-			path = gtk_tree_path_new_from_string (path_str);
-			widget = GTK_WIDGET (gtk_builder_get_object (builder, "treeview_devices"));
-			gtk_tree_view_set_cursor_on_cell (GTK_TREE_VIEW (widget), path, NULL, NULL, FALSE);
-			g_free (path_str);
-			gtk_tree_path_free (path);
-		}
-	}
+	if (last_device != NULL)
+		gpm_stats_highlight_device (last_device);
+
 	g_ptr_array_unref (devices);
 
 	/* set axis */
