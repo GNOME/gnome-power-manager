@@ -181,53 +181,14 @@ gpm_tray_icon_set_icon (GpmTrayIcon *icon, const gchar *filename)
 static void
 gpm_tray_icon_show_info_cb (GtkMenuItem *item, gpointer data)
 {
-	gchar *icon_name = NULL;
-	gchar *description = NULL;
-	GtkWidget *dialog;
-	GtkWidget *image;
+	gchar *path;
 	const gchar *object_path;
-	DkpDevice *device = NULL;
-	gboolean ret;
 
 	object_path = g_object_get_data (G_OBJECT (item), "object-path");
-	egg_debug ("object_path=%s", object_path);
-	if (object_path == NULL) {
-		dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
-						 GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "%s",
-						 _("Device information"));
-		gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog),
-							    "%s", _("There is no detailed information for this device"));
-		gtk_dialog_run (GTK_DIALOG (dialog));
-		gtk_widget_destroy (GTK_WIDGET (dialog));
-		goto out;
-	}
-
-	device = dkp_device_new ();
-	ret = dkp_device_set_object_path (device, object_path, NULL);
-	if (!ret)
-		goto out;
-	icon_name = gpm_devicekit_get_object_icon (device);
-	description = gpm_devicekit_get_object_description (device);
-
-	image = gtk_image_new ();
-	dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
-					 GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "%s",
-					 _("Device information"));
-	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog),
-						    "%s", description);
-	gtk_window_set_icon_name (GTK_WINDOW (dialog), icon_name);
-	gtk_image_set_from_icon_name (GTK_IMAGE (image), icon_name, GTK_ICON_SIZE_DIALOG);
-	gtk_message_dialog_set_image (GTK_MESSAGE_DIALOG (dialog), image);
-	gtk_widget_show (image);
-
-	gtk_dialog_run (GTK_DIALOG (dialog));
-	gtk_widget_destroy (GTK_WIDGET (dialog));
-
-out:
-	if (device != NULL)
-		g_object_unref (device);
-	g_free (description);
-	g_free (icon_name);
+	path = g_strdup_printf ("%s/gnome-power-statistics --device %s", BINDIR, object_path);
+	if (!g_spawn_command_line_async (path, NULL))
+		egg_warning ("Couldn't execute command: %s", path);
+	g_free (path);
 }
 
 /**
