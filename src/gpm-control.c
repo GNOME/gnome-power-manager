@@ -227,6 +227,7 @@ gpm_control_suspend (GpmControl *control, GError **error)
 	gboolean lock_gnome_keyring;
 	GnomeKeyringResult keyres;
 	GpmScreensaver *screensaver;
+	guint32 throttle_cookie = 0;
 
 	screensaver = gpm_screensaver_new ();
 
@@ -250,8 +251,10 @@ gpm_control_suspend (GpmControl *control, GError **error)
 	}
 
 	do_lock = gpm_control_get_lock_policy (control, GPM_CONF_LOCK_ON_SUSPEND);
-	if (do_lock)
+	if (do_lock) {
+		throttle_cookie = gpm_screensaver_add_throttle (screensaver, "suspend");
 		gpm_screensaver_lock (screensaver);
+	}
 
 	nm_sleep = gconf_client_get_bool (control->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, NULL);
 	if (nm_sleep)
@@ -271,8 +274,11 @@ gpm_control_suspend (GpmControl *control, GError **error)
 		g_signal_emit (control, signals [SLEEP_FAILURE], 0, GPM_CONTROL_ACTION_SUSPEND);
 	}
 
-	if (do_lock)
+	if (do_lock) {
 		gpm_screensaver_poke (screensaver);
+		if (throttle_cookie)
+			gpm_screensaver_remove_throttle (screensaver, throttle_cookie);
+	}
 
 	nm_sleep = gconf_client_get_bool (control->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, NULL);
 	if (nm_sleep)
@@ -296,6 +302,7 @@ gpm_control_hibernate (GpmControl *control, GError **error)
 	gboolean lock_gnome_keyring;
 	GnomeKeyringResult keyres;
 	GpmScreensaver *screensaver;
+	guint32 throttle_cookie = 0;
 
 	screensaver = gpm_screensaver_new ();
 
@@ -321,8 +328,10 @@ gpm_control_hibernate (GpmControl *control, GError **error)
 	}
 
 	do_lock = gpm_control_get_lock_policy (control, GPM_CONF_LOCK_ON_HIBERNATE);
-	if (do_lock)
+	if (do_lock) {
+		throttle_cookie = gpm_screensaver_add_throttle (screensaver, "hibernate");
 		gpm_screensaver_lock (screensaver);
+	}
 
 	nm_sleep = gconf_client_get_bool (control->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, NULL);
 	if (nm_sleep)
@@ -341,8 +350,11 @@ gpm_control_hibernate (GpmControl *control, GError **error)
 		g_signal_emit (control, signals [SLEEP_FAILURE], 0, GPM_CONTROL_ACTION_HIBERNATE);
 	}
 
-	if (do_lock)
+	if (do_lock) {
 		gpm_screensaver_poke (screensaver);
+		if (throttle_cookie)
+			gpm_screensaver_remove_throttle (screensaver, throttle_cookie);
+	}
 
 	nm_sleep = gconf_client_get_bool (control->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, NULL);
 	if (nm_sleep)
