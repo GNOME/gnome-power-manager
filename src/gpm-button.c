@@ -324,7 +324,11 @@ gpm_button_init (GpmButton *button)
 	/* register the brightness keys */
 	gpm_button_xevent_key (button, XF86XK_PowerOff, GPM_BUTTON_POWER);
 #ifdef HAVE_XF86XK_SUSPEND
-	gpm_button_xevent_key (button, XF86XK_Suspend, GPM_BUTTON_SUSPEND);
+	/* The kernel messes up suspend/hibernate in some places. One of
+	 * them is the key names. Unfortunately, they refuse to see the
+	 * errors of their way in the name of 'compatibility'. Meh
+	 */
+	gpm_button_xevent_key (button, XF86XK_Suspend, GPM_BUTTON_HIBERNATE);
 #endif
 	gpm_button_xevent_key (button, XF86XK_Sleep, GPM_BUTTON_SUSPEND); /* should be configurable */
 #ifdef HAVE_XF86XK_HIBERNATE
