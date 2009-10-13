@@ -95,7 +95,7 @@ gpm_disks_register (GpmDisks *disks, guint timeout)
 				 G_TYPE_INT, timeout,
 				 G_TYPE_STRV, options,
 				 G_TYPE_INVALID,
-				 G_TYPE_STRING, disks->priv->cookie,
+				 G_TYPE_STRING, &disks->priv->cookie,
 				 G_TYPE_INVALID);
 	if (!ret) {
 		egg_warning ("failed to set spindown timeout: %s", error->message);
