@@ -50,9 +50,9 @@ gpm_disks_unregister (GpmDisks *disks)
 	gboolean ret = FALSE;
 	GError *error = NULL;
 
-	/* no DeviceKit-power */
+	/* no DeviceKit-disks */
 	if (disks->priv->proxy == NULL) {
-		egg_warning ("no DeviceKit-power");
+		egg_warning ("no DeviceKit-disks");
 		goto out;
 	}
 
@@ -84,9 +84,9 @@ gpm_disks_register (GpmDisks *disks, guint timeout)
 	GError *error = NULL;
 	const gchar **options = {NULL};
 
-	/* no DeviceKit-power */
+	/* no DeviceKit-disks */
 	if (disks->priv->proxy == NULL) {
-		egg_warning ("no DeviceKit-power");
+		egg_warning ("no DeviceKit-disks");
 		goto out;
 	}
 
