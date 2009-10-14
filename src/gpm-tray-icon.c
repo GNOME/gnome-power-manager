@@ -244,77 +244,6 @@ gpm_tray_icon_show_preferences_cb (GtkMenuItem *item, gpointer data)
 }
 
 /**
- * gpm_tray_icon_show_help_cb:
- * @action: A valid GtkAction
- **/
-static void
-gpm_tray_icon_show_help_cb (GtkMenuItem *item, gpointer data)
-{
-	gpm_help_display (NULL);
-}
-
-/**
- * gpm_tray_icon_show_about_cb:
- * @action: A valid GtkAction
- **/
-static void
-gpm_tray_icon_show_about_cb (GtkMenuItem *item, gpointer data)
-{
-	const char *authors[] = {
-		"Richard Hughes <richard@hughsie.com>",
-		"William Jon McCann <mccann@jhu.edu>",
-		"Jaap A. Haitsma <jaap@haitsma.org>",
-		NULL};
-	const char *documenters[] = {
-		"Richard Hughes <richard@hughsie.com>",
-		NULL};
-	const char *artists[] = {
-		"Diana Fong <dfong@redhat.com>",
-		"Jakub Steiner <jimmac@ximian.com>",
-		NULL};
-	const char *license[] = {
-		N_("Licensed under the GNU General Public License Version 2"),
-		N_("Power Manager is free software; you can redistribute it and/or\n"
-		   "modify it under the terms of the GNU General Public License\n"
-		   "as published by the Free Software Foundation; either version 2\n"
-		   "of the License, or (at your option) any later version."),
-		N_("Power Manager is distributed in the hope that it will be useful,\n"
-		   "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-		   "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
-		   "GNU General Public License for more details."),
-		N_("You should have received a copy of the GNU General Public License\n"
-		   "along with this program; if not, write to the Free Software\n"
-		   "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
-		   "02110-1301, USA.")
-	};
-  	const char  *translators = _("translator-credits");
-	char	    *license_trans;
-
-	/* Translators comment: put your own name here to appear in the about dialog. */
-  	if (!strcmp (translators, "translator-credits"))
-		translators = NULL;
-
-	license_trans = g_strconcat (_(license[0]), "\n\n", _(license[1]), "\n\n",
-				     _(license[2]), "\n\n", _(license[3]), "\n",  NULL);
-
-	gtk_window_set_default_icon_name (GPM_STOCK_APP_ICON);
-	gtk_show_about_dialog (NULL,
-			       "version", VERSION,
-			       "copyright", "Copyright \xc2\xa9 2005-2007 Richard Hughes",
-			       "license", license_trans,
-			       "website-label", _("GNOME Power Manager Website"),
-			       "website", GPM_HOMEPAGE_URL,
-			       "comments", GPM_DESCRIPTION,
-			       "authors", authors,
-			       "documenters", documenters,
-			       "artists", artists,
-			       "translator-credits", translators,
-			       "logo-icon-name", GPM_STOCK_APP_ICON,
-			       NULL);
-	g_free (license_trans);
-}
-
-/**
  * gpm_tray_icon_popup_cleared_cd:
  * @widget: The popup Gtkwidget
  *
@@ -399,26 +328,6 @@ gpm_tray_icon_popup_menu_cb (GtkStatusIcon *status_icon, guint button, guint32 t
 				  G_CALLBACK (gpm_tray_icon_show_statistics_cb), icon);
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	}
-
-	/* separator for HIG */
-	item = gtk_separator_menu_item_new ();
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-
-	/* help */
-	item = gtk_image_menu_item_new_with_mnemonic (_("_Help"));
-	image = gtk_image_new_from_icon_name (GTK_STOCK_HELP, GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-	g_signal_connect (G_OBJECT (item), "activate",
-			  G_CALLBACK (gpm_tray_icon_show_help_cb), icon);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-
-	/* about */
-	item = gtk_image_menu_item_new_with_mnemonic (_("_About"));
-	image = gtk_image_new_from_icon_name (GTK_STOCK_ABOUT, GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-	g_signal_connect (G_OBJECT (item), "activate",
-			  G_CALLBACK (gpm_tray_icon_show_about_cb), icon);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
 	/* show the menu */
 	gtk_widget_show_all (GTK_WIDGET (menu));
