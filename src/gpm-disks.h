@@ -50,7 +50,7 @@ GType		 gpm_disks_get_type			(void);
 GpmDisks	*gpm_disks_new				(void);
 
 gboolean	 gpm_disks_set_spindown_timeout		(GpmDisks	*disks,
-							 guint		 timeout);
+							 gint		 timeout);
 
 G_END_DECLS
 

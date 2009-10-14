@@ -78,7 +78,7 @@ out:
  * gpm_disks_register:
  **/
 static gboolean
-gpm_disks_register (GpmDisks *disks, guint timeout)
+gpm_disks_register (GpmDisks *disks, gint timeout)
 {
 	gboolean ret = FALSE;
 	GError *error = NULL;
@@ -110,7 +110,7 @@ out:
  * gpm_disks_set_spindown_timeout:
  **/
 gboolean
-gpm_disks_set_spindown_timeout (GpmDisks *disks, guint timeout)
+gpm_disks_set_spindown_timeout (GpmDisks *disks, gint timeout)
 {
 	gboolean ret = TRUE;
 

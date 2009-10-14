@@ -791,11 +791,11 @@ gpm_manager_button_pressed_cb (GpmButton *button, const gchar *type, GpmManager 
 /**
  * gpm_manager_get_spindown_timeout:
  **/
-static guint
+static gint
 gpm_manager_get_spindown_timeout (GpmManager *manager)
 {
 	gboolean enabled;
-	guint timeout;
+	gint timeout;
 
 	/* get policy */
 	if (!manager->priv->on_battery) {
@@ -817,7 +817,7 @@ static void
 gpm_manager_client_changed_cb (DkpClient *client, GpmManager *manager)
 {
 	gboolean event_when_closed;
-	guint timeout;
+	gint timeout;
 	gboolean on_battery;
 
 	/* get the on-battery state */
@@ -1800,7 +1800,7 @@ static void
 gpm_manager_init (GpmManager *manager)
 {
 	gboolean check_type_cpu;
-	guint timeout;
+	gint timeout;
 	DBusGConnection *connection;
 	GError *error = NULL;
 	guint version;
