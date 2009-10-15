@@ -1443,6 +1443,10 @@ gpm_stats_highlight_device (const gchar *object_path)
 	GtkTreePath *path;
 	GtkWidget *widget;
 
+	/* check valid */
+	if (!g_str_has_prefix (object_path, "/"))
+		return;
+
 	/* we have to reuse the treeview data as it may be sorted */
 	ret = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (list_store_devices), &iter);
 	for (i=0; ret; i++) {
