@@ -45,7 +45,6 @@
 
 #include "gpm-devicekit.h"
 #include "gpm-engine.h"
-#include "gpm-control.h"
 #include "gpm-common.h"
 #include "gpm-stock-icons.h"
 #include "gpm-tray-icon.h"
@@ -57,45 +56,12 @@ static void     gpm_tray_icon_finalize   (GObject	   *object);
 struct GpmTrayIconPrivate
 {
 	GConfClient		*conf;
-	GpmControl		*control;
 	GpmEngine		*engine;
 	GtkStatusIcon		*status_icon;
-	gboolean		 show_suspend;
-	gboolean		 show_hibernate;
 	gboolean		 show_actions;
 };
 
-enum {
-	SUSPEND,
-	HIBERNATE,
-	LAST_SIGNAL
-};
-
-static guint signals [LAST_SIGNAL] = { 0 };
-
 G_DEFINE_TYPE (GpmTrayIcon, gpm_tray_icon, G_TYPE_OBJECT)
-
-/**
- * gpm_tray_icon_enable_suspend:
- * @enabled: If we should enable (i.e. show) the suspend icon
- **/
-static void
-gpm_tray_icon_enable_suspend (GpmTrayIcon *icon, gboolean enabled)
-{
-	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
-	icon->priv->show_suspend = enabled;
-}
-
-/**
- * gpm_tray_icon_enable_hibernate:
- * @enabled: If we should enable (i.e. show) the hibernate icon
- **/
-static void
-gpm_tray_icon_enable_hibernate (GpmTrayIcon *icon, gboolean enabled)
-{
-	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
-	icon->priv->show_hibernate = enabled;
-}
 
 /**
  * gpm_tray_icon_enable_actions:
@@ -192,30 +158,6 @@ gpm_tray_icon_show_info_cb (GtkMenuItem *item, gpointer data)
 }
 
 /**
- * gpm_tray_icon_hibernate_cb:
- * @action: A valid GtkAction
- **/
-static void
-gpm_tray_icon_hibernate_cb (GtkMenuItem *item, gpointer data)
-{
-	GpmTrayIcon *icon = GPM_TRAY_ICON (data);
-	egg_debug ("emitting hibernate");
-	g_signal_emit (icon, signals [HIBERNATE], 0);
-}
-
-/**
- * gpm_tray_icon_suspend_cb:
- * @action: A valid GtkAction
- **/
-static void
-gpm_tray_icon_suspend_cb (GtkMenuItem *item, gpointer data)
-{
-	GpmTrayIcon *icon = GPM_TRAY_ICON (data);
-	egg_debug ("emitting suspend");
-	g_signal_emit (icon, signals [SUSPEND], 0);
-}
-
-/**
  * gpm_tray_icon_show_statistics_cb:
  * @action: A valid GtkAction
  **/
@@ -268,23 +210,6 @@ gpm_tray_icon_class_init (GpmTrayIconClass *klass)
 
 	object_class->finalize = gpm_tray_icon_finalize;
 	g_type_class_add_private (klass, sizeof (GpmTrayIconPrivate));
-
-	signals [SUSPEND] =
-		g_signal_new ("suspend",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmTrayIconClass, suspend),
-			      NULL, NULL, g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
-	signals [HIBERNATE] =
-		g_signal_new ("hibernate",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmTrayIconClass, hibernate),
-			      NULL, NULL, g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
 }
 
 /**
@@ -409,7 +334,6 @@ gpm_tray_icon_activate_cb (GtkStatusIcon *status_icon, GpmTrayIcon *icon)
 {
 	GtkMenu *menu = (GtkMenu*) gtk_menu_new ();
 	GtkWidget *item;
-	GtkWidget *image;
 	guint dev_cnt = 0;
 	GPtrArray *array;
 	egg_debug ("icon left clicked");
@@ -424,33 +348,9 @@ gpm_tray_icon_activate_cb (GtkStatusIcon *status_icon, GpmTrayIcon *icon)
 	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, DKP_DEVICE_TYPE_PHONE);
 	g_ptr_array_unref (array);
 
-	/* nothing to display! */
-	if (dev_cnt == 0 && !icon->priv->show_suspend && !icon->priv->show_hibernate)
-		return;
-
 	/* only do the seporator if we have at least one device and can do an action */
-	if (dev_cnt != 0 && (icon->priv->show_suspend || icon->priv->show_hibernate)) {
+	if (dev_cnt != 0) {
 		item = gtk_separator_menu_item_new ();
-		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	}
-
-	/* Suspend if available */
-	if (icon->priv->show_suspend) {
-		item = gtk_image_menu_item_new_with_mnemonic (_("_Suspend"));
-		image = gtk_image_new_from_icon_name (GPM_STOCK_SUSPEND, GTK_ICON_SIZE_MENU);
-		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-		g_signal_connect (G_OBJECT (item), "activate",
-				  G_CALLBACK (gpm_tray_icon_suspend_cb), icon);
-		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	}
-
-	/* Hibernate if available */
-	if (icon->priv->show_hibernate) {
-		item = gtk_image_menu_item_new_with_mnemonic (_("Hi_bernate"));
-		image = gtk_image_new_from_icon_name (GPM_STOCK_HIBERNATE, GTK_ICON_SIZE_MENU);
-		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-		g_signal_connect (G_OBJECT (item), "activate",
-				  G_CALLBACK (gpm_tray_icon_hibernate_cb), icon);
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	}
 
@@ -473,22 +373,13 @@ static void
 gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *entry, GpmTrayIcon *icon)
 {
 	GConfValue *value;
-	gboolean enabled;
 	gboolean allowed_in_menu;
 
 	value = gconf_entry_get_value (entry);
 	if (value == NULL)
 		return;
 
-	if (strcmp (entry->key, GPM_CONF_CAN_SUSPEND) == 0) {
-		gpm_control_allowed_suspend (icon->priv->control, &enabled, NULL);
-		gpm_tray_icon_enable_suspend (icon, enabled);
-
-	} else if (strcmp (entry->key, GPM_CONF_CAN_HIBERNATE) == 0) {
-		gpm_control_allowed_hibernate (icon->priv->control, &enabled, NULL);
-		gpm_tray_icon_enable_hibernate (icon, enabled);
-
-	} else if (strcmp (entry->key, GPM_CONF_UI_SHOW_ACTIONS) == 0) {
+	if (strcmp (entry->key, GPM_CONF_UI_SHOW_ACTIONS) == 0) {
 		allowed_in_menu = gconf_value_get_bool (value);
 		gpm_tray_icon_enable_actions (icon, allowed_in_menu);
 	}
@@ -502,15 +393,11 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 static void
 gpm_tray_icon_init (GpmTrayIcon *icon)
 {
-	gboolean enabled;
 	gboolean allowed_in_menu;
 
 	icon->priv = GPM_TRAY_ICON_GET_PRIVATE (icon);
 
 	icon->priv->engine = gpm_engine_new ();
-
-	/* use the policy object */
-	icon->priv->control = gpm_control_new ();
 
 	icon->priv->conf = gconf_client_get_default ();
 	/* watch gnome-power-manager keys */
@@ -530,13 +417,6 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 				 G_CALLBACK (gpm_tray_icon_activate_cb),
 				 icon, 0);
 
-	/* only show the suspend and hibernate icons if we can do the action,
-	   and the policy allows the actions in the menu */
-	gpm_control_allowed_suspend (icon->priv->control, &enabled, NULL);
-	gpm_tray_icon_enable_suspend (icon, enabled);
-	gpm_control_allowed_hibernate (icon->priv->control, &enabled, NULL);
-	gpm_tray_icon_enable_hibernate (icon, enabled);
-
 	allowed_in_menu = gconf_client_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_ACTIONS, NULL);
 	gpm_tray_icon_enable_actions (icon, allowed_in_menu);
 }
@@ -555,7 +435,6 @@ gpm_tray_icon_finalize (GObject *object)
 
 	tray_icon = GPM_TRAY_ICON (object);
 
-	g_object_unref (tray_icon->priv->control);
 	g_object_unref (tray_icon->priv->status_icon);
 	g_object_unref (tray_icon->priv->engine);
 	g_return_if_fail (tray_icon->priv != NULL);

@@ -80,8 +80,6 @@ G_BEGIN_DECLS
 
 /* general */
 #define GPM_CONF_SCHEMA_VERSION			GPM_CONF_DIR "/general/installed_schema"
-#define GPM_CONF_CAN_SUSPEND			GPM_CONF_DIR "/general/can_suspend"
-#define GPM_CONF_CAN_HIBERNATE			GPM_CONF_DIR "/general/can_hibernate"
 #define GPM_CONF_USE_TIME_POLICY		GPM_CONF_DIR "/general/use_time_for_policy"
 #define GPM_CONF_USE_PROFILE_TIME		GPM_CONF_DIR "/general/use_profile_time"
 #define GPM_CONF_NETWORKMANAGER_SLEEP		GPM_CONF_DIR "/general/network_sleep"

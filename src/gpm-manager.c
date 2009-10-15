@@ -421,23 +421,7 @@ out:
 static gboolean
 gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 {
-	gboolean allowed;
 	GError *error = NULL;
-
-	/* check if the admin has disabled */
-	allowed = gconf_client_get_bool (manager->priv->conf, GPM_CONF_CAN_SUSPEND, NULL);
-	if (allowed == FALSE) {
-		/* error msg as disabled in gconf */
-		gpm_manager_notify (manager, &manager->priv->notification,
-				    /* TRANSLATORS: the action was not done */
-				    _("Action disallowed"),
-				    /* TRANSLATORS: admin has disabled ability to do this */
-				    _("Suspend support has been disabled. Contact your administrator for more details."),
-				    GPM_MANAGER_NOTIFY_TIMEOUT_SHORT,
-				    GPM_STOCK_APP_ICON,
-				    NOTIFY_URGENCY_NORMAL);
-		return FALSE;
-	}
 
 	/* check to see if we are inhibited */
 	if (gpm_manager_is_inhibit_valid (manager, FALSE, "suspend") == FALSE)
@@ -457,23 +441,7 @@ gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 static gboolean
 gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 {
-	gboolean allowed;
 	GError *error = NULL;
-
-	/* check if the admin has disabled */
-	allowed = gconf_client_get_bool (manager->priv->conf, GPM_CONF_CAN_HIBERNATE, NULL);
-	if (allowed == FALSE) {
-		/* error msg as disabled in gconf */
-		gpm_manager_notify (manager, &manager->priv->notification,
-				    /* TRANSLATORS: the action was not done */
-				    _("Action disallowed"),
-				    /* TRANSLATORS: admin has disabled ability to do this */
-				    _("Hibernate support has been disabled. Contact your administrator for more details."),
-				    GPM_MANAGER_NOTIFY_TIMEOUT_SHORT,
-				    GPM_STOCK_APP_ICON,
-				    NOTIFY_URGENCY_NORMAL);
-		return FALSE;
-	}
 
 	/* check to see if we are inhibited */
 	if (gpm_manager_is_inhibit_valid (manager, FALSE, "hibernate") == FALSE)
@@ -924,34 +892,6 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 	    g_strcmp0 (entry->key, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_BATT) == 0 ||
 	    g_strcmp0 (entry->key, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_AC) == 0)
 		gpm_manager_sync_policy_sleep (manager);
-}
-
-/**
- * gpm_manager_tray_icon_hibernate:
- * @manager: This class instance
- * @tray: The tray object
- *
- * The icon tray hibernate callback, which only should happen if both policy and
- * the inhibit states are valid.
- **/
-static void
-gpm_manager_tray_icon_hibernate (GpmManager *manager, GpmTrayIcon *tray)
-{
-	gpm_manager_action_hibernate (manager, "User clicked on tray");
-}
-
-/**
- * gpm_manager_tray_icon_suspend:
- * @manager: This class instance
- * @tray: The tray object
- *
- * The icon tray suspend callback, which only should happen if both policy and
- * the inhibit states are valid.
- **/
-static void
-gpm_manager_tray_icon_suspend (GpmManager *manager, GpmTrayIcon *tray)
-{
-	gpm_manager_action_suspend (manager, "User clicked on tray");
 }
 
 #if 0
@@ -1902,12 +1842,6 @@ gpm_manager_init (GpmManager *manager)
 
 	egg_debug ("creating new tray icon");
 	manager->priv->tray_icon = gpm_tray_icon_new ();
-	g_signal_connect_object (G_OBJECT (manager->priv->tray_icon),
-				 "suspend", G_CALLBACK (gpm_manager_tray_icon_suspend),
-				 manager, G_CONNECT_SWAPPED);
-	g_signal_connect_object (G_OBJECT (manager->priv->tray_icon),
-				 "hibernate", G_CALLBACK (gpm_manager_tray_icon_hibernate),
-				 manager, G_CONNECT_SWAPPED);
 
 	/* keep a reference for the notifications */
 	manager->priv->status_icon = gpm_tray_icon_get_status_icon (manager->priv->tray_icon);

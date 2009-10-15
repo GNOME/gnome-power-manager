@@ -111,7 +111,6 @@ gpm_control_check_foreground_console (GpmControl *control)
 gboolean
 gpm_control_allowed_suspend (GpmControl *control, gboolean *can, GError **error)
 {
-	gboolean conf_ok;
 	gboolean hardware_ok;
 	gboolean fg;
 	g_return_val_if_fail (can, FALSE);
@@ -123,14 +122,13 @@ gpm_control_allowed_suspend (GpmControl *control, gboolean *can, GError **error)
 		      "can-suspend", &hardware_ok,
 		      NULL);
 
-	conf_ok = gconf_client_get_bool (control->priv->conf, GPM_CONF_CAN_SUSPEND, NULL);
 	g_object_get (control->priv->client,
 		      "can-suspend", &hardware_ok,
 		      NULL);
 	fg = gpm_control_check_foreground_console (control);
-	if (conf_ok && hardware_ok && fg)
+	if (hardware_ok && fg)
 		*can = TRUE;
-	egg_debug ("conf=%i, fg=%i, can=%i", conf_ok, fg, *can);
+	egg_debug ("fg=%i, can=%i", fg, *can);
 	return TRUE;
 }
 
@@ -145,7 +143,6 @@ gpm_control_allowed_suspend (GpmControl *control, gboolean *can, GError **error)
 gboolean
 gpm_control_allowed_hibernate (GpmControl *control, gboolean *can, GError **error)
 {
-	gboolean conf_ok;
 	gboolean hardware_ok;
 	gboolean fg;
 	g_return_val_if_fail (can, FALSE);
@@ -156,14 +153,13 @@ gpm_control_allowed_hibernate (GpmControl *control, gboolean *can, GError **erro
 		      NULL);
 
 	*can = FALSE;
-	conf_ok = gconf_client_get_bool (control->priv->conf, GPM_CONF_CAN_HIBERNATE, NULL);
 	fg = gpm_control_check_foreground_console (control);
 	g_object_get (control->priv->client,
 		      "can-hibernate", &hardware_ok,
 		      NULL);
-	if (conf_ok && hardware_ok && fg)
+	if (hardware_ok && fg)
 		*can = TRUE;
-	egg_debug ("conf=%i, fg=%i, can=%i", conf_ok, fg, *can);
+	egg_debug ("fg=%i, can=%i", fg, *can);
 	return TRUE;
 }
 
