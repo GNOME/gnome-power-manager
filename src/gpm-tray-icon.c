@@ -62,7 +62,7 @@ struct GpmTrayIconPrivate
 	GtkStatusIcon		*status_icon;
 	gboolean		 show_suspend;
 	gboolean		 show_hibernate;
-	gboolean		 show_context_menu;
+	gboolean		 show_actions;
 };
 
 enum {
@@ -98,13 +98,13 @@ gpm_tray_icon_enable_hibernate (GpmTrayIcon *icon, gboolean enabled)
 }
 
 /**
- * gpm_tray_icon_enable_context_menu:
+ * gpm_tray_icon_enable_actions:
  **/
 static void
-gpm_tray_icon_enable_context_menu (GpmTrayIcon *icon, gboolean enabled)
+gpm_tray_icon_enable_actions (GpmTrayIcon *icon, gboolean enabled)
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
-	icon->priv->show_context_menu = enabled;
+	icon->priv->show_actions = enabled;
 }
 
 /**
@@ -303,7 +303,7 @@ gpm_tray_icon_popup_menu_cb (GtkStatusIcon *status_icon, guint button, guint32 t
 
 	egg_debug ("icon right clicked");
 
-	if (!icon->priv->show_context_menu)
+	if (!icon->priv->show_actions)
 		return;
 
 	/* preferences */
@@ -496,9 +496,9 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 		gpm_tray_icon_enable_suspend (icon, allowed_in_menu && enabled);
 		gpm_control_allowed_hibernate (icon->priv->control, &enabled, NULL);
 		gpm_tray_icon_enable_hibernate (icon, allowed_in_menu && enabled);
-	} else if (strcmp (entry->key, GPM_CONF_UI_SHOW_CONTEXT_MENU) == 0) {
+	} else if (strcmp (entry->key, GPM_CONF_UI_SHOW_ACTIONS) == 0) {
 		allowed_in_menu = gconf_value_get_bool (value);
-		gpm_tray_icon_enable_context_menu (icon, allowed_in_menu);
+		gpm_tray_icon_enable_actions (icon, allowed_in_menu);
 	}
 }
 
@@ -546,8 +546,8 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 	gpm_control_allowed_hibernate (icon->priv->control, &enabled, NULL);
 	gpm_tray_icon_enable_hibernate (icon, enabled && allowed_in_menu);
 
-	allowed_in_menu = gconf_client_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_CONTEXT_MENU, NULL);
-	gpm_tray_icon_enable_context_menu (icon, allowed_in_menu);
+	allowed_in_menu = gconf_client_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_ACTIONS, NULL);
+	gpm_tray_icon_enable_actions (icon, allowed_in_menu);
 }
 
 /**

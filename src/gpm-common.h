@@ -138,7 +138,7 @@ G_BEGIN_DECLS
 #define GPM_CONF_UI_ICON_POLICY			GPM_CONF_DIR "/ui/icon_policy"
 #define GPM_CONF_UI_SHOW_ACTIONS_IN_MENU	GPM_CONF_DIR "/ui/show_actions_in_menu"
 #define GPM_CONF_UI_ENABLE_SOUND		GPM_CONF_DIR "/ui/enable_sound"
-#define GPM_CONF_UI_SHOW_CONTEXT_MENU		GPM_CONF_DIR "/ui/show_context_menu"
+#define GPM_CONF_UI_SHOW_ACTIONS		GPM_CONF_DIR "/ui/show_actions"
 
 /* new info binary */
 #define GPM_CONF_INFO_HISTORY_TIME		"/apps/gnome-power-manager/info/history_time"
