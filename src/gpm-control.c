@@ -86,41 +86,6 @@ gpm_control_error_quark (void)
 }
 
 /**
- * gpm_control_allowed_suspend:
- * @control: This class instance
- * @can: If we can suspend
- *
- * checks gconf to see if we are allowed to suspend this computer.
- **/
-gboolean
-gpm_control_allowed_suspend (GpmControl *control, gboolean *can, GError **error)
-{
-	/* get values from DkpClient */
-	g_object_get (control->priv->client,
-		      "can-suspend", can,
-		      NULL);
-	return TRUE;
-}
-
-/**
- * gpm_control_allowed_hibernate:
- * @control: This class instance
- * @can: If we can hibernate
- *
- * Checks the HAL key power_management.can_suspend_to_disk and also
- * checks gconf to see if we are allowed to hibernate this computer.
- **/
-gboolean
-gpm_control_allowed_hibernate (GpmControl *control, gboolean *can, GError **error)
-{
-	/* get values from DkpClient */
-	g_object_get (control->priv->client,
-		      "can-hibernate", can,
-		      NULL);
-	return TRUE;
-}
-
-/**
  * gpm_control_shutdown:
  * @control: This class instance
  *
@@ -184,7 +149,9 @@ gpm_control_suspend (GpmControl *control, GError **error)
 
 	screensaver = gpm_screensaver_new ();
 
-	gpm_control_allowed_suspend (control, &allowed, error);
+	g_object_get (control->priv->client,
+		      "can-suspend", &allowed,
+		      NULL);
 	if (allowed == FALSE) {
 		egg_debug ("cannot suspend as not allowed from policy");
 		g_set_error (error,
@@ -259,8 +226,9 @@ gpm_control_hibernate (GpmControl *control, GError **error)
 
 	screensaver = gpm_screensaver_new ();
 
-	gpm_control_allowed_hibernate (control, &allowed, error);
-
+	g_object_get (control->priv->client,
+		      "can-hibernate", &allowed,
+		      NULL);
 	if (allowed == FALSE) {
 		egg_debug ("cannot hibernate as not allowed from policy");
 		g_set_error (error,

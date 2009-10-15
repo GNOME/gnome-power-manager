@@ -74,15 +74,6 @@ typedef struct
 GQuark		 gpm_control_error_quark		(void);
 GType		 gpm_control_get_type			(void);
 GpmControl	*gpm_control_new			(void);
-gboolean	 gpm_control_allowed_suspend		(GpmControl	*control,
-							 gboolean	*can,
-							 GError		**error);
-gboolean	 gpm_control_allowed_hibernate		(GpmControl	*control,
-							 gboolean	*can,
-							 GError		**error);
-gboolean	 gpm_control_allowed_shutdown		(GpmControl	*control,
-							 gboolean	*can,
-							 GError		**error);
 gboolean	 gpm_control_suspend			(GpmControl	*control,
 							 GError		**error);
 gboolean	 gpm_control_hibernate			(GpmControl	*control,
