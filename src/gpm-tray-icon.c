@@ -482,20 +482,12 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 
 	if (strcmp (entry->key, GPM_CONF_CAN_SUSPEND) == 0) {
 		gpm_control_allowed_suspend (icon->priv->control, &enabled, NULL);
-		allowed_in_menu = gconf_client_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_ACTIONS_IN_MENU, NULL);
-		gpm_tray_icon_enable_suspend (icon, allowed_in_menu && enabled);
+		gpm_tray_icon_enable_suspend (icon, enabled);
 
 	} else if (strcmp (entry->key, GPM_CONF_CAN_HIBERNATE) == 0) {
 		gpm_control_allowed_hibernate (icon->priv->control, &enabled, NULL);
-		allowed_in_menu = gconf_client_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_ACTIONS_IN_MENU, NULL);
-		gpm_tray_icon_enable_hibernate (icon, allowed_in_menu && enabled);
+		gpm_tray_icon_enable_hibernate (icon, enabled);
 
-	} else if (strcmp (entry->key, GPM_CONF_UI_SHOW_ACTIONS_IN_MENU) == 0) {
-		allowed_in_menu = gconf_value_get_bool (value);
-		gpm_control_allowed_suspend (icon->priv->control, &enabled, NULL);
-		gpm_tray_icon_enable_suspend (icon, allowed_in_menu && enabled);
-		gpm_control_allowed_hibernate (icon->priv->control, &enabled, NULL);
-		gpm_tray_icon_enable_hibernate (icon, allowed_in_menu && enabled);
 	} else if (strcmp (entry->key, GPM_CONF_UI_SHOW_ACTIONS) == 0) {
 		allowed_in_menu = gconf_value_get_bool (value);
 		gpm_tray_icon_enable_actions (icon, allowed_in_menu);
@@ -540,11 +532,10 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 
 	/* only show the suspend and hibernate icons if we can do the action,
 	   and the policy allows the actions in the menu */
-	allowed_in_menu = gconf_client_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_ACTIONS_IN_MENU, NULL);
 	gpm_control_allowed_suspend (icon->priv->control, &enabled, NULL);
-	gpm_tray_icon_enable_suspend (icon, enabled && allowed_in_menu);
+	gpm_tray_icon_enable_suspend (icon, enabled);
 	gpm_control_allowed_hibernate (icon->priv->control, &enabled, NULL);
-	gpm_tray_icon_enable_hibernate (icon, enabled && allowed_in_menu);
+	gpm_tray_icon_enable_hibernate (icon, enabled);
 
 	allowed_in_menu = gconf_client_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_ACTIONS, NULL);
 	gpm_tray_icon_enable_actions (icon, allowed_in_menu);
