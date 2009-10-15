@@ -158,21 +158,6 @@ gpm_tray_icon_show_info_cb (GtkMenuItem *item, gpointer data)
 }
 
 /**
- * gpm_tray_icon_show_statistics_cb:
- * @action: A valid GtkAction
- **/
-static void
-gpm_tray_icon_show_statistics_cb (GtkMenuItem *item, gpointer data)
-{
-	gchar *path;
-
-	path = g_build_filename (BINDIR, "gnome-power-statistics", NULL);
-	if (g_spawn_command_line_async (path, NULL) == FALSE)
-		egg_warning ("Couldn't execute command: %s", path);
-	g_free (path);
-}
-
-/**
  * gpm_tray_icon_show_preferences_cb:
  * @action: A valid GtkAction
  **/
@@ -210,60 +195,6 @@ gpm_tray_icon_class_init (GpmTrayIconClass *klass)
 
 	object_class->finalize = gpm_tray_icon_finalize;
 	g_type_class_add_private (klass, sizeof (GpmTrayIconPrivate));
-}
-
-/**
- * gpm_tray_icon_popup_menu_cb:
- *
- * Display the popup menu.
- **/
-static void
-gpm_tray_icon_popup_menu_cb (GtkStatusIcon *status_icon, guint button, guint32 timestamp, GpmTrayIcon *icon)
-{
-	GtkMenu *menu = (GtkMenu*) gtk_menu_new ();
-	GtkWidget *item;
-	GtkWidget *image;
-	gchar *path;
-	gboolean ret;
-
-	egg_debug ("icon right clicked");
-
-	if (!icon->priv->show_actions)
-		return;
-
-	/* preferences */
-	item = gtk_image_menu_item_new_with_mnemonic (_("_Preferences"));
-	image = gtk_image_new_from_icon_name (GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-	g_signal_connect (G_OBJECT (item), "activate",
-			  G_CALLBACK (gpm_tray_icon_show_preferences_cb), icon);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-
-	/* this program is optional, and may be in an uninstalled subpackage */
-	path = g_build_filename (BINDIR, "gnome-power-statistics", NULL);
-	ret = g_file_test (path, G_FILE_TEST_EXISTS);
-	g_free (path);
-
-	/* statistics */
-	if (ret) {
-		item = gtk_image_menu_item_new_with_mnemonic (_("Power _History"));
-		image = gtk_image_new_from_icon_name (GPM_STOCK_STATISTICS, GTK_ICON_SIZE_MENU);
-		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-		g_signal_connect (G_OBJECT (item), "activate",
-				  G_CALLBACK (gpm_tray_icon_show_statistics_cb), icon);
-		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	}
-
-	/* show the menu */
-	gtk_widget_show_all (GTK_WIDGET (menu));
-	gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
-			gtk_status_icon_position_menu, status_icon,
-			button, timestamp);
-	if (button == 0)
-		gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
-
-	g_signal_connect (GTK_WIDGET (menu), "hide",
-			  G_CALLBACK (gpm_tray_icon_popup_cleared_cd), icon);
 }
 
 /**
@@ -324,19 +255,18 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon, GtkMenu *menu, const GPtrArray *arr
 }
 
 /**
- * gpm_tray_icon_activate_cb:
- * @button: Which buttons are pressed
+ * gpm_tray_icon_create_menu:
  *
- * Callback when the icon is clicked
+ * Display the popup menu.
  **/
 static void
-gpm_tray_icon_activate_cb (GtkStatusIcon *status_icon, GpmTrayIcon *icon)
+gpm_tray_icon_create_menu (GpmTrayIcon *icon, guint32 timestamp)
 {
 	GtkMenu *menu = (GtkMenu*) gtk_menu_new ();
 	GtkWidget *item;
+	GtkWidget *image;
 	guint dev_cnt = 0;
 	GPtrArray *array;
-	egg_debug ("icon left clicked");
 
 	/* add all device types to the drop down menu */
 	array = gpm_engine_get_devices (icon->priv->engine);
@@ -348,20 +278,59 @@ gpm_tray_icon_activate_cb (GtkStatusIcon *status_icon, GpmTrayIcon *icon)
 	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, DKP_DEVICE_TYPE_PHONE);
 	g_ptr_array_unref (array);
 
-	/* only do the seporator if we have at least one device and can do an action */
+	/* skip for things like live-cd's and GDM */
+	if (0 && !icon->priv->show_actions)
+		goto skip_prefs;
+
+	/* only do the seporator if we have at least one device */
 	if (dev_cnt != 0) {
 		item = gtk_separator_menu_item_new ();
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	}
 
+	/* preferences */
+	item = gtk_image_menu_item_new_with_mnemonic (_("_Preferences"));
+	image = gtk_image_new_from_icon_name (GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+	g_signal_connect (G_OBJECT (item), "activate",
+			  G_CALLBACK (gpm_tray_icon_show_preferences_cb), icon);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+skip_prefs:
 	/* show the menu */
 	gtk_widget_show_all (GTK_WIDGET (menu));
 	gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
-			gtk_status_icon_position_menu, status_icon,
-			1, gtk_get_current_event_time());
+			gtk_status_icon_position_menu, icon->priv->status_icon,
+			1, timestamp);
 
 	g_signal_connect (GTK_WIDGET (menu), "hide",
 			  G_CALLBACK (gpm_tray_icon_popup_cleared_cd), icon);
+}
+
+/**
+ * gpm_tray_icon_popup_menu_cb:
+ *
+ * Display the popup menu.
+ **/
+static void
+gpm_tray_icon_popup_menu_cb (GtkStatusIcon *status_icon, guint button, guint32 timestamp, GpmTrayIcon *icon)
+{
+	egg_debug ("icon right clicked");
+	gpm_tray_icon_create_menu (icon, timestamp);
+}
+
+
+/**
+ * gpm_tray_icon_activate_cb:
+ * @button: Which buttons are pressed
+ *
+ * Callback when the icon is clicked
+ **/
+static void
+gpm_tray_icon_activate_cb (GtkStatusIcon *status_icon, GpmTrayIcon *icon)
+{
+	egg_debug ("icon left clicked");
+	gpm_tray_icon_create_menu (icon, gtk_get_current_event_time());
 }
 
 /**
