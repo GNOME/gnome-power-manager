@@ -86,22 +86,6 @@ gpm_control_error_quark (void)
 }
 
 /**
- * gpm_control_check_foreground_console:
- * @manager: This class instance
- * @action: The action we want to do, e.g. "suspend"
- *
- * Checks if the difference in time between this request for an action, and
- * the last action completing is larger than the timeout set in gconf.
- *
- * Return value: TRUE if we can perform the action.
- **/
-static gboolean
-gpm_control_check_foreground_console (GpmControl *control)
-{
-	return TRUE;
-}
-
-/**
  * gpm_control_allowed_suspend:
  * @control: This class instance
  * @can: If we can suspend
@@ -111,24 +95,10 @@ gpm_control_check_foreground_console (GpmControl *control)
 gboolean
 gpm_control_allowed_suspend (GpmControl *control, gboolean *can, GError **error)
 {
-	gboolean hardware_ok;
-	gboolean fg;
-	g_return_val_if_fail (can, FALSE);
-
-	*can = FALSE;
-
 	/* get values from DkpClient */
 	g_object_get (control->priv->client,
-		      "can-suspend", &hardware_ok,
+		      "can-suspend", can,
 		      NULL);
-
-	g_object_get (control->priv->client,
-		      "can-suspend", &hardware_ok,
-		      NULL);
-	fg = gpm_control_check_foreground_console (control);
-	if (hardware_ok && fg)
-		*can = TRUE;
-	egg_debug ("fg=%i, can=%i", fg, *can);
 	return TRUE;
 }
 
@@ -143,23 +113,10 @@ gpm_control_allowed_suspend (GpmControl *control, gboolean *can, GError **error)
 gboolean
 gpm_control_allowed_hibernate (GpmControl *control, gboolean *can, GError **error)
 {
-	gboolean hardware_ok;
-	gboolean fg;
-	g_return_val_if_fail (can, FALSE);
-
 	/* get values from DkpClient */
 	g_object_get (control->priv->client,
-		      "can-hibernate", &hardware_ok,
+		      "can-hibernate", can,
 		      NULL);
-
-	*can = FALSE;
-	fg = gpm_control_check_foreground_console (control);
-	g_object_get (control->priv->client,
-		      "can-hibernate", &hardware_ok,
-		      NULL);
-	if (hardware_ok && fg)
-		*can = TRUE;
-	egg_debug ("fg=%i, can=%i", fg, *can);
 	return TRUE;
 }
 
