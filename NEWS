@@ -1,5 +1,33 @@
+Version 2.28.1
+~~~~~~~~~~~~~~
+Released: 2009-10-19
+
+* Translations
+ - Updated Catalan translation (David Planella)
+ - Updated Greek translation (Kostas Papadimas)
+ - Updated Russian translation (Dmitriy Kodanev)
+ - Updated Romanian translation (Lucian Adrian Grijincu)
+ - Updated Danish translation (Mads Lundby)
+ - Upadated Oriya translation (Manoj Kumar Giri)
+ - Update Czech translation (Marek Černocký)
+ - Updated Slovenian translation (Matej Urbančič)
+
+* Bugfix:
+ - Add missing indirection to return value of DriveSetAllSpindownTimeouts call (Chris Coulson)
+ - Fix failure error messages and comments (Martin Pitt)
+ - Help the kernel through its sleep key confusion (Matthias Clasen)
+ - Improve configure summary wrt HAL (Michael Biebl)
+ - Use separate variables for dbus and dbus-glib (Michael Biebl)
+ - Remove devkit-power tool configure check (Michael Biebl)
+ - Correctly set the focus on the last used device in gnome-power-statistics (Richard Hughes)
+ - Do not hide some radio buttons depending on the current machine state (Richard Hughes)
+ - Fix up all the issues reported by clang (Richard Hughes)
+ - Don't try to match and refresh some devices, to stop g-p-s crashing on virual devices (Richard Hughes)
+ - DeviceKit-disks is expecting an int as a value, not a uint (Scott Howard)
+ - Throttle screensaver before suspend/hibernate (Tormod Volden)
+
 Version 2.28.0
-~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
 Released: 2009-09-21
 
 * Translations
