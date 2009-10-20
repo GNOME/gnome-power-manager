@@ -40,12 +40,12 @@ else
 	default_strict=no
 fi
 
-AC_ARG_ENABLE(strict, AC_HELP_STRING([--enable-strict],
+AC_ARG_ENABLE(strict, AS_HELP_STRING([--enable-strict],
 		[Enable strict compilation options]), enable_strict=$enableval,
 		enable_strict=$default_strict)
 if test x$enable_strict != xno; then
 	if test "$GCC" = "yes"; then
-		WARNINGFLAGS_C="$WARNINGFLAGS_C -Werror"
+		WARNINGFLAGS="$WARNINGFLAGS -Werror"
 	fi
 fi
 
