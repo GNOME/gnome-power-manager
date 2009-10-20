@@ -595,7 +595,6 @@ echo "
         GConf default support:     ${have_gconfdefaults}
         Docbook support:           ${enable_docbook_docs}
         documentation dir:         $DOCDIR
-        dbus-1 system.d dir:       $DBUS_SYS_DIR
         dbus-1 services dir:       $DBUS_SERVICES_DIR
         gconf-schema dir:          $GCONF_SCHEMA_FILE_DIR
 "
