@@ -30,9 +30,27 @@ CPPFLAGS="$CPPFLAGS -DG_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_DISABL
 #CPPFLAGS="$CPPFLAGS -DGDK_MULTIHEAD_SAFE -DGTK_MULTIHEAD_SAFE"
 CPPFLAGS="$CPPFLAGS -DGSEAL_ENABLE"
 
+dnl ---------------------------------------------------------------------------
+dnl - Use strict options (default enabled for devs, disabled in releases)
+dnl ---------------------------------------------------------------------------
+dnl if .git directory is present, considering we are working in the repository
+if test -d ".git"; then
+	default_strict=yes
+else
+	default_strict=no
+fi
+
+AC_ARG_ENABLE(strict, AC_HELP_STRING([--enable-strict],
+		[Enable strict compilation options]), enable_strict=$enableval,
+		enable_strict=$default_strict)
+if test x$enable_strict != xno; then
+	if test "$GCC" = "yes"; then
+		WARNINGFLAGS_C="$WARNINGFLAGS_C -Werror"
+	fi
+fi
+
 if test "$GCC" = "yes"; then
 	WARNINGFLAGS="$WARNINGFLAGS -Wall"
-	WARNINGFLAGS="$WARNINGFLAGS -Werror"
 	WARNINGFLAGS="$WARNINGFLAGS -Wcast-align -Wno-uninitialized"
 	WARNINGFLAGS="$WARNINGFLAGS -Wmissing-declarations"
 	WARNINGFLAGS="$WARNINGFLAGS -Wredundant-decls"
@@ -512,50 +530,6 @@ if test "$DOCBOOK2MAN" = "no" ; then
 	AC_MSG_WARN([docbook2man not found, will not be able to build man documentation])
 fi
 AM_CONDITIONAL(HAVE_DOCBOOK2MAN, [test "$DOCBOOK2MAN" != "no"])
-
-dnl ------------------------------------------------------------------------------
-dnl - Turn on the additional warnings last, so -Werror doesn't affect other tests.
-dnl ------------------------------------------------------------------------------
-
-AC_ARG_ENABLE(more-warnings,
-              AS_HELP_STRING([--enable-more-warnings],
-                             [Maximum compiler warnings]),
-set_more_warnings="$enableval",[
-if test -d $srcdir/CVS; then
-        is_cvs_version=true
-        set_more_warnings=yes
-else
-        set_more_warnings=no
-fi
-])
-AC_MSG_CHECKING(for more warnings)
-if test "$GCC" = "yes" -a "$set_more_warnings" != "no"; then
-        AC_MSG_RESULT(yes)
-        CFLAGS="\
-        -Wall \
-        -Wchar-subscripts -Wmissing-declarations -Wmissing-prototypes \
-        -Wnested-externs -Wpointer-arith \
-        -Wcast-align -Wsign-compare \
-        $CFLAGS"
-
-        for option in -Wno-strict-aliasing -Wno-sign-compare; do
-                SAVE_CFLAGS="$CFLAGS"
-                CFLAGS="$CFLAGS $option"
-                AC_MSG_CHECKING([whether gcc understands $option])
-                AC_TRY_COMPILE([], [],
-                        has_option=yes,
-                        has_option=no,)
-                if test $has_option = no; then
-                        CFLAGS="$SAVE_CFLAGS"
-                fi
-                AC_MSG_RESULT($has_option)
-                unset has_option
-                unset SAVE_CFLAGS
-        done
-        unset option
-else
-        AC_MSG_RESULT(no)
-fi
 
 dnl ---------------------------------------------------------------------------
 dnl - Makefiles, etc.
