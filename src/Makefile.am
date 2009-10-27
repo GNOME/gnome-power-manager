@@ -28,6 +28,7 @@ INCLUDES =						\
 	-DLIBDIR=\""$(libdir)"\" 			\
 	-DVERSION="\"$(VERSION)\"" 			\
 	-DGPM_DATA=\"$(pkgdatadir)\"			\
+	-DGTKBUILDERDIR=\"$(pkgdatadir)\"		\
 	-DDKP_DISABLE_DEPRECATED			\
 	-DEGG_LOG_FILE=\""/tmp/gpm.log"\"		\
 	-DEGG_VERBOSE="\"GPM_VERBOSE\""			\
@@ -161,8 +162,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-networkmanager.h				\
 	gpm-networkmanager.c				\
 	gpm-stock-icons.h				\
-	gpm-popup-window.h				\
-	gpm-popup-window.c				\
+	gsd-media-keys-window.h				\
+	gsd-media-keys-window.c				\
 	gpm-engine.h					\
 	gpm-engine.c					\
 	$(NULL)

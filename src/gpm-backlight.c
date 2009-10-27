@@ -48,7 +48,7 @@
 #include "gpm-control.h"
 #include "gpm-common.h"
 #include "egg-debug.h"
-#include "gpm-popup-window.h"
+#include "gsd-media-keys-window.h"
 #include "gpm-dpms.h"
 #include "gpm-idle.h"
 #include "gpm-marshal.h"
@@ -167,6 +167,92 @@ gpm_backlight_set_brightness (GpmBacklight *backlight, guint percentage, GError 
 }
 
 /**
+ * gpm_backlight_dialog_init:
+ *
+ * Initialises the popup, and makes sure that it matches the compositing of the screen.
+ **/
+static void
+gpm_backlight_dialog_init (GpmBacklight *backlight)
+{
+	if (backlight->priv->popup != NULL
+	    && !gsd_media_keys_window_is_valid (GSD_MEDIA_KEYS_WINDOW (backlight->priv->popup))) {
+		gtk_widget_destroy (backlight->priv->popup);
+		backlight->priv->popup = NULL;
+	}
+
+	if (backlight->priv->popup == NULL) {
+		backlight->priv->popup= gsd_media_keys_window_new ();
+		gsd_media_keys_window_set_action_custom (GSD_MEDIA_KEYS_WINDOW (backlight->priv->popup),
+							 "gpm-brightness-lcd",
+							 TRUE);
+		gtk_window_set_position (GTK_WINDOW (backlight->priv->popup), GTK_WIN_POS_NONE);
+	}
+}
+
+/**
+ * gpm_backlight_dialog_show:
+ *
+ * Show the brightness popup, and place it nicely on the screen.
+ **/
+static void
+gpm_backlight_dialog_show (GpmBacklight *backlight)
+{
+	int            orig_w;
+	int            orig_h;
+	int            screen_w;
+	int            screen_h;
+	int            x;
+	int            y;
+	int            pointer_x;
+	int            pointer_y;
+	GtkRequisition win_req;
+	GdkScreen     *pointer_screen;
+	GdkRectangle   geometry;
+	int            monitor;
+
+	/*
+	 * get the window size
+	 * if the window hasn't been mapped, it doesn't necessarily
+	 * know its true size, yet, so we need to jump through hoops
+	 */
+	gtk_window_get_default_size (GTK_WINDOW (backlight->priv->popup), &orig_w, &orig_h);
+	gtk_widget_size_request (backlight->priv->popup, &win_req);
+
+	if (win_req.width > orig_w) {
+		orig_w = win_req.width;
+	}
+	if (win_req.height > orig_h) {
+		orig_h = win_req.height;
+	}
+
+	pointer_screen = NULL;
+	gdk_display_get_pointer (gtk_widget_get_display (backlight->priv->popup),
+				 &pointer_screen,
+				 &pointer_x,
+				 &pointer_y,
+				 NULL);
+	monitor = gdk_screen_get_monitor_at_point (pointer_screen,
+						   pointer_x,
+						   pointer_y);
+
+	gdk_screen_get_monitor_geometry (pointer_screen,
+					 monitor,
+					 &geometry);
+
+	screen_w = geometry.width;
+	screen_h = geometry.height;
+
+	x = ((screen_w - orig_w) / 2) + geometry.x;
+	y = geometry.y + (screen_h / 2) + (screen_h / 2 - orig_h) / 2;
+
+	gtk_window_move (GTK_WINDOW (backlight->priv->popup), x, y);
+
+	gtk_widget_show (backlight->priv->popup);
+
+	gdk_display_sync (gtk_widget_get_display (backlight->priv->popup));
+}
+
+/**
  * gpm_common_sum_scale:
  *
  * Finds the average between value1 and value2 set on a scale factor
@@ -261,8 +347,10 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 
 	/* only show dialog if interactive */
 	if (interactive) {
-		gpm_popup_window_set_value (GPM_POPUP_WINDOW (backlight->priv->popup), (float) brightness);
-		gtk_widget_show (backlight->priv->popup);
+		gpm_backlight_dialog_init (backlight);
+		gsd_media_keys_window_set_volume_level (GSD_MEDIA_KEYS_WINDOW (backlight->priv->popup),
+							round (brightness));
+		gpm_backlight_dialog_show (backlight);
 	}
 
 	ret = gpm_brightness_set (backlight->priv->brightness, value, &hw_changed);
@@ -352,8 +440,10 @@ gpm_backlight_button_pressed_cb (GpmButton *button, const gchar *type, GpmBackli
 		/* show the new value */
 		if (ret) {
 			gpm_brightness_get (backlight->priv->brightness, &percentage);
-			gpm_popup_window_set_value (GPM_POPUP_WINDOW (backlight->priv->popup), (gfloat) percentage/100.0f);
-			gtk_widget_show (backlight->priv->popup);
+			gpm_backlight_dialog_init (backlight);
+			gsd_media_keys_window_set_volume_level (GSD_MEDIA_KEYS_WINDOW (backlight->priv->popup),
+								percentage);
+			gpm_backlight_dialog_show (backlight);
 			/* save the new percentage */
 			backlight->priv->master_percentage = percentage;
 		}
@@ -369,8 +459,10 @@ gpm_backlight_button_pressed_cb (GpmButton *button, const gchar *type, GpmBackli
 		/* show the new value */
 		if (ret) {
 			gpm_brightness_get (backlight->priv->brightness, &percentage);
-			gpm_popup_window_set_value (GPM_POPUP_WINDOW (backlight->priv->popup), (gfloat) percentage/100.0f);
-			gtk_widget_show (backlight->priv->popup);
+			gpm_backlight_dialog_init (backlight);
+			gsd_media_keys_window_set_volume_level (GSD_MEDIA_KEYS_WINDOW (backlight->priv->popup),
+								percentage);
+			gpm_backlight_dialog_show (backlight);
 			/* save the new percentage */
 			backlight->priv->master_percentage = percentage;
 		}
@@ -688,10 +780,11 @@ gpm_backlight_init (GpmBacklight *backlight)
 	gpm_idle_set_timeout_dim (backlight->priv->idle, backlight->priv->idle_dim_timeout);
 
 	/* use a visual widget */
-	backlight->priv->popup = gpm_popup_window_new ();
+	backlight->priv->popup = gsd_media_keys_window_new ();
+	gsd_media_keys_window_set_action_custom (GSD_MEDIA_KEYS_WINDOW (backlight->priv->popup),
+						 "gpm-brightness-lcd",
+						 TRUE);
         gtk_window_set_position (GTK_WINDOW (backlight->priv->popup), GTK_WIN_POS_NONE);
-	gpm_popup_window_set_icon_name (GPM_POPUP_WINDOW (backlight->priv->popup),
-					GPM_STOCK_BRIGHTNESS_LCD);
 
 	/* DPMS mode poll class */
 	backlight->priv->dpms = gpm_dpms_new ();

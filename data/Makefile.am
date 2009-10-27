@@ -26,7 +26,8 @@ $(service_DATA): $(service_in_files) Makefile
 pkgdata_DATA =						\
 	gpm-statistics.ui				\
 	gpm-feedback-widget.ui				\
-	gpm-prefs.ui
+	gpm-prefs.ui					\
+	acme.ui
 
 EXTRA_DIST =						\
 	gnome-power-manager.schemas.in			\
