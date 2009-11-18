@@ -415,12 +415,107 @@ out:
 	return ret;
 }
 
+
+/**
+ * gpm_manager_sleep_failure_response_cb:
+ **/
+static void
+gpm_manager_sleep_failure_response_cb (GtkDialog *dialog, gint response_id, GpmManager *manager)
+{
+	GdkScreen *screen;
+	GtkWidget *dialog_error;
+	GError *error = NULL;
+	gboolean ret;
+	gchar *uri = NULL;
+
+	/* user clicked the help button */
+	if (response_id == GTK_RESPONSE_HELP) {
+		uri = gconf_client_get_string (manager->priv->conf, GPM_CONF_NOTIFY_SLEEP_FAILED_URI, NULL);
+		screen = gdk_screen_get_default();
+		ret = gtk_show_uri (screen, uri, gtk_get_current_event_time (), &error);
+		if (!ret) {
+			dialog_error = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
+							       "Failed to show uri %s", error->message);
+			gtk_dialog_run (GTK_DIALOG (dialog_error));
+			g_error_free (error);
+		}
+	}
+
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+	g_free (uri);
+}
+
+/**
+ * gpm_manager_sleep_failure:
+ **/
+static void
+gpm_manager_sleep_failure (GpmManager *manager, gboolean is_suspend, const gchar *detail)
+{
+	gboolean show_sleep_failed;
+	GString *string = NULL;
+	const gchar *title;
+	gchar *uri = NULL;
+	const gchar *icon;
+	GtkWidget *dialog;
+
+	/* only show this if specified in gconf */
+	show_sleep_failed = gconf_client_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_SLEEP_FAILED, NULL);
+
+	egg_debug ("sleep failed");
+	gpm_manager_play (manager, GPM_MANAGER_SOUND_SUSPEND_ERROR, TRUE);
+
+	/* only emit if in GConf */
+	if (!show_sleep_failed)
+		goto out;
+
+	/* TRANSLATORS: window title: there was a problem putting the machine to sleep */
+	string = g_string_new ("");
+	if (is_suspend) {
+		/* TRANSLATORS: message text */
+		g_string_append (string, _("Your computer failed to suspend."));
+		/* TRANSLATORS: title text */
+		title = _("Failed to suspend");
+		icon = GPM_STOCK_SUSPEND;
+	} else {
+		/* TRANSLATORS: message text */
+		g_string_append (string, _("Your computer failed to hibernate."));
+		/* TRANSLATORS: title text */
+		title = _("Failed to hibernate");
+		icon = GPM_STOCK_HIBERNATE;
+	}
+
+	/* TRANSLATORS: message text */
+	g_string_append_printf (string, "\n\n%s %s", _("The failure was reported as:"), detail);
+
+	/* show modal dialog */
+	dialog = gtk_message_dialog_new_with_markup (NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
+						     GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE,
+						     "<span size='larger'><b>%s</b></span>", title);
+	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog), "%s", string->str);
+	gtk_window_set_icon_name (GTK_WINDOW(dialog), icon);
+
+	/* show a button? */
+	uri = gconf_client_get_string (manager->priv->conf, GPM_CONF_NOTIFY_SLEEP_FAILED_URI, NULL);
+	if (uri != NULL && uri[0] != '\0') {
+		/* TRANSLATORS: button text, visit the suspend help website */
+		gtk_dialog_add_button (GTK_DIALOG (dialog), _("Visit help page"), GTK_RESPONSE_HELP);
+	}
+
+	/* wait async for close */
+	gtk_widget_show (dialog);
+	g_signal_connect (dialog, "response", G_CALLBACK (gpm_manager_sleep_failure_response_cb), manager);
+out:
+	g_free (uri);
+	g_string_free (string, TRUE);
+}
+
 /**
  * gpm_manager_action_suspend:
  **/
 static gboolean
 gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 {
+	gboolean ret;
 	GError *error = NULL;
 
 	/* check to see if we are inhibited */
@@ -428,10 +523,12 @@ gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 		return FALSE;
 
 	egg_debug ("suspending, reason: %s", reason);
-	gpm_control_suspend (manager->priv->control, &error);
-	gpm_button_reset_time (manager->priv->button);
-	if (error != NULL)
+	ret = gpm_control_suspend (manager->priv->control, &error);
+	if (!ret) {
+		gpm_manager_sleep_failure (manager, TRUE, error->message);
 		g_error_free (error);
+	}
+	gpm_button_reset_time (manager->priv->button);
 	return TRUE;
 }
 
@@ -441,6 +538,7 @@ gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 static gboolean
 gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 {
+	gboolean ret;
 	GError *error = NULL;
 
 	/* check to see if we are inhibited */
@@ -448,10 +546,12 @@ gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 		return FALSE;
 
 	egg_debug ("hibernating, reason: %s", reason);
-	gpm_control_hibernate (manager->priv->control, &error);
-	gpm_button_reset_time (manager->priv->button);
-	if (error != NULL)
+	ret = gpm_control_hibernate (manager->priv->control, &error);
+	if (!ret) {
+		gpm_manager_sleep_failure (manager, TRUE, error->message);
 		g_error_free (error);
+	}
+	gpm_button_reset_time (manager->priv->button);
 	return TRUE;
 }
 
@@ -1205,93 +1305,6 @@ out:
 }
 
 /**
- * gpm_manager_sleep_failure_response_cb:
- **/
-static void
-gpm_manager_sleep_failure_response_cb (GtkDialog *dialog, gint response_id, GpmManager *manager)
-{
-	GdkScreen *screen;
-	GtkWidget *dialog_error;
-	GError *error = NULL;
-	gboolean ret;
-	gchar *uri = NULL;
-
-	/* user clicked the help button */
-	if (response_id == GTK_RESPONSE_HELP) {
-		uri = gconf_client_get_string (manager->priv->conf, GPM_CONF_NOTIFY_SLEEP_FAILED_URI, NULL);
-		screen = gdk_screen_get_default();
-		ret = gtk_show_uri (screen, uri, gtk_get_current_event_time (), &error);
-		if (!ret) {
-			dialog_error = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-							       "Failed to show uri %s", error->message);
-			gtk_dialog_run (GTK_DIALOG (dialog_error));
-			g_error_free (error);
-		}
-	}
-
-	gtk_widget_destroy (GTK_WIDGET (dialog));
-	g_free (uri);
-}
-
-/**
- * gpm_manager_sleep_failure_cb:
- **/
-static void
-gpm_manager_sleep_failure_cb (GpmControl *control, GpmControlAction action, GpmManager *manager)
-{
-	gboolean show_sleep_failed;
-	gchar *message = NULL;
-	gchar *title = NULL;
-	gchar *uri = NULL;
-	const gchar *icon;
-	GtkWidget *dialog;
-
-	/* only show this if specified in gconf */
-	show_sleep_failed = gconf_client_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_SLEEP_FAILED, NULL);
-
-	egg_debug ("sleep failed");
-	gpm_manager_play (manager, GPM_MANAGER_SOUND_SUSPEND_ERROR, TRUE);
-
-	/* only emit if in GConf */
-	if (!show_sleep_failed)
-		goto out;
-
-	/* TRANSLATORS: window title: there was a problem putting the machine to sleep */
-	title = g_strdup_printf ("%s: %s", GPM_NAME, _("Sleep problem"));
-	if (action == GPM_CONTROL_ACTION_SUSPEND) {
-		/* TRANSLATORS: message text */
-		message = g_strdup_printf ("%s\n%s", _("Your computer failed to suspend."), _("Check the help file for common problems."));
-		icon = GPM_STOCK_SUSPEND;
-	} else {
-		/* TRANSLATORS: message text */
-		message = g_strdup_printf ("%s\n%s", _("Your computer failed to hibernate."), _("Check the help file for common problems."));
-		icon = GPM_STOCK_HIBERNATE;
-	}
-
-	/* show modal dialog */
-	dialog = gtk_message_dialog_new_with_markup (NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
-						     GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE,
-						     "<span size='larger'><b>%s</b></span>", title);
-	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog), "%s", message);
-	gtk_window_set_icon_name (GTK_WINDOW(dialog), icon);
-
-	/* show a button? */
-	uri = gconf_client_get_string (manager->priv->conf, GPM_CONF_NOTIFY_SLEEP_FAILED_URI, NULL);
-	if (uri != NULL && uri[0] != '\0') {
-		/* TRANSLATORS: button text, visit the suspend help website */
-		gtk_dialog_add_button (GTK_DIALOG (dialog), _("Visit help page"), GTK_RESPONSE_HELP);
-	}
-
-	/* wait async for close */
-	gtk_widget_show (dialog);
-	g_signal_connect (dialog, "response", G_CALLBACK (gpm_manager_sleep_failure_response_cb), manager);
-out:
-	g_free (uri);
-	g_free (title);
-	g_free (message);
-}
-
-/**
  * gpm_manager_engine_just_laptop_battery:
  */
 static gboolean
@@ -1837,8 +1850,6 @@ gpm_manager_init (GpmManager *manager)
 	/* use the control object */
 	egg_debug ("creating new control instance");
 	manager->priv->control = gpm_control_new ();
-	g_signal_connect (manager->priv->control, "sleep-failure",
-			  G_CALLBACK (gpm_manager_sleep_failure_cb), manager);
 
 	egg_debug ("creating new tray icon");
 	manager->priv->tray_icon = gpm_tray_icon_new ();

@@ -60,10 +60,8 @@ struct GpmControlPrivate
 };
 
 enum {
-	REQUEST,
 	RESUME,
 	SLEEP,
-	SLEEP_FAILURE,
 	LAST_SIGNAL
 };
 
@@ -152,14 +150,11 @@ gpm_control_suspend (GpmControl *control, GError **error)
 	g_object_get (control->priv->client,
 		      "can-suspend", &allowed,
 		      NULL);
-	if (allowed == FALSE) {
+	if (!allowed) {
 		egg_debug ("cannot suspend as not allowed from policy");
-		g_set_error (error,
-			     GPM_CONTROL_ERROR,
-			     GPM_CONTROL_ERROR_GENERAL,
-			     "Cannot suspend as not allowed from policy");
-		g_signal_emit (control, signals [SLEEP_FAILURE], 0, GPM_CONTROL_ACTION_SUSPEND);
-		return FALSE;
+		if (error != NULL)
+			*error = g_error_new (GPM_CONTROL_ERROR, GPM_CONTROL_ERROR_GENERAL, "Cannot suspend");
+		goto out;
 	}
 
 	/* we should perhaps lock keyrings when sleeping #375681 */
@@ -189,11 +184,6 @@ gpm_control_suspend (GpmControl *control, GError **error)
 	egg_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_SUSPEND);
 
-	if (!ret) {
-		egg_debug ("emitting sleep-failure");
-		g_signal_emit (control, signals [SLEEP_FAILURE], 0, GPM_CONTROL_ACTION_SUSPEND);
-	}
-
 	if (do_lock) {
 		gpm_screensaver_poke (screensaver);
 		if (throttle_cookie)
@@ -204,8 +194,8 @@ gpm_control_suspend (GpmControl *control, GError **error)
 	if (nm_sleep)
 		gpm_networkmanager_wake ();
 
+out:
 	g_object_unref (screensaver);
-
 	return ret;
 }
 
@@ -216,7 +206,7 @@ gboolean
 gpm_control_hibernate (GpmControl *control, GError **error)
 {
 	gboolean allowed;
-	gboolean ret;
+	gboolean ret = FALSE;
 	gboolean do_lock;
 	gboolean nm_sleep;
 	gboolean lock_gnome_keyring;
@@ -229,14 +219,11 @@ gpm_control_hibernate (GpmControl *control, GError **error)
 	g_object_get (control->priv->client,
 		      "can-hibernate", &allowed,
 		      NULL);
-	if (allowed == FALSE) {
+	if (!allowed) {
 		egg_debug ("cannot hibernate as not allowed from policy");
-		g_set_error (error,
-			     GPM_CONTROL_ERROR,
-			     GPM_CONTROL_ERROR_GENERAL,
-			     "Cannot hibernate");
-		g_signal_emit (control, signals [SLEEP_FAILURE], 0, GPM_CONTROL_ACTION_HIBERNATE);
-		return FALSE;
+		if (error != NULL)
+			*error = g_error_new (GPM_CONTROL_ERROR, GPM_CONTROL_ERROR_GENERAL, "Cannot hibernate");
+		goto out;
 	}
 
 	/* we should perhaps lock keyrings when sleeping #375681 */
@@ -266,11 +253,6 @@ gpm_control_hibernate (GpmControl *control, GError **error)
 	egg_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_HIBERNATE);
 
-	if (!ret) {
-		egg_debug ("emitting sleep-failure");
-		g_signal_emit (control, signals [SLEEP_FAILURE], 0, GPM_CONTROL_ACTION_HIBERNATE);
-	}
-
 	if (do_lock) {
 		gpm_screensaver_poke (screensaver);
 		if (throttle_cookie)
@@ -281,8 +263,8 @@ gpm_control_hibernate (GpmControl *control, GError **error)
 	if (nm_sleep)
 		gpm_networkmanager_wake ();
 
+out:
 	g_object_unref (screensaver);
-
 	return ret;
 }
 
@@ -332,24 +314,6 @@ gpm_control_class_init (GpmControlClass *klass)
 			      NULL,
 			      g_cclosure_marshal_VOID__INT,
 			      G_TYPE_NONE, 1, G_TYPE_INT);
-	signals [SLEEP_FAILURE] =
-		g_signal_new ("sleep-failure",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmControlClass, sleep_failure),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__INT,
-			      G_TYPE_NONE, 1, G_TYPE_INT);
-	signals [REQUEST] =
-		g_signal_new ("request",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmControlClass, request),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__STRING,
-			      G_TYPE_NONE, 1, G_TYPE_STRING);
 
 	g_type_class_add_private (klass, sizeof (GpmControlPrivate));
 }
