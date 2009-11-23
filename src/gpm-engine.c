@@ -42,7 +42,6 @@ static void     gpm_engine_finalize   (GObject	  *object);
 #define GPM_ENGINE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_ENGINE, GpmEnginePrivate))
 #define GPM_ENGINE_RESUME_DELAY		2*1000
 #define GPM_ENGINE_WARN_ACCURACY	20
-#define GPM_USE_COMPOSITE		0
 
 struct GpmEnginePrivate
 {
