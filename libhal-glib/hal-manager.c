@@ -303,7 +303,6 @@ hal_manager_init (HalManager *manager)
 				       HAL_DBUS_INTERFACE_MANAGER);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		g_warning ("Either HAL or DBUS are not working!");
-		exit (0);
 	}
 
 	g_signal_connect (manager->priv->gproxy, "proxy-status",
