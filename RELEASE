@@ -1,12 +1,12 @@
 Follow http://developer.gnome.org/dotplan/for_maintainers.html
 
 • update configure.in, NEWS
-• git shortlog GNOME_POWER_MANAGER_2_28_1.. | grep -i -v trivial | grep -v Merge > NEWS.new
+• git shortlog GNOME_POWER_MANAGER_2_28_2.. | grep -i -v trivial | grep -v Merge > NEWS.new
 • Run "make distcheck", correct any problems encountered
 • Commit all the changes and create a tag:
 
-git commit -a -m "GNOME Power Manager 2.28.2"
-git tag -s GNOME_POWER_MANAGER_2_28_2 -m "==== Version 2.28.2 ===="
+git commit -a -m "GNOME Power Manager 2.28.3"
+git tag -s GNOME_POWER_MANAGER_2_28_3 -m "==== Version 2.28.3 ===="
 git push --tags
 git push
 
