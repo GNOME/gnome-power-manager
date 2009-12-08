@@ -1,3 +1,60 @@
+Version 2.29.1
+~~~~~~~~~~~~~~
+Released: 2009-12-08
+
+* Translations
+ - Updated Simplified Chinese translation (Aron Xu)
+ - Updated Swedish translation (Daniel Nylander)
+ - Updated Catalan translation (David Planella)
+ - Updated Estonian translation (Ivar Smolin)
+ - Updated Spanish translation (Jorge González)
+ - Updated Norwegian bokmål translation (Kjartan Maraas)
+ - Updated Greek translation. (Kostas Papadimas)
+ - Updated Romanian translation (Lucian Adrian Grijincu)
+ - Updated Danish translation (Mads Lundby)
+ - Updated Oriya translation (Manoj Kumar Giri)
+ - Updated Czech translation (Marek Černocký)
+ - Updated Slovenian translation (Matej Urbančič)
+ - Updated Simplified Chinese translation (Tao Wei)
+ - Updated Shavian translation (Thomas Thurman)
+ - Updated Hebrew translation (Yaron Shahrabani)
+ - Updated Hebrew translation (Yaron Sharabani)
+ - Updated Tamil translation (drtvasudevan)
+ - Added Simplified Chinese translation user manual (苏运强)
+
+* New Features:
+ - Switch to a single menu design, rather than a seporate left and right menu (Richard Hughes)
+ - Show the sleep failure as a modal dialog box. Fixes rh#427065 (Richard Hughes)
+ - Sets some tooltips for the gnome-power-preferences buttons (Richard Hughes)
+ - Throttle screensaver before suspend/hibernate (Tormod Volden)
+ - Add a --device parameter to gnome-power-statistics so we can set the device focus (Richard Hughes)
+ - When we click on a battery device in the context menu, show the gnome-power-statistics dialog. Fixes #596983 (Richard Hughes)
+ - Use gnome-settings-daemon popup code (Bastien Nocera)
+
+* Bugfix:
+ - Add missing indirection to return value of DriveSetAllSpindownTimeouts call (Chris Coulson)
+ - Use accessor functions instead direct access (Javier Jardón)
+ - Fix some error messages and comments (Martin Pitt)
+ - Help the kernel through its key name confusion (Matthias Clasen)
+ - Remove devkit-power check (Michael Biebl)
+ - Remove HAL_LIBS/HAL_CFLAGS (Michael Biebl)
+ - Remove obsolete check-foreground-console support. (Michael Biebl)
+ - Use separate variables for dbus and dbus-glib (Michael Biebl)
+ - Improve configure summary wrt HAL (Michael Biebl)
+ - Remove outdated information about DeviceKit from README (Michael Biebl)
+ - Sync compiler warnings handling with DK-power (Michael Biebl)
+ - Remove DBUS_SYS_DIR from configure summary (Michael Biebl)
+ - Do not hide some radio buttons depending on the current machine state (Richard Hughes)
+ - Correctly set the focus on the last used device in gnome-power-statistics (Richard Hughes)
+ - Add GSEAL_ENABLE to CPPFLAGS (Richard Hughes)
+ - Apparently 'whilst' is only a British English thing. Change to 'while' throughout. Fixes #596963 (Richard Hughes)
+ - Remove the 'About' and 'Help' items from the status area context menu (Richard Hughes)
+ - Rename show_context_menu to show_actions as we're moving to a mono-menu design (Richard Hughes)
+ - Remove show_actions_in_menu GConf key as the menu items are being removed eventually (Richard Hughes)
+ - Remove the suspend and hibernate menu items (Richard Hughes)
+ - Fix a bug where we try to match and refresh a virtual device, which means g-p-s crashes on next start (Richard Hughes)
+ - DeviceKit-disks is expecting an int, not a uint (Scott Howard)
+
 Version 2.27.92
 ~~~~~~~~~~~~~~~
 Released: 2009-09-07

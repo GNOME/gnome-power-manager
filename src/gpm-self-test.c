@@ -58,8 +58,6 @@ main (int argc, char **argv)
 	/* needed for DPMS checks */
 	gtk_init (&argc, &argv);
 
-	gpm_screensaver_test (test);
-
 	/* tests go here */
 	egg_precision_test (test);
 	egg_discrete_test (test);
@@ -72,6 +70,7 @@ main (int argc, char **argv)
 	gpm_phone_test (test);
 //	gpm_dpms_test (test);
 //	gpm_graph_widget_test (test);
+//	gpm_screensaver_test (test);
 
 #if 0
 	gpm_proxy_test (test);
