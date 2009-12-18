@@ -137,7 +137,7 @@ gboolean
 gpm_control_suspend (GpmControl *control, GError **error)
 {
 	gboolean allowed;
-	gboolean ret;
+	gboolean ret = FALSE;
 	gboolean do_lock;
 	gboolean nm_sleep;
 	gboolean lock_gnome_keyring;
