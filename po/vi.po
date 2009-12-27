@@ -1,13 +1,14 @@
 # Vietnamese translation for GNOME Power Manager.
 # Copyright © 2009 GNOME i18n Project for Vietnamese.
 # Clytie Siddall <clytie@riverland.net.au>, 2005-2009.
+# Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 2.25.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-08-24 11:05+0100\n"
-"PO-Revision-Date: 2009-02-08 19:29+0930\n"
+"PO-Revision-Date: 2009-12-27 13:56+0700\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +19,7 @@ msgstr ""
 
 #: ../applets/brightness/brightness-applet.c:105
 msgid "Power Manager Brightness Applet"
-msgstr "Tiểu dụng độ Sáng Bộ Quản lý Điện năng"
+msgstr "Tiểu dụng Độ sáng Bộ quản lý Điện năng"
 
 #: ../applets/brightness/brightness-applet.c:106
 msgid "Adjusts laptop panel brightness."
@@ -27,11 +28,11 @@ msgstr "Điều chỉnh độ sáng của màn hình máy tính xách tay."
 #: ../applets/brightness/brightness-applet.c:354
 #: ../applets/inhibit/inhibit-applet.c:353
 msgid "Cannot connect to gnome-power-manager"
-msgstr "Không thể kết nối đến Bộ Quản lý Điện năng GNOME."
+msgstr "Không thể kết nối đến gnome-power-manager"
 
 #: ../applets/brightness/brightness-applet.c:356
 msgid "Cannot get laptop panel brightness"
-msgstr "Không thể lấy độ sáng của màn hình máy tính xách tay."
+msgstr "Không thể lấy độ sáng của màn hình máy tính xách tay"
 
 #: ../applets/brightness/brightness-applet.c:358
 #, c-format
@@ -121,7 +122,7 @@ msgstr "Tự động ngủ đã bật"
 
 #: ../applets/inhibit/inhibit-applet.c:386
 msgid "Manual inhibit"
-msgstr "Tự ngăn chặn"
+msgstr "Ngăn chặn thủ công"
 
 #: ../applets/inhibit/inhibit-applet.c:445
 msgid "Copyright © 2006-2007 Richard Hughes"
@@ -165,7 +166,7 @@ msgstr "Hành động pin yếu tới hạn"
 
 #: ../data/gnome-power-manager.schemas.in.h:4
 msgid "Check CPU load before sleeping"
-msgstr "Kiểm tra trọng tải CPU trước khi ngủ"
+msgstr "Kiểm tra tải CPU trước khi ngủ"
 
 #: ../data/gnome-power-manager.schemas.in.h:5
 msgid "Dim the screen after a period of inactivity when on AC power"
@@ -177,17 +178,10 @@ msgid "Dim the screen after a period of inactivity when on battery power"
 msgstr "Mờ đi màn hình sau một thời gian không hoạt động khi chạy bằng pin"
 
 #: ../data/gnome-power-manager.schemas.in.h:7
-#, fuzzy
 msgid ""
 "Display options for the notification icon. Valid options are \"never\", \"low"
 "\", \"critical\", \"charge\", \"present\" and \"always\"."
-msgstr ""
-"Tùy chọn hiển thị biểu tượng thông báo. Tùy chọn hợp lệ:\n"
-" • never\t\tkhông bao giờ\n"
-" • critical\t\t[khi pin] tới hạn\n"
-" • charge\t\t[khi pin] sạc\n"
-" • present\t\tcó pin\n"
-" • always\t\tluôn luôn"
+msgstr "Tùy chọn hiển thị biểu tượng thông báo. Tùy chọn hợp lệ: \"never\" (không bao giờ), \"low\" (thấp), \"critical\" (nghiêm trọng), \"charge\" (sạc), \"present\" (có pin), \"always\" (luôn luôn)"
 
 #: ../data/gnome-power-manager.schemas.in.h:8
 msgid "Hibernate button action"
@@ -283,13 +277,10 @@ msgid "If the low-power mode should be enabled when on battery"
 msgstr "Bật/tắt chế độ điện thấp khi chạy bằng điện pin"
 
 #: ../data/gnome-power-manager.schemas.in.h:24
-#, fuzzy
 msgid ""
 "If the screen brightness should be changed when switching between AC and "
 "battery power."
-msgstr ""
-"Có nên thay đổi độ sáng màn hình khi chuyển đổi giữa điện chính và pin, hay "
-"không."
+msgstr "Có nên thay đổi độ sáng màn hình khi chuyển đổi giữa điện chính và pin, hay không."
 
 #: ../data/gnome-power-manager.schemas.in.h:25
 msgid ""
@@ -374,11 +365,11 @@ msgstr "Độ sáng LCD khi chạy bằng pin"
 
 #: ../data/gnome-power-manager.schemas.in.h:40
 msgid "Laptop lid close action on battery"
-msgstr "Hành động đóng nắp máy tính xách tây khi chạy bằng pin"
+msgstr "Hành động đóng nắp máy tính xách tay khi chạy bằng pin"
 
 #: ../data/gnome-power-manager.schemas.in.h:41
 msgid "Laptop lid close action when on AC"
-msgstr "Hành động đóng nắp máy tính xách tây khi chạy bằng điện chính"
+msgstr "Hành động đóng nắp máy tính xách tay khi chạy bằng điện chính"
 
 #: ../data/gnome-power-manager.schemas.in.h:42
 msgid "Lock GNOME keyring on sleep"
@@ -442,20 +433,19 @@ msgstr "Giảm độ sáng của đèn nền khi chạy bằng pin"
 
 #: ../data/gnome-power-manager.schemas.in.h:57
 msgid "Seconds of inactivity to spin down when on AC"
-msgstr ""
+msgstr "Số giây không hoạt động trước khi tắt đĩa cứng khi dùng nguồn chính"
 
 #: ../data/gnome-power-manager.schemas.in.h:58
 msgid "Seconds of inactivity to spin down when on battery"
-msgstr ""
+msgstr "Số giây không hoạt động trước khi tắt đĩa cứng khi dùng pin"
 
 #: ../data/gnome-power-manager.schemas.in.h:59
 msgid "Sleep timeout computer when on AC"
 msgstr "Thời hạn máy tính ngủ khi chạy bằng điện chính"
 
 #: ../data/gnome-power-manager.schemas.in.h:60
-#, fuzzy
 msgid "Sleep timeout computer when on UPS"
-msgstr "Thời hạn máy tính ngủ khi chạy bằng điện chính"
+msgstr "Thời hạn máy tính ngủ khi chạy bằng UPS"
 
 #: ../data/gnome-power-manager.schemas.in.h:61
 msgid "Sleep timeout computer when on battery"
@@ -466,9 +456,8 @@ msgid "Sleep timeout display when on AC"
 msgstr "Thời hạn bộ trình bày ngủ khi chạy bằng điện chính"
 
 #: ../data/gnome-power-manager.schemas.in.h:63
-#, fuzzy
 msgid "Sleep timeout display when on UPS"
-msgstr "Thời hạn bộ trình bày ngủ khi chạy bằng điện chính"
+msgstr "Thời hạn bộ trình bày ngủ khi chạy bằng UPS"
 
 #: ../data/gnome-power-manager.schemas.in.h:64
 msgid "Sleep timeout display when on battery"
@@ -483,34 +472,20 @@ msgid "Suspend enabled"
 msgstr "Ngưng đã bật"
 
 #: ../data/gnome-power-manager.schemas.in.h:67
-#, fuzzy
 msgid ""
 "The DPMS method used to blank the screen when on AC power. Possible values "
 "are \"standby\", \"suspend\" and \"off\"."
-msgstr ""
-"Phương pháp DPMS dùng để làm màn hình trắng khi chạy bằng điện chính. Giá "
-"trị hợp lệ:\n"
-" • default\t\tmặc định\n"
-" • standby\ttrạng thái chờ\n"
-" • suspend\tngưng\n"
-" • off\t tắt"
+msgstr "Phương pháp DPMS dùng để làm màn hình trắng khi chạy bằng điện chính. Giá trị hợp lệ: \"standby\" (trạng thái chờ), \"suspend\" (ngưng), \"off\" (tắt)"
 
 #: ../data/gnome-power-manager.schemas.in.h:68
-#, fuzzy
 msgid ""
 "The DPMS method used to blank the screen when on battery power. Possible "
 "values are \"standby\", \"suspend\" and \"off\"."
-msgstr ""
-"Phương pháp DPMS dùng để làm màn hình trắng khi chạy bằng pin. Giá trị hợp "
-"lệ:\n"
-" • default\t\tmặc định\n"
-" • standby\ttrạng thái chờ\n"
-" • suspend\tngưng\n"
-" • off\t tắt"
+msgstr "Phương pháp DPMS dùng để làm màn hình trắng khi chạy bằng pin. Giá trị hợp lệ: \"standby\" (trạng thái chờ), \"suspend\" (ngưng), \"off\" (tắt)"
 
 #: ../data/gnome-power-manager.schemas.in.h:69
 msgid "The URI to show to the user on sleep failure"
-msgstr ""
+msgstr "URI cần hiện cho người dùng khi gặp lỗi ngủ"
 
 #: ../data/gnome-power-manager.schemas.in.h:70
 msgid ""
@@ -551,7 +526,7 @@ msgid ""
 "power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
 "\"nothing\"."
 msgstr ""
-"Hành động cần làm khi nắp máy tính xách tây được đóng, và máy tính chạy bằng "
+"Hành động cần làm khi nắp máy tính xách tay được đóng, và máy tính chạy bằng "
 "điện chính. Giá trị hợp lệ:\n"
 " • hibernate\tngủ đông\n"
 " • suspend\tngưng\n"
@@ -563,7 +538,7 @@ msgid ""
 "battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
 "and \"nothing\"."
 msgstr ""
-"Hành động cần làm khi nắp máy tính xách tây được đóng, và máy tính chạy bằng "
+"Hành động cần làm khi nắp máy tính xách tay được đóng, và máy tính chạy bằng "
 "pin. Giá trị hợp lệ:\n"
 " • hibernate\tngủ đông\n"
 " • suspend\tngưng\n"
@@ -626,22 +601,16 @@ msgstr ""
 "ngủ."
 
 #: ../data/gnome-power-manager.schemas.in.h:80
-#, fuzzy
 msgid ""
 "The amount of time in seconds the computer on UPS power needs to be inactive "
 "before it goes to sleep."
-msgstr ""
-"Số giây máy tính đang chạy bằng điện chính cần ngưng làm việc trước khi nó "
-"ngủ."
+msgstr "Số giây máy tính đang chạy bằng UPS cần ngưng làm việc trước khi ngủ."
 
 #: ../data/gnome-power-manager.schemas.in.h:81
-#, fuzzy
 msgid ""
 "The amount of time in seconds the computer on UPS power needs to be inactive "
 "before the display goes to sleep."
-msgstr ""
-"Số giây máy tính đang chạy bằng pin cần ngưng làm việc trước khi bộ trình "
-"bày ngủ."
+msgstr "Số giây máy tính đang chạy bằng UPS cần ngưng làm việc trước khi bộ trình bày ngủ."
 
 #: ../data/gnome-power-manager.schemas.in.h:82
 msgid ""
@@ -706,18 +675,15 @@ msgid "The maximum time displayed on the graph"
 msgstr "Thời gian tối đa được hiển thị trên đồ thị"
 
 #: ../data/gnome-power-manager.schemas.in.h:94
-#, fuzzy
 msgid ""
 "The number of seconds of inactivity to spin down the disks when on AC power."
-msgstr ""
-"Mờ đi màn hình sau một thời gian không hoạt động khi chạy bằng điện chính"
+msgstr "Số giây ngưng làm việc để tắt đĩa cứng khi dùng điện chính."
 
 #: ../data/gnome-power-manager.schemas.in.h:95
-#, fuzzy
 msgid ""
 "The number of seconds of inactivity to spin down the disks when on battery "
 "power."
-msgstr "Mờ đi màn hình sau một thời gian không hoạt động khi chạy bằng pin"
+msgstr "Số giây ngưng làm việc để tắt đĩa cứng khi dùng pin."
 
 #: ../data/gnome-power-manager.schemas.in.h:96
 msgid ""
@@ -824,7 +790,7 @@ msgstr "Dùng thiết lập khoá của gnome-screensaver"
 msgid ""
 "When sleep fails we can show the user a button to help fix the situation. "
 "Leave this blank if the button should not be shown."
-msgstr ""
+msgstr "Khi gặp lỗi ngủ, có thể hiện một nút nhấn để giúp khắc phục tình hình. Để trống nếu không nên hiện nút này."
 
 #: ../data/gnome-power-manager.schemas.in.h:112
 msgid "When to show the notification icon"
@@ -983,7 +949,7 @@ msgstr "Thống kê"
 
 #: ../data/gpm-statistics.ui.h:10
 msgid "There is no data to display."
-msgstr ""
+msgstr "Không có dữ liệu cần hiển thị."
 
 #: ../data/gpm-statistics.ui.h:11
 msgid "Use smoothed line"
@@ -1055,7 +1021,7 @@ msgstr "Đặt độ _sáng cho bộ trình bày:"
 
 #: ../data/gpm-prefs.ui.h:16
 msgid "Sp_in down hard disks when possible"
-msgstr ""
+msgstr "_Tắt đĩa cứng nếu có thể"
 
 #: ../data/gpm-prefs.ui.h:17
 msgid "When UPS power is _critically low:"
@@ -1071,7 +1037,7 @@ msgstr "Khi nạp _pin tới hạn:"
 
 #: ../data/gpm-prefs.ui.h:20
 msgid "When laptop lid is cl_osed:"
-msgstr "Khi đóng _nắp máy tính xách tây:"
+msgstr "Khi đóng _nắp máy tính xách tay:"
 
 #: ../data/gpm-prefs.ui.h:21
 msgid "When the _suspend button is pressed:"
@@ -1090,9 +1056,8 @@ msgid "_Never display an icon"
 msgstr "_Không bao giờ hiện biểu tượng"
 
 #: ../data/gpm-prefs.ui.h:25
-#, fuzzy
 msgid "_Only display an icon when battery power is low"
-msgstr "Hiện biểu tượng chỉ khi pin tới _hạn"
+msgstr "_Hiện biểu tượng chỉ khi pin còn ít"
 
 #: ../data/gpm-prefs.ui.h:26
 msgid "_Reduce backlight brightness"
@@ -1141,19 +1106,19 @@ msgstr "%s đang sạc (%.1f%%)"
 
 #. TRANSLATORS: The laptop battery is fully charged, and we know a time
 #: ../src/gpm-devicekit.c:266
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Battery is fully charged.\n"
 "Provides %s laptop runtime"
 msgstr ""
-"%s đã sạc đầy (%.1f%%)\n"
-"thì cung cấp %s thời gian chạy bằng pin"
+"Pin đã sạc đầy.\n"
+"Cung cấp %s thời gian chạy laptop"
 
 #. TRANSLATORS: the device is fully charged
 #: ../src/gpm-devicekit.c:271
-#, fuzzy, c-format
+#, c-format
 msgid "%s is fully charged"
-msgstr "%s đã sạc đầy (%.1f%%)"
+msgstr "%s đã sạc đầy"
 
 #. TRANSLATORS: the device is discharging, and we have a time remaining
 #: ../src/gpm-devicekit.c:279
@@ -1175,7 +1140,7 @@ msgid ""
 "Provides %s battery runtime"
 msgstr ""
 "%s %s đến khi được sạc (%.1f%%)\n"
-"thì cung cấp %s thời gian chạy bằng pin"
+"Cung cấp %s thời gian chạy bằng pin"
 
 #. TRANSLATORS: device is charging, and we have a time to full and a percentage
 #: ../src/gpm-devicekit.c:309
@@ -1185,20 +1150,20 @@ msgstr "%s %s đến khi được sạc (%.1f%%)"
 
 #. TRANSLATORS: this is only shown for laptops with multiple batteries
 #: ../src/gpm-devicekit.c:323
-#, fuzzy, c-format
+#, c-format
 msgid "%s waiting to discharge (%.1f%%)"
-msgstr "%s đang xả (%.1f%%)"
+msgstr "%s đang chờ xả (%.1f%%)"
 
 #. TRANSLATORS: this is only shown for laptops with multiple batteries
 #: ../src/gpm-devicekit.c:329
-#, fuzzy, c-format
+#, c-format
 msgid "%s waiting to charge (%.1f%%)"
-msgstr "%s %s đến khi được sạc (%.1f%%)"
+msgstr "%s đang chờ sạc (%.1f%%)"
 
 #. TRANSLATORS: the type of data, e.g. Laptop battery
 #: ../src/gpm-devicekit.c:389
 msgid "Product:"
-msgstr ""
+msgstr "Sản phẩm:"
 
 #. TRANSLATORS: device is missing
 #. TRANSLATORS: device is charged
@@ -1206,9 +1171,8 @@ msgstr ""
 #. TRANSLATORS: device is discharging
 #: ../src/gpm-devicekit.c:393 ../src/gpm-devicekit.c:396
 #: ../src/gpm-devicekit.c:399 ../src/gpm-devicekit.c:402
-#, fuzzy
 msgid "Status:"
-msgstr "Tình trạng"
+msgstr "Tình trạng:"
 
 #: ../src/gpm-devicekit.c:393
 msgid "Missing"
@@ -1228,50 +1192,43 @@ msgstr "Đang xả"
 
 #. TRANSLATORS: percentage
 #: ../src/gpm-devicekit.c:407
-#, fuzzy
 msgid "Percentage charge:"
-msgstr "Phần trăm"
+msgstr "Phần trăm sạc:"
 
 #. TRANSLATORS: manufacturer
 #: ../src/gpm-devicekit.c:411
-#, fuzzy
 msgid "Vendor:"
-msgstr "Nhà sản xuất"
+msgstr "Nhà sản xuất:"
 
 #. TRANSLATORS: how the battery is made, e.g. Lithium Ion
 #: ../src/gpm-devicekit.c:416
-#, fuzzy
 msgid "Technology:"
-msgstr "Công nghệ"
+msgstr "Công nghệ:"
 
 #. TRANSLATORS: serial number of the battery
 #: ../src/gpm-devicekit.c:420
-#, fuzzy
 msgid "Serial number:"
-msgstr "Số thứ tự"
+msgstr "Số thứ tự:"
 
 #. TRANSLATORS: model number of the battery
 #: ../src/gpm-devicekit.c:424
-#, fuzzy
 msgid "Model:"
-msgstr "Kiểu"
+msgstr "Kiểu:"
 
 #. TRANSLATORS: time to fully charged
 #: ../src/gpm-devicekit.c:429
-#, fuzzy
 msgid "Charge time:"
-msgstr "Hồ sơ thời gian sạc"
+msgstr "Thời gian sạc:"
 
 #. TRANSLATORS: time to empty
 #: ../src/gpm-devicekit.c:435
-#, fuzzy
 msgid "Discharge time:"
-msgstr "Hồ sơ thời gian xả"
+msgstr "Thời gian xả:"
 
 #. TRANSLATORS: Excellent, Good, Fair and Poor are all related to battery Capacity
 #: ../src/gpm-devicekit.c:442
 msgid "Excellent"
-msgstr "Tốt lắm"
+msgstr "Rất tốt"
 
 #: ../src/gpm-devicekit.c:444
 msgid "Good"
@@ -1286,29 +1243,24 @@ msgid "Poor"
 msgstr "Xấu"
 
 #: ../src/gpm-devicekit.c:452
-#, fuzzy
 msgid "Capacity:"
-msgstr "Dung tích"
+msgstr "Dung tích:"
 
 #: ../src/gpm-devicekit.c:458 ../src/gpm-devicekit.c:483
-#, fuzzy
 msgid "Current charge:"
-msgstr "Sạc bộ pin"
+msgstr "Sạc hiện thời:"
 
 #: ../src/gpm-devicekit.c:464
-#, fuzzy
 msgid "Last full charge:"
-msgstr "<b>Lần sạc đầy cuối:</b> %.1f Wh\n"
+msgstr "Lần sạc đầy cuối:"
 
 #: ../src/gpm-devicekit.c:470 ../src/gpm-devicekit.c:488
-#, fuzzy
 msgid "Design charge:"
-msgstr "<b>Sạc thiết kế:</b> %.0f/7\n"
+msgstr "Sạc thiết kế:"
 
 #: ../src/gpm-devicekit.c:475
-#, fuzzy
 msgid "Charge rate:"
-msgstr "Hồ sơ thời gian sạc"
+msgstr "Mức sạc:"
 
 #. TRANSLATORS: system power cord
 #: ../src/gpm-devicekit.c:510
@@ -1320,7 +1272,7 @@ msgstr[0] "Bộ tiếp hợp điện chính"
 #: ../src/gpm-devicekit.c:514
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
-msgstr[0] "Pin máy tính xách tây"
+msgstr[0] "Pin máy tính xách tay"
 
 #. TRANSLATORS: battery-backed AC power source
 #: ../src/gpm-devicekit.c:518
@@ -1457,44 +1409,41 @@ msgstr "%.1fV"
 #: ../src/gpm-idle.c:216
 #, c-format
 msgid "Please see %s for more information."
-msgstr ""
+msgstr "Vui lòng xem %s để biết thêm thông tin."
 
 #. TRANSLATORS: this is telling the user that thier X server is broken, and needs to be fixed
 #: ../src/gpm-idle.c:220
 msgid ""
 "If you can see this text, your display server is broken and you should "
 "notify your distributor."
-msgstr ""
+msgstr "Nếu bạn thấy những dòng này, bộ trình bày của bạn bị hỏng và bạn nên thông báo với nhà phân phối."
 
 #. TRANSLATORS: this is for debugging, if the session is idle
 #: ../src/gpm-idle.c:226
 msgid "Session idle"
-msgstr ""
+msgstr "Phiên làm việc rảnh"
 
 #: ../src/gpm-idle.c:226
 msgid "Session active"
-msgstr ""
+msgstr "Phiên làm việc tích cực"
 
 #. TRANSLATORS: has something inhibited the session
 #: ../src/gpm-idle.c:228
-#, fuzzy
 msgid "inhibited"
-msgstr "Ngăn chặn"
+msgstr "ngăn chặn"
 
 #: ../src/gpm-idle.c:228
-#, fuzzy
 msgid "not inhibited"
-msgstr "Tự ngăn chặn"
+msgstr "không ngăn chặn"
 
 #. TRANSLATORS: is the screen idle or awake
 #: ../src/gpm-idle.c:230
 msgid "screen idle"
-msgstr ""
+msgstr "màn hình rảnh"
 
 #: ../src/gpm-idle.c:230
-#, fuzzy
 msgid "screen awake"
-msgstr "Khoá màn hình khi trắng"
+msgstr "màn hình thức"
 
 #. TRANSLATORS: show verbose debugging
 #: ../src/gpm-main.c:171 ../src/gpm-prefs.c:90 ../src/gpm-statistics.c:1465
@@ -1598,7 +1547,7 @@ msgstr "Bằng pin"
 
 #: ../src/gpm-manager.c:734
 msgid "Laptop lid is closed"
-msgstr "Nắp máy tính xách tây đã được đóng"
+msgstr "Nắp máy tính xách tay đã được đóng"
 
 #: ../src/gpm-manager.c:772
 msgid "Power Information"
@@ -1610,16 +1559,16 @@ msgid "Battery may be recalled"
 msgstr "Pin có thể bị thu hồi"
 
 #: ../src/gpm-manager.c:1034
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The battery in your computer may have been recalled by %s and you may be at "
 "risk.\n"
 "\n"
 "For more information visit the battery recall website."
 msgstr ""
-"Pin trong máy tính này có thể bị thu hồi bởi %s nên bạn gặp nguy hiểm.\n"
+"Pin trong máy tính này có thể bị thu hồi bởi %s và bạn có thể gặp nguy hiểm.\n"
 "\n"
-"Để tìm thêm thông tin, hãy thăm nơi Mạng thu hồi pin %s."
+"Để tìm thêm thông tin, hãy thăm trang web thu hồi pin."
 
 #. TRANSLATORS: button text, visit the manufacturers recall website
 #: ../src/gpm-manager.c:1044
@@ -1641,15 +1590,14 @@ msgstr "Pin có thể bị hỏng"
 
 #. TRANSLATORS: notify the user that that battery is broken as the capacity is very low
 #: ../src/gpm-manager.c:1135
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your battery has a very low capacity (%1.1f%%), which means that it may be "
 "old or broken."
-msgstr "Pin có năng suất rất yếu (%i%%), ngụ ý nó cũ hay bị hỏng hóc."
+msgstr "Pin rất yếu (%1.1f%%), có thể là pin cũ, hoặc pin hư."
 
 #. TRANSLATORS: show the fully charged notification
 #: ../src/gpm-manager.c:1183
-#, fuzzy
 msgid "Battery Fully Charged"
 msgid_plural "Batteries Fully Charged"
 msgstr[0] "Pin đầy"
@@ -1661,9 +1609,9 @@ msgstr "Pin đang xả"
 
 #. TRANSLATORS: tell the user how much time they have got
 #: ../src/gpm-manager.c:1227
-#, fuzzy, c-format
+#, c-format
 msgid "%s of battery power remaining (%.1f%%)"
-msgstr "%s %s còn lại (%.1f%%)"
+msgstr "%s còn lại (%.1f%%)"
 
 #. TRANSLATORS: UPS is now discharging
 #: ../src/gpm-manager.c:1230
@@ -1672,60 +1620,49 @@ msgstr "UPS đang xả"
 
 #. TRANSLATORS: tell the user how much time they have got
 #: ../src/gpm-manager.c:1233
-#, fuzzy, c-format
+#, c-format
 msgid "%s of UPS backup power remaining (%.1f%%)"
-msgstr "%s %s còn lại (%.1f%%)"
+msgstr "%s UPS còn lại (%.1f%%)"
 
 #. TRANSLATORS: window title: there was a problem putting the machine to sleep
 #: ../src/gpm-manager.c:1301
-#, fuzzy
 msgid "Sleep problem"
 msgstr "Lỗi ngủ"
 
 #. TRANSLATORS: message text
 #: ../src/gpm-manager.c:1304
-#, fuzzy
 msgid "Your computer failed to suspend."
-msgstr ""
-"Máy tính của bạn chưa ngưng.\n"
-"Hãy kiểm tra tập tin trợ giúp tìm vấn đề thường gặp."
+msgstr "Máy tính của bạn gặp lỗi khi ngưng."
 
 #: ../src/gpm-manager.c:1304 ../src/gpm-manager.c:1308
-#, fuzzy
 msgid "Check the help file for common problems."
-msgstr ""
-"Máy tính của bạn chưa ngưng.\n"
-"Hãy kiểm tra tập tin trợ giúp tìm vấn đề thường gặp."
+msgstr "Hãy kiểm tra tập tin trợ giúp tìm vấn đề thường gặp."
 
 #. TRANSLATORS: message text
 #: ../src/gpm-manager.c:1308
-#, fuzzy
 msgid "Your computer failed to hibernate."
-msgstr ""
-"Máy tính của bạn chưa ngủ đông.\n"
-"Hãy kiểm tra tập tin trợ giúp tìm vấn đề thường gặp."
+msgstr "Máy tính của bạn gặp lỗi khi ngủ đông."
 
 #. TRANSLATORS: button text, visit the suspend help website
 #: ../src/gpm-manager.c:1322
 msgid "Visit help page"
-msgstr ""
+msgstr "Xem trang trợ giúp"
 
 #. TRANSLATORS: laptop battery low, and we only have one battery
 #: ../src/gpm-manager.c:1397
-#, fuzzy
 msgid "Battery low"
 msgstr "Pin yếu"
 
 #. TRANSLATORS: laptop battery low, and we have more than one type of battery
 #: ../src/gpm-manager.c:1400
 msgid "Laptop battery low"
-msgstr "Pin yếu trong máy tính xách tây"
+msgstr "Pin yếu trong máy tính xách tay"
 
 #. TRANSLATORS: tell the user how much time they have got
 #: ../src/gpm-manager.c:1406
-#, fuzzy, c-format
+#, c-format
 msgid "Approximately <b>%s</b> remaining (%.1f%%)"
-msgstr "Bạn có xấp xỉ <b>%s</b> thời gian pin còn lại (%.1f%%)"
+msgstr "Xấp xỉ <b>%s</b> thời gian pin còn lại (%.1f%%)"
 
 #. TRANSLATORS: UPS is starting to get a little low
 #: ../src/gpm-manager.c:1410
@@ -1789,9 +1726,8 @@ msgstr "Điện thoại di động được kết nối đến máy tính này c
 
 #. TRANSLATORS: laptop battery critically low, and only have one type of battery
 #: ../src/gpm-manager.c:1503
-#, fuzzy
 msgid "Battery critically low"
-msgstr "Pin yếu tới hạn."
+msgstr "Pin cực yếu"
 
 #. TRANSLATORS: laptop battery critically low, and we have more than one type of battery
 #. TRANSLATORS: laptop battery is really, really, low
@@ -1806,23 +1742,21 @@ msgstr "Hãy cầm phít bộ tiếp hợp điện chính để tránh mất d�
 
 #. TRANSLATORS: give the user a ultimatum
 #: ../src/gpm-manager.c:1523
-#, fuzzy, c-format
+#, c-format
 msgid "Computer will suspend in %s."
-msgstr "Máy tính này sẽ ngưng trong vòng %s nếu điện chính chưa được kết nối."
+msgstr "Máy tính này sẽ ngưng trong %s."
 
 #. TRANSLATORS: give the user a ultimatum
 #: ../src/gpm-manager.c:1527
-#, fuzzy, c-format
+#, c-format
 msgid "Computer will hibernate in %s."
-msgstr ""
-"Máy tính này sẽ ngủ đông trong vòng %s nếu điện chính chưa được kết nối."
+msgstr "Máy tính này sẽ ngủ đông trong %s."
 
 #. TRANSLATORS: give the user a ultimatum
 #: ../src/gpm-manager.c:1531
-#, fuzzy, c-format
+#, c-format
 msgid "Computer will shutdown in %s."
-msgstr ""
-"Máy tính này sẽ tắt máy trong vòng %s nếu điện chính chưa được kết nối."
+msgstr "Máy tính này sẽ tắt máy trong %s."
 
 #. TRANSLATORS: the UPS is very low
 #. TRANSLATORS: UPS is really, really, low
@@ -2088,7 +2022,7 @@ msgstr "Nguồn"
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
-msgstr[0] ""
+msgstr[0] "%d giây"
 
 #: ../src/gpm-statistics.c:411
 msgid "Refreshed"
@@ -2170,7 +2104,7 @@ msgstr "Gián đoạn"
 #. TRANSLATORS: the keyboard and mouse device event
 #: ../src/gpm-statistics.c:869
 msgid "PS/2 keyboard/mouse/touchpad"
-msgstr "Bàn phím/chuột/vùng sờ PS/2"
+msgstr "Bàn phím PS/2/chuột/touchpad"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
 #: ../src/gpm-statistics.c:872
