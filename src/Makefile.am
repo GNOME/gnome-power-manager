@@ -97,6 +97,7 @@ gnome_power_statistics_LDADD =				\
 	$(GNOME_LIBS)					\
 	$(UNIQUE_LIBS)					\
 	$(DBUS_LIBS)					\
+	-lm						\
 	$(NULL)
 
 gnome_power_statistics_CFLAGS =				\
@@ -114,6 +115,7 @@ gnome_power_preferences_LDADD =				\
 	$(GLIB_LIBS)					\
 	$(GNOME_LIBS)					\
 	$(DBUS_LIBS)					\
+	-lm						\
 	$(UNIQUE_LIBS)					\
 	$(GPM_EXTRA_LIBS)				\
 	$(DEVKIT_LIBS)					\
@@ -181,6 +183,7 @@ gnome_power_manager_LDADD =				\
 	$(GSTREAMER_LIBS)				\
 	$(GNOME_LIBS)					\
 	$(DBUS_LIBS)					\
+	-lm						\
 	$(XRANDR_LIBS)					\
 	$(CANBERRA_LIBS)				\
 	$(LIBNOTIFY_LIBS)				\
@@ -254,6 +257,7 @@ gnome_power_self_test_LDADD =				\
 	$(GSTREAMER_LIBS)				\
 	$(DEVKIT_LIBS)					\
 	$(DBUS_LIBS)					\
+	-lm						\
 	$(LIBNOTIFY_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
 	$(NULL)
