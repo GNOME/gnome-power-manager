@@ -93,12 +93,12 @@ gnome_power_statistics_SOURCES =			\
 gnome_power_statistics_LDADD =				\
 	libgpmshared.a					\
 	$(GLIB_LIBS)					\
+	$(X11_LIBS)					\
 	$(DEVKIT_LIBS)					\
 	$(GNOME_LIBS)					\
 	$(UNIQUE_LIBS)					\
 	$(DBUS_LIBS)					\
-	-lm						\
-	$(NULL)
+	-lm
 
 gnome_power_statistics_CFLAGS =				\
 	$(WARNINGFLAGS)					\
@@ -113,14 +113,14 @@ gnome_power_preferences_SOURCES =			\
 gnome_power_preferences_LDADD =				\
 	libgpmshared.a					\
 	$(GLIB_LIBS)					\
+	$(X11_LIBS)					\
 	$(GNOME_LIBS)					\
 	$(HAL_LIBS)					\
 	$(DBUS_LIBS)					\
-	-lm						\
 	$(UNIQUE_LIBS)					\
 	$(GPM_EXTRA_LIBS)				\
 	$(DEVKIT_LIBS)					\
-	$(NULL)
+	-lm
 
 if HAVE_HAL
 gnome_power_preferences_LDADD += $(LOCAL_LIBHAL_LIBS)
@@ -181,17 +181,17 @@ endif
 gnome_power_manager_LDADD =				\
 	libgpmshared.a					\
 	$(GLIB_LIBS)					\
+	$(X11_LIBS)				\
 	$(GSTREAMER_LIBS)				\
 	$(GNOME_LIBS)					\
 	$(HAL_LIBS)					\
 	$(DBUS_LIBS)					\
-	-lm						\
 	$(XRANDR_LIBS)					\
 	$(CANBERRA_LIBS)				\
 	$(LIBNOTIFY_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
 	$(DEVKIT_LIBS)					\
-	$(NULL)
+	-lm
 
 if HAVE_HAL
 gnome_power_manager_LDADD += $(LOCAL_LIBHAL_LIBS)
@@ -255,14 +255,14 @@ gnome_power_self_test_SOURCES =				\
 
 gnome_power_self_test_LDADD =				\
 	$(GLIB_LIBS)					\
+	$(X11_LIBS)					\
 	$(GNOME_LIBS)					\
 	$(GSTREAMER_LIBS)				\
 	$(DEVKIT_LIBS)					\
 	$(DBUS_LIBS)					\
-	-lm						\
 	$(LIBNOTIFY_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
-	$(NULL)
+	-lm
 
 if HAVE_HAL
 gnome_power_self_test_LDADD += $(LOCAL_LIBHAL_LIBS)
