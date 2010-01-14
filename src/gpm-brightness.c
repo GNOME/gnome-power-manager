@@ -439,13 +439,15 @@ gpm_brightness_init (GpmBrightness *brightness)
 	g_signal_connect (brightness->priv->xrandr, "brightness-changed",
 			  G_CALLBACK (gpm_brightness_xrandr_changed_cb), brightness);
 #ifdef HAVE_HAL
-	brightness->priv->hal = gpm_brightness_hal_new ();
-	if (gpm_brightness_hal_has_hw (brightness->priv->hal)) {
-		egg_debug ("detected HAL hardware");
-		brightness->priv->use_hal = TRUE;
+	if (!brightness->priv->use_xrandr) {
+		brightness->priv->hal = gpm_brightness_hal_new ();
+		if (gpm_brightness_hal_has_hw (brightness->priv->hal)) {
+			egg_debug ("detected HAL hardware");
+			brightness->priv->use_hal = TRUE;
+		}
+		g_signal_connect (brightness->priv->hal, "brightness-changed",
+				  G_CALLBACK (gpm_brightness_hal_changed_cb), brightness);
 	}
-	g_signal_connect (brightness->priv->hal, "brightness-changed",
-			  G_CALLBACK (gpm_brightness_hal_changed_cb), brightness);
 #endif
 }
 
