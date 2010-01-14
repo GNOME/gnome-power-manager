@@ -113,7 +113,7 @@ enum {
 static void
 gpm_stats_button_help_cb (GtkWidget *widget, gboolean data)
 {
-	//gpm_gnome_help ("update-log");
+	gpm_help_display ("statistics");
 }
 
 /**
