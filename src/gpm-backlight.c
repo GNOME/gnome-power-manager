@@ -110,7 +110,7 @@ gpm_backlight_get_brightness (GpmBacklight *backlight, guint *brightness, GError
 
 	/* check if we have the hw */
 	if (backlight->priv->can_dim == FALSE) {
-		*error = g_error_new (gpm_backlight_error_quark (),
+		g_set_error_literal (error, gpm_backlight_error_quark (),
 				      GPM_BACKLIGHT_ERROR_HARDWARE_NOT_PRESENT,
 				      "Dim capable hardware not present");
 		return FALSE;
@@ -121,7 +121,7 @@ gpm_backlight_get_brightness (GpmBacklight *backlight, guint *brightness, GError
 	if (ret) {
 		*brightness = level;
 	} else {
-		*error = g_error_new (gpm_backlight_error_quark (),
+		g_set_error_literal (error, gpm_backlight_error_quark (),
 				      GPM_BACKLIGHT_ERROR_DATA_NOT_AVAILABLE,
 				      "Data not available");
 	}
@@ -142,7 +142,7 @@ gpm_backlight_set_brightness (GpmBacklight *backlight, guint percentage, GError 
 
 	/* check if we have the hw */
 	if (backlight->priv->can_dim == FALSE) {
-		*error = g_error_new (gpm_backlight_error_quark (),
+		g_set_error_literal (error, gpm_backlight_error_quark (),
 				      GPM_BACKLIGHT_ERROR_HARDWARE_NOT_PRESENT,
 				      "Dim capable hardware not present");
 		return FALSE;
@@ -154,7 +154,7 @@ gpm_backlight_set_brightness (GpmBacklight *backlight, guint percentage, GError 
 	/* sets the current policy brightness */
 	ret = gpm_brightness_set (backlight->priv->brightness, percentage, &hw_changed);
 	if (!ret) {
-		*error = g_error_new (gpm_backlight_error_quark (),
+		g_set_error_literal (error, gpm_backlight_error_quark (),
 				      GPM_BACKLIGHT_ERROR_GENERAL,
 				      "Cannot set policy brightness");
 	}

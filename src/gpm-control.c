@@ -152,8 +152,7 @@ gpm_control_suspend (GpmControl *control, GError **error)
 		      NULL);
 	if (!allowed) {
 		egg_debug ("cannot suspend as not allowed from policy");
-		if (error != NULL)
-			*error = g_error_new (GPM_CONTROL_ERROR, GPM_CONTROL_ERROR_GENERAL, "Cannot suspend");
+		g_set_error_literal (error, GPM_CONTROL_ERROR, GPM_CONTROL_ERROR_GENERAL, "Cannot suspend");
 		goto out;
 	}
 
@@ -221,8 +220,7 @@ gpm_control_hibernate (GpmControl *control, GError **error)
 		      NULL);
 	if (!allowed) {
 		egg_debug ("cannot hibernate as not allowed from policy");
-		if (error != NULL)
-			*error = g_error_new (GPM_CONTROL_ERROR, GPM_CONTROL_ERROR_GENERAL, "Cannot hibernate");
+		g_set_error_literal (error, GPM_CONTROL_ERROR, GPM_CONTROL_ERROR_GENERAL, "Cannot hibernate");
 		goto out;
 	}
 
