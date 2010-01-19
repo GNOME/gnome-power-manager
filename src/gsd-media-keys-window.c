@@ -81,6 +81,7 @@ fade_timeout (GsdMediaKeysWindow *window)
                 rect.width = allocation.width;
                 rect.height = allocation.height;
 
+                gtk_widget_realize (win);
                 gdk_window_invalidate_rect (gtk_widget_get_window (win), &rect, FALSE);
         }
 
