@@ -887,10 +887,12 @@ gpm_manager_client_changed_cb (DkpClient *client, GpmManager *manager)
 	gboolean event_when_closed;
 	gint timeout;
 	gboolean on_battery;
+	gboolean lid_is_closed;
 
-	/* get the on-battery state */
+	/* get the client state */
 	g_object_get (client,
 		      "on-battery", &on_battery,
+		      "lid-is-closed", &lid_is_closed,
 		      NULL);
 	if (on_battery == manager->priv->on_battery) {
 		egg_debug ("same state as before, ignoring");
@@ -923,7 +925,7 @@ gpm_manager_client_changed_cb (DkpClient *client, GpmManager *manager)
 	gpm_manager_update_ac_throttle (manager);
 
 	/* simulate user input, but only when the lid is open */
-	if (!gpm_button_is_lid_closed (manager->priv->button))
+	if (!lid_is_closed)
 		gpm_screensaver_poke (manager->priv->screensaver);
 
 	if (!on_battery)
@@ -938,7 +940,7 @@ gpm_manager_client_changed_cb (DkpClient *client, GpmManager *manager)
 	/* We keep track of the lid state so we can do the
 	   lid close on battery action if the ac adapter is removed when the laptop
 	   is closed. Fixes #331655 */
-	if (event_when_closed && on_battery && gpm_button_is_lid_closed (manager->priv->button)) {
+	if (event_when_closed && on_battery && lid_is_closed) {
 		gpm_manager_perform_policy (manager, GPM_CONF_BUTTON_LID_BATT,
 					    "The lid has been closed, and the ac adapter "
 					    "removed (and gconf is okay).");
