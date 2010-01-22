@@ -8,14 +8,15 @@
 # Dr.T.Vasudevan <agnihot3@gmail.com>, 2007, 2009.
 # Dr.T.vasudevan <agnihot3@gmail.com>, 2009.
 # I. Felix <ifelix@redhat.com>, 2009.
+# Dr,T,Vasudevan <agnihot3@gmail.com>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.master.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-23 17:29+0530\n"
-"PO-Revision-Date: 2009-10-23 17:30+0530\n"
-"Last-Translator: Dr.T.Vasudevan <agnihot3@gmail.com>\n"
-"Language-Team: Tamil <Ubuntu-l10n-tam@lists.ubuntu.com>\n"
+"POT-Creation-Date: 2010-01-22 14:13+0530\n"
+"PO-Revision-Date: 2010-01-22 14:18+0530\n"
+"Last-Translator: Dr,T,Vasudevan <agnihot3@gmail.com>\n"
+"Language-Team: Tamil <Ubuntu-l10n-tam@lists.ubuntu.com>>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -154,9 +155,10 @@ msgstr "பாதிப்பு குறுநிரல்"
 msgid "Inhibit Applet Factory"
 msgstr "பாதிப்பு குறு நிரல் தொழிற்சாலை"
 
-#: ../data/gnome-power-manager.desktop.in.in.h:1
-msgid "Power Manager"
-msgstr "மின் மேலாளர்"
+#. TRANSLATORS: this is the Y axis on the graph
+#: ../data/gnome-power-manager.desktop.in.in.h:1 ../src/gpm-statistics.c:1247
+msgid "Power"
+msgstr "சக்தி"
 
 #: ../data/gnome-power-manager.desktop.in.in.h:2
 msgid "Power management daemon"
@@ -214,7 +216,8 @@ msgstr "மின்கலம் சக்தி குறைந்து இர
 
 #: ../data/gnome-power-manager.schemas.in.h:11
 msgid "If preferences and statistics items should be shown in the context menu"
-msgstr "தேர்வுகள் மற்றும் புள்ளி விவரங்கள் உருப்படிகள் கான்டெக்ஸ்ட் மெனுவில் காட்டாப்பட வேண்டுமா "
+msgstr ""
+"தேர்வுகள் மற்றும் புள்ளி விவரங்கள் உருப்படிகள் கான்டெக்ஸ்ட் மெனுவில் காட்டாப்பட வேண்டுமா "
 
 #: ../data/gnome-power-manager.schemas.in.h:12
 msgid "If sounds should be used"
@@ -922,94 +925,106 @@ msgid "<b>Notification Area</b>"
 msgstr "<b>அறிவிப்பு பகுதி</b>"
 
 #: ../data/gpm-prefs.ui.h:4
+msgid "Closes the program"
+msgstr "நிரலை இயக்கம் நிறுத்துகிறது"
+
+#: ../data/gpm-prefs.ui.h:5
 msgid "Di_m display when idle"
 msgstr "(_m) வேலை இல்லாத போது திரை வெளிச்சத்தை குறைக்கவும்."
 
-#: ../data/gpm-prefs.ui.h:5
+#: ../data/gpm-prefs.ui.h:6
 msgid "General"
 msgstr "பொது"
 
-#: ../data/gpm-prefs.ui.h:6
+#: ../data/gpm-prefs.ui.h:7
 msgid "Make Default"
 msgstr "முன்னிருப்பு ஆக்கு"
 
-#: ../data/gpm-prefs.ui.h:7
+#: ../data/gpm-prefs.ui.h:8
 msgid "On AC Power"
 msgstr "ஏசி சக்தியில்"
 
-#: ../data/gpm-prefs.ui.h:8
+#: ../data/gpm-prefs.ui.h:9
 msgid "On Battery Power"
 msgstr "மின்கல திறனில்"
 
-#: ../data/gpm-prefs.ui.h:9
+#: ../data/gpm-prefs.ui.h:10
 msgid "On UPS Power"
 msgstr "யூபிஎஸ்(UPS) மின்சாரத்தில்"
 
-#: ../data/gpm-prefs.ui.h:10
+#: ../data/gpm-prefs.ui.h:11
 msgid "Only display an icon when a battery is p_resent"
 msgstr "மின்கலம் _r இருக்கும் போது சின்னம் மட்டும் காட்டு"
 
-#: ../data/gpm-prefs.ui.h:11
+#: ../data/gpm-prefs.ui.h:12
 msgid "Only display an icon when charging or _discharging"
 msgstr "மின் _d ஏற்றும் போது அல்லது இறக்கும் போது சின்னம் மட்டும் காட்டு"
 
-#: ../data/gpm-prefs.ui.h:12
+#: ../data/gpm-prefs.ui.h:13
 msgid "Power Management Preferences"
 msgstr "மின் மேலாண்மை முன்னுரிமைகள்"
 
-#: ../data/gpm-prefs.ui.h:13
+#: ../data/gpm-prefs.ui.h:14
+msgid "Provides help about this program"
+msgstr "இந்த நிரல் பற்றி உதவி தருகிறது"
+
+#: ../data/gpm-prefs.ui.h:15
 msgid "Put _display to sleep when inactive for:"
 msgstr "இவ்வளவு நேரம் செயலற்ற போது காட்சியை தூங்க வை"
 
-#: ../data/gpm-prefs.ui.h:14
+#: ../data/gpm-prefs.ui.h:16
 msgid "Put computer to _sleep when inactive for:"
 msgstr "இவ்வளவு நேரம் செயலற்ற போது கணினியை தூங்க வை"
 
-#: ../data/gpm-prefs.ui.h:15
+#: ../data/gpm-prefs.ui.h:17
 msgid "Set display _brightness to:"
 msgstr "காட்சியை இந்த வெளிச்சத்திற்கு அமைக்கவும்: (_b)"
 
-#: ../data/gpm-prefs.ui.h:16
+#: ../data/gpm-prefs.ui.h:18
+msgid "Sets this policy to be used by all users"
+msgstr "இந்த கொள்கையை அனைத்து பயனர்களுக்கும் பயன்படுத்த அமைக்கிறது"
+
+#: ../data/gpm-prefs.ui.h:19
 msgid "Sp_in down hard disks when possible"
 msgstr "(_i) முடிந்தால் வட்டுக்கள் சுழலை நிறுத்துக "
 
-#: ../data/gpm-prefs.ui.h:17
+#: ../data/gpm-prefs.ui.h:20
 msgid "When UPS power is _critically low:"
 msgstr "_c யூபிஎஸ்(UPS) மின்சாரம் மிகக்குறைவான போது:"
 
-#: ../data/gpm-prefs.ui.h:18
+#: ../data/gpm-prefs.ui.h:21
 msgid "When UPS power is l_ow:"
 msgstr "_o யூபிஎஸ்(UPS) மின்சாரம் குறைவான போது:"
 
-#: ../data/gpm-prefs.ui.h:19
+#: ../data/gpm-prefs.ui.h:22
 msgid "When battery po_wer is critically low:"
 msgstr "_w மின்கலத்தின் மின்சாரம் மிகக்குறைவான போது:"
 
-#: ../data/gpm-prefs.ui.h:20
+#: ../data/gpm-prefs.ui.h:23
 msgid "When laptop lid is cl_osed:"
 msgstr "_o மடிக்கணினி மூடி மூடியிருக்கும் போது:"
 
-#: ../data/gpm-prefs.ui.h:21
+#: ../data/gpm-prefs.ui.h:24
 msgid "When the _suspend button is pressed:"
 msgstr "_s இடைநிறுத்த பொத்தானை அழுத்தும் போது:"
 
-#: ../data/gpm-prefs.ui.h:22
+#: ../data/gpm-prefs.ui.h:25
 msgid "When the power _button is pressed:"
 msgstr "_b மின் பொத்தானை அழுத்தும் போது:"
 
-#: ../data/gpm-prefs.ui.h:23
+#: ../data/gpm-prefs.ui.h:26
 msgid "_Always display an icon"
 msgstr "_A எப்போதும் சின்னத்தை காட்டு"
 
-#: ../data/gpm-prefs.ui.h:24
+#: ../data/gpm-prefs.ui.h:27
 msgid "_Never display an icon"
 msgstr "சின்னத்தை _N ஒருபோதும் காட்டாதே"
 
-#: ../data/gpm-prefs.ui.h:25
+#: ../data/gpm-prefs.ui.h:28
 msgid "_Only display an icon when battery power is low"
 msgstr "_O மின்கல சக்தி இருக்கும் போது மட்டும் சின்னத்தை காட்டு"
 
-#: ../data/gpm-prefs.ui.h:26
+#: ../data/gpm-prefs.ui.h:29
 msgid "_Reduce backlight brightness"
 msgstr "(_R) பின்வெளிச்ச பிரகாசத்தை குறை"
 
@@ -1080,8 +1095,8 @@ msgid "%s %s remaining (%.1f%%)"
 msgstr "%s %s மீதமுள்ளது (%.1f%%)"
 
 #. TRANSLATORS: the device is discharging, but we only have a percentage
-#: ../src/gpm-devicekit.c:284 ../src/gpm-manager.c:1177
-#: ../src/gpm-manager.c:1189
+#: ../src/gpm-devicekit.c:284 ../src/gpm-manager.c:1279
+#: ../src/gpm-manager.c:1291
 #, c-format
 msgid "%s discharging (%.1f%%)"
 msgstr "%s இறங்குகிறது (%.1f%%)"
@@ -1480,30 +1495,60 @@ msgstr "மீள் துவங்கியது"
 msgid "Suspend failed"
 msgstr "செயல் நிறுத்தம் தோல்வியுற்றது"
 
+#. TRANSLATORS: message text
+#: ../src/gpm-manager.c:475
+msgid "Your computer failed to suspend."
+msgstr "உங்கள் கணினி இடை நிறுத்தாது போயிற்று."
+
+#. TRANSLATORS: title text
+#: ../src/gpm-manager.c:477
+msgid "Failed to suspend"
+msgstr "இடை நிறுத்தம் தோல்வியுற்றது"
+
+#. TRANSLATORS: message text
+#: ../src/gpm-manager.c:481
+msgid "Your computer failed to hibernate."
+msgstr "உங்கள் கணினி உறங்காது போயிற்று."
+
+#. TRANSLATORS: title text
+#: ../src/gpm-manager.c:483
+msgid "Failed to hibernate"
+msgstr "கணினி உறங்கம் தோல்வியுற்றது"
+
+#. TRANSLATORS: message text
+#: ../src/gpm-manager.c:488
+msgid "The failure was reported as:"
+msgstr "தோல்வி இப்படி அறிவிக்கப்பட்டது:"
+
+#. TRANSLATORS: button text, visit the suspend help website
+#: ../src/gpm-manager.c:501
+msgid "Visit help page"
+msgstr "உதவி பக்கத்தை பார்க்கவும்"
+
 #. TRANSLATORS: this is the gnome-screensaver throttle
-#: ../src/gpm-manager.c:664
+#: ../src/gpm-manager.c:764
 msgid "Display DPMS activated"
 msgstr "டிபிஎம்எஸ் செயல்படுத்தப்பட்டது என காட்டு"
 
 #. TRANSLATORS: this is the gnome-screensaver throttle
-#: ../src/gpm-manager.c:683
+#: ../src/gpm-manager.c:783
 msgid "On battery power"
 msgstr "மின்கல மின்சாரத்தில்"
 
-#: ../src/gpm-manager.c:701
+#: ../src/gpm-manager.c:801
 msgid "Laptop lid is closed"
 msgstr "மடிக்கணினி மூடி மூடப்பட்டது"
 
-#: ../src/gpm-manager.c:739
+#: ../src/gpm-manager.c:839
 msgid "Power Information"
 msgstr "மின் தகவல்"
 
 #. TRANSLATORS: the battery may be recalled by it's vendor
-#: ../src/gpm-manager.c:974
+#: ../src/gpm-manager.c:1076
 msgid "Battery may be recalled"
 msgstr "உங்கள் மின்கலம் திருப்பி அழைக்கப்படலாம்."
 
-#: ../src/gpm-manager.c:975
+#: ../src/gpm-manager.c:1077
 #, c-format
 msgid ""
 "The battery in your computer may have been recalled by %s and you may be at "
@@ -1516,12 +1561,12 @@ msgstr ""
 "மேல் விவரங்களுக்கு மின்கல திருப்பி அழைக்கப்படல் வலையகத்தை பார்க்கவும்."
 
 #. TRANSLATORS: button text, visit the manufacturers recall website
-#: ../src/gpm-manager.c:985
+#: ../src/gpm-manager.c:1087
 msgid "Visit recall website"
 msgstr "திருப்பி அழைக்கப்படல் வலையகத்தை பார்க்கவும்."
 
 #. TRANSLATORS: button text, do not show this bubble again
-#: ../src/gpm-manager.c:988
+#: ../src/gpm-manager.c:1090
 msgid "Do not show me this again"
 msgstr "இதை மீண்டும் காட்டாதே"
 
@@ -1529,12 +1574,12 @@ msgstr "இதை மீண்டும் காட்டாதே"
 #. * where capacity is the ratio of the last_full capacity with that of
 #. * the design capacity. (#326740)
 #. TRANSLATORS: battery is old or broken
-#: ../src/gpm-manager.c:1073
+#: ../src/gpm-manager.c:1175
 msgid "Battery may be broken"
 msgstr "மின்கலம் சிதைந்து இருக்கலாம்."
 
 #. TRANSLATORS: notify the user that that battery is broken as the capacity is very low
-#: ../src/gpm-manager.c:1076
+#: ../src/gpm-manager.c:1178
 #, c-format
 msgid ""
 "Your battery has a very low capacity (%1.1f%%), which means that it may be "
@@ -1544,175 +1589,151 @@ msgstr ""
 "அது சிதைந்து இருக்கலாம் என சந்தேகம்."
 
 #. TRANSLATORS: show the fully charged notification
-#: ../src/gpm-manager.c:1124
+#: ../src/gpm-manager.c:1226
 msgid "Battery Fully Charged"
 msgid_plural "Batteries Fully Charged"
 msgstr[0] "பேட்டரி முழுவதும் ஏற்றப்பட்டது"
 msgstr[1] "பேட்டரிகள் முழுவதும் ஏற்றப்பட்டது"
 
 #. TRANSLATORS: laptop battery is now discharging
-#: ../src/gpm-manager.c:1170
+#: ../src/gpm-manager.c:1272
 msgid "Battery Discharging"
 msgstr "மின்கல சக்தி இறங்குகிறது"
 
 #. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1174
+#: ../src/gpm-manager.c:1276
 #, c-format
 msgid "%s of battery power remaining (%.1f%%)"
 msgstr "%s பேட்டரி மின்சாரம் மீதமுள்ளது (%.1f%%)"
 
 #. TRANSLATORS: UPS is now discharging
-#: ../src/gpm-manager.c:1182
+#: ../src/gpm-manager.c:1284
 msgid "UPS Discharging"
 msgstr "யூபிஎஸ் மின் சக்தி இறங்குகிறது"
 
 #. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1186
+#: ../src/gpm-manager.c:1288
 #, c-format
 msgid "%s of UPS backup power remaining (%.1f%%)"
 msgstr "%s UPS பேக்அப் மின்சாரம் மீதமுள்ளது (%.1f%%)"
 
-#. TRANSLATORS: window title: there was a problem putting the machine to sleep
-#: ../src/gpm-manager.c:1260
-msgid "Sleep problem"
-msgstr "உறக்க சிக்கல்"
-
-#. TRANSLATORS: message text
-#: ../src/gpm-manager.c:1263
-msgid "Your computer failed to suspend."
-msgstr "உங்கள் கணினி இடை நிறுத்தாது போயிற்று."
-
-#: ../src/gpm-manager.c:1263 ../src/gpm-manager.c:1267
-msgid "Check the help file for common problems."
-msgstr "பொதுவான சிக்கலுக்கு உதவி கோப்பை பார்க்கவும்."
-
-#. TRANSLATORS: message text
-#: ../src/gpm-manager.c:1267
-msgid "Your computer failed to hibernate."
-msgstr "உங்கள் கணினி உறங்காது போயிற்று."
-
-#. TRANSLATORS: button text, visit the suspend help website
-#: ../src/gpm-manager.c:1282
-msgid "Visit help page"
-msgstr "உதவி பக்கத்தை பார்க்கவும்"
-
 #. TRANSLATORS: laptop battery low, and we only have one battery
-#: ../src/gpm-manager.c:1357
+#: ../src/gpm-manager.c:1372
 msgid "Battery low"
 msgstr "பாட்டரி குறைவாக உள்ளது"
 
 #. TRANSLATORS: laptop battery low, and we have more than one type of battery
-#: ../src/gpm-manager.c:1360
+#: ../src/gpm-manager.c:1375
 msgid "Laptop battery low"
 msgstr "மடிக்கணினி மின்கல சக்தி குறைவாக உள்ளது"
 
 #. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1366
+#: ../src/gpm-manager.c:1381
 #, c-format
 msgid "Approximately <b>%s</b> remaining (%.1f%%)"
 msgstr "தோராயமாக <b>%s</b> மீதமுள்ளது (%.1f%%)"
 
 #. TRANSLATORS: UPS is starting to get a little low
-#: ../src/gpm-manager.c:1370
+#: ../src/gpm-manager.c:1385
 msgid "UPS low"
 msgstr "யூபிஎஸ்(UPS) மின்சாரம் குறைவாக உள்ளது"
 
 #. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1374
+#: ../src/gpm-manager.c:1389
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"
 msgstr "உங்களுக்கு தோராயமாக <b>%s</b>  மீதம்  யுபிஎஸ் பாதுகாப்பு சக்தி (%.1f%%) உள்ளது"
 
 #. TRANSLATORS: mouse is getting a little low
 #. TRANSLATORS: the mouse battery is very low
-#: ../src/gpm-manager.c:1378 ../src/gpm-manager.c:1496
+#: ../src/gpm-manager.c:1393 ../src/gpm-manager.c:1511
 msgid "Mouse battery low"
 msgstr "சொடுக்கி மின்கல மின்சாரம் குறைவாக உள்ளது"
 
 #. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1381
+#: ../src/gpm-manager.c:1396
 #, c-format
 msgid "The wireless mouse attached to this computer is low in power (%.1f%%)"
 msgstr "இந்த கணினியில் இணைக்கப்பட்ட கம்பி இல்லா சொடுக்கி சக்தி குறைந்து உள்ளது (%.1f%%)"
 
 #. TRANSLATORS: keyboard is getting a little low
 #. TRANSLATORS: the keyboard battery is very low
-#: ../src/gpm-manager.c:1385 ../src/gpm-manager.c:1504
+#: ../src/gpm-manager.c:1400 ../src/gpm-manager.c:1519
 msgid "Keyboard battery low"
 msgstr "விசைப்பலகை மின்கல மின்சாரம் குறைவாக உள்ளது"
 
 #. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1388
+#: ../src/gpm-manager.c:1403
 #, c-format
 msgid "The wireless keyboard attached to this computer is low in power (%.1f%%)"
 msgstr "இந்த கணினியில் இணைக்கப்பட்ட கம்பி இல்லா விசைப்பலகை சக்தி குறைந்து உள்ளது (%.1f%%)"
 
 #. TRANSLATORS: PDA is getting a little low
 #. TRANSLATORS: the PDA battery is very low
-#: ../src/gpm-manager.c:1392 ../src/gpm-manager.c:1513
+#: ../src/gpm-manager.c:1407 ../src/gpm-manager.c:1528
 msgid "PDA battery low"
 msgstr "பிடிஏ மின்கல மின்சாரம் குறைவாக உள்ளது"
 
 #. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1395
+#: ../src/gpm-manager.c:1410
 #, c-format
 msgid "The PDA attached to this computer is low in power (%.1f%%)"
 msgstr "இந்த கணினியில் இணைக்கப்பட்ட பிடிஏ சக்தி குறைந்து உள்ளது (%.1f%%)"
 
 #. TRANSLATORS: cell phone (mobile) is getting a little low
 #. TRANSLATORS: the cell battery is very low
-#: ../src/gpm-manager.c:1399 ../src/gpm-manager.c:1522
+#: ../src/gpm-manager.c:1414 ../src/gpm-manager.c:1537
 msgid "Cell phone battery low"
 msgstr "அலைபேசி மின்கல மின்சாரம் குறைவாக உள்ளது"
 
 #. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1402
+#: ../src/gpm-manager.c:1417
 #, c-format
 msgid "The cell phone attached to this computer is low in power (%.1f%%)"
 msgstr "இந்த கணினியில் இணைக்கப்பட்ட அலைபேசி  சக்தி குறைந்து உள்ளது (%.1f%%)"
 
 #. TRANSLATORS: laptop battery critically low, and only have one type of battery
-#: ../src/gpm-manager.c:1452
+#: ../src/gpm-manager.c:1467
 msgid "Battery critically low"
 msgstr "பாட்டரி அபாயகரமாக குறைவாக உள்ளது"
 
 #. TRANSLATORS: laptop battery critically low, and we have more than one type of battery
 #. TRANSLATORS: laptop battery is really, really, low
-#: ../src/gpm-manager.c:1455 ../src/gpm-manager.c:1568
+#: ../src/gpm-manager.c:1470 ../src/gpm-manager.c:1583
 msgid "Laptop battery critically low"
 msgstr "மடிகணினி மின்கலம் மின் அடக்கம் மிகக் குறைவு"
 
 #. TRANSLATORS: tell the use to insert the plug, as we're not going to do anything
-#: ../src/gpm-manager.c:1467
+#: ../src/gpm-manager.c:1482
 msgid "Plug in your AC adapter to avoid losing data."
 msgstr "தரவை இழக்காதிருக்க ஏசி தகவியை சொருகவும்."
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1471
+#: ../src/gpm-manager.c:1486
 #, c-format
 msgid "Computer will suspend in %s."
 msgstr "%sஇல் கணினி இடை நிறுத்தப்படும்."
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1475
+#: ../src/gpm-manager.c:1490
 #, c-format
 msgid "Computer will hibernate in %s."
 msgstr "%sஇல் கணினி உறங்கும்."
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1479
+#: ../src/gpm-manager.c:1494
 #, c-format
 msgid "Computer will shutdown in %s."
 msgstr "கணினி %sஇல் பணிநிறுத்தம் செய்யப்படும்."
 
 #. TRANSLATORS: the UPS is very low
 #. TRANSLATORS: UPS is really, really, low
-#: ../src/gpm-manager.c:1486 ../src/gpm-manager.c:1606
+#: ../src/gpm-manager.c:1501 ../src/gpm-manager.c:1621
 msgid "UPS critically low"
 msgstr "யூபிஎஸ்(UPS) மின் அடக்கம் மிகவும்  குறைகிறது"
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1490
+#: ../src/gpm-manager.c:1505
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%.1f%%). Restore AC "
@@ -1722,7 +1743,7 @@ msgstr ""
 "இருக்க உங்க கணினிக்கு ஏசி மின் சக்தியை மீட்டு அமைக்கவும்."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1499
+#: ../src/gpm-manager.c:1514
 #, c-format
 msgid ""
 "The wireless mouse attached to this computer is very low in power (%.1f%%). "
@@ -1732,7 +1753,7 @@ msgstr ""
 "ஏற்றாவிடில் சீக்கிரம் செயல் இழக்கும்."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1507
+#: ../src/gpm-manager.c:1522
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is very low in power (%.1f%"
@@ -1742,7 +1763,7 @@ msgstr ""
 "சக்தி ஏற்றாவிடில் சீக்கிரம் செயல் இழக்கும்."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1516
+#: ../src/gpm-manager.c:1531
 #, c-format
 msgid ""
 "The PDA attached to this computer is very low in power (%.1f%%). This device "
@@ -1752,7 +1773,7 @@ msgstr ""
 "சீக்கிரம் செயல் இழக்கும்."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1525
+#: ../src/gpm-manager.c:1540
 #, c-format
 msgid ""
 "Your cell phone is very low in power (%.1f%%). This device will soon stop "
@@ -1762,7 +1783,7 @@ msgstr ""
 "ஏற்றாவிடில் சீக்கிரம் செயல் இழக்கும்."
 
 #. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1577
+#: ../src/gpm-manager.c:1592
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
@@ -1771,7 +1792,7 @@ msgstr ""
 "<b> மின் நிறுத்தம்</b> செய்யும்."
 
 #. TRANSLATORS: computer will suspend
-#: ../src/gpm-manager.c:1583
+#: ../src/gpm-manager.c:1598
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1781,14 +1802,14 @@ msgstr ""
 "<br><b>NOTE:</b> கணினியை இடை நிறுத்தத்தில் வைக்க சிறிது மின் சக்தி தேவை."
 
 #. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1590
+#: ../src/gpm-manager.c:1605
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr "மின்கல மின் அடக்கம் அபாயகரமாக குறைவு. இந்த கணினி இப்போது உறக்கம் செய்ய உள்ளது"
 
 #. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1595
+#: ../src/gpm-manager.c:1610
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
@@ -1797,7 +1818,7 @@ msgstr ""
 "செய்ய உள்ளது."
 
 #. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1615
+#: ../src/gpm-manager.c:1630
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
@@ -1806,24 +1827,24 @@ msgstr ""
 "<b> மின் நிறுத்தம்</b> செய்யும்."
 
 #. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1621
+#: ../src/gpm-manager.c:1636
 msgid "The UPS is below the critical level and this computer is about to hibernate."
 msgstr "யுபிஎஸ் மின் அடக்கம் அபாயகரமாக குறைவு இந்த கணினி இப்போது உறக்கம் செய்ய உள்ளது."
 
 #. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1626
+#: ../src/gpm-manager.c:1641
 msgid "The UPS is below the critical level and this computer is about to shutdown."
 msgstr ""
 "யுபிஎஸ் மின் அடக்கம் அபாயகரமாக குறைவு இந்த கணினி இப்போது முழு செயல் நிறுத்தம் செய்ய "
 "உள்ளது."
 
 #. TRANSLATORS: there was in install problem
-#: ../src/gpm-manager.c:1789
+#: ../src/gpm-manager.c:1804
 msgid "Install problem!"
 msgstr "நிறுவல் பிரச்சினை!"
 
 #. TRANSLATORS: the GConf schema was not installed properly
-#: ../src/gpm-manager.c:1791
+#: ../src/gpm-manager.c:1806
 msgid ""
 "The configuration defaults for GNOME Power Manager have not been installed "
 "correctly.\n"
@@ -2164,11 +2185,6 @@ msgid "Time elapsed"
 msgstr "கடந்த நேரம்"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1247
-msgid "Power"
-msgstr "சக்தி"
-
-#. TRANSLATORS: this is the Y axis on the graph
 #. TRANSLATORS: this is the X axis on the graph
 #: ../src/gpm-statistics.c:1253 ../src/gpm-statistics.c:1296
 #: ../src/gpm-statistics.c:1302 ../src/gpm-statistics.c:1308
@@ -2215,6 +2231,15 @@ msgstr "இதனை _A பற்றி"
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:2
 msgid "_Help"
 msgstr "_H உதவி"
+
+#~ msgid "Power Manager"
+#~ msgstr "மின் மேலாளர்"
+
+#~ msgid "Sleep problem"
+#~ msgstr "உறக்க சிக்கல்"
+
+#~ msgid "Check the help file for common problems."
+#~ msgstr "பொதுவான சிக்கலுக்கு உதவி கோப்பை பார்க்கவும்."
 
 #~ msgid "Allow Suspend and Hibernate in the menu"
 #~ msgstr "பட்டியில் இடைநீக்கம் மற்றும் செயலற்றதை அனுமதி"
