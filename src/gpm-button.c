@@ -255,8 +255,14 @@ gpm_button_class_init (GpmButtonClass *klass)
 gboolean
 gpm_button_is_lid_closed (GpmButton *button)
 {
+	gboolean lid_is_closed;
+
 	g_return_val_if_fail (GPM_IS_BUTTON (button), FALSE);
-	return button->priv->lid_is_closed;
+
+	g_object_get (button->priv->client,
+		      "lid-is-closed", &lid_is_closed,
+		      NULL);
+	return lid_is_closed;
 }
 
 /**
