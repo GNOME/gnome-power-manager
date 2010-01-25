@@ -1,3 +1,13 @@
+Version 2.28.3
+~~~~~~~~~~~~~~
+Released: 2010-01-25
+
+* Bugfix:
+ - Don't rely on the cached value of the lid status, to properly fix the double
+   suspend issue. Fixes #604362 (Chow Loong Jin)
+ - Enable the help action in gnome-power-statistics. Fixes #607005 (Richard Hughes)
+ - Fix compile when using an ld that defaults to --no-as-needed (Richard Hughes)
+
 Version 2.28.2
 ~~~~~~~~~~~~~~
 Released: 2009-12-07
