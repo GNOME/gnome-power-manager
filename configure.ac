@@ -1,10 +1,10 @@
-AC_PREREQ(2.60)
+AC_PREREQ(2.65)
 
-AC_INIT(gnome-power-manager, 2.29.2)
+AC_INIT([gnome-power-manager],[2.29.2])
 AC_CONFIG_SRCDIR(src)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AM_INIT_AUTOMAKE([foreign])
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 
 # enable nice build output on automake1.11
@@ -14,7 +14,7 @@ AC_PROG_CC
 AM_PROG_CC_C_O
 
 AC_PROG_INSTALL
-AM_PROG_LIBTOOL
+LT_INIT
 IT_PROG_INTLTOOL([0.35.0])
 
 GNOME_COMPILE_WARNINGS
@@ -371,7 +371,7 @@ AC_DEFUN(AC_CHECK_X_HEADER, [
   AC_CHECK_HEADER([$1],[$2],[$3],[$4])
   CPPFLAGS="$ac_save_CPPFLAGS"])
 
-# Like AC_TRY_COMPILE, but it uses the already-computed -I directories.
+# Like AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[]])],[],[]), but it uses the already-computed -I directories.
 #
 AC_DEFUN(AC_TRY_X_COMPILE, [
   ac_save_CPPFLAGS="$CPPFLAGS"
@@ -379,7 +379,7 @@ AC_DEFUN(AC_TRY_X_COMPILE, [
     CPPFLAGS="$CPPFLAGS -I$includedir"
   fi
   CPPFLAGS="$CPPFLAGS $X_CFLAGS"
-  AC_TRY_COMPILE([$1], [$2], [$3], [$4])
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[$1]], [[$2]])],[$3],[$4])
   CPPFLAGS="$ac_save_CPPFLAGS"])
 
 
