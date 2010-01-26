@@ -91,6 +91,7 @@ struct GpmManagerPrivate
 	guint32			 screensaver_lid_throttle_id;
 	DkpClient		*client;
 	gboolean		 on_battery;
+	gboolean		 just_resumed;
 	GtkStatusIcon		*status_icon;
 	gboolean		 supports_notification_actions;
 	NotifyNotification	*notification;
@@ -1731,6 +1732,25 @@ gpm_manager_dpms_mode_changed_cb (GpmDpms *dpms, GpmDpmsMode mode, GpmManager *m
 	gpm_manager_update_dpms_throttle (manager);
 }
 
+static gboolean
+gpm_manager_reset_just_resumed_cb (gpointer user_data)
+{
+	GpmManager *manager = GPM_MANAGER (user_data);
+	manager->priv->just_resumed = FALSE;
+	return FALSE;
+}
+
+/**
+ * gpm_manager_control_resume_cb
+ **/
+static void
+gpm_manager_control_resume_cb (GpmControl *control, GpmControlAction action, GpmManager *manager)
+{
+	manager->priv->just_resumed = TRUE;
+
+	g_timeout_add_seconds (1, gpm_manager_reset_just_resumed_cb, manager);
+}
+
 /**
  * gpm_manager_console_kit_active_changed_cb:
  **/
@@ -1748,6 +1768,12 @@ gpm_manager_console_kit_active_changed_cb (EggConsoleKit *console, gboolean acti
 	/* get lid state */
 	ret = gpm_button_is_lid_closed (manager->priv->button);
 	if (!ret)
+		return;
+
+	/* lid state might not be accurate if just resumed. Don't do anything if
+	 * we've just resumed as we might end up re-suspending the machine due
+	 * to pm-utils and uswsusp changing the tty */
+	if (manager->priv->just_resumed)
 		return;
 
 	/* get ac state */
@@ -1814,6 +1840,9 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->screensaver_ac_throttle_id = 0;
 	manager->priv->screensaver_dpms_throttle_id = 0;
 	manager->priv->screensaver_lid_throttle_id = 0;
+
+	/* init to not just_resumed */
+	manager->priv->just_resumed = FALSE;
 
 	/* don't apply policy when not active */
 	manager->priv->console = egg_console_kit_new ();
@@ -1901,6 +1930,8 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->control = gpm_control_new ();
 	g_signal_connect (manager->priv->control, "sleep-failure",
 			  G_CALLBACK (gpm_manager_sleep_failure_cb), manager);
+	g_signal_connect (manager->priv->control, "resume",
+			  G_CALLBACK (gpm_manager_control_resume_cb), manager);
 
 	egg_debug ("creating new tray icon");
 	manager->priv->tray_icon = gpm_tray_icon_new ();
