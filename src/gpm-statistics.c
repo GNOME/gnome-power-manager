@@ -308,22 +308,14 @@ gpm_stats_bool_to_text (gboolean ret)
 static gchar *
 gpm_stats_get_printable_device_path (DkpDevice *device)
 {
-	const gchar *prefix = "/org/freedesktop/DeviceKit/Power/devices/";
 	const gchar *object_path;
 	gchar *device_path = NULL;
-	guint len;
 
 	/* get object path */
 	object_path = dkp_device_get_object_path (device);
-	if (object_path == NULL)
-		goto out;
-	if (!g_str_has_prefix (object_path, prefix))
-		goto out;
+	if (object_path != NULL)
+		device_path = g_filename_display_basename (object_path);
 
-	/* trim */
-	len = strlen (prefix);
-	device_path = g_strdup (object_path+len);
-out:
 	return device_path;
 }
 
