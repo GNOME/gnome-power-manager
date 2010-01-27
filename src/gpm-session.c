@@ -29,6 +29,7 @@
 #include "gpm-session.h"
 #include "gpm-common.h"
 #include "egg-debug.h"
+#include "gpm-marshal.h"
 
 static void     gpm_session_finalize   (GObject		*object);
 
@@ -64,7 +65,8 @@ struct GpmSessionPrivate
 	DBusGProxy		*proxy_client_private;
 	DBusGProxy		*proxy_prop;
 	gboolean		 is_idle_old;
-	gboolean		 is_inhibited_old;
+	gboolean		 is_idle_inhibited_old;
+	gboolean		 is_suspend_inhibited_old;
 };
 
 enum {
@@ -112,13 +114,23 @@ gpm_session_get_idle (GpmSession *session)
 }
 
 /**
- * gpm_session_get_inhibited:
+ * gpm_session_get_idle_inhibited:
  **/
 gboolean
-gpm_session_get_inhibited (GpmSession *session)
+gpm_session_get_idle_inhibited (GpmSession *session)
 {
 	g_return_val_if_fail (GPM_IS_SESSION (session), FALSE);
-	return session->priv->is_inhibited_old;
+	return session->priv->is_idle_inhibited_old;
+}
+
+/**
+ * gpm_session_get_suspend_inhibited:
+ **/
+gboolean
+gpm_session_get_suspend_inhibited (GpmSession *session)
+{
+	g_return_val_if_fail (GPM_IS_SESSION (session), FALSE);
+	return session->priv->is_suspend_inhibited_old;
 }
 
 /**
@@ -174,10 +186,10 @@ out:
 }
 
 /**
- * gpm_session_is_inhibited:
+ * gpm_session_is_idle_inhibited:
  **/
 static gboolean
-gpm_session_is_inhibited (GpmSession *session)
+gpm_session_is_idle_inhibited (GpmSession *session)
 {
 	gboolean ret;
 	gboolean is_inhibited = FALSE;
@@ -192,6 +204,37 @@ gpm_session_is_inhibited (GpmSession *session)
 	/* find out if this change altered the inhibited state */
 	ret = dbus_g_proxy_call (session->priv->proxy, "IsInhibited", &error,
 				 G_TYPE_UINT, GPM_SESSION_INHIBIT_MASK_IDLE,
+				 G_TYPE_INVALID,
+				 G_TYPE_BOOLEAN, &is_inhibited,
+				 G_TYPE_INVALID);
+	if (!ret) {
+		egg_warning ("failed to get inhibit status: %s", error->message);
+		g_error_free (error);
+		is_inhibited = FALSE;
+	}
+out:
+	return is_inhibited;
+}
+
+/**
+ * gpm_session_is_suspend_inhibited:
+ **/
+static gboolean
+gpm_session_is_suspend_inhibited (GpmSession *session)
+{
+	gboolean ret;
+	gboolean is_inhibited = FALSE;
+	GError *error = NULL;
+
+	/* no gnome-session */
+	if (session->priv->proxy == NULL) {
+		egg_warning ("no gnome-session");
+		goto out;
+	}
+
+	/* find out if this change altered the inhibited state */
+	ret = dbus_g_proxy_call (session->priv->proxy, "IsInhibited", &error,
+				 G_TYPE_UINT, GPM_SESSION_INHIBIT_MASK_SUSPEND,
 				 G_TYPE_INVALID,
 				 G_TYPE_BOOLEAN, &is_inhibited,
 				 G_TYPE_INVALID);
@@ -333,13 +376,16 @@ out:
 static void
 gpm_session_inhibit_changed_cb (DBusGProxy *proxy, const gchar *id, GpmSession *session)
 {
-	gboolean is_inhibited;
+	gboolean is_idle_inhibited;
+	gboolean is_suspend_inhibited;
 
-	is_inhibited = gpm_session_is_inhibited (session);
-	if (is_inhibited != session->priv->is_inhibited_old) {
-		egg_debug ("emitting inhibited-changed : (%i)", is_inhibited);
-		session->priv->is_inhibited_old = is_inhibited;
-		g_signal_emit (session, signals [INHIBITED_CHANGED], 0, is_inhibited);
+	is_idle_inhibited = gpm_session_is_idle_inhibited (session);
+	is_suspend_inhibited = gpm_session_is_suspend_inhibited (session);
+	if (is_idle_inhibited != session->priv->is_idle_inhibited_old || is_suspend_inhibited != session->priv->is_suspend_inhibited_old) {
+		egg_debug ("emitting inhibited-changed : idle=(%i), suspend=(%i)", is_idle_inhibited, is_suspend_inhibited);
+		session->priv->is_idle_inhibited_old = is_idle_inhibited;
+		session->priv->is_suspend_inhibited_old = is_suspend_inhibited;
+		g_signal_emit (session, signals [INHIBITED_CHANGED], 0, is_idle_inhibited, is_suspend_inhibited);
 	}
 }
 
@@ -366,8 +412,8 @@ gpm_session_class_init (GpmSessionClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmSessionClass, inhibited_changed),
-			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+			      NULL, NULL, gpm_marshal_VOID__BOOLEAN_BOOLEAN,
+			      G_TYPE_NONE, 2, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
 	signals [STOP] =
 		g_signal_new ("stop",
 			      G_TYPE_FROM_CLASS (object_class),
@@ -410,7 +456,8 @@ gpm_session_init (GpmSession *session)
 
 	session->priv = GPM_SESSION_GET_PRIVATE (session);
 	session->priv->is_idle_old = FALSE;
-	session->priv->is_inhibited_old = FALSE;
+	session->priv->is_idle_inhibited_old = FALSE;
+	session->priv->is_suspend_inhibited_old = FALSE;
 	session->priv->proxy_client_private = NULL;
 
 	connection = dbus_g_bus_get (DBUS_BUS_SESSION, NULL);
@@ -458,9 +505,10 @@ gpm_session_init (GpmSession *session)
 	dbus_g_proxy_connect_signal (session->priv->proxy, "InhibitorRemoved", G_CALLBACK (gpm_session_inhibit_changed_cb), session, NULL);
 
 	/* coldplug */
-	session->priv->is_inhibited_old = gpm_session_is_inhibited (session);
+	session->priv->is_idle_inhibited_old = gpm_session_is_idle_inhibited (session);
+	session->priv->is_suspend_inhibited_old = gpm_session_is_suspend_inhibited (session);
 	session->priv->is_idle_old = gpm_session_is_idle (session);
-	egg_debug ("idle: %i, inhibited: %i", session->priv->is_idle_old, session->priv->is_inhibited_old);
+	egg_debug ("idle: %i, idle_inhibited: %i, suspend_inhibited: %i", session->priv->is_idle_old, session->priv->is_idle_inhibited_old, session->priv->is_suspend_inhibited_old);
 }
 
 /**

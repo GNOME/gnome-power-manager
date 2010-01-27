@@ -47,7 +47,8 @@ typedef struct
 	void		(* idle_changed)		(GpmSession	*session,
 							 gboolean	 is_idle);
 	void		(* inhibited_changed)		(GpmSession	*session,
-							 gboolean	 is_inhibited);
+							 gboolean	 is_idle_inhibited,
+							 gboolean        is_suspend_inhibited);
 	/* just exit */
 	void		(* stop)			(GpmSession	*session);
 	/* reply with EndSessionResponse */
@@ -64,7 +65,8 @@ GpmSession	*gpm_session_new			(void);
 
 gboolean	 gpm_session_logout			(GpmSession	*session);
 gboolean	 gpm_session_get_idle			(GpmSession	*session);
-gboolean	 gpm_session_get_inhibited		(GpmSession	*session);
+gboolean	 gpm_session_get_idle_inhibited		(GpmSession	*session);
+gboolean	 gpm_session_get_suspend_inhibited	(GpmSession	*session);
 gboolean	 gpm_session_register_client		(GpmSession	*session,
 							 const gchar	*app_id,
 							 const gchar	*client_startup_id);

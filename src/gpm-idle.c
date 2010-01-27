@@ -203,14 +203,16 @@ static void
 gpm_idle_evaluate (GpmIdle *idle)
 {
 	gboolean is_idle;
-	gboolean is_inhibited;
+	gboolean is_idle_inhibited;
+	gboolean is_suspend_inhibited;
 	gchar *tooltip;
 	gchar *what_to_do;
 	gchar *nag_message;
 
 	is_idle = gpm_session_get_idle (idle->priv->session);
-	is_inhibited = gpm_session_get_inhibited (idle->priv->session);
-	egg_debug ("session_idle=%i, session_inhibited=%i, x_idle=%i", is_idle, is_inhibited, idle->priv->x_idle);
+	is_idle_inhibited = gpm_session_get_idle_inhibited (idle->priv->session);
+	is_suspend_inhibited = gpm_session_get_suspend_inhibited (idle->priv->session);
+	egg_debug ("session_idle=%i, idle_inhibited=%i, suspend_inhibited=%i, x_idle=%i", is_idle, is_idle_inhibited, is_suspend_inhibited, idle->priv->x_idle);
 
 	/* TRANSLATORS: this is what the user should read for more information about the blanking problem (%s is a URL) */
 	what_to_do = g_strdup_printf (_("Please see %s for more information."),
@@ -221,11 +223,13 @@ gpm_idle_evaluate (GpmIdle *idle)
 				       what_to_do);
 
 	/* debug */
-	tooltip = g_strdup_printf ("%s, %s, %s.\n%s",
+	tooltip = g_strdup_printf ("%s, %s, %s, %s.\n%s",
 				   /* TRANSLATORS: this is for debugging, if the session is idle */
 				   is_idle ? _("Session idle") : _("Session active"),
-				   /* TRANSLATORS: has something inhibited the session */
-				   is_inhibited ? _("inhibited") : _("not inhibited"),
+				   /* TRANSLATORS: has something inhibited the session from going idle */
+				   is_idle_inhibited ? _("idle inhibited") : _("idle not inhibited"),
+				   /* TRANSLATORS: has something inhibited the system from being suspended */
+				   is_suspend_inhibited ? _("suspend inhibited") : _("suspend not inhibited"),
 				   /* TRANSLATORS: is the screen idle or awake */
 				   idle->priv->x_idle ? _("screen idle") : _("screen awake"),
 				   nag_message);
@@ -247,8 +251,8 @@ gpm_idle_evaluate (GpmIdle *idle)
 		goto out;
 	}
 
-	/* are we inhibited */
-	if (is_inhibited) {
+	/* are we inhibited from going idle */
+	if (is_idle_inhibited) {
 		egg_debug ("inhibited, so using normal state");
 		gpm_idle_set_mode (idle, GPM_IDLE_MODE_NORMAL);
 		if (idle->priv->timeout_blank_id != 0) {
@@ -276,8 +280,15 @@ gpm_idle_evaluate (GpmIdle *idle)
 		idle->priv->timeout_blank_id = g_timeout_add_seconds (idle->priv->timeout_blank, (GSourceFunc) gpm_idle_blank_cb, idle);
 	}
 
-	/* only do the sleep timeout when the session is idle */
-	if (is_idle) {
+	/* are we inhibited from sleeping */
+	if (is_suspend_inhibited) {
+		egg_debug ("suspend inhibited");
+		if (idle->priv->timeout_sleep_id != 0) {
+			g_source_remove (idle->priv->timeout_sleep_id);
+			idle->priv->timeout_sleep_id = 0;
+		}
+	} else if (is_idle) {
+	/* only do the sleep timeout when the session is idle and we aren't inhibited from sleeping */
 		if (idle->priv->timeout_sleep_id == 0 &&
 		    idle->priv->timeout_sleep != 0) {
 			egg_debug ("setting up sleep callback %is", idle->priv->timeout_sleep);
@@ -362,9 +373,9 @@ gpm_idle_session_idle_changed_cb (GpmSession *session, gboolean is_idle, GpmIdle
  * gpm_idle_session_inhibited_changed_cb:
  **/
 static void
-gpm_idle_session_inhibited_changed_cb (GpmSession *session, gboolean is_inhibited, GpmIdle *idle)
+gpm_idle_session_inhibited_changed_cb (GpmSession *session, gboolean is_idle_inhibited, gboolean is_suspend_inhibited, GpmIdle *idle)
 {
-	egg_debug ("Received gnome session inhibited changed: %i", is_inhibited);
+	egg_debug ("Received gnome session inhibited changed: idle=(%i), suspend=(%i)", is_idle_inhibited, is_suspend_inhibited);
 	gpm_idle_evaluate (idle);
 }
 
