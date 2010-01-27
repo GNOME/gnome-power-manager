@@ -1685,10 +1685,13 @@ gpm_manager_dpms_mode_changed_cb (GpmDpms *dpms, GpmDpmsMode mode, GpmManager *m
 	gpm_manager_update_dpms_throttle (manager);
 }
 
+/*
+ * gpm_manager_reset_just_resumed_cb
+ */
 static gboolean
 gpm_manager_reset_just_resumed_cb (gpointer user_data)
 {
-	GpmManager *manager = GPM_MANAGER(user_data)
+	GpmManager *manager = GPM_MANAGER (user_data);
 	manager->priv->just_resumed = FALSE;
 	return FALSE;
 }
@@ -1700,7 +1703,6 @@ static void
 gpm_manager_control_resume_cb (GpmControl *control, GpmControlAction action, GpmManager *manager)
 {
 	manager->priv->just_resumed = TRUE;
-
 	g_timeout_add_seconds (1, gpm_manager_reset_just_resumed_cb, manager);
 }
 
