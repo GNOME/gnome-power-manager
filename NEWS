@@ -1,3 +1,37 @@
+Version 2.29.2
+~~~~~~~~~~~~~~
+Released: 2009-02-01
+
+* Translations
+ - Updated Bulgarian translation (Alexander Shopov)
+ - Updated Welsh translation (Iestyn Pryce)
+ - Updated Bengali translation (Jamil Ahmed)
+ - Updated Spanish translation (Jorge González)
+ - Updated Arabic translation (Khaled Hosny)
+ - Updated Norwegian bokmål translation (Kjartan Maraas)
+ - Updated Thai translation (Theppitak Karoonboonyanan)
+ - updated Tamil translation (vasudeven)
+ - Updated Slovenian translation (Matej Urbančič)
+ - Updated Estonian translation (Mattias Põldaru)
+ - Updated Ukrainian translation (Maxim V. Dziumanenko)
+ - Updated Vietnamese translation (Nguyễn Thái Ngọc Duy)
+
+* New Features:
+ - Move the power management preferences into the hardware section of the control center (Richard Hughes)
+ - Use the name of 'Power' for the power management preferences capplet (Richard Hughes)
+
+* Bugfix:
+ - Don't rely on the cached value of the lid status, to fix a double suspend issue (Chow Loong Jin)
+ - Add a flag to inhibit consolekit events just after we resumed (Chow Loong Jin)
+ - Don't automatically suspend if there are suspend inhibits (Chris Coulson)
+ - Do not exit if hal is not available (Martin Pitt)
+ - Only connect to HAL if there is no xrandr backlight hardware (Martin Pitt)
+ - Fix compile when using an ld that defaults to --as-needed (Richard Hughes)
+ - Enable the help action in gnome-power-statistics. Fixes #607005 (Richard Hughes)
+ - Ensure the window is realized before we invalidate it. Fixes #604918 (Richard Hughes)
+ - Don't show the user a sleep failed link pointing to the quirk site (Richard Hughes)
+ - Show the device name even when using UPower (Richard Hughes)
+
 Version 2.29.1
 ~~~~~~~~~~~~~~
 Released: 2009-12-08
