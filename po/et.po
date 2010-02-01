@@ -7,16 +7,16 @@
 #
 # Priit Laes <amd store20 com>, 2006.
 # Ivar Smolin <okul at linux ee>, 2006-2009.
-# Mattias Põldaru <mahfiaz gmail com>, 2009.
+# Mattias Põldaru <mahfiaz gmail com>, 2009-2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Gnome Power Manager MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&component=general\n"
-"POT-Creation-Date: 2009-11-25 10:42+0000\n"
-"PO-Revision-Date: 2009-12-02 08:36+0200\n"
-"Last-Translator: Ivar Smolin <okul@linux.ee>\n"
+"POT-Creation-Date: 2010-01-30 11:13+0000\n"
+"PO-Revision-Date: 2010-01-31 22:58+0300\n"
+"Last-Translator: Mattias Põldaru <mahfiaz gmail com>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -122,8 +122,9 @@ msgstr "Vooluhalduri takistamise rakend"
 msgid "Inhibit Applet Factory"
 msgstr "Vooluhalduri takistamise rakendi factory"
 
-msgid "Power Manager"
-msgstr "Vooluhaldur"
+#. TRANSLATORS: this is the Y axis on the graph
+msgid "Power"
+msgstr "Toide"
 
 msgid "Power management daemon"
 msgstr "Vooluhaldusdeemon"
@@ -821,7 +822,7 @@ msgid "Set display _brightness to:"
 msgstr "Kuva _heledustase:"
 
 msgid "Sets this policy to be used by all users"
-msgstr ""
+msgstr "Määra see reegel kõigile kasutajatele"
 
 msgid "Sp_in down hard disks when possible"
 msgstr "Võimaluse korral vähendatakse _kõvaketta pöördeid"
@@ -1166,12 +1167,19 @@ msgstr "Sessioon puhkab"
 msgid "Session active"
 msgstr "Sessioon aktiivne"
 
-#. TRANSLATORS: has something inhibited the session
-msgid "inhibited"
-msgstr "takistatud"
+#. TRANSLATORS: has something inhibited the session from going idle
+msgid "idle inhibited"
+msgstr "jõudeolek on takistatud"
 
-msgid "not inhibited"
-msgstr "pole takistatud"
+msgid "idle not inhibited"
+msgstr "jõudeolek pole takistatud"
+
+#. TRANSLATORS: has something inhibited the system from being suspended
+msgid "suspend inhibited"
+msgstr "uinak on takistatud"
+
+msgid "suspend not inhibited"
+msgstr "uinak pole takistatud"
 
 #. TRANSLATORS: is the screen idle or awake
 msgid "screen idle"
@@ -1796,10 +1804,6 @@ msgid "Time elapsed"
 msgstr "Kulunud aeg"
 
 #. TRANSLATORS: this is the Y axis on the graph
-msgid "Power"
-msgstr "Toide"
-
-#. TRANSLATORS: this is the Y axis on the graph
 #. TRANSLATORS: this is the X axis on the graph
 msgid "Cell charge"
 msgstr "Aku laetus"
@@ -1818,7 +1822,7 @@ msgstr "Ennustuse täpsus"
 
 #. TRANSLATORS: show a device by default
 msgid "Select this device at startup"
-msgstr ""
+msgstr "Vali see seade käivitumisel"
 
 #. TRANSLATORS: the icon for the CPU
 msgid "Processor"
@@ -1833,6 +1837,3 @@ msgstr "_Programmist lähemalt"
 
 msgid "_Help"
 msgstr "_Abi"
-
-#~ msgid "Sleep problem"
-#~ msgstr "Viga uinumisel"
