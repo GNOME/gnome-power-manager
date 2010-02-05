@@ -38,7 +38,7 @@
 
 #include "gpm-common.h"
 #include "gpm-stock-icons.h"
-#include "gpm-devicekit.h"
+#include "gpm-upower.h"
 #include "gpm-graph-widget.h"
 
 static GtkBuilder *builder = NULL;
@@ -1145,7 +1145,7 @@ gpm_stats_add_device (DkpDevice *device)
 
 	id = dkp_device_get_object_path (device);
 	text = gpm_device_type_to_localised_text (type, 1);
-	icon = gpm_devicekit_get_object_icon (device);
+	icon = gpm_upower_get_device_icon (device);
 
 	gtk_list_store_append (list_store_devices, &iter);
 	gtk_list_store_set (list_store_devices, &iter,

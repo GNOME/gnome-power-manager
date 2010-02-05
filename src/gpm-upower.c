@@ -27,14 +27,14 @@
 #include "egg-debug.h"
 #include "egg-precision.h"
 
-#include "gpm-devicekit.h"
+#include "gpm-upower.h"
 #include "gpm-common.h"
 
 #define GPM_DKP_TIME_PRECISION			5*60
 #define GPM_DKP_TEXT_MIN_TIME			120
 
 /**
- * gpm_devicekit_get_object_icon_index:
+ * gpm_upower_get_device_icon_index:
  * @percent: The charge of the device
  *
  * The index value depends on the percentage charge:
@@ -48,7 +48,7 @@
  * Return value: The character string for the filename suffix.
  **/
 static const gchar *
-gpm_devicekit_get_object_icon_index (DkpDevice *device)
+gpm_upower_get_device_icon_index (DkpDevice *device)
 {
 	gdouble percentage;
 	/* get device properties */
@@ -67,13 +67,13 @@ gpm_devicekit_get_object_icon_index (DkpDevice *device)
 }
 
 /**
- * gpm_devicekit_get_object_icon:
+ * gpm_upower_get_device_icon:
  *
  * Need to free the return value
  *
  **/
 gchar *
-gpm_devicekit_get_object_icon (DkpDevice *device)
+gpm_upower_get_device_icon (DkpDevice *device)
 {
 	gchar *filename = NULL;
 	const gchar *prefix = NULL;
@@ -110,11 +110,11 @@ gpm_devicekit_get_object_icon (DkpDevice *device)
 			filename = g_strdup_printf ("gpm-%s-100", prefix);
 
 		} else if (state == DKP_DEVICE_STATE_CHARGING) {
-			index_str = gpm_devicekit_get_object_icon_index (device);
+			index_str = gpm_upower_get_device_icon_index (device);
 			filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index_str);
 
 		} else if (state == DKP_DEVICE_STATE_DISCHARGING) {
-			index_str = gpm_devicekit_get_object_icon_index (device);
+			index_str = gpm_upower_get_device_icon_index (device);
 			filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 		}
 	} else if (type == DKP_DEVICE_TYPE_BATTERY) {
@@ -135,11 +135,11 @@ gpm_devicekit_get_object_icon (DkpDevice *device)
 #endif
 
 		} else if (state == DKP_DEVICE_STATE_CHARGING) {
-			index_str = gpm_devicekit_get_object_icon_index (device);
+			index_str = gpm_upower_get_device_icon_index (device);
 			filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index_str);
 
 		} else if (state == DKP_DEVICE_STATE_DISCHARGING) {
-			index_str = gpm_devicekit_get_object_icon_index (device);
+			index_str = gpm_upower_get_device_icon_index (device);
 			filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 
 #if !DKP_CHECK_VERSION(0x009)
@@ -158,20 +158,20 @@ gpm_devicekit_get_object_icon (DkpDevice *device)
 
 			/* try to find a suitable icon depending on AC state */
 			if (on_battery) {
-				index_str = gpm_devicekit_get_object_icon_index (device);
+				index_str = gpm_upower_get_device_icon_index (device);
 				filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 			} else {
-				index_str = gpm_devicekit_get_object_icon_index (device);
+				index_str = gpm_upower_get_device_icon_index (device);
 				filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index_str);
 			}
 #else
 		} else if (state == DKP_DEVICE_STATE_PENDING_CHARGE) {
-			index_str = gpm_devicekit_get_object_icon_index (device);
+			index_str = gpm_upower_get_device_icon_index (device);
 			/* FIXME: do new grey icons */
 			filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index_str);
 
 		} else if (state == DKP_DEVICE_STATE_PENDING_DISCHARGE) {
-			index_str = gpm_devicekit_get_object_icon_index (device);
+			index_str = gpm_upower_get_device_icon_index (device);
 			filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 		} else {
 			filename = g_strdup ("gpm-battery-missing");
@@ -189,7 +189,7 @@ gpm_devicekit_get_object_icon (DkpDevice *device)
 			filename = g_strdup_printf ("gpm-%s-100", prefix);
 
 		} else if (state == DKP_DEVICE_STATE_DISCHARGING) {
-			index_str = gpm_devicekit_get_object_icon_index (device);
+			index_str = gpm_upower_get_device_icon_index (device);
 			filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 		}
 	}
@@ -205,10 +205,10 @@ gpm_devicekit_get_object_icon (DkpDevice *device)
 }
 
 /**
- * gpm_devicekit_get_object_summary:
+ * gpm_upower_get_device_summary:
  **/
 gchar *
-gpm_devicekit_get_object_summary (DkpDevice *device)
+gpm_upower_get_device_summary (DkpDevice *device)
 {
 	const gchar *type_desc = NULL;
 	gchar *description = NULL;
@@ -338,10 +338,10 @@ gpm_devicekit_get_object_summary (DkpDevice *device)
 }
 
 /**
- * gpm_devicekit_get_object_description:
+ * gpm_upower_get_device_description:
  **/
 gchar *
-gpm_devicekit_get_object_description (DkpDevice *device)
+gpm_upower_get_device_description (DkpDevice *device)
 {
 	GString	*details;
 	const gchar *text;

@@ -59,7 +59,7 @@
 #include "gpm-prefs-server.h"
 #include "gpm-tray-icon.h"
 #include "gpm-engine.h"
-#include "gpm-devicekit.h"
+#include "gpm-upower.h"
 #include "gpm-disks.h"
 
 #include "org.gnome.PowerManager.Backlight.h"
@@ -1297,7 +1297,7 @@ gpm_manager_engine_discharging_cb (GpmEngine *engine, DkpDevice *device, GpmMana
 		goto out;
 	}
 
-	icon = gpm_devicekit_get_object_icon (device);
+	icon = gpm_upower_get_device_icon (device);
 	/* show the notification */
 	gpm_manager_notify (manager, &manager->priv->notification_discharging, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_LONG,
 			    icon, NOTIFY_URGENCY_NORMAL);
@@ -1419,7 +1419,7 @@ gpm_manager_engine_charge_low_cb (GpmEngine *engine, DkpDevice *device, GpmManag
 	}
 
 	/* get correct icon */
-	icon = gpm_devicekit_get_object_icon (device);
+	icon = gpm_upower_get_device_icon (device);
 	gpm_manager_notify (manager, &manager->priv->notification, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_LONG, icon, NOTIFY_URGENCY_NORMAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
 out:
@@ -1544,7 +1544,7 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, Gpm
 	}
 
 	/* get correct icon */
-	icon = gpm_devicekit_get_object_icon (device);
+	icon = gpm_upower_get_device_icon (device);
 	gpm_manager_notify (manager, &manager->priv->notification, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_LONG, icon, NOTIFY_URGENCY_CRITICAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
 out:
@@ -1651,7 +1651,7 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, DkpDevice *device, GpmMa
 		return;
 
 	/* get correct icon */
-	icon = gpm_devicekit_get_object_icon (device);
+	icon = gpm_upower_get_device_icon (device);
 	gpm_manager_notify (manager, &manager->priv->notification,
 			    title, message, GPM_MANAGER_NOTIFY_TIMEOUT_LONG,
 			    icon, NOTIFY_URGENCY_CRITICAL);

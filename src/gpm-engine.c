@@ -30,7 +30,7 @@
 #include "egg-debug.h"
 
 #include "gpm-common.h"
-#include "gpm-devicekit.h"
+#include "gpm-upower.h"
 #include "gpm-marshal.h"
 #include "gpm-engine.h"
 #include "gpm-stock-icons.h"
@@ -246,7 +246,7 @@ gpm_engine_get_summary (GpmEngine *engine)
 	array = engine->priv->array;
 	for (i=0;i<array->len;i++) {
 		device = g_ptr_array_index (engine->priv->array, i);
-		part = gpm_devicekit_get_object_summary (device);
+		part = gpm_upower_get_device_summary (device);
 		if (part != NULL)
 			g_string_append_printf (tooltip, "%s\n", part);
 		g_free (part);
@@ -296,15 +296,15 @@ gpm_engine_get_icon_priv (GpmEngine *engine, DkpDeviceType device_type, GpmEngin
 		if (type == device_type && is_present) {
 			if (warning != GPM_ENGINE_WARNING_NONE) {
 				if (warning_temp == warning)
-					return gpm_devicekit_get_object_icon (device);
+					return gpm_upower_get_device_icon (device);
 				continue;
 			}
 			if (use_state) {
 				if (state == DKP_DEVICE_STATE_CHARGING || state == DKP_DEVICE_STATE_DISCHARGING)
-					return gpm_devicekit_get_object_icon (device);
+					return gpm_upower_get_device_icon (device);
 				continue;
 			}
-			return gpm_devicekit_get_object_icon (device);
+			return gpm_upower_get_device_icon (device);
 		}
 	}
 	return NULL;

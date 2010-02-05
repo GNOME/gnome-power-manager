@@ -78,8 +78,8 @@ libgpmshared_a_SOURCES =				\
 	gpm-common.c					\
 	gpm-marshal.h					\
 	gpm-marshal.c					\
-	gpm-devicekit.c					\
-	gpm-devicekit.h					\
+	gpm-upower.c					\
+	gpm-upower.h					\
 	$(NULL)
 
 gnome_power_statistics_SOURCES =			\
@@ -247,8 +247,8 @@ gnome_power_self_test_SOURCES =				\
 	gpm-marshal.c					\
 	gpm-common.h					\
 	gpm-common.c					\
-	gpm-devicekit.h					\
-	gpm-devicekit.c					\
+	gpm-upower.h					\
+	gpm-upower.c					\
 	$(NULL)
 
 gnome_power_self_test_LDADD =				\

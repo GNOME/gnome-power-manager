@@ -31,9 +31,9 @@ const gchar	*gpm_device_type_to_localised_text	(DkpDeviceType	 type,
 							 guint		 number);
 const gchar	*gpm_device_type_to_icon		(DkpDeviceType	 type);
 const gchar	*gpm_device_technology_to_localised_text (DkpDeviceTechnology technology_enum);
-gchar		*gpm_devicekit_get_object_icon		(DkpDevice *device);
-gchar		*gpm_devicekit_get_object_summary	(DkpDevice *device);
-gchar		*gpm_devicekit_get_object_description	(DkpDevice *device);
+gchar		*gpm_upower_get_device_icon		(DkpDevice *device);
+gchar		*gpm_upower_get_device_summary		(DkpDevice *device);
+gchar		*gpm_upower_get_device_description	(DkpDevice *device);
 
 G_END_DECLS
 

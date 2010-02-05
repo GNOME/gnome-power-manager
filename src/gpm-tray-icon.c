@@ -43,7 +43,7 @@
 
 #include "egg-debug.h"
 
-#include "gpm-devicekit.h"
+#include "gpm-upower.h"
 #include "gpm-engine.h"
 #include "gpm-common.h"
 #include "gpm-stock-icons.h"
@@ -238,7 +238,7 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon, GtkMenu *menu, const GPtrArray *arr
 		item = gtk_image_menu_item_new_with_label (label);
 
 		/* generate the image */
-		icon_name = gpm_devicekit_get_object_icon (device);
+		icon_name = gpm_upower_get_device_icon (device);
 		image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
 		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
 		gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item), TRUE);
