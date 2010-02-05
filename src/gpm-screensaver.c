@@ -177,6 +177,7 @@ gpm_screensaver_lock (GpmScreensaver *screensaver)
 		/* Sleep for 1/10s */
 		g_usleep (1000 * 100);
 		if (sleepcount++ > 50) {
+			egg_debug ("timeout waiting for gnome-screensaver");
 			break;
 		}
 	}
