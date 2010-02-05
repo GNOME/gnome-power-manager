@@ -40,7 +40,6 @@
 
 #include <hal-device.h>
 #include <hal-manager.h>
-#include "egg-dbus-proxy.h"
 
 #include "egg-debug.h"
 #include "egg-discrete.h"
@@ -59,7 +58,7 @@ struct GpmBrightnessHalPrivate
 	guint			 levels;
 	gchar			*udi;
 	gboolean		 hw_changed;
-	EggDbusProxy		*gproxy;
+	DBusGProxy		*proxy;
 
  	/* true if hardware automatically sets brightness in response to
  	 * key press events */
@@ -87,18 +86,16 @@ gpm_brightness_hal_get_hw (GpmBrightnessHal *brightness, guint *value_hw)
 {
 	GError *error = NULL;
 	gboolean ret;
-	DBusGProxy *proxy;
 	gint level = 0;
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_HAL (brightness), FALSE);
 
-	proxy = egg_dbus_proxy_get_proxy (brightness->priv->gproxy);
-	if (proxy == NULL) {
+	if (brightness->priv->proxy == NULL) {
 		egg_warning ("not connected to HAL");
 		return FALSE;
 	}
 
-	ret = dbus_g_proxy_call (proxy, "GetBrightness", &error,
+	ret = dbus_g_proxy_call (brightness->priv->proxy, "GetBrightness", &error,
 				 G_TYPE_INVALID,
 				 G_TYPE_INT, &level,
 				 G_TYPE_INVALID);
@@ -135,13 +132,11 @@ gpm_brightness_hal_set_hw (GpmBrightnessHal *brightness, guint value_hw)
 {
 	GError *error = NULL;
 	gboolean ret;
-	DBusGProxy *proxy;
 	gint retval;
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_HAL (brightness), FALSE);
 
-	proxy = egg_dbus_proxy_get_proxy (brightness->priv->gproxy);
-	if (proxy == NULL) {
+	if (brightness->priv->proxy == NULL) {
 		egg_warning ("not connected to HAL");
 		return FALSE;
 	}
@@ -154,7 +149,7 @@ gpm_brightness_hal_set_hw (GpmBrightnessHal *brightness, guint value_hw)
 
 	egg_debug ("Setting %i of %i", value_hw, brightness->priv->levels - 1);
 
-	ret = dbus_g_proxy_call (proxy, "SetBrightness", &error,
+	ret = dbus_g_proxy_call (brightness->priv->proxy, "SetBrightness", &error,
 				 G_TYPE_INT, (gint)value_hw,
 				 G_TYPE_INVALID,
 				 G_TYPE_INT, &retval,
@@ -390,7 +385,7 @@ gpm_brightness_hal_down (GpmBrightnessHal *brightness, gboolean *hw_changed)
 gboolean
 gpm_brightness_hal_has_hw (GpmBrightnessHal *brightness)
 {
-	return (brightness->priv->gproxy != NULL);
+	return (brightness->priv->proxy != NULL);
 }
 
 /**
@@ -404,12 +399,9 @@ gpm_brightness_hal_finalize (GObject *object)
 	g_return_if_fail (GPM_IS_BRIGHTNESS_HAL (object));
 	brightness = GPM_BRIGHTNESS_HAL (object);
 
-	if (brightness->priv->udi != NULL) {
-		g_free (brightness->priv->udi);
-	}
-	if (brightness->priv->gproxy != NULL) {
-		g_object_unref (brightness->priv->gproxy);
-	}
+	g_free (brightness->priv->udi);
+	if (brightness->priv->proxy != NULL)
+		g_object_unref (brightness->priv->proxy);
 
 	G_OBJECT_CLASS (gpm_brightness_hal_parent_class)->finalize (object);
 }
@@ -451,7 +443,7 @@ gpm_brightness_hal_init (GpmBrightnessHal *brightness)
 	DBusGConnection *connection;
 
 	brightness->priv = GPM_BRIGHTNESS_HAL_GET_PRIVATE (brightness);
-	brightness->priv->gproxy = NULL;
+	brightness->priv->proxy = NULL;
 	brightness->priv->hw_changed = FALSE;
 
 	/* save udi of lcd adapter */
@@ -498,10 +490,19 @@ gpm_brightness_hal_init (GpmBrightnessHal *brightness)
 	g_object_unref (device);
 
 	/* get a managed proxy */
-	brightness->priv->gproxy = egg_dbus_proxy_new ();
 	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, NULL);
-	egg_dbus_proxy_assign (brightness->priv->gproxy, connection, HAL_DBUS_SERVICE,
-			       brightness->priv->udi, HAL_DBUS_INTERFACE_LAPTOP_PANEL);
+	brightness->priv->proxy = dbus_g_proxy_new_for_name_owner (connection,
+								   HAL_DBUS_SERVICE,
+								   brightness->priv->udi,
+								   HAL_DBUS_INTERFACE_LAPTOP_PANEL,
+								   &error);
+	/* check for any possible error */
+	if (error != NULL) {
+		egg_warning ("DBUS error: %s", error->message);
+		g_error_free (error);
+		brightness->priv->proxy = NULL;
+		return;
+	}
 
 	/* this changes under our feet */
 	gpm_brightness_hal_get_hw (brightness, &brightness->priv->last_set_hw);
