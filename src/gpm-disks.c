@@ -50,9 +50,9 @@ gpm_disks_unregister (GpmDisks *disks)
 	gboolean ret = FALSE;
 	GError *error = NULL;
 
-	/* no DeviceKit-disks */
+	/* no UDisks */
 	if (disks->priv->proxy == NULL) {
-		egg_warning ("no DeviceKit-disks");
+		egg_warning ("no UDisks");
 		goto out;
 	}
 
@@ -84,9 +84,9 @@ gpm_disks_register (GpmDisks *disks, gint timeout)
 	GError *error = NULL;
 	const gchar **options = {NULL};
 
-	/* no DeviceKit-disks */
+	/* no UDisks */
 	if (disks->priv->proxy == NULL) {
-		egg_warning ("no DeviceKit-disks");
+		egg_warning ("no UDisks");
 		goto out;
 	}
 
@@ -150,9 +150,9 @@ gpm_disks_init (GpmDisks *disks)
 	/* get proxy to interface */
 	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, NULL);
 	disks->priv->proxy = dbus_g_proxy_new_for_name_owner (connection,
-							      "org.freedesktop.DeviceKit.Disks",
-							      "/org/freedesktop/DeviceKit/Disks",
-							      "org.freedesktop.DeviceKit.Disks", &error);
+							      "org.freedesktop.UDisks",
+							      "/org/freedesktop/UDisks",
+							      "org.freedesktop.UDisks", &error);
 	if (disks->priv->proxy == NULL) {
 		egg_warning ("DBUS error: %s", error->message);
 		g_error_free (error);
