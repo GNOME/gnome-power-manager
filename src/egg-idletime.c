@@ -146,14 +146,15 @@ egg_idletime_alarm_reset_all (EggIdletime *idletime)
 
 	g_return_if_fail (EGG_IS_IDLETIME (idletime));
 
-	if (!idletime->priv->reset_set)
-		return;
-
 	/* reset all the alarms (except the reset alarm) to their timeouts */
 	for (i=1; i<idletime->priv->array->len; i++) {
 		alarm = g_ptr_array_index (idletime->priv->array, i);
 		egg_idletime_xsync_alarm_set (idletime, alarm, EGG_IDLETIME_ALARM_TYPE_POSITIVE);
 	}
+
+	/* set the reset alarm to be disabled */
+	alarm = g_ptr_array_index (idletime->priv->array, 0);
+	egg_idletime_xsync_alarm_set (idletime, alarm, EGG_IDLETIME_ALARM_TYPE_DISABLED);
 
 	/* emit signal so say we've reset all timers */
 	g_signal_emit (idletime, signals [SIGNAL_RESET], 0);
@@ -176,6 +177,33 @@ egg_idletime_alarm_find_id (EggIdletime *idletime, guint id)
 			return alarm;
 	}
 	return NULL;
+}
+
+/**
+ * egg_idletime_set_reset_alarm:
+ */
+static void
+egg_idletime_set_reset_alarm (EggIdletime *idletime, XSyncAlarmNotifyEvent *alarm_event)
+{
+	EggIdletimeAlarm *alarm;
+	int overflow;
+	XSyncValue add;
+
+	alarm = egg_idletime_alarm_find_id (idletime, 0);
+
+	if (!idletime->priv->reset_set) {
+		/* don't match on the current value because
+		 * XSyncNegativeComparison means less or equal. */
+		XSyncIntToValue (&add, -1);
+		XSyncValueAdd (&alarm->timeout, alarm_event->counter_value, add, &overflow);
+
+		/* set the reset alarm to fire the next time
+		 * idletime->priv->idle_counter < the current counter value */
+		egg_idletime_xsync_alarm_set (idletime, alarm, EGG_IDLETIME_ALARM_TYPE_NEGATIVE);
+
+		/* don't try to set this again if multiple timers are going off in sequence */
+		idletime->priv->reset_set = TRUE;
+	}
 }
 
 /**
@@ -226,7 +254,7 @@ egg_idletime_event_filter_cb (GdkXEvent *gdkxevent, GdkEvent *event, gpointer da
 	g_signal_emit (alarm->idletime, signals [SIGNAL_ALARM_EXPIRED], 0, alarm->id);
 
 	/* we need the first alarm to go off to set the reset alarm */
-	idletime->priv->reset_set = TRUE;
+	egg_idletime_set_reset_alarm (idletime, alarm_event);
 out:
 	/* don't propagate */
 	return GDK_FILTER_REMOVE;
@@ -388,12 +416,6 @@ egg_idletime_init (EggIdletime *idletime)
 	/* create a reset alarm */
 	alarm = egg_idletime_alarm_new (idletime, 0);
 	g_ptr_array_add (idletime->priv->array, alarm);
-
-	XSyncIntToValue (&alarm->timeout, 0);
-
-	/* set the reset alarm to fire when the
-	 * idle_counter == 0 */
-	egg_idletime_xsync_alarm_set (idletime, alarm, EGG_IDLETIME_ALARM_TYPE_NEGATIVE);
 }
 
 /**
