@@ -14,10 +14,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-15 18:38+0100\n"
-"PO-Revision-Date: 2010-01-30 20:11+0100\n"
+"POT-Creation-Date: 2010-02-20 22:27+0100\n"
+"PO-Revision-Date: 2010-02-15 19:14+0100\n"
 "Last-Translator: Fran Diéguez <frandieguez@ubuntu.com>\n"
-"Language-Team: Galician <proxecto@trasno.net>\n"
+"Language-Team: Gallician <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -152,10 +152,9 @@ msgstr "Miniaplicativo para a inhibición"
 msgid "Inhibit Applet Factory"
 msgstr "Factoría do miniaplicativo para a inhibición"
 
-#. TRANSLATORS: this is the Y axis on the graph
-#: ../data/gnome-power-manager.desktop.in.in.h:1 ../src/gpm-statistics.c:1239
-msgid "Power"
-msgstr "Enerxía"
+#: ../data/gnome-power-manager.desktop.in.in.h:1
+msgid "Power Manager"
+msgstr "Xestor de enerxía"
 
 #: ../data/gnome-power-manager.desktop.in.in.h:2
 msgid "Power management daemon"
@@ -1218,25 +1217,21 @@ msgstr "Sesión activa"
 
 #. TRANSLATORS: has something inhibited the session from going idle
 #: ../src/gpm-idle.c:230
-#, fuzzy
 msgid "idle inhibited"
-msgstr "inhibida"
+msgstr "parada inhibida"
 
 #: ../src/gpm-idle.c:230
-#, fuzzy
 msgid "idle not inhibited"
-msgstr "non inhibida"
+msgstr "parada non inhibida"
 
 #. TRANSLATORS: has something inhibited the system from being suspended
 #: ../src/gpm-idle.c:232
-#, fuzzy
 msgid "suspend inhibited"
-msgstr "non inhibida"
+msgstr "suspensión inhibida"
 
 #: ../src/gpm-idle.c:232
-#, fuzzy
 msgid "suspend not inhibited"
-msgstr "non inhibida"
+msgstr "suspensión non inhibida"
 
 #. TRANSLATORS: is the screen idle or awake
 #: ../src/gpm-idle.c:234
@@ -1266,7 +1261,7 @@ msgstr "Saír despois de que o xestor se cargara (para depuración)"
 
 #: ../src/gpm-main.c:191 ../src/gpm-main.c:195
 msgid "GNOME Power Manager"
-msgstr "Xestor de enerxía do Gnome"
+msgstr "Xestor de enerxía do GNOME"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:172
@@ -1692,12 +1687,12 @@ msgid ""
 "Please contact your computer administrator."
 msgstr ""
 "Non se instalou correctamente a configuración predefinida para o Xestor de "
-"enerxía do Gnome.\n"
+"enerxía do GNOME.\n"
 "Por favor, contacte co administrador do seu sistema."
 
 #: ../src/gpm-prefs.c:94
 msgid "GNOME Power Preferences"
-msgstr "Preferencias de enerxía do Gnome"
+msgstr "Preferencias de enerxía do GNOME"
 
 #: ../src/gpm-prefs-core.c:363
 msgid "Shutdown"
@@ -2027,6 +2022,11 @@ msgid "Time elapsed"
 msgstr "Tempo transcorrido"
 
 #. TRANSLATORS: this is the Y axis on the graph
+#: ../src/gpm-statistics.c:1239
+msgid "Power"
+msgstr "Enerxía"
+
+#. TRANSLATORS: this is the Y axis on the graph
 #. TRANSLATORS: this is the X axis on the graph
 #: ../src/gpm-statistics.c:1245 ../src/gpm-statistics.c:1288
 #: ../src/gpm-statistics.c:1294 ../src/gpm-statistics.c:1300
@@ -2323,9 +2323,6 @@ msgstr "_Sobre"
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:2
 msgid "_Help"
 msgstr "_Axuda"
-
-#~ msgid "Power Manager"
-#~ msgstr "Xestor de enerxía"
 
 #~ msgid "Allow Suspend and Hibernate in the menu"
 #~ msgstr "Permite Suspender e Hibernar no menú"
