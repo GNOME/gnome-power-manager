@@ -1614,8 +1614,8 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, DkpDevice *device, GpmMa
 
 		g_free (action);
 
-		/* wait 10 seconds for user-panic */
-		g_timeout_add_seconds (10, (GSourceFunc) manager_critical_action_do, manager);
+		/* wait 20 seconds for user-panic */
+		g_timeout_add_seconds (20, (GSourceFunc) manager_critical_action_do, manager);
 
 	} else if (type == DKP_DEVICE_TYPE_UPS) {
 		/* TRANSLATORS: UPS is really, really, low */
