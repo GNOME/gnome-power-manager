@@ -1435,7 +1435,6 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, Gpm
 {
 	const gchar *title = NULL;
 	gchar *message = NULL;
-	gchar *remaining_text;
 	gchar *action;
 	gchar *icon = NULL;
 	DkpDeviceType type;
@@ -1471,8 +1470,6 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, Gpm
 			title = _("Laptop battery critically low");
 		}
 
-		remaining_text = gpm_get_timestring (time_to_empty);
-
 		/* we have to do different warnings depending on the policy */
 		action = gconf_client_get_string (manager->priv->conf, GPM_CONF_ACTIONS_CRITICAL_BATT, NULL);
 		policy = gpm_action_policy_from_string (action);
@@ -1484,20 +1481,21 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, Gpm
 
 		} else if (policy == GPM_ACTION_POLICY_SUSPEND) {
 			/* TRANSLATORS: give the user a ultimatum */
-			message = g_strdup_printf (_("Computer will suspend in %s."), remaining_text);
+			message = g_strdup_printf (_("Computer will suspend very soon unless it is plugged in."));
 
 		} else if (policy == GPM_ACTION_POLICY_HIBERNATE) {
 			/* TRANSLATORS: give the user a ultimatum */
-			message = g_strdup_printf (_("Computer will hibernate in %s."), remaining_text);
+			message = g_strdup_printf (_("Computer will hibernate very soon unless it is plugged in."));
 
 		} else if (policy == GPM_ACTION_POLICY_SHUTDOWN) {
 			/* TRANSLATORS: give the user a ultimatum */
-			message = g_strdup_printf (_("Computer will shutdown in %s."), remaining_text);
+			message = g_strdup_printf (_("Computer will shutdown very soon unless it is plugged in."));
 		}
 
 		g_free (action);
-		g_free (remaining_text);
 	} else if (type == DKP_DEVICE_TYPE_UPS) {
+		gchar *remaining_text;
+
 		/* TRANSLATORS: the UPS is very low */
 		title = _("UPS critically low");
 		remaining_text = gpm_get_timestring (time_to_empty);
