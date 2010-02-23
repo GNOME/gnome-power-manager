@@ -1545,7 +1545,7 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, Gpm
 
 	/* get correct icon */
 	icon = gpm_upower_get_device_icon (device);
-	gpm_manager_notify (manager, &manager->priv->notification, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_LONG, icon, NOTIFY_URGENCY_CRITICAL);
+	gpm_manager_notify (manager, &manager->priv->notification, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_NEVER, icon, NOTIFY_URGENCY_CRITICAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
 out:
 	g_free (icon);
@@ -1653,7 +1653,7 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, DkpDevice *device, GpmMa
 	/* get correct icon */
 	icon = gpm_upower_get_device_icon (device);
 	gpm_manager_notify (manager, &manager->priv->notification,
-			    title, message, GPM_MANAGER_NOTIFY_TIMEOUT_LONG,
+			    title, message, GPM_MANAGER_NOTIFY_TIMEOUT_NEVER,
 			    icon, NOTIFY_URGENCY_CRITICAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
 out:
