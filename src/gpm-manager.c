@@ -1692,6 +1692,14 @@ static gboolean
 gpm_manager_reset_just_resumed_cb (gpointer user_data)
 {
 	GpmManager *manager = GPM_MANAGER (user_data);
+
+	if (manager->priv->notification != NULL)
+		gpm_manager_notify_close (manager, manager->priv->notification);
+	if (manager->priv->notification_discharging != NULL)
+		gpm_manager_notify_close (manager, manager->priv->notification_discharging);
+	if (manager->priv->notification_fully_charged != NULL)
+		gpm_manager_notify_close (manager, manager->priv->notification_fully_charged);
+
 	manager->priv->just_resumed = FALSE;
 	return FALSE;
 }
