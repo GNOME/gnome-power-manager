@@ -1241,7 +1241,7 @@ gpm_stats_history_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 		history_type = GPM_HISTORY_CHARGE_VALUE;
 		/* TRANSLATORS: this is the X axis on the graph */
 		axis_x = _("Time elapsed");
-		/* TRANSLATORS: this is the Y axis on the graph */
+		/* TRANSLATORS: this is the Y axis on the graph for the whole battery device */
 		axis_y = _("Cell charge");
 	} else if (g_strcmp0 (value, GPM_HISTORY_TIME_FULL_TEXT) == 0) {
 		history_type = GPM_HISTORY_TIME_FULL_VALUE;
@@ -1284,25 +1284,25 @@ gpm_stats_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
 	if (g_strcmp0 (value, GPM_STATS_CHARGE_DATA_TEXT) == 0) {
 		stats_type = GPM_STATS_CHARGE_DATA_VALUE;
-		/* TRANSLATORS: this is the X axis on the graph */
+		/* TRANSLATORS: this is the X axis on the graph for the whole battery device */
 		axis_x = _("Cell charge");
 		/* TRANSLATORS: this is the Y axis on the graph */
 		axis_y = _("Correction factor");
 	} else if (g_strcmp0 (value, GPM_STATS_CHARGE_ACCURACY_TEXT) == 0) {
 		stats_type = GPM_STATS_CHARGE_ACCURACY_VALUE;
-		/* TRANSLATORS: this is the X axis on the graph */
+		/* TRANSLATORS: this is the X axis on the graph for the whole battery device */
 		axis_x = _("Cell charge");
 		/* TRANSLATORS: this is the Y axis on the graph */
 		axis_y = _("Prediction accuracy");
 	} else if (g_strcmp0 (value, GPM_STATS_DISCHARGE_DATA_TEXT) == 0) {
 		stats_type = GPM_STATS_DISCHARGE_DATA_VALUE;
-		/* TRANSLATORS: this is the X axis on the graph */
+		/* TRANSLATORS: this is the X axis on the graph for the whole battery device */
 		axis_x = _("Cell charge");
 		/* TRANSLATORS: this is the Y axis on the graph */
 		axis_y = _("Correction factor");
 	} else if (g_strcmp0 (value, GPM_STATS_DISCHARGE_ACCURACY_TEXT) == 0) {
 		stats_type = GPM_STATS_DISCHARGE_ACCURACY_VALUE;
-		/* TRANSLATORS: this is the X axis on the graph */
+		/* TRANSLATORS: this is the X axis on the graph for the whole battery device */
 		axis_x = _("Cell charge");
 		/* TRANSLATORS: this is the Y axis on the graph */
 		axis_y = _("Prediction accuracy");
