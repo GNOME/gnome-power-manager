@@ -441,6 +441,7 @@ gpm_brightness_hal_init (GpmBrightnessHal *brightness)
 	HalDevice *device;
 	gboolean res;
 	DBusGConnection *connection;
+	GError *error = NULL;
 
 	brightness->priv = GPM_BRIGHTNESS_HAL_GET_PRIVATE (brightness);
 	brightness->priv->proxy = NULL;
