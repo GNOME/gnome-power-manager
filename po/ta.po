@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.master.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-18 09:31+0530\n"
-"PO-Revision-Date: 2010-02-18 09:34+0530\n"
+"POT-Creation-Date: 2010-03-03 21:47+0530\n"
+"PO-Revision-Date: 2010-03-03 21:50+0530\n"
 "Last-Translator: Dr,T,Vasudevan <agnihot3@gmail.com>\n"
 "Language-Team: Tamil <Ubuntu-l10n-tam@lists.ubuntu.com>>\n"
 "MIME-Version: 1.0\n"
@@ -1403,7 +1403,7 @@ msgstr "உங்களுக்கு தோராயமாக <b>%s</b>  ம�
 
 #. TRANSLATORS: mouse is getting a little low
 #. TRANSLATORS: the mouse battery is very low
-#: ../src/gpm-manager.c:1394 ../src/gpm-manager.c:1512
+#: ../src/gpm-manager.c:1394 ../src/gpm-manager.c:1510
 msgid "Mouse battery low"
 msgstr "சொடுக்கி மின்கல மின்சாரம் குறைவாக உள்ளது"
 
@@ -1415,7 +1415,7 @@ msgstr "இந்த கணினியில் இணைக்கப்பட�
 
 #. TRANSLATORS: keyboard is getting a little low
 #. TRANSLATORS: the keyboard battery is very low
-#: ../src/gpm-manager.c:1401 ../src/gpm-manager.c:1520
+#: ../src/gpm-manager.c:1401 ../src/gpm-manager.c:1518
 msgid "Keyboard battery low"
 msgstr "விசைப்பலகை மின்கல மின்சாரம் குறைவாக உள்ளது"
 
@@ -1427,7 +1427,7 @@ msgstr "இந்த கணினியில் இணைக்கப்பட�
 
 #. TRANSLATORS: PDA is getting a little low
 #. TRANSLATORS: the PDA battery is very low
-#: ../src/gpm-manager.c:1408 ../src/gpm-manager.c:1529
+#: ../src/gpm-manager.c:1408 ../src/gpm-manager.c:1527
 msgid "PDA battery low"
 msgstr "பிடிஏ மின்கல மின்சாரம் குறைவாக உள்ளது"
 
@@ -1439,7 +1439,7 @@ msgstr "இந்த கணினியில் இணைக்கப்பட�
 
 #. TRANSLATORS: cell phone (mobile) is getting a little low
 #. TRANSLATORS: the cell battery is very low
-#: ../src/gpm-manager.c:1415 ../src/gpm-manager.c:1538
+#: ../src/gpm-manager.c:1415 ../src/gpm-manager.c:1536
 msgid "Cell phone battery low"
 msgstr "அலைபேசி மின்கல மின்சாரம் குறைவாக உள்ளது"
 
@@ -1450,47 +1450,44 @@ msgid "The cell phone attached to this computer is low in power (%.1f%%)"
 msgstr "இந்த கணினியில் இணைக்கப்பட்ட அலைபேசி  சக்தி குறைந்து உள்ளது (%.1f%%)"
 
 #. TRANSLATORS: laptop battery critically low, and only have one type of battery
-#: ../src/gpm-manager.c:1468
+#: ../src/gpm-manager.c:1467
 msgid "Battery critically low"
 msgstr "பாட்டரி அபாயகரமாக குறைவாக உள்ளது"
 
 #. TRANSLATORS: laptop battery critically low, and we have more than one type of battery
 #. TRANSLATORS: laptop battery is really, really, low
-#: ../src/gpm-manager.c:1471 ../src/gpm-manager.c:1584
+#: ../src/gpm-manager.c:1470 ../src/gpm-manager.c:1582
 msgid "Laptop battery critically low"
 msgstr "மடிகணினி மின்கலம் மின் அடக்கம் மிகக் குறைவு"
 
 #. TRANSLATORS: tell the use to insert the plug, as we're not going to do anything
-#: ../src/gpm-manager.c:1483
+#: ../src/gpm-manager.c:1480
 msgid "Plug in your AC adapter to avoid losing data."
 msgstr "தரவை இழக்காதிருக்க ஏசி தகவியை சொருகவும்."
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1487
-#, c-format
-msgid "Computer will suspend in %s."
-msgstr "%sஇல் கணினி இடை நிறுத்தப்படும்."
+#: ../src/gpm-manager.c:1484, c-format
+msgid "Computer will suspend very soon unless it is plugged in."
+msgstr "மின்சக்தி தொடர்பு தரவில்லையானால்  கணினி சீக்கிரம்  இடை நிறுத்தப்படும்."
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1491
-#, c-format
-msgid "Computer will hibernate in %s."
-msgstr "%sஇல் கணினி உறங்கும்."
+#: ../src/gpm-manager.c:1488, c-format
+msgid "Computer will hibernate very soon unless it is plugged in."
+msgstr "மின்சக்தி தொடர்பு தரவில்லையானால் கணினி  சீக்கிரம் உறங்கும்."
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1495
-#, c-format
-msgid "Computer will shutdown in %s."
-msgstr "கணினி %sஇல் பணிநிறுத்தம் செய்யப்படும்."
+#: ../src/gpm-manager.c:1492, c-format
+msgid "Computer will shutdown very soon unless it is plugged in."
+msgstr "மின்சக்தி தொடர்பு தரவில்லையானால் கணினி சீக்கிரம் பணிநிறுத்தம் செய்யப்படும்."
 
 #. TRANSLATORS: the UPS is very low
 #. TRANSLATORS: UPS is really, really, low
-#: ../src/gpm-manager.c:1502 ../src/gpm-manager.c:1622
+#: ../src/gpm-manager.c:1500 ../src/gpm-manager.c:1620
 msgid "UPS critically low"
 msgstr "யூபிஎஸ்(UPS) மின் அடக்கம் மிகவும்  குறைகிறது"
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1506
+#: ../src/gpm-manager.c:1504
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%.1f%%). Restore AC "
@@ -1500,7 +1497,7 @@ msgstr ""
 "இருக்க உங்க கணினிக்கு ஏசி மின் சக்தியை மீட்டு அமைக்கவும்."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1515
+#: ../src/gpm-manager.c:1513
 #, c-format
 msgid ""
 "The wireless mouse attached to this computer is very low in power (%.1f%%). "
@@ -1510,7 +1507,7 @@ msgstr ""
 "ஏற்றாவிடில் சீக்கிரம் செயல் இழக்கும்."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1523
+#: ../src/gpm-manager.c:1521
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is very low in power (%.1f%"
@@ -1520,7 +1517,7 @@ msgstr ""
 "சக்தி ஏற்றாவிடில் சீக்கிரம் செயல் இழக்கும்."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1532
+#: ../src/gpm-manager.c:1530
 #, c-format
 msgid ""
 "The PDA attached to this computer is very low in power (%.1f%%). This device "
@@ -1530,7 +1527,7 @@ msgstr ""
 "சீக்கிரம் செயல் இழக்கும்."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1541
+#: ../src/gpm-manager.c:1539
 #, c-format
 msgid ""
 "Your cell phone is very low in power (%.1f%%). This device will soon stop "
@@ -1540,7 +1537,7 @@ msgstr ""
 "ஏற்றாவிடில் சீக்கிரம் செயல் இழக்கும்."
 
 #. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1593
+#: ../src/gpm-manager.c:1591
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
@@ -1549,7 +1546,7 @@ msgstr ""
 "<b> மின் நிறுத்தம்</b> செய்யும்."
 
 #. TRANSLATORS: computer will suspend
-#: ../src/gpm-manager.c:1599
+#: ../src/gpm-manager.c:1597
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1559,14 +1556,14 @@ msgstr ""
 "<br><b>NOTE:</b> கணினியை இடை நிறுத்தத்தில் வைக்க சிறிது மின் சக்தி தேவை."
 
 #. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1606
+#: ../src/gpm-manager.c:1604
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr "மின்கல மின் அடக்கம் அபாயகரமாக குறைவு. இந்த கணினி இப்போது உறக்கம் செய்ய உள்ளது"
 
 #. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1611
+#: ../src/gpm-manager.c:1609
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
@@ -1575,7 +1572,7 @@ msgstr ""
 "செய்ய உள்ளது."
 
 #. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1631
+#: ../src/gpm-manager.c:1629
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
@@ -1584,24 +1581,24 @@ msgstr ""
 "<b> மின் நிறுத்தம்</b> செய்யும்."
 
 #. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1637
+#: ../src/gpm-manager.c:1635
 msgid "The UPS is below the critical level and this computer is about to hibernate."
 msgstr "யுபிஎஸ் மின் அடக்கம் அபாயகரமாக குறைவு இந்த கணினி இப்போது உறக்கம் செய்ய உள்ளது."
 
 #. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1642
+#: ../src/gpm-manager.c:1640
 msgid "The UPS is below the critical level and this computer is about to shutdown."
 msgstr ""
 "யுபிஎஸ் மின் அடக்கம் அபாயகரமாக குறைவு இந்த கணினி இப்போது முழு செயல் நிறுத்தம் செய்ய "
 "உள்ளது."
 
 #. TRANSLATORS: there was in install problem
-#: ../src/gpm-manager.c:1835
+#: ../src/gpm-manager.c:1841
 msgid "Install problem!"
 msgstr "நிறுவல் பிரச்சினை!"
 
 #. TRANSLATORS: the GConf schema was not installed properly
-#: ../src/gpm-manager.c:1837
+#: ../src/gpm-manager.c:1843
 msgid ""
 "The configuration defaults for GNOME Power Manager have not been installed "
 "correctly.\n"
@@ -1946,8 +1943,8 @@ msgstr "கடந்த நேரம்"
 msgid "Power"
 msgstr "சக்தி"
 
-#. TRANSLATORS: this is the Y axis on the graph
-#. TRANSLATORS: this is the X axis on the graph
+#. TRANSLATORS: this is the Y axis on the graph for the whole battery device
+#. TRANSLATORS: this is the X axis on the graph for the whole battery device
 #: ../src/gpm-statistics.c:1245 ../src/gpm-statistics.c:1288
 #: ../src/gpm-statistics.c:1294 ../src/gpm-statistics.c:1300
 #: ../src/gpm-statistics.c:1306
