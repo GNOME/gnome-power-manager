@@ -167,12 +167,6 @@ PKG_CHECK_MODULES(GNOME, [
 AC_SUBST(GNOME_CFLAGS)
 AC_SUBST(GNOME_LIBS)
 
-PKG_CHECK_MODULES(PANEL, [
- libpanelapplet-2.0 >= $LIBPANEL_REQUIRED])
-AC_SUBST(PANEL_CFLAGS)
-AC_SUBST(PANEL_LIBS)
-
-
 PKG_CHECK_MODULES(GDK, [
  gdk-2.0 >= $GDK_REQUIRED
  gdk-x11-2.0 >= $GDK_REQUIRED])
@@ -304,6 +298,11 @@ AC_MSG_CHECKING([whether to build applet support])
 have_applets=no
 if test x$enable_applets = xyes ; then
     have_applets=yes
+
+    PKG_CHECK_MODULES(PANEL, [libpanelapplet-2.0 >= $LIBPANEL_REQUIRED])
+    AC_SUBST(PANEL_CFLAGS)
+    AC_SUBST(PANEL_LIBS)
+
     AC_DEFINE(HAVE_APPLETS, 1, [Define if we are building applets])
     AC_MSG_RESULT(yes)
 else
