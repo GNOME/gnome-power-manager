@@ -1641,6 +1641,9 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, DkpDevice *device, GpmMa
 				              "this computer is about to shutdown."));
 		}
 
+		/* wait 20 seconds for user-panic */
+		g_timeout_add_seconds (20, (GSourceFunc) manager_critical_action_do, manager);
+
 		g_free (action);
 	}
 
