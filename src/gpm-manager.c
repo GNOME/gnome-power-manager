@@ -72,6 +72,8 @@ static void     gpm_manager_finalize	(GObject	 *object);
 #define GPM_MANAGER_NOTIFY_TIMEOUT_SHORT	10 * 1000 /* ms */
 #define GPM_MANAGER_NOTIFY_TIMEOUT_LONG		30 * 1000 /* ms */
 
+#define GPM_MANAGER_CRITICAL_ALERT_TIMEOUT      5 /* seconds */
+
 struct GpmManagerPrivate
 {
 	GpmButton		*button;
@@ -89,6 +91,8 @@ struct GpmManagerPrivate
 	guint32			 screensaver_ac_throttle_id;
 	guint32			 screensaver_dpms_throttle_id;
 	guint32			 screensaver_lid_throttle_id;
+	guint32                  critical_alert_timeout_id;
+	ca_proplist             *critical_alert_loop_props;
 	DkpClient		*client;
 	gboolean		 on_battery;
 	gboolean		 just_resumed;
@@ -147,6 +151,99 @@ gpm_manager_error_get_type (void)
 		etype = g_enum_register_static ("GpmManagerError", values);
 	}
 	return etype;
+}
+
+/**
+ * gpm_manager_play_loop_timeout_cb:
+ **/
+static gboolean
+gpm_manager_play_loop_timeout_cb (GpmManager *manager)
+{
+	ca_context_play_full (ca_gtk_context_get (),
+			      0,
+			      manager->priv->critical_alert_loop_props,
+			      NULL,
+			      NULL);
+	return TRUE;
+}
+
+/**
+ * gpm_manager_play_loop_stop:
+ **/
+static gboolean
+gpm_manager_play_loop_stop (GpmManager *manager)
+{
+	if (manager->priv->critical_alert_timeout_id == 0) {
+		egg_warning ("no sound loop present to stop");
+		return FALSE;
+	}
+
+	g_source_remove (manager->priv->critical_alert_timeout_id);
+	ca_proplist_destroy (manager->priv->critical_alert_loop_props);
+
+	manager->priv->critical_alert_loop_props = NULL;
+	manager->priv->critical_alert_timeout_id = 0;
+
+	return TRUE;
+}
+
+/**
+ * gpm_manager_play_loop_start:
+ **/
+static gboolean
+gpm_manager_play_loop_start (GpmManager *manager, GpmManagerSound action, gboolean force, guint timeout)
+{
+	const gchar *id = NULL;
+	const gchar *desc = NULL;
+	gboolean ret;
+	gint retval;
+
+	ret = gconf_client_get_bool (manager->priv->conf, GPM_CONF_UI_ENABLE_SOUND, NULL);
+	if (!ret && !force) {
+		egg_debug ("ignoring sound due to policy");
+		return FALSE;
+	}
+
+	if (timeout == 0) {
+		egg_warning ("received invalid timeout");
+		return FALSE;
+	}
+
+	/* if a sound loop is already running, stop the existing loop */
+	if (manager->priv->critical_alert_timeout_id != 0) {
+		egg_warning ("was instructed to play a sound loop with one already playing");
+		gpm_manager_play_loop_stop (manager);
+	}
+
+	if (action == GPM_MANAGER_SOUND_BATTERY_LOW) {
+		id = "battery-low";
+		/* TRANSLATORS: this is the sound description */
+		desc = _("Battery is very low");
+	}
+
+	/* no match */
+	if (id == NULL) {
+		egg_warning ("no sound match for %i", action);
+		return FALSE;
+	}
+
+	ca_proplist_create (&(manager->priv->critical_alert_loop_props));
+	ca_proplist_sets (manager->priv->critical_alert_loop_props,
+			  CA_PROP_EVENT_ID, id);
+	ca_proplist_sets (manager->priv->critical_alert_loop_props,
+			  CA_PROP_EVENT_DESCRIPTION, desc);
+
+	manager->priv->critical_alert_timeout_id = g_timeout_add_seconds (timeout,
+									  (GSourceFunc) gpm_manager_play_loop_timeout_cb,
+									  manager);
+
+	/* play the sound, using sounds from the naming spec */
+	retval = ca_context_play (ca_gtk_context_get (), 0,
+				  CA_PROP_EVENT_ID, id,
+				  CA_PROP_EVENT_DESCRIPTION, desc, NULL);
+	if (retval < 0)
+		egg_warning ("failed to play %s: %s", id, ca_strerror (retval));
+	return TRUE;
 }
 
 /**
@@ -906,6 +1003,12 @@ gpm_manager_client_changed_cb (DkpClient *client, GpmManager *manager)
 		gpm_manager_notify_close (manager, manager->priv->notification_discharging);
 	}
 
+	/* if we are playing a critical charge sound loop, stop it */
+	if (!on_battery && manager->priv->critical_alert_timeout_id) {
+		egg_debug ("stopping alert loop due to ac being present");
+		gpm_manager_play_loop_stop (manager);
+	}
+
 	/* save in local cache */
 	manager->priv->on_battery = on_battery;
 
@@ -960,6 +1063,10 @@ gpm_manager_client_changed_cb (DkpClient *client, GpmManager *manager)
 static gboolean
 manager_critical_action_do (GpmManager *manager)
 {
+	/* stop playing the alert as it's too late to do anything now */
+	if (manager->priv->critical_alert_timeout_id)
+		gpm_manager_play_loop_stop (manager);
+
 	gpm_manager_perform_policy (manager, GPM_CONF_ACTIONS_CRITICAL_BATT, "Battery is critically low.");
 	return FALSE;
 }
@@ -1544,7 +1651,21 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, Gpm
 	/* get correct icon */
 	icon = gpm_upower_get_device_icon (device);
 	gpm_manager_notify (manager, &manager->priv->notification, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_NEVER, icon, NOTIFY_URGENCY_CRITICAL);
-	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
+
+	switch (type) {
+
+	case DKP_DEVICE_TYPE_BATTERY:
+	case DKP_DEVICE_TYPE_UPS:
+		egg_debug ("critical charge level reached, starting sound loop");
+		gpm_manager_play_loop_start (manager,
+					     GPM_MANAGER_SOUND_BATTERY_LOW,
+					     TRUE,
+					     GPM_MANAGER_CRITICAL_ALERT_TIMEOUT);
+		break;
+
+	default:
+		gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
+	}
 out:
 	g_free (icon);
 	g_free (message);
@@ -1805,6 +1926,9 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->screensaver_dpms_throttle_id = 0;
 	manager->priv->screensaver_lid_throttle_id = 0;
 
+	manager->priv->critical_alert_timeout_id = 0;
+	manager->priv->critical_alert_loop_props = NULL;
+
 	/* init to not just_resumed */
 	manager->priv->just_resumed = FALSE;
 
@@ -1956,6 +2080,8 @@ gpm_manager_finalize (GObject *object)
 		gpm_manager_notify_close (manager, manager->priv->notification_discharging);
 	if (manager->priv->notification_fully_charged != NULL)
 		gpm_manager_notify_close (manager, manager->priv->notification_fully_charged);
+	if (manager->priv->critical_alert_timeout_id != 0)
+		g_source_remove (manager->priv->critical_alert_timeout_id);
 
 	g_object_unref (manager->priv->conf);
 	g_object_unref (manager->priv->disks);
