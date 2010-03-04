@@ -191,6 +191,10 @@ gpm_engine_get_warning (GpmEngine *engine, DkpDevice *device)
 	/* default to no engine */
 	warning_type = GPM_ENGINE_WARNING_NONE;
 
+	/* if the device in question is on ac, don't give a warning */
+	if (state == DKP_DEVICE_STATE_CHARGING)
+		goto out;
+
 	if (type == DKP_DEVICE_TYPE_MOUSE ||
 	    type == DKP_DEVICE_TYPE_KEYBOARD) {
 
@@ -218,6 +222,8 @@ gpm_engine_get_warning (GpmEngine *engine, DkpDevice *device)
 		if (state == DKP_DEVICE_STATE_DISCHARGING)
 			warning_type = GPM_ENGINE_WARNING_DISCHARGING;
 	}
+
+ out:
 	return warning_type;
 }
 
