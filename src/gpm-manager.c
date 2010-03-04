@@ -1421,7 +1421,7 @@ gpm_manager_engine_charge_low_cb (GpmEngine *engine, DkpDevice *device, GpmManag
 	/* get correct icon */
 	icon = gpm_upower_get_device_icon (device);
 	gpm_manager_notify (manager, &manager->priv->notification, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_LONG, icon, NOTIFY_URGENCY_NORMAL);
-	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
+	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_CAUTION, TRUE);
 out:
 	g_free (icon);
 	g_free (message);
