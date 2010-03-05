@@ -98,7 +98,8 @@ struct GpmManagerPrivate
 	gboolean		 just_resumed;
 	GtkStatusIcon		*status_icon;
 	gboolean		 supports_notification_actions;
-	NotifyNotification	*notification;
+	NotifyNotification	*notification_general;
+	NotifyNotification	*notification_warning_low;
 	NotifyNotification	*notification_discharging;
 	NotifyNotification	*notification_fully_charged;
 };
@@ -933,7 +934,7 @@ gpm_manager_button_pressed_cb (GpmButton *button, const gchar *type, GpmManager 
 		gpm_manager_lid_button_pressed (manager, TRUE);
 	} else if (g_strcmp0 (type, GPM_BUTTON_BATTERY) == 0) {
 		message = gpm_engine_get_summary (manager->priv->engine);
-		gpm_manager_notify (manager, &manager->priv->notification,
+		gpm_manager_notify (manager, &manager->priv->notification_general,
 				    _("Power Information"),
 				    message,
 				    GPM_MANAGER_NOTIFY_TIMEOUT_LONG,
@@ -1000,6 +1001,7 @@ gpm_manager_client_changed_cb (DkpClient *client, GpmManager *manager)
 	/* close any discharging notifications */
 	if (!on_battery) {
 		egg_debug ("clearing notify due ac being present");
+		gpm_manager_notify_close (manager, manager->priv->notification_warning_low);
 		gpm_manager_notify_close (manager, manager->priv->notification_discharging);
 	}
 
@@ -1285,7 +1287,7 @@ gpm_manager_engine_low_capacity_cb (GpmEngine *engine, DkpDevice *device, GpmMan
 	/* TRANSLATORS: notify the user that that battery is broken as the capacity is very low */
 	message = g_strdup_printf (_("Your battery has a very low capacity (%1.1f%%), "
 				     "which means that it may be old or broken."), capacity);
-	gpm_manager_notify (manager, &manager->priv->notification, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_SHORT,
+	gpm_manager_notify (manager, &manager->priv->notification_general, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_SHORT,
 			    GTK_STOCK_DIALOG_INFO, NOTIFY_URGENCY_LOW);
 out:
 	g_free (message);
@@ -1328,6 +1330,7 @@ gpm_manager_engine_fully_charged_cb (GpmEngine *engine, DkpDevice *device, GpmMa
 			plural = 2;
 
 		/* hide the discharging notification */
+		gpm_manager_notify_close (manager, manager->priv->notification_warning_low);
 		gpm_manager_notify_close (manager, manager->priv->notification_discharging);
 
 		/* TRANSLATORS: show the fully charged notification */
@@ -1527,7 +1530,7 @@ gpm_manager_engine_charge_low_cb (GpmEngine *engine, DkpDevice *device, GpmManag
 
 	/* get correct icon */
 	icon = gpm_upower_get_device_icon (device);
-	gpm_manager_notify (manager, &manager->priv->notification, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_LONG, icon, NOTIFY_URGENCY_NORMAL);
+	gpm_manager_notify (manager, &manager->priv->notification_warning_low, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_LONG, icon, NOTIFY_URGENCY_NORMAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_CAUTION, TRUE);
 out:
 	g_free (icon);
@@ -1650,7 +1653,7 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, Gpm
 
 	/* get correct icon */
 	icon = gpm_upower_get_device_icon (device);
-	gpm_manager_notify (manager, &manager->priv->notification, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_NEVER, icon, NOTIFY_URGENCY_CRITICAL);
+	gpm_manager_notify (manager, &manager->priv->notification_warning_low, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_NEVER, icon, NOTIFY_URGENCY_CRITICAL);
 
 	switch (type) {
 
@@ -1774,7 +1777,7 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, DkpDevice *device, GpmMa
 
 	/* get correct icon */
 	icon = gpm_upower_get_device_icon (device);
-	gpm_manager_notify (manager, &manager->priv->notification,
+	gpm_manager_notify (manager, &manager->priv->notification_warning_low,
 			    title, message, GPM_MANAGER_NOTIFY_TIMEOUT_NEVER,
 			    icon, NOTIFY_URGENCY_CRITICAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
@@ -1815,8 +1818,10 @@ gpm_manager_reset_just_resumed_cb (gpointer user_data)
 {
 	GpmManager *manager = GPM_MANAGER (user_data);
 
-	if (manager->priv->notification != NULL)
-		gpm_manager_notify_close (manager, manager->priv->notification);
+	if (manager->priv->notification_general != NULL)
+		gpm_manager_notify_close (manager, manager->priv->notification_general);
+	if (manager->priv->notification_warning_low != NULL)
+		gpm_manager_notify_close (manager, manager->priv->notification_warning_low);
 	if (manager->priv->notification_discharging != NULL)
 		gpm_manager_notify_close (manager, manager->priv->notification_discharging);
 	if (manager->priv->notification_fully_charged != NULL)
@@ -1940,7 +1945,8 @@ gpm_manager_init (GpmManager *manager)
 	/* this is a singleton, so we keep a master copy open here */
 	manager->priv->prefs_server = gpm_prefs_server_new ();
 
-	manager->priv->notification = NULL;
+	manager->priv->notification_general = NULL;
+	manager->priv->notification_warning_low = NULL;
 	manager->priv->notification_discharging = NULL;
 	manager->priv->notification_fully_charged = NULL;
 	manager->priv->disks = gpm_disks_new ();
@@ -1963,7 +1969,7 @@ gpm_manager_init (GpmManager *manager)
 	/* check to see if the user has installed the schema properly */
 	version = gconf_client_get_int (manager->priv->conf, GPM_CONF_SCHEMA_VERSION, NULL);
 	if (version != GPM_CONF_SCHEMA_ID) {
-		gpm_manager_notify (manager, &manager->priv->notification,
+		gpm_manager_notify (manager, &manager->priv->notification_general,
 				    /* TRANSLATORS: there was in install problem */
 				    _("Install problem!"),
 				    /* TRANSLATORS: the GConf schema was not installed properly */
@@ -2074,8 +2080,10 @@ gpm_manager_finalize (GObject *object)
 	g_return_if_fail (manager->priv != NULL);
 
 	/* close any notifications (also unrefs them) */
-	if (manager->priv->notification != NULL)
-		gpm_manager_notify_close (manager, manager->priv->notification);
+	if (manager->priv->notification_general != NULL)
+		gpm_manager_notify_close (manager, manager->priv->notification_general);
+	if (manager->priv->notification_warning_low != NULL)
+		gpm_manager_notify_close (manager, manager->priv->notification_warning_low);
 	if (manager->priv->notification_discharging != NULL)
 		gpm_manager_notify_close (manager, manager->priv->notification_discharging);
 	if (manager->priv->notification_fully_charged != NULL)
