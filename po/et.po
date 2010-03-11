@@ -1,11 +1,11 @@
-# GNOME vooluhalduri eesti keele tõlge.
+# GNOME'i vooluhalduri eesti keele tõlge.
 # Estonian translation of GNOME Power Manager.
 #
 # Copyright (C) 2006–2010 The Gnome Project.
 # This file is distributed under the same license as the gnome-power-manager
 # package.
 #
-# Priit Laes <amd store20 com>, 2006.
+# Priit Laes <plaes plaes org>, 2006, 2010.
 # Ivar Smolin <okul at linux ee>, 2006–2010.
 # Mattias Põldaru <mahfiaz gmail com>, 2009–2010.
 #
@@ -14,9 +14,9 @@ msgstr ""
 "Project-Id-Version: Gnome Power Manager MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&component=general\n"
-"POT-Creation-Date: 2010-02-27 11:36+0000\n"
-"PO-Revision-Date: 2010-01-31 22:58+0300\n"
-"Last-Translator: Mattias Põldaru <mahfiaz gmail com>\n"
+"POT-Creation-Date: 2010-03-11 16:51+0000\n"
+"PO-Revision-Date: 2010-03-11 19:30+0300\n"
+"Last-Translator: Priit Laes <plaes@plaes.org>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -184,7 +184,7 @@ msgstr ""
 "takistusnõue peatab tegevuse."
 
 msgid "If the CPU load should be checked before doing the idle action."
-msgstr "Kas enne uinumist peaks kontrollima CPU kasutust."
+msgstr "Kas enne uinumist peaks kontrollima protsessori koormust."
 
 msgid ""
 "If the battery event should occur when the lid is shut and the power "
@@ -226,14 +226,14 @@ msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on AC power."
 msgstr ""
-"Kas võrgutoite korral peab voolu säästmise eesmärgil ekraani tuhmistama või "
+"Kas võrgutoite korral peab energia säästmise eesmärgil ekraani tuhmistama või "
 "mitte."
 
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on battery power."
 msgstr ""
-"Kas akutoite korral peab voolu säästmise eesmärgil ekraani tuhmistama või "
+"Kas akutoite korral peab energia säästmise eesmärgil ekraani tuhmistama või "
 "mitte."
 
 msgid ""
@@ -268,14 +268,13 @@ msgstr "Kas vigase aku korral tuleb anda madala täituvuse hoiatust."
 
 msgid "If we should show the recalled battery warning for a broken battery"
 msgstr ""
-"Kas ümbervahetamiseks tagasi kutsutud aku korral tuleb anda madala täituvuse "
-"hoiatust."
+"Kas ümbervahetamiseks tagasi kutsutud aku korral tuleb näidata katkise aku hoiatust."
 
 msgid ""
 "If we should show the recalled battery warning for a broken battery. Set "
 "this to false only if you know your battery is okay."
 msgstr ""
-"Kas ümbervahetamiseks tagasi kutsutud aku korral tuleb anda madala täituvuse "
+"Kas ümbervahetamiseks tagasi kutsutud aku korral tuleb näidata katkise aku "
 "hoiatust. Kui sa tead, et akul pole midagi viga, siis nulli selle võtme "
 "väärtus."
 
@@ -331,7 +330,7 @@ msgid "Percentage considered low"
 msgstr "Madala taseme protsent"
 
 msgid "Power button action"
-msgstr "Voolunupu tegevus"
+msgstr "Toitenupu tegevus"
 
 msgid "Reduce the backlight brightness when on battery power"
 msgstr "Taustavalguse heleduse vähendamine akutoite korral"
@@ -417,7 +416,7 @@ msgid ""
 msgstr ""
 "Kaane sulgemisel sooritatav tegevus, kui sülearvuti on võrgutoitel. "
 "Võimalikud väärtused on \"suspend\" (uinak), \"hibernate\" (talveuni), "
-"\"blank\" (tühjendamine) ja \"nothing\" (mitte midagi)."
+"\"blank\" (ekraani tühjendamine) ja \"nothing\" (mitte midagi)."
 
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on "
@@ -426,7 +425,7 @@ msgid ""
 msgstr ""
 "Kaane sulgemisel sooritatav tegevus, kui sülearvuti on akutoitel. Võimalikud "
 "väärtused on \"suspend\" (uinak), \"hibernate\" (talveuni), \"blank"
-"\" (tühjendamine) ja \"nothing\" (mitte midagi)."
+"\" (ekraani tühjendamine) ja \"nothing\" (mitte midagi)."
 
 msgid ""
 "The action to take when the system hibernate button is pressed. Possible "
@@ -533,20 +532,18 @@ msgid "The maximum duration of time displayed on the x-axis of the graph."
 msgstr "Graafiku X-teljel näidatav suurim kestus."
 
 msgid "The maximum time displayed on the graph"
-msgstr "Graafikus näidatav suurim kestus"
+msgstr "Graafikul näidatav suurim kestus"
 
 msgid ""
 "The number of seconds of inactivity to spin down the disks when on AC power."
 msgstr ""
-"Ekraani tuhmistamine teatud jõudeaja järel, kui ollakse võrgutoitelJõudeaeg "
-"sekunidites, pärast mida vähendatakse võrgutoite korral kõvaketta pööredeid."
+"Jõudeaeg sekundites, mille möödudes vähendatakse võrgutoite olles kõvaketta pöördeid."
 
 msgid ""
 "The number of seconds of inactivity to spin down the disks when on battery "
 "power."
 msgstr ""
-"Jõudeaeg sekunidites, pärast mida vähendatakse akutoite korral kõvaketta "
-"pööredeid."
+"Jõudeaeg sekundites, mille möödudes vähendatakse akutoitel olles kõvaketta pöördeid."
 
 msgid ""
 "The percentage of the battery when it is considered critical. Only valid "
@@ -611,8 +608,8 @@ msgid ""
 "The version of the installed version of the schema. Do not edit this value, "
 "it is used so that configure changes between versions can be detected."
 msgstr ""
-"Paigaldatud skeemi versioon. Seda ei peaks muutma, seda kasutatakse, et "
-"tuvastada häälestuse muutuseid."
+"Paigaldatud skeemi versioon. See väärtus ei ole muutmiseks, vaid seda kasutatakse selleks, et "
+"tuvastada muutuseid häälestuses."
 
 msgid ""
 "This is the laptop panel screen brightness used when the session is idle. "
@@ -642,7 +639,7 @@ msgid "When to show the notification icon"
 msgstr "Millal tuleb teavitusikooni näidata."
 
 msgid "Whether NetworkManager should be connected and disconnected on sleep."
-msgstr "Kas võrguhaldur tuleks uinaku korral ühendada ja lahti ühendada."
+msgstr "Kas võrguhaldur peab võrguühenduse pärast uinakut taastama?"
 
 msgid ""
 "Whether NetworkManager should disconnect before suspending or hibernating "
@@ -656,14 +653,14 @@ msgid ""
 "This means the keyring will have to be unlocked on resume."
 msgstr ""
 "Kas GNOME võtmerõngas lukustatakse, enne kui arvuti siseneb talveunne. See "
-"tähendab, et naasmisel pole vaja võtmerõngast avada."
+"tähendab, et naasmisel on vaja võtmerõngas uuesti avada."
 
 msgid ""
 "Whether the GNOME keyring is locked before the computer enters suspend. This "
 "means the keyring will have to be unlocked on resume."
 msgstr ""
 "Kas GNOME võtmerõngas lukustatakse, enne kui arvuti alustab uinakut. See "
-"tähendab, et naasmisel pole vaja võtmerõngast avada."
+"tähendab, et naasmisel on vaja võtmerõngas uuesti avada."
 
 msgid ""
 "Whether the screen is locked when the computer wakes up from a hibernate. "
@@ -705,13 +702,13 @@ msgid "Whether we should show the axis labels in the statistics window"
 msgstr "Kas statistikaaknas kuvatakse telgede pealkirju"
 
 msgid "Whether we should show the axis labels in the statistics window."
-msgstr "Kas statistikaaknas kuvatakse telgede pealkirju"
+msgstr "Kas statistikaaknas kuvatakse telgede pealkirju."
 
 msgid "Whether we should show the events in the statistics window"
 msgstr "Kas statistikaaknas kuvatakse sündmuseid"
 
 msgid "Whether we should show the events in the statistics window."
-msgstr "Kas statistikaaknas kuvatakse sündmuseid"
+msgstr "Kas statistikaaknas kuvatakse sündmuseid."
 
 msgid "Whether we should smooth the data in the graph"
 msgstr "Kas graafikut silutakse"
@@ -782,7 +779,7 @@ msgid "Closes the program"
 msgstr "Programmi sulgemine"
 
 msgid "Di_m display when idle"
-msgstr "_Jõudeolekus kuva tuhmistatakse"
+msgstr "_Jõudeolekus kuva tuhmistamine"
 
 msgid "General"
 msgstr "Üldine"
@@ -895,12 +892,12 @@ msgstr "%ip"
 #. Translators: This is %i days %02i hours
 #, c-format
 msgid "%id%02ih"
-msgstr "%ip%02it"
+msgstr "%ip%02ih"
 
 #. Translators: This is %i hours
 #, c-format
 msgid "%ih"
-msgstr "%it"
+msgstr "%ih"
 
 #. Translators: This is %i hours %02i minutes
 #, c-format
@@ -995,6 +992,10 @@ msgid "GNOME Power Manager"
 msgstr "GNOME vooluhaldur"
 
 #. TRANSLATORS: this is the sound description
+msgid "Battery is very low"
+msgstr "Aku täituvus on kriitilisel tasemel"
+
+#. TRANSLATORS: this is the sound description
 msgid "Power plugged in"
 msgstr "Vooluvõrku ühendamine"
 
@@ -1013,10 +1014,6 @@ msgstr "Kaane sulgemine"
 #. TRANSLATORS: this is the sound description
 msgid "Battery is low"
 msgstr "Aku on tühjenemas"
-
-#. TRANSLATORS: this is the sound description
-msgid "Battery is very low"
-msgstr "Aku täituvus on kriitilisel tasemel"
 
 #. TRANSLATORS: this is the sound description
 msgid "Battery is full"
@@ -1085,11 +1082,11 @@ msgid ""
 msgstr ""
 "Sinu arvutis olev aku võib olla ohtlik ning %s palub selle tagastamist.\n"
 "\n"
-"Täpsemat infot leiab akutagastuse veebilehelt."
+"Täpsemat infot leiab aku tagasikutse veebilehelt."
 
 #. TRANSLATORS: button text, visit the manufacturers recall website
 msgid "Visit recall website"
-msgstr "Külasta akutagastuse veebisaiti"
+msgstr "Külasta aku tagasikutse veebilehte"
 
 #. TRANSLATORS: button text, do not show this bubble again
 msgid "Do not show me this again"
@@ -1182,7 +1179,7 @@ msgstr "Klaviatuuri patarei on peaaegu tühi"
 msgid ""
 "The wireless keyboard attached to this computer is low in power (%.1f%%)"
 msgstr ""
-"Arvuti külge ühendatud juhtmeta klaviatuuri aku on peaaegu tühi (%.1f%%)"
+"Arvutiga seotud juhtmeta klaviatuuri aku on peaaegu tühi (%.1f%%)"
 
 #. TRANSLATORS: PDA is getting a little low
 #. TRANSLATORS: the PDA battery is very low
@@ -1192,7 +1189,7 @@ msgstr "PDA patarei (või aku) on peaaegu tühi"
 #. TRANSLATORS: tell user more details
 #, c-format
 msgid "The PDA attached to this computer is low in power (%.1f%%)"
-msgstr "Arvuti külge ühendatud pihuarvuti aku on peaaegu tühi (%.1f%%)"
+msgstr "Arvutiga seotud pihuarvuti aku on peaaegu tühi (%.1f%%)"
 
 #. TRANSLATORS: cell phone (mobile) is getting a little low
 #. TRANSLATORS: the cell battery is very low
@@ -1202,7 +1199,7 @@ msgstr "Mobiiltelefoni aku on kriitiliselt tühi"
 #. TRANSLATORS: tell user more details
 #, c-format
 msgid "The cell phone attached to this computer is low in power (%.1f%%)"
-msgstr "Arvuti külge ühendatud mobiiltelefoni aku on peaaegu tühi (%.1f%%)"
+msgstr "Arvutiga seotud mobiiltelefoni aku on peaaegu tühi (%.1f%%)"
 
 #. TRANSLATORS: laptop battery critically low, and only have one type of battery
 msgid "Battery critically low"
@@ -1262,7 +1259,7 @@ msgid ""
 "The wireless keyboard attached to this computer is very low in power (%.1f%"
 "%). This device will soon stop functioning if not charged."
 msgstr ""
-"Selle arvutiga ühendatud juhtmeta klaviatuur on peaaegu tühi (%.1f%%). See "
+"Selle arvutiga seotud juhtmeta klaviatuuri aku on peaaegu tühi (%.1f%%). See "
 "seade lõpetab varsti töö, kui seda ei laadita."
 
 #. TRANSLATORS: the device is just going to stop working
@@ -1271,7 +1268,7 @@ msgid ""
 "The PDA attached to this computer is very low in power (%.1f%%). This device "
 "will soon stop functioning if not charged."
 msgstr ""
-"Selle arvutiga ühendatud pihuarvuti (PDA) on peaaegu tühi (%.1f%%). See "
+"Selle arvutiga seotud pihuarvuti (PDA) aku on peaaegu tühi (%.1f%%). See "
 "lülitub varsti välja, kui seda ei laadita."
 
 #. TRANSLATORS: the device is just going to stop working
@@ -1297,7 +1294,7 @@ msgid ""
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
 "computer in a suspended state."
 msgstr ""
-"Aku täituvus on alla kriitilise piiri ning see arvuti uinub.<br/><b>Märkus:</"
+"Aku täituvus on alla kriitilise piiri ning see arvuti uinub. <br/><b>Märkus:</"
 "b> ka uinaku ajal tarvitab arvuti natukene voolu."
 
 #. TRANSLATORS: computer will hibernate
@@ -1310,26 +1307,26 @@ msgstr "Aku täituvus on alla kriitilise piiri ning see arvuti läheb talveunne.
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
-msgstr "Aku täituvus on alla kriitilist taset ja seetõttu arvuti seisatakse."
+msgstr "Aku täituvus on alla kriitilise piiri ja seetõttu arvuti seisatakse."
 
 #. TRANSLATORS: computer will shutdown without saving data
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
 msgstr ""
-"UPS-i täituvus on allapoole kriitilist taset ja arvuti <b>lülitatakse</b> "
+"UPS-i täituvus on alla kriitilise piiri ja arvuti <b>lülitatakse</b> "
 "UPS-i täielikul tühjenemisel <b>välja</b>."
 
 #. TRANSLATORS: computer will hibernate
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr ""
-"UPS-i täituvus on alla kriitilist taset ja seetõttu läheb arvuti talveunne."
+"UPS-i täituvus on alla kriitilise piiri ja seetõttu läheb arvuti talveunne."
 
 #. TRANSLATORS: computer will just shutdown
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
-msgstr "UPS-i täituvus on alla kriitilist taset ja seetõttu arvuti seisatakse."
+msgstr "UPS-i täituvus on alla kriitilise piiri ja seetõttu arvuti seisatakse."
 
 #. TRANSLATORS: there was in install problem
 msgid "Install problem!"
@@ -1525,7 +1522,7 @@ msgstr "Serial ATA"
 
 #. TRANSLATORS: this is the old-style ATA interface
 msgid "ATA host controller"
-msgstr "ATA kettakontroller"
+msgstr "ATA kontroller"
 
 #. TRANSLATORS: 802.11 wireless adaptor
 msgid "Intel wireless adaptor"
@@ -1603,8 +1600,8 @@ msgstr "Kulunud aeg"
 msgid "Power"
 msgstr "Toide"
 
-#. TRANSLATORS: this is the Y axis on the graph
-#. TRANSLATORS: this is the X axis on the graph
+#. TRANSLATORS: this is the Y axis on the graph for the whole battery device
+#. TRANSLATORS: this is the X axis on the graph for the whole battery device
 msgid "Cell charge"
 msgstr "Aku laetus"
 
@@ -1645,7 +1642,7 @@ msgid ""
 "Provides %s laptop runtime"
 msgstr ""
 "Aku on täis laetud.\n"
-"See tagav sülearvuti tööajaks %s"
+"See tagab sülearvuti tööajaks %s"
 
 #. TRANSLATORS: the device is fully charged
 #, c-format
@@ -1706,7 +1703,7 @@ msgstr "Tühjenemine"
 
 #. TRANSLATORS: percentage
 msgid "Percentage charge:"
-msgstr "Laaditusprotsent:"
+msgstr "Laetuse protsent:"
 
 #. TRANSLATORS: manufacturer
 msgid "Vendor:"
@@ -1818,19 +1815,19 @@ msgstr "Liitiumpolümeer"
 
 #. TRANSLATORS: battery technology
 msgid "Lithium Iron Phosphate"
-msgstr "Liitium-raudfosfaat"
+msgstr "Liitium-raudfosfaat (LiFePO4)"
 
 #. TRANSLATORS: battery technology
 msgid "Lead acid"
-msgstr "Pliihape"
+msgstr "Pliiaku"
 
 #. TRANSLATORS: battery technology
 msgid "Nickel Cadmium"
-msgstr "Nikkel-kaadium"
+msgstr "Nikkel-kaadmium (Ni-Cd)"
 
 #. TRANSLATORS: battery technology
 msgid "Nickel metal hydride"
-msgstr "Nikkel-metallhübriid"
+msgstr "Nikkel-metallhüdriid (NiMH)"
 
 #. TRANSLATORS: battery technology
 msgid "Unknown technology"
