@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-power-manager&component=general\n"
-"POT-Creation-Date: 2010-02-24 05:21+0000\n"
-"PO-Revision-Date: 2010-02-24 12:13+0100\n"
+"POT-Creation-Date: 2010-03-15 17:52+0000\n"
+"PO-Revision-Date: 2010-03-15 20:23+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -184,7 +184,7 @@ msgstr "Dejanje gumba za hibernacijo"
 
 #: ../data/gnome-power-manager.schemas.in.h:8
 msgid "If a notification message should be displayed after suspend or hibernate failed."
-msgstr "Ali naj se prikaže obvestilo ob neuspešni zaustavitvi ali hibernaciji?"
+msgstr "Ali naj se prikaže obvestilo ob neuspešni postavitvi v mirovanje oziroma hibernaciji?"
 
 #: ../data/gnome-power-manager.schemas.in.h:9
 msgid "If a notification message should be displayed when the battery is fully charged."
@@ -216,7 +216,7 @@ msgstr "Ali naj dogodek baterije nastopi, ko je pokrov zaprt in napajanje izklju
 
 #: ../data/gnome-power-manager.schemas.in.h:16
 msgid "If the battery lid close event should occur (for example 'Suspend when lid closed on battery') when the lid is previously shut and the AC power disconnected at a later time."
-msgstr "Ali naj dogodek zapiranja pokrova nastopi (npr. 'Zaustavi, ko je ob uporabi baterije zaprt pokrov'), če je najprej zaprt pokrov, kasneje pa izključeno napajanje."
+msgstr "Ali naj dogodek zapiranja pokrova nastopi (npr. 'V mirovanje, ko je ob uporabi baterije zaprt pokrov'), če je najprej zaprt pokrov, kasneje pa izključeno napajanje."
 
 #: ../data/gnome-power-manager.schemas.in.h:17
 msgid "If the learnt profile should be used to calculate the time remaining"
@@ -308,7 +308,7 @@ msgstr "Ob hibernaciji zakleni zaslon"
 
 #: ../data/gnome-power-manager.schemas.in.h:39
 msgid "Lock screen on suspend"
-msgstr "Ob zaustavitvi zakleni zaslon"
+msgstr "Ob postavitvi v mirovanje zakleni zaslon"
 
 #: ../data/gnome-power-manager.schemas.in.h:40
 msgid "Lock screen when blanked"
@@ -392,15 +392,15 @@ msgstr "Zakasnitev pred spanjem zaslona ob uporabi baterije"
 
 #: ../data/gnome-power-manager.schemas.in.h:60
 msgid "Suspend button action"
-msgstr "Dejanje gumba za zaustavitev"
+msgstr "Dejanje gumba za postavitev v mirovanje"
 
 #: ../data/gnome-power-manager.schemas.in.h:61
 msgid "The DPMS method used to blank the screen when on AC power. Possible values are \"standby\", \"suspend\" and \"off\"."
-msgstr "Metoda DPMS za izklop zaslona ob uporabi napajalnika. Mogoče vrednosti so \"v mirovanje\", \"izklopi\" in \"izključeno\"."
+msgstr "Metoda DPMS za izklop zaslona ob uporabi napajalnika. Mogoče vrednosti so \"v mirovanje\", \"v pripravljenost\" in \"izključeno\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:62
 msgid "The DPMS method used to blank the screen when on battery power. Possible values are \"standby\", \"suspend\" and \"off\"."
-msgstr "Metoda DPMS za izklop zaslona ob uporabi baterije. Mogoče vrednosti so \"v mirovanje\", \"izklopi\" in \"izključeno\"."
+msgstr "Metoda DPMS za izklop zaslona ob uporabi baterije. Mogoče vrednosti so \"v mirovanje\", \"v pripravljenost\" in \"izključeno\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:63
 msgid "The URI to show to the user on sleep failure"
@@ -408,43 +408,43 @@ msgstr "Naslov URI, ki se prikaže ob napaki spanja"
 
 #: ../data/gnome-power-manager.schemas.in.h:64
 msgid "The action to take when the UPS is critically low. Possible values are \"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
-msgstr "Dejanje ob kritično nizkem stanju UPS. Mogoče vrednosti so \"hiberniraj\", \"zaustavi\", \"ugasni\" in \"nič\"."
+msgstr "Dejanje ob kritično nizkem stanju UPS. Mogoče vrednosti so \"hibernacija\", \"v mirovanje\", \"izklopi\" in \"nič\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:65
 msgid "The action to take when the UPS is low. Possible values are \"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
-msgstr "Dejanje ob kritično nizkem stanju UPS. Mogoče vrednosti so \"hiberniraj\", \"zaustavi\", \"ugasni\" in \"nič\"."
+msgstr "Dejanje ob kritično nizkem stanju UPS. Mogoče vrednosti so \"hibernacija\", \"v mirovanje\", \"izklopi\" in \"nič\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:66
 msgid "The action to take when the battery is critically low. Possible values are \"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
-msgstr "Dejanje ob kritično nizkem stanju baterije. Mogoče vrednosti so \"hiberniraj\", \"zaustavi\", \"ugasni\" in \"nič\"."
+msgstr "Dejanje ob kritično nizkem stanju baterije. Mogoče vrednosti so \"hiberniraj\", \"v mirovanje\", \"izklopi\" in \"nič\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:67
 msgid "The action to take when the laptop lid is closed and the laptop is on AC power. Possible values are \"suspend\", \"hibernate\", \"blank\" and \"nothing\"."
-msgstr "Dejanje ob zaprtju pokrova prenosnika pri uporabi napajalnika. Mogoče vrednosti so \"zaustavi\", \"hiberniraj\", \"izklopi zaslon\" in \"nič\"."
+msgstr "Dejanje ob zaprtju pokrova prenosnika pri uporabi napajalnika. Mogoče vrednosti so \"v mirovanje\", \"hiberniraj\", \"izklopi zaslon\" in \"nič\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:68
 msgid "The action to take when the laptop lid is closed and the laptop is on battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", and \"nothing\"."
-msgstr "Dejanje ob zaprtju pokrova prenosnika pri uporabi baterije. Mogoče vrednosti so \"zaustavi\", \"hiberniraj\", \"izklopi zaslon\" in \"nič\"."
+msgstr "Dejanje ob zaprtju pokrova prenosnika pri uporabi baterije. Mogoče vrednosti so \"v mirovanje\", \"hiberniraj\", \"izklopi zaslon\" in \"nič\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:69
 msgid "The action to take when the system hibernate button is pressed. Possible values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing\"."
-msgstr "Dejanje ob pritisku na gumb za hibernacijo. Mogoče vrednosti so \"zaustavi\", \"hiberniraj\", \"interaktivno\", \"ugasni\" in \"nič\"."
+msgstr "Dejanje ob pritisku na gumb za hibernacijo. Mogoče vrednosti so \"v mirovanje\", \"hiberniraj\", \"interaktivno\", \"izklopi\" in \"nič\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:70
 msgid "The action to take when the system power button is pressed. Possible values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing\"."
-msgstr "Dejanje ob pritisku na gumb za izklop. Mogoče vrednosti so \"zaustavi\", \"hiberniraj\", \"interaktivno\", \"ugasni\" in \"nič\"."
+msgstr "Dejanje ob pritisku na gumb za izklop. Mogoče vrednosti so \"v mirovanje\", \"hiberniraj\", \"interaktivno\", \"izklopi\" in \"nič\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:71
 msgid "The action to take when the system suspend button is pressed. Possible values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing\"."
-msgstr "Dejanje ob pritisku na gumb za zaustavitev. Mogoče vrednosti so \"zaustavi\", \"hiberniraj\", \"interaktivno\", \"ugasni\" in \"nič\"."
+msgstr "Dejanje ob pritisku na gumb za zaustavitev. Mogoče vrednosti so \"v mirovanje\", \"hiberniraj\", \"interaktivno\", \"izklopi\" in \"nič\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:72
 msgid "The amount of time in seconds before the display goes to sleep when the computer is on AC power."
-msgstr "Po koliko sekundah naj zaslon zaspi ob uporabi napajalnika."
+msgstr "Po koliko sekundah naj se zaslon postavi v mirovanje ob uporabi napajalnika."
 
 #: ../data/gnome-power-manager.schemas.in.h:73
 msgid "The amount of time in seconds the computer on AC power needs to be inactive before it goes to sleep."
-msgstr "Po koliko sekundah nedejavnosti računalnika, priključenega na napajalnik, naj zaslon zaspi."
+msgstr "Po koliko sekundah nedejavnosti računalnika, priključenega na napajalnik, naj se zaslon postavi v mirovanje."
 
 #: ../data/gnome-power-manager.schemas.in.h:74
 msgid "The amount of time in seconds the computer on UPS power needs to be inactive before it goes to sleep."
@@ -548,7 +548,7 @@ msgstr "Preostali čas, ko je stanje nizko"
 
 #: ../data/gnome-power-manager.schemas.in.h:99
 msgid "The type of sleeping that should be performed when the computer is inactive. Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
-msgstr "Vrsta spanja, ki naj se uporabi, ko je računalnik nedejaven. Mogoče vrednosti so \"hiberniraj\", \"zaustavi\" in \"nič\"."
+msgstr "Vrsta spanja, ki naj se uporabi, ko je računalnik nedejaven. Mogoče vrednosti so \"hiberniraj\", \"v mirovanje\" in \"nič\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:100
 msgid "The version of the installed version of the schema. Do not edit this value, it is used so that configure changes between versions can be detected."
@@ -584,7 +584,7 @@ msgstr "Ali naj se upravljalnik omrežja priklopi in odklopi med spanjem."
 
 #: ../data/gnome-power-manager.schemas.in.h:108
 msgid "Whether NetworkManager should disconnect before suspending or hibernating and connect on resume."
-msgstr "Ali naj se upravljalnik omrežja odklopi preden se začne postopek ustavitve ali hibernacija in ponovnega priklopa ob naslednji seji."
+msgstr "Ali naj se upravljalnik omrežja odklopi preden se začne postopek pošiljanja v mirovanje ali hibernacija in ponovnega priklopa ob naslednji seji."
 
 #: ../data/gnome-power-manager.schemas.in.h:109
 msgid "Whether the GNOME keyring is locked before the computer enters hibernate. This means the keyring will have to be unlocked on resume."
@@ -658,8 +658,8 @@ msgstr "Opazovanje upravljanja porabe"
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
 #: ../data/gpm-statistics.ui.h:6
-#: ../src/gpm-statistics.c:1035
-#: ../src/gpm-statistics.c:1508
+#: ../src/gpm-statistics.c:1044
+#: ../src/gpm-statistics.c:1517
 msgid "Power Statistics"
 msgstr "Statistika porabe"
 
@@ -934,57 +934,10 @@ msgstr "%.1fW"
 msgid "%.1fV"
 msgstr "%.1fV"
 
-#. TRANSLATORS: this is what the user should read for more information about the blanking problem (%s is a URL)
-#: ../src/gpm-idle.c:218
-#, c-format
-msgid "Please see %s for more information."
-msgstr "Poglejte si %s za več podrobnosti."
-
-#. TRANSLATORS: this is telling the user that thier X server is broken, and needs to be fixed
-#: ../src/gpm-idle.c:222
-msgid "If you can see this text, your display server is broken and you should notify your distributor."
-msgstr "V primeru, da vidite to besedilo, pomeni, da je strežnik zaslona pokvarjen in se morate obrniti na zastopnika sistema."
-
-#. TRANSLATORS: this is for debugging, if the session is idle
-#: ../src/gpm-idle.c:228
-msgid "Session idle"
-msgstr "Nedejavna seja"
-
-#: ../src/gpm-idle.c:228
-msgid "Session active"
-msgstr "Dejavna seja"
-
-#. TRANSLATORS: has something inhibited the session from going idle
-#: ../src/gpm-idle.c:230
-msgid "idle inhibited"
-msgstr "nedejavnost je preprečena"
-
-#: ../src/gpm-idle.c:230
-msgid "idle not inhibited"
-msgstr "nedejavnost ni preprečena"
-
-#. TRANSLATORS: has something inhibited the system from being suspended
-#: ../src/gpm-idle.c:232
-msgid "suspend inhibited"
-msgstr "prehod v mirovanje je preprečeno"
-
-#: ../src/gpm-idle.c:232
-msgid "suspend not inhibited"
-msgstr "prehod v mirovanje ni preprečen"
-
-#. TRANSLATORS: is the screen idle or awake
-#: ../src/gpm-idle.c:234
-msgid "screen idle"
-msgstr "nedejaven zaslon"
-
-#: ../src/gpm-idle.c:234
-msgid "screen awake"
-msgstr "dejaven zaslon"
-
 #. TRANSLATORS: show verbose debugging
 #: ../src/gpm-main.c:171
 #: ../src/gpm-prefs.c:90
-#: ../src/gpm-statistics.c:1488
+#: ../src/gpm-statistics.c:1497
 msgid "Show extra debugging information"
 msgstr "Pokaži dodatne podrobnosti razhroščevanja"
 
@@ -1006,109 +959,110 @@ msgid "GNOME Power Manager"
 msgstr "Upravljalnik porabe GNOME"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:172
-msgid "Power plugged in"
-msgstr "Priklop napajanja"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:176
-msgid "Power unplugged"
-msgstr "Napajanje ni priklopljeno"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:180
-msgid "Lid has opened"
-msgstr "Pokrov je odprt"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:184
-msgid "Lid has closed"
-msgstr "Pokrov je zaprt"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:188
-msgid "Battery is low"
-msgstr "Stanje baterije je nizko"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:192
+#: ../src/gpm-manager.c:222
+#: ../src/gpm-manager.c:290
 msgid "Battery is very low"
 msgstr "Stanje baterije je zelo nizko"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:196
+#: ../src/gpm-manager.c:270
+msgid "Power plugged in"
+msgstr "Priklop napajanja"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:274
+msgid "Power unplugged"
+msgstr "Napajanje ni priklopljeno"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:278
+msgid "Lid has opened"
+msgstr "Pokrov je odprt"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:282
+msgid "Lid has closed"
+msgstr "Pokrov je zaprt"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:286
+msgid "Battery is low"
+msgstr "Stanje baterije je nizko"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:294
 msgid "Battery is full"
 msgstr "Baterija je polna"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:200
+#: ../src/gpm-manager.c:298
 msgid "Suspend started"
 msgstr "Pričeta zaustavitev"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:204
+#: ../src/gpm-manager.c:302
 msgid "Resumed"
 msgstr "Obnovljeno"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:208
+#: ../src/gpm-manager.c:306
 msgid "Suspend failed"
 msgstr "Zaustavitev ni uspela"
 
 #. TRANSLATORS: message text
-#: ../src/gpm-manager.c:476
+#: ../src/gpm-manager.c:574
 msgid "Your computer failed to suspend."
 msgstr "Zaustavitev računalnika ni bila uspešna."
 
 #. TRANSLATORS: title text
-#: ../src/gpm-manager.c:478
+#: ../src/gpm-manager.c:576
 msgid "Failed to suspend"
 msgstr "Napaka med pošiljanjem v mirovanje"
 
 #. TRANSLATORS: message text
-#: ../src/gpm-manager.c:482
+#: ../src/gpm-manager.c:580
 msgid "Your computer failed to hibernate."
 msgstr "Hiberniranje računalnika ni uspelo."
 
 #. TRANSLATORS: title text
-#: ../src/gpm-manager.c:484
+#: ../src/gpm-manager.c:582
 msgid "Failed to hibernate"
 msgstr "Napaka med hiberniranjem"
 
 #. TRANSLATORS: message text
-#: ../src/gpm-manager.c:489
+#: ../src/gpm-manager.c:587
 msgid "The failure was reported as:"
 msgstr "Napaka je javljena kot:"
 
 #. TRANSLATORS: button text, visit the suspend help website
-#: ../src/gpm-manager.c:502
+#: ../src/gpm-manager.c:600
 msgid "Visit help page"
 msgstr "Obiščite stran pomoči"
 
 #. TRANSLATORS: this is the gnome-screensaver throttle
-#: ../src/gpm-manager.c:765
+#: ../src/gpm-manager.c:863
 msgid "Display DPMS activated"
 msgstr "Vključen prikaz DPMS"
 
 #. TRANSLATORS: this is the gnome-screensaver throttle
-#: ../src/gpm-manager.c:784
+#: ../src/gpm-manager.c:882
 msgid "On battery power"
 msgstr "Napajanje iz baterije"
 
-#: ../src/gpm-manager.c:802
+#: ../src/gpm-manager.c:900
 msgid "Laptop lid is closed"
 msgstr "Pokrov prenosnika zaprt"
 
-#: ../src/gpm-manager.c:840
+#: ../src/gpm-manager.c:938
 msgid "Power Information"
 msgstr "Podatki o porabi"
 
 #. TRANSLATORS: the battery may be recalled by it's vendor
-#: ../src/gpm-manager.c:1077
+#: ../src/gpm-manager.c:1186
 msgid "Battery may be recalled"
 msgstr "Baterija je bila morda preklicana"
 
-#: ../src/gpm-manager.c:1078
+#: ../src/gpm-manager.c:1187
 #, c-format
 msgid ""
 "The battery in your computer may have been recalled by %s and you may be at risk.\n"
@@ -1120,12 +1074,12 @@ msgstr ""
 "Za več podrobnosti obiščite preklicno spletno stran."
 
 #. TRANSLATORS: button text, visit the manufacturers recall website
-#: ../src/gpm-manager.c:1088
+#: ../src/gpm-manager.c:1197
 msgid "Visit recall website"
 msgstr "Obišči preklicno spletno stran"
 
 #. TRANSLATORS: button text, do not show this bubble again
-#: ../src/gpm-manager.c:1091
+#: ../src/gpm-manager.c:1200
 msgid "Do not show me this again"
 msgstr "Ne prikaži več tega sporočila"
 
@@ -1133,18 +1087,18 @@ msgstr "Ne prikaži več tega sporočila"
 #. * where capacity is the ratio of the last_full capacity with that of
 #. * the design capacity. (#326740)
 #. TRANSLATORS: battery is old or broken
-#: ../src/gpm-manager.c:1176
+#: ../src/gpm-manager.c:1285
 msgid "Battery may be broken"
 msgstr "Baterija je lahko poškodovana"
 
 #. TRANSLATORS: notify the user that that battery is broken as the capacity is very low
-#: ../src/gpm-manager.c:1179
+#: ../src/gpm-manager.c:1288
 #, c-format
 msgid "Your battery has a very low capacity (%1.1f%%), which means that it may be old or broken."
 msgstr "Bateriji je preostalo le malo moči (%1.1f%%), kar pomeni, da je lahko stara ali pa pokvarjena."
 
 #. TRANSLATORS: show the fully charged notification
-#: ../src/gpm-manager.c:1227
+#: ../src/gpm-manager.c:1337
 msgid "Battery Fully Charged"
 msgid_plural "Batteries Fully Charged"
 msgstr[0] "Baterije so polne"
@@ -1153,228 +1107,228 @@ msgstr[2] "Bateriji sta polni"
 msgstr[3] "Baterije so polne"
 
 #. TRANSLATORS: laptop battery is now discharging
-#: ../src/gpm-manager.c:1273
+#: ../src/gpm-manager.c:1383
 msgid "Battery Discharging"
 msgstr "Praznjenje baterije"
 
 #. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1277
+#: ../src/gpm-manager.c:1387
 #, c-format
 msgid "%s of battery power remaining (%.1f%%)"
 msgstr "%s preostale napetosti baterije (%.1f%%)"
 
 #. TRANSLATORS: the device is discharging, but we only have a percentage
-#: ../src/gpm-manager.c:1280
-#: ../src/gpm-manager.c:1292
+#: ../src/gpm-manager.c:1390
+#: ../src/gpm-manager.c:1402
 #: ../src/gpm-upower.c:284
 #, c-format
 msgid "%s discharging (%.1f%%)"
 msgstr "%s praznjenja (%.1f%%)"
 
 #. TRANSLATORS: UPS is now discharging
-#: ../src/gpm-manager.c:1285
+#: ../src/gpm-manager.c:1395
 msgid "UPS Discharging"
 msgstr "UPS praznjenje"
 
 #. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1289
+#: ../src/gpm-manager.c:1399
 #, c-format
 msgid "%s of UPS backup power remaining (%.1f%%)"
 msgstr "%s preostale varnostne UPS napetosti (%.1f%%)"
 
 #. TRANSLATORS: laptop battery low, and we only have one battery
-#: ../src/gpm-manager.c:1373
+#: ../src/gpm-manager.c:1483
 msgid "Battery low"
 msgstr "Stanje baterije je nizko"
 
 #. TRANSLATORS: laptop battery low, and we have more than one type of battery
-#: ../src/gpm-manager.c:1376
+#: ../src/gpm-manager.c:1486
 msgid "Laptop battery low"
 msgstr "Napetost baterije je nizka"
 
 #. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1382
+#: ../src/gpm-manager.c:1492
 #, c-format
 msgid "Approximately <b>%s</b> remaining (%.1f%%)"
 msgstr "Na voljo imate še približno <b>%s</b> zmogljivosti baterije (%.1f%%)"
 
 #. TRANSLATORS: UPS is starting to get a little low
-#: ../src/gpm-manager.c:1386
+#: ../src/gpm-manager.c:1496
 msgid "UPS low"
 msgstr "UPS nizek"
 
 #. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1390
+#: ../src/gpm-manager.c:1500
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"
 msgstr "Na voljo imate še približno <b>%s</b> zmogljivosti UPS varovala (%.1f%%)"
 
 #. TRANSLATORS: mouse is getting a little low
 #. TRANSLATORS: the mouse battery is very low
-#: ../src/gpm-manager.c:1394
-#: ../src/gpm-manager.c:1510
+#: ../src/gpm-manager.c:1504
+#: ../src/gpm-manager.c:1620
 msgid "Mouse battery low"
 msgstr "Napetost baterije miške je nizka"
 
 #. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1397
+#: ../src/gpm-manager.c:1507
 #, c-format
 msgid "The wireless mouse attached to this computer is low in power (%.1f%%)"
 msgstr "Priključena brezžična miška ima nizko napetost baterije (%.1f%%)"
 
 #. TRANSLATORS: keyboard is getting a little low
 #. TRANSLATORS: the keyboard battery is very low
-#: ../src/gpm-manager.c:1401
-#: ../src/gpm-manager.c:1518
+#: ../src/gpm-manager.c:1511
+#: ../src/gpm-manager.c:1628
 msgid "Keyboard battery low"
 msgstr "Napetost baterije tipkovnice je nizka"
 
 #. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1404
+#: ../src/gpm-manager.c:1514
 #, c-format
 msgid "The wireless keyboard attached to this computer is low in power (%.1f%%)"
 msgstr "Priključena brezžična tipkovnica ima nizko napetost baterije (%.1f%%)"
 
 #. TRANSLATORS: PDA is getting a little low
 #. TRANSLATORS: the PDA battery is very low
-#: ../src/gpm-manager.c:1408
-#: ../src/gpm-manager.c:1527
+#: ../src/gpm-manager.c:1518
+#: ../src/gpm-manager.c:1637
 msgid "PDA battery low"
-msgstr "Napetost baterije PDA je nizka"
+msgstr "Napetost baterije dlančnika je nizka"
 
 #. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1411
+#: ../src/gpm-manager.c:1521
 #, c-format
 msgid "The PDA attached to this computer is low in power (%.1f%%)"
-msgstr "Priključena naprava PDA ima nizko napetost baterije (%.1f%%)"
+msgstr "Priključen dlančnik ima nizko napetost baterije (%.1f%%)"
 
 #. TRANSLATORS: cell phone (mobile) is getting a little low
 #. TRANSLATORS: the cell battery is very low
-#: ../src/gpm-manager.c:1415
-#: ../src/gpm-manager.c:1536
+#: ../src/gpm-manager.c:1525
+#: ../src/gpm-manager.c:1646
 msgid "Cell phone battery low"
 msgstr "Napetost baterije mobilnega telefona je nizka"
 
 #. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1418
+#: ../src/gpm-manager.c:1528
 #, c-format
 msgid "The cell phone attached to this computer is low in power (%.1f%%)"
 msgstr "Priključen mobilni telefon ima nizko napetost baterije (%.1f%%)."
 
 #. TRANSLATORS: laptop battery critically low, and only have one type of battery
-#: ../src/gpm-manager.c:1467
+#: ../src/gpm-manager.c:1577
 msgid "Battery critically low"
 msgstr "Stanje baterije je kritično nizko"
 
 #. TRANSLATORS: laptop battery critically low, and we have more than one type of battery
 #. TRANSLATORS: laptop battery is really, really, low
-#: ../src/gpm-manager.c:1470
-#: ../src/gpm-manager.c:1582
+#: ../src/gpm-manager.c:1580
+#: ../src/gpm-manager.c:1706
 msgid "Laptop battery critically low"
 msgstr "Napetost baterije prenosnika je kritično nizka"
 
 #. TRANSLATORS: tell the use to insert the plug, as we're not going to do anything
-#: ../src/gpm-manager.c:1480
+#: ../src/gpm-manager.c:1590
 msgid "Plug in your AC adapter to avoid losing data."
 msgstr "Vtaknite omrežni električni kabel preden izgubite podatke."
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1484
+#: ../src/gpm-manager.c:1594
 #, c-format
 msgid "Computer will suspend very soon unless it is plugged in."
 msgstr "V kolikor računalnika ne priklopite v omrežje, se bo kmalu postavil v pripravljenost."
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1488
+#: ../src/gpm-manager.c:1598
 #, c-format
 msgid "Computer will hibernate very soon unless it is plugged in."
 msgstr "V kolikor računalnika ne priklopite v omrežje, se bo kmalu hiberniral."
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1492
+#: ../src/gpm-manager.c:1602
 #, c-format
 msgid "Computer will shutdown very soon unless it is plugged in."
 msgstr "V kolikor računalnika ne priklopite v omrežje, se bo kmalu izklopil."
 
 #. TRANSLATORS: the UPS is very low
 #. TRANSLATORS: UPS is really, really, low
-#: ../src/gpm-manager.c:1500
-#: ../src/gpm-manager.c:1620
+#: ../src/gpm-manager.c:1610
+#: ../src/gpm-manager.c:1744
 msgid "UPS critically low"
 msgstr "Stanje UPS je kritično nizko"
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1504
+#: ../src/gpm-manager.c:1614
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS power (%.1f%%). Restore AC power to your computer to avoid losing data."
 msgstr "Na voljo imate še približno <b>%s</b> zmogljivosti UPS varovala (%.1f%%). Prenosnik priklopite na omrežno napetost, da ne izgubite podatkov."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1513
+#: ../src/gpm-manager.c:1623
 #, c-format
 msgid "The wireless mouse attached to this computer is very low in power (%.1f%%). This device will soon stop functioning if not charged."
 msgstr "Priključena brezžična miška ima zelo nizko napetost baterije (%.1f%%). Miška bo, v primeru, da je ne napolnite, prenehala delovati."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1521
+#: ../src/gpm-manager.c:1631
 #, c-format
 msgid "The wireless keyboard attached to this computer is very low in power (%.1f%%). This device will soon stop functioning if not charged."
 msgstr "Priključena brezžična tipkovnica ima zelo nizko napetost baterije (%.1f%%). Tipkovnica bo, v primeru, da je ne napolnite, prenehala delovati."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1530
+#: ../src/gpm-manager.c:1640
 #, c-format
 msgid "The PDA attached to this computer is very low in power (%.1f%%). This device will soon stop functioning if not charged."
-msgstr "Priključena naprava PDA ima zelo nizko napetost baterije (%.1f%%). Naprava  bo, v primeru, da je ne napolnite, prenehala delovati."
+msgstr "Priključen dlančnik ima zelo nizko napetost baterije (%.1f%%). Naprava  bo, v primeru, da je ne napolnite, prenehala delovati."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1539
+#: ../src/gpm-manager.c:1649
 #, c-format
 msgid "Your cell phone is very low in power (%.1f%%). This device will soon stop functioning if not charged."
 msgstr "Priključen mobilni telefon ima zelo nizko napetost baterije (%.1f%%). Telefon  bo, v primeru, da ga ne napolnite, prenehal delovati."
 
 #. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1591
+#: ../src/gpm-manager.c:1715
 msgid "The battery is below the critical level and this computer will <b>power-off</b> when the battery becomes completely empty."
-msgstr "Baterija je pod kritično ravnjo. Računalnik se bo <b>ugasnil</b>, ko se baterija do konca izprazni."
+msgstr "Napetost baterije je kritično nizka. Računalnik se bo <b>izklopil</b>, ko se baterija do konca izprazni."
 
 #. TRANSLATORS: computer will suspend
-#: ../src/gpm-manager.c:1597
+#: ../src/gpm-manager.c:1721
 msgid "The battery is below the critical level and this computer is about to suspend.<br><b>NOTE:</b> A small amount of power is required to keep your computer in a suspended state."
-msgstr "Baterija je pod kritično ravnjo. Računalnik se bo zaustavil. <br><b>OPOMBA:</b> Za zadržanje računalnika v zaustavljenem stanju se porabi manjša količina energije."
+msgstr "Napetost baterije je kritično nizka. Računalnik se bo zaustavil. <br><b>OPOMBA:</b> Računalnik v zaustavljenem stanju porabi manj energije."
 
 #. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1604
+#: ../src/gpm-manager.c:1728
 msgid "The battery is below the critical level and this computer is about to hibernate."
-msgstr "Baterija je pod kritično ravnjo. Računalnik se bo hiberniral."
+msgstr "Napetost baterije je kritično nizka. Računalnik bo hiberniral."
 
 #. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1609
+#: ../src/gpm-manager.c:1733
 msgid "The battery is below the critical level and this computer is about to shutdown."
-msgstr "Baterija je pod kritično ravnjo. Računalnik se bo ugasnil."
+msgstr "Napetost baterije je kritično nizka. Računalnik se bo izklopil."
 
 #. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1629
+#: ../src/gpm-manager.c:1753
 msgid "The UPS is below the critical level and this computer will <b>power-off</b> when the UPS becomes completely empty."
-msgstr "UPS je pod kritično ravnjo. Računalnik se bo <b>ugasnil</b>, ko se UPS do konca izprazni."
+msgstr "UPS je pod kritično ravnjo. Računalnik se bo <b>izklopil</b>, ko se UPS do konca izprazni."
 
 #. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1635
+#: ../src/gpm-manager.c:1759
 msgid "The UPS is below the critical level and this computer is about to hibernate."
 msgstr "UPS je pod kritično ravnjo. Računalnik se bo hiberniral."
 
 #. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1640
+#: ../src/gpm-manager.c:1764
 msgid "The UPS is below the critical level and this computer is about to shutdown."
-msgstr "UPS je pod kritično ravnjo. Računalnik se bo ugasnil."
+msgstr "UPS je pod kritično ravnjo. Računalnik se bo izklopil."
 
 #. TRANSLATORS: there was in install problem
-#: ../src/gpm-manager.c:1841
+#: ../src/gpm-manager.c:1974
 msgid "Install problem!"
 msgstr "Napaka nastavitev!"
 
 #. TRANSLATORS: the GConf schema was not installed properly
-#: ../src/gpm-manager.c:1843
+#: ../src/gpm-manager.c:1976
 msgid ""
 "The configuration defaults for GNOME Power Manager have not been installed correctly.\n"
 "Please contact your computer administrator."
@@ -1415,7 +1369,7 @@ msgid "Never"
 msgstr "Nikoli"
 
 #: ../src/gpm-statistics.c:80
-#: ../src/gpm-statistics.c:437
+#: ../src/gpm-statistics.c:446
 msgid "Rate"
 msgstr "Hitrost"
 
@@ -1424,12 +1378,12 @@ msgid "Charge"
 msgstr "Polnjenje"
 
 #: ../src/gpm-statistics.c:82
-#: ../src/gpm-statistics.c:451
+#: ../src/gpm-statistics.c:460
 msgid "Time to full"
 msgstr "Čas do polnosti"
 
 #: ../src/gpm-statistics.c:83
-#: ../src/gpm-statistics.c:456
+#: ../src/gpm-statistics.c:465
 msgid "Time to empty"
 msgstr "Čas do praznosti"
 
@@ -1482,7 +1436,7 @@ msgid "Description"
 msgstr "Opis"
 
 #: ../src/gpm-statistics.c:179
-#: ../src/gpm-statistics.c:393
+#: ../src/gpm-statistics.c:402
 msgid "Type"
 msgstr "Vrsta"
 
@@ -1494,35 +1448,64 @@ msgstr "ID"
 msgid "Command"
 msgstr "Ukaz"
 
+#. TRANSLATORS: this is when the stats time is not known
+#: ../src/gpm-statistics.c:284
+msgid "Unknown"
+msgstr "Neznano"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#: ../src/gpm-statistics.c:288
+#, c-format
+msgid "%.0f seconds"
+msgstr "%.0f sekund"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#: ../src/gpm-statistics.c:293
+#, c-format
+msgid "%.1f minutes"
+msgstr "%.1f minut"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#: ../src/gpm-statistics.c:298
+#, c-format
+msgid "%.1f hours"
+msgstr "%.1f ur"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
 #: ../src/gpm-statistics.c:302
+#, c-format
+msgid "%.1f days"
+msgstr "%.1f dni"
+
+#: ../src/gpm-statistics.c:311
 msgid "Yes"
 msgstr "Da"
 
-#: ../src/gpm-statistics.c:302
+#: ../src/gpm-statistics.c:311
 msgid "No"
 msgstr "Ne"
 
-#: ../src/gpm-statistics.c:390
+#: ../src/gpm-statistics.c:399
 msgid "Device"
 msgstr "Naprava"
 
-#: ../src/gpm-statistics.c:395
+#: ../src/gpm-statistics.c:404
 msgid "Vendor"
 msgstr "Prodajalec"
 
-#: ../src/gpm-statistics.c:397
+#: ../src/gpm-statistics.c:406
 msgid "Model"
 msgstr "Model"
 
-#: ../src/gpm-statistics.c:399
+#: ../src/gpm-statistics.c:408
 msgid "Serial number"
 msgstr "Serijska številka"
 
-#: ../src/gpm-statistics.c:400
+#: ../src/gpm-statistics.c:409
 msgid "Supply"
 msgstr "Dostava"
 
-#: ../src/gpm-statistics.c:403
+#: ../src/gpm-statistics.c:412
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
@@ -1531,240 +1514,240 @@ msgstr[1] "%d sekunda"
 msgstr[2] "%d sekundi"
 msgstr[3] "%d sekunde"
 
-#: ../src/gpm-statistics.c:404
+#: ../src/gpm-statistics.c:413
 msgid "Refreshed"
 msgstr "Osveženo"
 
-#: ../src/gpm-statistics.c:411
+#: ../src/gpm-statistics.c:420
 msgid "Present"
 msgstr "Trenutna vrednost"
 
-#: ../src/gpm-statistics.c:415
+#: ../src/gpm-statistics.c:424
 msgid "Rechargeable"
 msgstr "Obnovljivo polnjenje"
 
-#: ../src/gpm-statistics.c:419
+#: ../src/gpm-statistics.c:428
 msgid "State"
 msgstr "Stanje"
 
-#: ../src/gpm-statistics.c:422
+#: ../src/gpm-statistics.c:431
 msgid "Energy"
 msgstr "Energija"
 
-#: ../src/gpm-statistics.c:425
+#: ../src/gpm-statistics.c:434
 msgid "Energy when empty"
 msgstr "Energija ob praznjenju"
 
-#: ../src/gpm-statistics.c:428
+#: ../src/gpm-statistics.c:437
 msgid "Energy when full"
 msgstr "Energija ob polnosti"
 
-#: ../src/gpm-statistics.c:431
+#: ../src/gpm-statistics.c:440
 msgid "Energy (design)"
 msgstr "Energija (zasnova)"
 
-#: ../src/gpm-statistics.c:444
+#: ../src/gpm-statistics.c:453
 msgid "Voltage"
 msgstr "Napetost"
 
-#: ../src/gpm-statistics.c:465
+#: ../src/gpm-statistics.c:474
 msgid "Percentage"
 msgstr "Odstotek"
 
-#: ../src/gpm-statistics.c:470
+#: ../src/gpm-statistics.c:479
 msgid "Capacity"
 msgstr "Zmogljivost"
 
-#: ../src/gpm-statistics.c:474
+#: ../src/gpm-statistics.c:483
 msgid "Technology"
 msgstr "Tehnologija"
 
-#: ../src/gpm-statistics.c:476
+#: ../src/gpm-statistics.c:485
 msgid "Online"
 msgstr "Povezano"
 
 #. TRANSLATORS: the command line was not provided
-#: ../src/gpm-statistics.c:787
+#: ../src/gpm-statistics.c:796
 msgid "No data"
 msgstr "Ni podatkov"
 
 #. TRANSLATORS: kernel module, usually a device driver
-#: ../src/gpm-statistics.c:794
-#: ../src/gpm-statistics.c:799
+#: ../src/gpm-statistics.c:803
+#: ../src/gpm-statistics.c:808
 msgid "Kernel module"
 msgstr "Modul jedra"
 
 #. TRANSLATORS: kernel housekeeping
-#: ../src/gpm-statistics.c:804
+#: ../src/gpm-statistics.c:813
 msgid "Kernel core"
 msgstr "Glavno jedro"
 
 #. TRANSLATORS: interrupt between processors
-#: ../src/gpm-statistics.c:809
+#: ../src/gpm-statistics.c:818
 msgid "Interprocessor interrupt"
 msgstr "Jedrna prekinitev"
 
 #. TRANSLATORS: unknown interrupt
-#: ../src/gpm-statistics.c:814
+#: ../src/gpm-statistics.c:823
 msgid "Interrupt"
 msgstr "Prekinitev"
 
 #. TRANSLATORS: the keyboard and mouse device event
-#: ../src/gpm-statistics.c:857
+#: ../src/gpm-statistics.c:866
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "PS/2 tipkovnica/miška/sledilna ploščica"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
-#: ../src/gpm-statistics.c:860
+#: ../src/gpm-statistics.c:869
 msgid "ACPI"
 msgstr "ACPI"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
-#: ../src/gpm-statistics.c:863
+#: ../src/gpm-statistics.c:872
 msgid "Serial ATA"
 msgstr "Serial ATA"
 
 #. TRANSLATORS: this is the old-style ATA interface
-#: ../src/gpm-statistics.c:866
+#: ../src/gpm-statistics.c:875
 msgid "ATA host controller"
 msgstr "Nadzornik ATA gostitelja"
 
 #. TRANSLATORS: 802.11 wireless adaptor
-#: ../src/gpm-statistics.c:869
+#: ../src/gpm-statistics.c:878
 msgid "Intel wireless adaptor"
 msgstr "Brezžični Intelov vmesnik"
 
 #. TRANSLATORS: a timer is something that fires periodically
-#: ../src/gpm-statistics.c:874
-#: ../src/gpm-statistics.c:877
-#: ../src/gpm-statistics.c:880
 #: ../src/gpm-statistics.c:883
 #: ../src/gpm-statistics.c:886
+#: ../src/gpm-statistics.c:889
+#: ../src/gpm-statistics.c:892
+#: ../src/gpm-statistics.c:895
 #, c-format
 msgid "Timer %s"
 msgstr "časomer %s"
 
 #. TRANSLATORS: this is a task that's woken up from sleeping
-#: ../src/gpm-statistics.c:889
+#: ../src/gpm-statistics.c:898
 #, c-format
 msgid "Sleep %s"
 msgstr "Spanje %s"
 
 #. TRANSLATORS: this is a new realtime task
-#: ../src/gpm-statistics.c:892
+#: ../src/gpm-statistics.c:901
 #, c-format
 msgid "New task %s"
 msgstr "Nova naloga %s"
 
 #. TRANSLATORS: this is a task thats woken to check state
-#: ../src/gpm-statistics.c:895
+#: ../src/gpm-statistics.c:904
 #, c-format
 msgid "Wait %s"
 msgstr "Počakaj %s"
 
 #. TRANSLATORS: a work queue is a list of work that has to be done
-#: ../src/gpm-statistics.c:898
-#: ../src/gpm-statistics.c:901
+#: ../src/gpm-statistics.c:907
+#: ../src/gpm-statistics.c:910
 #, c-format
 msgid "Work queue %s"
 msgstr "Delovni seznam %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
-#: ../src/gpm-statistics.c:904
+#: ../src/gpm-statistics.c:913
 #, c-format
 msgid "Network route flush %s"
 msgstr "Čiščenje omrežnih podatkov %s"
 
 #. TRANSLATORS: activity on the USB bus
-#: ../src/gpm-statistics.c:907
+#: ../src/gpm-statistics.c:916
 #, c-format
 msgid "USB activity %s"
 msgstr "USB dejavnost %s"
 
 #. TRANSLATORS: we've timed out of an aligned timer
-#: ../src/gpm-statistics.c:910
+#: ../src/gpm-statistics.c:919
 #, c-format
 msgid "Wakeup %s"
 msgstr "Prebujanje %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
-#: ../src/gpm-statistics.c:913
+#: ../src/gpm-statistics.c:922
 msgid "Local interrupts"
 msgstr "Krajevne procesorske prekinitve"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
-#: ../src/gpm-statistics.c:916
+#: ../src/gpm-statistics.c:925
 msgid "Rescheduling interrupts"
 msgstr "Ponovno določanje prekinitev"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1025
+#: ../src/gpm-statistics.c:1034
 msgid "Device Information"
 msgstr "Podatki o napravi"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1027
+#: ../src/gpm-statistics.c:1036
 msgid "Device History"
 msgstr "Zgodovina naprave"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1029
+#: ../src/gpm-statistics.c:1038
 msgid "Device Profile"
 msgstr "Profil naprave"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1031
+#: ../src/gpm-statistics.c:1040
 msgid "Processor Wakeups"
 msgstr "Prebujanja procesorja"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1237
-#: ../src/gpm-statistics.c:1243
-#: ../src/gpm-statistics.c:1249
-#: ../src/gpm-statistics.c:1255
+#: ../src/gpm-statistics.c:1246
+#: ../src/gpm-statistics.c:1252
+#: ../src/gpm-statistics.c:1258
+#: ../src/gpm-statistics.c:1264
 msgid "Time elapsed"
 msgstr "Porabljen čas"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1239
+#: ../src/gpm-statistics.c:1248
 msgid "Power"
 msgstr "Napajanje"
 
-#. TRANSLATORS: this is the Y axis on the graph
-#. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1245
-#: ../src/gpm-statistics.c:1288
-#: ../src/gpm-statistics.c:1294
-#: ../src/gpm-statistics.c:1300
-#: ../src/gpm-statistics.c:1306
+#. TRANSLATORS: this is the Y axis on the graph for the whole battery device
+#. TRANSLATORS: this is the X axis on the graph for the whole battery device
+#: ../src/gpm-statistics.c:1254
+#: ../src/gpm-statistics.c:1297
+#: ../src/gpm-statistics.c:1303
+#: ../src/gpm-statistics.c:1309
+#: ../src/gpm-statistics.c:1315
 msgid "Cell charge"
 msgstr "Napetost celice"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1251
-#: ../src/gpm-statistics.c:1257
+#: ../src/gpm-statistics.c:1260
+#: ../src/gpm-statistics.c:1266
 msgid "Predicted time"
 msgstr "Ocenjen čas"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1290
-#: ../src/gpm-statistics.c:1302
+#: ../src/gpm-statistics.c:1299
+#: ../src/gpm-statistics.c:1311
 msgid "Correction factor"
 msgstr "Korekcijski faktor"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1296
-#: ../src/gpm-statistics.c:1308
+#: ../src/gpm-statistics.c:1305
+#: ../src/gpm-statistics.c:1317
 msgid "Prediction accuracy"
 msgstr "Natančnost predvidevanja"
 
 #. TRANSLATORS: show a device by default
-#: ../src/gpm-statistics.c:1491
+#: ../src/gpm-statistics.c:1500
 msgid "Select this device at startup"
 msgstr "Izbor naprave ob zagonu"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:1767
+#: ../src/gpm-statistics.c:1776
 msgid "Processor"
 msgstr "Procesor"
 
@@ -1995,10 +1978,10 @@ msgstr[3] "Brezžične tipkovnice"
 #: ../src/gpm-upower.c:534
 msgid "PDA"
 msgid_plural "PDAs"
-msgstr[0] "PDAji"
-msgstr[1] "PDA"
-msgstr[2] "PDAji"
-msgstr[3] "PDAji"
+msgstr[0] "Dlančniki"
+msgstr[1] "Dlančnik"
+msgstr[2] "Dlančnika"
+msgstr[3] "Dlančniki"
 
 #. TRANSLATORS: cell phone (mobile...)
 #: ../src/gpm-upower.c:538
@@ -2054,6 +2037,30 @@ msgstr "_O programu"
 msgid "_Help"
 msgstr "Pomo_č"
 
+#~ msgid "Please see %s for more information."
+#~ msgstr "Poglejte si %s za več podrobnosti."
+#~ msgid ""
+#~ "If you can see this text, your display server is broken and you should "
+#~ "notify your distributor."
+#~ msgstr ""
+#~ "V primeru, da vidite to besedilo, pomeni, da je strežnik zaslona "
+#~ "pokvarjen in se morate obrniti na zastopnika sistema."
+#~ msgid "Session idle"
+#~ msgstr "Nedejavna seja"
+#~ msgid "Session active"
+#~ msgstr "Dejavna seja"
+#~ msgid "idle inhibited"
+#~ msgstr "nedejavnost je preprečena"
+#~ msgid "idle not inhibited"
+#~ msgstr "nedejavnost ni preprečena"
+#~ msgid "suspend inhibited"
+#~ msgstr "prehod v mirovanje je preprečeno"
+#~ msgid "suspend not inhibited"
+#~ msgstr "prehod v mirovanje ni preprečen"
+#~ msgid "screen idle"
+#~ msgstr "nedejaven zaslon"
+#~ msgid "screen awake"
+#~ msgstr "dejaven zaslon"
 #~ msgid "Sleep problem"
 #~ msgstr "Težave med zaustavitvijo"
 #~ msgid "Check the help file for common problems."
@@ -2476,8 +2483,6 @@ msgstr "Pomo_č"
 #~ msgstr "PDA-ji"
 #~ msgid "Cell phones"
 #~ msgstr "Mobilni telefoni"
-#~ msgid "Unknown"
-#~ msgstr "Neznano"
 #~ msgid "GNOME Power Statistics"
 #~ msgstr "Gnome statistika porabe"
 #~ msgid "Charge history"
