@@ -279,18 +279,27 @@ gpm_stats_time_to_text (gint seconds)
 {
 	gfloat value = seconds;
 
-	if (value < 0)
-		return g_strdup ("unknown");
-	if (value < 60)
-		return g_strdup_printf ("%.0f seconds", value);
+	if (value < 0) {
+		/* TRANSLATORS: this is when the stats time is not known */
+		return g_strdup (_("Unknown"));
+	}
+	if (value < 60) {
+		/* TRANSLATORS: this is a time value, usually to show on a graph */
+		return g_strdup_printf (_("%.0f seconds"), value);
+	}
 	value /= 60.0;
-	if (value < 60)
-		return g_strdup_printf ("%.1f minutes", value);
+	if (value < 60) {
+		/* TRANSLATORS: this is a time value, usually to show on a graph */
+		return g_strdup_printf (_("%.1f minutes"), value);
+	}
 	value /= 60.0;
-	if (value < 60)
-		return g_strdup_printf ("%.1f hours", value);
+	if (value < 60) {
+		/* TRANSLATORS: this is a time value, usually to show on a graph */
+		return g_strdup_printf (_("%.1f hours"), value);
+	}
 	value /= 24.0;
-	return g_strdup_printf ("%.1f days", value);
+	/* TRANSLATORS: this is a time value, usually to show on a graph */
+	return g_strdup_printf (_("%.1f days"), value);
 }
 
 /**
