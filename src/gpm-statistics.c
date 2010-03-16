@@ -285,21 +285,21 @@ gpm_stats_time_to_text (gint seconds)
 	}
 	if (value < 60) {
 		/* TRANSLATORS: this is a time value, usually to show on a graph */
-		return g_strdup_printf (_("%.0f seconds"), value);
+		return g_strdup_printf (ngettext ("%.0f second", "%.0f seconds", value), value);
 	}
 	value /= 60.0;
 	if (value < 60) {
 		/* TRANSLATORS: this is a time value, usually to show on a graph */
-		return g_strdup_printf (_("%.1f minutes"), value);
+		return g_strdup_printf (ngettext ("%.1f minute", "%.1f minutes", value), value);
 	}
 	value /= 60.0;
 	if (value < 60) {
 		/* TRANSLATORS: this is a time value, usually to show on a graph */
-		return g_strdup_printf (_("%.1f hours"), value);
+		return g_strdup_printf (ngettext ("%.1f hour", "%.1f hours", value), value);
 	}
 	value /= 24.0;
 	/* TRANSLATORS: this is a time value, usually to show on a graph */
-	return g_strdup_printf (_("%.1f days"), value);
+	return g_strdup_printf (ngettext ("%.1f day", "%.1f days", value), value);
 }
 
 /**
