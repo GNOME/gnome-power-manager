@@ -146,6 +146,9 @@ egg_idletime_alarm_reset_all (EggIdletime *idletime)
 
 	g_return_if_fail (EGG_IS_IDLETIME (idletime));
 
+	if (!idletime->priv->reset_set)
+		return;
+
 	/* reset all the alarms (except the reset alarm) to their timeouts */
 	for (i=1; i<idletime->priv->array->len; i++) {
 		alarm = g_ptr_array_index (idletime->priv->array, i);
@@ -188,6 +191,7 @@ egg_idletime_set_reset_alarm (EggIdletime *idletime, XSyncAlarmNotifyEvent *alar
 	EggIdletimeAlarm *alarm;
 	int overflow;
 	XSyncValue add;
+	gint64 current, reset_threshold;
 
 	alarm = egg_idletime_alarm_find_id (idletime, 0);
 
@@ -203,6 +207,13 @@ egg_idletime_set_reset_alarm (EggIdletime *idletime, XSyncAlarmNotifyEvent *alar
 
 		/* don't try to set this again if multiple timers are going off in sequence */
 		idletime->priv->reset_set = TRUE;
+
+		current = egg_idletime_get_time (idletime);
+		reset_threshold = egg_idletime_xsyncvalue_to_int64 (alarm->timeout);
+		if (current < reset_threshold) {
+			/* We've missed the alarm already */
+			egg_idletime_alarm_reset_all (idletime);
+		}
 	}
 }
 
