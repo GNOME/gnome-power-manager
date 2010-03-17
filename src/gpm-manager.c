@@ -1841,44 +1841,6 @@ gpm_manager_control_resume_cb (GpmControl *control, GpmControlAction action, Gpm
 }
 
 /**
- * gpm_manager_console_kit_active_changed_cb:
- **/
-static void
-gpm_manager_console_kit_active_changed_cb (EggConsoleKit *console, gboolean active, GpmManager *manager)
-{
-	gboolean ret;
-
-	egg_debug ("console now %s", active ? "active" : "inactive");
-
-	/* gone inactive */
-	if (!active)
-		return;
-
-	/* get lid state */
-	ret = gpm_button_is_lid_closed (manager->priv->button);
-	if (!ret)
-		return;
-
-	/* lid state might not be accurate if just resumed. Don't do anything if
-	 * we've just resumed as we might end up re-suspending the machine due
-	 * to pm-utils and uswsusp changing the tty */
-	if (manager->priv->just_resumed)
-		return;
-
-	/* get ac state */
-	if (!manager->priv->on_battery) {
-		egg_debug ("Performing AC policy as become active when lid down");
-		gpm_manager_perform_policy (manager, GPM_CONF_BUTTON_LID_AC,
-					    "The lid has been found closed on ac power.");
-		return;
-	}
-
-	egg_debug ("Performing battery policy as become active when lid down");
-	gpm_manager_perform_policy (manager, GPM_CONF_BUTTON_LID_BATT,
-				    "The lid has been found closed on battery power.");
-}
-
-/**
  * gpm_manager_init:
  * @manager: This class instance
  **/
@@ -1905,10 +1867,8 @@ gpm_manager_init (GpmManager *manager)
 	/* init to not just_resumed */
 	manager->priv->just_resumed = FALSE;
 
-	/* don't apply policy when not active */
+	/* don't apply policy when not active, so listen to ConsoleKit */
 	manager->priv->console = egg_console_kit_new ();
-	g_signal_connect (manager->priv->console, "active-changed",
-			  G_CALLBACK (gpm_manager_console_kit_active_changed_cb), manager);
 
 	/* this is a singleton, so we keep a master copy open here */
 	manager->priv->prefs_server = gpm_prefs_server_new ();
