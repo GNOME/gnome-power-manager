@@ -97,7 +97,6 @@ struct GpmManagerPrivate
 	gboolean		 on_battery;
 	gboolean		 just_resumed;
 	GtkStatusIcon		*status_icon;
-	gboolean		 supports_notification_actions;
 	NotifyNotification	*notification_general;
 	NotifyNotification	*notification_warning_low;
 	NotifyNotification	*notification_discharging;
@@ -1880,37 +1879,6 @@ gpm_manager_console_kit_active_changed_cb (EggConsoleKit *console, gboolean acti
 }
 
 /**
- * gpm_manager_supports_notification_actions:
- **/
-static gboolean
-gpm_manager_supports_notification_actions ()
-{
-	gboolean ret = FALSE;
-	GList *caps;
-	GList *c;
-
-	/* get capabilities from the server */
-	caps = notify_get_server_caps ();
-	if (caps == NULL) {
-		egg_warning ("failed to get capabilities of notification daemon");
-		goto out;
-	}
-
-	/* find the actions parameter */
-	for (c = caps; c != NULL; c = c->next) {
-		if (g_strcmp0 ((gchar*)c->data, "actions") == 0 ) {
-			ret = TRUE;
-			break;
-		}
-	}
-
-	g_list_foreach (caps, (GFunc)g_free, NULL);
-	g_list_free (caps);
-out:
-	return ret;
-}
-
-/**
  * gpm_manager_init:
  * @manager: This class instance
  **/
@@ -1957,7 +1925,6 @@ gpm_manager_init (GpmManager *manager)
 
 	/* use libnotify */
 	notify_init (GPM_NAME);
-	manager->priv->supports_notification_actions = gpm_manager_supports_notification_actions ();
 
 	/* watch gnome-power-manager keys */
 	gconf_client_add_dir (manager->priv->conf, GPM_CONF_DIR,
