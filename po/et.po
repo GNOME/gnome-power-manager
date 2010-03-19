@@ -14,9 +14,9 @@ msgstr ""
 "Project-Id-Version: Gnome Power Manager MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&component=general\n"
-"POT-Creation-Date: 2010-03-11 16:51+0000\n"
-"PO-Revision-Date: 2010-03-11 19:30+0300\n"
-"Last-Translator: Priit Laes <plaes@plaes.org>\n"
+"POT-Creation-Date: 2010-03-17 22:53+0000\n"
+"PO-Revision-Date: 2010-03-18 17:16+0300\n"
+"Last-Translator: Mattias Põldaru <mahfiaz gmail com>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -226,8 +226,8 @@ msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on AC power."
 msgstr ""
-"Kas võrgutoite korral peab energia säästmise eesmärgil ekraani tuhmistama või "
-"mitte."
+"Kas võrgutoite korral peab energia säästmise eesmärgil ekraani tuhmistama "
+"või mitte."
 
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
@@ -268,7 +268,8 @@ msgstr "Kas vigase aku korral tuleb anda madala täituvuse hoiatust."
 
 msgid "If we should show the recalled battery warning for a broken battery"
 msgstr ""
-"Kas ümbervahetamiseks tagasi kutsutud aku korral tuleb näidata katkise aku hoiatust."
+"Kas ümbervahetamiseks tagasi kutsutud aku korral tuleb näidata katkise aku "
+"hoiatust."
 
 msgid ""
 "If we should show the recalled battery warning for a broken battery. Set "
@@ -537,13 +538,15 @@ msgstr "Graafikul näidatav suurim kestus"
 msgid ""
 "The number of seconds of inactivity to spin down the disks when on AC power."
 msgstr ""
-"Jõudeaeg sekundites, mille möödudes vähendatakse võrgutoite olles kõvaketta pöördeid."
+"Jõudeaeg sekundites, mille möödudes vähendatakse võrgutoitel olles kõvaketta "
+"pöördeid."
 
 msgid ""
 "The number of seconds of inactivity to spin down the disks when on battery "
 "power."
 msgstr ""
-"Jõudeaeg sekundites, mille möödudes vähendatakse akutoitel olles kõvaketta pöördeid."
+"Jõudeaeg sekundites, mille möödudes vähendatakse akutoitel olles kõvaketta "
+"pöördeid."
 
 msgid ""
 "The percentage of the battery when it is considered critical. Only valid "
@@ -608,8 +611,8 @@ msgid ""
 "The version of the installed version of the schema. Do not edit this value, "
 "it is used so that configure changes between versions can be detected."
 msgstr ""
-"Paigaldatud skeemi versioon. See väärtus ei ole muutmiseks, vaid seda kasutatakse selleks, et "
-"tuvastada muutuseid häälestuses."
+"Paigaldatud skeemi versioon. See väärtus ei ole muutmiseks, vaid seda "
+"kasutatakse selleks, et tuvastada muutuseid häälestuses."
 
 msgid ""
 "This is the laptop panel screen brightness used when the session is idle. "
@@ -934,47 +937,6 @@ msgstr "%.1fW"
 msgid "%.1fV"
 msgstr "%.1fV"
 
-#. TRANSLATORS: this is what the user should read for more information about the blanking problem (%s is a URL)
-#, c-format
-msgid "Please see %s for more information."
-msgstr "Täiendava teabe jaoks vaata %s."
-
-#. TRANSLATORS: this is telling the user that thier X server is broken, and needs to be fixed
-msgid ""
-"If you can see this text, your display server is broken and you should "
-"notify your distributor."
-msgstr ""
-"Kui sa seda teksti näed, siis on su kuvaserver katki ja sa peaksid teavitama "
-"sellest oma distribuutorit."
-
-#. TRANSLATORS: this is for debugging, if the session is idle
-msgid "Session idle"
-msgstr "Sessioon puhkab"
-
-msgid "Session active"
-msgstr "Sessioon aktiivne"
-
-#. TRANSLATORS: has something inhibited the session from going idle
-msgid "idle inhibited"
-msgstr "jõudeolek on takistatud"
-
-msgid "idle not inhibited"
-msgstr "jõudeolek pole takistatud"
-
-#. TRANSLATORS: has something inhibited the system from being suspended
-msgid "suspend inhibited"
-msgstr "uinak on takistatud"
-
-msgid "suspend not inhibited"
-msgstr "uinak pole takistatud"
-
-#. TRANSLATORS: is the screen idle or awake
-msgid "screen idle"
-msgstr "ekraan puhkab"
-
-msgid "screen awake"
-msgstr "ekraan on ärkvel"
-
 #. TRANSLATORS: show verbose debugging
 msgid "Show extra debugging information"
 msgstr "Silumisteabe näitamine"
@@ -1178,8 +1140,7 @@ msgstr "Klaviatuuri patarei on peaaegu tühi"
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is low in power (%.1f%%)"
-msgstr ""
-"Arvutiga seotud juhtmeta klaviatuuri aku on peaaegu tühi (%.1f%%)"
+msgstr "Arvutiga seotud juhtmeta klaviatuuri aku on peaaegu tühi (%.1f%%)"
 
 #. TRANSLATORS: PDA is getting a little low
 #. TRANSLATORS: the PDA battery is very low
@@ -1294,8 +1255,8 @@ msgid ""
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
 "computer in a suspended state."
 msgstr ""
-"Aku täituvus on alla kriitilise piiri ning see arvuti uinub. <br/><b>Märkus:</"
-"b> ka uinaku ajal tarvitab arvuti natukene voolu."
+"Aku täituvus on alla kriitilise piiri ning see arvuti uinub. <br/><b>Märkus:"
+"</b> ka uinaku ajal tarvitab arvuti natukene voolu."
 
 #. TRANSLATORS: computer will hibernate
 msgid ""
@@ -1314,8 +1275,8 @@ msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
 msgstr ""
-"UPS-i täituvus on alla kriitilise piiri ja arvuti <b>lülitatakse</b> "
-"UPS-i täielikul tühjenemisel <b>välja</b>."
+"UPS-i täituvus on alla kriitilise piiri ja arvuti <b>lülitatakse</b> UPS-i "
+"täielikul tühjenemisel <b>välja</b>."
 
 #. TRANSLATORS: computer will hibernate
 msgid ""
@@ -1421,6 +1382,38 @@ msgstr "ID"
 
 msgid "Command"
 msgstr "Käsk"
+
+#. TRANSLATORS: this is when the stats time is not known
+msgid "Unknown"
+msgstr "Teadmata"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#, c-format
+msgid "%.0f second"
+msgid_plural "%.0f seconds"
+msgstr[0] "%.0f sekund"
+msgstr[1] "%.0f sekundit"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#, c-format
+msgid "%.1f minute"
+msgid_plural "%.1f minutes"
+msgstr[0] "%.1f minut"
+msgstr[1] "%.1f minutit"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#, c-format
+msgid "%.1f hour"
+msgid_plural "%.1f hours"
+msgstr[0] "%.1f tund"
+msgstr[1] "%.1f tundi"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#, c-format
+msgid "%.1f day"
+msgid_plural "%.1f days"
+msgstr[0] "%.1f päev"
+msgstr[1] "%.1f päeva"
 
 msgid "Yes"
 msgstr "Jah"
