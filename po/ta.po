@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.master.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-03 21:47+0530\n"
-"PO-Revision-Date: 2010-03-03 21:50+0530\n"
+"POT-Creation-Date: 2010-03-20 17:16+0530\n"
+"PO-Revision-Date: 2010-03-20 17:18+0530\n"
 "Last-Translator: Dr,T,Vasudevan <agnihot3@gmail.com>\n"
 "Language-Team: Tamil <Ubuntu-l10n-tam@lists.ubuntu.com>>\n"
 "MIME-Version: 1.0\n"
@@ -858,8 +858,8 @@ msgstr "மின் மேலாண்மையை அனுசரி"
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1035
-#: ../src/gpm-statistics.c:1508
+#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1044
+#: ../src/gpm-statistics.c:1517
 msgid "Power Statistics"
 msgstr "மின் புள்ளிவிவரங்கள்"
 
@@ -1124,59 +1124,8 @@ msgstr "%.1fW"
 msgid "%.1fV"
 msgstr "%.1fV"
 
-#. TRANSLATORS: this is what the user should read for more information about the blanking problem (%s is a URL)
-#: ../src/gpm-idle.c:218
-#, c-format
-msgid "Please see %s for more information."
-msgstr "கூடுதல் தகவலுக்கு %s ஐ பார்க்கவும்."
-
-#. TRANSLATORS: this is telling the user that thier X server is broken, and needs to be fixed
-#: ../src/gpm-idle.c:222
-msgid ""
-"If you can see this text, your display server is broken and you should "
-"notify your distributor."
-msgstr ""
-"நீங்கள் இந்த உரையை பார்த்தால், உங்கள் காட்சி சேவையகம் விடுபட்டிருக்கும் மற்றும் உங்கள் "
-"விநியோகஸ்தருக்கு தெரிவிக்க வேண்டும்."
-
-#. TRANSLATORS: this is for debugging, if the session is idle
-#: ../src/gpm-idle.c:228
-msgid "Session idle"
-msgstr "அமர்வு வெறுமை"
-
-#: ../src/gpm-idle.c:228
-msgid "Session active"
-msgstr "அமர்வு செயலில்"
-
-#. TRANSLATORS: has something inhibited the session from going idle
-#: ../src/gpm-idle.c:230
-msgid "idle inhibited"
-msgstr " தூக்கம் நிறுத்தப்பட்டது"
-
-#: ../src/gpm-idle.c:230
-msgid "idle not inhibited"
-msgstr "தூக்கத்துக்கு நிறுத்தம் இல்லை"
-
-#. TRANSLATORS: has something inhibited the system from being suspended
-#: ../src/gpm-idle.c:232
-msgid "suspend inhibited"
-msgstr "நிறுத்தம் செயல் நிறுத்து"
-
-#: ../src/gpm-idle.c:232
-msgid "suspend not inhibited"
-msgstr "நிறுத்தம் செயல் நிறுத்தம் இல்லை"
-
-#. TRANSLATORS: is the screen idle or awake
-#: ../src/gpm-idle.c:234
-msgid "screen idle"
-msgstr "திரை வெறுமை"
-
-#: ../src/gpm-idle.c:234
-msgid "screen awake"
-msgstr "திரையை விழிப்பு"
-
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-main.c:171 ../src/gpm-prefs.c:90 ../src/gpm-statistics.c:1488
+#: ../src/gpm-main.c:171 ../src/gpm-prefs.c:90 ../src/gpm-statistics.c:1497
 msgid "Show extra debugging information"
 msgstr "கூடுதல் பிழைத்திருத்த தகவல்களை காட்டு"
 
@@ -1197,109 +1146,109 @@ msgid "GNOME Power Manager"
 msgstr "க்னோம் மின் மேலாளர்"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:172
-msgid "Power plugged in"
-msgstr "மின்சக்தி பொருத்தப்பட்டது"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:176
-msgid "Power unplugged"
-msgstr "மின்சக்தி பொருத்தம் நீக்கப்பட்டது"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:180
-msgid "Lid has opened"
-msgstr "மூடி திறக்கப்பட்டது"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:184
-msgid "Lid has closed"
-msgstr "மூடி மூடப்பட்டது"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:188
-msgid "Battery is low"
-msgstr "மின்கல சக்தி குறைவாக உள்ளது"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:192
+#: ../src/gpm-manager.c:221 ../src/gpm-manager.c:289
 msgid "Battery is very low"
 msgstr "மின்கல சக்தி மிகவும் குறைவாக உள்ளது"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:196
+#: ../src/gpm-manager.c:269
+msgid "Power plugged in"
+msgstr "மின்சக்தி பொருத்தப்பட்டது"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:273
+msgid "Power unplugged"
+msgstr "மின்சக்தி பொருத்தம் நீக்கப்பட்டது"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:277
+msgid "Lid has opened"
+msgstr "மூடி திறக்கப்பட்டது"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:281
+msgid "Lid has closed"
+msgstr "மூடி மூடப்பட்டது"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:285
+msgid "Battery is low"
+msgstr "மின்கல சக்தி குறைவாக உள்ளது"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:293
 msgid "Battery is full"
 msgstr "மின்கல சக்தி நிறைவாக உள்ளது"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:200
+#: ../src/gpm-manager.c:297
 msgid "Suspend started"
 msgstr "செயல் நிறுத்தம் துவங்கியது"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:204
+#: ../src/gpm-manager.c:301
 msgid "Resumed"
 msgstr "மீள் துவங்கியது"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:208
+#: ../src/gpm-manager.c:305
 msgid "Suspend failed"
 msgstr "செயல் நிறுத்தம் தோல்வியுற்றது"
 
 #. TRANSLATORS: message text
-#: ../src/gpm-manager.c:476
+#: ../src/gpm-manager.c:573
 msgid "Your computer failed to suspend."
 msgstr "உங்கள் கணினி இடை நிறுத்தாது போயிற்று."
 
 #. TRANSLATORS: title text
-#: ../src/gpm-manager.c:478
+#: ../src/gpm-manager.c:575
 msgid "Failed to suspend"
 msgstr "இடை நிறுத்தம் தோல்வியுற்றது"
 
 #. TRANSLATORS: message text
-#: ../src/gpm-manager.c:482
+#: ../src/gpm-manager.c:579
 msgid "Your computer failed to hibernate."
 msgstr "உங்கள் கணினி உறங்காது போயிற்று."
 
 #. TRANSLATORS: title text
-#: ../src/gpm-manager.c:484
+#: ../src/gpm-manager.c:581
 msgid "Failed to hibernate"
 msgstr "கணினி உறங்கம் தோல்வியுற்றது"
 
 #. TRANSLATORS: message text
-#: ../src/gpm-manager.c:489
+#: ../src/gpm-manager.c:586
 msgid "The failure was reported as:"
 msgstr "தோல்வி இப்படி அறிவிக்கப்பட்டது:"
 
 #. TRANSLATORS: button text, visit the suspend help website
-#: ../src/gpm-manager.c:502
+#: ../src/gpm-manager.c:599
 msgid "Visit help page"
 msgstr "உதவி பக்கத்தை பார்க்கவும்"
 
 #. TRANSLATORS: this is the gnome-screensaver throttle
-#: ../src/gpm-manager.c:765
+#: ../src/gpm-manager.c:862
 msgid "Display DPMS activated"
 msgstr "டிபிஎம்எஸ் செயல்படுத்தப்பட்டது என காட்டு"
 
 #. TRANSLATORS: this is the gnome-screensaver throttle
-#: ../src/gpm-manager.c:784
+#: ../src/gpm-manager.c:881
 msgid "On battery power"
 msgstr "மின்கல மின்சாரத்தில்"
 
-#: ../src/gpm-manager.c:802
+#: ../src/gpm-manager.c:899
 msgid "Laptop lid is closed"
 msgstr "மடிக்கணினி மூடி மூடப்பட்டது"
 
-#: ../src/gpm-manager.c:840
+#: ../src/gpm-manager.c:937
 msgid "Power Information"
 msgstr "மின் தகவல்"
 
 #. TRANSLATORS: the battery may be recalled by it's vendor
-#: ../src/gpm-manager.c:1077
+#: ../src/gpm-manager.c:1185
 msgid "Battery may be recalled"
 msgstr "உங்கள் மின்கலம் திருப்பி அழைக்கப்படலாம்."
 
-#: ../src/gpm-manager.c:1078
+#: ../src/gpm-manager.c:1186
 #, c-format
 msgid ""
 "The battery in your computer may have been recalled by %s and you may be at "
@@ -1312,12 +1261,12 @@ msgstr ""
 "மேல் விவரங்களுக்கு மின்கல திருப்பி அழைக்கப்படல் வலையகத்தை பார்க்கவும்."
 
 #. TRANSLATORS: button text, visit the manufacturers recall website
-#: ../src/gpm-manager.c:1088
+#: ../src/gpm-manager.c:1196
 msgid "Visit recall website"
 msgstr "திருப்பி அழைக்கப்படல் வலையகத்தை பார்க்கவும்."
 
 #. TRANSLATORS: button text, do not show this bubble again
-#: ../src/gpm-manager.c:1091
+#: ../src/gpm-manager.c:1199
 msgid "Do not show me this again"
 msgstr "இதை மீண்டும் காட்டாதே"
 
@@ -1325,12 +1274,12 @@ msgstr "இதை மீண்டும் காட்டாதே"
 #. * where capacity is the ratio of the last_full capacity with that of
 #. * the design capacity. (#326740)
 #. TRANSLATORS: battery is old or broken
-#: ../src/gpm-manager.c:1176
+#: ../src/gpm-manager.c:1284
 msgid "Battery may be broken"
 msgstr "மின்கலம் சிதைந்து இருக்கலாம்."
 
 #. TRANSLATORS: notify the user that that battery is broken as the capacity is very low
-#: ../src/gpm-manager.c:1179
+#: ../src/gpm-manager.c:1287
 #, c-format
 msgid ""
 "Your battery has a very low capacity (%1.1f%%), which means that it may be "
@@ -1340,154 +1289,157 @@ msgstr ""
 "அது சிதைந்து இருக்கலாம் என சந்தேகம்."
 
 #. TRANSLATORS: show the fully charged notification
-#: ../src/gpm-manager.c:1227
+#: ../src/gpm-manager.c:1336
 msgid "Battery Fully Charged"
 msgid_plural "Batteries Fully Charged"
 msgstr[0] "பேட்டரி முழுவதும் ஏற்றப்பட்டது"
 msgstr[1] "பேட்டரிகள் முழுவதும் ஏற்றப்பட்டது"
 
 #. TRANSLATORS: laptop battery is now discharging
-#: ../src/gpm-manager.c:1273
+#: ../src/gpm-manager.c:1382
 msgid "Battery Discharging"
 msgstr "மின்கல சக்தி இறங்குகிறது"
 
 #. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1277
+#: ../src/gpm-manager.c:1386
 #, c-format
 msgid "%s of battery power remaining (%.1f%%)"
 msgstr "%s பேட்டரி மின்சாரம் மீதமுள்ளது (%.1f%%)"
 
 #. TRANSLATORS: the device is discharging, but we only have a percentage
-#: ../src/gpm-manager.c:1280 ../src/gpm-manager.c:1292 ../src/gpm-upower.c:284
+#: ../src/gpm-manager.c:1389 ../src/gpm-manager.c:1401 ../src/gpm-upower.c:284
 #, c-format
 msgid "%s discharging (%.1f%%)"
 msgstr "%s இறங்குகிறது (%.1f%%)"
 
 #. TRANSLATORS: UPS is now discharging
-#: ../src/gpm-manager.c:1285
+#: ../src/gpm-manager.c:1394
 msgid "UPS Discharging"
 msgstr "யூபிஎஸ் மின் சக்தி இறங்குகிறது"
 
 #. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1289
+#: ../src/gpm-manager.c:1398
 #, c-format
 msgid "%s of UPS backup power remaining (%.1f%%)"
 msgstr "%s UPS பேக்அப் மின்சாரம் மீதமுள்ளது (%.1f%%)"
 
 #. TRANSLATORS: laptop battery low, and we only have one battery
-#: ../src/gpm-manager.c:1373
+#: ../src/gpm-manager.c:1482
 msgid "Battery low"
 msgstr "பாட்டரி குறைவாக உள்ளது"
 
 #. TRANSLATORS: laptop battery low, and we have more than one type of battery
-#: ../src/gpm-manager.c:1376
+#: ../src/gpm-manager.c:1485
 msgid "Laptop battery low"
 msgstr "மடிக்கணினி மின்கல சக்தி குறைவாக உள்ளது"
 
 #. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1382
+#: ../src/gpm-manager.c:1491
 #, c-format
 msgid "Approximately <b>%s</b> remaining (%.1f%%)"
 msgstr "தோராயமாக <b>%s</b> மீதமுள்ளது (%.1f%%)"
 
 #. TRANSLATORS: UPS is starting to get a little low
-#: ../src/gpm-manager.c:1386
+#: ../src/gpm-manager.c:1495
 msgid "UPS low"
 msgstr "யூபிஎஸ்(UPS) மின்சாரம் குறைவாக உள்ளது"
 
 #. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1390
+#: ../src/gpm-manager.c:1499
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"
 msgstr "உங்களுக்கு தோராயமாக <b>%s</b>  மீதம்  யுபிஎஸ் பாதுகாப்பு சக்தி (%.1f%%) உள்ளது"
 
 #. TRANSLATORS: mouse is getting a little low
 #. TRANSLATORS: the mouse battery is very low
-#: ../src/gpm-manager.c:1394 ../src/gpm-manager.c:1510
+#: ../src/gpm-manager.c:1503 ../src/gpm-manager.c:1619
 msgid "Mouse battery low"
 msgstr "சொடுக்கி மின்கல மின்சாரம் குறைவாக உள்ளது"
 
 #. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1397
+#: ../src/gpm-manager.c:1506
 #, c-format
 msgid "The wireless mouse attached to this computer is low in power (%.1f%%)"
 msgstr "இந்த கணினியில் இணைக்கப்பட்ட கம்பி இல்லா சொடுக்கி சக்தி குறைந்து உள்ளது (%.1f%%)"
 
 #. TRANSLATORS: keyboard is getting a little low
 #. TRANSLATORS: the keyboard battery is very low
-#: ../src/gpm-manager.c:1401 ../src/gpm-manager.c:1518
+#: ../src/gpm-manager.c:1510 ../src/gpm-manager.c:1627
 msgid "Keyboard battery low"
 msgstr "விசைப்பலகை மின்கல மின்சாரம் குறைவாக உள்ளது"
 
 #. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1404
+#: ../src/gpm-manager.c:1513
 #, c-format
 msgid "The wireless keyboard attached to this computer is low in power (%.1f%%)"
 msgstr "இந்த கணினியில் இணைக்கப்பட்ட கம்பி இல்லா விசைப்பலகை சக்தி குறைந்து உள்ளது (%.1f%%)"
 
 #. TRANSLATORS: PDA is getting a little low
 #. TRANSLATORS: the PDA battery is very low
-#: ../src/gpm-manager.c:1408 ../src/gpm-manager.c:1527
+#: ../src/gpm-manager.c:1517 ../src/gpm-manager.c:1636
 msgid "PDA battery low"
 msgstr "பிடிஏ மின்கல மின்சாரம் குறைவாக உள்ளது"
 
 #. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1411
+#: ../src/gpm-manager.c:1520
 #, c-format
 msgid "The PDA attached to this computer is low in power (%.1f%%)"
 msgstr "இந்த கணினியில் இணைக்கப்பட்ட பிடிஏ சக்தி குறைந்து உள்ளது (%.1f%%)"
 
 #. TRANSLATORS: cell phone (mobile) is getting a little low
 #. TRANSLATORS: the cell battery is very low
-#: ../src/gpm-manager.c:1415 ../src/gpm-manager.c:1536
+#: ../src/gpm-manager.c:1524 ../src/gpm-manager.c:1645
 msgid "Cell phone battery low"
 msgstr "அலைபேசி மின்கல மின்சாரம் குறைவாக உள்ளது"
 
 #. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1418
+#: ../src/gpm-manager.c:1527
 #, c-format
 msgid "The cell phone attached to this computer is low in power (%.1f%%)"
 msgstr "இந்த கணினியில் இணைக்கப்பட்ட அலைபேசி  சக்தி குறைந்து உள்ளது (%.1f%%)"
 
 #. TRANSLATORS: laptop battery critically low, and only have one type of battery
-#: ../src/gpm-manager.c:1467
+#: ../src/gpm-manager.c:1576
 msgid "Battery critically low"
 msgstr "பாட்டரி அபாயகரமாக குறைவாக உள்ளது"
 
 #. TRANSLATORS: laptop battery critically low, and we have more than one type of battery
 #. TRANSLATORS: laptop battery is really, really, low
-#: ../src/gpm-manager.c:1470 ../src/gpm-manager.c:1582
+#: ../src/gpm-manager.c:1579 ../src/gpm-manager.c:1705
 msgid "Laptop battery critically low"
 msgstr "மடிகணினி மின்கலம் மின் அடக்கம் மிகக் குறைவு"
 
 #. TRANSLATORS: tell the use to insert the plug, as we're not going to do anything
-#: ../src/gpm-manager.c:1480
+#: ../src/gpm-manager.c:1589
 msgid "Plug in your AC adapter to avoid losing data."
 msgstr "தரவை இழக்காதிருக்க ஏசி தகவியை சொருகவும்."
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1484, c-format
+#: ../src/gpm-manager.c:1593
+#, c-format
 msgid "Computer will suspend very soon unless it is plugged in."
 msgstr "மின்சக்தி தொடர்பு தரவில்லையானால்  கணினி சீக்கிரம்  இடை நிறுத்தப்படும்."
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1488, c-format
+#: ../src/gpm-manager.c:1597
+#, c-format
 msgid "Computer will hibernate very soon unless it is plugged in."
 msgstr "மின்சக்தி தொடர்பு தரவில்லையானால் கணினி  சீக்கிரம் உறங்கும்."
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1492, c-format
+#: ../src/gpm-manager.c:1601
+#, c-format
 msgid "Computer will shutdown very soon unless it is plugged in."
 msgstr "மின்சக்தி தொடர்பு தரவில்லையானால் கணினி சீக்கிரம் பணிநிறுத்தம் செய்யப்படும்."
 
 #. TRANSLATORS: the UPS is very low
 #. TRANSLATORS: UPS is really, really, low
-#: ../src/gpm-manager.c:1500 ../src/gpm-manager.c:1620
+#: ../src/gpm-manager.c:1609 ../src/gpm-manager.c:1743
 msgid "UPS critically low"
 msgstr "யூபிஎஸ்(UPS) மின் அடக்கம் மிகவும்  குறைகிறது"
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1504
+#: ../src/gpm-manager.c:1613
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%.1f%%). Restore AC "
@@ -1497,7 +1449,7 @@ msgstr ""
 "இருக்க உங்க கணினிக்கு ஏசி மின் சக்தியை மீட்டு அமைக்கவும்."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1513
+#: ../src/gpm-manager.c:1622
 #, c-format
 msgid ""
 "The wireless mouse attached to this computer is very low in power (%.1f%%). "
@@ -1507,7 +1459,7 @@ msgstr ""
 "ஏற்றாவிடில் சீக்கிரம் செயல் இழக்கும்."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1521
+#: ../src/gpm-manager.c:1630
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is very low in power (%.1f%"
@@ -1517,7 +1469,7 @@ msgstr ""
 "சக்தி ஏற்றாவிடில் சீக்கிரம் செயல் இழக்கும்."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1530
+#: ../src/gpm-manager.c:1639
 #, c-format
 msgid ""
 "The PDA attached to this computer is very low in power (%.1f%%). This device "
@@ -1527,7 +1479,7 @@ msgstr ""
 "சீக்கிரம் செயல் இழக்கும்."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1539
+#: ../src/gpm-manager.c:1648
 #, c-format
 msgid ""
 "Your cell phone is very low in power (%.1f%%). This device will soon stop "
@@ -1537,7 +1489,7 @@ msgstr ""
 "ஏற்றாவிடில் சீக்கிரம் செயல் இழக்கும்."
 
 #. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1591
+#: ../src/gpm-manager.c:1714
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
@@ -1546,7 +1498,7 @@ msgstr ""
 "<b> மின் நிறுத்தம்</b> செய்யும்."
 
 #. TRANSLATORS: computer will suspend
-#: ../src/gpm-manager.c:1597
+#: ../src/gpm-manager.c:1720
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1556,14 +1508,14 @@ msgstr ""
 "<br><b>NOTE:</b> கணினியை இடை நிறுத்தத்தில் வைக்க சிறிது மின் சக்தி தேவை."
 
 #. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1604
+#: ../src/gpm-manager.c:1727
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr "மின்கல மின் அடக்கம் அபாயகரமாக குறைவு. இந்த கணினி இப்போது உறக்கம் செய்ய உள்ளது"
 
 #. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1609
+#: ../src/gpm-manager.c:1732
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
@@ -1572,7 +1524,7 @@ msgstr ""
 "செய்ய உள்ளது."
 
 #. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1629
+#: ../src/gpm-manager.c:1752
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
@@ -1581,24 +1533,24 @@ msgstr ""
 "<b> மின் நிறுத்தம்</b> செய்யும்."
 
 #. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1635
+#: ../src/gpm-manager.c:1758
 msgid "The UPS is below the critical level and this computer is about to hibernate."
 msgstr "யுபிஎஸ் மின் அடக்கம் அபாயகரமாக குறைவு இந்த கணினி இப்போது உறக்கம் செய்ய உள்ளது."
 
 #. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1640
+#: ../src/gpm-manager.c:1763
 msgid "The UPS is below the critical level and this computer is about to shutdown."
 msgstr ""
 "யுபிஎஸ் மின் அடக்கம் அபாயகரமாக குறைவு இந்த கணினி இப்போது முழு செயல் நிறுத்தம் செய்ய "
 "உள்ளது."
 
 #. TRANSLATORS: there was in install problem
-#: ../src/gpm-manager.c:1841
+#: ../src/gpm-manager.c:1941
 msgid "Install problem!"
 msgstr "நிறுவல் பிரச்சினை!"
 
 #. TRANSLATORS: the GConf schema was not installed properly
-#: ../src/gpm-manager.c:1843
+#: ../src/gpm-manager.c:1943
 msgid ""
 "The configuration defaults for GNOME Power Manager have not been installed "
 "correctly.\n"
@@ -1639,7 +1591,7 @@ msgstr "ஒன்றும் செய்யாதே"
 msgid "Never"
 msgstr "ஒரு போதும் இல்லை"
 
-#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:437
+#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:446
 msgid "Rate"
 msgstr "விகிதம்"
 
@@ -1647,11 +1599,11 @@ msgstr "விகிதம்"
 msgid "Charge"
 msgstr "சக்தி"
 
-#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:451
+#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:460
 msgid "Time to full"
 msgstr "நிறைவதற்கு நேரம் "
 
-#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:456
+#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:465
 msgid "Time to empty"
 msgstr "வெற்றாக நேரம் "
 
@@ -1703,7 +1655,7 @@ msgstr "பிம்பம்"
 msgid "Description"
 msgstr "விவரணம்"
 
-#: ../src/gpm-statistics.c:179 ../src/gpm-statistics.c:393
+#: ../src/gpm-statistics.c:179 ../src/gpm-statistics.c:402
 msgid "Type"
 msgstr "வகை"
 
@@ -1715,264 +1667,297 @@ msgstr "ஐடி (ID)"
 msgid "Command"
 msgstr "கட்டளை"
 
-#: ../src/gpm-statistics.c:302
+#. TRANSLATORS: this is when the stats time is not known
+#: ../src/gpm-statistics.c:284
+msgid "Unknown"
+msgstr "தெரியாத"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#: ../src/gpm-statistics.c:288, c-format
+msgid "%.0f second"
+msgid_plural "%.0f seconds"
+msgstr[0] "%.0f விநாடி"
+msgstr[1] "%.0f விநாடிகள்"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#: ../src/gpm-statistics.c:293, c-format
+msgid "%.1f minute"
+msgid_plural "%.1f minutes"
+msgstr[0] "%.1f  நிமிடம்"
+msgstr[1] "%.1f  நிமிடங்கள்"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#: ../src/gpm-statistics.c:298, c-format
+msgid "%.1f hour"
+msgid_plural "%.1f hours"
+msgstr[0] "%.1f  மணிநேரம்"
+msgstr[1] "%.1f  மணிநேரங்கள்"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#: ../src/gpm-statistics.c:302, c-format
+msgid "%.1f day"
+msgid_plural "%.1f days"
+msgstr[0] "%.1f  நாள்"
+msgstr[1] "%.1f  நாட்கள்"
+
+#: ../src/gpm-statistics.c:311
 msgid "Yes"
 msgstr "ஆம்"
 
-#: ../src/gpm-statistics.c:302
+#: ../src/gpm-statistics.c:311
 msgid "No"
 msgstr "இல்லை"
 
-#: ../src/gpm-statistics.c:390
+#: ../src/gpm-statistics.c:399
 msgid "Device"
 msgstr "சாதனம்"
 
-#: ../src/gpm-statistics.c:395
+#: ../src/gpm-statistics.c:404
 msgid "Vendor"
 msgstr "விற்பனையாளர்"
 
-#: ../src/gpm-statistics.c:397
+#: ../src/gpm-statistics.c:406
 msgid "Model"
 msgstr "மாதிரி"
 
-#: ../src/gpm-statistics.c:399
+#: ../src/gpm-statistics.c:408
 msgid "Serial number"
 msgstr "வரிசை எண் "
 
-#: ../src/gpm-statistics.c:400
+#: ../src/gpm-statistics.c:409
 msgid "Supply"
 msgstr "வழங்கு"
 
-#: ../src/gpm-statistics.c:403
+#: ../src/gpm-statistics.c:412
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
 msgstr[0] "%d விநாடி"
 msgstr[1] "%d விநாடிகள்"
 
-#: ../src/gpm-statistics.c:404
+#: ../src/gpm-statistics.c:413
 msgid "Refreshed"
 msgstr "புதுப்பிக்கப்பட்டது"
 
-#: ../src/gpm-statistics.c:411
+#: ../src/gpm-statistics.c:420
 msgid "Present"
 msgstr "நிகழ்"
 
-#: ../src/gpm-statistics.c:415
+#: ../src/gpm-statistics.c:424
 msgid "Rechargeable"
 msgstr "மீள் சக்தியேற்ற இயலும்"
 
-#: ../src/gpm-statistics.c:419
+#: ../src/gpm-statistics.c:428
 msgid "State"
 msgstr "நிலை"
 
-#: ../src/gpm-statistics.c:422
+#: ../src/gpm-statistics.c:431
 msgid "Energy"
 msgstr "சக்தி"
 
-#: ../src/gpm-statistics.c:425
+#: ../src/gpm-statistics.c:434
 msgid "Energy when empty"
 msgstr "வெற்றான போது சக்தி"
 
-#: ../src/gpm-statistics.c:428
+#: ../src/gpm-statistics.c:437
 msgid "Energy when full"
 msgstr "முழுமையான போது சக்தி"
 
-#: ../src/gpm-statistics.c:431
+#: ../src/gpm-statistics.c:440
 msgid "Energy (design)"
 msgstr "சக்தி (வடிவு)"
 
-#: ../src/gpm-statistics.c:444
+#: ../src/gpm-statistics.c:453
 msgid "Voltage"
 msgstr "வோல்டேஜ்"
 
-#: ../src/gpm-statistics.c:465
+#: ../src/gpm-statistics.c:474
 msgid "Percentage"
 msgstr "சதவிகிதம்"
 
-#: ../src/gpm-statistics.c:470
+#: ../src/gpm-statistics.c:479
 msgid "Capacity"
 msgstr "கொள்ளளவு:"
 
-#: ../src/gpm-statistics.c:474
+#: ../src/gpm-statistics.c:483
 msgid "Technology"
 msgstr "தொழில் நுட்பம்:"
 
-#: ../src/gpm-statistics.c:476
+#: ../src/gpm-statistics.c:485
 msgid "Online"
 msgstr "இணைப்பில்"
 
 #. TRANSLATORS: the command line was not provided
-#: ../src/gpm-statistics.c:787
+#: ../src/gpm-statistics.c:796
 msgid "No data"
 msgstr "தரவு இல்லை"
 
 #. TRANSLATORS: kernel module, usually a device driver
-#: ../src/gpm-statistics.c:794 ../src/gpm-statistics.c:799
+#: ../src/gpm-statistics.c:803 ../src/gpm-statistics.c:808
 msgid "Kernel module"
 msgstr "கரு தொகுப்பு"
 
 #. TRANSLATORS: kernel housekeeping
-#: ../src/gpm-statistics.c:804
+#: ../src/gpm-statistics.c:813
 msgid "Kernel core"
 msgstr "கரு உட்கூறு "
 
 #. TRANSLATORS: interrupt between processors
-#: ../src/gpm-statistics.c:809
+#: ../src/gpm-statistics.c:818
 msgid "Interprocessor interrupt"
 msgstr "இடைசெயலி மறிப்பு"
 
 #. TRANSLATORS: unknown interrupt
-#: ../src/gpm-statistics.c:814
+#: ../src/gpm-statistics.c:823
 msgid "Interrupt"
 msgstr "தடை"
 
 #. TRANSLATORS: the keyboard and mouse device event
-#: ../src/gpm-statistics.c:857
+#: ../src/gpm-statistics.c:866
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "பிஎஸ்/2 விசைப்பலகை/ சொடுக்கி/ தொடுதிட்டு"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
-#: ../src/gpm-statistics.c:860
+#: ../src/gpm-statistics.c:869
 msgid "ACPI"
 msgstr "ஏசிபிஐ"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
-#: ../src/gpm-statistics.c:863
+#: ../src/gpm-statistics.c:872
 msgid "Serial ATA"
 msgstr "சீரியல் ஏடிஏ"
 
 #. TRANSLATORS: this is the old-style ATA interface
-#: ../src/gpm-statistics.c:866
+#: ../src/gpm-statistics.c:875
 msgid "ATA host controller"
 msgstr "ஏடிஏ புரவலன் கட்டுபடுத்தி"
 
 #. TRANSLATORS: 802.11 wireless adaptor
-#: ../src/gpm-statistics.c:869
+#: ../src/gpm-statistics.c:878
 msgid "Intel wireless adaptor"
 msgstr "இன்டல் கம்பியில்லா தகவி"
 
 #. TRANSLATORS: a timer is something that fires periodically
-#: ../src/gpm-statistics.c:874 ../src/gpm-statistics.c:877
-#: ../src/gpm-statistics.c:880 ../src/gpm-statistics.c:883
-#: ../src/gpm-statistics.c:886
+#: ../src/gpm-statistics.c:883 ../src/gpm-statistics.c:886
+#: ../src/gpm-statistics.c:889 ../src/gpm-statistics.c:892
+#: ../src/gpm-statistics.c:895
 #, c-format
 msgid "Timer %s"
 msgstr "நேர கணனி %s"
 
 #. TRANSLATORS: this is a task that's woken up from sleeping
-#: ../src/gpm-statistics.c:889
+#: ../src/gpm-statistics.c:898
 #, c-format
 msgid "Sleep %s"
 msgstr "உறங்கு %s"
 
 #. TRANSLATORS: this is a new realtime task
-#: ../src/gpm-statistics.c:892
+#: ../src/gpm-statistics.c:901
 #, c-format
 msgid "New task %s"
 msgstr "புதிய வேலை %s"
 
 #. TRANSLATORS: this is a task thats woken to check state
-#: ../src/gpm-statistics.c:895
+#: ../src/gpm-statistics.c:904
 #, c-format
 msgid "Wait %s"
 msgstr "காத்திரு %s"
 
 #. TRANSLATORS: a work queue is a list of work that has to be done
-#: ../src/gpm-statistics.c:898 ../src/gpm-statistics.c:901
+#: ../src/gpm-statistics.c:907 ../src/gpm-statistics.c:910
 #, c-format
 msgid "Work queue %s"
 msgstr "வேலை வரிசை %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
-#: ../src/gpm-statistics.c:904
+#: ../src/gpm-statistics.c:913
 #, c-format
 msgid "Network route flush %s"
 msgstr "வலையமைப்பு தட சுத்தம் %s"
 
 #. TRANSLATORS: activity on the USB bus
-#: ../src/gpm-statistics.c:907
+#: ../src/gpm-statistics.c:916
 #, c-format
 msgid "USB activity %s"
 msgstr "யூஎஸ்பி செயல் %s"
 
 #. TRANSLATORS: we've timed out of an aligned timer
-#: ../src/gpm-statistics.c:910
+#: ../src/gpm-statistics.c:919
 #, c-format
 msgid "Wakeup %s"
 msgstr "எழுப்புதல் %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
-#: ../src/gpm-statistics.c:913
+#: ../src/gpm-statistics.c:922
 msgid "Local interrupts"
 msgstr "உள்ளமை தடைகள்"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
-#: ../src/gpm-statistics.c:916
+#: ../src/gpm-statistics.c:925
 msgid "Rescheduling interrupts"
 msgstr "தடைகளை மீள் அமைத்தல்"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1025
+#: ../src/gpm-statistics.c:1034
 msgid "Device Information"
 msgstr "சாதனம் தகவல்"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1027
+#: ../src/gpm-statistics.c:1036
 msgid "Device History"
 msgstr "சாதனம் வரலாறு"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1029
+#: ../src/gpm-statistics.c:1038
 msgid "Device Profile"
 msgstr "சாதனம் விவரகுறிப்பு"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1031
+#: ../src/gpm-statistics.c:1040
 msgid "Processor Wakeups"
 msgstr "செயலக எழுப்புதல்"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1237 ../src/gpm-statistics.c:1243
-#: ../src/gpm-statistics.c:1249 ../src/gpm-statistics.c:1255
+#: ../src/gpm-statistics.c:1246 ../src/gpm-statistics.c:1252
+#: ../src/gpm-statistics.c:1258 ../src/gpm-statistics.c:1264
 msgid "Time elapsed"
 msgstr "கடந்த நேரம்"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1239
+#: ../src/gpm-statistics.c:1248
 msgid "Power"
 msgstr "சக்தி"
 
 #. TRANSLATORS: this is the Y axis on the graph for the whole battery device
 #. TRANSLATORS: this is the X axis on the graph for the whole battery device
-#: ../src/gpm-statistics.c:1245 ../src/gpm-statistics.c:1288
-#: ../src/gpm-statistics.c:1294 ../src/gpm-statistics.c:1300
-#: ../src/gpm-statistics.c:1306
+#: ../src/gpm-statistics.c:1254 ../src/gpm-statistics.c:1297
+#: ../src/gpm-statistics.c:1303 ../src/gpm-statistics.c:1309
+#: ../src/gpm-statistics.c:1315
 msgid "Cell charge"
 msgstr "அறை சக்தி"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1251 ../src/gpm-statistics.c:1257
+#: ../src/gpm-statistics.c:1260 ../src/gpm-statistics.c:1266
 msgid "Predicted time"
 msgstr "கணிக்கப்பட்ட நேரம்"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1290 ../src/gpm-statistics.c:1302
+#: ../src/gpm-statistics.c:1299 ../src/gpm-statistics.c:1311
 msgid "Correction factor"
 msgstr "திருத்த காரணி "
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1296 ../src/gpm-statistics.c:1308
+#: ../src/gpm-statistics.c:1305 ../src/gpm-statistics.c:1317
 msgid "Prediction accuracy"
 msgstr "கணிப்பு வழுவாமை "
 
 #. TRANSLATORS: show a device by default
-#: ../src/gpm-statistics.c:1491
+#: ../src/gpm-statistics.c:1500
 msgid "Select this device at startup"
 msgstr "துவக்கத்தில் இந்த சாதனத்தை தேர்ந்தெடுக்கவும்"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:1767
+#: ../src/gpm-statistics.c:1776
 msgid "Processor"
 msgstr "செயலகம்"
 
@@ -2240,6 +2225,40 @@ msgstr "இதனை _A பற்றி"
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:2
 msgid "_Help"
 msgstr "_H உதவி"
+
+#~ msgid "Please see %s for more information."
+#~ msgstr "கூடுதல் தகவலுக்கு %s ஐ பார்க்கவும்."
+
+#~ msgid ""
+#~ "If you can see this text, your display server is broken and you should "
+#~ "notify your distributor."
+#~ msgstr ""
+#~ "நீங்கள் இந்த உரையை பார்த்தால், உங்கள் காட்சி சேவையகம் விடுபட்டிருக்கும் மற்றும் உங்கள் "
+#~ "விநியோகஸ்தருக்கு தெரிவிக்க வேண்டும்."
+
+#~ msgid "Session idle"
+#~ msgstr "அமர்வு வெறுமை"
+
+#~ msgid "Session active"
+#~ msgstr "அமர்வு செயலில்"
+
+#~ msgid "idle inhibited"
+#~ msgstr " தூக்கம் நிறுத்தப்பட்டது"
+
+#~ msgid "idle not inhibited"
+#~ msgstr "தூக்கத்துக்கு நிறுத்தம் இல்லை"
+
+#~ msgid "suspend inhibited"
+#~ msgstr "நிறுத்தம் செயல் நிறுத்து"
+
+#~ msgid "suspend not inhibited"
+#~ msgstr "நிறுத்தம் செயல் நிறுத்தம் இல்லை"
+
+#~ msgid "screen idle"
+#~ msgstr "திரை வெறுமை"
+
+#~ msgid "screen awake"
+#~ msgstr "திரையை விழிப்பு"
 
 #~ msgid "Sleep problem"
 #~ msgstr "உறக்க சிக்கல்"
