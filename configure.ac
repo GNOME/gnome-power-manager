@@ -80,9 +80,7 @@ if test "$GCC" = "yes"; then
 	WARNINGFLAGS="$WARNINGFLAGS -Wno-strict-aliasing"
 else
 	WARNINGFLAGS=""
-	WARNINGFLAGS=""
 fi
-AC_SUBST(WARNINGFLAGS)
 AC_SUBST(WARNINGFLAGS)
 
 dnl ---------------------------------------------------------------------------
@@ -126,37 +124,16 @@ CANBERRA_REQUIRED=0.10
 DEVKIT_POWER_REQUIRED=008
 
 dnl ---------------------------------------------------------------------------
-dnl - Make above strings available for packaging files (e.g. rpm spec files)
-dnl ---------------------------------------------------------------------------
-AC_SUBST(GLIB_REQUIRED)
-AC_SUBST(GTK_REQUIRED)
-AC_SUBST(GDK_REQUIRED)
-AC_SUBST(DBUS_REQUIRED)
-AC_SUBST(DBUS_GLIB_REQUIRED)
-AC_SUBST(LIBNOTIFY_REQUIRED)
-AC_SUBST(LIBWNCK_REQUIRED)
-AC_SUBST(CAIRO_REQUIRED)
-AC_SUBST(UNIQUE_REQUIRED)
-AC_SUBST(LIBPANEL_REQUIRED)
-AC_SUBST(XRANDR_REQUIRED)
-
-dnl ---------------------------------------------------------------------------
 dnl - Check library dependencies
 dnl ---------------------------------------------------------------------------
 PKG_CHECK_MODULES(GLIB, glib-2.0 >= $GLIB_REQUIRED gobject-2.0)
-AC_SUBST(GLIB_CFLAGS)
-AC_SUBST(GLIB_LIBS)
 
 PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk >= $CANBERRA_REQUIRED)
-AC_SUBST(CANBERRA_CFLAGS)
-AC_SUBST(CANBERRA_LIBS)
 
 PKG_CHECK_MODULES(DBUS,[
  dbus-glib-1 >= $DBUS_GLIB_REQUIRED
  dbus-1 >= $DBUS_REQUIRED
  gthread-2.0])
-AC_SUBST(DBUS_CFLAGS)
-AC_SUBST(DBUS_LIBS)
 
 PKG_CHECK_MODULES(GNOME, [
  libwnck-1.0 >= $LIBWNCK_REQUIRED
@@ -164,40 +141,26 @@ PKG_CHECK_MODULES(GNOME, [
  gconf-2.0 >= $GCONF_REQUIRED
  gnome-keyring-1 >= $GNOME_KEYRING_REQUIRED
  cairo >= $CAIRO_REQUIRED])
-AC_SUBST(GNOME_CFLAGS)
-AC_SUBST(GNOME_LIBS)
 
 PKG_CHECK_MODULES(GDK, [
  gdk-2.0 >= $GDK_REQUIRED
  gdk-x11-2.0 >= $GDK_REQUIRED])
-AC_SUBST(GDK_CFLAGS)
-AC_SUBST(GDK_LIBS)
 
 PKG_CHECK_MODULES(XRANDR, [
  xrandr >= $XRANDR_REQUIRED])
-AC_SUBST(XRANDR_CFLAGS)
-AC_SUBST(XRANDR_LIBS)
 
 PKG_CHECK_MODULES(X11, x11 xrender)
-AC_SUBST(X11_CFLAGS)
-AC_SUBST(X11_LIBS)
 
 PKG_CHECK_EXISTS(
  [xrandr >= 1.3],
  [AC_DEFINE(HAVE_XRANDR_13, 1, [xrandr 1.3 available])])
 
 PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= $LIBNOTIFY_REQUIRED)
-AC_SUBST(LIBNOTIFY_CFLAGS)
-AC_SUBST(LIBNOTIFY_LIBS)
 
 PKG_CHECK_MODULES(UNIQUE, unique-1.0 >= $UNIQUE_REQUIRED)
-AC_SUBST(UNIQUE_CFLAGS)
-AC_SUBST(UNIQUE_LIBS)
 
 PKG_CHECK_MODULES(DEVKIT, [
  devkit-power-gobject >= $DEVKIT_POWER_REQUIRED])
-AC_SUBST(DEVKIT_CFLAGS)
-AC_SUBST(DEVKIT_LIBS)
 
 AC_PATH_PROG(GCONFTOOL, gconftool-2)
 AM_GCONF_SOURCE_2
@@ -304,9 +267,6 @@ if test x$enable_applets = xyes ; then
     have_applets=yes
 
     PKG_CHECK_MODULES(PANEL, [libpanelapplet-2.0 >= $LIBPANEL_REQUIRED])
-    AC_SUBST(PANEL_CFLAGS)
-    AC_SUBST(PANEL_LIBS)
-
     AC_DEFINE(HAVE_APPLETS, 1, [Define if we are building applets])
     AC_MSG_RESULT(yes)
 else
