@@ -60,7 +60,7 @@ struct GpmBrightnessXRandRPrivate
 	Display			*dpy;
 	guint			 shared_value;
 	gboolean		 has_extension;
-#if (RANDR_MAJOR == 1 && RANDR_MINOR >= 3)
+#ifdef HAVE_XRANDR_13
 	gboolean		 has_randr13;
 #endif
 	gboolean		 hw_changed;
@@ -173,7 +173,7 @@ gpm_brightness_xrandr_setup_display (GpmBrightnessXRandR *brightness)
 	return TRUE;
 }
 
-#if (RANDR_MAJOR == 1 && RANDR_MINOR >= 3)
+#ifdef HAVE_XRANDR_13
 /**
  * gpm_brightness_xrandr_setup_version: Check whether xserver really supports xrandr-1.3 features.
  **/
@@ -642,14 +642,13 @@ gpm_brightness_xrandr_update_cache (GpmBrightnessXRandR *brightness)
 		   in RandR 1.3 or higher and of course xserver needs
 		   to support it.
 		*/
-#if (RANDR_MAJOR == 1 && RANDR_MINOR >= 3)
+#ifdef HAVE_XRANDR_13
 		if (brightness->priv->has_randr13)
 			resource = XRRGetScreenResourcesCurrent (brightness->priv->dpy, root);
 		else
-			resource = XRRGetScreenResources (brightness->priv->dpy, root);
-#else
-		resource = XRRGetScreenResources (brightness->priv->dpy, root);
 #endif
+			resource = XRRGetScreenResources (brightness->priv->dpy, root);
+
 		if (resource != NULL) {
 			egg_debug ("adding resource %p", resource);
 			g_ptr_array_add (brightness->priv->resources, resource);
@@ -711,7 +710,7 @@ gpm_brightness_xrandr_init (GpmBrightnessXRandR *brightness)
 
 	/* can we do this */
 	brightness->priv->has_extension = gpm_brightness_xrandr_setup_display (brightness);
-#if (RANDR_MAJOR == 1 && RANDR_MINOR >= 3)
+#ifdef HAVE_XRANDR_13
 	brightness->priv->has_randr13 = gpm_brightness_xrandr_setup_version (brightness);
 #endif
 	if (brightness->priv->has_extension == FALSE) {
