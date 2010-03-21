@@ -198,13 +198,9 @@ dnl - Where should we put documentation ?
 dnl ---------------------------------------------------------------------------
 AC_ARG_WITH(doc-dir,
             AS_HELP_STRING([--with-doc-dir=<dir>],
-                           [directory to install documentation]))
-
-if ! test -z "$with_doc_dir"; then
-   DOCDIR="$with_doc_dir/gnome-power-manager-$VERSION"
-else
-   DOCDIR="$DATADIR/doc/gnome-power-manager-$VERSION"
-fi
+                           [directory to install documentation]),
+            [DOCDIR="$with_doc_dir/gnome-power-manager-$VERSION"],
+            [DOCDIR="$DATADIR/doc/gnome-power-manager-$VERSION"])
 AC_SUBST(DOCDIR)
 
 dnl ---------------------------------------------------------------------------
@@ -247,10 +243,8 @@ AC_ARG_ENABLE(gconf-defaults,
 AC_MSG_CHECKING([whether to support gconf defaults])
 if test x$have_gconfdefaults = xyes ; then
     AC_DEFINE(HAVE_GCONF_DEFAULTS, 1, [Define if have gconf defaults])
-    AC_MSG_RESULT(yes)
-else
-    AC_MSG_RESULT(no)
 fi
+AC_MSG_RESULT([$have_gconfdefaults])
 AM_CONDITIONAL([HAVE_GCONF_DEFAULTS], [test $have_gconfdefaults = yes])
 
 dnl ---------------------------------------------------------------------------
@@ -268,10 +262,8 @@ if test x$enable_applets = xyes ; then
 
     PKG_CHECK_MODULES(PANEL, [libpanelapplet-2.0 >= $LIBPANEL_REQUIRED])
     AC_DEFINE(HAVE_APPLETS, 1, [Define if we are building applets])
-    AC_MSG_RESULT(yes)
-else
-    AC_MSG_RESULT(no)
 fi
+AC_MSG_RESULT([$have_applets])
 AM_CONDITIONAL([HAVE_APPLETS], [test $have_applets = yes])
 
 dnl ---------------------------------------------------------------------------
@@ -284,22 +276,15 @@ AC_ARG_ENABLE(docbook-docs,
 
 AC_PATH_PROG(XMLTO, xmlto, no)
 AC_MSG_CHECKING([whether to build DocBook documentation])
-if test x$XMLTO = xno ; then
-    have_docbook=no
-else
-    have_docbook=yes
-fi
 if test x$enable_docbook_docs = xauto ; then
-    if test x$have_docbook = xno ; then
+    if test x$XMLTO = xno ; then
         enable_docbook_docs=no
     else
         enable_docbook_docs=yes
     fi
 fi
-if test x$enable_docbook_docs = xyes; then
-    if test x$have_docbook = xno; then
+if test x$enable_docbook_docs = xyes -a x$XMLTO = xno; then
 	AC_MSG_ERROR([Building DocBook docs explicitly required, but DocBook not found])
-    fi
 fi
 AM_CONDITIONAL(DOCBOOK_DOCS_ENABLED, test x$enable_docbook_docs = xyes)
 AC_MSG_RESULT(yes)
@@ -309,14 +294,9 @@ dnl - Are we specifying a different dbus root ?
 dnl ---------------------------------------------------------------------------
 AC_ARG_WITH(dbus-services,
             AS_HELP_STRING([--with-dbus-services=<dir>],
-                           [where D-BUS services directory is]))
-
-if ! test -z "$with_dbus_services" ; then
-	DBUS_SERVICES_DIR="$with_dbus_services"
-else
-	# D-BUS 0.23 and higher use $prefix/share/dbus-1/services
-	DBUS_SERVICES_DIR="$DATADIR/dbus-1/services"
-fi
+                           [where D-BUS services directory is]),
+            [DBUS_SERVICES_DIR="$with_dbus_services"],
+            [DBUS_SERVICES_DIR="$DATADIR/dbus-1/services"])
 AC_SUBST(DBUS_SERVICES_DIR)
 
 dnl ---------------------------------------------------------------------------
