@@ -37,10 +37,8 @@
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 
-#ifdef HAVE_DPMS_EXTENSION
 #include <X11/Xproto.h>
 #include <X11/extensions/dpms.h>
-#endif
 
 #include "egg-debug.h"
 #include "gpm-dpms.h"
@@ -80,8 +78,6 @@ gpm_dpms_error_quark (void)
 		quark = g_quark_from_static_string ("gpm_dpms_error");
 	return quark;
 }
-
-#ifdef HAVE_DPMS_EXTENSION
 
 /**
  * gpm_dpms_x11_get_mode:
@@ -192,30 +188,6 @@ gpm_dpms_x11_set_mode (GpmDpms *dpms, GpmDpmsMode mode, GError **error)
 	return TRUE;
 }
 
-#else  /* HAVE_DPMS_EXTENSION */
-
-/**
- * gpm_dpms_x11_get_mode:
- **/
-static gboolean
-gpm_dpms_x11_get_mode (GpmDpms *dpms, GpmDpmsMode *mode, GError **error)
-{
-	if (mode)
-		*mode = GPM_DPMS_MODE_ON;
-	return TRUE;
-}
-
-/**
- * gpm_dpms_x11_set_mode:
- **/
-static gboolean
-gpm_dpms_x11_set_mode (GpmDpms *dpms, GpmDpmsMode mode, GError **error)
-{
-	return FALSE;
-}
-
-#endif /* !HAVE_DPMS_EXTENSION */
-
 /**
  * gpm_dpms_mode_from_string:
  **/
@@ -307,10 +279,6 @@ gpm_dpms_poll_mode_cb (GpmDpms *dpms)
 	GpmDpmsMode mode;
 	GError *error = NULL;
 
-#ifndef HAVE_DPMS_EXTENSION
-	return FALSE;
-#endif
-
 	/* Try again */
 	ret = gpm_dpms_x11_get_mode (dpms, &mode, &error);
 	if (!ret) {
@@ -340,12 +308,9 @@ gpm_dpms_clear_timeouts (GpmDpms *dpms)
 		goto out;
 	}
 
-#ifdef HAVE_DPMS_EXTENSION
 	egg_debug ("set timeouts to zero");
 	ret = DPMSSetTimeouts (GDK_DISPLAY (), 0, 0, 0);
-#else
-	egg_warning ("no DPMS extension");
-#endif
+
 out:
 	return ret;
 }

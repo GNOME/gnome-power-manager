@@ -146,8 +146,9 @@ PKG_CHECK_MODULES(GDK, [
  gdk-2.0 >= $GDK_REQUIRED
  gdk-x11-2.0 >= $GDK_REQUIRED])
 
-PKG_CHECK_MODULES(XRANDR, [
- xrandr >= $XRANDR_REQUIRED])
+PKG_CHECK_MODULES(X11, [
+ xrandr >= $XRANDR_REQUIRED
+ xrender x11 xext xproto])
 
 PKG_CHECK_MODULES(X11, x11 xrender)
 
@@ -165,25 +166,17 @@ PKG_CHECK_MODULES(DEVKIT, [
 AC_PATH_PROG(GCONFTOOL, gconftool-2)
 AM_GCONF_SOURCE_2
 
-AC_PATH_XTRA
-
 dnl ---------------------------------------------------------------------------
 dnl - Check XF86XK_Keys
 dnl ---------------------------------------------------------------------------
-AC_CHECK_DECL(XF86XK_Battery,have_XF86XK_Battery=1,have_XF86XK_Battery=0,[#include <X11/XF86keysym.h>])
-if test "x${ac_cv_have_decl_XF86XK_Battery}" != "xno"; then
-  AC_DEFINE(HAVE_XF86XK_BATTERY, 1, [Define if XF86XK_Battery is available])
-fi
-AC_CHECK_DECL(XF86XK_Suspend,have_XF86XK_Suspend=1,have_XF86XK_Suspend=0,[#include <X11/XF86keysym.h>])
-if test "x${ac_cv_have_decl_XF86XK_Suspend}" != "xno"; then
-  AC_DEFINE(HAVE_XF86XK_SUSPEND, 1, [Define if XF86XK_Suspend is available])
-fi
-AC_CHECK_DECL(XF86XK_Hibernate,have_XF86XK_Hibernate=1,have_XF86XK_Hibernate=0,[#include <X11/XF86keysym.h>])
-if test "x${ac_cv_have_decl_XF86XK_Hibernate}" != "xno"; then
-  AC_DEFINE(HAVE_XF86XK_HIBERNATE, 1, [Define if XF86XK_Hibernate is available])
-fi
+PKG_CHECK_EXISTS(
+ [xproto >= 7.0.14],
+ [AC_DEFINE(HAVE_XF86XK_BATTERY, 1, [Define if XF86XK_Battery is available])])
 
-ALL_X_LIBS="$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS"
+PKG_CHECK_EXISTS(
+ [xproto >= 7.0.15],
+ [AC_DEFINE(HAVE_XF86XK_SUSPEND, 1, [Define if XF86XK_Suspend is available])
+  AC_DEFINE(HAVE_XF86XK_HIBERNATE, 1, [Define if XF86XK_Hibernate is available])])
 
 dnl ---------------------------------------------------------------------------
 dnl - Make paths available for source files
@@ -300,164 +293,6 @@ AC_ARG_WITH(dbus-services,
 AC_SUBST(DBUS_SERVICES_DIR)
 
 dnl ---------------------------------------------------------------------------
-dnl - Some utility functions to make checking for X things easier.
-dnl ---------------------------------------------------------------------------
-
-# Like AC_CHECK_HEADER, but it uses the already-computed -I directories.
-#
-AC_DEFUN(AC_CHECK_X_HEADER, [
-  ac_save_CPPFLAGS="$CPPFLAGS"
-  if test \! -z "$includedir" ; then 
-    CPPFLAGS="$CPPFLAGS -I$includedir"
-  fi
-  CPPFLAGS="$CPPFLAGS $X_CFLAGS"
-  AC_CHECK_HEADER([$1],[$2],[$3],[$4])
-  CPPFLAGS="$ac_save_CPPFLAGS"])
-
-# Like AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[]])],[],[]), but it uses the already-computed -I directories.
-#
-AC_DEFUN(AC_TRY_X_COMPILE, [
-  ac_save_CPPFLAGS="$CPPFLAGS"
-  if test \! -z "$includedir" ; then 
-    CPPFLAGS="$CPPFLAGS -I$includedir"
-  fi
-  CPPFLAGS="$CPPFLAGS $X_CFLAGS"
-  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[$1]], [[$2]])],[$3],[$4])
-  CPPFLAGS="$ac_save_CPPFLAGS"])
-
-
-# Like AC_CHECK_LIB, but it uses the already-computed -I and -L directories.
-# Use this sparingly; it probably doesn't work very well on X programs.
-#
-AC_DEFUN(AC_CHECK_X_LIB, [
-  ac_save_CPPFLAGS="$CPPFLAGS"
-  ac_save_LDFLAGS="$LDFLAGS"
-#  ac_save_LIBS="$LIBS"
-
-  if test \! -z "$includedir" ; then 
-    CPPFLAGS="$CPPFLAGS -I$includedir"
-  fi
-  # note: $X_CFLAGS includes $x_includes
-  CPPFLAGS="$CPPFLAGS $X_CFLAGS"
-
-  if test \! -z "$libdir" ; then
-    LDFLAGS="$LDFLAGS -L$libdir"
-  fi
-  # note: $X_LIBS includes $x_libraries
-  LDFLAGS="$LDFLAGS $ALL_X_LIBS"
-
-  AC_CHECK_LIB([$1], [$2], [$3], [$4], [$5])
-  CPPFLAGS="$ac_save_CPPFLAGS"
-  LDFLAGS="$ac_save_LDFLAGS"
-#  LIBS="$ac_save_LIBS"
-  ])
-
-
-# Usage: HANDLE_X_PATH_ARG([variable_name],
-#                          [--command-line-option],
-#                          [descriptive string])
-#
-# All of the --with options take three forms:
-#
-#   --with-foo (or --with-foo=yes)
-#   --without-foo (or --with-foo=no)
-#   --with-foo=/DIR
-#
-# This function, HANDLE_X_PATH_ARG, deals with the /DIR case.  When it sees
-# a directory (string beginning with a slash) it checks to see whether
-# /DIR/include and /DIR/lib exist, and adds them to $X_CFLAGS and $X_LIBS
-# as appropriate.
-#
-AC_DEFUN(HANDLE_X_PATH_ARG, [
-   case "$[$1]" in
-    yes) ;;
-    no)  ;;
-
-    /*)
-     AC_MSG_CHECKING([for [$3] headers])
-     d=$[$1]/include
-     if test -d $d; then
-       X_CFLAGS="-I$d $X_CFLAGS"
-       AC_MSG_RESULT($d)
-     else
-       AC_MSG_RESULT(not found ($d: no such directory))
-     fi
-
-     AC_MSG_CHECKING([for [$3] libs])
-     d=$[$1]/lib
-     if test -d $d; then
-       X_LIBS="-L$d $X_LIBS"
-       AC_MSG_RESULT($d)
-     else
-       AC_MSG_RESULT(not found ($d: no such directory))
-     fi
-
-     # replace the directory string with "yes".
-     [$1]_req="yes"
-     [$1]=$[$1]_req
-     ;;
-
-    *)
-     echo ""
-     echo "error: argument to [$2] must be \"yes\", \"no\", or a directory."
-     echo "       If it is a directory, then \`DIR/include' will be added to"
-     echo "       the -I list, and \`DIR/lib' will be added to the -L list."
-     exit 1
-     ;;
-   esac
-  ])
-
-
-dnl ---------------------------------------------------------------------------
-dnl - Check for the DPMS server extension.
-dnl ---------------------------------------------------------------------------
-
-have_dpms=no
-with_dpms_req=unspecified
-GPM_EXTRA_LIBS="-lresolv"
-
-AC_ARG_WITH(dpms-ext,
-            AS_HELP_STRING([--without-dpms-ext],
-                           [Include support for the DPMS extension.]),
-            [with_dpms="$withval"; with_dpms_req="$withval"],[with_dpms=yes])
-
-HANDLE_X_PATH_ARG(with_dpms, --with-dpms-ext, DPMS)
-
-if test "$with_dpms" = yes; then
-
-  # first check for dpms.h
-  AC_CHECK_X_HEADER(X11/extensions/dpms.h, [have_dpms=yes],,
-                    [#include <X11/Xlib.h>
-		     #include <X11/Xmd.h>])
-
-  # if that succeeded, then check for the DPMS code in the libraries
-  if test "$have_dpms" = yes; then
-
-    # first look in -lXext (this is where it is with XFree86 4.0)
-    have_dpms=no
-    AC_CHECK_X_LIB(Xext, DPMSInfo, [have_dpms=yes], [true], -lXext -lX11)
-
-    # if that failed, look in -lXdpms (this is where it was in XFree86 3.x)
-    if test "$have_dpms" = no; then
-      AC_CHECK_X_LIB(Xdpms, DPMSInfo,
-                    [have_dpms=yes; XDPMS_LIBS="-lXdpms"], [true],
-                    -lXext -lX11)
-    fi
-  fi
-
-
-  # if that succeeded, then we've really got it.
-  if test "$have_dpms" = yes; then
-    AC_DEFINE(HAVE_DPMS_EXTENSION, 1, [Define if the DPMS extension is available])
-    GPM_EXTRA_LIBS="$GPM_EXTRA_LIBS -lXext"
-  fi
-
-elif test "$with_dpms" != no; then
-  echo "error: must be yes or no: --with-dpms-ext=$with_dpms"
-  exit 1
-fi
-
-dnl ---------------------------------------------------------------------------
 dnl - Check for Solaris kstat support
 dnl ---------------------------------------------------------------------------
 AC_MSG_CHECKING(for Solaris kstat)
@@ -536,7 +371,6 @@ echo "
         cflags:                    ${CFLAGS}
         Building extra applets:    ${enable_applets}
         HAL (brightness) support:  ${enable_hal}
-        DPMS support:              ${have_dpms}
         Self test support:         ${have_tests}
         GConf default support:     ${have_gconfdefaults}
         Docbook support:           ${enable_docbook_docs}
