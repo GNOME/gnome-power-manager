@@ -1,3 +1,62 @@
+Version 2.30.0
+~~~~~~~~~~~~~~
+Released: 2010-03-29
+
+* Translations
+ - Updated Arabic translation (Khaled Hosny)
+ - Updated Basque language (Inaki Larranaga Murgoitio)
+ - Updated Bengali translation (Jamil Ahmed)
+ - Updated Brazilian Portuguese translation (André Gondim)
+ - Updated British English translation (Bruce Cowan)
+ - Updated Bulgarian translation (Alexander Shopov)
+ - Updated Catalan translation (David Planella)
+ - Updated Czech translation (Marek Černocký)
+ - Updated Danish translation (Ask H. Larsen)
+ - Updated Dutch translation (Wouter Bolsterlee, Ruben Vermeersch)
+ - Updated Estonian translation (Mattias Põldaru, Priit Laes)
+ - Updated Finnish translation (Tommi Vainikainen)
+ - Updated French translation (Claude Paroz)
+ - Updated Galician translation (Fran Diéguez)
+ - Updated German translation (Christian Kirbach)
+ - Updated Greek doc translation (Simos Xenitellis)
+ - Updated Greek translation (Kostas Papadimas, Nikos Bakaoukas)
+ - Updated Hungarian translation (Gabor Kelemen)
+ - Updated Italian translation (Milo Casagrande)
+ - Updated Korean translation (Changwoo Ryu)
+ - Updated Lithuanian translation. (Gintautas Miliauskas)
+ - Updated Malayalam translation (Praveen Arimbrathodiyil)
+ - Updated Norwegian bokmål translation (Kjartan Maraas)
+ - Updated Polish translation (Piotr Drąg)
+ - Updated Portuguese translation (Duarte Loreto)
+ - Updated Punjabi translation (A S Alam)
+ - Updated Romanian translation (Adi Roiban)
+ - Updated Russian translation (Alexander Saprykin, Юрий Козлов)
+ - Updated Serbian translations (Miloš Popović)
+ - Updated Slovenian translation (Matej Urbančič)
+ - Updated Spanish translation (Jorge González)
+ - Updated Swedish translation (Daniel Nylander)
+ - updated Tamil translation (vasudeven)
+ - Updated Traditional Chinese translation(Hong Kong and Taiwan) (Chao-Hsiung Liao, Kevin Wei)
+ - Updated Ukrainian translation (Maxim V. Dziumanenko)
+
+* Bugfix:
+ - Check for libpanel only if building the applets (Saleem Abdulrasool)
+ - Check for XRR* functions using library version instead of proto version (Rémi Cardona)
+ - Use pkg-config instead of autoconf macros to find X libs and protos (Rémi Cardona)
+ - Declare GError in gpm_brightness_hal_init to fix build failure (Chris Coulson)
+ - Do not set a charge warning if the device is on AC (Pramod Dematagoda)
+ - Do not use EggDbusProxy in GpmScreensaver (Marc Deslauriers)
+ - Don't query the capabilities of the notification daemon (Chris Coulson)
+ - Ensure we close any 'battery low' notifications when we switch to being on AC (Richard Hughes)
+ - Fix a problem where the critical action is not done in the case of a UPS (Pramod Dematagoda)
+ - Fix a race condition where we can miss the idle reset alarm (Chris Coulson)
+ - Fix up a translation using ngettext rather than assuming the plural. Fixes #612950 (Richard Hughes)
+ - Fix wrong suspends with docked laptops (Martin Pitt)
+ - If a battery charge is low but not critical don't play the sound meant for a critical charge event (Pramod Dematagoda)
+ - Play a sound loop if the charge of a laptop battery/ups reaches a critical level. Fixes rh#470090 (Pramod Dematagoda)
+ - Remove the pointy-finger status icon when the idletime code fails to work correctly (Richard Hughes)
+ - Replace devkit-power call with upower in gnome-power-bugreport.sh (Chris Coulson)
+
 Version 2.29.91
 ~~~~~~~~~~~~~~~
 Released: 2009-03-01
