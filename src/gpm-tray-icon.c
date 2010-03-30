@@ -39,7 +39,7 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <gconf/gconf-client.h>
-#include <devkit-power-gobject/devicekit-power.h>
+#include <libupower-glib/upower.h>
 
 #include "egg-debug.h"
 
@@ -201,7 +201,7 @@ gpm_tray_icon_class_init (GpmTrayIconClass *klass)
  * gpm_tray_icon_add_device:
  **/
 static guint
-gpm_tray_icon_add_device (GpmTrayIcon *icon, GtkMenu *menu, const GPtrArray *array, DkpDeviceType type)
+gpm_tray_icon_add_device (GpmTrayIcon *icon, GtkMenu *menu, const GPtrArray *array, UpDeviceKind kind)
 {
 	guint i;
 	guint added = 0;
@@ -211,8 +211,8 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon, GtkMenu *menu, const GPtrArray *arr
 	GtkWidget *image;
 	const gchar *object_path;
 	const gchar *desc;
-	DkpDevice *device;
-	DkpDeviceType type_tmp;
+	UpDevice *device;
+	UpDeviceKind kind_tmp;
 	gdouble percentage;
 
 	/* find type */
@@ -221,19 +221,19 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon, GtkMenu *menu, const GPtrArray *arr
 
 		/* get device properties */
 		g_object_get (device,
-			      "type", &type_tmp,
+			      "kind", &kind_tmp,
 			      "percentage", &percentage,
 			      NULL);
 
-		if (type != type_tmp)
+		if (kind != kind_tmp)
 			continue;
 
-		object_path = dkp_device_get_object_path (device);
+		object_path = up_device_get_object_path (device);
 		egg_debug ("adding device %s", object_path);
 		added++;
 
 		/* generate the label */
-		desc = gpm_device_type_to_localised_text (type, 1);
+		desc = gpm_device_kind_to_localised_text (kind, 1);
 		label = g_strdup_printf ("%s (%.1f%%)", desc, percentage);
 		item = gtk_image_menu_item_new_with_label (label);
 
@@ -270,12 +270,12 @@ gpm_tray_icon_create_menu (GpmTrayIcon *icon, guint32 timestamp)
 
 	/* add all device types to the drop down menu */
 	array = gpm_engine_get_devices (icon->priv->engine);
-	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, DKP_DEVICE_TYPE_BATTERY);
-	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, DKP_DEVICE_TYPE_UPS);
-	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, DKP_DEVICE_TYPE_MOUSE);
-	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, DKP_DEVICE_TYPE_KEYBOARD);
-	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, DKP_DEVICE_TYPE_PDA);
-	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, DKP_DEVICE_TYPE_PHONE);
+	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, UP_DEVICE_KIND_BATTERY);
+	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, UP_DEVICE_KIND_UPS);
+	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, UP_DEVICE_KIND_MOUSE);
+	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, UP_DEVICE_KIND_KEYBOARD);
+	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, UP_DEVICE_KIND_PDA);
+	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, UP_DEVICE_KIND_PHONE);
 	g_ptr_array_unref (array);
 
 	/* skip for things like live-cd's and GDM */

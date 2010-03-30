@@ -19,7 +19,7 @@ INCLUDES =						\
 	$(CANBERRA_CFLAGS)				\
 	$(GSTREAMER_CFLAGS)				\
 	-DI_KNOW_THE_DEVICEKIT_POWER_API_IS_SUBJECT_TO_CHANGE \
-	$(DEVKIT_CFLAGS)				\
+	$(UPOWER_CFLAGS)				\
 	-DBINDIR=\"$(bindir)\"			 	\
 	-DSBINDIR=\"$(sbindir)\"			 \
 	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
@@ -30,7 +30,7 @@ INCLUDES =						\
 	-DVERSION="\"$(VERSION)\"" 			\
 	-DGPM_DATA=\"$(pkgdatadir)\"			\
 	-DGTKBUILDERDIR=\"$(pkgdatadir)\"		\
-	-DDKP_DISABLE_DEPRECATED			\
+	-DUP_DISABLE_DEPRECATED			\
 	-DEGG_LOG_FILE=\""/tmp/gpm.log"\"		\
 	-DEGG_VERBOSE="\"GPM_VERBOSE\""			\
 	-DEGG_LOGGING="\"GPM_LOGGING\""			\
@@ -108,7 +108,7 @@ gnome_power_statistics_LDADD =				\
 	libgpmshared.a					\
 	$(GLIB_LIBS)					\
 	$(X11_LIBS)					\
-	$(DEVKIT_LIBS)					\
+	$(UPOWER_LIBS)					\
 	$(GNOME_LIBS)					\
 	$(UNIQUE_LIBS)					\
 	$(DBUS_LIBS)					\
@@ -132,7 +132,7 @@ gnome_power_preferences_LDADD =				\
 	$(DBUS_LIBS)					\
 	$(UNIQUE_LIBS)					\
 	$(GPM_EXTRA_LIBS)				\
-	$(DEVKIT_LIBS)					\
+	$(UPOWER_LIBS)					\
 	-lm
 
 gnome_power_preferences_CFLAGS =			\
@@ -189,7 +189,7 @@ gnome_power_manager_LDADD =				\
 	$(CANBERRA_LIBS)				\
 	$(LIBNOTIFY_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
-	$(DEVKIT_LIBS)					\
+	$(UPOWER_LIBS)					\
 	-lm
 
 gnome_power_manager_CFLAGS =				\
@@ -253,7 +253,7 @@ gnome_power_self_test_LDADD =				\
 	$(X11_LIBS)					\
 	$(GNOME_LIBS)					\
 	$(GSTREAMER_LIBS)				\
-	$(DEVKIT_LIBS)					\
+	$(UPOWER_LIBS)					\
 	$(DBUS_LIBS)					\
 	$(X11_LIBS)						\
 	$(LIBNOTIFY_LIBS)				\

@@ -78,10 +78,10 @@ static gpointer gpm_idle_object = NULL;
 G_DEFINE_TYPE (GpmIdle, gpm_idle, G_TYPE_OBJECT)
 
 /**
- * gpm_idle_mode_to_text:
+ * gpm_idle_mode_to_string:
  **/
 static const gchar *
-gpm_idle_mode_to_text (GpmIdleMode mode)
+gpm_idle_mode_to_string (GpmIdleMode mode)
 {
 	if (mode == GPM_IDLE_MODE_NORMAL)
 		return "normal";
@@ -105,7 +105,7 @@ gpm_idle_set_mode (GpmIdle *idle, GpmIdleMode mode)
 
 	if (mode != idle->priv->mode) {
 		idle->priv->mode = mode;
-		egg_debug ("Doing a state transition: %s", gpm_idle_mode_to_text (mode));
+		egg_debug ("Doing a state transition: %s", gpm_idle_mode_to_string (mode));
 		g_signal_emit (idle, signals [IDLE_CHANGED], 0, mode);
 	}
 }
@@ -140,7 +140,7 @@ static gboolean
 gpm_idle_blank_cb (GpmIdle *idle)
 {
 	if (idle->priv->mode > GPM_IDLE_MODE_BLANK) {
-		egg_debug ("ignoring current mode %s", gpm_idle_mode_to_text (idle->priv->mode));
+		egg_debug ("ignoring current mode %s", gpm_idle_mode_to_string (idle->priv->mode));
 		return FALSE;
 	}
 	gpm_idle_set_mode (idle, GPM_IDLE_MODE_BLANK);
@@ -505,7 +505,7 @@ static void
 gpm_idle_test_idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, EggTest *test)
 {
 	_mode = mode;
-	egg_debug ("idle-changed %s", gpm_idle_mode_to_text (mode));
+	egg_debug ("idle-changed %s", gpm_idle_mode_to_string (mode));
 	egg_test_loop_quit (test);
 }
 
@@ -579,7 +579,7 @@ gpm_idle_test (gpointer data)
 	if (mode == GPM_IDLE_MODE_NORMAL)
 		egg_test_success (test, NULL);
 	else
-		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_text (mode));
+		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_string (mode));
 
 	/************************************************************/
 	g_print ("*****************************\n");
@@ -593,7 +593,7 @@ gpm_idle_test (gpointer data)
 	if (_mode == GPM_IDLE_MODE_DIM)
 		egg_test_success (test, NULL);
 	else
-		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_text (mode));
+		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_string (mode));
 
 	/************************************************************/
 	egg_test_title (test, "check current mode");
@@ -601,7 +601,7 @@ gpm_idle_test (gpointer data)
 	if (mode == GPM_IDLE_MODE_DIM)
 		egg_test_success (test, NULL);
 	else
-		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_text (mode));
+		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_string (mode));
 
 	/************************************************************/
 	egg_test_title (test, "check x_idle");
@@ -624,7 +624,7 @@ gpm_idle_test (gpointer data)
 	if (_mode == GPM_IDLE_MODE_BLANK)
 		egg_test_success (test, NULL);
 	else
-		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_text (mode));
+		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_string (mode));
 
 	/************************************************************/
 	egg_test_title (test, "check current mode");
@@ -632,7 +632,7 @@ gpm_idle_test (gpointer data)
 	if (mode == GPM_IDLE_MODE_BLANK)
 		egg_test_success (test, NULL);
 	else
-		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_text (mode));
+		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_string (mode));
 
 	/************************************************************/
 	g_print ("**********************\n");
@@ -646,7 +646,7 @@ gpm_idle_test (gpointer data)
 	if (_mode == GPM_IDLE_MODE_NORMAL)
 		egg_test_success (test, NULL);
 	else
-		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_text (mode));
+		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_string (mode));
 
 	/************************************************************/
 	egg_test_title (test, "check current mode");
@@ -654,7 +654,7 @@ gpm_idle_test (gpointer data)
 	if (mode == GPM_IDLE_MODE_NORMAL)
 		egg_test_success (test, NULL);
 	else
-		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_text (mode));
+		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_string (mode));
 
 	/************************************************************/
 	egg_test_title (test, "check x_idle");
@@ -677,7 +677,7 @@ gpm_idle_test (gpointer data)
 	if (mode == GPM_IDLE_MODE_DIM)
 		egg_test_success (test, NULL);
 	else
-		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_text (mode));
+		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_string (mode));
 
 	/************************************************************/
 	egg_test_title (test, "check x_idle");
@@ -692,7 +692,7 @@ gpm_idle_test (gpointer data)
 	if (mode == GPM_IDLE_MODE_BLANK)
 		egg_test_success (test, NULL);
 	else
-		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_text (mode));
+		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_string (mode));
 
 	/************************************************************/
 	egg_test_title (test, "set dpms off");
@@ -711,7 +711,7 @@ gpm_idle_test (gpointer data)
 	if (mode == GPM_IDLE_MODE_BLANK)
 		egg_test_success (test, NULL);
 	else
-		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_text (mode));
+		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_string (mode));
 
 	/************************************************************/
 	egg_test_title (test, "check x_idle");

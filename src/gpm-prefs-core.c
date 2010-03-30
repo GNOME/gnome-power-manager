@@ -31,7 +31,7 @@
 #include <math.h>
 #include <string.h>
 #include <gconf/gconf-client.h>
-#include <devkit-power-gobject/devicekit-power.h>
+#include <libupower-glib/upower.h>
 
 #include "egg-debug.h"
 #include "egg-console-kit.h"
@@ -48,7 +48,7 @@ static void gpm_prefs_finalize (GObject *object);
 
 struct GpmPrefsPrivate
 {
-	DkpClient		*client;
+	UpClient		*client;
 	GtkBuilder		*builder;
 	gboolean		 has_batteries;
 	gboolean		 has_lcd;
@@ -915,7 +915,7 @@ gpm_prefs_init (GpmPrefs *prefs)
 
 	prefs->priv = GPM_PREFS_GET_PRIVATE (prefs);
 
-	prefs->priv->client = dkp_client_new ();
+	prefs->priv->client = up_client_new ();
 	prefs->priv->console = egg_console_kit_new ();
 	prefs->priv->conf = gconf_client_get_default ();
 	/* watch gnome-power-manager keys */
@@ -942,7 +942,7 @@ gpm_prefs_init (GpmPrefs *prefs)
 	prefs->priv->can_shutdown = TRUE;
 	egg_console_kit_can_stop (prefs->priv->console, &prefs->priv->can_shutdown, NULL);
 
-	/* get values from DkpClient */
+	/* get values from UpClient */
 	g_object_get (prefs->priv->client,
 		      "can-suspend", &prefs->priv->can_suspend,
 		      "can-hibernate", &prefs->priv->can_hibernate,

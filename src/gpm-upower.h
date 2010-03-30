@@ -23,17 +23,17 @@
 #define __GPM_DEVICEKIT_H
 
 #include <glib-object.h>
-#include <devkit-power-gobject/devicekit-power.h>
+#include <libupower-glib/upower.h>
 
 G_BEGIN_DECLS
 
-const gchar	*gpm_device_type_to_localised_text	(DkpDeviceType	 type,
+const gchar	*gpm_device_kind_to_localised_text	(UpDeviceKind	 kind,
 							 guint		 number);
-const gchar	*gpm_device_type_to_icon		(DkpDeviceType	 type);
-const gchar	*gpm_device_technology_to_localised_text (DkpDeviceTechnology technology_enum);
-gchar		*gpm_upower_get_device_icon		(DkpDevice *device);
-gchar		*gpm_upower_get_device_summary		(DkpDevice *device);
-gchar		*gpm_upower_get_device_description	(DkpDevice *device);
+const gchar	*gpm_device_kind_to_icon		(UpDeviceKind	 kind);
+const gchar	*gpm_device_technology_to_localised_string (UpDeviceTechnology technology_enum);
+gchar		*gpm_upower_get_device_icon		(UpDevice *device);
+gchar		*gpm_upower_get_device_summary		(UpDevice *device);
+gchar		*gpm_upower_get_device_description	(UpDevice *device);
 
 G_END_DECLS
 

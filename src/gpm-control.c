@@ -41,7 +41,7 @@
 #include <dbus/dbus-glib-lowlevel.h>
 #include <gnome-keyring.h>
 #include <gconf/gconf-client.h>
-#include <devkit-power-gobject/devicekit-power.h>
+#include <libupower-glib/upower.h>
 
 #include "egg-debug.h"
 #include "egg-console-kit.h"
@@ -56,7 +56,7 @@
 struct GpmControlPrivate
 {
 	GConfClient		*conf;
-	DkpClient		*client;
+	UpClient		*client;
 };
 
 enum {
@@ -178,7 +178,7 @@ gpm_control_suspend (GpmControl *control, GError **error)
 	egg_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_SUSPEND);
 
-	ret = dkp_client_suspend (control->priv->client, error);
+	ret = up_client_suspend_sync (control->priv->client, NULL, error);
 
 	egg_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_SUSPEND);
@@ -246,7 +246,7 @@ gpm_control_hibernate (GpmControl *control, GError **error)
 	egg_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_HIBERNATE);
 
-	ret = dkp_client_hibernate (control->priv->client, error);
+	ret = up_client_hibernate_sync (control->priv->client, NULL, error);
 
 	egg_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_HIBERNATE);
@@ -325,7 +325,7 @@ gpm_control_init (GpmControl *control)
 {
 	control->priv = GPM_CONTROL_GET_PRIVATE (control);
 
-	control->priv->client = dkp_client_new ();
+	control->priv->client = up_client_new ();
 	control->priv->conf = gconf_client_get_default ();
 }
 

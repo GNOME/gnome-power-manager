@@ -23,7 +23,7 @@
 #define __GPM_ENGINE_H
 
 #include <glib-object.h>
-#include <devkit-power-gobject/devicekit-power.h>
+#include <libupower-glib/upower.h>
 
 G_BEGIN_DECLS
 
@@ -50,21 +50,21 @@ typedef struct
 	void		(* summary_changed)	(GpmEngine	*engine,
 						 gchar		*status);
 	void		(* perhaps_recall)	(GpmEngine	*engine,
-						 DkpDevice	*device,
+						 UpDevice	*device,
 						 const gchar	*oem_vendor,
 						 const gchar	*website);
 	void		(* low_capacity)	(GpmEngine	*engine,
-						 DkpDevice	*device);
+						 UpDevice	*device);
 	void		(* charge_low)		(GpmEngine	*engine,
-						 DkpDevice	*device);
+						 UpDevice	*device);
 	void		(* charge_critical)	(GpmEngine	*engine,
-						 DkpDevice	*device);
+						 UpDevice	*device);
 	void		(* charge_action)	(GpmEngine	*engine,
-						 DkpDevice	*device);
+						 UpDevice	*device);
 	void		(* fully_charged)	(GpmEngine	*engine,
-						 DkpDevice	*device);
+						 UpDevice	*device);
 	void		(* discharging)		(GpmEngine	*engine,
-						 DkpDevice	*device);
+						 UpDevice	*device);
 } GpmEngineClass;
 
 GType		 gpm_engine_get_type		(void);

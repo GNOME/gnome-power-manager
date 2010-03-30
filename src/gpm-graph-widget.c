@@ -131,10 +131,10 @@ gpm_graph_widget_key_data_add (GpmGraphWidget *graph, guint32 color, const gchar
 }
 
 /**
- * dkp_graph_get_property:
+ * up_graph_get_property:
  **/
 static void
-dkp_graph_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec)
+up_graph_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec)
 {
 	GpmGraphWidget *graph = GPM_GRAPH_WIDGET (object);
 	switch (prop_id) {
@@ -175,10 +175,10 @@ dkp_graph_get_property (GObject *object, guint prop_id, GValue *value, GParamSpe
 }
 
 /**
- * dkp_graph_set_property:
+ * up_graph_set_property:
  **/
 static void
-dkp_graph_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec)
+up_graph_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec)
 {
 	GpmGraphWidget *graph = GPM_GRAPH_WIDGET (object);
 
@@ -234,8 +234,8 @@ gpm_graph_widget_class_init (GpmGraphWidgetClass *class)
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 
 	widget_class->expose_event = gpm_graph_widget_expose;
-	object_class->get_property = dkp_graph_get_property;
-	object_class->set_property = dkp_graph_set_property;
+	object_class->get_property = up_graph_get_property;
+	object_class->set_property = up_graph_set_property;
 	object_class->finalize = gpm_graph_widget_finalize;
 
 	g_type_class_add_private (class, sizeof (GpmGraphWidgetPrivate));
