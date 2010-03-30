@@ -399,7 +399,7 @@ gpm_stats_update_info_page_details (UpDevice *device)
 	gpm_stats_add_info_data (_("Device"), device_path);
 	g_free (device_path);
 
-	gpm_stats_add_info_data (_("Type"), gpm_device_kind_to_localised_text (kind, 1));
+	gpm_stats_add_info_data (_("Type"), gpm_device_kind_to_localised_string (kind, 1));
 	if (vendor != NULL && vendor[0] != '\0')
 		gpm_stats_add_info_data (_("Vendor"), vendor);
 	if (model != NULL && model[0] != '\0')
@@ -425,7 +425,7 @@ gpm_stats_update_info_page_details (UpDevice *device)
 	if (kind == UP_DEVICE_KIND_BATTERY ||
 	    kind == UP_DEVICE_KIND_MOUSE ||
 	    kind == UP_DEVICE_KIND_KEYBOARD)
-		gpm_stats_add_info_data (_("State"), up_device_state_to_string (state));
+		gpm_stats_add_info_data (_("State"), gpm_device_state_to_localised_string (state));
 	if (kind == UP_DEVICE_KIND_BATTERY) {
 		text = g_strdup_printf ("%.1f Wh", energy);
 		gpm_stats_add_info_data (_("Energy"), text);
@@ -1155,7 +1155,7 @@ gpm_stats_add_device (UpDevice *device)
 		      NULL);
 
 	id = up_device_get_object_path (device);
-	text = gpm_device_kind_to_localised_text (kind, 1);
+	text = gpm_device_kind_to_localised_string (kind, 1);
 	icon = gpm_upower_get_device_icon (device);
 
 	gtk_list_store_append (list_store_devices, &iter);

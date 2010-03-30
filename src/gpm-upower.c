@@ -206,7 +206,7 @@ gpm_upower_get_device_summary (UpDevice *device)
 	if (!is_present)
 		return NULL;
 
-	kind_desc = gpm_device_kind_to_localised_text (kind, 1);
+	kind_desc = gpm_device_kind_to_localised_string (kind, 1);
 
 	/* don't display all the extra stuff for keyboards and mice */
 	if (kind == UP_DEVICE_KIND_MOUSE ||
@@ -352,7 +352,7 @@ gpm_upower_get_device_description (UpDevice *device)
 		      NULL);
 
 	details = g_string_new ("");
-	text = gpm_device_kind_to_localised_text (kind, 1);
+	text = gpm_device_kind_to_localised_string (kind, 1);
 	/* TRANSLATORS: the type of data, e.g. Laptop battery */
 	g_string_append_printf (details, "<b>%s</b> %s\n", _("Product:"), text);
 
@@ -466,10 +466,10 @@ gpm_upower_get_device_description (UpDevice *device)
 }
 
 /**
- * gpm_device_kind_to_localised_text:
+ * gpm_device_kind_to_localised_string:
  **/
 const gchar *
-gpm_device_kind_to_localised_text (UpDeviceKind kind, guint number)
+gpm_device_kind_to_localised_string (UpDeviceKind kind, guint number)
 {
 	const gchar *text = NULL;
 	switch (kind) {
@@ -592,5 +592,45 @@ gpm_device_technology_to_localised_string (UpDeviceTechnology technology_enum)
 		break;
 	}
 	return technology;
+}
+
+/**
+ * gpm_device_state_to_localised_string:
+ **/
+const gchar *
+gpm_device_state_to_localised_string (UpDeviceState state)
+{
+	const gchar *state_string = NULL;
+
+	switch (state) {
+	case UP_DEVICE_STATE_CHARGING:
+		/* TRANSLATORS: battery state */
+		state_string = _("Charging");
+		break;
+	case UP_DEVICE_STATE_DISCHARGING:
+		/* TRANSLATORS: battery state */
+		state_string = _("Discharging");
+		break;
+	case UP_DEVICE_STATE_EMPTY:
+		/* TRANSLATORS: battery state */
+		state_string = _("Empty");
+		break;
+	case UP_DEVICE_STATE_FULLY_CHARGED:
+		/* TRANSLATORS: battery state */
+		state_string = _("Fully charged");
+		break;
+	case UP_DEVICE_STATE_PENDING_CHARGE:
+		/* TRANSLATORS: battery state */
+		state_string = _("Waiting to charge");
+		break;
+	case UP_DEVICE_STATE_PENDING_DISCHARGE:
+		/* TRANSLATORS: battery state */
+		state_string = _("Waiting to discharge");
+		break;
+	default:
+		g_assert_not_reached ();
+		break;
+	}
+	return state_string;
 }
 

@@ -233,7 +233,7 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon, GtkMenu *menu, const GPtrArray *arr
 		added++;
 
 		/* generate the label */
-		desc = gpm_device_kind_to_localised_text (kind, 1);
+		desc = gpm_device_kind_to_localised_string (kind, 1);
 		label = g_strdup_printf ("%s (%.1f%%)", desc, percentage);
 		item = gtk_image_menu_item_new_with_label (label);
 
