@@ -57,6 +57,7 @@ enum {
 	EGG_CONSOLE_KIT_LAST_SIGNAL
 };
 
+static gpointer egg_console_kit_object = NULL;
 static guint signals [EGG_CONSOLE_KIT_LAST_SIGNAL] = { 0 };
 G_DEFINE_TYPE (EggConsoleKit, egg_console_kit, G_TYPE_OBJECT)
 
@@ -350,8 +351,13 @@ egg_console_kit_finalize (GObject *object)
 EggConsoleKit *
 egg_console_kit_new (void)
 {
-	EggConsoleKit *console;
-	console = g_object_new (EGG_TYPE_CONSOLE_KIT, NULL);
-	return EGG_CONSOLE_KIT (console);
+	if (egg_console_kit_object != NULL) {
+		g_object_ref (egg_console_kit_object);
+	} else {
+		egg_console_kit_object = g_object_new (EGG_TYPE_CONSOLE_KIT, NULL);
+		g_object_add_weak_pointer (egg_console_kit_object, &egg_console_kit_object);
+	}
+
+	return EGG_CONSOLE_KIT (egg_console_kit_object);
 }
 
