@@ -29,7 +29,7 @@
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 #include <X11/XF86keysym.h>
-#include <devkit-power-gobject/devicekit-power.h>
+#include <libupower-glib/upower.h>
 
 #include "gpm-common.h"
 #include "gpm-button.h"
@@ -48,7 +48,7 @@ struct GpmButtonPrivate
 	gchar			*last_button;
 	GTimer			*timer;
 	gboolean		 lid_is_closed;
-	DkpClient		*client;
+	UpClient		*client;
 };
 
 enum {
@@ -283,7 +283,7 @@ gpm_button_reset_time (GpmButton *button)
  * gpm_button_client_changed_cb
  **/
 static void
-gpm_button_client_changed_cb (DkpClient *client, GpmButton *button)
+gpm_button_client_changed_cb (UpClient *client, GpmButton *button)
 {
 	gboolean lid_is_closed;
 
@@ -323,7 +323,7 @@ gpm_button_init (GpmButton *button)
 	button->priv->timer = g_timer_new ();
 
 	button->priv->lid_is_closed = FALSE;
-	button->priv->client = dkp_client_new ();
+	button->priv->client = up_client_new ();
 	g_signal_connect (button->priv->client, "changed",
 			  G_CALLBACK (gpm_button_client_changed_cb), button);
 

@@ -40,7 +40,7 @@
 #include <dbus/dbus-glib-lowlevel.h>
 #include <gconf/gconf-client.h>
 #include <canberra-gtk.h>
-#include <devkit-power-gobject/devicekit-power.h>
+#include <libupower-glib/upower.h>
 #include <libnotify/notify.h>
 
 #include "egg-debug.h"
@@ -93,7 +93,7 @@ struct GpmManagerPrivate
 	guint32			 screensaver_lid_throttle_id;
 	guint32                  critical_alert_timeout_id;
 	ca_proplist             *critical_alert_loop_props;
-	DkpClient		*client;
+	UpClient		*client;
 	gboolean		 on_battery;
 	gboolean		 just_resumed;
 	GtkStatusIcon		*status_icon;
@@ -980,7 +980,7 @@ gpm_manager_get_spindown_timeout (GpmManager *manager)
  * gpm_manager_client_changed_cb:
  **/
 static void
-gpm_manager_client_changed_cb (DkpClient *client, GpmManager *manager)
+gpm_manager_client_changed_cb (UpClient *client, GpmManager *manager)
 {
 	gboolean event_when_closed;
 	gint timeout;
@@ -1213,7 +1213,7 @@ gpm_manager_perhaps_recall_delay_cb (GpmManager *manager)
  * gpm_manager_engine_perhaps_recall_cb:
  */
 static void
-gpm_manager_engine_perhaps_recall_cb (GpmEngine *engine, DkpDevice *device, gchar *oem_vendor, gchar *website, GpmManager *manager)
+gpm_manager_engine_perhaps_recall_cb (GpmEngine *engine, UpDevice *device, gchar *oem_vendor, gchar *website, GpmManager *manager)
 {
 	gboolean ret;
 
@@ -1259,7 +1259,7 @@ gpm_manager_engine_summary_changed_cb (GpmEngine *engine, gchar *summary, GpmMan
  * gpm_manager_engine_low_capacity_cb:
  */
 static void
-gpm_manager_engine_low_capacity_cb (GpmEngine *engine, DkpDevice *device, GpmManager *manager)
+gpm_manager_engine_low_capacity_cb (GpmEngine *engine, UpDevice *device, GpmManager *manager)
 {
 	gchar *message = NULL;
 	const gchar *title;
@@ -1296,9 +1296,9 @@ out:
  * gpm_manager_engine_fully_charged_cb:
  */
 static void
-gpm_manager_engine_fully_charged_cb (GpmEngine *engine, DkpDevice *device, GpmManager *manager)
+gpm_manager_engine_fully_charged_cb (GpmEngine *engine, UpDevice *device, GpmManager *manager)
 {
-	DkpDeviceType type;
+	UpDeviceKind kind;
 	gchar *native_path = NULL;
 	gboolean ret;
 	guint plural = 1;
@@ -1319,11 +1319,11 @@ gpm_manager_engine_fully_charged_cb (GpmEngine *engine, DkpDevice *device, GpmMa
 
 	/* get device properties */
 	g_object_get (device,
-		      "type", &type,
+		      "kind", &kind,
 		      "native-path", &native_path,
 		      NULL);
 
-	if (type == DKP_DEVICE_TYPE_BATTERY) {
+	if (kind == UP_DEVICE_KIND_BATTERY) {
 		/* is this a dummy composite device, which is plural? */
 		if (g_str_has_prefix (native_path, "dummy"))
 			plural = 2;
@@ -1346,9 +1346,9 @@ out:
  * gpm_manager_engine_discharging_cb:
  */
 static void
-gpm_manager_engine_discharging_cb (GpmEngine *engine, DkpDevice *device, GpmManager *manager)
+gpm_manager_engine_discharging_cb (GpmEngine *engine, UpDevice *device, GpmManager *manager)
 {
-	DkpDeviceType type;
+	UpDeviceKind kind;
 	gboolean ret;
 	const gchar *title;
 	const gchar *message;
@@ -1356,7 +1356,7 @@ gpm_manager_engine_discharging_cb (GpmEngine *engine, DkpDevice *device, GpmMana
 	gint64 time_to_empty;
 	gchar *remaining_text = NULL;
 	gchar *icon = NULL;
-	const gchar *type_desc;
+	const gchar *kind_desc;
 
 	/* only action this if specified in gconf */
 	ret = gconf_client_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_DISCHARGING, NULL);
@@ -1367,7 +1367,7 @@ gpm_manager_engine_discharging_cb (GpmEngine *engine, DkpDevice *device, GpmMana
 
 	/* get device properties */
 	g_object_get (device,
-		      "type", &type,
+		      "kind", &kind,
 		      "percentage", &percentage,
 		      "time-to-empty", &time_to_empty,
 		      NULL);
@@ -1375,9 +1375,9 @@ gpm_manager_engine_discharging_cb (GpmEngine *engine, DkpDevice *device, GpmMana
 	/* only show text if there is a valid time */
 	if (time_to_empty > 0)
 		remaining_text = gpm_get_timestring (time_to_empty);
-	type_desc = gpm_device_type_to_localised_text (type, 1);
+	kind_desc = gpm_device_kind_to_localised_text (kind, 1);
 
-	if (type == DKP_DEVICE_TYPE_BATTERY) {
+	if (kind == UP_DEVICE_KIND_BATTERY) {
 		/* TRANSLATORS: laptop battery is now discharging */
 		title = _("Battery Discharging");
 
@@ -1387,9 +1387,9 @@ gpm_manager_engine_discharging_cb (GpmEngine *engine, DkpDevice *device, GpmMana
 		} else {
 			/* TRANSLATORS: the device is discharging, but we only have a percentage */
 			message = g_strdup_printf (_("%s discharging (%.1f%%)"),
-						   type_desc, percentage);
+						   kind_desc, percentage);
 		}
-	} else if (type == DKP_DEVICE_TYPE_UPS) {
+	} else if (kind == UP_DEVICE_KIND_UPS) {
 		/* TRANSLATORS: UPS is now discharging */
 		title = _("UPS Discharging");
 
@@ -1399,7 +1399,7 @@ gpm_manager_engine_discharging_cb (GpmEngine *engine, DkpDevice *device, GpmMana
 		} else {
 			/* TRANSLATORS: the device is discharging, but we only have a percentage */
 			message = g_strdup_printf (_("%s discharging (%.1f%%)"),
-						   type_desc, percentage);
+						   kind_desc, percentage);
 		}
 	} else {
 		/* nothing else of interest */
@@ -1422,8 +1422,8 @@ out:
 static gboolean
 gpm_manager_engine_just_laptop_battery (GpmManager *manager)
 {
-	DkpDevice *device;
-	DkpDeviceType type;
+	UpDevice *device;
+	UpDeviceKind kind;
 	GPtrArray *array;
 	gboolean ret = TRUE;
 	guint i;
@@ -1433,8 +1433,8 @@ gpm_manager_engine_just_laptop_battery (GpmManager *manager)
 	array = gpm_engine_get_devices (manager->priv->engine);
 	for (i=0; i<array->len; i++) {
 		device = g_ptr_array_index (array, i);
-		g_object_get (device, "type", &type, NULL);
-		if (type != DKP_DEVICE_TYPE_BATTERY) {
+		g_object_get (device, "kind", &kind, NULL);
+		if (kind != UP_DEVICE_KIND_BATTERY) {
 			ret = FALSE;
 			break;
 		}
@@ -1447,33 +1447,33 @@ gpm_manager_engine_just_laptop_battery (GpmManager *manager)
  * gpm_manager_engine_charge_low_cb:
  */
 static void
-gpm_manager_engine_charge_low_cb (GpmEngine *engine, DkpDevice *device, GpmManager *manager)
+gpm_manager_engine_charge_low_cb (GpmEngine *engine, UpDevice *device, GpmManager *manager)
 {
 	const gchar *title = NULL;
 	gchar *message = NULL;
 	gchar *remaining_text;
 	gchar *icon = NULL;
-	DkpDeviceType type;
+	UpDeviceKind kind;
 	gdouble percentage;
 	gint64 time_to_empty;
 	gboolean ret;
 
 	/* get device properties */
 	g_object_get (device,
-		      "type", &type,
+		      "kind", &kind,
 		      "percentage", &percentage,
 		      "time-to-empty", &time_to_empty,
 		      NULL);
 
 	/* check to see if the batteries have not noticed we are on AC */
-	if (type == DKP_DEVICE_TYPE_BATTERY) {
+	if (kind == UP_DEVICE_KIND_BATTERY) {
 		if (!manager->priv->on_battery) {
 			egg_warning ("ignoring critically low message as we are not on battery power");
 			goto out;
 		}
 	}
 
-	if (type == DKP_DEVICE_TYPE_BATTERY) {
+	if (kind == UP_DEVICE_KIND_BATTERY) {
 
 		/* if the user has no other batteries, drop the "Laptop" wording */
 		ret = gpm_manager_engine_just_laptop_battery (manager);
@@ -1481,7 +1481,7 @@ gpm_manager_engine_charge_low_cb (GpmEngine *engine, DkpDevice *device, GpmManag
 			/* TRANSLATORS: laptop battery low, and we only have one battery */
 			title = _("Battery low");
 		} else {
-			/* TRANSLATORS: laptop battery low, and we have more than one type of battery */
+			/* TRANSLATORS: laptop battery low, and we have more than one kind of battery */
 			title = _("Laptop battery low");
 		}
 
@@ -1490,7 +1490,7 @@ gpm_manager_engine_charge_low_cb (GpmEngine *engine, DkpDevice *device, GpmManag
 		/* TRANSLATORS: tell the user how much time they have got */
 		message = g_strdup_printf (_("Approximately <b>%s</b> remaining (%.1f%%)"), remaining_text, percentage);
 
-	} else if (type == DKP_DEVICE_TYPE_UPS) {
+	} else if (kind == UP_DEVICE_KIND_UPS) {
 		/* TRANSLATORS: UPS is starting to get a little low */
 		title = _("UPS low");
 		remaining_text = gpm_get_timestring (time_to_empty);
@@ -1498,28 +1498,28 @@ gpm_manager_engine_charge_low_cb (GpmEngine *engine, DkpDevice *device, GpmManag
 		/* TRANSLATORS: tell the user how much time they have got */
 		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"),
 					   remaining_text, percentage);
-	} else if (type == DKP_DEVICE_TYPE_MOUSE) {
+	} else if (kind == UP_DEVICE_KIND_MOUSE) {
 		/* TRANSLATORS: mouse is getting a little low */
 		title = _("Mouse battery low");
 
 		/* TRANSLATORS: tell user more details */
 		message = g_strdup_printf (_("The wireless mouse attached to this computer is low in power (%.1f%%)"), percentage);
 
-	} else if (type == DKP_DEVICE_TYPE_KEYBOARD) {
+	} else if (kind == UP_DEVICE_KIND_KEYBOARD) {
 		/* TRANSLATORS: keyboard is getting a little low */
 		title = _("Keyboard battery low");
 
 		/* TRANSLATORS: tell user more details */
 		message = g_strdup_printf (_("The wireless keyboard attached to this computer is low in power (%.1f%%)"), percentage);
 
-	} else if (type == DKP_DEVICE_TYPE_PDA) {
+	} else if (kind == UP_DEVICE_KIND_PDA) {
 		/* TRANSLATORS: PDA is getting a little low */
 		title = _("PDA battery low");
 
 		/* TRANSLATORS: tell user more details */
 		message = g_strdup_printf (_("The PDA attached to this computer is low in power (%.1f%%)"), percentage);
 
-	} else if (type == DKP_DEVICE_TYPE_PHONE) {
+	} else if (kind == UP_DEVICE_KIND_PHONE) {
 		/* TRANSLATORS: cell phone (mobile) is getting a little low */
 		title = _("Cell phone battery low");
 
@@ -1540,13 +1540,13 @@ out:
  * gpm_manager_engine_charge_critical_cb:
  */
 static void
-gpm_manager_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, GpmManager *manager)
+gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmManager *manager)
 {
 	const gchar *title = NULL;
 	gchar *message = NULL;
 	gchar *action;
 	gchar *icon = NULL;
-	DkpDeviceType type;
+	UpDeviceKind kind;
 	gdouble percentage;
 	gint64 time_to_empty;
 	GpmActionPolicy policy;
@@ -1554,25 +1554,25 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, Gpm
 
 	/* get device properties */
 	g_object_get (device,
-		      "type", &type,
+		      "kind", &kind,
 		      "percentage", &percentage,
 		      "time-to-empty", &time_to_empty,
 		      NULL);
 
 	/* check to see if the batteries have not noticed we are on AC */
-	if (type == DKP_DEVICE_TYPE_BATTERY) {
+	if (kind == UP_DEVICE_KIND_BATTERY) {
 		if (!manager->priv->on_battery) {
 			egg_warning ("ignoring critically low message as we are not on battery power");
 			goto out;
 		}
 	}
 
-	if (type == DKP_DEVICE_TYPE_BATTERY) {
+	if (kind == UP_DEVICE_KIND_BATTERY) {
 
 		/* if the user has no other batteries, drop the "Laptop" wording */
 		ret = gpm_manager_engine_just_laptop_battery (manager);
 		if (ret) {
-			/* TRANSLATORS: laptop battery critically low, and only have one type of battery */
+			/* TRANSLATORS: laptop battery critically low, and only have one kind of battery */
 			title = _("Battery critically low");
 		} else {
 			/* TRANSLATORS: laptop battery critically low, and we have more than one type of battery */
@@ -1602,7 +1602,7 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, Gpm
 		}
 
 		g_free (action);
-	} else if (type == DKP_DEVICE_TYPE_UPS) {
+	} else if (kind == UP_DEVICE_KIND_UPS) {
 		gchar *remaining_text;
 
 		/* TRANSLATORS: the UPS is very low */
@@ -1614,7 +1614,7 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, Gpm
 					     "Restore AC power to your computer to avoid losing data."),
 					   remaining_text, percentage);
 		g_free (remaining_text);
-	} else if (type == DKP_DEVICE_TYPE_MOUSE) {
+	} else if (kind == UP_DEVICE_KIND_MOUSE) {
 		/* TRANSLATORS: the mouse battery is very low */
 		title = _("Mouse battery low");
 
@@ -1622,7 +1622,7 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, Gpm
 		message = g_strdup_printf (_("The wireless mouse attached to this computer is very low in power (%.1f%%). "
 					     "This device will soon stop functioning if not charged."),
 					   percentage);
-	} else if (type == DKP_DEVICE_TYPE_KEYBOARD) {
+	} else if (kind == UP_DEVICE_KIND_KEYBOARD) {
 		/* TRANSLATORS: the keyboard battery is very low */
 		title = _("Keyboard battery low");
 
@@ -1630,7 +1630,7 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, Gpm
 		message = g_strdup_printf (_("The wireless keyboard attached to this computer is very low in power (%.1f%%). "
 					     "This device will soon stop functioning if not charged."),
 					   percentage);
-	} else if (type == DKP_DEVICE_TYPE_PDA) {
+	} else if (kind == UP_DEVICE_KIND_PDA) {
 
 		/* TRANSLATORS: the PDA battery is very low */
 		title = _("PDA battery low");
@@ -1639,7 +1639,7 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, Gpm
 		message = g_strdup_printf (_("The PDA attached to this computer is very low in power (%.1f%%). "
 					     "This device will soon stop functioning if not charged."),
 					   percentage);
-	} else if (type == DKP_DEVICE_TYPE_PHONE) {
+	} else if (kind == UP_DEVICE_KIND_PHONE) {
 
 		/* TRANSLATORS: the cell battery is very low */
 		title = _("Cell phone battery low");
@@ -1654,10 +1654,10 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, DkpDevice *device, Gpm
 	icon = gpm_upower_get_device_icon (device);
 	gpm_manager_notify (manager, &manager->priv->notification_warning_low, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_NEVER, icon, NOTIFY_URGENCY_CRITICAL);
 
-	switch (type) {
+	switch (kind) {
 
-	case DKP_DEVICE_TYPE_BATTERY:
-	case DKP_DEVICE_TYPE_UPS:
+	case UP_DEVICE_KIND_BATTERY:
+	case UP_DEVICE_KIND_UPS:
 		egg_debug ("critical charge level reached, starting sound loop");
 		gpm_manager_play_loop_start (manager,
 					     GPM_MANAGER_SOUND_BATTERY_LOW,
@@ -1677,29 +1677,29 @@ out:
  * gpm_manager_engine_charge_action_cb:
  */
 static void
-gpm_manager_engine_charge_action_cb (GpmEngine *engine, DkpDevice *device, GpmManager *manager)
+gpm_manager_engine_charge_action_cb (GpmEngine *engine, UpDevice *device, GpmManager *manager)
 {
 	const gchar *title = NULL;
 	gchar *action;
 	gchar *message = NULL;
 	gchar *icon = NULL;
-	DkpDeviceType type;
+	UpDeviceKind kind;
 	GpmActionPolicy policy;
 
 	/* get device properties */
 	g_object_get (device,
-		      "type", &type,
+		      "kind", &kind,
 		      NULL);
 
 	/* check to see if the batteries have not noticed we are on AC */
-	if (type == DKP_DEVICE_TYPE_BATTERY) {
+	if (kind == UP_DEVICE_KIND_BATTERY) {
 		if (!manager->priv->on_battery) {
 			egg_warning ("ignoring critically low message as we are not on battery power");
 			goto out;
 		}
 	}
 
-	if (type == DKP_DEVICE_TYPE_BATTERY) {
+	if (kind == UP_DEVICE_KIND_BATTERY) {
 
 		/* TRANSLATORS: laptop battery is really, really, low */
 		title = _("Laptop battery critically low");
@@ -1738,7 +1738,7 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, DkpDevice *device, GpmMa
 		/* wait 20 seconds for user-panic */
 		g_timeout_add_seconds (20, (GSourceFunc) manager_critical_action_do, manager);
 
-	} else if (type == DKP_DEVICE_TYPE_UPS) {
+	} else if (kind == UP_DEVICE_KIND_UPS) {
 		/* TRANSLATORS: UPS is really, really, low */
 		title = _("UPS critically low");
 
@@ -1879,7 +1879,7 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->notification_fully_charged = NULL;
 	manager->priv->disks = gpm_disks_new ();
 	manager->priv->conf = gconf_client_get_default ();
-	manager->priv->client = dkp_client_new ();
+	manager->priv->client = up_client_new ();
 	g_signal_connect (manager->priv->client, "changed",
 			  G_CALLBACK (gpm_manager_client_changed_cb), manager);
 

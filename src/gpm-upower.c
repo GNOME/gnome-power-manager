@@ -22,7 +22,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
-#include <devkit-power-gobject/devicekit-power.h>
+#include <libupower-glib/upower.h>
 
 #include "egg-debug.h"
 #include "egg-precision.h"
@@ -30,8 +30,8 @@
 #include "gpm-upower.h"
 #include "gpm-common.h"
 
-#define GPM_DKP_TIME_PRECISION			5*60
-#define GPM_DKP_TEXT_MIN_TIME			120
+#define GPM_UP_TIME_PRECISION			5*60
+#define GPM_UP_TEXT_MIN_TIME			120
 
 /**
  * gpm_upower_get_device_icon_index:
@@ -48,7 +48,7 @@
  * Return value: The character string for the filename suffix.
  **/
 static const gchar *
-gpm_upower_get_device_icon_index (DkpDevice *device)
+gpm_upower_get_device_icon_index (UpDevice *device)
 {
 	gdouble percentage;
 	/* get device properties */
@@ -73,13 +73,13 @@ gpm_upower_get_device_icon_index (DkpDevice *device)
  *
  **/
 gchar *
-gpm_upower_get_device_icon (DkpDevice *device)
+gpm_upower_get_device_icon (UpDevice *device)
 {
 	gchar *filename = NULL;
 	const gchar *prefix = NULL;
 	const gchar *index_str;
-	DkpDeviceType type;
-	DkpDeviceState state;
+	UpDeviceKind kind;
+	UpDeviceState state;
 	gboolean is_present;
 	gdouble percentage;
 
@@ -87,108 +87,78 @@ gpm_upower_get_device_icon (DkpDevice *device)
 
 	/* get device properties */
 	g_object_get (device,
-		      "type", &type,
+		      "kind", &kind,
 		      "state", &state,
 		      "percentage", &percentage,
 		      "is-present", &is_present,
 		      NULL);
 
 	/* get correct icon prefix */
-	prefix = dkp_device_type_to_text (type);
+	prefix = up_device_kind_to_string (kind);
 
 	/* get the icon from some simple rules */
-	if (type == DKP_DEVICE_TYPE_LINE_POWER) {
+	if (kind == UP_DEVICE_KIND_LINE_POWER) {
 		filename = g_strdup ("gpm-ac-adapter");
-	} else if (type == DKP_DEVICE_TYPE_MONITOR) {
+	} else if (kind == UP_DEVICE_KIND_MONITOR) {
 		filename = g_strdup ("gpm-monitor");
-	} else if (type == DKP_DEVICE_TYPE_UPS) {
+	} else if (kind == UP_DEVICE_KIND_UPS) {
 		if (!is_present) {
 			/* battery missing */
 			filename = g_strdup_printf ("gpm-%s-missing", prefix);
 
-		} else if (state == DKP_DEVICE_STATE_FULLY_CHARGED) {
+		} else if (state == UP_DEVICE_STATE_FULLY_CHARGED) {
 			filename = g_strdup_printf ("gpm-%s-100", prefix);
 
-		} else if (state == DKP_DEVICE_STATE_CHARGING) {
+		} else if (state == UP_DEVICE_STATE_CHARGING) {
 			index_str = gpm_upower_get_device_icon_index (device);
 			filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index_str);
 
-		} else if (state == DKP_DEVICE_STATE_DISCHARGING) {
+		} else if (state == UP_DEVICE_STATE_DISCHARGING) {
 			index_str = gpm_upower_get_device_icon_index (device);
 			filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 		}
-	} else if (type == DKP_DEVICE_TYPE_BATTERY) {
+	} else if (kind == UP_DEVICE_KIND_BATTERY) {
 		if (!is_present) {
 			/* battery missing */
 			filename = g_strdup_printf ("gpm-%s-missing", prefix);
 
-		} else if (state == DKP_DEVICE_STATE_EMPTY) {
+		} else if (state == UP_DEVICE_STATE_EMPTY) {
 			filename = g_strdup_printf ("gpm-%s-empty", prefix);
 
-		} else if (state == DKP_DEVICE_STATE_FULLY_CHARGED) {
+		} else if (state == UP_DEVICE_STATE_FULLY_CHARGED) {
 			filename = g_strdup_printf ("gpm-%s-charged", prefix);
 
-#if !DKP_CHECK_VERSION(0x009)
-		} else if (state == DKP_DEVICE_STATE_UNKNOWN && percentage > 95.0f) {
-			egg_warning ("fixing up unknown %f", percentage);
-			filename = g_strdup_printf ("gpm-%s-charged", prefix);
-#endif
-
-		} else if (state == DKP_DEVICE_STATE_CHARGING) {
+		} else if (state == UP_DEVICE_STATE_CHARGING) {
 			index_str = gpm_upower_get_device_icon_index (device);
 			filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index_str);
 
-		} else if (state == DKP_DEVICE_STATE_DISCHARGING) {
+		} else if (state == UP_DEVICE_STATE_DISCHARGING) {
 			index_str = gpm_upower_get_device_icon_index (device);
 			filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 
-#if !DKP_CHECK_VERSION(0x009)
-		/* the battery isn't charging or discharging, it's just
-		 * sitting there half full doing nothing */
-		} else {
-			DkpClient *client;
-			gboolean on_battery;
-
-			/* get battery status */
-			client = dkp_client_new ();
-			g_object_get (client,
-				      "on-battery", &on_battery,
-				      NULL);
-			g_object_unref (client);
-
-			/* try to find a suitable icon depending on AC state */
-			if (on_battery) {
-				index_str = gpm_upower_get_device_icon_index (device);
-				filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
-			} else {
-				index_str = gpm_upower_get_device_icon_index (device);
-				filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index_str);
-			}
-#else
-		} else if (state == DKP_DEVICE_STATE_PENDING_CHARGE) {
+		} else if (state == UP_DEVICE_STATE_PENDING_CHARGE) {
 			index_str = gpm_upower_get_device_icon_index (device);
 			/* FIXME: do new grey icons */
 			filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index_str);
 
-		} else if (state == DKP_DEVICE_STATE_PENDING_DISCHARGE) {
+		} else if (state == UP_DEVICE_STATE_PENDING_DISCHARGE) {
 			index_str = gpm_upower_get_device_icon_index (device);
 			filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 		} else {
 			filename = g_strdup ("gpm-battery-missing");
-#endif
 		}
 
-	} else if (type == DKP_DEVICE_TYPE_MOUSE ||
-		   type == DKP_DEVICE_TYPE_KEYBOARD ||
-		   type == DKP_DEVICE_TYPE_PHONE) {
+	} else if (kind == UP_DEVICE_KIND_MOUSE ||
+		   kind == UP_DEVICE_KIND_KEYBOARD ||
+		   kind == UP_DEVICE_KIND_PHONE) {
 		if (!is_present) {
 			/* battery missing */
 			filename = g_strdup_printf ("gpm-%s-000", prefix);
 
-		} else if (state == DKP_DEVICE_STATE_FULLY_CHARGED) {
+		} else if (state == UP_DEVICE_STATE_FULLY_CHARGED) {
 			filename = g_strdup_printf ("gpm-%s-100", prefix);
 
-		} else if (state == DKP_DEVICE_STATE_DISCHARGING) {
+		} else if (state == UP_DEVICE_STATE_DISCHARGING) {
 			index_str = gpm_upower_get_device_icon_index (device);
 			filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 		}
@@ -208,16 +178,16 @@ gpm_upower_get_device_icon (DkpDevice *device)
  * gpm_upower_get_device_summary:
  **/
 gchar *
-gpm_upower_get_device_summary (DkpDevice *device)
+gpm_upower_get_device_summary (UpDevice *device)
 {
-	const gchar *type_desc = NULL;
+	const gchar *kind_desc = NULL;
 	gchar *description = NULL;
 	guint time_to_full_round;
 	guint time_to_empty_round;
 	gchar *time_to_full_str;
 	gchar *time_to_empty_str;
-	DkpDeviceType type;
-	DkpDeviceState state;
+	UpDeviceKind kind;
+	UpDeviceState state;
 	gdouble percentage;
 	gboolean is_present;
 	gint64 time_to_full;
@@ -225,7 +195,7 @@ gpm_upower_get_device_summary (DkpDevice *device)
 
 	/* get device properties */
 	g_object_get (device,
-		      "type", &type,
+		      "kind", &kind,
 		      "state", &state,
 		      "percentage", &percentage,
 		      "is-present", &is_present,
@@ -236,31 +206,31 @@ gpm_upower_get_device_summary (DkpDevice *device)
 	if (!is_present)
 		return NULL;
 
-	type_desc = gpm_device_type_to_localised_text (type, 1);
+	kind_desc = gpm_device_kind_to_localised_text (kind, 1);
 
 	/* don't display all the extra stuff for keyboards and mice */
-	if (type == DKP_DEVICE_TYPE_MOUSE ||
-	    type == DKP_DEVICE_TYPE_KEYBOARD ||
-	    type == DKP_DEVICE_TYPE_PDA)
-		return g_strdup_printf ("%s (%.1f%%)", type_desc, percentage);
+	if (kind == UP_DEVICE_KIND_MOUSE ||
+	    kind == UP_DEVICE_KIND_KEYBOARD ||
+	    kind == UP_DEVICE_KIND_PDA)
+		return g_strdup_printf ("%s (%.1f%%)", kind_desc, percentage);
 
 	/* we care if we are on AC */
-	if (type == DKP_DEVICE_TYPE_PHONE) {
-		if (state == DKP_DEVICE_STATE_CHARGING || !state == DKP_DEVICE_STATE_DISCHARGING) {
+	if (kind == UP_DEVICE_KIND_PHONE) {
+		if (state == UP_DEVICE_STATE_CHARGING || !state == UP_DEVICE_STATE_DISCHARGING) {
 			/* TRANSLATORS: a phone is charging */
-			return g_strdup_printf (_("%s charging (%.1f%%)"), type_desc, percentage);
+			return g_strdup_printf (_("%s charging (%.1f%%)"), kind_desc, percentage);
 		}
-		return g_strdup_printf ("%s (%.1f%%)", type_desc, percentage);
+		return g_strdup_printf ("%s (%.1f%%)", kind_desc, percentage);
 	}
 
 	/* precalculate so we don't get Unknown time remaining */
-	time_to_full_round = egg_precision_round_down (time_to_full, GPM_DKP_TIME_PRECISION);
-	time_to_empty_round = egg_precision_round_down (time_to_empty, GPM_DKP_TIME_PRECISION);
+	time_to_full_round = egg_precision_round_down (time_to_full, GPM_UP_TIME_PRECISION);
+	time_to_empty_round = egg_precision_round_down (time_to_empty, GPM_UP_TIME_PRECISION);
 
 	/* we always display "Laptop battery 16 minutes remaining" as we need to clarify what device we are refering to */
-	if (state == DKP_DEVICE_STATE_FULLY_CHARGED) {
+	if (state == UP_DEVICE_STATE_FULLY_CHARGED) {
 
-		if (type == DKP_DEVICE_TYPE_BATTERY && time_to_empty_round > GPM_DKP_TEXT_MIN_TIME) {
+		if (kind == UP_DEVICE_KIND_BATTERY && time_to_empty_round > GPM_UP_TEXT_MIN_TIME) {
 			time_to_empty_str = gpm_get_timestring (time_to_empty_round);
 			/* TRANSLATORS: The laptop battery is fully charged, and we know a time */
 			description = g_strdup_printf (_("Battery is fully charged.\nProvides %s laptop runtime"),
@@ -268,27 +238,27 @@ gpm_upower_get_device_summary (DkpDevice *device)
 			g_free (time_to_empty_str);
 		} else {
 			/* TRANSLATORS: the device is fully charged */
-			description = g_strdup_printf (_("%s is fully charged"), type_desc);
+			description = g_strdup_printf (_("%s is fully charged"), kind_desc);
 		}
 
-	} else if (state == DKP_DEVICE_STATE_DISCHARGING) {
+	} else if (state == UP_DEVICE_STATE_DISCHARGING) {
 
-		if (time_to_empty_round > GPM_DKP_TEXT_MIN_TIME) {
+		if (time_to_empty_round > GPM_UP_TEXT_MIN_TIME) {
 			time_to_empty_str = gpm_get_timestring (time_to_empty_round);
 			/* TRANSLATORS: the device is discharging, and we have a time remaining */
 			description = g_strdup_printf (_("%s %s remaining (%.1f%%)"),
-							type_desc, time_to_empty_str, percentage);
+							kind_desc, time_to_empty_str, percentage);
 			g_free (time_to_empty_str);
 		} else {
 			/* TRANSLATORS: the device is discharging, but we only have a percentage */
 			description = g_strdup_printf (_("%s discharging (%.1f%%)"),
-							type_desc, percentage);
+							kind_desc, percentage);
 		}
 
-	} else if (state == DKP_DEVICE_STATE_CHARGING) {
+	} else if (state == UP_DEVICE_STATE_CHARGING) {
 
-		if (time_to_full_round > GPM_DKP_TEXT_MIN_TIME &&
-		    time_to_empty_round > GPM_DKP_TEXT_MIN_TIME) {
+		if (time_to_full_round > GPM_UP_TEXT_MIN_TIME &&
+		    time_to_empty_round > GPM_UP_TEXT_MIN_TIME) {
 
 			/* display both discharge and charge time */
 			time_to_full_str = gpm_get_timestring (time_to_full_round);
@@ -296,43 +266,41 @@ gpm_upower_get_device_summary (DkpDevice *device)
 
 			/* TRANSLATORS: the device is charging, and we have a time to full and empty */
 			description = g_strdup_printf (_("%s %s until charged (%.1f%%)\nProvides %s battery runtime"),
-							type_desc, time_to_full_str, percentage, time_to_empty_str);
+							kind_desc, time_to_full_str, percentage, time_to_empty_str);
 			g_free (time_to_full_str);
 			g_free (time_to_empty_str);
 
-		} else if (time_to_full_round > GPM_DKP_TEXT_MIN_TIME) {
+		} else if (time_to_full_round > GPM_UP_TEXT_MIN_TIME) {
 
 			/* display only charge time */
 			time_to_full_str = gpm_get_timestring (time_to_full_round);
 
 			/* TRANSLATORS: device is charging, and we have a time to full and a percentage */
 			description = g_strdup_printf (_("%s %s until charged (%.1f%%)"),
-						type_desc, time_to_full_str, percentage);
+						kind_desc, time_to_full_str, percentage);
 			g_free (time_to_full_str);
 		} else {
 
 			/* TRANSLATORS: device is charging, but we only have a percentage */
 			description = g_strdup_printf (_("%s charging (%.1f%%)"),
-						type_desc, percentage);
+						kind_desc, percentage);
 		}
 
-#if DKP_CHECK_VERSION(0x009)
-	} else if (state == DKP_DEVICE_STATE_PENDING_DISCHARGE) {
+	} else if (state == UP_DEVICE_STATE_PENDING_DISCHARGE) {
 
 		/* TRANSLATORS: this is only shown for laptops with multiple batteries */
 		description = g_strdup_printf (_("%s waiting to discharge (%.1f%%)"),
-						type_desc, percentage);
+						kind_desc, percentage);
 
-	} else if (state == DKP_DEVICE_STATE_PENDING_CHARGE) {
+	} else if (state == UP_DEVICE_STATE_PENDING_CHARGE) {
 
 		/* TRANSLATORS: this is only shown for laptops with multiple batteries */
-		description = g_strdup_printf (_("%s waiting to charge (%.1f%%)"), type_desc, percentage);
-#endif
+		description = g_strdup_printf (_("%s waiting to charge (%.1f%%)"), kind_desc, percentage);
 
 	} else {
 		egg_warning ("in an undefined state we are not charging or "
 			     "discharging and the batteries are also not charged");
-		description = g_strdup_printf ("%s (%.1f%%)", type_desc, percentage);
+		description = g_strdup_printf ("%s (%.1f%%)", kind_desc, percentage);
 	}
 	return description;
 }
@@ -341,14 +309,14 @@ gpm_upower_get_device_summary (DkpDevice *device)
  * gpm_upower_get_device_description:
  **/
 gchar *
-gpm_upower_get_device_description (DkpDevice *device)
+gpm_upower_get_device_description (UpDevice *device)
 {
 	GString	*details;
 	const gchar *text;
 	gchar *time_str;
-	DkpDeviceType type;
-	DkpDeviceState state;
-	DkpDeviceTechnology technology;
+	UpDeviceKind kind;
+	UpDeviceState state;
+	UpDeviceTechnology technology;
 	gdouble percentage;
 	gdouble capacity;
 	gdouble energy;
@@ -366,7 +334,7 @@ gpm_upower_get_device_description (DkpDevice *device)
 
 	/* get device properties */
 	g_object_get (device,
-		      "type", &type,
+		      "kind", &kind,
 		      "state", &state,
 		      "percentage", &percentage,
 		      "is-present", &is_present,
@@ -384,20 +352,20 @@ gpm_upower_get_device_description (DkpDevice *device)
 		      NULL);
 
 	details = g_string_new ("");
-	text = gpm_device_type_to_localised_text (type, 1);
+	text = gpm_device_kind_to_localised_text (kind, 1);
 	/* TRANSLATORS: the type of data, e.g. Laptop battery */
 	g_string_append_printf (details, "<b>%s</b> %s\n", _("Product:"), text);
 
 	if (!is_present) {
 		/* TRANSLATORS: device is missing */
 		g_string_append_printf (details, "<b>%s</b> %s\n", _("Status:"), _("Missing"));
-	} else if (state == DKP_DEVICE_STATE_FULLY_CHARGED) {
+	} else if (state == UP_DEVICE_STATE_FULLY_CHARGED) {
 		/* TRANSLATORS: device is charged */
 		g_string_append_printf (details, "<b>%s</b> %s\n", _("Status:"), _("Charged"));
-	} else if (state == DKP_DEVICE_STATE_CHARGING) {
+	} else if (state == UP_DEVICE_STATE_CHARGING) {
 		/* TRANSLATORS: device is charging */
 		g_string_append_printf (details, "<b>%s</b> %s\n", _("Status:"), _("Charging"));
-	} else if (state == DKP_DEVICE_STATE_DISCHARGING) {
+	} else if (state == UP_DEVICE_STATE_DISCHARGING) {
 		/* TRANSLATORS: device is discharging */
 		g_string_append_printf (details, "<b>%s</b> %s\n", _("Status:"), _("Discharging"));
 	}
@@ -410,8 +378,8 @@ gpm_upower_get_device_description (DkpDevice *device)
 		/* TRANSLATORS: manufacturer */
 		g_string_append_printf (details, "<b>%s</b> %s\n", _("Vendor:"), vendor);
 	}
-	if (technology != DKP_DEVICE_TECHNOLOGY_UNKNOWN) {
-		text = gpm_device_technology_to_localised_text (technology);
+	if (technology != UP_DEVICE_TECHNOLOGY_UNKNOWN) {
+		text = gpm_device_technology_to_localised_string (technology);
 		/* TRANSLATORS: how the battery is made, e.g. Lithium Ion */
 		g_string_append_printf (details, "<b>%s</b> %s\n", _("Technology:"), text);
 	}
@@ -451,7 +419,7 @@ gpm_upower_get_device_description (DkpDevice *device)
 		g_string_append_printf (details, "<b>%s</b> %.1f%% (%s)\n",
 					_("Capacity:"), capacity, condition);
 	}
-	if (type == DKP_DEVICE_TYPE_BATTERY) {
+	if (kind == UP_DEVICE_KIND_BATTERY) {
 		if (energy > 0) {
 			/* TRANSLATORS: current charge */
 			g_string_append_printf (details, "<b>%s</b> %.1f Wh\n",
@@ -475,8 +443,8 @@ gpm_upower_get_device_description (DkpDevice *device)
 						_("Charge rate:"), energy_rate);
 		}
 	}
-	if (type == DKP_DEVICE_TYPE_MOUSE ||
-	    type == DKP_DEVICE_TYPE_KEYBOARD) {
+	if (kind == UP_DEVICE_KIND_MOUSE ||
+	    kind == UP_DEVICE_KIND_KEYBOARD) {
 		if (energy > 0) {
 			/* TRANSLATORS: the current charge for CSR devices */
 			g_string_append_printf (details, "<b>%s</b> %.0f/7\n",
@@ -498,124 +466,124 @@ gpm_upower_get_device_description (DkpDevice *device)
 }
 
 /**
- * gpm_device_type_to_localised_text:
+ * gpm_device_kind_to_localised_text:
  **/
 const gchar *
-gpm_device_type_to_localised_text (DkpDeviceType type, guint number)
+gpm_device_kind_to_localised_text (UpDeviceKind kind, guint number)
 {
 	const gchar *text = NULL;
-	switch (type) {
-	case DKP_DEVICE_TYPE_LINE_POWER:
+	switch (kind) {
+	case UP_DEVICE_KIND_LINE_POWER:
 		/* TRANSLATORS: system power cord */
 		text = ngettext ("AC adapter", "AC adapters", number);
 		break;
-	case DKP_DEVICE_TYPE_BATTERY:
+	case UP_DEVICE_KIND_BATTERY:
 		/* TRANSLATORS: laptop primary battery */
 		text = ngettext ("Laptop battery", "Laptop batteries", number);
 		break;
-	case DKP_DEVICE_TYPE_UPS:
+	case UP_DEVICE_KIND_UPS:
 		/* TRANSLATORS: battery-backed AC power source */
 		text = ngettext ("UPS", "UPSs", number);
 		break;
-	case DKP_DEVICE_TYPE_MONITOR:
+	case UP_DEVICE_KIND_MONITOR:
 		/* TRANSLATORS: a monitor is a device to measure voltage and current */
 		text = ngettext ("Monitor", "Monitors", number);
 		break;
-	case DKP_DEVICE_TYPE_MOUSE:
+	case UP_DEVICE_KIND_MOUSE:
 		/* TRANSLATORS: wireless mice with internal batteries */
 		text = ngettext ("Wireless mouse", "Wireless mice", number);
 		break;
-	case DKP_DEVICE_TYPE_KEYBOARD:
+	case UP_DEVICE_KIND_KEYBOARD:
 		/* TRANSLATORS: wireless keyboard with internal battery */
 		text = ngettext ("Wireless keyboard", "Wireless keyboards", number);
 		break;
-	case DKP_DEVICE_TYPE_PDA:
+	case UP_DEVICE_KIND_PDA:
 		/* TRANSLATORS: portable device */
 		text = ngettext ("PDA", "PDAs", number);
 		break;
-	case DKP_DEVICE_TYPE_PHONE:
+	case UP_DEVICE_KIND_PHONE:
 		/* TRANSLATORS: cell phone (mobile...) */
 		text = ngettext ("Cell phone", "Cell phones", number);
 		break;
 	default:
-		egg_warning ("enum unrecognised: %i", type);
-		text = dkp_device_type_to_text (type);
+		egg_warning ("enum unrecognised: %i", kind);
+		text = up_device_kind_to_string (kind);
 	}
 	return text;
 }
 
 /**
- * gpm_device_type_to_icon:
+ * gpm_device_kind_to_icon:
  **/
 const gchar *
-gpm_device_type_to_icon (DkpDeviceType type)
+gpm_device_kind_to_icon (UpDeviceKind kind)
 {
 	const gchar *icon = NULL;
-	switch (type) {
-	case DKP_DEVICE_TYPE_LINE_POWER:
+	switch (kind) {
+	case UP_DEVICE_KIND_LINE_POWER:
 		icon = "gpm-ac-adapter";
 		break;
-	case DKP_DEVICE_TYPE_BATTERY:
+	case UP_DEVICE_KIND_BATTERY:
 		icon = "battery";
 		break;
-	case DKP_DEVICE_TYPE_UPS:
+	case UP_DEVICE_KIND_UPS:
 		icon = "network-wired";
 		break;
-	case DKP_DEVICE_TYPE_MONITOR:
+	case UP_DEVICE_KIND_MONITOR:
 		icon = "application-certificate";
 		break;
-	case DKP_DEVICE_TYPE_MOUSE:
+	case UP_DEVICE_KIND_MOUSE:
 		icon = "mouse";
 		break;
-	case DKP_DEVICE_TYPE_KEYBOARD:
+	case UP_DEVICE_KIND_KEYBOARD:
 		icon = "input-keyboard";
 		break;
-	case DKP_DEVICE_TYPE_PDA:
+	case UP_DEVICE_KIND_PDA:
 		icon = "input-gaming";
 		break;
-	case DKP_DEVICE_TYPE_PHONE:
+	case UP_DEVICE_KIND_PHONE:
 		icon = "camera-video";
 		break;
 	default:
-		egg_warning ("enum unrecognised: %i", type);
+		egg_warning ("enum unrecognised: %i", kind);
 		icon = "gtk-help";
 	}
 	return icon;
 }
 
 /**
- * gpm_device_technology_to_localised_text:
+ * gpm_device_technology_to_localised_string:
  **/
 const gchar *
-gpm_device_technology_to_localised_text (DkpDeviceTechnology technology_enum)
+gpm_device_technology_to_localised_string (UpDeviceTechnology technology_enum)
 {
 	const gchar *technology = NULL;
 	switch (technology_enum) {
-	case DKP_DEVICE_TECHNOLOGY_LITHIUM_ION:
+	case UP_DEVICE_TECHNOLOGY_LITHIUM_ION:
 		/* TRANSLATORS: battery technology */
 		technology = _("Lithium Ion");
 		break;
-	case DKP_DEVICE_TECHNOLOGY_LITHIUM_POLYMER:
+	case UP_DEVICE_TECHNOLOGY_LITHIUM_POLYMER:
 		/* TRANSLATORS: battery technology */
 		technology = _("Lithium Polymer");
 		break;
-	case DKP_DEVICE_TECHNOLOGY_LITHIUM_IRON_PHOSPHATE:
+	case UP_DEVICE_TECHNOLOGY_LITHIUM_IRON_PHOSPHATE:
 		/* TRANSLATORS: battery technology */
 		technology = _("Lithium Iron Phosphate");
 		break;
-	case DKP_DEVICE_TECHNOLOGY_LEAD_ACID:
+	case UP_DEVICE_TECHNOLOGY_LEAD_ACID:
 		/* TRANSLATORS: battery technology */
 		technology = _("Lead acid");
 		break;
-	case DKP_DEVICE_TECHNOLOGY_NICKEL_CADMIUM:
+	case UP_DEVICE_TECHNOLOGY_NICKEL_CADMIUM:
 		/* TRANSLATORS: battery technology */
 		technology = _("Nickel Cadmium");
 		break;
-	case DKP_DEVICE_TECHNOLOGY_NICKEL_METAL_HYDRIDE:
+	case UP_DEVICE_TECHNOLOGY_NICKEL_METAL_HYDRIDE:
 		/* TRANSLATORS: battery technology */
 		technology = _("Nickel metal hydride");
 		break;
-	case DKP_DEVICE_TECHNOLOGY_UNKNOWN:
+	case UP_DEVICE_TECHNOLOGY_UNKNOWN:
 		/* TRANSLATORS: battery technology */
 		technology = _("Unknown technology");
 		break;

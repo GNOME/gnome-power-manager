@@ -40,7 +40,7 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 #include <gconf/gconf-client.h>
-#include <devkit-power-gobject/devicekit-power.h>
+#include <libupower-glib/upower.h>
 
 #include "gpm-button.h"
 #include "gpm-backlight.h"
@@ -59,7 +59,7 @@
 
 struct GpmBacklightPrivate
 {
-	DkpClient		*client;
+	UpClient		*client;
 	GpmBrightness		*brightness;
 	GpmButton		*button;
 	GConfClient		*conf;
@@ -406,13 +406,13 @@ gpm_conf_gconf_key_changed_cb (GConfClient *client, guint cnxn_id, GConfEntry *e
 
 /**
  * gpm_backlight_client_changed_cb:
- * @client: The dkp_client class instance
+ * @client: The up_client class instance
  * @backlight: This class instance
  *
  * Does the actions when the ac power source is inserted/removed.
  **/
 static void
-gpm_backlight_client_changed_cb (DkpClient *client, GpmBacklight *backlight)
+gpm_backlight_client_changed_cb (UpClient *client, GpmBacklight *backlight)
 {
 	gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 }
@@ -728,8 +728,8 @@ gpm_backlight_init (GpmBacklight *backlight)
 	g_signal_connect (backlight->priv->brightness, "brightness-changed",
 			  G_CALLBACK (brightness_changed_cb), backlight);
 
-	/* we use dkp_client for the ac-adapter-changed signal */
-	backlight->priv->client = dkp_client_new ();
+	/* we use up_client for the ac-adapter-changed signal */
+	backlight->priv->client = up_client_new ();
 	g_signal_connect (backlight->priv->client, "changed",
 			  G_CALLBACK (gpm_backlight_client_changed_cb), backlight);
 
@@ -737,11 +737,9 @@ gpm_backlight_init (GpmBacklight *backlight)
 	backlight->priv->can_dim = gpm_brightness_has_hw (backlight->priv->brightness);
 
 	/* we use DeviceKit-power to see if we should show the lid UI */
-#if DKP_CHECK_VERSION(0x009)
 	g_object_get (backlight->priv->client,
 		      "lid-is-present", &lid_is_present,
 		      NULL);
-#endif
 
 	/* expose ui in prefs program */
 	prefs_server = gpm_prefs_server_new ();

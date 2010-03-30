@@ -26,11 +26,6 @@
 
 G_BEGIN_DECLS
 
-/* do this until we depend on DeviceKit-power 009 */
-#ifndef DKP_CHECK_VERSION
-#define DKP_CHECK_VERSION(o)	(0)
-#endif
-
 #define	GPM_DBUS_SERVICE		"org.gnome.PowerManager"
 #define	GPM_DBUS_INTERFACE		"org.gnome.PowerManager"
 #define	GPM_DBUS_INTERFACE_BACKLIGHT	"org.gnome.PowerManager.Backlight"

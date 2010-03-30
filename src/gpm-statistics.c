@@ -29,7 +29,7 @@
 #include <gtk/gtk.h>
 #include <dbus/dbus-glib.h>
 #include <gconf/gconf-client.h>
-#include <devkit-power-gobject/devicekit-power.h>
+#include <libupower-glib/upower.h>
 
 #include "egg-debug.h"
 #include "egg-color.h"
@@ -51,7 +51,7 @@ static const gchar *stats_type;
 static guint history_time;
 static GConfClient *gconf_client;
 static gfloat sigma_smoothing = 0.0f;
-static DkpWakeups *wakeups = NULL;
+static UpWakeups *wakeups = NULL;
 static GtkWidget *graph_history = NULL;
 static GtkWidget *graph_statistics = NULL;
 
@@ -272,10 +272,10 @@ gpm_stats_update_smooth_data (GPtrArray *list)
 }
 
 /**
- * gpm_stats_time_to_text:
+ * gpm_stats_time_to_string:
  **/
 static gchar *
-gpm_stats_time_to_text (gint seconds)
+gpm_stats_time_to_string (gint seconds)
 {
 	gfloat value = seconds;
 
@@ -303,10 +303,10 @@ gpm_stats_time_to_text (gint seconds)
 }
 
 /**
- * gpm_stats_bool_to_text:
+ * gpm_stats_bool_to_string:
  **/
 static const gchar *
-gpm_stats_bool_to_text (gboolean ret)
+gpm_stats_bool_to_string (gboolean ret)
 {
 	return ret ? _("Yes") : _("No");
 }
@@ -315,13 +315,13 @@ gpm_stats_bool_to_text (gboolean ret)
  * gpm_stats_get_printable_device_path:
  **/
 static gchar *
-gpm_stats_get_printable_device_path (DkpDevice *device)
+gpm_stats_get_printable_device_path (UpDevice *device)
 {
 	const gchar *object_path;
 	gchar *device_path = NULL;
 
 	/* get object path */
-	object_path = dkp_device_get_object_path (device);
+	object_path = up_device_get_object_path (device);
 	if (object_path != NULL)
 		device_path = g_filename_display_basename (object_path);
 
@@ -332,16 +332,16 @@ gpm_stats_get_printable_device_path (DkpDevice *device)
  * gpm_stats_update_info_page_details:
  **/
 static void
-gpm_stats_update_info_page_details (DkpDevice *device)
+gpm_stats_update_info_page_details (UpDevice *device)
 {
 	struct tm *time_tm;
 	time_t t;
 	gchar time_buf[256];
 	gchar *text;
 	guint refreshed;
-	DkpDeviceType type;
-	DkpDeviceState state;
-	DkpDeviceTechnology technology;
+	UpDeviceKind kind;
+	UpDeviceState state;
+	UpDeviceTechnology technology;
 	gdouble percentage;
 	gdouble capacity;
 	gdouble energy;
@@ -366,7 +366,7 @@ gpm_stats_update_info_page_details (DkpDevice *device)
 
 	/* get device properties */
 	g_object_get (device,
-		      "type", &type,
+		      "kind", &kind,
 		      "state", &state,
 		      "percentage", &percentage,
 		      "online", &online,
@@ -399,34 +399,34 @@ gpm_stats_update_info_page_details (DkpDevice *device)
 	gpm_stats_add_info_data (_("Device"), device_path);
 	g_free (device_path);
 
-	gpm_stats_add_info_data (_("Type"), gpm_device_type_to_localised_text (type, 1));
+	gpm_stats_add_info_data (_("Type"), gpm_device_kind_to_localised_text (kind, 1));
 	if (vendor != NULL && vendor[0] != '\0')
 		gpm_stats_add_info_data (_("Vendor"), vendor);
 	if (model != NULL && model[0] != '\0')
 		gpm_stats_add_info_data (_("Model"), model);
 	if (serial != NULL && serial[0] != '\0')
 		gpm_stats_add_info_data (_("Serial number"), serial);
-	gpm_stats_add_info_data (_("Supply"), gpm_stats_bool_to_text (power_supply));
+	gpm_stats_add_info_data (_("Supply"), gpm_stats_bool_to_string (power_supply));
 
 	refreshed = (int) (time (NULL) - update_time);
 	text = g_strdup_printf (ngettext ("%d second", "%d seconds", refreshed), refreshed);
 	gpm_stats_add_info_data (_("Refreshed"), text);
 	g_free (text);
 
-	if (type == DKP_DEVICE_TYPE_BATTERY ||
-	    type == DKP_DEVICE_TYPE_MOUSE ||
-	    type == DKP_DEVICE_TYPE_KEYBOARD ||
-	    type == DKP_DEVICE_TYPE_UPS)
-		gpm_stats_add_info_data (_("Present"), gpm_stats_bool_to_text (is_present));
-	if (type == DKP_DEVICE_TYPE_BATTERY ||
-	    type == DKP_DEVICE_TYPE_MOUSE ||
-	    type == DKP_DEVICE_TYPE_KEYBOARD)
-		gpm_stats_add_info_data (_("Rechargeable"), gpm_stats_bool_to_text (is_rechargeable));
-	if (type == DKP_DEVICE_TYPE_BATTERY ||
-	    type == DKP_DEVICE_TYPE_MOUSE ||
-	    type == DKP_DEVICE_TYPE_KEYBOARD)
-		gpm_stats_add_info_data (_("State"), dkp_device_state_to_text (state));
-	if (type == DKP_DEVICE_TYPE_BATTERY) {
+	if (kind == UP_DEVICE_KIND_BATTERY ||
+	    kind == UP_DEVICE_KIND_MOUSE ||
+	    kind == UP_DEVICE_KIND_KEYBOARD ||
+	    kind == UP_DEVICE_KIND_UPS)
+		gpm_stats_add_info_data (_("Present"), gpm_stats_bool_to_string (is_present));
+	if (kind == UP_DEVICE_KIND_BATTERY ||
+	    kind == UP_DEVICE_KIND_MOUSE ||
+	    kind == UP_DEVICE_KIND_KEYBOARD)
+		gpm_stats_add_info_data (_("Rechargeable"), gpm_stats_bool_to_string (is_rechargeable));
+	if (kind == UP_DEVICE_KIND_BATTERY ||
+	    kind == UP_DEVICE_KIND_MOUSE ||
+	    kind == UP_DEVICE_KIND_KEYBOARD)
+		gpm_stats_add_info_data (_("State"), up_device_state_to_string (state));
+	if (kind == UP_DEVICE_KIND_BATTERY) {
 		text = g_strdup_printf ("%.1f Wh", energy);
 		gpm_stats_add_info_data (_("Energy"), text);
 		g_free (text);
@@ -440,49 +440,49 @@ gpm_stats_update_info_page_details (DkpDevice *device)
 		gpm_stats_add_info_data (_("Energy (design)"), text);
 		g_free (text);
 	}
-	if (type == DKP_DEVICE_TYPE_BATTERY ||
-	    type == DKP_DEVICE_TYPE_MONITOR) {
+	if (kind == UP_DEVICE_KIND_BATTERY ||
+	    kind == UP_DEVICE_KIND_MONITOR) {
 		text = g_strdup_printf ("%.1f W", energy_rate);
 		gpm_stats_add_info_data (_("Rate"), text);
 		g_free (text);
 	}
-	if (type == DKP_DEVICE_TYPE_UPS ||
-	    type == DKP_DEVICE_TYPE_BATTERY ||
-	    type == DKP_DEVICE_TYPE_MONITOR) {
+	if (kind == UP_DEVICE_KIND_UPS ||
+	    kind == UP_DEVICE_KIND_BATTERY ||
+	    kind == UP_DEVICE_KIND_MONITOR) {
 		text = g_strdup_printf ("%.1f V", voltage);
 		gpm_stats_add_info_data (_("Voltage"), text);
 		g_free (text);
 	}
-	if (type == DKP_DEVICE_TYPE_BATTERY ||
-	    type == DKP_DEVICE_TYPE_UPS) {
+	if (kind == UP_DEVICE_KIND_BATTERY ||
+	    kind == UP_DEVICE_KIND_UPS) {
 		if (time_to_full >= 0) {
-			text = gpm_stats_time_to_text (time_to_full);
+			text = gpm_stats_time_to_string (time_to_full);
 			gpm_stats_add_info_data (_("Time to full"), text);
 			g_free (text);
 		}
 		if (time_to_empty >= 0) {
-			text = gpm_stats_time_to_text (time_to_empty);
+			text = gpm_stats_time_to_string (time_to_empty);
 			gpm_stats_add_info_data (_("Time to empty"), text);
 			g_free (text);
 		}
 	}
-	if (type == DKP_DEVICE_TYPE_BATTERY ||
-	    type == DKP_DEVICE_TYPE_MOUSE ||
-	    type == DKP_DEVICE_TYPE_KEYBOARD ||
-	    type == DKP_DEVICE_TYPE_UPS) {
+	if (kind == UP_DEVICE_KIND_BATTERY ||
+	    kind == UP_DEVICE_KIND_MOUSE ||
+	    kind == UP_DEVICE_KIND_KEYBOARD ||
+	    kind == UP_DEVICE_KIND_UPS) {
 		text = g_strdup_printf ("%.1f%%", percentage);
 		gpm_stats_add_info_data (_("Percentage"), text);
 		g_free (text);
 	}
-	if (type == DKP_DEVICE_TYPE_BATTERY) {
+	if (kind == UP_DEVICE_KIND_BATTERY) {
 		text = g_strdup_printf ("%.1f%%", capacity);
 		gpm_stats_add_info_data (_("Capacity"), text);
 		g_free (text);
 	}
-	if (type == DKP_DEVICE_TYPE_BATTERY)
-		gpm_stats_add_info_data (_("Technology"), gpm_device_technology_to_localised_text (technology));
-	if (type == DKP_DEVICE_TYPE_LINE_POWER)
-		gpm_stats_add_info_data (_("Online"), gpm_stats_bool_to_text (online));
+	if (kind == UP_DEVICE_KIND_BATTERY)
+		gpm_stats_add_info_data (_("Technology"), gpm_device_technology_to_localised_string (technology));
+	if (kind == UP_DEVICE_KIND_LINE_POWER)
+		gpm_stats_add_info_data (_("Online"), gpm_stats_bool_to_string (online));
 
 	g_free (vendor);
 	g_free (serial);
@@ -521,11 +521,11 @@ gpm_stats_set_graph_data (GtkWidget *widget, GPtrArray *data, gboolean use_smoot
  * gpm_stats_update_info_page_history:
  **/
 static void
-gpm_stats_update_info_page_history (DkpDevice *device)
+gpm_stats_update_info_page_history (UpDevice *device)
 {
 	GPtrArray *array;
 	guint i;
-	DkpHistoryObj *hobj;
+	UpHistoryItem *item;
 	GtkWidget *widget;
 	gboolean checked;
 	gboolean points;
@@ -565,7 +565,7 @@ gpm_stats_update_info_page_history (DkpDevice *device)
 	}
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "label_history_nodata"));
-	array = dkp_device_get_history (device, history_type, history_time, 150, NULL);
+	array = up_device_get_history_sync (device, history_type, history_time, 150, NULL, NULL);
 	if (array == NULL) {
 		/* show no data label and hide graph */
 		gtk_widget_hide (graph_history);
@@ -581,25 +581,23 @@ gpm_stats_update_info_page_history (DkpDevice *device)
 	offset = timeval.tv_sec;
 
 	for (i=0; i<array->len; i++) {
-		hobj = (DkpHistoryObj *) g_ptr_array_index (array, i);
+		item = (UpHistoryItem *) g_ptr_array_index (array, i);
 
 		/* abandon this point */
-		if (hobj->state == DKP_DEVICE_STATE_UNKNOWN)
+		if (up_history_item_get_state (item) == UP_DEVICE_STATE_UNKNOWN)
 			continue;
 
 		point = gpm_point_obj_new ();
-		point->x = (gint32) hobj->time - offset;
-		point->y = hobj->value;
-		if (hobj->state == DKP_DEVICE_STATE_CHARGING)
+		point->x = (gint32) up_history_item_get_time (item) - offset;
+		point->y = up_history_item_get_value (item);
+		if (up_history_item_get_state (item) == UP_DEVICE_STATE_CHARGING)
 			point->color = egg_color_from_rgb (255, 0, 0);
-		else if (hobj->state == DKP_DEVICE_STATE_DISCHARGING)
+		else if (up_history_item_get_state (item) == UP_DEVICE_STATE_DISCHARGING)
 			point->color = egg_color_from_rgb (0, 0, 255);
-#if DKP_CHECK_VERSION(0x009)
-		else if (hobj->state == DKP_DEVICE_STATE_PENDING_CHARGE)
+		else if (up_history_item_get_state (item) == UP_DEVICE_STATE_PENDING_CHARGE)
 			point->color = egg_color_from_rgb (200, 0, 0);
-		else if (hobj->state == DKP_DEVICE_STATE_PENDING_DISCHARGE)
+		else if (up_history_item_get_state (item) == UP_DEVICE_STATE_PENDING_DISCHARGE)
 			point->color = egg_color_from_rgb (0, 0, 200);
-#endif
 		else {
 			if (g_strcmp0 (history_type, GPM_HISTORY_RATE_VALUE) == 0)
 				point->color = egg_color_from_rgb (255, 255, 255);
@@ -629,11 +627,11 @@ out:
  * gpm_stats_update_info_page_stats:
  **/
 static void
-gpm_stats_update_info_page_stats (DkpDevice *device)
+gpm_stats_update_info_page_stats (UpDevice *device)
 {
 	GPtrArray *array;
 	guint i;
-	DkpStatsObj *sobj;
+	UpStatsItem *item;
 	GtkWidget *widget;
 	gboolean checked;
 	gboolean points;
@@ -676,7 +674,7 @@ gpm_stats_update_info_page_stats (DkpDevice *device)
 	}
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "label_stats_nodata"));
-	array = dkp_device_get_statistics (device, type, NULL);
+	array = up_device_get_statistics_sync (device, type, NULL, NULL);
 	if (array == NULL) {
 		/* show no data label and hide graph */
 		gtk_widget_hide (graph_statistics);
@@ -689,13 +687,13 @@ gpm_stats_update_info_page_stats (DkpDevice *device)
 	gtk_widget_show (graph_statistics);
 
 	for (i=0; i<array->len; i++) {
-		sobj = (DkpStatsObj *) g_ptr_array_index (array, i);
+		item = (UpStatsItem *) g_ptr_array_index (array, i);
 		point = gpm_point_obj_new ();
 		point->x = i;
 		if (use_data)
-			point->y = sobj->value;
+			point->y = up_stats_item_get_value (item);
 		else
-			point->y = sobj->accuracy;
+			point->y = up_stats_item_get_accuracy (item);
 		point->color = egg_color_from_rgb (255, 0, 0);
 		g_ptr_array_add (new, point);
 	}
@@ -720,7 +718,7 @@ out:
  * gpm_stats_update_info_data_page:
  **/
 static void
-gpm_stats_update_info_data_page (DkpDevice *device, gint page)
+gpm_stats_update_info_data_page (UpDevice *device, gint page)
 {
 	if (page == 0)
 		gpm_stats_update_info_page_details (device);
@@ -734,7 +732,7 @@ gpm_stats_update_info_data_page (DkpDevice *device, gint page)
  * gpm_stats_update_info_data:
  **/
 static void
-gpm_stats_update_info_data (DkpDevice *device)
+gpm_stats_update_info_data (UpDevice *device)
 {
 	gint page;
 	GtkNotebook *notebook;
@@ -783,7 +781,7 @@ gpm_stats_update_info_data (DkpDevice *device)
  * gpm_stats_format_cmdline:
  **/
 static gchar *
-gpm_stats_format_cmdline (const DkpWakeupsObj *obj)
+gpm_stats_format_cmdline (UpWakeupItem *item)
 {
 	gchar *found;
 	gchar *temp = NULL;
@@ -791,41 +789,41 @@ gpm_stats_format_cmdline (const DkpWakeupsObj *obj)
 	const gchar *temp_ptr;
 
 	/* nothing */
-	if (obj->cmdline == NULL) {
+	if (up_wakeup_item_get_cmdline (item) == NULL) {
 		/* TRANSLATORS: the command line was not provided */
 		temp_ptr = _("No data");
 		goto out;
 	}
 
 	/* common kernel cmd names */
-	if (g_strcmp0 (obj->cmdline, "insmod") == 0) {
+	if (g_strcmp0 (up_wakeup_item_get_cmdline (item), "insmod") == 0) {
 		/* TRANSLATORS: kernel module, usually a device driver */
 		temp_ptr = _("Kernel module");
 		goto out;
 	}
-	if (g_strcmp0 (obj->cmdline, "modprobe") == 0) {
+	if (g_strcmp0 (up_wakeup_item_get_cmdline (item), "modprobe") == 0) {
 		/* TRANSLATORS: kernel module, usually a device driver */
 		temp_ptr = _("Kernel module");
 		goto out;
 	}
-	if (g_strcmp0 (obj->cmdline, "swapper") == 0) {
+	if (g_strcmp0 (up_wakeup_item_get_cmdline (item), "swapper") == 0) {
 		/* TRANSLATORS: kernel housekeeping */
 		temp_ptr = _("Kernel core");
 		goto out;
 	}
-	if (g_strcmp0 (obj->cmdline, "kernel-ipi") == 0) {
+	if (g_strcmp0 (up_wakeup_item_get_cmdline (item), "kernel-ipi") == 0) {
 		/* TRANSLATORS: interrupt between processors */
 		temp_ptr = _("Interprocessor interrupt");
 		goto out;
 	}
-	if (g_strcmp0 (obj->cmdline, "interrupt") == 0) {
+	if (g_strcmp0 (up_wakeup_item_get_cmdline (item), "interrupt") == 0) {
 		/* TRANSLATORS: unknown interrupt */
 		temp_ptr = _("Interrupt");
 		goto out;
 	}
 
 	/* truncate at first space or ':' */
-	temp = g_strdup (obj->cmdline);
+	temp = g_strdup (up_wakeup_item_get_cmdline (item));
 	found = strstr (temp, ":");
 	if (found != NULL)
 		*found = '\0';
@@ -842,7 +840,7 @@ gpm_stats_format_cmdline (const DkpWakeupsObj *obj)
 
 out:
 	/* format command line */
-	if (obj->is_userspace)
+	if (up_wakeup_item_get_is_userspace (item))
 		cmdline = g_markup_escape_text (temp_ptr, -1);
 	else
 		cmdline = g_markup_printf_escaped ("<i>%s</i>", temp_ptr);
@@ -856,83 +854,87 @@ out:
  * gpm_stats_format_details:
  **/
 static gchar *
-gpm_stats_format_details (const DkpWakeupsObj *obj)
+gpm_stats_format_details (UpWakeupItem *item)
 {
 	gchar *details;
+	const gchar *data;
+
+	/* get this once to avoid a load of derefs */
+	data = up_wakeup_item_get_details (item);
 
 	/* replace common driver names */
-	if (g_strcmp0 (obj->details, "i8042") == 0) {
+	if (g_strcmp0 (data, "i8042") == 0) {
 		/* TRANSLATORS: the keyboard and mouse device event */
 		details = g_strdup (_("PS/2 keyboard/mouse/touchpad"));
-	} else if (g_strcmp0 (obj->details, "acpi") == 0) {
+	} else if (g_strcmp0 (data, "acpi") == 0) {
 		/* TRANSLATORS: ACPI, the Intel power standard on laptops and desktops */
 		details = g_strdup (_("ACPI"));
-	} else if (g_strcmp0 (obj->details, "ata_piix") == 0) {
+	} else if (g_strcmp0 (data, "ata_piix") == 0) {
 		/* TRANSLATORS: serial ATA is a new style of hard disk interface */
 		details = g_strdup (_("Serial ATA"));
-	} else if (g_strcmp0 (obj->details, "libata") == 0) {
+	} else if (g_strcmp0 (data, "libata") == 0) {
 		/* TRANSLATORS: this is the old-style ATA interface */
 		details = g_strdup (_("ATA host controller"));
-	} else if (g_strcmp0 (obj->details, "iwl3945") == 0 || g_strcmp0 (obj->details, "iwlagn") == 0) {
+	} else if (g_strcmp0 (data, "iwl3945") == 0 || g_strcmp0 (data, "iwlagn") == 0) {
 		/* TRANSLATORS: 802.11 wireless adaptor */
 		details = g_strdup (_("Intel wireless adaptor"));
 
 	/* try to make the wakeup type nicer */
-	} else if (g_str_has_prefix (obj->details, "__mod_timer")) {
+	} else if (g_str_has_prefix (data, "__mod_timer")) {
 		/* TRANSLATORS: a timer is something that fires periodically */
-		details = g_strdup_printf (_("Timer %s"), obj->details+12);
-	} else if (g_str_has_prefix (obj->details, "mod_timer")) {
+		details = g_strdup_printf (_("Timer %s"), data+12);
+	} else if (g_str_has_prefix (data, "mod_timer")) {
 		/* TRANSLATORS: a timer is something that fires periodically */
-		details = g_strdup_printf (_("Timer %s"), obj->details+10);
-	} else if (g_str_has_prefix (obj->details, "hrtimer_start_expires")) {
+		details = g_strdup_printf (_("Timer %s"), data+10);
+	} else if (g_str_has_prefix (data, "hrtimer_start_expires")) {
 		/* TRANSLATORS: a timer is something that fires periodically */
-		details = g_strdup_printf (_("Timer %s"), obj->details+22);
-	} else if (g_str_has_prefix (obj->details, "hrtimer_start")) {
+		details = g_strdup_printf (_("Timer %s"), data+22);
+	} else if (g_str_has_prefix (data, "hrtimer_start")) {
 		/* TRANSLATORS: a timer is something that fires periodically */
-		details = g_strdup_printf (_("Timer %s"), obj->details+14);
-	} else if (g_str_has_prefix (obj->details, "do_setitimer")) {
+		details = g_strdup_printf (_("Timer %s"), data+14);
+	} else if (g_str_has_prefix (data, "do_setitimer")) {
 		/* TRANSLATORS: a timer is something that fires periodically */
-		details = g_strdup_printf (_("Timer %s"), obj->details+10);
-	} else if (g_str_has_prefix (obj->details, "do_nanosleep")) {
+		details = g_strdup_printf (_("Timer %s"), data+10);
+	} else if (g_str_has_prefix (data, "do_nanosleep")) {
 		/* TRANSLATORS: this is a task that's woken up from sleeping */
-		details = g_strdup_printf (_("Sleep %s"), obj->details+13);
-	} else if (g_str_has_prefix (obj->details, "enqueue_task_rt")) {
+		details = g_strdup_printf (_("Sleep %s"), data+13);
+	} else if (g_str_has_prefix (data, "enqueue_task_rt")) {
 		/* TRANSLATORS: this is a new realtime task */
-		details = g_strdup_printf (_("New task %s"), obj->details+16);
-	} else if (g_str_has_prefix (obj->details, "futex_wait")) {
+		details = g_strdup_printf (_("New task %s"), data+16);
+	} else if (g_str_has_prefix (data, "futex_wait")) {
 		/* TRANSLATORS: this is a task thats woken to check state */
-		details = g_strdup_printf (_("Wait %s"), obj->details+11);
-	} else if (g_str_has_prefix (obj->details, "queue_delayed_work_on")) {
+		details = g_strdup_printf (_("Wait %s"), data+11);
+	} else if (g_str_has_prefix (data, "queue_delayed_work_on")) {
 		/* TRANSLATORS: a work queue is a list of work that has to be done */
-		details = g_strdup_printf (_("Work queue %s"), obj->details+22);
-	} else if (g_str_has_prefix (obj->details, "queue_delayed_work")) {
+		details = g_strdup_printf (_("Work queue %s"), data+22);
+	} else if (g_str_has_prefix (data, "queue_delayed_work")) {
 		/* TRANSLATORS: a work queue is a list of work that has to be done */
-		details = g_strdup_printf (_("Work queue %s"), obj->details+19);
-	} else if (g_str_has_prefix (obj->details, "dst_run_gc")) {
+		details = g_strdup_printf (_("Work queue %s"), data+19);
+	} else if (g_str_has_prefix (data, "dst_run_gc")) {
 		/* TRANSLATORS: this is when the networking subsystem clears out old entries */
-		details = g_strdup_printf (_("Network route flush %s"), obj->details+11);
-	} else if (g_str_has_prefix (obj->details, "usb_hcd_poll_rh_status")) {
+		details = g_strdup_printf (_("Network route flush %s"), data+11);
+	} else if (g_str_has_prefix (data, "usb_hcd_poll_rh_status")) {
 		/* TRANSLATORS: activity on the USB bus */
-		details = g_strdup_printf (_("USB activity %s"), obj->details+23);
-	} else if (g_str_has_prefix (obj->details, "schedule_hrtimeout_range")) {
+		details = g_strdup_printf (_("USB activity %s"), data+23);
+	} else if (g_str_has_prefix (data, "schedule_hrtimeout_range")) {
 		/* TRANSLATORS: we've timed out of an aligned timer */
-		details = g_strdup_printf (_("Wakeup %s"), obj->details+25);
-	} else if (g_str_has_prefix (obj->details, "Local timer interrupts")) {
+		details = g_strdup_printf (_("Wakeup %s"), data+25);
+	} else if (g_str_has_prefix (data, "Local timer interrupts")) {
 		/* TRANSLATORS: interupts on the system required for basic operation */
 		details = g_strdup (_("Local interrupts"));
-	} else if (g_str_has_prefix (obj->details, "Rescheduling interrupts")) {
+	} else if (g_str_has_prefix (data, "Rescheduling interrupts")) {
 		/* TRANSLATORS: interrupts when a task gets moved from one core to another */
 		details = g_strdup (_("Rescheduling interrupts"));
 	} else
-		details = g_markup_escape_text (obj->details, -1);
+		details = g_markup_escape_text (data, -1);
 
 	return details;
 }
 /**
- * gpm_stats_add_wakeups_obj:
+ * gpm_stats_add_wakeups_item:
  **/
 static void
-gpm_stats_add_wakeups_obj (const DkpWakeupsObj *obj)
+gpm_stats_add_wakeups_item (UpWakeupItem *item)
 {
 	const gchar *icon;
 	gchar *value;
@@ -941,23 +943,23 @@ gpm_stats_add_wakeups_obj (const DkpWakeupsObj *obj)
 	gchar *cmdline;
 	GtkTreeIter iter;
 
-	if (obj->is_userspace) {
+	if (up_wakeup_item_get_is_userspace (item)) {
 		icon = "application-x-executable";
-		id = g_strdup_printf ("%i", obj->id);
+		id = g_strdup_printf ("%i", up_wakeup_item_get_id (item));
 	} else {
 		icon = "applications-system";
-		if (obj->id < 0xff0)
-			id = g_strdup_printf ("IRQ%i", obj->id);
+		if (up_wakeup_item_get_id (item) < 0xff0)
+			id = g_strdup_printf ("IRQ%i", up_wakeup_item_get_id (item));
 		else
 			id = g_strdup ("IRQx");
 	}
 
 	/* formate value to one decimal place */
-	value = g_strdup_printf ("%.1f", obj->value);
+	value = g_strdup_printf ("%.1f", up_wakeup_item_get_value (item));
 
 	/* get formatted lines */
-	cmdline = gpm_stats_format_cmdline (obj);
-	details = gpm_stats_format_details (obj);
+	cmdline = gpm_stats_format_cmdline (item);
+	details = gpm_stats_format_details (item);
 
 	gtk_list_store_append (list_store_wakeups, &iter);
 	gtk_list_store_set (list_store_wakeups, &iter,
@@ -981,7 +983,7 @@ gpm_stats_update_wakeups_data (void)
 	GtkWidget *widget;
 	GtkWidget *page_widget;
 	guint total;
-	DkpWakeupsObj *obj;
+	UpWakeupItem *item;
 	gchar *text;
 	guint i;
 	GError *error = NULL;
@@ -1002,7 +1004,7 @@ gpm_stats_update_wakeups_data (void)
 	gtk_widget_show (page_widget);
 
 	/* show total */
-	total = dkp_wakeups_get_total (wakeups, &error);
+	total = up_wakeups_get_total_sync (wakeups, NULL, &error);
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "label_total_wakeups"));
 	if (error == NULL) {
 		text = g_strdup_printf ("%i", total);
@@ -1015,12 +1017,12 @@ gpm_stats_update_wakeups_data (void)
 
 	/* get data */
 	gtk_list_store_clear (list_store_wakeups);
-	array = dkp_wakeups_get_data (wakeups, NULL);
+	array = up_wakeups_get_data_sync (wakeups, NULL, NULL);
 	if (array == NULL)
 		return;
 	for (i=0; i<array->len; i++) {
-		obj = g_ptr_array_index (array, i);
-		gpm_stats_add_wakeups_obj (obj);
+		item = g_ptr_array_index (array, i);
+		gpm_stats_add_wakeups_item (item);
 	}
 	g_ptr_array_unref (array);
 }
@@ -1052,7 +1054,7 @@ gpm_stats_set_title (GtkWindow *window, gint page_num)
 static void
 gpm_stats_notebook_changed_cb (GtkNotebook *notebook, GtkNotebookPage *page, gint page_num, gpointer user_data)
 {
-	DkpDevice *device;
+	UpDevice *device;
 	GtkWidget *widget;
 
 	/* set the window title depending on the mode */
@@ -1068,8 +1070,8 @@ gpm_stats_notebook_changed_cb (GtkNotebook *notebook, GtkNotebookPage *page, gin
 	if (g_strcmp0 (current_device, "wakeups") == 0)
 		return;
 
-	device = dkp_device_new ();
-	dkp_device_set_object_path (device, current_device, NULL);
+	device = up_device_new ();
+	up_device_set_object_path_sync (device, current_device, NULL, NULL);
 	gpm_stats_update_info_data_page (device, page_num);
 	gpm_stats_update_info_data (device);
 	g_object_unref (device);
@@ -1081,9 +1083,9 @@ gpm_stats_notebook_changed_cb (GtkNotebook *notebook, GtkNotebookPage *page, gin
 static void
 gpm_stats_button_update_ui (void)
 {
-	DkpDevice *device;
-	device = dkp_device_new ();
-	dkp_device_set_object_path (device, current_device, NULL);
+	UpDevice *device;
+	device = up_device_new ();
+	up_device_set_object_path_sync (device, current_device, NULL, NULL);
 	gpm_stats_update_info_data (device);
 	g_object_unref (device);
 }
@@ -1096,7 +1098,7 @@ gpm_stats_devices_treeview_clicked_cb (GtkTreeSelection *selection, gboolean dat
 {
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	DkpDevice *device;
+	UpDevice *device;
 
 	/* This will only work in single or browse selection mode! */
 	if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
@@ -1113,8 +1115,8 @@ gpm_stats_devices_treeview_clicked_cb (GtkTreeSelection *selection, gboolean dat
 		if (g_strcmp0 (current_device, "wakeups") == 0) {
 			gpm_stats_update_wakeups_data ();
 		} else {
-			device = dkp_device_new ();
-			dkp_device_set_object_path (device, current_device, NULL);
+			device = up_device_new ();
+			up_device_set_object_path_sync (device, current_device, NULL, NULL);
 			gpm_stats_update_info_data (device);
 			g_object_unref (device);
 		}
@@ -1139,21 +1141,21 @@ gpm_stats_window_activated_cb (EggUnique *egg_unique, gpointer data)
  * gpm_stats_add_device:
  **/
 static void
-gpm_stats_add_device (DkpDevice *device)
+gpm_stats_add_device (UpDevice *device)
 {
 	const gchar *id;
 	GtkTreeIter iter;
 	const gchar *text;
 	const gchar *icon;
-	DkpDeviceType type;
+	UpDeviceKind kind;
 
 	/* get device properties */
 	g_object_get (device,
-		      "type", &type,
+		      "kind", &kind,
 		      NULL);
 
-	id = dkp_device_get_object_path (device);
-	text = gpm_device_type_to_localised_text (type, 1);
+	id = up_device_get_object_path (device);
+	text = gpm_device_kind_to_localised_text (kind, 1);
 	icon = gpm_upower_get_device_icon (device);
 
 	gtk_list_store_append (list_store_devices, &iter);
@@ -1167,7 +1169,7 @@ gpm_stats_add_device (DkpDevice *device)
  * gpm_stats_data_changed_cb:
  **/
 static void
-gpm_stats_data_changed_cb (DkpClient *client, gpointer user_data)
+gpm_stats_data_changed_cb (UpClient *client, gpointer user_data)
 {
 	if (g_strcmp0 (current_device, "wakeups") == 0)
 		gpm_stats_update_wakeups_data ();
@@ -1177,10 +1179,10 @@ gpm_stats_data_changed_cb (DkpClient *client, gpointer user_data)
  * gpm_stats_device_added_cb:
  **/
 static void
-gpm_stats_device_added_cb (DkpClient *client, DkpDevice *device, gpointer user_data)
+gpm_stats_device_added_cb (UpClient *client, UpDevice *device, gpointer user_data)
 {
 	const gchar *object_path;
-	object_path = dkp_device_get_object_path (device);
+	object_path = up_device_get_object_path (device);
 	egg_debug ("added:     %s", object_path);
 	gpm_stats_add_device (device);
 }
@@ -1189,10 +1191,10 @@ gpm_stats_device_added_cb (DkpClient *client, DkpDevice *device, gpointer user_d
  * gpm_stats_device_changed_cb:
  **/
 static void
-gpm_stats_device_changed_cb (DkpClient *client, DkpDevice *device, gpointer user_data)
+gpm_stats_device_changed_cb (UpClient *client, UpDevice *device, gpointer user_data)
 {
 	const gchar *object_path;
-	object_path = dkp_device_get_object_path (device);
+	object_path = up_device_get_object_path (device);
 	if (object_path == NULL || current_device == NULL)
 		return;
 	egg_debug ("changed:   %s", object_path);
@@ -1204,14 +1206,14 @@ gpm_stats_device_changed_cb (DkpClient *client, DkpDevice *device, gpointer user
  * gpm_stats_device_removed_cb:
  **/
 static void
-gpm_stats_device_removed_cb (DkpClient *client, DkpDevice *device, gpointer user_data)
+gpm_stats_device_removed_cb (UpClient *client, UpDevice *device, gpointer user_data)
 {
 	const gchar *object_path;
 	GtkTreeIter iter;
 	gchar *id = NULL;
 	gboolean ret;
 
-	object_path = dkp_device_get_object_path (device);
+	object_path = up_device_get_object_path (device);
 	egg_debug ("removed:   %s", object_path);
 	if (g_strcmp0 (current_device, object_path) == 0) {
 		gtk_list_store_clear (list_store_info);
@@ -1480,10 +1482,10 @@ main (int argc, char *argv[])
 	GtkTreeSelection *selection;
 	EggUnique *egg_unique;
 	gboolean ret;
-	DkpClient *client;
+	UpClient *client;
 	GPtrArray *devices;
-	DkpDevice *device;
-	DkpDeviceType type;
+	UpDevice *device;
+	UpDeviceKind kind;
 	guint i;
 	gint page;
 	gboolean checked;
@@ -1704,54 +1706,55 @@ main (int argc, char *argv[])
 	g_signal_connect (G_OBJECT (widget), "changed",
 			  G_CALLBACK (gpm_stats_range_combo_changed), NULL);
 
-	client = dkp_client_new ();
+	client = up_client_new ();
 	g_signal_connect (client, "device-added", G_CALLBACK (gpm_stats_device_added_cb), NULL);
 	g_signal_connect (client, "device-removed", G_CALLBACK (gpm_stats_device_removed_cb), NULL);
 	g_signal_connect (client, "device-changed", G_CALLBACK (gpm_stats_device_changed_cb), NULL);
 
-	wakeups = dkp_wakeups_new ();
+	wakeups = up_wakeups_new ();
 	g_signal_connect (wakeups, "data-changed", G_CALLBACK (gpm_stats_data_changed_cb), NULL);
 
 	/* coldplug */
-	devices = dkp_client_enumerate_devices (client, NULL);
-	if (devices == NULL)
+	ret = up_client_enumerate_devices_sync (client, NULL, NULL);
+	if (!ret)
 		goto out;
+	devices = up_client_get_devices (client);
 
 	/* add devices in visually pleasing order */
 	for (i=0; i < devices->len; i++) {
 		device = g_ptr_array_index (devices, i);
-		g_object_get (device, "type", &type, NULL);
-		if (type == DKP_DEVICE_TYPE_LINE_POWER)
+		g_object_get (device, "kind", &kind, NULL);
+		if (kind == UP_DEVICE_KIND_LINE_POWER)
 			gpm_stats_add_device (device);
 	}
 	for (i=0; i < devices->len; i++) {
 		device = g_ptr_array_index (devices, i);
-		g_object_get (device, "type", &type, NULL);
-		if (type == DKP_DEVICE_TYPE_BATTERY)
+		g_object_get (device, "kind", &kind, NULL);
+		if (kind == UP_DEVICE_KIND_BATTERY)
 			gpm_stats_add_device (device);
 	}
 	for (i=0; i < devices->len; i++) {
 		device = g_ptr_array_index (devices, i);
-		g_object_get (device, "type", &type, NULL);
-		if (type == DKP_DEVICE_TYPE_UPS)
+		g_object_get (device, "kind", &kind, NULL);
+		if (kind == UP_DEVICE_KIND_UPS)
 			gpm_stats_add_device (device);
 	}
 	for (i=0; i < devices->len; i++) {
 		device = g_ptr_array_index (devices, i);
-		g_object_get (device, "type", &type, NULL);
-		if (type == DKP_DEVICE_TYPE_MONITOR)
+		g_object_get (device, "kind", &kind, NULL);
+		if (kind == UP_DEVICE_KIND_MONITOR)
 			gpm_stats_add_device (device);
 	}
 	for (i=0; i < devices->len; i++) {
 		device = g_ptr_array_index (devices, i);
-		g_object_get (device, "type", &type, NULL);
-		if (type == DKP_DEVICE_TYPE_MOUSE)
+		g_object_get (device, "kind", &kind, NULL);
+		if (kind == UP_DEVICE_KIND_MOUSE)
 			gpm_stats_add_device (device);
 	}
 	for (i=0; i < devices->len; i++) {
 		device = g_ptr_array_index (devices, i);
-		g_object_get (device, "type", &type, NULL);
-		if (type == DKP_DEVICE_TYPE_KEYBOARD)
+		g_object_get (device, "kind", &kind, NULL);
+		if (kind == UP_DEVICE_KIND_KEYBOARD)
 			gpm_stats_add_device (device);
 	}
 
@@ -1759,14 +1762,14 @@ main (int argc, char *argv[])
 	if (devices->len > 0) {
 		device = g_ptr_array_index (devices, 0);
 		gpm_stats_update_info_data (device);
-		current_device = g_strdup (dkp_device_get_object_path (device));
+		current_device = g_strdup (up_device_get_object_path (device));
 	}
 
 	if (last_device == NULL)
 		last_device = gconf_client_get_string (gconf_client, GPM_CONF_INFO_LAST_DEVICE, NULL);
 
 	/* has capability to measure wakeups */
-	ret = dkp_wakeups_has_capability (wakeups);
+	ret = up_wakeups_get_has_capability (wakeups);
 	if (ret) {
 		GtkTreeIter iter;
 		gtk_list_store_append (list_store_devices, &iter);
