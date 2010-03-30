@@ -397,9 +397,8 @@ gpm_engine_get_icon (GpmEngine *engine)
 		return NULL;
 	}
 
-	/* we fallback to the ac_adapter icon */
-	egg_debug ("Using fallback");
-	return g_strdup (GPM_STOCK_AC_ADAPTER);
+	/* do not show an icon */
+	return NULL;
 }
 
 /**

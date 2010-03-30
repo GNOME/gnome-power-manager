@@ -156,7 +156,6 @@ G_BEGIN_DECLS
 #define GPM_CONF_IDLE_DELAY			"/desktop/gnome/session/idle_delay"
 
 typedef enum {
-	GPM_ICON_POLICY_ALWAYS,
 	GPM_ICON_POLICY_PRESENT,
 	GPM_ICON_POLICY_CHARGE,
 	GPM_ICON_POLICY_LOW,

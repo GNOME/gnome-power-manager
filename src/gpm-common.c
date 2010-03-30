@@ -86,9 +86,8 @@ gpm_icon_policy_from_string (const gchar *policy)
 {
 	if (policy == NULL)
 		return GPM_ICON_POLICY_NEVER;
-	if (g_strcmp0 (policy, "always") == 0)
-		return GPM_ICON_POLICY_ALWAYS;
-	if (g_strcmp0 (policy, "present") == 0)
+	if (g_strcmp0 (policy, "always") == 0 ||
+	    g_strcmp0 (policy, "present") == 0)
 		return GPM_ICON_POLICY_PRESENT;
 	if (g_strcmp0 (policy, "charge") == 0)
 		return GPM_ICON_POLICY_CHARGE;
@@ -107,8 +106,6 @@ gpm_icon_policy_from_string (const gchar *policy)
 const gchar *
 gpm_icon_policy_to_string (GpmIconPolicy policy)
 {
-	if (policy == GPM_ICON_POLICY_ALWAYS)
-		return "always";
 	if (policy == GPM_ICON_POLICY_PRESENT)
 		return "present";
 	if (policy == GPM_ICON_POLICY_CHARGE)

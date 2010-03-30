@@ -573,7 +573,6 @@ prefs_setup_notification (GpmPrefs *prefs)
 {
 	gchar *icon_policy_str;
 	gint icon_policy;
-	GtkWidget *radiobutton_icon_always;
 	GtkWidget *radiobutton_icon_present;
 	GtkWidget *radiobutton_icon_charge;
 	GtkWidget *radiobutton_icon_low;
@@ -584,8 +583,6 @@ prefs_setup_notification (GpmPrefs *prefs)
 	icon_policy = gpm_icon_policy_from_string (icon_policy_str);
 	g_free (icon_policy_str);
 
-	radiobutton_icon_always = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder,
-					      "radiobutton_notification_always"));
 	radiobutton_icon_present = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder,
 					       "radiobutton_notification_present"));
 	radiobutton_icon_charge = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder,
@@ -596,14 +593,11 @@ prefs_setup_notification (GpmPrefs *prefs)
 					     "radiobutton_notification_never"));
 
 	is_writable = gconf_client_key_is_writable (prefs->priv->conf, GPM_CONF_UI_ICON_POLICY, NULL);
-	gtk_widget_set_sensitive (radiobutton_icon_always, is_writable);
 	gtk_widget_set_sensitive (radiobutton_icon_present, is_writable);
 	gtk_widget_set_sensitive (radiobutton_icon_charge, is_writable);
 	gtk_widget_set_sensitive (radiobutton_icon_low, is_writable);
 	gtk_widget_set_sensitive (radiobutton_icon_never, is_writable);
 
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_always),
-				      icon_policy == GPM_ICON_POLICY_ALWAYS);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_present),
 				      icon_policy == GPM_ICON_POLICY_PRESENT);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_charge),
@@ -613,8 +607,6 @@ prefs_setup_notification (GpmPrefs *prefs)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_never),
 				      icon_policy == GPM_ICON_POLICY_NEVER);
 
-	g_object_set_data (G_OBJECT (radiobutton_icon_always), "policy",
-			   GINT_TO_POINTER (GPM_ICON_POLICY_ALWAYS));
 	g_object_set_data (G_OBJECT (radiobutton_icon_present), "policy",
 			   GINT_TO_POINTER (GPM_ICON_POLICY_PRESENT));
 	g_object_set_data (G_OBJECT (radiobutton_icon_charge), "policy",
@@ -626,8 +618,6 @@ prefs_setup_notification (GpmPrefs *prefs)
 
 	/* only connect the callbacks after we set the value, else the conf
 	 * keys gets written to (for a split second), and the icon flickers. */
-	g_signal_connect (radiobutton_icon_always, "clicked",
-			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
 	g_signal_connect (radiobutton_icon_present, "clicked",
 			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
 	g_signal_connect (radiobutton_icon_charge, "clicked",
