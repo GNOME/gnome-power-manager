@@ -51,7 +51,7 @@ struct GpmEnginePrivate
 	GPtrArray		*array;
 	GpmPhone		*phone;
 	GpmIconPolicy		 icon_policy;
-	gchar			*previous_icon;
+	GIcon			*previous_icon;
 	gchar			*previous_summary;
 
 	gboolean		 use_time_primary;
@@ -271,7 +271,7 @@ gpm_engine_get_summary (GpmEngine *engine)
  *
  * Returns the icon
  **/
-static gchar *
+static GIcon *
 gpm_engine_get_icon_priv (GpmEngine *engine, UpDeviceKind device_kind, GpmEngineWarning warning, gboolean use_state)
 {
 	guint i;
@@ -321,10 +321,10 @@ gpm_engine_get_icon_priv (GpmEngine *engine, UpDeviceKind device_kind, GpmEngine
  *
  * Returns the icon
  **/
-gchar *
+GIcon *
 gpm_engine_get_icon (GpmEngine *engine)
 {
-	gchar *icon = NULL;
+	GIcon *icon = NULL;
 
 	g_return_val_if_fail (GPM_IS_ENGINE (engine), NULL);
 
@@ -412,7 +412,7 @@ gpm_engine_get_icon (GpmEngine *engine)
 static gboolean
 gpm_engine_recalculate_state_icon (GpmEngine *engine)
 {
-	gchar *icon;
+	GIcon *icon;
 
 	g_return_val_if_fail (engine != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_ENGINE (engine), FALSE);
@@ -427,31 +427,29 @@ gpm_engine_recalculate_state_icon (GpmEngine *engine)
 		egg_debug ("** EMIT: icon-changed: none");
 		g_signal_emit (engine, signals [ICON_CHANGED], 0, NULL);
 
-		g_free (engine->priv->previous_icon);
+		g_object_unref (engine->priv->previous_icon);
 		engine->priv->previous_icon = NULL;
 		return TRUE;
 	}
 
 	/* no icon before, now icon */
 	if (engine->priv->previous_icon == NULL) {
-		egg_debug ("** EMIT: icon-changed: %s", icon);
 		g_signal_emit (engine, signals [ICON_CHANGED], 0, icon);
-		engine->priv->previous_icon = icon;
+		engine->priv->previous_icon = g_object_ref (icon);
 		return TRUE;
 	}
 
 	/* icon before, now different */
-	if (strcmp (engine->priv->previous_icon, icon) != 0) {
-		g_free (engine->priv->previous_icon);
-		engine->priv->previous_icon = icon;
-		egg_debug ("** EMIT: icon-changed: %s", icon);
+	if (!g_icon_equal (engine->priv->previous_icon, icon)) {
+		g_object_unref (engine->priv->previous_icon);
+		engine->priv->previous_icon = g_object_ref (icon);
 		g_signal_emit (engine, signals [ICON_CHANGED], 0, icon);
 		return TRUE;
 	}
 
 	egg_debug ("no change");
 	/* nothing to do */
-	g_free (icon);
+	g_object_unref (icon);
 	return FALSE;
 }
 
@@ -1152,8 +1150,8 @@ gpm_engine_class_init (GpmEngineClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmEngineClass, icon_changed),
-			      NULL, NULL, g_cclosure_marshal_VOID__STRING,
-			      G_TYPE_NONE, 1, G_TYPE_STRING);
+			      NULL, NULL, g_cclosure_marshal_VOID__OBJECT,
+			      G_TYPE_NONE, 1, G_TYPE_ICON);
 	signals [SUMMARY_CHANGED] =
 		g_signal_new ("summary-changed",
 			      G_TYPE_FROM_CLASS (object_class),
@@ -1240,7 +1238,8 @@ gpm_engine_finalize (GObject *object)
 	g_object_unref (engine->priv->phone);
 	g_object_unref (engine->priv->battery_composite);
 
-	g_free (engine->priv->previous_icon);
+	if (engine->priv->previous_icon != NULL)
+		g_object_unref (engine->priv->previous_icon);
 	g_free (engine->priv->previous_summary);
 
 	G_OBJECT_CLASS (gpm_engine_parent_class)->finalize (object);

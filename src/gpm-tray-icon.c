@@ -116,14 +116,16 @@ gpm_tray_icon_get_status_icon (GpmTrayIcon *icon)
  * Loads a pixmap from disk, and sets as the tooltip icon
  **/
 gboolean
-gpm_tray_icon_set_icon (GpmTrayIcon *icon, const gchar *filename)
+gpm_tray_icon_set_icon (GpmTrayIcon *icon, GIcon *gicon)
 {
+	gchar *filename = NULL;
 	g_return_val_if_fail (icon != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_TRAY_ICON (icon), FALSE);
 
-	if (filename != NULL) {
+	if (gicon != NULL) {
+		filename = g_icon_to_string (gicon);
 		egg_debug ("Setting icon to %s", filename);
-		gtk_status_icon_set_from_icon_name (icon->priv->status_icon, filename);
+		gtk_status_icon_set_from_gicon (icon->priv->status_icon, gicon);
 
 		/* make sure that we are visible */
 		gpm_tray_icon_show (icon, TRUE);
@@ -134,6 +136,7 @@ gpm_tray_icon_set_icon (GpmTrayIcon *icon, const gchar *filename)
 		/* make sure that we are hidden */
 		gpm_tray_icon_show (icon, FALSE);
 	}
+	g_free (filename);
 	return TRUE;
 }
 
@@ -200,6 +203,7 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon, GtkMenu *menu, const GPtrArray *arr
 	UpDevice *device;
 	UpDeviceKind kind_tmp;
 	gdouble percentage;
+	GIcon *gicon = NULL;
 
 	/* find type */
 	for (i=0;i<array->len;i++) {
@@ -245,8 +249,8 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon, GtkMenu *menu, const GPtrArray *arr
 		gtk_box_pack_start (GTK_BOX (hbox), label_percentage, FALSE, FALSE, 3);
 
 		/* generate the image */
-		icon_name = gpm_upower_get_device_icon (device);
-		image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
+		gicon = gpm_upower_get_device_icon (device);
+		image = gtk_image_new_from_gicon (gicon, GTK_ICON_SIZE_MENU);
 		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
 		gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item), TRUE);
 
@@ -258,6 +262,7 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon, GtkMenu *menu, const GPtrArray *arr
 
 		g_free (icon_name);
 		g_free (percentage_str);
+		g_object_unref (gicon);
 	}
 	return added;
 }

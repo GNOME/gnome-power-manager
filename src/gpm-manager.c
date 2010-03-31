@@ -460,12 +460,33 @@ gpm_manager_notification_closed_cb (NotifyNotification *notification, NotifyNoti
 }
 
 /**
+ * gpm_manager_get_icon_name:
+ **/
+static const gchar *
+gpm_manager_get_icon_name (GIcon *icon)
+{
+	const gchar* const *icon_names;
+	const gchar *icon_name = NULL;
+
+	/* no icon */
+	if (icon == NULL)
+		goto out;
+
+	/* just use the first icon */
+	icon_names = g_themed_icon_get_names (G_THEMED_ICON (icon));
+	if (icon_names != NULL)
+		icon_name = icon_names[0];
+out:
+	return icon_name;
+}
+
+/**
  * gpm_manager_notify:
  **/
 static gboolean
 gpm_manager_notify (GpmManager *manager, NotifyNotification **notification_class,
 		    const gchar *title, const gchar *message,
-		    guint timeout, const gchar *icon, NotifyUrgency urgency)
+		    guint timeout, const gchar *icon_name, NotifyUrgency urgency)
 {
 	gboolean ret;
 	GError *error = NULL;
@@ -477,9 +498,9 @@ gpm_manager_notify (GpmManager *manager, NotifyNotification **notification_class
 
 	/* if the status icon is hidden, don't point at it */
 	if (gtk_status_icon_is_embedded (manager->priv->status_icon))
-		notification = notify_notification_new_with_status_icon (title, message, icon, manager->priv->status_icon);
+		notification = notify_notification_new_with_status_icon (title, message, icon_name, manager->priv->status_icon);
 	else
-		notification = notify_notification_new (title, message, icon, NULL);
+		notification = notify_notification_new (title, message, icon_name, NULL);
 	notify_notification_set_timeout (notification, timeout);
 	notify_notification_set_urgency (notification, urgency);
 	g_signal_connect (notification, "closed", G_CALLBACK (gpm_manager_notification_closed_cb), notification_class);
@@ -1241,7 +1262,7 @@ gpm_manager_engine_perhaps_recall_cb (GpmEngine *engine, UpDevice *device, gchar
  * gpm_manager_engine_icon_changed_cb:
  */
 static void
-gpm_manager_engine_icon_changed_cb (GpmEngine  *engine, gchar *icon, GpmManager *manager)
+gpm_manager_engine_icon_changed_cb (GpmEngine  *engine, GIcon *icon, GpmManager *manager)
 {
 	gpm_tray_icon_set_icon (manager->priv->tray_icon, icon);
 }
@@ -1355,7 +1376,7 @@ gpm_manager_engine_discharging_cb (GpmEngine *engine, UpDevice *device, GpmManag
 	gdouble percentage;
 	gint64 time_to_empty;
 	gchar *remaining_text = NULL;
-	gchar *icon = NULL;
+	GIcon *icon = NULL;
 	const gchar *kind_desc;
 
 	/* only action this if specified in gconf */
@@ -1409,9 +1430,10 @@ gpm_manager_engine_discharging_cb (GpmEngine *engine, UpDevice *device, GpmManag
 	icon = gpm_upower_get_device_icon (device);
 	/* show the notification */
 	gpm_manager_notify (manager, &manager->priv->notification_discharging, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_LONG,
-			    icon, NOTIFY_URGENCY_NORMAL);
+			    gpm_manager_get_icon_name (icon), NOTIFY_URGENCY_NORMAL);
 out:
-	g_free (icon);
+	if (icon != NULL)
+		g_object_unref (icon);
 	g_free (remaining_text);
 	return;
 }
@@ -1452,7 +1474,7 @@ gpm_manager_engine_charge_low_cb (GpmEngine *engine, UpDevice *device, GpmManage
 	const gchar *title = NULL;
 	gchar *message = NULL;
 	gchar *remaining_text;
-	gchar *icon = NULL;
+	GIcon *icon = NULL;
 	UpDeviceKind kind;
 	gdouble percentage;
 	gint64 time_to_empty;
@@ -1529,10 +1551,12 @@ gpm_manager_engine_charge_low_cb (GpmEngine *engine, UpDevice *device, GpmManage
 
 	/* get correct icon */
 	icon = gpm_upower_get_device_icon (device);
-	gpm_manager_notify (manager, &manager->priv->notification_warning_low, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_LONG, icon, NOTIFY_URGENCY_NORMAL);
+	gpm_manager_notify (manager, &manager->priv->notification_warning_low, title, message,
+			    GPM_MANAGER_NOTIFY_TIMEOUT_LONG, gpm_manager_get_icon_name (icon), NOTIFY_URGENCY_NORMAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_CAUTION, TRUE);
 out:
-	g_free (icon);
+	if (icon != NULL)
+		g_object_unref (icon);
 	g_free (message);
 }
 
@@ -1545,7 +1569,7 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmM
 	const gchar *title = NULL;
 	gchar *message = NULL;
 	gchar *action;
-	gchar *icon = NULL;
+	GIcon *icon = NULL;
 	UpDeviceKind kind;
 	gdouble percentage;
 	gint64 time_to_empty;
@@ -1652,7 +1676,8 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmM
 
 	/* get correct icon */
 	icon = gpm_upower_get_device_icon (device);
-	gpm_manager_notify (manager, &manager->priv->notification_warning_low, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_NEVER, icon, NOTIFY_URGENCY_CRITICAL);
+	gpm_manager_notify (manager, &manager->priv->notification_warning_low, title, message,
+			    GPM_MANAGER_NOTIFY_TIMEOUT_NEVER, gpm_manager_get_icon_name (icon), NOTIFY_URGENCY_CRITICAL);
 
 	switch (kind) {
 
@@ -1669,7 +1694,8 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmM
 		gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
 	}
 out:
-	g_free (icon);
+	if (icon != NULL)
+		g_object_unref (icon);
 	g_free (message);
 }
 
@@ -1682,7 +1708,7 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, UpDevice *device, GpmMan
 	const gchar *title = NULL;
 	gchar *action;
 	gchar *message = NULL;
-	gchar *icon = NULL;
+	GIcon *icon = NULL;
 	UpDeviceKind kind;
 	GpmActionPolicy policy;
 
@@ -1778,10 +1804,11 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, UpDevice *device, GpmMan
 	icon = gpm_upower_get_device_icon (device);
 	gpm_manager_notify (manager, &manager->priv->notification_warning_low,
 			    title, message, GPM_MANAGER_NOTIFY_TIMEOUT_NEVER,
-			    icon, NOTIFY_URGENCY_CRITICAL);
+			    gpm_manager_get_icon_name (icon), NOTIFY_URGENCY_CRITICAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
 out:
-	g_free (icon);
+	if (icon != NULL)
+		g_object_unref (icon);
 	g_free (message);
 }
 

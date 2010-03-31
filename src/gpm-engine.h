@@ -70,7 +70,7 @@ typedef struct
 
 GType		 gpm_engine_get_type		(void);
 GpmEngine	*gpm_engine_new			(void);
-gchar		*gpm_engine_get_icon		(GpmEngine	*engine);
+GIcon		*gpm_engine_get_icon		(GpmEngine	*engine);
 gchar		*gpm_engine_get_summary		(GpmEngine	*engine);
 GPtrArray	*gpm_engine_get_devices		(GpmEngine	*engine);
 

@@ -72,7 +72,7 @@ gpm_upower_get_device_icon_index (UpDevice *device)
  * Need to free the return value
  *
  **/
-gchar *
+GIcon *
 gpm_upower_get_device_icon (UpDevice *device)
 {
 	gchar *filename = NULL;
@@ -82,6 +82,7 @@ gpm_upower_get_device_icon (UpDevice *device)
 	UpDeviceState state;
 	gboolean is_present;
 	gdouble percentage;
+	GIcon *icon = NULL;
 
 	g_return_val_if_fail (device != NULL, NULL);
 
@@ -171,7 +172,9 @@ gpm_upower_get_device_icon (UpDevice *device)
 	}
 
 	egg_debug ("got filename: %s", filename);
-	return filename;
+	icon = g_themed_icon_new (filename);
+	g_free (filename);
+	return icon;
 }
 
 /**

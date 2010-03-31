@@ -152,7 +152,7 @@ gpm_stats_add_devices_columns (GtkTreeView *treeview)
 	renderer = gtk_cell_renderer_pixbuf_new ();
 	g_object_set (renderer, "stock-size", GTK_ICON_SIZE_DIALOG, NULL);
 	column = gtk_tree_view_column_new_with_attributes (_("Image"), renderer,
-							   "icon-name", GPM_DEVICES_COLUMN_ICON, NULL);
+							   "gicon", GPM_DEVICES_COLUMN_ICON, NULL);
 	gtk_tree_view_append_column (treeview, column);
 
 	/* column for text */
@@ -1146,7 +1146,7 @@ gpm_stats_add_device (UpDevice *device)
 	const gchar *id;
 	GtkTreeIter iter;
 	const gchar *text;
-	const gchar *icon;
+	GIcon *icon;
 	UpDeviceKind kind;
 
 	/* get device properties */
@@ -1163,6 +1163,7 @@ gpm_stats_add_device (UpDevice *device)
 			    GPM_DEVICES_COLUMN_ID, id,
 			    GPM_DEVICES_COLUMN_TEXT, text,
 			    GPM_DEVICES_COLUMN_ICON, icon, -1);
+	g_object_unref (icon);
 }
 
 /**
@@ -1612,7 +1613,7 @@ main (int argc, char *argv[])
 
 	/* create list stores */
 	list_store_info = gtk_list_store_new (GPM_INFO_COLUMN_LAST, G_TYPE_STRING, G_TYPE_STRING);
-	list_store_devices = gtk_list_store_new (GPM_DEVICES_COLUMN_LAST, G_TYPE_STRING,
+	list_store_devices = gtk_list_store_new (GPM_DEVICES_COLUMN_LAST, G_TYPE_ICON,
 						 G_TYPE_STRING, G_TYPE_STRING);
 	list_store_wakeups = gtk_list_store_new (GPM_WAKEUPS_COLUMN_LAST, G_TYPE_STRING,
 						 G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
@@ -1772,12 +1773,15 @@ main (int argc, char *argv[])
 	ret = up_wakeups_get_has_capability (wakeups);
 	if (ret) {
 		GtkTreeIter iter;
+		GIcon *icon;
+		icon = g_themed_icon_new ("computer");
 		gtk_list_store_append (list_store_devices, &iter);
 		gtk_list_store_set (list_store_devices, &iter,
 				    GPM_DEVICES_COLUMN_ID, "wakeups",
 				    /* TRANSLATORS: the icon for the CPU */
 				    GPM_DEVICES_COLUMN_TEXT, _("Processor"),
-				    GPM_DEVICES_COLUMN_ICON, "computer", -1);
+				    GPM_DEVICES_COLUMN_ICON, icon, -1);
+		g_object_unref (icon);
 	}
 
 	/* set the correct focus on the last device */
