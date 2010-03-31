@@ -342,26 +342,6 @@ gpm_screensaver_class_init (GpmScreensaverClass *klass)
 }
 
 /**
- * gpm_screensaver_proxy_status_cb:
- * @proxy: The dbus raw proxy
- * @status: The status of the service, where TRUE is connected
- * @screensaver: This class instance
- **/
-static void
-gpm_screensaver_proxy_status_cb (DBusGProxy *proxy, gboolean status, GpmScreensaver *screensaver)
-{
-	g_return_if_fail (GPM_IS_SCREENSAVER (screensaver));
-
-#if 0
-	if (status) {
-		gpm_screensaver_proxy_connect_more (screensaver);
-	} else {
-		gpm_screensaver_proxy_disconnect_more (screensaver);
-	}
-#endif
-}
-
-/**
  * gpm_screensaver_init:
  * @screensaver: This class instance
  **/
@@ -373,16 +353,10 @@ gpm_screensaver_init (GpmScreensaver *screensaver)
 	screensaver->priv = GPM_SCREENSAVER_GET_PRIVATE (screensaver);
 
 	connection = dbus_g_bus_get (DBUS_BUS_SESSION, NULL);
-
 	screensaver->priv->proxy = dbus_g_proxy_new_for_name (connection,
 							      GS_LISTENER_SERVICE,
 							      GS_LISTENER_PATH,
 							      GS_LISTENER_INTERFACE);
-
-	g_signal_connect (screensaver->priv->proxy, "proxy-status",
-			  G_CALLBACK (gpm_screensaver_proxy_status_cb),
-			  screensaver);
-
 	screensaver->priv->conf = gconf_client_get_default ();
 }
 
@@ -400,9 +374,6 @@ gpm_screensaver_finalize (GObject *object)
 	screensaver = GPM_SCREENSAVER (object);
 	screensaver->priv = GPM_SCREENSAVER_GET_PRIVATE (screensaver);
 
-#if 0
-	gpm_screensaver_proxy_disconnect_more (screensaver);
-#endif
 	g_object_unref (screensaver->priv->conf);
 	g_object_unref (screensaver->priv->proxy);
 
