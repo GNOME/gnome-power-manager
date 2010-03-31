@@ -1706,19 +1706,19 @@ main (int argc, char *argv[])
 	g_signal_connect (G_OBJECT (widget), "changed",
 			  G_CALLBACK (gpm_stats_range_combo_changed), NULL);
 
-	client = up_client_new ();
-	g_signal_connect (client, "device-added", G_CALLBACK (gpm_stats_device_added_cb), NULL);
-	g_signal_connect (client, "device-removed", G_CALLBACK (gpm_stats_device_removed_cb), NULL);
-	g_signal_connect (client, "device-changed", G_CALLBACK (gpm_stats_device_changed_cb), NULL);
 
 	wakeups = up_wakeups_new ();
 	g_signal_connect (wakeups, "data-changed", G_CALLBACK (gpm_stats_data_changed_cb), NULL);
 
 	/* coldplug */
+	client = up_client_new ();
 	ret = up_client_enumerate_devices_sync (client, NULL, NULL);
 	if (!ret)
 		goto out;
 	devices = up_client_get_devices (client);
+	g_signal_connect (client, "device-added", G_CALLBACK (gpm_stats_device_added_cb), NULL);
+	g_signal_connect (client, "device-removed", G_CALLBACK (gpm_stats_device_removed_cb), NULL);
+	g_signal_connect (client, "device-changed", G_CALLBACK (gpm_stats_device_changed_cb), NULL);
 
 	/* add devices in visually pleasing order */
 	for (i=0; i < devices->len; i++) {
