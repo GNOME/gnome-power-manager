@@ -237,6 +237,7 @@ gpm_engine_get_summary (GpmEngine *engine)
 	UpDevice *device;
 	GString *tooltip = NULL;
 	gchar *part;
+	gboolean is_present;
 
 	g_return_val_if_fail (GPM_IS_ENGINE (engine), NULL);
 
@@ -247,6 +248,9 @@ gpm_engine_get_summary (GpmEngine *engine)
 	array = engine->priv->array;
 	for (i=0;i<array->len;i++) {
 		device = g_ptr_array_index (engine->priv->array, i);
+		g_object_get (device, "is-present", &is_present, NULL);
+		if (!is_present)
+			continue;
 		part = gpm_upower_get_device_summary (device);
 		if (part != NULL)
 			g_string_append_printf (tooltip, "%s\n", part);
