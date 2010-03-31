@@ -206,9 +206,14 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon, GtkMenu *menu, const GPtrArray *arr
 	guint i;
 	guint added = 0;
 	gchar *icon_name;
-	gchar *label;
+	gchar *percentage_str;
 	GtkWidget *item;
+	GtkWidget *label_title;
+	GtkWidget *label_percentage;
 	GtkWidget *image;
+	GtkWidget *hbox;
+	GtkWidget *child;
+	GtkWidget *hbox_align;
 	const gchar *object_path;
 	const gchar *desc;
 	UpDevice *device;
@@ -232,10 +237,31 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon, GtkMenu *menu, const GPtrArray *arr
 		egg_debug ("adding device %s", object_path);
 		added++;
 
-		/* generate the label */
+		/* generate the labels */
 		desc = gpm_device_kind_to_localised_string (kind, 1);
-		label = g_strdup_printf ("%s (%.1f%%)", desc, percentage);
-		item = gtk_image_menu_item_new_with_label (label);
+		percentage_str = g_strdup_printf ("%.0f%%", percentage);
+
+		/* align title and percentage in columns */
+		hbox = gtk_hbox_new (FALSE, 3);
+		gtk_widget_show (hbox);
+
+		/* left align the device text */
+		hbox_align = gtk_hbox_new (FALSE, 0);
+		gtk_widget_show (hbox_align);
+		label_title = gtk_label_new (desc);
+		gtk_widget_show (label_title);
+		gtk_box_pack_start (GTK_BOX (hbox_align), label_title, FALSE, FALSE, 0);
+
+		/* center align the percentage */
+		label_percentage = gtk_label_new (percentage_str);
+		gtk_widget_show (label_percentage);
+
+		/* add to the menu item */
+		item = gtk_image_menu_item_new ();
+		child = gtk_bin_get_child (GTK_BIN (item));
+		gtk_container_add (GTK_CONTAINER (item), hbox);
+		gtk_box_pack_start (GTK_BOX (hbox), hbox_align, TRUE, TRUE, 3);
+		gtk_box_pack_start (GTK_BOX (hbox), label_percentage, FALSE, FALSE, 3);
 
 		/* generate the image */
 		icon_name = gpm_upower_get_device_icon (device);
@@ -246,10 +272,11 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon, GtkMenu *menu, const GPtrArray *arr
 		/* callback and add the the menu */
 		g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (gpm_tray_icon_show_info_cb), icon);
 		g_object_set_data (G_OBJECT (item), "object-path", (gpointer) object_path);
+
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
 		g_free (icon_name);
-		g_free (label);
+		g_free (percentage_str);
 	}
 	return added;
 }
