@@ -6,7 +6,7 @@ iconsdir = $(themedir)/$(size)/$(context)
 
 
 icons_DATA = 			        \
-	gpm-ac-adapter.png		\
+	ac-adapter.png			\
 	gpm-brightness-lcd.png		\
 	gpm-brightness-kbd.png		\
 	gpm-brightness-lcd-disabled.png	\

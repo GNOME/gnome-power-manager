@@ -98,7 +98,7 @@ gpm_upower_get_device_icon (UpDevice *device)
 
 	/* get the icon from some simple rules */
 	if (kind == UP_DEVICE_KIND_LINE_POWER) {
-		filename = g_strdup ("gpm-ac-adapter");
+		filename = g_strdup ("ac-adapter");
 	} else if (kind == UP_DEVICE_KIND_MONITOR) {
 		filename = g_strdup ("gpm-monitor");
 	} else if (kind == UP_DEVICE_KIND_UPS) {
@@ -521,7 +521,7 @@ gpm_device_kind_to_icon (UpDeviceKind kind)
 	const gchar *icon = NULL;
 	switch (kind) {
 	case UP_DEVICE_KIND_LINE_POWER:
-		icon = "gpm-ac-adapter";
+		icon = "ac-adapter";
 		break;
 	case UP_DEVICE_KIND_BATTERY:
 		icon = "battery";
