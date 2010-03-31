@@ -491,11 +491,11 @@ gpm_device_kind_to_localised_string (UpDeviceKind kind, guint number)
 		break;
 	case UP_DEVICE_KIND_MOUSE:
 		/* TRANSLATORS: wireless mice with internal batteries */
-		text = ngettext ("Wireless mouse", "Wireless mice", number);
+		text = ngettext ("Mouse", "Mice", number);
 		break;
 	case UP_DEVICE_KIND_KEYBOARD:
 		/* TRANSLATORS: wireless keyboard with internal battery */
-		text = ngettext ("Wireless keyboard", "Wireless keyboards", number);
+		text = ngettext ("Keyboard", "Keyboards", number);
 		break;
 	case UP_DEVICE_KIND_PDA:
 		/* TRANSLATORS: portable device */
