@@ -235,13 +235,13 @@ gpm_upower_get_device_summary (UpDevice *device)
 
 		if (kind == UP_DEVICE_KIND_BATTERY && time_to_empty_round > GPM_UP_TEXT_MIN_TIME) {
 			time_to_empty_str = gpm_get_timestring (time_to_empty_round);
-			/* TRANSLATORS: The laptop battery is fully charged, and we know a time */
-			description = g_strdup_printf (_("Battery is fully charged.\nProvides %s laptop runtime"),
+			/* TRANSLATORS: The laptop battery is charged, and we know a time */
+			description = g_strdup_printf (_("Battery is charged.\nProvides %s laptop runtime"),
 							time_to_empty_str);
 			g_free (time_to_empty_str);
 		} else {
-			/* TRANSLATORS: the device is fully charged */
-			description = g_strdup_printf (_("%s is fully charged"), kind_desc);
+			/* TRANSLATORS: the device is charged */
+			description = g_strdup_printf (_("%s is charged"), kind_desc);
 		}
 
 	} else if (state == UP_DEVICE_STATE_DISCHARGING) {
@@ -620,7 +620,7 @@ gpm_device_state_to_localised_string (UpDeviceState state)
 		break;
 	case UP_DEVICE_STATE_FULLY_CHARGED:
 		/* TRANSLATORS: battery state */
-		state_string = _("Fully charged");
+		state_string = _("Charged");
 		break;
 	case UP_DEVICE_STATE_PENDING_CHARGE:
 		/* TRANSLATORS: battery state */

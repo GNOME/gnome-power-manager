@@ -1332,8 +1332,8 @@ gpm_manager_engine_fully_charged_cb (GpmEngine *engine, UpDevice *device, GpmMan
 		gpm_manager_notify_close (manager, manager->priv->notification_warning_low);
 		gpm_manager_notify_close (manager, manager->priv->notification_discharging);
 
-		/* TRANSLATORS: show the fully charged notification */
-		title = ngettext ("Battery Fully Charged", "Batteries Fully Charged", plural);
+		/* TRANSLATORS: show the charged notification */
+		title = ngettext ("Battery Charged", "Batteries Charged", plural);
 		gpm_manager_notify (manager, &manager->priv->notification_fully_charged,
 				    title, NULL, GPM_MANAGER_NOTIFY_TIMEOUT_SHORT,
 				    GTK_STOCK_DIALOG_INFO, NOTIFY_URGENCY_LOW);

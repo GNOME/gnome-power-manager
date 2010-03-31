@@ -86,7 +86,7 @@ gpm_tray_icon_show (GpmTrayIcon *icon, gboolean enabled)
 
 /**
  * gpm_tray_icon_set_tooltip:
- * @tooltip: The tooltip text, e.g. "Batteries fully charged"
+ * @tooltip: The tooltip text, e.g. "Batteries charged"
  **/
 gboolean
 gpm_tray_icon_set_tooltip (GpmTrayIcon *icon, const gchar *tooltip)
