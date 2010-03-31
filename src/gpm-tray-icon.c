@@ -249,7 +249,7 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon, GtkMenu *menu, const GPtrArray *arr
 		gtk_box_pack_start (GTK_BOX (hbox), label_percentage, FALSE, FALSE, 3);
 
 		/* generate the image */
-		gicon = gpm_upower_get_device_icon (device);
+		gicon = gpm_upower_get_device_icon (device, TRUE);
 		image = gtk_image_new_from_gicon (gicon, GTK_ICON_SIZE_MENU);
 		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
 		gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item), TRUE);

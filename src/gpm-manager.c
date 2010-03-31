@@ -1427,7 +1427,7 @@ gpm_manager_engine_discharging_cb (GpmEngine *engine, UpDevice *device, GpmManag
 		goto out;
 	}
 
-	icon = gpm_upower_get_device_icon (device);
+	icon = gpm_upower_get_device_icon (device, TRUE);
 	/* show the notification */
 	gpm_manager_notify (manager, &manager->priv->notification_discharging, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_LONG,
 			    gpm_manager_get_icon_name (icon), NOTIFY_URGENCY_NORMAL);
@@ -1550,7 +1550,7 @@ gpm_manager_engine_charge_low_cb (GpmEngine *engine, UpDevice *device, GpmManage
 	}
 
 	/* get correct icon */
-	icon = gpm_upower_get_device_icon (device);
+	icon = gpm_upower_get_device_icon (device, TRUE);
 	gpm_manager_notify (manager, &manager->priv->notification_warning_low, title, message,
 			    GPM_MANAGER_NOTIFY_TIMEOUT_LONG, gpm_manager_get_icon_name (icon), NOTIFY_URGENCY_NORMAL);
 	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_CAUTION, TRUE);
@@ -1675,7 +1675,7 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmM
 	}
 
 	/* get correct icon */
-	icon = gpm_upower_get_device_icon (device);
+	icon = gpm_upower_get_device_icon (device, TRUE);
 	gpm_manager_notify (manager, &manager->priv->notification_warning_low, title, message,
 			    GPM_MANAGER_NOTIFY_TIMEOUT_NEVER, gpm_manager_get_icon_name (icon), NOTIFY_URGENCY_CRITICAL);
 
@@ -1801,7 +1801,7 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, UpDevice *device, GpmMan
 		return;
 
 	/* get correct icon */
-	icon = gpm_upower_get_device_icon (device);
+	icon = gpm_upower_get_device_icon (device, TRUE);
 	gpm_manager_notify (manager, &manager->priv->notification_warning_low,
 			    title, message, GPM_MANAGER_NOTIFY_TIMEOUT_NEVER,
 			    gpm_manager_get_icon_name (icon), NOTIFY_URGENCY_CRITICAL);

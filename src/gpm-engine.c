@@ -302,15 +302,15 @@ gpm_engine_get_icon_priv (GpmEngine *engine, UpDeviceKind device_kind, GpmEngine
 		if (kind == device_kind && is_present) {
 			if (warning != GPM_ENGINE_WARNING_NONE) {
 				if (warning_temp == warning)
-					return gpm_upower_get_device_icon (device);
+					return gpm_upower_get_device_icon (device, TRUE);
 				continue;
 			}
 			if (use_state) {
 				if (state == UP_DEVICE_STATE_CHARGING || state == UP_DEVICE_STATE_DISCHARGING)
-					return gpm_upower_get_device_icon (device);
+					return gpm_upower_get_device_icon (device, TRUE);
 				continue;
 			}
-			return gpm_upower_get_device_icon (device);
+			return gpm_upower_get_device_icon (device, TRUE);
 		}
 	}
 	return NULL;

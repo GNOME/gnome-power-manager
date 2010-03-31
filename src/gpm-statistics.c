@@ -1156,7 +1156,7 @@ gpm_stats_add_device (UpDevice *device)
 
 	id = up_device_get_object_path (device);
 	text = gpm_device_kind_to_localised_string (kind, 1);
-	icon = gpm_upower_get_device_icon (device);
+	icon = gpm_upower_get_device_icon (device, FALSE);
 
 	gtk_list_store_append (list_store_devices, &iter);
 	gtk_list_store_set (list_store_devices, &iter,
