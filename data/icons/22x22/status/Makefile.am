@@ -33,21 +33,16 @@ icons_DATA = 			        \
 	gpm-mouse-060.png		\
 	gpm-mouse-080.png		\
 	gpm-mouse-100.png		\
-	gpm-battery-000.png		\
-	gpm-battery-020.png		\
-	gpm-battery-040.png		\
-	gpm-battery-060.png		\
-	gpm-battery-080.png		\
-	gpm-battery-100.png		\
-	gpm-battery-000-charging.png	\
-	gpm-battery-020-charging.png	\
-	gpm-battery-040-charging.png	\
-	gpm-battery-060-charging.png	\
-	gpm-battery-080-charging.png	\
-	gpm-battery-100-charging.png	\
-	gpm-battery-missing.png		\
-	gpm-battery-charged.png		\
-	gpm-battery-empty.png		\
+	battery-caution.png		\
+	battery-low.png			\
+	battery-good.png		\
+	battery-full.png		\
+	battery-caution-charging.png	\
+	battery-low-charging.png	\
+	battery-good-charging.png	\
+	battery-full-charging.png	\
+	battery-missing.png		\
+	battery-empty.png		\
 	gpm-ups-000.png			\
 	gpm-ups-020.png			\
 	gpm-ups-040.png			\
