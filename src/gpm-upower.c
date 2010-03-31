@@ -181,11 +181,11 @@ gchar *
 gpm_upower_get_device_summary (UpDevice *device)
 {
 	const gchar *kind_desc = NULL;
-	gchar *description = NULL;
+	GString *description;
 	guint time_to_full_round;
 	guint time_to_empty_round;
-	gchar *time_to_full_str;
-	gchar *time_to_empty_str;
+	gchar *time_to_full_str = NULL;
+	gchar *time_to_empty_str = NULL;
 	UpDeviceKind kind;
 	UpDeviceState state;
 	gdouble percentage;
@@ -203,27 +203,36 @@ gpm_upower_get_device_summary (UpDevice *device)
 		      "time-to-empty", &time_to_empty,
 		      NULL);
 
+	description = g_string_new (NULL);
 	kind_desc = gpm_device_kind_to_localised_string (kind, 1);
 
 	/* not installed */
 	if (!is_present) {
 		/* TRANSLATORS: device not present */
-		return g_strdup_printf (_("%s not present"), kind_desc);
+		g_string_append_printf (description, _("%s not present"), kind_desc);
+		goto out;
 	}
 
 	/* don't display all the extra stuff for keyboards and mice */
 	if (kind == UP_DEVICE_KIND_MOUSE ||
 	    kind == UP_DEVICE_KIND_KEYBOARD ||
-	    kind == UP_DEVICE_KIND_PDA)
-		return g_strdup_printf ("%s (%.1f%%)", kind_desc, percentage);
+	    kind == UP_DEVICE_KIND_PDA) {
+		g_string_append (description, kind_desc);
+		g_string_append_printf (description, " (%.0f%%)", percentage);
+		goto out;
+	}
 
 	/* we care if we are on AC */
 	if (kind == UP_DEVICE_KIND_PHONE) {
 		if (state == UP_DEVICE_STATE_CHARGING || !state == UP_DEVICE_STATE_DISCHARGING) {
 			/* TRANSLATORS: a phone is charging */
-			return g_strdup_printf (_("%s charging (%.1f%%)"), kind_desc, percentage);
+			g_string_append_printf (description, _("%s charging"), kind_desc);
+			g_string_append_printf (description, " (%.0f%%)", percentage);
+			goto out;
 		}
-		return g_strdup_printf ("%s (%.1f%%)", kind_desc, percentage);
+		g_string_append (description, kind_desc);
+		g_string_append_printf (description, " (%.0f%%)", percentage);
+		goto out;
 	}
 
 	/* precalculate so we don't get Unknown time remaining */
@@ -233,32 +242,33 @@ gpm_upower_get_device_summary (UpDevice *device)
 	/* we always display "Laptop battery 16 minutes remaining" as we need to clarify what device we are refering to */
 	if (state == UP_DEVICE_STATE_FULLY_CHARGED) {
 
+		/* TRANSLATORS: the device is charged */
+		g_string_append_printf (description, _("%s is charged"), kind_desc);
+
 		if (kind == UP_DEVICE_KIND_BATTERY && time_to_empty_round > GPM_UP_TEXT_MIN_TIME) {
 			time_to_empty_str = gpm_get_timestring (time_to_empty_round);
+			g_string_append (description, " - ");
 			/* TRANSLATORS: The laptop battery is charged, and we know a time */
-			description = g_strdup_printf (_("Battery is charged.\nProvides %s laptop runtime"),
-							time_to_empty_str);
-			g_free (time_to_empty_str);
-		} else {
-			/* TRANSLATORS: the device is charged */
-			description = g_strdup_printf (_("%s is charged"), kind_desc);
+			g_string_append_printf (description, _("provides %s laptop runtime"), time_to_empty_str);
 		}
-
-	} else if (state == UP_DEVICE_STATE_DISCHARGING) {
+		goto out;
+	}
+	if (state == UP_DEVICE_STATE_DISCHARGING) {
 
 		if (time_to_empty_round > GPM_UP_TEXT_MIN_TIME) {
 			time_to_empty_str = gpm_get_timestring (time_to_empty_round);
 			/* TRANSLATORS: the device is discharging, and we have a time remaining */
-			description = g_strdup_printf (_("%s %s remaining (%.1f%%)"),
-							kind_desc, time_to_empty_str, percentage);
-			g_free (time_to_empty_str);
+			g_string_append_printf (description, _("%s %s remaining"),
+						kind_desc, time_to_empty_str);
+			g_string_append_printf (description, " (%.0f%%)", percentage);
 		} else {
 			/* TRANSLATORS: the device is discharging, but we only have a percentage */
-			description = g_strdup_printf (_("%s discharging (%.1f%%)"),
-							kind_desc, percentage);
+			g_string_append_printf (description, _("%s discharging"), kind_desc);
+			g_string_append_printf (description, " (%.0f%%)", percentage);
 		}
-
-	} else if (state == UP_DEVICE_STATE_CHARGING) {
+		goto out;
+	}
+	if (state == UP_DEVICE_STATE_CHARGING) {
 
 		if (time_to_full_round > GPM_UP_TEXT_MIN_TIME &&
 		    time_to_empty_round > GPM_UP_TEXT_MIN_TIME) {
@@ -267,45 +277,56 @@ gpm_upower_get_device_summary (UpDevice *device)
 			time_to_full_str = gpm_get_timestring (time_to_full_round);
 			time_to_empty_str = gpm_get_timestring (time_to_empty_round);
 
-			/* TRANSLATORS: the device is charging, and we have a time to full and empty */
-			description = g_strdup_printf (_("%s %s until charged (%.1f%%)\nProvides %s battery runtime"),
-							kind_desc, time_to_full_str, percentage, time_to_empty_str);
-			g_free (time_to_full_str);
-			g_free (time_to_empty_str);
+			/* TRANSLATORS: device is charging, and we have a time to full and a percentage */
+			g_string_append_printf (description, _("%s %s until charged"),
+						kind_desc, time_to_full_str);
+			g_string_append_printf (description, " (%.0f%%)", percentage);
 
+			g_string_append (description, " - ");
+			/* TRANSLATORS: the device is charging, and we have a time to full and empty */
+			g_string_append_printf (description, _("provides %s battery runtime"),
+						kind_desc, time_to_full_str, percentage, time_to_empty_str);
 		} else if (time_to_full_round > GPM_UP_TEXT_MIN_TIME) {
 
 			/* display only charge time */
 			time_to_full_str = gpm_get_timestring (time_to_full_round);
 
 			/* TRANSLATORS: device is charging, and we have a time to full and a percentage */
-			description = g_strdup_printf (_("%s %s until charged (%.1f%%)"),
-						kind_desc, time_to_full_str, percentage);
-			g_free (time_to_full_str);
+			g_string_append_printf (description, _("%s %s until charged"),
+						kind_desc, time_to_full_str);
+			g_string_append_printf (description, " (%.0f%%)", percentage);
 		} else {
 
 			/* TRANSLATORS: device is charging, but we only have a percentage */
-			description = g_strdup_printf (_("%s charging (%.1f%%)"),
-						kind_desc, percentage);
+			g_string_append_printf (description, _("%s charging"), kind_desc);
+			g_string_append_printf (description, " (%.0f%%)", percentage);
 		}
-
-	} else if (state == UP_DEVICE_STATE_PENDING_DISCHARGE) {
-
-		/* TRANSLATORS: this is only shown for laptops with multiple batteries */
-		description = g_strdup_printf (_("%s waiting to discharge (%.1f%%)"),
-						kind_desc, percentage);
-
-	} else if (state == UP_DEVICE_STATE_PENDING_CHARGE) {
-
-		/* TRANSLATORS: this is only shown for laptops with multiple batteries */
-		description = g_strdup_printf (_("%s waiting to charge (%.1f%%)"), kind_desc, percentage);
-
-	} else {
-		egg_warning ("in an undefined state we are not charging or "
-			     "discharging and the batteries are also not charged");
-		description = g_strdup_printf ("%s (%.1f%%)", kind_desc, percentage);
+		goto out;
 	}
-	return description;
+	if (state == UP_DEVICE_STATE_PENDING_DISCHARGE) {
+
+		/* TRANSLATORS: this is only shown for laptops with multiple batteries */
+		g_string_append_printf (description, _("%s waiting to discharge"), kind_desc);
+		g_string_append_printf (description, " (%.0f%%)", percentage);
+		goto out;
+	}
+	if (state == UP_DEVICE_STATE_PENDING_CHARGE) {
+
+		/* TRANSLATORS: this is only shown for laptops with multiple batteries */
+		g_string_append_printf (description, _("%s waiting to charge"), kind_desc);
+		g_string_append_printf (description, " (%.0f%%)", percentage);
+		goto out;
+	}
+
+	/* fallback */
+	egg_warning ("in an undefined state we are not charging or "
+		     "discharging and the batteries are also not charged");
+	g_string_append (description, kind_desc);
+	g_string_append_printf (description, " (%.0f%%)", percentage);
+out:
+	g_free (time_to_full_str);
+	g_free (time_to_empty_str);
+	return g_string_free (description, FALSE);
 }
 
 /**
