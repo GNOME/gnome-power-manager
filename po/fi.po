@@ -6,7 +6,7 @@
 # Timo Jyrinki <timo.jyrinki@iki.fi>, 2008.
 # Tommi Vainikainen <thv@iki.fi>, 2009-2010.
 #
-# suspend = keskeytystila
+# suspend = valmiustila (poikkeuksena lokalisointi.org:iin)
 # hibernate = lepotila
 # sleep = virransäästötila (kattotermi kahdelle edelliselle)
 #
@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-20 22:06+0200\n"
-"PO-Revision-Date: 2010-03-20 22:06+0200\n"
-"Last-Translator: Tommi Vainikainen <thv@iki.fi>\n"
+"PO-Revision-Date: 2010-04-01 09:56+0300\n"
+"Last-Translator: Timo Jyrinki <timo.jyrinki@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -119,11 +119,11 @@ msgstr "Sallii käyttäjän estää automaattinen virranhallinta."
 
 #: ../applets/inhibit/inhibit-applet.c:361
 msgid "Automatic sleep inhibited"
-msgstr "Automaattinen keskeytystila estetty"
+msgstr "Automaattinen virransäästötila estetty"
 
 #: ../applets/inhibit/inhibit-applet.c:363
 msgid "Automatic sleep enabled"
-msgstr "Automaattinen keskeytystila käytössä"
+msgstr "Automaattinen virransäästötila käytössä"
 
 #: ../applets/inhibit/inhibit-applet.c:391
 msgid "Manual inhibit"
@@ -195,7 +195,7 @@ msgid ""
 "If a notification message should be displayed after suspend or hibernate "
 "failed."
 msgstr ""
-"Näytetäänkö huomautusviesti, jos keskeytystilaan tai lepotilaan siirtyminen "
+"Näytetäänkö huomautusviesti, jos valmiustilaan tai lepotilaan siirtyminen "
 "epäonnistui."
 
 #: ../data/gnome-power-manager.schemas.in.h:9
@@ -358,7 +358,7 @@ msgstr "Kannettavan kannen sulkemisen toiminto käytettäessä verkkovirtaa"
 
 #: ../data/gnome-power-manager.schemas.in.h:37
 msgid "Lock GNOME keyring on sleep"
-msgstr "Lukitse Gnomen avainrengas keskeytystilassa"
+msgstr "Lukitse Gnomen avainrengas virransäästötilassa"
 
 #: ../data/gnome-power-manager.schemas.in.h:38
 msgid "Lock screen on hibernate"
@@ -366,7 +366,7 @@ msgstr "Lukitse näyttö lepotilassa"
 
 #: ../data/gnome-power-manager.schemas.in.h:39
 msgid "Lock screen on suspend"
-msgstr "Lukitse näyttö keskeytystilassa"
+msgstr "Lukitse näyttö valmiustilassa"
 
 #: ../data/gnome-power-manager.schemas.in.h:40
 msgid "Lock screen when blanked"
@@ -386,7 +386,7 @@ msgstr "Huomautetaanko matalasta latauksesta"
 
 #: ../data/gnome-power-manager.schemas.in.h:44
 msgid "Notify on a sleep failure"
-msgstr "Huomautetaanko keskeytystilan epäonnistumisesta"
+msgstr "Huomautetaanko virransäästötilan epäonnistumisesta"
 
 #: ../data/gnome-power-manager.schemas.in.h:45
 msgid "Notify when AC adapter is disconnected"
@@ -473,7 +473,7 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:63
 msgid "The URI to show to the user on sleep failure"
-msgstr "Käyttäjälle näytettävä URI keskeytystilan virheessä"
+msgstr "Käyttäjälle näytettävä URI virransäästötilan virheessä"
 
 #: ../data/gnome-power-manager.schemas.in.h:64
 msgid ""
@@ -551,7 +551,7 @@ msgid ""
 "The amount of time in seconds before the display goes to sleep when the "
 "computer is on AC power."
 msgstr ""
-"Aika sekunteina, jonka jälkeen näyttö siirtyy keskeytystilaan verkkovirran "
+"Aika sekunteina, jonka jälkeen näyttö siirtyy virransäästötilaan verkkovirran "
 "ollessa kytkettynä."
 
 #: ../data/gnome-power-manager.schemas.in.h:73
@@ -769,7 +769,7 @@ msgstr "Milloin ilmoitusalueen kuvake näytetään"
 msgid "Whether NetworkManager should be connected and disconnected on sleep."
 msgstr ""
 "Yhdistetäänkö ja katkaistaanko NetworkManagerin verkkoyhteydet "
-"keskeytystilassa."
+"valmiustilassa."
 
 #: ../data/gnome-power-manager.schemas.in.h:108
 msgid ""
@@ -777,7 +777,7 @@ msgid ""
 "and connect on resume."
 msgstr ""
 "Katkaistaanko NetworkManagerin verkkoyhteydet tietokoneen siirtyessä "
-"keskeytys- tai lepotilaan ja yhdistetäänkö automaattisesti tietokoneen "
+"valmius- tai lepotilaan ja yhdistetäänkö automaattisesti tietokoneen "
 "palautuessa normaaliin tilaan."
 
 #: ../data/gnome-power-manager.schemas.in.h:109
@@ -793,7 +793,7 @@ msgid ""
 "Whether the GNOME keyring is locked before the computer enters suspend. This "
 "means the keyring will have to be unlocked on resume."
 msgstr ""
-"Lukitaanko Gnomen avainrengas ennen keskeytystilaan siirtymistä. Jos tämä on "
+"Lukitaanko Gnomen avainrengas ennen valmiustilaan siirtymistä. Jos tämä on "
 "valittu, täytyy avainrengas avata palautumisen jälkeen."
 
 #: ../data/gnome-power-manager.schemas.in.h:111
@@ -809,7 +809,7 @@ msgid ""
 "Whether the screen is locked when the computer wakes up from a suspend. Only "
 "used if lock_use_screensaver_settings is false."
 msgstr ""
-"Lukitaanko näyttö, kun tietokone palaa keskeytystilasta. Valintaa käytetään "
+"Lukitaanko näyttö, kun tietokone palaa valmiustilasta. Valintaa käytetään "
 "vain, jos lock_use_screensaver_settings on epätosi."
 
 #: ../data/gnome-power-manager.schemas.in.h:113
@@ -822,7 +822,7 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:114
 msgid "Whether to hibernate, suspend or do nothing when inactive"
-msgstr "Käytetäänkö joutenollessa lepotilaa, keskeytystilaa vai ei mitään"
+msgstr "Käytetäänkö joutenollessa lepotilaa, valmiustilaa vai ei mitään"
 
 #: ../data/gnome-power-manager.schemas.in.h:115
 msgid ""
@@ -830,7 +830,7 @@ msgid ""
 "screen is locked after a hibernate, suspend or blank screen."
 msgstr ""
 "Käytetäänkö ohjelman gnome-screensaver näytön lukituksen asetuksia "
-"päätettäessä lukitaanko näyttö lepotilan, keskeytystilan tai näytön "
+"päätettäessä lukitaanko näyttö lepotilan, valmiustilan tai näytön "
 "pimennyksen jälkeen."
 
 #: ../data/gnome-power-manager.schemas.in.h:116
@@ -991,7 +991,7 @@ msgstr "Aseta _näyttö virransäästötilaan aikaviiveellä:"
 
 #: ../data/gpm-prefs.ui.h:16
 msgid "Put computer to _sleep when inactive for:"
-msgstr "Aseta tietokone _keskeytystilaan viiveellä:"
+msgstr "Aseta tietokone valmiu_stilaan viiveellä:"
 
 #: ../data/gpm-prefs.ui.h:17
 msgid "Set display _brightness to:"
@@ -1201,7 +1201,7 @@ msgstr "Akku on täynnä"
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:297
 msgid "Suspend started"
-msgstr "Keskeyttäminen aloitettu"
+msgstr "Valmiustilan siirtyminen aloitettu"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:301
@@ -1211,17 +1211,17 @@ msgstr "Palautettu"
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:305
 msgid "Suspend failed"
-msgstr "Keskeytys epäonnistui"
+msgstr "Valmiustilaan siirtyminen epäonnistui"
 
 #. TRANSLATORS: message text
 #: ../src/gpm-manager.c:573
 msgid "Your computer failed to suspend."
-msgstr "Tietokone ei voinut siirtyä keskeytystilaan."
+msgstr "Tietokone ei voinut siirtyä valmiustilaan."
 
 #. TRANSLATORS: title text
 #: ../src/gpm-manager.c:575
 msgid "Failed to suspend"
-msgstr "Keskeytystilaan siirtyminen epäonnistui"
+msgstr "Valmiustilaan siirtyminen epäonnistui"
 
 #. TRANSLATORS: message text
 #: ../src/gpm-manager.c:579
@@ -1440,7 +1440,7 @@ msgstr "Liitä verkkovirta, jotta et menetä tietoja."
 #, c-format
 msgid "Computer will suspend very soon unless it is plugged in."
 msgstr ""
-"Tietokone siirtyy keskeytystilaan erittäin pian ellei virtajohtoa kytketä."
+"Tietokone siirtyy valmiustilaan erittäin pian ellei virtajohtoa kytketä."
 
 #. TRANSLATORS: give the user a ultimatum
 #: ../src/gpm-manager.c:1597
@@ -1526,8 +1526,8 @@ msgid ""
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
 "computer in a suspended state."
 msgstr ""
-"Akun lataus on alle kriittisen arvon ja tietokone asetetaan keskeytystilaan. "
-"<br><b>HUOMAUTUS:</b> Tietokoneen pitäminen keskeytystilassa vaatii myös "
+"Akun lataus on alle kriittisen arvon ja tietokone asetetaan valmiustilaan. "
+"<br><b>HUOMAUTUS:</b> Tietokoneen pitäminen valmiustilassa vaatii myös "
 "hieman sähköä."
 
 #. TRANSLATORS: computer will hibernate
@@ -1591,7 +1591,7 @@ msgstr "Sammuta"
 
 #: ../src/gpm-prefs-core.c:370
 msgid "Suspend"
-msgstr "Keskeytystila"
+msgstr "Valmiustila"
 
 #: ../src/gpm-prefs-core.c:373
 msgid "Hibernate"
@@ -2287,7 +2287,7 @@ msgstr "O_hje"
 #~ msgstr "Lue ohjetiedostosta tietoja yleisistä ongelmista."
 
 #~ msgid "Allow Suspend and Hibernate in the menu"
-#~ msgstr "Salli keskeytys- ja lepotilojen toiminnot valikosta"
+#~ msgstr "Salli valmius- ja lepotilojen toiminnot valikosta"
 
 #~ msgid "Hibernate enabled"
 #~ msgstr "Lepotila käytettävissä"
@@ -2299,17 +2299,17 @@ msgstr "O_hje"
 #~ "If the Suspend and Hibernate options should be allowed in the "
 #~ "notification area drop down menu."
 #~ msgstr ""
-#~ "Sallitaanko toiminnot Keskeytystila ja Lepotila ilmoitusalueen kuvakkeen "
+#~ "Sallitaanko toiminnot Valmiustila ja Lepotila ilmoitusalueen kuvakkeen "
 #~ "pudotusvalikosta."
 
 #~ msgid "If the user is authorized to hibernate the computer."
 #~ msgstr "Voiko käyttäjä siirtää tietokoneen lepotilaan"
 
 #~ msgid "If the user is authorized to suspend the computer."
-#~ msgstr "Voiko käyttäjä siirtää tietokoneen keskeytystilaan"
+#~ msgstr "Voiko käyttäjä siirtää tietokoneen valmiustilaan"
 
 #~ msgid "Suspend enabled"
-#~ msgstr "Keskeytystila käytettävissä"
+#~ msgstr "Valmiustila käytettävissä"
 
 #~ msgid "Action disallowed"
 #~ msgstr "Toimintoa ei sallittu"
@@ -2318,7 +2318,7 @@ msgstr "O_hje"
 #~ "Suspend support has been disabled. Contact your administrator for more "
 #~ "details."
 #~ msgstr ""
-#~ "Keskeytystilan käyttö on estetty. Kysy lisätietoja järjestelmäsi "
+#~ "Valmiustilan käyttö on estetty. Kysy lisätietoja järjestelmäsi "
 #~ "ylläpitäjältä."
 
 #~ msgid ""
@@ -2348,7 +2348,7 @@ msgstr "O_hje"
 #~ msgstr "Virrankäytön _historia"
 
 #~ msgid "_Suspend"
-#~ msgstr "_Keskeytystila"
+#~ msgstr "_Valmiustila"
 
 #~ msgid "Hi_bernate"
 #~ msgstr "_Lepotila"
@@ -2369,14 +2369,14 @@ msgstr "O_hje"
 #~ "to sleep on lid close"
 #~ msgstr ""
 #~ "Näytetäänkö varoitus, kun käytössä on kelvollinen esto ja tietokone on "
-#~ "määritelty keskeytystilaan suljettaessa kansi"
+#~ "määritelty valmiustilaan suljettaessa kansi"
 
 #~ msgid ""
 #~ "If we should show the warning when we have a valid inhibit and configured "
 #~ "to sleep on lid close."
 #~ msgstr ""
 #~ "Näytetäänkö varoitus, kun käytössä on kelvollinen esto ja tietokone on "
-#~ "määritelty keskeytystilaan suljettaessa kansi."
+#~ "määritelty valmiustilaan suljettaessa kansi."
 
 #~ msgid "Notify when the profile data is guessed"
 #~ msgstr "Annetaanko huomautus, kun profiilitiedot on arvattu"
@@ -2494,7 +2494,7 @@ msgstr "O_hje"
 #~ msgstr "Virtanappia painettiin."
 
 #~ msgid "The suspend button has been pressed."
-#~ msgstr "Keskeytystilanappia painettiin."
+#~ msgstr "Valmiustilanappia painettiin."
 
 #~ msgid "The hibernate button has been pressed."
 #~ msgstr "Lepotilanappia painettiin."
@@ -2517,16 +2517,16 @@ msgstr "O_hje"
 #~ msgstr "Kansi suljettiin akkukäytön aikana."
 
 #~ msgid "Sleep warning"
-#~ msgstr "Varoitus keskeytystilasta"
+#~ msgstr "Varoitus valmiustilasta"
 
 #~ msgid ""
 #~ "Your laptop will not sleep if you shut the lid as a running program has "
 #~ "prevented this.\n"
 #~ "Some laptops can overheat if they do not sleep when the lid is closed."
 #~ msgstr ""
-#~ "Kannettava ei siirry keskeytystilaan, jos suljet kannen, koska käynnissä "
+#~ "Kannettava ei siirry valmiustilaan, jos suljet kannen, koska käynnissä "
 #~ "oleva ohjelma estää sen.\n"
-#~ "Jotkut kannettavat ylikuumenevat, jos ne eivät ole keskeytystilassa "
+#~ "Jotkut kannettavat ylikuumenevat, jos ne eivät ole valmiustilassa "
 #~ "kannen ollessa kiinni."
 
 #~ msgid "Your laptop battery is now fully charged"
@@ -2600,7 +2600,7 @@ msgstr "O_hje"
 #~ msgstr "<b>Lisäasetukset</b>"
 
 #~ msgid "Always sleep when the lid is _closed"
-#~ msgstr "Siirry aina _keskeytystilaan, kun kansi on suljettu"
+#~ msgstr "Siirry aina _valmiustilaan, kun kansi on suljettu"
 
 #~ msgid "Enable UPS discharge _alarm"
 #~ msgstr "Ota käyttöön UPSin purkautumisen _hälytys"
@@ -2621,7 +2621,7 @@ msgstr "O_hje"
 #~ msgstr "Laitteen tilaa ei voi lukea"
 
 #~ msgid "%s has stopped the suspend from taking place: %s."
-#~ msgstr "%s esti keskeytystilan käynnistymisen: %s."
+#~ msgstr "%s esti valmiustilan käynnistymisen: %s."
 
 #~ msgid "%s has stopped the hibernate from taking place: %s."
 #~ msgstr "%s esti lepotilan käynnistymisen: %s."
@@ -2639,7 +2639,7 @@ msgstr "O_hje"
 #~ msgstr "%s esti aikaviivetoiminnon käynnistymisen: %s."
 
 #~ msgid "Multiple applications have stopped the suspend from taking place."
-#~ msgstr "Useat sovellukset estivät keskeytystilaan siirtymisen."
+#~ msgstr "Useat sovellukset estivät valmiustilaan siirtymisen."
 
 #~ msgid "Multiple applications have stopped the hibernate from taking place."
 #~ msgstr "Useat sovellukset estivät lepotilaan siirtymisen."
