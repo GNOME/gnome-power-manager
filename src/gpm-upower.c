@@ -325,6 +325,12 @@ gpm_upower_get_device_summary (UpDevice *device)
 		g_string_append_printf (description, " (%.0f%%)", percentage);
 		goto out;
 	}
+	if (state == UP_DEVICE_STATE_EMPTY) {
+
+		/* TRANSLATORS: when the device has no charge left */
+		g_string_append_printf (description, _("%s empty"), kind_desc);
+		goto out;
+	}
 
 	/* fallback */
 	egg_warning ("in an undefined state we are not charging or "
