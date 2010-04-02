@@ -627,11 +627,17 @@ gpm_engine_update_composite_device (GpmEngine *engine, UpDevice *original_device
 	UpDevice *device;
 	UpDeviceState state;
 	UpDeviceKind kind;
+	UpDeviceKind original_kind;
 	gboolean debug;
 	gchar *text;
 
 	/* are we printing to console? */
 	debug = egg_debug_enabled ();
+
+	/* get the type of the original device */
+	g_object_get (original_device,
+		      "kind", &original_kind,
+		      NULL);
 
 	/* update the composite device */
 	array = engine->priv->array;
@@ -644,7 +650,7 @@ gpm_engine_update_composite_device (GpmEngine *engine, UpDevice *original_device
 			      "energy-full", &energy_full,
 			      "energy-rate", &energy_rate,
 			      NULL);
-		if (kind != UP_DEVICE_KIND_BATTERY)
+		if (kind != original_kind)
 			continue;
 
 		if (debug) {
