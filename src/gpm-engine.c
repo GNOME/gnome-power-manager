@@ -236,6 +236,7 @@ gpm_engine_get_summary (GpmEngine *engine)
 	guint i;
 	GPtrArray *array;
 	UpDevice *device;
+	UpDeviceState state;
 	GString *tooltip = NULL;
 	gchar *part;
 	gboolean is_present;
@@ -249,8 +250,13 @@ gpm_engine_get_summary (GpmEngine *engine)
 	array = engine->priv->array;
 	for (i=0;i<array->len;i++) {
 		device = g_ptr_array_index (engine->priv->array, i);
-		g_object_get (device, "is-present", &is_present, NULL);
+		g_object_get (device,
+			      "is-present", &is_present,
+			      "state", &state,
+			      NULL);
 		if (!is_present)
+			continue;
+		if (state == UP_DEVICE_STATE_EMPTY)
 			continue;
 		part = gpm_upower_get_device_summary (device);
 		if (part != NULL)
