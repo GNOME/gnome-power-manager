@@ -576,7 +576,13 @@ gpm_engine_get_composite_device (GpmEngine *engine, UpDevice *original_device)
 	GPtrArray *array;
 	UpDevice *device;
 	UpDeviceKind kind;
+	UpDeviceKind original_kind;
 	guint i;
+
+	/* get the type of the original device */
+	g_object_get (original_device,
+		      "kind", &original_kind,
+		      NULL);
 
 	/* find out how many batteries in the system */
 	array = engine->priv->array;
@@ -585,7 +591,7 @@ gpm_engine_get_composite_device (GpmEngine *engine, UpDevice *original_device)
 		g_object_get (device,
 			      "kind", &kind,
 			      NULL);
-		if (kind == UP_DEVICE_KIND_BATTERY)
+		if (kind == original_kind)
 			battery_devices++;
 	}
 
