@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-power-manager 2.19.7\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&component=general\n"
-"POT-Creation-Date: 2010-01-27 21:20+0000\n"
-"PO-Revision-Date: 2010-01-29 23:34+0700\n"
+"POT-Creation-Date: 2010-03-29 12:18+0000\n"
+"PO-Revision-Date: 2010-04-06 16:07+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -144,10 +144,9 @@ msgstr "ระงับ"
 msgid "Inhibit Applet Factory"
 msgstr "โรงงานแอพเพล็ตระงับ"
 
-#. TRANSLATORS: this is the Y axis on the graph
-#: ../data/gnome-power-manager.desktop.in.in.h:1 ../src/gpm-statistics.c:1239
-msgid "Power"
-msgstr "พลังงาน"
+#: ../data/gnome-power-manager.desktop.in.in.h:1
+msgid "Power Manager"
+msgstr "เครื่องมือจัดการการใช้พลังงาน"
 
 #: ../data/gnome-power-manager.desktop.in.in.h:2
 msgid "Power management daemon"
@@ -838,8 +837,8 @@ msgstr "ตรวจสอบการใช้พลังงาน"
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1035
-#: ../src/gpm-statistics.c:1508
+#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1044
+#: ../src/gpm-statistics.c:1517
 msgid "Power Statistics"
 msgstr "กราฟการใช้พลังงาน"
 
@@ -1040,255 +1039,6 @@ msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "นาที"
 
-#. TRANSLATORS: a phone is charging
-#. TRANSLATORS: device is charging, but we only have a percentage
-#: ../src/gpm-devicekit.c:251 ../src/gpm-devicekit.c:315
-#, c-format
-msgid "%s charging (%.1f%%)"
-msgstr "%s กำลังประจุไฟ (%.1f%%)"
-
-#. TRANSLATORS: The laptop battery is fully charged, and we know a time
-#: ../src/gpm-devicekit.c:266
-#, c-format
-msgid ""
-"Battery is fully charged.\n"
-"Provides %s laptop runtime"
-msgstr ""
-"แบตเตอรี่ประจุเต็มแล้ว\n"
-"มีพลังงานสำหรับจ่ายเป็นเวลา %s"
-
-#. TRANSLATORS: the device is fully charged
-#: ../src/gpm-devicekit.c:271
-#, c-format
-msgid "%s is fully charged"
-msgstr "%s ประจุเต็มแล้ว"
-
-#. TRANSLATORS: the device is discharging, and we have a time remaining
-#: ../src/gpm-devicekit.c:279
-#, c-format
-msgid "%s %s remaining (%.1f%%)"
-msgstr "%s อีก %s จะหมด (%.1f%%)"
-
-#. TRANSLATORS: the device is discharging, but we only have a percentage
-#: ../src/gpm-devicekit.c:284 ../src/gpm-manager.c:1280
-#: ../src/gpm-manager.c:1292
-#, c-format
-msgid "%s discharging (%.1f%%)"
-msgstr "%s กำลังจ่ายไฟ (%.1f%%)"
-
-#. TRANSLATORS: the device is charging, and we have a time to full and empty
-#: ../src/gpm-devicekit.c:298
-#, c-format
-msgid ""
-"%s %s until charged (%.1f%%)\n"
-"Provides %s battery runtime"
-msgstr ""
-"%s อีก %s จะเต็ม (%.1f%%)\n"
-"มีพลังงานสำหรับจ่ายเป็นเวลา %s"
-
-#. TRANSLATORS: device is charging, and we have a time to full and a percentage
-#: ../src/gpm-devicekit.c:309
-#, c-format
-msgid "%s %s until charged (%.1f%%)"
-msgstr "%s อีก %s จะเต็ม (%.1f%%)"
-
-#. TRANSLATORS: this is only shown for laptops with multiple batteries
-#: ../src/gpm-devicekit.c:323
-#, c-format
-msgid "%s waiting to discharge (%.1f%%)"
-msgstr "%s กำลังรอจ่ายไฟ (%.1f%%)"
-
-#. TRANSLATORS: this is only shown for laptops with multiple batteries
-#: ../src/gpm-devicekit.c:329
-#, c-format
-msgid "%s waiting to charge (%.1f%%)"
-msgstr "%s กำลังรอประจุไฟ (%.1f%%)"
-
-#. TRANSLATORS: the type of data, e.g. Laptop battery
-#: ../src/gpm-devicekit.c:389
-msgid "Product:"
-msgstr "ผลิตภัณฑ์:"
-
-#. TRANSLATORS: device is missing
-#. TRANSLATORS: device is charged
-#. TRANSLATORS: device is charging
-#. TRANSLATORS: device is discharging
-#: ../src/gpm-devicekit.c:393 ../src/gpm-devicekit.c:396
-#: ../src/gpm-devicekit.c:399 ../src/gpm-devicekit.c:402
-msgid "Status:"
-msgstr "สถานะ:"
-
-#: ../src/gpm-devicekit.c:393
-msgid "Missing"
-msgstr "ไม่มี"
-
-#: ../src/gpm-devicekit.c:396
-msgid "Charged"
-msgstr "ประจุไฟเต็มแล้ว"
-
-#: ../src/gpm-devicekit.c:399
-msgid "Charging"
-msgstr "กำลังประจุไฟ"
-
-#: ../src/gpm-devicekit.c:402
-msgid "Discharging"
-msgstr "กำลังจ่ายไฟ"
-
-#. TRANSLATORS: percentage
-#: ../src/gpm-devicekit.c:407
-msgid "Percentage charge:"
-msgstr "เปอร์เซ็นต์ประจุ:"
-
-#. TRANSLATORS: manufacturer
-#: ../src/gpm-devicekit.c:411
-msgid "Vendor:"
-msgstr "ผู้จำหน่าย:"
-
-#. TRANSLATORS: how the battery is made, e.g. Lithium Ion
-#: ../src/gpm-devicekit.c:416
-msgid "Technology:"
-msgstr "เทคโนโลยี:"
-
-#. TRANSLATORS: serial number of the battery
-#: ../src/gpm-devicekit.c:420
-msgid "Serial number:"
-msgstr "เลขลำดับผลิตภัณฑ์:"
-
-#. TRANSLATORS: model number of the battery
-#: ../src/gpm-devicekit.c:424
-msgid "Model:"
-msgstr "รุ่น:"
-
-#. TRANSLATORS: time to fully charged
-#: ../src/gpm-devicekit.c:429
-msgid "Charge time:"
-msgstr "เวลาประจุ:"
-
-#. TRANSLATORS: time to empty
-#: ../src/gpm-devicekit.c:435
-msgid "Discharge time:"
-msgstr "เวลาจ่ายไฟ:"
-
-#. TRANSLATORS: Excellent, Good, Fair and Poor are all related to battery Capacity
-#: ../src/gpm-devicekit.c:442
-msgid "Excellent"
-msgstr "ดีมาก"
-
-#: ../src/gpm-devicekit.c:444
-msgid "Good"
-msgstr "สภาพดี"
-
-#: ../src/gpm-devicekit.c:446
-msgid "Fair"
-msgstr "พอใช้"
-
-#: ../src/gpm-devicekit.c:448
-msgid "Poor"
-msgstr "สภาพแย่"
-
-#: ../src/gpm-devicekit.c:452
-msgid "Capacity:"
-msgstr "ความจุ:"
-
-#: ../src/gpm-devicekit.c:458 ../src/gpm-devicekit.c:483
-msgid "Current charge:"
-msgstr "ประจุปัจจุบัน:"
-
-#: ../src/gpm-devicekit.c:464
-msgid "Last full charge:"
-msgstr "ประจุเต็มครั้งล่าสุด:"
-
-#: ../src/gpm-devicekit.c:470 ../src/gpm-devicekit.c:488
-msgid "Design charge:"
-msgstr "ประจุที่ออกแบบไว้:"
-
-#: ../src/gpm-devicekit.c:475
-msgid "Charge rate:"
-msgstr "อัตราการประจุ:"
-
-#. TRANSLATORS: system power cord
-#: ../src/gpm-devicekit.c:510
-msgid "AC adapter"
-msgid_plural "AC adapters"
-msgstr[0] "ที่แปลงไฟ AC"
-
-#. TRANSLATORS: laptop primary battery
-#: ../src/gpm-devicekit.c:514
-msgid "Laptop battery"
-msgid_plural "Laptop batteries"
-msgstr[0] "แบตเตอรี่แล็ปท็อป"
-
-#. TRANSLATORS: battery-backed AC power source
-#: ../src/gpm-devicekit.c:518
-msgid "UPS"
-msgid_plural "UPSs"
-msgstr[0] "UPS"
-
-#. TRANSLATORS: a monitor is a device to measure voltage and current
-#: ../src/gpm-devicekit.c:522
-msgid "Monitor"
-msgid_plural "Monitors"
-msgstr[0] "จอภาพ"
-
-#. TRANSLATORS: wireless mice with internal batteries
-#: ../src/gpm-devicekit.c:526
-msgid "Wireless mouse"
-msgid_plural "Wireless mice"
-msgstr[0] "เมาส์ไร้สาย"
-
-#. TRANSLATORS: wireless keyboard with internal battery
-#: ../src/gpm-devicekit.c:530
-msgid "Wireless keyboard"
-msgid_plural "Wireless keyboards"
-msgstr[0] "แป้นพิมพ์ไร้สาย"
-
-#. TRANSLATORS: portable device
-#: ../src/gpm-devicekit.c:534
-msgid "PDA"
-msgid_plural "PDAs"
-msgstr[0] "PDA"
-
-#. TRANSLATORS: cell phone (mobile...)
-#: ../src/gpm-devicekit.c:538
-msgid "Cell phone"
-msgid_plural "Cell phones"
-msgstr[0] "โทรศัพท์มือถือ"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-devicekit.c:596
-msgid "Lithium Ion"
-msgstr "ลิเทียมไอออน"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-devicekit.c:600
-msgid "Lithium Polymer"
-msgstr "ลิเทียมพอลิเมอร์"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-devicekit.c:604
-msgid "Lithium Iron Phosphate"
-msgstr "ลิเทียมไอรอนฟอสเฟต"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-devicekit.c:608
-msgid "Lead acid"
-msgstr "กรดตะกั่ว"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-devicekit.c:612
-msgid "Nickel Cadmium"
-msgstr "นิกเกิลแคดเมียม"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-devicekit.c:616
-msgid "Nickel metal hydride"
-msgstr "นิกเกิลเมทัลไฮไดรด์"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-devicekit.c:620
-msgid "Unknown technology"
-msgstr "ไม่ทราบเทคโนโลยี"
-
 #. Translators: This is %i days
 #: ../src/gpm-graph-widget.c:434
 #, c-format
@@ -1349,57 +1099,8 @@ msgstr "%.1fW"
 msgid "%.1fV"
 msgstr "%.1fV"
 
-#. TRANSLATORS: this is what the user should read for more information about the blanking problem (%s is a URL)
-#: ../src/gpm-idle.c:218
-#, c-format
-msgid "Please see %s for more information."
-msgstr "กรุณาอ่านข้อมูลเพิ่มเติมได้ที่ %s"
-
-#. TRANSLATORS: this is telling the user that thier X server is broken, and needs to be fixed
-#: ../src/gpm-idle.c:222
-msgid ""
-"If you can see this text, your display server is broken and you should "
-"notify your distributor."
-msgstr "ถ้าคุณเห็นข้อความนี้ แสดงว่าเซิร์ฟเวอร์แสดงผลของคุณมีปัญหา และคุณควรแจ้งผู้จัดแจกของคุณ"
-
-#. TRANSLATORS: this is for debugging, if the session is idle
-#: ../src/gpm-idle.c:228
-msgid "Session idle"
-msgstr "เครื่องไม่ได้ใช้งาน"
-
-#: ../src/gpm-idle.c:228
-msgid "Session active"
-msgstr "เครื่องใช้งาน"
-
-#. TRANSLATORS: has something inhibited the session from going idle
-#: ../src/gpm-idle.c:230
-msgid "idle inhibited"
-msgstr "การเข้าสู่สถานะไม่ใช้งานถูกระงับ"
-
-#: ../src/gpm-idle.c:230
-msgid "idle not inhibited"
-msgstr "การเข้าสู่สถานะไม่ใช้งานไม่ได้ถูกระงับ"
-
-#. TRANSLATORS: has something inhibited the system from being suspended
-#: ../src/gpm-idle.c:232
-msgid "suspend inhibited"
-msgstr "การพักเครื่องถูกระงับ"
-
-#: ../src/gpm-idle.c:232
-msgid "suspend not inhibited"
-msgstr "การพักเครื่องไม่ได้ถูกระงับ"
-
-#. TRANSLATORS: is the screen idle or awake
-#: ../src/gpm-idle.c:234
-msgid "screen idle"
-msgstr "จอภาพว่างใช้งาน"
-
-#: ../src/gpm-idle.c:234
-msgid "screen awake"
-msgstr "จอภาพตื่น"
-
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-main.c:171 ../src/gpm-prefs.c:90 ../src/gpm-statistics.c:1488
+#: ../src/gpm-main.c:171 ../src/gpm-prefs.c:90 ../src/gpm-statistics.c:1497
 msgid "Show extra debugging information"
 msgstr "แสดงข้อมูลดีบั๊กเพิ่มเติม"
 
@@ -1420,109 +1121,109 @@ msgid "GNOME Power Manager"
 msgstr "โปรแกรมจัดการการใช้พลังงานของ GNOME"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:172
-msgid "Power plugged in"
-msgstr "เสียบปลั๊กไฟฟ้า"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:176
-msgid "Power unplugged"
-msgstr "ถอดปลั๊กไฟฟ้า"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:180
-msgid "Lid has opened"
-msgstr "ฝาเปิด"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:184
-msgid "Lid has closed"
-msgstr "ฝาปิด"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:188
-msgid "Battery is low"
-msgstr "พลังงานแบตเตอรี่ต่ำ"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:192
+#: ../src/gpm-manager.c:221 ../src/gpm-manager.c:289
 msgid "Battery is very low"
 msgstr "พลังงานแบตเตอรี่ต่ำมาก"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:196
+#: ../src/gpm-manager.c:269
+msgid "Power plugged in"
+msgstr "เสียบปลั๊กไฟฟ้า"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:273
+msgid "Power unplugged"
+msgstr "ถอดปลั๊กไฟฟ้า"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:277
+msgid "Lid has opened"
+msgstr "ฝาเปิด"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:281
+msgid "Lid has closed"
+msgstr "ฝาปิด"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:285
+msgid "Battery is low"
+msgstr "พลังงานแบตเตอรี่ต่ำ"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:293
 msgid "Battery is full"
 msgstr "แบตเตอรี่เต็มแล้ว"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:200
+#: ../src/gpm-manager.c:297
 msgid "Suspend started"
 msgstr "เริ่มพักเครื่อง"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:204
+#: ../src/gpm-manager.c:301
 msgid "Resumed"
 msgstr "ทำงานต่อ"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:208
+#: ../src/gpm-manager.c:305
 msgid "Suspend failed"
 msgstr "พักเครื่องไม่สำเร็จ"
 
 #. TRANSLATORS: message text
-#: ../src/gpm-manager.c:476
+#: ../src/gpm-manager.c:573
 msgid "Your computer failed to suspend."
 msgstr "เครื่องคอมพิวเตอร์ไม่สามารถพักเครื่องได้"
 
 #. TRANSLATORS: title text
-#: ../src/gpm-manager.c:478
+#: ../src/gpm-manager.c:575
 msgid "Failed to suspend"
 msgstr "พักเครื่องไม่สำเร็จ"
 
 #. TRANSLATORS: message text
-#: ../src/gpm-manager.c:482
+#: ../src/gpm-manager.c:579
 msgid "Your computer failed to hibernate."
 msgstr "เครื่องคอมพิวเตอร์ไม่สามารถจำศีลได้"
 
 #. TRANSLATORS: title text
-#: ../src/gpm-manager.c:484
+#: ../src/gpm-manager.c:581
 msgid "Failed to hibernate"
 msgstr "จำศีลเครื่องไม่สำเร็จ"
 
 #. TRANSLATORS: message text
-#: ../src/gpm-manager.c:489
+#: ../src/gpm-manager.c:586
 msgid "The failure was reported as:"
 msgstr "ข้อผิดพลาดตามที่ได้รับรายงานคือ:"
 
 #. TRANSLATORS: button text, visit the suspend help website
-#: ../src/gpm-manager.c:502
+#: ../src/gpm-manager.c:599
 msgid "Visit help page"
 msgstr "ดูหน้าคู่มือวิธีใช้"
 
 #. TRANSLATORS: this is the gnome-screensaver throttle
-#: ../src/gpm-manager.c:765
+#: ../src/gpm-manager.c:862
 msgid "Display DPMS activated"
 msgstr "DPMS ของจอภาพถูกเรียก"
 
 #. TRANSLATORS: this is the gnome-screensaver throttle
-#: ../src/gpm-manager.c:784
+#: ../src/gpm-manager.c:881
 msgid "On battery power"
 msgstr "ใช้ไฟจากแบตเตอรี่"
 
-#: ../src/gpm-manager.c:802
+#: ../src/gpm-manager.c:899
 msgid "Laptop lid is closed"
 msgstr "แล็ปท็อปถูกพับเก็บ"
 
-#: ../src/gpm-manager.c:840
+#: ../src/gpm-manager.c:937
 msgid "Power Information"
 msgstr "ข้อมูลการใช้พลังงาน"
 
 #. TRANSLATORS: the battery may be recalled by it's vendor
-#: ../src/gpm-manager.c:1077
+#: ../src/gpm-manager.c:1185
 msgid "Battery may be recalled"
 msgstr "แบตเตอรี่อาจถูกเรียกคืน"
 
-#: ../src/gpm-manager.c:1078
+#: ../src/gpm-manager.c:1186
 #, c-format
 msgid ""
 "The battery in your computer may have been recalled by %s and you may be at "
@@ -1535,12 +1236,12 @@ msgstr ""
 "อ่านข้อมูลเพิ่มเติมได้ที่เว็บเรียกคืนแบตเตอรี่"
 
 #. TRANSLATORS: button text, visit the manufacturers recall website
-#: ../src/gpm-manager.c:1088
+#: ../src/gpm-manager.c:1196
 msgid "Visit recall website"
 msgstr "ไปที่เว็บเรียกคืน"
 
 #. TRANSLATORS: button text, do not show this bubble again
-#: ../src/gpm-manager.c:1091
+#: ../src/gpm-manager.c:1199
 msgid "Do not show me this again"
 msgstr "ไม่ต้องแสดงข้อความนี้อีก"
 
@@ -1548,12 +1249,12 @@ msgstr "ไม่ต้องแสดงข้อความนี้อีก
 #. * where capacity is the ratio of the last_full capacity with that of
 #. * the design capacity. (#326740)
 #. TRANSLATORS: battery is old or broken
-#: ../src/gpm-manager.c:1176
+#: ../src/gpm-manager.c:1284
 msgid "Battery may be broken"
 msgstr "แบตเตอรี่อาจจะเสีย"
 
 #. TRANSLATORS: notify the user that that battery is broken as the capacity is very low
-#: ../src/gpm-manager.c:1179
+#: ../src/gpm-manager.c:1287
 #, c-format
 msgid ""
 "Your battery has a very low capacity (%1.1f%%), which means that it may be "
@@ -1561,80 +1262,86 @@ msgid ""
 msgstr "แบตเตอรี่ของคุณมีความจุต่ำมาก (%1.1f%%) ซึ่งอาจหมายความว่าแบตเตอรี่นี้เก่าหรือเสียแล้ว"
 
 #. TRANSLATORS: show the fully charged notification
-#: ../src/gpm-manager.c:1227
+#: ../src/gpm-manager.c:1336
 msgid "Battery Fully Charged"
 msgid_plural "Batteries Fully Charged"
 msgstr[0] "ประจุแบตเตอรี่เต็มแล้ว"
 
 #. TRANSLATORS: laptop battery is now discharging
-#: ../src/gpm-manager.c:1273
+#: ../src/gpm-manager.c:1382
 msgid "Battery Discharging"
 msgstr "แบตเตอรี่กำลังจ่ายไฟ"
 
 #. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1277
+#: ../src/gpm-manager.c:1386
 #, c-format
 msgid "%s of battery power remaining (%.1f%%)"
 msgstr "แบตเตอรี่มีพลังงานสำหรับจ่ายอีก %s (%.1f%%)"
 
+#. TRANSLATORS: the device is discharging, but we only have a percentage
+#: ../src/gpm-manager.c:1389 ../src/gpm-manager.c:1401 ../src/gpm-upower.c:284
+#, c-format
+msgid "%s discharging (%.1f%%)"
+msgstr "%s กำลังจ่ายไฟ (%.1f%%)"
+
 #. TRANSLATORS: UPS is now discharging
-#: ../src/gpm-manager.c:1285
+#: ../src/gpm-manager.c:1394
 msgid "UPS Discharging"
 msgstr "UPS กำลังจ่ายไฟ"
 
 #. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1289
+#: ../src/gpm-manager.c:1398
 #, c-format
 msgid "%s of UPS backup power remaining (%.1f%%)"
 msgstr "UPS มีพลังงานสำรองสำหรับจ่ายอีก %s (%.1f%%)"
 
 #. TRANSLATORS: laptop battery low, and we only have one battery
-#: ../src/gpm-manager.c:1373
+#: ../src/gpm-manager.c:1482
 msgid "Battery low"
 msgstr "พลังงานแบตเตอรี่ต่ำ"
 
 #. TRANSLATORS: laptop battery low, and we have more than one type of battery
-#: ../src/gpm-manager.c:1376
+#: ../src/gpm-manager.c:1485
 msgid "Laptop battery low"
 msgstr "แบตเตอรี่แล็ปท็อปเหลือพลังงานต่ำ"
 
 #. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1382
+#: ../src/gpm-manager.c:1491
 #, c-format
 msgid "Approximately <b>%s</b> remaining (%.1f%%)"
 msgstr "อีกประมาณ <b>%s</b> จะหมด (%.1f%%)"
 
 #. TRANSLATORS: UPS is starting to get a little low
-#: ../src/gpm-manager.c:1386
+#: ../src/gpm-manager.c:1495
 msgid "UPS low"
 msgstr "UPS เหลือพลังงานต่ำ"
 
 #. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1390
+#: ../src/gpm-manager.c:1499
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"
 msgstr "UPS ของคุณสามารถจ่ายไฟสำรองได้อีกประมาณ <b>%s</b> (%.1f%%)"
 
 #. TRANSLATORS: mouse is getting a little low
 #. TRANSLATORS: the mouse battery is very low
-#: ../src/gpm-manager.c:1394 ../src/gpm-manager.c:1512
+#: ../src/gpm-manager.c:1503 ../src/gpm-manager.c:1619
 msgid "Mouse battery low"
 msgstr "แบตเตอรี่เมาส์เหลือพลังงานต่ำ"
 
 #. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1397
+#: ../src/gpm-manager.c:1506
 #, c-format
 msgid "The wireless mouse attached to this computer is low in power (%.1f%%)"
 msgstr "เมาส์ไร้สายที่ต่อกับเครื่องคอมพิวเตอร์นี้ เหลือพลังงานต่ำแล้ว (%.1f%%)"
 
 #. TRANSLATORS: keyboard is getting a little low
 #. TRANSLATORS: the keyboard battery is very low
-#: ../src/gpm-manager.c:1401 ../src/gpm-manager.c:1520
+#: ../src/gpm-manager.c:1510 ../src/gpm-manager.c:1627
 msgid "Keyboard battery low"
 msgstr "แบตเตอรี่แป้นพิมพ์เหลือพลังงานต่ำ"
 
 #. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1404
+#: ../src/gpm-manager.c:1513
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is low in power (%.1f%%)"
@@ -1642,70 +1349,70 @@ msgstr "แป้นพิมพ์ไร้สายที่ต่อกับ
 
 #. TRANSLATORS: PDA is getting a little low
 #. TRANSLATORS: the PDA battery is very low
-#: ../src/gpm-manager.c:1408 ../src/gpm-manager.c:1529
+#: ../src/gpm-manager.c:1517 ../src/gpm-manager.c:1636
 msgid "PDA battery low"
 msgstr "แบตเตอรี่ PDA เหลือพลังงานต่ำ"
 
 #. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1411
+#: ../src/gpm-manager.c:1520
 #, c-format
 msgid "The PDA attached to this computer is low in power (%.1f%%)"
 msgstr "PDA ที่ต่อกับเครื่องคอมพิวเตอร์นี้ เหลือพลังงานต่ำแล้ว (%.1f%%)"
 
 #. TRANSLATORS: cell phone (mobile) is getting a little low
 #. TRANSLATORS: the cell battery is very low
-#: ../src/gpm-manager.c:1415 ../src/gpm-manager.c:1538
+#: ../src/gpm-manager.c:1524 ../src/gpm-manager.c:1645
 msgid "Cell phone battery low"
 msgstr "แบตเตอรี่โทรศัพท์มือถือเหลือพลังงานต่ำ"
 
 #. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1418
+#: ../src/gpm-manager.c:1527
 #, c-format
 msgid "The cell phone attached to this computer is low in power (%.1f%%)"
 msgstr "โทรศัพท์มือถือที่ต่อกับเครื่องคอมพิวเตอร์นี้ เหลือพลังงานต่ำแล้ว (%.1f%%)"
 
 #. TRANSLATORS: laptop battery critically low, and only have one type of battery
-#: ../src/gpm-manager.c:1468
+#: ../src/gpm-manager.c:1576
 msgid "Battery critically low"
 msgstr "พลังงานแบตเตอรี่ต่ำถึงขั้นวิกฤติ"
 
 #. TRANSLATORS: laptop battery critically low, and we have more than one type of battery
 #. TRANSLATORS: laptop battery is really, really, low
-#: ../src/gpm-manager.c:1471 ../src/gpm-manager.c:1584
+#: ../src/gpm-manager.c:1579 ../src/gpm-manager.c:1705
 msgid "Laptop battery critically low"
 msgstr "พลังงานแบตเตอรี่แล็ปท็อปต่ำถึงขั้นวิกฤติ"
 
 #. TRANSLATORS: tell the use to insert the plug, as we're not going to do anything
-#: ../src/gpm-manager.c:1483
+#: ../src/gpm-manager.c:1589
 msgid "Plug in your AC adapter to avoid losing data."
 msgstr "กรุณาเสียบที่แปลงไฟ AC เพื่อหลีกเลี่ยงการสูญเสียข้อมูล"
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1487
+#: ../src/gpm-manager.c:1593
 #, c-format
-msgid "Computer will suspend in %s."
-msgstr "คอมพิวเตอร์จะพักเครื่องในอีก %s"
+msgid "Computer will suspend very soon unless it is plugged in."
+msgstr "คอมพิวเตอร์จะพักเครื่องในอีกไม่ช้า ถ้าไม่เสียบปลั๊กไฟ"
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1491
+#: ../src/gpm-manager.c:1597
 #, c-format
-msgid "Computer will hibernate in %s."
-msgstr "คอมพิวเตอร์จะจำศีลเครื่องในอีก %s"
+msgid "Computer will hibernate very soon unless it is plugged in."
+msgstr "คอมพิวเตอร์จะจำศีลเครื่องในอีกไม่ช้า ถ้าไม่เสียบปลั๊กไฟ"
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1495
+#: ../src/gpm-manager.c:1601
 #, c-format
-msgid "Computer will shutdown in %s."
-msgstr "คอมพิวเตอร์จะปิดเครื่องในอีก %s"
+msgid "Computer will shutdown very soon unless it is plugged in."
+msgstr "คอมพิวเตอร์จะปิดเครื่องในอีกไม่ช้า ถ้าไม่เสียบปลั๊กไฟ"
 
 #. TRANSLATORS: the UPS is very low
 #. TRANSLATORS: UPS is really, really, low
-#: ../src/gpm-manager.c:1502 ../src/gpm-manager.c:1622
+#: ../src/gpm-manager.c:1609 ../src/gpm-manager.c:1743
 msgid "UPS critically low"
 msgstr "พลังงาน UPS ต่ำถึงขั้นวิกฤติ"
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1506
+#: ../src/gpm-manager.c:1613
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%.1f%%). Restore AC "
@@ -1715,7 +1422,7 @@ msgstr ""
 "เพื่อหลีกเลี่ยงการสูญเสียข้อมูล"
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1515
+#: ../src/gpm-manager.c:1622
 #, c-format
 msgid ""
 "The wireless mouse attached to this computer is very low in power (%.1f%%). "
@@ -1725,7 +1432,7 @@ msgstr ""
 "อุปกรณ์นี้จะหยุดทำงานในไม่ช้า ถ้าไม่ประจุไฟเพิ่ม"
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1523
+#: ../src/gpm-manager.c:1630
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is very low in power (%.1f%"
@@ -1735,7 +1442,7 @@ msgstr ""
 "อุปกรณ์นี้จะหยุดทำงานในไม่ช้า ถ้าไม่ประจุไฟเพิ่ม"
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1532
+#: ../src/gpm-manager.c:1639
 #, c-format
 msgid ""
 "The PDA attached to this computer is very low in power (%.1f%%). This device "
@@ -1745,7 +1452,7 @@ msgstr ""
 "ถ้าไม่ประจุไฟเพิ่ม"
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1541
+#: ../src/gpm-manager.c:1648
 #, c-format
 msgid ""
 "Your cell phone is very low in power (%.1f%%). This device will soon stop "
@@ -1754,14 +1461,14 @@ msgstr ""
 "โทรศัพท์มือถือของคุณเหลือพลังงานต่ำแล้ว (%.1f%%) อุปกรณ์นี้จะหยุดทำงานในไม่ช้า ถ้าไม่ประจุไฟเพิ่ม"
 
 #. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1593
+#: ../src/gpm-manager.c:1714
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
 msgstr "ประจุไฟในแบตเตอรี่ต่ำกว่าขีดวิกฤติแล้ว และเครื่องนี้กำลังจะ<b>ปิด</b> เมื่อแบตเตอรี่หมด"
 
 #. TRANSLATORS: computer will suspend
-#: ../src/gpm-manager.c:1599
+#: ../src/gpm-manager.c:1720
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1771,45 +1478,45 @@ msgstr ""
 "ต้องเหลือพลังงานเล็กน้อยถ้าจะนำเครื่องเข้าสู่ภาวะพักเครื่อง"
 
 #. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1606
+#: ../src/gpm-manager.c:1727
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr "ประจุไฟในแบตเตอรี่ต่ำกว่าขีดวิกฤติแล้ว และเครื่องนี้กำลังจะจำศีล"
 
 #. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1611
+#: ../src/gpm-manager.c:1732
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr "ประจุไฟในแบตเตอรี่ต่ำกว่าขีดวิกฤติแล้ว และเครื่องนี้กำลังจะปิด"
 
 #. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1631
+#: ../src/gpm-manager.c:1752
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
 msgstr "UPS ถึงระดับต่ำกว่าขีดวิกฤติแล้ว และเครื่องนี้กำลังจะ<b>ปิด</b> เมื่อ UPS แบตเตอรี่หมด"
 
 #. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1637
+#: ../src/gpm-manager.c:1758
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr "UPS ถึงระดับต่ำกว่าขีดวิกฤติแล้ว และเครื่องนี้กำลังจะจำศีล"
 
 #. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1642
+#: ../src/gpm-manager.c:1763
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr "UPS ถึงระดับต่ำกว่าขีดวิกฤติแล้ว และเครื่องนี้กำลังจะปิด"
 
 #. TRANSLATORS: there was in install problem
-#: ../src/gpm-manager.c:1835
+#: ../src/gpm-manager.c:1901
 msgid "Install problem!"
 msgstr "เกิดปัญหาการติดตั้ง!"
 
 #. TRANSLATORS: the GConf schema was not installed properly
-#: ../src/gpm-manager.c:1837
+#: ../src/gpm-manager.c:1903
 msgid ""
 "The configuration defaults for GNOME Power Manager have not been installed "
 "correctly.\n"
@@ -1850,7 +1557,7 @@ msgstr "ไม่ต้องทำอะไร"
 msgid "Never"
 msgstr "ไม่ต้อง"
 
-#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:437
+#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:446
 msgid "Rate"
 msgstr "อัตรา"
 
@@ -1858,11 +1565,11 @@ msgstr "อัตรา"
 msgid "Charge"
 msgstr "ประจุ"
 
-#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:451
+#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:460
 msgid "Time to full"
 msgstr "เวลาที่จะเต็ม"
 
-#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:456
+#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:465
 msgid "Time to empty"
 msgstr "เวลาที่จะหมด"
 
@@ -1914,7 +1621,7 @@ msgstr "ภาพ"
 msgid "Description"
 msgstr "คำบรรยาย"
 
-#: ../src/gpm-statistics.c:179 ../src/gpm-statistics.c:393
+#: ../src/gpm-statistics.c:179 ../src/gpm-statistics.c:402
 msgid "Type"
 msgstr "ชนิด"
 
@@ -1926,258 +1633,296 @@ msgstr "ID"
 msgid "Command"
 msgstr "คำสั่ง"
 
+#. TRANSLATORS: this is when the stats time is not known
+#: ../src/gpm-statistics.c:284
+msgid "Unknown"
+msgstr "ไม่ทราบ"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#: ../src/gpm-statistics.c:288
+#, c-format
+msgid "%.0f second"
+msgid_plural "%.0f seconds"
+msgstr[0] "%.0f วินาที"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#: ../src/gpm-statistics.c:293
+#, c-format
+msgid "%.1f minute"
+msgid_plural "%.1f minutes"
+msgstr[0] "%.1f นาที"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#: ../src/gpm-statistics.c:298
+#, c-format
+msgid "%.1f hour"
+msgid_plural "%.1f hours"
+msgstr[0] "%.1f ชั่วโมง"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
 #: ../src/gpm-statistics.c:302
+#, c-format
+msgid "%.1f day"
+msgid_plural "%.1f days"
+msgstr[0] "%.1f วัน"
+
+#: ../src/gpm-statistics.c:311
 msgid "Yes"
 msgstr "ใช่"
 
-#: ../src/gpm-statistics.c:302
+#: ../src/gpm-statistics.c:311
 msgid "No"
 msgstr "ไม่"
 
-#: ../src/gpm-statistics.c:390
+#: ../src/gpm-statistics.c:399
 msgid "Device"
 msgstr "อุปกรณ์"
 
-#: ../src/gpm-statistics.c:395
+#: ../src/gpm-statistics.c:404
 msgid "Vendor"
 msgstr "ผู้จำหน่าย"
 
-#: ../src/gpm-statistics.c:397
+#: ../src/gpm-statistics.c:406
 msgid "Model"
 msgstr "รุ่น"
 
-#: ../src/gpm-statistics.c:399
+#: ../src/gpm-statistics.c:408
 msgid "Serial number"
 msgstr "เลขลำดับผลิตภัณฑ์"
 
-#: ../src/gpm-statistics.c:400
+#: ../src/gpm-statistics.c:409
 msgid "Supply"
 msgstr "จ่ายพลังงาน"
 
-#: ../src/gpm-statistics.c:403
+#: ../src/gpm-statistics.c:412
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
 msgstr[0] "%d วินาที"
 
-#: ../src/gpm-statistics.c:404
+#: ../src/gpm-statistics.c:413
 msgid "Refreshed"
 msgstr "ข้อมูลล่าสุด"
 
-#: ../src/gpm-statistics.c:411
+#: ../src/gpm-statistics.c:420
 msgid "Present"
 msgstr "ปรากฏอยู่"
 
-#: ../src/gpm-statistics.c:415
+#: ../src/gpm-statistics.c:424
 msgid "Rechargeable"
 msgstr "ประจุไฟได้"
 
-#: ../src/gpm-statistics.c:419
+#: ../src/gpm-statistics.c:428
 msgid "State"
 msgstr "สถานะ"
 
-#: ../src/gpm-statistics.c:422
+#: ../src/gpm-statistics.c:431
 msgid "Energy"
 msgstr "พลังงาน"
 
-#: ../src/gpm-statistics.c:425
+#: ../src/gpm-statistics.c:434
 msgid "Energy when empty"
 msgstr "พลังงานเมื่อไฟหมด"
 
-#: ../src/gpm-statistics.c:428
+#: ../src/gpm-statistics.c:437
 msgid "Energy when full"
 msgstr "พลังงานเมื่อประจุเต็ม"
 
-#: ../src/gpm-statistics.c:431
+#: ../src/gpm-statistics.c:440
 msgid "Energy (design)"
 msgstr "พลังงาน (ค่าออกแบบไว้)"
 
-#: ../src/gpm-statistics.c:444
+#: ../src/gpm-statistics.c:453
 msgid "Voltage"
 msgstr "ศักย์ไฟฟ้า"
 
-#: ../src/gpm-statistics.c:465
+#: ../src/gpm-statistics.c:474
 msgid "Percentage"
 msgstr "เปอร์เซ็นต์"
 
-#: ../src/gpm-statistics.c:470
+#: ../src/gpm-statistics.c:479
 msgid "Capacity"
 msgstr "ความจุ"
 
-#: ../src/gpm-statistics.c:474
+#: ../src/gpm-statistics.c:483
 msgid "Technology"
 msgstr "เทคโนโลยี"
 
-#: ../src/gpm-statistics.c:476
+#: ../src/gpm-statistics.c:485
 msgid "Online"
 msgstr "ต่ออยู่"
 
 #. TRANSLATORS: the command line was not provided
-#: ../src/gpm-statistics.c:787
+#: ../src/gpm-statistics.c:796
 msgid "No data"
 msgstr "ไม่มีข้อมูล"
 
 #. TRANSLATORS: kernel module, usually a device driver
-#: ../src/gpm-statistics.c:794 ../src/gpm-statistics.c:799
+#: ../src/gpm-statistics.c:803 ../src/gpm-statistics.c:808
 msgid "Kernel module"
 msgstr "มอดูลของเคอร์เนล"
 
 #. TRANSLATORS: kernel housekeeping
-#: ../src/gpm-statistics.c:804
+#: ../src/gpm-statistics.c:813
 msgid "Kernel core"
 msgstr "แกนของเคอร์เนล"
 
 #. TRANSLATORS: interrupt between processors
-#: ../src/gpm-statistics.c:809
+#: ../src/gpm-statistics.c:818
 msgid "Interprocessor interrupt"
 msgstr "การขัดจังหวะระหว่างตัวประมวลผล"
 
 #. TRANSLATORS: unknown interrupt
-#: ../src/gpm-statistics.c:814
+#: ../src/gpm-statistics.c:823
 msgid "Interrupt"
 msgstr "การขัดจังหวะ"
 
 #. TRANSLATORS: the keyboard and mouse device event
-#: ../src/gpm-statistics.c:857
+#: ../src/gpm-statistics.c:866
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "แป้นพิมพ์/เมาส์/ทัชแพด PS/2"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
-#: ../src/gpm-statistics.c:860
+#: ../src/gpm-statistics.c:869
 msgid "ACPI"
 msgstr "ACPI"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
-#: ../src/gpm-statistics.c:863
+#: ../src/gpm-statistics.c:872
 msgid "Serial ATA"
 msgstr "Serial ATA"
 
 #. TRANSLATORS: this is the old-style ATA interface
-#: ../src/gpm-statistics.c:866
+#: ../src/gpm-statistics.c:875
 msgid "ATA host controller"
 msgstr "ตัวควบคุมโฮสต์ ATA"
 
 #. TRANSLATORS: 802.11 wireless adaptor
-#: ../src/gpm-statistics.c:869
+#: ../src/gpm-statistics.c:878
 msgid "Intel wireless adaptor"
 msgstr "อุปกรณ์ไร้สายของอินเทล"
 
 #. TRANSLATORS: a timer is something that fires periodically
-#: ../src/gpm-statistics.c:874 ../src/gpm-statistics.c:877
-#: ../src/gpm-statistics.c:880 ../src/gpm-statistics.c:883
-#: ../src/gpm-statistics.c:886
+#: ../src/gpm-statistics.c:883 ../src/gpm-statistics.c:886
+#: ../src/gpm-statistics.c:889 ../src/gpm-statistics.c:892
+#: ../src/gpm-statistics.c:895
 #, c-format
 msgid "Timer %s"
 msgstr "เครื่องตั้งเวลา %s"
 
 #. TRANSLATORS: this is a task that's woken up from sleeping
-#: ../src/gpm-statistics.c:889
+#: ../src/gpm-statistics.c:898
 #, c-format
 msgid "Sleep %s"
 msgstr "การหลับ %s"
 
 #. TRANSLATORS: this is a new realtime task
-#: ../src/gpm-statistics.c:892
+#: ../src/gpm-statistics.c:901
 #, c-format
 msgid "New task %s"
 msgstr "งานใหม่ %s"
 
 #. TRANSLATORS: this is a task thats woken to check state
-#: ../src/gpm-statistics.c:895
+#: ../src/gpm-statistics.c:904
 #, c-format
 msgid "Wait %s"
 msgstr "การคอย %s"
 
 #. TRANSLATORS: a work queue is a list of work that has to be done
-#: ../src/gpm-statistics.c:898 ../src/gpm-statistics.c:901
+#: ../src/gpm-statistics.c:907 ../src/gpm-statistics.c:910
 #, c-format
 msgid "Work queue %s"
 msgstr "คิวงาน %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
-#: ../src/gpm-statistics.c:904
+#: ../src/gpm-statistics.c:913
 #, c-format
 msgid "Network route flush %s"
 msgstr "การล้างข้อมูลเส้นทางเครือข่าย %s"
 
 #. TRANSLATORS: activity on the USB bus
-#: ../src/gpm-statistics.c:907
+#: ../src/gpm-statistics.c:916
 #, c-format
 msgid "USB activity %s"
 msgstr "กิจกรรม USB %s"
 
 #. TRANSLATORS: we've timed out of an aligned timer
-#: ../src/gpm-statistics.c:910
+#: ../src/gpm-statistics.c:919
 #, c-format
 msgid "Wakeup %s"
 msgstr "การปลุก %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
-#: ../src/gpm-statistics.c:913
+#: ../src/gpm-statistics.c:922
 msgid "Local interrupts"
 msgstr "การขัดจังหวะในเครื่อง"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
-#: ../src/gpm-statistics.c:916
+#: ../src/gpm-statistics.c:925
 msgid "Rescheduling interrupts"
 msgstr "การขัดจังหวะเพื่อเปลี่ยนแผนเวลาทำงาน"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1025
+#: ../src/gpm-statistics.c:1034
 msgid "Device Information"
 msgstr "ข้อมูลอุปกรณ์"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1027
+#: ../src/gpm-statistics.c:1036
 msgid "Device History"
 msgstr "ประวัติอุปกรณ์"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1029
+#: ../src/gpm-statistics.c:1038
 msgid "Device Profile"
 msgstr "โพรไฟล์อุปกรณ์"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1031
+#: ../src/gpm-statistics.c:1040
 msgid "Processor Wakeups"
 msgstr "การปลุกตัวประมวลผล"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1237 ../src/gpm-statistics.c:1243
-#: ../src/gpm-statistics.c:1249 ../src/gpm-statistics.c:1255
+#: ../src/gpm-statistics.c:1246 ../src/gpm-statistics.c:1252
+#: ../src/gpm-statistics.c:1258 ../src/gpm-statistics.c:1264
 msgid "Time elapsed"
 msgstr "เวลาที่ผ่านไป"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1245 ../src/gpm-statistics.c:1288
-#: ../src/gpm-statistics.c:1294 ../src/gpm-statistics.c:1300
-#: ../src/gpm-statistics.c:1306
+#: ../src/gpm-statistics.c:1248
+msgid "Power"
+msgstr "พลังงาน"
+
+#. TRANSLATORS: this is the Y axis on the graph for the whole battery device
+#. TRANSLATORS: this is the X axis on the graph for the whole battery device
+#: ../src/gpm-statistics.c:1254 ../src/gpm-statistics.c:1297
+#: ../src/gpm-statistics.c:1303 ../src/gpm-statistics.c:1309
+#: ../src/gpm-statistics.c:1315
 msgid "Cell charge"
 msgstr "ประจุของเซลล์"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1251 ../src/gpm-statistics.c:1257
+#: ../src/gpm-statistics.c:1260 ../src/gpm-statistics.c:1266
 msgid "Predicted time"
 msgstr "เวลาประเมิน"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1290 ../src/gpm-statistics.c:1302
+#: ../src/gpm-statistics.c:1299 ../src/gpm-statistics.c:1311
 msgid "Correction factor"
 msgstr "ค่าปรับแก้"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1296 ../src/gpm-statistics.c:1308
+#: ../src/gpm-statistics.c:1305 ../src/gpm-statistics.c:1317
 msgid "Prediction accuracy"
 msgstr "ความแม่นยำของการประเมิน"
 
 #. TRANSLATORS: show a device by default
-#: ../src/gpm-statistics.c:1491
+#: ../src/gpm-statistics.c:1500
 msgid "Select this device at startup"
 msgstr "เลือกอุปกรณ์นี้เมื่อเริ่มโปรแกรม"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:1767
+#: ../src/gpm-statistics.c:1776
 msgid "Processor"
 msgstr "ตัวประมวลผล"
 
@@ -2185,6 +1930,248 @@ msgstr "ตัวประมวลผล"
 #: ../src/gpm-tray-icon.c:292
 msgid "_Preferences"
 msgstr "_ปรับแต่ง"
+
+#. TRANSLATORS: a phone is charging
+#. TRANSLATORS: device is charging, but we only have a percentage
+#: ../src/gpm-upower.c:251 ../src/gpm-upower.c:315
+#, c-format
+msgid "%s charging (%.1f%%)"
+msgstr "%s กำลังประจุไฟ (%.1f%%)"
+
+#. TRANSLATORS: The laptop battery is fully charged, and we know a time
+#: ../src/gpm-upower.c:266
+#, c-format
+msgid ""
+"Battery is fully charged.\n"
+"Provides %s laptop runtime"
+msgstr ""
+"แบตเตอรี่ประจุเต็มแล้ว\n"
+"มีพลังงานสำหรับจ่ายเป็นเวลา %s"
+
+#. TRANSLATORS: the device is fully charged
+#: ../src/gpm-upower.c:271
+#, c-format
+msgid "%s is fully charged"
+msgstr "%s ประจุเต็มแล้ว"
+
+#. TRANSLATORS: the device is discharging, and we have a time remaining
+#: ../src/gpm-upower.c:279
+#, c-format
+msgid "%s %s remaining (%.1f%%)"
+msgstr "%s อีก %s จะหมด (%.1f%%)"
+
+#. TRANSLATORS: the device is charging, and we have a time to full and empty
+#: ../src/gpm-upower.c:298
+#, c-format
+msgid ""
+"%s %s until charged (%.1f%%)\n"
+"Provides %s battery runtime"
+msgstr ""
+"%s อีก %s จะเต็ม (%.1f%%)\n"
+"มีพลังงานสำหรับจ่ายเป็นเวลา %s"
+
+#. TRANSLATORS: device is charging, and we have a time to full and a percentage
+#: ../src/gpm-upower.c:309
+#, c-format
+msgid "%s %s until charged (%.1f%%)"
+msgstr "%s อีก %s จะเต็ม (%.1f%%)"
+
+#. TRANSLATORS: this is only shown for laptops with multiple batteries
+#: ../src/gpm-upower.c:323
+#, c-format
+msgid "%s waiting to discharge (%.1f%%)"
+msgstr "%s กำลังรอจ่ายไฟ (%.1f%%)"
+
+#. TRANSLATORS: this is only shown for laptops with multiple batteries
+#: ../src/gpm-upower.c:329
+#, c-format
+msgid "%s waiting to charge (%.1f%%)"
+msgstr "%s กำลังรอประจุไฟ (%.1f%%)"
+
+#. TRANSLATORS: the type of data, e.g. Laptop battery
+#: ../src/gpm-upower.c:389
+msgid "Product:"
+msgstr "ผลิตภัณฑ์:"
+
+#. TRANSLATORS: device is missing
+#. TRANSLATORS: device is charged
+#. TRANSLATORS: device is charging
+#. TRANSLATORS: device is discharging
+#: ../src/gpm-upower.c:393 ../src/gpm-upower.c:396 ../src/gpm-upower.c:399
+#: ../src/gpm-upower.c:402
+msgid "Status:"
+msgstr "สถานะ:"
+
+#: ../src/gpm-upower.c:393
+msgid "Missing"
+msgstr "ไม่มี"
+
+#: ../src/gpm-upower.c:396
+msgid "Charged"
+msgstr "ประจุไฟเต็มแล้ว"
+
+#: ../src/gpm-upower.c:399
+msgid "Charging"
+msgstr "กำลังประจุไฟ"
+
+#: ../src/gpm-upower.c:402
+msgid "Discharging"
+msgstr "กำลังจ่ายไฟ"
+
+#. TRANSLATORS: percentage
+#: ../src/gpm-upower.c:407
+msgid "Percentage charge:"
+msgstr "เปอร์เซ็นต์ประจุ:"
+
+#. TRANSLATORS: manufacturer
+#: ../src/gpm-upower.c:411
+msgid "Vendor:"
+msgstr "ผู้จำหน่าย:"
+
+#. TRANSLATORS: how the battery is made, e.g. Lithium Ion
+#: ../src/gpm-upower.c:416
+msgid "Technology:"
+msgstr "เทคโนโลยี:"
+
+#. TRANSLATORS: serial number of the battery
+#: ../src/gpm-upower.c:420
+msgid "Serial number:"
+msgstr "เลขลำดับผลิตภัณฑ์:"
+
+#. TRANSLATORS: model number of the battery
+#: ../src/gpm-upower.c:424
+msgid "Model:"
+msgstr "รุ่น:"
+
+#. TRANSLATORS: time to fully charged
+#: ../src/gpm-upower.c:429
+msgid "Charge time:"
+msgstr "เวลาประจุ:"
+
+#. TRANSLATORS: time to empty
+#: ../src/gpm-upower.c:435
+msgid "Discharge time:"
+msgstr "เวลาจ่ายไฟ:"
+
+#. TRANSLATORS: Excellent, Good, Fair and Poor are all related to battery Capacity
+#: ../src/gpm-upower.c:442
+msgid "Excellent"
+msgstr "ดีมาก"
+
+#: ../src/gpm-upower.c:444
+msgid "Good"
+msgstr "สภาพดี"
+
+#: ../src/gpm-upower.c:446
+msgid "Fair"
+msgstr "พอใช้"
+
+#: ../src/gpm-upower.c:448
+msgid "Poor"
+msgstr "สภาพแย่"
+
+#: ../src/gpm-upower.c:452
+msgid "Capacity:"
+msgstr "ความจุ:"
+
+#: ../src/gpm-upower.c:458 ../src/gpm-upower.c:483
+msgid "Current charge:"
+msgstr "ประจุปัจจุบัน:"
+
+#: ../src/gpm-upower.c:464
+msgid "Last full charge:"
+msgstr "ประจุเต็มครั้งล่าสุด:"
+
+#: ../src/gpm-upower.c:470 ../src/gpm-upower.c:488
+msgid "Design charge:"
+msgstr "ประจุที่ออกแบบไว้:"
+
+#: ../src/gpm-upower.c:475
+msgid "Charge rate:"
+msgstr "อัตราการประจุ:"
+
+#. TRANSLATORS: system power cord
+#: ../src/gpm-upower.c:510
+msgid "AC adapter"
+msgid_plural "AC adapters"
+msgstr[0] "ที่แปลงไฟ AC"
+
+#. TRANSLATORS: laptop primary battery
+#: ../src/gpm-upower.c:514
+msgid "Laptop battery"
+msgid_plural "Laptop batteries"
+msgstr[0] "แบตเตอรี่แล็ปท็อป"
+
+#. TRANSLATORS: battery-backed AC power source
+#: ../src/gpm-upower.c:518
+msgid "UPS"
+msgid_plural "UPSs"
+msgstr[0] "UPS"
+
+#. TRANSLATORS: a monitor is a device to measure voltage and current
+#: ../src/gpm-upower.c:522
+msgid "Monitor"
+msgid_plural "Monitors"
+msgstr[0] "จอภาพ"
+
+#. TRANSLATORS: wireless mice with internal batteries
+#: ../src/gpm-upower.c:526
+msgid "Wireless mouse"
+msgid_plural "Wireless mice"
+msgstr[0] "เมาส์ไร้สาย"
+
+#. TRANSLATORS: wireless keyboard with internal battery
+#: ../src/gpm-upower.c:530
+msgid "Wireless keyboard"
+msgid_plural "Wireless keyboards"
+msgstr[0] "แป้นพิมพ์ไร้สาย"
+
+#. TRANSLATORS: portable device
+#: ../src/gpm-upower.c:534
+msgid "PDA"
+msgid_plural "PDAs"
+msgstr[0] "PDA"
+
+#. TRANSLATORS: cell phone (mobile...)
+#: ../src/gpm-upower.c:538
+msgid "Cell phone"
+msgid_plural "Cell phones"
+msgstr[0] "โทรศัพท์มือถือ"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-upower.c:596
+msgid "Lithium Ion"
+msgstr "ลิเทียมไอออน"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-upower.c:600
+msgid "Lithium Polymer"
+msgstr "ลิเทียมพอลิเมอร์"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-upower.c:604
+msgid "Lithium Iron Phosphate"
+msgstr "ลิเทียมไอรอนฟอสเฟต"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-upower.c:608
+msgid "Lead acid"
+msgstr "กรดตะกั่ว"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-upower.c:612
+msgid "Nickel Cadmium"
+msgstr "นิกเกิลแคดเมียม"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-upower.c:616
+msgid "Nickel metal hydride"
+msgstr "นิกเกิลเมทัลไฮไดรด์"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-upower.c:620
+msgid "Unknown technology"
+msgstr "ไม่ทราบเทคโนโลยี"
 
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:1
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:1
@@ -2196,8 +2183,38 @@ msgstr "เ_กี่ยวกับ"
 msgid "_Help"
 msgstr "_วิธีใช้"
 
-#~ msgid "Power Manager"
-#~ msgstr "เครื่องมือจัดการการใช้พลังงาน"
+#~ msgid "Please see %s for more information."
+#~ msgstr "กรุณาอ่านข้อมูลเพิ่มเติมได้ที่ %s"
+
+#~ msgid ""
+#~ "If you can see this text, your display server is broken and you should "
+#~ "notify your distributor."
+#~ msgstr ""
+#~ "ถ้าคุณเห็นข้อความนี้ แสดงว่าเซิร์ฟเวอร์แสดงผลของคุณมีปัญหา และคุณควรแจ้งผู้จัดแจกของคุณ"
+
+#~ msgid "Session idle"
+#~ msgstr "เครื่องไม่ได้ใช้งาน"
+
+#~ msgid "Session active"
+#~ msgstr "เครื่องใช้งาน"
+
+#~ msgid "idle inhibited"
+#~ msgstr "การเข้าสู่สถานะไม่ใช้งานถูกระงับ"
+
+#~ msgid "idle not inhibited"
+#~ msgstr "การเข้าสู่สถานะไม่ใช้งานไม่ได้ถูกระงับ"
+
+#~ msgid "suspend inhibited"
+#~ msgstr "การพักเครื่องถูกระงับ"
+
+#~ msgid "suspend not inhibited"
+#~ msgstr "การพักเครื่องไม่ได้ถูกระงับ"
+
+#~ msgid "screen idle"
+#~ msgstr "จอภาพว่างใช้งาน"
+
+#~ msgid "screen awake"
+#~ msgstr "จอภาพตื่น"
 
 #~ msgid "Allow Suspend and Hibernate in the menu"
 #~ msgstr "มีตัวเลือกพักเครื่องและจำศีลเครื่องในเมนู"
@@ -2736,9 +2753,6 @@ msgstr "_วิธีใช้"
 
 #~ msgid "a short time"
 #~ msgstr "ไม่นาน"
-
-#~ msgid "Unknown"
-#~ msgstr "ไม่ทราบ"
 
 #~ msgid "Laptop batteries"
 #~ msgstr "แบตเตอรี่แล็ปท็อป"
