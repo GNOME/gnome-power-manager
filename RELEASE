@@ -1,9 +1,9 @@
 Follow http://developer.gnome.org/dotplan/for_maintainers.html
 
-git shortlog GNOME_POWER_MANAGER_2_30_0.. | grep -i -v trivial | uniq | grep -v Merge > NEWS.new
+git shortlog GNOME_POWER_MANAGER_2_30_1.. | grep -i -v trivial | uniq | grep -v Merge > NEWS.new
 
 --------------------------------------------------------------------------------
-Version 2.30.1
+Version 2.30.2
 ~~~~~~~~~~~~~~
 Released: 2010-xx-xx
 
@@ -16,8 +16,8 @@ Released: 2010-xx-xx
 
 Run "make dist", correct any problems encountered
 
-git commit -a -m "GNOME Power Manager 2.30.1"
-git tag -s GNOME_POWER_MANAGER_2_30_1 -m "==== Version 2.30.1 ===="
+git commit -a -m "GNOME Power Manager 2.30.2"
+git tag -s GNOME_POWER_MANAGER_2_30_2 -m "==== Version 2.30.2 ===="
 <wait>
 git push --tags
 git push
@@ -32,7 +32,7 @@ install-module gnome-power-manager-*.tar.gz
 
 - Do a post-release version bump by updating configure.in
 
-git commit -a -m "Post release version bump"
+git commit -a -m "trivial: Post release version bump"
 git push
 
 - Update jhbuild modulesets
