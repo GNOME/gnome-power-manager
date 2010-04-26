@@ -2,7 +2,19 @@ Follow http://developer.gnome.org/dotplan/for_maintainers.html
 
 git shortlog GNOME_POWER_MANAGER_2_30_0.. | grep -i -v trivial | uniq | grep -v Merge > NEWS.new
 
-Run "make distcheck", correct any problems encountered
+--------------------------------------------------------------------------------
+Version 2.30.1
+~~~~~~~~~~~~~~
+Released: 2010-xx-xx
+
+* Translations
+
+* New Features:
+
+* Bugfix:
+--------------------------------------------------------------------------------
+
+Run "make dist", correct any problems encountered
 
 git commit -a -m "GNOME Power Manager 2.30.1"
 git tag -s GNOME_POWER_MANAGER_2_30_1 -m "==== Version 2.30.1 ===="
