@@ -293,7 +293,7 @@ gpm_upower_get_device_summary (UpDevice *device)
 			g_string_append (description, " - ");
 			/* TRANSLATORS: the device is charging, and we have a time to full and empty */
 			g_string_append_printf (description, _("provides %s battery runtime"),
-						kind_desc, time_to_full_str, percentage, time_to_empty_str);
+						time_to_empty_str);
 		} else if (time_to_full_round > GPM_UP_TEXT_MIN_TIME) {
 
 			/* display only charge time */
