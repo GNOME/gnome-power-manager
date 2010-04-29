@@ -38,11 +38,6 @@ INCLUDES =						\
 	-I$(top_srcdir)/libhal-glib			\
 	$(NULL)
 
-if HAVE_HAL
-LOCAL_LIBHAL_LIBS =					\
-	$(top_builddir)/libhal-glib/libhal.la
-endif
-
 bin_PROGRAMS =						\
 	gnome-power-manager				\
 	gnome-power-preferences				\
@@ -121,10 +116,6 @@ gnome_power_preferences_LDADD =				\
 	$(DEVKIT_LIBS)					\
 	-lm
 
-if HAVE_HAL
-gnome_power_preferences_LDADD += $(LOCAL_LIBHAL_LIBS)
-endif
-
 gnome_power_preferences_CFLAGS =			\
 	$(WARNINGFLAGS)					\
 	$(NULL)
@@ -170,13 +161,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-engine.c					\
 	$(NULL)
 
-if HAVE_HAL
-gnome_power_manager_SOURCES += 				\
-	gpm-brightness-hal.h				\
-	gpm-brightness-hal.c				\
-	$(NULL)
-endif
-
 gnome_power_manager_LDADD =				\
 	libgpmshared.a					\
 	$(GLIB_LIBS)					\
@@ -190,10 +174,6 @@ gnome_power_manager_LDADD =				\
 	$(GPM_EXTRA_LIBS)				\
 	$(DEVKIT_LIBS)					\
 	-lm
-
-if HAVE_HAL
-gnome_power_manager_LDADD += $(LOCAL_LIBHAL_LIBS)
-endif
 
 gnome_power_manager_CFLAGS =				\
 	$(WARNINGFLAGS)					\
@@ -262,10 +242,6 @@ gnome_power_self_test_LDADD =				\
 	$(LIBNOTIFY_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
 	-lm
-
-if HAVE_HAL
-gnome_power_self_test_LDADD += $(LOCAL_LIBHAL_LIBS)
-endif
 
 gnome_power_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS) $(WARNINGFLAGS)
 
