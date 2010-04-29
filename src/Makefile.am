@@ -35,7 +35,6 @@ INCLUDES =						\
 	-DEGG_LOGGING="\"GPM_LOGGING\""			\
 	-DEGG_CONSOLE="\"GPM_CONSOLE\""			\
 	-I$(top_srcdir)					\
-	-I$(top_srcdir)/libhal-glib			\
 	$(NULL)
 
 bin_PROGRAMS =						\
@@ -141,8 +140,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-button.c					\
 	gpm-brightness.h				\
 	gpm-brightness.c				\
-	gpm-brightness-xrandr.h				\
-	gpm-brightness-xrandr.c				\
 	gpm-main.c					\
 	gpm-manager.h					\
 	gpm-manager.c					\
