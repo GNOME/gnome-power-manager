@@ -36,9 +36,6 @@
 #endif /* HAVE_UNISTD_H */
 
 #include "gpm-brightness.h"
-#ifdef HAVE_HAL
-#include "gpm-brightness-hal.h"
-#endif
 #include "gpm-brightness-xrandr.h"
 #include "gpm-common.h"
 #include "egg-debug.h"
@@ -50,15 +47,9 @@
 struct GpmBrightnessPrivate
 {
 	gboolean		 use_xrandr;
-#ifdef HAVE_HAL
-	gboolean		 use_hal;
-#endif
 	gboolean		 has_changed_events;
 	gboolean		 cache_trusted;
 	guint			 cache_percentage;
-#ifdef HAVE_HAL
-	GpmBrightnessHal	*hal;
-#endif
 	GpmBrightnessXRandR	*xrandr;
 };
 
@@ -141,14 +132,6 @@ gpm_brightness_set (GpmBrightness *brightness, guint percentage, gboolean *hw_ch
 		egg_warning ("failed to set using xrandr, falling back to HAL");
 		brightness->priv->use_xrandr = FALSE;
 	}
-#ifdef HAVE_HAL
-	if (brightness->priv->use_hal) {
-		ret = gpm_brightness_hal_set (brightness->priv->hal, percentage, &hw_changed_local);
-		if (ret)
-			goto out;
-		egg_warning ("failed to set using HAL");
-	}
-#endif
 	egg_debug ("no hardware support");
 	return FALSE;
 out:
@@ -196,14 +179,6 @@ gpm_brightness_get (GpmBrightness *brightness, guint *percentage)
 		egg_warning ("failed to set using xrandr, falling back to HAL");
 		brightness->priv->use_xrandr = FALSE;
 	}
-#ifdef HAVE_HAL
-	if (brightness->priv->use_hal) {
-		ret = gpm_brightness_hal_get (brightness->priv->hal, &percentage_local);
-		if (ret)
-			goto out;
-		egg_warning ("failed to set using HAL");
-	}
-#endif
 	egg_debug ("no hardware support");
 	return FALSE;
 out:
@@ -246,14 +221,6 @@ gpm_brightness_up (GpmBrightness *brightness, gboolean *hw_changed)
 		egg_warning ("failed to set using xrandr, falling back to HAL");
 		brightness->priv->use_xrandr = FALSE;
 	}
-#ifdef HAVE_HAL
-	if (brightness->priv->use_hal) {
-		ret = gpm_brightness_hal_up (brightness->priv->hal, &hw_changed_local);
-		if (ret)
-			goto out;
-		egg_warning ("failed to set using HAL");
-	}
-#endif
 	egg_debug ("no hardware support");
 	return FALSE;
 out:
@@ -290,14 +257,6 @@ gpm_brightness_down (GpmBrightness *brightness, gboolean *hw_changed)
 		egg_warning ("failed to set using xrandr, falling back to HAL");
 		brightness->priv->use_xrandr = FALSE;
 	}
-#ifdef HAVE_HAL
-	if (brightness->priv->use_hal) {
-		ret = gpm_brightness_hal_down (brightness->priv->hal, &hw_changed_local);
-		if (ret)
-			goto out;
-		egg_warning ("failed to set using HAL");
-	}
-#endif
 	egg_debug ("no hardware support");
 	return FALSE;
 out:
@@ -318,11 +277,7 @@ gboolean
 gpm_brightness_has_hw (GpmBrightness *brightness)
 {
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
-#ifdef HAVE_HAL
-	return (brightness->priv->use_xrandr || brightness->priv->use_hal);
-#else
 	return brightness->priv->use_xrandr;
-#endif
 }
 
 /**
@@ -335,9 +290,6 @@ gpm_brightness_finalize (GObject *object)
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GPM_IS_BRIGHTNESS (object));
 	brightness = GPM_BRIGHTNESS (object);
-#ifdef HAVE_HAL
-	g_object_unref (brightness->priv->hal);
-#endif
 	g_object_unref (brightness->priv->xrandr);
 	G_OBJECT_CLASS (gpm_brightness_parent_class)->finalize (object);
 }
@@ -400,20 +352,6 @@ gpm_brightness_xrandr_changed_cb (GpmBrightnessXRandR *xrandr, guint percentage,
 		gpm_brightness_changed (brightness, percentage);
 }
 
-#ifdef HAVE_HAL
-/**
- * gpm_brightness_hal_changed_cb:
- * This callback is called when the brightness value changes.
- **/
-static void
-gpm_brightness_hal_changed_cb (GpmBrightnessHal *hal, guint percentage, GpmBrightness *brightness)
-{
-	g_return_if_fail (GPM_IS_BRIGHTNESS (brightness));
-	if (brightness->priv->use_hal)
-		gpm_brightness_changed (brightness, percentage);
-}
-#endif
-
 /**
  * gpm_brightness_init:
  * @brightness: This brightness class instance
@@ -424,9 +362,6 @@ gpm_brightness_init (GpmBrightness *brightness)
 	brightness->priv = GPM_BRIGHTNESS_GET_PRIVATE (brightness);
 
 	brightness->priv->use_xrandr = FALSE;
-#ifdef HAVE_HAL
-	brightness->priv->use_hal = FALSE;
-#endif
 	brightness->priv->cache_trusted = FALSE;
 	brightness->priv->has_changed_events = FALSE;
 	brightness->priv->cache_percentage = 0;
@@ -438,17 +373,6 @@ gpm_brightness_init (GpmBrightness *brightness)
 	}
 	g_signal_connect (brightness->priv->xrandr, "brightness-changed",
 			  G_CALLBACK (gpm_brightness_xrandr_changed_cb), brightness);
-#ifdef HAVE_HAL
-	if (!brightness->priv->use_xrandr) {
-		brightness->priv->hal = gpm_brightness_hal_new ();
-		if (gpm_brightness_hal_has_hw (brightness->priv->hal)) {
-			egg_debug ("detected HAL hardware");
-			brightness->priv->use_hal = TRUE;
-		}
-		g_signal_connect (brightness->priv->hal, "brightness-changed",
-				  G_CALLBACK (gpm_brightness_hal_changed_cb), brightness);
-	}
-#endif
 }
 
 /**

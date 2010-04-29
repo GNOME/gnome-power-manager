@@ -196,16 +196,6 @@ AC_ARG_WITH(doc-dir,
 AC_SUBST(DOCDIR)
 
 dnl ---------------------------------------------------------------------------
-dnl - HAL support
-dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(hal, AS_HELP_STRING([--enable-hal],[Build using HAL support]),
-	      enable_hal=$enableval,enable_hal=no)
-if test x$enable_hal = xyes; then
-	AC_DEFINE(HAVE_HAL, 1, [Define if we have HAL support])
-fi
-AM_CONDITIONAL([HAVE_HAL], [test $enable_hal = yes])
-
-dnl ---------------------------------------------------------------------------
 dnl - Build self tests
 dnl ---------------------------------------------------------------------------
 AC_ARG_ENABLE(tests,
@@ -320,7 +310,6 @@ src/Makefile
 applets/Makefile
 applets/brightness/Makefile
 applets/inhibit/Makefile
-libhal-glib/Makefile
 docs/Makefile
 man/Makefile
 help/Makefile
@@ -369,7 +358,6 @@ echo "
         compiler:                  ${CC}
         cflags:                    ${CFLAGS}
         Building extra applets:    ${enable_applets}
-        HAL (brightness) support:  ${enable_hal}
         Self test support:         ${have_tests}
         GConf default support:     ${have_gconfdefaults}
         Docbook support:           ${enable_docbook_docs}
