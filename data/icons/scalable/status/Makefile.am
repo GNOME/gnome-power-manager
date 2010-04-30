@@ -25,21 +25,16 @@ icons_DATA = 			        \
 	gpm-mouse-000.svg		\
 	gpm-mouse-060.svg		\
 	gpm-mouse-100.svg		\
-	gpm-battery-000.svg		\
-	gpm-battery-020.svg		\
-	gpm-battery-040.svg		\
-	gpm-battery-060.svg		\
-	gpm-battery-080.svg		\
-	gpm-battery-100.svg		\
-	gpm-battery-000-charging.svg	\
-	gpm-battery-020-charging.svg	\
-	gpm-battery-040-charging.svg	\
-	gpm-battery-060-charging.svg	\
-	gpm-battery-080-charging.svg	\
-	gpm-battery-100-charging.svg	\
-	gpm-battery-missing.svg		\
-	gpm-battery-charged.svg		\
-	gpm-battery-empty.svg		\
+	battery-caution.svg		\
+	battery-low.svg			\
+	battery-good.svg		\
+	battery-full.svg		\
+	battery-caution-charging.svg	\
+	battery-low-charging.svg	\
+	battery-good-charging.svg	\
+	battery-full-charging.svg	\
+	battery-missing.svg		\
+	battery-empty.svg		\
 	gpm-ups-000.svg			\
 	gpm-ups-020.svg			\
 	gpm-ups-040.svg			\
