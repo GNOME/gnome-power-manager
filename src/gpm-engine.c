@@ -842,12 +842,13 @@ gpm_engine_coldplug_idle_cb (GpmEngine *engine)
 		g_error_free (error);
 		goto out;
 	}
-	engine->priv->array = up_client_get_devices (engine->priv->client);
+
+	/* get the devices */
+	array = up_client_get_devices (engine->priv->client);
 
 	/* do we have specific device types? */
-	array = engine->priv->array;
 	for (i=0;i<array->len;i++) {
-		device = g_ptr_array_index (engine->priv->array, i);
+		device = g_ptr_array_index (array, i);
 
 		/* get device properties */
 		g_object_get (device,
@@ -875,7 +876,7 @@ gpm_engine_coldplug_idle_cb (GpmEngine *engine)
 
 	/* add to database */
 	for (i=0;i<array->len;i++) {
-		device = g_ptr_array_index (engine->priv->array, i);
+		device = g_ptr_array_index (array, i);
 		gpm_engine_device_add (engine, device);
 		gpm_engine_check_recall (engine, device);
 	}
