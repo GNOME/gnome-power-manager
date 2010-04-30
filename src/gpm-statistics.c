@@ -1537,10 +1537,6 @@ main (int argc, char *argv[])
 	/* get data from gconf */
 	gconf_client = gconf_client_get_default ();
 
-	/* add application specific icons to search path */
-	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
-                                           GPM_DATA G_DIR_SEPARATOR_S "icons");
-
 	/* get UI */
 	builder = gtk_builder_new ();
 	retval = gtk_builder_add_from_file (builder, GPM_DATA "/gpm-statistics.ui", &error);
