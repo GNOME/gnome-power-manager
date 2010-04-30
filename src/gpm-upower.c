@@ -114,7 +114,7 @@ gpm_upower_get_device_icon (UpDevice *device, gboolean use_symbolic)
 		g_string_append (filename, "ac-adapter");
 	} else if (kind == UP_DEVICE_KIND_MONITOR) {
 		g_string_append (filename, "gpm-monitor");
-	} else if (kind == UP_DEVICE_KIND_UPS) {
+	} else if (kind == UP_DEVICE_KIND_UPS && !use_symbolic) {
 		if (!is_present) {
 			/* battery missing */
 			g_string_append (filename, "gpm-ups-missing");
@@ -130,7 +130,7 @@ gpm_upower_get_device_icon (UpDevice *device, gboolean use_symbolic)
 			index_str = gpm_upower_get_device_icon_index (device);
 			g_string_append_printf (filename, "gpm-ups-%s", index_str);
 		}
-	} else if (kind == UP_DEVICE_KIND_BATTERY) {
+	} else if (kind == UP_DEVICE_KIND_BATTERY || use_symbolic) {
 		if (!is_present) {
 			/* battery missing */
 			g_string_append (filename, "battery-missing");
@@ -155,9 +155,9 @@ gpm_upower_get_device_icon (UpDevice *device, gboolean use_symbolic)
 			g_string_append (filename, "battery-missing");
 		}
 
-	} else if (kind == UP_DEVICE_KIND_MOUSE ||
-		   kind == UP_DEVICE_KIND_KEYBOARD ||
-		   kind == UP_DEVICE_KIND_PHONE) {
+	} else if ((kind == UP_DEVICE_KIND_MOUSE ||
+		    kind == UP_DEVICE_KIND_KEYBOARD ||
+		    kind == UP_DEVICE_KIND_PHONE) && !use_symbolic) {
 		kind_str = up_device_kind_to_string (kind);
 		if (!is_present) {
 			/* battery missing */
