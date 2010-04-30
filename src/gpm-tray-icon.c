@@ -189,14 +189,12 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon, GtkMenu *menu, const GPtrArray *arr
 {
 	guint i;
 	guint added = 0;
-	gchar *icon_name;
 	gchar *percentage_str;
 	GtkWidget *item;
 	GtkWidget *label_title;
 	GtkWidget *label_percentage;
 	GtkWidget *image;
 	GtkWidget *hbox;
-	GtkWidget *child;
 	GtkWidget *hbox_align;
 	const gchar *object_path;
 	const gchar *desc;
@@ -243,7 +241,6 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon, GtkMenu *menu, const GPtrArray *arr
 
 		/* add to the menu item */
 		item = gtk_image_menu_item_new ();
-		child = gtk_bin_get_child (GTK_BIN (item));
 		gtk_container_add (GTK_CONTAINER (item), hbox);
 		gtk_box_pack_start (GTK_BOX (hbox), hbox_align, TRUE, TRUE, 3);
 		gtk_box_pack_start (GTK_BOX (hbox), label_percentage, FALSE, FALSE, 3);
@@ -260,7 +257,6 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon, GtkMenu *menu, const GPtrArray *arr
 
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
-		g_free (icon_name);
 		g_free (percentage_str);
 		g_object_unref (gicon);
 	}
