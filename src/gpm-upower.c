@@ -96,7 +96,6 @@ gpm_upower_get_device_icon (UpDevice *device, gboolean use_symbolic)
 
 	/* get correct icon prefix */
 	filename = g_string_new (NULL);
-	prefix = up_device_kind_to_string (kind);
 
 	/* get the icon from some simple rules */
 	if (kind == UP_DEVICE_KIND_LINE_POWER) {
@@ -106,46 +105,46 @@ gpm_upower_get_device_icon (UpDevice *device, gboolean use_symbolic)
 	} else if (kind == UP_DEVICE_KIND_UPS) {
 		if (!is_present) {
 			/* battery missing */
-			g_string_append_printf (filename, "gpm-%s-missing", prefix);
+			g_string_append (filename, "gpm-ups-missing");
 
 		} else if (state == UP_DEVICE_STATE_FULLY_CHARGED) {
-			g_string_append_printf (filename, "gpm-%s-100", prefix);
+			g_string_append (filename, "gpm-ups-100");
 
 		} else if (state == UP_DEVICE_STATE_CHARGING) {
 			index_str = gpm_upower_get_device_icon_index (device);
-			g_string_append_printf (filename, "gpm-%s-%s-charging", prefix, index_str);
+			g_string_append_printf (filename, "gpm-ups-%s-charging", index_str);
 
 		} else if (state == UP_DEVICE_STATE_DISCHARGING) {
 			index_str = gpm_upower_get_device_icon_index (device);
-			g_string_append_printf (filename, "gpm-%s-%s", prefix, index_str);
+			g_string_append_printf (filename, "gpm-ups-%s", index_str);
 		}
 	} else if (kind == UP_DEVICE_KIND_BATTERY) {
 		if (!is_present) {
 			/* battery missing */
-			g_string_append_printf (filename, "gpm-%s-missing", prefix);
+			g_string_append (filename, "gpm-battery-missing");
 
 		} else if (state == UP_DEVICE_STATE_EMPTY) {
-			g_string_append_printf (filename, "gpm-%s-empty", prefix);
+			g_string_append (filename, "gpm-battery-empty");
 
 		} else if (state == UP_DEVICE_STATE_FULLY_CHARGED) {
-			g_string_append_printf (filename, "gpm-%s-charged", prefix);
+			g_string_append (filename, "gpm-battery-charged");
 
 		} else if (state == UP_DEVICE_STATE_CHARGING) {
 			index_str = gpm_upower_get_device_icon_index (device);
-			g_string_append_printf (filename, "gpm-%s-%s-charging", prefix, index_str);
+			g_string_append_printf (filename, "gpm-battery-%s-charging", index_str);
 
 		} else if (state == UP_DEVICE_STATE_DISCHARGING) {
 			index_str = gpm_upower_get_device_icon_index (device);
-			g_string_append_printf (filename, "gpm-%s-%s", prefix, index_str);
+			g_string_append_printf (filename, "gpm-battery-%s", index_str);
 
 		} else if (state == UP_DEVICE_STATE_PENDING_CHARGE) {
 			index_str = gpm_upower_get_device_icon_index (device);
 			/* FIXME: do new grey icons */
-			g_string_append_printf (filename, "gpm-%s-%s-charging", prefix, index_str);
+			g_string_append_printf (filename, "gpm-battery-%s-charging", index_str);
 
 		} else if (state == UP_DEVICE_STATE_PENDING_DISCHARGE) {
 			index_str = gpm_upower_get_device_icon_index (device);
-			g_string_append_printf (filename, "gpm-%s-%s", prefix, index_str);
+			g_string_append_printf (filename, "gpm-battery-%s", index_str);
 		} else {
 			g_string_append (filename, "gpm-battery-missing");
 		}
@@ -153,6 +152,7 @@ gpm_upower_get_device_icon (UpDevice *device, gboolean use_symbolic)
 	} else if (kind == UP_DEVICE_KIND_MOUSE ||
 		   kind == UP_DEVICE_KIND_KEYBOARD ||
 		   kind == UP_DEVICE_KIND_PHONE) {
+		prefix = up_device_kind_to_string (kind);
 		if (!is_present) {
 			/* battery missing */
 			g_string_append_printf (filename, "gpm-%s-000", prefix);
