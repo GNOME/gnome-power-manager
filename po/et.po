@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: Gnome Power Manager MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&component=general\n"
-"POT-Creation-Date: 2010-03-17 22:53+0000\n"
-"PO-Revision-Date: 2010-04-23 22:11+0300\n"
+"POT-Creation-Date: 2010-04-30 14:03+0000\n"
+"PO-Revision-Date: 2010-05-01 16:04+0300\n"
 "Last-Translator: Mattias Põldaru <mahfiaz gmail com>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -145,12 +145,12 @@ msgstr "Ekraani tuhmistamine teatud jõudeaja järel, kui ollakse akutoitel"
 
 msgid ""
 "Display options for the notification icon. Valid options are \"never\", \"low"
-"\", \"critical\", \"charge\", \"present\" and \"always\"."
+"\", \"critical\", \"charge\", and \"present\"."
 msgstr ""
 "Millal teavitusikooni kuvatakse. Võimalikud variandid on \"never\" (ei "
 "kuvata kunagi), \"critical\" (kriitilise täituvuse korral), \"low\" (aku "
-"madala täituvuse korral), \"charge\" (laadimise ajal), \"present\" (aku "
-"olemasolu korral) ja \"always\" (alati)."
+"madala täituvuse korral), \"charge\" (laadimise ajal) ja \"present\" (aku "
+"olemasolu korral)."
 
 msgid "Hibernate button action"
 msgstr "Talveune nupu tegevus"
@@ -520,8 +520,8 @@ msgid "The default amount of time to dim the screen after idle."
 msgstr ""
 "Vaikimisi aeg, kui kaua peab arvuti ekraani tuhmistamiseks jõude olema."
 
-msgid "The default configuration version."
-msgstr "Vaikimisi seadistuste versioon."
+msgid "The default configuration version"
+msgstr "Vaikimisi seadistuste versioon"
 
 msgid "The default graph type to show in the statistics window"
 msgstr "Vaikimisi graafiku tüüp statistikaaknas"
@@ -641,8 +641,8 @@ msgstr ""
 msgid "When to show the notification icon"
 msgstr "Millal tuleb teavitusikooni näidata."
 
-msgid "Whether NetworkManager should be connected and disconnected on sleep."
-msgstr "Kas võrguhaldur peab võrguühenduse pärast uinakut taastama?"
+msgid "Whether NetworkManager should be connected and disconnected on sleep"
+msgstr "Kas võrguhaldur peab uinaku ajaks ühenduse katkestama"
 
 msgid ""
 "Whether NetworkManager should disconnect before suspending or hibernating "
@@ -843,9 +843,6 @@ msgstr "_Uinutamise nupu vajutamisel:"
 
 msgid "When the power _button is pressed:"
 msgstr "_Sisselülitamise nupu vajutamisel:"
-
-msgid "_Always display an icon"
-msgstr "_Ikooni kuvatakse alati"
 
 msgid "_Never display an icon"
 msgstr "Ikooni ei kuvata _mitte kunagi"
@@ -1070,9 +1067,9 @@ msgstr ""
 "Sinu arvuti aku mahtuvus on väga väike (%1.1f%%), mis tähendab, see võib "
 "olla kas vana või vigane."
 
-#. TRANSLATORS: show the fully charged notification
-msgid "Battery Fully Charged"
-msgid_plural "Batteries Fully Charged"
+#. TRANSLATORS: show the charged notification
+msgid "Battery Charged"
+msgid_plural "Batteries Charged"
 msgstr[0] "Aku on täis laetud"
 msgstr[1] "Akud on täis laetud"
 
@@ -1103,7 +1100,7 @@ msgstr "UPS suudab toita veel %s (%.1f%%)"
 msgid "Battery low"
 msgstr "Aku on tühjenemas"
 
-#. TRANSLATORS: laptop battery low, and we have more than one type of battery
+#. TRANSLATORS: laptop battery low, and we have more than one kind of battery
 msgid "Laptop battery low"
 msgstr "Sülearvuti aku on peaaegu tühi"
 
@@ -1162,7 +1159,7 @@ msgstr "Mobiiltelefoni aku on kriitiliselt tühi"
 msgid "The cell phone attached to this computer is low in power (%.1f%%)"
 msgstr "Arvutiga seotud mobiiltelefoni aku on peaaegu tühi (%.1f%%)"
 
-#. TRANSLATORS: laptop battery critically low, and only have one type of battery
+#. TRANSLATORS: laptop battery critically low, and only have one kind of battery
 msgid "Battery critically low"
 msgstr "Aku on kriitiliselt tühi"
 
@@ -1326,6 +1323,7 @@ msgstr "Ei tehta midagi"
 msgid "Never"
 msgstr "Mitte kunagi"
 
+#. TRANSLATORS: the rate of discharge for the device
 msgid "Rate"
 msgstr "Kiirus"
 
@@ -1350,14 +1348,16 @@ msgstr "1 päev"
 msgid "1 week"
 msgstr "1 nädal"
 
+#. TRANSLATORS: what we've observed about the device
 msgid "Charge profile"
 msgstr "Laadimise profiil"
 
-msgid "Charge accuracy"
-msgstr "Laadimisaja täpsus"
-
 msgid "Discharge profile"
 msgstr "Tühjenemise profiil"
+
+#. TRANSLATORS: how accurately we can predict the time remaining of the battery
+msgid "Charge accuracy"
+msgstr "Laadimisaja täpsus"
 
 msgid "Discharge accuracy"
 msgstr "Tühjenemisaja täpsus"
@@ -1421,6 +1421,7 @@ msgstr "Jah"
 msgid "No"
 msgstr "Ei"
 
+#. TRANSLATORS: the device ID of the current device, e.g. "battery0"
 msgid "Device"
 msgstr "Seade"
 
@@ -1433,6 +1434,9 @@ msgstr "Mudel"
 msgid "Serial number"
 msgstr "Seerianumber"
 
+#. TRANSLATORS: a boolean attribute that means if the device is supplying the
+#. * main power for the computer. For instance, an AC adapter or laptop battery
+#. * would be TRUE,  but a mobile phone or mouse taking power is FALSE
 msgid "Supply"
 msgstr "Toide"
 
@@ -1443,15 +1447,23 @@ msgstr[0] "%d sekund"
 msgstr[1] "%d sekundit"
 
 # Nimetus: "Andmete vanus" Väärtus: "102 sekundit"
+#. TRANSLATORS: when the device was last updated with new data. It's
+#. * usually a few seconds when a device is discharging or charging.
 msgid "Refreshed"
 msgstr "Andmete vanus"
 
+#. TRANSLATORS: Present is whether the device is currently attached
+#. * to the computer, as some devices (e.g. laptop batteries) can
+#. * be removed, but still observed as devices on the system
 msgid "Present"
 msgstr "Olemas"
 
+#. TRANSLATORS: If the device can be recharged, e.g. lithium
+#. * batteries rather than alkaline ones
 msgid "Rechargeable"
 msgstr "Laaditav"
 
+#. TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged"
 msgid "State"
 msgstr "Olek"
 
@@ -1470,15 +1482,21 @@ msgstr "Tehasetäituvus"
 msgid "Voltage"
 msgstr "Pinge"
 
+#. TRANSLATORS: the amount of charge the cell contains
 msgid "Percentage"
 msgstr "Protsent"
 
+#. TRANSLATORS: the capacity of the device, which is basically a measure
+#. * of how full it can get, relative to the design capacity
 msgid "Capacity"
 msgstr "Mahtuvus"
 
+#. TRANSLATORS: the type of battery, e.g. lithium or nikel metal hydroxide
 msgid "Technology"
 msgstr "Tehnoloogia"
 
+#. TRANSLATORS: this is when the device is plugged in, typically
+#. * only shown for the ac adaptor device
 msgid "Online"
 msgstr "Ühendatud"
 
@@ -1623,54 +1641,61 @@ msgstr "Protsessor"
 msgid "_Preferences"
 msgstr "_Eelistused"
 
+#. TRANSLATORS: device not present
+#, c-format
+msgid "%s not present"
+msgstr "%s pole ühendatud"
+
 #. TRANSLATORS: a phone is charging
 #. TRANSLATORS: device is charging, but we only have a percentage
 #, c-format
-msgid "%s charging (%.1f%%)"
-msgstr "%s laadimine (%.1f%%)"
+msgid "%s charging"
+msgstr "%s on laadimisel"
 
-#. TRANSLATORS: The laptop battery is fully charged, and we know a time
+#. TRANSLATORS: the device is charged
 #, c-format
-msgid ""
-"Battery is fully charged.\n"
-"Provides %s laptop runtime"
-msgstr ""
-"Aku on täis laetud.\n"
-"See tagab sülearvuti tööajaks %s"
-
-#. TRANSLATORS: the device is fully charged
-#, c-format
-msgid "%s is fully charged"
+msgid "%s is charged"
 msgstr "%s on täis laetud"
+
+#. TRANSLATORS: The laptop battery is charged, and we know a time
+#, c-format
+msgid "provides %s laptop runtime"
+msgstr "see tagab sülearvuti tööajaks %s"
 
 #. TRANSLATORS: the device is discharging, and we have a time remaining
 #, c-format
-msgid "%s %s remaining (%.1f%%)"
-msgstr "%s %s lõpuni (%.1f%%)"
+msgid "%s %s remaining"
+msgstr "%s lõpuni %s"
 
-#. TRANSLATORS: the device is charging, and we have a time to full and empty
+#. TRANSLATORS: the device is discharging, but we only have a percentage
 #, c-format
-msgid ""
-"%s %s until charged (%.1f%%)\n"
-"Provides %s battery runtime"
-msgstr ""
-"%s täislaadimiseni kulub %s (%.1f%%)\n"
-"Aku suudab nüüd toita %s"
+msgid "%s discharging"
+msgstr "%s tühjeneb"
 
 #. TRANSLATORS: device is charging, and we have a time to full and a percentage
 #, c-format
-msgid "%s %s until charged (%.1f%%)"
-msgstr "%s täislaadimiseni kulub %s (%.1f%%)"
+msgid "%s %s until charged"
+msgstr "%s täislaadimiseni %s"
+
+#. TRANSLATORS: the device is charging, and we have a time to full and empty
+#, c-format
+msgid "provides %s battery runtime"
+msgstr "aku suudab nüüd toita %s"
 
 #. TRANSLATORS: this is only shown for laptops with multiple batteries
 #, c-format
-msgid "%s waiting to discharge (%.1f%%)"
-msgstr "%s tühjenemise ootel (%.1f%%)"
+msgid "%s waiting to discharge"
+msgstr "%s on tühjenemise ootel"
 
 #. TRANSLATORS: this is only shown for laptops with multiple batteries
 #, c-format
-msgid "%s waiting to charge (%.1f%%)"
-msgstr "%s laadimise ootel (%.1f%%)"
+msgid "%s waiting to charge"
+msgstr "%s on laadimise ootel"
+
+#. TRANSLATORS: when the device has no charge left
+#, c-format
+msgid "%s empty"
+msgstr "%s on tühi"
 
 #. TRANSLATORS: the type of data, e.g. Laptop battery
 msgid "Product:"
@@ -1686,12 +1711,15 @@ msgstr "Olek:"
 msgid "Missing"
 msgstr "Puudub"
 
+#. TRANSLATORS: battery state
 msgid "Charged"
 msgstr "Laetud"
 
+#. TRANSLATORS: battery state
 msgid "Charging"
 msgstr "Laadimine"
 
+#. TRANSLATORS: battery state
 msgid "Discharging"
 msgstr "Tühjenemine"
 
@@ -1776,16 +1804,16 @@ msgstr[0] "Monitor"
 msgstr[1] "Monitorid"
 
 #. TRANSLATORS: wireless mice with internal batteries
-msgid "Wireless mouse"
-msgid_plural "Wireless mice"
-msgstr[0] "Juhtmeta hiir"
-msgstr[1] "Juhtmeta hiired"
+msgid "Mouse"
+msgid_plural "Mice"
+msgstr[0] "Hiir"
+msgstr[1] "Hiired"
 
 #. TRANSLATORS: wireless keyboard with internal battery
-msgid "Wireless keyboard"
-msgid_plural "Wireless keyboards"
-msgstr[0] "Juhtmeta klaviatuur"
-msgstr[1] "Juhtmeta klaviatuurid"
+msgid "Keyboard"
+msgid_plural "Keyboards"
+msgstr[0] "Klaviatuur"
+msgstr[1] "Klaviatuurid"
 
 #. TRANSLATORS: portable device
 msgid "PDA"
@@ -1826,6 +1854,18 @@ msgstr "Nikkel-metallhüdriid (NiMH)"
 #. TRANSLATORS: battery technology
 msgid "Unknown technology"
 msgstr "Tundmatu tehnoloogia"
+
+#. TRANSLATORS: battery state
+msgid "Empty"
+msgstr "Tühi"
+
+#. TRANSLATORS: battery state
+msgid "Waiting to charge"
+msgstr "Laadimise ootel"
+
+#. TRANSLATORS: battery state
+msgid "Waiting to discharge"
+msgstr "Tühjenemise ootel"
 
 msgid "_About"
 msgstr "_Programmist lähemalt"
