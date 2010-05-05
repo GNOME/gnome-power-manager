@@ -1,4 +1,4 @@
-AC_PREREQ(2.65)
+AC_PREREQ(2.63)
 
 AC_INIT([gnome-power-manager],[2.31.1])
 AC_CONFIG_SRCDIR(src)
