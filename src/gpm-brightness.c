@@ -42,6 +42,7 @@
 
 #include "egg-discrete.h"
 #include "egg-debug.h"
+#include "egg-string.h"
 
 #include "gpm-brightness.h"
 #include "gpm-common.h"
@@ -66,6 +67,8 @@ struct GpmBrightnessPrivate
 	gboolean		 hw_changed;
 	/* A cache of XRRScreenResources is used as XRRGetScreenResources is expensive */
 	GPtrArray		*resources;
+	gint			 extension_levels;
+	gint			 extension_current;
 };
 
 enum {
@@ -83,6 +86,65 @@ typedef enum {
 G_DEFINE_TYPE (GpmBrightness, gpm_brightness, G_TYPE_OBJECT)
 static guint signals [LAST_SIGNAL] = { 0 };
 static gpointer gpm_brightness_object = NULL;
+
+/**
+ * gpm_brightness_helper_get_value:
+ **/
+static gint
+gpm_brightness_helper_get_value (const gchar *argument)
+{
+	gboolean ret;
+	GError *error = NULL;
+	gchar *stdout_data = NULL;
+	gint exit_status = 0;
+	gint value = -1;
+	gchar *command = NULL;
+
+	/* get the data */
+	command = g_strdup_printf ("pkexec /usr/sbin/gnome-power-backlight-helper --%s", argument);
+	ret = g_spawn_command_line_sync (command,
+					 &stdout_data, NULL, &exit_status, &error);
+	if (!ret) {
+		egg_error ("failed to get value: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+	egg_debug ("executing %s retval: %i", command, exit_status);
+
+	/* parse for a number */
+	ret = egg_strtoint (stdout_data, &value);
+	if (!ret)
+		goto out;
+out:
+	g_free (command);
+	g_free (stdout_data);
+	return value;
+}
+
+/**
+ * gpm_brightness_helper_set_value:
+ **/
+static gboolean
+gpm_brightness_helper_set_value (const gchar *argument, gint value)
+{
+	gboolean ret;
+	GError *error = NULL;
+	gint exit_status = 0;
+	gchar *command = NULL;
+
+	/* get the data */
+	command = g_strdup_printf ("pkexec /usr/sbin/gnome-power-backlight-helper --%s %i", argument, value);
+	ret = g_spawn_command_line_sync (command, NULL, NULL, &exit_status, &error);
+	if (!ret) {
+		egg_error ("failed to get value: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+	egg_debug ("executing %s retval: %i", command, exit_status);
+out:
+	g_free (command);
+	return ret;
+}
 
 /**
  * gpm_brightness_get_step:
@@ -456,6 +518,8 @@ gpm_brightness_foreach_screen (GpmBrightness *brightness, GpmXRandROp op)
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
 
+	return FALSE;
+
 	/* do for each screen */
 	length = brightness->priv->resources->len;
 	for (i=0; i<length; i++) {
@@ -523,6 +587,14 @@ gpm_brightness_set (GpmBrightness *brightness, guint percentage, gboolean *hw_ch
 	brightness->priv->hw_changed = FALSE;
 	ret = gpm_brightness_foreach_screen (brightness, ACTION_BACKLIGHT_SET);
 
+	/* legacy fallback */
+	if (!ret) {
+		if (brightness->priv->extension_levels < 0)
+			brightness->priv->extension_levels = gpm_brightness_helper_get_value ("get-max-brightness");
+		brightness->priv->extension_current = egg_discrete_from_percent (percentage, brightness->priv->extension_levels+1);
+		ret = gpm_brightness_helper_set_value ("set-brightness", brightness->priv->extension_current);
+	}
+
 	/* did the hardware have to be modified? */
 	if (ret && hw_changed != NULL)
 		*hw_changed = brightness->priv->hw_changed;
@@ -563,10 +635,19 @@ gpm_brightness_get (GpmBrightness *brightness, guint *percentage)
 	ret = gpm_brightness_foreach_screen (brightness, ACTION_BACKLIGHT_GET);
 	percentage_local = brightness->priv->shared_value;
 
+	/* legacy fallback */
+	if (!ret) {
+		if (brightness->priv->extension_levels < 0)
+			brightness->priv->extension_levels = gpm_brightness_helper_get_value ("get-max-brightness");
+		brightness->priv->extension_current = gpm_brightness_helper_get_value ("get-brightness");
+		percentage_local = egg_discrete_to_percent (brightness->priv->extension_current, brightness->priv->extension_levels+1);
+		ret = TRUE;
+	}
+
 	/* valid? */
 	if (percentage_local > 100) {
-		egg_warning ("percentage value of %i will be ignored", percentage_local);
-		ret = FALSE;
+		egg_warning ("percentage value of %i will be truncated", percentage_local);
+		percentage_local = 100;
 	}
 
 	/* a new value is always trusted if the method and checks succeed */
@@ -607,6 +688,19 @@ gpm_brightness_up (GpmBrightness *brightness, gboolean *hw_changed)
 	if (ret)
 		brightness->priv->cache_trusted = FALSE;
 
+	/* legacy fallback */
+	if (!ret) {
+		if (brightness->priv->extension_levels < 0)
+			brightness->priv->extension_levels = gpm_brightness_helper_get_value ("get-max-brightness");
+		brightness->priv->extension_current = gpm_brightness_helper_get_value ("get-brightness");
+		if (brightness->priv->extension_current < brightness->priv->extension_levels)
+			ret = gpm_brightness_helper_set_value ("set-brightness", ++brightness->priv->extension_current);
+		if (hw_changed != NULL)
+			*hw_changed = ret;
+		brightness->priv->cache_trusted = FALSE;
+		goto out;
+	}
+out:
 	return ret;
 }
 
@@ -637,6 +731,17 @@ gpm_brightness_down (GpmBrightness *brightness, gboolean *hw_changed)
 	if (ret)
 		brightness->priv->cache_trusted = FALSE;
 
+	/* legacy fallback */
+	if (!ret) {
+		brightness->priv->extension_current = gpm_brightness_helper_get_value ("get-brightness");
+		if (brightness->priv->extension_current > 0)
+			ret = gpm_brightness_helper_set_value ("set-brightness", --brightness->priv->extension_current);
+		if (hw_changed != NULL)
+			*hw_changed = ret;
+		brightness->priv->cache_trusted = FALSE;
+		goto out;
+	}
+out:
 	return ret;
 }
 
@@ -746,7 +851,17 @@ gboolean
 gpm_brightness_has_hw (GpmBrightness *brightness)
 {
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
-	return brightness->priv->has_extension;
+
+	/* use XRandR first */
+	if (brightness->priv->has_extension)
+		return TRUE;
+
+	/* fallback to legacy access */
+	if (brightness->priv->extension_levels < 0)
+		brightness->priv->extension_levels = gpm_brightness_helper_get_value ("get-max-brightness");
+	if (brightness->priv->extension_levels > 0)
+		return TRUE;
+	return FALSE;
 }
 
 /**
@@ -801,6 +916,7 @@ gpm_brightness_init (GpmBrightness *brightness)
 	brightness->priv->has_changed_events = FALSE;
 	brightness->priv->cache_percentage = 0;
 	brightness->priv->hw_changed = FALSE;
+	brightness->priv->extension_levels = -1;
 	brightness->priv->resources = g_ptr_array_new_with_free_func ((GDestroyNotify) XRRFreeScreenResources);
 
 	/* can we do this */
@@ -808,10 +924,8 @@ gpm_brightness_init (GpmBrightness *brightness)
 #ifdef HAVE_XRANDR_13
 	brightness->priv->has_randr13 = gpm_brightness_setup_version (brightness);
 #endif
-	if (brightness->priv->has_extension == FALSE) {
-		egg_debug ("no XRANDR extension, so aborting init");
-		return;
-	}
+	if (brightness->priv->has_extension == FALSE)
+		egg_debug ("no XRANDR extension");
 
 	screen = gdk_screen_get_default ();
 	window = gdk_screen_get_root_window (screen);
