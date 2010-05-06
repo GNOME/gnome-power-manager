@@ -43,6 +43,10 @@ bin_PROGRAMS =						\
 	gnome-power-statistics				\
 	$(NULL)
 
+sbin_PROGRAMS =						\
+	gnome-power-backlight-helper			\
+	$(NULL)
+
 check_PROGRAMS =					\
 	gnome-power-self-test
 
@@ -66,6 +70,8 @@ libgpmshared_a_SOURCES =				\
 	egg-dbus-monitor.c				\
 	egg-discrete.h					\
 	egg-discrete.c					\
+	egg-string.h					\
+	egg-string.c					\
 	egg-console-kit.h				\
 	egg-console-kit.c				\
 	gpm-common.h					\
@@ -74,6 +80,19 @@ libgpmshared_a_SOURCES =				\
 	gpm-marshal.c					\
 	gpm-upower.c					\
 	gpm-upower.h					\
+	$(NULL)
+
+gnome_power_backlight_helper_SOURCES =			\
+	gpm-backlight-helper.c				\
+	$(NULL)
+
+gnome_power_backlight_helper_LDADD =			\
+	libgpmshared.a					\
+	$(GLIB_LIBS)					\
+	-lm
+
+gnome_power_backlight_helper_CFLAGS =			\
+	$(WARNINGFLAGS)					\
 	$(NULL)
 
 gnome_power_statistics_SOURCES =			\

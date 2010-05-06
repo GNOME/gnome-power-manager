@@ -316,6 +316,7 @@ man/Makefile
 help/Makefile
 po/Makefile.in
 tools/Makefile
+policy/Makefile
 data/Makefile
 data/gnome-power-manager.desktop.in
 data/gnome-power-preferences.desktop.in
