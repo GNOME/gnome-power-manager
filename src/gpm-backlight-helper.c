@@ -34,19 +34,24 @@
 #define GCM_BACKLIGHT_HELPER_EXIT_CODE_ARGUMENTS_INVALID	3
 #define GCM_BACKLIGHT_HELPER_EXIT_CODE_INVALID_USER		4
 
+#define GCM_BACKLIGHT_HELPER_SYSFS_LOCATION			"/sys/class/backlight"
+
 /**
  * gcm_backlight_helper_get_best_backlight:
  **/
 static gchar *
 gcm_backlight_helper_get_best_backlight ()
 {
-	gchar *filename = NULL;
+	gchar *filename;
 	guint i;
 	gboolean ret;
+	GDir *dir = NULL;
+	GError *error = NULL;
+	const gchar *first_device;
 
 	/* available kernel interfaces in priority order */
 	static const gchar *backlight_interfaces[] = {
-		"asus-laptop",
+		"asus_laptop",
 		"eeepc",
 		"thinkpad_screen",
 		"acpi_video1",
@@ -60,13 +65,35 @@ gcm_backlight_helper_get_best_backlight ()
 
 	/* search each one */
 	for (i=0; backlight_interfaces[i] != NULL; i++) {
-		filename = g_build_filename ("/sys/class/backlight", backlight_interfaces[i], NULL);
+		filename = g_build_filename (GCM_BACKLIGHT_HELPER_SYSFS_LOCATION,
+					     backlight_interfaces[i], NULL);
 		ret = g_file_test (filename, G_FILE_TEST_EXISTS);
 		if (ret)
-			return filename;
+			goto out;
 		g_free (filename);
 	}
-	return NULL;
+
+	/* nothing found in the ordered list */
+	filename = NULL;
+
+	/* find any random ones */
+	dir = g_dir_open (GCM_BACKLIGHT_HELPER_SYSFS_LOCATION, 0, &error);
+	if (dir == NULL) {
+		g_warning ("failed to find any devices: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* get first device if any */
+	first_device = g_dir_read_name (dir);
+	if (first_device != NULL) {
+		filename = g_build_filename (GCM_BACKLIGHT_HELPER_SYSFS_LOCATION,
+					     first_device, NULL);
+	}
+out:
+	if (dir != NULL)
+		g_dir_close (dir);
+	return filename;
 }
 
 /**
