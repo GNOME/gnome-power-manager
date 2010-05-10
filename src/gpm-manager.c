@@ -1525,28 +1525,28 @@ gpm_manager_engine_charge_low_cb (GpmEngine *engine, UpDevice *device, GpmManage
 		title = _("Mouse battery low");
 
 		/* TRANSLATORS: tell user more details */
-		message = g_strdup_printf (_("The wireless mouse attached to this computer is low in power (%.0f%%)"), percentage);
+		message = g_strdup_printf (_("The wireless mouse is low in power (%.0f%%)"), percentage);
 
 	} else if (kind == UP_DEVICE_KIND_KEYBOARD) {
 		/* TRANSLATORS: keyboard is getting a little low */
 		title = _("Keyboard battery low");
 
 		/* TRANSLATORS: tell user more details */
-		message = g_strdup_printf (_("The wireless keyboard attached to this computer is low in power (%.0f%%)"), percentage);
+		message = g_strdup_printf (_("The wireless keyboard is low in power (%.0f%%)"), percentage);
 
 	} else if (kind == UP_DEVICE_KIND_PDA) {
 		/* TRANSLATORS: PDA is getting a little low */
 		title = _("PDA battery low");
 
 		/* TRANSLATORS: tell user more details */
-		message = g_strdup_printf (_("The PDA attached to this computer is low in power (%.0f%%)"), percentage);
+		message = g_strdup_printf (_("The PDA is low in power (%.0f%%)"), percentage);
 
 	} else if (kind == UP_DEVICE_KIND_PHONE) {
 		/* TRANSLATORS: cell phone (mobile) is getting a little low */
 		title = _("Cell phone battery low");
 
 		/* TRANSLATORS: tell user more details */
-		message = g_strdup_printf (_("The cell phone attached to this computer is low in power (%.0f%%)"), percentage);
+		message = g_strdup_printf (_("The cell phone is low in power (%.0f%%)"), percentage);
 	}
 
 	/* get correct icon */
@@ -1643,7 +1643,7 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmM
 		title = _("Mouse battery low");
 
 		/* TRANSLATORS: the device is just going to stop working */
-		message = g_strdup_printf (_("The wireless mouse attached to this computer is very low in power (%.0f%%). "
+		message = g_strdup_printf (_("The wireless mouse is very low in power (%.0f%%). "
 					     "This device will soon stop functioning if not charged."),
 					   percentage);
 	} else if (kind == UP_DEVICE_KIND_KEYBOARD) {
@@ -1651,7 +1651,7 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmM
 		title = _("Keyboard battery low");
 
 		/* TRANSLATORS: the device is just going to stop working */
-		message = g_strdup_printf (_("The wireless keyboard attached to this computer is very low in power (%.0f%%). "
+		message = g_strdup_printf (_("The wireless keyboard is very low in power (%.0f%%). "
 					     "This device will soon stop functioning if not charged."),
 					   percentage);
 	} else if (kind == UP_DEVICE_KIND_PDA) {
@@ -1660,7 +1660,7 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmM
 		title = _("PDA battery low");
 
 		/* TRANSLATORS: the device is just going to stop working */
-		message = g_strdup_printf (_("The PDA attached to this computer is very low in power (%.0f%%). "
+		message = g_strdup_printf (_("The PDA is very low in power (%.0f%%). "
 					     "This device will soon stop functioning if not charged."),
 					   percentage);
 	} else if (kind == UP_DEVICE_KIND_PHONE) {
