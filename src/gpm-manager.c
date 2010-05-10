@@ -853,13 +853,13 @@ gpm_manager_lid_button_pressed (GpmManager *manager, gboolean pressed)
 	if (!manager->priv->on_battery) {
 		egg_debug ("Performing AC policy");
 		gpm_manager_perform_policy (manager, GPM_CONF_BUTTON_LID_AC,
-					    "The lid has been closed on ac power.");
+					    "Lid been closed on AC power.");
 		return;
 	}
 
 	egg_debug ("Performing battery policy");
 	gpm_manager_perform_policy (manager, GPM_CONF_BUTTON_LID_BATT,
-				    "The lid has been closed on battery power.");
+				    "Lid closed on battery power.");
 }
 
 static void
@@ -1518,7 +1518,7 @@ gpm_manager_engine_charge_low_cb (GpmEngine *engine, UpDevice *device, GpmManage
 		remaining_text = gpm_get_timestring (time_to_empty);
 
 		/* TRANSLATORS: tell the user how much time they have got */
-		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining UPS backup power (%.0f%%)"),
+		message = g_strdup_printf (_("Approximately <b>%s</b> of remaining UPS backup power (%.0f%%)"),
 					   remaining_text, percentage);
 	} else if (kind == UP_DEVICE_KIND_MOUSE) {
 		/* TRANSLATORS: mouse is getting a little low */
@@ -1634,7 +1634,7 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmM
 		remaining_text = gpm_get_timestring (time_to_empty);
 
 		/* TRANSLATORS: give the user a ultimatum */
-		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining UPS power (%.0f%%). "
+		message = g_strdup_printf (_("Approximately <b>%s</b> of remaining UPS power (%.0f%%). "
 					     "Restore AC power to your computer to avoid losing data."),
 					   remaining_text, percentage);
 		g_free (remaining_text);
