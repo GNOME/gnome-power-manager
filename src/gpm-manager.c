@@ -591,13 +591,13 @@ gpm_manager_sleep_failure (GpmManager *manager, gboolean is_suspend, const gchar
 	string = g_string_new ("");
 	if (is_suspend) {
 		/* TRANSLATORS: message text */
-		g_string_append (string, _("Your computer failed to suspend."));
+		g_string_append (string, _("The computer failed to suspend."));
 		/* TRANSLATORS: title text */
 		title = _("Failed to suspend");
 		icon = GPM_STOCK_SUSPEND;
 	} else {
 		/* TRANSLATORS: message text */
-		g_string_append (string, _("Your computer failed to hibernate."));
+		g_string_append (string, _("The computer failed to hibernate."));
 		/* TRANSLATORS: title text */
 		title = _("Failed to hibernate");
 		icon = GPM_STOCK_HIBERNATE;
@@ -1305,7 +1305,7 @@ gpm_manager_engine_low_capacity_cb (GpmEngine *engine, UpDevice *device, GpmMana
 	title = _("Battery may be broken");
 
 	/* TRANSLATORS: notify the user that that battery is broken as the capacity is very low */
-	message = g_strdup_printf (_("Your battery has a very low capacity (%1.1f%%), "
+	message = g_strdup_printf (_("Battery has a very low capacity (%1.1f%%), "
 				     "which means that it may be old or broken."), capacity);
 	gpm_manager_notify (manager, &manager->priv->notification_general, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_SHORT,
 			    GTK_STOCK_DIALOG_INFO, NOTIFY_URGENCY_LOW);
@@ -1669,7 +1669,7 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmM
 		title = _("Cell phone battery low");
 
 		/* TRANSLATORS: the device is just going to stop working */
-		message = g_strdup_printf (_("Your cell phone is very low in power (%.0f%%). "
+		message = g_strdup_printf (_("Cell phone is very low in power (%.0f%%). "
 					     "This device will soon stop functioning if not charged."),
 					   percentage);
 	}
