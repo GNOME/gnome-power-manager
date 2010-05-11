@@ -76,6 +76,8 @@ libgpmshared_a_SOURCES =				\
 	egg-console-kit.c				\
 	gpm-common.h					\
 	gpm-common.c					\
+	gpm-brightness.h				\
+	gpm-brightness.c				\
 	gpm-marshal.h					\
 	gpm-marshal.c					\
 	gpm-upower.c					\
@@ -145,8 +147,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-phone.c					\
 	gpm-backlight.h					\
 	gpm-backlight.c					\
-	gpm-prefs-server.h				\
-	gpm-prefs-server.c				\
 	gpm-idle.h					\
 	gpm-idle.c					\
 	gpm-load.h					\
@@ -157,8 +157,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-control.c					\
 	gpm-button.h					\
 	gpm-button.c					\
-	gpm-brightness.h				\
-	gpm-brightness.c				\
 	gpm-main.c					\
 	gpm-manager.h					\
 	gpm-manager.c					\
@@ -217,8 +215,6 @@ gnome_power_self_test_SOURCES =				\
 	egg-array-float.c				\
 	egg-console-kit.h				\
 	egg-console-kit.c				\
-	gpm-prefs-server.h				\
-	gpm-prefs-server.c				\
 	gpm-control.h					\
 	gpm-control.c					\
 	gpm-networkmanager.h				\

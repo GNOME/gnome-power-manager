@@ -34,7 +34,6 @@
 #include "gpm-marshal.h"
 #include "gpm-engine.h"
 #include "gpm-stock-icons.h"
-#include "gpm-prefs-server.h"
 #include "gpm-phone.h"
 
 static void     gpm_engine_finalize   (GObject	  *object);
@@ -823,12 +822,8 @@ static gboolean
 gpm_engine_coldplug_idle_cb (GpmEngine *engine)
 {
 	guint i;
-	GPtrArray *array;
-	gboolean has_battery = FALSE;
-	gboolean has_ups = FALSE;
-	GpmPrefsServer *prefs_server;
+	GPtrArray *array = NULL;
 	UpDevice *device;
-	UpDeviceKind kind;
 	gboolean ret;
 	GError *error = NULL;
 
@@ -843,44 +838,21 @@ gpm_engine_coldplug_idle_cb (GpmEngine *engine)
 		goto out;
 	}
 
-	/* get the devices */
-	array = up_client_get_devices (engine->priv->client);
-
-	/* do we have specific device types? */
-	for (i=0;i<array->len;i++) {
-		device = g_ptr_array_index (array, i);
-
-		/* get device properties */
-		g_object_get (device,
-			      "kind", &kind,
-			      NULL);
-
-		if (kind == UP_DEVICE_KIND_BATTERY)
-			has_battery = TRUE;
-		else if (kind == UP_DEVICE_KIND_UPS)
-			has_ups = TRUE;
-	}
-
-	/* only show the battery prefs section if we have batteries */
-	prefs_server = gpm_prefs_server_new ();
-	if (has_battery)
-		gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_BATTERY);
-	if (has_ups)
-		gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_UPS);
-	g_object_unref (prefs_server);
-
 	/* connected mobile phones */
 	gpm_phone_coldplug (engine->priv->phone);
 
 	gpm_engine_recalculate_state (engine);
 
 	/* add to database */
+	array = up_client_get_devices (engine->priv->client);
 	for (i=0;i<array->len;i++) {
 		device = g_ptr_array_index (array, i);
 		gpm_engine_device_add (engine, device);
 		gpm_engine_check_recall (engine, device);
 	}
 out:
+	if (array != NULL)
+		g_ptr_array_unref (array);
 	/* never repeat */
 	return FALSE;
 }
