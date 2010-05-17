@@ -367,4 +367,14 @@ echo "
         dbus-1 services dir:       $DBUS_SERVICES_DIR
         gconf-schema dir:          $GCONF_SCHEMA_FILE_DIR
 "
+if [[ "${prefix}" != "/usr" ]] ; then
+	echo '
+WARNING!!!  GNOME Power Manager uses the "pkexec" utility to provide root
+permissions necessary for the "gnome-power-backlight-helper" executable to run.
+
+A link should be provided from the file
+"/usr/share/polkit-1/actions/org.gnome.power.policy" to the installed version
+"${prefix}/share/polkit-1/actions/org.gnome.power.policy" after installation.
+'
+fi
 

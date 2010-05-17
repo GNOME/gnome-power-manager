@@ -21,6 +21,7 @@ INCLUDES =						\
 	-DI_KNOW_THE_DEVICEKIT_POWER_API_IS_SUBJECT_TO_CHANGE \
 	$(DEVKIT_CFLAGS)				\
 	-DBINDIR=\"$(bindir)\"			 	\
+	-DSBINDIR=\"$(sbindir)\"			 \
 	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
 	-DDATADIR=\"$(datadir)\"			\
 	-DPREFIX=\""$(prefix)"\" 			\
