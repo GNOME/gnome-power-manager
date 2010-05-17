@@ -6,8 +6,11 @@ dist_polkit_policy_DATA =					\
 # http://bugzilla.gnome.org/show_bug.cgi?id=462312
 @INTLTOOL_POLICY_RULE@
 
-EXTRA_DIST = org.gnome.power.policy.in
-DISTCLEANFILES = org.gnome.power.policy
+.in2.in:
+	sed "s|[@]sbindir@|${sbindir}|" $< > $@
+
+EXTRA_DIST = org.gnome.power.policy.in2
+DISTCLEANFILES = org.gnome.power.policy org.gnome.power.policy.in
 
 clean-local :
 	rm -f *~
