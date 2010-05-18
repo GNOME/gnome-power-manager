@@ -51,6 +51,7 @@ gcm_backlight_helper_get_best_backlight ()
 
 	/* available kernel interfaces in priority order */
 	static const gchar *backlight_interfaces[] = {
+		"nv_backlight",
 		"asus_laptop",
 		"eeepc",
 		"thinkpad_screen",
