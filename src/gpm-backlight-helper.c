@@ -53,6 +53,7 @@ gcm_backlight_helper_get_best_backlight ()
 	static const gchar *backlight_interfaces[] = {
 		"nv_backlight",
 		"asus_laptop",
+		"toshiba",
 		"eeepc",
 		"thinkpad_screen",
 		"acpi_video1",
