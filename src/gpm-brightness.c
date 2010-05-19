@@ -59,6 +59,7 @@ struct GpmBrightnessPrivate
 	guint			 last_set_hw;
 	Atom			 backlight;
 	Display			*dpy;
+	GdkWindow		*root_window;
 	guint			 shared_value;
 	gboolean		 has_extension;
 #ifdef HAVE_XRANDR_13
@@ -873,6 +874,8 @@ gpm_brightness_finalize (GObject *object)
 	g_return_if_fail (GPM_IS_BRIGHTNESS (object));
 	brightness = GPM_BRIGHTNESS (object);
 	g_ptr_array_unref (brightness->priv->resources);
+	gdk_window_remove_filter (brightness->priv->root_window,
+				  gpm_brightness_filter_xevents, brightness);
 	G_OBJECT_CLASS (gpm_brightness_parent_class)->finalize (object);
 }
 
@@ -903,7 +906,6 @@ static void
 gpm_brightness_init (GpmBrightness *brightness)
 {
 	GdkScreen *screen;
-	GdkWindow *window;
 	GdkDisplay *display;
 	int event_base;
 	int ignore;
@@ -926,7 +928,7 @@ gpm_brightness_init (GpmBrightness *brightness)
 		egg_debug ("no XRANDR extension");
 
 	screen = gdk_screen_get_default ();
-	window = gdk_screen_get_root_window (screen);
+	brightness->priv->root_window = gdk_screen_get_root_window (screen);
 	display = gdk_display_get_default ();
 
 	/* as we a filtering by a window, we have to add an event type */
@@ -934,11 +936,12 @@ gpm_brightness_init (GpmBrightness *brightness)
 		egg_error ("can't get event_base for XRR");
 	}
 	gdk_x11_register_standard_event_type (display, event_base, RRNotify + 1);
-	gdk_window_add_filter (window, gpm_brightness_filter_xevents, (gpointer) brightness);
+	gdk_window_add_filter (brightness->priv->root_window,
+			       gpm_brightness_filter_xevents, brightness);
 
 	/* don't abort on error */
 	gdk_error_trap_push ();
-	XRRSelectInput (GDK_DISPLAY(), GDK_WINDOW_XID (window),
+	XRRSelectInput (GDK_DISPLAY(), GDK_WINDOW_XID (brightness->priv->root_window),
 			RRScreenChangeNotifyMask |
 			RROutputPropertyNotifyMask); /* <--- the only one we need, but see rh:345551 */
 	gdk_flush ();
