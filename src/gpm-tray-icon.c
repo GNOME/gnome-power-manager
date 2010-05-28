@@ -321,6 +321,10 @@ gpm_tray_icon_create_menu (GpmTrayIcon *icon)
 	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, UP_DEVICE_KIND_KEYBOARD);
 	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, UP_DEVICE_KIND_PDA);
 	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, UP_DEVICE_KIND_PHONE);
+#if UP_CHECK_VERSION(0,9,5)
+	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, UP_DEVICE_KIND_MEDIA_PLAYER);
+	dev_cnt += gpm_tray_icon_add_device (icon, menu, array, UP_DEVICE_KIND_TABLET);
+#endif
 	g_ptr_array_unref (array);
 
 	/* skip for things like live-cd's and GDM */
