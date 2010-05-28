@@ -122,11 +122,8 @@ gpm_upower_get_device_icon (UpDevice *device, gboolean use_symbolic)
 			g_string_append (filename, "gpm-monitor-symbolic;");
 		g_string_append (filename, "gpm-monitor;");
 
-	} else if (kind == UP_DEVICE_KIND_UPS ||
-		   kind == UP_DEVICE_KIND_BATTERY ||
-		   kind == UP_DEVICE_KIND_MOUSE ||
-		   kind == UP_DEVICE_KIND_KEYBOARD ||
-		   kind == UP_DEVICE_KIND_PHONE) {
+	} else {
+
 		kind_str = up_device_kind_to_string (kind);
 		if (!is_present) {
 			if (use_symbolic)
@@ -555,6 +552,16 @@ gpm_device_kind_to_localised_string (UpDeviceKind kind, guint number)
 		/* TRANSLATORS: cell phone (mobile...) */
 		text = ngettext ("Cell phone", "Cell phones", number);
 		break;
+#if UP_CHECK_VERSION(0,9,5)
+	case UP_DEVICE_KIND_MEDIA_PLAYER:
+		/* TRANSLATORS: media player, mp3 etc */
+		text = ngettext ("Media player", "Media players", number);
+		break;
+	case UP_DEVICE_KIND_TABLET:
+		/* TRANSLATORS: tablet device */
+		text = ngettext ("Tablet", "Tablets", number);
+		break;
+#endif
 	default:
 		egg_warning ("enum unrecognised: %i", kind);
 		text = up_device_kind_to_string (kind);
@@ -594,6 +601,14 @@ gpm_device_kind_to_icon (UpDeviceKind kind)
 	case UP_DEVICE_KIND_PHONE:
 		icon = "phone";
 		break;
+#if UP_CHECK_VERSION(0,9,5)
+	case UP_DEVICE_KIND_MEDIA_PLAYER:
+		icon = "multimedia-player";
+		break;
+	case UP_DEVICE_KIND_TABLET:
+		icon = "computer-apple-ipad";
+		break;
+#endif
 	default:
 		egg_warning ("enum unrecognised: %i", kind);
 		icon = "gtk-help";
