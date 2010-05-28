@@ -1549,8 +1549,8 @@ gpm_manager_engine_charge_low_cb (GpmEngine *engine, UpDevice *device, GpmManage
 
 		/* TRANSLATORS: tell user more details */
 		message = g_strdup_printf (_("Tablet is low in power (%.0f%%)"), percentage);
-	}
 #endif
+	}
 
 	/* get correct icon */
 	icon = gpm_upower_get_device_icon (device, TRUE);
@@ -1696,8 +1696,8 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmM
 		message = g_strdup_printf (_("Tablet is very low in power (%.0f%%). "
 					     "This device will soon shutdown if not charged."),
 					   percentage);
-	}
 #endif
+	}
 
 	/* get correct icon */
 	icon = gpm_upower_get_device_icon (device, TRUE);
