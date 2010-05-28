@@ -1515,7 +1515,7 @@ main (int argc, char *argv[])
 	GPtrArray *devices;
 	UpDevice *device;
 	UpDeviceKind kind;
-	guint i;
+	guint i, j;
 	gint page;
 	gboolean checked;
 	gchar *last_device = NULL;
@@ -1746,41 +1746,13 @@ main (int argc, char *argv[])
 	g_signal_connect (client, "device-changed", G_CALLBACK (gpm_stats_device_changed_cb), NULL);
 
 	/* add devices in visually pleasing order */
-	for (i=0; i < devices->len; i++) {
-		device = g_ptr_array_index (devices, i);
-		g_object_get (device, "kind", &kind, NULL);
-		if (kind == UP_DEVICE_KIND_LINE_POWER)
-			gpm_stats_add_device (device);
-	}
-	for (i=0; i < devices->len; i++) {
-		device = g_ptr_array_index (devices, i);
-		g_object_get (device, "kind", &kind, NULL);
-		if (kind == UP_DEVICE_KIND_BATTERY)
-			gpm_stats_add_device (device);
-	}
-	for (i=0; i < devices->len; i++) {
-		device = g_ptr_array_index (devices, i);
-		g_object_get (device, "kind", &kind, NULL);
-		if (kind == UP_DEVICE_KIND_UPS)
-			gpm_stats_add_device (device);
-	}
-	for (i=0; i < devices->len; i++) {
-		device = g_ptr_array_index (devices, i);
-		g_object_get (device, "kind", &kind, NULL);
-		if (kind == UP_DEVICE_KIND_MONITOR)
-			gpm_stats_add_device (device);
-	}
-	for (i=0; i < devices->len; i++) {
-		device = g_ptr_array_index (devices, i);
-		g_object_get (device, "kind", &kind, NULL);
-		if (kind == UP_DEVICE_KIND_MOUSE)
-			gpm_stats_add_device (device);
-	}
-	for (i=0; i < devices->len; i++) {
-		device = g_ptr_array_index (devices, i);
-		g_object_get (device, "kind", &kind, NULL);
-		if (kind == UP_DEVICE_KIND_KEYBOARD)
-			gpm_stats_add_device (device);
+	for (j=0; j<UP_DEVICE_KIND_LAST; j++) {
+		for (i=0; i < devices->len; i++) {
+			device = g_ptr_array_index (devices, i);
+			g_object_get (device, "kind", &kind, NULL);
+			if (kind == j)
+				gpm_stats_add_device (device);
+		}
 	}
 
 	/* set current device */
