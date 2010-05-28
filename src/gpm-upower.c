@@ -533,16 +533,16 @@ gpm_device_kind_to_icon (UpDeviceKind kind)
 		icon = "application-certificate";
 		break;
 	case UP_DEVICE_KIND_MOUSE:
-		icon = "mouse";
+		icon = "input-mouse";
 		break;
 	case UP_DEVICE_KIND_KEYBOARD:
 		icon = "input-keyboard";
 		break;
 	case UP_DEVICE_KIND_PDA:
-		icon = "input-gaming";
+		icon = "pda";
 		break;
 	case UP_DEVICE_KIND_PHONE:
-		icon = "camera-video";
+		icon = "phone";
 		break;
 	default:
 		egg_warning ("enum unrecognised: %i", kind);
