@@ -840,7 +840,7 @@ gpm_manager_lid_button_pressed (GpmManager *manager, gboolean pressed)
 	if (!manager->priv->on_battery) {
 		egg_debug ("Performing AC policy");
 		gpm_manager_perform_policy (manager, GPM_CONF_BUTTON_LID_AC,
-					    "Lid been closed on AC power.");
+					    "Lid closed on AC power.");
 		return;
 	}
 
