@@ -2,7 +2,7 @@
 # Copyright (C) 2005-2010 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnome-power-manager package.
 #
-# See http://wiki.traduc.org/gnomefr/NomenclatureEnergie.
+# See http://wiki.traduc.org/gnomefr/NomenclatureGestionEnergie.
 # NOT USED YET.
 #
 # Yann Simon <yann.simon.fr@gmail.com>, 2005.
@@ -17,6 +17,7 @@
 # Bruno Brouard <annoa.b@gmail.com>, 2009.
 # Laurent Coudeur <laurentc@iol.ie>, 2009.
 # Nicolas Repentin <nicolas@shivaserv.fr>, 2010.
+# Milan Bouchet-Valat <nalimilan@club.fr>, 2010.
 #
 msgid ""
 msgstr ""
@@ -24,8 +25,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&component=general\n"
 "POT-Creation-Date: 2010-03-16 21:43+0000\n"
-"PO-Revision-Date: 2010-03-17 08:43+0100\n"
-"Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
+"PO-Revision-Date: 2010-05-30 20:04+0200\n"
+"Last-Translator: Milan Bouchet-Valat <nalimilan@club.fr>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2113,7 +2114,7 @@ msgid ""
 "Provides %s laptop runtime"
 msgstr ""
 "La batterie est complètement chargée.\n"
-"Elle peut fournir %s de temps de fonctionnement"
+"Elle peut fournir %s d'autonomie"
 
 #. TRANSLATORS: the device is fully charged
 #: ../src/gpm-upower.c:271
@@ -2125,7 +2126,7 @@ msgstr "%s : charge complète"
 #: ../src/gpm-upower.c:279
 #, c-format
 msgid "%s %s remaining (%.1f%%)"
-msgstr "%s, %s restantes (%.1f %%)"
+msgstr "%s : %s restantes (%.1f %%)"
 
 #. TRANSLATORS: the device is charging, and we have a time to full and empty
 #: ../src/gpm-upower.c:298
@@ -2135,19 +2136,19 @@ msgid ""
 "Provides %s battery runtime"
 msgstr ""
 "%s, %s avant l'état chargé (%.1f %%)\n"
-"Le temps disponible sur batterie est de %s"
+"L'autonomie est de %s"
 
 #. TRANSLATORS: device is charging, and we have a time to full and a percentage
 #: ../src/gpm-upower.c:309
 #, c-format
 msgid "%s %s until charged (%.1f%%)"
-msgstr "%s, %s avant l'état chargé (%.1f %%)"
+msgstr "%s : %s avant l'état chargé (%.1f %%)"
 
 #. TRANSLATORS: this is only shown for laptops with multiple batteries
 #: ../src/gpm-upower.c:323
 #, c-format
 msgid "%s waiting to discharge (%.1f%%)"
-msgstr "%s : en attente de décharge (%.1f %%)"
+msgstr "%s en attente de décharge (%.1f %%)"
 
 #. TRANSLATORS: this is only shown for laptops with multiple batteries
 #: ../src/gpm-upower.c:329
