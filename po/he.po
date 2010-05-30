@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-29 13:01+0300\n"
-"PO-Revision-Date: 2010-05-29 13:19+0200\n"
+"POT-Creation-Date: 2010-05-30 03:09+0300\n"
+"PO-Revision-Date: 2010-05-30 03:10+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: he <he@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -871,8 +871,8 @@ msgstr "צפה בניהול צריכת החשמל"
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1074
-#: ../src/gpm-statistics.c:1548
+#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1076
+#: ../src/gpm-statistics.c:1552
 msgid "Power Statistics"
 msgstr "סטטיסטיקת חשמל"
 
@@ -888,7 +888,7 @@ msgstr "0"
 msgid "Data length:"
 msgstr "אורך הנתונים:"
 
-#: ../data/gpm-statistics.ui.h:3 ../src/gpm-statistics.c:208
+#: ../data/gpm-statistics.ui.h:3 ../src/gpm-statistics.c:210
 msgid "Details"
 msgstr "פרטים"
 
@@ -920,7 +920,7 @@ msgstr "אין נתונים להצגה."
 msgid "Use smoothed line"
 msgstr "השתמש בקו מוחלק"
 
-#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:194
+#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:196
 msgid "Wakeups"
 msgstr "התעוררויות"
 
@@ -1189,7 +1189,7 @@ msgid "%.1fV"
 msgstr "%.1fV"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-main.c:171 ../src/gpm-prefs.c:90 ../src/gpm-statistics.c:1528
+#: ../src/gpm-main.c:171 ../src/gpm-prefs.c:90 ../src/gpm-statistics.c:1532
 msgid "Show extra debugging information"
 msgstr "Show extra debugging information"
 
@@ -1693,7 +1693,7 @@ msgid "Never"
 msgstr "לעולם לא"
 
 #. TRANSLATORS: the rate of discharge for the device
-#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:466
+#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:468
 msgid "Rate"
 msgstr "דירוג"
 
@@ -1701,11 +1701,11 @@ msgstr "דירוג"
 msgid "Charge"
 msgstr "טעינה"
 
-#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:480
+#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:482
 msgid "Time to full"
 msgstr "זמן למילוי"
 
-#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:485
+#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:487
 msgid "Time to empty"
 msgstr "זמן לריקון"
 
@@ -1718,66 +1718,70 @@ msgid "2 hours"
 msgstr "שעתיים"
 
 #: ../src/gpm-statistics.c:92
+msgid "6 hours"
+msgstr "6 שעות"
+
+#: ../src/gpm-statistics.c:93
 msgid "1 day"
 msgstr "יום אחד"
 
-#: ../src/gpm-statistics.c:93
+#: ../src/gpm-statistics.c:94
 msgid "1 week"
 msgstr "שבוע אחד"
 
 #. TRANSLATORS: what we've observed about the device
-#: ../src/gpm-statistics.c:101
+#: ../src/gpm-statistics.c:103
 msgid "Charge profile"
 msgstr "פרופיל טעינה"
 
-#: ../src/gpm-statistics.c:102
+#: ../src/gpm-statistics.c:104
 msgid "Discharge profile"
 msgstr "פרופיל פריקה"
 
 #. TRANSLATORS: how accurately we can predict the time remaining of the battery
-#: ../src/gpm-statistics.c:104
+#: ../src/gpm-statistics.c:106
 msgid "Charge accuracy"
 msgstr "דיוק טעינה"
 
-#: ../src/gpm-statistics.c:105
+#: ../src/gpm-statistics.c:107
 msgid "Discharge accuracy"
 msgstr "דיוק פריקה"
 
-#: ../src/gpm-statistics.c:132
+#: ../src/gpm-statistics.c:134
 msgid "Attribute"
 msgstr "תכונה"
 
-#: ../src/gpm-statistics.c:139
+#: ../src/gpm-statistics.c:141
 msgid "Value"
 msgstr "ערך"
 
-#: ../src/gpm-statistics.c:156
+#: ../src/gpm-statistics.c:158
 msgid "Image"
 msgstr "תמונה"
 
-#: ../src/gpm-statistics.c:162
+#: ../src/gpm-statistics.c:164
 msgid "Description"
 msgstr "תיאור"
 
-#: ../src/gpm-statistics.c:181 ../src/gpm-statistics.c:405
+#: ../src/gpm-statistics.c:183 ../src/gpm-statistics.c:407
 msgid "Type"
 msgstr "סוג"
 
-#: ../src/gpm-statistics.c:187
+#: ../src/gpm-statistics.c:189
 msgid "ID"
 msgstr "מזהה"
 
-#: ../src/gpm-statistics.c:201
+#: ../src/gpm-statistics.c:203
 msgid "Command"
 msgstr "פקודה"
 
 #. TRANSLATORS: this is when the stats time is not known
-#: ../src/gpm-statistics.c:286
+#: ../src/gpm-statistics.c:288
 msgid "Unknown"
 msgstr "לא ידוע"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:290
+#: ../src/gpm-statistics.c:292
 #, c-format
 msgid "%.0f second"
 msgid_plural "%.0f seconds"
@@ -1785,7 +1789,7 @@ msgstr[0] "שניה אחת"
 msgstr[1] "%.0f שניות"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:295
+#: ../src/gpm-statistics.c:297
 #, c-format
 msgid "%.1f minute"
 msgid_plural "%.1f minutes"
@@ -1793,7 +1797,7 @@ msgstr[0] "דקה אחת"
 msgstr[1] "%.1f דקות"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:300
+#: ../src/gpm-statistics.c:302
 #, c-format
 msgid "%.1f hour"
 msgid_plural "%.1f hours"
@@ -1801,46 +1805,46 @@ msgstr[0] "שעה אחת"
 msgstr[1] "%.1f שעות"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:304
+#: ../src/gpm-statistics.c:306
 #, c-format
 msgid "%.1f day"
 msgid_plural "%.1f days"
 msgstr[0] "יום אחד"
 msgstr[1] "%.1f ימים"
 
-#: ../src/gpm-statistics.c:313
+#: ../src/gpm-statistics.c:315
 msgid "Yes"
 msgstr "כן"
 
-#: ../src/gpm-statistics.c:313
+#: ../src/gpm-statistics.c:315
 msgid "No"
 msgstr "לא"
 
 #. TRANSLATORS: the device ID of the current device, e.g. "battery0"
-#: ../src/gpm-statistics.c:402
+#: ../src/gpm-statistics.c:404
 msgid "Device"
 msgstr "התקן"
 
-#: ../src/gpm-statistics.c:407
+#: ../src/gpm-statistics.c:409
 msgid "Vendor"
 msgstr "יצרן"
 
-#: ../src/gpm-statistics.c:409
+#: ../src/gpm-statistics.c:411
 msgid "Model"
 msgstr "דגם"
 
-#: ../src/gpm-statistics.c:411
+#: ../src/gpm-statistics.c:413
 msgid "Serial number"
 msgstr "מספר סידורי"
 
 #. TRANSLATORS: a boolean attribute that means if the device is supplying the
 #. * main power for the computer. For instance, an AC adapter or laptop battery
 #. * would be TRUE,  but a mobile phone or mouse taking power is FALSE
-#: ../src/gpm-statistics.c:416
+#: ../src/gpm-statistics.c:418
 msgid "Supply"
 msgstr "ספק"
 
-#: ../src/gpm-statistics.c:419
+#: ../src/gpm-statistics.c:421
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
@@ -1849,241 +1853,241 @@ msgstr[1] "%d שניות"
 
 #. TRANSLATORS: when the device was last updated with new data. It's
 #. * usually a few seconds when a device is discharging or charging.
-#: ../src/gpm-statistics.c:423
+#: ../src/gpm-statistics.c:425
 msgid "Refreshed"
 msgstr "רוענן"
 
 #. TRANSLATORS: Present is whether the device is currently attached
 #. * to the computer, as some devices (e.g. laptop batteries) can
 #. * be removed, but still observed as devices on the system
-#: ../src/gpm-statistics.c:433
+#: ../src/gpm-statistics.c:435
 msgid "Present"
 msgstr "נוכח"
 
 #. TRANSLATORS: If the device can be recharged, e.g. lithium
 #. * batteries rather than alkaline ones
-#: ../src/gpm-statistics.c:440
+#: ../src/gpm-statistics.c:442
 msgid "Rechargeable"
 msgstr "ניתן לטעינה מחדש "
 
 #. TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged"
-#: ../src/gpm-statistics.c:446
+#: ../src/gpm-statistics.c:448
 msgid "State"
 msgstr "מצב"
 
-#: ../src/gpm-statistics.c:450
+#: ../src/gpm-statistics.c:452
 msgid "Energy"
 msgstr "אנרגיה"
 
-#: ../src/gpm-statistics.c:453
+#: ../src/gpm-statistics.c:455
 msgid "Energy when empty"
 msgstr "אנרגיה בעת התרוקנות"
 
-#: ../src/gpm-statistics.c:456
+#: ../src/gpm-statistics.c:458
 msgid "Energy when full"
 msgstr "אנרגיה כשמלא"
 
-#: ../src/gpm-statistics.c:459
+#: ../src/gpm-statistics.c:461
 msgid "Energy (design)"
 msgstr "אנרגיה (תכנון)"
 
-#: ../src/gpm-statistics.c:473
+#: ../src/gpm-statistics.c:475
 msgid "Voltage"
 msgstr "מתח"
 
 #. TRANSLATORS: the amount of charge the cell contains
-#: ../src/gpm-statistics.c:495
+#: ../src/gpm-statistics.c:497
 msgid "Percentage"
 msgstr "אחוזים"
 
 #. TRANSLATORS: the capacity of the device, which is basically a measure
 #. * of how full it can get, relative to the design capacity
-#: ../src/gpm-statistics.c:502
+#: ../src/gpm-statistics.c:504
 msgid "Capacity"
 msgstr "קיבולת"
 
 #. TRANSLATORS: the type of battery, e.g. lithium or nikel metal hydroxide
-#: ../src/gpm-statistics.c:507
+#: ../src/gpm-statistics.c:509
 msgid "Technology"
 msgstr "טכנולוגיה"
 
 #. TRANSLATORS: this is when the device is plugged in, typically
 #. * only shown for the ac adaptor device
-#: ../src/gpm-statistics.c:512
+#: ../src/gpm-statistics.c:514
 msgid "Online"
 msgstr "מקוון"
 
 #. TRANSLATORS: the command line was not provided
-#: ../src/gpm-statistics.c:822
+#: ../src/gpm-statistics.c:824
 msgid "No data"
 msgstr "אין נתונים"
 
 #. TRANSLATORS: kernel module, usually a device driver
-#: ../src/gpm-statistics.c:829 ../src/gpm-statistics.c:834
+#: ../src/gpm-statistics.c:831 ../src/gpm-statistics.c:836
 msgid "Kernel module"
 msgstr "מודול הקרנל"
 
 #. TRANSLATORS: kernel housekeeping
-#: ../src/gpm-statistics.c:839
+#: ../src/gpm-statistics.c:841
 msgid "Kernel core"
 msgstr "ליבת הקרנל"
 
 #. TRANSLATORS: interrupt between processors
-#: ../src/gpm-statistics.c:844
+#: ../src/gpm-statistics.c:846
 msgid "Interprocessor interrupt"
 msgstr "פסק בין מעבדים"
 
 #. TRANSLATORS: unknown interrupt
-#: ../src/gpm-statistics.c:849
+#: ../src/gpm-statistics.c:851
 msgid "Interrupt"
 msgstr "פסק"
 
 #. TRANSLATORS: the keyboard and mouse device event
-#: ../src/gpm-statistics.c:896
+#: ../src/gpm-statistics.c:898
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "מקלדת/עכבר/משטח־מגע  בחיבור PS/2"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
-#: ../src/gpm-statistics.c:899
+#: ../src/gpm-statistics.c:901
 msgid "ACPI"
 msgstr "ACPI"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
-#: ../src/gpm-statistics.c:902
+#: ../src/gpm-statistics.c:904
 msgid "Serial ATA"
 msgstr "‏ATA טורי"
 
 #. TRANSLATORS: this is the old-style ATA interface
-#: ../src/gpm-statistics.c:905
+#: ../src/gpm-statistics.c:907
 msgid "ATA host controller"
 msgstr "בקר מארח ATA"
 
 #. TRANSLATORS: 802.11 wireless adaptor
-#: ../src/gpm-statistics.c:908
+#: ../src/gpm-statistics.c:910
 msgid "Intel wireless adaptor"
 msgstr "התקן אלחוטי של Intel"
 
 #. TRANSLATORS: a timer is something that fires periodically
-#: ../src/gpm-statistics.c:913 ../src/gpm-statistics.c:916
-#: ../src/gpm-statistics.c:919 ../src/gpm-statistics.c:922
-#: ../src/gpm-statistics.c:925
+#: ../src/gpm-statistics.c:915 ../src/gpm-statistics.c:918
+#: ../src/gpm-statistics.c:921 ../src/gpm-statistics.c:924
+#: ../src/gpm-statistics.c:927
 #, c-format
 msgid "Timer %s"
 msgstr "מתזמן %s"
 
 #. TRANSLATORS: this is a task that's woken up from sleeping
-#: ../src/gpm-statistics.c:928
+#: ../src/gpm-statistics.c:930
 #, c-format
 msgid "Sleep %s"
 msgstr "שינה ‏%s"
 
 #. TRANSLATORS: this is a new realtime task
-#: ../src/gpm-statistics.c:931
+#: ../src/gpm-statistics.c:933
 #, c-format
 msgid "New task %s"
 msgstr "משימה חדשה %s"
 
 #. TRANSLATORS: this is a task thats woken to check state
-#: ../src/gpm-statistics.c:934
+#: ../src/gpm-statistics.c:936
 #, c-format
 msgid "Wait %s"
 msgstr "המתנה %s"
 
 #. TRANSLATORS: a work queue is a list of work that has to be done
-#: ../src/gpm-statistics.c:937 ../src/gpm-statistics.c:940
+#: ../src/gpm-statistics.c:939 ../src/gpm-statistics.c:942
 #, c-format
 msgid "Work queue %s"
 msgstr "תור עבודה %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
-#: ../src/gpm-statistics.c:943
+#: ../src/gpm-statistics.c:945
 #, c-format
 msgid "Network route flush %s"
 msgstr "איפוס נתיב רשת %s"
 
 #. TRANSLATORS: activity on the USB bus
-#: ../src/gpm-statistics.c:946
+#: ../src/gpm-statistics.c:948
 #, c-format
 msgid "USB activity %s"
 msgstr "פעילות USB ‏%s"
 
 #. TRANSLATORS: we've timed out of an aligned timer
-#: ../src/gpm-statistics.c:949
+#: ../src/gpm-statistics.c:951
 #, c-format
 msgid "Wakeup %s"
 msgstr "התעוררות %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
-#: ../src/gpm-statistics.c:952
+#: ../src/gpm-statistics.c:954
 msgid "Local interrupts"
 msgstr "פסקים מקומיים"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
-#: ../src/gpm-statistics.c:955
+#: ../src/gpm-statistics.c:957
 msgid "Rescheduling interrupts"
 msgstr "פסקים מתחדשים"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1064
+#: ../src/gpm-statistics.c:1066
 msgid "Device Information"
 msgstr "נתוני ההתקן"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1066
+#: ../src/gpm-statistics.c:1068
 msgid "Device History"
 msgstr "היסטורית ההתקן"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1068
+#: ../src/gpm-statistics.c:1070
 msgid "Device Profile"
 msgstr "פרופיל ההתקן"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1070
+#: ../src/gpm-statistics.c:1072
 msgid "Processor Wakeups"
 msgstr "התעוררויות מעבד"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1277 ../src/gpm-statistics.c:1283
-#: ../src/gpm-statistics.c:1289 ../src/gpm-statistics.c:1295
+#: ../src/gpm-statistics.c:1279 ../src/gpm-statistics.c:1285
+#: ../src/gpm-statistics.c:1291 ../src/gpm-statistics.c:1297
 msgid "Time elapsed"
 msgstr "זמן שחלף"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1279
+#: ../src/gpm-statistics.c:1281
 msgid "Power"
 msgstr "חשמל"
 
 #. TRANSLATORS: this is the Y axis on the graph for the whole battery device
 #. TRANSLATORS: this is the X axis on the graph for the whole battery device
-#: ../src/gpm-statistics.c:1285 ../src/gpm-statistics.c:1328
-#: ../src/gpm-statistics.c:1334 ../src/gpm-statistics.c:1340
-#: ../src/gpm-statistics.c:1346
+#: ../src/gpm-statistics.c:1287 ../src/gpm-statistics.c:1330
+#: ../src/gpm-statistics.c:1336 ../src/gpm-statistics.c:1342
+#: ../src/gpm-statistics.c:1348
 msgid "Cell charge"
 msgstr "טעינת תא"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1291 ../src/gpm-statistics.c:1297
+#: ../src/gpm-statistics.c:1293 ../src/gpm-statistics.c:1299
 msgid "Predicted time"
 msgstr "זמן מוערך"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1330 ../src/gpm-statistics.c:1342
+#: ../src/gpm-statistics.c:1332 ../src/gpm-statistics.c:1344
 msgid "Correction factor"
 msgstr "מתאם תיקון"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1336 ../src/gpm-statistics.c:1348
+#: ../src/gpm-statistics.c:1338 ../src/gpm-statistics.c:1350
 msgid "Prediction accuracy"
 msgstr "דיוק חיזוי"
 
 #. TRANSLATORS: show a device by default
-#: ../src/gpm-statistics.c:1531
+#: ../src/gpm-statistics.c:1535
 msgid "Select this device at startup"
 msgstr "בחר התקן זה עם ההפעלה"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:1778
+#: ../src/gpm-statistics.c:1783
 msgid "Processor"
 msgstr "מעבד"
 
