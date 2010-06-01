@@ -1544,11 +1544,18 @@ gpm_manager_engine_charge_low_cb (GpmEngine *engine, UpDevice *device, GpmManage
 		message = g_strdup_printf (_("Media player is low in power (%.0f%%)"), percentage);
 
 	} else if (kind == UP_DEVICE_KIND_TABLET) {
-		/* TRANSLATORS: tablet, e.g. ipad is getting a little low */
+		/* TRANSLATORS: graphics tablet, e.g. wacom is getting a little low */
 		title = _("Tablet battery low");
 
 		/* TRANSLATORS: tell user more details */
 		message = g_strdup_printf (_("Tablet is low in power (%.0f%%)"), percentage);
+
+	} else if (kind == UP_DEVICE_KIND_COMPUTER) {
+		/* TRANSLATORS: computer, e.g. ipad is getting a little low */
+		title = _("Attached computer battery low");
+
+		/* TRANSLATORS: tell user more details */
+		message = g_strdup_printf (_("Attached computer is low in power (%.0f%%)"), percentage);
 #endif
 	}
 
@@ -1694,7 +1701,16 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmM
 
 		/* TRANSLATORS: the device is just going to stop working */
 		message = g_strdup_printf (_("Tablet is very low in power (%.0f%%). "
-					     "This device will soon shutdown if not charged."),
+					     "This device will soon stop functioning if not charged."),
+					   percentage);
+	} else if (kind == UP_DEVICE_KIND_COMPUTER) {
+
+		/* TRANSLATORS: the cell battery is very low */
+		title = _("Attached computer battery low");
+
+		/* TRANSLATORS: the device is just going to stop working */
+		message = g_strdup_printf (_("Attached computer is very low in power (%.0f%%). "
+					     "The device will soon shutdown if not charged."),
 					   percentage);
 #endif
 	}

@@ -561,6 +561,10 @@ gpm_device_kind_to_localised_string (UpDeviceKind kind, guint number)
 		/* TRANSLATORS: tablet device */
 		text = ngettext ("Tablet", "Tablets", number);
 		break;
+	case UP_DEVICE_KIND_COMPUTER:
+		/* TRANSLATORS: tablet device */
+		text = ngettext ("Computer", "Computers", number);
+		break;
 #endif
 	default:
 		egg_warning ("enum unrecognised: %i", kind);
@@ -606,6 +610,9 @@ gpm_device_kind_to_icon (UpDeviceKind kind)
 		icon = "multimedia-player";
 		break;
 	case UP_DEVICE_KIND_TABLET:
+		icon = "input-tablet";
+		break;
+	case UP_DEVICE_KIND_COMPUTER:
 		icon = "computer-apple-ipad";
 		break;
 #endif

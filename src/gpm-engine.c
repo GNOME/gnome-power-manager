@@ -199,6 +199,7 @@ gpm_engine_get_warning (GpmEngine *engine, UpDevice *device)
 #if UP_CHECK_VERSION(0,9,5)
 		   kind == UP_DEVICE_KIND_MEDIA_PLAYER ||
 		   kind == UP_DEVICE_KIND_TABLET ||
+		   kind == UP_DEVICE_KIND_COMPUTER ||
 #endif
 		   kind == UP_DEVICE_KIND_PDA) {
 
