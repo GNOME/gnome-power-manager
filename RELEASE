@@ -1,6 +1,6 @@
 Follow http://developer.gnome.org/dotplan/for_maintainers.html
 
-git shortlog GNOME_POWER_MANAGER_2_30_0.. | grep -i -v trivial | uniq | grep -v Merge > NEWS.new
+git shortlog GNOME_POWER_MANAGER_2_31_0.. | grep -i -v trivial | uniq | grep -v Merge > NEWS.new
 
 Run "make distcheck", correct any problems encountered
 

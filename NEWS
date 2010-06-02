@@ -1,3 +1,60 @@
+Version 2.31.1
+~~~~~~~~~~~~~~
+Released: 2010-06-02
+
+* Translations
+ - Updated Arabic translation (Khaled Hosny)
+ - Updated Belarusian translation (Mikola Tsehan)
+ - Updated Catalan translation (Jordi Serratosa)
+ - Updated Catalan (Valencian) translation (Carles Ferrando)
+ - Updated Estonian translation (Mattias Põldaru)
+ - Updated French translation (Bruno Brouard)
+ - Updated French translation (Claude Paroz)
+ - Updated French translation (Milan Bouchet-Valat)
+ - Updated Galician translation (Francisco Diéguez)
+ - Updated Greek translation (Jenny Petoumenou)
+ - Updated Hebrew translation (Yaron Shahrabani, Yaron Sharabani)
+ - Updated Indonesian translation (Andika Triwidada)
+ - Updated Kannada translations (Shankar Prasad)
+ - Updated Malayalam Translation (Ani Peter)
+ - Updated Norwegian bokmål translation (Kjartan Maraas)
+ - Updated Oriya translation (Manoj Kumar Giri)
+ - Updated Simplified Chinese translation (Chen Xing)
+ - Updated Shavian translation (Thomas Thurman)
+ - Updated Spanish translation (Jorge González)
+ - Updated Thai translation (Theppitak Karoonboonyanan)
+
+* Features:
+ - Port from DeviceKit-power to UPower (Richard Hughes)
+ - Remove the use of HAL from gnome-power-manager (Richard Hughes)
+ - Add new 6 hours period in power history stats (Rafał Rosiak)
+ - Use the device names from the shared-icon-specification (Richard Hughes)
+ - Use the symbolic icons present in some themes (Richard Hughes)
+ - Show the primary device time remaining as the first entry in the context menu (Richard Hughes)
+ - Provide a pkexec helper for systems that do not have xbacklight capability (Richard Hughes)
+
+* Bugfix:
+ - Added explicit fallback priority lists for icon naming (Brian Hutsell)
+ - Add the required translations and icons for computer, tablet and media-player device types (Richard Hughes)
+ - Closed lid notification message typo fix (Frédéric Péters)
+ - Correctly coldplug the list of devices in the stats viewer (Richard Hughes)
+ - Do not issue a console warning when laptop batteries are empty (Richard Hughes)
+ - Do not show empty devices in the status area tooltip (Richard Hughes)
+ - Do not show gnome-power-statistics in the menus (Richard Hughes)
+ - Don't treat percentage=0 as error condition (Chow Loong Jin)
+ - Drop the 'Wireless' prefix for battery devices (Richard Hughes)
+ - Ensure we add phone type devices in the coldplug (Richard Hughes)
+ - Make EggConsoleKit a singleton (Chris Coulson)
+ - Make the battery status translatable in gnome-power-statistics (Richard Hughes)
+ - Now we do not have the suspend and hibernate menu context items, remove the 'Always' option (Richard Hughes)
+ - Only dim the screen on idle when on the active console (Chris Coulson)
+ - Remove GetPreferencesOptions() and untie the preferences from the daemon (Richard Hughes)
+ - Remove hardcoded paths from pkexec setup (Brian Hutsell)
+ - Remove the decimal place precision from the warning notification percentages (Richard Hughes)
+ - Remove the filter in GpmBrightness to prevent a crash in some circumstances. Fixes #617529 (Richard Hughes)
+ - Reorganize the tray icon code to make it easier for AppIndicator support to be patched in (Jan Arne Petersen)
+ - Right align the percentage column in the device context menu (Richard Hughes)
+
 Version 2.30.0
 ~~~~~~~~~~~~~~
 Released: 2010-03-29
