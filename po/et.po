@@ -14,9 +14,9 @@ msgstr ""
 "Project-Id-Version: Gnome Power Manager MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&component=general\n"
-"POT-Creation-Date: 2010-04-30 14:03+0000\n"
-"PO-Revision-Date: 2010-05-01 16:04+0300\n"
-"Last-Translator: Mattias Põldaru <mahfiaz gmail com>\n"
+"POT-Creation-Date: 2010-06-01 13:29+0000\n"
+"PO-Revision-Date: 2010-06-03 09:49+0300\n"
+"Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -853,6 +853,50 @@ msgstr "_Kuvatakse ainult juhul, kui aku täituvus on madal"
 msgid "_Reduce backlight brightness"
 msgstr "_Taustavalgustuse heledust vähendatakse"
 
+#. command line argument
+msgid "Set the current brightness"
+msgstr ""
+
+#. command line argument
+msgid "Get the current brightness"
+msgstr ""
+
+#. command line argument
+msgid "Get the number of brightness levels supported"
+msgstr ""
+
+#. TRANSLATORS: tool that is used when copying profiles system-wide
+msgid "GNOME Power Manager Backlight Helper"
+msgstr "GNOME vooluhalduri taustavalguse abiline"
+
+#. TRANSLATORS: user did not specify valid options
+msgid "No valid option was specified"
+msgstr ""
+
+#. TRANSLATORS: only able to install profiles as root
+msgid "This program can only be used by the root user"
+msgstr ""
+
+#. TRANSLATORS: the program must never be directly run
+msgid "This program must only be run through pkexec"
+msgstr ""
+
+#. TRANSLATORS: no backlights found
+msgid "No backlights were found on your system"
+msgstr ""
+
+#. TRANSLATORS: failed to access backlight file
+msgid "Could not get the value of the backlight"
+msgstr ""
+
+#. TRANSLATORS: failed to access backlight file
+msgid "Could not get the maximum value of the backlight"
+msgstr ""
+
+#. TRANSLATORS: failed to access backlight file
+msgid "Could not set the value of the backlight"
+msgstr ""
+
 msgid "Unknown time"
 msgstr "teadmata aeg"
 
@@ -991,23 +1035,23 @@ msgid "Suspend failed"
 msgstr "Uinaku nurjumine"
 
 #. TRANSLATORS: message text
-msgid "Your computer failed to suspend."
-msgstr "Sinu arvutil pole võimalik uinuda."
+msgid "Computer failed to suspend."
+msgstr "Arvutil pole võimalik uinuda."
 
 #. TRANSLATORS: title text
 msgid "Failed to suspend"
 msgstr "Tõrge uinumisel"
 
 #. TRANSLATORS: message text
-msgid "Your computer failed to hibernate."
-msgstr "Sinu arvutil pole võimalik talveunne jääda."
+msgid "Computer failed to hibernate."
+msgstr "Arvutil pole võimalik talveunne jääda."
 
 #. TRANSLATORS: title text
 msgid "Failed to hibernate"
 msgstr "Tõrge talveunne jäämisel"
 
 #. TRANSLATORS: message text
-msgid "The failure was reported as:"
+msgid "Failure was reported as:"
 msgstr "Tõrke kohta tuli järgmine raport:"
 
 #. TRANSLATORS: button text, visit the suspend help website
@@ -1034,7 +1078,7 @@ msgstr "Aku võib olla ümbervahetamiseks tagasi kutsutud"
 
 #, c-format
 msgid ""
-"The battery in your computer may have been recalled by %s and you may be at "
+"A battery in your computer may have been recalled by %s and you may be at "
 "risk.\n"
 "\n"
 "For more information visit the battery recall website."
@@ -1061,10 +1105,10 @@ msgstr "Aku võib katki olla"
 #. TRANSLATORS: notify the user that that battery is broken as the capacity is very low
 #, c-format
 msgid ""
-"Your battery has a very low capacity (%1.1f%%), which means that it may be "
-"old or broken."
+"Battery has a very low capacity (%1.1f%%), which means that it may be old or "
+"broken."
 msgstr ""
-"Sinu arvuti aku mahtuvus on väga väike (%1.1f%%), mis tähendab, see võib "
+"Arvuti aku mahtuvus on väga väike (%1.1f%%) ja see tähendab, et aku võib "
 "olla kas vana või vigane."
 
 #. TRANSLATORS: show the charged notification
@@ -1079,13 +1123,13 @@ msgstr "Aku tühjenemine"
 
 #. TRANSLATORS: tell the user how much time they have got
 #, c-format
-msgid "%s of battery power remaining (%.1f%%)"
-msgstr "Aku suudab toita veel %s (%.1f%%)"
+msgid "%s of battery power remaining (%.0f%%)"
+msgstr "Aku suudab toita veel %s (%.0f%%)"
 
 #. TRANSLATORS: the device is discharging, but we only have a percentage
 #, c-format
-msgid "%s discharging (%.1f%%)"
-msgstr "%s tühjenemine (%.1f%%)"
+msgid "%s discharging (%.0f%%)"
+msgstr "%s tühjenemine (%.0f%%)"
 
 #. TRANSLATORS: UPS is now discharging
 msgid "UPS Discharging"
@@ -1093,8 +1137,8 @@ msgstr "UPS-i tühjenemine"
 
 #. TRANSLATORS: tell the user how much time they have got
 #, c-format
-msgid "%s of UPS backup power remaining (%.1f%%)"
-msgstr "UPS suudab toita veel %s (%.1f%%)"
+msgid "%s of UPS backup power remaining (%.0f%%)"
+msgstr "UPS suudab toita veel %s (%.0f%%)"
 
 #. TRANSLATORS: laptop battery low, and we only have one battery
 msgid "Battery low"
@@ -1106,8 +1150,8 @@ msgstr "Sülearvuti aku on peaaegu tühi"
 
 #. TRANSLATORS: tell the user how much time they have got
 #, c-format
-msgid "Approximately <b>%s</b> remaining (%.1f%%)"
-msgstr "Ligikaudu <b>%s</b> jäänud (%.1f%%)"
+msgid "Approximately <b>%s</b> remaining (%.0f%%)"
+msgstr "Ligikaudu <b>%s</b> jäänud (%.0f%%)"
 
 #. TRANSLATORS: UPS is starting to get a little low
 msgid "UPS low"
@@ -1115,8 +1159,8 @@ msgstr "UPS-i aku on peaaegu tühi"
 
 #. TRANSLATORS: tell the user how much time they have got
 #, c-format
-msgid "You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"
-msgstr "UPS suudab arvutit toita veel ligikaudu <b>%s</b> (%.1f%%)"
+msgid "Approximately <b>%s</b> of remaining UPS backup power (%.0f%%)"
+msgstr "UPS suudab arvutit toita veel ligikaudu <b>%s</b> (%.0f%%)"
 
 #. TRANSLATORS: mouse is getting a little low
 #. TRANSLATORS: the mouse battery is very low
@@ -1125,8 +1169,8 @@ msgstr "Hiire patarei on peaaegu tühi"
 
 #. TRANSLATORS: tell user more details
 #, c-format
-msgid "The wireless mouse attached to this computer is low in power (%.1f%%)"
-msgstr "Arvuti külge ühendatud juhtmeta hiire aku on peaaegu tühi (%.1f%%)"
+msgid "Wireless mouse is low in power (%.0f%%)"
+msgstr "Juhtmeta hiire aku on peaaegu tühi (%.0f%%)"
 
 #. TRANSLATORS: keyboard is getting a little low
 #. TRANSLATORS: the keyboard battery is very low
@@ -1135,9 +1179,8 @@ msgstr "Klaviatuuri patarei on peaaegu tühi"
 
 #. TRANSLATORS: tell user more details
 #, c-format
-msgid ""
-"The wireless keyboard attached to this computer is low in power (%.1f%%)"
-msgstr "Arvutiga seotud juhtmeta klaviatuuri aku on peaaegu tühi (%.1f%%)"
+msgid "Wireless keyboard is low in power (%.0f%%)"
+msgstr "Juhtmeta klaviatuuri aku on peaaegu tühi (%.0f%%)"
 
 #. TRANSLATORS: PDA is getting a little low
 #. TRANSLATORS: the PDA battery is very low
@@ -1146,8 +1189,8 @@ msgstr "PDA patarei (või aku) on peaaegu tühi"
 
 #. TRANSLATORS: tell user more details
 #, c-format
-msgid "The PDA attached to this computer is low in power (%.1f%%)"
-msgstr "Arvutiga seotud pihuarvuti aku on peaaegu tühi (%.1f%%)"
+msgid "PDA is low in power (%.0f%%)"
+msgstr "Pihuarvuti aku on peaaegu tühi (%.0f%%)"
 
 #. TRANSLATORS: cell phone (mobile) is getting a little low
 #. TRANSLATORS: the cell battery is very low
@@ -1156,8 +1199,46 @@ msgstr "Mobiiltelefoni aku on kriitiliselt tühi"
 
 #. TRANSLATORS: tell user more details
 #, c-format
-msgid "The cell phone attached to this computer is low in power (%.1f%%)"
-msgstr "Arvutiga seotud mobiiltelefoni aku on peaaegu tühi (%.1f%%)"
+msgid "Cell phone is low in power (%.0f%%)"
+msgstr "Mobiiltelefoni aku on peaaegu tühi (%.0f%%)"
+
+#. TRANSLATORS: media player, e.g. mp3 is getting a little low
+#, fuzzy
+#| msgid "Cell phone battery low"
+msgid "Media player battery low"
+msgstr "Mobiiltelefoni aku on kriitiliselt tühi"
+
+#. TRANSLATORS: tell user more details
+#, fuzzy, c-format
+#| msgid "The PDA attached to this computer is low in power (%.1f%%)"
+msgid "Media player is low in power (%.0f%%)"
+msgstr "Arvutiga seotud pihuarvuti aku on peaaegu tühi (%.1f%%)"
+
+#. TRANSLATORS: graphics tablet, e.g. wacom is getting a little low
+#. TRANSLATORS: the cell battery is very low
+#, fuzzy
+#| msgid "Laptop battery low"
+msgid "Tablet battery low"
+msgstr "Sülearvuti aku on peaaegu tühi"
+
+#. TRANSLATORS: tell user more details
+#, fuzzy, c-format
+#| msgid "The PDA attached to this computer is low in power (%.1f%%)"
+msgid "Tablet is low in power (%.0f%%)"
+msgstr "Arvutiga seotud pihuarvuti aku on peaaegu tühi (%.1f%%)"
+
+#. TRANSLATORS: computer, e.g. ipad is getting a little low
+#. TRANSLATORS: the cell battery is very low
+#, fuzzy
+#| msgid "Mouse battery low"
+msgid "Attached computer battery low"
+msgstr "Hiire patarei on peaaegu tühi"
+
+#. TRANSLATORS: tell user more details
+#, fuzzy, c-format
+#| msgid "The PDA attached to this computer is low in power (%.1f%%)"
+msgid "Attached computer is low in power (%.0f%%)"
+msgstr "Arvutiga seotud pihuarvuti aku on peaaegu tühi (%.1f%%)"
 
 #. TRANSLATORS: laptop battery critically low, and only have one kind of battery
 msgid "Battery critically low"
@@ -1194,49 +1275,100 @@ msgid "UPS critically low"
 msgstr "UPS on kriitiliselt tühi"
 
 #. TRANSLATORS: give the user a ultimatum
-#, c-format
+#, fuzzy, c-format
+#| msgid ""
+#| "You have approximately <b>%s</b> of remaining UPS power (%.1f%%). Restore "
+#| "AC power to your computer to avoid losing data."
 msgid ""
-"You have approximately <b>%s</b> of remaining UPS power (%.1f%%). Restore AC "
-"power to your computer to avoid losing data."
+"Approximately <b>%s</b> of remaining UPS power (%.0f%%). Restore AC power to "
+"your computer to avoid losing data."
 msgstr ""
 "UPS suudab arvutit toita veel ligikaudu <b>%s</b> (%.1f%%). Andmete "
 "kaotsimineku vältimiseks püüa võrgutoide taastada."
 
 #. TRANSLATORS: the device is just going to stop working
-#, c-format
+#, fuzzy, c-format
+#| msgid ""
+#| "Your cell phone is very low in power (%.1f%%). This device will soon stop "
+#| "functioning if not charged."
 msgid ""
-"The wireless mouse attached to this computer is very low in power (%.1f%%). "
-"This device will soon stop functioning if not charged."
-msgstr ""
-"Selle arvutiga ühendatud juhtmeta hiir on peaaegu tühi (%.1f%%). See seade "
-"lõpetab varsti töö, kui seda ei laadita."
-
-#. TRANSLATORS: the device is just going to stop working
-#, c-format
-msgid ""
-"The wireless keyboard attached to this computer is very low in power (%.1f%"
-"%). This device will soon stop functioning if not charged."
-msgstr ""
-"Selle arvutiga seotud juhtmeta klaviatuuri aku on peaaegu tühi (%.1f%%). See "
-"seade lõpetab varsti töö, kui seda ei laadita."
-
-#. TRANSLATORS: the device is just going to stop working
-#, c-format
-msgid ""
-"The PDA attached to this computer is very low in power (%.1f%%). This device "
-"will soon stop functioning if not charged."
-msgstr ""
-"Selle arvutiga seotud pihuarvuti (PDA) aku on peaaegu tühi (%.1f%%). See "
-"lülitub varsti välja, kui seda ei laadita."
-
-#. TRANSLATORS: the device is just going to stop working
-#, c-format
-msgid ""
-"Your cell phone is very low in power (%.1f%%). This device will soon stop "
+"Wireless mouse is very low in power (%.0f%%). This device will soon stop "
 "functioning if not charged."
 msgstr ""
 "Sinu mobiiltelefon on peaaegu tühi (%.1f%%). See lülitub varsti välja, kui "
 "seda ei laadita."
+
+#. TRANSLATORS: the device is just going to stop working
+#, fuzzy, c-format
+#| msgid ""
+#| "Your cell phone is very low in power (%.1f%%). This device will soon stop "
+#| "functioning if not charged."
+msgid ""
+"Wireless keyboard is very low in power (%.0f%%). This device will soon stop "
+"functioning if not charged."
+msgstr ""
+"Sinu mobiiltelefon on peaaegu tühi (%.1f%%). See lülitub varsti välja, kui "
+"seda ei laadita."
+
+#. TRANSLATORS: the device is just going to stop working
+#, fuzzy, c-format
+#| msgid ""
+#| "Your cell phone is very low in power (%.1f%%). This device will soon stop "
+#| "functioning if not charged."
+msgid ""
+"PDA is very low in power (%.0f%%). This device will soon stop functioning if "
+"not charged."
+msgstr ""
+"Sinu mobiiltelefon on peaaegu tühi (%.1f%%). See lülitub varsti välja, kui "
+"seda ei laadita."
+
+#. TRANSLATORS: the device is just going to stop working
+#, fuzzy, c-format
+#| msgid ""
+#| "Your cell phone is very low in power (%.1f%%). This device will soon stop "
+#| "functioning if not charged."
+msgid ""
+"Cell phone is very low in power (%.0f%%). This device will soon stop "
+"functioning if not charged."
+msgstr ""
+"Sinu mobiiltelefon on peaaegu tühi (%.1f%%). See lülitub varsti välja, kui "
+"seda ei laadita."
+
+#. TRANSLATORS: the device is just going to stop working
+#, fuzzy, c-format
+#| msgid ""
+#| "Your cell phone is very low in power (%.1f%%). This device will soon stop "
+#| "functioning if not charged."
+msgid ""
+"Media player is very low in power (%.0f%%). This device will soon stop "
+"functioning if not charged."
+msgstr ""
+"Sinu mobiiltelefon on peaaegu tühi (%.1f%%). See lülitub varsti välja, kui "
+"seda ei laadita."
+
+#. TRANSLATORS: the device is just going to stop working
+#, fuzzy, c-format
+#| msgid ""
+#| "Your cell phone is very low in power (%.1f%%). This device will soon stop "
+#| "functioning if not charged."
+msgid ""
+"Tablet is very low in power (%.0f%%). This device will soon stop functioning "
+"if not charged."
+msgstr ""
+"Sinu mobiiltelefon on peaaegu tühi (%.1f%%). See lülitub varsti välja, kui "
+"seda ei laadita."
+
+#. TRANSLATORS: the device is just going to stop working
+#, fuzzy, c-format
+#| msgid ""
+#| "The PDA attached to this computer is very low in power (%.1f%%). This "
+#| "device will soon stop functioning if not charged."
+msgid ""
+"Attached computer is very low in power (%.0f%%). The device will soon "
+"shutdown if not charged."
+msgstr ""
+"Selle arvutiga seotud pihuarvuti (PDA) aku on peaaegu tühi (%.1f%%). See "
+"lülitub varsti välja, kui seda ei laadita."
 
 #. TRANSLATORS: computer will shutdown without saving data
 msgid ""
@@ -1269,21 +1401,20 @@ msgstr "Aku täituvus on alla kriitilise piiri ja seetõttu arvuti seisatakse."
 
 #. TRANSLATORS: computer will shutdown without saving data
 msgid ""
-"The UPS is below the critical level and this computer will <b>power-off</b> "
-"when the UPS becomes completely empty."
+"UPS is below the critical level and this computer will <b>power-off</b> when "
+"the UPS becomes completely empty."
 msgstr ""
 "UPS-i täituvus on alla kriitilise piiri ja arvuti <b>lülitatakse</b> UPS-i "
 "täielikul tühjenemisel <b>välja</b>."
 
 #. TRANSLATORS: computer will hibernate
 msgid ""
-"The UPS is below the critical level and this computer is about to hibernate."
+"UPS is below the critical level and this computer is about to hibernate."
 msgstr ""
 "UPS-i täituvus on alla kriitilise piiri ja seetõttu läheb arvuti talveunne."
 
 #. TRANSLATORS: computer will just shutdown
-msgid ""
-"The UPS is below the critical level and this computer is about to shutdown."
+msgid "UPS is below the critical level and this computer is about to shutdown."
 msgstr "UPS-i täituvus on alla kriitilise piiri ja seetõttu arvuti seisatakse."
 
 #. TRANSLATORS: there was in install problem
@@ -1341,6 +1472,9 @@ msgstr "10 minutit"
 
 msgid "2 hours"
 msgstr "2 tundi"
+
+msgid "6 hours"
+msgstr "6 tundi"
 
 msgid "1 day"
 msgstr "1 päev"
@@ -1637,6 +1771,11 @@ msgstr "Vali see seade käivitumisel"
 msgid "Processor"
 msgstr "Protsessor"
 
+#. TRANSLATORS: % is a timestring, e.g. "6 hours 10 minutes"
+#, c-format
+msgid "%s remaining"
+msgstr "%s lõpuni"
+
 #. preferences
 msgid "_Preferences"
 msgstr "_Eelistused"
@@ -1827,6 +1966,24 @@ msgid_plural "Cell phones"
 msgstr[0] "Mobiiltelefon"
 msgstr[1] "Mobiiltelefonid"
 
+#. TRANSLATORS: media player, mp3 etc
+msgid "Media player"
+msgid_plural "Media players"
+msgstr[0] ""
+msgstr[1] ""
+
+#. TRANSLATORS: tablet device
+msgid "Tablet"
+msgid_plural "Tablets"
+msgstr[0] ""
+msgstr[1] ""
+
+#. TRANSLATORS: tablet device
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] ""
+msgstr[1] ""
+
 #. TRANSLATORS: battery technology
 msgid "Lithium Ion"
 msgstr "Liitium-ioon"
@@ -1872,3 +2029,17 @@ msgstr "_Programmist lähemalt"
 
 msgid "_Help"
 msgstr "_Abi"
+
+#~ msgid ""
+#~ "The wireless mouse attached to this computer is very low in power (%.1f%"
+#~ "%). This device will soon stop functioning if not charged."
+#~ msgstr ""
+#~ "Selle arvutiga ühendatud juhtmeta hiir on peaaegu tühi (%.1f%%). See "
+#~ "seade lõpetab varsti töö, kui seda ei laadita."
+
+#~ msgid ""
+#~ "The wireless keyboard attached to this computer is very low in power (%.1f"
+#~ "%%). This device will soon stop functioning if not charged."
+#~ msgstr ""
+#~ "Selle arvutiga seotud juhtmeta klaviatuuri aku on peaaegu tühi (%.1f%%). "
+#~ "See seade lõpetab varsti töö, kui seda ei laadita."
