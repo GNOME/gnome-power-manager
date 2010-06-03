@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager-master-po-gl-71586.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-30 17:46+0200\n"
-"PO-Revision-Date: 2010-05-30 17:45+0200\n"
+"POT-Creation-Date: 2010-06-03 22:08+0200\n"
+"PO-Revision-Date: 2010-06-03 22:08+0200\n"
 "Last-Translator: Fran Diéguez <frandieguez@ubuntu.com>\n"
 "Language-Team: Galician <gnome@g11.net>\n"
 "MIME-Version: 1.0\n"
@@ -1472,7 +1472,7 @@ msgstr ""
 
 #. TRANSLATORS: mouse is getting a little low
 #. TRANSLATORS: the mouse battery is very low
-#: ../src/gpm-manager.c:1512 ../src/gpm-manager.c:1646
+#: ../src/gpm-manager.c:1512 ../src/gpm-manager.c:1653
 msgid "Mouse battery low"
 msgstr "Batería do rato baixa"
 
@@ -1484,7 +1484,7 @@ msgstr "O rato sen fíos estase quedando sen enerxía (%.0f%%)"
 
 #. TRANSLATORS: keyboard is getting a little low
 #. TRANSLATORS: the keyboard battery is very low
-#: ../src/gpm-manager.c:1519 ../src/gpm-manager.c:1654
+#: ../src/gpm-manager.c:1519 ../src/gpm-manager.c:1661
 msgid "Keyboard battery low"
 msgstr "Batería do teclado baixa"
 
@@ -1496,7 +1496,7 @@ msgstr "O teclado sen fíos estase quedando sen enerxía (%.0f%%)"
 
 #. TRANSLATORS: PDA is getting a little low
 #. TRANSLATORS: the PDA battery is very low
-#: ../src/gpm-manager.c:1526 ../src/gpm-manager.c:1663
+#: ../src/gpm-manager.c:1526 ../src/gpm-manager.c:1670
 msgid "PDA battery low"
 msgstr "Batería da PDA baixa"
 
@@ -1508,8 +1508,8 @@ msgstr "A PDA estase quedando sen enerxía (%.0f%%)"
 
 #. TRANSLATORS: cell phone (mobile) is getting a little low
 #. TRANSLATORS: the cell battery is very low
-#: ../src/gpm-manager.c:1533 ../src/gpm-manager.c:1673
-#: ../src/gpm-manager.c:1684
+#: ../src/gpm-manager.c:1533 ../src/gpm-manager.c:1680
+#: ../src/gpm-manager.c:1691
 msgid "Cell phone battery low"
 msgstr "A batería do teléfono baixa"
 
@@ -1530,9 +1530,9 @@ msgstr "A batería do reprodutor multimedia está baixa"
 msgid "Media player is low in power (%.0f%%)"
 msgstr "O reprodutor multimedia estase quedando sen enerxía (%.0f%%)"
 
-#. TRANSLATORS: tablet, e.g. ipad is getting a little low
+#. TRANSLATORS: graphics tablet, e.g. wacom is getting a little low
 #. TRANSLATORS: the cell battery is very low
-#: ../src/gpm-manager.c:1548 ../src/gpm-manager.c:1693
+#: ../src/gpm-manager.c:1548 ../src/gpm-manager.c:1700
 msgid "Tablet battery low"
 msgstr "A batería do «tablet» está baixa"
 
@@ -1542,49 +1542,61 @@ msgstr "A batería do «tablet» está baixa"
 msgid "Tablet is low in power (%.0f%%)"
 msgstr "O «tablet» estase quedando sen enerxía (%.0f%%)"
 
+#. TRANSLATORS: computer, e.g. ipad is getting a little low
+#. TRANSLATORS: the cell battery is very low
+#: ../src/gpm-manager.c:1555 ../src/gpm-manager.c:1709
+msgid "Attached computer battery low"
+msgstr "A batería do computador anexada está baixa"
+
+#. TRANSLATORS: tell user more details
+#: ../src/gpm-manager.c:1558
+#, c-format
+msgid "Attached computer is low in power (%.0f%%)"
+msgstr "O equipo anexado estase quedando sen carga (%.0f%%)"
+
 #. TRANSLATORS: laptop battery critically low, and only have one kind of battery
-#: ../src/gpm-manager.c:1603
+#: ../src/gpm-manager.c:1610
 msgid "Battery critically low"
 msgstr "A batería ten a carga baixísima"
 
 #. TRANSLATORS: laptop battery critically low, and we have more than one type of battery
 #. TRANSLATORS: laptop battery is really, really, low
-#: ../src/gpm-manager.c:1606 ../src/gpm-manager.c:1756
+#: ../src/gpm-manager.c:1613 ../src/gpm-manager.c:1772
 msgid "Laptop battery critically low"
 msgstr "A batería do portátil está baixísima"
 
 #. TRANSLATORS: tell the use to insert the plug, as we're not going to do anything
-#: ../src/gpm-manager.c:1616
+#: ../src/gpm-manager.c:1623
 msgid "Plug in your AC adapter to avoid losing data."
 msgstr "Enchufe o seu adaptador de corrente para evitar perder datos."
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1620
+#: ../src/gpm-manager.c:1627
 #, c-format
 msgid "Computer will suspend very soon unless it is plugged in."
 msgstr "O computador pasará a suspensión moi pronto a menos que o conecte."
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1624
+#: ../src/gpm-manager.c:1631
 #, c-format
 msgid "Computer will hibernate very soon unless it is plugged in."
 msgstr ""
 "Este computador pasará a hibernar moi pronto a menos que estea conectado."
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1628
+#: ../src/gpm-manager.c:1635
 #, c-format
 msgid "Computer will shutdown very soon unless it is plugged in."
 msgstr "Este computador apagarase en moi pronto a menos que o conecte."
 
 #. TRANSLATORS: the UPS is very low
 #. TRANSLATORS: UPS is really, really, low
-#: ../src/gpm-manager.c:1636 ../src/gpm-manager.c:1794
+#: ../src/gpm-manager.c:1643 ../src/gpm-manager.c:1810
 msgid "UPS critically low"
 msgstr "O SAI está excesivamente baixo"
 
 #. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1640
+#: ../src/gpm-manager.c:1647
 #, c-format
 msgid ""
 "Approximately <b>%s</b> of remaining UPS power (%.0f%%). Restore AC power to "
@@ -1594,7 +1606,7 @@ msgstr ""
 "seu adaptador de corrente para evitar a perda de datos."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1649
+#: ../src/gpm-manager.c:1656
 #, c-format
 msgid ""
 "Wireless mouse is very low in power (%.0f%%). This device will soon stop "
@@ -1604,7 +1616,7 @@ msgstr ""
 "deixará de funcionar se non se carga."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1657
+#: ../src/gpm-manager.c:1664
 #, c-format
 msgid ""
 "Wireless keyboard is very low in power (%.0f%%). This device will soon stop "
@@ -1614,7 +1626,7 @@ msgstr ""
 "deixará de funcionar se non se carga."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1666
+#: ../src/gpm-manager.c:1673
 #, c-format
 msgid ""
 "PDA is very low in power (%.0f%%). This device will soon stop functioning if "
@@ -1624,7 +1636,7 @@ msgstr ""
 "deixará de funcionar se non se carga."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1676
+#: ../src/gpm-manager.c:1683
 #, c-format
 msgid ""
 "Cell phone is very low in power (%.0f%%). This device will soon stop "
@@ -1634,7 +1646,7 @@ msgstr ""
 "deixará de funcionar se non se carga."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1687
+#: ../src/gpm-manager.c:1694
 #, c-format
 msgid ""
 "Media player is very low in power (%.0f%%). This device will soon stop "
@@ -1644,17 +1656,27 @@ msgstr ""
 "pronto deixará de funcionar se non se carga."
 
 #. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1696
+#: ../src/gpm-manager.c:1703
 #, c-format
 msgid ""
-"Tablet is very low in power (%.0f%%). This device will soon shutdown if not "
-"charged."
+"Tablet is very low in power (%.0f%%). This device will soon stop functioning "
+"if not charged."
 msgstr ""
-"O «tablet» está quedando sen enerxía (%.0f%%). Este dispositivo pronto "
+"A «tableta» móbil está quedando sen enerxía (%.0f%%). Este dispositivo pronto "
 "deixará de funcionar se non se carga."
 
+#. TRANSLATORS: the device is just going to stop working
+#: ../src/gpm-manager.c:1712
+#, c-format
+msgid ""
+"Attached computer is very low in power (%.0f%%). The device will soon "
+"shutdown if not charged."
+msgstr ""
+"O computador anexado está quedando sen enerxía (%.0f%%). Este dispositivo "
+"pronto deixará de funcionar se non se carga."
+
 #. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1765
+#: ../src/gpm-manager.c:1781
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
@@ -1663,7 +1685,7 @@ msgstr ""
 "b> cando esta se baleire completamente."
 
 #. TRANSLATORS: computer will suspend
-#: ../src/gpm-manager.c:1771
+#: ../src/gpm-manager.c:1787
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1674,7 +1696,7 @@ msgstr ""
 "suspensión é necesaria unha pequena cantidade de enerxía."
 
 #. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1778
+#: ../src/gpm-manager.c:1794
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
@@ -1683,14 +1705,14 @@ msgstr ""
 "de entrar en estado de hibernación."
 
 #. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1783
+#: ../src/gpm-manager.c:1799
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr "A batería está por debaixo dun nivel crítico e o computador apagarase."
 
 #. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1803
+#: ../src/gpm-manager.c:1819
 msgid ""
 "UPS is below the critical level and this computer will <b>power-off</b> when "
 "the UPS becomes completely empty."
@@ -1699,7 +1721,7 @@ msgstr ""
 "cando o SAI estea completamente baleiro."
 
 #. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1809
+#: ../src/gpm-manager.c:1825
 msgid ""
 "UPS is below the critical level and this computer is about to hibernate."
 msgstr ""
@@ -1707,19 +1729,19 @@ msgstr ""
 "hibernar."
 
 #. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1814
+#: ../src/gpm-manager.c:1830
 msgid "UPS is below the critical level and this computer is about to shutdown."
 msgstr ""
 "O SAI está por debaixo dun nivel crítico e este computador está a piques de "
 "apagarase."
 
 #. TRANSLATORS: there was in install problem
-#: ../src/gpm-manager.c:1950
+#: ../src/gpm-manager.c:1966
 msgid "Install problem!"
 msgstr "Problema de instalación!"
 
 #. TRANSLATORS: the GConf schema was not installed properly
-#: ../src/gpm-manager.c:1952
+#: ../src/gpm-manager.c:1968
 msgid ""
 "The configuration defaults for GNOME Power Manager have not been installed "
 "correctly.\n"
@@ -2167,7 +2189,7 @@ msgid "%s remaining"
 msgstr "quedan %s"
 
 #. preferences
-#: ../src/gpm-tray-icon.c:341
+#: ../src/gpm-tray-icon.c:342
 msgid "_Preferences"
 msgstr "_Preferencias"
 
@@ -2257,17 +2279,17 @@ msgid "Missing"
 msgstr "Falta"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:411 ../src/gpm-upower.c:685
+#: ../src/gpm-upower.c:411 ../src/gpm-upower.c:692
 msgid "Charged"
 msgstr "Cargada"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:414 ../src/gpm-upower.c:673
+#: ../src/gpm-upower.c:414 ../src/gpm-upower.c:680
 msgid "Charging"
 msgstr "Cargando"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:417 ../src/gpm-upower.c:677
+#: ../src/gpm-upower.c:417 ../src/gpm-upower.c:684
 msgid "Discharging"
 msgstr "Descargando"
 
@@ -2413,53 +2435,60 @@ msgid_plural "Tablets"
 msgstr[0] "«Tablet»"
 msgstr[1] "«Tablets»"
 
+#. TRANSLATORS: tablet device
+#: ../src/gpm-upower.c:566
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Computador"
+msgstr[1] "Computadores"
+
 #. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:629
+#: ../src/gpm-upower.c:636
 msgid "Lithium Ion"
 msgstr "Ión de litio"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:633
+#: ../src/gpm-upower.c:640
 msgid "Lithium Polymer"
 msgstr "Polímero de litio"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:637
+#: ../src/gpm-upower.c:644
 msgid "Lithium Iron Phosphate"
 msgstr "Fosfato de ferro de litio"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:641
+#: ../src/gpm-upower.c:648
 msgid "Lead acid"
 msgstr "Chumbo e ácido"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:645
+#: ../src/gpm-upower.c:652
 msgid "Nickel Cadmium"
 msgstr "Níquel cadmio"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:649
+#: ../src/gpm-upower.c:656
 msgid "Nickel metal hydride"
 msgstr "Níquel metal hidruro"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:653
+#: ../src/gpm-upower.c:660
 msgid "Unknown technology"
 msgstr "Tecnoloxía descoñecida"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:681
+#: ../src/gpm-upower.c:688
 msgid "Empty"
 msgstr "Baleira"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:689
+#: ../src/gpm-upower.c:696
 msgid "Waiting to charge"
 msgstr "Esperando para carga"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:693
+#: ../src/gpm-upower.c:700
 msgid "Waiting to discharge"
 msgstr "Esperando para descarga"
 
