@@ -102,13 +102,6 @@ G_BEGIN_DECLS
 #define GPM_SETTINGS_NOTIFY_SLEEP_FAILED_URI		"notify-sleep-failed-uri"
 #define GPM_SETTINGS_NOTIFY_LOW_POWER			"notify-low-power"
 
-/* statistics */
-#define GPM_SETTINGS_STATS_SHOW_AXIS_LABELS		"statistics-show-axis-labels"
-#define GPM_SETTINGS_STATS_SHOW_EVENTS			"statistics-show-events"
-#define GPM_SETTINGS_STATS_SMOOTH_DATA			"statistics-smooth-data"
-#define GPM_SETTINGS_STATS_GRAPH_TYPE			"statistics-graph-type"
-#define GPM_SETTINGS_STATS_MAX_TIME			"statistics-data-max-time"
-
 /* thresholds */
 #define GPM_SETTINGS_PERCENTAGE_LOW			"percentage-low"
 #define GPM_SETTINGS_PERCENTAGE_CRITICAL		"percentage-critical"
@@ -130,7 +123,7 @@ G_BEGIN_DECLS
 #define GPM_SETTINGS_ENABLE_SOUND			"enable-sound"
 #define GPM_SETTINGS_SHOW_ACTIONS			"show-actions"
 
-/* new info binary */
+/* statistics */
 #define GPM_SETTINGS_INFO_HISTORY_TIME			"info-history-time"
 #define GPM_SETTINGS_INFO_HISTORY_TYPE			"info-history-type"
 #define GPM_SETTINGS_INFO_HISTORY_GRAPH_SMOOTH		"info-history-graph-smooth"
