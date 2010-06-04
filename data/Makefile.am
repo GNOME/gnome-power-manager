@@ -1,9 +1,7 @@
 SUBDIRS = icons
 
-@INTLTOOL_SCHEMAS_RULE@
-schemadir = $(sysconfdir)/gconf/schemas
-schema_in_files = gnome-power-manager.schemas.in
-schema_DATA = $(schema_in_files:.schemas.in=.schemas)
+migrationdir = $(datadir)/GConf/gsettings
+dist_migration_DATA = org.gnome.power-manager.gschema.migrate
 
 @INTLTOOL_DESKTOP_RULE@
 desktopdir = $(datadir)/applications
@@ -23,6 +21,9 @@ service_DATA     = $(service_in_files:.service.in=.service)
 $(service_DATA): $(service_in_files) Makefile
 	@sed -e "s|\@servicedir\@|$(bindir)|" $< > $@
 
+@GSETTINGS_RULES@
+gsettings_SCHEMAS = org.gnome.power-manager.gschema.xml
+
 pkgdata_DATA =						\
 	gpm-statistics.ui				\
 	gpm-feedback-widget.ui				\
@@ -30,24 +31,11 @@ pkgdata_DATA =						\
 	acme.ui
 
 EXTRA_DIST =						\
-	gnome-power-manager.schemas.in			\
-	$(schema_in_files)				\
-	$(desktop_in_files)				\
-	$(autostart_in_files)				\
+	$(gsettings_SCHEMAS)				\
 	$(service_in_files)				\
+	$(autostart_in_files)				\
+	$(desktop_in_files)				\
 	$(pkgdata_DATA)
-
-if GCONF_SCHEMAS_INSTALL
-install-data-local:
-	-GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) \
-	$(GCONFTOOL) --makefile-install-rule $(schema_DATA)
-endif
-
-if GCONF_SCHEMAS_INSTALL
-uninstall-local:
-	-GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) \
-	$(GCONFTOOL) --makefile-uninstall-rule $(schema_DATA)
-endif
 
 clean-local :
 	rm -f *~
@@ -56,5 +44,4 @@ DISTCLEANFILES =					\
 	gnome-power-manager.desktop			\
 	gnome-power-preferences.desktop			\
 	gnome-power-statistics.desktop			\
-	gnome-power-manager.schemas			\
 	gnome-power-manager.service

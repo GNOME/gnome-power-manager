@@ -103,14 +103,16 @@ AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE(GETTEXT_PACKAGE, "AC_PACKAGE_NAME", [foo])
 
 AM_GLIB_GNU_GETTEXT
+GLIB_GSETTINGS
 
 dnl ---------------------------------------------------------------------------
 dnl - Library dependencies
 dnl ---------------------------------------------------------------------------
 GLIB_REQUIRED=2.13.0
+GIO_REQUIRED=2.25.0
 GTK_REQUIRED=2.17.7
 GDK_REQUIRED=2.11.0
-GCONF_REQUIRED=2.10.0
+GCONF_REQUIRED=2.31.1
 GNOME_KEYRING_REQUIRED=0.6.0
 DBUS_REQUIRED=1.0
 DBUS_GLIB_REQUIRED=0.70
@@ -126,7 +128,7 @@ UPOWER_REQUIRED=0.9.1
 dnl ---------------------------------------------------------------------------
 dnl - Check library dependencies
 dnl ---------------------------------------------------------------------------
-PKG_CHECK_MODULES(GLIB, glib-2.0 >= $GLIB_REQUIRED gobject-2.0)
+PKG_CHECK_MODULES(GLIB, glib-2.0 >= $GLIB_REQUIRED gobject-2.0 gio-2.0 >= $GIO_REQUIRED)
 
 PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk >= $CANBERRA_REQUIRED)
 
@@ -161,9 +163,6 @@ PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= $LIBNOTIFY_REQUIRED)
 PKG_CHECK_MODULES(UNIQUE, unique-1.0 >= $UNIQUE_REQUIRED)
 
 PKG_CHECK_MODULES(UPOWER, upower-glib >= $UPOWER_REQUIRED)
-
-AC_PATH_PROG(GCONFTOOL, gconftool-2)
-AM_GCONF_SOURCE_2
 
 dnl ---------------------------------------------------------------------------
 dnl - Check XF86XK_Keys
@@ -213,21 +212,6 @@ else
     AC_MSG_RESULT(no)
 fi
 AM_CONDITIONAL([HAVE_TESTS], [test $have_tests = yes])
-
-dnl ---------------------------------------------------------------------------
-dnl - Build gconf default button?
-dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(gconf-defaults,
-              AS_HELP_STRING([--disable-gconf-defaults],
-                             [Allow setting gconf default settings]),
-              have_gconfdefaults=$enableval,have_gconfdefaults=yes)
-
-AC_MSG_CHECKING([whether to support gconf defaults])
-if test x$have_gconfdefaults = xyes ; then
-    AC_DEFINE(HAVE_GCONF_DEFAULTS, 1, [Define if have gconf defaults])
-fi
-AC_MSG_RESULT([$have_gconfdefaults])
-AM_CONDITIONAL([HAVE_GCONF_DEFAULTS], [test $have_gconfdefaults = yes])
 
 dnl ---------------------------------------------------------------------------
 dnl - Build applets
@@ -346,7 +330,6 @@ data/icons/scalable/actions/Makefile
 data/icons/scalable/apps/Makefile
 data/icons/scalable/status/Makefile
 ])
-
 AC_OUTPUT
 
 dnl ==========================================================================
@@ -360,11 +343,9 @@ echo "
         cflags:                    ${CFLAGS}
         Building extra applets:    ${enable_applets}
         Self test support:         ${have_tests}
-        GConf default support:     ${have_gconfdefaults}
         Docbook support:           ${enable_docbook_docs}
         documentation dir:         $DOCDIR
         dbus-1 services dir:       $DBUS_SERVICES_DIR
-        gconf-schema dir:          $GCONF_SCHEMA_FILE_DIR
 "
 if [[ "${prefix}" != "/usr" ]] ; then
 	echo '

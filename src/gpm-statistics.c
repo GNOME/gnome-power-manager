@@ -49,7 +49,7 @@ gchar *current_device = NULL;
 static const gchar *history_type;
 static const gchar *stats_type;
 static guint history_time;
-static GConfClient *gconf_client;
+static GSettings *settings;
 static gfloat sigma_smoothing = 0.0f;
 static UpWakeups *wakeups = NULL;
 static GtkWidget *graph_history = NULL;
@@ -1092,7 +1092,7 @@ gpm_stats_notebook_changed_cb (GtkNotebook *notebook, GtkNotebookPage *page, gin
 	gpm_stats_set_title (GTK_WINDOW (widget), page_num);
 
 	/* save page in gconf */
-	gconf_client_set_int (gconf_client, GPM_CONF_INFO_PAGE_NUMBER, page_num, NULL);
+	g_settings_set_int (settings, GPM_SETTINGS_INFO_PAGE_NUMBER, page_num);
 
 	if (current_device == NULL)
 		return;
@@ -1136,7 +1136,7 @@ gpm_stats_devices_treeview_clicked_cb (GtkTreeSelection *selection, gboolean dat
 		gtk_tree_model_get (model, &iter, GPM_DEVICES_COLUMN_ID, &current_device, -1);
 
 		/* save device in gconf */
-		gconf_client_set_string (gconf_client, GPM_CONF_INFO_LAST_DEVICE, current_device, NULL);
+		g_settings_set_string (settings, GPM_SETTINGS_INFO_LAST_DEVICE, current_device);
 
 		/* show transaction_id */
 		egg_debug ("selected row is: %s", current_device);
@@ -1311,7 +1311,7 @@ gpm_stats_history_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 	g_free (value);
 
 	/* save to gconf */
-	gconf_client_set_string (gconf_client, GPM_CONF_INFO_HISTORY_TYPE, history_type, NULL);
+	g_settings_set_string (settings, GPM_SETTINGS_INFO_HISTORY_TYPE, history_type);
 }
 
 /**
@@ -1362,7 +1362,7 @@ gpm_stats_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 	g_free (value);
 
 	/* save to gconf */
-	gconf_client_set_string (gconf_client, GPM_CONF_INFO_STATS_TYPE, stats_type, NULL);
+	g_settings_set_string (settings, GPM_SETTINGS_INFO_STATS_TYPE, stats_type);
 }
 
 /**
@@ -1387,7 +1387,7 @@ gpm_stats_range_combo_changed (GtkWidget *widget, gpointer data)
 		g_assert (FALSE);
 
 	/* save to gconf */
-	gconf_client_set_int (gconf_client, GPM_CONF_INFO_HISTORY_TIME, history_time, NULL);
+	g_settings_set_int (settings, GPM_SETTINGS_INFO_HISTORY_TIME, history_time);
 
 	gpm_stats_button_update_ui ();
 	g_free (value);
@@ -1402,7 +1402,7 @@ gpm_stats_smooth_checkbox_history_cb (GtkWidget *widget, gpointer data)
 {
 	gboolean checked;
 	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
-	gconf_client_set_bool (gconf_client, GPM_CONF_INFO_HISTORY_GRAPH_SMOOTH, checked, NULL);
+	g_settings_set_boolean (settings, GPM_SETTINGS_INFO_HISTORY_GRAPH_SMOOTH, checked);
 	gpm_stats_button_update_ui ();
 }
 
@@ -1415,7 +1415,7 @@ gpm_stats_smooth_checkbox_stats_cb (GtkWidget *widget, gpointer data)
 {
 	gboolean checked;
 	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
-	gconf_client_set_bool (gconf_client, GPM_CONF_INFO_STATS_GRAPH_SMOOTH, checked, NULL);
+	g_settings_set_boolean (settings, GPM_SETTINGS_INFO_STATS_GRAPH_SMOOTH, checked);
 	gpm_stats_button_update_ui ();
 }
 
@@ -1428,7 +1428,7 @@ gpm_stats_points_checkbox_history_cb (GtkWidget *widget, gpointer data)
 {
 	gboolean checked;
 	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
-	gconf_client_set_bool (gconf_client, GPM_CONF_INFO_HISTORY_GRAPH_POINTS, checked, NULL);
+	g_settings_set_boolean (settings, GPM_SETTINGS_INFO_HISTORY_GRAPH_POINTS, checked);
 	gpm_stats_button_update_ui ();
 }
 
@@ -1441,7 +1441,7 @@ gpm_stats_points_checkbox_stats_cb (GtkWidget *widget, gpointer data)
 {
 	gboolean checked;
 	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
-	gconf_client_set_bool (gconf_client, GPM_CONF_INFO_STATS_GRAPH_POINTS, checked, NULL);
+	g_settings_set_boolean (settings, GPM_SETTINGS_INFO_STATS_GRAPH_POINTS, checked);
 	gpm_stats_button_update_ui ();
 }
 
@@ -1570,7 +1570,7 @@ main (int argc, char *argv[])
                                            GPM_DATA G_DIR_SEPARATOR_S "icons");
 
 	/* get data from gconf */
-	gconf_client = gconf_client_get_default ();
+	settings = g_settings_new (GPM_SETTINGS_SCHEMA);
 
 	/* get UI */
 	builder = gtk_builder_new ();
@@ -1610,31 +1610,31 @@ main (int argc, char *argv[])
 			  G_CALLBACK (gpm_stats_button_help_cb), NULL);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_smooth_history"));
-	checked = gconf_client_get_bool (gconf_client, GPM_CONF_INFO_HISTORY_GRAPH_SMOOTH, NULL);
+	checked = g_settings_get_boolean (settings, GPM_SETTINGS_INFO_HISTORY_GRAPH_SMOOTH);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_stats_smooth_checkbox_history_cb), NULL);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_smooth_stats"));
-	checked = gconf_client_get_bool (gconf_client, GPM_CONF_INFO_STATS_GRAPH_SMOOTH, NULL);
+	checked = g_settings_get_boolean (settings, GPM_SETTINGS_INFO_STATS_GRAPH_SMOOTH);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_stats_smooth_checkbox_stats_cb), NULL);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_points_history"));
-	checked = gconf_client_get_bool (gconf_client, GPM_CONF_INFO_HISTORY_GRAPH_POINTS, NULL);
+	checked = g_settings_get_boolean (settings, GPM_SETTINGS_INFO_HISTORY_GRAPH_POINTS);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_stats_points_checkbox_history_cb), NULL);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_points_stats"));
-	checked = gconf_client_get_bool (gconf_client, GPM_CONF_INFO_STATS_GRAPH_POINTS, NULL);
+	checked = g_settings_get_boolean (settings, GPM_SETTINGS_INFO_STATS_GRAPH_POINTS);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_stats_points_checkbox_stats_cb), NULL);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "notebook1"));
-	page = gconf_client_get_int (gconf_client, GPM_CONF_INFO_PAGE_NUMBER, NULL);
+	page = g_settings_get_int (settings, GPM_SETTINGS_INFO_PAGE_NUMBER);
 	gtk_notebook_set_current_page (GTK_NOTEBOOK (widget), page);
 	g_signal_connect (widget, "switch-page",
 			  G_CALLBACK (gpm_stats_notebook_changed_cb), NULL);
@@ -1676,14 +1676,14 @@ main (int argc, char *argv[])
 	gpm_stats_add_wakeups_columns (GTK_TREE_VIEW (widget));
 	gtk_tree_view_columns_autosize (GTK_TREE_VIEW (widget)); /* show */
 
-	history_type = gconf_client_get_string (gconf_client, GPM_CONF_INFO_HISTORY_TYPE, NULL);
-	history_time = gconf_client_get_int (gconf_client, GPM_CONF_INFO_HISTORY_TIME, NULL);
+	history_type = g_settings_get_string (settings, GPM_SETTINGS_INFO_HISTORY_TYPE);
+	history_time = g_settings_get_int (settings, GPM_SETTINGS_INFO_HISTORY_TIME);
 	if (history_type == NULL)
 		history_type = GPM_HISTORY_CHARGE_VALUE;
 	if (history_time == 0)
 		history_time = GPM_HISTORY_HOUR_VALUE;
 
-	stats_type = gconf_client_get_string (gconf_client, GPM_CONF_INFO_STATS_TYPE, NULL);
+	stats_type = g_settings_get_string (settings, GPM_SETTINGS_INFO_STATS_TYPE);
 	if (stats_type == NULL)
 		stats_type = GPM_STATS_CHARGE_DATA_VALUE;
 
@@ -1768,7 +1768,7 @@ main (int argc, char *argv[])
 	}
 
 	if (last_device == NULL)
-		last_device = gconf_client_get_string (gconf_client, GPM_CONF_INFO_LAST_DEVICE, NULL);
+		last_device = g_settings_get_string (settings, GPM_SETTINGS_INFO_LAST_DEVICE);
 
 	/* has capability to measure wakeups */
 	ret = up_wakeups_get_has_capability (wakeups);
@@ -1803,7 +1803,7 @@ main (int argc, char *argv[])
 	gtk_main ();
 
 out:
-	g_object_unref (gconf_client);
+	g_object_unref (settings);
 	g_object_unref (client);
 	g_object_unref (wakeups);
 	g_object_unref (builder);
