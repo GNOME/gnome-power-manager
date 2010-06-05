@@ -227,7 +227,11 @@ gpm_idle_evaluate (GpmIdle *idle)
 	if (idle->priv->timeout_blank_id == 0 &&
 	    idle->priv->timeout_blank != 0) {
 		egg_debug ("setting up blank callback for %is", idle->priv->timeout_blank);
-		idle->priv->timeout_blank_id = g_timeout_add_seconds (idle->priv->timeout_blank, (GSourceFunc) gpm_idle_blank_cb, idle);
+		idle->priv->timeout_blank_id = g_timeout_add_seconds (idle->priv->timeout_blank,
+								      (GSourceFunc) gpm_idle_blank_cb, idle);
+#if GLIB_CHECK_VERSION(2,25,8)
+		g_source_set_name_by_id (idle->priv->timeout_blank_id, "[GpmIdle] blank");
+#endif
 	}
 
 	/* are we inhibited from sleeping */
@@ -242,7 +246,11 @@ gpm_idle_evaluate (GpmIdle *idle)
 		if (idle->priv->timeout_sleep_id == 0 &&
 		    idle->priv->timeout_sleep != 0) {
 			egg_debug ("setting up sleep callback %is", idle->priv->timeout_sleep);
-			idle->priv->timeout_sleep_id = g_timeout_add_seconds (idle->priv->timeout_sleep, (GSourceFunc) gpm_idle_sleep_cb, idle);
+			idle->priv->timeout_sleep_id = g_timeout_add_seconds (idle->priv->timeout_sleep,
+									      (GSourceFunc) gpm_idle_sleep_cb, idle);
+#if GLIB_CHECK_VERSION(2,25,8)
+			g_source_set_name_by_id (idle->priv->timeout_sleep_id, "[GpmIdle] sleep");
+#endif
 		}
 	}
 out:

@@ -233,6 +233,9 @@ gpm_manager_play_loop_start (GpmManager *manager, GpmManagerSound action, gboole
 	manager->priv->critical_alert_timeout_id = g_timeout_add_seconds (timeout,
 									  (GSourceFunc) gpm_manager_play_loop_timeout_cb,
 									  manager);
+#if GLIB_CHECK_VERSION(2,25,8)
+	g_source_set_name_by_id (manager->priv->critical_alert_timeout_id, "[GpmManager] play-loop");
+#endif
 
 	/* play the sound, using sounds from the naming spec */
 	retval = ca_context_play (ca_gtk_context_get (), 0,
@@ -1217,6 +1220,7 @@ static void
 gpm_manager_engine_perhaps_recall_cb (GpmEngine *engine, UpDevice *device, gchar *oem_vendor, gchar *website, GpmManager *manager)
 {
 	gboolean ret;
+	guint timer_id;
 
 	/* don't show when running under GDM */
 	if (g_getenv ("RUNNING_UNDER_GDM") != NULL) {
@@ -1235,7 +1239,11 @@ gpm_manager_engine_perhaps_recall_cb (GpmEngine *engine, UpDevice *device, gchar
 	g_object_set_data_full (G_OBJECT (manager), "recall-oem-website", (gpointer) g_strdup (website), (GDestroyNotify) g_free);
 
 	/* delay by a few seconds so the panel can load */
-	g_timeout_add_seconds (GPM_MANAGER_RECALL_DELAY, (GSourceFunc) gpm_manager_perhaps_recall_delay_cb, manager);
+	timer_id = g_timeout_add_seconds (GPM_MANAGER_RECALL_DELAY,
+					  (GSourceFunc) gpm_manager_perhaps_recall_delay_cb, manager);
+#if GLIB_CHECK_VERSION(2,25,8)
+	g_source_set_name_by_id (timer_id, "[GpmManager] perhaps-recall");
+#endif
 }
 
 /**
@@ -1745,6 +1753,7 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, UpDevice *device, GpmMan
 	GIcon *icon = NULL;
 	UpDeviceKind kind;
 	GpmActionPolicy policy;
+	guint timer_id;
 
 	/* get device properties */
 	g_object_get (device,
@@ -1796,7 +1805,10 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, UpDevice *device, GpmMan
 		g_free (action);
 
 		/* wait 20 seconds for user-panic */
-		g_timeout_add_seconds (20, (GSourceFunc) manager_critical_action_do, manager);
+		timer_id = g_timeout_add_seconds (20, (GSourceFunc) manager_critical_action_do, manager);
+#if GLIB_CHECK_VERSION(2,25,8)
+		g_source_set_name_by_id (timer_id, "[GpmManager] battery critical-action");
+#endif
 
 	} else if (kind == UP_DEVICE_KIND_UPS) {
 		/* TRANSLATORS: UPS is really, really, low */
@@ -1825,7 +1837,10 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, UpDevice *device, GpmMan
 		}
 
 		/* wait 20 seconds for user-panic */
-		g_timeout_add_seconds (20, (GSourceFunc) manager_critical_action_do, manager);
+		timer_id = g_timeout_add_seconds (20, (GSourceFunc) manager_critical_action_do, manager);
+#if GLIB_CHECK_VERSION(2,25,8)
+		g_source_set_name_by_id (timer_id, "[GpmManager] ups critical-action");
+#endif
 
 		g_free (action);
 	}
@@ -1897,8 +1912,12 @@ gpm_manager_reset_just_resumed_cb (gpointer user_data)
 static void
 gpm_manager_control_resume_cb (GpmControl *control, GpmControlAction action, GpmManager *manager)
 {
+	guint timer_id;
 	manager->priv->just_resumed = TRUE;
-	g_timeout_add_seconds (1, gpm_manager_reset_just_resumed_cb, manager);
+	timer_id = g_timeout_add_seconds (1, gpm_manager_reset_just_resumed_cb, manager);
+#if GLIB_CHECK_VERSION(2,25,8)
+	g_source_set_name_by_id (timer_id, "[GpmManager] just-resumed");
+#endif
 }
 
 /**

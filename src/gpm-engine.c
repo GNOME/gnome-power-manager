@@ -1102,6 +1102,7 @@ static void
 gpm_engine_init (GpmEngine *engine)
 {
 	gchar *icon_policy;
+	guint idle_id;
 
 	engine->priv = GPM_ENGINE_GET_PRIVATE (engine);
 
@@ -1161,7 +1162,10 @@ gpm_engine_init (GpmEngine *engine)
 	else
 		egg_debug ("Using percentage notification policy");
 
-	g_idle_add ((GSourceFunc) gpm_engine_coldplug_idle_cb, engine);
+	idle_id = g_idle_add ((GSourceFunc) gpm_engine_coldplug_idle_cb, engine);
+#if GLIB_CHECK_VERSION(2,25,8)
+	g_source_set_name_by_id (idle_id, "[GpmEngine] coldplug");
+#endif
 }
 
 /**

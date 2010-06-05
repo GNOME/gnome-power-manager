@@ -346,6 +346,9 @@ gpm_dpms_init (GpmDpms *dpms)
 	/* DPMSCapable() can never change for a given display */
 	dpms->priv->dpms_capable = DPMSCapable (GDK_DISPLAY ());
 	dpms->priv->timer_id = g_timeout_add_seconds (GPM_DPMS_POLL_TIME, (GSourceFunc)gpm_dpms_poll_mode_cb, dpms);
+#if GLIB_CHECK_VERSION(2,25,8)
+	g_source_set_name_by_id (dpms->priv->timer_id, "[GpmDpms] poll");
+#endif
 
 	/* ensure we clear the default timeouts (Standby: 1200s, Suspend: 1800s, Off: 2400s) */
 	gpm_dpms_clear_timeouts (dpms);
