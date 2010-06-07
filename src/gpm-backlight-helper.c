@@ -192,25 +192,6 @@ main (gint argc, gchar *argv[])
 		goto out;
 	}
 
-	/* get calling process */
-	uid = getuid ();
-	euid = geteuid ();
-	if (uid != 0 || euid != 0) {
-		/* TRANSLATORS: only able to install profiles as root */
-		g_print ("%s\n", _("This program can only be used by the root user"));
-		retval = GCM_BACKLIGHT_HELPER_EXIT_CODE_ARGUMENTS_INVALID;
-		goto out;
-	}
-
-	/* check we're not being spoofed */
-	pkexec_uid_str = g_getenv ("PKEXEC_UID");
-	if (pkexec_uid_str == NULL) {
-		/* TRANSLATORS: the program must never be directly run */
-		g_print ("%s\n", _("This program must only be run through pkexec"));
-		retval = GCM_BACKLIGHT_HELPER_EXIT_CODE_INVALID_USER;
-		goto out;
-	}
-
 	/* find device */
 	filename = gcm_backlight_helper_get_best_backlight ();
 	if (filename == NULL) {
@@ -234,6 +215,8 @@ main (gint argc, gchar *argv[])
 
 		/* just print the contents to stdout */
 		g_print ("%s", contents);
+		retval = GCM_BACKLIGHT_HELPER_EXIT_CODE_SUCCESS;
+		goto out;
 	}
 
 	/* GetSteps */
@@ -250,6 +233,27 @@ main (gint argc, gchar *argv[])
 
 		/* just print the contents to stdout */
 		g_print ("%s", contents);
+		retval = GCM_BACKLIGHT_HELPER_EXIT_CODE_SUCCESS;
+		goto out;
+	}
+
+	/* get calling process */
+	uid = getuid ();
+	euid = geteuid ();
+	if (uid != 0 || euid != 0) {
+		/* TRANSLATORS: only able to install profiles as root */
+		g_print ("%s\n", _("This program can only be used by the root user"));
+		retval = GCM_BACKLIGHT_HELPER_EXIT_CODE_ARGUMENTS_INVALID;
+		goto out;
+	}
+
+	/* check we're not being spoofed */
+	pkexec_uid_str = g_getenv ("PKEXEC_UID");
+	if (pkexec_uid_str == NULL) {
+		/* TRANSLATORS: the program must never be directly run */
+		g_print ("%s\n", _("This program must only be run through pkexec"));
+		retval = GCM_BACKLIGHT_HELPER_EXIT_CODE_INVALID_USER;
+		goto out;
 	}
 
 	/* SetBrightness */
