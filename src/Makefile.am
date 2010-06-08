@@ -13,7 +13,6 @@ INCLUDES =						\
 	$(GLIB_CFLAGS)					\
 	$(DBUS_CFLAGS)					\
 	$(GNOME_CFLAGS)					\
-	$(UNIQUE_CFLAGS)				\
 	$(X11_CFLAGS)					\
 	$(LIBNOTIFY_CFLAGS)				\
 	$(CANBERRA_CFLAGS)				\
@@ -57,8 +56,6 @@ libgpmshared_a_SOURCES =				\
 	egg-color.h					\
 	egg-debug.h					\
 	egg-debug.c					\
-	egg-unique.h					\
-	egg-unique.c					\
 	egg-precision.h					\
 	egg-precision.c					\
 	egg-array-float.c				\
@@ -112,7 +109,6 @@ gnome_power_statistics_LDADD =				\
 	$(X11_LIBS)					\
 	$(UPOWER_LIBS)					\
 	$(GNOME_LIBS)					\
-	$(UNIQUE_LIBS)					\
 	$(DBUS_LIBS)					\
 	-lm
 
@@ -132,7 +128,6 @@ gnome_power_preferences_LDADD =				\
 	$(X11_LIBS)					\
 	$(GNOME_LIBS)					\
 	$(DBUS_LIBS)					\
-	$(UNIQUE_LIBS)					\
 	$(GPM_EXTRA_LIBS)				\
 	$(UPOWER_LIBS)					\
 	-lm

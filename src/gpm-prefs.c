@@ -30,45 +30,35 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-/* local .la */
-#include <egg-unique.h>
+#include "egg-debug.h"
 
 #include "gpm-common.h"
-#include "egg-debug.h"
 #include "gpm-prefs-core.h"
 
 /**
  * gpm_prefs_help_cb
- * @prefs: This prefs class instance
- *
- * What to do when help is requested
  **/
 static void
-gpm_prefs_help_cb (GpmPrefs *prefs)
+gpm_prefs_help_cb (GpmPrefs *prefs, GApplication *application)
 {
 	gpm_help_display ("preferences");
 }
 
 /**
  * gpm_prefs_close_cb
- * @prefs: This prefs class instance
- *
- * What to do when we are asked to close for whatever reason
  **/
 static void
-gpm_prefs_close_cb (GpmPrefs *prefs)
+gpm_prefs_close_cb (GpmPrefs *prefs, GApplication *application)
 {
-	gtk_main_quit ();
+	g_application_quit (application, 0);
 }
 
 /**
- * gpm_prefs_activated_cb
- * @prefs: This prefs class instance
- *
- * We have been asked to show the window
+ * gpm_prefs_application_prepare_action_cb:
  **/
 static void
-gpm_prefs_activated_cb (EggUnique *egg_unique, GpmPrefs *prefs)
+gpm_prefs_application_prepare_action_cb (GApplication *application, GVariant *arguments,
+					 GVariant *platform_data, GpmPrefs *prefs)
 {
 	gpm_prefs_activate_window (prefs);
 }
@@ -82,8 +72,7 @@ main (int argc, char **argv)
 	gboolean verbose = FALSE;
 	GOptionContext *context;
 	GpmPrefs *prefs = NULL;
-	gboolean ret;
-	EggUnique *egg_unique;
+	GApplication *application;
 
 	const GOptionEntry options[] = {
 		{ "verbose", '\0', 0, G_OPTION_ARG_NONE, &verbose,
@@ -105,26 +94,22 @@ main (int argc, char **argv)
 	gtk_init (&argc, &argv);
 	egg_debug_init (verbose);
 
-	/* are we already activated? */
-	egg_unique = egg_unique_new ();
-	ret = egg_unique_assign (egg_unique, "org.gnome.PowerManager.Preferences");
-	if (!ret) {
-		goto unique_out;
-	}
-
 	prefs = gpm_prefs_new ();
 
-	g_signal_connect (egg_unique, "activated",
-			  G_CALLBACK (gpm_prefs_activated_cb), prefs);
+	/* ensure single instance */
+	application = g_application_new_and_register ("org.gnome.PowerManager.Preferences", argc, argv);
+	g_signal_connect (application, "prepare-activation",
+			  G_CALLBACK (gpm_prefs_application_prepare_action_cb), prefs);
 	g_signal_connect (prefs, "action-help",
-			  G_CALLBACK (gpm_prefs_help_cb), prefs);
+			  G_CALLBACK (gpm_prefs_help_cb), application);
 	g_signal_connect (prefs, "action-close",
-			  G_CALLBACK (gpm_prefs_close_cb), prefs);
-	gtk_main ();
-	g_object_unref (prefs);
+			  G_CALLBACK (gpm_prefs_close_cb), application);
 
-unique_out:
-	g_object_unref (egg_unique);
+	/* run */
+	g_application_run (application);
+
+	g_object_unref (prefs);
+	g_object_unref (application);
 
 /* seems to not work...
 	g_option_context_free (context); */

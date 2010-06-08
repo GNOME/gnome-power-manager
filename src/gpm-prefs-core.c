@@ -378,9 +378,6 @@ gpm_prefs_close_cb (GtkWidget *widget, GpmPrefs *prefs)
 
 /**
  * gpm_prefs_delete_event_cb:
- * @widget: The GtkWidget object
- * @event: The event type, unused.
- * @prefs: This prefs class instance
  **/
 static gboolean
 gpm_prefs_delete_event_cb (GtkWidget *widget, GdkEvent *event, GpmPrefs *prefs)
@@ -806,7 +803,7 @@ gpm_prefs_init (GpmPrefs *prefs)
 	gtk_window_set_default_icon_name (GPM_STOCK_APP_ICON);
 
 	/* Get the main window quit */
-	g_signal_connect (main_window, "delete_event",
+	g_signal_connect (main_window, "delete-event",
 			  G_CALLBACK (gpm_prefs_delete_event_cb), prefs);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "button_close"));

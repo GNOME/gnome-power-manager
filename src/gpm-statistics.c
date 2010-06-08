@@ -34,7 +34,6 @@
 #include "egg-debug.h"
 #include "egg-color.h"
 #include "egg-array-float.h"
-#include "egg-unique.h"
 
 #include "gpm-common.h"
 #include "gpm-stock-icons.h"
@@ -115,7 +114,7 @@ enum {
  * gpm_stats_button_help_cb:
  **/
 static void
-gpm_stats_button_help_cb (GtkWidget *widget, gboolean data)
+gpm_stats_button_help_cb (GtkWidget *widget, gpointer user_data)
 {
 	gpm_help_display ("statistics");
 }
@@ -1124,7 +1123,7 @@ gpm_stats_button_update_ui (void)
  * gpm_stats_devices_treeview_clicked_cb:
  **/
 static void
-gpm_stats_devices_treeview_clicked_cb (GtkTreeSelection *selection, gboolean data)
+gpm_stats_devices_treeview_clicked_cb (GtkTreeSelection *selection, gpointer user_data)
 {
 	GtkTreeModel *model;
 	GtkTreeIter iter;
@@ -1157,10 +1156,11 @@ gpm_stats_devices_treeview_clicked_cb (GtkTreeSelection *selection, gboolean dat
 }
 
 /**
- * gpm_stats_window_activated_cb
+ * gpm_stats_application_prepare_action_cb:
  **/
 static void
-gpm_stats_window_activated_cb (EggUnique *egg_unique, gpointer data)
+gpm_stats_application_prepare_action_cb (GApplication *application, GVariant *arguments,
+					 GVariant *platform_data, gpointer user_data)
 {
 	GtkWidget *widget;
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_stats"));
@@ -1503,6 +1503,25 @@ gpm_stats_highlight_device (const gchar *object_path)
 }
 
 /**
+ * gpm_stats_delete_event_cb:
+ **/
+static gboolean
+gpm_stats_delete_event_cb (GtkWidget *widget, GdkEvent *event, GApplication *application)
+{
+	g_application_quit (application, 0);
+	return FALSE;
+}
+
+/**
+ * gpm_stats_button_close_cb:
+ **/
+static void
+gpm_stats_button_close_cb (GtkWidget *widget, GApplication *application)
+{
+	g_application_quit (application, 0);
+}
+
+/**
  * main:
  **/
 int
@@ -1513,7 +1532,7 @@ main (int argc, char *argv[])
 	GtkBox *box;
 	GtkWidget *widget;
 	GtkTreeSelection *selection;
-	EggUnique *egg_unique;
+	GApplication *application;
 	gboolean ret;
 	UpClient *client;
 	GPtrArray *devices;
@@ -1558,12 +1577,9 @@ main (int argc, char *argv[])
 	gtk_init (&argc, &argv);
 
 	/* are we already activated? */
-	egg_unique = egg_unique_new ();
-	ret = egg_unique_assign (egg_unique, "org.gnome.PowerManager.Statistics");
-	if (!ret)
-		goto unique_out;
-	g_signal_connect (egg_unique, "activated",
-			  G_CALLBACK (gpm_stats_window_activated_cb), NULL);
+	application = g_application_new_and_register ("org.gnome.PowerManager.Statistics", argc, argv);
+	g_signal_connect (application, "prepare-activation",
+			  G_CALLBACK (gpm_stats_application_prepare_action_cb), NULL);
 
 	/* add application specific icons to search path */
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
@@ -1599,10 +1615,12 @@ main (int argc, char *argv[])
 	gtk_window_set_default_icon_name (GPM_STOCK_APP_ICON);
 
 	/* Get the main window quit */
-	g_signal_connect_swapped (widget, "delete_event", G_CALLBACK (gtk_main_quit), NULL);
+	g_signal_connect (widget, "delete-event",
+			  G_CALLBACK (gpm_stats_delete_event_cb), application);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "button_close"));
-	g_signal_connect_swapped (widget, "clicked", G_CALLBACK (gtk_main_quit), NULL);
+	g_signal_connect (widget, "clicked",
+			  G_CALLBACK (gpm_stats_button_close_cb), application);
 	gtk_widget_grab_default (widget);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "button_help"));
@@ -1800,7 +1818,8 @@ main (int argc, char *argv[])
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_stats"));
 	gtk_widget_show (widget);
 
-	gtk_main ();
+	/* run */
+	g_application_run (application);
 
 out:
 	g_object_unref (settings);
@@ -1808,8 +1827,7 @@ out:
 	g_object_unref (wakeups);
 	g_object_unref (builder);
 	g_object_unref (list_store_info);
-unique_out:
-	g_object_unref (egg_unique);
+	g_object_unref (application);
 	g_free (last_device);
 	return 0;
 }

@@ -109,7 +109,7 @@ dnl ---------------------------------------------------------------------------
 dnl - Library dependencies
 dnl ---------------------------------------------------------------------------
 GLIB_REQUIRED=2.13.0
-GIO_REQUIRED=2.25.0
+GIO_REQUIRED=2.25.8
 GTK_REQUIRED=2.17.7
 GDK_REQUIRED=2.11.0
 GCONF_REQUIRED=2.31.1
@@ -119,7 +119,6 @@ DBUS_GLIB_REQUIRED=0.70
 LIBNOTIFY_REQUIRED=0.4.3
 LIBWNCK_REQUIRED=2.10.0
 CAIRO_REQUIRED=1.0.0
-UNIQUE_REQUIRED=0.9.4
 LIBPANEL_REQUIRED=2.0.0
 XRANDR_REQUIRED=1.2.0
 CANBERRA_REQUIRED=0.10
@@ -159,9 +158,6 @@ PKG_CHECK_EXISTS(
  [AC_DEFINE(HAVE_XRANDR_13, 1, [xrandr 1.3 available])])
 
 PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= $LIBNOTIFY_REQUIRED)
-
-PKG_CHECK_MODULES(UNIQUE, unique-1.0 >= $UNIQUE_REQUIRED)
-
 PKG_CHECK_MODULES(UPOWER, upower-glib >= $UPOWER_REQUIRED)
 
 dnl ---------------------------------------------------------------------------
