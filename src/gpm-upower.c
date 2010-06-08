@@ -142,11 +142,14 @@ gpm_upower_get_device_icon (UpDevice *device, gboolean use_symbolic)
 				g_string_append (filename, "battery-empty;");
 				break;
 			case UP_DEVICE_STATE_FULLY_CHARGED:
-				if (use_symbolic)
-					g_string_append (filename, "battery-full-symbolic;");
+				if (use_symbolic) {
+					g_string_append (filename, "battery-full-charged-symbolic;");
+					g_string_append (filename, "battery-full-charging-symbolic;");
+				}
 				g_string_append_printf (filename, "gpm-%s-full;", kind_str);
 				g_string_append_printf (filename, "gpm-%s-100;", kind_str);
-				g_string_append (filename, "battery-full;");
+				g_string_append (filename, "battery-full-charged;");
+				g_string_append (filename, "battery-full-charging;");
 				break;
 			case UP_DEVICE_STATE_CHARGING:
 			case UP_DEVICE_STATE_PENDING_CHARGE:
