@@ -110,8 +110,8 @@ dnl - Library dependencies
 dnl ---------------------------------------------------------------------------
 GLIB_REQUIRED=2.13.0
 GIO_REQUIRED=2.25.8
-GTK_REQUIRED=2.17.7
-GDK_REQUIRED=2.11.0
+GTK_REQUIRED=2.90.2
+GDK_REQUIRED=2.90.2
 GCONF_REQUIRED=2.31.1
 GNOME_KEYRING_REQUIRED=0.6.0
 DBUS_REQUIRED=1.0
@@ -138,14 +138,14 @@ PKG_CHECK_MODULES(DBUS,[
 
 PKG_CHECK_MODULES(GNOME, [
  libwnck-1.0 >= $LIBWNCK_REQUIRED
- gtk+-2.0 >= $GTK_REQUIRED
+ gtk+-3.0 >= $GTK_REQUIRED
  gconf-2.0 >= $GCONF_REQUIRED
  gnome-keyring-1 >= $GNOME_KEYRING_REQUIRED
  cairo >= $CAIRO_REQUIRED])
 
 PKG_CHECK_MODULES(GDK, [
- gdk-2.0 >= $GDK_REQUIRED
- gdk-x11-2.0 >= $GDK_REQUIRED])
+ gdk-3.0 >= $GDK_REQUIRED
+ gdk-x11-3.0 >= $GDK_REQUIRED])
 
 PKG_CHECK_MODULES(X11, [
  xrandr >= $XRANDR_REQUIRED
