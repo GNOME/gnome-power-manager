@@ -106,47 +106,29 @@ AM_GLIB_GNU_GETTEXT
 GLIB_GSETTINGS
 
 dnl ---------------------------------------------------------------------------
-dnl - Library dependencies
-dnl ---------------------------------------------------------------------------
-GLIB_REQUIRED=2.13.0
-GIO_REQUIRED=2.25.8
-GTK_REQUIRED=2.90.2
-GDK_REQUIRED=2.90.2
-GCONF_REQUIRED=2.31.1
-GNOME_KEYRING_REQUIRED=0.6.0
-DBUS_REQUIRED=1.0
-DBUS_GLIB_REQUIRED=0.70
-LIBNOTIFY_REQUIRED=0.4.3
-CAIRO_REQUIRED=1.0.0
-LIBPANEL_REQUIRED=2.0.0
-XRANDR_REQUIRED=1.2.0
-CANBERRA_REQUIRED=0.10
-UPOWER_REQUIRED=0.9.1
-
-dnl ---------------------------------------------------------------------------
 dnl - Check library dependencies
 dnl ---------------------------------------------------------------------------
-PKG_CHECK_MODULES(GLIB, glib-2.0 >= $GLIB_REQUIRED gobject-2.0 gio-2.0 >= $GIO_REQUIRED)
+PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.13.0 gobject-2.0 gio-2.0 >= 2.25.9)
 
-PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk3 >= $CANBERRA_REQUIRED)
+PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk3 >= 0.10)
 
 PKG_CHECK_MODULES(DBUS,[
- dbus-glib-1 >= $DBUS_GLIB_REQUIRED
- dbus-1 >= $DBUS_REQUIRED
+ dbus-glib-1 >= 0.70
+ dbus-1 >= 1.0
  gthread-2.0])
 
 PKG_CHECK_MODULES(GNOME, [
- gtk+-3.0 >= $GTK_REQUIRED
- gconf-2.0 >= $GCONF_REQUIRED
- gnome-keyring-1 >= $GNOME_KEYRING_REQUIRED
- cairo >= $CAIRO_REQUIRED])
+ gtk+-3.0 >= 2.90.2
+ gconf-2.0 >= 2.31.1
+ gnome-keyring-1 >= 0.6.0
+ cairo >= 1.0.0])
 
 PKG_CHECK_MODULES(GDK, [
- gdk-3.0 >= $GDK_REQUIRED
- gdk-x11-3.0 >= $GDK_REQUIRED])
+ gdk-3.0 >= 2.90.2
+ gdk-x11-3.0 >= 2.90.2])
 
 PKG_CHECK_MODULES(X11, [
- xrandr >= $XRANDR_REQUIRED
+ xrandr >= 1.2.0
  xrender x11 xext xproto])
 
 PKG_CHECK_MODULES(X11, x11 xrender)
@@ -155,8 +137,8 @@ PKG_CHECK_EXISTS(
  [xrandr >= 1.3],
  [AC_DEFINE(HAVE_XRANDR_13, 1, [xrandr 1.3 available])])
 
-PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= $LIBNOTIFY_REQUIRED)
-PKG_CHECK_MODULES(UPOWER, upower-glib >= $UPOWER_REQUIRED)
+PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= 0.4.3)
+PKG_CHECK_MODULES(UPOWER, upower-glib >= 0.9.1)
 
 dnl ---------------------------------------------------------------------------
 dnl - Check XF86XK_Keys
@@ -220,7 +202,7 @@ have_applets=no
 if test x$enable_applets = xyes ; then
     have_applets=yes
 
-    PKG_CHECK_MODULES(PANEL, [libpanelapplet-2.0 >= $LIBPANEL_REQUIRED])
+    PKG_CHECK_MODULES(PANEL, [libpanelapplet-3.0 >= 2.31.2])
     AC_DEFINE(HAVE_APPLETS, 1, [Define if we are building applets])
 fi
 AC_MSG_RESULT([$have_applets])
