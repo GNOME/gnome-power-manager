@@ -50,7 +50,7 @@ gpm_prefs_help_cb (GpmPrefs *prefs, GApplication *application)
 static void
 gpm_prefs_close_cb (GpmPrefs *prefs, GApplication *application)
 {
-	g_application_quit (application, 0);
+	g_application_quit_with_data (application, NULL);
 }
 
 /**
@@ -97,7 +97,7 @@ main (int argc, char **argv)
 	prefs = gpm_prefs_new ();
 
 	/* ensure single instance */
-	application = g_application_new_and_register ("org.gnome.PowerManager.Preferences", argc, argv);
+	application = g_application_new ("org.gnome.PowerManager.Preferences", argc, argv);
 	g_signal_connect (application, "prepare-activation",
 			  G_CALLBACK (gpm_prefs_application_prepare_action_cb), prefs);
 	g_signal_connect (prefs, "action-help",

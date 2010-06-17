@@ -1508,7 +1508,7 @@ gpm_stats_highlight_device (const gchar *object_path)
 static gboolean
 gpm_stats_delete_event_cb (GtkWidget *widget, GdkEvent *event, GApplication *application)
 {
-	g_application_quit (application, 0);
+	g_application_quit_with_data (application, NULL);
 	return FALSE;
 }
 
@@ -1518,7 +1518,7 @@ gpm_stats_delete_event_cb (GtkWidget *widget, GdkEvent *event, GApplication *app
 static void
 gpm_stats_button_close_cb (GtkWidget *widget, GApplication *application)
 {
-	g_application_quit (application, 0);
+	g_application_quit_with_data (application, NULL);
 }
 
 /**
@@ -1577,7 +1577,7 @@ main (int argc, char *argv[])
 	gtk_init (&argc, &argv);
 
 	/* are we already activated? */
-	application = g_application_new_and_register ("org.gnome.PowerManager.Statistics", argc, argv);
+	application = g_application_new ("org.gnome.PowerManager.Statistics", argc, argv);
 	g_signal_connect (application, "prepare-activation",
 			  G_CALLBACK (gpm_stats_application_prepare_action_cb), NULL);
 
