@@ -1156,18 +1156,6 @@ gpm_stats_devices_treeview_clicked_cb (GtkTreeSelection *selection, gpointer use
 }
 
 /**
- * gpm_stats_application_prepare_action_cb:
- **/
-static void
-gpm_stats_application_prepare_action_cb (GApplication *application, GVariant *arguments,
-					 GVariant *platform_data, gpointer user_data)
-{
-	GtkWidget *widget;
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_stats"));
-	gtk_window_present (GTK_WINDOW (widget));
-}
-
-/**
  * gpm_stats_add_device:
  **/
 static void
@@ -1506,9 +1494,9 @@ gpm_stats_highlight_device (const gchar *object_path)
  * gpm_stats_delete_event_cb:
  **/
 static gboolean
-gpm_stats_delete_event_cb (GtkWidget *widget, GdkEvent *event, GApplication *application)
+gpm_stats_delete_event_cb (GtkWidget *widget, GdkEvent *event, GtkApplication *application)
 {
-	g_application_quit_with_data (application, NULL);
+	gtk_application_quit (application);
 	return FALSE;
 }
 
@@ -1516,9 +1504,9 @@ gpm_stats_delete_event_cb (GtkWidget *widget, GdkEvent *event, GApplication *app
  * gpm_stats_button_close_cb:
  **/
 static void
-gpm_stats_button_close_cb (GtkWidget *widget, GApplication *application)
+gpm_stats_button_close_cb (GtkWidget *widget, GtkApplication *application)
 {
-	g_application_quit_with_data (application, NULL);
+	gtk_application_quit (application);
 }
 
 /**
@@ -1532,7 +1520,7 @@ main (int argc, char *argv[])
 	GtkBox *box;
 	GtkWidget *widget;
 	GtkTreeSelection *selection;
-	GApplication *application;
+	GtkApplication *application;
 	gboolean ret;
 	UpClient *client;
 	GPtrArray *devices;
@@ -1577,9 +1565,7 @@ main (int argc, char *argv[])
 	gtk_init (&argc, &argv);
 
 	/* are we already activated? */
-	application = g_application_new ("org.gnome.PowerManager.Statistics", argc, argv);
-	g_signal_connect (application, "prepare-activation",
-			  G_CALLBACK (gpm_stats_application_prepare_action_cb), NULL);
+	application = gtk_application_new ("org.gnome.PowerManager.Statistics", &argc, &argv);
 
 	/* add application specific icons to search path */
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
@@ -1611,6 +1597,7 @@ main (int argc, char *argv[])
 	gtk_widget_show (graph_statistics);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_stats"));
+	gtk_application_add_window (application, GTK_WINDOW (widget));
 	gtk_window_set_default_size (GTK_WINDOW(widget), 800, 500);
 	gtk_window_set_default_icon_name (GPM_STOCK_APP_ICON);
 
@@ -1819,7 +1806,7 @@ main (int argc, char *argv[])
 	gtk_widget_show (widget);
 
 	/* run */
-	g_application_run (application);
+	gtk_application_run (application);
 
 out:
 	g_object_unref (settings);

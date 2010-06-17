@@ -39,7 +39,7 @@
  * gpm_prefs_help_cb
  **/
 static void
-gpm_prefs_help_cb (GpmPrefs *prefs, GApplication *application)
+gpm_prefs_help_cb (GpmPrefs *prefs, GtkApplication *application)
 {
 	gpm_help_display ("preferences");
 }
@@ -48,16 +48,16 @@ gpm_prefs_help_cb (GpmPrefs *prefs, GApplication *application)
  * gpm_prefs_close_cb
  **/
 static void
-gpm_prefs_close_cb (GpmPrefs *prefs, GApplication *application)
+gpm_prefs_close_cb (GpmPrefs *prefs, GtkApplication *application)
 {
-	g_application_quit_with_data (application, NULL);
+	gtk_application_quit (application);
 }
 
 /**
  * gpm_prefs_application_prepare_action_cb:
  **/
 static void
-gpm_prefs_application_prepare_action_cb (GApplication *application, GVariant *arguments,
+gpm_prefs_application_prepare_action_cb (GtkApplication *application, GVariant *arguments,
 					 GVariant *platform_data, GpmPrefs *prefs)
 {
 	gpm_prefs_activate_window (prefs);
@@ -72,7 +72,7 @@ main (int argc, char **argv)
 	gboolean verbose = FALSE;
 	GOptionContext *context;
 	GpmPrefs *prefs = NULL;
-	GApplication *application;
+	GtkApplication *application;
 
 	const GOptionEntry options[] = {
 		{ "verbose", '\0', 0, G_OPTION_ARG_NONE, &verbose,
@@ -97,7 +97,7 @@ main (int argc, char **argv)
 	prefs = gpm_prefs_new ();
 
 	/* ensure single instance */
-	application = g_application_new ("org.gnome.PowerManager.Preferences", argc, argv);
+	application = gtk_application_new ("org.gnome.PowerManager.Preferences", &argc, &argv);
 	g_signal_connect (application, "prepare-activation",
 			  G_CALLBACK (gpm_prefs_application_prepare_action_cb), prefs);
 	g_signal_connect (prefs, "action-help",
@@ -106,7 +106,7 @@ main (int argc, char **argv)
 			  G_CALLBACK (gpm_prefs_close_cb), application);
 
 	/* run */
-	g_application_run (application);
+	gtk_application_run (application);
 
 	g_object_unref (prefs);
 	g_object_unref (application);
