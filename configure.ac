@@ -137,8 +137,14 @@ PKG_CHECK_EXISTS(
  [xrandr >= 1.3],
  [AC_DEFINE(HAVE_XRANDR_13, 1, [xrandr 1.3 available])])
 
-PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= 0.4.3)
 PKG_CHECK_MODULES(UPOWER, upower-glib >= 0.9.1)
+
+dnl **** Check for LIBNOTIFY ****
+PKG_CHECK_MODULES(LIBNOTIFY, libnotify3 >= 0.4.3, has_libnotify=yes, has_libnotify=no)
+AM_CONDITIONAL(HAVE_LIBNOTIFY, test x$libnotify = xyes)
+if test x$has_libnotify = xyes; then
+	AC_DEFINE(HAVE_LIBNOTIFY,1,[Use session notifications])
+fi
 
 dnl ---------------------------------------------------------------------------
 dnl - Check XF86XK_Keys

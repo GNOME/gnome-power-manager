@@ -40,7 +40,9 @@
 #include <dbus/dbus-glib-lowlevel.h>
 #include <canberra-gtk.h>
 #include <libupower-glib/upower.h>
+#ifdef HAVE_LIBNOTIFY
 #include <libnotify/notify.h>
+#endif
 
 #include "egg-debug.h"
 #include "egg-console-kit.h"

@@ -138,6 +138,25 @@ G_BEGIN_DECLS
 #define GS_CONF_DIR					"/apps/gnome-screensaver"
 #define GS_CONF_PREF_LOCK_ENABLED			GS_CONF_DIR "/lock_enabled"
 
+/* libnotify dummy code */
+#ifndef HAVE_LIBNOTIFY
+#define	notify_init(f1)						/* nothing */
+#define	notify_is_initted(f1)					FALSE
+#define	notify_notification_close(f1,f2)			TRUE
+#define	notify_notification_show(f1,f2)				TRUE
+#define	notify_notification_set_timeout(f1,f2)			/* nothing */
+#define	notify_notification_set_urgency(f1,f2)			/* nothing */
+#define	notify_notification_add_action(f1,f2,f3,f4,f5,f6)	/* nothing */
+#define NotifyNotification					GtkWidget
+#define	NotifyUrgency						guint
+#define	notify_notification_new(f1,f2,f3,f4)			gtk_fixed_new()
+#define	notify_notification_new_with_status_icon(f1,f2,f3,f4)	gtk_fixed_new()
+#define NOTIFY_URGENCY_LOW					0
+#define NOTIFY_URGENCY_NORMAL					1
+#define NOTIFY_URGENCY_CRITICAL					2
+#define NOTIFY_EXPIRES_NEVER					0
+#endif
+
 typedef enum {
 	GPM_ICON_POLICY_PRESENT,
 	GPM_ICON_POLICY_CHARGE,
