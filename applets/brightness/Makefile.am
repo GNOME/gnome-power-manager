@@ -14,6 +14,7 @@ INCLUDES =							\
 	-DLIBDIR=\""$(libdir)"\" 				\
 	-DVERSION="\"$(VERSION)\"" 				\
 	-DGPM_DATA=\"$(pkgdatadir)\"				\
+	-DBRIGHTNESS_MENU_UI_DIR=\""$(uidir)"\"			\
 	-DEGG_LOG_FILE=\""~/gnome-power-manager.log"\"		\
 	-DEGG_VERBOSE="\"GPM_VERBOSE\""				\
 	-DEGG_LOGGING="\"GPM_LOGGING\""				\
@@ -37,19 +38,32 @@ gnome_brightness_applet_LDADD =					\
 	$(GNOME_LIBS)						\
 	$(PANEL_LIBS)
 
-serverdir       = $(libdir)/bonobo/servers
-server_in_files = GNOME_BrightnessApplet.server.in
-server_DATA     = $(server_in_files:.server.in=.server)
 
-$(server_in_files): $(server_in_files:.server.in=.server.in.in)
-	sed -e "s|\@LIBEXECDIR\@|$(libexecdir)|" -e "s|\@VERSION\@|$(VERSION)|" $< > $@
+appletdir       = $(datadir)/gnome-panel/applets
+applet_in_files = org.gnome.BrightnessApplet.panel-applet.in
+applet_DATA     = $(applet_in_files:.panel-applet.in=.panel-applet)
 
-@INTLTOOL_SERVER_RULE@
+$(applet_in_files): $(applet_in_files).in Makefile
+	$(AM_V_GEN)sed \
+            -e "s|\@LIBEXECDIR\@|$(libexecdir)|" \
+            -e "s|\@VERSION\@|$(PACKAGE_VERSION)|" \
+            $< > $@
+
+%.panel-applet: %.panel-applet.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*po) ; $(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
+
+servicedir       = $(datadir)/dbus-1/services
+service_in_files = org.gnome.panel.applet.BrightnessAppletFactory.service.in
+service_DATA     = $(service_in_files:.service.in=.service)
+
+org.gnome.panel.applet.BrightnessAppletFactory.service: $(service_in_files)
+	$(AM_V_GEN)sed \
+            -e "s|\@LIBEXECDIR\@|$(libexecdir)|" \
+            $< > $@
 
 uidir   = $(datadir)/gnome-2.0/ui
-ui_DATA = GNOME_BrightnessApplet.xml
+ui_DATA = brightness-applet-menu.xml
 
-EXTRA_DIST = GNOME_BrightnessApplet.server.in.in $(ui_DATA)
+EXTRA_DIST = org.gnome.BrightnessApplet.panel-applet.in.in $(ui_DATA) $(service_in_files)
 
 DISTCLEANFILES =						\
-	$(server_DATA) $(server_DATA).in
+	$(applet_DATA) $(applet_DATA).in $(service_DATA)
