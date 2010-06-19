@@ -10,18 +10,20 @@
 # Mario Blättermann <mariobl@gnome.org>, 2009.
 # Wolfgang Stöggl <c72578@yahoo.de>, 2009, 2010.
 # Christian Kirbach <Christian.Kirbach@googlemail.com>, 2009, 2010.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power HEAD\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-17 17:54+0100\n"
-"PO-Revision-Date: 2010-03-17 17:54+0100\n"
-"Last-Translator: Christian Kirbach <Christian.Kirbach@googlemail.com>\n"
-"Language-Team: Deutsch <gnome-de@gnome.org>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"power-manager&component=general\n"
+"POT-Creation-Date: 2010-06-11 13:25+0000\n"
+"PO-Revision-Date: 2010-06-19 16:28+0200\n"
+"Last-Translator: Wolfgang Stoeggl <c72578@yahoo.de>\n"
+"Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: GERMANY\n"
 
@@ -290,8 +292,8 @@ msgstr ""
 #: ../data/gnome-power-manager.schemas.in.h:19
 msgid "If the low-power mode should be enabled when on AC"
 msgstr ""
-"Legt fest, ob der der Rechner in Bereitschaft gehen soll, wenn das "
-"Stromkabel angeschlossen ist."
+"Legt fest, ob der Rechner in Bereitschaft gehen soll, wenn das Stromkabel "
+"angeschlossen ist."
 
 #: ../data/gnome-power-manager.schemas.in.h:20
 msgid "If the low-power mode should be enabled when on battery"
@@ -331,7 +333,7 @@ msgstr "Legt fest, ob der Bildschirm im Akkubetrieb abgedunkelt wird"
 msgid "If the system low-power mode should be enabled when on AC power."
 msgstr ""
 "Legt fest, ob der Energiesparmodus nach einer festgelegten Zeit des "
-"Leerlaufs im Netzbetrieb abgedunkelt wird um Strom zu sparen."
+"Leerlaufs im Netzbetrieb abgedunkelt wird, um Strom zu sparen."
 
 #: ../data/gnome-power-manager.schemas.in.h:26
 msgid ""
@@ -364,23 +366,23 @@ msgstr ""
 #: ../data/gnome-power-manager.schemas.in.h:30
 msgid "If we should show the low capacity warning for a broken battery."
 msgstr ""
-"Legt fest, ob bei potenziell defekten Akkus eine Warnung angezeigt werden "
-"soll"
+"Legt fest, ob die Warnung für geringe Kapazität bei einem defekten Akku "
+"angezeigt werden soll."
 
 #: ../data/gnome-power-manager.schemas.in.h:31
 msgid "If we should show the recalled battery warning for a broken battery"
 msgstr ""
-"Legt fest, ob bei potenziell defekten Akkus eine Warnung angezeigt werden "
-"soll"
+"Legt fest, ob die Warnung für einen Rückruf bei einem defekten Akku "
+"angezeigt werden soll"
 
 #: ../data/gnome-power-manager.schemas.in.h:32
 msgid ""
 "If we should show the recalled battery warning for a broken battery. Set "
 "this to false only if you know your battery is okay."
 msgstr ""
-"Legt fest, ob bei potenziell defekten Akkus eine Warnung angezeigt werden "
-"soll. Setzten Sie dies nur auf »FALSCH« wenn Sie sicher sind, dass Ihr Akku "
-"in Ordnung ist."
+"Legt fest, ob die Warnung für einen Rückruf bei einem defekten Akku "
+"angezeigt werden soll. Setzen Sie dies nur auf »FALSCH« wenn Sie sicher "
+"sind, dass Ihr Akku in Ordnung ist."
 
 #: ../data/gnome-power-manager.schemas.in.h:33
 msgid "LCD brightness when on AC"
@@ -388,7 +390,7 @@ msgstr "Bildschirmhelligkeit bei Netzversorgung"
 
 #: ../data/gnome-power-manager.schemas.in.h:34
 msgid "LCD dimming amount when on battery"
-msgstr "Bildschirm abdunkeln bei Akkubetrieb"
+msgstr "Grad der Bildschirmabdunkelung bei Akkubetrieb"
 
 #: ../data/gnome-power-manager.schemas.in.h:35
 msgid "Laptop lid close action on battery"
@@ -1274,7 +1276,7 @@ msgstr "Ladezustand des Akkus ist niedrig"
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:293
 msgid "Battery is full"
-msgstr "Akkus ist vollständig geladen"
+msgstr "Akku ist vollständig geladen"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:297
@@ -1663,12 +1665,12 @@ msgstr ""
 "Rechner wird deshalb nun heruntergefahren."
 
 #. TRANSLATORS: there was in install problem
-#: ../src/gpm-manager.c:1941
+#: ../src/gpm-manager.c:1901
 msgid "Install problem!"
 msgstr "Installationsproblem!"
 
 #. TRANSLATORS: the GConf schema was not installed properly
-#: ../src/gpm-manager.c:1943
+#: ../src/gpm-manager.c:1903
 msgid ""
 "The configuration defaults for GNOME Power Manager have not been installed "
 "correctly.\n"
