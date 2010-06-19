@@ -71,13 +71,9 @@ cc_power_panel_help_cb (GtkWidget *widget, CcPowerPanel *panel)
 static void
 cc_power_panel_icon_radio_cb (GtkWidget *widget, CcPowerPanel *panel)
 {
-	const gchar *str;
 	gint policy;
-
 	policy = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "policy"));
-	str = gpm_icon_policy_to_string (policy);
-	g_debug ("Changing %s to %s", GPM_SETTINGS_ICON_POLICY, str);
-	g_settings_set_string (panel->priv->settings, GPM_SETTINGS_ICON_POLICY, str);
+	g_settings_set_enum (panel->priv->settings, GPM_SETTINGS_ICON_POLICY, policy);
 }
 
 /**
@@ -98,7 +94,6 @@ cc_power_panel_action_combo_changed_cb (GtkWidget *widget, CcPowerPanel *panel)
 	GpmActionPolicy policy;
 	const GpmActionPolicy *actions;
 	const gchar *gpm_pref_key;
-	const gchar *action;
 	guint active;
 
 	actions = (const GpmActionPolicy *) g_object_get_data (G_OBJECT (widget), "actions");
@@ -106,9 +101,7 @@ cc_power_panel_action_combo_changed_cb (GtkWidget *widget, CcPowerPanel *panel)
 
 	active = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
 	policy = actions[active];
-	action = gpm_action_policy_to_string (policy);
-	g_debug ("Changing %s to %s", gpm_pref_key, action);
-	g_settings_set_string (panel->priv->settings, gpm_pref_key, action);
+	g_settings_set_enum (panel->priv->settings, gpm_pref_key, policy);
 }
 
 /**
@@ -168,7 +161,6 @@ static void
 cc_power_panel_setup_action_combo (CcPowerPanel *panel, const gchar *widget_name,
 			      const gchar *gpm_pref_key, const GpmActionPolicy *actions)
 {
-	gchar *value_txt;
 	gint i;
 	gboolean is_writable;
 	GtkWidget *widget;
@@ -180,9 +172,8 @@ cc_power_panel_setup_action_combo (CcPowerPanel *panel, const gchar *widget_name
 	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, widget_name));
 	cc_power_panel_set_combo_simple_text (widget);
 
-	value_txt = g_settings_get_string (panel->priv->settings, gpm_pref_key);
+	value = g_settings_get_enum (panel->priv->settings, gpm_pref_key);
 	is_writable = g_settings_is_writable (panel->priv->settings, gpm_pref_key);
-	value = gpm_action_policy_from_string (value_txt);
 
 	gtk_widget_set_sensitive (widget, is_writable);
 
@@ -236,13 +227,11 @@ cc_power_panel_setup_action_combo (CcPowerPanel *panel, const gchar *widget_name
 	/* set what we have in GConf */
 	for (i=0; actions_added[i] != -1; i++) {
 		policy = actions_added[i];
-		g_debug ("added: %s", gpm_action_policy_to_string (policy));
 		if (value == policy)
 			 gtk_combo_box_set_active (GTK_COMBO_BOX (widget), i);
 	}
 
 	g_ptr_array_unref (array);
-	g_free (value_txt);
 }
 
 /**
@@ -294,7 +283,6 @@ cc_power_panel_setup_time_combo (CcPowerPanel *panel, const gchar *widget_name,
 static void
 cc_power_panel_setup_notification (CcPowerPanel *panel)
 {
-	gchar *icon_policy_str;
 	gint icon_policy;
 	GtkWidget *radiobutton_icon_present;
 	GtkWidget *radiobutton_icon_charge;
@@ -302,10 +290,7 @@ cc_power_panel_setup_notification (CcPowerPanel *panel)
 	GtkWidget *radiobutton_icon_never;
 	gboolean is_writable;
 
-	icon_policy_str = g_settings_get_string (panel->priv->settings, GPM_SETTINGS_ICON_POLICY);
-	icon_policy = gpm_icon_policy_from_string (icon_policy_str);
-	g_free (icon_policy_str);
-
+	icon_policy = g_settings_get_enum (panel->priv->settings, GPM_SETTINGS_ICON_POLICY);
 	radiobutton_icon_present = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder,
 					       "radiobutton_notification_present"));
 	radiobutton_icon_charge = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder,
