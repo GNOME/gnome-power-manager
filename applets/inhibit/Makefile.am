@@ -55,7 +55,7 @@ service_in_files = org.gnome.panel.applet.InhibitAppletFactory.service.in
 service_DATA     = $(service_in_files:.service.in=.service)
 
 org.gnome.panel.applet.InhibitAppletFactory.service: $(service_in_files)
-        $(AM_V_GEN)sed \
+	$(AM_V_GEN)sed \
             -e "s|\@LIBEXECDIR\@|$(libexecdir)|" \
             $< > $@
 
