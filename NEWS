@@ -1,3 +1,36 @@
+Version 2.31.3
+~~~~~~~~~~~~~~
+Released: 2010-06-18
+
+* Translations
+ - Added Norwegian bokmål translation (Kjartan Maraas)
+ - Updated Danish translation (Ask H. Larsen)
+ - Updated Estonian translation (Ivar Smolin)
+ - Updated Galician translations (Fran Diéguez)
+ - Updated German doc translation (Mario Blättermann, Wolfgang Stöggl)
+ - Updated Hebrew translation (Yaron Shahrabani)
+ - Updated Latvian translation (Rudolfs Mazurs)
+ - Updated Norwegian bokmål translation (Kjartan Maraas)
+ - Updated Punjabi Translation (A S Alam)
+ - Updated Spanish translation (Jorge González)
+ - Updated Thai translation (Sira Nokyoongtong)
+
+* New Features:
+ - Require GTK3 as per the GNOME release team announcement (Richard Hughes)
+ - Port to GSettings (Richard Hughes)
+ - Port to GtkApplication (Richard Hughes)
+ - Port to libpanel-applet-3 (Carlos Garcia Campos)
+ - Assign names to our idle sources when using new versions of glib2 (Richard Hughes)
+ - Make libnotify an optional dependency as it relies on gtk-2.0 (Richard Hughes)
+ - Require libcanberra-gtk3 for GNOME3 (Richard Hughes)
+ - Require libpanelapplet-3.0 to avoid gtk-2.0 (Richard Hughes)
+
+* Bugfix:
+ - Do not require PolicyKit to get the brightness values (Richard Hughes)
+ - Correctly call docbook2man (Dominique Leuenberger)
+ - Remove libwnck-1.0 from configure, we don't actually need it (Richard Hughes)
+ - Use the new battery-full-charged icon from the shared icon specification. Fixes #620851 (Richard Hughes)
+
 Version 2.31.1
 ~~~~~~~~~~~~~~
 Released: 2010-06-02
