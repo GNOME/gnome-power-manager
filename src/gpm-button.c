@@ -255,14 +255,8 @@ gpm_button_class_init (GpmButtonClass *klass)
 gboolean
 gpm_button_is_lid_closed (GpmButton *button)
 {
-	gboolean lid_is_closed;
-
 	g_return_val_if_fail (GPM_IS_BUTTON (button), FALSE);
-
-	g_object_get (button->priv->client,
-		      "lid-is-closed", &lid_is_closed,
-		      NULL);
-	return lid_is_closed;
+	return 	up_client_get_lid_is_closed (button->priv->client);
 }
 
 /**
@@ -288,9 +282,7 @@ gpm_button_client_changed_cb (UpClient *client, GpmButton *button)
 	gboolean lid_is_closed;
 
 	/* get new state */
-	g_object_get (client,
-		      "lid-is-closed", &lid_is_closed,
-		      NULL);
+	lid_is_closed = up_client_get_lid_is_closed (button->priv->client);
 
 	/* same state */
 	if (button->priv->lid_is_closed == lid_is_closed)
@@ -322,8 +314,8 @@ gpm_button_init (GpmButton *button)
 	button->priv->last_button = NULL;
 	button->priv->timer = g_timer_new ();
 
-	button->priv->lid_is_closed = FALSE;
 	button->priv->client = up_client_new ();
+	button->priv->lid_is_closed = up_client_get_lid_is_closed (button->priv->client);
 	g_signal_connect (button->priv->client, "changed",
 			  G_CALLBACK (gpm_button_client_changed_cb), button);
 
