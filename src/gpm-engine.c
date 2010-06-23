@@ -617,10 +617,10 @@ static UpDevice *
 gpm_engine_update_composite_device (GpmEngine *engine, UpDevice *original_device)
 {
 	guint i;
-	gdouble percentage;
-	gdouble energy;
-	gdouble energy_full;
-	gdouble energy_rate;
+	gdouble percentage = 0.0;
+	gdouble energy = 0.0;
+	gdouble energy_full = 0.0;
+	gdouble energy_rate = 0.0;
 	gdouble energy_total = 0.0;
 	gdouble energy_full_total = 0.0;
 	gdouble energy_rate_total = 0.0;
