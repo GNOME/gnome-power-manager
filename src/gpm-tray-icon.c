@@ -284,7 +284,7 @@ gpm_tray_icon_create_menu (GpmTrayIcon *icon, guint32 timestamp)
 	g_ptr_array_unref (array);
 
 	/* skip for things like live-cd's and GDM */
-	if (0 && !icon->priv->show_actions)
+	if (!icon->priv->show_actions)
 		goto skip_prefs;
 
 	/* only do the seporator if we have at least one device */
