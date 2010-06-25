@@ -1,8 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2005 Jaap Haitsma <jaap@haitsma.org>
- * Copyright (C) 2005 William Jon McCann <mccann@jhu.edu>
- * Copyright (C) 2005-2009 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2010 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -21,32 +19,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "config.h"
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
-#include <glib.h>
-#include <glib/gi18n.h>
-
+#include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
-#include <dbus/dbus-glib.h>
-#include <math.h>
-#include <string.h>
 #include <libupower-glib/upower.h>
 
 #include "egg-debug.h"
 #include "egg-console-kit.h"
 
-#include "gpm-tray-icon.h"
 #include "gpm-common.h"
-#include "gpm-prefs-core.h"
-#include "gpm-stock-icons.h"
 #include "gpm-brightness.h"
 
-static void gpm_prefs_finalize (GObject *object);
+#include "cc-power-panel.h"
 
-#define GPM_PREFS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_PREFS, GpmPrefsPrivate))
-
-struct GpmPrefsPrivate
-{
+struct _CcPowerPanelPrivate {
 	UpClient		*client;
 	GtkBuilder		*builder;
 	gboolean		 has_batteries;
@@ -61,110 +50,50 @@ struct GpmPrefsPrivate
 	EggConsoleKit		*console;
 };
 
-enum {
-	ACTION_HELP,
-	ACTION_CLOSE,
-	LAST_SIGNAL
-};
+G_DEFINE_DYNAMIC_TYPE (CcPowerPanel, cc_power_panel, CC_TYPE_PANEL)
 
-static guint signals [LAST_SIGNAL] = { 0 };
+static void cc_power_panel_finalize (GObject *object);
 
-G_DEFINE_TYPE (GpmPrefs, gpm_prefs, G_TYPE_OBJECT)
+#define CC_POWER_PREFS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), CC_TYPE_POWER_PANEL, CcPowerPanelPrivate))
 
 /**
- * gpm_prefs_class_init:
- * @klass: This prefs class instance
+ * cc_power_panel_help_cb:
  **/
 static void
-gpm_prefs_class_init (GpmPrefsClass *klass)
+cc_power_panel_help_cb (GtkWidget *widget, CcPowerPanel *panel)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	object_class->finalize = gpm_prefs_finalize;
-	g_type_class_add_private (klass, sizeof (GpmPrefsPrivate));
-
-	signals [ACTION_HELP] =
-		g_signal_new ("action-help",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmPrefsClass, action_help),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE, 0);
-	signals [ACTION_CLOSE] =
-		g_signal_new ("action-close",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmPrefsClass, action_close),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE, 0);
+	gpm_help_display ("preferences");
 }
 
 /**
- * gpm_prefs_activate_window:
- * @prefs: This prefs class instance
- *
- * Activates (shows) the window.
- **/
-void
-gpm_prefs_activate_window (GpmPrefs *prefs)
-{
-	GtkWindow *window;
-	window = GTK_WINDOW (gtk_builder_get_object (prefs->priv->builder, "dialog_preferences"));
-	gtk_window_present (window);
-}
-
-/**
- * gpm_prefs_help_cb:
- * @widget: The GtkWidget object
- * @prefs: This prefs class instance
+ * cc_power_panel_icon_radio_cb:
  **/
 static void
-gpm_prefs_help_cb (GtkWidget *widget, GpmPrefs *prefs)
+cc_power_panel_icon_radio_cb (GtkWidget *widget, CcPowerPanel *panel)
 {
-	egg_debug ("emitting action-help");
-	g_signal_emit (prefs, signals [ACTION_HELP], 0);
-}
-
-/**
- * gpm_prefs_icon_radio_cb:
- * @widget: The GtkWidget object
- **/
-static void
-gpm_prefs_icon_radio_cb (GtkWidget *widget, GpmPrefs *prefs)
-{
-	const gchar *str;
 	gint policy;
-
 	policy = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "policy"));
-	str = gpm_icon_policy_to_string (policy);
-	egg_debug ("Changing %s to %s", GPM_SETTINGS_ICON_POLICY, str);
-	g_settings_set_string (prefs->priv->settings, GPM_SETTINGS_ICON_POLICY, str);
+	g_settings_set_enum (panel->priv->settings, GPM_SETTINGS_ICON_POLICY, policy);
 }
 
 /**
- * gpm_prefs_format_percentage_cb:
- * @scale: The GtkScale object
- * @value: The value in %.
+ * cc_power_panel_format_percentage_cb:
  **/
 static gchar *
-gpm_prefs_format_percentage_cb (GtkScale *scale, gdouble value)
+cc_power_panel_format_percentage_cb (GtkScale *scale, gdouble value)
 {
 	return g_strdup_printf ("%.0f%%", value * 100.0f);
 }
 
 /**
- * gpm_prefs_action_combo_changed_cb:
+ * cc_power_panel_action_combo_changed_cb:
  **/
 static void
-gpm_prefs_action_combo_changed_cb (GtkWidget *widget, GpmPrefs *prefs)
+cc_power_panel_action_combo_changed_cb (GtkWidget *widget, CcPowerPanel *panel)
 {
 	GpmActionPolicy policy;
 	const GpmActionPolicy *actions;
 	const gchar *gpm_pref_key;
-	const gchar *action;
 	guint active;
 
 	actions = (const GpmActionPolicy *) g_object_get_data (G_OBJECT (widget), "actions");
@@ -172,16 +101,14 @@ gpm_prefs_action_combo_changed_cb (GtkWidget *widget, GpmPrefs *prefs)
 
 	active = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
 	policy = actions[active];
-	action = gpm_action_policy_to_string (policy);
-	egg_debug ("Changing %s to %s", gpm_pref_key, action);
-	g_settings_set_string (prefs->priv->settings, gpm_pref_key, action);
+	g_settings_set_enum (panel->priv->settings, gpm_pref_key, policy);
 }
 
 /**
- * gpm_prefs_action_time_changed_cb:
+ * cc_power_panel_action_time_changed_cb:
  **/
 static void
-gpm_prefs_action_time_changed_cb (GtkWidget *widget, GpmPrefs *prefs)
+cc_power_panel_action_time_changed_cb (GtkWidget *widget, CcPowerPanel *panel)
 {
 	guint value;
 	const gint *values;
@@ -194,15 +121,15 @@ gpm_prefs_action_time_changed_cb (GtkWidget *widget, GpmPrefs *prefs)
 	active = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
 	value = values[active];
 
-	egg_debug ("Changing %s to %i", gpm_pref_key, value);
-	g_settings_set_int (prefs->priv->settings, gpm_pref_key, value);
+	g_debug ("Changing %s to %i", gpm_pref_key, value);
+	g_settings_set_int (panel->priv->settings, gpm_pref_key, value);
 }
 
 /**
- * gpm_prefs_set_combo_simple_text:
+ * cc_power_panel_set_combo_simple_text:
  **/
 static void
-gpm_prefs_set_combo_simple_text (GtkWidget *combo_box)
+cc_power_panel_set_combo_simple_text (GtkWidget *combo_box)
 {
 	GtkCellRenderer *cell;
 	GtkListStore *store;
@@ -219,26 +146,21 @@ gpm_prefs_set_combo_simple_text (GtkWidget *combo_box)
 }
 
 /**
- * gpm_prefs_actions_destroy_cb:
+ * cc_power_panel_actions_destroy_cb:
  **/
 static void
-gpm_prefs_actions_destroy_cb (GpmActionPolicy *array)
+cc_power_panel_actions_destroy_cb (GpmActionPolicy *array)
 {
 	g_free (array);
 }
 
 /**
- * gpm_prefs_setup_action_combo:
- * @prefs: This prefs class instance
- * @widget_name: The GtkWidget name
- * @gpm_pref_key: The GConf key for this preference setting.
- * @actions: The actions to associate in an array.
+ * cc_power_panel_setup_action_combo:
  **/
 static void
-gpm_prefs_setup_action_combo (GpmPrefs *prefs, const gchar *widget_name,
+cc_power_panel_setup_action_combo (CcPowerPanel *panel, const gchar *widget_name,
 			      const gchar *gpm_pref_key, const GpmActionPolicy *actions)
 {
-	gchar *value_txt;
 	gint i;
 	gboolean is_writable;
 	GtkWidget *widget;
@@ -247,35 +169,34 @@ gpm_prefs_setup_action_combo (GpmPrefs *prefs, const gchar *widget_name,
 	GPtrArray *array;
 	GpmActionPolicy *actions_added;
 
-	widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, widget_name));
-	gpm_prefs_set_combo_simple_text (widget);
+	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, widget_name));
+	cc_power_panel_set_combo_simple_text (widget);
 
-	value_txt = g_settings_get_string (prefs->priv->settings, gpm_pref_key);
-	is_writable = g_settings_is_writable (prefs->priv->settings, gpm_pref_key);
-	value = gpm_action_policy_from_string (value_txt);
+	value = g_settings_get_enum (panel->priv->settings, gpm_pref_key);
+	is_writable = g_settings_is_writable (panel->priv->settings, gpm_pref_key);
 
 	gtk_widget_set_sensitive (widget, is_writable);
 
 	array = g_ptr_array_new ();
 	g_object_set_data (G_OBJECT (widget), "settings_key", (gpointer) gpm_pref_key);
 	g_signal_connect (G_OBJECT (widget), "changed",
-			  G_CALLBACK (gpm_prefs_action_combo_changed_cb), prefs);
+			  G_CALLBACK (cc_power_panel_action_combo_changed_cb), panel);
 
 	for (i=0; actions[i] != -1; i++) {
 		policy = actions[i];
-		if (policy == GPM_ACTION_POLICY_SHUTDOWN && !prefs->priv->can_shutdown) {
-			egg_debug ("Cannot add option, as cannot shutdown.");
-		} else if (policy == GPM_ACTION_POLICY_SHUTDOWN && prefs->priv->can_shutdown) {
+		if (policy == GPM_ACTION_POLICY_SHUTDOWN && !panel->priv->can_shutdown) {
+			g_debug ("Cannot add option, as cannot shutdown.");
+		} else if (policy == GPM_ACTION_POLICY_SHUTDOWN && panel->priv->can_shutdown) {
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Shutdown"));
 			g_ptr_array_add (array, GINT_TO_POINTER (policy));
-		} else if (policy == GPM_ACTION_POLICY_SUSPEND && !prefs->priv->can_suspend) {
-			egg_debug ("Cannot add option, as cannot suspend.");
-		} else if (policy == GPM_ACTION_POLICY_HIBERNATE && !prefs->priv->can_hibernate) {
-			egg_debug ("Cannot add option, as cannot hibernate.");
-		} else if (policy == GPM_ACTION_POLICY_SUSPEND && prefs->priv->can_suspend) {
+		} else if (policy == GPM_ACTION_POLICY_SUSPEND && !panel->priv->can_suspend) {
+			g_debug ("Cannot add option, as cannot suspend.");
+		} else if (policy == GPM_ACTION_POLICY_HIBERNATE && !panel->priv->can_hibernate) {
+			g_debug ("Cannot add option, as cannot hibernate.");
+		} else if (policy == GPM_ACTION_POLICY_SUSPEND && panel->priv->can_suspend) {
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Suspend"));
 			g_ptr_array_add (array, GINT_TO_POINTER (policy));
-		} else if (policy == GPM_ACTION_POLICY_HIBERNATE && prefs->priv->can_hibernate) {
+		} else if (policy == GPM_ACTION_POLICY_HIBERNATE && panel->priv->can_hibernate) {
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Hibernate"));
 			g_ptr_array_add (array, GINT_TO_POINTER (policy));
 		} else if (policy == GPM_ACTION_POLICY_BLANK) {
@@ -291,7 +212,7 @@ gpm_prefs_setup_action_combo (GpmPrefs *prefs, const gchar *widget_name,
 				g_ptr_array_add (array, GINT_TO_POINTER (policy));
 			}
 		} else {
-			egg_warning ("Unknown action read from settings: %i", policy);
+			g_warning ("Unknown action read from settings: %i", policy);
 		}
 	}
 
@@ -301,29 +222,23 @@ gpm_prefs_setup_action_combo (GpmPrefs *prefs, const gchar *widget_name,
 		actions_added[i] = GPOINTER_TO_INT (g_ptr_array_index (array, i));
 	actions_added[i] = -1;
 
-	g_object_set_data_full (G_OBJECT (widget), "actions", (gpointer) actions_added, (GDestroyNotify) gpm_prefs_actions_destroy_cb);
+	g_object_set_data_full (G_OBJECT (widget), "actions", (gpointer) actions_added, (GDestroyNotify) cc_power_panel_actions_destroy_cb);
 
 	/* set what we have in GConf */
 	for (i=0; actions_added[i] != -1; i++) {
 		policy = actions_added[i];
-		egg_debug ("added: %s", gpm_action_policy_to_string (policy));
 		if (value == policy)
 			 gtk_combo_box_set_active (GTK_COMBO_BOX (widget), i);
 	}
 
 	g_ptr_array_unref (array);
-	g_free (value_txt);
 }
 
 /**
- * gpm_prefs_setup_time_combo:
- * @prefs: This prefs class instance
- * @widget_name: The GtkWidget name
- * @gpm_pref_key: The GConf key for this preference setting.
- * @actions: The actions to associate in an array.
+ * cc_power_panel_setup_time_combo:
  **/
 static void
-gpm_prefs_setup_time_combo (GpmPrefs *prefs, const gchar *widget_name,
+cc_power_panel_setup_time_combo (CcPowerPanel *panel, const gchar *widget_name,
 			    const gchar *gpm_pref_key, const gint *values)
 {
 	guint value;
@@ -332,11 +247,11 @@ gpm_prefs_setup_time_combo (GpmPrefs *prefs, const gchar *widget_name,
 	gboolean is_writable;
 	GtkWidget *widget;
 
-	widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, widget_name));
-	gpm_prefs_set_combo_simple_text (widget);
+	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, widget_name));
+	cc_power_panel_set_combo_simple_text (widget);
 
-	value = g_settings_get_int (prefs->priv->settings, gpm_pref_key);
-	is_writable = g_settings_is_writable (prefs->priv->settings, gpm_pref_key);
+	value = g_settings_get_int (panel->priv->settings, gpm_pref_key);
+	is_writable = g_settings_is_writable (panel->priv->settings, gpm_pref_key);
 	gtk_widget_set_sensitive (widget, is_writable);
 
 	g_object_set_data (G_OBJECT (widget), "settings_key", (gpointer) gpm_pref_key);
@@ -361,36 +276,13 @@ gpm_prefs_setup_time_combo (GpmPrefs *prefs, const gchar *widget_name,
 
 	/* connect after set */
 	g_signal_connect (G_OBJECT (widget), "changed",
-			  G_CALLBACK (gpm_prefs_action_time_changed_cb), prefs);
-}
-
-/**
- * gpm_prefs_close_cb:
- * @widget: The GtkWidget object
- * @prefs: This prefs class instance
- **/
-static void
-gpm_prefs_close_cb (GtkWidget *widget, GpmPrefs *prefs)
-{
-	egg_debug ("emitting action-close");
-	g_signal_emit (prefs, signals [ACTION_CLOSE], 0);
-}
-
-/**
- * gpm_prefs_delete_event_cb:
- **/
-static gboolean
-gpm_prefs_delete_event_cb (GtkWidget *widget, GdkEvent *event, GpmPrefs *prefs)
-{
-	gpm_prefs_close_cb (widget, prefs);
-	return FALSE;
+			  G_CALLBACK (cc_power_panel_action_time_changed_cb), panel);
 }
 
 /** setup the notification page */
 static void
-prefs_setup_notification (GpmPrefs *prefs)
+cc_power_panel_setup_notification (CcPowerPanel *panel)
 {
-	gchar *icon_policy_str;
 	gint icon_policy;
 	GtkWidget *radiobutton_icon_present;
 	GtkWidget *radiobutton_icon_charge;
@@ -398,20 +290,17 @@ prefs_setup_notification (GpmPrefs *prefs)
 	GtkWidget *radiobutton_icon_never;
 	gboolean is_writable;
 
-	icon_policy_str = g_settings_get_string (prefs->priv->settings, GPM_SETTINGS_ICON_POLICY);
-	icon_policy = gpm_icon_policy_from_string (icon_policy_str);
-	g_free (icon_policy_str);
-
-	radiobutton_icon_present = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder,
+	icon_policy = g_settings_get_enum (panel->priv->settings, GPM_SETTINGS_ICON_POLICY);
+	radiobutton_icon_present = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder,
 					       "radiobutton_notification_present"));
-	radiobutton_icon_charge = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder,
+	radiobutton_icon_charge = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder,
 					      "radiobutton_notification_charge"));
-	radiobutton_icon_low = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder,
+	radiobutton_icon_low = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder,
 					   "radiobutton_notification_low"));
-	radiobutton_icon_never = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder,
+	radiobutton_icon_never = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder,
 					     "radiobutton_notification_never"));
 
-	is_writable = g_settings_is_writable (prefs->priv->settings, GPM_SETTINGS_ICON_POLICY);
+	is_writable = g_settings_is_writable (panel->priv->settings, GPM_SETTINGS_ICON_POLICY);
 	gtk_widget_set_sensitive (radiobutton_icon_present, is_writable);
 	gtk_widget_set_sensitive (radiobutton_icon_charge, is_writable);
 	gtk_widget_set_sensitive (radiobutton_icon_low, is_writable);
@@ -438,17 +327,20 @@ prefs_setup_notification (GpmPrefs *prefs)
 	/* only connect the callbacks after we set the value, else the settings
 	 * keys gets written to (for a split second), and the icon flickers. */
 	g_signal_connect (radiobutton_icon_present, "clicked",
-			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
+			  G_CALLBACK (cc_power_panel_icon_radio_cb), panel);
 	g_signal_connect (radiobutton_icon_charge, "clicked",
-			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
+			  G_CALLBACK (cc_power_panel_icon_radio_cb), panel);
 	g_signal_connect (radiobutton_icon_low, "clicked",
-			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
+			  G_CALLBACK (cc_power_panel_icon_radio_cb), panel);
 	g_signal_connect (radiobutton_icon_never, "clicked",
-			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
+			  G_CALLBACK (cc_power_panel_icon_radio_cb), panel);
 }
 
+/**
+ * cc_power_panel_setup_ac:
+ **/
 static void
-prefs_setup_ac (GpmPrefs *prefs)
+cc_power_panel_setup_ac (CcPowerPanel *panel)
 {
 	GtkWidget *widget;
 	const GpmActionPolicy button_lid_actions[] =
@@ -475,49 +367,52 @@ prefs_setup_ac (GpmPrefs *prefs)
 		 0, /* never */
 		 -1};
 
-	gpm_prefs_setup_time_combo (prefs, "combobox_ac_computer",
+	cc_power_panel_setup_time_combo (panel, "combobox_ac_computer",
 				    GPM_SETTINGS_SLEEP_COMPUTER_AC,
 				    computer_times);
-	gpm_prefs_setup_time_combo (prefs, "combobox_ac_display",
+	cc_power_panel_setup_time_combo (panel, "combobox_ac_display",
 				    GPM_SETTINGS_SLEEP_DISPLAY_AC,
 				    display_times);
 
-	gpm_prefs_setup_action_combo (prefs, "combobox_ac_lid",
+	cc_power_panel_setup_action_combo (panel, "combobox_ac_lid",
 				      GPM_SETTINGS_BUTTON_LID_AC,
 				      button_lid_actions);
 
 	/* setup brightness slider */
-	widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "hscale_ac_brightness"));
-	g_settings_bind (prefs->priv->settings, GPM_SETTINGS_BRIGHTNESS_AC,
+	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "hscale_ac_brightness"));
+	g_settings_bind (panel->priv->settings, GPM_SETTINGS_BRIGHTNESS_AC,
 			 widget, "fill-level",
 			 G_SETTINGS_BIND_DEFAULT);
 	g_signal_connect (G_OBJECT (widget), "format-value",
-			  G_CALLBACK (gpm_prefs_format_percentage_cb), NULL);
+			  G_CALLBACK (cc_power_panel_format_percentage_cb), NULL);
 
 	/* set up the checkboxes */
-	widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "checkbutton_ac_display_dim"));
-	g_settings_bind (prefs->priv->settings, GPM_SETTINGS_IDLE_DIM_AC,
+	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "checkbutton_ac_display_dim"));
+	g_settings_bind (panel->priv->settings, GPM_SETTINGS_IDLE_DIM_AC,
 			 widget, "active",
 			 G_SETTINGS_BIND_DEFAULT);
-	widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "checkbutton_ac_spindown"));
-	g_settings_bind (prefs->priv->settings, GPM_SETTINGS_SPINDOWN_ENABLE_AC,
+	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "checkbutton_ac_spindown"));
+	g_settings_bind (panel->priv->settings, GPM_SETTINGS_SPINDOWN_ENABLE_AC,
 			 widget, "active",
 			 G_SETTINGS_BIND_DEFAULT);
 
-	if (prefs->priv->has_button_lid == FALSE) {
-		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "hbox_ac_lid"));
+	if (panel->priv->has_button_lid == FALSE) {
+		widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "hbox_ac_lid"));
 		gtk_widget_hide_all (widget);
 	}
-	if (prefs->priv->has_lcd == FALSE) {
-		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "hbox_ac_brightness"));
+	if (panel->priv->has_lcd == FALSE) {
+		widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "hbox_ac_brightness"));
 		gtk_widget_hide_all (widget);
-		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "checkbutton_ac_display_dim"));
+		widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "checkbutton_ac_display_dim"));
 		gtk_widget_hide_all (widget);
 	}
 }
 
+/**
+ * cc_power_panel_setup_battery:
+ **/
 static void
-prefs_setup_battery (GpmPrefs *prefs)
+cc_power_panel_setup_battery (CcPowerPanel *panel)
 {
 	GtkWidget *widget;
 	GtkNotebook *notebook;
@@ -553,54 +448,57 @@ prefs_setup_battery (GpmPrefs *prefs)
 		 0, /* never */
 		 -1};
 
-	gpm_prefs_setup_time_combo (prefs, "combobox_battery_computer",
+	cc_power_panel_setup_time_combo (panel, "combobox_battery_computer",
 				    GPM_SETTINGS_SLEEP_COMPUTER_BATT,
 				    computer_times);
-	gpm_prefs_setup_time_combo (prefs, "combobox_battery_display",
+	cc_power_panel_setup_time_combo (panel, "combobox_battery_display",
 				    GPM_SETTINGS_SLEEP_DISPLAY_BATT,
 				    display_times);
 
-	if (prefs->priv->has_batteries == FALSE) {
-		notebook = GTK_NOTEBOOK (gtk_builder_get_object (prefs->priv->builder, "notebook_preferences"));
-		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "vbox_battery"));
+	if (panel->priv->has_batteries == FALSE) {
+		notebook = GTK_NOTEBOOK (gtk_builder_get_object (panel->priv->builder, "notebook_preferences"));
+		widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "vbox_battery"));
 		page = gtk_notebook_page_num (notebook, GTK_WIDGET (widget));
 		gtk_notebook_remove_page (notebook, page);
 		return;
 	}
 
-	gpm_prefs_setup_action_combo (prefs, "combobox_battery_lid",
+	cc_power_panel_setup_action_combo (panel, "combobox_battery_lid",
 				      GPM_SETTINGS_BUTTON_LID_BATT,
 				      button_lid_actions);
-	gpm_prefs_setup_action_combo (prefs, "combobox_battery_critical",
+	cc_power_panel_setup_action_combo (panel, "combobox_battery_critical",
 				      GPM_SETTINGS_ACTION_CRITICAL_BATT,
 				      battery_critical_actions);
 
 	/* set up the checkboxes */
-	widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "checkbutton_battery_display_reduce"));
-	g_settings_bind (prefs->priv->settings, GPM_SETTINGS_BACKLIGHT_BATTERY_REDUCE,
+	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "checkbutton_battery_display_reduce"));
+	g_settings_bind (panel->priv->settings, GPM_SETTINGS_BACKLIGHT_BATTERY_REDUCE,
 			 widget, "active",
 			 G_SETTINGS_BIND_DEFAULT);
-	widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "checkbutton_battery_display_dim"));
-	g_settings_bind (prefs->priv->settings, GPM_SETTINGS_IDLE_DIM_BATT,
+	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "checkbutton_battery_display_dim"));
+	g_settings_bind (panel->priv->settings, GPM_SETTINGS_IDLE_DIM_BATT,
 			 widget, "active",
 			 G_SETTINGS_BIND_DEFAULT);
-	widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "checkbutton_battery_spindown"));
-	g_settings_bind (prefs->priv->settings, GPM_SETTINGS_SPINDOWN_ENABLE_BATT,
+	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "checkbutton_battery_spindown"));
+	g_settings_bind (panel->priv->settings, GPM_SETTINGS_SPINDOWN_ENABLE_BATT,
 			 widget, "active",
 			 G_SETTINGS_BIND_DEFAULT);
 
-	if (prefs->priv->has_button_lid == FALSE) {
-		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "hbox_battery_lid"));
+	if (panel->priv->has_button_lid == FALSE) {
+		widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "hbox_battery_lid"));
 		gtk_widget_hide_all (widget);
 	}
-	if (prefs->priv->has_lcd == FALSE) {
-		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "checkbutton_battery_display_dim"));
+	if (panel->priv->has_lcd == FALSE) {
+		widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "checkbutton_battery_display_dim"));
 		gtk_widget_hide_all (widget);
 	}
 }
 
+/**
+ * cc_power_panel_setup_ups:
+ **/
 static void
-prefs_setup_ups (GpmPrefs *prefs)
+cc_power_panel_setup_ups (CcPowerPanel *panel)
 {
 	GtkWidget *widget;
 	GtkNotebook *notebook;
@@ -628,31 +526,34 @@ prefs_setup_ups (GpmPrefs *prefs)
 		 0, /* never */
 		 -1};
 
-	gpm_prefs_setup_time_combo (prefs, "combobox_ups_computer",
+	cc_power_panel_setup_time_combo (panel, "combobox_ups_computer",
 				    GPM_SETTINGS_SLEEP_COMPUTER_UPS,
 				    computer_times);
-	gpm_prefs_setup_time_combo (prefs, "combobox_ups_display",
+	cc_power_panel_setup_time_combo (panel, "combobox_ups_display",
 				    GPM_SETTINGS_SLEEP_DISPLAY_UPS,
 				    display_times);
 
-	if (prefs->priv->has_ups == FALSE) {
-		notebook = GTK_NOTEBOOK (gtk_builder_get_object (prefs->priv->builder, "notebook_preferences"));
-		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "vbox_ups"));
+	if (panel->priv->has_ups == FALSE) {
+		notebook = GTK_NOTEBOOK (gtk_builder_get_object (panel->priv->builder, "notebook_preferences"));
+		widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "vbox_ups"));
 		page = gtk_notebook_page_num (notebook, GTK_WIDGET (widget));
 		gtk_notebook_remove_page (notebook, page);
 		return;
 	}
 
-	gpm_prefs_setup_action_combo (prefs, "combobox_ups_low",
+	cc_power_panel_setup_action_combo (panel, "combobox_ups_low",
 				      GPM_SETTINGS_ACTION_LOW_UPS,
 				      ups_low_actions);
-	gpm_prefs_setup_action_combo (prefs, "combobox_ups_critical",
+	cc_power_panel_setup_action_combo (panel, "combobox_ups_critical",
 				      GPM_SETTINGS_ACTION_CRITICAL_UPS,
 				      ups_low_actions);
 }
 
+/**
+ * cc_power_panel_setup_general:
+ **/
 static void
-prefs_setup_general (GpmPrefs *prefs)
+cc_power_panel_setup_general (CcPowerPanel *panel)
 {
 	GtkWidget *widget;
 	const GpmActionPolicy power_button_actions[] =
@@ -667,25 +568,25 @@ prefs_setup_general (GpmPrefs *prefs)
 				 GPM_ACTION_POLICY_HIBERNATE,
 				 -1};
 
-	gpm_prefs_setup_action_combo (prefs, "combobox_general_power",
+	cc_power_panel_setup_action_combo (panel, "combobox_general_power",
 				      GPM_SETTINGS_BUTTON_POWER,
 				      power_button_actions);
-	gpm_prefs_setup_action_combo (prefs, "combobox_general_suspend",
+	cc_power_panel_setup_action_combo (panel, "combobox_general_suspend",
 				      GPM_SETTINGS_BUTTON_SUSPEND,
 				      suspend_button_actions);
 
-	if (prefs->priv->has_button_suspend == FALSE) {
-		widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "hbox_general_suspend"));
+	if (panel->priv->has_button_suspend == FALSE) {
+		widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "hbox_general_suspend"));
 		gtk_widget_hide_all (widget);
 	}
 }
 
 #ifdef HAVE_GCONF_DEFAULTS
 /**
- * gpm_prefs_set_defaults_cb:
+ * cc_power_panel_set_defaults_cb:
  **/
 static void
-gpm_prefs_set_defaults_cb (GtkWidget *widget, GpmPrefs *prefs)
+cc_power_panel_set_defaults_cb (GtkWidget *widget, CcPowerPanel *panel)
 {
 	DBusGProxy *proxy;
 	DBusGConnection *connection;
@@ -723,12 +624,33 @@ gpm_prefs_set_defaults_cb (GtkWidget *widget, GpmPrefs *prefs)
 }
 #endif
 
-/**
- * gpm_prefs_init:
- * @prefs: This prefs class instance
- **/
 static void
-gpm_prefs_init (GpmPrefs *prefs)
+cc_power_panel_class_init (CcPowerPanelClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	g_type_class_add_private (klass, sizeof (CcPowerPanelPrivate));
+	object_class->finalize = cc_power_panel_finalize;
+}
+
+static void
+cc_power_panel_class_finalize (CcPowerPanelClass *klass)
+{
+}
+
+static void
+cc_power_panel_finalize (GObject *object)
+{
+	CcPowerPanel *panel = CC_POWER_PANEL (object);
+
+	g_object_unref (panel->priv->settings);
+	g_object_unref (panel->priv->client);
+	g_object_unref (panel->priv->console);
+
+	G_OBJECT_CLASS (cc_power_panel_parent_class)->finalize (object);
+}
+
+static void
+cc_power_panel_init (CcPowerPanel *panel)
 {
 	GtkWidget *main_window;
 	GtkWidget *widget;
@@ -741,41 +663,41 @@ gpm_prefs_init (GpmPrefs *prefs)
 	gboolean ret;
 	guint i;
 
-	prefs->priv = GPM_PREFS_GET_PRIVATE (prefs);
+	panel->priv = CC_POWER_PREFS_GET_PRIVATE (panel);
 
-	prefs->priv->client = up_client_new ();
-	prefs->priv->console = egg_console_kit_new ();
-	prefs->priv->settings = g_settings_new (GPM_SETTINGS_SCHEMA);
+	panel->priv->client = up_client_new ();
+	panel->priv->console = egg_console_kit_new ();
+	panel->priv->settings = g_settings_new (GPM_SETTINGS_SCHEMA);
 
 	/* are we allowed to shutdown? */
-	prefs->priv->can_shutdown = TRUE;
-	egg_console_kit_can_stop (prefs->priv->console, &prefs->priv->can_shutdown, NULL);
+	panel->priv->can_shutdown = TRUE;
+	egg_console_kit_can_stop (panel->priv->console, &panel->priv->can_shutdown, NULL);
 
 	/* get values from UpClient */
-	prefs->priv->can_suspend = up_client_get_can_suspend (prefs->priv->client);
-	prefs->priv->can_hibernate = up_client_get_can_hibernate (prefs->priv->client);
+	panel->priv->can_suspend = up_client_get_can_suspend (panel->priv->client);
+	panel->priv->can_hibernate = up_client_get_can_hibernate (panel->priv->client);
 #if UP_CHECK_VERSION(0,9,2)
-	prefs->priv->has_button_lid = up_client_get_lid_is_present (prefs->priv->client);
+	panel->priv->has_button_lid = up_client_get_lid_is_present (panel->priv->client);
 #else
-	g_object_get (prefs->priv->client,
-		      "lid-is-present", &prefs->priv->has_button_lid,
+	g_object_get (panel->priv->client,
+		      "lid-is-present", &panel->priv->has_button_lid,
 		      NULL);
 #endif
-	prefs->priv->has_button_suspend = TRUE;
+	panel->priv->has_button_suspend = TRUE;
 
 	/* find if we have brightness hardware */
 	brightness = gpm_brightness_new ();
-	prefs->priv->has_lcd = gpm_brightness_has_hw (brightness);
+	panel->priv->has_lcd = gpm_brightness_has_hw (brightness);
 	g_object_unref (brightness);
 
 	/* get device list */
-	ret = up_client_enumerate_devices_sync (prefs->priv->client, NULL, &error);
+	ret = up_client_enumerate_devices_sync (panel->priv->client, NULL, &error);
 	if (!ret) {
-		egg_warning ("failed to get device list: %s", error->message);
+		g_warning ("failed to get device list: %s", error->message);
 		g_error_free (error);
 	}
 
-	devices = up_client_get_devices (prefs->priv->client);
+	devices = up_client_get_devices (panel->priv->client);
 	for (i=0; i<devices->len; i++) {
 		device = g_ptr_array_index (devices, i);
 		//kind = up_device_get_kind (device);
@@ -783,83 +705,68 @@ gpm_prefs_init (GpmPrefs *prefs)
 			      "kind", &kind,
 			      NULL);
 		if (kind == UP_DEVICE_KIND_BATTERY)
-			prefs->priv->has_batteries = TRUE;
+			panel->priv->has_batteries = TRUE;
 		if (kind == UP_DEVICE_KIND_UPS)
-			prefs->priv->has_ups = TRUE;
+			panel->priv->has_ups = TRUE;
 	}
 	g_ptr_array_unref (devices);
 
-	prefs->priv->builder = gtk_builder_new ();
-	retval = gtk_builder_add_from_file (prefs->priv->builder, GPM_DATA "/gpm-prefs.ui", &error);
+	panel->priv->builder = gtk_builder_new ();
+	retval = gtk_builder_add_from_file (panel->priv->builder, GPM_DATA "/gpm-prefs.ui", &error);
 	if (retval == 0) {
-		egg_warning ("failed to load ui: %s", error->message);
+		g_warning ("failed to load ui: %s", error->message);
 		g_error_free (error);
+		goto out;
 	}
 
-	main_window = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "dialog_preferences"));
-
-	/* Hide window first so that the dialogue resizes itself without redrawing */
-	gtk_widget_hide (main_window);
-	gtk_window_set_default_icon_name (GPM_STOCK_APP_ICON);
-
-	/* Get the main window quit */
-	g_signal_connect (main_window, "delete-event",
-			  G_CALLBACK (gpm_prefs_delete_event_cb), prefs);
-
-	widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "button_close"));
+	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "button_help"));
 	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_prefs_close_cb), prefs);
+			  G_CALLBACK (cc_power_panel_help_cb), panel);
 
-	widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "button_help"));
-	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_prefs_help_cb), prefs);
-
-	widget = GTK_WIDGET (gtk_builder_get_object (prefs->priv->builder, "button_defaults"));
+	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "button_defaults"));
 #ifdef HAVE_GCONF_DEFAULTS
 	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_prefs_set_defaults_cb), prefs);
+			  G_CALLBACK (cc_power_panel_set_defaults_cb), panel);
 #else
 	gtk_widget_hide (widget);
 #endif
 
-	prefs_setup_ac (prefs);
-	prefs_setup_battery (prefs);
-	prefs_setup_ups (prefs);
-	prefs_setup_general (prefs);
-	prefs_setup_notification (prefs);
+	cc_power_panel_setup_ac (panel);
+	cc_power_panel_setup_battery (panel);
+	cc_power_panel_setup_ups (panel);
+	cc_power_panel_setup_general (panel);
+	cc_power_panel_setup_notification (panel);
 
-	gtk_widget_show (main_window);
+out:
+	main_window = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "dialog_preferences"));
+//	gtk_widget_show (main_window);
+	widget = gtk_dialog_get_content_area (GTK_DIALOG (main_window));
+	gtk_widget_unparent (widget);
+
+	gtk_container_add (GTK_CONTAINER (panel), widget);
 }
 
-/**
- * gpm_prefs_finalize:
- * @object: This prefs class instance
- **/
-static void
-gpm_prefs_finalize (GObject *object)
+void
+cc_power_panel_register (GIOModule *module)
 {
-	GpmPrefs *prefs;
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (GPM_IS_PREFS (object));
-
-	prefs = GPM_PREFS (object);
-	prefs->priv = GPM_PREFS_GET_PRIVATE (prefs);
-
-	g_object_unref (prefs->priv->settings);
-	g_object_unref (prefs->priv->client);
-	g_object_unref (prefs->priv->console);
-
-	G_OBJECT_CLASS (gpm_prefs_parent_class)->finalize (object);
+	cc_power_panel_register_type (G_TYPE_MODULE (module));
+	g_io_extension_point_implement (CC_SHELL_PANEL_EXTENSION_POINT,
+					CC_TYPE_POWER_PANEL,
+					"power", 0);
 }
 
-/**
- * gpm_prefs_new:
- * Return value: new GpmPrefs instance.
- **/
-GpmPrefs *
-gpm_prefs_new (void)
+/* GIO extension stuff */
+void
+g_io_module_load (GIOModule *module)
 {
-	GpmPrefs *prefs;
-	prefs = g_object_new (GPM_TYPE_PREFS, NULL);
-	return GPM_PREFS (prefs);
+	bindtextdomain (GETTEXT_PACKAGE, GNOMELOCALEDIR);
+	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+
+	/* register the panel */
+	cc_power_panel_register (module);
+}
+
+void
+g_io_module_unload (GIOModule *module)
+{
 }

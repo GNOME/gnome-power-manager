@@ -146,6 +146,12 @@ if test x$has_libnotify = xyes; then
 	AC_DEFINE(HAVE_LIBNOTIFY,1,[Use session notifications])
 fi
 
+dnl Required for the properties window
+PKG_CHECK_MODULES(CONTROL_CENTER, [
+ libgnome-control-center >= 2.31.3])
+PANELS_DIR="${libdir}/control-center-1/panels"
+AC_SUBST(PANELS_DIR)
+
 dnl ---------------------------------------------------------------------------
 dnl - Check XF86XK_Keys
 dnl ---------------------------------------------------------------------------

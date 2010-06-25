@@ -687,17 +687,14 @@ gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 static gboolean
 gpm_manager_perform_policy (GpmManager  *manager, const gchar *policy_key, const gchar *reason)
 {
-	gchar *action = NULL;
 	GpmActionPolicy policy;
 
 	/* are we inhibited? */
 	if (gpm_manager_is_inhibit_valid (manager, FALSE, "policy action") == FALSE)
 		return FALSE;
 
-	action = g_settings_get_string (manager->priv->settings, policy_key);
-	egg_debug ("action: %s set to %s (%s)", policy_key, action, reason);
-	policy = gpm_action_policy_from_string (action);
-
+	policy = g_settings_get_enum (manager->priv->settings, policy_key);
+	egg_debug ("action: %s set to %i (%s)", policy_key, policy, reason);
 	if (policy == GPM_ACTION_POLICY_NOTHING) {
 		egg_debug ("doing nothing, reason: %s", reason);
 	} else if (policy == GPM_ACTION_POLICY_SUSPEND) {
@@ -720,10 +717,9 @@ gpm_manager_perform_policy (GpmManager  *manager, const gchar *policy_key, const
 		gpm_session_logout (session);
 		g_object_unref (session);
 	} else {
-		egg_warning ("unknown action %s", action);
+		egg_warning ("unknown action %i", policy);
 	}
 
-	g_free (action);
 	return TRUE;
 }
 
@@ -737,16 +733,14 @@ gpm_manager_perform_policy (GpmManager  *manager, const gchar *policy_key, const
 static void
 gpm_manager_idle_do_sleep (GpmManager *manager)
 {
-	gchar *action = NULL;
 	gboolean ret;
 	GError *error = NULL;
 	GpmActionPolicy policy;
 
 	if (!manager->priv->on_battery)
-		action = g_settings_get_string (manager->priv->settings, GPM_SETTINGS_ACTION_SLEEP_TYPE_AC);
+		policy = g_settings_get_enum (manager->priv->settings, GPM_SETTINGS_ACTION_SLEEP_TYPE_AC);
 	else
-		action = g_settings_get_string (manager->priv->settings, GPM_SETTINGS_ACTION_SLEEP_TYPE_BATT);
-	policy = gpm_action_policy_from_string (action);
+		policy = g_settings_get_enum (manager->priv->settings, GPM_SETTINGS_ACTION_SLEEP_TYPE_BATT);
 
 	if (policy == GPM_ACTION_POLICY_NOTHING) {
 		egg_debug ("doing nothing as system idle action");
@@ -779,7 +773,6 @@ gpm_manager_idle_do_sleep (GpmManager *manager)
 			}
 		}
 	}
-	g_free (action);
 }
 
 /**
@@ -1581,7 +1574,6 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmM
 {
 	const gchar *title = NULL;
 	gchar *message = NULL;
-	gchar *action;
 	GIcon *icon = NULL;
 	UpDeviceKind kind;
 	gdouble percentage;
@@ -1617,8 +1609,7 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmM
 		}
 
 		/* we have to do different warnings depending on the policy */
-		action = g_settings_get_string (manager->priv->settings, GPM_SETTINGS_ACTION_CRITICAL_BATT);
-		policy = gpm_action_policy_from_string (action);
+		policy = g_settings_get_enum (manager->priv->settings, GPM_SETTINGS_ACTION_CRITICAL_BATT);
 
 		/* use different text for different actions */
 		if (policy == GPM_ACTION_POLICY_NOTHING) {
@@ -1638,7 +1629,6 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmM
 			message = g_strdup_printf (_("Computer will shutdown very soon unless it is plugged in."));
 		}
 
-		g_free (action);
 	} else if (kind == UP_DEVICE_KIND_UPS) {
 		gchar *remaining_text;
 
@@ -1750,7 +1740,6 @@ static void
 gpm_manager_engine_charge_action_cb (GpmEngine *engine, UpDevice *device, GpmManager *manager)
 {
 	const gchar *title = NULL;
-	gchar *action;
 	gchar *message = NULL;
 	GIcon *icon = NULL;
 	UpDeviceKind kind;
@@ -1776,8 +1765,7 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, UpDevice *device, GpmMan
 		title = _("Laptop battery critically low");
 
 		/* we have to do different warnings depending on the policy */
-		action = g_settings_get_string (manager->priv->settings, GPM_SETTINGS_ACTION_CRITICAL_BATT);
-		policy = gpm_action_policy_from_string (action);
+		policy = g_settings_get_enum (manager->priv->settings, GPM_SETTINGS_ACTION_CRITICAL_BATT);
 
 		/* use different text for different actions */
 		if (policy == GPM_ACTION_POLICY_NOTHING) {
@@ -1804,8 +1792,6 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, UpDevice *device, GpmMan
 					      "this computer is about to shutdown."));
 		}
 
-		g_free (action);
-
 		/* wait 20 seconds for user-panic */
 		timer_id = g_timeout_add_seconds (20, (GSourceFunc) manager_critical_action_do, manager);
 #if GLIB_CHECK_VERSION(2,25,8)
@@ -1817,8 +1803,7 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, UpDevice *device, GpmMan
 		title = _("UPS critically low");
 
 		/* we have to do different warnings depending on the policy */
-		action = g_settings_get_string (manager->priv->settings, GPM_SETTINGS_ACTION_CRITICAL_UPS);
-		policy = gpm_action_policy_from_string (action);
+		policy = g_settings_get_enum (manager->priv->settings, GPM_SETTINGS_ACTION_CRITICAL_UPS);
 
 		/* use different text for different actions */
 		if (policy == GPM_ACTION_POLICY_NOTHING) {
@@ -1843,8 +1828,6 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, UpDevice *device, GpmMan
 #if GLIB_CHECK_VERSION(2,25,8)
 		g_source_set_name_by_id (timer_id, "[GpmManager] ups critical-action");
 #endif
-
-		g_free (action);
 	}
 
 	/* not all types have actions */

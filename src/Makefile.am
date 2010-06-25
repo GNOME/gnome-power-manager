@@ -17,10 +17,11 @@ INCLUDES =						\
 	$(LIBNOTIFY_CFLAGS)				\
 	$(CANBERRA_CFLAGS)				\
 	$(GSTREAMER_CFLAGS)				\
+	$(CONTROL_CENTER_CFLAGS)			\
 	-DI_KNOW_THE_DEVICEKIT_POWER_API_IS_SUBJECT_TO_CHANGE \
 	$(UPOWER_CFLAGS)				\
 	-DBINDIR=\"$(bindir)\"			 	\
-	-DSBINDIR=\"$(sbindir)\"			 \
+	-DSBINDIR=\"$(sbindir)\"			\
 	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
 	-DDATADIR=\"$(datadir)\"			\
 	-DPREFIX=\""$(prefix)"\" 			\
@@ -29,7 +30,7 @@ INCLUDES =						\
 	-DVERSION="\"$(VERSION)\"" 			\
 	-DGPM_DATA=\"$(pkgdatadir)\"			\
 	-DGTKBUILDERDIR=\"$(pkgdatadir)\"		\
-	-DUP_DISABLE_DEPRECATED			\
+	-DUP_DISABLE_DEPRECATED				\
 	-DEGG_LOG_FILE=\""/tmp/gpm.log"\"		\
 	-DEGG_VERBOSE="\"GPM_VERBOSE\""			\
 	-DEGG_LOGGING="\"GPM_LOGGING\""			\
@@ -37,9 +38,11 @@ INCLUDES =						\
 	-I$(top_srcdir)					\
 	$(NULL)
 
+ccpanelsdir = $(PANELS_DIR)
+ccpanels_LTLIBRARIES = libpower.la
+
 bin_PROGRAMS =						\
 	gnome-power-manager				\
-	gnome-power-preferences				\
 	gnome-power-statistics				\
 	$(NULL)
 
@@ -116,15 +119,22 @@ gnome_power_statistics_CFLAGS =				\
 	$(WARNINGFLAGS)					\
 	$(NULL)
 
-gnome_power_preferences_SOURCES =			\
-	gpm-prefs.c					\
-	gpm-prefs-core.h				\
-	gpm-prefs-core.c				\
+libpower_la_SOURCES =					\
+	egg-console-kit.h				\
+	egg-console-kit.c				\
+	egg-debug.h					\
+	egg-debug.c					\
+	gpm-brightness.h				\
+	gpm-brightness.c				\
+	gpm-common.h					\
+	gpm-common.c					\
+	cc-power-panel.c				\
+	cc-power-panel.h				\
 	$(NULL)
 
-gnome_power_preferences_LDADD =				\
-	libgpmshared.a					\
+libpower_la_LIBADD =					\
 	$(GLIB_LIBS)					\
+	$(CONTROL_CENTER_LIBS)				\
 	$(X11_LIBS)					\
 	$(GNOME_LIBS)					\
 	$(DBUS_LIBS)					\
@@ -132,9 +142,8 @@ gnome_power_preferences_LDADD =				\
 	$(UPOWER_LIBS)					\
 	-lm
 
-gnome_power_preferences_CFLAGS =			\
-	$(WARNINGFLAGS)					\
-	$(NULL)
+libpower_la_LDFLAGS = -avoid-version -module
+libpower_la_CFLAGS = $(WARNINGFLAGS)
 
 gnome_power_manager_SOURCES =				\
 	gpm-dpms.h					\
