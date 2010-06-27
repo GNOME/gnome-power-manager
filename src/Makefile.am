@@ -65,8 +65,6 @@ libgpmshared_a_SOURCES =				\
 	egg-array-float.h				\
 	egg-idletime.h					\
 	egg-idletime.c					\
-	egg-dbus-proxy.h				\
-	egg-dbus-proxy.c				\
 	egg-dbus-monitor.h				\
 	egg-dbus-monitor.c				\
 	egg-discrete.h					\
