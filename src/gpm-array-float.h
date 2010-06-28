@@ -27,29 +27,28 @@
 G_BEGIN_DECLS
 
 /* at the moment just use a GArray as it's quick */
-typedef GArray EggArrayFloat;
+typedef GArray GpmArrayFloat;
 
-EggArrayFloat	*egg_array_float_new			(guint		 length);
-void		 egg_array_float_free			(EggArrayFloat	*array);
-gfloat		 egg_array_float_sum			(EggArrayFloat	*array);
-EggArrayFloat	*egg_array_float_compute_gaussian	(guint		 length,
+GpmArrayFloat	*gpm_array_float_new			(guint		 length);
+void		 gpm_array_float_free			(GpmArrayFloat	*array);
+gfloat		 gpm_array_float_sum			(GpmArrayFloat	*array);
+GpmArrayFloat	*gpm_array_float_compute_gaussian	(guint		 length,
 							 gfloat		 sigma);
-gfloat		 egg_array_float_compute_integral	(EggArrayFloat	*array,
+gfloat		 gpm_array_float_compute_integral	(GpmArrayFloat	*array,
 							 guint		 x1,
 							 guint		 x2);
-gfloat		 egg_array_float_get_average		(EggArrayFloat	*array);
-gboolean	 egg_array_float_print			(EggArrayFloat	*array);
-EggArrayFloat	*egg_array_float_convolve		(EggArrayFloat	*data,
-							 EggArrayFloat	*kernel);
-gfloat		 egg_array_float_get			(EggArrayFloat	*array,
+gfloat		 gpm_array_float_get_average		(GpmArrayFloat	*array);
+gboolean	 gpm_array_float_print			(GpmArrayFloat	*array);
+GpmArrayFloat	*gpm_array_float_convolve		(GpmArrayFloat	*data,
+							 GpmArrayFloat	*kernel);
+gfloat		 gpm_array_float_get			(GpmArrayFloat	*array,
 							 guint		 i);
-void		 egg_array_float_set			(EggArrayFloat	*array,
+void		 gpm_array_float_set			(GpmArrayFloat	*array,
 							 guint		 i,
 							 gfloat		 value);
-EggArrayFloat	*egg_array_float_remove_outliers	(EggArrayFloat *data, guint length, gfloat sigma);
-#ifdef EGG_TEST
-void		 egg_array_float_test			(gpointer	 data);
-#endif
+GpmArrayFloat	*gpm_array_float_remove_outliers	(GpmArrayFloat *data, guint length, gfloat sigma);
+gfloat		 gpm_array_float_guassian_value		(gfloat		 x,
+							 gfloat		 sigma);
 
 G_END_DECLS
 

@@ -26,8 +26,6 @@ libexec_PROGRAMS=gnome-brightness-applet
 
 gnome_brightness_applet_SOURCES =				\
 	brightness-applet.c					\
-	egg-dbus-monitor.c					\
-	egg-dbus-monitor.h					\
 	egg-debug.c						\
 	egg-debug.h						\
 	gpm-common.c						\

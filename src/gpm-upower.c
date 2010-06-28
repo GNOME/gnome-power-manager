@@ -25,7 +25,6 @@
 #include <libupower-glib/upower.h>
 
 #include "egg-debug.h"
-#include "egg-precision.h"
 
 #include "gpm-upower.h"
 #include "gpm-common.h"
@@ -256,8 +255,8 @@ gpm_upower_get_device_summary (UpDevice *device)
 	}
 
 	/* precalculate so we don't get Unknown time remaining */
-	time_to_full_round = egg_precision_round_down (time_to_full, GPM_UP_TIME_PRECISION);
-	time_to_empty_round = egg_precision_round_down (time_to_empty, GPM_UP_TIME_PRECISION);
+	time_to_full_round = gpm_precision_round_down (time_to_full, GPM_UP_TIME_PRECISION);
+	time_to_empty_round = gpm_precision_round_down (time_to_empty, GPM_UP_TIME_PRECISION);
 
 	/* we always display "Laptop battery 16 minutes remaining" as we need to clarify what device we are refering to */
 	if (state == UP_DEVICE_STATE_FULLY_CHARGED) {

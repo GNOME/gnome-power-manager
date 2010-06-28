@@ -55,18 +55,12 @@ check_PROGRAMS =					\
 
 noinst_LIBRARIES = libgpmshared.a
 libgpmshared_a_SOURCES =				\
-	egg-color.c					\
-	egg-color.h					\
 	egg-debug.h					\
 	egg-debug.c					\
-	egg-precision.h					\
-	egg-precision.c					\
-	egg-array-float.c				\
-	egg-array-float.h				\
-	egg-idletime.h					\
-	egg-idletime.c					\
-	egg-discrete.h					\
-	egg-discrete.c					\
+	gpm-array-float.c				\
+	gpm-array-float.h				\
+	gpm-idletime.h					\
+	gpm-idletime.c					\
 	egg-string.h					\
 	egg-string.c					\
 	egg-console-kit.h				\
@@ -195,63 +189,36 @@ gnome_power_manager_CFLAGS =				\
 	$(NULL)
 
 gnome_power_self_test_SOURCES =				\
-	gpm-self-test.c					\
-	egg-color.h					\
-	egg-color.c					\
-	egg-test.h					\
-	egg-test.c					\
-	egg-debug.h					\
-	egg-debug.c					\
-	egg-dbus-monitor.h				\
-	egg-dbus-monitor.c				\
-	egg-dbus-proxy.h				\
-	egg-dbus-proxy.c				\
-	egg-precision.h					\
-	egg-precision.c					\
-	egg-idletime.h					\
-	egg-idletime.c					\
-	egg-discrete.h					\
-	egg-discrete.c					\
-	egg-array-float.h				\
-	egg-array-float.c				\
-	egg-console-kit.h				\
-	egg-console-kit.c				\
-	gpm-control.h					\
-	gpm-control.c					\
-	gpm-networkmanager.h				\
-	gpm-networkmanager.c				\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
-	gpm-button.h					\
-	gpm-button.c					\
-	gpm-screensaver.h				\
-	gpm-screensaver.c				\
-	gpm-engine.h					\
-	gpm-engine.c					\
-	gpm-phone.h					\
-	gpm-phone.c					\
 	gpm-idle.h					\
 	gpm-idle.c					\
 	gpm-session.h					\
 	gpm-session.c					\
-	gpm-load.h					\
-	gpm-load.c					\
-	gpm-marshal.h					\
-	gpm-marshal.c					\
 	gpm-common.h					\
 	gpm-common.c					\
-	gpm-upower.h					\
-	gpm-upower.c					\
+	gpm-load.h					\
+	gpm-load.c					\
+	gpm-phone.h					\
+	gpm-phone.c					\
+	gpm-screensaver.h				\
+	gpm-screensaver.c				\
+	gpm-idletime.h					\
+	gpm-idletime.c					\
+	gpm-array-float.h				\
+	gpm-array-float.c				\
+	gpm-self-test.c					\
 	$(NULL)
 
 gnome_power_self_test_LDADD =				\
+	libgpmshared.a					\
 	$(GLIB_LIBS)					\
 	$(X11_LIBS)					\
 	$(GNOME_LIBS)					\
 	$(GSTREAMER_LIBS)				\
 	$(UPOWER_LIBS)					\
 	$(DBUS_LIBS)					\
-	$(X11_LIBS)						\
+	$(X11_LIBS)					\
 	$(LIBNOTIFY_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
 	-lm

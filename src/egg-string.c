@@ -238,7 +238,7 @@ egg_strreplace (const gchar *text, const gchar *find, const gchar *replace)
 #include "egg-test.h"
 
 void
-egg_string_test (EggTest *test)
+egg_string_test (void)
 {
 	gboolean ret;
 	gchar *text_safe;
@@ -249,13 +249,7 @@ egg_string_test (EggTest *test)
 	gchar **id1;
 	gchar **id2;
 
-	if (!egg_test_start (test, "EggString"))
-		return;
-
-	/************************************************************
-	 ****************    String array equal    ******************
-	 ************************************************************/
-	egg_test_title (test, "egg_strvequal same argument");
+	/* egg_strvequal same argument */
 	id1 = g_strsplit ("the quick brown fox", " ", 0);
 	if (egg_strvequal (id1, id1))
 		egg_test_success (test, NULL);
@@ -263,8 +257,7 @@ egg_string_test (EggTest *test)
 		egg_test_failed (test, "incorrect ret when both same");
 	g_strfreev (id1);
 
-	/************************************************************/
-	egg_test_title (test, "egg_strvequal same");
+	/* egg_strvequal same */
 	id1 = g_strsplit ("the quick brown fox", " ", 0);
 	id2 = g_strsplit ("the quick brown fox", " ", 0);
 	if (egg_strvequal (id1, id2))
@@ -274,8 +267,7 @@ egg_string_test (EggTest *test)
 	g_strfreev (id1);
 	g_strfreev (id2);
 
-	/************************************************************/
-	egg_test_title (test, "egg_strvequal different lengths");
+	/* egg_strvequal different lengths */
 	id1 = g_strsplit ("the quick brown", " ", 0);
 	id2 = g_strsplit ("the quick brown fox", " ", 0);
 	if (!egg_strvequal (id1, id2))
@@ -285,8 +277,7 @@ egg_string_test (EggTest *test)
 	g_strfreev (id1);
 	g_strfreev (id2);
 
-	/************************************************************/
-	egg_test_title (test, "egg_strvequal different");
+	/* egg_strvequal different */
 	id1 = g_strsplit ("the quick brown fox", " ", 0);
 	id2 = g_strsplit ("richard hughes maintainer dude", " ", 0);
 	if (!egg_strvequal (id1, id2))
@@ -296,73 +287,59 @@ egg_string_test (EggTest *test)
 	g_strfreev (id1);
 	g_strfreev (id2);
 
-	/************************************************************
-	 ****************          Zero            ******************
-	 ************************************************************/
+	/* Zero */
 	temp = NULL;
-	egg_test_title (test, "test strzero (null)");
+	/* test strzero (null) */
 	ret = egg_strzero (NULL);
 	if (ret)
 		egg_test_success (test, NULL);
 	else
 		egg_test_failed (test, "failed null");
 
-	/************************************************************/
-	egg_test_title (test, "test strzero (null first char)");
+	/* test strzero (null first char) */
 	ret = egg_strzero ("");
 	if (ret)
 		egg_test_success (test, NULL);
 	else
 		egg_test_failed (test, "failed null");
 
-	/************************************************************/
-	egg_test_title (test, "test strzero (long string)");
+	/* test strzero (long string) */
 	ret = egg_strzero ("Richard");
 	if (!ret)
 		egg_test_success (test, NULL);
 	else
 		egg_test_failed (test, "zero length word!");
 
-	/************************************************************/
-	egg_test_title (test, "id strcmp pass");
+	/* id strcmp pass */
 	ret = (g_strcmp0 ("moo;0.0.1;i386;fedora", "moo;0.0.1;i386;fedora") == 0);
 	egg_test_assert (test, ret);
 
-	/************************************************************/
-	egg_test_title (test, "id strcmp fail");
+	/* id strcmp fail */
 	ret = (g_strcmp0 ("moo;0.0.1;i386;fedora", "moo;0.0.2;i386;fedora") == 0);
 	egg_test_assert (test, !ret);
 
-	/************************************************************
-	 ****************          strlen          ******************
-	 ************************************************************/
-	egg_test_title (test, "strlen bigger");
+	/* strlen bigger */
 	length = egg_strlen ("123456789", 20);
 	if (length == 9)
 		egg_test_success (test, NULL);
 	else
 		egg_test_failed (test, "failed the strlen %i", length);
 
-	/************************************************************/
-	egg_test_title (test, "strlen smaller");
+	/* strlen smaller */
 	length = egg_strlen ("123456789", 5);
 	if (length == 5)
 		egg_test_success (test, NULL);
 	else
 		egg_test_failed (test, "failed the strlen %i", length);
 
-	/************************************************************/
-	egg_test_title (test, "strlen correct");
+	/* strlen correct */
 	length = egg_strlen ("123456789", 9);
 	if (length == 9)
 		egg_test_success (test, NULL);
 	else
 		egg_test_failed (test, "failed the strlen %i", length);
 
-	/************************************************************
-	 ****************         Replace          ******************
-	 ************************************************************/
-	egg_test_title (test, "replace start");
+	/* replace start */
 	text_safe = egg_strreplace ("richard\nhughes", "r", "e");
 	if (g_strcmp0 (text_safe, "eichaed\nhughes") == 0)
 		egg_test_success (test, NULL);
@@ -370,8 +347,7 @@ egg_string_test (EggTest *test)
 		egg_test_failed (test, "failed the replace '%s'", text_safe);
 	g_free (text_safe);
 
-	/************************************************************/
-	egg_test_title (test, "replace none");
+	/* replace none */
 	text_safe = egg_strreplace ("richard\nhughes", "dave", "e");
 	if (g_strcmp0 (text_safe, "richard\nhughes") == 0)
 		egg_test_success (test, NULL);
@@ -379,8 +355,7 @@ egg_string_test (EggTest *test)
 		egg_test_failed (test, "failed the replace '%s'", text_safe);
 	g_free (text_safe);
 
-	/************************************************************/
-	egg_test_title (test, "replace end");
+	/* replace end */
 	text_safe = egg_strreplace ("richard\nhughes", "s", "e");
 	if (g_strcmp0 (text_safe, "richard\nhughee") == 0)
 		egg_test_success (test, NULL);
@@ -388,8 +363,7 @@ egg_string_test (EggTest *test)
 		egg_test_failed (test, "failed the replace '%s'", text_safe);
 	g_free (text_safe);
 
-	/************************************************************/
-	egg_test_title (test, "replace unicode");
+	/* replace unicode */
 	text_safe = egg_strreplace ("richard\n- hughes", "\n- ", "\n• ");
 	if (g_strcmp0 (text_safe, "richard\n• hughes") == 0)
 		egg_test_success (test, NULL);
@@ -397,57 +371,47 @@ egg_string_test (EggTest *test)
 		egg_test_failed (test, "failed the replace '%s'", text_safe);
 	g_free (text_safe);
 
-	/************************************************************
-	 **************        Convert numbers       ****************
-	 ************************************************************/
-	egg_test_title (test, "convert valid number");
+	/* convert valid number */
 	ret = egg_strtoint ("234", &value);
 	if (ret && value == 234)
 		egg_test_success (test, NULL);
 	else
 		egg_test_failed (test, "value is %i", value);
 
-	/************************************************************/
-	egg_test_title (test, "convert negative valid number");
+	/* convert negative valid number */
 	ret = egg_strtoint ("-234", &value);
 	if (ret && value == -234)
 		egg_test_success (test, NULL);
 	else
 		egg_test_failed (test, "value is %i", value);
 
-	/************************************************************/
-	egg_test_title (test, "don't convert invalid number");
+	/* don't convert invalid number */
 	ret = egg_strtoint ("dave", &value);
 	if (!ret)
 		egg_test_success (test, NULL);
 	else
 		egg_test_failed (test, "value is %i", value);
 
-	/************************************************************/
-	egg_test_title (test, "convert NULL to a number");
+	/* convert NULL to a number */
 	ret = egg_strtouint (NULL, &uvalue);
 	if (!ret)
 		egg_test_success (test, NULL);
 	else
 		egg_test_failed (test, "value is %i", uvalue);
 
-	/************************************************************/
-	egg_test_title (test, "convert valid uint number");
+	/* convert valid uint number */
 	ret = egg_strtouint ("234", &uvalue);
 	if (ret && uvalue == 234)
 		egg_test_success (test, NULL);
 	else
 		egg_test_failed (test, "value is %i", uvalue);
 
-	/************************************************************/
-	egg_test_title (test, "convert invalid uint number");
+	/* convert invalid uint number */
 	ret = egg_strtouint ("-234", &uvalue);
 	if (ret == FALSE)
 		egg_test_success (test, NULL);
 	else
 		egg_test_failed (test, "value is %i", uvalue);
-
-	egg_test_end (test);
 }
 #endif
 

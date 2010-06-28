@@ -32,9 +32,8 @@
 #include <libupower-glib/upower.h>
 
 #include "egg-debug.h"
-#include "egg-color.h"
-#include "egg-array-float.h"
 
+#include "gpm-array-float.h"
 #include "gpm-common.h"
 #include "gpm-stock-icons.h"
 #include "gpm-upower.h"
@@ -235,24 +234,24 @@ gpm_stats_update_smooth_data (GPtrArray *list)
 	GpmPointObj *point;
 	GpmPointObj *point_new;
 	GPtrArray *new;
-	EggArrayFloat *raw;
-	EggArrayFloat *convolved;
-	EggArrayFloat *outliers;
-	EggArrayFloat *gaussian = NULL;
+	GpmArrayFloat *raw;
+	GpmArrayFloat *convolved;
+	GpmArrayFloat *outliers;
+	GpmArrayFloat *gaussian = NULL;
 
-	/* convert the y data to a EggArrayFloat array */
-	raw = egg_array_float_new (list->len);
+	/* convert the y data to a GpmArrayFloat array */
+	raw = gpm_array_float_new (list->len);
 	for (i=0; i<list->len; i++) {
 		point = (GpmPointObj *) g_ptr_array_index (list, i);
-		egg_array_float_set (raw, i, point->y);
+		gpm_array_float_set (raw, i, point->y);
 	}
 
 	/* remove any outliers */
-	outliers = egg_array_float_remove_outliers (raw, 3, 0.1);
+	outliers = gpm_array_float_remove_outliers (raw, 3, 0.1);
 
 	/* convolve with gaussian */
-	gaussian = egg_array_float_compute_gaussian (15, sigma_smoothing);
-	convolved = egg_array_float_convolve (outliers, gaussian);
+	gaussian = gpm_array_float_compute_gaussian (15, sigma_smoothing);
+	convolved = gpm_array_float_convolve (outliers, gaussian);
 
 	/* add the smoothed data back into a new array */
 	new = g_ptr_array_new_with_free_func ((GDestroyNotify) gpm_point_obj_free);
@@ -261,15 +260,15 @@ gpm_stats_update_smooth_data (GPtrArray *list)
 		point_new = g_new0 (GpmPointObj, 1);
 		point_new->color = point->color;
 		point_new->x = point->x;
-		point_new->y = egg_array_float_get (convolved, i);
+		point_new->y = gpm_array_float_get (convolved, i);
 		g_ptr_array_add (new, point_new);
 	}
 
 	/* free data */
-	egg_array_float_free (gaussian);
-	egg_array_float_free (raw);
-	egg_array_float_free (convolved);
-	egg_array_float_free (outliers);
+	gpm_array_float_free (gaussian);
+	gpm_array_float_free (raw);
+	gpm_array_float_free (convolved);
+	gpm_array_float_free (outliers);
 
 	return new;
 }
@@ -620,18 +619,18 @@ gpm_stats_update_info_page_history (UpDevice *device)
 		point->x = (gint32) up_history_item_get_time (item) - offset;
 		point->y = up_history_item_get_value (item);
 		if (up_history_item_get_state (item) == UP_DEVICE_STATE_CHARGING)
-			point->color = egg_color_from_rgb (255, 0, 0);
+			point->color = gpm_color_from_rgb (255, 0, 0);
 		else if (up_history_item_get_state (item) == UP_DEVICE_STATE_DISCHARGING)
-			point->color = egg_color_from_rgb (0, 0, 255);
+			point->color = gpm_color_from_rgb (0, 0, 255);
 		else if (up_history_item_get_state (item) == UP_DEVICE_STATE_PENDING_CHARGE)
-			point->color = egg_color_from_rgb (200, 0, 0);
+			point->color = gpm_color_from_rgb (200, 0, 0);
 		else if (up_history_item_get_state (item) == UP_DEVICE_STATE_PENDING_DISCHARGE)
-			point->color = egg_color_from_rgb (0, 0, 200);
+			point->color = gpm_color_from_rgb (0, 0, 200);
 		else {
 			if (g_strcmp0 (history_type, GPM_HISTORY_RATE_VALUE) == 0)
-				point->color = egg_color_from_rgb (255, 255, 255);
+				point->color = gpm_color_from_rgb (255, 255, 255);
 			else
-				point->color = egg_color_from_rgb (0, 255, 0);
+				point->color = gpm_color_from_rgb (0, 255, 0);
 		}
 		g_ptr_array_add (new, point);
 	}
@@ -723,7 +722,7 @@ gpm_stats_update_info_page_stats (UpDevice *device)
 			point->y = up_stats_item_get_value (item);
 		else
 			point->y = up_stats_item_get_accuracy (item);
-		point->color = egg_color_from_rgb (255, 0, 0);
+		point->color = gpm_color_from_rgb (255, 0, 0);
 		g_ptr_array_add (new, point);
 	}
 

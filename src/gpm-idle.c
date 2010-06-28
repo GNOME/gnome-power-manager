@@ -39,7 +39,7 @@
 #include <gtk/gtk.h>
 
 #include "egg-debug.h"
-#include "egg-idletime.h"
+#include "gpm-idletime.h"
 
 #include "gpm-idle.h"
 #include "gpm-load.h"
@@ -54,7 +54,7 @@
 
 struct GpmIdlePrivate
 {
-	EggIdletime	*idletime;
+	GpmIdletime	*idletime;
 	GpmLoad		*load;
 	GpmSession	*session;
 	GpmIdleMode	 mode;
@@ -80,7 +80,7 @@ G_DEFINE_TYPE (GpmIdle, gpm_idle, G_TYPE_OBJECT)
 /**
  * gpm_idle_mode_to_string:
  **/
-static const gchar *
+const gchar *
 gpm_idle_mode_to_string (GpmIdleMode mode)
 {
 	if (mode == GPM_IDLE_MODE_NORMAL)
@@ -271,9 +271,9 @@ gpm_idle_set_timeout_dim (GpmIdle *idle, guint timeout)
 		idle->priv->timeout_dim = timeout;
 
 		if (timeout > 0)
-			egg_idletime_alarm_set (idle->priv->idletime, GPM_IDLE_IDLETIME_ID, timeout * 1000);
+			gpm_idletime_alarm_set (idle->priv->idletime, GPM_IDLE_IDLETIME_ID, timeout * 1000);
 		else
-			egg_idletime_alarm_remove (idle->priv->idletime, GPM_IDLE_IDLETIME_ID);
+			gpm_idletime_alarm_remove (idle->priv->idletime, GPM_IDLE_IDLETIME_ID);
 	}
 	return TRUE;
 }
@@ -341,7 +341,7 @@ gpm_idle_session_inhibited_changed_cb (GpmSession *session, gboolean is_idle_inh
  * We're idle, something timed out
  **/
 static void
-gpm_idle_idletime_alarm_expired_cb (EggIdletime *idletime, guint alarm_id, GpmIdle *idle)
+gpm_idle_idletime_alarm_expired_cb (GpmIdletime *idletime, guint alarm_id, GpmIdle *idle)
 {
 	egg_debug ("idletime alarm: %i", alarm_id);
 
@@ -356,7 +356,7 @@ gpm_idle_idletime_alarm_expired_cb (EggIdletime *idletime, guint alarm_id, GpmId
  * We're no longer idle, the user moved
  **/
 static void
-gpm_idle_idletime_reset_cb (EggIdletime *idletime, GpmIdle *idle)
+gpm_idle_idletime_reset_cb (GpmIdletime *idletime, GpmIdle *idle)
 {
 	egg_debug ("idletime reset");
 
@@ -388,7 +388,7 @@ gpm_idle_finalize (GObject *object)
 	g_object_unref (idle->priv->load);
 	g_object_unref (idle->priv->session);
 
-	egg_idletime_alarm_remove (idle->priv->idletime, GPM_IDLE_IDLETIME_ID);
+	gpm_idletime_alarm_remove (idle->priv->idletime, GPM_IDLE_IDLETIME_ID);
 	g_object_unref (idle->priv->idletime);
 
 	G_OBJECT_CLASS (gpm_idle_parent_class)->finalize (object);
@@ -439,7 +439,7 @@ gpm_idle_init (GpmIdle *idle)
 	g_signal_connect (idle->priv->session, "idle-changed", G_CALLBACK (gpm_idle_session_idle_changed_cb), idle);
 	g_signal_connect (idle->priv->session, "inhibited-changed", G_CALLBACK (gpm_idle_session_inhibited_changed_cb), idle);
 
-	idle->priv->idletime = egg_idletime_new ();
+	idle->priv->idletime = gpm_idletime_new ();
 	g_signal_connect (idle->priv->idletime, "reset", G_CALLBACK (gpm_idle_idletime_reset_cb), idle);
 	g_signal_connect (idle->priv->idletime, "alarm-expired", G_CALLBACK (gpm_idle_idletime_alarm_expired_cb), idle);
 
@@ -461,239 +461,4 @@ gpm_idle_new (void)
 	}
 	return GPM_IDLE (gpm_idle_object);
 }
-
-/***************************************************************************
- ***                          MAKE CHECK TESTS                           ***
- ***************************************************************************/
-#ifdef EGG_TEST
-#include "egg-test.h"
-#include "gpm-dpms.h"
-
-static GpmIdleMode _mode = 0;
-
-static void
-gpm_idle_test_idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, EggTest *test)
-{
-	_mode = mode;
-	egg_debug ("idle-changed %s", gpm_idle_mode_to_string (mode));
-	egg_test_loop_quit (test);
-}
-
-static gboolean
-gpm_idle_test_delay_cb (EggTest *test)
-{
-	egg_warning ("timing out");
-	egg_test_loop_quit (test);
-	return FALSE;
-}
-
-void
-gpm_idle_test (gpointer data)
-{
-	GpmIdle *idle;
-	gboolean ret;
-	EggTest *test = (EggTest *) data;
-	GpmIdleMode mode;
-	GpmDpms *dpms;
-
-	if (!egg_test_start (test, "GpmIdle"))
-		return;
-
-	/************************************************************/
-	egg_test_title (test, "get object");
-	idle = gpm_idle_new ();
-	if (idle != NULL)
-		egg_test_success (test, NULL);
-	else
-		egg_test_failed (test, "got no object");
-
-	/* set up defaults */
-	gpm_idle_set_check_cpu (idle, FALSE);
-	gpm_idle_set_timeout_dim (idle, 4);
-	gpm_idle_set_timeout_blank (idle, 5);
-	gpm_idle_set_timeout_sleep (idle, 15);
-	g_signal_connect (idle, "idle-changed",
-			  G_CALLBACK (gpm_idle_test_idle_changed_cb), test);
-
-	/************************************************************/
-	egg_test_title (test, "check cpu type");
-	egg_test_assert (test, (idle->priv->check_type_cpu == FALSE));
-
-	/************************************************************/
-	egg_test_title (test, "check timeout dim");
-	egg_test_assert (test, (idle->priv->timeout_dim == 4));
-
-	/************************************************************/
-	egg_test_title (test, "check timeout blank");
-	egg_test_assert (test, (idle->priv->timeout_blank == 5));
-
-	/************************************************************/
-	egg_test_title (test, "check timeout sleep");
-	egg_test_assert (test, (idle->priv->timeout_sleep == 15));
-
-	/************************************************************/
-	egg_test_title (test, "check x_idle");
-	egg_test_assert (test, (idle->priv->x_idle == FALSE));
-
-	/************************************************************/
-	egg_test_title (test, "check blank id");
-	egg_test_assert (test, (idle->priv->timeout_blank_id == 0));
-
-	/************************************************************/
-	egg_test_title (test, "check sleep id");
-	egg_test_assert (test, (idle->priv->timeout_sleep_id == 0));
-
-	/************************************************************/
-	egg_test_title (test, "check normal at startup");
-	mode = gpm_idle_get_mode (idle);
-	if (mode == GPM_IDLE_MODE_NORMAL)
-		egg_test_success (test, NULL);
-	else
-		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_string (mode));
-
-	/************************************************************/
-	g_print ("*****************************\n");
-	g_print ("*** DO NOT MOVE THE MOUSE ***\n");
-	g_print ("*****************************\n");
-	egg_test_loop_wait (test, 2000 + 10000);
-	egg_test_loop_check (test);
-
-	/************************************************************/
-	egg_test_title (test, "check callback mode");
-	if (_mode == GPM_IDLE_MODE_DIM)
-		egg_test_success (test, NULL);
-	else
-		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_string (mode));
-
-	/************************************************************/
-	egg_test_title (test, "check current mode");
-	mode = gpm_idle_get_mode (idle);
-	if (mode == GPM_IDLE_MODE_DIM)
-		egg_test_success (test, NULL);
-	else
-		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_string (mode));
-
-	/************************************************************/
-	egg_test_title (test, "check x_idle");
-	egg_test_assert (test, (idle->priv->x_idle == TRUE));
-
-	/************************************************************/
-	egg_test_title (test, "check blank id");
-	egg_test_assert (test, (idle->priv->timeout_blank_id != 0));
-
-	/************************************************************/
-	egg_test_title (test, "check sleep id");
-	egg_test_assert (test, (idle->priv->timeout_sleep_id == 0));
-
-	/************************************************************/
-	egg_test_loop_wait (test, 5000 + 1000);
-	egg_test_loop_check (test);
-
-	/************************************************************/
-	egg_test_title (test, "check callback mode");
-	if (_mode == GPM_IDLE_MODE_BLANK)
-		egg_test_success (test, NULL);
-	else
-		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_string (mode));
-
-	/************************************************************/
-	egg_test_title (test, "check current mode");
-	mode = gpm_idle_get_mode (idle);
-	if (mode == GPM_IDLE_MODE_BLANK)
-		egg_test_success (test, NULL);
-	else
-		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_string (mode));
-
-	/************************************************************/
-	g_print ("**********************\n");
-	g_print ("*** MOVE THE MOUSE ***\n");
-	g_print ("**********************\n");
-	egg_test_loop_wait (test, G_MAXUINT);
-	egg_test_loop_check (test);
-
-	/************************************************************/
-	egg_test_title (test, "check callback mode");
-	if (_mode == GPM_IDLE_MODE_NORMAL)
-		egg_test_success (test, NULL);
-	else
-		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_string (mode));
-
-	/************************************************************/
-	egg_test_title (test, "check current mode");
-	mode = gpm_idle_get_mode (idle);
-	if (mode == GPM_IDLE_MODE_NORMAL)
-		egg_test_success (test, NULL);
-	else
-		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_string (mode));
-
-	/************************************************************/
-	egg_test_title (test, "check x_idle");
-	egg_test_assert (test, (idle->priv->x_idle == FALSE));
-
-	/************************************************************/
-	egg_test_title (test, "check blank id");
-	egg_test_assert (test, (idle->priv->timeout_blank_id == 0));
-
-	/************************************************************/
-	g_print ("*****************************\n");
-	g_print ("*** DO NOT MOVE THE MOUSE ***\n");
-	g_print ("*****************************\n");
-	egg_test_loop_wait (test, 4000 + 1500);
-	egg_test_loop_check (test);
-
-	/************************************************************/
-	egg_test_title (test, "check current mode");
-	mode = gpm_idle_get_mode (idle);
-	if (mode == GPM_IDLE_MODE_DIM)
-		egg_test_success (test, NULL);
-	else
-		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_string (mode));
-
-	/************************************************************/
-	egg_test_title (test, "check x_idle");
-	egg_test_assert (test, (idle->priv->x_idle == TRUE));
-
-	egg_test_loop_wait (test, 15000);
-	egg_test_loop_check (test);
-
-	/************************************************************/
-	egg_test_title (test, "check current mode");
-	mode = gpm_idle_get_mode (idle);
-	if (mode == GPM_IDLE_MODE_BLANK)
-		egg_test_success (test, NULL);
-	else
-		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_string (mode));
-
-	/************************************************************/
-	egg_test_title (test, "set dpms off");
-	dpms = gpm_dpms_new ();
-	ret = gpm_dpms_set_mode (dpms, GPM_DPMS_MODE_OFF, NULL);
-	egg_test_assert (test, ret);
-
-	/* wait for normal event to be suppressed */
-	g_timeout_add (2000, (GSourceFunc) gpm_idle_test_delay_cb, test);
-	egg_test_loop_wait (test, G_MAXUINT);
-	egg_test_loop_check (test);
-
-	/************************************************************/
-	egg_test_title (test, "check current mode");
-	mode = gpm_idle_get_mode (idle);
-	if (mode == GPM_IDLE_MODE_BLANK)
-		egg_test_success (test, NULL);
-	else
-		egg_test_failed (test, "mode: %s", gpm_idle_mode_to_string (mode));
-
-	/************************************************************/
-	egg_test_title (test, "check x_idle");
-	egg_test_assert (test, (idle->priv->x_idle == TRUE));
-
-	gpm_dpms_set_mode (dpms, GPM_DPMS_MODE_ON, NULL);
-
-	g_object_unref (idle);
-	g_object_unref (dpms);
-
-	egg_test_end (test);
-}
-
-#endif
 

@@ -30,8 +30,6 @@
 #include "gpm-graph-widget.h"
 
 #include "egg-debug.h"
-#include "egg-color.h"
-#include "egg-precision.h"
 
 G_DEFINE_TYPE (GpmGraphWidget, gpm_graph_widget, GTK_TYPE_DRAWING_AREA);
 #define GPM_GRAPH_WIDGET_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_GRAPH_WIDGET, GpmGraphWidgetPrivate))
@@ -691,8 +689,8 @@ gpm_graph_widget_autorange_x (GpmGraphWidget *graph)
 			rounding_x = 10 * 60;
 	}
 
-	graph->priv->start_x = egg_precision_round_down (smallest_x, rounding_x);
-	graph->priv->stop_x = egg_precision_round_up (biggest_x, rounding_x);
+	graph->priv->start_x = gpm_precision_round_down (smallest_x, rounding_x);
+	graph->priv->stop_x = gpm_precision_round_up (biggest_x, rounding_x);
 
 	egg_debug ("Processed(1) range is %i<x<%i",
 		   graph->priv->start_x, graph->priv->stop_x);
@@ -785,8 +783,8 @@ gpm_graph_widget_autorange_y (GpmGraphWidget *graph)
 			rounding_y = 10 * 60;
 	}
 
-	graph->priv->start_y = egg_precision_round_down (smallest_y, rounding_y);
-	graph->priv->stop_y = egg_precision_round_up (biggest_y, rounding_y);
+	graph->priv->start_y = gpm_precision_round_down (smallest_y, rounding_y);
+	graph->priv->stop_y = gpm_precision_round_up (biggest_y, rounding_y);
 
 	/* a factor graph always is centered around zero */
 	if (graph->priv->type_y == GPM_GRAPH_WIDGET_TYPE_FACTOR) {
@@ -822,7 +820,7 @@ static void
 gpm_graph_widget_set_color (cairo_t *cr, guint32 color)
 {
 	guint8 r, g, b;
-	egg_color_to_rgb (color, &r, &g, &b);
+	gpm_color_to_rgb (color, &r, &g, &b);
 	cairo_set_source_rgb (cr, ((gdouble) r)/256.0f, ((gdouble) g)/256.0f, ((gdouble) b)/256.0f);
 }
 

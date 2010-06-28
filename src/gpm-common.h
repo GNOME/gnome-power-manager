@@ -173,12 +173,42 @@ typedef enum {
 	GPM_ACTION_POLICY_INTERACTIVE,
 	GPM_ACTION_POLICY_NOTHING
 } GpmActionPolicy;
+#define	GPM_COLOR_WHITE			0xffffff
+#define	GPM_COLOR_BLACK			0x000000
+#define	GPM_COLOR_RED			0xff0000
+#define	GPM_COLOR_GREEN			0x00ff00
+#define	GPM_COLOR_BLUE			0x0000ff
+#define	GPM_COLOR_CYAN			0x00ffff
+#define	GPM_COLOR_MAGENTA		0xff00ff
+#define	GPM_COLOR_YELLOW		0xffff00
+#define	GPM_COLOR_GREY			0xcccccc
+#define	GPM_COLOR_DARK_RED		0x600000
+#define	GPM_COLOR_DARK_GREEN		0x006000
+#define	GPM_COLOR_DARK_BLUE		0x000060
+#define	GPM_COLOR_DARK_CYAN		0x006060
+#define	GPM_COLOR_DARK_MAGENTA		0x600060
+#define	GPM_COLOR_DARK_YELLOW		0x606000
+#define	GPM_COLOR_DARK_GREY		0x606060
 
 gchar		*gpm_get_timestring				(guint		 time);
 void 		 gpm_help_display				(const gchar	*link_id);
-#ifdef EGG_TEST
-void		 gpm_common_test				(gpointer	 data);
-#endif
+gint		 gpm_precision_round_up				(gfloat		 value,
+								gint		 smallest);
+gint		 gpm_precision_round_down			(gfloat		 value,
+								gint		 smallest);
+guint		 gpm_discrete_from_percent			(guint		 percentage,
+								guint		 levels);
+guint		 gpm_discrete_to_percent			(guint		 discrete,
+								guint		 levels);
+gfloat		 gpm_discrete_to_fraction			(guint		 discrete,
+								guint		 levels);
+guint32		 gpm_color_from_rgb				(guint8		 red,
+								guint8		 green,
+								guint8		 blue);
+void		 gpm_color_to_rgb				(guint32	 color,
+								guint8		*red,
+								guint8		*green,
+								guint8		*blue);
 
 G_END_DECLS
 

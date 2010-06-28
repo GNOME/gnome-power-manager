@@ -26,6 +26,9 @@
 #include <glib/gi18n.h>
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "egg-debug.h"
 #include "gpm-common.h"
@@ -106,21 +109,154 @@ gpm_help_display (const gchar *link_id)
 	g_free (uri);
 }
 
-/***************************************************************************
- ***                          MAKE CHECK TESTS                           ***
- ***************************************************************************/
-#ifdef EGG_TEST
-#include "egg-test.h"
-
-void
-gpm_common_test (gpointer data)
+/**
+ * gpm_precision_round_up:
+ * @value: The input value
+ * @smallest: The smallest increment allowed
+ *
+ * 101, 10	110
+ * 95,  10	100
+ * 0,   10	0
+ * 112, 10	120
+ * 100, 10	100
+ **/
+gint
+gpm_precision_round_up (gfloat value, gint smallest)
 {
-	EggTest *test = (EggTest *) data;
-	if (egg_test_start (test, "GpmCommon") == FALSE)
-		return;
-
-	egg_test_end (test);
+	gfloat division;
+	if (fabs (value) < 0.01)
+		return 0;
+	if (smallest == 0) {
+		egg_warning ("divisor zero");
+		return 0;
+	}
+	division = (gfloat) value / (gfloat) smallest;
+	division = ceilf (division);
+	division *= smallest;
+	return (gint) division;
 }
 
-#endif
+/**
+ * gpm_precision_round_down:
+ * @value: The input value
+ * @smallest: The smallest increment allowed
+ *
+ * 101, 10	100
+ * 95,  10	90
+ * 0,   10	0
+ * 112, 10	110
+ * 100, 10	100
+ **/
+gint
+gpm_precision_round_down (gfloat value, gint smallest)
+{
+	gfloat division;
+	if (fabs (value) < 0.01)
+		return 0;
+	if (smallest == 0) {
+		egg_warning ("divisor zero");
+		return 0;
+	}
+	division = (gfloat) value / (gfloat) smallest;
+	division = floorf (division);
+	division *= smallest;
+	return (gint) division;
+}
+
+/**
+ * gpm_discrete_from_percent:
+ * @percentage: The percentage to convert
+ * @levels: The number of discrete levels
+ *
+ * We have to be carefull when converting from %->discrete as precision is very
+ * important if we want the highest value.
+ *
+ * Return value: The discrete value for this percentage.
+ **/
+guint
+gpm_discrete_from_percent (guint percentage, guint levels)
+{
+	/* check we are in range */
+	if (percentage > 100)
+		return levels;
+	if (levels == 0) {
+		egg_warning ("levels is 0!");
+		return 0;
+	}
+	return ((gfloat) percentage * (gfloat) (levels - 1)) / 100.0f;
+}
+
+/**
+ * gpm_discrete_to_percent:
+ * @hw: The discrete level
+ * @levels: The number of discrete levels
+ *
+ * We have to be carefull when converting from discrete->%.
+ *
+ * Return value: The percentage for this discrete value.
+ **/
+guint
+gpm_discrete_to_percent (guint discrete, guint levels)
+{
+	/* check we are in range */
+	if (discrete > levels)
+		return 100;
+	if (levels == 0) {
+		egg_warning ("levels is 0!");
+		return 0;
+	}
+	return (guint) ((gfloat) discrete * (100.0f / (gfloat) (levels - 1)));
+}
+
+/**
+ * gpm_discrete_to_fraction:
+ * @hw: The discrete level
+ * @levels: The number of discrete levels
+ *
+ * We have to be careful when converting from discrete->fractions.
+ *
+ * Return value: The floating point fraction (0..1) for this discrete value.
+ **/
+gfloat
+gpm_discrete_to_fraction (guint discrete, guint levels)
+{
+	/* check we are in range */
+	if (discrete > levels)
+		return 1.0;
+	if (levels == 0) {
+		egg_warning ("levels is 0!");
+		return 0.0;
+	}
+	return (guint) ((gfloat) discrete / ((gfloat) (levels - 1)));
+}
+
+/**
+ * gpm_color_from_rgb:
+ * @red: The red value
+ * @green: The green value
+ * @blue: The blue value
+ **/
+guint32
+gpm_color_from_rgb (guint8 red, guint8 green, guint8 blue)
+{
+	guint32 color = 0;
+	color += (guint32) red * 0x10000;
+	color += (guint32) green * 0x100;
+	color += (guint32) blue;
+	return color;
+}
+
+/**
+ * gpm_color_to_rgb:
+ * @red: The red value
+ * @green: The green value
+ * @blue: The blue value
+ **/
+void
+gpm_color_to_rgb (guint32 color, guint8 *red, guint8 *green, guint8 *blue)
+{
+	*red = (color & 0xff0000) / 0x10000;
+	*green = (color & 0x00ff00) / 0x100;
+	*blue = color & 0x0000ff;
+}
 

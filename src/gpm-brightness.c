@@ -40,7 +40,6 @@
 #include <unistd.h>
 #endif /* HAVE_UNISTD_H */
 
-#include "egg-discrete.h"
 #include "egg-debug.h"
 #include "egg-string.h"
 
@@ -328,7 +327,7 @@ gpm_brightness_output_get_percentage (GpmBrightness *brightness, RROutput output
 	if (!ret || min == max)
 		return FALSE;
 	egg_debug ("hard value=%i, min=%i, max=%i", cur, min, max);
-	percentage = egg_discrete_to_percent (cur, (max-min)+1);
+	percentage = gpm_discrete_to_percent (cur, (max-min)+1);
 	egg_debug ("percentage %i", percentage);
 	brightness->priv->shared_value = percentage;
 	return TRUE;
@@ -423,7 +422,7 @@ gpm_brightness_output_set (GpmBrightness *brightness, RROutput output)
 	if (!ret || min == max)
 		return FALSE;
 
-	shared_value_abs = egg_discrete_from_percent (brightness->priv->shared_value, (max-min)+1);
+	shared_value_abs = gpm_discrete_from_percent (brightness->priv->shared_value, (max-min)+1);
 	egg_debug ("percent=%i, absolute=%i", brightness->priv->shared_value, shared_value_abs);
 
 	egg_debug ("hard value=%i, min=%i, max=%i", cur, min, max);
@@ -590,7 +589,7 @@ gpm_brightness_set (GpmBrightness *brightness, guint percentage, gboolean *hw_ch
 	if (!ret) {
 		if (brightness->priv->extension_levels < 0)
 			brightness->priv->extension_levels = gpm_brightness_helper_get_value ("get-max-brightness");
-		brightness->priv->extension_current = egg_discrete_from_percent (percentage, brightness->priv->extension_levels+1);
+		brightness->priv->extension_current = gpm_discrete_from_percent (percentage, brightness->priv->extension_levels+1);
 		ret = gpm_brightness_helper_set_value ("set-brightness", brightness->priv->extension_current);
 	}
 
@@ -639,7 +638,7 @@ gpm_brightness_get (GpmBrightness *brightness, guint *percentage)
 		if (brightness->priv->extension_levels < 0)
 			brightness->priv->extension_levels = gpm_brightness_helper_get_value ("get-max-brightness");
 		brightness->priv->extension_current = gpm_brightness_helper_get_value ("get-brightness");
-		percentage_local = egg_discrete_to_percent (brightness->priv->extension_current, brightness->priv->extension_levels+1);
+		percentage_local = gpm_discrete_to_percent (brightness->priv->extension_current, brightness->priv->extension_levels+1);
 		ret = TRUE;
 	}
 
