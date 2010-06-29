@@ -14,7 +14,7 @@ INCLUDES =						\
 	$(DBUS_CFLAGS)					\
 	$(GNOME_CFLAGS)					\
 	$(X11_CFLAGS)					\
-	$(LIBNOTIFY_CFLAGS)				\
+	$(NOTIFY_CFLAGS)				\
 	$(CANBERRA_CFLAGS)				\
 	$(GSTREAMER_CFLAGS)				\
 	$(CONTROL_CENTER_CFLAGS)			\
@@ -179,7 +179,7 @@ gnome_power_manager_LDADD =				\
 	$(DBUS_LIBS)					\
 	$(X11_LIBS)						\
 	$(CANBERRA_LIBS)				\
-	$(LIBNOTIFY_LIBS)				\
+	$(NOTIFY_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
 	$(UPOWER_LIBS)					\
 	-lm
@@ -219,7 +219,7 @@ gnome_power_self_test_LDADD =				\
 	$(UPOWER_LIBS)					\
 	$(DBUS_LIBS)					\
 	$(X11_LIBS)					\
-	$(LIBNOTIFY_LIBS)				\
+	$(NOTIFY_LIBS)				\
 	$(GPM_EXTRA_LIBS)				\
 	-lm
 

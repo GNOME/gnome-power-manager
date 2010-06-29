@@ -139,7 +139,7 @@ G_BEGIN_DECLS
 #define GS_CONF_PREF_LOCK_ENABLED			GS_CONF_DIR "/lock_enabled"
 
 /* libnotify dummy code */
-#ifndef HAVE_LIBNOTIFY
+#ifndef HAVE_NOTIFY
 #define	notify_init(f1)						/* nothing */
 #define	notify_is_initted(f1)					FALSE
 #define	notify_notification_close(f1,f2)			TRUE

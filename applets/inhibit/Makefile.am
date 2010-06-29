@@ -4,7 +4,7 @@ INCLUDES =							\
 	$(DBUS_CFLAGS)						\
 	$(GNOME_CFLAGS)						\
 	$(PANEL_CFLAGS)						\
-	$(LIBNOTIFY_CFLAGS)					\
+	$(NOTIFY_CFLAGS)					\
 	$(GTKUNIQUE_CFLAGS)					\
 	-DBINDIR=\"$(bindir)\"			 		\
 	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"		\
