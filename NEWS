@@ -1,3 +1,22 @@
+Version 2.31.4
+~~~~~~~~~~~~~~
+Released: 2010-07-01
+
+* Translations
+ - Add Esperanto translation (Kristjan Schmidt)
+ - Updated Estonian translation (Ivar Smolin)
+ - Updated Estonian translation (Mattias Põldaru)
+
+* New Features:
+ - Port the preferences dialog to libgnome-control-center (Richard Hughes)
+ - Use the GSetting enum functionality (Richard Hughes)
+ - Convert from our homegrown test framework to GTest (Richard Hughes)
+
+* Bugfix:
+ - Do not assume the lid is open at boot. Fixes #622026 (Richard Hughes)
+ - Do not show the prefs menu on LiveCD's and with GDM. Fixes #621674 (Richard Hughes)
+ - Depend on gnome-control-center 2.31.4 so the GTK dep is correct (Richard Hughes)
+
 Version 2.31.3
 ~~~~~~~~~~~~~~
 Released: 2010-06-18
