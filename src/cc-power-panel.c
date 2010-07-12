@@ -206,11 +206,8 @@ cc_power_panel_setup_action_combo (CcPowerPanel *panel, const gchar *widget_name
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Ask me"));
 			g_ptr_array_add (array, GINT_TO_POINTER (policy));
 		} else if (policy == GPM_ACTION_POLICY_NOTHING) {
-			/* we only add do nothing in the GUI if the user has explicitly specified this in GConf */
-			if (value == GPM_ACTION_POLICY_NOTHING) {
-				gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Do nothing"));
-				g_ptr_array_add (array, GINT_TO_POINTER (policy));
-			}
+			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Do nothing"));
+			g_ptr_array_add (array, GINT_TO_POINTER (policy));
 		} else {
 			g_warning ("Unknown action read from settings: %i", policy);
 		}
