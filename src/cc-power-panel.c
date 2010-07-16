@@ -111,15 +111,15 @@ static void
 cc_power_panel_action_time_changed_cb (GtkWidget *widget, CcPowerPanel *panel)
 {
 	guint value;
-	const gint *values;
+	const GArray *values;
 	const gchar *gpm_pref_key;
 	guint active;
 
-	values = (const gint *) g_object_get_data (G_OBJECT (widget), "values");
+	values = (const GArray *) g_object_get_data (G_OBJECT (widget), "values");
 	gpm_pref_key = (const gchar *) g_object_get_data (G_OBJECT (widget), "settings_key");
 
 	active = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
-	value = values[active];
+	value = g_array_index (values, gint, active);
 
 	g_debug ("Changing %s to %i", gpm_pref_key, value);
 	g_settings_set_int (panel->priv->settings, gpm_pref_key, value);
@@ -232,17 +232,31 @@ cc_power_panel_setup_action_combo (CcPowerPanel *panel, const gchar *widget_name
 }
 
 /**
+ * cc_power_panel_delete_array:
+ **/
+static void
+cc_power_panel_delete_array (GArray *array)
+{
+	g_array_free (array, TRUE);
+}
+
+/**
  * cc_power_panel_setup_time_combo:
  **/
 static void
 cc_power_panel_setup_time_combo (CcPowerPanel *panel, const gchar *widget_name,
-			    const gchar *gpm_pref_key, const gint *values)
+			    const gchar *gpm_pref_key, const gint *values_in)
 {
 	guint value;
 	gchar *text;
 	guint i;
+	gint values_in_len;
+	gint loop_value;
 	gboolean is_writable;
+	gboolean found_value = FALSE;
+	gint found_index = -1;
 	GtkWidget *widget;
+	GArray *values;
 
 	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, widget_name));
 	cc_power_panel_set_combo_simple_text (widget);
@@ -251,15 +265,37 @@ cc_power_panel_setup_time_combo (CcPowerPanel *panel, const gchar *widget_name,
 	is_writable = g_settings_is_writable (panel->priv->settings, gpm_pref_key);
 	gtk_widget_set_sensitive (widget, is_writable);
 
+	/* Search values to see if current value is already listed.  If not,
+	   we will add it ourselves. */
+	for (i=0; values_in[i] != -1; i++) {
+		if (value == values_in[i])
+			found_value = TRUE;
+		if (found_index == -1 && (values_in[i] == 0 || value < values_in[i]))
+			found_index = i;
+	}
+	values_in_len = i + 1;
+	if (value == 0) /* 'Never' should always be last */
+		found_index = values_in_len - 1;
+
+	/* Build array of values */
+	values = g_array_sized_new (FALSE, FALSE, sizeof (gint),
+	                            values_in_len + (found_value ? 0 : 1));
+	g_array_append_vals (values, values_in, values_in_len);
+	if (!found_value)
+		g_array_insert_val (values, found_index, value);
+
 	g_object_set_data (G_OBJECT (widget), "settings_key", (gpointer) gpm_pref_key);
-	g_object_set_data (G_OBJECT (widget), "values", (gpointer) values);
+	g_object_set_data_full (G_OBJECT (widget), "values", (gpointer) values,
+	                        (GDestroyNotify) cc_power_panel_delete_array);
 
 	/* add each time */
-	for (i=0; values[i] != -1; i++) {
+	for (i=0; g_array_index (values, gint, i) != -1; i++) {
 
+		loop_value = g_array_index (values, gint, i);
+ 
 		/* get translation for number of seconds */
-		if (values[i] != 0) {
-			text = gpm_get_timestring (values[i]);
+		if (loop_value != 0) {
+			text = gpm_get_timestring (loop_value);
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), text);
 			g_free (text);
 		} else {
@@ -267,7 +303,7 @@ cc_power_panel_setup_time_combo (CcPowerPanel *panel, const gchar *widget_name,
 		}
 
 		/* matches, so set default */
-		if (value == values[i])
+		if (value == loop_value)
 			 gtk_combo_box_set_active (GTK_COMBO_BOX (widget), i);
 	}
 
