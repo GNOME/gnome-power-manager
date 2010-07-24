@@ -5,13 +5,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager master\n"
-"POT-Creation-Date: 2009-10-01 15:05+0000\n"
-"PO-Revision-Date: 2009-11-18 14:34+0800\n"
-"Last-Translator: 苏运强 <wzssyqa@gmail.com>\n"
-"Language-Team: Chinese (simplified)\n"
+"POT-Creation-Date: 2010-07-15 14:16+0000\n"
+"PO-Revision-Date: 2010-07-15 22:21+0800\n"
+"Last-Translator: YunQiang Su <wzssyqa@gmail.com>\n"
+"Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Chinese\n"
+"X-Poedit-Country: CHINA\n"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
@@ -287,7 +289,7 @@ msgstr "gnome-power-manager"
 
 #: C/gnome-power-manager.xml:113(title)
 msgid "Introduction"
-msgstr "入门"
+msgstr "介绍"
 
 #: C/gnome-power-manager.xml:119(secondary)
 msgid "Manual"
@@ -324,7 +326,7 @@ msgid ""
 "press <keycap>Return</keycap>:"
 msgstr ""
 "键入 <command>gnome-power-manager --verbose --no-daemon</command>，然后按 "
-"<keycap>Return</keycap>："
+"<keycap>回车键</keycap>："
 
 #: C/gnome-power-manager.xml:150(title)
 msgid "Notification Messages"
@@ -335,7 +337,7 @@ msgid ""
 "When <application>GNOME Power Manager</application> has started, the "
 "following notifications may be displayed."
 msgstr ""
-"<application>GNOME Power Manager</application>启动以后，将会显示下列消息。"
+"<application>GNOME 电源管理器</application>启动以后，将会显示下列消息。"
 
 #: C/gnome-power-manager.xml:156(title)
 msgid "AC Adapter Unplugged"
@@ -343,7 +345,7 @@ msgstr "交流电源适配器已拔出"
 
 #: C/gnome-power-manager.xml:158(title)
 msgid "GNOME Power Manager Notification when AC adapter is removed"
-msgstr "交流适配器移除后，GNOME 电源管理器将会提示"
+msgstr "交流适配器移除后，GNOME 电源管理器的提示"
 
 #: C/gnome-power-manager.xml:168(para)
 msgid ""
@@ -355,12 +357,12 @@ msgstr ""
 
 #: C/gnome-power-manager.xml:176(title)
 msgid "Fully Charged"
-msgstr "全部更改"
+msgstr "充电完成"
 
 #: C/gnome-power-manager.xml:178(title)
 msgid ""
 "GNOME Power Manager Notification when laptop primary battery is fully charged"
-msgstr "笔记本主电池充满时，GNOME 电源管理器将提示"
+msgstr "笔记本主电池充满时，GNOME 电源管理器的提示"
 
 #: C/gnome-power-manager.xml:188(para)
 msgid ""
@@ -377,8 +379,8 @@ msgid ""
 "from showing unwanted repeat notifications if the battery is incorrectly "
 "reporting the charged status."
 msgstr ""
-"电池电量低于95%后将只有一次重复提示，知道电池再次充满。这防止一些机器电池状态"
-"报告不准确而显示一些不希望的提示。"
+"只有在电池电量低于 95% 时重复一次提示，然后直到电池再次充满。这防止一些机器电"
+"池状态报告不准确而显示一些不希望的提示。"
 
 #: C/gnome-power-manager.xml:204(title)
 msgid "Power Low"
@@ -388,7 +390,7 @@ msgstr "电量低"
 msgid ""
 "When the battery is low, you will receive the following notification. You "
 "should consider switching to AC power really soon."
-msgstr "电池电量低时，您将收到下边的提示。您应该考虑马上切换到交流电源。"
+msgstr "电池电量低时，您将收到如下提示。您应该考虑马上切换到交流电源。"
 
 #: C/gnome-power-manager.xml:210(title)
 msgid "GNOME Power Manager Notification when battery power is low"
@@ -407,13 +409,12 @@ msgid "Power Critical"
 msgstr "电量严重不足"
 
 #: C/gnome-power-manager.xml:229(para)
-#, fuzzy
 msgid ""
 "When the computer has run out of power, it will show this notification "
 "explaining what action is required. You can change the critical low action "
 "using the preferences tool."
 msgstr ""
-"电脑将要没电时，将会显示提示解释要求的操作。您可以使用首选项工具更改这个临界"
+"电脑将要没电时，将会显示提示需要进行的操作。您可以使用首选项工具更改这个临界"
 "动作。"
 
 #: C/gnome-power-manager.xml:235(title)
@@ -463,13 +464,13 @@ msgid ""
 "internal IPC. This allows other applications to query and display the data "
 "if required."
 msgstr ""
-"这已经从先前版本的 GNOME 电源管理器信息窗口中移除了，因为现在使用 DBUS 数据接"
-"口而不是内部 IPC。这允许其它程序需要时请求和显示数据。"
+"这已经从先前版本的 GNOME 电源管理器信息窗口中移除了，因为现在使用 D-BUS 数据"
+"接口而不是内部 IPC。这允许其它程序需要时请求和显示数据。"
 
 # 根本看不懂这句哦
 #: C/gnome-power-manager.xml:286(title)
 msgid "Power History going from battery power to AC"
-msgstr ""
+msgstr "从电池供电到交流电供电的历史记录"
 
 #: C/gnome-power-manager.xml:296(para)
 msgid ""
@@ -518,16 +519,15 @@ msgid ""
 "limitations where the rate is only sent from the battery management chip, "
 "rather than the power management chip on the motherboard."
 msgstr ""
-"当没有充电或放电时，或处于挂起状态时，您真的不会从电脑收到比率数据。这是因为"
-"鉴于硬件的限制，即这个比率信息只是从电池管理芯片而不是主板上的电源管理芯片。"
+"当没有充电或放电时，或处于挂起状态时，您绝不会从电脑收到比率数据。这是因为鉴"
+"于硬件的限制，即这个比率信息只是从电池管理芯片而不是主板上的电源管理芯片。"
 
 #: C/gnome-power-manager.xml:340(title)
-#, fuzzy
 msgid "Estimated Time History"
 msgstr "估计时间的历史"
 
+# 不懂
 #: C/gnome-power-manager.xml:341(para)
-#, fuzzy
 msgid ""
 "This graph shows the estimated charge history for the composite primary "
 "battery. This line represents the amount of time required until charged, or "
@@ -535,7 +535,7 @@ msgid ""
 "when the rate decreases and down when the rate increases. A legend is shown "
 "with this graph when data events have been received."
 msgstr ""
-"这个图显示复合主电池估计剩余时间的历史。这条线代表直到充电的时间，或者直达放"
+"这个图显示复合主电池估计剩余时间的历史。这条线代表直到充电的时间，或者直到放"
 "电的时间。这条线将按比例地在比率下降时上升，在比率上升时下降。当接收到数据事"
 "件时，一个说明将随着本图显示。"
 
@@ -596,18 +596,17 @@ msgstr "这允许一个高能耗的计算机在空闲或不需要全速运行时
 
 #: C/gnome-power-manager.xml:422(title)
 msgid "General Preferences"
-msgstr "通用首选项"
+msgstr "常规首选项"
 
 #: C/gnome-power-manager.xml:424(title)
 msgid "GNOME Power Manager general tab"
-msgstr "GNOME 电源管理器通用标签"
+msgstr "GNOME 电源管理器常规标签"
 
 #: C/gnome-power-manager.xml:436(title)
 msgid "Session and system idle times"
 msgstr "会话和系统空闲时间"
 
 #: C/gnome-power-manager.xml:437(para)
-#, fuzzy
 msgid ""
 "<command>gnome-screensaver</command> is a session daemon that monitors user "
 "input, and if the mouse has not been moved, or the keyboard been pressed "
@@ -619,7 +618,9 @@ msgid ""
 msgstr ""
 "<command>gnome-screensaver</command> 是一个监视用户输入的会话守护进程，如果鼠"
 "标和键盘没有动作，就开始计算时间。当这个时间到达 <command>gnome-screensaver-"
-"preferences</command> 中设置的值时，the login is marked as 'session idle'。"
+"preferences</command> 中设置的值时，这个登录会标记为空闲会话。"
+"<application>GNOME 电源管理</application> 执行所有空闲会话动作，比如启用低能"
+"耗模式和降低笔记本面板亮度。"
 
 #: C/gnome-power-manager.xml:449(title)
 msgid ""
@@ -635,12 +636,12 @@ msgid ""
 "idle, then the idle action is performed, which is usually to turn off the "
 "screen, or to suspend or hibernate."
 msgstr ""
-"只要会话被标记为空闲的，<application>GNOME 电源管理器</application>启动一个计"
-"时器。当这个时间达到 <command>gnome-power-preferences</command> 中设置的时间"
-"点，并且 CPU 负载仍然是空时，执行空闲动作，通常是关闭屏幕或者挂起、休眠。"
+"只要会话被标记为空闲的，<application>GNOME 电源管理器</application>启动它"
+"的“system”计时器。当这个时间达到 <command>gnome-power-preferences</command> "
+"中设置的时间点，并且 CPU 负载仍然是空时，执行空闲动作，通常是关闭屏幕或者挂"
+"起、休眠。"
 
 #: C/gnome-power-manager.xml:467(para)
-#, fuzzy
 msgid ""
 "To make this clearer, the sliders in <command>gnome-power-preferences</"
 "command> are set to start at the value of the session-timeout + 1 minute, as "
@@ -649,8 +650,8 @@ msgid ""
 "preferences</command> then the start of the sliders in <command>gnome-power-"
 "preferences</command> will change accordingly."
 msgstr ""
-"为了清洁，<command>gnome-power-preferences</command>上的滑动条被设置为会话过"
-"时时间加一分钟，这样就不会在会话被标记为空闲之前触发。如果调整了 "
+"为了确保正确，<command>gnome-power-preferences</command>上的滑动条被设置为会"
+"话过时时间加一分钟，这样就不会在会话被标记为空闲之前触发。如果调整了 "
 "<command>gnome-screensaver-preferences</command> 中的会话空闲时间值，"
 "<command>gnome-power-preferences</command> 中的滑动条开始值也会随之调整。"
 
@@ -659,7 +660,6 @@ msgid "Advanced Preferences"
 msgstr "高级选项"
 
 #: C/gnome-power-manager.xml:482(title)
-#, fuzzy
 msgid "Screen Dim Brightness"
 msgstr "屏幕亮度"
 
@@ -682,9 +682,9 @@ msgid ""
 "\" in gnome-screensaver when the lid is closed, or the system performs a "
 "suspend or hibernate action."
 msgstr ""
-"默认的，GNOME 电源管理器支持简单的锁定计划。这意味着，如果在 gnome-"
-"screensaver 中设置了“锁定屏幕”，当笔记本的盖子合上或进行挂起或休眠操作时，屏"
-"幕将会锁定。"
+"默认的，<application>GNOME 电源管理器</application>支持简单的锁定计划。这意味"
+"着，如果在 gnome-screensaver 中设置了“锁定屏幕”，当笔记本的盖子合上或进行挂起"
+"或休眠操作时，屏幕将会锁定。"
 
 #: C/gnome-power-manager.xml:499(para)
 msgid ""
@@ -722,7 +722,7 @@ msgstr "/apps/gnome-power-manager/lock/hibernate"
 msgid ""
 "The lock policy for gnome-screensaver is ignored until the simple mode is re-"
 "enabled."
-msgstr "这个 gnome-screensaver 锁定策略将会被忽略直到简单模式从新启用。"
+msgstr "这个 gnome-screensaver 锁定策略将会被忽略直到简单模式重新启用。"
 
 #: C/gnome-power-manager.xml:545(title)
 msgid "GNOME Power Applets"
@@ -744,14 +744,13 @@ msgstr ""
 
 #: C/gnome-power-manager.xml:556(title)
 msgid "Brightness applet drop-down."
-msgstr "亮度小工具上下拉动条"
+msgstr "亮度小工具滚动条。"
 
 #: C/gnome-power-manager.xml:568(para)
 msgid "You will not get the slider if your hardware is not supported."
-msgstr "如果硬件不支持，您不会获得滑动条。"
+msgstr "如果硬件不支持，您不会获得滚动条。"
 
 #: C/gnome-power-manager.xml:575(title)
-#, fuzzy
 msgid "Inhibit Applet"
 msgstr "电源管理器阻止管理小程序"
 
@@ -795,7 +794,7 @@ msgstr "什么是电池容量？"
 msgid ""
 "Capacity is how much charge your battery can store compared to its "
 "manufacturer's guidelines."
-msgstr "容量是你的电池能容纳的电量相比它的制造商的指南上的。"
+msgstr "容量是你的电池能容纳的电量与它的制造商的指南上给出的值的比值。"
 
 #: C/gnome-power-manager.xml:617(title)
 msgid ""
@@ -805,7 +804,7 @@ msgstr "此图显示典型锂电池数百次充放电之后的电量。"
 
 #: C/gnome-power-manager.xml:632(title)
 msgid "What's the difference between suspend and hibernate?"
-msgstr "挂起和休眠有啥不同？"
+msgstr "挂起和休眠有什么不同？"
 
 #: C/gnome-power-manager.xml:633(para)
 msgid ""
@@ -815,16 +814,19 @@ msgid ""
 "until normal activity is resumed. It will not resume until signaled by an "
 "external event such as a keyboard button press. It generally takes a few "
 "seconds to suspend and then resume your computer."
-msgstr "挂起状态是一个节能特征，将程序信息留在内存中，只有很低的能源消耗。"
+msgstr ""
+"挂起状态是一个节能特性，将程序信息留在内存中，只有很低的能源消耗供给内存中运"
+"行的程序数据。当计算机处于挂起状态，将不能进行各种操作。除非被外部的事件信"
+"号，比如按下键盘来唤醒，不会恢复。通常挂起和唤醒计算机只需几秒时间。"
 
 #: C/gnome-power-manager.xml:643(para)
 msgid ""
-"You still use a small amount of battery power whilst suspended, so is not "
+"You still use a small amount of battery power while suspended, so is not "
 "recommended for the low power action. If you remove AC power on a desktop, "
 "or run out of battery power on a laptop then you will lose your work."
 msgstr ""
-"当挂起时，仍然使用电池的少量电力，所以不推荐这种低点量的操作。如果你移除台式"
-"机上的交流电源或者笔记本上的电池没电了，将会丢失你的正在进行的工作。"
+"当挂起时，仍然使用电池的少量电力，所以不特别推荐这种低电量的操作。如果你关闭"
+"了台式机上的交流电源或者笔记本上的电池没电了，将会丢失你的正在进行的工作。"
 
 #: C/gnome-power-manager.xml:650(para)
 msgid ""
@@ -836,15 +838,17 @@ msgid ""
 "lost. It can take up to a minute or more to hibernate and wake your computer."
 msgstr ""
 "休眠模式将计算机的状态完全保存到硬盘，然后切断电源，所以计算机表现为关闭。它"
-"将不会恢复直到一个外部信号，比如键盘的按键被按下。这是可以达到的最低电能消耗"
-"的睡眠状态。如果移除台式机的交流电源或笔记本的电池耗光，工作也不会丢失。休眠"
-"和唤醒电脑将可能消耗一分钟或更多的时间。"
+"将不会恢复，除非收到一个外部信号，比如键盘的按键被按下。这是可以达到的最低电"
+"能消耗的睡眠状态。如果移除台式机的交流电源或笔记本的电池耗光，工作也不会丢"
+"失。休眠和唤醒电脑将可能消耗一分钟或更多的时间。"
 
 #: C/gnome-power-manager.xml:663(title)
 msgid ""
 "My monitor is broken and treats DPMS standby and off states as 'no-signal' "
 "which leaves the monitor powered on."
 msgstr ""
+"显示器损坏了，将 DPMS 待机和关闭状态为辨认成“无信号”，让显示器的电源一直开"
+"着。"
 
 #: C/gnome-power-manager.xml:667(para)
 msgid ""
@@ -854,6 +858,11 @@ msgid ""
 "and <literal>/apps/gnome-power-manager/backlight/dpms_method_battery</"
 "literal> to one of the modes that work, e.g. standby, suspend or off."
 msgstr ""
+"您得使用 <application>GNOME 电源管理</application> 来更改 DPMS 挂起模式，打"
+"开 <command>gconf-editor</command>，依次找到 <literal>/apps/gnome-power-"
+"manager/backlight/dpms_method_ac</literal> 和 <literal>/apps/gnome-power-"
+"manager/backlight/dpms_method_battery</literal>，设定为一个工作的模式，例如待"
+"机、挂起或关闭。"
 
 #: C/gnome-power-manager.xml:677(title)
 msgid ""
@@ -869,6 +878,11 @@ msgid ""
 "false. You can do this easily by doing: <command> gconftool-2 --set --type "
 "bool /apps/gnome-power-manager/general/use_time_for_policy false </command>"
 msgstr ""
+"您可能要使用百分比来管理 g-p-m 的策略数据，打开 <command>gconf-editor</"
+"command>，然后更改 <command>/apps/gnome-power-manager/general/"
+"use_time_for_policy</command> 键值为 false。您可以用这个命令来方便地操作： "
+"<command> gconftool-2 --set --type bool /apps/gnome-power-manager/general/"
+"use_time_for_policy false </command>。"
 
 #: C/gnome-power-manager.xml:692(para)
 msgid ""
@@ -897,20 +911,18 @@ msgid ""
 msgstr "我正在使用 ACPI。为什么事件( 例如移除交流适配器)花费这么长时间注册？"
 
 #: C/gnome-power-manager.xml:716(para)
-#, fuzzy
 msgid "One of two things might be the problem."
-msgstr "两者之一问题所在。"
+msgstr "可能是如下两个原因引起了这个问题。"
 
 #: C/gnome-power-manager.xml:721(para)
 msgid "HAL might not be running the addon that captures the ACPI event."
 msgstr "HAL 可能没有运行捕获 ACPI 事件的插件。"
 
 #: C/gnome-power-manager.xml:726(para)
-#, fuzzy
 msgid ""
 "You BIOS could be faulty, and might need a work-around. Please send a bug "
 "report."
-msgstr "你的 BIOS 可能损坏了，也可能需要work-around。请报告bug。"
+msgstr "你的 BIOS 可能损坏了，可能需要一个解决方案，请发送 bug 反馈。"
 
 #: C/gnome-power-manager.xml:732(para)
 msgid ""
@@ -928,16 +940,15 @@ msgid ""
 "initscript. An alternative to this is to use acpid, rather than the kernel "
 "proc file."
 msgstr ""
-"且检查 <command>hald-addon-acpi</command> 进程。如果它没有运行，请使用带 "
-"<command>--retain-privileges</command> 选项的 <command>haldaemon</command> 启"
-"动脚本确定 HAL 正在运行。一个替代的方法是使用 acpid 而不是内核 proc 文件。"
+"且检查 <command>hald-addon-acpi</command> 进程。如果它没有运行，请确定 "
+"<command>haldaemon</command> 启动脚本中的 HAL 是使用了 <command>--retain-"
+"privileges</command> 选项。一个替代的方法是使用 acpid 而不是内核 proc 文件。"
 
 #: C/gnome-power-manager.xml:748(title)
 msgid "About"
 msgstr "关于"
 
 #: C/gnome-power-manager.xml:749(para)
-#, fuzzy
 msgid ""
 "GNOME Power Manager was written by Richard Hughes <email>richard@hughsie."
 "com</email>. To find more information about GNOME Power Manager, please "
@@ -946,7 +957,7 @@ msgid ""
 "ulink>."
 msgstr ""
 "GNOME 电源管理器由  Richard Hughes <email>richard@hughsie.com</email> 编写。"
-"要获取 GNOME 电源管理器的更多消息，请访问 <ulink url=\"http://www.gnome.org/"
+"要获取 GNOME 电源管理器的更多信息，请访问 <ulink url=\"http://www.gnome.org/"
 "projects/gnome-power-manager\" type=\"http\"><application>GNOME 电源管理器</"
 "application> 网页</ulink>。"
 
@@ -979,4 +990,6 @@ msgstr ""
 #. Put one translator per line, in the form of NAME <EMAIL>, YEAR1, YEAR2
 #: C/gnome-power-manager.xml:0(None)
 msgid "translator-credits"
-msgstr "苏运强 wzssyqa@gmail.com"
+msgstr ""
+"YunQiang Su <wzssyqa@gmail.com>, 2009\n"
+"TeliuTe <teliute@163.com>, 2010"
