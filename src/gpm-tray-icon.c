@@ -162,7 +162,7 @@ gpm_tray_icon_show_info_cb (GtkMenuItem *item, gpointer data)
 static void
 gpm_tray_icon_show_preferences_cb (GtkMenuItem *item, gpointer data)
 {
-	const gchar *command = "gnome-power-preferences";
+	const gchar *command = "gnome-control-center power";
 
 	if (g_spawn_command_line_async (command, NULL) == FALSE)
 		egg_warning ("Couldn't execute command: %s", command);
