@@ -250,13 +250,51 @@ out:
 }
 
 /**
+ *  gpm_idle_adjust_timeout_dim:
+ *  @idle_time: The new timeout we want to set, in seconds.
+ *  @timeout: Current idle time, in seconds.
+ *
+ *  On slow machines, or machines that have lots to load duing login,
+ *  the current idle time could be bigger than the requested timeout.
+ *  In this case the scheduled idle timeout will never fire, unless
+ *  some user activity (keyboard, mouse) resets the current idle time.
+ *  Instead of relying on user activity to correct this issue, we need
+ *  to adjust timeout, as related to current idle time, so the idle
+ *  timeout will fire as designed.
+ *
+ *  Return value: timeout to set, adjusted acccording to current idle time.
+ **/
+static guint
+gpm_idle_adjust_timeout_dim (guint idle_time, guint timeout)
+{
+	/* allow 2 sec margin for messaging delay. */
+	idle_time += 2;
+
+	/* Double timeout until it's larger than current idle time.
+	 * Give up for ultra slow machines. (86400 sec = 24 hours) */
+	while (timeout < idle_time && timeout < 86400 && timeout > 0) {
+		timeout *= 2;
+	}
+	return timeout;
+}
+
+/**
  * gpm_idle_set_timeout_dim:
  * @timeout: The new timeout we want to set, in seconds
  **/
 gboolean
 gpm_idle_set_timeout_dim (GpmIdle *idle, guint timeout)
 {
+	gint64 idle_time_in_msec;
+	guint timeout_adjusted;
+
 	g_return_val_if_fail (GPM_IS_IDLE (idle), FALSE);
+
+	idle_time_in_msec = gpm_idletime_get_time (idle->priv->idletime);
+	timeout_adjusted  = gpm_idle_adjust_timeout_dim (idle_time_in_msec / 1000, timeout);
+	egg_debug ("Current idle time=%lldms, timeout was %us, becomes %us after adjustment",
+		   idle_time_in_msec, timeout, timeout_adjusted);
+	timeout = timeout_adjusted;
 
 	egg_debug ("Setting dim idle timeout: %ds", timeout);
 	if (idle->priv->timeout_dim != timeout) {
