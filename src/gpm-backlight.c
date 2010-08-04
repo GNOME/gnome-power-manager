@@ -543,6 +543,7 @@ static void
 idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *backlight)
 {
 	gboolean ret;
+	gboolean is_active;
 	GError *error = NULL;
 	gboolean on_battery;
 	GpmDpmsMode dpms_mode;
@@ -552,7 +553,12 @@ idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *backlight)
 		return;
 
 	/* don't dim or undim the screen unless we are on the active console */
-	if (!egg_console_kit_is_active (backlight->priv->consolekit)) {
+	ret = egg_console_kit_is_active (backlight->priv->consolekit, &is_active, &error);
+	if (!ret) {
+		egg_warning ("failed to get console active status: %s", error->message);
+		g_error_free (error);
+	}
+	if (!is_active) {
 		egg_debug ("ignoring as not on active console");
 		return;
 	}

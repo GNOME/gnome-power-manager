@@ -776,6 +776,25 @@ gpm_manager_idle_do_sleep (GpmManager *manager)
 }
 
 /**
+ * gpm_manager_is_active:
+ **/
+static gboolean
+gpm_manager_is_active (GpmManager *manager)
+{
+	gboolean ret;
+	gboolean is_active = TRUE;
+	GError *error = NULL;
+
+	/* if we fail, assume we are on active console */
+	ret = egg_console_kit_is_active (manager->priv->console, &is_active, &error);
+	if (!ret) {
+		egg_warning ("failed to get active status: %s", error->message);
+		g_error_free (error);
+	}
+	return is_active;
+}
+
+/**
  * gpm_manager_idle_changed_cb:
  * @idle: The idle class instance
  * @mode: The idle mode, e.g. GPM_IDLE_MODE_BLANK
@@ -790,7 +809,7 @@ static void
 gpm_manager_idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmManager *manager)
 {
 	/* ConsoleKit says we are not on active console */
-	if (!egg_console_kit_is_active (manager->priv->console)) {
+	if (!gpm_manager_is_active (manager)) {
 		egg_debug ("ignoring as not on active console");
 		return;
 	}
@@ -919,7 +938,7 @@ gpm_manager_button_pressed_cb (GpmButton *button, const gchar *type, GpmManager 
 	egg_debug ("Button press event type=%s", type);
 
 	/* ConsoleKit says we are not on active console */
-	if (!egg_console_kit_is_active (manager->priv->console)) {
+	if (!gpm_manager_is_active (manager)) {
 		egg_debug ("ignoring as not on active console");
 		return;
 	}
@@ -1019,7 +1038,7 @@ gpm_manager_client_changed_cb (UpClient *client, GpmManager *manager)
 	manager->priv->on_battery = on_battery;
 
 	/* ConsoleKit says we are not on active console */
-	if (!egg_console_kit_is_active (manager->priv->console)) {
+	if (!gpm_manager_is_active (manager)) {
 		egg_debug ("ignoring as not on active console");
 		return;
 	}
