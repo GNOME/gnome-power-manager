@@ -227,7 +227,8 @@ gpm_upower_get_device_summary (UpDevice *device)
 
 	/* not installed */
 	if (!is_present) {
-		/* TRANSLATORS: device not present */
+		/* TRANSLATORS: device not present.
+		 * The parameter is a device kind, e.g. "Laptop battery" or "Wireless mouse" */
 		g_string_append_printf (description, _("%s not present"), kind_desc);
 		goto out;
 	}
@@ -244,7 +245,8 @@ gpm_upower_get_device_summary (UpDevice *device)
 	/* we care if we are on AC */
 	if (kind == UP_DEVICE_KIND_PHONE) {
 		if (state == UP_DEVICE_STATE_CHARGING || !state == UP_DEVICE_STATE_DISCHARGING) {
-			/* TRANSLATORS: a phone is charging */
+			/* TRANSLATORS: a phone is charging.
+			 * The parameter is a device kind, e.g. "Laptop battery" or "Wireless mouse" */
 			g_string_append_printf (description, _("%s charging"), kind_desc);
 			g_string_append_printf (description, " (%.0f%%)", percentage);
 			goto out;
@@ -261,13 +263,15 @@ gpm_upower_get_device_summary (UpDevice *device)
 	/* we always display "Laptop battery 16 minutes remaining" as we need to clarify what device we are refering to */
 	if (state == UP_DEVICE_STATE_FULLY_CHARGED) {
 
-		/* TRANSLATORS: the device is charged */
+		/* TRANSLATORS: the device is charged.
+		 * The parameter is a device kind, e.g. "Laptop battery" or "Wireless mouse" */
 		g_string_append_printf (description, _("%s is charged"), kind_desc);
 
 		if (kind == UP_DEVICE_KIND_BATTERY && time_to_empty_round > GPM_UP_TEXT_MIN_TIME) {
 			time_to_empty_str = gpm_get_timestring (time_to_empty_round);
 			g_string_append (description, " - ");
-			/* TRANSLATORS: The laptop battery is charged, and we know a time */
+			/* TRANSLATORS: The laptop battery is charged, and we know a time.
+			 * The parameter is the time, e.g. 7 hours 6 minutes */
 			g_string_append_printf (description, _("provides %s laptop runtime"), time_to_empty_str);
 		}
 		goto out;
@@ -283,7 +287,8 @@ gpm_upower_get_device_summary (UpDevice *device)
 						kind_desc, time_to_empty_str);
 			g_string_append_printf (description, " (%.0f%%)", percentage);
 		} else {
-			/* TRANSLATORS: the device is discharging, but we only have a percentage */
+			/* TRANSLATORS: the device is discharging, but we only have a percentage.
+			 * The parameter is a device kind, e.g. "Laptop battery" or "Wireless mouse" */
 			g_string_append_printf (description, _("%s discharging"), kind_desc);
 			g_string_append_printf (description, " (%.0f%%)", percentage);
 		}
@@ -315,7 +320,9 @@ gpm_upower_get_device_summary (UpDevice *device)
 			/* display only charge time */
 			time_to_full_str = gpm_get_timestring (time_to_full_round);
 
-			/* TRANSLATORS: device is charging, and we have a time to full and a percentage */
+			/* TRANSLATORS: device is charging, and we have a time to full and a percentage.
+			 * The first parameter is the device type, e.g. "Laptop battery" and
+			 * the second is the time, e.g. "7 hours 6 minutes" */
 			g_string_append_printf (description, _("%s %s until charged"),
 						kind_desc, time_to_full_str);
 			g_string_append_printf (description, " (%.0f%%)", percentage);
@@ -330,21 +337,24 @@ gpm_upower_get_device_summary (UpDevice *device)
 	}
 	if (state == UP_DEVICE_STATE_PENDING_DISCHARGE) {
 
-		/* TRANSLATORS: this is only shown for laptops with multiple batteries */
+		/* TRANSLATORS: this is only shown for laptops with multiple batteries.
+		 * The parameter is a device kind, e.g. "Laptop battery" or "Wireless mouse" */
 		g_string_append_printf (description, _("%s waiting to discharge"), kind_desc);
 		g_string_append_printf (description, " (%.0f%%)", percentage);
 		goto out;
 	}
 	if (state == UP_DEVICE_STATE_PENDING_CHARGE) {
 
-		/* TRANSLATORS: this is only shown for laptops with multiple batteries */
+		/* TRANSLATORS: this is only shown for laptops with multiple batteries.
+		 * The parameter is a device kind, e.g. "Laptop battery" or "Wireless mouse" */
 		g_string_append_printf (description, _("%s waiting to charge"), kind_desc);
 		g_string_append_printf (description, " (%.0f%%)", percentage);
 		goto out;
 	}
 	if (state == UP_DEVICE_STATE_EMPTY) {
 
-		/* TRANSLATORS: when the device has no charge left */
+		/* TRANSLATORS: when the device has no charge left.
+		 * The parameter is a device kind, e.g. "Laptop battery" or "Wireless mouse" */
 		g_string_append_printf (description, _("%s empty"), kind_desc);
 		goto out;
 	}

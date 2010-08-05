@@ -910,40 +910,53 @@ gpm_stats_format_details (UpWakeupItem *item)
 	/* try to make the wakeup type nicer */
 	} else if (g_str_has_prefix (data, "__mod_timer")) {
 		/* TRANSLATORS: a timer is something that fires periodically.
-		 * The parameter is a process name, e.g. "firefox-bin" */
+		 * The parameter is a process name, e.g. "firefox-bin".
+		 * This is shown when the timer wakes up. */
 		details = g_strdup_printf (_("Timer %s"), data+12);
 	} else if (g_str_has_prefix (data, "mod_timer")) {
-		/* TRANSLATORS: a timer is something that fires periodically */
+		/* TRANSLATORS: a timer is something that fires periodically.
+		 * The parameter is a process name, e.g. "firefox-bin".
+		 * This is shown when the timer wakes up. */
 		details = g_strdup_printf (_("Timer %s"), data+10);
 	} else if (g_str_has_prefix (data, "hrtimer_start_expires")) {
-		/* TRANSLATORS: a timer is something that fires periodically */
+		/* TRANSLATORS: a timer is something that fires periodically.
+		 * The parameter is a process name, e.g. "firefox-bin".
+		 * This is shown when the timer wakes up. */
 		details = g_strdup_printf (_("Timer %s"), data+22);
 	} else if (g_str_has_prefix (data, "hrtimer_start")) {
-		/* TRANSLATORS: a timer is something that fires periodically */
+		/* TRANSLATORS: a timer is something that fires periodically.
+		 * The parameter is a process name, e.g. "firefox-bin".
+		 * This is shown when the timer wakes up. */
 		details = g_strdup_printf (_("Timer %s"), data+14);
 	} else if (g_str_has_prefix (data, "do_setitimer")) {
-		/* TRANSLATORS: a timer is something that fires periodically */
+		/* TRANSLATORS: a timer is something that fires periodically.
+		 * The parameter is a process name, e.g. "firefox-bin".
+		 * This is shown when the timer wakes up. */
 		details = g_strdup_printf (_("Timer %s"), data+10);
 	} else if (g_str_has_prefix (data, "do_nanosleep")) {
-		/* TRANSLATORS: this is a task that's woken up from sleeping */
+		/* TRANSLATORS: the parameter is the name of task that's woken up from sleeping.
+		 * This is shown when the task wakes up. */
 		details = g_strdup_printf (_("Sleep %s"), data+13);
 	} else if (g_str_has_prefix (data, "enqueue_task_rt")) {
-		/* TRANSLATORS: this is the name of a new realtime task */
+		/* TRANSLATORS: this is the name of a new realtime task. */
 		details = g_strdup_printf (_("New task %s"), data+16);
 	} else if (g_str_has_prefix (data, "futex_wait")) {
-		/* TRANSLATORS: this is the name of a task thats woken to check state */
+		/* TRANSLATORS: this is the name of a task that's woken to check state.
+		 * This is shown when the task wakes up. */
 		details = g_strdup_printf (_("Wait %s"), data+11);
 	} else if (g_str_has_prefix (data, "queue_delayed_work_on")) {
-		/* TRANSLATORS: this is the name of a work queue is a list of work that has to be done */
+		/* TRANSLATORS: this is the name of a work queue.
+		 * A work queue is a list of work that has to be done. */
 		details = g_strdup_printf (_("Work queue %s"), data+22);
 	} else if (g_str_has_prefix (data, "queue_delayed_work")) {
-		/* TRANSLATORS: this is the name of a work queue is a list of work that has to be done */
+		/* TRANSLATORS: this is the name of a work queue.
+		 * A work queue is a list of work that has to be done. */
 		details = g_strdup_printf (_("Work queue %s"), data+19);
 	} else if (g_str_has_prefix (data, "dst_run_gc")) {
 		/* TRANSLATORS: this is when the networking subsystem clears out old entries */
 		details = g_strdup_printf (_("Network route flush %s"), data+11);
 	} else if (g_str_has_prefix (data, "usb_hcd_poll_rh_status")) {
-		/* TRANSLATORS: this is the name of activity on the USB bus */
+		/* TRANSLATORS: this is the name of an activity on the USB bus */
 		details = g_strdup_printf (_("USB activity %s"), data+23);
 	} else if (g_str_has_prefix (data, "schedule_hrtimeout_range")) {
 		/* TRANSLATORS: we've timed out of an aligned timer, with the name */
