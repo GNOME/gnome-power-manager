@@ -276,7 +276,9 @@ gpm_upower_get_device_summary (UpDevice *device)
 
 		if (time_to_empty_round > GPM_UP_TEXT_MIN_TIME) {
 			time_to_empty_str = gpm_get_timestring (time_to_empty_round);
-			/* TRANSLATORS: the device is discharging, and we have a time remaining */
+			/* TRANSLATORS: the device is discharging, and we have a time remaining
+			 * The first parameter is the device type, e.g. "Laptop battery" and
+			 * the second is the time, e.g. 7 hours 6 minutes */
 			g_string_append_printf (description, _("%s %s remaining"),
 						kind_desc, time_to_empty_str);
 			g_string_append_printf (description, " (%.0f%%)", percentage);
@@ -296,13 +298,16 @@ gpm_upower_get_device_summary (UpDevice *device)
 			time_to_full_str = gpm_get_timestring (time_to_full_round);
 			time_to_empty_str = gpm_get_timestring (time_to_empty_round);
 
-			/* TRANSLATORS: device is charging, and we have a time to full and a percentage */
+			/* TRANSLATORS: device is charging, and we have a time to full and a percentage
+			 * The first parameter is the device type, e.g. "Laptop battery" and
+			 * the second is the time, e.g. "7 hours 6 minutes" */
 			g_string_append_printf (description, _("%s %s until charged"),
 						kind_desc, time_to_full_str);
 			g_string_append_printf (description, " (%.0f%%)", percentage);
 
 			g_string_append (description, " - ");
-			/* TRANSLATORS: the device is charging, and we have a time to full and empty */
+			/* TRANSLATORS: the device is charging, and we have a time to full and empty.
+			 * The parameter is a time string, e.g. "7 hours 6 minutes" */
 			g_string_append_printf (description, _("provides %s battery runtime"),
 						time_to_empty_str);
 		} else if (time_to_full_round > GPM_UP_TEXT_MIN_TIME) {
@@ -316,7 +321,8 @@ gpm_upower_get_device_summary (UpDevice *device)
 			g_string_append_printf (description, " (%.0f%%)", percentage);
 		} else {
 
-			/* TRANSLATORS: device is charging, but we only have a percentage */
+			/* TRANSLATORS: device is charging, but we only have a percentage.
+			 * The parameter is a device kind, e.g. "Laptop battery" or "Wireless mouse" */
 			g_string_append_printf (description, _("%s charging"), kind_desc);
 			g_string_append_printf (description, " (%.0f%%)", percentage);
 		}
