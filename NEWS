@@ -1,3 +1,41 @@
+Version 2.31.6
+~~~~~~~~~~~~~~
+Released: 2010-08-06
+
+* Important note:
+ - This is 2.31.6, which is forked from the gnome-2-30 branch.
+ - If you have been using 2.31.5 or any earlier 2.31 version, then you will
+   notice the UI and functionality going back in time. This is unfortunate.
+ - GNOME 3 has been pushed back 6 months, and the GSettings and GtkApplication
+   code is not ready for prime-time just yet. I'm not willing to add multiple
+   levels of ifdef'd code for the n-permutations of distros on different GTK
+   and GLib versions, so people are just going to make do with 3.30.x with
+   a few backported bugs and translation fixes. I do apologise to the
+   translators, who have wasted some time on translating git master.
+ - This release does not use the new control center panel, GDBus or GSettings.
+ - I don't intend on wasting time backporting features from git master into
+   GNOME 2.32.x. Bugfixes will be, where they make sense.
+ - In my personal opinion, GNOME 2.32.0 is going to blow goats.
+
+* New Features:
+ - Add new 6 hours period in power history stats (Rafał Rosiak)
+ - Use device icons from the icon name specification (Richard Hughes)
+
+* Bugfix:
+ - Adjust dim timeout when necessary (Tim Liim)
+ - As we no longer have more than one backlight mechanism, remove a ton of abstract code (Richard Hughes)
+ - Backport support for new devices recognised in UPower (Richard Hughes)
+ - Backport various translation fixes and translator comments from git master (Richard Hughes)
+ - Do not assume the lid is open at boot. Fixes #622026 (Richard Hughes)
+ - Do not show gnome-power-statistics in the menus (Richard Hughes)
+ - Do not show the prefs menu on LiveCD's and with GDM. Fixes #621674 (Richard Hughes)
+ - Don't treat percentage=0 as error condition (Chow Loong Jin)
+ - Fix a crash when displaying the 'No GConf schema warning' (Richard Hughes)
+ - Port from DeviceKit-power to UPower (Richard Hughes)
+ - Provide a pkexec helper for systems that do not have xbacklight capability (Richard Hughes)
+ - Remove hardcoded paths from pkexec setup (Brian Hutsell)
+ - Remove the use of HAL from gnome-power-manager (Richard Hughes)
+
 Version 2.30.1
 ~~~~~~~~~~~~~~
 Released: 2010-04-26

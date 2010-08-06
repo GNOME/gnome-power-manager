@@ -1,9 +1,9 @@
 Follow http://developer.gnome.org/dotplan/for_maintainers.html
 
-git shortlog GNOME_POWER_MANAGER_2_30_1.. | grep -i -v trivial | uniq | grep -v Merge > NEWS.new
+git shortlog GNOME_POWER_MANAGER_2_31_5.. | grep -i -v trivial | uniq | grep -v Merge > NEWS.new
 
 --------------------------------------------------------------------------------
-Version 2.30.2
+Version 2.31.6
 ~~~~~~~~~~~~~~
 Released: 2010-xx-xx
 
@@ -16,8 +16,8 @@ Released: 2010-xx-xx
 
 Run "make dist", correct any problems encountered
 
-git commit -a -m "GNOME Power Manager 2.30.2"
-git tag -s GNOME_POWER_MANAGER_2_30_2 -m "==== Version 2.30.2 ===="
+git commit -a -m "GNOME Power Manager 2.31.6"
+git tag -s GNOME_POWER_MANAGER_2_31_6 -m "==== Version 2.31.6 ===="
 <wait>
 git push --tags
 git push
