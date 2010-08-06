@@ -1379,7 +1379,7 @@ gpm_manager_engine_discharging_cb (GpmEngine *engine, UpDevice *device, GpmManag
 	gint64 time_to_empty;
 	gchar *remaining_text = NULL;
 	GIcon *icon = NULL;
-	const gchar *kind_desc;
+	const gchar *device_desc;
 
 	/* only action this if specified in the settings */
 	ret = g_settings_get_boolean (manager->priv->settings, GPM_SETTINGS_NOTIFY_DISCHARGING);
@@ -1398,7 +1398,7 @@ gpm_manager_engine_discharging_cb (GpmEngine *engine, UpDevice *device, GpmManag
 	/* only show text if there is a valid time */
 	if (time_to_empty > 0)
 		remaining_text = gpm_get_timestring (time_to_empty);
-	kind_desc = gpm_device_kind_to_localised_string (kind, 1);
+	device_desc = gpm_device_to_localised_string (device);
 
 	if (kind == UP_DEVICE_KIND_BATTERY) {
 		/* TRANSLATORS: laptop battery is now discharging */
@@ -1408,9 +1408,7 @@ gpm_manager_engine_discharging_cb (GpmEngine *engine, UpDevice *device, GpmManag
 			/* TRANSLATORS: tell the user how much time they have got */
 			message = g_strdup_printf (_("%s of battery power remaining (%.0f%%)"), remaining_text, percentage);
 		} else {
-			/* TRANSLATORS: the device is discharging, but we only have a percentage */
-			message = g_strdup_printf (_("%s discharging (%.0f%%)"),
-						   kind_desc, percentage);
+			message = g_strdup_printf ("%s (%.0f%%)", device_desc, percentage);
 		}
 	} else if (kind == UP_DEVICE_KIND_UPS) {
 		/* TRANSLATORS: UPS is now discharging */
@@ -1420,9 +1418,8 @@ gpm_manager_engine_discharging_cb (GpmEngine *engine, UpDevice *device, GpmManag
 			/* TRANSLATORS: tell the user how much time they have got */
 			message = g_strdup_printf (_("%s of UPS backup power remaining (%.0f%%)"), remaining_text, percentage);
 		} else {
-			/* TRANSLATORS: the device is discharging, but we only have a percentage */
-			message = g_strdup_printf (_("%s discharging (%.0f%%)"),
-						   kind_desc, percentage);
+			message = g_strdup (gpm_device_to_localised_string (device));
+			message = g_strdup_printf ("%s (%.0f%%)", device_desc, percentage);
 		}
 	} else {
 		/* nothing else of interest */

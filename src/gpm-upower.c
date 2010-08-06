@@ -200,6 +200,7 @@ gchar *
 gpm_upower_get_device_summary (UpDevice *device)
 {
 	const gchar *kind_desc = NULL;
+	const gchar *device_desc = NULL;
 	GString *description;
 	guint time_to_full_round;
 	guint time_to_empty_round;
@@ -224,12 +225,11 @@ gpm_upower_get_device_summary (UpDevice *device)
 
 	description = g_string_new (NULL);
 	kind_desc = gpm_device_kind_to_localised_string (kind, 1);
+	device_desc = gpm_device_to_localised_string (device);
 
 	/* not installed */
 	if (!is_present) {
-		/* TRANSLATORS: device not present.
-		 * The parameter is a device kind, e.g. "Laptop battery" or "Wireless mouse" */
-		g_string_append_printf (description, _("%s not present"), kind_desc);
+		g_string_append (description, device_desc);
 		goto out;
 	}
 
@@ -245,9 +245,7 @@ gpm_upower_get_device_summary (UpDevice *device)
 	/* we care if we are on AC */
 	if (kind == UP_DEVICE_KIND_PHONE) {
 		if (state == UP_DEVICE_STATE_CHARGING || !state == UP_DEVICE_STATE_DISCHARGING) {
-			/* TRANSLATORS: a phone is charging.
-			 * The parameter is a device kind, e.g. "Laptop battery" or "Wireless mouse" */
-			g_string_append_printf (description, _("%s charging"), kind_desc);
+			g_string_append (description, device_desc);
 			g_string_append_printf (description, " (%.0f%%)", percentage);
 			goto out;
 		}
@@ -263,9 +261,7 @@ gpm_upower_get_device_summary (UpDevice *device)
 	/* we always display "Laptop battery 16 minutes remaining" as we need to clarify what device we are refering to */
 	if (state == UP_DEVICE_STATE_FULLY_CHARGED) {
 
-		/* TRANSLATORS: the device is charged.
-		 * The parameter is a device kind, e.g. "Laptop battery" or "Wireless mouse" */
-		g_string_append_printf (description, _("%s is charged"), kind_desc);
+		g_string_append (description, device_desc);
 
 		if (kind == UP_DEVICE_KIND_BATTERY && time_to_empty_round > GPM_UP_TEXT_MIN_TIME) {
 			time_to_empty_str = gpm_get_timestring (time_to_empty_round);
@@ -287,9 +283,7 @@ gpm_upower_get_device_summary (UpDevice *device)
 						kind_desc, time_to_empty_str);
 			g_string_append_printf (description, " (%.0f%%)", percentage);
 		} else {
-			/* TRANSLATORS: the device is discharging, but we only have a percentage.
-			 * The parameter is a device kind, e.g. "Laptop battery" or "Wireless mouse" */
-			g_string_append_printf (description, _("%s discharging"), kind_desc);
+			g_string_append (description, device_desc);
 			g_string_append_printf (description, " (%.0f%%)", percentage);
 		}
 		goto out;
@@ -327,42 +321,30 @@ gpm_upower_get_device_summary (UpDevice *device)
 						kind_desc, time_to_full_str);
 			g_string_append_printf (description, " (%.0f%%)", percentage);
 		} else {
-
-			/* TRANSLATORS: device is charging, but we only have a percentage.
-			 * The parameter is a device kind, e.g. "Laptop battery" or "Wireless mouse" */
-			g_string_append_printf (description, _("%s charging"), kind_desc);
+			g_string_append (description, device_desc);
 			g_string_append_printf (description, " (%.0f%%)", percentage);
 		}
 		goto out;
 	}
 	if (state == UP_DEVICE_STATE_PENDING_DISCHARGE) {
-
-		/* TRANSLATORS: this is only shown for laptops with multiple batteries.
-		 * The parameter is a device kind, e.g. "Laptop battery" or "Wireless mouse" */
-		g_string_append_printf (description, _("%s waiting to discharge"), kind_desc);
+		g_string_append (description, device_desc);
 		g_string_append_printf (description, " (%.0f%%)", percentage);
 		goto out;
 	}
 	if (state == UP_DEVICE_STATE_PENDING_CHARGE) {
-
-		/* TRANSLATORS: this is only shown for laptops with multiple batteries.
-		 * The parameter is a device kind, e.g. "Laptop battery" or "Wireless mouse" */
-		g_string_append_printf (description, _("%s waiting to charge"), kind_desc);
+		g_string_append (description, device_desc);
 		g_string_append_printf (description, " (%.0f%%)", percentage);
 		goto out;
 	}
 	if (state == UP_DEVICE_STATE_EMPTY) {
-
-		/* TRANSLATORS: when the device has no charge left.
-		 * The parameter is a device kind, e.g. "Laptop battery" or "Wireless mouse" */
-		g_string_append_printf (description, _("%s empty"), kind_desc);
+		g_string_append (description, device_desc);
 		goto out;
 	}
 
 	/* fallback */
 	egg_warning ("in an undefined state we are not charging or "
 		     "discharging and the batteries are also not charged");
-	g_string_append (description, kind_desc);
+	g_string_append (description, device_desc);
 	g_string_append_printf (description, " (%.0f%%)", percentage);
 out:
 	g_free (time_to_full_str);
@@ -724,3 +706,264 @@ gpm_device_state_to_localised_string (UpDeviceState state)
 	return state_string;
 }
 
+/**
+ * gpm_device_to_localised_string:
+ **/
+const gchar *
+gpm_device_to_localised_string (UpDevice *device)
+{
+	UpDeviceState state;
+	UpDeviceKind kind;
+	gboolean present;
+
+	/* get device parameters */
+	g_object_get (device,
+		      "is-present", &present,
+		      "kind", &kind,
+		      "state", &state,
+		      NULL);
+
+	/* line power */
+	if (kind == UP_DEVICE_KIND_LINE_POWER) {
+		/* TRANSLATORS: system power cord */
+		return _("AC adapter");
+	}
+
+	/* laptop battery */
+	if (kind == UP_DEVICE_KIND_BATTERY) {
+
+		if (!present) {
+			/* TRANSLATORS: device not present */
+			return _("Laptop battery not present");
+		}
+		if (state == UP_DEVICE_STATE_CHARGING) {
+			/* TRANSLATORS: battery state */
+			return _("Laptop battery is charging");
+		}
+		if (state == UP_DEVICE_STATE_DISCHARGING) {
+			/* TRANSLATORS: battery state */
+			return _("Laptop battery is discharging");
+		}
+		if (state == UP_DEVICE_STATE_EMPTY) {
+			/* TRANSLATORS: battery state */
+			return _("Laptop battery is empty");
+		}
+		if (state == UP_DEVICE_STATE_FULLY_CHARGED) {
+			/* TRANSLATORS: battery state */
+			return _("Laptop battery is charged");
+		}
+		if (state == UP_DEVICE_STATE_PENDING_CHARGE) {
+			/* TRANSLATORS: battery state */
+			return _("Laptop battery is waiting to charge");
+		}
+		if (state == UP_DEVICE_STATE_PENDING_DISCHARGE) {
+			/* TRANSLATORS: battery state */
+			return _("Laptop battery is waiting to discharge");
+		}
+
+		/* TRANSLATORS: laptop primary battery */
+		return _("Laptop battery");
+	}
+
+	/* UPS */
+	if (kind == UP_DEVICE_KIND_UPS) {
+
+		if (state == UP_DEVICE_STATE_CHARGING) {
+			/* TRANSLATORS: battery state */
+			return _("UPS is charging");
+		}
+		if (state == UP_DEVICE_STATE_DISCHARGING) {
+			/* TRANSLATORS: battery state */
+			return _("UPS is discharging");
+		}
+		if (state == UP_DEVICE_STATE_EMPTY) {
+			/* TRANSLATORS: battery state */
+			return _("UPS is empty");
+		}
+		if (state == UP_DEVICE_STATE_FULLY_CHARGED) {
+			/* TRANSLATORS: battery state */
+			return _("UPS is charged");
+		}
+
+		/* TRANSLATORS: battery-backed AC power source */
+		return _("UPS");
+	}
+
+	/* monitor */
+	if (kind == UP_DEVICE_KIND_MONITOR) {
+
+		/* TRANSLATORS: a monitor is a device to measure voltage and current */
+		return _("Monitor");
+	}
+
+	/* mouse */
+	if (kind == UP_DEVICE_KIND_MOUSE) {
+
+		if (state == UP_DEVICE_STATE_CHARGING) {
+			/* TRANSLATORS: battery state */
+			return _("Mouse is charging");
+		}
+		if (state == UP_DEVICE_STATE_DISCHARGING) {
+			/* TRANSLATORS: battery state */
+			return _("Mouse is discharging");
+		}
+		if (state == UP_DEVICE_STATE_EMPTY) {
+			/* TRANSLATORS: battery state */
+			return _("Mouse is empty");
+		}
+		if (state == UP_DEVICE_STATE_FULLY_CHARGED) {
+			/* TRANSLATORS: battery state */
+			return _("Mouse is charged");
+		}
+
+		/* TRANSLATORS: wireless mice with internal batteries */
+		return _("Mouse");
+	}
+
+	/* keyboard */
+	if (kind == UP_DEVICE_KIND_KEYBOARD) {
+
+		if (state == UP_DEVICE_STATE_CHARGING) {
+			/* TRANSLATORS: battery state */
+			return _("Keyboard is charging");
+		}
+		if (state == UP_DEVICE_STATE_DISCHARGING) {
+			/* TRANSLATORS: battery state */
+			return _("Keyboard is discharging");
+		}
+		if (state == UP_DEVICE_STATE_EMPTY) {
+			/* TRANSLATORS: battery state */
+			return _("Keyboard is empty");
+		}
+		if (state == UP_DEVICE_STATE_FULLY_CHARGED) {
+			/* TRANSLATORS: battery state */
+			return _("Keyboard is charged");
+		}
+
+		/* TRANSLATORS: wireless keyboard with internal battery */
+		return _("Keyboard");
+	}
+
+	/* PDA */
+	if (kind == UP_DEVICE_KIND_PDA) {
+
+		if (state == UP_DEVICE_STATE_CHARGING) {
+			/* TRANSLATORS: battery state */
+			return _("PDA is charging");
+		}
+		if (state == UP_DEVICE_STATE_DISCHARGING) {
+			/* TRANSLATORS: battery state */
+			return _("PDA is discharging");
+		}
+		if (state == UP_DEVICE_STATE_EMPTY) {
+			/* TRANSLATORS: battery state */
+			return _("PDA is empty");
+		}
+		if (state == UP_DEVICE_STATE_FULLY_CHARGED) {
+			/* TRANSLATORS: battery state */
+			return _("PDA is charged");
+		}
+
+		/* TRANSLATORS: portable device */
+		return _("PDA");
+	}
+
+	/* phone */
+	if (kind == UP_DEVICE_KIND_PHONE) {
+
+		if (state == UP_DEVICE_STATE_CHARGING) {
+			/* TRANSLATORS: battery state */
+			return _("Cell phone is charging");
+		}
+		if (state == UP_DEVICE_STATE_DISCHARGING) {
+			/* TRANSLATORS: battery state */
+			return _("Cell phone is discharging");
+		}
+		if (state == UP_DEVICE_STATE_EMPTY) {
+			/* TRANSLATORS: battery state */
+			return _("Cell phone is empty");
+		}
+		if (state == UP_DEVICE_STATE_FULLY_CHARGED) {
+			/* TRANSLATORS: battery state */
+			return _("Cell phone is charged");
+		}
+
+		/* TRANSLATORS: cell phone (mobile...) */
+		return _("Cell phone");
+	}
+#if UP_CHECK_VERSION(0,9,5)
+
+	/* media player */
+	if (kind == UP_DEVICE_KIND_MEDIA_PLAYER) {
+
+		if (state == UP_DEVICE_STATE_CHARGING) {
+			/* TRANSLATORS: battery state */
+			return _("Media player is charging");
+		}
+		if (state == UP_DEVICE_STATE_DISCHARGING) {
+			/* TRANSLATORS: battery state */
+			return _("Media player is discharging");
+		}
+		if (state == UP_DEVICE_STATE_EMPTY) {
+			/* TRANSLATORS: battery state */
+			return _("Media player is empty");
+		}
+		if (state == UP_DEVICE_STATE_FULLY_CHARGED) {
+			/* TRANSLATORS: battery state */
+			return _("Media player is charged");
+		}
+
+		/* TRANSLATORS: media player, mp3 etc */
+		return _("Media player");
+	}
+
+	/* tablet */
+	if (kind == UP_DEVICE_KIND_TABLET) {
+
+		if (state == UP_DEVICE_STATE_CHARGING) {
+			/* TRANSLATORS: battery state */
+			return _("Tablet is charging");
+		}
+		if (state == UP_DEVICE_STATE_DISCHARGING) {
+			/* TRANSLATORS: battery state */
+			return _("Tablet is discharging");
+		}
+		if (state == UP_DEVICE_STATE_EMPTY) {
+			/* TRANSLATORS: battery state */
+			return _("Tablet is empty");
+		}
+		if (state == UP_DEVICE_STATE_FULLY_CHARGED) {
+			/* TRANSLATORS: battery state */
+			return _("Tablet is charged");
+		}
+
+		/* TRANSLATORS: tablet device */
+		return _("Tablet");
+	}
+
+	/* computer */
+	if (kind == UP_DEVICE_KIND_COMPUTER) {
+
+		if (state == UP_DEVICE_STATE_CHARGING) {
+			/* TRANSLATORS: battery state */
+			return _("Computer is charging");
+		}
+		if (state == UP_DEVICE_STATE_DISCHARGING) {
+			/* TRANSLATORS: battery state */
+			return _("Computer is discharging");
+		}
+		if (state == UP_DEVICE_STATE_EMPTY) {
+			/* TRANSLATORS: battery state */
+			return _("Computer is empty");
+		}
+		if (state == UP_DEVICE_STATE_FULLY_CHARGED) {
+			/* TRANSLATORS: battery state */
+			return _("Computer is charged");
+		}
+
+		/* TRANSLATORS: tablet device */
+		return _("Computer");
+	}
+#endif
+	return NULL;
+}
