@@ -196,6 +196,11 @@ gpm_engine_get_warning (GpmEngine *engine, UpDevice *device)
 		warning_type = gpm_engine_get_warning_csr (engine, device);
 
 	} else if (kind == UP_DEVICE_KIND_UPS ||
+#if UP_CHECK_VERSION(0,9,5)
+		   kind == UP_DEVICE_KIND_MEDIA_PLAYER ||
+		   kind == UP_DEVICE_KIND_TABLET ||
+		   kind == UP_DEVICE_KIND_COMPUTER ||
+#endif
 		   kind == UP_DEVICE_KIND_PDA) {
 
 		warning_type = gpm_engine_get_warning_percentage (engine, device);
@@ -235,8 +240,10 @@ gpm_engine_get_summary (GpmEngine *engine)
 	guint i;
 	GPtrArray *array;
 	UpDevice *device;
+	UpDeviceState state;
 	GString *tooltip = NULL;
 	gchar *part;
+	gboolean is_present;
 
 	g_return_val_if_fail (GPM_IS_ENGINE (engine), NULL);
 
@@ -247,6 +254,14 @@ gpm_engine_get_summary (GpmEngine *engine)
 	array = engine->priv->array;
 	for (i=0;i<array->len;i++) {
 		device = g_ptr_array_index (engine->priv->array, i);
+		g_object_get (device,
+			      "is-present", &is_present,
+			      "state", &state,
+			      NULL);
+		if (!is_present)
+			continue;
+		if (state == UP_DEVICE_STATE_EMPTY)
+			continue;
 		part = gpm_upower_get_device_summary (device);
 		if (part != NULL)
 			g_string_append_printf (tooltip, "%s\n", part);
@@ -606,10 +621,10 @@ static UpDevice *
 gpm_engine_update_composite_device (GpmEngine *engine, UpDevice *original_device)
 {
 	guint i;
-	gdouble percentage;
-	gdouble energy;
-	gdouble energy_full;
-	gdouble energy_rate;
+	gdouble percentage = 0.0;
+	gdouble energy = 0.0;
+	gdouble energy_full = 0.0;
+	gdouble energy_rate = 0.0;
 	gdouble energy_total = 0.0;
 	gdouble energy_full_total = 0.0;
 	gdouble energy_rate_total = 0.0;

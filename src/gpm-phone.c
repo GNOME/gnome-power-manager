@@ -143,7 +143,6 @@ gpm_phone_get_num_batteries (GpmPhone *phone)
 static void
 gpm_phone_battery_state_changed (DBusGProxy *proxy, guint idx, guint percentage, gboolean on_ac, GpmPhone *phone)
 {
-	g_return_if_fail (phone != NULL);
 	g_return_if_fail (GPM_IS_PHONE (phone));
 
 	egg_debug ("got BatteryStateChanged %i = %i (%i)", idx, percentage, on_ac);
@@ -159,7 +158,6 @@ gpm_phone_battery_state_changed (DBusGProxy *proxy, guint idx, guint percentage,
 static void
 gpm_phone_num_batteries_changed (DBusGProxy *proxy, guint number, GpmPhone *phone)
 {
-	g_return_if_fail (phone != NULL);
 	g_return_if_fail (GPM_IS_PHONE (phone));
 
 	egg_debug ("got NumberBatteriesChanged %i", number);

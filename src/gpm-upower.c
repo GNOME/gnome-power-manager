@@ -505,6 +505,20 @@ gpm_device_kind_to_localised_text (UpDeviceKind kind, guint number)
 		/* TRANSLATORS: cell phone (mobile...) */
 		text = ngettext ("Cell phone", "Cell phones", number);
 		break;
+#if UP_CHECK_VERSION(0,9,5)
+	case UP_DEVICE_KIND_MEDIA_PLAYER:
+		/* TRANSLATORS: media player, mp3 etc */
+		text = ngettext ("Media player", "Media players", number);
+		break;
+	case UP_DEVICE_KIND_TABLET:
+		/* TRANSLATORS: tablet device */
+		text = ngettext ("Tablet", "Tablets", number);
+		break;
+	case UP_DEVICE_KIND_COMPUTER:
+		/* TRANSLATORS: tablet device */
+		text = ngettext ("Computer", "Computers", number);
+		break;
+#endif
 	default:
 		egg_warning ("enum unrecognised: %i", kind);
 		text = up_device_kind_to_string (kind);
@@ -544,6 +558,17 @@ gpm_device_kind_to_icon (UpDeviceKind kind)
 	case UP_DEVICE_KIND_PHONE:
 		icon = "phone";
 		break;
+#if UP_CHECK_VERSION(0,9,5)
+	case UP_DEVICE_KIND_MEDIA_PLAYER:
+		icon = "multimedia-player";
+		break;
+	case UP_DEVICE_KIND_TABLET:
+		icon = "input-tablet";
+		break;
+	case UP_DEVICE_KIND_COMPUTER:
+		icon = "computer-apple-ipad";
+		break;
+#endif
 	default:
 		egg_warning ("enum unrecognised: %i", kind);
 		icon = "gtk-help";
