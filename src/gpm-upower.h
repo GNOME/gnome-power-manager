@@ -31,6 +31,7 @@ const gchar	*gpm_device_kind_to_localised_text	(UpDeviceKind	 kind,
 							 guint		 number);
 const gchar	*gpm_device_kind_to_icon		(UpDeviceKind	 kind);
 const gchar	*gpm_device_technology_to_localised_string (UpDeviceTechnology technology_enum);
+const gchar	*gpm_device_state_to_localised_string	(UpDeviceState	 state);
 gchar		*gpm_upower_get_device_icon		(UpDevice *device);
 gchar		*gpm_upower_get_device_summary		(UpDevice *device);
 gchar		*gpm_upower_get_device_description	(UpDevice *device);

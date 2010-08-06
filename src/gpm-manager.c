@@ -570,20 +570,20 @@ gpm_manager_sleep_failure (GpmManager *manager, gboolean is_suspend, const gchar
 	string = g_string_new ("");
 	if (is_suspend) {
 		/* TRANSLATORS: message text */
-		g_string_append (string, _("Your computer failed to suspend."));
+		g_string_append (string, _("Computer failed to suspend."));
 		/* TRANSLATORS: title text */
 		title = _("Failed to suspend");
 		icon = GPM_STOCK_SUSPEND;
 	} else {
 		/* TRANSLATORS: message text */
-		g_string_append (string, _("Your computer failed to hibernate."));
+		g_string_append (string, _("Computer failed to hibernate."));
 		/* TRANSLATORS: title text */
 		title = _("Failed to hibernate");
 		icon = GPM_STOCK_HIBERNATE;
 	}
 
 	/* TRANSLATORS: message text */
-	g_string_append_printf (string, "\n\n%s %s", _("The failure was reported as:"), detail);
+	g_string_append_printf (string, "\n\n%s %s", _("Failure was reported as:"), detail);
 
 	/* show modal dialog */
 	dialog = gtk_message_dialog_new_with_markup (NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -1183,7 +1183,7 @@ gpm_manager_perhaps_recall_delay_cb (GpmManager *manager)
 
 	/* TRANSLATORS: the battery may be recalled by it's vendor */
 	title = g_strdup_printf ("%s: %s", GPM_NAME, _("Battery may be recalled"));
-	message = g_strdup_printf (_("The battery in your computer may have been "
+	message = g_strdup_printf (_("A battery in your computer may have been "
 				     "recalled by %s and you may be at risk.\n\n"
 				     "For more information visit the battery recall website."), oem_vendor);
 	dialog = gtk_message_dialog_new_with_markup (NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -1284,7 +1284,7 @@ gpm_manager_engine_low_capacity_cb (GpmEngine *engine, UpDevice *device, GpmMana
 	title = _("Battery may be broken");
 
 	/* TRANSLATORS: notify the user that that battery is broken as the capacity is very low */
-	message = g_strdup_printf (_("Your battery has a very low capacity (%1.1f%%), "
+	message = g_strdup_printf (_("Battery has a very low capacity (%1.1f%%), "
 				     "which means that it may be old or broken."), capacity);
 	gpm_manager_notify (manager, &manager->priv->notification_general, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_SHORT,
 			    GTK_STOCK_DIALOG_INFO, NOTIFY_URGENCY_LOW);
@@ -1332,8 +1332,8 @@ gpm_manager_engine_fully_charged_cb (GpmEngine *engine, UpDevice *device, GpmMan
 		gpm_manager_notify_close (manager, manager->priv->notification_warning_low);
 		gpm_manager_notify_close (manager, manager->priv->notification_discharging);
 
-		/* TRANSLATORS: show the fully charged notification */
-		title = ngettext ("Battery Fully Charged", "Batteries Fully Charged", plural);
+		/* TRANSLATORS: show the charged notification */
+		title = ngettext ("Battery Charged", "Batteries Charged", plural);
 		gpm_manager_notify (manager, &manager->priv->notification_fully_charged,
 				    title, NULL, GPM_MANAGER_NOTIFY_TIMEOUT_SHORT,
 				    GTK_STOCK_DIALOG_INFO, NOTIFY_URGENCY_LOW);
@@ -1383,10 +1383,10 @@ gpm_manager_engine_discharging_cb (GpmEngine *engine, UpDevice *device, GpmManag
 
 		if (remaining_text != NULL) {
 			/* TRANSLATORS: tell the user how much time they have got */
-			message = g_strdup_printf (_("%s of battery power remaining (%.1f%%)"), remaining_text, percentage);
+			message = g_strdup_printf (_("%s of battery power remaining (%.0f%%)"), remaining_text, percentage);
 		} else {
 			/* TRANSLATORS: the device is discharging, but we only have a percentage */
-			message = g_strdup_printf (_("%s discharging (%.1f%%)"),
+			message = g_strdup_printf (_("%s discharging (%.0f%%)"),
 						   kind_desc, percentage);
 		}
 	} else if (kind == UP_DEVICE_KIND_UPS) {
@@ -1395,10 +1395,10 @@ gpm_manager_engine_discharging_cb (GpmEngine *engine, UpDevice *device, GpmManag
 
 		if (remaining_text != NULL) {
 			/* TRANSLATORS: tell the user how much time they have got */
-			message = g_strdup_printf (_("%s of UPS backup power remaining (%.1f%%)"), remaining_text, percentage);
+			message = g_strdup_printf (_("%s of UPS backup power remaining (%.0f%%)"), remaining_text, percentage);
 		} else {
 			/* TRANSLATORS: the device is discharging, but we only have a percentage */
-			message = g_strdup_printf (_("%s discharging (%.1f%%)"),
+			message = g_strdup_printf (_("%s discharging (%.0f%%)"),
 						   kind_desc, percentage);
 		}
 	} else {
@@ -1488,7 +1488,7 @@ gpm_manager_engine_charge_low_cb (GpmEngine *engine, UpDevice *device, GpmManage
 		remaining_text = gpm_get_timestring (time_to_empty);
 
 		/* TRANSLATORS: tell the user how much time they have got */
-		message = g_strdup_printf (_("Approximately <b>%s</b> remaining (%.1f%%)"), remaining_text, percentage);
+		message = g_strdup_printf (_("Approximately <b>%s</b> remaining (%.0f%%)"), remaining_text, percentage);
 
 	} else if (kind == UP_DEVICE_KIND_UPS) {
 		/* TRANSLATORS: UPS is starting to get a little low */
@@ -1496,28 +1496,28 @@ gpm_manager_engine_charge_low_cb (GpmEngine *engine, UpDevice *device, GpmManage
 		remaining_text = gpm_get_timestring (time_to_empty);
 
 		/* TRANSLATORS: tell the user how much time they have got */
-		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining UPS backup power (%.1f%%)"),
+		message = g_strdup_printf (_("Approximately <b>%s</b> of remaining UPS backup power (%.0f%%)"),
 					   remaining_text, percentage);
 	} else if (kind == UP_DEVICE_KIND_MOUSE) {
 		/* TRANSLATORS: mouse is getting a little low */
 		title = _("Mouse battery low");
 
 		/* TRANSLATORS: tell user more details */
-		message = g_strdup_printf (_("The wireless mouse attached to this computer is low in power (%.1f%%)"), percentage);
+		message = g_strdup_printf (_("Wireless mouse is low in power (%.0f%%)"), percentage);
 
 	} else if (kind == UP_DEVICE_KIND_KEYBOARD) {
 		/* TRANSLATORS: keyboard is getting a little low */
 		title = _("Keyboard battery low");
 
 		/* TRANSLATORS: tell user more details */
-		message = g_strdup_printf (_("The wireless keyboard attached to this computer is low in power (%.1f%%)"), percentage);
+		message = g_strdup_printf (_("Wireless keyboard is low in power (%.0f%%)"), percentage);
 
 	} else if (kind == UP_DEVICE_KIND_PDA) {
 		/* TRANSLATORS: PDA is getting a little low */
 		title = _("PDA battery low");
 
 		/* TRANSLATORS: tell user more details */
-		message = g_strdup_printf (_("The PDA attached to this computer is low in power (%.1f%%)"), percentage);
+		message = g_strdup_printf (_("PDA is low in power (%.0f%%)"), percentage);
 
 	} else if (kind == UP_DEVICE_KIND_PHONE) {
 		/* TRANSLATORS: cell phone (mobile) is getting a little low */
@@ -1610,7 +1610,7 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmM
 		remaining_text = gpm_get_timestring (time_to_empty);
 
 		/* TRANSLATORS: give the user a ultimatum */
-		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining UPS power (%.1f%%). "
+		message = g_strdup_printf (_("Approximately <b>%s</b> of remaining UPS power (%.0f%%). "
 					     "Restore AC power to your computer to avoid losing data."),
 					   remaining_text, percentage);
 		g_free (remaining_text);
@@ -1619,7 +1619,7 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmM
 		title = _("Mouse battery low");
 
 		/* TRANSLATORS: the device is just going to stop working */
-		message = g_strdup_printf (_("The wireless mouse attached to this computer is very low in power (%.1f%%). "
+		message = g_strdup_printf (_("Wireless mouse is very low in power (%.0f%%). "
 					     "This device will soon stop functioning if not charged."),
 					   percentage);
 	} else if (kind == UP_DEVICE_KIND_KEYBOARD) {
@@ -1627,7 +1627,7 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmM
 		title = _("Keyboard battery low");
 
 		/* TRANSLATORS: the device is just going to stop working */
-		message = g_strdup_printf (_("The wireless keyboard attached to this computer is very low in power (%.1f%%). "
+		message = g_strdup_printf (_("Wireless keyboard is very low in power (%.0f%%). "
 					     "This device will soon stop functioning if not charged."),
 					   percentage);
 	} else if (kind == UP_DEVICE_KIND_PDA) {
@@ -1636,16 +1636,17 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmM
 		title = _("PDA battery low");
 
 		/* TRANSLATORS: the device is just going to stop working */
-		message = g_strdup_printf (_("The PDA attached to this computer is very low in power (%.1f%%). "
+		message = g_strdup_printf (_("PDA is very low in power (%.0f%%). "
 					     "This device will soon stop functioning if not charged."),
 					   percentage);
+
 	} else if (kind == UP_DEVICE_KIND_PHONE) {
 
 		/* TRANSLATORS: the cell battery is very low */
 		title = _("Cell phone battery low");
 
 		/* TRANSLATORS: the device is just going to stop working */
-		message = g_strdup_printf (_("Your cell phone is very low in power (%.1f%%). "
+		message = g_strdup_printf (_("Cell phone is very low in power (%.0f%%). "
 					     "This device will soon stop functioning if not charged."),
 					   percentage);
 	}

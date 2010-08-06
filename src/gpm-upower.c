@@ -491,11 +491,11 @@ gpm_device_kind_to_localised_text (UpDeviceKind kind, guint number)
 		break;
 	case UP_DEVICE_KIND_MOUSE:
 		/* TRANSLATORS: wireless mice with internal batteries */
-		text = ngettext ("Wireless mouse", "Wireless mice", number);
+		text = ngettext ("Mouse", "Mice", number);
 		break;
 	case UP_DEVICE_KIND_KEYBOARD:
 		/* TRANSLATORS: wireless keyboard with internal battery */
-		text = ngettext ("Wireless keyboard", "Wireless keyboards", number);
+		text = ngettext ("Keyboard", "Keyboards", number);
 		break;
 	case UP_DEVICE_KIND_PDA:
 		/* TRANSLATORS: portable device */
@@ -592,5 +592,45 @@ gpm_device_technology_to_localised_string (UpDeviceTechnology technology_enum)
 		break;
 	}
 	return technology;
+}
+
+/**
+ * gpm_device_state_to_localised_string:
+ **/
+const gchar *
+gpm_device_state_to_localised_string (UpDeviceState state)
+{
+	const gchar *state_string = NULL;
+
+	switch (state) {
+	case UP_DEVICE_STATE_CHARGING:
+		/* TRANSLATORS: battery state */
+		state_string = _("Charging");
+		break;
+	case UP_DEVICE_STATE_DISCHARGING:
+		/* TRANSLATORS: battery state */
+		state_string = _("Discharging");
+		break;
+	case UP_DEVICE_STATE_EMPTY:
+		/* TRANSLATORS: battery state */
+		state_string = _("Empty");
+		break;
+	case UP_DEVICE_STATE_FULLY_CHARGED:
+		/* TRANSLATORS: battery state */
+		state_string = _("Charged");
+		break;
+	case UP_DEVICE_STATE_PENDING_CHARGE:
+		/* TRANSLATORS: battery state */
+		state_string = _("Waiting to charge");
+		break;
+	case UP_DEVICE_STATE_PENDING_DISCHARGE:
+		/* TRANSLATORS: battery state */
+		state_string = _("Waiting to discharge");
+		break;
+	default:
+		g_assert_not_reached ();
+		break;
+	}
+	return state_string;
 }
 

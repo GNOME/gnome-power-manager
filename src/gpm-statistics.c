@@ -99,9 +99,11 @@ enum {
 #define GPM_HISTORY_DAY_VALUE			24*60*60
 #define GPM_HISTORY_WEEK_VALUE			7*24*60*60
 
+/* TRANSLATORS: what we've observed about the device */
 #define GPM_STATS_CHARGE_DATA_TEXT		_("Charge profile")
-#define GPM_STATS_CHARGE_ACCURACY_TEXT		_("Charge accuracy")
 #define GPM_STATS_DISCHARGE_DATA_TEXT		_("Discharge profile")
+/* TRANSLATORS: how accurately we can predict the time remaining of the battery */
+#define GPM_STATS_CHARGE_ACCURACY_TEXT		_("Charge accuracy")
 #define GPM_STATS_DISCHARGE_ACCURACY_TEXT	_("Discharge accuracy")
 
 #define GPM_STATS_CHARGE_DATA_VALUE		"charge-data"
@@ -398,6 +400,7 @@ gpm_stats_update_info_page_details (UpDevice *device)
 
 	/* remove prefix */
 	device_path = gpm_stats_get_printable_device_path (device);
+	/* TRANSLATORS: the device ID of the current device, e.g. "battery0" */
 	gpm_stats_add_info_data (_("Device"), device_path);
 	g_free (device_path);
 
@@ -408,26 +411,42 @@ gpm_stats_update_info_page_details (UpDevice *device)
 		gpm_stats_add_info_data (_("Model"), model);
 	if (serial != NULL && serial[0] != '\0')
 		gpm_stats_add_info_data (_("Serial number"), serial);
+
+	/* TRANSLATORS: a boolean attribute that means if the device is supplying the
+	 * main power for the computer. For instance, an AC adapter or laptop battery
+	 * would be TRUE,  but a mobile phone or mouse taking power is FALSE */
 	gpm_stats_add_info_data (_("Supply"), gpm_stats_bool_to_string (power_supply));
 
 	refreshed = (int) (time (NULL) - update_time);
 	text = g_strdup_printf (ngettext ("%d second", "%d seconds", refreshed), refreshed);
+
+	/* TRANSLATORS: when the device was last updated with new data. It's
+	* usually a few seconds when a device is discharging or charging. */
 	gpm_stats_add_info_data (_("Refreshed"), text);
 	g_free (text);
 
 	if (kind == UP_DEVICE_KIND_BATTERY ||
 	    kind == UP_DEVICE_KIND_MOUSE ||
 	    kind == UP_DEVICE_KIND_KEYBOARD ||
-	    kind == UP_DEVICE_KIND_UPS)
+	    kind == UP_DEVICE_KIND_UPS) {
+		/* TRANSLATORS: Present is whether the device is currently attached
+		 * to the computer, as some devices (e.g. laptop batteries) can
+		 * be removed, but still observed as devices on the system */
 		gpm_stats_add_info_data (_("Present"), gpm_stats_bool_to_string (is_present));
+	}
 	if (kind == UP_DEVICE_KIND_BATTERY ||
 	    kind == UP_DEVICE_KIND_MOUSE ||
-	    kind == UP_DEVICE_KIND_KEYBOARD)
+	    kind == UP_DEVICE_KIND_KEYBOARD) {
+		/* TRANSLATORS: If the device can be recharged, e.g. lithium
+		 * batteries rather than alkaline ones */
 		gpm_stats_add_info_data (_("Rechargeable"), gpm_stats_bool_to_string (is_rechargeable));
+	}
 	if (kind == UP_DEVICE_KIND_BATTERY ||
 	    kind == UP_DEVICE_KIND_MOUSE ||
-	    kind == UP_DEVICE_KIND_KEYBOARD)
-		gpm_stats_add_info_data (_("State"), up_device_state_to_string (state));
+	    kind == UP_DEVICE_KIND_KEYBOARD) {
+		/* TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged" */
+		gpm_stats_add_info_data (_("State"), gpm_device_state_to_localised_string (state));
+	}
 	if (kind == UP_DEVICE_KIND_BATTERY) {
 		text = g_strdup_printf ("%.1f Wh", energy);
 		gpm_stats_add_info_data (_("Energy"), text);
@@ -445,6 +464,7 @@ gpm_stats_update_info_page_details (UpDevice *device)
 	if (kind == UP_DEVICE_KIND_BATTERY ||
 	    kind == UP_DEVICE_KIND_MONITOR) {
 		text = g_strdup_printf ("%.1f W", energy_rate);
+		/* TRANSLATORS: the rate of discharge for the device */
 		gpm_stats_add_info_data (_("Rate"), text);
 		g_free (text);
 	}
@@ -473,18 +493,26 @@ gpm_stats_update_info_page_details (UpDevice *device)
 	    kind == UP_DEVICE_KIND_KEYBOARD ||
 	    kind == UP_DEVICE_KIND_UPS) {
 		text = g_strdup_printf ("%.1f%%", percentage);
+		/* TRANSLATORS: the amount of charge the cell contains */
 		gpm_stats_add_info_data (_("Percentage"), text);
 		g_free (text);
 	}
 	if (kind == UP_DEVICE_KIND_BATTERY) {
 		text = g_strdup_printf ("%.1f%%", capacity);
+		/* TRANSLATORS: the capacity of the device, which is basically a measure
+		 * of how full it can get, relative to the design capacity */
 		gpm_stats_add_info_data (_("Capacity"), text);
 		g_free (text);
 	}
-	if (kind == UP_DEVICE_KIND_BATTERY)
+	if (kind == UP_DEVICE_KIND_BATTERY) {
+		/* TRANSLATORS: the type of battery, e.g. lithium or nikel metal hydroxide */
 		gpm_stats_add_info_data (_("Technology"), gpm_device_technology_to_localised_string (technology));
-	if (kind == UP_DEVICE_KIND_LINE_POWER)
+	}
+	if (kind == UP_DEVICE_KIND_LINE_POWER) {
+		/* TRANSLATORS: this is when the device is plugged in, typically
+		 * only shown for the ac adaptor device */
 		gpm_stats_add_info_data (_("Online"), gpm_stats_bool_to_string (online));
+	}
 
 	g_free (vendor);
 	g_free (serial);
@@ -883,43 +911,57 @@ gpm_stats_format_details (UpWakeupItem *item)
 
 	/* try to make the wakeup type nicer */
 	} else if (g_str_has_prefix (data, "__mod_timer")) {
-		/* TRANSLATORS: a timer is something that fires periodically */
+		/* TRANSLATORS: a timer is something that fires periodically.
+		 * The parameter is a process name, e.g. "firefox-bin".
+		 * This is shown when the timer wakes up. */
 		details = g_strdup_printf (_("Timer %s"), data+12);
 	} else if (g_str_has_prefix (data, "mod_timer")) {
-		/* TRANSLATORS: a timer is something that fires periodically */
+		/* TRANSLATORS: a timer is something that fires periodically.
+		 * The parameter is a process name, e.g. "firefox-bin".
+		 * This is shown when the timer wakes up. */
 		details = g_strdup_printf (_("Timer %s"), data+10);
 	} else if (g_str_has_prefix (data, "hrtimer_start_expires")) {
-		/* TRANSLATORS: a timer is something that fires periodically */
+		/* TRANSLATORS: a timer is something that fires periodically.
+		 * The parameter is a process name, e.g. "firefox-bin".
+		 * This is shown when the timer wakes up. */
 		details = g_strdup_printf (_("Timer %s"), data+22);
 	} else if (g_str_has_prefix (data, "hrtimer_start")) {
-		/* TRANSLATORS: a timer is something that fires periodically */
+		/* TRANSLATORS: a timer is something that fires periodically.
+		 * The parameter is a process name, e.g. "firefox-bin".
+		 * This is shown when the timer wakes up. */
 		details = g_strdup_printf (_("Timer %s"), data+14);
 	} else if (g_str_has_prefix (data, "do_setitimer")) {
-		/* TRANSLATORS: a timer is something that fires periodically */
+		/* TRANSLATORS: a timer is something that fires periodically.
+		 * The parameter is a process name, e.g. "firefox-bin".
+		 * This is shown when the timer wakes up. */
 		details = g_strdup_printf (_("Timer %s"), data+10);
 	} else if (g_str_has_prefix (data, "do_nanosleep")) {
-		/* TRANSLATORS: this is a task that's woken up from sleeping */
+		/* TRANSLATORS: the parameter is the name of task that's woken up from sleeping.
+		 * This is shown when the task wakes up. */
 		details = g_strdup_printf (_("Sleep %s"), data+13);
 	} else if (g_str_has_prefix (data, "enqueue_task_rt")) {
-		/* TRANSLATORS: this is a new realtime task */
+		/* TRANSLATORS: this is the name of a new realtime task. */
 		details = g_strdup_printf (_("New task %s"), data+16);
 	} else if (g_str_has_prefix (data, "futex_wait")) {
-		/* TRANSLATORS: this is a task thats woken to check state */
+		/* TRANSLATORS: this is the name of a task that's woken to check state.
+		 * This is shown when the task wakes up. */
 		details = g_strdup_printf (_("Wait %s"), data+11);
 	} else if (g_str_has_prefix (data, "queue_delayed_work_on")) {
-		/* TRANSLATORS: a work queue is a list of work that has to be done */
+		/* TRANSLATORS: this is the name of a work queue.
+		 * A work queue is a list of work that has to be done. */
 		details = g_strdup_printf (_("Work queue %s"), data+22);
 	} else if (g_str_has_prefix (data, "queue_delayed_work")) {
-		/* TRANSLATORS: a work queue is a list of work that has to be done */
+		/* TRANSLATORS: this is the name of a work queue.
+		 * A work queue is a list of work that has to be done. */
 		details = g_strdup_printf (_("Work queue %s"), data+19);
 	} else if (g_str_has_prefix (data, "dst_run_gc")) {
 		/* TRANSLATORS: this is when the networking subsystem clears out old entries */
 		details = g_strdup_printf (_("Network route flush %s"), data+11);
 	} else if (g_str_has_prefix (data, "usb_hcd_poll_rh_status")) {
-		/* TRANSLATORS: activity on the USB bus */
+		/* TRANSLATORS: this is the name of an activity on the USB bus */
 		details = g_strdup_printf (_("USB activity %s"), data+23);
 	} else if (g_str_has_prefix (data, "schedule_hrtimeout_range")) {
-		/* TRANSLATORS: we've timed out of an aligned timer */
+		/* TRANSLATORS: we've timed out of an aligned timer, with the name */
 		details = g_strdup_printf (_("Wakeup %s"), data+25);
 	} else if (g_str_has_prefix (data, "Local timer interrupts")) {
 		/* TRANSLATORS: interupts on the system required for basic operation */
