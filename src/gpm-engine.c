@@ -123,11 +123,6 @@ gpm_engine_get_warning_percentage (GpmEngine *engine, UpDevice *device)
 	/* get device properties */
 	g_object_get (device, "percentage", &percentage, NULL);
 
-	/* this is probably an error condition */
-	if (percentage == 0) {
-		egg_warning ("percentage zero, something's gone wrong");
-		return GPM_ENGINE_WARNING_NONE;
-	}
 	if (percentage <= engine->priv->action_percentage)
 		return GPM_ENGINE_WARNING_ACTION;
 	if (percentage <= engine->priv->critical_percentage)
