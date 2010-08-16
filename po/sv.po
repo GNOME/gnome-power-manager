@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-12 10:56+0200\n"
+"POT-Creation-Date: 2010-08-16 13:47+0200\n"
 "PO-Revision-Date: 2010-08-12 11:30+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -144,8 +144,7 @@ msgstr "Observera strömhantering"
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.ui.h:6
-#: ../src/gpm-statistics.c:1088
+#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1088
 #: ../src/gpm-statistics.c:1572
 msgid "Power Statistics"
 msgstr "Strömstatistik"
@@ -162,8 +161,7 @@ msgstr "0"
 msgid "Data length:"
 msgstr "Datalängd:"
 
-#: ../data/gpm-statistics.ui.h:3
-#: ../src/gpm-statistics.c:208
+#: ../data/gpm-statistics.ui.h:3 ../src/gpm-statistics.c:208
 msgid "Details"
 msgstr "Detaljer"
 
@@ -195,8 +193,7 @@ msgstr "Det finns ingen data att visa."
 msgid "Use smoothed line"
 msgstr "Använd mjuk linje"
 
-#: ../data/gpm-statistics.ui.h:12
-#: ../src/gpm-statistics.c:194
+#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:194
 msgid "Wakeups"
 msgstr "Uppvakningar"
 
@@ -490,8 +487,7 @@ msgid "%.1fV"
 msgstr "%.1fV"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-main.c:172
-#: ../src/gpm-statistics.c:1552
+#: ../src/gpm-main.c:172 ../src/gpm-statistics.c:1552
 msgid "Show extra debugging information"
 msgstr "Visa extra felsökningsinformation"
 
@@ -507,14 +503,12 @@ msgstr "Avsluta efter en liten fördröjning (för felsökning)"
 msgid "Exit after the manager has loaded (for debugging)"
 msgstr "Avsluta efter att hanteraren har lästs in (för felsökning)"
 
-#: ../src/gpm-main.c:192
-#: ../src/gpm-main.c:196
+#: ../src/gpm-main.c:192 ../src/gpm-main.c:196
 msgid "GNOME Power Manager"
 msgstr "GNOME-strömhanteraren"
 
 #. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:220
-#: ../src/gpm-manager.c:291
+#: ../src/gpm-manager.c:220 ../src/gpm-manager.c:291
 msgid "Battery is very low"
 msgstr "Batterikapaciteten är mycket låg"
 
@@ -619,11 +613,13 @@ msgstr "Batteriet kan ha blivit återkallat"
 #: ../src/gpm-manager.c:1204
 #, c-format
 msgid ""
-"A battery in your computer may have been recalled by %s and you may be at risk.\n"
+"A battery in your computer may have been recalled by %s and you may be at "
+"risk.\n"
 "\n"
 "For more information visit the battery recall website."
 msgstr ""
-"Ett batteri i din dator kan ha blivit återkallat av %s och du kan vara i riskzonen.\n"
+"Ett batteri i din dator kan ha blivit återkallat av %s och du kan vara i "
+"riskzonen.\n"
 "\n"
 "Besök webbplatsen för återkallade batterier för mer information."
 
@@ -648,8 +644,12 @@ msgstr "Batteriet kan vara trasigt"
 #. TRANSLATORS: notify the user that that battery is broken as the capacity is very low
 #: ../src/gpm-manager.c:1310
 #, c-format
-msgid "Battery has a very low capacity (%1.1f%%), which means that it may be old or broken."
-msgstr "Batteriet har en mycket låg kapacitet (%1.1f%%) vilket kan betyda att det är gammalt eller trasigt."
+msgid ""
+"Battery has a very low capacity (%1.1f%%), which means that it may be old or "
+"broken."
+msgstr ""
+"Batteriet har en mycket låg kapacitet (%1.1f%%) vilket kan betyda att det är "
+"gammalt eller trasigt."
 
 #. TRANSLATORS: show the charged notification
 #: ../src/gpm-manager.c:1359
@@ -709,8 +709,7 @@ msgstr "Ungefär <b>%s</b> av återstående UPS-reservström (%.0f%%)"
 
 #. TRANSLATORS: mouse is getting a little low
 #. TRANSLATORS: the mouse battery is very low
-#: ../src/gpm-manager.c:1524
-#: ../src/gpm-manager.c:1662
+#: ../src/gpm-manager.c:1524 ../src/gpm-manager.c:1662
 msgid "Mouse battery low"
 msgstr "Batterispänning i mus är låg"
 
@@ -722,8 +721,7 @@ msgstr "Trådlösa musen har låg batterispänning (%.0f%%)"
 
 #. TRANSLATORS: keyboard is getting a little low
 #. TRANSLATORS: the keyboard battery is very low
-#: ../src/gpm-manager.c:1531
-#: ../src/gpm-manager.c:1670
+#: ../src/gpm-manager.c:1531 ../src/gpm-manager.c:1670
 msgid "Keyboard battery low"
 msgstr "Batterispänning i tangentbord är låg"
 
@@ -735,8 +733,7 @@ msgstr "Trådlösa tangentbordet har låg batterispänning (%.0f%%)"
 
 #. TRANSLATORS: PDA is getting a little low
 #. TRANSLATORS: the PDA battery is very low
-#: ../src/gpm-manager.c:1538
-#: ../src/gpm-manager.c:1679
+#: ../src/gpm-manager.c:1538 ../src/gpm-manager.c:1679
 msgid "PDA battery low"
 msgstr "Batterispänning i handdator är låg"
 
@@ -748,8 +745,7 @@ msgstr "Handdatorn har låg strömspänning (%.0f%%)"
 
 #. TRANSLATORS: cell phone (mobile) is getting a little low
 #. TRANSLATORS: the cell battery is very low
-#: ../src/gpm-manager.c:1545
-#: ../src/gpm-manager.c:1689
+#: ../src/gpm-manager.c:1545 ../src/gpm-manager.c:1689
 #: ../src/gpm-manager.c:1700
 msgid "Cell phone battery low"
 msgstr "Batterispänning i mobiltelefon är låg"
@@ -773,8 +769,7 @@ msgstr "Mediaspelaren har låg batterispänning (%.0f%%)"
 
 #. TRANSLATORS: graphics tablet, e.g. wacom is getting a little low
 #. TRANSLATORS: the cell battery is very low
-#: ../src/gpm-manager.c:1560
-#: ../src/gpm-manager.c:1709
+#: ../src/gpm-manager.c:1560 ../src/gpm-manager.c:1709
 msgid "Tablet battery low"
 msgstr "Batterispänning i pekdator är låg"
 
@@ -786,8 +781,7 @@ msgstr "Batterispänning i pekdator är låg (%.0f%%)"
 
 #. TRANSLATORS: computer, e.g. ipad is getting a little low
 #. TRANSLATORS: the cell battery is very low
-#: ../src/gpm-manager.c:1567
-#: ../src/gpm-manager.c:1718
+#: ../src/gpm-manager.c:1567 ../src/gpm-manager.c:1718
 msgid "Attached computer battery low"
 msgstr "Ansluten dator har låg batterispänning"
 
@@ -804,8 +798,7 @@ msgstr "Batterispänningen är kritiskt lågt"
 
 #. TRANSLATORS: laptop battery critically low, and we have more than one type of battery
 #. TRANSLATORS: laptop battery is really, really, low
-#: ../src/gpm-manager.c:1624
-#: ../src/gpm-manager.c:1781
+#: ../src/gpm-manager.c:1624 ../src/gpm-manager.c:1781
 msgid "Laptop battery critically low"
 msgstr "Batterispänning i bärbar dator är kritiskt låg"
 
@@ -818,109 +811,173 @@ msgstr "Anslut din strömadapter för att undvika att förlora data."
 #: ../src/gpm-manager.c:1637
 #, c-format
 msgid "Computer will suspend very soon unless it is plugged in."
-msgstr "Datorn kommer mycket snart att försättas i vänteläge om den inte ansluts till extern ström."
+msgstr ""
+"Datorn kommer mycket snart att försättas i vänteläge om den inte ansluts "
+"till extern ström."
 
 #. TRANSLATORS: give the user a ultimatum
 #: ../src/gpm-manager.c:1641
 #, c-format
 msgid "Computer will hibernate very soon unless it is plugged in."
-msgstr "Datorn kommer mycket snart att försättas i viloläge om den inte ansluts till extern ström."
+msgstr ""
+"Datorn kommer mycket snart att försättas i viloläge om den inte ansluts till "
+"extern ström."
 
 #. TRANSLATORS: give the user a ultimatum
 #: ../src/gpm-manager.c:1645
 #, c-format
 msgid "Computer will shutdown very soon unless it is plugged in."
-msgstr "Datorn kommer mycket snart att stängas av om den inte ansluts till extern ström."
+msgstr ""
+"Datorn kommer mycket snart att stängas av om den inte ansluts till extern "
+"ström."
 
 #. TRANSLATORS: the UPS is very low
 #. TRANSLATORS: UPS is really, really, low
-#: ../src/gpm-manager.c:1652
-#: ../src/gpm-manager.c:1819
+#: ../src/gpm-manager.c:1652 ../src/gpm-manager.c:1819
 msgid "UPS critically low"
 msgstr "UPS-reservström är kritiskt låg"
 
 #. TRANSLATORS: give the user a ultimatum
 #: ../src/gpm-manager.c:1656
 #, c-format
-msgid "Approximately <b>%s</b> of remaining UPS power (%.0f%%). Restore AC power to your computer to avoid losing data."
-msgstr "Ungefär <b>%s</b> av återstående UPS-reservström (%.0f%%). Anslut strömadaptern till din dator för att undvika dataförlust."
+msgid ""
+"Approximately <b>%s</b> of remaining UPS power (%.0f%%). Restore AC power to "
+"your computer to avoid losing data."
+msgstr ""
+"Ungefär <b>%s</b> av återstående UPS-reservström (%.0f%%). Anslut "
+"strömadaptern till din dator för att undvika dataförlust."
 
 #. TRANSLATORS: the device is just going to stop working
 #: ../src/gpm-manager.c:1665
 #, c-format
-msgid "Wireless mouse is very low in power (%.0f%%). This device will soon stop functioning if not charged."
-msgstr "Trådlösa musen har mycket låg strömspänning (%.0f%%). Enheten kommer inom kort att sluta fungera om den inte laddas upp."
+msgid ""
+"Wireless mouse is very low in power (%.0f%%). This device will soon stop "
+"functioning if not charged."
+msgstr ""
+"Trådlösa musen har mycket låg strömspänning (%.0f%%). Enheten kommer inom "
+"kort att sluta fungera om den inte laddas upp."
 
 #. TRANSLATORS: the device is just going to stop working
 #: ../src/gpm-manager.c:1673
 #, c-format
-msgid "Wireless keyboard is very low in power (%.0f%%). This device will soon stop functioning if not charged."
-msgstr "Trådlösa tangentbordet har mycket låg strömspänning (%.0f%%). Enheten kommer inom kort att sluta fungera om den inte laddas upp."
+msgid ""
+"Wireless keyboard is very low in power (%.0f%%). This device will soon stop "
+"functioning if not charged."
+msgstr ""
+"Trådlösa tangentbordet har mycket låg strömspänning (%.0f%%). Enheten kommer "
+"inom kort att sluta fungera om den inte laddas upp."
 
 #. TRANSLATORS: the device is just going to stop working
 #: ../src/gpm-manager.c:1682
 #, c-format
-msgid "PDA is very low in power (%.0f%%). This device will soon stop functioning if not charged."
-msgstr "Handdatorn har mycket låg strömspänning (%.0f%%). Enheten kommer inom kort att sluta fungera om den inte laddas upp."
+msgid ""
+"PDA is very low in power (%.0f%%). This device will soon stop functioning if "
+"not charged."
+msgstr ""
+"Handdatorn har mycket låg strömspänning (%.0f%%). Enheten kommer inom kort "
+"att sluta fungera om den inte laddas upp."
 
 #. TRANSLATORS: the device is just going to stop working
 #: ../src/gpm-manager.c:1692
 #, c-format
-msgid "Cell phone is very low in power (%.0f%%). This device will soon stop functioning if not charged."
-msgstr "Mobiltelefonen har mycket låg strömspänning (%.0f%%). Enheten kommer inom kort att sluta fungera om den inte laddas upp."
+msgid ""
+"Cell phone is very low in power (%.0f%%). This device will soon stop "
+"functioning if not charged."
+msgstr ""
+"Mobiltelefonen har mycket låg strömspänning (%.0f%%). Enheten kommer inom "
+"kort att sluta fungera om den inte laddas upp."
 
 #. TRANSLATORS: the device is just going to stop working
 #: ../src/gpm-manager.c:1703
 #, c-format
-msgid "Media player is very low in power (%.0f%%). This device will soon stop functioning if not charged."
-msgstr "Mediaspelaren har mycket låg strömspänning (%.0f%%). Enheten kommer inom kort att sluta fungera om den inte laddas upp."
+msgid ""
+"Media player is very low in power (%.0f%%). This device will soon stop "
+"functioning if not charged."
+msgstr ""
+"Mediaspelaren har mycket låg strömspänning (%.0f%%). Enheten kommer inom "
+"kort att sluta fungera om den inte laddas upp."
 
 #. TRANSLATORS: the device is just going to stop working
 #: ../src/gpm-manager.c:1712
 #, c-format
-msgid "Tablet is very low in power (%.0f%%). This device will soon stop functioning if not charged."
-msgstr "Pekdatorn har mycket låg strömspänning (%.0f%%). Enheten kommer inom kort att sluta fungera om den inte laddas upp."
+msgid ""
+"Tablet is very low in power (%.0f%%). This device will soon stop functioning "
+"if not charged."
+msgstr ""
+"Pekdatorn har mycket låg strömspänning (%.0f%%). Enheten kommer inom kort "
+"att sluta fungera om den inte laddas upp."
 
 #. TRANSLATORS: the device is just going to stop working
 #: ../src/gpm-manager.c:1721
 #, c-format
-msgid "Attached computer is very low in power (%.0f%%). The device will soon shutdown if not charged."
-msgstr "Ansluten dator har mycket låg strömspänning (%.0f%%). Enheten kommer inom kort att stängas av om den inte laddas upp."
+msgid ""
+"Attached computer is very low in power (%.0f%%). The device will soon "
+"shutdown if not charged."
+msgstr ""
+"Ansluten dator har mycket låg strömspänning (%.0f%%). Enheten kommer inom "
+"kort att stängas av om den inte laddas upp."
 
 #. TRANSLATORS: computer will shutdown without saving data
 #: ../src/gpm-manager.c:1789
-msgid "The battery is below the critical level and this computer will <b>power-off</b> when the battery becomes completely empty."
-msgstr "Batteriet är under den kritiska nivån och den här datorn kommer att <b>stängas av</b> när batteriet blir helt tomt."
+msgid ""
+"The battery is below the critical level and this computer will <b>power-off</"
+"b> when the battery becomes completely empty."
+msgstr ""
+"Batteriet är under den kritiska nivån och den här datorn kommer att "
+"<b>stängas av</b> när batteriet blir helt tomt."
 
 #. TRANSLATORS: computer will suspend
 #: ../src/gpm-manager.c:1795
-msgid "The battery is below the critical level and this computer is about to suspend.<br><b>NOTE:</b> A small amount of power is required to keep your computer in a suspended state."
-msgstr "Batteriet är under den kritiska nivån och den här datorn kommer att försättas i vänteläge.<br><b>OBSERVERA:</b> En liten mängd ström krävs för att hålla din dator i ett väntande tillstånd."
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
+"computer in a suspended state."
+msgstr ""
+"Batteriet är under den kritiska nivån och den här datorn kommer att "
+"försättas i vänteläge.<br><b>OBSERVERA:</b> En liten mängd ström krävs för "
+"att hålla din dator i ett väntande tillstånd."
 
 #. TRANSLATORS: computer will hibernate
 #: ../src/gpm-manager.c:1802
-msgid "The battery is below the critical level and this computer is about to hibernate."
-msgstr "Batteriet är under den kritiska nivån och den här datorn kommer att försättas i viloläge."
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"hibernate."
+msgstr ""
+"Batteriet är under den kritiska nivån och den här datorn kommer att "
+"försättas i viloläge."
 
 #. TRANSLATORS: computer will just shutdown
 #: ../src/gpm-manager.c:1807
-msgid "The battery is below the critical level and this computer is about to shutdown."
-msgstr "Batteriet är under den kritiska nivån och den här datorn kommer att stängas av."
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"shutdown."
+msgstr ""
+"Batteriet är under den kritiska nivån och den här datorn kommer att stängas "
+"av."
 
 #. TRANSLATORS: computer will shutdown without saving data
 #: ../src/gpm-manager.c:1827
-msgid "UPS is below the critical level and this computer will <b>power-off</b> when the UPS becomes completely empty."
-msgstr "UPS:en är under den kritiska nivån och den här datorn kommer <b>stängas av</b> när UPS:en blir helt tom."
+msgid ""
+"UPS is below the critical level and this computer will <b>power-off</b> when "
+"the UPS becomes completely empty."
+msgstr ""
+"UPS:en är under den kritiska nivån och den här datorn kommer <b>stängas av</"
+"b> när UPS:en blir helt tom."
 
 #. TRANSLATORS: computer will hibernate
 #: ../src/gpm-manager.c:1833
-msgid "UPS is below the critical level and this computer is about to hibernate."
-msgstr "UPS:en är under den kritiska nivån och den här datorn kommer att försättas i viloläge."
+msgid ""
+"UPS is below the critical level and this computer is about to hibernate."
+msgstr ""
+"UPS:en är under den kritiska nivån och den här datorn kommer att försättas i "
+"viloläge."
 
 #. TRANSLATORS: computer will just shutdown
 #: ../src/gpm-manager.c:1838
 msgid "UPS is below the critical level and this computer is about to shutdown."
-msgstr "UPS:en är under den kritiska nivån och den här datorn kommer inom kort att stängas av."
+msgstr ""
+"UPS:en är under den kritiska nivån och den här datorn kommer inom kort att "
+"stängas av."
 
 #. TRANSLATORS: there was in install problem
 #: ../src/gpm-manager.c:1974
@@ -930,15 +987,16 @@ msgstr "Installeringsproblem!"
 #. TRANSLATORS: the GConf schema was not installed properly
 #: ../src/gpm-manager.c:1976
 msgid ""
-"The configuration defaults for GNOME Power Manager have not been installed correctly.\n"
+"The configuration defaults for GNOME Power Manager have not been installed "
+"correctly.\n"
 "Please contact your computer administrator."
 msgstr ""
-"Konfigurationens standardvärden för GNOME-strömhanterare har inte installerats korrekt.\n"
+"Konfigurationens standardvärden för GNOME-strömhanterare har inte "
+"installerats korrekt.\n"
 "Kontakta din systemadministratör."
 
 #. TRANSLATORS: the rate of discharge for the device
-#: ../src/gpm-statistics.c:78
-#: ../src/gpm-statistics.c:466
+#: ../src/gpm-statistics.c:78 ../src/gpm-statistics.c:466
 msgid "Rate"
 msgstr "Frekvens"
 
@@ -946,13 +1004,11 @@ msgstr "Frekvens"
 msgid "Charge"
 msgstr "Laddning"
 
-#: ../src/gpm-statistics.c:80
-#: ../src/gpm-statistics.c:480
+#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:480
 msgid "Time to full"
 msgstr "Tid till fullständig"
 
-#: ../src/gpm-statistics.c:81
-#: ../src/gpm-statistics.c:485
+#: ../src/gpm-statistics.c:81 ../src/gpm-statistics.c:485
 msgid "Time to empty"
 msgstr "Tid till tom"
 
@@ -1010,8 +1066,7 @@ msgstr "Bild"
 msgid "Description"
 msgstr "Beskrivning"
 
-#: ../src/gpm-statistics.c:181
-#: ../src/gpm-statistics.c:405
+#: ../src/gpm-statistics.c:181 ../src/gpm-statistics.c:405
 msgid "Type"
 msgstr "Typ"
 
@@ -1172,8 +1227,7 @@ msgid "No data"
 msgstr "Inget data"
 
 #. TRANSLATORS: kernel module, usually a device driver
-#: ../src/gpm-statistics.c:829
-#: ../src/gpm-statistics.c:834
+#: ../src/gpm-statistics.c:829 ../src/gpm-statistics.c:834
 msgid "Kernel module"
 msgstr "Kärnmodul"
 
@@ -1220,10 +1274,8 @@ msgstr "Trådlöst Intel-nätverkskort"
 #. TRANSLATORS: a timer is something that fires periodically.
 #. * The parameter is a process name, e.g. "firefox-bin".
 #. * This is shown when the timer wakes up.
-#: ../src/gpm-statistics.c:915
-#: ../src/gpm-statistics.c:920
-#: ../src/gpm-statistics.c:925
-#: ../src/gpm-statistics.c:930
+#: ../src/gpm-statistics.c:915 ../src/gpm-statistics.c:920
+#: ../src/gpm-statistics.c:925 ../src/gpm-statistics.c:930
 #: ../src/gpm-statistics.c:935
 #, c-format
 msgid "Timer %s"
@@ -1251,8 +1303,7 @@ msgstr "Vänta %s"
 
 #. TRANSLATORS: this is the name of a work queue.
 #. * A work queue is a list of work that has to be done.
-#: ../src/gpm-statistics.c:950
-#: ../src/gpm-statistics.c:954
+#: ../src/gpm-statistics.c:950 ../src/gpm-statistics.c:954
 #, c-format
 msgid "Work queue %s"
 msgstr "Arbetskö %s"
@@ -1306,10 +1357,8 @@ msgid "Processor Wakeups"
 msgstr "Processoruppvakningar"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1280
-#: ../src/gpm-statistics.c:1286
-#: ../src/gpm-statistics.c:1292
-#: ../src/gpm-statistics.c:1298
+#: ../src/gpm-statistics.c:1280 ../src/gpm-statistics.c:1286
+#: ../src/gpm-statistics.c:1292 ../src/gpm-statistics.c:1298
 msgid "Time elapsed"
 msgstr "Tid åtgången"
 
@@ -1320,29 +1369,24 @@ msgstr "Effekt"
 
 #. TRANSLATORS: this is the Y axis on the graph for the whole battery device
 #. TRANSLATORS: this is the X axis on the graph for the whole battery device
-#: ../src/gpm-statistics.c:1288
-#: ../src/gpm-statistics.c:1331
-#: ../src/gpm-statistics.c:1337
-#: ../src/gpm-statistics.c:1343
+#: ../src/gpm-statistics.c:1288 ../src/gpm-statistics.c:1331
+#: ../src/gpm-statistics.c:1337 ../src/gpm-statistics.c:1343
 #: ../src/gpm-statistics.c:1349
 msgid "Cell charge"
 msgstr "Batteriladdning"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1294
-#: ../src/gpm-statistics.c:1300
+#: ../src/gpm-statistics.c:1294 ../src/gpm-statistics.c:1300
 msgid "Predicted time"
 msgstr "Beräknad tid"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1333
-#: ../src/gpm-statistics.c:1345
+#: ../src/gpm-statistics.c:1333 ../src/gpm-statistics.c:1345
 msgid "Correction factor"
 msgstr "Korrigeringsfaktor"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1339
-#: ../src/gpm-statistics.c:1351
+#: ../src/gpm-statistics.c:1339 ../src/gpm-statistics.c:1351
 msgid "Prediction accuracy"
 msgstr "Noggrannhet för beräkning"
 
@@ -1388,8 +1432,7 @@ msgstr "%s %s återstår"
 #. TRANSLATORS: device is charging, and we have a time to full and a percentage.
 #. * The first parameter is the device type, e.g. "Laptop battery" and
 #. * the second is the time, e.g. "7 hours 6 minutes"
-#: ../src/gpm-upower.c:303
-#: ../src/gpm-upower.c:320
+#: ../src/gpm-upower.c:303 ../src/gpm-upower.c:320
 #, c-format
 msgid "%s %s until charged"
 msgstr "%s %s tills uppladdat"
@@ -1410,9 +1453,7 @@ msgstr "Produkt:"
 #. TRANSLATORS: device is charged
 #. TRANSLATORS: device is charging
 #. TRANSLATORS: device is discharging
-#: ../src/gpm-upower.c:408
-#: ../src/gpm-upower.c:411
-#: ../src/gpm-upower.c:414
+#: ../src/gpm-upower.c:408 ../src/gpm-upower.c:411 ../src/gpm-upower.c:414
 #: ../src/gpm-upower.c:417
 msgid "Status:"
 msgstr "Status:"
@@ -1422,20 +1463,17 @@ msgid "Missing"
 msgstr "Saknas"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:411
-#: ../src/gpm-upower.c:692
+#: ../src/gpm-upower.c:411 ../src/gpm-upower.c:692
 msgid "Charged"
 msgstr "Uppladdat"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:414
-#: ../src/gpm-upower.c:680
+#: ../src/gpm-upower.c:414 ../src/gpm-upower.c:680
 msgid "Charging"
 msgstr "Laddar upp"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:417
-#: ../src/gpm-upower.c:684
+#: ../src/gpm-upower.c:417 ../src/gpm-upower.c:684
 msgid "Discharging"
 msgstr "Laddar ur"
 
@@ -1495,8 +1533,7 @@ msgstr "Dålig"
 msgid "Capacity:"
 msgstr "Kapacitet:"
 
-#: ../src/gpm-upower.c:473
-#: ../src/gpm-upower.c:498
+#: ../src/gpm-upower.c:473 ../src/gpm-upower.c:498
 msgid "Current charge:"
 msgstr "Aktuell laddning:"
 
@@ -1504,98 +1541,86 @@ msgstr "Aktuell laddning:"
 msgid "Last full charge:"
 msgstr "Senaste fullständiga laddning:"
 
-#: ../src/gpm-upower.c:485
-#: ../src/gpm-upower.c:503
+#: ../src/gpm-upower.c:485 ../src/gpm-upower.c:503
 msgid "Design charge:"
-msgstr "Angiven laddning:"
+msgstr "Angiven kapacitet:"
 
 #: ../src/gpm-upower.c:490
 msgid "Charge rate:"
-msgstr "Laddningsfrekvens:"
+msgstr "Laddningseffekt:"
 
 #. TRANSLATORS: system power cord
-#: ../src/gpm-upower.c:525
-#: ../src/gpm-upower.c:729
+#: ../src/gpm-upower.c:525 ../src/gpm-upower.c:729
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "Strömadapter"
 msgstr[1] "Strömadaptrar"
 
 #. TRANSLATORS: laptop primary battery
-#: ../src/gpm-upower.c:529
-#: ../src/gpm-upower.c:765
+#: ../src/gpm-upower.c:529 ../src/gpm-upower.c:765
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "Batteri i bärbar dator"
 msgstr[1] "Batterier i bärbar dator"
 
 #. TRANSLATORS: battery-backed AC power source
-#: ../src/gpm-upower.c:533
-#: ../src/gpm-upower.c:789
+#: ../src/gpm-upower.c:533 ../src/gpm-upower.c:789
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "UPS"
 msgstr[1] "UPS:er"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
-#: ../src/gpm-upower.c:537
-#: ../src/gpm-upower.c:796
+#: ../src/gpm-upower.c:537 ../src/gpm-upower.c:796
 msgid "Monitor"
 msgid_plural "Monitors"
 msgstr[0] "Skärm"
 msgstr[1] "Skärmar"
 
 #. TRANSLATORS: wireless mice with internal batteries
-#: ../src/gpm-upower.c:541
-#: ../src/gpm-upower.c:820
+#: ../src/gpm-upower.c:541 ../src/gpm-upower.c:820
 msgid "Mouse"
 msgid_plural "Mice"
 msgstr[0] "Mus"
 msgstr[1] "Möss"
 
 #. TRANSLATORS: wireless keyboard with internal battery
-#: ../src/gpm-upower.c:545
-#: ../src/gpm-upower.c:844
+#: ../src/gpm-upower.c:545 ../src/gpm-upower.c:844
 msgid "Keyboard"
 msgid_plural "Keyboards"
 msgstr[0] "Tangentbord"
 msgstr[1] "Tangentbord"
 
 #. TRANSLATORS: portable device
-#: ../src/gpm-upower.c:549
-#: ../src/gpm-upower.c:868
+#: ../src/gpm-upower.c:549 ../src/gpm-upower.c:868
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "Handdator"
 msgstr[1] "Handdatorer"
 
 #. TRANSLATORS: cell phone (mobile...)
-#: ../src/gpm-upower.c:553
-#: ../src/gpm-upower.c:892
+#: ../src/gpm-upower.c:553 ../src/gpm-upower.c:892
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "Mobiltelefon"
 msgstr[1] "Mobiltelefoner"
 
 #. TRANSLATORS: media player, mp3 etc
-#: ../src/gpm-upower.c:558
-#: ../src/gpm-upower.c:917
+#: ../src/gpm-upower.c:558 ../src/gpm-upower.c:917
 msgid "Media player"
 msgid_plural "Media players"
 msgstr[0] "Mediaspelare"
 msgstr[1] "Mediaspelare"
 
 #. TRANSLATORS: tablet device
-#: ../src/gpm-upower.c:562
-#: ../src/gpm-upower.c:941
+#: ../src/gpm-upower.c:562 ../src/gpm-upower.c:941
 msgid "Tablet"
 msgid_plural "Tablets"
 msgstr[0] "Pekdator"
 msgstr[1] "Pekdatorer"
 
 #. TRANSLATORS: tablet device
-#: ../src/gpm-upower.c:566
-#: ../src/gpm-upower.c:965
+#: ../src/gpm-upower.c:566 ../src/gpm-upower.c:965
 msgid "Computer"
 msgid_plural "Computers"
 msgstr[0] "Dator"
@@ -1848,12 +1873,15 @@ msgstr "Datorn är uppladdad"
 
 #~ msgid "Adjusts Laptop panel brightness"
 #~ msgstr "Justerar skärmens ljusstyrka på bärbar dator"
+
 #~ msgid "Brightness Applet"
 #~ msgstr "Panelprogram för justering av ljusstyrka"
+
 #~ msgid "Brightness Applet Factory"
 #~ msgstr "Panelprogramsfabrik för justering av ljusstyrka"
+
 #~ msgid "Factory for Brightness Applet"
 #~ msgstr "Panelprogramsfabrik för justering av ljusstyrka"
+
 #~ msgid "Allows user to inhibit automatic power saving"
 #~ msgstr "Tillåter användaren att förhindra automatisk strömsparning"
-
