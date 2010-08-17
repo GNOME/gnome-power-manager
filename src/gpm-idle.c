@@ -293,7 +293,7 @@ gpm_idle_set_timeout_dim (GpmIdle *idle, guint timeout)
 	idle_time_in_msec = egg_idletime_get_time (idle->priv->idletime);
 	timeout_adjusted  = gpm_idle_adjust_timeout_dim (idle_time_in_msec / 1000, timeout);
 	egg_debug ("Current idle time=%lldms, timeout was %us, becomes %us after adjustment",
-		   idle_time_in_msec, timeout, timeout_adjusted);
+		   (long long int)idle_time_in_msec, timeout, timeout_adjusted);
 	timeout = timeout_adjusted;
 
 	egg_debug ("Setting dim idle timeout: %ds", timeout);
