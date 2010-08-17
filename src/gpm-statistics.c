@@ -1096,7 +1096,7 @@ gpm_stats_set_title (GtkWindow *window, gint page_num)
  * gpm_stats_notebook_changed_cb:
  **/
 static void
-gpm_stats_notebook_changed_cb (GtkNotebook *notebook, GtkNotebookPage *page, gint page_num, gpointer user_data)
+gpm_stats_notebook_changed_cb (GtkNotebook *notebook, gpointer page, gint page_num, gpointer user_data)
 {
 	UpDevice *device;
 	GtkWidget *widget;
