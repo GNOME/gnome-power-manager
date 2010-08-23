@@ -519,6 +519,10 @@ gpm_brightness_foreach_screen (GpmBrightness *brightness, GpmXRandROp op)
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
 
+	/* Return immediately if we can't use XRandR */
+	if (!brightness->priv->has_extension)
+		return FALSE;
+
 	/* do for each screen */
 	length = brightness->priv->resources->len;
 	for (i=0; i<length; i++) {
