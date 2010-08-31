@@ -175,6 +175,9 @@ gpm_brightness_output_get_internal (GpmBrightness *brightness, RROutput output, 
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
 
+	if (brightness->priv->backlight == None)
+		return FALSE;
+
 	if (XRRGetOutputProperty (brightness->priv->dpy, output, brightness->priv->backlight,
 				  0, 4, False, False, None,
 				  &actual_type, &actual_format,
