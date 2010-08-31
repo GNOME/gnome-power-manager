@@ -675,6 +675,7 @@ gboolean
 gpm_brightness_up (GpmBrightness *brightness, gboolean *hw_changed)
 {
 	gboolean ret = FALSE;
+	guint step;
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
 
@@ -695,8 +696,15 @@ gpm_brightness_up (GpmBrightness *brightness, gboolean *hw_changed)
 		if (brightness->priv->extension_levels < 0)
 			brightness->priv->extension_levels = gpm_brightness_helper_get_value ("get-max-brightness");
 		brightness->priv->extension_current = gpm_brightness_helper_get_value ("get-brightness");
-		if (brightness->priv->extension_current < brightness->priv->extension_levels)
-			ret = gpm_brightness_helper_set_value ("set-brightness", ++brightness->priv->extension_current);
+
+		/* increase by the step, limiting to the maximum possible levels */
+		if (brightness->priv->extension_current < brightness->priv->extension_levels) {
+			step = gpm_brightness_get_step (brightness->priv->extension_levels);
+			brightness->priv->extension_current += step;
+			if (brightness->priv->extension_current > brightness->priv->extension_levels)
+				brightness->priv->extension_current = brightness->priv->extension_levels;
+			ret = gpm_brightness_helper_set_value ("set-brightness", brightness->priv->extension_current);
+		}
 		if (hw_changed != NULL)
 			*hw_changed = ret;
 		brightness->priv->cache_trusted = FALSE;
@@ -718,6 +726,7 @@ gboolean
 gpm_brightness_down (GpmBrightness *brightness, gboolean *hw_changed)
 {
 	gboolean ret = FALSE;
+	guint step;
 
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
 
@@ -735,9 +744,18 @@ gpm_brightness_down (GpmBrightness *brightness, gboolean *hw_changed)
 
 	/* legacy fallback */
 	if (!ret) {
+		if (brightness->priv->extension_levels < 0)
+			brightness->priv->extension_levels = gpm_brightness_helper_get_value ("get-max-brightness");
 		brightness->priv->extension_current = gpm_brightness_helper_get_value ("get-brightness");
-		if (brightness->priv->extension_current > 0)
-			ret = gpm_brightness_helper_set_value ("set-brightness", --brightness->priv->extension_current);
+
+		/* decrease by the step, limiting to zero */
+		if (brightness->priv->extension_current > 0) {
+			step = gpm_brightness_get_step (brightness->priv->extension_levels);
+			brightness->priv->extension_current -= step;
+			if (brightness->priv->extension_current < 0)
+				brightness->priv->extension_current = 0;
+			ret = gpm_brightness_helper_set_value ("set-brightness", brightness->priv->extension_current);
+		}
 		if (hw_changed != NULL)
 			*hw_changed = ret;
 		brightness->priv->cache_trusted = FALSE;
