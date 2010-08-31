@@ -49,7 +49,6 @@
 #include "gpm-screensaver.h"
 #include "gpm-common.h"
 #include "gpm-control.h"
-#include "gpm-networkmanager.h"
 
 #define GPM_CONTROL_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_CONTROL, GpmControlPrivate))
 
@@ -140,7 +139,6 @@ gpm_control_suspend (GpmControl *control, GError **error)
 	gboolean allowed;
 	gboolean ret = FALSE;
 	gboolean do_lock;
-	gboolean nm_sleep;
 	gboolean lock_gnome_keyring;
 	GnomeKeyringResult keyres;
 	GpmScreensaver *screensaver;
@@ -171,10 +169,6 @@ gpm_control_suspend (GpmControl *control, GError **error)
 		gpm_screensaver_lock (screensaver);
 	}
 
-	nm_sleep = g_settings_get_boolean (control->priv->settings, GPM_SETTINGS_NETWORKMANAGER_SLEEP);
-	if (nm_sleep)
-		gpm_networkmanager_sleep ();
-
 	/* Do the suspend */
 	egg_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_SUSPEND);
@@ -190,10 +184,6 @@ gpm_control_suspend (GpmControl *control, GError **error)
 			gpm_screensaver_remove_throttle (screensaver, throttle_cookie);
 	}
 
-	nm_sleep = g_settings_get_boolean (control->priv->settings, GPM_SETTINGS_NETWORKMANAGER_SLEEP);
-	if (nm_sleep)
-		gpm_networkmanager_wake ();
-
 out:
 	g_object_unref (screensaver);
 	return ret;
@@ -208,7 +198,6 @@ gpm_control_hibernate (GpmControl *control, GError **error)
 	gboolean allowed;
 	gboolean ret = FALSE;
 	gboolean do_lock;
-	gboolean nm_sleep;
 	gboolean lock_gnome_keyring;
 	GnomeKeyringResult keyres;
 	GpmScreensaver *screensaver;
@@ -240,10 +229,6 @@ gpm_control_hibernate (GpmControl *control, GError **error)
 		gpm_screensaver_lock (screensaver);
 	}
 
-	nm_sleep = g_settings_get_boolean (control->priv->settings, GPM_SETTINGS_NETWORKMANAGER_SLEEP);
-	if (nm_sleep)
-		gpm_networkmanager_sleep ();
-
 	egg_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_HIBERNATE);
 
@@ -257,11 +242,6 @@ gpm_control_hibernate (GpmControl *control, GError **error)
 		if (throttle_cookie)
 			gpm_screensaver_remove_throttle (screensaver, throttle_cookie);
 	}
-
-	nm_sleep = g_settings_get_boolean (control->priv->settings, GPM_SETTINGS_NETWORKMANAGER_SLEEP);
-	if (nm_sleep)
-		gpm_networkmanager_wake ();
-
 out:
 	g_object_unref (screensaver);
 	return ret;

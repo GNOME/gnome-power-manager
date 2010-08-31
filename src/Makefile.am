@@ -161,8 +161,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-screensaver.c				\
 	gpm-session.h					\
 	gpm-session.c					\
-	gpm-networkmanager.h				\
-	gpm-networkmanager.c				\
 	gpm-stock-icons.h				\
 	gsd-media-keys-window.h				\
 	gsd-media-keys-window.c				\
