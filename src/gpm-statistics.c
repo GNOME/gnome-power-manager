@@ -1750,9 +1750,6 @@ main (int argc, char *argv[])
 			  G_CALLBACK (gpm_stats_range_combo_changed), NULL);
 
 	client = up_client_new ();
-	g_signal_connect (client, "device-added", G_CALLBACK (gpm_stats_device_added_cb), NULL);
-	g_signal_connect (client, "device-removed", G_CALLBACK (gpm_stats_device_removed_cb), NULL);
-	g_signal_connect (client, "device-changed", G_CALLBACK (gpm_stats_device_changed_cb), NULL);
 
 	wakeups = up_wakeups_new ();
 	g_signal_connect (wakeups, "data-changed", G_CALLBACK (gpm_stats_data_changed_cb), NULL);
@@ -1772,6 +1769,11 @@ main (int argc, char *argv[])
 				gpm_stats_add_device (device);
 		}
 	}
+
+	/* connect now the coldplug is done */
+	g_signal_connect (client, "device-added", G_CALLBACK (gpm_stats_device_added_cb), NULL);
+	g_signal_connect (client, "device-removed", G_CALLBACK (gpm_stats_device_removed_cb), NULL);
+	g_signal_connect (client, "device-changed", G_CALLBACK (gpm_stats_device_changed_cb), NULL);
 
 	/* set current device */
 	if (devices->len > 0) {
