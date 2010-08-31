@@ -1,5 +1,5 @@
 polkit_policydir = $(datadir)/polkit-1/actions
-dist_polkit_policy_DATA =					\
+polkit_policy_DATA =					\
 	org.gnome.power.policy
 
 # You will need a recent intltool or the patch from this bug
