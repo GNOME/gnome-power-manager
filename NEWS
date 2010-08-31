@@ -1,3 +1,27 @@
+Version 2.31.91
+~~~~~~~~~~~~~~~
+Released: 2010-08-31
+
+* Translations
+ - Updated Danish translation (Ask H. Larsen)
+ - Updated Estonian translation (Mattias Põldaru)
+ - Updated Hungarian translation (Gabor Kelemen)
+ - Updated Indonesian translation (Andika Triwidada)
+ - Updated Serbian translation (Милош Поповић)
+ - Updated Slovak translation (Pavol Šimo)
+ - Updated Slovenian translation (Matej Urbančič)
+ - Updated Traditional Chinese translation(Hong Kong and Taiwan) (Chao-Hsiung Liao)
+
+* Bugfix:
+ - brightness-applet: Add missing include (Martin Pitt)
+ - inhibit-applet: Add missing include and re-enable deprecated GDK functions (Martin Pitt)
+ - Do not autoscale the percentage graph in the history tab. Fixes #613984 (Richard Hughes)
+ - Do not dist org.gnome.power.policy in the tarball (Richard Hughes)
+ - Fix #627711 - Don't crash on systems which don't have XBACKLIGHT (Chris Coulson)
+ - Only connect the UpClient::device-added signal after the coldplug (Richard Hughes)
+ - Re-enable deprecated GDK functions for brightness applet (Martin Pitt)
+ - Use the correct backlight step value when using the legacy fallback device (Will Woods)
+
 Version 2.31.90
 ~~~~~~~~~~~~~~~
 Released: 2010-08-18
