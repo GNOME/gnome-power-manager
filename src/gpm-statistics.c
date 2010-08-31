@@ -570,7 +570,9 @@ gpm_stats_update_info_page_history (UpDevice *device)
 			      "autorange-x", FALSE,
 			      "start-x", -history_time,
 			      "stop-x", 0,
-			      "autorange-y", TRUE,
+			      "autorange-y", FALSE,
+			      "start-y", 0,
+			      "stop-y", 100,
 			      NULL);
 	} else if (g_strcmp0 (history_type, GPM_HISTORY_RATE_VALUE) == 0) {
 		g_object_set (graph_history,
