@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.master.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-09 08:43+0530\n"
+"POT-Creation-Date: 2010-09-03 17:28+0530\n"
 "PO-Revision-Date: 2010-08-08 14:06+0530\n"
 "Last-Translator: Dr.T.Vasudevan <agnihot3@gmail.com>\n"
 "Language-Team: Tamil <<Ubuntu-l10n-tam@lists.ubuntu.com>>\n"
@@ -155,8 +155,8 @@ msgstr "மின் மேலாண்மையை அனுசரி"
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1088
-#: ../src/gpm-statistics.c:1572
+#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1090
+#: ../src/gpm-statistics.c:1574
 msgid "Power Statistics"
 msgstr "மின் புள்ளிவிவரங்கள்"
 
@@ -497,7 +497,7 @@ msgid "%.1fV"
 msgstr "%.1fV"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-main.c:172 ../src/gpm-statistics.c:1552
+#: ../src/gpm-main.c:172 ../src/gpm-statistics.c:1554
 msgid "Show extra debugging information"
 msgstr "கூடுதல் பிழைத்திருத்த தகவல்களை காட்டு"
 
@@ -1218,181 +1218,181 @@ msgid "Online"
 msgstr "இணைப்பில்"
 
 #. TRANSLATORS: the command line was not provided
-#: ../src/gpm-statistics.c:822
+#: ../src/gpm-statistics.c:824
 msgid "No data"
 msgstr "தரவு இல்லை"
 
 #. TRANSLATORS: kernel module, usually a device driver
-#: ../src/gpm-statistics.c:829 ../src/gpm-statistics.c:834
+#: ../src/gpm-statistics.c:831 ../src/gpm-statistics.c:836
 msgid "Kernel module"
 msgstr "கரு தொகுப்பு"
 
 #. TRANSLATORS: kernel housekeeping
-#: ../src/gpm-statistics.c:839
+#: ../src/gpm-statistics.c:841
 msgid "Kernel core"
 msgstr "கரு உட்கூறு "
 
 #. TRANSLATORS: interrupt between processors
-#: ../src/gpm-statistics.c:844
+#: ../src/gpm-statistics.c:846
 msgid "Interprocessor interrupt"
 msgstr "இடைசெயலி மறிப்பு"
 
 #. TRANSLATORS: unknown interrupt
-#: ../src/gpm-statistics.c:849
+#: ../src/gpm-statistics.c:851
 msgid "Interrupt"
 msgstr "தடை"
 
 #. TRANSLATORS: the keyboard and mouse device event
-#: ../src/gpm-statistics.c:896
+#: ../src/gpm-statistics.c:898
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "பிஎஸ்/2 விசைப்பலகை/ சொடுக்கி/ தொடுதிட்டு"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
-#: ../src/gpm-statistics.c:899
+#: ../src/gpm-statistics.c:901
 msgid "ACPI"
 msgstr "ஏசிபிஐ"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
-#: ../src/gpm-statistics.c:902
+#: ../src/gpm-statistics.c:904
 msgid "Serial ATA"
 msgstr "சீரியல் ஏடிஏ"
 
 #. TRANSLATORS: this is the old-style ATA interface
-#: ../src/gpm-statistics.c:905
+#: ../src/gpm-statistics.c:907
 msgid "ATA host controller"
 msgstr "ஏடிஏ புரவலன் கட்டுபடுத்தி"
 
 #. TRANSLATORS: 802.11 wireless adaptor
-#: ../src/gpm-statistics.c:908
+#: ../src/gpm-statistics.c:910
 msgid "Intel wireless adaptor"
 msgstr "இன்டல் கம்பியில்லா தகவி"
 
 #. TRANSLATORS: a timer is something that fires periodically.
 #. * The parameter is a process name, e.g. "firefox-bin".
 #. * This is shown when the timer wakes up.
-#: ../src/gpm-statistics.c:915 ../src/gpm-statistics.c:920
-#: ../src/gpm-statistics.c:925 ../src/gpm-statistics.c:930
-#: ../src/gpm-statistics.c:935
+#: ../src/gpm-statistics.c:917 ../src/gpm-statistics.c:922
+#: ../src/gpm-statistics.c:927 ../src/gpm-statistics.c:932
+#: ../src/gpm-statistics.c:937
 #, c-format
 msgid "Timer %s"
 msgstr "நேர கணனி %s"
 
 #. TRANSLATORS: the parameter is the name of task that's woken up from sleeping.
 #. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:939
+#: ../src/gpm-statistics.c:941
 #, c-format
 msgid "Sleep %s"
 msgstr "உறங்கு %s"
 
 #. TRANSLATORS: this is the name of a new realtime task.
-#: ../src/gpm-statistics.c:942
+#: ../src/gpm-statistics.c:944
 #, c-format
 msgid "New task %s"
 msgstr "புதிய வேலை %s"
 
 #. TRANSLATORS: this is the name of a task that's woken to check state.
 #. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:946
+#: ../src/gpm-statistics.c:948
 #, c-format
 msgid "Wait %s"
 msgstr "காத்திரு %s"
 
 #. TRANSLATORS: this is the name of a work queue.
 #. * A work queue is a list of work that has to be done.
-#: ../src/gpm-statistics.c:950 ../src/gpm-statistics.c:954
+#: ../src/gpm-statistics.c:952 ../src/gpm-statistics.c:956
 #, c-format
 msgid "Work queue %s"
 msgstr "வேலை வரிசை %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
-#: ../src/gpm-statistics.c:957
+#: ../src/gpm-statistics.c:959
 #, c-format
 msgid "Network route flush %s"
 msgstr "வலையமைப்பு தட சுத்தம் %s"
 
 #. TRANSLATORS: this is the name of an activity on the USB bus
-#: ../src/gpm-statistics.c:960
+#: ../src/gpm-statistics.c:962
 #, c-format
 msgid "USB activity %s"
 msgstr "யூஎஸ்பி செயல் %s"
 
 #. TRANSLATORS: we've timed out of an aligned timer, with the name
-#: ../src/gpm-statistics.c:963
+#: ../src/gpm-statistics.c:965
 #, c-format
 msgid "Wakeup %s"
 msgstr "எழுப்புதல் %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
-#: ../src/gpm-statistics.c:966
+#: ../src/gpm-statistics.c:968
 msgid "Local interrupts"
 msgstr "உள்ளமை தடைகள்"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
-#: ../src/gpm-statistics.c:969
+#: ../src/gpm-statistics.c:971
 msgid "Rescheduling interrupts"
 msgstr "தடைகளை மீள் அமைத்தல்"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1078
+#: ../src/gpm-statistics.c:1080
 msgid "Device Information"
 msgstr "சாதனம் தகவல்"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1080
+#: ../src/gpm-statistics.c:1082
 msgid "Device History"
 msgstr "சாதனம் வரலாறு"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1082
+#: ../src/gpm-statistics.c:1084
 msgid "Device Profile"
 msgstr "சாதனம் விவரகுறிப்பு"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1084
+#: ../src/gpm-statistics.c:1086
 msgid "Processor Wakeups"
 msgstr "செயலக எழுப்புதல்"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1280 ../src/gpm-statistics.c:1286
-#: ../src/gpm-statistics.c:1292 ../src/gpm-statistics.c:1298
+#: ../src/gpm-statistics.c:1282 ../src/gpm-statistics.c:1288
+#: ../src/gpm-statistics.c:1294 ../src/gpm-statistics.c:1300
 msgid "Time elapsed"
 msgstr "கடந்த நேரம்"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1282
+#: ../src/gpm-statistics.c:1284
 msgid "Power"
 msgstr "சக்தி"
 
 #. TRANSLATORS: this is the Y axis on the graph for the whole battery device
 #. TRANSLATORS: this is the X axis on the graph for the whole battery device
-#: ../src/gpm-statistics.c:1288 ../src/gpm-statistics.c:1331
-#: ../src/gpm-statistics.c:1337 ../src/gpm-statistics.c:1343
-#: ../src/gpm-statistics.c:1349
+#: ../src/gpm-statistics.c:1290 ../src/gpm-statistics.c:1333
+#: ../src/gpm-statistics.c:1339 ../src/gpm-statistics.c:1345
+#: ../src/gpm-statistics.c:1351
 msgid "Cell charge"
 msgstr "அறை சக்தி"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1294 ../src/gpm-statistics.c:1300
+#: ../src/gpm-statistics.c:1296 ../src/gpm-statistics.c:1302
 msgid "Predicted time"
 msgstr "கணிக்கப்பட்ட நேரம்"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1333 ../src/gpm-statistics.c:1345
+#: ../src/gpm-statistics.c:1335 ../src/gpm-statistics.c:1347
 msgid "Correction factor"
 msgstr "திருத்த காரணி "
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1339 ../src/gpm-statistics.c:1351
+#: ../src/gpm-statistics.c:1341 ../src/gpm-statistics.c:1353
 msgid "Prediction accuracy"
 msgstr "கணிப்பு வழுவாமை "
 
 #. TRANSLATORS: show a device by default
-#: ../src/gpm-statistics.c:1555
+#: ../src/gpm-statistics.c:1557
 msgid "Select this device at startup"
 msgstr "துவக்கத்தில் இந்த சாதனத்தை தேர்ந்தெடுக்கவும்"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:1801
+#: ../src/gpm-statistics.c:1803
 msgid "Processor"
 msgstr "செயலகம்"
 
