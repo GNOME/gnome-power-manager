@@ -55,6 +55,7 @@ struct GpmDpmsPrivate
 	gboolean		 dpms_capable;
 	GpmDpmsMode		 mode;
 	guint			 timer_id;
+	Display			*display;
 };
 
 enum {
@@ -95,7 +96,7 @@ gpm_dpms_x11_get_mode (GpmDpms *dpms, GpmDpmsMode *mode, GError **error)
 		goto out;
 	}
 
-	DPMSInfo (GDK_DISPLAY (), &state, &enabled);
+	DPMSInfo (dpms->priv->display, &state, &enabled);
 	if (!enabled) {
 		/* Server says DPMS is disabled -- so the monitor is on. */
 		result = GPM_DPMS_MODE_ON;
@@ -143,7 +144,7 @@ gpm_dpms_x11_set_mode (GpmDpms *dpms, GpmDpmsMode mode, GError **error)
 		return FALSE;
 	}
 
-	if (!DPMSInfo (GDK_DISPLAY (), &current_state, &current_enabled)) {
+	if (!DPMSInfo (dpms->priv->display, &current_state, &current_enabled)) {
 		egg_debug ("couldn't get DPMS info");
 		g_set_error (error, GPM_DPMS_ERROR, GPM_DPMS_ERROR_GENERAL,
 			     "Unable to get DPMS state");
@@ -177,12 +178,12 @@ gpm_dpms_x11_set_mode (GpmDpms *dpms, GpmDpmsMode mode, GError **error)
 
 	gpm_dpms_x11_get_mode (dpms, &current_mode, NULL);
 	if (current_mode != mode) {
-		if (! DPMSForceLevel (GDK_DISPLAY (), state)) {
+		if (! DPMSForceLevel (dpms->priv->display, state)) {
 			g_set_error (error, GPM_DPMS_ERROR, GPM_DPMS_ERROR_GENERAL,
 				     "Could not change DPMS mode");
 			return FALSE;
 		}
-		XSync (GDK_DISPLAY (), FALSE);
+		XSync (dpms->priv->display, FALSE);
 	}
 
 	return TRUE;
@@ -309,7 +310,7 @@ gpm_dpms_clear_timeouts (GpmDpms *dpms)
 	}
 
 	egg_debug ("set timeouts to zero");
-	ret = DPMSSetTimeouts (GDK_DISPLAY (), 0, 0, 0);
+	ret = DPMSSetTimeouts (dpms->priv->display, 0, 0, 0);
 
 out:
 	return ret;
@@ -344,7 +345,8 @@ gpm_dpms_init (GpmDpms *dpms)
 	dpms->priv = GPM_DPMS_GET_PRIVATE (dpms);
 
 	/* DPMSCapable() can never change for a given display */
-	dpms->priv->dpms_capable = DPMSCapable (GDK_DISPLAY ());
+	dpms->priv->display = GDK_DISPLAY_XDISPLAY (gdk_display_get_default());
+	dpms->priv->dpms_capable = DPMSCapable (dpms->priv->display);
 	dpms->priv->timer_id = g_timeout_add_seconds (GPM_DPMS_POLL_TIME, (GSourceFunc)gpm_dpms_poll_mode_cb, dpms);
 #if GLIB_CHECK_VERSION(2,25,8)
 	g_source_set_name_by_id (dpms->priv->timer_id, "[GpmDpms] poll");

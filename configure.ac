@@ -23,14 +23,6 @@ GNOME_DOC_INIT
 AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal)
 
 dnl ---------------------------------------------------------------------------
-dnl - Extra verbose warning switches
-dnl ---------------------------------------------------------------------------
-CPPFLAGS="$CPPFLAGS -DG_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_SINGLE_INCLUDES"
-CPPFLAGS="$CPPFLAGS -DG_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED"
-#CPPFLAGS="$CPPFLAGS -DGDK_MULTIHEAD_SAFE -DGTK_MULTIHEAD_SAFE"
-CPPFLAGS="$CPPFLAGS -DGSEAL_ENABLE"
-
-dnl ---------------------------------------------------------------------------
 dnl - Use strict options (default enabled for devs, disabled in releases)
 dnl ---------------------------------------------------------------------------
 if test -d ".git"; then
@@ -43,6 +35,10 @@ AC_ARG_ENABLE(strict, AS_HELP_STRING([--enable-strict],
 		[Enable strict compilation options]), enable_strict=$enableval,
 		enable_strict=$default_strict)
 if test x$enable_strict != xno; then
+	CPPFLAGS="$CPPFLAGS -DG_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_SINGLE_INCLUDES"
+	CPPFLAGS="$CPPFLAGS -DG_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED"
+	CPPFLAGS="$CPPFLAGS -DGDK_MULTIHEAD_SAFE -DGTK_MULTIHEAD_SAFE"
+	CPPFLAGS="$CPPFLAGS -DGSEAL_ENABLE"
 	if test "$GCC" = "yes"; then
 		WARNINGFLAGS="$WARNINGFLAGS -Werror"
 	fi
@@ -87,12 +83,6 @@ dnl - Debugging switches (uncomment this if you want to use gdb)
 dnl ---------------------------------------------------------------------------
 CPPFLAGS="$CPPFLAGS -g"
 CPPFLAGS="$CPPFLAGS -fexceptions"
-
-dnl ---------------------------------------------------------------------------
-dnl - GProf switches (do not use for normal building)
-dnl ---------------------------------------------------------------------------
-#CPPFLAGS="$CPPFLAGS -c -pg"
-#LDFLAGS="$LDFLAGS -pg"
 
 dnl ---------------------------------------------------------------------------
 dnl - gettext stuff
