@@ -159,8 +159,9 @@ gpm_manager_error_get_type (void)
 static gboolean
 gpm_manager_play_loop_timeout_cb (GpmManager *manager)
 {
-	ca_context_play_full (ca_gtk_context_get (),
-			      0,
+	ca_context *context;
+	context = ca_gtk_context_get_for_screen (gdk_screen_get_default ());
+	ca_context_play_full (context, 0,
 			      manager->priv->critical_alert_loop_props,
 			      NULL,
 			      NULL);
@@ -197,6 +198,7 @@ gpm_manager_play_loop_start (GpmManager *manager, GpmManagerSound action, gboole
 	const gchar *desc = NULL;
 	gboolean ret;
 	gint retval;
+	ca_context *context;
 
 	ret = gconf_client_get_bool (manager->priv->conf, GPM_CONF_UI_ENABLE_SOUND, NULL);
 	if (!ret && !force) {
@@ -238,7 +240,8 @@ gpm_manager_play_loop_start (GpmManager *manager, GpmManagerSound action, gboole
 									  manager);
 
 	/* play the sound, using sounds from the naming spec */
-	retval = ca_context_play (ca_gtk_context_get (), 0,
+	context = ca_gtk_context_get_for_screen (gdk_screen_get_default ());
+	retval = ca_context_play (context, 0,
 				  CA_PROP_EVENT_ID, id,
 				  CA_PROP_EVENT_DESCRIPTION, desc, NULL);
 	if (retval < 0)
@@ -256,6 +259,7 @@ gpm_manager_play (GpmManager *manager, GpmManagerSound action, gboolean force)
 	const gchar *desc = NULL;
 	gboolean ret;
 	gint retval;
+	ca_context *context;
 
 	ret = gconf_client_get_bool (manager->priv->conf, GPM_CONF_UI_ENABLE_SOUND, NULL);
 	if (!ret && !force) {
@@ -312,7 +316,8 @@ gpm_manager_play (GpmManager *manager, GpmManagerSound action, gboolean force)
 	}
 
 	/* play the sound, using sounds from the naming spec */
-	retval = ca_context_play (ca_gtk_context_get (), 0,
+	context = ca_gtk_context_get_for_screen (gdk_screen_get_default ());
+	retval = ca_context_play (context, 0,
 				  CA_PROP_EVENT_ID, id,
 				  CA_PROP_EVENT_DESCRIPTION, desc, NULL);
 	if (retval < 0)

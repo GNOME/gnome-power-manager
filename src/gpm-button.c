@@ -144,7 +144,7 @@ gpm_button_grab_keystring (GpmButton *button, guint64 keycode)
 	gint ret;
 
 	/* get the current X Display */
-	display = GDK_DISPLAY ();
+	display = GDK_DISPLAY_XDISPLAY (gdk_display_get_default());
 
 	/* don't abort on error */
 	gdk_error_trap_push ();
@@ -198,7 +198,7 @@ gpm_button_xevent_key (GpmButton *button, guint keysym, const gchar *key_name)
 	guint keycode;
 
 	/* convert from keysym to keycode */
-	keycode = XKeysymToKeycode (GDK_DISPLAY (), keysym);
+	keycode = XKeysymToKeycode (GDK_DISPLAY_XDISPLAY (gdk_display_get_default()), keysym);
 	if (keycode == 0) {
 		egg_warning ("could not map keysym %x to keycode", keysym);
 		return FALSE;

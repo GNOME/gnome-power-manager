@@ -399,7 +399,7 @@ egg_idletime_init (EggIdletime *idletime)
 	idletime->priv->reset_set = FALSE;
 	idletime->priv->idle_counter = None;
 	idletime->priv->sync_event = 0;
-	idletime->priv->dpy = GDK_DISPLAY ();
+	idletime->priv->dpy = GDK_DISPLAY_XDISPLAY (gdk_display_get_default());
 
 	/* get the sync event */
 	if (!XSyncQueryExtension (idletime->priv->dpy, &idletime->priv->sync_event, &sync_error)) {
