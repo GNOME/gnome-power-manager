@@ -72,7 +72,7 @@ lshal | grep "battery\."
 
 OS=`uname -s`
 
-echo "DeviceKit data:"
+echo "UPower data:"
 upower --dump
 
 echo "GNOME Power Manager Process Information:"
