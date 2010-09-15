@@ -2,7 +2,7 @@
 			   A Power Manager for GNOME
 
 GNOME Power Manager is a GNOME session daemon that acts as a policy agent on top of
-the DeviceKit stack, which requires fairly new versions of the kernel and udev.
+UPower, which requires fairly new versions of the kernel and udev.
 GNOME Power Manager listens for system events and responds with user-configurable actions.
 
 GNOME Power Manager comes in three main parts:
@@ -24,10 +24,10 @@ To build, GNOME Power Manager requires
 	- libpanel (2.0.0 or later)
 	- xrandr (1.2.0 or later)
 	- Canberra (0.10 or later)
-	- DeviceKit-power (008 or later)
+	- UPower (0.9.1 or later)
 	- HAL (0.5.8 or later)
 
-To work properly, gnome-power-manager requires udevd, DeviceKit-power and
-DeviceKit-disks to be running.
+To work properly, gnome-power-manager requires udevd, upowerd and
+udisks-daemon to be running.
 
 For more information, please see http://www.gnome.org/projects/gnome-power-manager/
