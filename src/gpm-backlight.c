@@ -745,7 +745,7 @@ gpm_backlight_init (GpmBacklight *backlight)
 	/* gets caps */
 	backlight->priv->can_dim = gpm_brightness_has_hw (backlight->priv->brightness);
 
-	/* we use DeviceKit-power to see if we should show the lid UI */
+	/* we use UPower to see if we should show the lid UI */
 	g_object_get (backlight->priv->client,
 		      "lid-is-present", &lid_is_present,
 		      NULL);
