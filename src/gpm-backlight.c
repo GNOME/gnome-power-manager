@@ -216,7 +216,7 @@ gpm_backlight_dialog_show (GpmBacklight *backlight)
 	 * know its true size, yet, so we need to jump through hoops
 	 */
 	gtk_window_get_default_size (GTK_WINDOW (backlight->priv->popup), &orig_w, &orig_h);
-	gtk_widget_size_request (backlight->priv->popup, &win_req);
+	gtk_widget_get_preferred_size(backlight->priv->popup, &win_req, NULL);
 
 	if (win_req.width > orig_w) {
 		orig_w = win_req.width;
