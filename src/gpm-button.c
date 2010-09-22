@@ -171,7 +171,7 @@ gpm_button_grab_keystring (GpmButton *button, guint64 keycode)
 
 	/* we are not processing the error */
 	gdk_flush ();
-	gdk_error_trap_pop ();
+	gdk_error_trap_pop_ignored ();
 
 	egg_debug ("Grabbed modmask=%x, keycode=%li", modmask, (long int) keycode);
 	return TRUE;
