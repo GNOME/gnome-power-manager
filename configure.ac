@@ -197,7 +197,7 @@ dnl ---------------------------------------------------------------------------
 AC_ARG_ENABLE(applets,
               AS_HELP_STRING([--disable-applets],
                              [Build the extra power applets]),
-              enable_applets=$enableval,enable_applets=yes)
+              enable_applets=$enableval,enable_applets=no)
 
 AC_MSG_CHECKING([whether to build applet support])
 have_applets=no
