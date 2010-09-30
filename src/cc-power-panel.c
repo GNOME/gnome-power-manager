@@ -66,17 +66,6 @@ cc_power_panel_help_cb (GtkWidget *widget, CcPowerPanel *panel)
 }
 
 /**
- * cc_power_panel_icon_radio_cb:
- **/
-static void
-cc_power_panel_icon_radio_cb (GtkWidget *widget, CcPowerPanel *panel)
-{
-	gint policy;
-	policy = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "policy"));
-	g_settings_set_enum (panel->priv->settings, GPM_SETTINGS_ICON_POLICY, policy);
-}
-
-/**
  * cc_power_panel_format_percentage_cb:
  **/
 static gchar *
@@ -312,63 +301,6 @@ cc_power_panel_setup_time_combo (CcPowerPanel *panel, const gchar *widget_name,
 			  G_CALLBACK (cc_power_panel_action_time_changed_cb), panel);
 }
 
-/** setup the notification page */
-static void
-cc_power_panel_setup_notification (CcPowerPanel *panel)
-{
-	gint icon_policy;
-	GtkWidget *radiobutton_icon_present;
-	GtkWidget *radiobutton_icon_charge;
-	GtkWidget *radiobutton_icon_low;
-	GtkWidget *radiobutton_icon_never;
-	gboolean is_writable;
-
-	icon_policy = g_settings_get_enum (panel->priv->settings, GPM_SETTINGS_ICON_POLICY);
-	radiobutton_icon_present = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder,
-					       "radiobutton_notification_present"));
-	radiobutton_icon_charge = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder,
-					      "radiobutton_notification_charge"));
-	radiobutton_icon_low = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder,
-					   "radiobutton_notification_low"));
-	radiobutton_icon_never = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder,
-					     "radiobutton_notification_never"));
-
-	is_writable = g_settings_is_writable (panel->priv->settings, GPM_SETTINGS_ICON_POLICY);
-	gtk_widget_set_sensitive (radiobutton_icon_present, is_writable);
-	gtk_widget_set_sensitive (radiobutton_icon_charge, is_writable);
-	gtk_widget_set_sensitive (radiobutton_icon_low, is_writable);
-	gtk_widget_set_sensitive (radiobutton_icon_never, is_writable);
-
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_present),
-				      icon_policy == GPM_ICON_POLICY_PRESENT);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_charge),
-				      icon_policy == GPM_ICON_POLICY_CHARGE);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_low),
-				      icon_policy == GPM_ICON_POLICY_LOW);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_never),
-				      icon_policy == GPM_ICON_POLICY_NEVER);
-
-	g_object_set_data (G_OBJECT (radiobutton_icon_present), "policy",
-			   GINT_TO_POINTER (GPM_ICON_POLICY_PRESENT));
-	g_object_set_data (G_OBJECT (radiobutton_icon_charge), "policy",
-			   GINT_TO_POINTER (GPM_ICON_POLICY_CHARGE));
-	g_object_set_data (G_OBJECT (radiobutton_icon_low), "policy",
-			   GINT_TO_POINTER (GPM_ICON_POLICY_LOW));
-	g_object_set_data (G_OBJECT (radiobutton_icon_never), "policy",
-			   GINT_TO_POINTER (GPM_ICON_POLICY_NEVER));
-
-	/* only connect the callbacks after we set the value, else the settings
-	 * keys gets written to (for a split second), and the icon flickers. */
-	g_signal_connect (radiobutton_icon_present, "clicked",
-			  G_CALLBACK (cc_power_panel_icon_radio_cb), panel);
-	g_signal_connect (radiobutton_icon_charge, "clicked",
-			  G_CALLBACK (cc_power_panel_icon_radio_cb), panel);
-	g_signal_connect (radiobutton_icon_low, "clicked",
-			  G_CALLBACK (cc_power_panel_icon_radio_cb), panel);
-	g_signal_connect (radiobutton_icon_never, "clicked",
-			  G_CALLBACK (cc_power_panel_icon_radio_cb), panel);
-}
-
 /**
  * cc_power_panel_setup_ac:
  **/
@@ -412,11 +344,11 @@ cc_power_panel_setup_ac (CcPowerPanel *panel)
 				      button_lid_actions);
 
 	/* setup brightness slider */
-	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "hscale_ac_brightness"));
-	g_settings_bind (panel->priv->settings, GPM_SETTINGS_BRIGHTNESS_AC,
-			 widget, "fill-level",
-			 G_SETTINGS_BIND_DEFAULT);
-	g_signal_connect (G_OBJECT (widget), "format-value",
+//	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "hscale_ac_brightness"));
+//	g_settings_bind (panel->priv->settings, GPM_SETTINGS_BRIGHTNESS_AC,
+//			 widget, "fill-level",
+//			 G_SETTINGS_BIND_DEFAULT);
+if(0)	g_signal_connect (G_OBJECT (widget), "format-value",
 			  G_CALLBACK (cc_power_panel_format_percentage_cb), NULL);
 
 	/* set up the checkboxes */
@@ -768,7 +700,6 @@ cc_power_panel_init (CcPowerPanel *panel)
 	cc_power_panel_setup_battery (panel);
 	cc_power_panel_setup_ups (panel);
 	cc_power_panel_setup_general (panel);
-	cc_power_panel_setup_notification (panel);
 
 out:
 	main_window = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "dialog_preferences"));
