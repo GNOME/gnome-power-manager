@@ -25,6 +25,7 @@ AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal)
 dnl ---------------------------------------------------------------------------
 dnl - Use strict options (default enabled for devs, disabled in releases)
 dnl ---------------------------------------------------------------------------
+dnl if .git directory is present, considering we are working in the repository
 if test -d ".git"; then
 	default_strict=yes
 else
@@ -99,44 +100,22 @@ dnl - Check library dependencies
 dnl ---------------------------------------------------------------------------
 PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.13.0 gobject-2.0 gio-2.0 >= 2.25.9)
 
-dnl **** We can compile against GTK2 or GTK3 ****
-AC_MSG_CHECKING([which gtk+ version to compile against])
-AC_ARG_WITH([gtk],
-  [AS_HELP_STRING([--with-gtk=2.0|3.0],[which gtk+ version to compile against (default: 3.0)])],
-  [case "$with_gtk" in
-     2.0|3.0) ;;
-     *) AC_MSG_ERROR([invalid gtk version specified]) ;;
-   esac],
-  [with_gtk=2.0])
-AC_MSG_RESULT([$with_gtk])
-
-case "$with_gtk" in
-2.0)
-	PKG_CHECK_MODULES(GNOME, [
-	 gconf-2.0 >= 2.31.1
-	 gnome-keyring-1 >= 0.6.0
-	 cairo >= 1.0.0
-	 gtk+-2.0 >= 2.21.5
-	 gdk-x11-2.0])
-	PKG_CHECK_MODULES(NOTIFY, libnotify >= 0.4.0, has_libnotify=yes, has_libnotify=no)
-	PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk >= 0.10)
-	;;
-3.0)
-	PKG_CHECK_MODULES(GNOME, [
-	 gconf-2.0 >= 2.31.1
-	 gnome-keyring-1 >= 0.6.0
-	 cairo >= 1.0.0
-	 gtk+-3.0 >= 2.90.3
-	 gdk-x11-3.0])
-	PKG_CHECK_MODULES(NOTIFY, libnotify >= 0.5.0, has_libnotify=yes, has_libnotify=no)
-	PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk3 >= 0.10)
-       ;;
-esac
+PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk3 >= 0.10)
 
 PKG_CHECK_MODULES(DBUS,[
  dbus-glib-1 >= 0.70
  dbus-1 >= 1.0
  gthread-2.0])
+
+PKG_CHECK_MODULES(GNOME, [
+ gtk+-3.0 >= 2.90.3
+ gconf-2.0 >= 2.31.1
+ gnome-keyring-1 >= 0.6.0
+ cairo >= 1.0.0])
+
+PKG_CHECK_MODULES(GDK, [
+ gdk-3.0 >= 2.90.3
+ gdk-x11-3.0])
 
 PKG_CHECK_MODULES(X11, [
  xrandr >= 1.2.0
@@ -151,6 +130,7 @@ PKG_CHECK_EXISTS(
 PKG_CHECK_MODULES(UPOWER, upower-glib >= 0.9.1)
 
 dnl **** Check for NOTIFY ****
+PKG_CHECK_MODULES(NOTIFY, libnotify >= 0.5.0, has_libnotify=yes, has_libnotify=no)
 AM_CONDITIONAL(HAVE_NOTIFY, test x$libnotify = xyes)
 if test x$has_libnotify = xyes; then
 	AC_DEFINE(HAVE_NOTIFY,1,[Use session notifications])
@@ -339,7 +319,6 @@ echo "
         datadir:                   ${datadir}
         compiler:                  ${CC}
         cflags:                    ${CFLAGS}
-        GTK version:               ${with_gtk}
         Building extra applets:    ${enable_applets}
         Self test support:         ${have_tests}
         Docbook support:           ${enable_docbook_docs}
