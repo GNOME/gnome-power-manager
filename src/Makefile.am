@@ -61,8 +61,6 @@ libgpmshared_a_SOURCES =				\
 	gpm-array-float.h				\
 	gpm-idletime.h					\
 	gpm-idletime.c					\
-	egg-string.h					\
-	egg-string.c					\
 	egg-console-kit.h				\
 	egg-console-kit.c				\
 	gpm-common.h					\
