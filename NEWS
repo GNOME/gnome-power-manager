@@ -1,3 +1,72 @@
+Version 2.91.1
+~~~~~~~~~~~~~~
+Released: 2010-10-04
+
+* Translations
+ - Updated Arabic translation (Khaled Hosny)
+ - Updated British English translation (Bruce Cowan)
+ - Updated Bulgarian translation (Damyan Ivanov)
+ - Updated Catlan translation (Gil Forcada)
+ - Updated Czech translation (Ondrej Kopka, Marek Cernocky)
+ - Updated Danish translation (Ask H. Larsen)
+ - Updated Dutch translation (Wouter Bolsterlee)
+ - Updated Estonian translation (Ivar Smolin)
+ - Updated Estonian translation (Mattias Põldaru)
+ - Updated Finnish translation (Timo Jyrinki).
+ - Updated French translation (Bruno Brouard)
+ - Updated Galician translations (Fran Diéguez)
+ - Updated German translation (Christian Kirbach)
+ - Updated German translation (Mario Blättermann)
+ - Updated Greek translation for gnome-power-manager (Michael Kotsarinis)
+ - Updated Hebrew translation (Yaron Shahrabani)
+ - Updated Hungarian translation (Gabor Kelemen)
+ - Updated Indonesian translation (Dirgita)
+ - Updated Italian translation (Milo Casagrande)
+ - Updated Japanese translation (Takayuki KUSANO)
+ - Updated Lithuanian translation (Aurimas Černius)
+ - Updated Lithuanian translation (Žygimantas Beručka)
+ - Updated Polish translation (Piotr Drąg)
+ - Updated Portuguese translation (Duarte Loreto)
+ - Updated Punjabi translation (A S Alam)
+ - Updated Romanian translation (Lucian Adrian Grijincu)
+ - Updated Serbian translation (Милош Поповић)
+ - Updated Simplified Chinese help translation (Aron Xu)
+ - Updated Simplified Chinese translation (Tao Wang)
+ - Updated Slovak translation (Pavol Šimo)
+ - Updated Slovenian translation (Andrej Žnidaršič)
+ - Updated Slovenian translation (Matej Urbančič)
+ - Updated Swedish translation (Daniel Nylander)
+ - Updated Tamil translation (drtv)
+ - Updated Traditional Chinese translation(Hong Kong and Taiwan) (Chao-Hsiung Liao)
+
+* New Features:
+ - Support arbitrary time combo values (Michael Terry)
+ - Allow 'Do nothing' as an option as Xorg is still broken. Fixes #589736 (Richard Hughes)
+
+* Bugfix:
+ - Adjust dim timeout when necessary (Tim Liim)
+ - brightness-applet: Add missing include (Martin Pitt)
+ - Cast idle_time_in_msec to appropriate type (Frédéric Péters)
+ - Convert EggConsolekit to use GDBus (Richard Hughes)
+ - Do not autoscale the percentage graph in the history tab. Fixes #613984 (Richard Hughes)
+ - Do not dist org.gnome.power.policy in the tarball (Richard Hughes)
+ - Do not play games with string concatenating. Fixes #626191 (Richard Hughes)
+ - Don't poke NetworkManager at suspend and resume (Richard Hughes)
+ - Ensure the preferences menu item launches the control center. Fixes rh#619231 (Richard Hughes)
+ - Fix #627711 - Don't crash on systems which don't have XBACKLIGHT (Chris Coulson)
+ - Fix compile with expose -> draw change (Richard Hughes)
+ - gtk_widget_size_request is deprecated (Alban Browaeys)
+ - has_separator was removed from gtk 3 (Alban Browaeys)
+ - Make changes to the Power control center capplet to better match the mockup (Richard Hughes)
+ - Only disable deprecated code for --enable-strict builds (Richard Hughes)
+ - Raise the GTK build dep to 2.91.0 (Richard Hughes)
+ - Remove last traces of DeviceKit-power (Michael Biebl)
+ - Remove the inhibit applet. It doesn't belong here anymore (Richard Hughes)
+ - Replace gdk_error_trap_pop by new gdk_error_trap_pop_ignored (Alban Browaeys)
+ - Treat brightness-up when at max as a success (Michael Terry)
+ - Update the GSD media keys window shared code to fix the build with GTK3 (William Jon McCann)
+ - Use the correct backlight step value when using the legacy fallback device (Will Woods)
+
 Version 2.31.4
 ~~~~~~~~~~~~~~
 Released: 2010-07-01
