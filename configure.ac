@@ -271,7 +271,6 @@ Makefile
 src/Makefile
 applets/Makefile
 applets/brightness/Makefile
-applets/inhibit/Makefile
 docs/Makefile
 man/Makefile
 help/Makefile
