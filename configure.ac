@@ -108,13 +108,13 @@ PKG_CHECK_MODULES(DBUS,[
  gthread-2.0])
 
 PKG_CHECK_MODULES(GNOME, [
- gtk+-3.0 >= 2.90.3
+ gtk+-3.0 >= 2.91.0
  gconf-2.0 >= 2.31.1
  gnome-keyring-1 >= 0.6.0
  cairo >= 1.0.0])
 
 PKG_CHECK_MODULES(GDK, [
- gdk-3.0 >= 2.90.3
+ gdk-3.0 >= 2.91.0
  gdk-x11-3.0])
 
 PKG_CHECK_MODULES(X11, [
