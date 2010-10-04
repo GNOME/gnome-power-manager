@@ -956,36 +956,26 @@ gsd_media_keys_window_real_hide (GtkWidget *widget)
 static void
 gsd_media_keys_window_real_realize (GtkWidget *widget)
 {
-        GdkColormap *colormap;
-        GtkAllocation allocation;
-        GdkBitmap *mask;
-        cairo_t *cr;
+        cairo_region_t *region;
+        GdkScreen *screen;
+        GdkVisual *visual;
 
-        colormap = gdk_screen_get_rgba_colormap (gtk_widget_get_screen (widget));
-
-        if (colormap != NULL) {
-                gtk_widget_set_colormap (widget, colormap);
+        screen = gtk_widget_get_screen (widget);
+        visual = gdk_screen_get_rgba_visual (screen);
+        if (visual == NULL) {
+                visual = gdk_screen_get_system_visual (screen);
         }
+
+        gtk_widget_set_visual (widget, visual);
 
         if (GTK_WIDGET_CLASS (gsd_media_keys_window_parent_class)->realize) {
                 GTK_WIDGET_CLASS (gsd_media_keys_window_parent_class)->realize (widget);
         }
 
-        gtk_widget_get_allocation (widget, &allocation);
-        mask = gdk_pixmap_new (gtk_widget_get_window (widget),
-                               allocation.width,
-                               allocation.height,
-                               1);
-        cr = gdk_cairo_create (mask);
-
-        cairo_set_source_rgba (cr, 1., 1., 1., 0.);
-        cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-        cairo_paint (cr);
-
         /* make the whole window ignore events */
-        gdk_window_input_shape_combine_mask (gtk_widget_get_window (widget), mask, 0, 0);
-        g_object_unref (mask);
-        cairo_destroy (cr);
+        region = cairo_region_create ();
+        gtk_widget_input_shape_combine_region (widget, region);
+        cairo_region_destroy (region);
 }
 
 static void
