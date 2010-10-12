@@ -192,25 +192,6 @@ fi
 AM_CONDITIONAL([HAVE_TESTS], [test $have_tests = yes])
 
 dnl ---------------------------------------------------------------------------
-dnl - Build applets
-dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(applets,
-              AS_HELP_STRING([--disable-applets],
-                             [Build the extra power applets]),
-              enable_applets=$enableval,enable_applets=no)
-
-AC_MSG_CHECKING([whether to build applet support])
-have_applets=no
-if test x$enable_applets = xyes ; then
-    have_applets=yes
-
-    PKG_CHECK_MODULES(PANEL, [libpanelapplet-3.0 >= 2.31.2])
-    AC_DEFINE(HAVE_APPLETS, 1, [Define if we are building applets])
-fi
-AC_MSG_RESULT([$have_applets])
-AM_CONDITIONAL([HAVE_APPLETS], [test $have_applets = yes])
-
-dnl ---------------------------------------------------------------------------
 dnl - DocBook Documentation
 dnl ---------------------------------------------------------------------------
 AC_ARG_ENABLE(docbook-docs,
@@ -269,8 +250,6 @@ dnl ---------------------------------------------------------------------------
 AC_CONFIG_FILES([
 Makefile
 src/Makefile
-applets/Makefile
-applets/brightness/Makefile
 docs/Makefile
 man/Makefile
 help/Makefile
@@ -318,7 +297,6 @@ echo "
         datadir:                   ${datadir}
         compiler:                  ${CC}
         cflags:                    ${CFLAGS}
-        Building extra applets:    ${enable_applets}
         Self test support:         ${have_tests}
         Docbook support:           ${enable_docbook_docs}
         documentation dir:         $DOCDIR

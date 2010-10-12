@@ -11,10 +11,6 @@ SUBDIRS = 						\
 	policy						\
 	tools
 
-if HAVE_APPLETS
-SUBDIRS += applets
-endif
-
 EXTRA_DIST =						\
 	HACKING						\
 	MAINTAINERS					\
@@ -40,7 +36,6 @@ DISTCLEANFILES =					\
 DISTCHECK_CONFIGURE_FLAGS = 				\
 	--disable-schemas-install			\
 	--disable-scrollkeeper				\
-	--disable-applets				\
 	--disable-tests
 
 distclean-local:
