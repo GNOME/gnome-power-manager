@@ -1491,6 +1491,20 @@ gpm_manager_engine_charge_low_cb (GpmEngine *engine, UpDevice *device, GpmManage
 		      "time-to-empty", &time_to_empty,
 		      NULL);
 
+	/* do we do the notification */
+	if (kind == UP_DEVICE_KIND_BATTERY ||
+	    kind == UP_DEVICE_KIND_UPS) {
+		ret = g_settings_get_boolean (manager->priv->settings,
+					      GPM_SETTINGS_NOTIFY_LOW_POWER_SYSTEM);
+	} else {
+		ret = g_settings_get_boolean (manager->priv->settings,
+					      GPM_SETTINGS_NOTIFY_LOW_POWER_DEVICE);
+	}
+	if (!ret) {
+		egg_debug ("ignoring notication for type %s", up_device_kind_to_string (kind));
+		goto out;
+	}
+
 	/* check to see if the batteries have not noticed we are on AC */
 	if (kind == UP_DEVICE_KIND_BATTERY) {
 		if (!manager->priv->on_battery) {
@@ -1615,6 +1629,20 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmM
 			egg_warning ("ignoring critically low message as we are not on battery power");
 			goto out;
 		}
+	}
+
+	/* do we do the notification */
+	if (kind == UP_DEVICE_KIND_BATTERY ||
+	    kind == UP_DEVICE_KIND_UPS) {
+		/* this is not configurable */
+		ret = TRUE;
+	} else {
+		ret = g_settings_get_boolean (manager->priv->settings,
+					      GPM_SETTINGS_NOTIFY_LOW_POWER_DEVICE);
+	}
+	if (!ret) {
+		egg_debug ("ignoring notication for type %s", up_device_kind_to_string (kind));
+		goto out;
 	}
 
 	if (kind == UP_DEVICE_KIND_BATTERY) {

@@ -100,7 +100,8 @@ G_BEGIN_DECLS
 #define GPM_SETTINGS_NOTIFY_FULLY_CHARGED		"notify-fully-charged"
 #define GPM_SETTINGS_NOTIFY_SLEEP_FAILED		"notify-sleep-failed"
 #define GPM_SETTINGS_NOTIFY_SLEEP_FAILED_URI		"notify-sleep-failed-uri"
-#define GPM_SETTINGS_NOTIFY_LOW_POWER			"notify-low-power"
+#define GPM_SETTINGS_NOTIFY_LOW_POWER_SYSTEM		"notify-low-power-system"
+#define GPM_SETTINGS_NOTIFY_LOW_POWER_DEVICE		"notify-low-power-device"
 
 /* thresholds */
 #define GPM_SETTINGS_PERCENTAGE_LOW			"percentage-low"

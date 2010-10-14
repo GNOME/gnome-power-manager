@@ -225,10 +225,15 @@
       <summary>The URI to show to the user on sleep failure</summary>
       <description>When sleep fails we can show the user a button to help fix the situation. Leave this blank if the button should not be shown.</description>
     </key>
-    <key name="notify-low-power" type="b">
+    <key name="notify-low-power-system" type="b">
       <default>true</default>
       <summary>Notify on a low power</summary>
-      <description>If a notification message should be displayed when the battery is getting low.</description>
+      <description>If a notification message should be displayed when the system battery or UPS is getting low.</description>
+    </key>
+    <key name="notify-low-power-device" type="b">
+      <default>true</default>
+      <summary>Notify on a low power</summary>
+      <description>If a notification message should be displayed when devices attached to the computer are getting low.</description>
     </key>
     <key name="info-history-graph-points" type="b">
       <default>true</default>
