@@ -50,82 +50,9 @@ enum {
 	LAST_SIGNAL
 };
 
-#if 0
-static guint signals [LAST_SIGNAL] = { 0 };
-#endif
 static gpointer gpm_screensaver_object = NULL;
 
 G_DEFINE_TYPE (GpmScreensaver, gpm_screensaver, G_TYPE_OBJECT)
-
-#if 0
-
-/** Invoked when we get the AuthenticationRequestBegin from g-s when the user
- *  has moved their mouse and we are showing the authentication box.
- */
-static void
-gpm_screensaver_auth_begin (DBusGProxy     *proxy,
-			    GpmScreensaver *screensaver)
-{
-	egg_debug ("emitting auth-request : (%i)", TRUE);
-	g_signal_emit (screensaver, signals [AUTH_REQUEST], 0, TRUE);
-}
-
-/** Invoked when we get the AuthenticationRequestEnd from g-s when the user
- *  has entered a valid password or re-authenticated.
- */
-static void
-gpm_screensaver_auth_end (DBusGProxy     *proxy,
-			  GpmScreensaver *screensaver)
-{
-	egg_debug ("emitting auth-request : (%i)", FALSE);
-	g_signal_emit (screensaver, signals [AUTH_REQUEST], 0, FALSE);
-}
-
-/**
- * gpm_screensaver_proxy_connect_more:
- * @screensaver: This class instance
- **/
-static gboolean
-gpm_screensaver_proxy_connect_more (GpmScreensaver *screensaver)
-{
-	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
-
-	if (screensaver->priv->proxy == NULL) {
-		egg_warning ("not connected");
-		return FALSE;
-	}
-
-	/* get AuthenticationRequestBegin */
-	dbus_g_proxy_add_signal (screensaver->priv->proxy,
-				 "AuthenticationRequestBegin", G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal (screensaver->priv->proxy,
-				     "AuthenticationRequestBegin",
-				     G_CALLBACK (gpm_screensaver_auth_begin),
-				     screensaver, NULL);
-
-	/* get AuthenticationRequestEnd */
-	dbus_g_proxy_add_signal (screensaver->priv->proxy,
-				 "AuthenticationRequestEnd", G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal (screensaver->priv->proxy,
-				     "AuthenticationRequestEnd",
-				     G_CALLBACK (gpm_screensaver_auth_end),
-				     screensaver, NULL);
-
-	return TRUE;
-}
-
-/**
- * gpm_screensaver_proxy_disconnect_more:
- * @screensaver: This class instance
- **/
-static gboolean
-gpm_screensaver_proxy_disconnect_more (GpmScreensaver *screensaver)
-{
-	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
-	egg_debug ("gnome-screensaver disconnected from the session DBUS");
-	return TRUE;
-}
-#endif
 
 /**
  * gpm_screensaver_lock_enabled:
@@ -327,38 +254,6 @@ gpm_screensaver_class_init (GpmScreensaverClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	object_class->finalize = gpm_screensaver_finalize;
 	g_type_class_add_private (klass, sizeof (GpmScreensaverPrivate));
-
-#if 0
-	signals [AUTH_REQUEST] =
-		g_signal_new ("auth-request",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmScreensaverClass, auth_request),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
-#endif
-}
-
-/**
- * gpm_screensaver_proxy_status_cb:
- * @proxy: The dbus raw proxy
- * @status: The status of the service, where TRUE is connected
- * @screensaver: This class instance
- **/
-static void
-gpm_screensaver_proxy_status_cb (DBusGProxy *proxy, gboolean status, GpmScreensaver *screensaver)
-{
-	g_return_if_fail (GPM_IS_SCREENSAVER (screensaver));
-
-#if 0
-	if (status) {
-		gpm_screensaver_proxy_connect_more (screensaver);
-	} else {
-		gpm_screensaver_proxy_disconnect_more (screensaver);
-	}
-#endif
 }
 
 /**
@@ -379,10 +274,6 @@ gpm_screensaver_init (GpmScreensaver *screensaver)
 							      GS_LISTENER_PATH,
 							      GS_LISTENER_INTERFACE);
 
-	g_signal_connect (screensaver->priv->proxy, "proxy-status",
-			  G_CALLBACK (gpm_screensaver_proxy_status_cb),
-			  screensaver);
-
 	screensaver->priv->conf = gconf_client_get_default ();
 }
 
@@ -400,9 +291,6 @@ gpm_screensaver_finalize (GObject *object)
 	screensaver = GPM_SCREENSAVER (object);
 	screensaver->priv = GPM_SCREENSAVER_GET_PRIVATE (screensaver);
 
-#if 0
-	gpm_screensaver_proxy_disconnect_more (screensaver);
-#endif
 	g_object_unref (screensaver->priv->conf);
 	g_object_unref (screensaver->priv->proxy);
 
