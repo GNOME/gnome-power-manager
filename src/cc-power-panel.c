@@ -115,26 +115,6 @@ cc_power_panel_action_time_changed_cb (GtkWidget *widget, CcPowerPanel *panel)
 }
 
 /**
- * cc_power_panel_set_combo_simple_text:
- **/
-static void
-cc_power_panel_set_combo_simple_text (GtkWidget *combo_box)
-{
-	GtkCellRenderer *cell;
-	GtkListStore *store;
-
-	store = gtk_list_store_new (1, G_TYPE_STRING);
-	gtk_combo_box_set_model (GTK_COMBO_BOX (combo_box), GTK_TREE_MODEL (store));
-	g_object_unref (store);
-
-	cell = gtk_cell_renderer_text_new ();
-	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), cell, TRUE);
-	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), cell,
-					"text", 0,
-					NULL);
-}
-
-/**
  * cc_power_panel_actions_destroy_cb:
  **/
 static void
@@ -159,7 +139,6 @@ cc_power_panel_setup_action_combo (CcPowerPanel *panel, const gchar *widget_name
 	GpmActionPolicy *actions_added;
 
 	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, widget_name));
-	cc_power_panel_set_combo_simple_text (widget);
 
 	value = g_settings_get_enum (panel->priv->settings, gpm_pref_key);
 	is_writable = g_settings_is_writable (panel->priv->settings, gpm_pref_key);
@@ -176,26 +155,26 @@ cc_power_panel_setup_action_combo (CcPowerPanel *panel, const gchar *widget_name
 		if (policy == GPM_ACTION_POLICY_SHUTDOWN && !panel->priv->can_shutdown) {
 			g_debug ("Cannot add option, as cannot shutdown.");
 		} else if (policy == GPM_ACTION_POLICY_SHUTDOWN && panel->priv->can_shutdown) {
-			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Shutdown"));
+			gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _("Shutdown"));
 			g_ptr_array_add (array, GINT_TO_POINTER (policy));
 		} else if (policy == GPM_ACTION_POLICY_SUSPEND && !panel->priv->can_suspend) {
 			g_debug ("Cannot add option, as cannot suspend.");
 		} else if (policy == GPM_ACTION_POLICY_HIBERNATE && !panel->priv->can_hibernate) {
 			g_debug ("Cannot add option, as cannot hibernate.");
 		} else if (policy == GPM_ACTION_POLICY_SUSPEND && panel->priv->can_suspend) {
-			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Suspend"));
+			gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _("Suspend"));
 			g_ptr_array_add (array, GINT_TO_POINTER (policy));
 		} else if (policy == GPM_ACTION_POLICY_HIBERNATE && panel->priv->can_hibernate) {
-			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Hibernate"));
+			gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _("Hibernate"));
 			g_ptr_array_add (array, GINT_TO_POINTER (policy));
 		} else if (policy == GPM_ACTION_POLICY_BLANK) {
-			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Blank screen"));
+			gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _("Blank screen"));
 			g_ptr_array_add (array, GINT_TO_POINTER (policy));
 		} else if (policy == GPM_ACTION_POLICY_INTERACTIVE) {
-			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Ask me"));
+			gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _("Ask me"));
 			g_ptr_array_add (array, GINT_TO_POINTER (policy));
 		} else if (policy == GPM_ACTION_POLICY_NOTHING) {
-			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Do nothing"));
+			gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _("Do nothing"));
 			g_ptr_array_add (array, GINT_TO_POINTER (policy));
 		} else {
 			g_warning ("Unknown action read from settings: %i", policy);
@@ -248,7 +227,6 @@ cc_power_panel_setup_time_combo (CcPowerPanel *panel, const gchar *widget_name,
 	GArray *values;
 
 	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, widget_name));
-	cc_power_panel_set_combo_simple_text (widget);
 
 	value = g_settings_get_int (panel->priv->settings, gpm_pref_key);
 	is_writable = g_settings_is_writable (panel->priv->settings, gpm_pref_key);
@@ -285,10 +263,10 @@ cc_power_panel_setup_time_combo (CcPowerPanel *panel, const gchar *widget_name,
 		/* get translation for number of seconds */
 		if (loop_value != 0) {
 			text = gpm_get_timestring (loop_value);
-			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), text);
+			gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), text);
 			g_free (text);
 		} else {
-			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Never"));
+			gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _("Never"));
 		}
 
 		/* matches, so set default */

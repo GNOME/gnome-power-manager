@@ -1275,7 +1275,7 @@ gpm_stats_history_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 	gchar *value;
 	const gchar *axis_x = NULL;
 	const gchar *axis_y = NULL;
-	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
+	value = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (widget));
 	if (g_strcmp0 (value, GPM_HISTORY_RATE_TEXT) == 0) {
 		history_type = GPM_HISTORY_RATE_VALUE;
 		/* TRANSLATORS: this is the X axis on the graph */
@@ -1326,7 +1326,7 @@ gpm_stats_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 	gchar *value;
 	const gchar *axis_x = NULL;
 	const gchar *axis_y = NULL;
-	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
+	value = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (widget));
 	if (g_strcmp0 (value, GPM_STATS_CHARGE_DATA_TEXT) == 0) {
 		stats_type = GPM_STATS_CHARGE_DATA_VALUE;
 		/* TRANSLATORS: this is the X axis on the graph for the whole battery device */
@@ -1375,7 +1375,7 @@ static void
 gpm_stats_range_combo_changed (GtkWidget *widget, gpointer data)
 {
 	gchar *value;
-	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
+	value = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (widget));
 	if (g_strcmp0 (value, GPM_HISTORY_MINUTE_TEXT) == 0)
 		history_time = GPM_HISTORY_MINUTE_VALUE;
 	else if (g_strcmp0 (value, GPM_HISTORY_HOUR_TEXT) == 0)
@@ -1446,26 +1446,6 @@ gpm_stats_points_checkbox_stats_cb (GtkWidget *widget, gpointer data)
 	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 	g_settings_set_boolean (settings, GPM_SETTINGS_INFO_STATS_GRAPH_POINTS, checked);
 	gpm_stats_button_update_ui ();
-}
-
-/**
- * gpm_stats_set_combo_simple_text:
- **/
-static void
-gpm_stats_set_combo_simple_text (GtkWidget *combo_box)
-{
-	GtkCellRenderer *cell;
-	GtkListStore *store;
-
-	store = gtk_list_store_new (1, G_TYPE_STRING);
-	gtk_combo_box_set_model (GTK_COMBO_BOX (combo_box), GTK_TREE_MODEL (store));
-	g_object_unref (store);
-
-	cell = gtk_cell_renderer_text_new ();
-	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), cell, TRUE);
-	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), cell,
-					"text", 0,
-					NULL);
 }
 
 /**
@@ -1708,11 +1688,10 @@ main (int argc, char *argv[])
 		stats_type = GPM_STATS_CHARGE_DATA_VALUE;
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "combobox_history_type"));
-	gpm_stats_set_combo_simple_text (widget);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_RATE_TEXT);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_CHARGE_TEXT);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_TIME_FULL_TEXT);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_TIME_EMPTY_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_HISTORY_RATE_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_HISTORY_CHARGE_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_HISTORY_TIME_FULL_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_HISTORY_TIME_EMPTY_TEXT);
 	if (g_strcmp0 (history_type, GPM_HISTORY_RATE_VALUE) == 0)
 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
 	else
@@ -1721,11 +1700,10 @@ main (int argc, char *argv[])
 			  G_CALLBACK (gpm_stats_history_type_combo_changed_cb), NULL);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "combobox_stats_type"));
-	gpm_stats_set_combo_simple_text (widget);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_STATS_CHARGE_DATA_TEXT);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_STATS_CHARGE_ACCURACY_TEXT);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_STATS_DISCHARGE_DATA_TEXT);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_STATS_DISCHARGE_ACCURACY_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_STATS_CHARGE_DATA_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_STATS_CHARGE_ACCURACY_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_STATS_DISCHARGE_DATA_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_STATS_DISCHARGE_ACCURACY_TEXT);
 	if (g_strcmp0 (stats_type, GPM_STATS_CHARGE_DATA_VALUE) == 0)
 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
 	else if (g_strcmp0 (stats_type, GPM_STATS_CHARGE_DATA_VALUE) == 0)
@@ -1740,12 +1718,11 @@ main (int argc, char *argv[])
 			  G_CALLBACK (gpm_stats_type_combo_changed_cb), NULL);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "combobox_history_time"));
-	gpm_stats_set_combo_simple_text (widget);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_MINUTE_TEXT);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_HOUR_TEXT);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_HOURS_TEXT);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_DAY_TEXT);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_WEEK_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_HISTORY_MINUTE_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_HISTORY_HOUR_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_HISTORY_HOURS_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_HISTORY_DAY_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_HISTORY_WEEK_TEXT);
 	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 1);
 	if (history_time == GPM_HISTORY_MINUTE_VALUE)
 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
