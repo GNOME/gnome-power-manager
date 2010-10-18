@@ -500,15 +500,11 @@ gpm_manager_notify (GpmManager *manager, NotifyNotification **notification_class
 	/* close any existing notification of this class */
 	gpm_manager_notify_close (manager, *notification_class);
 
-	/* if the status icon is hidden, don't point at it */
-	if (gtk_status_icon_is_embedded (manager->priv->status_icon))
-		notification = notify_notification_new_with_status_icon (title, message, icon_name, manager->priv->status_icon);
-	else
-		notification = notify_notification_new (title, message, icon_name, NULL);
+	/* create a new notification */
+	notification = notify_notification_new (title, message, icon_name);
 	notify_notification_set_timeout (notification, timeout);
 	notify_notification_set_urgency (notification, urgency);
 	g_signal_connect (notification, "closed", G_CALLBACK (gpm_manager_notification_closed_cb), notification_class);
-
 	egg_debug ("notification %p: %s : %s", notification, title, message);
 
 	/* try to show */
