@@ -130,7 +130,7 @@ PKG_CHECK_EXISTS(
 PKG_CHECK_MODULES(UPOWER, upower-glib >= 0.9.1)
 
 dnl **** Check for NOTIFY ****
-PKG_CHECK_MODULES(NOTIFY, libnotify >= 0.6.0)
+PKG_CHECK_MODULES(NOTIFY, libnotify >= 0.7.0)
 
 dnl Required for the properties window
 PKG_CHECK_MODULES(CONTROL_CENTER, [
