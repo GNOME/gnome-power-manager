@@ -496,7 +496,6 @@ gpm_manager_notify (GpmManager *manager, NotifyNotification **notification_class
 	gboolean ret;
 	GError *error = NULL;
 	NotifyNotification *notification;
-	GtkWidget *dialog;
 
 	/* close any existing notification of this class */
 	gpm_manager_notify_close (manager, *notification_class);
@@ -517,17 +516,6 @@ gpm_manager_notify (GpmManager *manager, NotifyNotification **notification_class
 	if (!ret) {
 		egg_warning ("failed to show notification: %s", error->message);
 		g_error_free (error);
-
-		/* show modal dialog as libnotify failed */
-		dialog = gtk_message_dialog_new_with_markup (NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
-							     GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE,
-							     "<span size='larger'><b>%s</b></span>", title);
-		gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog), "%s", message);
-
-		/* wait async for close */
-		gtk_widget_show (dialog);
-		g_signal_connect_swapped (dialog, "response", G_CALLBACK (gtk_widget_destroy), dialog);
-
 		g_object_unref (notification);
 		goto out;
 	}
