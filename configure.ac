@@ -130,11 +130,7 @@ PKG_CHECK_EXISTS(
 PKG_CHECK_MODULES(UPOWER, upower-glib >= 0.9.1)
 
 dnl **** Check for NOTIFY ****
-PKG_CHECK_MODULES(NOTIFY, libnotify >= 0.5.0, has_libnotify=yes, has_libnotify=no)
-AM_CONDITIONAL(HAVE_NOTIFY, test x$libnotify = xyes)
-if test x$has_libnotify = xyes; then
-	AC_DEFINE(HAVE_NOTIFY,1,[Use session notifications])
-fi
+PKG_CHECK_MODULES(NOTIFY, libnotify >= 0.5.0)
 
 dnl Required for the properties window
 PKG_CHECK_MODULES(CONTROL_CENTER, [
