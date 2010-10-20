@@ -1275,7 +1275,7 @@ gpm_stats_history_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 	gchar *value;
 	const gchar *axis_x = NULL;
 	const gchar *axis_y = NULL;
-	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
+	value = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (widget));
 	if (g_strcmp0 (value, GPM_HISTORY_RATE_TEXT) == 0) {
 		history_type = GPM_HISTORY_RATE_VALUE;
 		/* TRANSLATORS: this is the X axis on the graph */
@@ -1326,7 +1326,7 @@ gpm_stats_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 	gchar *value;
 	const gchar *axis_x = NULL;
 	const gchar *axis_y = NULL;
-	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
+	value = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (widget));
 	if (g_strcmp0 (value, GPM_STATS_CHARGE_DATA_TEXT) == 0) {
 		stats_type = GPM_STATS_CHARGE_DATA_VALUE;
 		/* TRANSLATORS: this is the X axis on the graph for the whole battery device */
@@ -1375,7 +1375,7 @@ static void
 gpm_stats_range_combo_changed (GtkWidget *widget, gpointer data)
 {
 	gchar *value;
-	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
+	value = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (widget));
 	if (g_strcmp0 (value, GPM_HISTORY_MINUTE_TEXT) == 0)
 		history_time = GPM_HISTORY_MINUTE_VALUE;
 	else if (g_strcmp0 (value, GPM_HISTORY_HOUR_TEXT) == 0)
@@ -1511,7 +1511,7 @@ gpm_stats_highlight_device (const gchar *object_path)
 static gboolean
 gpm_stats_delete_event_cb (GtkWidget *widget, GdkEvent *event, GtkApplication *application)
 {
-	gtk_application_quit (application);
+//	gtk_application_quit (application);
 	return FALSE;
 }
 
@@ -1521,7 +1521,7 @@ gpm_stats_delete_event_cb (GtkWidget *widget, GdkEvent *event, GtkApplication *a
 static void
 gpm_stats_button_close_cb (GtkWidget *widget, GtkApplication *application)
 {
-	gtk_application_quit (application);
+//	gtk_application_quit (application);
 }
 
 /**
@@ -1546,6 +1546,7 @@ main (int argc, char *argv[])
 	gboolean checked;
 	gchar *last_device = NULL;
 	guint retval;
+	gint status = 1;
 	GError *error = NULL;
 
 	const GOptionEntry options[] = {
@@ -1580,7 +1581,7 @@ main (int argc, char *argv[])
 	gtk_init (&argc, &argv);
 
 	/* are we already activated? */
-	application = gtk_application_new ("org.gnome.PowerManager.Statistics", &argc, &argv);
+	application = gtk_application_new ("org.gnome.PowerManager.Statistics", G_APPLICATION_FLAGS_NONE);
 
 	/* add application specific icons to search path */
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
@@ -1612,7 +1613,7 @@ main (int argc, char *argv[])
 	gtk_widget_show (graph_statistics);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_stats"));
-	gtk_application_add_window (application, GTK_WINDOW (widget));
+	gtk_window_set_application (GTK_WINDOW (widget), application);
 	gtk_window_set_default_size (GTK_WINDOW(widget), 800, 500);
 	gtk_window_set_default_icon_name (GPM_STOCK_APP_ICON);
 
@@ -1709,10 +1710,10 @@ main (int argc, char *argv[])
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "combobox_history_type"));
 	gpm_stats_set_combo_simple_text (widget);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_RATE_TEXT);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_CHARGE_TEXT);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_TIME_FULL_TEXT);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_TIME_EMPTY_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_HISTORY_RATE_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_HISTORY_CHARGE_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_HISTORY_TIME_FULL_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_HISTORY_TIME_EMPTY_TEXT);
 	if (g_strcmp0 (history_type, GPM_HISTORY_RATE_VALUE) == 0)
 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
 	else
@@ -1722,10 +1723,10 @@ main (int argc, char *argv[])
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "combobox_stats_type"));
 	gpm_stats_set_combo_simple_text (widget);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_STATS_CHARGE_DATA_TEXT);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_STATS_CHARGE_ACCURACY_TEXT);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_STATS_DISCHARGE_DATA_TEXT);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_STATS_DISCHARGE_ACCURACY_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_STATS_CHARGE_DATA_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_STATS_CHARGE_ACCURACY_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_STATS_DISCHARGE_DATA_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_STATS_DISCHARGE_ACCURACY_TEXT);
 	if (g_strcmp0 (stats_type, GPM_STATS_CHARGE_DATA_VALUE) == 0)
 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
 	else if (g_strcmp0 (stats_type, GPM_STATS_CHARGE_DATA_VALUE) == 0)
@@ -1741,11 +1742,11 @@ main (int argc, char *argv[])
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "combobox_history_time"));
 	gpm_stats_set_combo_simple_text (widget);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_MINUTE_TEXT);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_HOUR_TEXT);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_HOURS_TEXT);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_DAY_TEXT);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), GPM_HISTORY_WEEK_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_HISTORY_MINUTE_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_HISTORY_HOUR_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_HISTORY_HOURS_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_HISTORY_DAY_TEXT);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_HISTORY_WEEK_TEXT);
 	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 1);
 	if (history_time == GPM_HISTORY_MINUTE_VALUE)
 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
@@ -1821,7 +1822,7 @@ main (int argc, char *argv[])
 	gtk_widget_show (widget);
 
 	/* run */
-	gtk_application_run (application);
+	status = g_application_run (G_APPLICATION (application), argc, argv);
 
 out:
 	g_object_unref (settings);
@@ -1831,5 +1832,5 @@ out:
 	g_object_unref (list_store_info);
 	g_object_unref (application);
 	g_free (last_device);
-	return 0;
+	return status;
 }
