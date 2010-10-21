@@ -341,13 +341,13 @@ if(0)	g_signal_connect (G_OBJECT (widget), "format-value",
 
 	if (panel->priv->has_button_lid == FALSE) {
 		widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "hbox_ac_lid"));
-		gtk_widget_hide_all (widget);
+		gtk_widget_hide (widget);
 	}
 	if (panel->priv->has_lcd == FALSE) {
 		widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "hbox_ac_brightness"));
-		gtk_widget_hide_all (widget);
+		gtk_widget_hide (widget);
 		widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "checkbutton_ac_display_dim"));
-		gtk_widget_hide_all (widget);
+		gtk_widget_hide (widget);
 	}
 }
 
@@ -429,11 +429,11 @@ cc_power_panel_setup_battery (CcPowerPanel *panel)
 
 	if (panel->priv->has_button_lid == FALSE) {
 		widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "hbox_battery_lid"));
-		gtk_widget_hide_all (widget);
+		gtk_widget_hide (widget);
 	}
 	if (panel->priv->has_lcd == FALSE) {
 		widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "checkbutton_battery_display_dim"));
-		gtk_widget_hide_all (widget);
+		gtk_widget_hide (widget);
 	}
 }
 
@@ -520,7 +520,7 @@ cc_power_panel_setup_general (CcPowerPanel *panel)
 
 	if (panel->priv->has_button_suspend == FALSE) {
 		widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "hbox_general_suspend"));
-		gtk_widget_hide_all (widget);
+		gtk_widget_hide (widget);
 	}
 }
 
