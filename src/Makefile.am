@@ -1,24 +1,17 @@
 ## We require new-style dependency handling.
 AUTOMAKE_OPTIONS = 1.7
 
-NULL =
-
 EXTRA_DIST =						\
-	org.gnome.PowerManager.xml			\
-	org.gnome.PowerManager.Backlight.xml		\
-	gpm-marshal.list				\
-	$(NULL)
+	gpm-marshal.list
 
 INCLUDES =						\
 	$(GLIB_CFLAGS)					\
-	$(DBUS_CFLAGS)					\
 	$(GNOME_CFLAGS)					\
 	$(X11_CFLAGS)					\
 	$(NOTIFY_CFLAGS)				\
 	$(CANBERRA_CFLAGS)				\
 	$(GSTREAMER_CFLAGS)				\
 	$(CONTROL_CENTER_CFLAGS)			\
-	-DI_KNOW_THE_DEVICEKIT_POWER_API_IS_SUBJECT_TO_CHANGE \
 	$(UPOWER_CFLAGS)				\
 	-DBINDIR=\"$(bindir)\"			 	\
 	-DSBINDIR=\"$(sbindir)\"			\
@@ -35,16 +28,14 @@ INCLUDES =						\
 	-DEGG_VERBOSE="\"GPM_VERBOSE\""			\
 	-DEGG_LOGGING="\"GPM_LOGGING\""			\
 	-DEGG_CONSOLE="\"GPM_CONSOLE\""			\
-	-I$(top_srcdir)					\
-	$(NULL)
+	-I$(top_srcdir)
 
 ccpanelsdir = $(PANELS_DIR)
 ccpanels_LTLIBRARIES = libpower.la
 
 bin_PROGRAMS =						\
 	gnome-power-manager				\
-	gnome-power-statistics				\
-	$(NULL)
+	gnome-power-statistics
 
 sbin_PROGRAMS =						\
 	gnome-power-backlight-helper			\
@@ -70,12 +61,10 @@ libgpmshared_a_SOURCES =				\
 	gpm-marshal.h					\
 	gpm-marshal.c					\
 	gpm-upower.c					\
-	gpm-upower.h					\
-	$(NULL)
+	gpm-upower.h
 
 gnome_power_backlight_helper_SOURCES =			\
-	gpm-backlight-helper.c				\
-	$(NULL)
+	gpm-backlight-helper.c
 
 gnome_power_backlight_helper_LDADD =			\
 	libgpmshared.a					\
@@ -83,16 +72,14 @@ gnome_power_backlight_helper_LDADD =			\
 	-lm
 
 gnome_power_backlight_helper_CFLAGS =			\
-	$(WARNINGFLAGS)					\
-	$(NULL)
+	$(WARNINGFLAGS)
 
 gnome_power_statistics_SOURCES =			\
 	gpm-statistics.c				\
 	gpm-point-obj.c					\
 	gpm-point-obj.h					\
 	gpm-graph-widget.h				\
-	gpm-graph-widget.c				\
-	$(NULL)
+	gpm-graph-widget.c
 
 gnome_power_statistics_LDADD =				\
 	libgpmshared.a					\
@@ -100,12 +87,10 @@ gnome_power_statistics_LDADD =				\
 	$(X11_LIBS)					\
 	$(UPOWER_LIBS)					\
 	$(GNOME_LIBS)					\
-	$(DBUS_LIBS)					\
 	-lm
 
 gnome_power_statistics_CFLAGS =				\
-	$(WARNINGFLAGS)					\
-	$(NULL)
+	$(WARNINGFLAGS)
 
 libpower_la_SOURCES =					\
 	egg-console-kit.h				\
@@ -117,15 +102,13 @@ libpower_la_SOURCES =					\
 	gpm-common.h					\
 	gpm-common.c					\
 	cc-power-panel.c				\
-	cc-power-panel.h				\
-	$(NULL)
+	cc-power-panel.h
 
 libpower_la_LIBADD =					\
 	$(GLIB_LIBS)					\
 	$(CONTROL_CENTER_LIBS)				\
 	$(X11_LIBS)					\
 	$(GNOME_LIBS)					\
-	$(DBUS_LIBS)					\
 	$(GPM_EXTRA_LIBS)				\
 	$(UPOWER_LIBS)					\
 	-lm
@@ -157,40 +140,33 @@ gnome_power_manager_SOURCES =				\
 	gpm-tray-icon.c					\
 	gpm-screensaver.h				\
 	gpm-screensaver.c				\
-	gpm-session.h					\
-	gpm-session.c					\
 	gpm-stock-icons.h				\
 	gsd-media-keys-window.h				\
 	gsd-media-keys-window.c				\
 	gpm-engine.h					\
-	gpm-engine.c					\
-	$(NULL)
+	gpm-engine.c
 
 gnome_power_manager_LDADD =				\
 	libgpmshared.a					\
 	$(GLIB_LIBS)					\
-	$(X11_LIBS)				\
+	$(X11_LIBS)					\
 	$(GSTREAMER_LIBS)				\
 	$(GNOME_LIBS)					\
-	$(DBUS_LIBS)					\
-	$(X11_LIBS)						\
+	$(X11_LIBS)					\
 	$(CANBERRA_LIBS)				\
-	$(NOTIFY_LIBS)				\
+	$(NOTIFY_LIBS)					\
 	$(GPM_EXTRA_LIBS)				\
 	$(UPOWER_LIBS)					\
 	-lm
 
 gnome_power_manager_CFLAGS =				\
-	$(WARNINGFLAGS)					\
-	$(NULL)
+	$(WARNINGFLAGS)
 
 gnome_power_self_test_SOURCES =				\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
 	gpm-idle.h					\
 	gpm-idle.c					\
-	gpm-session.h					\
-	gpm-session.c					\
 	gpm-common.h					\
 	gpm-common.c					\
 	gpm-load.h					\
@@ -203,8 +179,7 @@ gnome_power_self_test_SOURCES =				\
 	gpm-idletime.c					\
 	gpm-array-float.h				\
 	gpm-array-float.c				\
-	gpm-self-test.c					\
-	$(NULL)
+	gpm-self-test.c
 
 gnome_power_self_test_LDADD =				\
 	libgpmshared.a					\
@@ -213,20 +188,16 @@ gnome_power_self_test_LDADD =				\
 	$(GNOME_LIBS)					\
 	$(GSTREAMER_LIBS)				\
 	$(UPOWER_LIBS)					\
-	$(DBUS_LIBS)					\
 	$(X11_LIBS)					\
-	$(NOTIFY_LIBS)				\
+	$(NOTIFY_LIBS)					\
 	$(GPM_EXTRA_LIBS)				\
 	-lm
 
 gnome_power_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS) $(WARNINGFLAGS)
 
 BUILT_SOURCES = 					\
-	org.gnome.PowerManager.h			\
-	org.gnome.PowerManager.Backlight.h		\
 	gpm-marshal.c					\
-	gpm-marshal.h					\
-	$(NULL)
+	gpm-marshal.h
 
 gpm-marshal.c: gpm-marshal.list
 	echo "#include \"gpm-marshal.h\"" > $@ && \
@@ -234,20 +205,6 @@ gpm-marshal.c: gpm-marshal.list
 
 gpm-marshal.h: gpm-marshal.list
 	@GLIB_GENMARSHAL@ $< --prefix=gpm_marshal --header > $@
-
-org.gnome.PowerManager.h: org.gnome.PowerManager.xml
-	libtool --mode=execute dbus-binding-tool	\
-		--prefix=gpm_manager			\
-		--mode=glib-server			\
-		--output=org.gnome.PowerManager.h	\
-		$(srcdir)/org.gnome.PowerManager.xml
-
-org.gnome.PowerManager.Backlight.h: org.gnome.PowerManager.Backlight.xml
-	libtool --mode=execute dbus-binding-tool	\
-		--prefix=gpm_backlight			\
-		--mode=glib-server			\
-		--output=org.gnome.PowerManager.Backlight.h	\
-		$(srcdir)/org.gnome.PowerManager.Backlight.xml
 
 clean-local:
 	rm -f *~
@@ -259,6 +216,5 @@ TESTS = gnome-power-self-test
 
 MAINTAINERCLEANFILES =					\
 	*~			      			\
-	Makefile.in					\
-	$(NULL)
+	Makefile.in
 

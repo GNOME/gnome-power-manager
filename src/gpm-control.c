@@ -37,8 +37,6 @@
 #endif /* HAVE_UNISTD_H */
 
 #include <glib/gi18n.h>
-#include <dbus/dbus-glib.h>
-#include <dbus/dbus-glib-lowlevel.h>
 #include <gnome-keyring.h>
 #include <gconf/gconf-client.h>
 #include <libupower-glib/upower.h>

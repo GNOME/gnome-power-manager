@@ -38,7 +38,6 @@
 #endif /* HAVE_UNISTD_H */
 
 #include <glib/gi18n.h>
-#include <dbus/dbus-glib.h>
 #include <libupower-glib/upower.h>
 
 #include "gpm-button.h"
@@ -53,6 +52,22 @@
 #include "gpm-marshal.h"
 #include "gpm-stock-icons.h"
 #include "egg-console-kit.h"
+
+static const gchar *backlight_introspection = ""
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+"<node name=\"/\">"
+  "<interface name=\"org.gnome.PowerManager.Backlight\">"
+    "<method name=\"GetBrightness\">"
+      "<arg type=\"u\" name=\"percentage_brightness\" direction=\"out\"/>"
+    "</method>"
+    "<method name=\"SetBrightness\">"
+      "<arg type=\"u\" name=\"percentage_brightness\" direction=\"in\"/>"
+    "</method>"
+    "<signal name=\"BrightnessChanged\">"
+      "<arg type=\"u\" name=\"percentage_brightness\" direction=\"out\"/>"
+    "</signal>"
+  "</interface>"
+"</node>";
 
 #define GPM_BACKLIGHT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_BACKLIGHT, GpmBacklightPrivate))
 
@@ -72,6 +87,8 @@ struct GpmBacklightPrivate
 	GTimer			*idle_timer;
 	guint			 idle_dim_timeout;
 	guint			 master_percentage;
+	GDBusConnection		*bus_connection;
+	guint			 bus_object_id;
 };
 
 enum {
@@ -385,10 +402,10 @@ gpm_settings_key_changed_cb (GSettings *settings, const gchar *key, GpmBacklight
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 
 	} else if (g_strcmp0 (key, GPM_SETTINGS_IDLE_DIM_AC) == 0 ||
-	           g_strcmp0 (key, GPM_SETTINGS_BACKLIGHT_ENABLE) == 0 ||
-	           g_strcmp0 (key, GPM_SETTINGS_SLEEP_DISPLAY_BATT) == 0 ||
-	           g_strcmp0 (key, GPM_SETTINGS_BACKLIGHT_BATTERY_REDUCE) == 0 ||
-	           g_strcmp0 (key, GPM_SETTINGS_IDLE_BRIGHTNESS) == 0) {
+		   g_strcmp0 (key, GPM_SETTINGS_BACKLIGHT_ENABLE) == 0 ||
+		   g_strcmp0 (key, GPM_SETTINGS_SLEEP_DISPLAY_BATT) == 0 ||
+		   g_strcmp0 (key, GPM_SETTINGS_BACKLIGHT_BATTERY_REDUCE) == 0 ||
+		   g_strcmp0 (key, GPM_SETTINGS_IDLE_BRIGHTNESS) == 0) {
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 
 	} else if (g_strcmp0 (key, GPM_SETTINGS_IDLE_DIM_TIME) == 0) {
@@ -529,7 +546,7 @@ gpm_backlight_notify_system_idle_changed (GpmBacklight *backlight, gboolean is_i
 }
 
 /**
- * idle_changed_cb:
+ * gpm_backlight_idle_changed_cb:
  * @idle: The idle class instance
  * @mode: The idle mode, e.g. GPM_IDLE_MODE_BLANK
  * @manager: This class instance
@@ -540,7 +557,7 @@ gpm_backlight_notify_system_idle_changed (GpmBacklight *backlight, gboolean is_i
  * session timeout has elapsed for the idle action.
  **/
 static void
-idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *backlight)
+gpm_backlight_idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *backlight)
 {
 	gboolean ret;
 	gboolean is_active;
@@ -619,7 +636,7 @@ idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *backlight)
 }
 
 /**
- * brightness_changed_cb:
+ * gpm_backlight_brightness_changed_cb:
  * @brightness: The GpmBrightness class instance
  * @percentage: The new percentage brightness
  * @brightness: This class instance
@@ -627,7 +644,7 @@ idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *backlight)
  * This callback is called when the brightness value changes.
  **/
 static void
-brightness_changed_cb (GpmBrightness *brightness, guint percentage, GpmBacklight *backlight)
+gpm_backlight_brightness_changed_cb (GpmBrightness *brightness, guint percentage, GpmBacklight *backlight)
 {
 	/* save the new percentage */
 	backlight->priv->master_percentage = percentage;
@@ -635,17 +652,26 @@ brightness_changed_cb (GpmBrightness *brightness, guint percentage, GpmBacklight
 	/* we emit a signal for the brightness applet */
 	egg_debug ("emitting brightness-changed : %i", percentage);
 	g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, percentage);
+
+	/* and one for Dbus users */
+	g_dbus_connection_emit_signal (backlight->priv->bus_connection,
+			NULL,
+			GPM_DBUS_PATH_BACKLIGHT,
+			GPM_DBUS_INTERFACE_BACKLIGHT,
+			"BrightnessChanged",
+			g_variant_new ("(u)", percentage),
+			NULL);
 }
 
 /**
- * control_resume_cb:
+ * gpm_backlight_control_resume_cb:
  * @control: The control class instance
  * @power: This power class instance
  *
  * We have to update the caches on resume
  **/
 static void
-control_resume_cb (GpmControl *control, GpmControlAction action, GpmBacklight *backlight)
+gpm_backlight_control_resume_cb (GpmControl *control, GpmControlAction action, GpmBacklight *backlight)
 {
 	gboolean ret;
 	GError *error = NULL;
@@ -659,6 +685,100 @@ control_resume_cb (GpmControl *control, GpmControlAction action, GpmBacklight *b
 }
 
 /**
+ * gpm_backlight_dbus_method_call:
+ **/
+static void
+gpm_backlight_dbus_method_call (GDBusConnection *connection,
+				const gchar *sender, const gchar *object_path,
+				const gchar *interface_name, const gchar *method_name,
+				GVariant *parameters, GDBusMethodInvocation *invocation,
+				gpointer user_data)
+{
+	GError *error;
+	guint value;
+	gboolean ret;
+	GpmBacklight *backlight = GPM_BACKLIGHT (user_data);
+
+	if (g_strcmp0 (method_name, "GetBrightness") == 0) {
+		ret = gpm_backlight_get_brightness (backlight, &value, &error);
+		if (!ret) {
+			g_dbus_method_invocation_return_gerror (invocation, error);
+			g_error_free (error);
+		} else {
+			g_dbus_method_invocation_return_value (invocation, g_variant_new ("(u)", value));
+		}
+		return;
+	}
+	if (g_strcmp0 (method_name, "SetBrightness") == 0) {
+		g_variant_get (parameters, "(u)", &value);
+		ret = gpm_backlight_set_brightness (backlight, value, &error);
+		if (!ret) {
+			g_dbus_method_invocation_return_gerror (invocation, error);
+			g_error_free (error);
+		} else {
+			g_dbus_method_invocation_return_value (invocation, NULL);
+		}
+		return;
+	}
+	g_assert_not_reached ();
+}
+
+/**
+ * gpm_backlight_dbus_property_get:
+ **/
+static GVariant *
+gpm_backlight_dbus_property_get (GDBusConnection *connection,
+				 const gchar *sender, const gchar *object_path,
+				 const gchar *interface_name, const gchar *property_name,
+				 GError **error, gpointer user_data)
+{
+	/* do nothing, no properties defined */
+	return NULL;
+}
+
+/**
+ * gpm_backlight_dbus_property_set:
+ **/
+static gboolean
+gpm_backlight_dbus_property_set (GDBusConnection *connection,
+				 const gchar *sender, const gchar *object_path,
+				 const gchar *interface_name, const gchar *property_name,
+				 GVariant *value,
+				 GError**invocation, gpointer user_data)
+{
+	/* do nothing, no properties defined */
+	return FALSE;
+}
+
+/**
+ * gpm_backlight_register_dbus:
+ **/
+void
+gpm_backlight_register_dbus (GpmBacklight *backlight, GDBusConnection *connection)
+{
+	GDBusNodeInfo *node_info;
+	GDBusInterfaceInfo *interface_info;
+	GDBusInterfaceVTable interface_vtable = {
+			gpm_backlight_dbus_method_call,
+			gpm_backlight_dbus_property_get,
+			gpm_backlight_dbus_property_set
+	};
+
+	node_info = g_dbus_node_info_new_for_xml (backlight_introspection, NULL);
+	interface_info = g_dbus_node_info_lookup_interface (node_info, GPM_DBUS_INTERFACE_BACKLIGHT);
+
+	backlight->priv->bus_connection = g_object_ref (connection);
+	backlight->priv->bus_object_id =
+		g_dbus_connection_register_object (connection,
+						   GPM_DBUS_PATH_BACKLIGHT,
+						   interface_info,
+						   &interface_vtable,
+						   backlight,
+						   NULL, NULL);
+	g_dbus_node_info_unref (node_info);
+}
+
+/**
  * gpm_backlight_finalize:
  **/
 static void
@@ -668,6 +788,12 @@ gpm_backlight_finalize (GObject *object)
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GPM_IS_BACKLIGHT (object));
 	backlight = GPM_BACKLIGHT (object);
+
+	if (backlight->priv->bus_connection != NULL) {
+		g_dbus_connection_unregister_object (backlight->priv->bus_connection,
+						     backlight->priv->bus_object_id);
+		g_object_unref (backlight->priv->bus_connection);
+	}
 
 	g_timer_destroy (backlight->priv->idle_timer);
 	gtk_widget_destroy (backlight->priv->popup);
@@ -725,7 +851,7 @@ gpm_backlight_init (GpmBacklight *backlight)
 	/* watch for manual brightness changes (for the popup widget) */
 	backlight->priv->brightness = gpm_brightness_new ();
 	g_signal_connect (backlight->priv->brightness, "brightness-changed",
-			  G_CALLBACK (brightness_changed_cb), backlight);
+			  G_CALLBACK (gpm_backlight_brightness_changed_cb), backlight);
 
 	/* we use up_client for the ac-adapter-changed signal */
 	backlight->priv->client = up_client_new ();
@@ -751,7 +877,7 @@ gpm_backlight_init (GpmBacklight *backlight)
 	/* watch for idle mode changes */
 	backlight->priv->idle = gpm_idle_new ();
 	g_signal_connect (backlight->priv->idle, "idle-changed",
-			  G_CALLBACK (idle_changed_cb), backlight);
+			  G_CALLBACK (gpm_backlight_idle_changed_cb), backlight);
 
 	/* assumption */
 	backlight->priv->system_is_idle = FALSE;
@@ -763,7 +889,7 @@ gpm_backlight_init (GpmBacklight *backlight)
 	gsd_media_keys_window_set_action_custom (GSD_MEDIA_KEYS_WINDOW (backlight->priv->popup),
 						 "gpm-brightness-lcd",
 						 TRUE);
-        gtk_window_set_position (GTK_WINDOW (backlight->priv->popup), GTK_WIN_POS_NONE);
+	gtk_window_set_position (GTK_WINDOW (backlight->priv->popup), GTK_WIN_POS_NONE);
 
 	/* DPMS mode poll class */
 	backlight->priv->dpms = gpm_dpms_new ();
@@ -771,7 +897,7 @@ gpm_backlight_init (GpmBacklight *backlight)
 	/* we refresh DPMS on resume */
 	backlight->priv->control = gpm_control_new ();
 	g_signal_connect (backlight->priv->control, "resume",
-			  G_CALLBACK (control_resume_cb), backlight);
+			  G_CALLBACK (gpm_backlight_control_resume_cb), backlight);
 
 	/* Don't do dimming on inactive console */
 	backlight->priv->consolekit = egg_console_kit_new ();

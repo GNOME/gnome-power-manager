@@ -36,8 +36,6 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <dbus/dbus-glib.h>
-#include <dbus/dbus-glib-lowlevel.h>
 #include <canberra-gtk.h>
 #include <libupower-glib/upower.h>
 #include <libnotify/notify.h>
@@ -53,14 +51,18 @@
 #include "gpm-manager.h"
 #include "gpm-screensaver.h"
 #include "gpm-backlight.h"
-#include "gpm-session.h"
 #include "gpm-stock-icons.h"
 #include "gpm-tray-icon.h"
 #include "gpm-engine.h"
 #include "gpm-upower.h"
 #include "gpm-disks.h"
 
-#include "org.gnome.PowerManager.Backlight.h"
+static const gchar *power_manager_introspection = ""
+"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+"<node name=\"/org/gnome/PowerManager\">"
+  "<interface name=\"org.gnome.PowerManager\">"
+  "</interface>"
+"</node>";
 
 static void     gpm_manager_finalize	(GObject	 *object);
 
@@ -98,6 +100,9 @@ struct GpmManagerPrivate
 	NotifyNotification	*notification_warning_low;
 	NotifyNotification	*notification_discharging;
 	NotifyNotification	*notification_fully_charged;
+	GDBusConnection		*bus_connection;
+	guint 			 bus_owner_id;
+	guint			 bus_object_id;
 };
 
 typedef enum {
@@ -235,9 +240,7 @@ gpm_manager_play_loop_start (GpmManager *manager, GpmManagerSound action, gboole
 	manager->priv->critical_alert_timeout_id = g_timeout_add_seconds (timeout,
 									  (GSourceFunc) gpm_manager_play_loop_timeout_cb,
 									  manager);
-#if GLIB_CHECK_VERSION(2,25,8)
 	g_source_set_name_by_id (manager->priv->critical_alert_timeout_id, "[GpmManager] play-loop");
-#endif
 
 	/* play the sound, using sounds from the naming spec */
 	context = ca_gtk_context_get_for_screen (gdk_screen_get_default ());
@@ -523,7 +526,6 @@ out:
 	return ret;
 }
 
-
 /**
  * gpm_manager_sleep_failure_response_cb:
  **/
@@ -664,6 +666,60 @@ gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 }
 
 /**
+ * gpm_manager_logout:
+ **/
+static gboolean
+gpm_manager_logout (GpmManager *manager)
+{
+	gboolean ret = FALSE;
+	GVariant *retval = NULL;
+	GError *error = NULL;
+	GDBusProxy *proxy = NULL;
+	GDBusConnection *connection;
+
+	/* connect to gnome-session */
+	connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
+	if (connection == NULL) {
+		egg_warning ("Failed to connect to the session: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+	proxy = g_dbus_proxy_new_sync (connection,
+			G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
+			G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+			NULL,
+			"org.gnome.SessionManager",
+			"/org/gnome/SessionManager",
+			"org.gnome.SessionManager",
+			NULL, &error);
+	if (proxy == NULL) {
+		egg_warning ("Failed to shutdown session: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* ask to shut it down */
+	retval = g_dbus_proxy_call_sync (proxy,
+					 "Shutdown",
+					 NULL, G_DBUS_CALL_FLAGS_NONE,
+					 -1, NULL, &error);
+	if (retval == NULL) {
+		egg_debug ("Failed to shutdown session: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* success */
+	ret = TRUE;
+out:
+	if (retval != NULL)
+		g_variant_unref (retval);
+	if (proxy != NULL)
+		g_object_unref (proxy);
+	return ret;
+}
+
+/**
  * gpm_manager_perform_policy:
  * @manager: This class instance
  * @policy: The policy that we should do, e.g. "suspend"
@@ -698,11 +754,8 @@ gpm_manager_perform_policy (GpmManager  *manager, const gchar *policy_key, const
 		gpm_control_shutdown (manager->priv->control, NULL);
 
 	} else if (policy == GPM_ACTION_POLICY_INTERACTIVE) {
-		GpmSession *session;
 		egg_debug ("logout, reason: %s", reason);
-		session = gpm_session_new ();
-		gpm_session_logout (session);
-		g_object_unref (session);
+		gpm_manager_logout (manager);
 	} else {
 		egg_warning ("unknown action %i", policy);
 	}
@@ -1242,9 +1295,7 @@ gpm_manager_engine_perhaps_recall_cb (GpmEngine *engine, UpDevice *device, gchar
 	/* delay by a few seconds so the panel can load */
 	timer_id = g_timeout_add_seconds (GPM_MANAGER_RECALL_DELAY,
 					  (GSourceFunc) gpm_manager_perhaps_recall_delay_cb, manager);
-#if GLIB_CHECK_VERSION(2,25,8)
 	g_source_set_name_by_id (timer_id, "[GpmManager] perhaps-recall");
-#endif
 }
 
 /**
@@ -1825,9 +1876,7 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, UpDevice *device, GpmMan
 
 		/* wait 20 seconds for user-panic */
 		timer_id = g_timeout_add_seconds (20, (GSourceFunc) manager_critical_action_do, manager);
-#if GLIB_CHECK_VERSION(2,25,8)
 		g_source_set_name_by_id (timer_id, "[GpmManager] battery critical-action");
-#endif
 
 	} else if (kind == UP_DEVICE_KIND_UPS) {
 		/* TRANSLATORS: UPS is really, really, low */
@@ -1840,25 +1889,23 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, UpDevice *device, GpmMan
 		if (policy == GPM_ACTION_POLICY_NOTHING) {
 			/* TRANSLATORS: computer will shutdown without saving data */
 			message = g_strdup (_("UPS is below the critical level and "
-				              "this computer will <b>power-off</b> when the "
-				              "UPS becomes completely empty."));
+					      "this computer will <b>power-off</b> when the "
+					      "UPS becomes completely empty."));
 
 		} else if (policy == GPM_ACTION_POLICY_HIBERNATE) {
 			/* TRANSLATORS: computer will hibernate */
 			message = g_strdup (_("UPS is below the critical level and "
-				              "this computer is about to hibernate."));
+					      "this computer is about to hibernate."));
 
 		} else if (policy == GPM_ACTION_POLICY_SHUTDOWN) {
 			/* TRANSLATORS: computer will just shutdown */
 			message = g_strdup (_("UPS is below the critical level and "
-				              "this computer is about to shutdown."));
+					      "this computer is about to shutdown."));
 		}
 
 		/* wait 20 seconds for user-panic */
 		timer_id = g_timeout_add_seconds (20, (GSourceFunc) manager_critical_action_do, manager);
-#if GLIB_CHECK_VERSION(2,25,8)
 		g_source_set_name_by_id (timer_id, "[GpmManager] ups critical-action");
-#endif
 	}
 
 	/* not all types have actions */
@@ -1901,9 +1948,9 @@ gpm_manager_dpms_mode_changed_cb (GpmDpms *dpms, GpmDpmsMode mode, GpmManager *m
 	gpm_manager_update_dpms_throttle (manager);
 }
 
-/*
- * gpm_manager_reset_just_resumed_cb
- */
+/**
+ * gpm_manager_reset_just_resumed_cb:
+ **/
 static gboolean
 gpm_manager_reset_just_resumed_cb (gpointer user_data)
 {
@@ -1923,7 +1970,7 @@ gpm_manager_reset_just_resumed_cb (gpointer user_data)
 }
 
 /**
- * gpm_manager_control_resume_cb
+ * gpm_manager_control_resume_cb:
  **/
 static void
 gpm_manager_control_resume_cb (GpmControl *control, GpmControlAction action, GpmManager *manager)
@@ -1931,9 +1978,97 @@ gpm_manager_control_resume_cb (GpmControl *control, GpmControlAction action, Gpm
 	guint timer_id;
 	manager->priv->just_resumed = TRUE;
 	timer_id = g_timeout_add_seconds (1, gpm_manager_reset_just_resumed_cb, manager);
-#if GLIB_CHECK_VERSION(2,25,8)
 	g_source_set_name_by_id (timer_id, "[GpmManager] just-resumed");
-#endif
+}
+
+/**
+ * gpm_manager_dbus_method_call:
+ **/
+static void
+gpm_manager_dbus_method_call (GDBusConnection *connection,
+			      const gchar *sender, const gchar *object_path,
+			      const gchar *interface_name, const gchar *method_name,
+			      GVariant *parameters,
+			      GDBusMethodInvocation *invocation,
+			      gpointer user_data)
+{
+	/* GpmManager *manager = GPM_MANAGER (user_data); */
+
+	/* do nothing, no methods defined (yet) */
+}
+
+/**
+ * gpm_manager_dbus_property_get:
+ **/
+static GVariant *
+gpm_manager_dbus_property_get (GDBusConnection *connection,
+			       const gchar *sender, const gchar *object_path,
+			       const gchar *interface_name, const gchar *property_name,
+			       GError **error, gpointer user_data)
+{
+	/* GpmManager *manager = GPM_MANAGER (user_data); */
+	/* do nothing, no properties defined (yet) */
+	return NULL;
+}
+
+/**
+ * gpm_manager_dbus_property_set:
+ **/
+static gboolean
+gpm_manager_dbus_property_set (GDBusConnection *connection,
+			       const gchar *sender, const gchar *object_path,
+			       const gchar *interface_name, const gchar *property_name,
+			       GVariant *value,
+			       GError **invocation, gpointer user_data)
+{
+	/* GpmManager *manager = GPM_MANAGER (user_data); */
+	/* do nothing, no properties defined (yet) */
+	return FALSE;
+}
+
+/**
+ * gpm_manager_bus_acquired_cb:
+ **/
+static void
+gpm_manager_bus_acquired_cb (GDBusConnection *connection,
+			    const gchar *name, gpointer user_data)
+{
+	GDBusNodeInfo *node_info;
+	GDBusInterfaceInfo *interface_info;
+	GpmManager *manager = GPM_MANAGER (user_data);
+	GDBusInterfaceVTable interface_vtable = {
+			gpm_manager_dbus_method_call,
+			gpm_manager_dbus_property_get,
+			gpm_manager_dbus_property_set
+	};
+
+	node_info = g_dbus_node_info_new_for_xml (power_manager_introspection, NULL);
+	interface_info = g_dbus_node_info_lookup_interface (node_info, GPM_DBUS_INTERFACE);
+
+	manager->priv->bus_connection = (GDBusConnection*) g_object_ref ((GObject*) connection);
+	manager->priv->bus_object_id = g_dbus_connection_register_object (connection,
+			GPM_DBUS_PATH,
+			interface_info,
+			&interface_vtable,
+			manager,
+			NULL,
+			NULL);
+	g_dbus_node_info_unref (node_info);
+
+	if (manager->priv->backlight != NULL) {
+		gpm_backlight_register_dbus (manager->priv->backlight, connection);
+	}
+}
+
+/**
+ * gpm_manager_name_lost_cb:
+ **/
+static void
+gpm_manager_name_lost_cb (GDBusConnection *connection,
+			  const gchar *name,
+			  gpointer user_data)
+{
+	egg_warning ("name lost %s", name);
 }
 
 /**
@@ -1945,12 +2080,9 @@ gpm_manager_init (GpmManager *manager)
 {
 	gboolean check_type_cpu;
 	gint timeout;
-	DBusGConnection *connection;
-	GError *error = NULL;
 	guint version;
 
 	manager->priv = GPM_MANAGER_GET_PRIVATE (manager);
-	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 
 	/* init to unthrottled */
 	manager->priv->screensaver_ac_throttle_id = 0;
@@ -2007,20 +2139,9 @@ gpm_manager_init (GpmManager *manager)
 
 	/* try and start an interactive service */
 	manager->priv->screensaver = gpm_screensaver_new ();
-#if 0
-	g_signal_connect (manager->priv->screensaver, "auth-request",
-			  G_CALLBACK (gpm_manager_screensaver_auth_request_cb), manager);
-#endif
 
 	/* try an start an interactive service */
 	manager->priv->backlight = gpm_backlight_new ();
-	if (manager->priv->backlight != NULL) {
-		/* add the new brightness lcd DBUS interface */
-		dbus_g_object_type_install_info (GPM_TYPE_BACKLIGHT,
-						 &dbus_glib_gpm_backlight_object_info);
-		dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH_BACKLIGHT,
-						     G_OBJECT (manager->priv->backlight));
-	}
 
 	manager->priv->idle = gpm_idle_new ();
 	g_signal_connect (manager->priv->idle, "idle-changed",
@@ -2074,6 +2195,18 @@ gpm_manager_init (GpmManager *manager)
 
 	/* update ac throttle */
 	gpm_manager_update_ac_throttle (manager);
+
+	/* finally, register on the bus, exporting the objects */
+	manager->priv->bus_object_id = -1;
+	manager->priv->bus_owner_id =
+		g_bus_own_name (G_BUS_TYPE_SESSION,
+				GPM_DBUS_SERVICE,
+				G_BUS_NAME_OWNER_FLAGS_NONE,
+				gpm_manager_bus_acquired_cb,
+				NULL,
+				gpm_manager_name_lost_cb,
+				g_object_ref (manager),
+				g_object_unref);
 }
 
 /**
@@ -2119,6 +2252,10 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->console);
 	g_object_unref (manager->priv->client);
 	g_object_unref (manager->priv->status_icon);
+
+	g_dbus_connection_unregister_object (manager->priv->bus_connection, manager->priv->bus_object_id);
+	g_object_unref (manager->priv->bus_connection);
+	g_bus_unown_name (manager->priv->bus_owner_id);
 
 	G_OBJECT_CLASS (gpm_manager_parent_class)->finalize (object);
 }

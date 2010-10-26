@@ -22,7 +22,7 @@
 #include "config.h"
 
 #include <glib.h>
-#include <dbus/dbus-glib.h>
+#include <gio/gio.h>
 
 #include "egg-debug.h"
 #include "gpm-disks.h"
@@ -33,7 +33,7 @@ static void     gpm_disks_finalize   (GObject	  *object);
 
 struct GpmDisksPrivate
 {
-	DBusGProxy		*proxy;
+	GDBusProxy		*proxy;
 	gchar			*cookie;
 };
 
@@ -48,6 +48,7 @@ static gboolean
 gpm_disks_unregister (GpmDisks *disks)
 {
 	gboolean ret = FALSE;
+	GVariant *retval = NULL;
 	GError *error = NULL;
 
 	/* no UDisks */
@@ -56,21 +57,25 @@ gpm_disks_unregister (GpmDisks *disks)
 		goto out;
 	}
 
-	/* clear spindown timeouts */
-	ret = dbus_g_proxy_call (disks->priv->proxy, "DriveUnsetAllSpindownTimeouts", &error,
-				 G_TYPE_STRING, disks->priv->cookie,
-				 G_TYPE_INVALID,
-				 G_TYPE_INVALID);
-	if (!ret) {
+	/* set spindown timeouts */
+	retval = g_dbus_proxy_call_sync (disks->priv->proxy,
+					 "DriveUnsetAllSpindownTimeouts",
+					g_variant_new ("(s)",
+						       disks->priv->cookie),
+					G_DBUS_CALL_FLAGS_NONE,
+					-1, NULL, &error);
+	if (retval == NULL) {
+		/* abort as the DBUS method failed */
 		egg_warning ("failed to clear spindown timeout: %s", error->message);
 		g_error_free (error);
 		goto out;
 	}
-out:
-	/* reset */
-	g_free (disks->priv->cookie);
-	disks->priv->cookie = NULL;
 
+	/* sucess */
+	ret = TRUE;
+out:
+	if (retval != NULL)
+		g_variant_unref (retval);
 	return ret;
 }
 
@@ -81,6 +86,7 @@ static gboolean
 gpm_disks_register (GpmDisks *disks, gint timeout)
 {
 	gboolean ret = FALSE;
+	GVariant *retval = NULL;
 	GError *error = NULL;
 	const gchar **options = {NULL};
 
@@ -91,18 +97,26 @@ gpm_disks_register (GpmDisks *disks, gint timeout)
 	}
 
 	/* set spindown timeouts */
-	ret = dbus_g_proxy_call (disks->priv->proxy, "DriveSetAllSpindownTimeouts", &error,
-				 G_TYPE_INT, timeout,
-				 G_TYPE_STRV, options,
-				 G_TYPE_INVALID,
-				 G_TYPE_STRING, &disks->priv->cookie,
-				 G_TYPE_INVALID);
-	if (!ret) {
+	retval = g_dbus_proxy_call_sync (disks->priv->proxy,
+					 "DriveSetAllSpindownTimeouts",
+					g_variant_new ("(ias)",
+						       timeout,
+						       options),
+					G_DBUS_CALL_FLAGS_NONE,
+					-1, NULL, &error);
+	if (retval == NULL) {
+		/* abort as the DBUS method failed */
 		egg_warning ("failed to set spindown timeout: %s", error->message);
 		g_error_free (error);
 		goto out;
 	}
+
+	/* sucess */
+	ret = TRUE;
+	g_variant_get (retval, "(s)", &disks->priv->cookie);
 out:
+	if (retval != NULL)
+		g_variant_unref (retval);
 	return ret;
 }
 
@@ -141,20 +155,23 @@ static void
 gpm_disks_init (GpmDisks *disks)
 {
 	GError *error = NULL;
-	DBusGConnection *connection;
+	GDBusConnection *connection;
 
 	disks->priv = GPM_DISKS_GET_PRIVATE (disks);
 
-	disks->priv->cookie = NULL;
-
 	/* get proxy to interface */
-	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, NULL);
-	disks->priv->proxy = dbus_g_proxy_new_for_name_owner (connection,
-							      "org.freedesktop.UDisks",
-							      "/org/freedesktop/UDisks",
-							      "org.freedesktop.UDisks", &error);
+	connection = g_bus_get_sync (G_BUS_TYPE_SYSTEM, NULL, &error);
+	disks->priv->proxy =
+		g_dbus_proxy_new_sync (connection,
+			G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
+			G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+			NULL,
+			"org.freedesktop.UDisks",
+			"/org/freedesktop/UDisks",
+			"org.freedesktop.UDisks",
+			NULL, &error);
 	if (disks->priv->proxy == NULL) {
-		egg_warning ("DBUS error: %s", error->message);
+		egg_warning ("failed to setup disks proxy: %s", error->message);
 		g_error_free (error);
 	}
 }

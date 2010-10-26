@@ -24,7 +24,6 @@
 #define __GPM_MANAGER_H
 
 #include <glib-object.h>
-#include <dbus/dbus-glib.h>
 
 G_BEGIN_DECLS
 
@@ -56,7 +55,6 @@ typedef enum
 	GPM_MANAGER_ERROR_NO_HW,
 	GPM_MANAGER_ERROR_LAST
 } GpmManagerError;
-
 
 GQuark		 gpm_manager_error_quark		(void);
 GType		 gpm_manager_error_get_type		(void);

@@ -25,7 +25,6 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
-#include <dbus/dbus-glib.h>
 
 #include "gpm-phone.h"
 #include "egg-debug.h"
@@ -37,8 +36,8 @@ static void     gpm_phone_finalize   (GObject	    *object);
 
 struct GpmPhonePrivate
 {
-	DBusGProxy		*proxy;
-	DBusGConnection		*connection;
+	GDBusProxy		*proxy;
+	GDBusConnection		*connection;
 	guint			 watch_id;
 	gboolean		 present;
 	guint			 percentage;
@@ -65,6 +64,7 @@ gboolean
 gpm_phone_coldplug (GpmPhone *phone)
 {
 	GError  *error = NULL;
+	GVariant *reply;
 	gboolean ret;
 
 	g_return_val_if_fail (phone != NULL, FALSE);
@@ -75,18 +75,24 @@ gpm_phone_coldplug (GpmPhone *phone)
 		return FALSE;
 	}
 
-	ret = dbus_g_proxy_call (phone->priv->proxy, "Coldplug", &error,
-				 G_TYPE_INVALID, G_TYPE_INVALID);
+	reply = g_dbus_proxy_call_sync (phone->priv->proxy, "Coldplug",
+			NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, &error);
 	if (error != NULL) {
 		egg_warning ("DEBUG: ERROR: %s", error->message);
 		g_error_free (error);
 	}
 
+	if (reply != NULL) {
+		ret = TRUE;
+		g_variant_unref (reply);
+	} else
+		ret = FALSE;
+
 	return ret;
 }
 
 /**
- * gpm_phone_coldplug:
+ * gpm_phone_get_present:
  * Return value: if present
  **/
 gboolean
@@ -98,7 +104,7 @@ gpm_phone_get_present (GpmPhone	*phone, guint idx)
 }
 
 /**
- * gpm_phone_coldplug:
+ * gpm_phone_get_percentage:
  * Return value: if present
  **/
 guint
@@ -110,7 +116,7 @@ gpm_phone_get_percentage (GpmPhone *phone, guint idx)
 }
 
 /**
- * gpm_phone_coldplug:
+ * gpm_phone_get_on_ac:
  * Return value: if present
  **/
 gboolean
@@ -139,7 +145,7 @@ gpm_phone_get_num_batteries (GpmPhone *phone)
 /** Invoked when we get the BatteryStateChanged
  */
 static void
-gpm_phone_battery_state_changed (DBusGProxy *proxy, guint idx, guint percentage, gboolean on_ac, GpmPhone *phone)
+gpm_phone_battery_state_changed (GDBusProxy *proxy, guint idx, guint percentage, gboolean on_ac, GpmPhone *phone)
 {
 	g_return_if_fail (GPM_IS_PHONE (phone));
 
@@ -154,7 +160,7 @@ gpm_phone_battery_state_changed (DBusGProxy *proxy, guint idx, guint percentage,
 /** Invoked when we get NumberBatteriesChanged
  */
 static void
-gpm_phone_num_batteries_changed (DBusGProxy *proxy, guint number, GpmPhone *phone)
+gpm_phone_num_batteries_changed (GDBusProxy *proxy, guint number, GpmPhone *phone)
 {
 	g_return_if_fail (GPM_IS_PHONE (phone));
 
@@ -185,6 +191,36 @@ gpm_phone_num_batteries_changed (DBusGProxy *proxy, guint number, GpmPhone *phon
 	phone->priv->onac = FALSE;
 	egg_debug ("emitting device-added : (%i)", 0);
 	g_signal_emit (phone, signals [DEVICE_ADDED], 0, 0);
+}
+
+/**
+ * gpm_phone_generic_signal_cb:
+ */
+static void
+gpm_phone_generic_signal_cb (GDBusProxy *proxy,
+			     gchar *sender_name, gchar *signal_name,
+			     GVariant *parameters, gpointer user_data) {
+
+	GpmPhone *self = GPM_PHONE (user_data);
+
+	if (!g_strcmp0 (signal_name, "BatteryStateChanged")) {
+		guint idx, percentage;
+		gboolean on_ac;
+
+		g_variant_get (parameters, "(uub)", &idx, &percentage, &on_ac);
+		gpm_phone_battery_state_changed (proxy, idx, percentage, on_ac, self);
+		return;
+	}
+
+	if (!g_strcmp0 (signal_name, "NumberBatteriesChanged")) {
+		guint number;
+
+		g_variant_get (parameters, "(u)", &number);
+		gpm_phone_num_batteries_changed (proxy, number, self);
+		return;
+	}
+
+	/* not a signal we're interested in */
 }
 
 /**
@@ -238,8 +274,8 @@ gpm_phone_service_appeared_cb (GDBusConnection *connection,
 	if (phone->priv->connection == NULL) {
 		egg_debug ("get connection");
 		g_clear_error (&error);
-		phone->priv->connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
-		if (error != NULL) {
+		phone->priv->connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
+		if (phone->priv->connection == NULL) {
 			egg_warning ("Could not connect to DBUS daemon: %s", error->message);
 			g_error_free (error);
 			phone->priv->connection = NULL;
@@ -249,37 +285,21 @@ gpm_phone_service_appeared_cb (GDBusConnection *connection,
 	if (phone->priv->proxy == NULL) {
 		egg_debug ("get proxy");
 		g_clear_error (&error);
-		phone->priv->proxy = dbus_g_proxy_new_for_name_owner (phone->priv->connection,
-							 GNOME_PHONE_MANAGER_DBUS_SERVICE,
-							 GNOME_PHONE_MANAGER_DBUS_PATH,
-							 GNOME_PHONE_MANAGER_DBUS_INTERFACE,
-							 &error);
-		if (error != NULL) {
+		phone->priv->proxy = g_dbus_proxy_new_sync (phone->priv->connection,
+				G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
+				NULL,
+				GNOME_PHONE_MANAGER_DBUS_SERVICE,
+				GNOME_PHONE_MANAGER_DBUS_PATH,
+				GNOME_PHONE_MANAGER_DBUS_INTERFACE,
+				NULL, &error);
+		if (phone->priv->proxy == NULL) {
 			egg_warning ("Cannot connect, maybe the daemon is not running: %s", error->message);
 			g_error_free (error);
 			phone->priv->proxy = NULL;
 			return;
 		}
 
-		/* complicated type. ick */
-		dbus_g_object_register_marshaller(gpm_marshal_VOID__UINT_UINT_BOOLEAN,
-						  G_TYPE_NONE, G_TYPE_UINT, G_TYPE_UINT,
-						  G_TYPE_BOOLEAN, G_TYPE_INVALID);
-
-		/* get BatteryStateChanged */
-		dbus_g_proxy_add_signal (phone->priv->proxy, "BatteryStateChanged",
-					 G_TYPE_UINT, G_TYPE_UINT, G_TYPE_BOOLEAN, G_TYPE_INVALID);
-		dbus_g_proxy_connect_signal (phone->priv->proxy, "BatteryStateChanged",
-					     G_CALLBACK (gpm_phone_battery_state_changed),
-					     phone, NULL);
-
-		/* get NumberBatteriesChanged */
-		dbus_g_proxy_add_signal (phone->priv->proxy, "NumberBatteriesChanged",
-					 G_TYPE_UINT, G_TYPE_INVALID);
-		dbus_g_proxy_connect_signal (phone->priv->proxy, "NumberBatteriesChanged",
-					     G_CALLBACK (gpm_phone_num_batteries_changed),
-					     phone, NULL);
-
+		g_signal_connect (phone->priv->proxy, "g-signal", G_CALLBACK(gpm_phone_generic_signal_cb), phone);
 	}
 }
 
@@ -288,8 +308,8 @@ gpm_phone_service_appeared_cb (GDBusConnection *connection,
  */
 static void
 gpm_phone_service_vanished_cb (GDBusConnection *connection,
-			        const gchar *name,
-			        GpmPhone *phone)
+				const gchar *name,
+				GpmPhone *phone)
 {
 	g_return_if_fail (GPM_IS_PHONE (phone));
 

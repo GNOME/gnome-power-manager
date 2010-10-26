@@ -531,8 +531,8 @@ cc_power_panel_setup_general (CcPowerPanel *panel)
 static void
 cc_power_panel_set_defaults_cb (GtkWidget *widget, CcPowerPanel *panel)
 {
-	DBusGProxy *proxy;
-	DBusGConnection *connection;
+	GDBusProxy *proxy;
+	GDBusConnection *connection;
 	GError *error = NULL;
 	const gchar *keys[5] = {
 		"/apps/gnome-power-manager/actions",
@@ -542,7 +542,7 @@ cc_power_panel_set_defaults_cb (GtkWidget *widget, CcPowerPanel *panel)
 		"/apps/gnome-power-manager/timeout"
 	};
 
-	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
+	connection = g_bus_get_sync (G_BUS_TYPE_SYSTEM, NULL, &error);
 	if (error != NULL) {
 		g_warning ("failed to get system bus connection: %s", error->message);
 		g_error_free (error);
@@ -558,7 +558,7 @@ cc_power_panel_set_defaults_cb (GtkWidget *widget, CcPowerPanel *panel)
 		return;
 	}
 
-	dbus_g_proxy_call (proxy, "SetSystem", &error,
+	g_dbus_proxy_call (proxy, "SetSystem", &error,
 			   G_TYPE_STRV, keys,
 			   G_TYPE_STRV, NULL,
 			   G_TYPE_INVALID, G_TYPE_INVALID);

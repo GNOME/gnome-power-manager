@@ -27,7 +27,6 @@
 #include <glib/gi18n.h>
 
 #include <gtk/gtk.h>
-#include <dbus/dbus-glib.h>
 #include <gconf/gconf-client.h>
 #include <libupower-glib/upower.h>
 
@@ -775,7 +774,6 @@ gpm_stats_update_info_data (UpDevice *device)
 		      "has-history", &has_history,
 		      "has-statistics", &has_statistics,
 		      NULL);
-
 
 	notebook = GTK_NOTEBOOK (gtk_builder_get_object (builder, "notebook1"));
 
@@ -1755,7 +1753,6 @@ gpm_stats_startup_cb (GApplication *application,
 	g_signal_connect (G_OBJECT (widget), "changed",
 			  G_CALLBACK (gpm_stats_range_combo_changed), NULL);
 
-
 	wakeups = up_wakeups_new ();
 	g_signal_connect (wakeups, "data-changed", G_CALLBACK (gpm_stats_data_changed_cb), NULL);
 
@@ -1832,7 +1829,6 @@ main (int argc, char *argv[])
 
 	if (! g_thread_supported ())
 		g_thread_init (NULL);
-	dbus_g_thread_init ();
 	g_type_init ();
 
 	gtk_init (&argc, &argv);

@@ -37,13 +37,13 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#include <gio/gio.h>
 
 #include "egg-debug.h"
 #include "gpm-idletime.h"
 
 #include "gpm-idle.h"
 #include "gpm-load.h"
-#include "gpm-session.h"
 
 #define GPM_IDLE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_IDLE, GpmIdlePrivate))
 
@@ -54,17 +54,18 @@
 
 struct GpmIdlePrivate
 {
-	GpmIdletime	*idletime;
-	GpmLoad		*load;
-	GpmSession	*session;
-	GpmIdleMode	 mode;
-	guint		 timeout_dim;		/* in seconds */
-	guint		 timeout_blank;		/* in seconds */
-	guint		 timeout_sleep;		/* in seconds */
-	guint		 timeout_blank_id;
-	guint		 timeout_sleep_id;
-	gboolean	 x_idle;
-	gboolean	 check_type_cpu;
+	GpmIdletime		*idletime;
+	GpmLoad			*load;
+	GDBusProxy		*proxy;
+	GDBusProxy		*proxy_presence;
+	GpmIdleMode		 mode;
+	guint			 timeout_dim;		/* in seconds */
+	guint			 timeout_blank;		/* in seconds */
+	guint			 timeout_sleep;		/* in seconds */
+	guint			 timeout_blank_id;
+	guint			 timeout_sleep_id;
+	gboolean		 x_idle;
+	gboolean		 check_type_cpu;
 };
 
 enum {
@@ -171,6 +172,75 @@ out:
 	return ret;
 }
 
+typedef enum {
+	GPM_IDLE_STATUS_ENUM_AVAILABLE = 0,
+	GPM_IDLE_STATUS_ENUM_INVISIBLE,
+	GPM_IDLE_STATUS_ENUM_BUSY,
+	GPM_IDLE_STATUS_ENUM_IDLE,
+	GPM_IDLE_STATUS_ENUM_UNKNOWN
+} GpmIdleStatusEnum;
+
+/**
+ * gpm_idle_is_session_idle:
+ **/
+static gboolean
+gpm_idle_is_session_idle (GpmIdle *idle)
+{
+	gboolean ret = FALSE;
+	GVariant *result;
+	guint status;
+
+	/* get the session status */
+	result = g_dbus_proxy_get_cached_property (idle->priv->proxy_presence, "status");
+	if (result == NULL)
+		goto out;
+
+	g_variant_get (result, "u", &status);
+	ret = (status == GPM_IDLE_STATUS_ENUM_IDLE);
+	g_variant_unref (result);
+out:
+	return ret;
+}
+
+typedef enum {
+	GPM_IDLE_INHIBIT_MASK_LOGOUT = 1,
+	GPM_IDLE_INHIBIT_MASK_SWITCH = 2,
+	GPM_IDLE_INHIBIT_MASK_SUSPEND = 4,
+	GPM_IDLE_INHIBIT_MASK_IDLE = 8
+} GpmIdleInhibitMask;
+
+/**
+ * gpm_idle_is_session_inhibited:
+ **/
+static gboolean
+gpm_idle_is_session_inhibited (GpmIdle *idle, guint mask)
+{
+	gboolean ret = FALSE;
+	GVariant *retval = NULL;
+	GError *error = NULL;
+
+	retval = g_dbus_proxy_call_sync (idle->priv->proxy,
+					 "IsInhibited",
+					 g_variant_new ("(u)",
+							mask),
+					 G_DBUS_CALL_FLAGS_NONE,
+					 -1, NULL,
+					 &error);
+	if (retval == NULL) {
+		/* abort as the DBUS method failed */
+		egg_warning ("IsInhibited failed: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* success */
+	g_variant_get (retval, "(b)", &ret);
+out:
+	if (retval != NULL)
+		g_variant_unref (retval);
+	return ret;
+}
+
 /**
  * gpm_idle_evaluate:
  **/
@@ -180,11 +250,6 @@ gpm_idle_evaluate (GpmIdle *idle)
 	gboolean is_idle;
 	gboolean is_idle_inhibited;
 	gboolean is_suspend_inhibited;
-
-	is_idle = gpm_session_get_idle (idle->priv->session);
-	is_idle_inhibited = gpm_session_get_idle_inhibited (idle->priv->session);
-	is_suspend_inhibited = gpm_session_get_suspend_inhibited (idle->priv->session);
-	egg_debug ("session_idle=%i, idle_inhibited=%i, suspend_inhibited=%i, x_idle=%i", is_idle, is_idle_inhibited, is_suspend_inhibited, idle->priv->x_idle);
 
 	/* check we are really idle */
 	if (!idle->priv->x_idle) {
@@ -202,6 +267,7 @@ gpm_idle_evaluate (GpmIdle *idle)
 	}
 
 	/* are we inhibited from going idle */
+	is_idle_inhibited = gpm_idle_is_session_inhibited (idle, GPM_IDLE_INHIBIT_MASK_IDLE);
 	if (is_idle_inhibited) {
 		egg_debug ("inhibited, so using normal state");
 		gpm_idle_set_mode (idle, GPM_IDLE_MODE_NORMAL);
@@ -229,12 +295,12 @@ gpm_idle_evaluate (GpmIdle *idle)
 		egg_debug ("setting up blank callback for %is", idle->priv->timeout_blank);
 		idle->priv->timeout_blank_id = g_timeout_add_seconds (idle->priv->timeout_blank,
 								      (GSourceFunc) gpm_idle_blank_cb, idle);
-#if GLIB_CHECK_VERSION(2,25,8)
 		g_source_set_name_by_id (idle->priv->timeout_blank_id, "[GpmIdle] blank");
-#endif
 	}
 
 	/* are we inhibited from sleeping */
+	is_idle = gpm_idle_is_session_idle (idle);
+	is_suspend_inhibited = gpm_idle_is_session_inhibited (idle, GPM_IDLE_INHIBIT_MASK_SUSPEND);
 	if (is_suspend_inhibited) {
 		egg_debug ("suspend inhibited");
 		if (idle->priv->timeout_sleep_id != 0) {
@@ -242,15 +308,13 @@ gpm_idle_evaluate (GpmIdle *idle)
 			idle->priv->timeout_sleep_id = 0;
 		}
 	} else if (is_idle) {
-	/* only do the sleep timeout when the session is idle and we aren't inhibited from sleeping */
+		/* only do the sleep timeout when the session is idle and we aren't inhibited from sleeping */
 		if (idle->priv->timeout_sleep_id == 0 &&
 		    idle->priv->timeout_sleep != 0) {
 			egg_debug ("setting up sleep callback %is", idle->priv->timeout_sleep);
 			idle->priv->timeout_sleep_id = g_timeout_add_seconds (idle->priv->timeout_sleep,
 									      (GSourceFunc) gpm_idle_sleep_cb, idle);
-#if GLIB_CHECK_VERSION(2,25,8)
 			g_source_set_name_by_id (idle->priv->timeout_sleep_id, "[GpmIdle] sleep");
-#endif
 		}
 	}
 out:
@@ -351,29 +415,6 @@ gpm_idle_set_timeout_sleep (GpmIdle *idle, guint timeout)
 }
 
 /**
- * gpm_idle_session_idle_changed_cb:
- * @is_idle: If the session is idle
- *
- * The SessionIdleChanged callback from gnome-session.
- **/
-static void
-gpm_idle_session_idle_changed_cb (GpmSession *session, gboolean is_idle, GpmIdle *idle)
-{
-	egg_debug ("Received gnome session idle changed: %i", is_idle);
-	gpm_idle_evaluate (idle);
-}
-
-/**
- * gpm_idle_session_inhibited_changed_cb:
- **/
-static void
-gpm_idle_session_inhibited_changed_cb (GpmSession *session, gboolean is_idle_inhibited, gboolean is_suspend_inhibited, GpmIdle *idle)
-{
-	egg_debug ("Received gnome session inhibited changed: idle=(%i), suspend=(%i)", is_idle_inhibited, is_suspend_inhibited);
-	gpm_idle_evaluate (idle);
-}
-
-/**
  * gpm_idle_idletime_alarm_expired_cb:
  *
  * We're idle, something timed out
@@ -403,6 +444,27 @@ gpm_idle_idletime_reset_cb (GpmIdletime *idletime, GpmIdle *idle)
 }
 
 /**
+ * gpm_idle_dbus_signal_cb:
+ **/
+static void
+gpm_idle_dbus_signal_cb (GDBusProxy *proxy, const gchar *sender_name, const gchar *signal_name, GVariant *parameters, gpointer user_data)
+{
+	GpmIdle *idle = GPM_IDLE (user_data);
+
+	if (g_strcmp0 (signal_name, "InhibitorAdded") == 0 ||
+	    g_strcmp0 (signal_name, "InhibitorRemoved") == 0) {
+		egg_debug ("Received gnome session inhibitor change");
+		gpm_idle_evaluate (idle);
+		return;
+	}
+	if (g_strcmp0 (signal_name, "StatusChanged") == 0) {
+		egg_debug ("Received gnome session status change");
+		gpm_idle_evaluate (idle);
+		return;
+	}
+}
+
+/**
  * gpm_idle_finalize:
  * @object: This class instance
  **/
@@ -424,7 +486,10 @@ gpm_idle_finalize (GObject *object)
 		g_source_remove (idle->priv->timeout_sleep_id);
 
 	g_object_unref (idle->priv->load);
-	g_object_unref (idle->priv->session);
+	if (idle->priv->proxy != NULL)
+		g_object_unref (idle->priv->proxy);
+	if (idle->priv->proxy_presence != NULL)
+		g_object_unref (idle->priv->proxy_presence);
 
 	gpm_idletime_alarm_remove (idle->priv->idletime, GPM_IDLE_IDLETIME_ID);
 	g_object_unref (idle->priv->idletime);
@@ -464,6 +529,9 @@ gpm_idle_class_init (GpmIdleClass *klass)
 static void
 gpm_idle_init (GpmIdle *idle)
 {
+	GDBusConnection *connection;
+	GError *error = NULL;
+
 	idle->priv = GPM_IDLE_GET_PRIVATE (idle);
 
 	idle->priv->timeout_dim = G_MAXUINT;
@@ -473,13 +541,48 @@ gpm_idle_init (GpmIdle *idle)
 	idle->priv->timeout_sleep_id = 0;
 	idle->priv->x_idle = FALSE;
 	idle->priv->load = gpm_load_new ();
-	idle->priv->session = gpm_session_new ();
-	g_signal_connect (idle->priv->session, "idle-changed", G_CALLBACK (gpm_idle_session_idle_changed_cb), idle);
-	g_signal_connect (idle->priv->session, "inhibited-changed", G_CALLBACK (gpm_idle_session_inhibited_changed_cb), idle);
 
 	idle->priv->idletime = gpm_idletime_new ();
 	g_signal_connect (idle->priv->idletime, "reset", G_CALLBACK (gpm_idle_idletime_reset_cb), idle);
 	g_signal_connect (idle->priv->idletime, "alarm-expired", G_CALLBACK (gpm_idle_idletime_alarm_expired_cb), idle);
+
+	/* get connection */
+	connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
+	if (connection == NULL) {
+		egg_warning ("Failed to get session connection: %s", error->message);
+		g_error_free (error);
+		return;
+	}
+
+	/* get org.gnome.Session main interface */
+	idle->priv->proxy =
+		g_dbus_proxy_new_sync (connection,
+			0, NULL,
+			"org.gnome.SessionManager",
+			"/org/gnome/SessionManager",
+			"org.gnome.SessionManager",
+			NULL, &error);
+	if (idle->priv->proxy == NULL) {
+		egg_warning ("Cannot connect to session manager: %s", error->message);
+		g_error_free (error);
+		return;
+	}
+	g_signal_connect (idle->priv->proxy, "g-signal", G_CALLBACK (gpm_idle_dbus_signal_cb), idle);
+
+	/* get org.gnome.Session.Presence interface */
+	idle->priv->proxy_presence =
+		g_dbus_proxy_new_sync (connection,
+			0, NULL,
+			"org.gnome.SessionManager",
+			"/org/gnome/SessionManager/Presence",
+			"org.gnome.SessionManager.Presence",
+			NULL, &error);
+	if (idle->priv->proxy_presence == NULL) {
+		egg_warning ("Cannot connect to session manager: %s", error->message);
+		g_error_free (error);
+		return;
+	}
+	g_signal_connect (idle->priv->proxy_presence, "g-signal", G_CALLBACK (gpm_idle_dbus_signal_cb), idle);
 
 	gpm_idle_evaluate (idle);
 }

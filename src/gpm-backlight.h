@@ -38,7 +38,7 @@ typedef struct GpmBacklightPrivate GpmBacklightPrivate;
 
 typedef struct
 {
-	GObject		         parent;
+	GObject			 parent;
 	GpmBacklightPrivate *priv;
 } GpmBacklight;
 
@@ -66,6 +66,8 @@ gboolean	 gpm_backlight_get_brightness		(GpmBacklight	*backlight,
 gboolean	 gpm_backlight_set_brightness		(GpmBacklight	*backlight,
 							 guint		 brightness,
 							 GError		**error);
+void		 gpm_backlight_register_dbus		(GpmBacklight 	 *backlight,
+							 GDBusConnection *connection);
 
 G_END_DECLS
 

@@ -33,72 +33,16 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <dbus/dbus-glib.h>
-#include <dbus/dbus-glib-lowlevel.h>
 
 #include "gpm-stock-icons.h"
 #include "gpm-common.h"
 #include "gpm-manager.h"
-#include "gpm-session.h"
-
-#include "org.gnome.PowerManager.h"
 
 #include "egg-debug.h"
 
-/**
- * gpm_object_register:
- * @connection: What we want to register to
- * @object: The GObject we want to register
- *
- * Register org.gnome.PowerManager on the session bus.
- * This function MUST be called before DBUS service will work.
- *
- * Return value: success
- **/
-static gboolean
-gpm_object_register (DBusGConnection *connection,
-		     GObject	     *object)
-{
-	DBusGProxy *bus_proxy = NULL;
-	GError *error = NULL;
-	guint request_name_result;
-	gboolean ret;
-
-	bus_proxy = dbus_g_proxy_new_for_name (connection,
-					       DBUS_SERVICE_DBUS,
-					       DBUS_PATH_DBUS,
-					       DBUS_INTERFACE_DBUS);
-
-	ret = dbus_g_proxy_call (bus_proxy, "RequestName", &error,
-				 G_TYPE_STRING, GPM_DBUS_SERVICE,
-				 G_TYPE_UINT, 0,
-				 G_TYPE_INVALID,
-				 G_TYPE_UINT, &request_name_result,
-				 G_TYPE_INVALID);
-	if (error) {
-		egg_debug ("ERROR: %s", error->message);
-		g_error_free (error);
-	}
-	if (!ret) {
-		/* abort as the DBUS method failed */
-		egg_warning ("RequestName failed!");
-		return FALSE;
-	}
-
-	/* free the bus_proxy */
-	g_object_unref (G_OBJECT (bus_proxy));
-
-	/* already running */
- 	if (request_name_result != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER) {
-		return FALSE;
-	}
-
-	dbus_g_object_type_install_info (GPM_TYPE_MANAGER, &dbus_glib_gpm_manager_object_info);
-	dbus_g_error_domain_register (GPM_MANAGER_ERROR, NULL, GPM_MANAGER_TYPE_ERROR);
-	dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH, object);
-
-	return TRUE;
-}
+static GDBusProxy *session_proxy = NULL;
+static GDBusProxy *session_proxy_client = NULL;
+static GMainLoop *loop = NULL;
 
 /**
  * timed_exit_cb:
@@ -109,42 +53,157 @@ gpm_object_register (DBusGConnection *connection,
  * Return value: FALSE, as we don't want to repeat this action.
  **/
 static gboolean
-timed_exit_cb (GMainLoop *loop)
+timed_exit_cb (GMainLoop *_loop)
 {
 	g_main_loop_quit (loop);
 	return FALSE;
 }
 
 /**
- * gpm_main_stop_cb:
+ * gpm_main_session_end_session_response:
  **/
-static void
-gpm_main_stop_cb (GpmSession *session, GMainLoop *loop)
+static gboolean
+gpm_main_session_end_session_response (gboolean is_okay, const gchar *reason)
 {
-	g_main_loop_quit (loop);
+	gboolean ret = FALSE;
+	GVariant *retval = NULL;
+	GError *error = NULL;
+
+	g_return_val_if_fail (session_proxy_client != NULL, FALSE);
+
+	/* no gnome-session */
+	if (session_proxy == NULL) {
+		egg_warning ("no gnome-session");
+		goto out;
+	}
+
+	retval = g_dbus_proxy_call_sync (session_proxy,
+					 "EndSessionResponse",
+					 g_variant_new ("(bs)",
+							is_okay,
+							reason),
+					 G_DBUS_CALL_FLAGS_NONE,
+					 -1, NULL, &error);
+	if (retval == NULL) {
+		egg_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* success */
+	ret = TRUE;
+out:
+	if (retval != NULL)
+		g_variant_unref (retval);
+	return ret;
 }
 
 /**
- * gpm_main_query_end_session_cb:
+ * gpm_main_session_dbus_signal_cb:
  **/
 static void
-gpm_main_query_end_session_cb (GpmSession *session, guint flags, GMainLoop *loop)
+gpm_main_session_dbus_signal_cb (GDBusProxy *proxy, const gchar *sender_name, const gchar *signal_name, GVariant *parameters, gpointer user_data)
 {
-	/* just send response */
-	gpm_session_end_session_response (session, TRUE, NULL);
+	if (g_strcmp0 (signal_name, "Stop") == 0) {
+		g_main_loop_quit (loop);
+		return;
+	}
+	if (g_strcmp0 (signal_name, "QueryEndSession") == 0) {
+		/* just send response */
+		gpm_main_session_end_session_response (TRUE, NULL);
+		return;
+	}
+	if (g_strcmp0 (signal_name, "EndSession") == 0) {
+		/* send response */
+		gpm_main_session_end_session_response (TRUE, NULL);
+
+		/* exit loop, will unref manager */
+		g_main_loop_quit (loop);
+		return;
+	}
 }
 
 /**
- * gpm_main_end_session_cb:
+ * gpm_main_session_register_client:
  **/
-static void
-gpm_main_end_session_cb (GpmSession *session, guint flags, GMainLoop *loop)
+static gboolean
+gpm_main_session_register_client (const gchar *app_id, const gchar *client_startup_id)
 {
-	/* send response */
-	gpm_session_end_session_response (session, TRUE, NULL);
+	gboolean ret = FALSE;
+	gchar *client_id = NULL;
+	GError *error = NULL;
+	GDBusConnection *connection;
+	GVariant *retval = NULL;
 
-	/* exit loop, will unref manager */
-	g_main_loop_quit (loop);
+	/* fallback for local running */
+	if (client_startup_id == NULL)
+		client_startup_id = "";
+
+	/* get connection */
+	connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
+	if (connection == NULL) {
+		egg_warning ("Failed to get session connection: %s", error->message);
+		g_error_free (error);
+		return FALSE;
+	}
+
+	/* get org.gnome.Session interface */
+	session_proxy =
+		g_dbus_proxy_new_sync (connection,
+			G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
+			G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+			NULL,
+			"org.gnome.SessionManager",
+			"/org/gnome/SessionManager",
+			"org.gnome.SessionManager",
+			NULL, &error);
+	if (session_proxy == NULL) {
+		egg_warning ("Failed to get gnome-session: %s", error->message);
+		g_error_free (error);
+		return FALSE;
+	}
+
+	/* register ourselves */
+	retval = g_dbus_proxy_call_sync (session_proxy,
+					 "RegisterClient",
+					 g_variant_new ("(ss)",
+							app_id,
+							client_startup_id),
+					 G_DBUS_CALL_FLAGS_NONE,
+					 -1, NULL, &error);
+	if (retval == NULL) {
+		egg_warning ("failed to register client '%s': %s", client_startup_id, error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* get client id */
+	g_variant_get (retval, "(o)", &client_id);
+
+	/* get org.gnome.Session.ClientPrivate interface */
+	session_proxy_client =
+		g_dbus_proxy_new_sync (connection,
+			G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
+			NULL,
+			"org.gnome.SessionManager",
+			client_id,
+			"org.gnome.SessionManager.ClientPrivate",
+			NULL, &error);
+	if (session_proxy_client == NULL) {
+		egg_warning ("failed to setup private proxy: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+	g_signal_connect (session_proxy_client, "g-signal", G_CALLBACK (gpm_main_session_dbus_signal_cb), NULL);
+
+	/* success */
+	ret = TRUE;
+	egg_debug ("registered startup '%s' to client id '%s'", client_startup_id, client_id);
+out:
+	if (retval != NULL)
+		g_variant_unref (retval);
+	g_free (client_id);
+	return ret;
 }
 
 /**
@@ -153,18 +212,16 @@ gpm_main_end_session_cb (GpmSession *session, guint flags, GMainLoop *loop)
 int
 main (int argc, char *argv[])
 {
-	GMainLoop *loop;
-	DBusGConnection *system_connection;
-	DBusGConnection *session_connection;
+	GDBusConnection *system_connection;
+	GDBusConnection *session_connection;
 	gboolean verbose = FALSE;
 	gboolean version = FALSE;
 	gboolean timed_exit = FALSE;
 	gboolean immediate_exit = FALSE;
-	GpmSession *session = NULL;
 	GpmManager *manager = NULL;
 	GError *error = NULL;
 	GOptionContext *context;
-	gint ret;
+	gint policy_owner_id;
 	guint timer_id;
 
 	const GOptionEntry options[] = {
@@ -186,7 +243,6 @@ main (int argc, char *argv[])
 
 	if (! g_thread_supported ())
 		g_thread_init (NULL);
-	dbus_g_thread_init ();
 	g_type_init ();
 
 	context = g_option_context_new (N_("GNOME Power Manager"));
@@ -203,7 +259,6 @@ main (int argc, char *argv[])
 
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
-	dbus_g_thread_init ();
 
 	gtk_init (&argc, &argv);
 	egg_debug_init (verbose);
@@ -211,7 +266,7 @@ main (int argc, char *argv[])
 	egg_debug ("GNOME %s %s", GPM_NAME, VERSION);
 
 	/* check dbus connections, exit if not valid */
-	system_connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
+	system_connection = g_bus_get_sync (G_BUS_TYPE_SYSTEM, NULL, &error);
 	if (error) {
 		egg_warning ("%s", error->message);
 		g_error_free (error);
@@ -221,7 +276,7 @@ main (int argc, char *argv[])
 			   "your computer after starting this service.");
 	}
 
-	session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+	session_connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
 	if (error) {
 		egg_warning ("%s", error->message);
 		g_error_free (error);
@@ -233,47 +288,26 @@ main (int argc, char *argv[])
 
 	/* add application specific icons to search path */
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
-                                           GPM_DATA G_DIR_SEPARATOR_S "icons");
+					   GPM_DATA G_DIR_SEPARATOR_S "icons");
 
 	loop = g_main_loop_new (NULL, FALSE);
 
 	/* optionally register with the session */
-	session = gpm_session_new ();
-	g_signal_connect (session, "stop", G_CALLBACK (gpm_main_stop_cb), loop);
-	g_signal_connect (session, "query-end-session", G_CALLBACK (gpm_main_query_end_session_cb), loop);
-	g_signal_connect (session, "end-session", G_CALLBACK (gpm_main_end_session_cb), loop);
-	gpm_session_register_client (session, "gnome-power-manager", getenv ("DESKTOP_AUTOSTART_ID"));
+	gpm_main_session_register_client ("gnome-power-manager", getenv ("DESKTOP_AUTOSTART_ID"));
 
 	/* create a new gui object */
 	manager = gpm_manager_new ();
 
-	if (!gpm_object_register (session_connection, G_OBJECT (manager))) {
-		egg_error ("%s is already running in this session.", GPM_NAME);
-		return 0;
-	}
-
-	/* register to be a policy agent, just like kpackagekit does */
-	ret = dbus_bus_request_name(dbus_g_connection_get_connection(system_connection),
+	/* register to be a policy agent, just like kpowersave does */
+	policy_owner_id = g_bus_own_name_on_connection (system_connection,
 				    "org.freedesktop.Policy.Power",
-				    DBUS_NAME_FLAG_REPLACE_EXISTING, NULL);
-	switch (ret) {
-	case DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER:
-		egg_debug ("Successfully acquired interface org.freedesktop.Policy.Power.");
-		break;
-	case DBUS_REQUEST_NAME_REPLY_IN_QUEUE:
-		egg_debug ("Queued for interface org.freedesktop.Policy.Power.");
-		break;
-	default:
-		break;
-	};
+				    G_BUS_NAME_OWNER_FLAGS_REPLACE, NULL, NULL, NULL, NULL);
 
 	/* Only timeout and close the mainloop if we have specified it
 	 * on the command line */
 	if (timed_exit) {
 		timer_id = g_timeout_add_seconds (20, (GSourceFunc) timed_exit_cb, loop);
-#if GLIB_CHECK_VERSION(2,25,8)
 		g_source_set_name_by_id (timer_id, "[GpmMain] timed-exit");
-#endif
 	}
 
 	if (immediate_exit == FALSE) {
@@ -282,7 +316,10 @@ main (int argc, char *argv[])
 
 	g_main_loop_unref (loop);
 
-	g_object_unref (session);
+	if (session_proxy != NULL)
+		g_object_unref (session_proxy);
+	if (session_proxy_client != NULL)
+		g_object_unref (session_proxy_client);
 	g_object_unref (manager);
 unref_program:
 	g_option_context_free (context);
