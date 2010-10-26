@@ -1451,10 +1451,11 @@ gpm_stats_points_checkbox_stats_cb (GtkWidget *widget, gpointer data)
 /**
  * gpm_stats_highlight_device:
  **/
-static void
+static gboolean
 gpm_stats_highlight_device (const gchar *object_path)
 {
 	gboolean ret;
+	gboolean found = FALSE;
 	gchar *id = NULL;
 	gchar *path_str;
 	guint i;
@@ -1464,11 +1465,11 @@ gpm_stats_highlight_device (const gchar *object_path)
 
 	/* check valid */
 	if (!g_str_has_prefix (object_path, "/"))
-		return;
+		goto out;
 
 	/* we have to reuse the treeview data as it may be sorted */
 	ret = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (list_store_devices), &iter);
-	for (i=0; ret; i++) {
+	for (i=0; ret && !found; i++) {
 		gtk_tree_model_get (GTK_TREE_MODEL (list_store_devices), &iter,
 				    GPM_DEVICES_COLUMN_ID, &id,
 				    -1);
@@ -1479,10 +1480,13 @@ gpm_stats_highlight_device (const gchar *object_path)
 			gtk_tree_view_set_cursor_on_cell (GTK_TREE_VIEW (widget), path, NULL, NULL, FALSE);
 			g_free (path_str);
 			gtk_tree_path_free (path);
+			found = TRUE;
 		}
 		g_free (id);
 		ret = gtk_tree_model_iter_next (GTK_TREE_MODEL (list_store_devices), &iter);
 	}
+out:
+	return found;
 }
 
 /**
@@ -1491,7 +1495,7 @@ gpm_stats_highlight_device (const gchar *object_path)
 static gboolean
 gpm_stats_delete_event_cb (GtkWidget *widget, GdkEvent *event, GtkApplication *application)
 {
-	gtk_application_quit (application);
+	g_application_release (G_APPLICATION (application));
 	return FALSE;
 }
 
@@ -1501,32 +1505,24 @@ gpm_stats_delete_event_cb (GtkWidget *widget, GdkEvent *event, GtkApplication *a
 static void
 gpm_stats_button_close_cb (GtkWidget *widget, GtkApplication *application)
 {
-	gtk_application_quit (application);
+	g_application_release (G_APPLICATION (application));
 }
 
 /**
- * main:
+ * gpm_stats_commandline_cb:
  **/
-int
-main (int argc, char *argv[])
+static int
+gpm_stats_commandline_cb (GApplication *application,
+			  GApplicationCommandLine *cmdline,
+			  gpointer user_data)
 {
-	gboolean verbose = FALSE;
-	GOptionContext *context;
-	GtkBox *box;
-	GtkWidget *widget;
-	GtkTreeSelection *selection;
-	GtkApplication *application;
 	gboolean ret;
-	UpClient *client;
-	GPtrArray *devices;
-	UpDevice *device;
-	UpDeviceKind kind;
-	guint i, j;
-	gint page;
-	gboolean checked;
-	gchar *last_device = NULL;
-	guint retval;
-	GError *error = NULL;
+	gboolean verbose = FALSE;
+	gchar **argv;
+	gchar *last_device =  NULL;
+	gint argc;
+	GOptionContext *context;
+	GtkWindow *window;
 
 	const GOptionEntry options[] = {
 		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
@@ -1538,36 +1534,61 @@ main (int argc, char *argv[])
 		{ NULL}
 	};
 
-	setlocale (LC_ALL, "");
-
-	bindtextdomain (GETTEXT_PACKAGE, GNOMELOCALEDIR);
-	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-	textdomain (GETTEXT_PACKAGE);
-
-	if (! g_thread_supported ())
-		g_thread_init (NULL);
-	dbus_g_thread_init ();
-	g_type_init ();
+	/* get arguments */
+	argv = g_application_command_line_get_arguments (cmdline, &argc);
 
 	context = g_option_context_new (NULL);
 	/* TRANSLATORS: the program name */
 	g_option_context_set_summary (context, _("Power Statistics"));
 	g_option_context_add_main_entries (context, options, NULL);
-	g_option_context_parse (context, &argc, &argv, NULL);
-	g_option_context_free (context);
+	ret = g_option_context_parse (context, &argc, &argv, NULL);
+	if (!ret)
+		goto out;
 
+	/* set debugging level */
 	egg_debug_init (verbose);
-	gtk_init (&argc, &argv);
 
-	/* are we already activated? */
-	application = gtk_application_new ("org.gnome.PowerManager.Statistics", &argc, &argv);
+	/* get from GSettings if we never specified on the command line */
+	if (last_device == NULL)
+		last_device = g_settings_get_string (settings, GPM_SETTINGS_INFO_LAST_DEVICE);
 
-	/* add application specific icons to search path */
-	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
-                                           GPM_DATA G_DIR_SEPARATOR_S "icons");
+	/* set the correct focus on the last device */
+	if (last_device != NULL) {
+		ret = gpm_stats_highlight_device (last_device);
+		if (!ret)
+			egg_warning ("failed to select");
+		g_free (last_device);
+	}
 
-	/* get data from gconf */
-	settings = g_settings_new (GPM_SETTINGS_SCHEMA);
+	/* make sure the window is raised */
+	window = GTK_WINDOW (gtk_builder_get_object (builder, "dialog_stats"));
+	gtk_window_present (window);
+out:
+	g_strfreev (argv);
+	g_option_context_free (context);
+	return ret;
+}
+
+/**
+ * gpm_stats_startup_cb:
+ **/
+static void
+gpm_stats_startup_cb (GApplication *application,
+		      gpointer user_data)
+{
+	GtkBox *box;
+	GtkWidget *widget;
+	GtkTreeSelection *selection;
+	gboolean ret;
+	UpClient *client;
+	GPtrArray *devices;
+	UpDevice *device;
+	UpDeviceKind kind;
+	guint i, j;
+	gint page;
+	gboolean checked;
+	guint retval;
+	GError *error = NULL;
 
 	/* get UI */
 	builder = gtk_builder_new ();
@@ -1592,7 +1613,7 @@ main (int argc, char *argv[])
 	gtk_widget_show (graph_statistics);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_stats"));
-	gtk_application_add_window (application, GTK_WINDOW (widget));
+	gtk_window_set_application (GTK_WINDOW (widget), GTK_APPLICATION (application));
 	gtk_window_set_default_size (GTK_WINDOW(widget), 800, 500);
 	gtk_window_set_default_icon_name (GPM_STOCK_APP_ICON);
 
@@ -1600,9 +1621,10 @@ main (int argc, char *argv[])
 	g_signal_connect (widget, "delete-event",
 			  G_CALLBACK (gpm_stats_delete_event_cb), application);
 
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "button_close"));
+        widget = GTK_WIDGET (gtk_builder_get_object (builder, "button_close"));
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_stats_button_close_cb), application);
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "button_close"));
 	gtk_widget_grab_default (widget);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "button_help"));
@@ -1764,9 +1786,6 @@ main (int argc, char *argv[])
 		current_device = g_strdup (up_device_get_object_path (device));
 	}
 
-	if (last_device == NULL)
-		last_device = g_settings_get_string (settings, GPM_SETTINGS_INFO_LAST_DEVICE);
-
 	/* has capability to measure wakeups */
 	ret = up_wakeups_get_has_capability (wakeups);
 	if (ret) {
@@ -1782,10 +1801,6 @@ main (int argc, char *argv[])
 		g_object_unref (icon);
 	}
 
-	/* set the correct focus on the last device */
-	if (last_device != NULL)
-		gpm_stats_highlight_device (last_device);
-
 	g_ptr_array_unref (devices);
 
 	/* set axis */
@@ -1796,17 +1811,51 @@ main (int argc, char *argv[])
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_stats"));
 	gtk_widget_show (widget);
+out:
+	g_object_unref (client);
+}
+
+/**
+ * main:
+ **/
+int
+main (int argc, char *argv[])
+{
+	GtkApplication *application;
+	int status = 0;
+
+	setlocale (LC_ALL, "");
+
+	bindtextdomain (GETTEXT_PACKAGE, GNOMELOCALEDIR);
+	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+	textdomain (GETTEXT_PACKAGE);
+
+	if (! g_thread_supported ())
+		g_thread_init (NULL);
+	dbus_g_thread_init ();
+	g_type_init ();
+
+	gtk_init (&argc, &argv);
+
+	/* get data from gconf */
+	settings = g_settings_new (GPM_SETTINGS_SCHEMA);
+
+	/* are we already activated? */
+	application = gtk_application_new ("org.gnome.PowerManager.Statistics",
+					   G_APPLICATION_HANDLES_COMMAND_LINE);
+	g_signal_connect (application, "startup",
+			  G_CALLBACK (gpm_stats_startup_cb), NULL);
+	g_signal_connect (application, "command-line",
+			  G_CALLBACK (gpm_stats_commandline_cb), NULL);
+
+	/* add application specific icons to search path */
+	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
+                                           GPM_DATA G_DIR_SEPARATOR_S "icons");
 
 	/* run */
-	gtk_application_run (application);
+	status = g_application_run (G_APPLICATION (application), argc, argv);
 
-out:
 	g_object_unref (settings);
-	g_object_unref (client);
-	g_object_unref (wakeups);
-	g_object_unref (builder);
-	g_object_unref (list_store_info);
 	g_object_unref (application);
-	g_free (last_device);
-	return 0;
+	return status;
 }
