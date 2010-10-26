@@ -24,10 +24,7 @@ INCLUDES =						\
 	-DGPM_DATA=\"$(pkgdatadir)\"			\
 	-DGTKBUILDERDIR=\"$(pkgdatadir)\"		\
 	-DUP_DISABLE_DEPRECATED				\
-	-DEGG_LOG_FILE=\""/tmp/gpm.log"\"		\
-	-DEGG_VERBOSE="\"GPM_VERBOSE\""			\
-	-DEGG_LOGGING="\"GPM_LOGGING\""			\
-	-DEGG_CONSOLE="\"GPM_CONSOLE\""			\
+	-DG_LOG_DOMAIN=\"PowerManager\"			\
 	-I$(top_srcdir)
 
 ccpanelsdir = $(PANELS_DIR)
@@ -46,8 +43,8 @@ check_PROGRAMS =					\
 
 noinst_LIBRARIES = libgpmshared.a
 libgpmshared_a_SOURCES =				\
-	egg-debug.h					\
-	egg-debug.c					\
+	gpm-debug.h					\
+	gpm-debug.c					\
 	gpm-array-float.c				\
 	gpm-array-float.h				\
 	gpm-idletime.h					\
@@ -95,8 +92,8 @@ gnome_power_statistics_CFLAGS =				\
 libpower_la_SOURCES =					\
 	egg-console-kit.h				\
 	egg-console-kit.c				\
-	egg-debug.h					\
-	egg-debug.c					\
+	gpm-debug.h					\
+	gpm-debug.c					\
 	gpm-brightness.h				\
 	gpm-brightness.c				\
 	gpm-common.h					\

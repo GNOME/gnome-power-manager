@@ -30,7 +30,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "egg-debug.h"
 #include "gpm-common.h"
 
 /**
@@ -127,7 +126,7 @@ gpm_precision_round_up (gfloat value, gint smallest)
 	if (fabs (value) < 0.01)
 		return 0;
 	if (smallest == 0) {
-		egg_warning ("divisor zero");
+		g_warning ("divisor zero");
 		return 0;
 	}
 	division = (gfloat) value / (gfloat) smallest;
@@ -154,7 +153,7 @@ gpm_precision_round_down (gfloat value, gint smallest)
 	if (fabs (value) < 0.01)
 		return 0;
 	if (smallest == 0) {
-		egg_warning ("divisor zero");
+		g_warning ("divisor zero");
 		return 0;
 	}
 	division = (gfloat) value / (gfloat) smallest;
@@ -180,7 +179,7 @@ gpm_discrete_from_percent (guint percentage, guint levels)
 	if (percentage > 100)
 		return levels;
 	if (levels == 0) {
-		egg_warning ("levels is 0!");
+		g_warning ("levels is 0!");
 		return 0;
 	}
 	return ((gfloat) percentage * (gfloat) (levels - 1)) / 100.0f;
@@ -202,7 +201,7 @@ gpm_discrete_to_percent (guint discrete, guint levels)
 	if (discrete > levels)
 		return 100;
 	if (levels == 0) {
-		egg_warning ("levels is 0!");
+		g_warning ("levels is 0!");
 		return 0;
 	}
 	return (guint) ((gfloat) discrete * (100.0f / (gfloat) (levels - 1)));
@@ -224,7 +223,7 @@ gpm_discrete_to_fraction (guint discrete, guint levels)
 	if (discrete > levels)
 		return 1.0;
 	if (levels == 0) {
-		egg_warning ("levels is 0!");
+		g_warning ("levels is 0!");
 		return 0.0;
 	}
 	return (guint) ((gfloat) discrete / ((gfloat) (levels - 1)));

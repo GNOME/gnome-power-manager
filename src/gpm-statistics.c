@@ -30,13 +30,12 @@
 #include <gconf/gconf-client.h>
 #include <libupower-glib/upower.h>
 
-#include "egg-debug.h"
-
 #include "gpm-array-float.h"
 #include "gpm-common.h"
 #include "gpm-stock-icons.h"
 #include "gpm-upower.h"
 #include "gpm-graph-widget.h"
+#include "gpm-debug.h"
 
 static GtkBuilder *builder = NULL;
 static GtkListStore *list_store_info = NULL;
@@ -1151,7 +1150,7 @@ gpm_stats_devices_treeview_clicked_cb (GtkTreeSelection *selection, gpointer use
 		g_settings_set_string (settings, GPM_SETTINGS_INFO_LAST_DEVICE, current_device);
 
 		/* show transaction_id */
-		egg_debug ("selected row is: %s", current_device);
+		g_debug ("selected row is: %s", current_device);
 
 		/* is special device */
 		if (g_strcmp0 (current_device, "wakeups") == 0) {
@@ -1164,7 +1163,7 @@ gpm_stats_devices_treeview_clicked_cb (GtkTreeSelection *selection, gpointer use
 		}
 
 	} else {
-		egg_debug ("no row selected");
+		g_debug ("no row selected");
 	}
 }
 
@@ -1215,7 +1214,7 @@ gpm_stats_device_added_cb (UpClient *client, UpDevice *device, gpointer user_dat
 {
 	const gchar *object_path;
 	object_path = up_device_get_object_path (device);
-	egg_debug ("added:     %s", object_path);
+	g_debug ("added:     %s", object_path);
 	gpm_stats_add_device (device);
 }
 
@@ -1229,7 +1228,7 @@ gpm_stats_device_changed_cb (UpClient *client, UpDevice *device, gpointer user_d
 	object_path = up_device_get_object_path (device);
 	if (object_path == NULL || current_device == NULL)
 		return;
-	egg_debug ("changed:   %s", object_path);
+	g_debug ("changed:   %s", object_path);
 	if (g_strcmp0 (current_device, object_path) == 0)
 		gpm_stats_update_info_data (device);
 }
@@ -1246,7 +1245,7 @@ gpm_stats_device_removed_cb (UpClient *client, UpDevice *device, gpointer user_d
 	gboolean ret;
 
 	object_path = up_device_get_object_path (device);
-	egg_debug ("removed:   %s", object_path);
+	g_debug ("removed:   %s", object_path);
 	if (g_strcmp0 (current_device, object_path) == 0) {
 		gtk_list_store_clear (list_store_info);
 	}
@@ -1539,12 +1538,10 @@ gpm_stats_commandline_cb (GApplication *application,
 	/* TRANSLATORS: the program name */
 	g_option_context_set_summary (context, _("Power Statistics"));
 	g_option_context_add_main_entries (context, options, NULL);
+	g_option_context_add_group (context, gpm_debug_get_option_group ());
 	ret = g_option_context_parse (context, &argc, &argv, NULL);
 	if (!ret)
 		goto out;
-
-	/* set debugging level */
-	egg_debug_init (verbose);
 
 	/* get from GSettings if we never specified on the command line */
 	if (last_device == NULL)
@@ -1554,7 +1551,7 @@ gpm_stats_commandline_cb (GApplication *application,
 	if (last_device != NULL) {
 		ret = gpm_stats_highlight_device (last_device);
 		if (!ret)
-			egg_warning ("failed to select");
+			g_warning ("failed to select");
 		g_free (last_device);
 	}
 
@@ -1592,7 +1589,7 @@ gpm_stats_startup_cb (GApplication *application,
 	builder = gtk_builder_new ();
 	retval = gtk_builder_add_from_file (builder, GPM_DATA "/gpm-statistics.ui", &error);
 	if (retval == 0) {
-		egg_warning ("failed to load ui: %s", error->message);
+		g_warning ("failed to load ui: %s", error->message);
 		g_error_free (error);
 	}
 

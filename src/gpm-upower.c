@@ -24,8 +24,6 @@
 #include <glib/gi18n.h>
 #include <libupower-glib/upower.h>
 
-#include "egg-debug.h"
-
 #include "gpm-upower.h"
 #include "gpm-common.h"
 
@@ -179,11 +177,11 @@ gpm_upower_get_device_icon (UpDevice *device, gboolean use_symbolic)
 
 	/* nothing matched */
 	if (filename->len == 0) {
-		egg_warning ("nothing matched, falling back to default icon");
+		g_warning ("nothing matched, falling back to default icon");
 		g_string_append (filename, "dialog-warning;");
 	}
 
-	egg_debug ("got filename: %s", filename->str);
+	g_debug ("got filename: %s", filename->str);
 
 	iconnames = g_strsplit (filename->str, ";", -1);
 	icon = g_themed_icon_new_from_names (iconnames, -1);
@@ -342,7 +340,7 @@ gpm_upower_get_device_summary (UpDevice *device)
 	}
 
 	/* fallback */
-	egg_warning ("in an undefined state we are not charging or "
+	g_warning ("in an undefined state we are not charging or "
 		     "discharging and the batteries are also not charged");
 	g_string_append (description, device_desc);
 	g_string_append_printf (description, " (%.0f%%)", percentage);
@@ -567,7 +565,7 @@ gpm_device_kind_to_localised_string (UpDeviceKind kind, guint number)
 		break;
 #endif
 	default:
-		egg_warning ("enum unrecognised: %i", kind);
+		g_warning ("enum unrecognised: %i", kind);
 		text = up_device_kind_to_string (kind);
 	}
 	return text;
@@ -617,7 +615,7 @@ gpm_device_kind_to_icon (UpDeviceKind kind)
 		break;
 #endif
 	default:
-		egg_warning ("enum unrecognised: %i", kind);
+		g_warning ("enum unrecognised: %i", kind);
 		icon = "gtk-help";
 	}
 	return icon;

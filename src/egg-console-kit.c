@@ -27,7 +27,6 @@
 #include <glib.h>
 #include <gio/gio.h>
 
-#include "egg-debug.h"
 #include "egg-console-kit.h"
 
 static void     egg_console_kit_finalize	(GObject		*object);
@@ -206,7 +205,7 @@ egg_console_kit_is_local (EggConsoleKit *console, gboolean *is_local, GError **e
 
 	/* maybe console kit does not know about our session */
 	if (console->priv->proxy_session == NULL) {
-		egg_warning ("no ConsoleKit session");
+		g_warning ("no ConsoleKit session");
 		goto out;
 	}
 
@@ -247,7 +246,7 @@ egg_console_kit_is_active (EggConsoleKit *console, gboolean *is_active, GError *
 
 	/* maybe console kit does not know about our session */
 	if (console->priv->proxy_session == NULL) {
-		egg_warning ("no ConsoleKit session");
+		g_warning ("no ConsoleKit session");
 		goto out;
 	}
 
@@ -282,7 +281,7 @@ egg_console_kit_proxy_signal_cb (GDBusProxy *proxy, const gchar *sender_name, co
 	gboolean active;
 	if (g_strcmp0 (signal_name, "ActiveChanged") == 0) {
 		g_variant_get (parameters, "(b)", &active);
-		egg_debug ("emitting active: %i", active);
+		g_debug ("emitting active: %i", active);
 		g_signal_emit (console, signals [EGG_CONSOLE_KIT_ACTIVE_CHANGED], 0, active);
 	}
 }
@@ -329,7 +328,7 @@ egg_console_kit_init (EggConsoleKit *console)
 					       CONSOLEKIT_MANAGER_INTERFACE,
 					       NULL, &error);
 	if (console->priv->proxy_manager == NULL) {
-		egg_warning ("cannot connect to ConsoleKit: %s", error->message);
+		g_warning ("cannot connect to ConsoleKit: %s", error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -342,12 +341,12 @@ egg_console_kit_init (EggConsoleKit *console)
 					 G_DBUS_CALL_FLAGS_NONE,
 					 -1, NULL, &error);
 	if (result == NULL) {
-		egg_warning ("Failed to get session for pid %i: %s", pid, error->message);
+		g_warning ("Failed to get session for pid %i: %s", pid, error->message);
 		g_error_free (error);
 		goto out;
 	}
 	g_variant_get (result, "(o)", &console->priv->session_id);
-	egg_debug ("ConsoleKit session ID: %s", console->priv->session_id);
+	g_debug ("ConsoleKit session ID: %s", console->priv->session_id);
 
 	/* connect to session */
 	console->priv->proxy_session =
@@ -359,7 +358,7 @@ egg_console_kit_init (EggConsoleKit *console)
 					       CONSOLEKIT_SESSION_INTERFACE,
 					       NULL, &error);
 	if (console->priv->proxy_session == NULL) {
-		egg_warning ("cannot connect to %s: %s", console->priv->session_id, error->message);
+		g_warning ("cannot connect to %s: %s", console->priv->session_id, error->message);
 		g_error_free (error);
 		goto out;
 	}

@@ -29,7 +29,6 @@
 
 #include "gpm-screensaver.h"
 #include "gpm-common.h"
-#include "egg-debug.h"
 
 static void     gpm_screensaver_finalize   (GObject		*object);
 
@@ -81,11 +80,11 @@ gpm_screensaver_lock (GpmScreensaver *screensaver)
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 
 	if (screensaver->priv->proxy == NULL) {
-		egg_warning ("not connected");
+		g_warning ("not connected");
 		return FALSE;
 	}
 
-	egg_debug ("doing gnome-screensaver lock");
+	g_debug ("doing gnome-screensaver lock");
 	g_dbus_proxy_call (screensaver->priv->proxy,
 			   "Lock",
 			   NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
@@ -102,7 +101,7 @@ gpm_screensaver_lock (GpmScreensaver *screensaver)
 		/* Sleep for 1/10s */
 		g_usleep (1000 * 100);
 		if (sleepcount++ > 50) {
-			egg_debug ("timeout waiting for gnome-screensaver");
+			g_debug ("timeout waiting for gnome-screensaver");
 			break;
 		}
 	}
@@ -127,7 +126,7 @@ gpm_screensaver_add_throttle (GpmScreensaver *screensaver, const char *reason)
 	g_return_val_if_fail (reason != NULL, 0);
 
 	if (screensaver->priv->proxy == NULL) {
-		egg_warning ("not connected to the screensaver");
+		g_warning ("not connected to the screensaver");
 		goto out;
 	}
 
@@ -141,14 +140,14 @@ gpm_screensaver_add_throttle (GpmScreensaver *screensaver, const char *reason)
 					 &error);
 	if (retval == NULL) {
 		/* abort as the DBUS method failed */
-		egg_warning ("Throttle failed: %s", error->message);
+		g_warning ("Throttle failed: %s", error->message);
 		g_error_free (error);
 		goto out;
 	}
 
 	/* success */
 	g_variant_get (retval, "(s)", &cookie);
-	egg_debug ("adding throttle reason: '%s': id %u", reason, cookie);
+	g_debug ("adding throttle reason: '%s': id %u", reason, cookie);
 out:
 	if (retval != NULL)
 		g_variant_unref (retval);
@@ -168,11 +167,11 @@ gpm_screensaver_remove_throttle (GpmScreensaver *screensaver, guint cookie)
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 
 	if (screensaver->priv->proxy == NULL) {
-		egg_warning ("not connected to the screensaver");
+		g_warning ("not connected to the screensaver");
 		goto out;
 	}
 
-	egg_debug ("removing throttle: id %u", cookie);
+	g_debug ("removing throttle: id %u", cookie);
 	retval = g_dbus_proxy_call_sync (screensaver->priv->proxy,
 					 "UnThrottle",
 					 g_variant_new ("(s)", cookie),
@@ -181,7 +180,7 @@ gpm_screensaver_remove_throttle (GpmScreensaver *screensaver, guint cookie)
 					 &error);
 	if (retval == NULL) {
 		/* abort as the DBUS method failed */
-		egg_warning ("UnThrottle failed!: %s", error->message);
+		g_warning ("UnThrottle failed!: %s", error->message);
 		g_error_free (error);
 		return FALSE;
 	}
@@ -209,7 +208,7 @@ gpm_screensaver_check_running (GpmScreensaver *screensaver)
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 
 	if (screensaver->priv->proxy == NULL) {
-		egg_warning ("not connected to screensaver");
+		g_warning ("not connected to screensaver");
 		goto out;
 	}
 
@@ -219,7 +218,7 @@ gpm_screensaver_check_running (GpmScreensaver *screensaver)
 					 -1, NULL, &error);
 
 	if (retval == NULL) {
-		egg_debug ("ERROR: %s", error->message);
+		g_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -246,11 +245,11 @@ gpm_screensaver_poke (GpmScreensaver *screensaver)
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 
 	if (screensaver->priv->proxy == NULL) {
-		egg_warning ("not connected");
+		g_warning ("not connected");
 		return FALSE;
 	}
 
-	egg_debug ("poke");
+	g_debug ("poke");
 	g_dbus_proxy_call (screensaver->priv->proxy,
 			   "SimulateUserActivity",
 			   NULL, G_DBUS_CALL_FLAGS_NONE,
@@ -294,7 +293,7 @@ gpm_screensaver_init (GpmScreensaver *screensaver)
 			GS_LISTENER_INTERFACE,
 			NULL, &error);
 	if (screensaver->priv->proxy == NULL) {
-		egg_warning ("failed to setup screensaver proxy: %s", error->message);
+		g_warning ("failed to setup screensaver proxy: %s", error->message);
 		g_error_free (error);
 	}
 	screensaver->priv->conf = gconf_client_get_default ();

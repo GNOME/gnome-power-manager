@@ -26,8 +26,6 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
-#include "egg-debug.h"
-
 #include "gpm-screensaver.h"
 #include "gpm-dpms.h"
 #include "gpm-phone.h"
@@ -35,7 +33,6 @@
 #include "gpm-common.h"
 #include "gpm-idletime.h"
 #include "gpm-array-float.h"
-
 
 /** ver:1.0 ***********************************************************/
 static GMainLoop *_test_loop = NULL;
@@ -158,7 +155,7 @@ static void
 gpm_test_idle_func_idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, gpointer user_data)
 {
 	_mode = mode;
-	egg_debug ("idle-changed %s", gpm_idle_mode_to_string (mode));
+	g_debug ("idle-changed %s", gpm_idle_mode_to_string (mode));
 	_g_test_loop_quit ();
 }
 
@@ -301,7 +298,7 @@ gpm_test_phone_func (void)
 static void
 gpm_test_screensaver_func_auth_request_cb (GpmScreensaver *screensaver, gboolean auth, gpointer user_data)
 {
-	egg_debug ("auth request = %i", auth);
+	g_debug ("auth request = %i", auth);
 	test_got_request = auth;
 
 	_g_test_loop_quit ();
@@ -424,7 +421,6 @@ gpm_test_color_func (void)
 	color = gpm_color_from_rgb (0xff, 0xff, 0xff);
 	g_assert_cmpint (color, ==, 0xffffff);
 }
-
 
 static void
 gpm_test_array_float_func (void)
@@ -696,7 +692,6 @@ gpm_test_array_float_func (void)
 	gpm_array_float_free (array);
 	gpm_array_float_free (kernel);
 }
-
 
 static void
 gpm_test_idletime_wait (guint time_ms)

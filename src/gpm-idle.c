@@ -39,7 +39,6 @@
 #include <gtk/gtk.h>
 #include <gio/gio.h>
 
-#include "egg-debug.h"
 #include "gpm-idletime.h"
 
 #include "gpm-idle.h"
@@ -106,7 +105,7 @@ gpm_idle_set_mode (GpmIdle *idle, GpmIdleMode mode)
 
 	if (mode != idle->priv->mode) {
 		idle->priv->mode = mode;
-		egg_debug ("Doing a state transition: %s", gpm_idle_mode_to_string (mode));
+		g_debug ("Doing a state transition: %s", gpm_idle_mode_to_string (mode));
 		g_signal_emit (idle, signals [IDLE_CHANGED], 0, mode);
 	}
 }
@@ -120,7 +119,7 @@ void
 gpm_idle_set_check_cpu (GpmIdle *idle, gboolean check_type_cpu)
 {
 	g_return_if_fail (GPM_IS_IDLE (idle));
-	egg_debug ("Setting the CPU load check to %i", check_type_cpu);
+	g_debug ("Setting the CPU load check to %i", check_type_cpu);
 	idle->priv->check_type_cpu = check_type_cpu;
 }
 
@@ -141,7 +140,7 @@ static gboolean
 gpm_idle_blank_cb (GpmIdle *idle)
 {
 	if (idle->priv->mode > GPM_IDLE_MODE_BLANK) {
-		egg_debug ("ignoring current mode %s", gpm_idle_mode_to_string (idle->priv->mode));
+		g_debug ("ignoring current mode %s", gpm_idle_mode_to_string (idle->priv->mode));
 		return FALSE;
 	}
 	gpm_idle_set_mode (idle, GPM_IDLE_MODE_BLANK);
@@ -162,7 +161,7 @@ gpm_idle_sleep_cb (GpmIdle *idle)
 		load = gpm_load_get_current (idle->priv->load);
 		if (load > GPM_IDLE_CPU_LIMIT) {
 			/* check if system is "idle" enough */
-			egg_debug ("Detected that the CPU is busy");
+			g_debug ("Detected that the CPU is busy");
 			ret = TRUE;
 			goto out;
 		}
@@ -228,7 +227,7 @@ gpm_idle_is_session_inhibited (GpmIdle *idle, guint mask)
 					 &error);
 	if (retval == NULL) {
 		/* abort as the DBUS method failed */
-		egg_warning ("IsInhibited failed: %s", error->message);
+		g_warning ("IsInhibited failed: %s", error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -254,7 +253,7 @@ gpm_idle_evaluate (GpmIdle *idle)
 	/* check we are really idle */
 	if (!idle->priv->x_idle) {
 		gpm_idle_set_mode (idle, GPM_IDLE_MODE_NORMAL);
-		egg_debug ("X not idle");
+		g_debug ("X not idle");
 		if (idle->priv->timeout_blank_id != 0) {
 			g_source_remove (idle->priv->timeout_blank_id);
 			idle->priv->timeout_blank_id = 0;
@@ -269,7 +268,7 @@ gpm_idle_evaluate (GpmIdle *idle)
 	/* are we inhibited from going idle */
 	is_idle_inhibited = gpm_idle_is_session_inhibited (idle, GPM_IDLE_INHIBIT_MASK_IDLE);
 	if (is_idle_inhibited) {
-		egg_debug ("inhibited, so using normal state");
+		g_debug ("inhibited, so using normal state");
 		gpm_idle_set_mode (idle, GPM_IDLE_MODE_NORMAL);
 		if (idle->priv->timeout_blank_id != 0) {
 			g_source_remove (idle->priv->timeout_blank_id);
@@ -284,7 +283,7 @@ gpm_idle_evaluate (GpmIdle *idle)
 
 	/* normal to dim */
 	if (idle->priv->mode == GPM_IDLE_MODE_NORMAL) {
-		egg_debug ("normal to dim");
+		g_debug ("normal to dim");
 		gpm_idle_set_mode (idle, GPM_IDLE_MODE_DIM);
 	}
 
@@ -292,7 +291,7 @@ gpm_idle_evaluate (GpmIdle *idle)
 	 * but only if we actually want to blank. */
 	if (idle->priv->timeout_blank_id == 0 &&
 	    idle->priv->timeout_blank != 0) {
-		egg_debug ("setting up blank callback for %is", idle->priv->timeout_blank);
+		g_debug ("setting up blank callback for %is", idle->priv->timeout_blank);
 		idle->priv->timeout_blank_id = g_timeout_add_seconds (idle->priv->timeout_blank,
 								      (GSourceFunc) gpm_idle_blank_cb, idle);
 		g_source_set_name_by_id (idle->priv->timeout_blank_id, "[GpmIdle] blank");
@@ -302,7 +301,7 @@ gpm_idle_evaluate (GpmIdle *idle)
 	is_idle = gpm_idle_is_session_idle (idle);
 	is_suspend_inhibited = gpm_idle_is_session_inhibited (idle, GPM_IDLE_INHIBIT_MASK_SUSPEND);
 	if (is_suspend_inhibited) {
-		egg_debug ("suspend inhibited");
+		g_debug ("suspend inhibited");
 		if (idle->priv->timeout_sleep_id != 0) {
 			g_source_remove (idle->priv->timeout_sleep_id);
 			idle->priv->timeout_sleep_id = 0;
@@ -311,7 +310,7 @@ gpm_idle_evaluate (GpmIdle *idle)
 		/* only do the sleep timeout when the session is idle and we aren't inhibited from sleeping */
 		if (idle->priv->timeout_sleep_id == 0 &&
 		    idle->priv->timeout_sleep != 0) {
-			egg_debug ("setting up sleep callback %is", idle->priv->timeout_sleep);
+			g_debug ("setting up sleep callback %is", idle->priv->timeout_sleep);
 			idle->priv->timeout_sleep_id = g_timeout_add_seconds (idle->priv->timeout_sleep,
 									      (GSourceFunc) gpm_idle_sleep_cb, idle);
 			g_source_set_name_by_id (idle->priv->timeout_sleep_id, "[GpmIdle] sleep");
@@ -364,11 +363,11 @@ gpm_idle_set_timeout_dim (GpmIdle *idle, guint timeout)
 
 	idle_time_in_msec = gpm_idletime_get_time (idle->priv->idletime);
 	timeout_adjusted  = gpm_idle_adjust_timeout_dim (idle_time_in_msec / 1000, timeout);
-	egg_debug ("Current idle time=%lldms, timeout was %us, becomes %us after adjustment",
+	g_debug ("Current idle time=%lldms, timeout was %us, becomes %us after adjustment",
 		   (long long int)idle_time_in_msec, timeout, timeout_adjusted);
 	timeout = timeout_adjusted;
 
-	egg_debug ("Setting dim idle timeout: %ds", timeout);
+	g_debug ("Setting dim idle timeout: %ds", timeout);
 	if (idle->priv->timeout_dim != timeout) {
 		idle->priv->timeout_dim = timeout;
 
@@ -389,7 +388,7 @@ gpm_idle_set_timeout_blank (GpmIdle *idle, guint timeout)
 {
 	g_return_val_if_fail (GPM_IS_IDLE (idle), FALSE);
 
-	egg_debug ("Setting blank idle timeout: %ds", timeout);
+	g_debug ("Setting blank idle timeout: %ds", timeout);
 	if (idle->priv->timeout_blank != timeout) {
 		idle->priv->timeout_blank = timeout;
 		gpm_idle_evaluate (idle);
@@ -406,7 +405,7 @@ gpm_idle_set_timeout_sleep (GpmIdle *idle, guint timeout)
 {
 	g_return_val_if_fail (GPM_IS_IDLE (idle), FALSE);
 
-	egg_debug ("Setting sleep idle timeout: %ds", timeout);
+	g_debug ("Setting sleep idle timeout: %ds", timeout);
 	if (idle->priv->timeout_sleep != timeout) {
 		idle->priv->timeout_sleep = timeout;
 		gpm_idle_evaluate (idle);
@@ -422,7 +421,7 @@ gpm_idle_set_timeout_sleep (GpmIdle *idle, guint timeout)
 static void
 gpm_idle_idletime_alarm_expired_cb (GpmIdletime *idletime, guint alarm_id, GpmIdle *idle)
 {
-	egg_debug ("idletime alarm: %i", alarm_id);
+	g_debug ("idletime alarm: %i", alarm_id);
 
 	/* set again */
 	idle->priv->x_idle = TRUE;
@@ -437,7 +436,7 @@ gpm_idle_idletime_alarm_expired_cb (GpmIdletime *idletime, guint alarm_id, GpmId
 static void
 gpm_idle_idletime_reset_cb (GpmIdletime *idletime, GpmIdle *idle)
 {
-	egg_debug ("idletime reset");
+	g_debug ("idletime reset");
 
 	idle->priv->x_idle = FALSE;
 	gpm_idle_evaluate (idle);
@@ -453,12 +452,12 @@ gpm_idle_dbus_signal_cb (GDBusProxy *proxy, const gchar *sender_name, const gcha
 
 	if (g_strcmp0 (signal_name, "InhibitorAdded") == 0 ||
 	    g_strcmp0 (signal_name, "InhibitorRemoved") == 0) {
-		egg_debug ("Received gnome session inhibitor change");
+		g_debug ("Received gnome session inhibitor change");
 		gpm_idle_evaluate (idle);
 		return;
 	}
 	if (g_strcmp0 (signal_name, "StatusChanged") == 0) {
-		egg_debug ("Received gnome session status change");
+		g_debug ("Received gnome session status change");
 		gpm_idle_evaluate (idle);
 		return;
 	}
@@ -549,7 +548,7 @@ gpm_idle_init (GpmIdle *idle)
 	/* get connection */
 	connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
 	if (connection == NULL) {
-		egg_warning ("Failed to get session connection: %s", error->message);
+		g_warning ("Failed to get session connection: %s", error->message);
 		g_error_free (error);
 		return;
 	}
@@ -563,7 +562,7 @@ gpm_idle_init (GpmIdle *idle)
 			"org.gnome.SessionManager",
 			NULL, &error);
 	if (idle->priv->proxy == NULL) {
-		egg_warning ("Cannot connect to session manager: %s", error->message);
+		g_warning ("Cannot connect to session manager: %s", error->message);
 		g_error_free (error);
 		return;
 	}
@@ -578,7 +577,7 @@ gpm_idle_init (GpmIdle *idle)
 			"org.gnome.SessionManager.Presence",
 			NULL, &error);
 	if (idle->priv->proxy_presence == NULL) {
-		egg_warning ("Cannot connect to session manager: %s", error->message);
+		g_warning ("Cannot connect to session manager: %s", error->message);
 		g_error_free (error);
 		return;
 	}

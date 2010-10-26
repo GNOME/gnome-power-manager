@@ -27,7 +27,6 @@
 #include <gtk/gtk.h>
 #include <libupower-glib/upower.h>
 
-#include "egg-debug.h"
 #include "egg-console-kit.h"
 
 #include "gpm-common.h"

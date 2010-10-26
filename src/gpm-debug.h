@@ -1,6 +1,8 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2008 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2010 Richard Hughes <richard@hughsie.com>
+ *
+ * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,50 +16,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
+#ifndef __GPM_DEBUG_H__
+#define __GPM_DEBUG_H__
 
 #include <glib.h>
 
-#include "gpm-point-obj.h"
+gboolean	 gpm_debug_is_verbose		(void);
+GOptionGroup	*gpm_debug_get_option_group	(void);
+void		 gpm_debug_add_log_domain	(const gchar	*log_domain);
 
-/**
- * gpm_point_obj_copy:
- **/
-GpmPointObj *
-gpm_point_obj_copy (const GpmPointObj *cobj)
-{
-	GpmPointObj *obj;
-	obj = g_new0 (GpmPointObj, 1);
-	obj->x = cobj->x;
-	obj->y = cobj->y;
-	obj->color = cobj->color;
-	return obj;
-}
-
-/**
- * gpm_point_obj_new:
- **/
-GpmPointObj *
-gpm_point_obj_new (void)
-{
-	GpmPointObj *obj;
-	obj = g_new0 (GpmPointObj, 1);
-	obj->x = 0.0f;
-	obj->y = 0.0f;
-	obj->color = 0x0;
-	return obj;
-}
-
-/**
- * gpm_point_obj_free:
- **/
-void
-gpm_point_obj_free (GpmPointObj *obj)
-{
-	if (obj == NULL)
-		return;
-	g_free (obj);
-}
-
+#endif /* __GPM_DEBUG_H__ */

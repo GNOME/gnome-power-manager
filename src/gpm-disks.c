@@ -24,7 +24,6 @@
 #include <glib.h>
 #include <gio/gio.h>
 
-#include "egg-debug.h"
 #include "gpm-disks.h"
 
 static void     gpm_disks_finalize   (GObject	  *object);
@@ -53,7 +52,7 @@ gpm_disks_unregister (GpmDisks *disks)
 
 	/* no UDisks */
 	if (disks->priv->proxy == NULL) {
-		egg_warning ("no UDisks");
+		g_warning ("no UDisks");
 		goto out;
 	}
 
@@ -66,7 +65,7 @@ gpm_disks_unregister (GpmDisks *disks)
 					-1, NULL, &error);
 	if (retval == NULL) {
 		/* abort as the DBUS method failed */
-		egg_warning ("failed to clear spindown timeout: %s", error->message);
+		g_warning ("failed to clear spindown timeout: %s", error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -92,7 +91,7 @@ gpm_disks_register (GpmDisks *disks, gint timeout)
 
 	/* no UDisks */
 	if (disks->priv->proxy == NULL) {
-		egg_warning ("no UDisks");
+		g_warning ("no UDisks");
 		goto out;
 	}
 
@@ -106,7 +105,7 @@ gpm_disks_register (GpmDisks *disks, gint timeout)
 					-1, NULL, &error);
 	if (retval == NULL) {
 		/* abort as the DBUS method failed */
-		egg_warning ("failed to set spindown timeout: %s", error->message);
+		g_warning ("failed to set spindown timeout: %s", error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -130,20 +129,20 @@ gpm_disks_set_spindown_timeout (GpmDisks *disks, gint timeout)
 
 	/* get rid of last request */
 	if (disks->priv->cookie != NULL) {
-		egg_debug ("unregistering %s", disks->priv->cookie);
+		g_debug ("unregistering %s", disks->priv->cookie);
 		gpm_disks_unregister (disks);
 	}
 
 	/* is not enabled? */
 	if (timeout == 0) {
-		egg_debug ("disk spindown disabled");
+		g_debug ("disk spindown disabled");
 		goto out;
 	}
 
 	/* register */
 	ret = gpm_disks_register (disks, timeout);
 	if (ret)
-		egg_debug ("registered %s (%i)", disks->priv->cookie, timeout);
+		g_debug ("registered %s (%i)", disks->priv->cookie, timeout);
 out:
 	return ret;
 }
@@ -171,7 +170,7 @@ gpm_disks_init (GpmDisks *disks)
 			"org.freedesktop.UDisks",
 			NULL, &error);
 	if (disks->priv->proxy == NULL) {
-		egg_warning ("failed to setup disks proxy: %s", error->message);
+		g_warning ("failed to setup disks proxy: %s", error->message);
 		g_error_free (error);
 	}
 }

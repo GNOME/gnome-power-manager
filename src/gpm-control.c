@@ -41,7 +41,6 @@
 #include <gconf/gconf-client.h>
 #include <libupower-glib/upower.h>
 
-#include "egg-debug.h"
 #include "egg-console-kit.h"
 
 #include "gpm-screensaver.h"
@@ -120,10 +119,10 @@ gpm_control_get_lock_policy (GpmControl *control, const gchar *policy)
 	use_ss_setting = g_settings_get_boolean (control->priv->settings, GPM_SETTINGS_LOCK_USE_SCREENSAVER);
 	if (use_ss_setting) {
 		do_lock = gconf_client_get_bool (control->priv->conf, GS_CONF_PREF_LOCK_ENABLED, NULL);
-		egg_debug ("Using ScreenSaver settings (%i)", do_lock);
+		g_debug ("Using ScreenSaver settings (%i)", do_lock);
 	} else {
 		do_lock = g_settings_get_boolean (control->priv->settings, policy);
-		egg_debug ("Using custom locking settings (%i)", do_lock);
+		g_debug ("Using custom locking settings (%i)", do_lock);
 	}
 	return do_lock;
 }
@@ -148,7 +147,7 @@ gpm_control_suspend (GpmControl *control, GError **error)
 		      "can-suspend", &allowed,
 		      NULL);
 	if (!allowed) {
-		egg_debug ("cannot suspend as not allowed from policy");
+		g_debug ("cannot suspend as not allowed from policy");
 		g_set_error_literal (error, GPM_CONTROL_ERROR, GPM_CONTROL_ERROR_GENERAL, "Cannot suspend");
 		goto out;
 	}
@@ -158,7 +157,7 @@ gpm_control_suspend (GpmControl *control, GError **error)
 	if (lock_gnome_keyring) {
 		keyres = gnome_keyring_lock_all_sync ();
 		if (keyres != GNOME_KEYRING_RESULT_OK)
-			egg_warning ("could not lock keyring");
+			g_warning ("could not lock keyring");
 	}
 
 	do_lock = gpm_control_get_lock_policy (control, GPM_SETTINGS_LOCK_ON_SUSPEND);
@@ -168,12 +167,12 @@ gpm_control_suspend (GpmControl *control, GError **error)
 	}
 
 	/* Do the suspend */
-	egg_debug ("emitting sleep");
+	g_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_SUSPEND);
 
 	ret = up_client_suspend_sync (control->priv->client, NULL, error);
 
-	egg_debug ("emitting resume");
+	g_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_SUSPEND);
 
 	if (do_lock) {
@@ -207,7 +206,7 @@ gpm_control_hibernate (GpmControl *control, GError **error)
 		      "can-hibernate", &allowed,
 		      NULL);
 	if (!allowed) {
-		egg_debug ("cannot hibernate as not allowed from policy");
+		g_debug ("cannot hibernate as not allowed from policy");
 		g_set_error_literal (error, GPM_CONTROL_ERROR, GPM_CONTROL_ERROR_GENERAL, "Cannot hibernate");
 		goto out;
 	}
@@ -217,7 +216,7 @@ gpm_control_hibernate (GpmControl *control, GError **error)
 	if (lock_gnome_keyring) {
 		keyres = gnome_keyring_lock_all_sync ();
 		if (keyres != GNOME_KEYRING_RESULT_OK) {
-			egg_warning ("could not lock keyring");
+			g_warning ("could not lock keyring");
 		}
 	}
 
@@ -227,12 +226,12 @@ gpm_control_hibernate (GpmControl *control, GError **error)
 		gpm_screensaver_lock (screensaver);
 	}
 
-	egg_debug ("emitting sleep");
+	g_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_HIBERNATE);
 
 	ret = up_client_hibernate_sync (control->priv->client, NULL, error);
 
-	egg_debug ("emitting resume");
+	g_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_HIBERNATE);
 
 	if (do_lock) {

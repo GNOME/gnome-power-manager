@@ -37,8 +37,7 @@
 #include "gpm-stock-icons.h"
 #include "gpm-common.h"
 #include "gpm-manager.h"
-
-#include "egg-debug.h"
+#include "gpm-debug.h"
 
 static GDBusProxy *session_proxy = NULL;
 static GDBusProxy *session_proxy_client = NULL;
@@ -73,7 +72,7 @@ gpm_main_session_end_session_response (gboolean is_okay, const gchar *reason)
 
 	/* no gnome-session */
 	if (session_proxy == NULL) {
-		egg_warning ("no gnome-session");
+		g_warning ("no gnome-session");
 		goto out;
 	}
 
@@ -85,7 +84,7 @@ gpm_main_session_end_session_response (gboolean is_okay, const gchar *reason)
 					 G_DBUS_CALL_FLAGS_NONE,
 					 -1, NULL, &error);
 	if (retval == NULL) {
-		egg_debug ("ERROR: %s", error->message);
+		g_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -142,7 +141,7 @@ gpm_main_session_register_client (const gchar *app_id, const gchar *client_start
 	/* get connection */
 	connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
 	if (connection == NULL) {
-		egg_warning ("Failed to get session connection: %s", error->message);
+		g_warning ("Failed to get session connection: %s", error->message);
 		g_error_free (error);
 		return FALSE;
 	}
@@ -158,7 +157,7 @@ gpm_main_session_register_client (const gchar *app_id, const gchar *client_start
 			"org.gnome.SessionManager",
 			NULL, &error);
 	if (session_proxy == NULL) {
-		egg_warning ("Failed to get gnome-session: %s", error->message);
+		g_warning ("Failed to get gnome-session: %s", error->message);
 		g_error_free (error);
 		return FALSE;
 	}
@@ -172,7 +171,7 @@ gpm_main_session_register_client (const gchar *app_id, const gchar *client_start
 					 G_DBUS_CALL_FLAGS_NONE,
 					 -1, NULL, &error);
 	if (retval == NULL) {
-		egg_warning ("failed to register client '%s': %s", client_startup_id, error->message);
+		g_warning ("failed to register client '%s': %s", client_startup_id, error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -190,7 +189,7 @@ gpm_main_session_register_client (const gchar *app_id, const gchar *client_start
 			"org.gnome.SessionManager.ClientPrivate",
 			NULL, &error);
 	if (session_proxy_client == NULL) {
-		egg_warning ("failed to setup private proxy: %s", error->message);
+		g_warning ("failed to setup private proxy: %s", error->message);
 		g_error_free (error);
 		goto out;
 	}
@@ -198,7 +197,7 @@ gpm_main_session_register_client (const gchar *app_id, const gchar *client_start
 
 	/* success */
 	ret = TRUE;
-	egg_debug ("registered startup '%s' to client id '%s'", client_startup_id, client_id);
+	g_debug ("registered startup '%s' to client id '%s'", client_startup_id, client_id);
 out:
 	if (retval != NULL)
 		g_variant_unref (retval);
@@ -214,7 +213,6 @@ main (int argc, char *argv[])
 {
 	GDBusConnection *system_connection;
 	GDBusConnection *session_connection;
-	gboolean verbose = FALSE;
 	gboolean version = FALSE;
 	gboolean timed_exit = FALSE;
 	gboolean immediate_exit = FALSE;
@@ -225,8 +223,6 @@ main (int argc, char *argv[])
 	guint timer_id;
 
 	const GOptionEntry options[] = {
-		{ "verbose", '\0', 0, G_OPTION_ARG_NONE, &verbose,
-		  N_("Show extra debugging information"), NULL },
 		{ "version", '\0', 0, G_OPTION_ARG_NONE, &version,
 		  N_("Show version of installed program and exit"), NULL },
 		{ "timed-exit", '\0', 0, G_OPTION_ARG_NONE, &timed_exit,
@@ -248,6 +244,7 @@ main (int argc, char *argv[])
 	context = g_option_context_new (N_("GNOME Power Manager"));
 	/* TRANSLATORS: program name, a simple app to view pending updates */
 	g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
+	g_option_context_add_group (context, gpm_debug_get_option_group ());
 	g_option_context_set_translation_domain(context, GETTEXT_PACKAGE);
 	g_option_context_set_summary (context, _("GNOME Power Manager"));
 	g_option_context_parse (context, &argc, &argv, NULL);
@@ -261,16 +258,15 @@ main (int argc, char *argv[])
 		g_thread_init (NULL);
 
 	gtk_init (&argc, &argv);
-	egg_debug_init (verbose);
 
-	egg_debug ("GNOME %s %s", GPM_NAME, VERSION);
+	g_debug ("GNOME %s %s", GPM_NAME, VERSION);
 
 	/* check dbus connections, exit if not valid */
 	system_connection = g_bus_get_sync (G_BUS_TYPE_SYSTEM, NULL, &error);
 	if (error) {
-		egg_warning ("%s", error->message);
+		g_warning ("%s", error->message);
 		g_error_free (error);
-		egg_error ("This program cannot start until you start "
+		g_error ("This program cannot start until you start "
 			   "the dbus system service.\n"
 			   "It is <b>strongly recommended</b> you reboot "
 			   "your computer after starting this service.");
@@ -278,9 +274,9 @@ main (int argc, char *argv[])
 
 	session_connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
 	if (error) {
-		egg_warning ("%s", error->message);
+		g_warning ("%s", error->message);
 		g_error_free (error);
-		egg_error ("This program cannot start until you start the "
+		g_error ("This program cannot start until you start the "
 			   "dbus session service.\n\n"
 			   "This is usually started automatically in X "
 			   "or gnome startup when you start a new session.");
