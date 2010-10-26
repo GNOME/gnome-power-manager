@@ -1573,6 +1573,7 @@ gpm_stats_startup_cb (GApplication *application,
 {
 	GtkBox *box;
 	GtkWidget *widget;
+	GtkWindow *window;
 	GtkTreeSelection *selection;
 	gboolean ret;
 	UpClient *client;
@@ -1607,9 +1608,10 @@ gpm_stats_startup_cb (GApplication *application,
 	gtk_widget_set_size_request (graph_statistics, 400, 250);
 	gtk_widget_show (graph_statistics);
 
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_stats"));
-	gtk_window_set_application (GTK_WINDOW (widget), GTK_APPLICATION (application));
-	gtk_window_set_default_size (GTK_WINDOW(widget), 800, 500);
+	window = GTK_WINDOW (gtk_builder_get_object (builder, "dialog_stats"));
+	gtk_window_set_application (window, GTK_APPLICATION (application));
+	gtk_window_set_default_size (window, 800, 500);
+	gtk_window_set_application (window, application);
 	gtk_window_set_default_icon_name (GPM_STOCK_APP_ICON);
 
 	/* Get the main window quit */
@@ -1834,8 +1836,7 @@ main (int argc, char *argv[])
 	settings = g_settings_new (GPM_SETTINGS_SCHEMA);
 
 	/* are we already activated? */
-	application = gtk_application_new ("org.gnome.PowerManager.Statistics",
-					   G_APPLICATION_HANDLES_COMMAND_LINE);
+	application = gtk_application_new ("org.gnome.PowerManager.Statistics", 0);
 	g_signal_connect (application, "startup",
 			  G_CALLBACK (gpm_stats_startup_cb), NULL);
 	g_signal_connect (application, "command-line",
