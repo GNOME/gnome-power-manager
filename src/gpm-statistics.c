@@ -1611,7 +1611,7 @@ gpm_stats_startup_cb (GApplication *application,
 	window = GTK_WINDOW (gtk_builder_get_object (builder, "dialog_stats"));
 	gtk_window_set_application (window, GTK_APPLICATION (application));
 	gtk_window_set_default_size (window, 800, 500);
-	gtk_window_set_application (window, application);
+	gtk_window_set_application (window, GTK_APPLICATION (application));
 	gtk_window_set_default_icon_name (GPM_STOCK_APP_ICON);
 
 	/* Get the main window quit */
