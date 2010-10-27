@@ -67,10 +67,10 @@ static const gchar *power_manager_introspection = ""
     "<signal name=\"Changed\">"
     "</signal>"
     "<method name=\"GetPrimaryDevice\">"
-      "<arg name=\"device\" type=\"susuuu\" direction=\"out\" />"
+      "<arg name=\"device\" type=\"(susdut)\" direction=\"out\" />"
     "</method>"
     "<method name=\"GetDevices\">"
-      "<arg name=\"devices\" type=\"a(susuuu)\" direction=\"out\" />"
+      "<arg name=\"devices\" type=\"a(susdut)\" direction=\"out\" />"
     "</method>"
   "</interface>"
 "</node>";
@@ -2001,8 +2001,8 @@ gpm_manager_device_to_variant_blob (UpDevice *device)
 	gchar *display = NULL;
 	UpDeviceKind kind;
 	UpDeviceState state;
-	guint percentage;
-	guint time_state = 0;
+	gdouble percentage;
+	guint64 time_state = 0;
 	guint64 time_empty, time_full;
 	GVariant *value;
 
@@ -2022,7 +2022,7 @@ gpm_manager_device_to_variant_blob (UpDevice *device)
 		time_state = time_full;
 
 	/* format complex object */
-	value = g_variant_new ("(susuuu)",
+	value = g_variant_new ("(susdut)",
 			       up_device_get_object_path (device),
 			       kind,
 			       display,
@@ -2075,7 +2075,7 @@ gpm_manager_dbus_method_call (GDBusConnection *connection,
 	if (g_strcmp0 (method_name, "GetDevices") == 0) {
 
 		/* create builder */
-		builder = g_variant_builder_new (G_VARIANT_TYPE("a(susuuu)"));
+		builder = g_variant_builder_new (G_VARIANT_TYPE("a(susdut)"));
 
 		/* add each tuple to the array */
 		array = gpm_engine_get_devices (manager->priv->engine);
@@ -2189,9 +2189,11 @@ static void
 gpm_manager_engine_devices_changed_cb (GpmEngine *engine, GpmManager *manager)
 {
 	/* emit for the shell */
-	g_dbus_connection_emit_signal (manager->priv->bus_connection,
-				       NULL, GPM_DBUS_PATH, GPM_DBUS_INTERFACE,
-				       "Changed", NULL, NULL);
+	if (manager->priv->bus_connection != NULL) {
+		g_dbus_connection_emit_signal (manager->priv->bus_connection,
+					       NULL, GPM_DBUS_PATH, GPM_DBUS_INTERFACE,
+					       "Changed", NULL, NULL);
+	}
 }
 
 /**
