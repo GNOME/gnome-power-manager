@@ -86,8 +86,8 @@ gpm_disks_register (GpmDisks *disks, gint timeout)
 {
 	gboolean ret = FALSE;
 	GVariant *retval = NULL;
+	GVariantBuilder array;
 	GError *error = NULL;
-	const gchar **options = {NULL};
 
 	/* no UDisks */
 	if (disks->priv->proxy == NULL) {
@@ -96,11 +96,12 @@ gpm_disks_register (GpmDisks *disks, gint timeout)
 	}
 
 	/* set spindown timeouts */
+	g_variant_builder_init (&array, G_VARIANT_TYPE ("as"));
 	retval = g_dbus_proxy_call_sync (disks->priv->proxy,
 					 "DriveSetAllSpindownTimeouts",
 					g_variant_new ("(ias)",
 						       timeout,
-						       options),
+						       &array),
 					G_DBUS_CALL_FLAGS_NONE,
 					-1, NULL, &error);
 	if (retval == NULL) {

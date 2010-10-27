@@ -146,7 +146,7 @@ gpm_screensaver_add_throttle (GpmScreensaver *screensaver, const char *reason)
 	}
 
 	/* success */
-	g_variant_get (retval, "(s)", &cookie);
+	g_variant_get (retval, "(u)", &cookie);
 	g_debug ("adding throttle reason: '%s': id %u", reason, cookie);
 out:
 	if (retval != NULL)
@@ -174,7 +174,7 @@ gpm_screensaver_remove_throttle (GpmScreensaver *screensaver, guint cookie)
 	g_debug ("removing throttle: id %u", cookie);
 	retval = g_dbus_proxy_call_sync (screensaver->priv->proxy,
 					 "UnThrottle",
-					 g_variant_new ("(s)", cookie),
+					 g_variant_new ("(u)", cookie),
 					 G_DBUS_CALL_FLAGS_NONE,
 					 -1, NULL,
 					 &error);
