@@ -66,6 +66,12 @@ static const gchar *power_manager_introspection = ""
     "</property>"
     "<signal name=\"Changed\">"
     "</signal>"
+    "<method name=\"GetPrimaryDevice\">"
+      "<arg name=\"device\" type=\"susuuu\" direction=\"out\" />"
+    "</method>"
+    "<method name=\"GetDevices\">"
+      "<arg name=\"devices\" type=\"a(susuuu)\" direction=\"out\" />"
+    "</method>"
   "</interface>"
 "</node>";
 
@@ -1987,6 +1993,47 @@ gpm_manager_control_resume_cb (GpmControl *control, GpmControlAction action, Gpm
 }
 
 /**
+ * gpm_manager_device_to_variant_blob:
+ **/
+static GVariant *
+gpm_manager_device_to_variant_blob (UpDevice *device)
+{
+	gchar *display = NULL;
+	UpDeviceKind kind;
+	UpDeviceState state;
+	guint percentage;
+	guint time_state = 0;
+	guint64 time_empty, time_full;
+	GVariant *value;
+
+	display = gpm_upower_get_device_summary (device);
+	g_object_get (device,
+		      "kind", &kind,
+		      "percentage", &percentage,
+		      "state", &state,
+		      "time-to-empty", &time_empty,
+		      "time-to-full", &time_full,
+		      NULL);
+
+	/* only return time for these simple states */
+	if (state == UP_DEVICE_STATE_DISCHARGING)
+		time_state = time_empty;
+	else if (state == UP_DEVICE_STATE_CHARGING)
+		time_state = time_full;
+
+	/* format complex object */
+	value = g_variant_new ("(susuuu)",
+			       up_device_get_object_path (device),
+			       kind,
+			       display,
+			       percentage,
+			       state,
+			       time_state);
+	g_free (display);
+	return value;
+}
+
+/**
  * gpm_manager_dbus_method_call:
  **/
 static void
@@ -1997,9 +2044,60 @@ gpm_manager_dbus_method_call (GDBusConnection *connection,
 			      GDBusMethodInvocation *invocation,
 			      gpointer user_data)
 {
-	/* GpmManager *manager = GPM_MANAGER (user_data); */
+	GpmManager *manager = GPM_MANAGER (user_data);
+	UpDevice *device;
+	GVariant *value = NULL;
+	GVariant *tuple = NULL;
+	GPtrArray *array = NULL;
+	guint i;
+	GVariantBuilder *builder;
 
-	/* do nothing, no methods defined (yet) */
+	/* return object */
+	if (g_strcmp0 (method_name, "GetPrimaryDevice") == 0) {
+
+		/* get the virtual device */
+		device = gpm_engine_get_primary_device (manager->priv->engine);
+		if (device == NULL) {
+			g_dbus_method_invocation_return_dbus_error (invocation,
+								    "org.gnome.PowerManager.Failed",
+								    "There is no primary device to reflect system state (don't show any UI)");
+			goto out;
+		}
+
+		/* return the value */
+		value = gpm_manager_device_to_variant_blob (device);
+		tuple = g_variant_new_tuple (&value, 1);
+		g_dbus_method_invocation_return_value (invocation, tuple);
+		goto out;
+	}
+
+	/* return array */
+	if (g_strcmp0 (method_name, "GetDevices") == 0) {
+
+		/* create builder */
+		builder = g_variant_builder_new (G_VARIANT_TYPE("a(susuuu)"));
+
+		/* add each tuple to the array */
+		array = gpm_engine_get_devices (manager->priv->engine);
+		for (i=0; i<array->len; i++) {
+			device = g_ptr_array_index (array, i);
+			value = gpm_manager_device_to_variant_blob (device);
+			g_variant_builder_add_value (builder, value);
+		}
+
+		/* return the value */
+		value = g_variant_builder_end (builder);
+		tuple = g_variant_new_tuple (&value, 1);
+		g_dbus_method_invocation_return_value (invocation, tuple);
+		g_variant_builder_unref (builder);
+	}
+out:
+	if (array != NULL)
+		g_ptr_array_unref (array);
+	if (tuple != NULL)
+		g_variant_unref (tuple);
+	if (value != NULL)
+		g_variant_unref (value);
 }
 
 /**
