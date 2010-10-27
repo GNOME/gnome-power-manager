@@ -191,7 +191,7 @@ static void
 gpm_backlight_dialog_init (GpmBacklight *backlight)
 {
 	if (backlight->priv->popup != NULL
-	    && !gsd_media_keys_window_is_valid (GSD_MEDIA_KEYS_WINDOW (backlight->priv->popup))) {
+	    && !gsd_osd_window_is_valid (GSD_OSD_WINDOW (backlight->priv->popup))) {
 		gtk_widget_destroy (backlight->priv->popup);
 		backlight->priv->popup = NULL;
 	}

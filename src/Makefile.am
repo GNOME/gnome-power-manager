@@ -140,6 +140,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-stock-icons.h				\
 	gsd-media-keys-window.h				\
 	gsd-media-keys-window.c				\
+	gsd-osd-window.h				\
+	gsd-osd-window.c				\
 	gpm-engine.h					\
 	gpm-engine.c
 
