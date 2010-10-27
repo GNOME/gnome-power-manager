@@ -2116,13 +2116,14 @@ gpm_manager_dbus_property_get (GDBusConnection *connection,
 
 	if (g_strcmp0 (property_name, "Icon") == 0) {
 		icon = gpm_engine_get_icon (manager->priv->engine);
-		tooltip = g_icon_to_string (icon);
-		retval = g_variant_new_string (tooltip);
+		if (icon != NULL)
+			tooltip = g_icon_to_string (icon);
+		retval = g_variant_new_string (tooltip != NULL ? tooltip : "");
 		goto out;
 	}
 	if (g_strcmp0 (property_name, "Tooltip") == 0) {
 		tooltip = gpm_engine_get_summary (manager->priv->engine);
-		retval = g_variant_new_string (tooltip);
+		retval = g_variant_new_string (tooltip != NULL ? tooltip : "");
 		goto out;
 	}
 out:
