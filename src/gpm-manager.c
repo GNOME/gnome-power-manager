@@ -60,6 +60,12 @@ static const gchar *power_manager_introspection = ""
 "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
 "<node name=\"/org/gnome/PowerManager\">"
   "<interface name=\"org.gnome.PowerManager\">"
+    "<property name='Icon' type='s' access='read'>"
+    "</property>"
+    "<property name='Tooltip' type='s' access='read'>"
+    "</property>"
+    "<signal name=\"Changed\">"
+    "</signal>"
   "</interface>"
 "</node>";
 
@@ -2005,9 +2011,27 @@ gpm_manager_dbus_property_get (GDBusConnection *connection,
 			       const gchar *interface_name, const gchar *property_name,
 			       GError **error, gpointer user_data)
 {
-	/* GpmManager *manager = GPM_MANAGER (user_data); */
-	/* do nothing, no properties defined (yet) */
-	return NULL;
+	GpmManager *manager = GPM_MANAGER (user_data);
+	gchar *tooltip = NULL;
+	GIcon *icon = NULL;
+	GVariant *retval = NULL;
+
+	if (g_strcmp0 (property_name, "Icon") == 0) {
+		icon = gpm_engine_get_icon (manager->priv->engine);
+		tooltip = g_icon_to_string (icon);
+		retval = g_variant_new_string (tooltip);
+		goto out;
+	}
+	if (g_strcmp0 (property_name, "Tooltip") == 0) {
+		tooltip = gpm_engine_get_summary (manager->priv->engine);
+		retval = g_variant_new_string (tooltip);
+		goto out;
+	}
+out:
+	if (icon != NULL)
+		g_object_unref (icon);
+	g_free (tooltip);
+	return retval;
 }
 
 /**
@@ -2057,6 +2081,18 @@ gpm_manager_bus_acquired_cb (GDBusConnection *connection,
 	if (manager->priv->backlight != NULL) {
 		gpm_backlight_register_dbus (manager->priv->backlight, connection);
 	}
+}
+
+/**
+ * gpm_manager_engine_devices_changed_cb:
+ **/
+static void
+gpm_manager_engine_devices_changed_cb (GpmEngine *engine, GpmManager *manager)
+{
+	/* emit for the shell */
+	g_dbus_connection_emit_signal (manager->priv->bus_connection,
+				       NULL, GPM_DBUS_PATH, GPM_DBUS_INTERFACE,
+				       "Changed", NULL, NULL);
 }
 
 /**
@@ -2187,6 +2223,8 @@ gpm_manager_init (GpmManager *manager)
 			  G_CALLBACK (gpm_manager_engine_charge_critical_cb), manager);
 	g_signal_connect (manager->priv->engine, "charge-action",
 			  G_CALLBACK (gpm_manager_engine_charge_action_cb), manager);
+	g_signal_connect (manager->priv->engine, "devices-changed",
+			  G_CALLBACK (gpm_manager_engine_devices_changed_cb), manager);
 
 	/* set disk spindown threshold */
 	timeout = gpm_manager_get_spindown_timeout (manager);
