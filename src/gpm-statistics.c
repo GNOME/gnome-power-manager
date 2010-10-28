@@ -1461,8 +1461,10 @@ gpm_stats_highlight_device (const gchar *object_path)
 	GtkWidget *widget;
 
 	/* check valid */
-	if (!g_str_has_prefix (object_path, "/"))
+	if (!g_str_has_prefix (object_path, "/") &&
+	    g_strcmp0 (object_path, "wakeups") != 0) {
 		goto out;
+	}
 
 	/* we have to reuse the treeview data as it may be sorted */
 	ret = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (list_store_devices), &iter);
