@@ -1617,7 +1617,7 @@ gpm_stats_startup_cb (GApplication *application,
 	gtk_window_set_default_icon_name (GPM_STOCK_APP_ICON);
 
 	/* Get the main window quit */
-	g_signal_connect (widget, "delete-event",
+	g_signal_connect (window, "delete-event",
 			  G_CALLBACK (gpm_stats_delete_event_cb), application);
 
         widget = GTK_WIDGET (gtk_builder_get_object (builder, "button_close"));
@@ -1838,7 +1838,8 @@ main (int argc, char *argv[])
 	settings = g_settings_new (GPM_SETTINGS_SCHEMA);
 
 	/* are we already activated? */
-	application = gtk_application_new ("org.gnome.PowerManager.Statistics", 0);
+	application = gtk_application_new ("org.gnome.PowerManager.Statistics",
+					   G_APPLICATION_HANDLES_COMMAND_LINE);
 	g_signal_connect (application, "startup",
 			  G_CALLBACK (gpm_stats_startup_cb), NULL);
 	g_signal_connect (application, "command-line",
