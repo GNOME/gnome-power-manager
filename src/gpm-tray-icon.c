@@ -222,11 +222,11 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon, GtkMenu *menu, const GPtrArray *arr
 		percentage_str = g_strdup_printf ("%.0f%%", percentage);
 
 		/* align title and percentage in columns */
-		hbox = gtk_hbox_new (FALSE, 3);
+		hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 3);
 		gtk_widget_show (hbox);
 
 		/* left align the device text */
-		hbox_align = gtk_hbox_new (FALSE, 0);
+		hbox_align = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
 		gtk_widget_show (hbox_align);
 		label_title = gtk_label_new (desc);
 		gtk_widget_show (label_title);
