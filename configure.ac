@@ -109,7 +109,7 @@ PKG_CHECK_MODULES(GNOME, [
  cairo >= 1.0.0])
 
 PKG_CHECK_MODULES(GDK, [
- gdk-3.0 >= 2.91.0
+ gdk-3.0 >= 2.91.3
  gdk-x11-3.0])
 
 PKG_CHECK_MODULES(X11, [
