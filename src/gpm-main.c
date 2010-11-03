@@ -70,13 +70,7 @@ gpm_main_session_end_session_response (gboolean is_okay, const gchar *reason)
 
 	g_return_val_if_fail (session_proxy_client != NULL, FALSE);
 
-	/* no gnome-session */
-	if (session_proxy == NULL) {
-		g_warning ("no gnome-session");
-		goto out;
-	}
-
-	retval = g_dbus_proxy_call_sync (session_proxy,
+	retval = g_dbus_proxy_call_sync (session_proxy_client,
 					 "EndSessionResponse",
 					 g_variant_new ("(bs)",
 							is_okay,
@@ -109,12 +103,12 @@ gpm_main_session_dbus_signal_cb (GDBusProxy *proxy, const gchar *sender_name, co
 	}
 	if (g_strcmp0 (signal_name, "QueryEndSession") == 0) {
 		/* just send response */
-		gpm_main_session_end_session_response (TRUE, NULL);
+		gpm_main_session_end_session_response (TRUE, "");
 		return;
 	}
 	if (g_strcmp0 (signal_name, "EndSession") == 0) {
 		/* send response */
-		gpm_main_session_end_session_response (TRUE, NULL);
+		gpm_main_session_end_session_response (TRUE, "");
 
 		/* exit loop, will unref manager */
 		g_main_loop_quit (loop);
