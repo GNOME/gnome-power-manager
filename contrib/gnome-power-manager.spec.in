@@ -6,8 +6,7 @@ Version: #VERSION#
 Release: 1.#BUILD#%{?alphatag}%{?dist}
 License: GPLv2+ and GFDL
 Group: Applications/System
-Source: http://download.gnome.org/sources/gnome-power-manager/2.31/gnome-power-manager-%{version}.tar.gz
-
+Source: http://download.gnome.org/sources/gnome-power-manager/2.91/gnome-power-manager-%{version}-%{?alphatag}.tar.gz
 URL: http://projects.gnome.org/gnome-power-manager/
 
 BuildRequires: gnome-panel-devel >= 2.31.2
@@ -23,8 +22,9 @@ BuildRequires: upower-devel >= 0.9.0
 BuildRequires: intltool
 BuildRequires: glib2-devel >= 2.25.9
 BuildRequires: GConf2-devel >= 2.31.1
-BuildRequires: gtk3-devel >= 2.16.0
+BuildRequires: gtk3-devel >= 2.91.3
 BuildRequires: dbus-glib-devel
+BuildRequires: control-center-devel >= 2.91.1
 BuildRequires: libwnck-devel
 Requires: gnome-icon-theme
 
@@ -80,6 +80,8 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_bindir}/*
 %{_datadir}/applications/*.desktop
 %{_datadir}/dbus-1/services/gnome-power-manager.service
+%{_datadir}/glib-2.0/schemas/*.gschema.xml
+%{_datadir}/GConf/gsettings/*.gschema.migrate
 %{_datadir}/gnome-power-manager/*.ui
 %{_datadir}/gnome-power-manager/icons/hicolor/*/*/*.*
 %{_datadir}/icons/hicolor/*/apps/gnome-brightness-applet.*
