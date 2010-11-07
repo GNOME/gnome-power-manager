@@ -74,7 +74,7 @@ gpm_main_session_end_session_response (gboolean is_okay, const gchar *reason)
 					 "EndSessionResponse",
 					 g_variant_new ("(bs)",
 							is_okay,
-							reason),
+							reason != NULL ? reason : ""),
 					 G_DBUS_CALL_FLAGS_NONE,
 					 -1, NULL, &error);
 	if (retval == NULL) {
