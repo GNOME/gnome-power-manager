@@ -1,3 +1,55 @@
+Version 2.91.2
+~~~~~~~~~~~~~~
+Released: 2010-11-08
+
+* Translations
+ - Added Slovenian translation (Matej Urbančič)
+ - Updated Catalan (Valencian) translation (Carles Ferrando)
+ - Updated Estonian translation (Mattias Põldaru)
+ - Updated French doc translation (Bruno Brouard)
+ - Updated Japanese translation (Takayuki KUSANO)
+ - Updated Korean translation (Changwoo Ryu)
+ - Updated Norwegian bokmål translation (Kjartan Maraas)
+ - Updated Punjabi translation (A S Alam)
+ - Updated Simplified Chinese translation (Aron Xu)
+ - Updated Spanish translation (Jorge González)
+ - Updated Telugu Translations (krishnababu k)
+
+* New Features:
+ - Add two methods to the DBus interface for gnome-shell (Richard Hughes)
+ - Add two properties to the DBus interface for gnome-shell (Richard Hughes)
+ - Split notify-low-power into -system and -device keys, so that users can
+   disable device notifications for faulty devices attached to the computer
+   and still get system events. Fixes #632029 (Richard Hughes)
+
+* Bugfix:
+ - Adapt to GtkObject removal in GTK3 (Javier Jardón)
+ - Add the X-GNOME-Settings-Panel category so the control center panel is not in 'Other' (Richard Hughes)
+ - Alias 'always' to 'present' to ensure that migrating the schema does not emit a warning (Richard Hughes)
+ - Allow 'gnome-power-statistics --device wakeups' to focus on the correct entry (Richard Hughes)
+ - Convert to GtkComboBoxText. (Alban Browaeys)
+ - Do not fall back to a GtkMessageBox if using libnotify failed. Fixes #632334 (Richard Hughes)
+ - Ensure correct values for Icon and Tooltip properties (Giovanni Campagna)
+ - Ensure parameters to g_variant_new are not NULL (Giovanni Campagna)
+ - Fix a copy-paste error (Matthias Clasen)
+ - Fix compile with latest GTK (Yanko Kaneti)
+ - Fix use of GVariant types and DBus signatures (Giovanni Campagna)
+ - GTK3 api change: gtk_widget_hide_all (Alban Browaeys)
+ - Handle the remote command line in gnome-power-statistics (Richard Hughes)
+ - Lock the keyring before suspending as gnome-keyring with pam support will
+   automatically unlock on resume. Fixes #628290 (Richard Hughes)
+ - Make session requested quit work and not crash (Yanko Kaneti)
+ - Migrate from dbus-glib to GDBus (Giovanni Campagna, Richard Hughes)
+ - Port from EggDebug to the built-in GLib logging framework (Richard Hughes)
+ - Port to libnotify 0.7.0 (Richard Hughes, William Jon McCann)
+ - Port to the new GtkApplication API (Alban Browaeys, Richard Hughes)
+ - Remove the brightness applet as GNOME3 will not have the ability to show applets at all (Richard Hughes)
+ - Require libnotify as a hard build time dep (William Jon McCann)
+ - The control center module name shuld be 'Power', not 'Power Management' (Richard Hughes)
+ - Update gnome-settings-daemon copy pasted code (Giovanni Campagna)
+ - Use correct DBus types for UPower data (Giovanni Campagna)
+ - Use gtk_box_new() instead gtk_[v|h]box_new() (Javier Jardón)
+
 Version 2.91.1
 ~~~~~~~~~~~~~~
 Released: 2010-10-04
