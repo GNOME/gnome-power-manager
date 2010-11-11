@@ -430,7 +430,7 @@ gsd_osd_window_get_preferred_width (GtkWidget *widget,
         style = gtk_widget_get_style (widget);
 
         *minimum += style->xthickness;
-        *natural += style->ythickness;
+        *natural += style->xthickness;
 }
 
 static void
@@ -446,7 +446,7 @@ gsd_osd_window_get_preferred_height (GtkWidget *widget,
 
         style = gtk_widget_get_style (widget);
 
-        *minimum += style->xthickness;
+        *minimum += style->ythickness;
         *natural += style->ythickness;
 }
 
