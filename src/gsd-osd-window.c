@@ -314,16 +314,8 @@ draw_when_not_composited (GtkWidget *widget, cairo_t *cr)
         width = gtk_widget_get_allocated_width (widget);
         height = gtk_widget_get_allocated_width (widget);
 
-        gtk_paint_shadow (gtk_widget_get_style (widget),
-                          cr,
-                          gtk_widget_get_state (widget),
-                          GTK_SHADOW_OUT,
-                          widget,
-                          NULL, /* NULL detail -> themes should use the GsdOsdWindow widget name, probably */
-                          0,
-                          0,
-                          width,
-                          height);
+        gtk_render_frame (gtk_widget_get_style_context (widget),
+                          cr, 0, 0, width, height);
 }
 
 static gboolean
