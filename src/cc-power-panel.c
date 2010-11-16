@@ -333,10 +333,6 @@ if(0)	g_signal_connect (G_OBJECT (widget), "format-value",
 	g_settings_bind (panel->priv->settings, GPM_SETTINGS_IDLE_DIM_AC,
 			 widget, "active",
 			 G_SETTINGS_BIND_DEFAULT);
-	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "checkbutton_ac_spindown"));
-	g_settings_bind (panel->priv->settings, GPM_SETTINGS_SPINDOWN_ENABLE_AC,
-			 widget, "active",
-			 G_SETTINGS_BIND_DEFAULT);
 
 	if (panel->priv->has_button_lid == FALSE) {
 		widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "hbox_ac_lid"));
@@ -419,10 +415,6 @@ cc_power_panel_setup_battery (CcPowerPanel *panel)
 			 G_SETTINGS_BIND_DEFAULT);
 	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "checkbutton_battery_display_dim"));
 	g_settings_bind (panel->priv->settings, GPM_SETTINGS_IDLE_DIM_BATT,
-			 widget, "active",
-			 G_SETTINGS_BIND_DEFAULT);
-	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "checkbutton_battery_spindown"));
-	g_settings_bind (panel->priv->settings, GPM_SETTINGS_SPINDOWN_ENABLE_BATT,
 			 widget, "active",
 			 G_SETTINGS_BIND_DEFAULT);
 
