@@ -2262,21 +2262,6 @@ gpm_manager_init (GpmManager *manager)
 	/* use libnotify */
 	notify_init (GPM_NAME);
 
-	/* check to see if the user has installed the schema properly */
-	version = g_settings_get_int (manager->priv->settings, GPM_SETTINGS_SCHEMA_VERSION);
-	if (version != GPM_SETTINGS_SCHEMA_ID) {
-		gpm_manager_notify (manager, &manager->priv->notification_general,
-				    /* TRANSLATORS: there was in install problem */
-				    _("Install problem!"),
-				    /* TRANSLATORS: the GConf schema was not installed properly */
-				    _("The configuration defaults for GNOME Power Manager have not been installed correctly.\n"
-				      "Please contact your computer administrator."),
-				    GPM_MANAGER_NOTIFY_TIMEOUT_LONG,
-				    GTK_STOCK_DIALOG_WARNING,
-				    NOTIFY_URGENCY_NORMAL);
-		g_error ("no GSettings schema installed!");
-	}
-
 	/* coldplug so we are in the correct state at startup */
 	g_object_get (manager->priv->client,
 		      "on-battery", &manager->priv->on_battery,

@@ -42,7 +42,6 @@ G_BEGIN_DECLS
 #define GPM_FAQ_URL			"http://live.gnome.org/GnomePowerManager/Faq"
 
 /* change general/installed_schema whenever adding or moving keys */
-#define GPM_SETTINGS_SCHEMA_ID				3
 #define GPM_SETTINGS_SCHEMA				"org.gnome.power-manager"
 #define GSD_SETTINGS_SCHEMA				"org.gnome.settings-daemon.plugins.power"
 
@@ -72,7 +71,6 @@ G_BEGIN_DECLS
 #define GSD_SETTINGS_BUTTON_POWER			"button-power"
 
 /* general */
-#define GPM_SETTINGS_SCHEMA_VERSION			"schema-version"
 #define GPM_SETTINGS_USE_TIME_POLICY			"use-time-for-policy"
 #define GPM_SETTINGS_USE_PROFILE_TIME			"use-profile-time"
 #define GPM_SETTINGS_NETWORKMANAGER_SLEEP		"network-sleep"
