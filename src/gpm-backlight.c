@@ -76,6 +76,7 @@ struct GpmBacklightPrivate
 	GpmBrightness		*brightness;
 	GpmButton		*button;
 	GSettings		*settings;
+	GSettings		*settings_gsd;
 	GtkWidget		*popup;
 	GpmControl		*control;
 	GpmDpms			*dpms;
@@ -335,11 +336,11 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 
 	/* reduce if system is momentarily idle */
 	if (!on_battery)
-		enable_action = g_settings_get_boolean (backlight->priv->settings, GPM_SETTINGS_IDLE_DIM_AC);
+		enable_action = g_settings_get_boolean (backlight->priv->settings_gsd, GSD_SETTINGS_IDLE_DIM_AC);
 	else
-		enable_action = g_settings_get_boolean (backlight->priv->settings, GPM_SETTINGS_IDLE_DIM_BATT);
+		enable_action = g_settings_get_boolean (backlight->priv->settings_gsd, GSD_SETTINGS_IDLE_DIM_BATT);
 	if (enable_action && backlight->priv->system_is_idle) {
-		value = g_settings_get_int (backlight->priv->settings, GPM_SETTINGS_IDLE_BRIGHTNESS);
+		value = g_settings_get_int (backlight->priv->settings_gsd, GSD_SETTINGS_IDLE_BRIGHTNESS);
 		if (value > 100) {
 			g_warning ("cannot use idle brightness value %i, correcting to 50", value);
 			value = 50;
@@ -400,14 +401,14 @@ gpm_settings_key_changed_cb (GSettings *settings, const gchar *key, GpmBacklight
 	} else if (on_battery && g_strcmp0 (key, GPM_SETTINGS_BRIGHTNESS_DIM_BATT) == 0) {
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 
-	} else if (g_strcmp0 (key, GPM_SETTINGS_IDLE_DIM_AC) == 0 ||
+	} else if (g_strcmp0 (key, GSD_SETTINGS_IDLE_DIM_AC) == 0 ||
 		   g_strcmp0 (key, GPM_SETTINGS_BACKLIGHT_ENABLE) == 0 ||
-		   g_strcmp0 (key, GPM_SETTINGS_SLEEP_DISPLAY_BATT) == 0 ||
+		   g_strcmp0 (key, GSD_SETTINGS_SLEEP_DISPLAY_BATT) == 0 ||
 		   g_strcmp0 (key, GPM_SETTINGS_BACKLIGHT_BATTERY_REDUCE) == 0 ||
-		   g_strcmp0 (key, GPM_SETTINGS_IDLE_BRIGHTNESS) == 0) {
+		   g_strcmp0 (key, GSD_SETTINGS_IDLE_BRIGHTNESS) == 0) {
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 
-	} else if (g_strcmp0 (key, GPM_SETTINGS_IDLE_DIM_TIME) == 0) {
+	} else if (g_strcmp0 (key, GSD_SETTINGS_IDLE_DIM_TIME) == 0) {
 		backlight->priv->idle_dim_timeout = g_settings_get_int (settings, key);
 		gpm_idle_set_timeout_dim (backlight->priv->idle, backlight->priv->idle_dim_timeout);
 	} else {
@@ -530,8 +531,8 @@ gpm_backlight_notify_system_idle_changed (GpmBacklight *backlight, gboolean is_i
 		if (elapsed > 2*60) {
 			/* reset back to our default dimming */
 			backlight->priv->idle_dim_timeout =
-				g_settings_get_int (backlight->priv->settings,
-					   GPM_SETTINGS_IDLE_DIM_TIME);
+				g_settings_get_int (backlight->priv->settings_gsd,
+					   GSD_SETTINGS_IDLE_DIM_TIME);
 			g_debug ("resetting idle dim time to %is", backlight->priv->idle_dim_timeout);
 			gpm_idle_set_timeout_dim (backlight->priv->idle, backlight->priv->idle_dim_timeout);
 		}
@@ -800,6 +801,7 @@ gpm_backlight_finalize (GObject *object)
 	g_object_unref (backlight->priv->dpms);
 	g_object_unref (backlight->priv->control);
 	g_object_unref (backlight->priv->settings);
+	g_object_unref (backlight->priv->settings_gsd);
 	g_object_unref (backlight->priv->client);
 	g_object_unref (backlight->priv->button);
 	g_object_unref (backlight->priv->idle);
@@ -863,6 +865,8 @@ gpm_backlight_init (GpmBacklight *backlight)
 	/* watch for dim value changes */
 	backlight->priv->settings = g_settings_new (GPM_SETTINGS_SCHEMA);
 	g_signal_connect (backlight->priv->settings, "changed", G_CALLBACK (gpm_settings_key_changed_cb), backlight);
+	backlight->priv->settings_gsd = g_settings_new (GSD_SETTINGS_SCHEMA);
+	g_signal_connect (backlight->priv->settings_gsd, "changed", G_CALLBACK (gpm_settings_key_changed_cb), backlight);
 
 	/* set the main brightness, this is designed to be updated if the user changes the
 	 * brightness so we can undim to the 'correct' value */
@@ -880,7 +884,7 @@ gpm_backlight_init (GpmBacklight *backlight)
 
 	/* assumption */
 	backlight->priv->system_is_idle = FALSE;
-	backlight->priv->idle_dim_timeout = g_settings_get_int (backlight->priv->settings, GPM_SETTINGS_IDLE_DIM_TIME);
+	backlight->priv->idle_dim_timeout = g_settings_get_int (backlight->priv->settings_gsd, GSD_SETTINGS_IDLE_DIM_TIME);
 	gpm_idle_set_timeout_dim (backlight->priv->idle, backlight->priv->idle_dim_timeout);
 
 	/* use a visual widget */

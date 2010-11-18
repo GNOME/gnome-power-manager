@@ -65,15 +65,6 @@ cc_power_panel_help_cb (GtkWidget *widget, CcPowerPanel *panel)
 }
 
 /**
- * cc_power_panel_format_percentage_cb:
- **/
-static gchar *
-cc_power_panel_format_percentage_cb (GtkScale *scale, gdouble value)
-{
-	return g_strdup_printf ("%.0f%%", value * 100.0f);
-}
-
-/**
  * cc_power_panel_action_combo_changed_cb:
  **/
 static void
@@ -300,39 +291,14 @@ cc_power_panel_setup_ac (CcPowerPanel *panel)
 		 2*60*60,
 		 0, /* never */
 		 -1};
-	static const gint display_times[] =
-		{1*60,
-		 5*60,
-		 10*60,
-		 30*60,
-		 1*60*60,
-		 0, /* never */
-		 -1};
 
 	cc_power_panel_setup_time_combo (panel, "combobox_ac_computer",
 				    GPM_SETTINGS_SLEEP_COMPUTER_AC,
 				    computer_times);
-	cc_power_panel_setup_time_combo (panel, "combobox_ac_display",
-				    GPM_SETTINGS_SLEEP_DISPLAY_AC,
-				    display_times);
 
 	cc_power_panel_setup_action_combo (panel, "combobox_ac_lid",
 				      GPM_SETTINGS_BUTTON_LID_AC,
 				      button_lid_actions);
-
-	/* setup brightness slider */
-//	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "hscale_ac_brightness"));
-//	g_settings_bind (panel->priv->settings, GPM_SETTINGS_BRIGHTNESS_AC,
-//			 widget, "fill-level",
-//			 G_SETTINGS_BIND_DEFAULT);
-if(0)	g_signal_connect (G_OBJECT (widget), "format-value",
-			  G_CALLBACK (cc_power_panel_format_percentage_cb), NULL);
-
-	/* set up the checkboxes */
-	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "checkbutton_ac_display_dim"));
-	g_settings_bind (panel->priv->settings, GPM_SETTINGS_IDLE_DIM_AC,
-			 widget, "active",
-			 G_SETTINGS_BIND_DEFAULT);
 
 	if (panel->priv->has_button_lid == FALSE) {
 		widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "hbox_ac_lid"));
@@ -377,21 +343,10 @@ cc_power_panel_setup_battery (CcPowerPanel *panel)
 		 2*60*60,
 		 0, /* never */
 		 -1};
-	static const gint display_times[] =
-		{1*60,
-		 5*60,
-		 10*60,
-		 30*60,
-		 1*60*60,
-		 0, /* never */
-		 -1};
 
 	cc_power_panel_setup_time_combo (panel, "combobox_battery_computer",
 				    GPM_SETTINGS_SLEEP_COMPUTER_BATT,
 				    computer_times);
-	cc_power_panel_setup_time_combo (panel, "combobox_battery_display",
-				    GPM_SETTINGS_SLEEP_DISPLAY_BATT,
-				    display_times);
 
 	if (panel->priv->has_batteries == FALSE) {
 		notebook = GTK_NOTEBOOK (gtk_builder_get_object (panel->priv->builder, "notebook_preferences"));
@@ -407,16 +362,6 @@ cc_power_panel_setup_battery (CcPowerPanel *panel)
 	cc_power_panel_setup_action_combo (panel, "combobox_battery_critical",
 				      GPM_SETTINGS_ACTION_CRITICAL_BATT,
 				      battery_critical_actions);
-
-	/* set up the checkboxes */
-	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "checkbutton_battery_display_reduce"));
-	g_settings_bind (panel->priv->settings, GPM_SETTINGS_BACKLIGHT_BATTERY_REDUCE,
-			 widget, "active",
-			 G_SETTINGS_BIND_DEFAULT);
-	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "checkbutton_battery_display_dim"));
-	g_settings_bind (panel->priv->settings, GPM_SETTINGS_IDLE_DIM_BATT,
-			 widget, "active",
-			 G_SETTINGS_BIND_DEFAULT);
 
 	if (panel->priv->has_button_lid == FALSE) {
 		widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "hbox_battery_lid"));
@@ -451,21 +396,10 @@ cc_power_panel_setup_ups (CcPowerPanel *panel)
 		 2*60*60,
 		 0, /* never */
 		 -1};
-	static const gint display_times[] =
-		{1*60,
-		 5*60,
-		 10*60,
-		 30*60,
-		 1*60*60,
-		 0, /* never */
-		 -1};
 
 	cc_power_panel_setup_time_combo (panel, "combobox_ups_computer",
 				    GPM_SETTINGS_SLEEP_COMPUTER_UPS,
 				    computer_times);
-	cc_power_panel_setup_time_combo (panel, "combobox_ups_display",
-				    GPM_SETTINGS_SLEEP_DISPLAY_UPS,
-				    display_times);
 
 	if (panel->priv->has_ups == FALSE) {
 		notebook = GTK_NOTEBOOK (gtk_builder_get_object (panel->priv->builder, "notebook_preferences"));

@@ -60,30 +60,10 @@
       <summary>Reduce the backlight brightness when on battery power</summary>
       <description>If the screen should be reduced in brightness when the computer is on battery power.</description>
     </key>
-    <key name="idle-brightness" type="i">
-      <default>30</default>
-      <summary>The brightness of the screen when idle</summary>
-      <description>This is the laptop panel screen brightness used when the session is idle. Only valid when use-time-for-policy is true.</description>
-    </key>
-    <key name="idle-dim-battery" type="b">
-      <default>true</default>
-      <summary>Dim the screen after a period of inactivity when on battery power</summary>
-      <description>If the screen should be dimmed to save power when the computer is idle when on battery power.</description>
-    </key>
-    <key name="idle-dim-time" type="i">
-      <default>10</default>
-      <summary>The default amount of time to dim the screen after idle</summary>
-      <description>The default amount of time to dim the screen after idle.</description>
-    </key>
     <key name="brightness-dim-battery" type="i">
       <default>50</default>
       <summary>LCD dimming amount when on battery</summary>
       <description>The amount to dim the brightness of the display when on battery power. Possible values are between 0 and 100.</description>
-    </key>
-    <key name="idle-dim-ac" type="b">
-      <default>false</default>
-      <summary>Dim the screen after a period of inactivity when on AC power</summary>
-      <description>If the screen should be dimmed to save power when the computer is idle when on AC power.</description>
     </key>
     <key name="dpms-method-ac" enum="org.gnome.power-manager.DpmsMethod">
       <default>'off'</default>
@@ -324,16 +304,6 @@
       <default>0</default>
       <summary>Sleep timeout computer when on UPS</summary>
       <description>The amount of time in seconds the computer on UPS power needs to be inactive before it goes to sleep.</description>
-    </key>
-    <key name="sleep-display-ac" type="i">
-      <default>1800</default>
-      <summary>Sleep timeout display when on AC</summary>
-      <description>The amount of time in seconds before the display goes to sleep when the computer is on AC power.</description>
-    </key>
-    <key name="sleep-display-battery" type="i">
-      <default>600</default>
-      <summary>Sleep timeout display when on battery</summary>
-      <description>The amount of time in seconds the computer on battery power needs to be inactive before the display goes to sleep.</description>
     </key>
     <key name="sleep-display-ups" type="i">
       <default>600</default>

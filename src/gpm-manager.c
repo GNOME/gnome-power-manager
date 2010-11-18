@@ -89,6 +89,7 @@ struct GpmManagerPrivate
 {
 	GpmButton		*button;
 	GSettings		*settings;
+	GSettings		*settings_gsd;
 	GpmDisks		*disks;
 	GpmDpms			*dpms;
 	GpmIdle			*idle;
@@ -371,10 +372,10 @@ gpm_manager_sync_policy_sleep (GpmManager *manager)
 
 	if (!manager->priv->on_battery) {
 		sleep_computer = g_settings_get_int (manager->priv->settings, GPM_SETTINGS_SLEEP_COMPUTER_AC);
-		sleep_display = g_settings_get_int (manager->priv->settings, GPM_SETTINGS_SLEEP_DISPLAY_AC);
+		sleep_display = g_settings_get_int (manager->priv->settings_gsd, GSD_SETTINGS_SLEEP_DISPLAY_AC);
 	} else {
 		sleep_computer = g_settings_get_int (manager->priv->settings, GPM_SETTINGS_SLEEP_COMPUTER_BATT);
-		sleep_display = g_settings_get_int (manager->priv->settings, GPM_SETTINGS_SLEEP_DISPLAY_BATT);
+		sleep_display = g_settings_get_int (manager->priv->settings_gsd, GSD_SETTINGS_SLEEP_DISPLAY_BATT);
 	}
 
 	/* set the new sleep (inactivity) value */
@@ -1169,8 +1170,8 @@ gpm_manager_settings_changed_cb (GSettings *settings, const gchar *key, GpmManag
 {
 	if (g_strcmp0 (key, GPM_SETTINGS_SLEEP_COMPUTER_BATT) == 0 ||
 	    g_strcmp0 (key, GPM_SETTINGS_SLEEP_COMPUTER_AC) == 0 ||
-	    g_strcmp0 (key, GPM_SETTINGS_SLEEP_DISPLAY_BATT) == 0 ||
-	    g_strcmp0 (key, GPM_SETTINGS_SLEEP_DISPLAY_AC) == 0)
+	    g_strcmp0 (key, GSD_SETTINGS_SLEEP_DISPLAY_BATT) == 0 ||
+	    g_strcmp0 (key, GSD_SETTINGS_SLEEP_DISPLAY_AC) == 0)
 		gpm_manager_sync_policy_sleep (manager);
 }
 
@@ -2242,6 +2243,9 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->settings = g_settings_new (GPM_SETTINGS_SCHEMA);
 	g_signal_connect (manager->priv->settings, "changed",
 			  G_CALLBACK (gpm_manager_settings_changed_cb), manager);
+	manager->priv->settings_gsd = g_settings_new (GSD_SETTINGS_SCHEMA);
+	g_signal_connect (manager->priv->settings_gsd, "changed",
+			  G_CALLBACK (gpm_manager_settings_changed_cb), manager);
 	manager->priv->client = up_client_new ();
 	g_signal_connect (manager->priv->client, "changed",
 			  G_CALLBACK (gpm_manager_client_changed_cb), manager);
@@ -2378,6 +2382,7 @@ gpm_manager_finalize (GObject *object)
 		g_source_remove (manager->priv->critical_alert_timeout_id);
 
 	g_object_unref (manager->priv->settings);
+	g_object_unref (manager->priv->settings_gsd);
 	g_object_unref (manager->priv->disks);
 	g_object_unref (manager->priv->dpms);
 	g_object_unref (manager->priv->idle);

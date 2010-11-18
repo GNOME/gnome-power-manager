@@ -44,6 +44,7 @@ G_BEGIN_DECLS
 /* change general/installed_schema whenever adding or moving keys */
 #define GPM_SETTINGS_SCHEMA_ID				3
 #define GPM_SETTINGS_SCHEMA				"org.gnome.power-manager"
+#define GSD_SETTINGS_SCHEMA				"org.gnome.settings-daemon.plugins.power"
 
 /* actions */
 #define GPM_SETTINGS_ACTION_CRITICAL_UPS		"action-critical-ups"
@@ -58,10 +59,10 @@ G_BEGIN_DECLS
 #define GPM_SETTINGS_BACKLIGHT_BATTERY_REDUCE		"backlight-battery-reduce"
 #define GPM_SETTINGS_DPMS_METHOD_AC			"dpms-method-ac"
 #define GPM_SETTINGS_DPMS_METHOD_BATT			"dpms-method-battery"
-#define GPM_SETTINGS_IDLE_BRIGHTNESS			"idle-brightness"
-#define GPM_SETTINGS_IDLE_DIM_AC			"idle-dim-ac"
-#define GPM_SETTINGS_IDLE_DIM_BATT			"idle-dim-battery"
-#define GPM_SETTINGS_IDLE_DIM_TIME			"idle-dim-time"
+#define GSD_SETTINGS_IDLE_BRIGHTNESS			"idle-brightness"
+#define GSD_SETTINGS_IDLE_DIM_AC			"idle-dim-ac"
+#define GSD_SETTINGS_IDLE_DIM_BATT			"idle-dim-battery"
+#define GSD_SETTINGS_IDLE_DIM_TIME			"idle-dim-time"
 #define GPM_SETTINGS_BRIGHTNESS_AC			"brightness-ac"
 #define GPM_SETTINGS_BRIGHTNESS_DIM_BATT		"brightness-dim-battery"
 
@@ -115,8 +116,8 @@ G_BEGIN_DECLS
 #define GPM_SETTINGS_SLEEP_COMPUTER_AC			"sleep-computer-ac"
 #define GPM_SETTINGS_SLEEP_COMPUTER_BATT		"sleep-computer-battery"
 #define GPM_SETTINGS_SLEEP_COMPUTER_UPS			"sleep-computer-ups"
-#define GPM_SETTINGS_SLEEP_DISPLAY_AC			"sleep-display-ac"
-#define GPM_SETTINGS_SLEEP_DISPLAY_BATT			"sleep-display-battery"
+#define GSD_SETTINGS_SLEEP_DISPLAY_AC			"sleep-display-ac"
+#define GSD_SETTINGS_SLEEP_DISPLAY_BATT			"sleep-display-battery"
 #define GPM_SETTINGS_SLEEP_DISPLAY_UPS			"sleep-display-ups"
 
 /* ui */
