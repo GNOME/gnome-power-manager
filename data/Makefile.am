@@ -5,8 +5,7 @@ dist_migration_DATA = org.gnome.power-manager.gschema.migrate
 
 @INTLTOOL_DESKTOP_RULE@
 desktopdir = $(datadir)/applications
-desktop_in_files = gnome-power-preferences.desktop.in \
-		   gnome-power-statistics.desktop.in
+desktop_in_files = gnome-power-statistics.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 @INTLTOOL_DESKTOP_RULE@
@@ -27,7 +26,6 @@ gsettings_SCHEMAS = org.gnome.power-manager.gschema.xml
 pkgdata_DATA =						\
 	gpm-statistics.ui				\
 	gpm-feedback-widget.ui				\
-	gpm-prefs.ui					\
 	acme.ui
 
 EXTRA_DIST =						\
@@ -42,6 +40,5 @@ clean-local :
 
 DISTCLEANFILES =					\
 	gnome-power-manager.desktop			\
-	gnome-power-preferences.desktop			\
 	gnome-power-statistics.desktop			\
 	gnome-power-manager.service

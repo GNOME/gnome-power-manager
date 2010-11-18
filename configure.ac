@@ -249,7 +249,6 @@ tools/Makefile
 policy/Makefile
 data/Makefile
 data/gnome-power-manager.desktop.in
-data/gnome-power-preferences.desktop.in
 data/gnome-power-statistics.desktop.in
 data/icons/Makefile
 data/icons/16x16/Makefile
