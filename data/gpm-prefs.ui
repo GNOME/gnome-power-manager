@@ -233,132 +233,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="vbox_ups">
-                <property name="visible">True</property>
-                <property name="border_width">12</property>
-                <property name="spacing">9</property>
-                <child>
-                  <object class="GtkHBox" id="hbox_ups_computer">
-                    <property name="visible">True</property>
-                    <property name="spacing">12</property>
-                    <child>
-                      <object class="GtkLabel" id="label_ups_computer">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Put computer to _sleep when inactive for:</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="combobox_ups_computer">
-                        <property name="entry-text-column">0</property>
-                        <property name="visible">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkHBox" id="hbox18">
-                    <property name="visible">True</property>
-                    <property name="spacing">12</property>
-                    <child>
-                      <object class="GtkLabel" id="label_ups_low">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">When UPS power is l_ow:</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="combobox_ups_low">
-                        <property name="entry-text-column">0</property>
-                        <property name="visible">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkHBox" id="hbox19">
-                    <property name="visible">True</property>
-                    <property name="spacing">12</property>
-                    <child>
-                      <object class="GtkLabel" id="label_ups_critical">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">When UPS power is _critically low:</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="combobox_ups_critical">
-                        <property name="entry-text-column">0</property>
-                        <property name="visible">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">3</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="position">2</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="label_tab_ups">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">On UPS Power</property>
-              </object>
-              <packing>
-                <property name="position">2</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkVBox" id="vbox_general">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
@@ -495,23 +369,16 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">button_help</action-widget>
       <action-widget response="0">button_defaults</action-widget>
     </action-widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup_labels">
     <widgets>
-      <widget name="label_ups_critical"/>
-      <widget name="label_ups_low"/>
-      <widget name="label_ups_computer"/>
-      <widget name="label_ups_display"/>
       <widget name="label121"/>
       <widget name="label_battery_lid"/>
       <widget name="label_battery_computer"/>
-      <widget name="label_battery_display"/>
       <widget name="label_ac_lid"/>
       <widget name="label_ac_computer"/>
-      <widget name="label_ac_display"/>
       <widget name="label_general_power"/>
       <widget name="label_general_suspend"/>
     </widgets>

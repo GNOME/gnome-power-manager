@@ -40,16 +40,6 @@
       <summary>Whether to hibernate, suspend or do nothing when inactive</summary>
       <description>The type of sleeping that should be performed when the computer is inactive.</description>
     </key>
-    <key name="action-critical-ups" enum="org.gnome.power-manager.ActionType">
-      <default>'shutdown'</default>
-      <summary>UPS critical low action</summary>
-      <description>The action to take when the UPS is critically low.</description>
-    </key>
-    <key name="action-low-ups" enum="org.gnome.power-manager.ActionType">
-      <default>'hibernate'</default>
-      <summary>UPS low power action</summary>
-      <description>The action to take when the UPS is low.</description>
-    </key>
     <key name="backlight-enable" type="b">
       <default>true</default>
       <summary>Allow backlight brightness adjustment</summary>
@@ -299,16 +289,6 @@
       <default>0</default>
       <summary>Sleep timeout computer when on AC</summary>
       <description>The amount of time in seconds the computer on AC power needs to be inactive before it goes to sleep.</description>
-    </key>
-    <key name="sleep-computer-ups" type="i">
-      <default>0</default>
-      <summary>Sleep timeout computer when on UPS</summary>
-      <description>The amount of time in seconds the computer on UPS power needs to be inactive before it goes to sleep.</description>
-    </key>
-    <key name="sleep-display-ups" type="i">
-      <default>600</default>
-      <summary>Sleep timeout display when on UPS</summary>
-      <description>The amount of time in seconds the computer on UPS power needs to be inactive before the display goes to sleep.</description>
     </key>
     <key name="enable-sound" type="b">
       <default>true</default>

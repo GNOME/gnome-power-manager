@@ -39,7 +39,6 @@ struct _CcPowerPanelPrivate {
 	GtkBuilder		*builder;
 	gboolean		 has_batteries;
 	gboolean		 has_lcd;
-	gboolean		 has_ups;
 	gboolean		 has_button_lid;
 	gboolean		 has_button_suspend;
 	gboolean		 can_shutdown;
@@ -365,50 +364,6 @@ cc_power_panel_setup_battery (CcPowerPanel *panel)
 }
 
 /**
- * cc_power_panel_setup_ups:
- **/
-static void
-cc_power_panel_setup_ups (CcPowerPanel *panel)
-{
-	GtkWidget *widget;
-	GtkNotebook *notebook;
-	gint page;
-
-	const GpmActionPolicy ups_low_actions[] =
-				{GPM_ACTION_POLICY_NOTHING,
-				 GPM_ACTION_POLICY_HIBERNATE,
-				 GPM_ACTION_POLICY_SHUTDOWN,
-				 -1};
-
-	static const gint computer_times[] =
-		{10*60,
-		 30*60,
-		 1*60*60,
-		 2*60*60,
-		 0, /* never */
-		 -1};
-
-	cc_power_panel_setup_time_combo (panel, "combobox_ups_computer",
-				    GPM_SETTINGS_SLEEP_COMPUTER_UPS,
-				    computer_times);
-
-	if (panel->priv->has_ups == FALSE) {
-		notebook = GTK_NOTEBOOK (gtk_builder_get_object (panel->priv->builder, "notebook_preferences"));
-		widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "vbox_ups"));
-		page = gtk_notebook_page_num (notebook, GTK_WIDGET (widget));
-		gtk_notebook_remove_page (notebook, page);
-		return;
-	}
-
-	cc_power_panel_setup_action_combo (panel, "combobox_ups_low",
-				      GPM_SETTINGS_ACTION_LOW_UPS,
-				      ups_low_actions);
-	cc_power_panel_setup_action_combo (panel, "combobox_ups_critical",
-				      GPM_SETTINGS_ACTION_CRITICAL_UPS,
-				      ups_low_actions);
-}
-
-/**
  * cc_power_panel_setup_general:
  **/
 static void
@@ -563,10 +518,9 @@ cc_power_panel_init (CcPowerPanel *panel)
 		g_object_get (device,
 			      "kind", &kind,
 			      NULL);
-		if (kind == UP_DEVICE_KIND_BATTERY)
+		if (kind == UP_DEVICE_KIND_BATTERY ||
+		    kind == UP_DEVICE_KIND_UPS)
 			panel->priv->has_batteries = TRUE;
-		if (kind == UP_DEVICE_KIND_UPS)
-			panel->priv->has_ups = TRUE;
 	}
 	g_ptr_array_unref (devices);
 
@@ -588,7 +542,6 @@ cc_power_panel_init (CcPowerPanel *panel)
 
 	cc_power_panel_setup_ac (panel);
 	cc_power_panel_setup_battery (panel);
-	cc_power_panel_setup_ups (panel);
 	cc_power_panel_setup_general (panel);
 
 out:

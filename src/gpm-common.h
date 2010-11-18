@@ -47,9 +47,7 @@ G_BEGIN_DECLS
 #define GSD_SETTINGS_SCHEMA				"org.gnome.settings-daemon.plugins.power"
 
 /* actions */
-#define GPM_SETTINGS_ACTION_CRITICAL_UPS		"action-critical-ups"
 #define GPM_SETTINGS_ACTION_CRITICAL_BATT		"action-critical-battery"
-#define GPM_SETTINGS_ACTION_LOW_UPS			"action-low-ups"
 #define GPM_SETTINGS_ACTION_SLEEP_TYPE_AC		"action-sleep-type-ac"
 #define GPM_SETTINGS_ACTION_SLEEP_TYPE_BATT		"action-sleep-type-battery"
 #define GPM_SETTINGS_SLEEP_WHEN_CLOSED			"event-when-closed-battery"
@@ -115,10 +113,8 @@ G_BEGIN_DECLS
 /* timeout */
 #define GPM_SETTINGS_SLEEP_COMPUTER_AC			"sleep-computer-ac"
 #define GPM_SETTINGS_SLEEP_COMPUTER_BATT		"sleep-computer-battery"
-#define GPM_SETTINGS_SLEEP_COMPUTER_UPS			"sleep-computer-ups"
 #define GSD_SETTINGS_SLEEP_DISPLAY_AC			"sleep-display-ac"
 #define GSD_SETTINGS_SLEEP_DISPLAY_BATT			"sleep-display-battery"
-#define GPM_SETTINGS_SLEEP_DISPLAY_UPS			"sleep-display-ups"
 
 /* ui */
 #define GPM_SETTINGS_ICON_POLICY			"icon-policy"

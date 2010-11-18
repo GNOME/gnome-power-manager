@@ -1895,7 +1895,7 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, UpDevice *device, GpmMan
 		title = _("UPS critically low");
 
 		/* we have to do different warnings depending on the policy */
-		policy = g_settings_get_enum (manager->priv->settings, GPM_SETTINGS_ACTION_CRITICAL_UPS);
+		policy = g_settings_get_enum (manager->priv->settings, GPM_SETTINGS_ACTION_CRITICAL_BATT);
 
 		/* use different text for different actions */
 		if (policy == GPM_ACTION_POLICY_NOTHING) {
