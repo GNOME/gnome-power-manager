@@ -1064,7 +1064,6 @@ gpm_manager_get_spindown_timeout (GpmManager *manager)
 static void
 gpm_manager_client_changed_cb (UpClient *client, GpmManager *manager)
 {
-	gboolean event_when_closed;
 	gint timeout;
 	gboolean on_battery;
 	gboolean lid_is_closed;
@@ -1120,17 +1119,12 @@ gpm_manager_client_changed_cb (UpClient *client, GpmManager *manager)
 	else
 		gpm_manager_play (manager, GPM_MANAGER_SOUND_POWER_UNPLUG, FALSE);
 
-	/* We do the lid close on battery action if the ac adapter is removed
-	   when the laptop is closed and on battery. Fixes #331655 */
-	event_when_closed = g_settings_get_boolean (manager->priv->settings, GPM_SETTINGS_SLEEP_WHEN_CLOSED);
-
 	/* We keep track of the lid state so we can do the
-	   lid close on battery action if the ac adapter is removed when the laptop
-	   is closed. Fixes #331655 */
-	if (event_when_closed && on_battery && lid_is_closed) {
+	 * lid close on battery action if the ac adapter is removed when the laptop
+	 * is closed */
+	if (on_battery && lid_is_closed) {
 		gpm_manager_perform_policy (manager, GSD_SETTINGS_BUTTON_LID_BATT,
-					    "The lid has been closed, and the ac adapter "
-					    "removed (and GSettings is okay).");
+					    "The lid has been closed, and the ac adapter removed.");
 	}
 }
 

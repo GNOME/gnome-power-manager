@@ -44,7 +44,6 @@ G_BEGIN_DECLS
 #define GSD_SETTINGS_ACTION_CRITICAL_BATT		"critical-battery-action"
 #define GSD_SETTINGS_ACTION_SLEEP_TYPE_AC		"sleep-inactive-ac-type"
 #define GSD_SETTINGS_ACTION_SLEEP_TYPE_BATT		"sleep-inactive-battery-type"
-#define GPM_SETTINGS_SLEEP_WHEN_CLOSED			"event-when-closed-battery"
 
 /* backlight stuff */
 #define GPM_SETTINGS_BACKLIGHT_ENABLE			"backlight-enable"
