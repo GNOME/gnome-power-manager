@@ -76,7 +76,6 @@ G_BEGIN_DECLS
 #define GPM_SETTINGS_USE_TIME_POLICY			"use-time-for-policy"
 #define GPM_SETTINGS_USE_PROFILE_TIME			"use-profile-time"
 #define GPM_SETTINGS_NETWORKMANAGER_SLEEP		"network-sleep"
-#define GPM_SETTINGS_IDLE_CHECK_CPU			"check-type-cpu"
 
 /* lock */
 #define GPM_SETTINGS_LOCK_USE_SCREENSAVER		"lock-use-screensaver"

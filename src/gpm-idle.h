@@ -59,8 +59,6 @@ typedef struct
 GType		 gpm_idle_get_type			(void);
 GpmIdle		*gpm_idle_new				(void);
 GpmIdleMode	 gpm_idle_get_mode			(GpmIdle	*idle);
-void		 gpm_idle_set_check_cpu			(GpmIdle	*idle,
-							 gboolean	 check_type_cpu);
 gboolean	 gpm_idle_set_timeout_dim		(GpmIdle	*idle,
 							 guint		 timeout);
 gboolean	 gpm_idle_set_timeout_blank		(GpmIdle	*idle,

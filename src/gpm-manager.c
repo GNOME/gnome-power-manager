@@ -2225,7 +2225,6 @@ gpm_manager_name_lost_cb (GDBusConnection *connection,
 static void
 gpm_manager_init (GpmManager *manager)
 {
-	gboolean check_type_cpu;
 	gint timeout;
 	guint version;
 
@@ -2296,10 +2295,6 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->idle = gpm_idle_new ();
 	g_signal_connect (manager->priv->idle, "idle-changed",
 			  G_CALLBACK (gpm_manager_idle_changed_cb), manager);
-
-	/* set up the check_type_cpu, so we can disable the CPU load check */
-	check_type_cpu = g_settings_get_boolean (manager->priv->settings, GPM_SETTINGS_IDLE_CHECK_CPU);
-	gpm_idle_set_check_cpu (manager->priv->idle, check_type_cpu);
 
 	manager->priv->dpms = gpm_dpms_new ();
 	g_signal_connect (manager->priv->dpms, "mode-changed",

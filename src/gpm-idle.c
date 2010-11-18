@@ -42,19 +42,14 @@
 #include "gpm-idletime.h"
 
 #include "gpm-idle.h"
-#include "gpm-load.h"
 
 #define GPM_IDLE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_IDLE, GpmIdlePrivate))
 
-/* Sets the idle percent limit, i.e. how hard the computer can work
-   while considered "at idle" */
-#define GPM_IDLE_CPU_LIMIT			5
 #define	GPM_IDLE_IDLETIME_ID			1
 
 struct GpmIdlePrivate
 {
 	GpmIdletime		*idletime;
-	GpmLoad			*load;
 	GDBusProxy		*proxy;
 	GDBusProxy		*proxy_presence;
 	GpmIdleMode		 mode;
@@ -64,7 +59,6 @@ struct GpmIdlePrivate
 	guint			 timeout_blank_id;
 	guint			 timeout_sleep_id;
 	gboolean		 x_idle;
-	gboolean		 check_type_cpu;
 };
 
 enum {
@@ -111,19 +105,6 @@ gpm_idle_set_mode (GpmIdle *idle, GpmIdleMode mode)
 }
 
 /**
- * gpm_idle_set_check_cpu:
- * @check_type_cpu: If we should check the CPU before mode becomes
- *		    GPM_IDLE_MODE_SLEEP and the event is done.
- **/
-void
-gpm_idle_set_check_cpu (GpmIdle *idle, gboolean check_type_cpu)
-{
-	g_return_if_fail (GPM_IS_IDLE (idle));
-	g_debug ("Setting the CPU load check to %i", check_type_cpu);
-	idle->priv->check_type_cpu = check_type_cpu;
-}
-
-/**
  * gpm_idle_get_mode:
  * Return value: The current mode, e.g. GPM_IDLE_MODE_SLEEP
  **/
@@ -153,22 +134,8 @@ gpm_idle_blank_cb (GpmIdle *idle)
 static gboolean
 gpm_idle_sleep_cb (GpmIdle *idle)
 {
-	gdouble load;
-	gboolean ret = FALSE;
-
-	/* get our computed load value */
-	if (idle->priv->check_type_cpu) {
-		load = gpm_load_get_current (idle->priv->load);
-		if (load > GPM_IDLE_CPU_LIMIT) {
-			/* check if system is "idle" enough */
-			g_debug ("Detected that the CPU is busy");
-			ret = TRUE;
-			goto out;
-		}
-	}
 	gpm_idle_set_mode (idle, GPM_IDLE_MODE_SLEEP);
-out:
-	return ret;
+	return FALSE;
 }
 
 typedef enum {
@@ -484,7 +451,6 @@ gpm_idle_finalize (GObject *object)
 	if (idle->priv->timeout_sleep_id != 0)
 		g_source_remove (idle->priv->timeout_sleep_id);
 
-	g_object_unref (idle->priv->load);
 	if (idle->priv->proxy != NULL)
 		g_object_unref (idle->priv->proxy);
 	if (idle->priv->proxy_presence != NULL)
@@ -539,7 +505,6 @@ gpm_idle_init (GpmIdle *idle)
 	idle->priv->timeout_blank_id = 0;
 	idle->priv->timeout_sleep_id = 0;
 	idle->priv->x_idle = FALSE;
-	idle->priv->load = gpm_load_new ();
 
 	idle->priv->idletime = gpm_idletime_new ();
 	g_signal_connect (idle->priv->idletime, "reset", G_CALLBACK (gpm_idle_idletime_reset_cb), idle);
