@@ -2007,22 +2007,23 @@ gpm_manager_control_resume_cb (GpmControl *control, GpmControlAction action, Gpm
 static GVariant *
 gpm_manager_device_to_variant_blob (UpDevice *device)
 {
-	gchar *display = NULL;
 	UpDeviceKind kind;
 	UpDeviceState state;
 	gdouble percentage;
 	guint64 time_state = 0;
 	guint64 time_empty, time_full;
 	GVariant *value;
+	GIcon *icon;
+	gchar *device_icon;
 
-	display = gpm_upower_get_device_summary (device);
+	icon = gpm_upower_get_device_icon (device, FALSE);
+	device_icon = g_icon_to_string (icon);
 	g_object_get (device,
 		      "kind", &kind,
 		      "percentage", &percentage,
 		      "state", &state,
 		      "time-to-empty", &time_empty,
 		      "time-to-full", &time_full,
-          /* need icon! */
 		      NULL);
 
 	/* only return time for these simple states */
@@ -2035,11 +2036,11 @@ gpm_manager_device_to_variant_blob (UpDevice *device)
 	value = g_variant_new ("(susdut)",
 			       up_device_get_object_path (device),
 			       kind,
-			       display,
+			       device_icon,
 			       percentage,
 			       state,
 			       time_state);
-	g_free (display);
+	g_free (device_icon);
 	return value;
 }
 
