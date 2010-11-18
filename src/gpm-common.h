@@ -36,11 +36,6 @@ G_BEGIN_DECLS
 #define GPM_NAME 			_("Power Manager")
 #define GPM_DESCRIPTION 		_("Power Manager for the GNOME desktop")
 
-/* help location */
-#define GPM_HOMEPAGE_URL	 	"http://www.gnome.org/projects/gnome-power-manager/"
-#define GPM_BUGZILLA_URL		"http://bugzilla.gnome.org/buglist.cgi?product=gnome-power-manager"
-#define GPM_FAQ_URL			"http://live.gnome.org/GnomePowerManager/Faq"
-
 /* change general/installed_schema whenever adding or moving keys */
 #define GPM_SETTINGS_SCHEMA				"org.gnome.power-manager"
 #define GSD_SETTINGS_SCHEMA				"org.gnome.settings-daemon.plugins.power"
@@ -72,8 +67,6 @@ G_BEGIN_DECLS
 
 /* general */
 #define GPM_SETTINGS_USE_TIME_POLICY			"use-time-for-policy"
-#define GPM_SETTINGS_USE_PROFILE_TIME			"use-profile-time"
-#define GPM_SETTINGS_NETWORKMANAGER_SLEEP		"network-sleep"
 
 /* lock */
 #define GPM_SETTINGS_LOCK_USE_SCREENSAVER		"lock-use-screensaver"
