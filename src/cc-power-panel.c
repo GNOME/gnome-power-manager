@@ -56,15 +56,6 @@ static void cc_power_panel_finalize (GObject *object);
 #define CC_POWER_PREFS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), CC_TYPE_POWER_PANEL, CcPowerPanelPrivate))
 
 /**
- * cc_power_panel_help_cb:
- **/
-static void
-cc_power_panel_help_cb (GtkWidget *widget, CcPowerPanel *panel)
-{
-	gpm_help_display ("preferences");
-}
-
-/**
  * cc_power_panel_action_combo_changed_cb:
  **/
 static void
@@ -586,10 +577,6 @@ cc_power_panel_init (CcPowerPanel *panel)
 		g_error_free (error);
 		goto out;
 	}
-
-	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "button_help"));
-	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (cc_power_panel_help_cb), panel);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (panel->priv->builder, "button_defaults"));
 #ifdef HAVE_GCONF_DEFAULTS
