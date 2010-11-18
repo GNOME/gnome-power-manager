@@ -562,8 +562,6 @@ gpm_backlight_idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *ba
 	gboolean ret;
 	gboolean is_active;
 	GError *error = NULL;
-	gboolean on_battery;
-	GpmDpmsMode dpms_mode;
 
 	/* don't dim or undim the screen when the lid is closed */
 	if (gpm_button_is_lid_closed (backlight->priv->button))
@@ -611,23 +609,8 @@ gpm_backlight_idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *ba
 		gpm_backlight_notify_system_idle_changed (backlight, TRUE);
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 
-		/* get the DPMS state we're supposed to use on the power state */
-		g_object_get (backlight->priv->client,
-			      "on-battery", &on_battery,
-			      NULL);
-		if (!on_battery)
-			dpms_mode = g_settings_get_enum (backlight->priv->settings, GPM_SETTINGS_DPMS_METHOD_AC);
-		else
-			dpms_mode = g_settings_get_enum (backlight->priv->settings, GPM_SETTINGS_DPMS_METHOD_BATT);
-
-		/* check if method is valid */
-		if (dpms_mode == GPM_DPMS_MODE_UNKNOWN || dpms_mode == GPM_DPMS_MODE_ON) {
-			g_warning ("BACKLIGHT method %s unknown. Using OFF.", gpm_dpms_mode_to_string (dpms_mode));
-			dpms_mode = GPM_DPMS_MODE_OFF;
-		}
-
 		/* turn backlight off */
-		ret = gpm_dpms_set_mode (backlight->priv->dpms, dpms_mode, &error);
+		ret = gpm_dpms_set_mode (backlight->priv->dpms, GPM_DPMS_MODE_OFF, &error);
 		if (!ret) {
 			g_warning ("failed to change DPMS: %s", error->message);
 			g_error_free (error);

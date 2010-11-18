@@ -6,11 +6,6 @@
     <value nick="critical" value="3"/>
     <value nick="never" value="4"/>
   </enum>
-  <enum id="org.gnome.power-manager.DpmsMethod">
-    <value nick="standby" value="1"/>
-    <value nick="suspend" value="2"/>
-    <value nick="off" value="3"/>
-  </enum>
   <schema id="org.gnome.power-manager" path="/apps/gnome-power-manager/">
     <key name="backlight-enable" type="b">
       <default>true</default>
@@ -26,16 +21,6 @@
       <default>50</default>
       <summary>LCD dimming amount when on battery</summary>
       <description>The amount to dim the brightness of the display when on battery power. Possible values are between 0 and 100.</description>
-    </key>
-    <key name="dpms-method-ac" enum="org.gnome.power-manager.DpmsMethod">
-      <default>'off'</default>
-      <summary>Method used to blank screen on AC</summary>
-      <description>The DPMS method used to blank the screen when on AC power.</description>
-    </key>
-    <key name="dpms-method-battery" enum="org.gnome.power-manager.DpmsMethod">
-      <default>'off'</default>
-      <summary>Method used to blank screen on battery</summary>
-      <description>The DPMS method used to blank the screen when on battery power.</description>
     </key>
     <key name="brightness-ac" type="d">
       <default>1.0</default>

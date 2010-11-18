@@ -48,8 +48,6 @@ G_BEGIN_DECLS
 /* backlight stuff */
 #define GPM_SETTINGS_BACKLIGHT_ENABLE			"backlight-enable"
 #define GPM_SETTINGS_BACKLIGHT_BATTERY_REDUCE		"backlight-battery-reduce"
-#define GPM_SETTINGS_DPMS_METHOD_AC			"dpms-method-ac"
-#define GPM_SETTINGS_DPMS_METHOD_BATT			"dpms-method-battery"
 #define GSD_SETTINGS_IDLE_BRIGHTNESS			"idle-brightness"
 #define GSD_SETTINGS_IDLE_DIM_AC			"idle-dim-ac"
 #define GSD_SETTINGS_IDLE_DIM_BATT			"idle-dim-battery"
