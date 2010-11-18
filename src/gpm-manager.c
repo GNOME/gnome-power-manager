@@ -371,10 +371,16 @@ gpm_manager_sync_policy_sleep (GpmManager *manager)
 	guint sleep_computer;
 
 	if (!manager->priv->on_battery) {
-		sleep_computer = g_settings_get_int (manager->priv->settings, GPM_SETTINGS_SLEEP_COMPUTER_AC);
+		sleep_computer = g_settings_get_int (manager->priv->settings_gsd, GSD_SETTINGS_SLEEP_COMPUTER_AC);
+		/* hack around new gsettings key */
+		if (!g_settings_get_boolean (manager->priv->settings_gsd, GSD_SETTINGS_SLEEP_COMPUTER_AC_EN))
+			sleep_computer = 0;
 		sleep_display = g_settings_get_int (manager->priv->settings_gsd, GSD_SETTINGS_SLEEP_DISPLAY_AC);
 	} else {
-		sleep_computer = g_settings_get_int (manager->priv->settings, GPM_SETTINGS_SLEEP_COMPUTER_BATT);
+		sleep_computer = g_settings_get_int (manager->priv->settings_gsd, GSD_SETTINGS_SLEEP_COMPUTER_BATT);
+		/* hack around new gsettings key */
+		if (!g_settings_get_boolean (manager->priv->settings_gsd, GSD_SETTINGS_SLEEP_COMPUTER_BATT_EN))
+			sleep_computer = 0;
 		sleep_display = g_settings_get_int (manager->priv->settings_gsd, GSD_SETTINGS_SLEEP_DISPLAY_BATT);
 	}
 
@@ -748,7 +754,7 @@ gpm_manager_perform_policy (GpmManager  *manager, const gchar *policy_key, const
 	if (gpm_manager_is_inhibit_valid (manager, FALSE, "policy action") == FALSE)
 		return FALSE;
 
-	policy = g_settings_get_enum (manager->priv->settings, policy_key);
+	policy = g_settings_get_enum (manager->priv->settings_gsd, policy_key);
 	g_debug ("action: %s set to %i (%s)", policy_key, policy, reason);
 	if (policy == GPM_ACTION_POLICY_NOTHING) {
 		g_debug ("doing nothing, reason: %s", reason);
@@ -790,9 +796,9 @@ gpm_manager_idle_do_sleep (GpmManager *manager)
 	GpmActionPolicy policy;
 
 	if (!manager->priv->on_battery)
-		policy = g_settings_get_enum (manager->priv->settings, GPM_SETTINGS_ACTION_SLEEP_TYPE_AC);
+		policy = g_settings_get_enum (manager->priv->settings_gsd, GSD_SETTINGS_ACTION_SLEEP_TYPE_AC);
 	else
-		policy = g_settings_get_enum (manager->priv->settings, GPM_SETTINGS_ACTION_SLEEP_TYPE_BATT);
+		policy = g_settings_get_enum (manager->priv->settings_gsd, GSD_SETTINGS_ACTION_SLEEP_TYPE_BATT);
 
 	if (policy == GPM_ACTION_POLICY_NOTHING) {
 		g_debug ("doing nothing as system idle action");
@@ -907,13 +913,13 @@ gpm_manager_lid_button_pressed (GpmManager *manager, gboolean pressed)
 
 	if (!manager->priv->on_battery) {
 		g_debug ("Performing AC policy");
-		gpm_manager_perform_policy (manager, GPM_SETTINGS_BUTTON_LID_AC,
+		gpm_manager_perform_policy (manager, GSD_SETTINGS_BUTTON_LID_AC,
 					    "Lid closed on AC power.");
 		return;
 	}
 
 	g_debug ("Performing battery policy");
-	gpm_manager_perform_policy (manager, GPM_SETTINGS_BUTTON_LID_BATT,
+	gpm_manager_perform_policy (manager, GSD_SETTINGS_BUTTON_LID_BATT,
 				    "Lid closed on battery power.");
 }
 
@@ -996,13 +1002,13 @@ gpm_manager_button_pressed_cb (GpmButton *button, const gchar *type, GpmManager 
 	}
 
 	if (g_strcmp0 (type, GPM_BUTTON_POWER) == 0) {
-		gpm_manager_perform_policy (manager, GPM_SETTINGS_BUTTON_POWER, "The power button has been pressed.");
+		gpm_manager_perform_policy (manager, GSD_SETTINGS_BUTTON_POWER, "The power button has been pressed.");
 	} else if (g_strcmp0 (type, GPM_BUTTON_SLEEP) == 0) {
-		gpm_manager_perform_policy (manager, GPM_SETTINGS_BUTTON_SUSPEND, "The suspend button has been pressed.");
+		gpm_manager_perform_policy (manager, GSD_SETTINGS_BUTTON_SUSPEND, "The suspend button has been pressed.");
 	} else if (g_strcmp0 (type, GPM_BUTTON_SUSPEND) == 0) {
-		gpm_manager_perform_policy (manager, GPM_SETTINGS_BUTTON_SUSPEND, "The suspend button has been pressed.");
+		gpm_manager_perform_policy (manager, GSD_SETTINGS_BUTTON_SUSPEND, "The suspend button has been pressed.");
 	} else if (g_strcmp0 (type, GPM_BUTTON_HIBERNATE) == 0) {
-		gpm_manager_perform_policy (manager, GPM_SETTINGS_BUTTON_HIBERNATE, "The hibernate button has been pressed.");
+		gpm_manager_perform_policy (manager, GSD_SETTINGS_BUTTON_HIBERNATE, "The hibernate button has been pressed.");
 	} else if (g_strcmp0 (type, GPM_BUTTON_LID_OPEN) == 0) {
 		gpm_manager_lid_button_pressed (manager, FALSE);
 	} else if (g_strcmp0 (type, GPM_BUTTON_LID_CLOSED) == 0) {
@@ -1122,7 +1128,7 @@ gpm_manager_client_changed_cb (UpClient *client, GpmManager *manager)
 	   lid close on battery action if the ac adapter is removed when the laptop
 	   is closed. Fixes #331655 */
 	if (event_when_closed && on_battery && lid_is_closed) {
-		gpm_manager_perform_policy (manager, GPM_SETTINGS_BUTTON_LID_BATT,
+		gpm_manager_perform_policy (manager, GSD_SETTINGS_BUTTON_LID_BATT,
 					    "The lid has been closed, and the ac adapter "
 					    "removed (and GSettings is okay).");
 	}
@@ -1144,7 +1150,7 @@ manager_critical_action_do (GpmManager *manager)
 	if (manager->priv->critical_alert_timeout_id)
 		gpm_manager_play_loop_stop (manager);
 
-	gpm_manager_perform_policy (manager, GPM_SETTINGS_ACTION_CRITICAL_BATT, "Battery is critically low.");
+	gpm_manager_perform_policy (manager, GSD_SETTINGS_ACTION_CRITICAL_BATT, "Battery is critically low.");
 	return FALSE;
 }
 
@@ -1168,8 +1174,10 @@ gpm_manager_class_init (GpmManagerClass *klass)
 static void
 gpm_manager_settings_changed_cb (GSettings *settings, const gchar *key, GpmManager *manager)
 {
-	if (g_strcmp0 (key, GPM_SETTINGS_SLEEP_COMPUTER_BATT) == 0 ||
-	    g_strcmp0 (key, GPM_SETTINGS_SLEEP_COMPUTER_AC) == 0 ||
+	if (g_strcmp0 (key, GSD_SETTINGS_SLEEP_COMPUTER_BATT) == 0 ||
+	    g_strcmp0 (key, GSD_SETTINGS_SLEEP_COMPUTER_AC) == 0 ||
+	    g_strcmp0 (key, GSD_SETTINGS_SLEEP_COMPUTER_BATT_EN) == 0 ||
+	    g_strcmp0 (key, GSD_SETTINGS_SLEEP_COMPUTER_AC_EN) == 0 ||
 	    g_strcmp0 (key, GSD_SETTINGS_SLEEP_DISPLAY_BATT) == 0 ||
 	    g_strcmp0 (key, GSD_SETTINGS_SLEEP_DISPLAY_AC) == 0)
 		gpm_manager_sync_policy_sleep (manager);
@@ -1703,7 +1711,7 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmM
 		}
 
 		/* we have to do different warnings depending on the policy */
-		policy = g_settings_get_enum (manager->priv->settings, GPM_SETTINGS_ACTION_CRITICAL_BATT);
+		policy = g_settings_get_enum (manager->priv->settings_gsd, GSD_SETTINGS_ACTION_CRITICAL_BATT);
 
 		/* use different text for different actions */
 		if (policy == GPM_ACTION_POLICY_NOTHING) {
@@ -1859,7 +1867,7 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, UpDevice *device, GpmMan
 		title = _("Laptop battery critically low");
 
 		/* we have to do different warnings depending on the policy */
-		policy = g_settings_get_enum (manager->priv->settings, GPM_SETTINGS_ACTION_CRITICAL_BATT);
+		policy = g_settings_get_enum (manager->priv->settings_gsd, GSD_SETTINGS_ACTION_CRITICAL_BATT);
 
 		/* use different text for different actions */
 		if (policy == GPM_ACTION_POLICY_NOTHING) {
@@ -1895,7 +1903,7 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, UpDevice *device, GpmMan
 		title = _("UPS critically low");
 
 		/* we have to do different warnings depending on the policy */
-		policy = g_settings_get_enum (manager->priv->settings, GPM_SETTINGS_ACTION_CRITICAL_BATT);
+		policy = g_settings_get_enum (manager->priv->settings_gsd, GSD_SETTINGS_ACTION_CRITICAL_BATT);
 
 		/* use different text for different actions */
 		if (policy == GPM_ACTION_POLICY_NOTHING) {
@@ -2014,6 +2022,7 @@ gpm_manager_device_to_variant_blob (UpDevice *device)
 		      "state", &state,
 		      "time-to-empty", &time_empty,
 		      "time-to-full", &time_full,
+          /* need icon! */
 		      NULL);
 
 	/* only return time for these simple states */

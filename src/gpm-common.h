@@ -47,9 +47,9 @@ G_BEGIN_DECLS
 #define GSD_SETTINGS_SCHEMA				"org.gnome.settings-daemon.plugins.power"
 
 /* actions */
-#define GPM_SETTINGS_ACTION_CRITICAL_BATT		"action-critical-battery"
-#define GPM_SETTINGS_ACTION_SLEEP_TYPE_AC		"action-sleep-type-ac"
-#define GPM_SETTINGS_ACTION_SLEEP_TYPE_BATT		"action-sleep-type-battery"
+#define GSD_SETTINGS_ACTION_CRITICAL_BATT		"critical-battery-action"
+#define GSD_SETTINGS_ACTION_SLEEP_TYPE_AC		"sleep-inactive-ac-type"
+#define GSD_SETTINGS_ACTION_SLEEP_TYPE_BATT		"sleep-inactive-battery-type"
 #define GPM_SETTINGS_SLEEP_WHEN_CLOSED			"event-when-closed-battery"
 
 /* backlight stuff */
@@ -65,11 +65,11 @@ G_BEGIN_DECLS
 #define GPM_SETTINGS_BRIGHTNESS_DIM_BATT		"brightness-dim-battery"
 
 /* buttons */
-#define GPM_SETTINGS_BUTTON_LID_AC			"button-lid-ac"
-#define GPM_SETTINGS_BUTTON_LID_BATT			"button-lid-battery"
-#define GPM_SETTINGS_BUTTON_SUSPEND			"button-suspend"
-#define GPM_SETTINGS_BUTTON_HIBERNATE			"button-hibernate"
-#define GPM_SETTINGS_BUTTON_POWER			"button-power"
+#define GSD_SETTINGS_BUTTON_LID_AC			"lid-close-ac-action"
+#define GSD_SETTINGS_BUTTON_LID_BATT			"lid-close-battery-action"
+#define GSD_SETTINGS_BUTTON_SUSPEND			"button-suspend"
+#define GSD_SETTINGS_BUTTON_HIBERNATE			"button-hibernate"
+#define GSD_SETTINGS_BUTTON_POWER			"button-power"
 
 /* general */
 #define GPM_SETTINGS_SCHEMA_VERSION			"schema-version"
@@ -111,8 +111,10 @@ G_BEGIN_DECLS
 #define GPM_SETTINGS_TIME_ACTION			"time-action"
 
 /* timeout */
-#define GPM_SETTINGS_SLEEP_COMPUTER_AC			"sleep-computer-ac"
-#define GPM_SETTINGS_SLEEP_COMPUTER_BATT		"sleep-computer-battery"
+#define GSD_SETTINGS_SLEEP_COMPUTER_AC			"sleep-inactive-ac-timeout"
+#define GSD_SETTINGS_SLEEP_COMPUTER_BATT		"sleep-inactive-battery-timeout"
+#define GSD_SETTINGS_SLEEP_COMPUTER_AC_EN			"sleep-inactive-ac"
+#define GSD_SETTINGS_SLEEP_COMPUTER_BATT_EN		"sleep-inactive-battery"
 #define GSD_SETTINGS_SLEEP_DISPLAY_AC			"sleep-display-ac"
 #define GSD_SETTINGS_SLEEP_DISPLAY_BATT			"sleep-display-battery"
 

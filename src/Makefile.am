@@ -27,9 +27,6 @@ INCLUDES =						\
 	-DG_LOG_DOMAIN=\"PowerManager\"			\
 	-I$(top_srcdir)
 
-ccpanelsdir = $(PANELS_DIR)
-ccpanels_LTLIBRARIES = libpower.la
-
 bin_PROGRAMS =						\
 	gnome-power-manager				\
 	gnome-power-statistics
@@ -88,30 +85,6 @@ gnome_power_statistics_LDADD =				\
 
 gnome_power_statistics_CFLAGS =				\
 	$(WARNINGFLAGS)
-
-libpower_la_SOURCES =					\
-	egg-console-kit.h				\
-	egg-console-kit.c				\
-	gpm-debug.h					\
-	gpm-debug.c					\
-	gpm-brightness.h				\
-	gpm-brightness.c				\
-	gpm-common.h					\
-	gpm-common.c					\
-	cc-power-panel.c				\
-	cc-power-panel.h
-
-libpower_la_LIBADD =					\
-	$(GLIB_LIBS)					\
-	$(CONTROL_CENTER_LIBS)				\
-	$(X11_LIBS)					\
-	$(GNOME_LIBS)					\
-	$(GPM_EXTRA_LIBS)				\
-	$(UPOWER_LIBS)					\
-	-lm
-
-libpower_la_LDFLAGS = -avoid-version -module
-libpower_la_CFLAGS = $(WARNINGFLAGS)
 
 gnome_power_manager_SOURCES =				\
 	gpm-dpms.h					\

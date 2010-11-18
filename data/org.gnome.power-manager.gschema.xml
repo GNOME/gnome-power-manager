@@ -1,12 +1,4 @@
 <schemalist>
-  <enum id="org.gnome.power-manager.ActionType">
-    <value nick="blank" value="0"/>
-    <value nick="suspend" value="1"/>
-    <value nick="shutdown" value="2"/>
-    <value nick="hibernate" value="3"/>
-    <value nick="interactive" value="4"/>
-    <value nick="nothing" value="5"/>
-  </enum>
   <enum id="org.gnome.power-manager.IconPolicy">
     <value nick="present" value="0"/>
     <value nick="charge" value="1"/>
@@ -20,25 +12,10 @@
     <value nick="off" value="3"/>
   </enum>
   <schema id="org.gnome.power-manager" path="/apps/gnome-power-manager/">
-    <key name="action-sleep-type-battery" enum="org.gnome.power-manager.ActionType">
-      <default>'hibernate'</default>
-      <summary>Whether to hibernate, suspend or do nothing when inactive</summary>
-      <description>The type of sleeping that should be performed when the computer is inactive.</description>
-    </key>
-    <key name="action-critical-battery" enum="org.gnome.power-manager.ActionType">
-      <default>'hibernate'</default>
-      <summary>Battery critical low action</summary>
-      <description>The action to take when the battery is critically low.</description>
-    </key>
     <key name="event-when-closed-battery" type="b">
       <default>true</default>
       <summary>If the battery event should occur when the lid is shut and the power disconnected</summary>
       <description>If the battery lid close event should occur (for example 'Suspend when lid closed on battery') when the lid is previously shut and the AC power disconnected at a later time.</description>
-    </key>
-    <key name="action-sleep-type-ac" enum="org.gnome.power-manager.ActionType">
-      <default>'suspend'</default>
-      <summary>Whether to hibernate, suspend or do nothing when inactive</summary>
-      <description>The type of sleeping that should be performed when the computer is inactive.</description>
     </key>
     <key name="backlight-enable" type="b">
       <default>true</default>
@@ -69,31 +46,6 @@
       <default>1.0</default>
       <summary>LCD brightness when on AC</summary>
       <description>The brightness of the display when on AC power. Possible values are between 0.0 and 1.0.</description>
-    </key>
-    <key name="button-suspend" enum="org.gnome.power-manager.ActionType">
-      <default>'suspend'</default>
-      <summary>Suspend button action</summary>
-      <description>The action to take when the system suspend button is pressed.</description>
-    </key>
-    <key name="button-hibernate" enum="org.gnome.power-manager.ActionType">
-      <default>'hibernate'</default>
-      <summary>Hibernate button action</summary>
-      <description>The action to take when the system hibernate button is pressed.</description>
-    </key>
-    <key name="button-power" enum="org.gnome.power-manager.ActionType">
-      <default>'interactive'</default>
-      <summary>Power button action</summary>
-      <description>The action to take when the system power button is pressed.</description>
-    </key>
-    <key name="button-lid-battery" enum="org.gnome.power-manager.ActionType">
-      <default>'suspend'</default>
-      <summary>Laptop lid close action on battery</summary>
-      <description>The action to take when the laptop lid is closed and the laptop is on battery power.</description>
-    </key>
-    <key name="button-lid-ac" enum="org.gnome.power-manager.ActionType">
-      <default>'suspend'</default>
-      <summary>Laptop lid close action when on AC</summary>
-      <description>The action to take when the laptop lid is closed and the laptop is on AC power.</description>
     </key>
     <key name="schema-version" type="i">
       <default>3</default>
@@ -279,16 +231,6 @@
       <default>120</default>
       <summary>The time remaining when action is taken</summary>
       <description>The time remaining in seconds of the battery when critical action is taken. Only valid when use-time-for-policy is true.</description>
-    </key>
-    <key name="sleep-computer-battery" type="i">
-      <default>0</default>
-      <summary>Sleep timeout computer when on battery</summary>
-      <description>The amount of time in seconds the computer on battery power needs to be inactive before it goes to sleep.</description>
-    </key>
-    <key name="sleep-computer-ac" type="i">
-      <default>0</default>
-      <summary>Sleep timeout computer when on AC</summary>
-      <description>The amount of time in seconds the computer on AC power needs to be inactive before it goes to sleep.</description>
     </key>
     <key name="enable-sound" type="b">
       <default>true</default>
