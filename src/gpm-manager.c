@@ -2226,7 +2226,6 @@ static void
 gpm_manager_init (GpmManager *manager)
 {
 	gint timeout;
-	guint version;
 
 	manager->priv = GPM_MANAGER_GET_PRIVATE (manager);
 
