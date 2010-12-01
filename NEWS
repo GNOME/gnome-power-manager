@@ -1,3 +1,25 @@
+Version 2.91.3
+~~~~~~~~~~~~~~
+Released: 2010-12-01
+
+* Translations
+ - Added UG translation (Gheyret T.Kenji)
+ - Updated Norwegian bokmål translation (Kjartan Maraas)
+ - Updated Romanian translation (Lucian Adrian Grijincu)
+ - Updated Thai translation (Theppitak Karoonboonyanan)
+
+* New Features:
+ - Don't export a full text device description in the tuple (Richard Hughes)
+ - Move the power control panel to the gnome-control-center project (Richard Hughes)
+ - Remove all the preferences options to do with the screen (Richard Hughes)
+ - Remove the CPU idle check before inactive sleep functionality (Richard Hughes)
+ - Remove the DPMS mode selection (Richard Hughes)
+ - Remove the 'event-when-closed-battery' setting (Richard Hughes)
+
+* Bugfix:
+ - Remove unused variable to pacify -Werror (Colin Walters)
+ - The size_request vfunc is going away in GTK3 (Javier Jardón)
+
 Version 2.91.2
 ~~~~~~~~~~~~~~
 Released: 2010-11-08

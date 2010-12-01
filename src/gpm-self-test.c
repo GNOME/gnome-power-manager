@@ -170,7 +170,6 @@ gpm_test_idle_func (void)
 	g_assert (idle != NULL);
 
 	/* set up defaults */
-	gpm_idle_set_check_cpu (idle, FALSE);
 	gpm_idle_set_timeout_dim (idle, 4);
 	gpm_idle_set_timeout_blank (idle, 5);
 	gpm_idle_set_timeout_sleep (idle, 15);
