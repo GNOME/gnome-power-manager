@@ -14,14 +14,14 @@ msgstr ""
 "Project-Id-Version: Gnome Power Manager MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&component=general\n"
-"POT-Creation-Date: 2010-10-16 20:29+0000\n"
-"PO-Revision-Date: 2010-10-17 15:09+0300\n"
-"Last-Translator: Mattias Põldaru <mahfiaz gmail com>\n"
+"POT-Creation-Date: 2010-12-12 21:01+0000\n"
+"PO-Revision-Date: 2010-12-15 09:01+0200\n"
+"Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
-"Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: et\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Power Manager"
@@ -29,12 +29,6 @@ msgstr "Vooluhaldur"
 
 msgid "Power management daemon"
 msgstr "Vooluhaldusdeemon"
-
-msgid "Configure power management"
-msgstr "Vooluhalduse seadistamine"
-
-msgid "Power Management"
-msgstr "Vooluhaldus"
 
 msgid "Observe power management"
 msgstr "Vooluhalduse vaatlemine"
@@ -79,84 +73,6 @@ msgstr "Sile joon"
 
 msgid "Wakeups"
 msgstr "Ärkamised"
-
-msgid "Di_m display when idle"
-msgstr "_Jõudeolekus kuva tuhmistatakse"
-
-msgid "General"
-msgstr "Üldine"
-
-msgid "Make Default"
-msgstr "Määra vaikimisi"
-
-msgid "On AC Power"
-msgstr "Võrgutoitel"
-
-msgid "On Battery Power"
-msgstr "Akutoitel"
-
-msgid "On UPS Power"
-msgstr "UPS-itoitel"
-
-msgid "Power Management Preferences"
-msgstr "Vooluhalduse eelistused"
-
-msgid "Provides help about this program"
-msgstr "Selle programmi kohta abiteabe tagamine"
-
-msgid "Put _display to sleep when inactive for:"
-msgstr "_Kuva viiakse puhkerežiimi, kui ollakse tegevuseta:"
-
-msgid "Put computer to _sleep when inactive for:"
-msgstr "A_rvuti viiakse puhkerežiimi, kui ollakse tegevuseta:"
-
-msgid "Sets this policy to be used by all users"
-msgstr "Määra see reegel kõigile kasutajatele"
-
-msgid "Sp_in down hard disks when possible"
-msgstr "Võimaluse korral vähendatakse _kõvaketta pöördeid"
-
-msgid "When UPS power is _critically low:"
-msgstr "Kui UPS-itoide on k_riitiliselt madal:"
-
-msgid "When UPS power is l_ow:"
-msgstr "Kui UPS-itoide on _madal:"
-
-msgid "When battery po_wer is critically low:"
-msgstr "Kr_iitiliselt madala akutäituvuse korral:"
-
-msgid "When laptop lid is cl_osed:"
-msgstr "Sülearvuti kaane _sulgemise korral:"
-
-msgid "When the _suspend button is pressed:"
-msgstr "_Uinutamise nupu vajutamisel:"
-
-msgid "When the power _button is pressed:"
-msgstr "_Sisselülitamise nupu vajutamisel:"
-
-msgid "_Reduce backlight brightness"
-msgstr "_Taustavalgustuse heledust vähendatakse"
-
-msgid "Shutdown"
-msgstr "Lülitatakse arvuti välja"
-
-msgid "Suspend"
-msgstr "Alustatakse uinakut"
-
-msgid "Hibernate"
-msgstr "Alustatakse talveund"
-
-msgid "Blank screen"
-msgstr "Tühjendatakse ekraan"
-
-msgid "Ask me"
-msgstr "Küsitakse kasutajalt"
-
-msgid "Do nothing"
-msgstr "Ei tehta midagi"
-
-msgid "Never"
-msgstr "Mitte kunagi"
 
 #. command line argument
 msgid "Set the current brightness"
@@ -233,6 +149,16 @@ msgid_plural "minutes"
 msgstr[0] "minut"
 msgstr[1] "minutit"
 
+#. TRANSLATORS: turn on all debugging
+msgid "Show debugging information for all files"
+msgstr "Silumisteabe näitamine kõikide failide kohta"
+
+msgid "Debugging Options"
+msgstr "Silumisvalikud"
+
+msgid "Show debugging options"
+msgstr "Silumisvalikute näitamine"
+
 #. Translators: This is %i days
 #, c-format
 msgid "%id"
@@ -282,10 +208,6 @@ msgstr "%.1fW"
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fV"
-
-#. TRANSLATORS: show verbose debugging
-msgid "Show extra debugging information"
-msgstr "Silumisteabe näitamine"
 
 msgid "Show version of installed program and exit"
 msgstr "Paigaldatud programmi versiooni näitamine ja töö lõpetamine"
@@ -685,19 +607,6 @@ msgid "UPS is below the critical level and this computer is about to shutdown."
 msgstr ""
 "UPS-i täituvus on alla kriitilise piiri ja seetõttu arvuti lülitatakse välja."
 
-#. TRANSLATORS: there was in install problem
-msgid "Install problem!"
-msgstr "Paigaldusprobleem!"
-
-#. TRANSLATORS: the GConf schema was not installed properly
-msgid ""
-"The configuration defaults for GNOME Power Manager have not been installed "
-"correctly.\n"
-"Please contact your computer administrator."
-msgstr ""
-"GNOME vooluhalduri sätete vaikeväärtused pole korralikult paigaldatud.\n"
-"Palun võta ühendust oma arvuti haldajaga."
-
 #. TRANSLATORS: the rate of discharge for the device
 msgid "Rate"
 msgstr "Kiirus"
@@ -1011,6 +920,10 @@ msgstr "Parandustegur"
 #. TRANSLATORS: this is the Y axis on the graph
 msgid "Prediction accuracy"
 msgstr "Ennustuse täpsus"
+
+#. TRANSLATORS: show verbose debugging
+msgid "Show extra debugging information"
+msgstr "Silumisteabe näitamine"
 
 #. TRANSLATORS: show a device by default
 msgid "Select this device at startup"
@@ -1401,3 +1314,98 @@ msgstr "Arvuti on tühi"
 #. TRANSLATORS: battery state
 msgid "Computer is charged"
 msgstr "Arvuti on täis laetud"
+
+#~ msgid "Configure power management"
+#~ msgstr "Vooluhalduse seadistamine"
+
+#~ msgid "Power Management"
+#~ msgstr "Vooluhaldus"
+
+#~ msgid "Di_m display when idle"
+#~ msgstr "_Jõudeolekus kuva tuhmistatakse"
+
+#~ msgid "General"
+#~ msgstr "Üldine"
+
+#~ msgid "Make Default"
+#~ msgstr "Määra vaikimisi"
+
+#~ msgid "On AC Power"
+#~ msgstr "Võrgutoitel"
+
+#~ msgid "On Battery Power"
+#~ msgstr "Akutoitel"
+
+#~ msgid "On UPS Power"
+#~ msgstr "UPS-itoitel"
+
+#~ msgid "Power Management Preferences"
+#~ msgstr "Vooluhalduse eelistused"
+
+#~ msgid "Provides help about this program"
+#~ msgstr "Selle programmi kohta abiteabe tagamine"
+
+#~ msgid "Put _display to sleep when inactive for:"
+#~ msgstr "_Kuva viiakse puhkerežiimi, kui ollakse tegevuseta:"
+
+#~ msgid "Put computer to _sleep when inactive for:"
+#~ msgstr "A_rvuti viiakse puhkerežiimi, kui ollakse tegevuseta:"
+
+#~ msgid "Sets this policy to be used by all users"
+#~ msgstr "Määra see reegel kõigile kasutajatele"
+
+#~ msgid "Sp_in down hard disks when possible"
+#~ msgstr "Võimaluse korral vähendatakse _kõvaketta pöördeid"
+
+#~ msgid "When UPS power is _critically low:"
+#~ msgstr "Kui UPS-itoide on k_riitiliselt madal:"
+
+#~ msgid "When UPS power is l_ow:"
+#~ msgstr "Kui UPS-itoide on _madal:"
+
+#~ msgid "When battery po_wer is critically low:"
+#~ msgstr "Kr_iitiliselt madala akutäituvuse korral:"
+
+#~ msgid "When laptop lid is cl_osed:"
+#~ msgstr "Sülearvuti kaane _sulgemise korral:"
+
+#~ msgid "When the _suspend button is pressed:"
+#~ msgstr "_Uinutamise nupu vajutamisel:"
+
+#~ msgid "When the power _button is pressed:"
+#~ msgstr "_Sisselülitamise nupu vajutamisel:"
+
+#~ msgid "_Reduce backlight brightness"
+#~ msgstr "_Taustavalgustuse heledust vähendatakse"
+
+#~ msgid "Shutdown"
+#~ msgstr "Lülitatakse arvuti välja"
+
+#~ msgid "Suspend"
+#~ msgstr "Alustatakse uinakut"
+
+#~ msgid "Hibernate"
+#~ msgstr "Alustatakse talveund"
+
+#~ msgid "Blank screen"
+#~ msgstr "Tühjendatakse ekraan"
+
+#~ msgid "Ask me"
+#~ msgstr "Küsitakse kasutajalt"
+
+#~ msgid "Do nothing"
+#~ msgstr "Ei tehta midagi"
+
+#~ msgid "Never"
+#~ msgstr "Mitte kunagi"
+
+#~ msgid "Install problem!"
+#~ msgstr "Paigaldusprobleem!"
+
+#~ msgid ""
+#~ "The configuration defaults for GNOME Power Manager have not been "
+#~ "installed correctly.\n"
+#~ "Please contact your computer administrator."
+#~ msgstr ""
+#~ "GNOME vooluhalduri sätete vaikeväärtused pole korralikult paigaldatud.\n"
+#~ "Palun võta ühendust oma arvuti haldajaga."
