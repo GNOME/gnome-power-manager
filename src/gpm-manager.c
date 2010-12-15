@@ -2099,10 +2099,6 @@ gpm_manager_dbus_method_call (GDBusConnection *connection,
 out:
 	if (array != NULL)
 		g_ptr_array_unref (array);
-	if (tuple != NULL)
-		g_variant_unref (tuple);
-	if (value != NULL)
-		g_variant_unref (value);
 }
 
 /**
