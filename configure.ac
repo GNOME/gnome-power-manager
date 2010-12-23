@@ -111,9 +111,7 @@ PKG_CHECK_MODULES(GNOME, [
  gnome-keyring-1 >= 0.6.0
  cairo >= 1.0.0])
 
-PKG_CHECK_MODULES(GDK, [
- gdk-3.0 >= 2.91.3
- gdk-x11-3.0])
+PKG_CHECK_MODULES(GDK, [gdk-3.0 >= 2.91.7])
 
 PKG_CHECK_MODULES(X11, [
  xrandr >= 1.2.0
