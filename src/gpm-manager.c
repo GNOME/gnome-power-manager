@@ -528,6 +528,13 @@ gpm_manager_notify (GpmManager *manager, NotifyNotification **notification_class
 	g_signal_connect (notification, "closed", G_CALLBACK (gpm_manager_notification_closed_cb), notification_class);
 	g_debug ("notification %p: %s : %s", notification, title, message);
 
+	/* non-urgent notifications are transient */
+	if (urgency != NOTIFY_URGENCY_CRITICAL) {
+		notify_notification_set_hint (notification,
+					      "transient",
+					      g_variant_new_boolean (TRUE));
+	}
+
 	/* try to show */
 	ret = notify_notification_show (notification, &error);
 	if (!ret) {
