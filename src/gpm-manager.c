@@ -918,6 +918,14 @@ gpm_manager_lid_button_pressed (GpmManager *manager, gboolean pressed)
 		return;
 	}
 
+#if UP_CHECK_VERSION(0,9,8)
+	/* are we docked? */
+	if (up_client_get_is_docked (manager->priv->up_client)) {
+		g_debug ("ignoring lid closed action because we are docked");
+		return;
+	}
+#endif
+
 	if (!manager->priv->on_battery) {
 		g_debug ("Performing AC policy");
 		gpm_manager_perform_policy (manager, GSD_SETTINGS_BUTTON_LID_AC,
