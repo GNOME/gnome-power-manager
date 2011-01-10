@@ -920,7 +920,7 @@ gpm_manager_lid_button_pressed (GpmManager *manager, gboolean pressed)
 
 #if UP_CHECK_VERSION(0,9,8)
 	/* are we docked? */
-	if (up_client_get_is_docked (manager->priv->up_client)) {
+	if (up_client_get_is_docked (manager->priv->client)) {
 		g_debug ("ignoring lid closed action because we are docked");
 		return;
 	}
