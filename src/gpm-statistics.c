@@ -150,7 +150,7 @@ gpm_stats_add_devices_columns (GtkTreeView *treeview)
 
 	/* image */
 	renderer = gtk_cell_renderer_pixbuf_new ();
-	g_object_set (renderer, "stock-size", GTK_ICON_SIZE_DIALOG, NULL);
+	g_object_set (renderer, "stock-size", GTK_ICON_SIZE_DND, NULL);
 	column = gtk_tree_view_column_new_with_attributes (_("Image"), renderer,
 							   "gicon", GPM_DEVICES_COLUMN_ICON, NULL);
 	gtk_tree_view_append_column (treeview, column);
