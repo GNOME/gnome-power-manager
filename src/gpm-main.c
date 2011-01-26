@@ -206,14 +206,14 @@ int
 main (int argc, char *argv[])
 {
 	GDBusConnection *system_connection;
-	GDBusConnection *session_connection;
+	GDBusConnection *session_connection G_GNUC_UNUSED;
 	gboolean version = FALSE;
 	gboolean timed_exit = FALSE;
 	gboolean immediate_exit = FALSE;
 	GpmManager *manager = NULL;
 	GError *error = NULL;
 	GOptionContext *context;
-	gint policy_owner_id;
+	gint policy_owner_id G_GNUC_UNUSED;
 	guint timer_id;
 
 	const GOptionEntry options[] = {
