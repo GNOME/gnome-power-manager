@@ -83,9 +83,9 @@ action_changed (GsdMediaKeysWindow *window)
                         volume_controls_set_visible (window, TRUE);
 
                         if (window->priv->volume_muted) {
-                                window_set_icon_name (window, "audio-volume-muted");
+                                window_set_icon_name (window, "audio-volume-muted-symbolic");
                         } else {
-                                window_set_icon_name (window, "audio-volume-high");
+                                window_set_icon_name (window, "audio-volume-high-symbolic");
                         }
 
                         break;
@@ -124,9 +124,9 @@ volume_muted_changed (GsdMediaKeysWindow *window)
 
         if (!gsd_osd_window_is_composited (GSD_OSD_WINDOW (window))) {
                 if (window->priv->volume_muted) {
-                        window_set_icon_name (window, "audio-volume-muted");
+                        window_set_icon_name (window, "audio-volume-muted-symbolic");
                 } else {
-                        window_set_icon_name (window, "audio-volume-high");
+                        window_set_icon_name (window, "audio-volume-high-symbolic");
                 }
         }
 }
@@ -208,7 +208,7 @@ load_pixbuf (GsdMediaKeysWindow *window,
         pixbuf = gtk_icon_theme_load_icon (theme,
                                            name,
                                            icon_size,
-                                           GTK_ICON_LOOKUP_FORCE_SIZE,
+                                           GTK_ICON_LOOKUP_FORCE_SIZE | GTK_ICON_LOOKUP_GENERIC_FALLBACK,
                                            NULL);
 
         return pixbuf;
@@ -357,10 +357,10 @@ render_speaker (GsdMediaKeysWindow *window,
         int                icon_size;
         int                n;
         static const char *icon_names[] = {
-                "audio-volume-muted",
-                "audio-volume-low",
-                "audio-volume-medium",
-                "audio-volume-high",
+                "audio-volume-muted-symbolic",
+                "audio-volume-low-symbolic",
+                "audio-volume-medium-symbolic",
+                "audio-volume-high-symbolic",
                 NULL
         };
 
@@ -392,6 +392,9 @@ render_speaker (GsdMediaKeysWindow *window,
         return TRUE;
 }
 
+#define LIGHTNESS_MULT  1.3
+#define DARKNESS_MULT   0.7
+
 static void
 draw_volume_boxes (GsdMediaKeysWindow *window,
                    cairo_t            *cr,
@@ -402,44 +405,41 @@ draw_volume_boxes (GsdMediaKeysWindow *window,
                    double              height)
 {
         gdouble   x1;
-        GdkColor  color;
-        double    r, g, b;
-        GtkStyle *style;
+        GtkStyleContext *context;
+        GdkRGBA  acolor;
 
         _x0 += 0.5;
         _y0 += 0.5;
         height = round (height) - 1;
         width = round (width) - 1;
         x1 = round ((width - 1) * percentage);
-        style = gtk_widget_get_style (GTK_WIDGET (window));
+        context = gtk_widget_get_style_context (GTK_WIDGET (window));
 
         /* bar background */
-        gsd_osd_window_color_reverse (&style->dark[GTK_STATE_NORMAL], &color);
-        r = (float)color.red / 65535.0;
-        g = (float)color.green / 65535.0;
-        b = (float)color.blue / 65535.0;
+        gtk_style_context_get_background_color (context, GTK_STATE_NORMAL, &acolor);
+        gsd_osd_window_color_shade (&acolor, DARKNESS_MULT);
+        gsd_osd_window_color_reverse (&acolor);
+        acolor.alpha = GSD_OSD_WINDOW_FG_ALPHA / 2;
         gsd_osd_window_draw_rounded_rectangle (cr, 1.0, _x0, _y0, height / 6, width, height);
-        cairo_set_source_rgba (cr, r, g, b, GSD_OSD_WINDOW_FG_ALPHA / 2);
+        gdk_cairo_set_source_rgba (cr, &acolor);
         cairo_fill_preserve (cr);
 
         /* bar border */
-        gsd_osd_window_color_reverse (&style->light[GTK_STATE_NORMAL], &color);
-        r = (float)color.red / 65535.0;
-        g = (float)color.green / 65535.0;
-        b = (float)color.blue / 65535.0;
-        cairo_set_source_rgba (cr, r, g, b, GSD_OSD_WINDOW_FG_ALPHA / 2);
+        gtk_style_context_get_background_color (context, GTK_STATE_NORMAL, &acolor);
+        gsd_osd_window_color_shade (&acolor, LIGHTNESS_MULT);
+        gsd_osd_window_color_reverse (&acolor);
+        acolor.alpha = GSD_OSD_WINDOW_FG_ALPHA / 2;
+        gdk_cairo_set_source_rgba (cr, &acolor);
         cairo_set_line_width (cr, 1);
         cairo_stroke (cr);
 
         /* bar progress */
         if (percentage < 0.01)
                 return;
-        color = style->bg[GTK_STATE_NORMAL];
-        r = (float)color.red / 65535.0;
-        g = (float)color.green / 65535.0;
-        b = (float)color.blue / 65535.0;
+        gtk_style_context_get_background_color (context, GTK_STATE_NORMAL, &acolor);
+        acolor.alpha = GSD_OSD_WINDOW_FG_ALPHA;
         gsd_osd_window_draw_rounded_rectangle (cr, 1.0, _x0 + 0.5, _y0 + 0.5, height / 6 - 0.5, x1, height - 1);
-        cairo_set_source_rgba (cr, r, g, b, GSD_OSD_WINDOW_FG_ALPHA);
+        gdk_cairo_set_source_rgba (cr, &acolor);
         cairo_fill (cr);
 }
 
@@ -467,9 +467,9 @@ draw_action_volume (GsdMediaKeysWindow *window,
         volume_box_height = round (window_height * 0.05);
 
         icon_box_x0 = (window_width - icon_box_width) / 2;
-        icon_box_y0 = (window_height - icon_box_height - volume_box_height) / 2;
+        icon_box_y0 = (window_height - icon_box_height - volume_box_height) / 2 - volume_box_height;
         volume_box_x0 = round (icon_box_x0);
-        volume_box_y0 = round (icon_box_height + icon_box_y0);
+        volume_box_y0 = round (icon_box_height + icon_box_y0) + volume_box_height;
 
 #if 0
         g_message ("icon box: w=%f h=%f _x0=%f _y0=%f",
@@ -604,9 +604,9 @@ draw_action_custom (GsdMediaKeysWindow *window,
         bright_box_height = round (window_height * 0.05);
 
         icon_box_x0 = (window_width - icon_box_width) / 2;
-        icon_box_y0 = (window_height - icon_box_height - bright_box_height) / 2;
+        icon_box_y0 = (window_height - icon_box_height - bright_box_height) / 2 - bright_box_height;
         bright_box_x0 = round (icon_box_x0);
-        bright_box_y0 = round (icon_box_height + icon_box_y0);
+        bright_box_y0 = round (icon_box_height + icon_box_y0) + bright_box_height;
 
 #if 0
         g_message ("icon box: w=%f h=%f _x0=%f _y0=%f",
@@ -625,7 +625,7 @@ draw_action_custom (GsdMediaKeysWindow *window,
                              cr,
                              icon_box_x0, icon_box_y0,
                              icon_box_width, icon_box_height);
-        if (! res && g_strcmp0 (window->priv->icon_name, "media-eject") == 0) {
+        if (! res && g_str_has_prefix (window->priv->icon_name, "media-eject")) {
                 /* draw eject symbol */
                 draw_eject (cr,
                             icon_box_x0, icon_box_y0,
@@ -675,11 +675,7 @@ gsd_media_keys_window_class_init (GsdMediaKeysWindowClass *klass)
 static void
 gsd_media_keys_window_init (GsdMediaKeysWindow *window)
 {
-        GdkScreen *screen;
-
         window->priv = GSD_MEDIA_KEYS_WINDOW_GET_PRIVATE (window);
-
-        screen = gtk_widget_get_screen (GTK_WIDGET (window));
 
         if (!gsd_osd_window_is_composited (GSD_OSD_WINDOW (window))) {
                 GtkBuilder *builder;
@@ -693,6 +689,7 @@ gsd_media_keys_window_init (GsdMediaKeysWindow *window)
                                                    NULL);
 
                 window->priv->image = GTK_IMAGE (gtk_builder_get_object (builder, "acme_image"));
+                g_object_set (G_OBJECT (window->priv->image), "use-fallback", TRUE, NULL);
                 window->priv->progress = GTK_WIDGET (gtk_builder_get_object (builder, "acme_volume_progressbar"));
                 box = GTK_WIDGET (gtk_builder_get_object (builder, "acme_box"));
 
