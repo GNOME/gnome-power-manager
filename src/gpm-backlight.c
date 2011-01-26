@@ -226,6 +226,9 @@ gpm_backlight_dialog_show (GpmBacklight *backlight)
 	GdkScreen     *pointer_screen;
 	GdkRectangle   geometry;
 	int            monitor;
+        GdkDisplay    *display;
+        GdkDeviceManager *device_manager;
+        GdkDevice     *device;
 
 	/*
 	 * get the window size
@@ -243,11 +246,13 @@ gpm_backlight_dialog_show (GpmBacklight *backlight)
 	}
 
 	pointer_screen = NULL;
-	gdk_display_get_pointer (gtk_widget_get_display (backlight->priv->popup),
+        display = gtk_widget_get_display (backlight->priv->popup);
+        device_manager = gdk_display_get_device_manager (display);
+        device = gdk_device_manager_get_client_pointer (device_manager);
+        gdk_device_get_position (device,
 				 &pointer_screen,
 				 &pointer_x,
-				 &pointer_y,
-				 NULL);
+				 &pointer_y);
 	monitor = gdk_screen_get_monitor_at_point (pointer_screen,
 						   pointer_x,
 						   pointer_y);
