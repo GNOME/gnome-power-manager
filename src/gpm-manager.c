@@ -907,15 +907,48 @@ gpm_manager_idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmManager *manage
 static void
 gpm_manager_lid_button_pressed (GpmManager *manager, gboolean pressed)
 {
+	const gchar *description;
+	const gchar *policy_key;
+	GpmActionPolicy policy;
+
 	if (pressed)
 		gpm_manager_play (manager, GPM_MANAGER_SOUND_LID_CLOSE, FALSE);
 	else
 		gpm_manager_play (manager, GPM_MANAGER_SOUND_LID_OPEN, FALSE);
 
+	/* we turn the lid dpms back on unconditionally */
 	if (pressed == FALSE) {
-		/* we turn the lid dpms back on unconditionally */
 		gpm_manager_unblank_screen (manager, NULL);
 		return;
+	}
+
+	/* we have different settings depending on AC state */
+	if (!manager->priv->on_battery) {
+		policy_key = GSD_SETTINGS_BUTTON_LID_AC;
+		description = "Lid closed on AC power";
+	} else {
+		policy_key = GSD_SETTINGS_BUTTON_LID_BATT;
+		description = "Lid closed on battery power";
+	}
+
+	/* check that on systems that would meld when the lid is closed
+	 * and not asleep we set a better policy option */
+	policy = g_settings_get_enum (manager->priv->settings_gsd,
+				      policy_key);
+	if (policy != GPM_ACTION_POLICY_SUSPEND &&
+	    policy != GPM_ACTION_POLICY_HIBERNATE) {
+#if UP_CHECK_VERSION(0,9,9)
+		if (up_client_get_lid_force_sleep (manager->priv->up_client)) {
+			g_warning ("to prevent damage, %s is now forced to 'suspend'",
+				   policy_key);
+			g_settings_set_enum (manager->priv->settings_gsd,
+					     policy_key,
+					     GPM_ACTION_POLICY_SUSPEND);
+		}
+#else
+		g_warning ("Laptop may melt if lid is closed. "
+			   "Update UPower and rebuild to find out!");
+#endif
 	}
 
 #if UP_CHECK_VERSION(0,9,8)
@@ -926,16 +959,10 @@ gpm_manager_lid_button_pressed (GpmManager *manager, gboolean pressed)
 	}
 #endif
 
-	if (!manager->priv->on_battery) {
-		g_debug ("Performing AC policy");
-		gpm_manager_perform_policy (manager, GSD_SETTINGS_BUTTON_LID_AC,
-					    "Lid closed on AC power.");
-		return;
-	}
-
-	g_debug ("Performing battery policy");
-	gpm_manager_perform_policy (manager, GSD_SETTINGS_BUTTON_LID_BATT,
-				    "Lid closed on battery power.");
+	/* do action */
+	gpm_manager_perform_policy (manager,
+				    policy_key,
+				    description);
 }
 
 static void
