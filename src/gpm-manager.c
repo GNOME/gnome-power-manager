@@ -2051,6 +2051,7 @@ gpm_manager_device_to_variant_blob (UpDevice *device)
 	GVariant *value;
 	GIcon *icon;
 	gchar *device_icon;
+	const gchar *object_path;
 
 	icon = gpm_upower_get_device_icon (device, FALSE);
 	device_icon = g_icon_to_string (icon);
@@ -2068,9 +2069,14 @@ gpm_manager_device_to_variant_blob (UpDevice *device)
 	else if (state == UP_DEVICE_STATE_CHARGING)
 		time_state = time_full;
 
+	/* get an object path, even for the composite device */
+	object_path = up_device_get_object_path (device);
+	if (object_path == NULL)
+		object_path = "/org/gnome/PowerManager";
+
 	/* format complex object */
 	value = g_variant_new ("(susdut)",
-			       up_device_get_object_path (device),
+			       object_path,
 			       kind,
 			       device_icon,
 			       percentage,
