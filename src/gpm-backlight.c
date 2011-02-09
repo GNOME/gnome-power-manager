@@ -682,7 +682,7 @@ gpm_backlight_dbus_method_call (GDBusConnection *connection,
 				GVariant *parameters, GDBusMethodInvocation *invocation,
 				gpointer user_data)
 {
-	GError *error;
+	GError *error = NULL;
 	guint value;
 	gboolean ret;
 	GpmBacklight *backlight = GPM_BACKLIGHT (user_data);
