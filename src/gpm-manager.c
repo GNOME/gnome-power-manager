@@ -2053,7 +2053,7 @@ gpm_manager_device_to_variant_blob (UpDevice *device)
 	gchar *device_icon;
 	const gchar *object_path;
 
-	icon = gpm_upower_get_device_icon (device, FALSE);
+	icon = gpm_upower_get_device_icon (device, TRUE);
 	device_icon = g_icon_to_string (icon);
 	g_object_get (device,
 		      "kind", &kind,
