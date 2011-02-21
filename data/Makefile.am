@@ -21,7 +21,9 @@ $(service_DATA): $(service_in_files) Makefile
 	@sed -e "s|\@servicedir\@|$(bindir)|" $< > $@
 
 @GSETTINGS_RULES@
-gsettings_SCHEMAS = org.gnome.power-manager.gschema.xml
+@INTLTOOL_XML_NOMERGE_RULE@
+gsettings_schemas_in_files = org.gnome.power-manager.gschema.xml.in
+gsettings_SCHEMAS = $(gsettings_schemas_in_files:.gschema.xml.in=.gschema.xml)
 
 pkgdata_DATA =						\
 	gpm-statistics.ui				\
@@ -33,6 +35,7 @@ EXTRA_DIST =						\
 	$(service_in_files)				\
 	$(autostart_in_files)				\
 	$(desktop_in_files)				\
+	$(gsettings_schemas_in_files)			\
 	$(pkgdata_DATA)
 
 clean-local :
@@ -41,4 +44,5 @@ clean-local :
 DISTCLEANFILES =					\
 	gnome-power-manager.desktop			\
 	gnome-power-statistics.desktop			\
-	gnome-power-manager.service
+	gnome-power-manager.service			\
+	org.gnome.power-manager.gschema.xml
