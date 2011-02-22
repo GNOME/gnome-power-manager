@@ -1,3 +1,34 @@
+Version 2.91.90
+~~~~~~~~~~~~~~~
+Released: 2011-02-22
+
+* Translations
+ - QA of Galician translations (Fran Diéguez)
+ - Updated Arabic translation (Khaled Hosny)
+ - Updated Bulgarian translation (Alexander Shopov)
+ - Updated Catalan translation (David Planella)
+ - Updated French translation (Bruno Brouard)
+ - Updated Gujarati Translations (Sweta Kothari)
+ - Updated Persian Translation (Mahyar Moghimi)
+ - Updated Punjabi Translation (A S Alam)
+ - Updated Spanish translation (Jorge González)
+
+* New Features:
+ - Force suspend on lid close if LidForceSleep is set to avoid a melted laptop (Richard Hughes)
+
+* Bugfix:
+ - Copy newer versions of osd window from gnome-settings-daemon (Matthias Clasen)
+ - Disable deprecated api again (Matthias Clasen)
+ - Do not use g-p-m in XFCE (Vincent Untz)
+ - Don't use gdk_display_get_pointer (Matthias Clasen)
+ - Fix the expand properties in gnome-power-statistics. Fixes #641766 (Richard Hughes)
+ - Fix typo in gnome-settings-daemon migration script (Nirbheek Chauhan)
+ - Initialize the error before using in gpm_backlight_dbus_method_call(). Fixes rh#676075 (Richard Hughes)
+ - Mark variables as unused to satisfy gcc (Matthias Clasen)
+ - Never return NULL for the object path in GetPrimaryDevice for the composite battery device. Fixes rh#676055 (Richard Hughes)
+ - Use smaller icons in gnome-power-statistics (Vincent Untz)
+ - Use symbolic icons in GNOME Shell (Giovanni Campagna)
+
 Version 2.91.5
 ~~~~~~~~~~~~~~
 Released: 2011-01-11
