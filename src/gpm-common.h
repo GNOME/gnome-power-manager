@@ -31,6 +31,7 @@ G_BEGIN_DECLS
 #define	GPM_DBUS_INTERFACE_BACKLIGHT	"org.gnome.PowerManager.Backlight"
 #define	GPM_DBUS_PATH			"/org/gnome/PowerManager"
 #define	GPM_DBUS_PATH_BACKLIGHT		"/org/gnome/PowerManager/Backlight"
+#define GPM_DBUS_PATH_KBD_BACKLIGHT	"/org/gnome/PowerManager/KbdBacklight"
 
 /* common descriptions of this program */
 #define GPM_NAME 			_("Power Manager")
@@ -54,6 +55,12 @@ G_BEGIN_DECLS
 #define GSD_SETTINGS_IDLE_DIM_TIME			"idle-dim-time"
 #define GPM_SETTINGS_BRIGHTNESS_AC			"brightness-ac"
 #define GPM_SETTINGS_BRIGHTNESS_DIM_BATT		"brightness-dim-battery"
+
+/* keyboard backlight */
+#define GPM_SETTINGS_KBD_BACKLIGHT_BATT_REDUCE		"kbd-backlight-battery-reduce"
+#define GPM_SETTINGS_KBD_BRIGHTNESS_ON_AC		"kbd-brightness-on-ac"
+#define GPM_SETTINGS_KBD_BRIGHTNESS_DIM_BY_ON_BATT      "kbd-brightness-dim-by-on-battery"
+#define GPM_SETTINGS_KBD_BRIGHTNESS_DIM_BY_ON_IDLE	"kbd-brightness-dim-by-on-idle"
 
 /* buttons */
 #define GSD_SETTINGS_BUTTON_LID_AC			"lid-close-ac-action"

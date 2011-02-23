@@ -38,7 +38,7 @@ typedef struct GpmBacklightPrivate GpmBacklightPrivate;
 
 typedef struct
 {
-	GObject			 parent;
+	GObject		     parent;
 	GpmBacklightPrivate *priv;
 } GpmBacklight;
 

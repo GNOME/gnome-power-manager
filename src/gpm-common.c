@@ -258,4 +258,3 @@ gpm_color_to_rgb (guint32 color, guint8 *red, guint8 *green, guint8 *blue)
 	*green = (color & 0x00ff00) / 0x100;
 	*blue = color & 0x0000ff;
 }
-
