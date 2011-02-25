@@ -59,8 +59,8 @@ struct GpmKbdBacklightPrivate
 	GTimer			*idle_timer;
 	guint			 idle_dim_timeout;
 	guint			 master_percentage;
-	guint	 		 brightness;
-	guint	 		 max_brightness;
+	guint			 brightness;
+	guint			 max_brightness;
 	guint			 brightness_percent;
 	GDBusProxy		*upower_proxy;
 	GDBusConnection		*bus_connection;
@@ -125,9 +125,8 @@ gpm_kbd_backlight_set (GpmKbdBacklight *backlight,
 	guint goal;
 
 	g_return_val_if_fail (GPM_IS_KBD_BACKLIGHT (backlight), FALSE);
-	/* if we're setting the same we are, don't bother */
-	//g_return_val_if_fail (backlight->priv->brightness_percent != percentage, FALSE);
 
+	/* if we're setting the same we are, don't bother */
 	goal = gpm_discrete_from_percent (percentage, backlight->priv->max_brightness);
 	scale = percentage > backlight->priv->brightness_percent ? 1 : -1;
 
@@ -169,7 +168,7 @@ gpm_kbd_backlight_brightness_down (GpmKbdBacklight *backlight)
 {
 	guint new;
 
-	// we can possibly go below 0 here, so by converting to a gint we avoid underflow errors.
+	/* we can possibly go below 0 here, so by converting to a gint we avoid underflow errors */
 	new = MAX ((gint) backlight->priv->brightness_percent - GPM_KBD_BACKLIGHT_STEP, 0);
 	return gpm_kbd_backlight_set (backlight, new);
 }
@@ -333,8 +332,8 @@ static gboolean
 gpm_kbd_backlight_dbus_property_set (GDBusConnection *connection,
 				     const gchar *sender,
 				     const gchar *object_path,
-    				     const gchar *interface_name,
-    				     const gchar *property_name,
+				     const gchar *interface_name,
+				     const gchar *property_name,
 				     GVariant *value,
 				     GError **error,
 				     gpointer user_data)

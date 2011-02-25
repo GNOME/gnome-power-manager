@@ -2231,7 +2231,7 @@ gpm_manager_bus_acquired_cb (GDBusConnection *connection,
 	if (manager->priv->backlight != NULL) {
 		gpm_backlight_register_dbus (manager->priv->backlight, connection);
 	}
-	
+
 	if (manager->priv->kbd_backlight != NULL) {
 		gpm_kbd_backlight_register_dbus (manager->priv->kbd_backlight,
 						 connection,
@@ -2321,7 +2321,7 @@ gpm_manager_init (GpmManager *manager)
 
 	/* try an start an interactive service */
 	manager->priv->backlight = gpm_backlight_new ();
-	
+
 	/* try and start an interactive service */
 	manager->priv->kbd_backlight = gpm_kbd_backlight_new ();
 
