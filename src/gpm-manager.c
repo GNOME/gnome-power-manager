@@ -940,7 +940,7 @@ gpm_manager_lid_button_pressed (GpmManager *manager, gboolean pressed)
 	if (policy != GPM_ACTION_POLICY_SUSPEND &&
 	    policy != GPM_ACTION_POLICY_HIBERNATE) {
 #if UP_CHECK_VERSION(0,9,9)
-		if (up_client_get_lid_force_sleep (manager->priv->up_client)) {
+		if (up_client_get_lid_force_sleep (manager->priv->client)) {
 			g_warning ("to prevent damage, %s is now forced to 'suspend'",
 				   policy_key);
 			g_settings_set_enum (manager->priv->settings_gsd,
