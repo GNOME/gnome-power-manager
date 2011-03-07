@@ -182,7 +182,7 @@ gpm_discrete_from_percent (guint percentage, guint levels)
 		g_warning ("levels is 0!");
 		return 0;
 	}
-	return ((gfloat) percentage * (gfloat) (levels - 1)) / 100.0f;
+	return (guint) ((((gfloat) percentage * (gfloat) (levels - 1)) / 100.0f) + 0.5f);
 }
 
 /**
@@ -204,7 +204,7 @@ gpm_discrete_to_percent (guint discrete, guint levels)
 		g_warning ("levels is 0!");
 		return 0;
 	}
-	return (guint) ((gfloat) discrete * (100.0f / (gfloat) (levels - 1)));
+	return (guint) (((gfloat) discrete * (100.0f / (gfloat) (levels - 1))) + 0.5f);
 }
 
 /**
