@@ -5,15 +5,16 @@
 #
 # Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2005, 2006.
 # Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010, 2011.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&component=general\n"
-"POT-Creation-Date: 2011-03-06 12:39+0000\n"
-"PO-Revision-Date: 2011-03-06 16:05+0100\n"
-"Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
+"POT-Creation-Date: 2011-03-07 15:18+0000\n"
+"PO-Revision-Date: 2011-03-08 09:59+0100\n"
+"Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -46,9 +47,12 @@ msgstr ""
 "suspensión o hibernación."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:4
+#| msgid ""
+#| "If a notification message should be displayed when devices attached to "
+#| "the computer are getting low."
 msgid ""
-"If a notification message should be displayed when devices attached to the "
-"computer are getting low."
+"If a notification message should be displayed when battery in a device "
+"attached to the computer is getting low."
 msgstr ""
 "Indica si se debe mostrar un mensaje de notificación cuando la batería de "
 "los dispositivos acoplados se esté agotando."
@@ -222,9 +226,6 @@ msgid "Notify when fully charged"
 msgstr "Notificar al cargarse totalmente"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:34
-#| msgid ""
-#| "The brightness of the keyboard when on AC power. Possible values are "
-#| "between 0 and 100."
 msgid ""
 "Percent brightness to set keyboard backlight at when on AC power. Legal "
 "values are between 0 and 100."
@@ -238,7 +239,6 @@ msgid "Percent to reduce keyboard backlight by when idle."
 msgstr "Porcentaje en el que reducir el brillo del teclado en reposo."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:36
-#| msgid "Reduce the backlight brightness when on battery power"
 msgid "Percent to reduce keyboard backlight by when on battery power."
 msgstr ""
 "Porcentaje al que reducir el brillo del teclado cuando se esté usando la "
@@ -261,7 +261,6 @@ msgid "Reduce the backlight brightness when on battery power"
 msgstr "Reducir el brillo de fondo cuando se esté usando la batería"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:41
-#| msgid "Reduce the backlight brightness when on battery power"
 msgid "Reduce the keyboard backlight when on battery power"
 msgstr "Reducir el brillo del teclado cuando se esté usando la batería"
 
@@ -293,9 +292,6 @@ msgstr ""
 "batería. Los valores válidos están entre 0 y 100."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:47
-#| msgid ""
-#| "The brightness of the display when on AC power. Possible values are "
-#| "between 0 and 100."
 msgid ""
 "The brightness of the display when on AC power. Possible values are between "
 "0.0 and 1.0."
@@ -304,23 +300,19 @@ msgstr ""
 "Los valores válidos están entre 0.0 y 1.0."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:48
-#| msgid "The default graph type to show in the statistics window"
 msgid "The default graph type to show for history"
 msgstr "El tipo de gráfica predeterminado que mostrar para el histórico"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:49
-#| msgid "The default graph type to show in the statistics window"
 msgid "The default graph type to show for stats"
 msgstr "El tipo de gráfica predeterminado que mostrar para las estadísticas"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:50
-#| msgid "The default graph type to show in the statistics window."
 msgid "The default graph type to show in the history window."
 msgstr ""
 "El tipo de gráfica predeterminado que mostrar en la ventana del histórico."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:51
-#| msgid "The default graph type to show in the statistics window."
 msgid "The default graph type to show in the stats window."
 msgstr ""
 "El tipo de gráfica predeterminado que mostrar en la ventana de estadísticas."
@@ -384,13 +376,10 @@ msgid ""
 "The percentage of the battery when it is considered low. Only valid when use-"
 "time-for-policy is false."
 msgstr ""
-"El porcentaje de la batería considerado como bajo. Sólo es válido cuando "
-"«use-time-for-policy» está desactivado."
+"El porcentaje de la batería considerado como bajo. Sólo es válido cuando «use-"
+"time-for-policy» está desactivado."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:61
-#| msgid ""
-#| "The percentage of the battery when the critical action is performed. Only "
-#| "valid when use_time_for_policy is false."
 msgid ""
 "The percentage of the battery when the critical action is performed. Only "
 "valid when use-time-for-policy is false."
@@ -417,13 +406,10 @@ msgid ""
 "power. Legal values are between 0 and 100."
 msgstr ""
 "El porcentaje al que reducir el brillo del teclado cuando se esté usando la "
-"batería. Por ejemplo, si está ajustado a «60», el brillo se cortará un 40% "
-"en reposo. Los valores válidos están entre 0 y 100."
+"batería. Por ejemplo, si está ajustado a «60», el brillo se cortará un 40% en "
+"reposo. Los valores válidos están entre 0 y 100."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:66
-#| msgid ""
-#| "The time remaining in seconds of the battery when critical action is "
-#| "taken. Only valid when use_time_for_policy is true."
 msgid ""
 "The time remaining in seconds of the battery when critical action is taken. "
 "Only valid when use-time-for-policy is true."
@@ -432,9 +418,6 @@ msgstr ""
 "crítica. Sólo es válido cuando «use-time-for-policy» está activado."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:67
-#| msgid ""
-#| "The time remaining in seconds of the battery when it is considered "
-#| "critical. Only valid when use_time_for_policy is true."
 msgid ""
 "The time remaining in seconds of the battery when it is considered critical. "
 "Only valid when use-time-for-policy is true."
@@ -443,9 +426,6 @@ msgstr ""
 "válido cuando «use-time-for-policy» está activado."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:68
-#| msgid ""
-#| "The time remaining in seconds of the battery when it is considered low. "
-#| "Only valid when use_time_for_policy is true."
 msgid ""
 "The time remaining in seconds of the battery when it is considered low. Only "
 "valid when use-time-for-policy is true."
@@ -498,9 +478,6 @@ msgstr ""
 "suspenda. Esto significa que tendrá que desbloquear el depósito al reanudar."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:77
-#| msgid ""
-#| "Whether the screen is locked when the computer wakes up from a hibernate. "
-#| "Only used if lock_use_screensaver_settings is false."
 msgid ""
 "Whether the screen is locked when the computer wakes up from a hibernate. "
 "Only used if lock-use-screensaver is false."
@@ -509,9 +486,6 @@ msgstr ""
 "una hibernación. Sólo se usa si «lock-use-screensaver» está desactivado."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:78
-#| msgid ""
-#| "Whether the screen is locked when the computer wakes up from a suspend. "
-#| "Only used if lock_use_screensaver_settings is false."
 msgid ""
 "Whether the screen is locked when the computer wakes up from a suspend. Only "
 "used if lock-use-screensaver is false."
@@ -520,9 +494,6 @@ msgstr ""
 "una suspensión. Sólo se usa si «lock-use-screensaver» está desactivado."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:79
-#| msgid ""
-#| "Whether the screen is locked when the screen is turned off. Only used if "
-#| "lock_use_screensaver_settings is false."
 msgid ""
 "Whether the screen is locked when the screen is turned off. Only used if "
 "lock-use-screensaver is false."
