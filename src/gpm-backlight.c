@@ -278,7 +278,7 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 
 	/* only show dialog if interactive */
 	if (interactive) {
-		gpm_osd_dialog_init (&backlight->priv->popup, "gpm-brightness-lcd");
+		gpm_osd_dialog_init (&backlight->priv->popup, "display-brightness-symbolic");
 		gsd_media_keys_window_set_volume_level (GSD_MEDIA_KEYS_WINDOW (backlight->priv->popup),
 							round (brightness));
 		gpm_osd_dialog_show (backlight->priv->popup);
@@ -366,7 +366,7 @@ gpm_backlight_button_pressed_cb (GpmButton *button, const gchar *type, GpmBackli
 		/* show the new value */
 		if (ret) {
 			gpm_brightness_get (backlight->priv->brightness, &percentage);
-			gpm_osd_dialog_init (&backlight->priv->popup, "gpm-brightness-lcd");
+			gpm_osd_dialog_init (&backlight->priv->popup, "display-brightness-symbolic");
 			gsd_media_keys_window_set_volume_level (GSD_MEDIA_KEYS_WINDOW (backlight->priv->popup),
 								percentage);
 			gpm_osd_dialog_show (backlight->priv->popup);
@@ -385,7 +385,7 @@ gpm_backlight_button_pressed_cb (GpmButton *button, const gchar *type, GpmBackli
 		/* show the new value */
 		if (ret) {
 			gpm_brightness_get (backlight->priv->brightness, &percentage);
-			gpm_osd_dialog_init (&backlight->priv->popup, "gpm-brightness-lcd");
+			gpm_osd_dialog_init (&backlight->priv->popup, "display-brightness-symbolic");
 			gsd_media_keys_window_set_volume_level (GSD_MEDIA_KEYS_WINDOW (backlight->priv->popup),
 								percentage);
 			gpm_osd_dialog_show (backlight->priv->popup);
@@ -785,7 +785,7 @@ gpm_backlight_init (GpmBacklight *backlight)
 	gpm_idle_set_timeout_dim (backlight->priv->idle, backlight->priv->idle_dim_timeout);
 
 	/* use a visual widget */
-	gpm_osd_dialog_init (&backlight->priv->popup, "gpm-brightness-lcd");
+	gpm_osd_dialog_init (&backlight->priv->popup, "display-brightness-symbolic");
 
 	/* DPMS mode poll class */
 	backlight->priv->dpms = gpm_dpms_new ();
