@@ -6,16 +6,8 @@ iconsdir = $(themedir)/$(size)/$(context)
 
 
 icons_DATA = 			        \
-	ac-adapter.svg			\
-	gpm-brightness-lcd.svg		\
 	gpm-brightness-kbd.svg		\
-	gpm-brightness-lcd-disabled.svg	\
-	gpm-brightness-kbd-disabled.svg	\
-	gpm-brightness-lcd-invalid.svg	\
-	gpm-brightness-kbd-invalid.svg	\
 	gpm-monitor.svg			\
-	gpm-inhibit.svg			\
-	gpm-inhibit-invalid.svg		\
 	gpm-keyboard-000.svg		\
 	gpm-keyboard-060.svg		\
 	gpm-keyboard-100.svg		\

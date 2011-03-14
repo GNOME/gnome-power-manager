@@ -32,7 +32,6 @@ G_BEGIN_DECLS
 #define GPM_STOCK_SUSPEND			"gpm-suspend"
 #define GPM_STOCK_STATISTICS			"gnome-power-statistics"
 #define GPM_STOCK_BRIGHTNESS_KBD		"gpm-brightness-kbd"
-#define GPM_STOCK_INHIBIT			"gpm-inhibit"
 
 G_END_DECLS
 
