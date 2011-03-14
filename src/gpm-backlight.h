@@ -45,8 +45,6 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
-	void		(* brightness_changed)		(GpmBacklight	*backlight,
-							 gint		 brightness);
 } GpmBacklightClass;
 
 typedef enum

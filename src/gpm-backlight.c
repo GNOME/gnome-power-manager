@@ -91,13 +91,6 @@ struct GpmBacklightPrivate
 	guint			 bus_object_id;
 };
 
-enum {
-	BRIGHTNESS_CHANGED,
-	LAST_SIGNAL
-};
-
-static guint signals [LAST_SIGNAL] = { 0 };
-
 G_DEFINE_TYPE (GpmBacklight, gpm_backlight, G_TYPE_OBJECT)
 
 /**
@@ -146,6 +139,26 @@ gpm_backlight_get_brightness (GpmBacklight *backlight, guint *brightness, GError
 }
 
 /**
+ * gpm_backlight_brightness_changed:
+ **/
+static void
+gpm_backlight_brightness_changed (GpmBacklight *backlight, guint percentage)
+{
+	/* save the new percentage */
+	backlight->priv->master_percentage = percentage;
+
+	/* we emit a signal for the brightness applet */
+	g_debug ("emitting brightness-changed : %i", percentage);
+	g_dbus_connection_emit_signal (backlight->priv->bus_connection,
+			NULL,
+			GPM_DBUS_PATH_BACKLIGHT,
+			GPM_DBUS_INTERFACE_BACKLIGHT,
+			"BrightnessChanged",
+			g_variant_new ("(u)", percentage),
+			NULL);
+}
+
+/**
  * gpm_backlight_set_brightness:
  **/
 gboolean
@@ -176,10 +189,8 @@ gpm_backlight_set_brightness (GpmBacklight *backlight, guint percentage, GError 
 				      "Cannot set policy brightness");
 	}
 	/* we emit a signal for the brightness applet */
-	if (ret && hw_changed) {
-		g_debug ("emitting brightness-changed : %i", percentage);
-		g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, percentage);
-	}
+	if (ret && hw_changed)
+		gpm_backlight_brightness_changed (backlight, percentage);
 	return ret;
 }
 
@@ -286,10 +297,8 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 
 	ret = gpm_brightness_set (backlight->priv->brightness, value, &hw_changed);
 	/* we emit a signal for the brightness applet */
-	if (ret && hw_changed) {
-		g_debug ("emitting brightness-changed : %i", value);
-		g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, value);
-	}
+	if (ret && hw_changed)
+		gpm_backlight_brightness_changed (backlight, value);
 	return TRUE;
 }
 
@@ -374,10 +383,9 @@ gpm_backlight_button_pressed_cb (GpmButton *button, const gchar *type, GpmBackli
 			backlight->priv->master_percentage = percentage;
 		}
 		/* we emit a signal for the brightness applet */
-		if (ret && hw_changed) {
-			g_debug ("emitting brightness-changed : %i", percentage);
-			g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, percentage);
-		}
+		if (ret && hw_changed)
+			gpm_backlight_brightness_changed (backlight, percentage);
+
 	} else if (g_strcmp0 (type, GPM_BUTTON_BRIGHT_DOWN) == 0) {
 		/* go up down step */
 		ret = gpm_brightness_down (backlight->priv->brightness, &hw_changed);
@@ -393,10 +401,9 @@ gpm_backlight_button_pressed_cb (GpmButton *button, const gchar *type, GpmBackli
 			backlight->priv->master_percentage = percentage;
 		}
 		/* we emit a signal for the brightness applet */
-		if (ret && hw_changed) {
-			g_debug ("emitting brightness-changed : %i", percentage);
-			g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, percentage);
-		}
+		if (ret && hw_changed)
+			gpm_backlight_brightness_changed (backlight, percentage);
+
 	} else if (g_strcmp0 (type, GPM_BUTTON_LID_OPEN) == 0) {
 		/* make sure we undim when we lift the lid */
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
@@ -534,30 +541,11 @@ gpm_backlight_idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *ba
 
 /**
  * gpm_backlight_brightness_changed_cb:
- * @brightness: The GpmBrightness class instance
- * @percentage: The new percentage brightness
- * @brightness: This class instance
- *
- * This callback is called when the brightness value changes.
  **/
 static void
 gpm_backlight_brightness_changed_cb (GpmBrightness *brightness, guint percentage, GpmBacklight *backlight)
 {
-	/* save the new percentage */
-	backlight->priv->master_percentage = percentage;
-
-	/* we emit a signal for the brightness applet */
-	g_debug ("emitting brightness-changed : %i", percentage);
-	g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, percentage);
-
-	/* and one for Dbus users */
-	g_dbus_connection_emit_signal (backlight->priv->bus_connection,
-			NULL,
-			GPM_DBUS_PATH_BACKLIGHT,
-			GPM_DBUS_INTERFACE_BACKLIGHT,
-			"BrightnessChanged",
-			g_variant_new ("(u)", percentage),
-			NULL);
+	gpm_backlight_brightness_changed (backlight, percentage);
 }
 
 /**
@@ -716,17 +704,7 @@ static void
 gpm_backlight_class_init (GpmBacklightClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	object_class->finalize	   = gpm_backlight_finalize;
-
-	signals [BRIGHTNESS_CHANGED] =
-		g_signal_new ("brightness-changed",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmBacklightClass, brightness_changed),
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__UINT,
-			      G_TYPE_NONE, 1, G_TYPE_UINT);
-
+	object_class->finalize = gpm_backlight_finalize;
 	g_type_class_add_private (klass, sizeof (GpmBacklightPrivate));
 }
 
