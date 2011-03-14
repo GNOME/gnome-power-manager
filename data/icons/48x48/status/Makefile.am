@@ -6,7 +6,6 @@ iconsdir = $(themedir)/$(size)/$(context)
 
 
 icons_DATA = 			        \
-	gpm-brightness-kbd.png		\
 	gpm-monitor.png			\
 	gpm-keyboard-000.png		\
 	gpm-keyboard-020.png		\

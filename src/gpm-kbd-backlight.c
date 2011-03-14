@@ -484,7 +484,7 @@ gpm_kbd_backlight_button_pressed_cb (GpmButton *button,
 		}
 	}
 	if (ret) {
-		gpm_osd_dialog_init (&backlight->priv->popup, "gpm-brightness-kbd");
+		gpm_osd_dialog_init (&backlight->priv->popup, "keyboard-brightness-symbolic");
 		gsd_media_keys_window_set_volume_level (GSD_MEDIA_KEYS_WINDOW (backlight->priv->popup),
 							backlight->priv->brightness_percent);
 		gpm_osd_dialog_show (backlight->priv->popup);
@@ -722,7 +722,7 @@ noerr:
 	gpm_idle_set_timeout_dim (backlight->priv->idle, backlight->priv->idle_dim_timeout);
 
 	/* use a visual widget */
-	gpm_osd_dialog_init(&backlight->priv->popup, "gpm-brightness-kbd");
+	gpm_osd_dialog_init(&backlight->priv->popup, "keyboard-brightness-symbolic");
 
 	/* make sure we turn the keyboard backlight back on after resuming */
 	backlight->priv->control = gpm_control_new ();

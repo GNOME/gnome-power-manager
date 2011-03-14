@@ -4,9 +4,7 @@ context = status
 
 iconsdir = $(themedir)/$(size)/$(context)
 
-
 icons_DATA = 			        \
-	gpm-brightness-kbd.svg		\
 	gpm-monitor.svg			\
 	gpm-keyboard-000.svg		\
 	gpm-keyboard-060.svg		\
@@ -40,6 +38,9 @@ icons_DATA = 			        \
 	gpm-ups-080-charging.svg	\
 	gpm-ups-100-charging.svg	\
 	gpm-ups-missing.svg
+
+symiconsdir = $(datadir)/icons/gnome/scalable/status/
+symicons_DATA = keyboard-brightness-symbolic.svg
 
 noinst_DATA = 
 
