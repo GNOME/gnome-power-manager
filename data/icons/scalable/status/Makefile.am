@@ -46,5 +46,6 @@ noinst_DATA =
 
 EXTRA_DIST =		\
 	$(icons_DATA)	\
+	$(symicons_DATA)	\
 	$(noinst_DATA)
 

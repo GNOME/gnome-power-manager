@@ -1,3 +1,51 @@
+Version 2.91.92
+~~~~~~~~~~~~~~~
+Released: 2011-03-21
+
+* Translations
+ - Updated Arabic translation (Khaled Hosny)
+ - Updated British English translation (Bruce Cowan)
+ - Updated Czech translation (Marek Černocký)
+ - Updated Dutch translation by Wouter Bolsterlee (Wouter Bolsterlee)
+ - Updated Estonian translation (Mattias Põldaru)
+ - Updated Galician translation (Fran Diéguez)
+ - Updated German translation (Mario Blättermann)
+ - Updated Hebrew translation (Yaron Shahrabani)
+ - Updated Hungarian translation (Gabor Kelemen)
+ - Updated Indonesian translation (Andika Triwidada)
+ - Updated Korean translation (Changwoo Ryu)
+ - Updated Latvian translation (Rudolfs Mazurs)
+ - Updated Norwegian bokmål translation (Kjartan Maraas)
+ - Updated Polish translation (Piotr Drąg)
+ - Updated Portuguese translation (Duarte Loreto)
+ - updated Punjabi Translation (A S Alam)
+ - Updated Romanian translation (Lucian Adrian Grijincu)
+ - Updated Russian translation (Yuri Myasoedov)
+ - Updated Simplified Chinese translation (Aron Xu)
+ - Updated Slovenian translation (Andrej Žnidaršič)
+ - Updated Spanish translation (Daniel Mustieles, Jorge González)
+ - Updated Swedish translation (Daniel Nylander)
+
+* New Features:
+ - Add keyboard backlight support including dimming on idle and keyboard control (Alex Murray)
+ - Add on screen display of keyboard brightness level (Alex Murray)
+ - Unify osd popup dialog into separate file to avoid code duplication (Alex Murray)
+
+* Bugfix:
+ - Change the default of backlight-battery-reduce to FALSE (Richard Hughes)
+ - Don't migrate the button settings for GSD in case the user has used 'interactive' (Richard Hughes)
+ - Don't try to migrate backlight-battery-reduce (Richard Hughes)
+ - Ensure we emit the BrightnessChanged DBus signal for the brightness buttons (Richard Hughes)
+ - Fixed conversion from percentage to discrete. Fixed #644143 (Pedro Martinez-Julia)
+ - Fix omitted renamed file in POTFILES.in (Claude Paroz)
+ - Fix typo (William Jon McCann)
+ - Fix up a translated comment in the schema. Fixes #644013 (Richard Hughes)
+ - GSchema should be translatable (Christopher Aillon)
+ - Remove some icons that are no longer used (Richard Hughes)
+ - Remove the 'interactive' option for power actions (Richard Hughes)
+ - Use symbolic icon for the keyboard brightness OSD (Bastien Nocera)
+ - Use symbolic icons for brightness OSD (Bastien Nocera)
+
 Version 2.91.90
 ~~~~~~~~~~~~~~~
 Released: 2011-02-22
