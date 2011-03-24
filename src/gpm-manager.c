@@ -693,6 +693,60 @@ gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 }
 
 /**
+ * gpm_manager_logout:
+ **/
+static gboolean
+gpm_manager_logout (GpmManager *manager)
+{
+	gboolean ret = FALSE;
+	GVariant *retval = NULL;
+	GError *error = NULL;
+	GDBusProxy *proxy = NULL;
+	GDBusConnection *connection;
+
+	/* connect to gnome-session */
+	connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
+	if (connection == NULL) {
+		g_warning ("Failed to connect to the session: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+	proxy = g_dbus_proxy_new_sync (connection,
+			G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
+			G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+			NULL,
+			"org.gnome.SessionManager",
+			"/org/gnome/SessionManager",
+			"org.gnome.SessionManager",
+			NULL, &error);
+	if (proxy == NULL) {
+		g_warning ("Failed to shutdown session: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* ask to shut it down */
+	retval = g_dbus_proxy_call_sync (proxy,
+					 "Shutdown",
+					 NULL, G_DBUS_CALL_FLAGS_NONE,
+					 -1, NULL, &error);
+	if (retval == NULL) {
+		g_debug ("Failed to shutdown session: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* success */
+	ret = TRUE;
+out:
+	if (retval != NULL)
+		g_variant_unref (retval);
+	if (proxy != NULL)
+		g_object_unref (proxy);
+	return ret;
+}
+
+/**
  * gpm_manager_perform_policy:
  * @manager: This class instance
  * @policy: The policy that we should do, e.g. "suspend"
