@@ -726,6 +726,9 @@ gpm_manager_perform_policy (GpmManager  *manager, const gchar *policy_key, const
 		g_debug ("shutting down, reason: %s", reason);
 		gpm_control_shutdown (manager->priv->control, NULL);
 
+	} else if (policy == GPM_ACTION_POLICY_INTERACTIVE) {
+		g_debug ("logout, reason: %s", reason);
+		gpm_manager_logout (manager);
 	} else {
 		g_warning ("unknown action %i", policy);
 	}
