@@ -1,0 +1,1619 @@
+# Afrikaans translation for gnome-power-manager.
+# Copyright (C) 2011
+# This file is distributed under the same license as the gnome-power-manager package.
+# F Wolff <friedel@translate.org.za>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-power-manager gnome-3-0\nn"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"power-manager&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-03-29 21:46+0000\n"
+"PO-Revision-Date: 2011-04-01 23:25+0200\n"
+"Last-Translator: F Wolff <friedel@translate.org.za>\n"
+"Language-Team: Afrikaans <translate-discuss-af@lists.sourceforge.net>\n"
+"Language: af\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Virtaal 0.7.0-beta4\n"
+"X-DamnedLies-Scope: partial\n"
+"X-Project-Style: gnome\n"
+
+#: ../data/gnome-power-manager.desktop.in.in.h:1
+msgid "Power Manager"
+msgstr "Kragbestuur"
+
+#: ../data/gnome-power-manager.desktop.in.in.h:2
+msgid "Power management daemon"
+msgstr "Agtergrondprogram vir kragbestuur"
+
+#: ../data/gnome-power-statistics.desktop.in.in.h:1
+msgid "Observe power management"
+msgstr "Waarneming van kragbestuur"
+
+#. TRANSLATORS: shown on the titlebar
+#. TRANSLATORS: the program name
+#: ../data/gnome-power-statistics.desktop.in.in.h:2
+#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1087
+#: ../src/gpm-statistics.c:1541
+msgid "Power Statistics"
+msgstr "Kragstatistiek"
+
+#: ../data/gpm-feedback-widget.ui.h:1
+msgid "Brightness"
+msgstr "Helderheid"
+
+#: ../data/gpm-statistics.ui.h:1
+msgid "0"
+msgstr "0"
+
+#: ../data/gpm-statistics.ui.h:2
+msgid "Data length:"
+msgstr "Datalengte:"
+
+#: ../data/gpm-statistics.ui.h:3 ../src/gpm-statistics.c:206
+msgid "Details"
+msgstr "Besonderhede"
+
+#: ../data/gpm-statistics.ui.h:4
+msgid "Graph type:"
+msgstr "Grafiektipe:"
+
+#: ../data/gpm-statistics.ui.h:5
+msgid "History"
+msgstr "Geskiedenis"
+
+#: ../data/gpm-statistics.ui.h:7
+msgid "Processor wakeups per second:"
+msgstr "Verwerker gewek per sekonde:"
+
+#: ../data/gpm-statistics.ui.h:8
+msgid "Show data points"
+msgstr "Wys datapunte"
+
+#: ../data/gpm-statistics.ui.h:9
+msgid "Statistics"
+msgstr "Statistiek"
+
+#: ../data/gpm-statistics.ui.h:10
+msgid "There is no data to display."
+msgstr "Daar is geen data om te wys nie."
+
+#: ../data/gpm-statistics.ui.h:11
+msgid "Use smoothed line"
+msgstr "Gebruik gladgestrykte lyn"
+
+#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:192
+msgid "Wakeups"
+msgstr "Kere gewek"
+
+#. command line argument
+#: ../src/gpm-backlight-helper.c:161
+msgid "Set the current brightness"
+msgstr "Stel die huidige helderheid"
+
+#. command line argument
+#: ../src/gpm-backlight-helper.c:164
+msgid "Get the current brightness"
+msgstr "Kry die huidige helderheid"
+
+#. command line argument
+#: ../src/gpm-backlight-helper.c:167
+msgid "Get the number of brightness levels supported"
+msgstr "Kry die aantal ondersteunde vlakke van helderheid"
+
+#. TRANSLATORS: tool that is used when copying profiles system-wide
+#: ../src/gpm-backlight-helper.c:182
+msgid "GNOME Power Manager Backlight Helper"
+msgstr ""
+
+#. TRANSLATORS: user did not specify valid options
+#: ../src/gpm-backlight-helper.c:190
+msgid "No valid option was specified"
+msgstr "Geen geldige keuse is gegee nie"
+
+#. TRANSLATORS: no backlights found
+#: ../src/gpm-backlight-helper.c:199
+msgid "No backlights were found on your system"
+msgstr ""
+
+#. TRANSLATORS: failed to access backlight file
+#: ../src/gpm-backlight-helper.c:210
+msgid "Could not get the value of the backlight"
+msgstr ""
+
+#. TRANSLATORS: failed to access backlight file
+#: ../src/gpm-backlight-helper.c:228
+msgid "Could not get the maximum value of the backlight"
+msgstr ""
+
+#. TRANSLATORS: only able to install profiles as root
+#: ../src/gpm-backlight-helper.c:245
+msgid "This program can only be used by the root user"
+msgstr "Dié program kan slegs gebruik word deur die root-gebruiker"
+
+#. TRANSLATORS: the program must never be directly run
+#: ../src/gpm-backlight-helper.c:254
+msgid "This program must only be run through pkexec"
+msgstr "Dié program moet slegs deur pkexec geloop word"
+
+#. TRANSLATORS: failed to access backlight file
+#: ../src/gpm-backlight-helper.c:265
+msgid "Could not set the value of the backlight"
+msgstr ""
+
+#: ../src/gpm-common.c:55
+msgid "Unknown time"
+msgstr "Onbekende tyd"
+
+#: ../src/gpm-common.c:60
+#, c-format
+msgid "%i minute"
+msgid_plural "%i minutes"
+msgstr[0] "%i minuut"
+msgstr[1] "%i minute"
+
+#: ../src/gpm-common.c:71
+#, c-format
+msgid "%i hour"
+msgid_plural "%i hours"
+msgstr[0] "%i uur"
+msgstr[1] "%i ure"
+
+#. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
+#. * Swap order with "%2$s %2$i %1$s %1$i if needed
+#: ../src/gpm-common.c:77
+#, c-format
+msgid "%i %s %i %s"
+msgstr "%i %s %i %s"
+
+#: ../src/gpm-common.c:78
+msgid "hour"
+msgid_plural "hours"
+msgstr[0] "uur"
+msgstr[1] "ure"
+
+#: ../src/gpm-common.c:79
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] "minuut"
+msgstr[1] "minute"
+
+#. TRANSLATORS: turn on all debugging
+#: ../src/gpm-debug.c:131
+msgid "Show debugging information for all files"
+msgstr "Wys ontfoutinligting vir alle lêers"
+
+#: ../src/gpm-debug.c:189
+msgid "Debugging Options"
+msgstr "Ontfoutkeuses"
+
+#: ../src/gpm-debug.c:189
+msgid "Show debugging options"
+msgstr "Wys ontfoutkeuses"
+
+#. Translators: This is %i days
+#: ../src/gpm-graph-widget.c:430
+#, c-format
+msgid "%id"
+msgstr "%id."
+
+#. Translators: This is %i days %02i hours
+#: ../src/gpm-graph-widget.c:433
+#, c-format
+msgid "%id%02ih"
+msgstr "%id.%02iu."
+
+#. Translators: This is %i hours
+#: ../src/gpm-graph-widget.c:438
+#, c-format
+msgid "%ih"
+msgstr "%iu."
+
+#. Translators: This is %i hours %02i minutes
+#: ../src/gpm-graph-widget.c:441
+#, c-format
+msgid "%ih%02im"
+msgstr "%iu.%02im."
+
+#. Translators: This is %2i minutes
+#: ../src/gpm-graph-widget.c:446
+#, c-format
+msgid "%2im"
+msgstr "%2im."
+
+#. Translators: This is %2i minutes %02i seconds
+#: ../src/gpm-graph-widget.c:449
+#, c-format
+msgid "%2im%02i"
+msgstr "%2im.%02i"
+
+#. Translators: This is %2i seconds
+#: ../src/gpm-graph-widget.c:453
+#, c-format
+msgid "%2is"
+msgstr "%2is."
+
+#. Translators: This is %i Percentage
+#: ../src/gpm-graph-widget.c:457
+#, c-format
+msgid "%i%%"
+msgstr "%i%%"
+
+#. Translators: This is %.1f Watts
+#: ../src/gpm-graph-widget.c:460
+#, c-format
+msgid "%.1fW"
+msgstr "%.1fW"
+
+#. Translators: This is %.1f Volts
+#: ../src/gpm-graph-widget.c:465
+#, c-format
+msgid "%.1fV"
+msgstr "%.1fV"
+
+#: ../src/gpm-main.c:221
+msgid "Show version of installed program and exit"
+msgstr "Wys weergawe van die geïnstalleerde program en sluit af"
+
+#: ../src/gpm-main.c:223
+msgid "Exit after a small delay (for debugging)"
+msgstr "Sluit af na 'n kort rukkie (vir ontfouting)"
+
+#: ../src/gpm-main.c:225
+msgid "Exit after the manager has loaded (for debugging)"
+msgstr "Sluit af nadat die bestuurder gelaai is (vir ontfouting)"
+
+#: ../src/gpm-main.c:238 ../src/gpm-main.c:243
+msgid "GNOME Power Manager"
+msgstr "GNOME-kragbestuur"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:239 ../src/gpm-manager.c:310
+msgid "Battery is very low"
+msgstr "Battery is baie pap"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:290
+msgid "Power plugged in"
+msgstr "Krag ingeprop"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:294
+msgid "Power unplugged"
+msgstr "Krag uitgeprop"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:298
+msgid "Lid has opened"
+msgstr "Rekenaar is oopgemaak"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:302
+msgid "Lid has closed"
+msgstr "Rekenaar is toegemaak"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:306
+msgid "Battery is low"
+msgstr "Battery is amper pap"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:314
+msgid "Battery is full"
+msgstr "Battery is vol"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:318
+msgid "Suspend started"
+msgstr "Begin met sluimer"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:322
+#, fuzzy
+msgid "Resumed"
+msgstr "Hervat/wakkerword"
+
+#. TRANSLATORS: this is the sound description
+#: ../src/gpm-manager.c:326
+msgid "Suspend failed"
+msgstr "Sluimer het misluk"
+
+#. TRANSLATORS: message text
+#: ../src/gpm-manager.c:612
+msgid "Computer failed to suspend."
+msgstr "Rekenaar kon nie sluimer nie."
+
+#. TRANSLATORS: title text
+#: ../src/gpm-manager.c:614
+msgid "Failed to suspend"
+msgstr "Kon nie sluimer nie"
+
+#. TRANSLATORS: message text
+#: ../src/gpm-manager.c:618
+msgid "Computer failed to hibernate."
+msgstr "Rekenaar kon nie hiberneer nie."
+
+#. TRANSLATORS: title text
+#: ../src/gpm-manager.c:620
+msgid "Failed to hibernate"
+msgstr "Kon nie hiberneer nie"
+
+#. TRANSLATORS: message text
+#: ../src/gpm-manager.c:625
+msgid "Failure was reported as:"
+msgstr "Fout is gerapporteer as:"
+
+#. TRANSLATORS: button text, visit the suspend help website
+#: ../src/gpm-manager.c:638
+msgid "Visit help page"
+msgstr "Besoek hulpbladsy"
+
+#. TRANSLATORS: this is the gnome-screensaver throttle
+#: ../src/gpm-manager.c:988
+msgid "Display DPMS activated"
+msgstr "Vertoon-DPMS geaktiveer"
+
+#. TRANSLATORS: this is the gnome-screensaver throttle
+#: ../src/gpm-manager.c:1007
+msgid "On battery power"
+msgstr "Op batterykrag"
+
+#: ../src/gpm-manager.c:1025
+msgid "Laptop lid is closed"
+msgstr ""
+
+#: ../src/gpm-manager.c:1063
+msgid "Power Information"
+msgstr "Kraginligting"
+
+#. TRANSLATORS: the battery may be recalled by it's vendor
+#: ../src/gpm-manager.c:1301
+msgid "Battery may be recalled"
+msgstr "Battery is dalk herroep"
+
+#: ../src/gpm-manager.c:1302
+#, c-format
+msgid ""
+"A battery in your computer may have been recalled by %s and you may be at "
+"risk.\n"
+"\n"
+"For more information visit the battery recall website."
+msgstr ""
+"'n Battery in die rekenaar is moontlik herroep deur %s en u is dalk in "
+"gevaar.\n"
+"\n"
+"Vir meer inligting besoek die webwerf oor battery-herroeping."
+
+#. TRANSLATORS: button text, visit the manufacturers recall website
+#: ../src/gpm-manager.c:1312
+msgid "Visit recall website"
+msgstr "Besoek herroep-webwerf"
+
+#. TRANSLATORS: button text, do not show this bubble again
+#: ../src/gpm-manager.c:1315
+msgid "Do not show me this again"
+msgstr "Moenie hierdie weer wys nie"
+
+#. We should notify the user if the battery has a low capacity,
+#. * where capacity is the ratio of the last_full capacity with that of
+#. * the design capacity. (#326740)
+#. TRANSLATORS: battery is old or broken
+#: ../src/gpm-manager.c:1403
+msgid "Battery may be broken"
+msgstr "Battery is dalk gebreek"
+
+#. TRANSLATORS: notify the user that that battery is broken as the capacity is very low
+#: ../src/gpm-manager.c:1406
+#, c-format
+msgid ""
+"Battery has a very low capacity (%1.1f%%), which means that it may be old or "
+"broken."
+msgstr ""
+"Die battery het baie lae kapasiteit (%1.1f%%) wat beteken dat dit moontlik "
+"oud of gebreek is."
+
+#. TRANSLATORS: show the charged notification
+#: ../src/gpm-manager.c:1455
+msgid "Battery Charged"
+msgid_plural "Batteries Charged"
+msgstr[0] "Battery gelaai"
+msgstr[1] "Batterye gelaai"
+
+#. TRANSLATORS: laptop battery is now discharging
+#: ../src/gpm-manager.c:1501
+msgid "Battery Discharging"
+msgstr "Battery ontlaai nou"
+
+#. TRANSLATORS: tell the user how much time they have got
+#: ../src/gpm-manager.c:1505
+#, c-format
+msgid "%s of battery power remaining (%.0f%%)"
+msgstr "%s van batterykrag bly oor (%.0f%%)"
+
+#. TRANSLATORS: UPS is now discharging
+#: ../src/gpm-manager.c:1511
+msgid "UPS Discharging"
+msgstr "UPS ontlaai nou"
+
+#. TRANSLATORS: tell the user how much time they have got
+#: ../src/gpm-manager.c:1515
+#, c-format
+msgid "%s of UPS backup power remaining (%.0f%%)"
+msgstr "%s van UPS-noodkrag bly oor (%.0f%%)"
+
+#. TRANSLATORS: laptop battery low, and we only have one battery
+#: ../src/gpm-manager.c:1613
+msgid "Battery low"
+msgstr "Battery is effens pap"
+
+#. TRANSLATORS: laptop battery low, and we have more than one kind of battery
+#: ../src/gpm-manager.c:1616
+msgid "Laptop battery low"
+msgstr "Skootrekenaarbattery effens pap"
+
+#. TRANSLATORS: tell the user how much time they have got
+#: ../src/gpm-manager.c:1622
+#, c-format
+msgid "Approximately <b>%s</b> remaining (%.0f%%)"
+msgstr "Ongeveer <b>%s</b> bly oor (%.0f%%)"
+
+#. TRANSLATORS: UPS is starting to get a little low
+#: ../src/gpm-manager.c:1626
+msgid "UPS low"
+msgstr "UPS effens pap"
+
+#. TRANSLATORS: tell the user how much time they have got
+#: ../src/gpm-manager.c:1630
+#, c-format
+msgid "Approximately <b>%s</b> of remaining UPS backup power (%.0f%%)"
+msgstr "Ongeveer <b>%s</b> UPS-noodkrag bly oor (%.0f%%)"
+
+#. TRANSLATORS: mouse is getting a little low
+#. TRANSLATORS: the mouse battery is very low
+#: ../src/gpm-manager.c:1634 ../src/gpm-manager.c:1786
+msgid "Mouse battery low"
+msgstr "Muis effens pap"
+
+#. TRANSLATORS: tell user more details
+#: ../src/gpm-manager.c:1637
+#, c-format
+msgid "Wireless mouse is low in power (%.0f%%)"
+msgstr "Draadlose muis het min batterykrag (%.0f%%)"
+
+#. TRANSLATORS: keyboard is getting a little low
+#. TRANSLATORS: the keyboard battery is very low
+#: ../src/gpm-manager.c:1641 ../src/gpm-manager.c:1794
+msgid "Keyboard battery low"
+msgstr "Sleutelbord effens pap"
+
+#. TRANSLATORS: tell user more details
+#: ../src/gpm-manager.c:1644
+#, c-format
+msgid "Wireless keyboard is low in power (%.0f%%)"
+msgstr "Draadlose sleutelbord het min batterykrag (%.0f%%)"
+
+#. TRANSLATORS: PDA is getting a little low
+#. TRANSLATORS: the PDA battery is very low
+#: ../src/gpm-manager.c:1648 ../src/gpm-manager.c:1803
+msgid "PDA battery low"
+msgstr "PDA effens pap"
+
+#. TRANSLATORS: tell user more details
+#: ../src/gpm-manager.c:1651
+#, c-format
+msgid "PDA is low in power (%.0f%%)"
+msgstr "PDA het min batterykrag (%.0f%%)"
+
+#. TRANSLATORS: cell phone (mobile) is getting a little low
+#. TRANSLATORS: the cell battery is very low
+#: ../src/gpm-manager.c:1655 ../src/gpm-manager.c:1813
+#: ../src/gpm-manager.c:1824
+msgid "Cell phone battery low"
+msgstr "Selfoon effens pap"
+
+#. TRANSLATORS: tell user more details
+#: ../src/gpm-manager.c:1658
+#, c-format
+msgid "Cell phone is low in power (%.0f%%)"
+msgstr "Selfoon het min batterykrag (%.0f%%)"
+
+#. TRANSLATORS: media player, e.g. mp3 is getting a little low
+#: ../src/gpm-manager.c:1663
+msgid "Media player battery low"
+msgstr "Mediaspeler effens pap"
+
+#. TRANSLATORS: tell user more details
+#: ../src/gpm-manager.c:1666
+#, c-format
+msgid "Media player is low in power (%.0f%%)"
+msgstr "Mediaspeler het min batterykrag (%.0f%%)"
+
+#. TRANSLATORS: graphics tablet, e.g. wacom is getting a little low
+#. TRANSLATORS: the cell battery is very low
+#: ../src/gpm-manager.c:1670 ../src/gpm-manager.c:1833
+msgid "Tablet battery low"
+msgstr "Tablet effens pap"
+
+#. TRANSLATORS: tell user more details
+#: ../src/gpm-manager.c:1673
+#, c-format
+msgid "Tablet is low in power (%.0f%%)"
+msgstr "Tablet het min batterykrag (%.0f%%)"
+
+#. TRANSLATORS: computer, e.g. ipad is getting a little low
+#. TRANSLATORS: the cell battery is very low
+#: ../src/gpm-manager.c:1677 ../src/gpm-manager.c:1842
+msgid "Attached computer battery low"
+msgstr ""
+
+#. TRANSLATORS: tell user more details
+#: ../src/gpm-manager.c:1680
+#, c-format
+msgid "Attached computer is low in power (%.0f%%)"
+msgstr ""
+
+#. TRANSLATORS: laptop battery critically low, and only have one kind of battery
+#: ../src/gpm-manager.c:1745
+msgid "Battery critically low"
+msgstr "Battery feitlik pap"
+
+#. TRANSLATORS: laptop battery critically low, and we have more than one type of battery
+#. TRANSLATORS: laptop battery is really, really, low
+#: ../src/gpm-manager.c:1748 ../src/gpm-manager.c:1905
+msgid "Laptop battery critically low"
+msgstr "Skootrekenaarbattery feitlik pap"
+
+#. TRANSLATORS: tell the use to insert the plug, as we're not going to do anything
+#: ../src/gpm-manager.c:1757
+msgid "Plug in your AC adapter to avoid losing data."
+msgstr "Prop die muurkrag in om dataverlies te voorkom."
+
+#. TRANSLATORS: give the user a ultimatum
+#: ../src/gpm-manager.c:1761
+#, c-format
+msgid "Computer will suspend very soon unless it is plugged in."
+msgstr "Die rekenaar gaan binnekort sluimer tensy dit ingeprop word."
+
+#. TRANSLATORS: give the user a ultimatum
+#: ../src/gpm-manager.c:1765
+#, c-format
+msgid "Computer will hibernate very soon unless it is plugged in."
+msgstr "Die rekenaar gaan binnekort hiberneer tensy dit ingeprop word."
+
+#. TRANSLATORS: give the user a ultimatum
+#: ../src/gpm-manager.c:1769
+#, c-format
+msgid "Computer will shutdown very soon unless it is plugged in."
+msgstr "Die rekenaar gaan binnekort afskakel tensy dit ingeprop word."
+
+#. TRANSLATORS: the UPS is very low
+#. TRANSLATORS: UPS is really, really, low
+#: ../src/gpm-manager.c:1776 ../src/gpm-manager.c:1941
+msgid "UPS critically low"
+msgstr "UPS feitlik pap"
+
+#. TRANSLATORS: give the user a ultimatum
+#: ../src/gpm-manager.c:1780
+#, c-format
+msgid ""
+"Approximately <b>%s</b> of remaining UPS power (%.0f%%). Restore AC power to "
+"your computer to avoid losing data."
+msgstr ""
+"Ongeveer <b>%s</b> UPS-noodkrag bly oor (%.0f%%). Prop die muurkrag in om "
+"dataverlies te voorkom."
+
+#. TRANSLATORS: the device is just going to stop working
+#: ../src/gpm-manager.c:1789
+#, c-format
+msgid ""
+"Wireless mouse is very low in power (%.0f%%). This device will soon stop "
+"functioning if not charged."
+msgstr ""
+"Draadlose muis het baie min batterykrag (%.0f%%). Dié toestel gaan binnekort "
+"ophou werk as dit nie gelaai word nie."
+
+#. TRANSLATORS: the device is just going to stop working
+#: ../src/gpm-manager.c:1797
+#, c-format
+msgid ""
+"Wireless keyboard is very low in power (%.0f%%). This device will soon stop "
+"functioning if not charged."
+msgstr ""
+"Draadlose sleutelbord het baie min batterykrag (%.0f%%). Dié toestel gaan "
+"binnekort ophou werk as dit nie gelaai word nie."
+
+#. TRANSLATORS: the device is just going to stop working
+#: ../src/gpm-manager.c:1806
+#, c-format
+msgid ""
+"PDA is very low in power (%.0f%%). This device will soon stop functioning if "
+"not charged."
+msgstr ""
+"PDA het baie min batterykrag (%.0f%%). Dié toestel gaan binnekort ophou werk "
+"as dit nie gelaai word nie."
+
+#. TRANSLATORS: the device is just going to stop working
+#: ../src/gpm-manager.c:1816
+#, c-format
+msgid ""
+"Cell phone is very low in power (%.0f%%). This device will soon stop "
+"functioning if not charged."
+msgstr ""
+"Selfoon het baie min batterykrag (%.0f%%). Dié toestel gaan binnekort ophou "
+"werk as dit nie gelaai word nie."
+
+#. TRANSLATORS: the device is just going to stop working
+#: ../src/gpm-manager.c:1827
+#, c-format
+msgid ""
+"Media player is very low in power (%.0f%%). This device will soon stop "
+"functioning if not charged."
+msgstr ""
+"Mediaspeler het baie min batterykrag (%.0f%%). Dié toestel gaan binnekort "
+"ophou werk as dit nie gelaai word nie."
+
+#. TRANSLATORS: the device is just going to stop working
+#: ../src/gpm-manager.c:1836
+#, c-format
+msgid ""
+"Tablet is very low in power (%.0f%%). This device will soon stop functioning "
+"if not charged."
+msgstr ""
+"Tablet het baie min batterykrag (%.0f%%). Dié toestel gaan binnekort ophou "
+"werk as dit nie gelaai word nie."
+
+#. TRANSLATORS: the device is just going to stop working
+#: ../src/gpm-manager.c:1845
+#, c-format
+msgid ""
+"Attached computer is very low in power (%.0f%%). The device will soon "
+"shutdown if not charged."
+msgstr ""
+
+#. TRANSLATORS: computer will shutdown without saving data
+#: ../src/gpm-manager.c:1913
+msgid ""
+"The battery is below the critical level and this computer will <b>power-off</"
+"b> when the battery becomes completely empty."
+msgstr ""
+"Die battery is onder die kritieke vlak en die rekenaar gaan <b>afskakel</b> "
+"wanneer die battery heeltemal leegloop."
+
+#. TRANSLATORS: computer will suspend
+#: ../src/gpm-manager.c:1919
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
+"computer in a suspended state."
+msgstr ""
+"Die battery is onder die kritieke vlak en die rekenaar staan op die punt om "
+"te sluimer.<br><b>LET WEL:</b> 'n klein hoeveelheid krag is nodig om die "
+"rekenaar in sluimerstand te hou."
+
+#. TRANSLATORS: computer will hibernate
+#: ../src/gpm-manager.c:1926
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"hibernate."
+msgstr ""
+"Die battery is onder die kritieke vlak en die rekenaar staan op die punt om "
+"te hiberneer."
+
+#. TRANSLATORS: computer will just shutdown
+#: ../src/gpm-manager.c:1931
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"shutdown."
+msgstr ""
+"Die battery is onder die kritieke vlak en die rekenaar staan op die punt om "
+"af te skakel."
+
+#. TRANSLATORS: computer will shutdown without saving data
+#: ../src/gpm-manager.c:1949
+msgid ""
+"UPS is below the critical level and this computer will <b>power-off</b> when "
+"the UPS becomes completely empty."
+msgstr ""
+"Die UPS is onder die kritieke vlak en die rekenaar gaan <b>afskakel</b> "
+"wanneer die UPS heeltemal leegloop."
+
+#. TRANSLATORS: computer will hibernate
+#: ../src/gpm-manager.c:1955
+msgid ""
+"UPS is below the critical level and this computer is about to hibernate."
+msgstr ""
+"Die UPS is onder die kritieke vlak en die rekenaar staan op die punt om te "
+"hiberneer."
+
+#. TRANSLATORS: computer will just shutdown
+#: ../src/gpm-manager.c:1960
+msgid "UPS is below the critical level and this computer is about to shutdown."
+msgstr ""
+"Die UPS is onder die kritieke vlak en die rekenaar staan op die punt om af "
+"te skakel."
+
+#. TRANSLATORS: the rate of discharge for the device
+#: ../src/gpm-statistics.c:76 ../src/gpm-statistics.c:464
+msgid "Rate"
+msgstr "Tempo"
+
+#: ../src/gpm-statistics.c:77
+msgid "Charge"
+msgstr "Lading"
+
+#: ../src/gpm-statistics.c:78 ../src/gpm-statistics.c:478
+msgid "Time to full"
+msgstr "Tyd tot by vol"
+
+#: ../src/gpm-statistics.c:79 ../src/gpm-statistics.c:483
+msgid "Time to empty"
+msgstr "Tyd tot by leeg"
+
+#: ../src/gpm-statistics.c:86
+msgid "10 minutes"
+msgstr "10 minute"
+
+#: ../src/gpm-statistics.c:87
+msgid "2 hours"
+msgstr "2 ure"
+
+#: ../src/gpm-statistics.c:88
+msgid "6 hours"
+msgstr "6 ure"
+
+#: ../src/gpm-statistics.c:89
+msgid "1 day"
+msgstr "1 dag"
+
+#: ../src/gpm-statistics.c:90
+msgid "1 week"
+msgstr "1 week"
+
+#. TRANSLATORS: what we've observed about the device
+#: ../src/gpm-statistics.c:99
+msgid "Charge profile"
+msgstr "Laaiprofiel"
+
+#: ../src/gpm-statistics.c:100
+msgid "Discharge profile"
+msgstr "Ontlaaiprofiel"
+
+#. TRANSLATORS: how accurately we can predict the time remaining of the battery
+#: ../src/gpm-statistics.c:102
+msgid "Charge accuracy"
+msgstr "Laai-akkuraatheid"
+
+#: ../src/gpm-statistics.c:103
+msgid "Discharge accuracy"
+msgstr "Ontlaai-akkuraatheid"
+
+#: ../src/gpm-statistics.c:130
+msgid "Attribute"
+msgstr "Eienskap"
+
+#: ../src/gpm-statistics.c:137
+msgid "Value"
+msgstr "Waarde"
+
+#: ../src/gpm-statistics.c:154
+msgid "Image"
+msgstr "Beeld"
+
+#: ../src/gpm-statistics.c:160
+msgid "Description"
+msgstr "Beskrywing"
+
+#: ../src/gpm-statistics.c:179 ../src/gpm-statistics.c:403
+msgid "Type"
+msgstr "Tipe"
+
+#: ../src/gpm-statistics.c:185
+msgid "ID"
+msgstr "ID"
+
+#: ../src/gpm-statistics.c:199
+msgid "Command"
+msgstr "Opdrag"
+
+#. TRANSLATORS: this is when the stats time is not known
+#: ../src/gpm-statistics.c:284
+msgid "Unknown"
+msgstr "Onbekend"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#: ../src/gpm-statistics.c:288
+#, c-format
+msgid "%.0f second"
+msgid_plural "%.0f seconds"
+msgstr[0] "%.0f sekonde"
+msgstr[1] "%.0f sekondes"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#: ../src/gpm-statistics.c:293
+#, c-format
+msgid "%.1f minute"
+msgid_plural "%.1f minutes"
+msgstr[0] "%.1f minuut"
+msgstr[1] "%.1f minute"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#: ../src/gpm-statistics.c:298
+#, c-format
+msgid "%.1f hour"
+msgid_plural "%.1f hours"
+msgstr[0] "%.1f uur"
+msgstr[1] "%.1f ure"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#: ../src/gpm-statistics.c:302
+#, c-format
+msgid "%.1f day"
+msgid_plural "%.1f days"
+msgstr[0] "%.1f dag"
+msgstr[1] "%.1f dae"
+
+#: ../src/gpm-statistics.c:311
+msgid "Yes"
+msgstr "Ja"
+
+#: ../src/gpm-statistics.c:311
+msgid "No"
+msgstr "Nee"
+
+#. TRANSLATORS: the device ID of the current device, e.g. "battery0"
+#: ../src/gpm-statistics.c:400
+msgid "Device"
+msgstr "Toestel"
+
+#: ../src/gpm-statistics.c:405
+#, fuzzy
+msgid "Vendor"
+msgstr "Vervaardiger/verkoper/leweransier/handelaar"
+
+#: ../src/gpm-statistics.c:407
+msgid "Model"
+msgstr "Model"
+
+#: ../src/gpm-statistics.c:409
+msgid "Serial number"
+msgstr "Reeksnommer"
+
+#. TRANSLATORS: a boolean attribute that means if the device is supplying the
+#. * main power for the computer. For instance, an AC adapter or laptop battery
+#. * would be TRUE,  but a mobile phone or mouse taking power is FALSE
+#: ../src/gpm-statistics.c:414
+msgid "Supply"
+msgstr ""
+
+#: ../src/gpm-statistics.c:417
+#, c-format
+msgid "%d second"
+msgid_plural "%d seconds"
+msgstr[0] "%d sekonde"
+msgstr[1] "%d sekondes"
+
+#. TRANSLATORS: when the device was last updated with new data. It's
+#. * usually a few seconds when a device is discharging or charging.
+#: ../src/gpm-statistics.c:421
+msgid "Refreshed"
+msgstr "Laas verfris"
+
+#. TRANSLATORS: Present is whether the device is currently attached
+#. * to the computer, as some devices (e.g. laptop batteries) can
+#. * be removed, but still observed as devices on the system
+#: ../src/gpm-statistics.c:431
+msgid "Present"
+msgstr "Teenwoordig"
+
+#. TRANSLATORS: If the device can be recharged, e.g. lithium
+#. * batteries rather than alkaline ones
+#: ../src/gpm-statistics.c:438
+msgid "Rechargeable"
+msgstr "Herlaaibaar"
+
+#. TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged"
+#: ../src/gpm-statistics.c:444
+msgid "State"
+msgstr "Toestand"
+
+#: ../src/gpm-statistics.c:448
+msgid "Energy"
+msgstr "Energie"
+
+#: ../src/gpm-statistics.c:451
+msgid "Energy when empty"
+msgstr "Energie wanneer leeg"
+
+#: ../src/gpm-statistics.c:454
+msgid "Energy when full"
+msgstr "Energie wanneer vol"
+
+#: ../src/gpm-statistics.c:457
+msgid "Energy (design)"
+msgstr "Energie (ontwerp)"
+
+#: ../src/gpm-statistics.c:471
+msgid "Voltage"
+msgstr "Spanning"
+
+#. TRANSLATORS: the amount of charge the cell contains
+#: ../src/gpm-statistics.c:493
+msgid "Percentage"
+msgstr "Persentasie"
+
+#. TRANSLATORS: the capacity of the device, which is basically a measure
+#. * of how full it can get, relative to the design capacity
+#: ../src/gpm-statistics.c:500
+msgid "Capacity"
+msgstr "Kapasiteit"
+
+#. TRANSLATORS: the type of battery, e.g. lithium or nikel metal hydroxide
+#: ../src/gpm-statistics.c:505
+msgid "Technology"
+msgstr "Tegnologie"
+
+#. TRANSLATORS: this is when the device is plugged in, typically
+#. * only shown for the ac adaptor device
+#: ../src/gpm-statistics.c:510
+msgid "Online"
+msgstr "Ingeprop"
+
+#. TRANSLATORS: the command line was not provided
+#: ../src/gpm-statistics.c:821
+msgid "No data"
+msgstr "Geen data"
+
+#. TRANSLATORS: kernel module, usually a device driver
+#: ../src/gpm-statistics.c:828 ../src/gpm-statistics.c:833
+msgid "Kernel module"
+msgstr "Kernmodule"
+
+#. TRANSLATORS: kernel housekeeping
+#: ../src/gpm-statistics.c:838
+msgid "Kernel core"
+msgstr ""
+
+#. TRANSLATORS: interrupt between processors
+#: ../src/gpm-statistics.c:843
+msgid "Interprocessor interrupt"
+msgstr "Onderbreking tussen verwerkers"
+
+#. TRANSLATORS: unknown interrupt
+#: ../src/gpm-statistics.c:848
+msgid "Interrupt"
+msgstr "Onderbreking"
+
+#. TRANSLATORS: the keyboard and mouse device event
+#: ../src/gpm-statistics.c:895
+msgid "PS/2 keyboard/mouse/touchpad"
+msgstr "PS/2 sleutelbord/muis/raakblad"
+
+#. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
+#: ../src/gpm-statistics.c:898
+msgid "ACPI"
+msgstr "ACPI"
+
+#. TRANSLATORS: serial ATA is a new style of hard disk interface
+#: ../src/gpm-statistics.c:901
+msgid "Serial ATA"
+msgstr "Serie-ATA"
+
+#. TRANSLATORS: this is the old-style ATA interface
+#: ../src/gpm-statistics.c:904
+msgid "ATA host controller"
+msgstr "ATA-gasheerbeheerder"
+
+#. TRANSLATORS: 802.11 wireless adaptor
+#: ../src/gpm-statistics.c:907
+#, fuzzy
+msgid "Intel wireless adaptor"
+msgstr "Intel draadlose passtuk"
+
+#. TRANSLATORS: a timer is something that fires periodically.
+#. * The parameter is a process name, e.g. "firefox-bin".
+#. * This is shown when the timer wakes up.
+#: ../src/gpm-statistics.c:914 ../src/gpm-statistics.c:919
+#: ../src/gpm-statistics.c:924 ../src/gpm-statistics.c:929
+#: ../src/gpm-statistics.c:934
+#, c-format
+msgid "Timer %s"
+msgstr ""
+
+#. TRANSLATORS: the parameter is the name of task that's woken up from sleeping.
+#. * This is shown when the task wakes up.
+#: ../src/gpm-statistics.c:938
+#, c-format
+msgid "Sleep %s"
+msgstr ""
+
+#. TRANSLATORS: this is the name of a new realtime task.
+#: ../src/gpm-statistics.c:941
+#, c-format
+msgid "New task %s"
+msgstr ""
+
+#. TRANSLATORS: this is the name of a task that's woken to check state.
+#. * This is shown when the task wakes up.
+#: ../src/gpm-statistics.c:945
+#, c-format
+msgid "Wait %s"
+msgstr ""
+
+#. TRANSLATORS: this is the name of a work queue.
+#. * A work queue is a list of work that has to be done.
+#: ../src/gpm-statistics.c:949 ../src/gpm-statistics.c:953
+#, c-format
+msgid "Work queue %s"
+msgstr ""
+
+#. TRANSLATORS: this is when the networking subsystem clears out old entries
+#: ../src/gpm-statistics.c:956
+#, c-format
+msgid "Network route flush %s"
+msgstr ""
+
+#. TRANSLATORS: this is the name of an activity on the USB bus
+#: ../src/gpm-statistics.c:959
+#, c-format
+msgid "USB activity %s"
+msgstr "USB-aktiwiteit %s"
+
+#. TRANSLATORS: we've timed out of an aligned timer, with the name
+#: ../src/gpm-statistics.c:962
+#, c-format
+msgid "Wakeup %s"
+msgstr ""
+
+#. TRANSLATORS: interupts on the system required for basic operation
+#: ../src/gpm-statistics.c:965
+msgid "Local interrupts"
+msgstr "Plaaslike onderbrekings"
+
+#. TRANSLATORS: interrupts when a task gets moved from one core to another
+#: ../src/gpm-statistics.c:968
+msgid "Rescheduling interrupts"
+msgstr ""
+
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:1077
+msgid "Device Information"
+msgstr "Toestelinligting"
+
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:1079
+msgid "Device History"
+msgstr "Toestelgeskiedenis"
+
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:1081
+msgid "Device Profile"
+msgstr "Toestelprofiel"
+
+#. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:1083
+msgid "Processor Wakeups"
+msgstr "Opwekking van verwerker"
+
+#. TRANSLATORS: this is the X axis on the graph
+#: ../src/gpm-statistics.c:1279 ../src/gpm-statistics.c:1285
+#: ../src/gpm-statistics.c:1291 ../src/gpm-statistics.c:1297
+msgid "Time elapsed"
+msgstr "Tydverloop"
+
+#. TRANSLATORS: this is the Y axis on the graph
+#: ../src/gpm-statistics.c:1281
+msgid "Power"
+msgstr "Krag"
+
+#. TRANSLATORS: this is the Y axis on the graph for the whole battery device
+#. TRANSLATORS: this is the X axis on the graph for the whole battery device
+#: ../src/gpm-statistics.c:1287 ../src/gpm-statistics.c:1330
+#: ../src/gpm-statistics.c:1336 ../src/gpm-statistics.c:1342
+#: ../src/gpm-statistics.c:1348
+msgid "Cell charge"
+msgstr "Sellading"
+
+#. TRANSLATORS: this is the Y axis on the graph
+#: ../src/gpm-statistics.c:1293 ../src/gpm-statistics.c:1299
+msgid "Predicted time"
+msgstr "Voorspelde tydsduur"
+
+#. TRANSLATORS: this is the Y axis on the graph
+#: ../src/gpm-statistics.c:1332 ../src/gpm-statistics.c:1344
+msgid "Correction factor"
+msgstr "Korreksiefaktor"
+
+#. TRANSLATORS: this is the Y axis on the graph
+#: ../src/gpm-statistics.c:1338 ../src/gpm-statistics.c:1350
+msgid "Prediction accuracy"
+msgstr "Akkuraatheid van voorspelling"
+
+#. TRANSLATORS: show verbose debugging
+#: ../src/gpm-statistics.c:1529
+msgid "Show extra debugging information"
+msgstr "Wys ekstra ontfoutinligting"
+
+#. TRANSLATORS: show a device by default
+#: ../src/gpm-statistics.c:1532
+msgid "Select this device at startup"
+msgstr "Kies dié toestel by begin"
+
+#. TRANSLATORS: the icon for the CPU
+#: ../src/gpm-statistics.c:1797
+msgid "Processor"
+msgstr "Verwerker"
+
+#. TRANSLATORS: % is a timestring, e.g. "6 hours 10 minutes"
+#: ../src/gpm-tray-icon.c:283
+#, c-format
+msgid "%s remaining"
+msgstr "%s bly oor"
+
+#. preferences
+#: ../src/gpm-tray-icon.c:339
+msgid "_Preferences"
+msgstr "_Voorkeure"
+
+#. TRANSLATORS: The laptop battery is charged, and we know a time.
+#. * The parameter is the time, e.g. 7 hours 6 minutes
+#: ../src/gpm-upower.c:269
+#, c-format
+msgid "provides %s laptop runtime"
+msgstr "verskaf %s skootrekenaargebruik"
+
+#. TRANSLATORS: the device is discharging, and we have a time remaining
+#. * The first parameter is the device type, e.g. "Laptop battery" and
+#. * the second is the time, e.g. 7 hours 6 minutes
+#: ../src/gpm-upower.c:280
+#, c-format
+msgid "%s %s remaining"
+msgstr "%s %s bly oor"
+
+#. TRANSLATORS: device is charging, and we have a time to full and a percentage
+#. * The first parameter is the device type, e.g. "Laptop battery" and
+#. * the second is the time, e.g. "7 hours 6 minutes"
+#. TRANSLATORS: device is charging, and we have a time to full and a percentage.
+#. * The first parameter is the device type, e.g. "Laptop battery" and
+#. * the second is the time, e.g. "7 hours 6 minutes"
+#: ../src/gpm-upower.c:301 ../src/gpm-upower.c:318
+#, c-format
+msgid "%s %s until charged"
+msgstr "%s %s tot volgelaai"
+
+#. TRANSLATORS: the device is charging, and we have a time to full and empty.
+#. * The parameter is a time string, e.g. "7 hours 6 minutes"
+#: ../src/gpm-upower.c:308
+#, c-format
+msgid "provides %s battery runtime"
+msgstr "verskaf %s batterygebruik"
+
+#. TRANSLATORS: the type of data, e.g. Laptop battery
+#: ../src/gpm-upower.c:402
+msgid "Product:"
+msgstr "Produk:"
+
+#. TRANSLATORS: device is missing
+#. TRANSLATORS: device is charged
+#. TRANSLATORS: device is charging
+#. TRANSLATORS: device is discharging
+#: ../src/gpm-upower.c:406 ../src/gpm-upower.c:409 ../src/gpm-upower.c:412
+#: ../src/gpm-upower.c:415
+msgid "Status:"
+msgstr "Status:"
+
+#: ../src/gpm-upower.c:406
+#, fuzzy
+msgid "Missing"
+msgstr "Ontbreek"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:409 ../src/gpm-upower.c:690
+msgid "Charged"
+msgstr "Volgelaai"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:412 ../src/gpm-upower.c:678
+msgid "Charging"
+msgstr "Laai tans"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:415 ../src/gpm-upower.c:682
+msgid "Discharging"
+msgstr "Ontlaai tans"
+
+#. TRANSLATORS: percentage
+#: ../src/gpm-upower.c:420
+msgid "Percentage charge:"
+msgstr "Persentasie gelaai:"
+
+#. TRANSLATORS: manufacturer
+#: ../src/gpm-upower.c:424
+msgid "Vendor:"
+msgstr ""
+
+#. TRANSLATORS: how the battery is made, e.g. Lithium Ion
+#: ../src/gpm-upower.c:429
+msgid "Technology:"
+msgstr "Tegnologie:"
+
+#. TRANSLATORS: serial number of the battery
+#: ../src/gpm-upower.c:433
+msgid "Serial number:"
+msgstr "Reeksnommer:"
+
+#. TRANSLATORS: model number of the battery
+#: ../src/gpm-upower.c:437
+msgid "Model:"
+msgstr "Model:"
+
+#. TRANSLATORS: time to fully charged
+#: ../src/gpm-upower.c:442
+msgid "Charge time:"
+msgstr "Laaityd:"
+
+#. TRANSLATORS: time to empty
+#: ../src/gpm-upower.c:448
+msgid "Discharge time:"
+msgstr "Ontlaaityd:"
+
+#. TRANSLATORS: Excellent, Good, Fair and Poor are all related to battery Capacity
+#: ../src/gpm-upower.c:455
+msgid "Excellent"
+msgstr "Uitstekend"
+
+#: ../src/gpm-upower.c:457
+msgid "Good"
+msgstr "Goed"
+
+#: ../src/gpm-upower.c:459
+msgid "Fair"
+msgstr "Redelik"
+
+#: ../src/gpm-upower.c:461
+msgid "Poor"
+msgstr "Swak"
+
+#: ../src/gpm-upower.c:465
+msgid "Capacity:"
+msgstr "Kapasiteit:"
+
+#: ../src/gpm-upower.c:471 ../src/gpm-upower.c:496
+msgid "Current charge:"
+msgstr "Huidige lading:"
+
+#: ../src/gpm-upower.c:477
+msgid "Last full charge:"
+msgstr "Laas volgelaai:"
+
+#: ../src/gpm-upower.c:483 ../src/gpm-upower.c:501
+msgid "Design charge:"
+msgstr "Ontwerplading:"
+
+#: ../src/gpm-upower.c:488
+msgid "Charge rate:"
+msgstr "Laaitempo:"
+
+#. TRANSLATORS: system power cord
+#: ../src/gpm-upower.c:523 ../src/gpm-upower.c:727
+msgid "AC adapter"
+msgid_plural "AC adapters"
+msgstr[0] "Muurkragkoord"
+msgstr[1] "Muurkragkoorde"
+
+#. TRANSLATORS: laptop primary battery
+#: ../src/gpm-upower.c:527 ../src/gpm-upower.c:763
+msgid "Laptop battery"
+msgid_plural "Laptop batteries"
+msgstr[0] "Skootrekenaarbattery"
+msgstr[1] "Skootrekenaarbatterye"
+
+#. TRANSLATORS: battery-backed AC power source
+#: ../src/gpm-upower.c:531 ../src/gpm-upower.c:787
+msgid "UPS"
+msgid_plural "UPSs"
+msgstr[0] "UPS"
+msgstr[1] "UPS'e"
+
+#. TRANSLATORS: a monitor is a device to measure voltage and current
+#: ../src/gpm-upower.c:535 ../src/gpm-upower.c:794
+msgid "Monitor"
+msgid_plural "Monitors"
+msgstr[0] ""
+msgstr[1] ""
+
+#. TRANSLATORS: wireless mice with internal batteries
+#: ../src/gpm-upower.c:539 ../src/gpm-upower.c:818
+msgid "Mouse"
+msgid_plural "Mice"
+msgstr[0] "Muis"
+msgstr[1] "Muise"
+
+#. TRANSLATORS: wireless keyboard with internal battery
+#: ../src/gpm-upower.c:543 ../src/gpm-upower.c:842
+msgid "Keyboard"
+msgid_plural "Keyboards"
+msgstr[0] "Sleutelbord"
+msgstr[1] "Sleutelborde"
+
+#. TRANSLATORS: portable device
+#: ../src/gpm-upower.c:547 ../src/gpm-upower.c:866
+msgid "PDA"
+msgid_plural "PDAs"
+msgstr[0] "PDA"
+msgstr[1] "PDA's"
+
+#. TRANSLATORS: cell phone (mobile...)
+#: ../src/gpm-upower.c:551 ../src/gpm-upower.c:890
+msgid "Cell phone"
+msgid_plural "Cell phones"
+msgstr[0] "Selfoon"
+msgstr[1] "Selfone"
+
+#. TRANSLATORS: media player, mp3 etc
+#: ../src/gpm-upower.c:556 ../src/gpm-upower.c:915
+msgid "Media player"
+msgid_plural "Media players"
+msgstr[0] "Mediaspeler"
+msgstr[1] "Mediaspelers"
+
+#. TRANSLATORS: tablet device
+#: ../src/gpm-upower.c:560 ../src/gpm-upower.c:939
+msgid "Tablet"
+msgid_plural "Tablets"
+msgstr[0] "Tablet"
+msgstr[1] "Tablette"
+
+#. TRANSLATORS: tablet device
+#: ../src/gpm-upower.c:564 ../src/gpm-upower.c:963
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Rekenaar"
+msgstr[1] "Rekenaars"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-upower.c:634
+msgid "Lithium Ion"
+msgstr "Litium-ioon"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-upower.c:638
+msgid "Lithium Polymer"
+msgstr "Litium-polimeer"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-upower.c:642
+msgid "Lithium Iron Phosphate"
+msgstr "Litium-ioon-fosfaat"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-upower.c:646
+msgid "Lead acid"
+msgstr "Loodsuur"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-upower.c:650
+msgid "Nickel Cadmium"
+msgstr "Nikkel-kadmium"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-upower.c:654
+msgid "Nickel metal hydride"
+msgstr ""
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-upower.c:658
+msgid "Unknown technology"
+msgstr "Onbekend tegnologie"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:686
+msgid "Empty"
+msgstr "Pap"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:694
+msgid "Waiting to charge"
+msgstr "Wag om gelaai te word"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:698
+msgid "Waiting to discharge"
+msgstr "Wat om ontlaai te word"
+
+#. TRANSLATORS: device not present
+#: ../src/gpm-upower.c:735
+#, fuzzy
+msgid "Laptop battery not present"
+msgstr "Skootrekenaarbattery"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:739
+msgid "Laptop battery is charging"
+msgstr "Skootrekenaarbattery laai tans"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:743
+msgid "Laptop battery is discharging"
+msgstr "Skootrekenaarbattery ontlaai tans"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:747
+msgid "Laptop battery is empty"
+msgstr "Skootrekenaarbattery is pap"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:751
+msgid "Laptop battery is charged"
+msgstr "Skootrekenaarbattery is volgelaai"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:755
+msgid "Laptop battery is waiting to charge"
+msgstr "Skootrekenaarbattery wag om gelaai te word"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:759
+msgid "Laptop battery is waiting to discharge"
+msgstr "Skootrekenaarbattery wag om ontlaai te word"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:771
+msgid "UPS is charging"
+msgstr "UPS laai nou"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:775
+msgid "UPS is discharging"
+msgstr "UPS ontlaai nou"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:779
+msgid "UPS is empty"
+msgstr "UPS is pap"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:783
+msgid "UPS is charged"
+msgstr "UPS is gelaai"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:802
+msgid "Mouse is charging"
+msgstr "Muis laai tans"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:806
+msgid "Mouse is discharging"
+msgstr "Muis ontlaai tans"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:810
+msgid "Mouse is empty"
+msgstr "Muis is pap"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:814
+msgid "Mouse is charged"
+msgstr "Muis is volgelaai"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:826
+msgid "Keyboard is charging"
+msgstr "Sleutelbord laai tans"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:830
+msgid "Keyboard is discharging"
+msgstr "Sleutelbord ontlaai tans"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:834
+msgid "Keyboard is empty"
+msgstr "Sleutelbord is pap"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:838
+msgid "Keyboard is charged"
+msgstr "Sleutelbord is volgelaai"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:850
+msgid "PDA is charging"
+msgstr "PDA laai tans"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:854
+msgid "PDA is discharging"
+msgstr "PDA ontlaai tans"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:858
+msgid "PDA is empty"
+msgstr "PDA is pap"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:862
+msgid "PDA is charged"
+msgstr "PDA is volgelaai"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:874
+msgid "Cell phone is charging"
+msgstr "Selfoon laai tans"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:878
+msgid "Cell phone is discharging"
+msgstr "Selfoon ontlaai tans"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:882
+msgid "Cell phone is empty"
+msgstr "Selfoon is pap"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:886
+msgid "Cell phone is charged"
+msgstr "Selfoon is volgelaai"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:899
+msgid "Media player is charging"
+msgstr "Mediaspeler laai tans"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:903
+msgid "Media player is discharging"
+msgstr "Mediaspeler ontlaai tans"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:907
+msgid "Media player is empty"
+msgstr "Mediaspeler is pap"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:911
+msgid "Media player is charged"
+msgstr "Mediaspeler is volgelaai"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:923
+msgid "Tablet is charging"
+msgstr "Tablet laai tans"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:927
+msgid "Tablet is discharging"
+msgstr "Tablet ontlaai tans"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:931
+msgid "Tablet is empty"
+msgstr "Tablet is pap"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:935
+msgid "Tablet is charged"
+msgstr "Tablet is volgelaai"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:947
+msgid "Computer is charging"
+msgstr "Rekenaar laai tans"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:951
+msgid "Computer is discharging"
+msgstr "Rekenaar ontlaai tans"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:955
+msgid "Computer is empty"
+msgstr "Rekenaar is pap"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-upower.c:959
+msgid "Computer is charged"
+msgstr "Rekenaar is volgelaai"
