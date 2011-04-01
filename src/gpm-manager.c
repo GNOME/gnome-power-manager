@@ -2262,6 +2262,7 @@ gpm_manager_name_lost_cb (GDBusConnection *connection,
 			  gpointer user_data)
 {
 	g_warning ("name lost %s", name);
+	exit (1);
 }
 
 /**
