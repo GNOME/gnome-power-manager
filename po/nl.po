@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-13 21:40+0100\n"
-"PO-Revision-Date: 2011-03-13 21:39+0100\n"
+"POT-Creation-Date: 2011-04-02 18:07+0200\n"
+"PO-Revision-Date: 2011-04-02 18:07+0200\n"
 "Last-Translator: Wouter Bolsterlee <wbolster@gnome.org>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "Language: \n"
@@ -237,22 +237,23 @@ msgid "Notify when fully charged"
 msgstr "Attenderen wanneer volledig opgeladen"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:34
-#, fuzzy
 msgid ""
 "Percent brightness to set keyboard backlight at when on AC power. Legal "
 "values are between 0 and 100."
 msgstr ""
-"De helderheid van het scherm wanneer netstroom gebruikt wordt. Mogelijke "
-"waarden liggen tussen 0 en 100."
+"De helderheid van de verlichting van het toetsenbord wanneer netstroom "
+"gebruikt wordt. Mogelijke waarden liggen tussen 0 en 100."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:35
 msgid "Percent to reduce keyboard backlight by when idle."
 msgstr ""
+"Percentage waarmee de toetsenbordverlichting gedimd wordt bij inactiviteit."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:36
-#, fuzzy
 msgid "Percent to reduce keyboard backlight by when on battery power."
-msgstr "Achtergrondverlichting dimmen wanneer de computer op accustroom werkt"
+msgstr ""
+"Percentage waarmee de toetsenbordverlichting gedimd wordt wanneer de "
+"computer op accustroom werkt."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:37
 msgid "Percentage action is taken"
@@ -271,9 +272,8 @@ msgid "Reduce the backlight brightness when on battery power"
 msgstr "Achtergrondverlichting dimmen wanneer de computer op accustroom werkt"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:41
-#, fuzzy
 msgid "Reduce the keyboard backlight when on battery power"
-msgstr "Achtergrondverlichting dimmen wanneer de computer op accustroom werkt"
+msgstr "Toetsenbordverlichting dimmen wanneer de computer op accustroom werkt"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:42
 msgid "Seconds of inactivity to spin down when on AC"
@@ -285,7 +285,7 @@ msgstr "Aantal seconden van inactiviteit vóór stilzetten wanneer op accustroom
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:44
 msgid "The ID of the last device selected"
-msgstr ""
+msgstr "De ID van het laatst geselecteerde apparaat."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:45
 msgid "The URI to show to the user on sleep failure"
@@ -300,31 +300,26 @@ msgstr ""
 "waarden liggen tussen 0 en 100."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:47
-#, fuzzy
 msgid ""
 "The brightness of the display when on AC power. Possible values are between "
 "0.0 and 1.0."
 msgstr ""
 "De helderheid van het scherm wanneer netstroom gebruikt wordt. Mogelijke "
-"waarden liggen tussen 0 en 100."
+"waarden liggen tussen 0.0 en 1.0."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:48
-#, fuzzy
 msgid "The default graph type to show for history"
-msgstr "Standaard grafiektype voor het statistiekenvenster"
+msgstr "Standaard grafiektype voor geschiedenis"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:49
-#, fuzzy
 msgid "The default graph type to show for stats"
-msgstr "Standaard grafiektype voor het statistiekenvenster"
+msgstr "Standaard grafiektype voor statistieken"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:50
-#, fuzzy
 msgid "The default graph type to show in the history window."
-msgstr "Standaard grafiektype voor het statistiekenvenster."
+msgstr "Standaard grafiektype voor het geschiedenisvenster."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:51
-#, fuzzy
 msgid "The default graph type to show in the stats window."
 msgstr "Standaard grafiektype voor het statistiekenvenster."
 
@@ -333,16 +328,20 @@ msgid ""
 "The identifier of the last device which is used to return focus to the "
 "correct device."
 msgstr ""
+"De identifier van het meest recente apparaat, gebruikt voor het focussen van "
+"het juiste apparaat."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:53
 msgid "The index of the page number to show by default"
-msgstr ""
+msgstr "De index van het paginanummer dat standaard getoond wordt."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:54
 msgid ""
 "The index of the page number to show by default which is used to return "
 "focus to the correct page."
 msgstr ""
+"De index van het paginanummer dat standaard getoond wordt; gebruikt voor het "
+"focussen van de juiste pagina."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:55
 #, fuzzy
@@ -404,6 +403,9 @@ msgid ""
 "if set to '60', the backlight will be cut by 40% when idle. Legal values are "
 "between 0 and 100."
 msgstr ""
+"Percentage waarmee de toetsenbordverlichting gedimd wordt bij inactiviteit. "
+"Voorbeeld: als dit staat ingesteld op ‘60’, wordt de verlichting 40% gedimd. "
+"Geldige waarden liggen tussen 0 en 100."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:65
 #, no-c-format
@@ -412,6 +414,9 @@ msgid ""
 "For example, if set to '60', the backlight will be cut by 40% on battery "
 "power. Legal values are between 0 and 100."
 msgstr ""
+"Percentage waarmee de toetsenbordverlichting gedimd wordt wanneer de "
+"computer op accustroom werkt. Voorbeeld: als dit staat ingesteld op ‘60’, "
+"wordt de verlichting 40% gedimd. Geldige waarden liggen tussen 0 en 100."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:66
 #, fuzzy
