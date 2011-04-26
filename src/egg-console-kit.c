@@ -205,7 +205,7 @@ egg_console_kit_is_local (EggConsoleKit *console, gboolean *is_local, GError **e
 
 	/* maybe console kit does not know about our session */
 	if (console->priv->proxy_session == NULL) {
-		g_warning ("no ConsoleKit session");
+		g_set_error_literal (error, 1, 0, "no ConsoleKit session");
 		goto out;
 	}
 
@@ -246,7 +246,7 @@ egg_console_kit_is_active (EggConsoleKit *console, gboolean *is_active, GError *
 
 	/* maybe console kit does not know about our session */
 	if (console->priv->proxy_session == NULL) {
-		g_warning ("no ConsoleKit session");
+		g_set_error_literal (error, 1, 0, "no ConsoleKit session");
 		goto out;
 	}
 
