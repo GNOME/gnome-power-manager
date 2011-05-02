@@ -424,6 +424,11 @@ gpm_idle_dbus_signal_cb (GDBusProxy *proxy, const gchar *sender_name, const gcha
 		return;
 	}
 	if (g_strcmp0 (signal_name, "StatusChanged") == 0) {
+                guint status;
+
+                g_variant_get (parameters, "(u)", &status);
+                g_dbus_proxy_set_cached_property (proxy, "status",
+                                                  g_variant_new ("u", status));
 		g_debug ("Received gnome session status change");
 		gpm_idle_evaluate (idle);
 		return;
