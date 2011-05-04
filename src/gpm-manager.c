@@ -52,7 +52,6 @@
 #include "gpm-backlight.h"
 #include "gpm-kbd-backlight.h"
 #include "gpm-stock-icons.h"
-#include "gpm-tray-icon.h"
 #include "gpm-engine.h"
 #include "gpm-upower.h"
 #include "gpm-disks.h"
@@ -96,7 +95,6 @@ struct GpmManagerPrivate
 	GpmIdle			*idle;
 	GpmControl		*control;
 	GpmScreensaver		*screensaver;
-	GpmTrayIcon		*tray_icon;
 	GpmEngine		*engine;
 	GpmBacklight		*backlight;
 	GpmKbdBacklight		*kbd_backlight;
@@ -109,7 +107,6 @@ struct GpmManagerPrivate
 	UpClient		*client;
 	gboolean		 on_battery;
 	gboolean		 just_resumed;
-	GtkStatusIcon		*status_icon;
 	NotifyNotification	*notification_general;
 	NotifyNotification	*notification_warning_low;
 	NotifyNotification	*notification_discharging;
@@ -1357,24 +1354,6 @@ gpm_manager_engine_perhaps_recall_cb (GpmEngine *engine, UpDevice *device, gchar
 }
 
 /**
- * gpm_manager_engine_icon_changed_cb:
- */
-static void
-gpm_manager_engine_icon_changed_cb (GpmEngine  *engine, GIcon *icon, GpmManager *manager)
-{
-	gpm_tray_icon_set_icon (manager->priv->tray_icon, icon);
-}
-
-/**
- * gpm_manager_engine_summary_changed_cb:
- */
-static void
-gpm_manager_engine_summary_changed_cb (GpmEngine *engine, gchar *summary, GpmManager *manager)
-{
-	gpm_tray_icon_set_tooltip (manager->priv->tray_icon, summary);
-}
-
-/**
  * gpm_manager_engine_low_capacity_cb:
  */
 static void
@@ -2340,12 +2319,6 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect (manager->priv->control, "resume",
 			  G_CALLBACK (gpm_manager_control_resume_cb), manager);
 
-	g_debug ("creating new tray icon");
-	manager->priv->tray_icon = gpm_tray_icon_new ();
-
-	/* keep a reference for the notifications */
-	manager->priv->status_icon = gpm_tray_icon_get_status_icon (manager->priv->tray_icon);
-
 	gpm_manager_sync_policy_sleep (manager);
 
 	manager->priv->engine = gpm_engine_new ();
@@ -2353,10 +2326,6 @@ gpm_manager_init (GpmManager *manager)
 			  G_CALLBACK (gpm_manager_engine_perhaps_recall_cb), manager);
 	g_signal_connect (manager->priv->engine, "low-capacity",
 			  G_CALLBACK (gpm_manager_engine_low_capacity_cb), manager);
-	g_signal_connect (manager->priv->engine, "icon-changed",
-			  G_CALLBACK (gpm_manager_engine_icon_changed_cb), manager);
-	g_signal_connect (manager->priv->engine, "summary-changed",
-			  G_CALLBACK (gpm_manager_engine_summary_changed_cb), manager);
 	g_signal_connect (manager->priv->engine, "fully-charged",
 			  G_CALLBACK (gpm_manager_engine_fully_charged_cb), manager);
 	g_signal_connect (manager->priv->engine, "discharging",
@@ -2426,7 +2395,6 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->dpms);
 	g_object_unref (manager->priv->idle);
 	g_object_unref (manager->priv->engine);
-	g_object_unref (manager->priv->tray_icon);
 	g_object_unref (manager->priv->screensaver);
 	g_object_unref (manager->priv->control);
 	g_object_unref (manager->priv->button);
@@ -2434,7 +2402,6 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->kbd_backlight);
 	g_object_unref (manager->priv->console);
 	g_object_unref (manager->priv->client);
-	g_object_unref (manager->priv->status_icon);
 
 	g_dbus_connection_unregister_object (manager->priv->bus_connection, manager->priv->bus_object_id);
 	g_object_unref (manager->priv->bus_connection);

@@ -107,8 +107,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-main.c					\
 	gpm-manager.h					\
 	gpm-manager.c					\
-	gpm-tray-icon.h					\
-	gpm-tray-icon.c					\
 	gpm-screensaver.h				\
 	gpm-screensaver.c				\
 	gpm-stock-icons.h				\
