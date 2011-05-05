@@ -11,7 +11,6 @@ INCLUDES =						\
 	$(NOTIFY_CFLAGS)				\
 	$(CANBERRA_CFLAGS)				\
 	$(GSTREAMER_CFLAGS)				\
-	$(CONTROL_CENTER_CFLAGS)			\
 	$(UPOWER_CFLAGS)				\
 	-DBINDIR=\"$(bindir)\"			 	\
 	-DSBINDIR=\"$(sbindir)\"			\
