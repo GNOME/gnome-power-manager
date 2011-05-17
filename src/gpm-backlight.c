@@ -144,9 +144,6 @@ gpm_backlight_get_brightness (GpmBacklight *backlight, guint *brightness, GError
 static void
 gpm_backlight_brightness_changed (GpmBacklight *backlight, guint percentage)
 {
-	/* save the new percentage */
-	backlight->priv->master_percentage = percentage;
-
 	/* we emit a signal for the brightness applet */
 	g_debug ("emitting brightness-changed : %i", percentage);
 	g_dbus_connection_emit_signal (backlight->priv->bus_connection,
@@ -545,6 +542,8 @@ gpm_backlight_idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *ba
 static void
 gpm_backlight_brightness_changed_cb (GpmBrightness *brightness, guint percentage, GpmBacklight *backlight)
 {
+	/* save the new percentage */
+	backlight->priv->master_percentage = percentage;
 	gpm_backlight_brightness_changed (backlight, percentage);
 }
 
