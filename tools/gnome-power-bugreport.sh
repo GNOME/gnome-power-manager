@@ -45,30 +45,49 @@ uname -r
 echo -n "g-p-m version:        "
 gnome-power-manager --version | cut -f2 -d" "
 
-echo -n "HAL version:          "
-lshal -V | cut -f3 -d" "
+if [ -d /sys/class/dmi/id ]; then
+    echo -n "System manufacturer:  "
+    cat /sys/class/dmi/id/sys_vendor
 
-echo -n "System manufacturer:  "
-print_hal_key "smbios.system.manufacturer"
-echo -n "System version:       "
-print_hal_key "smbios.system.version"
-echo -n "System product:       "
-print_hal_key "smbios.system.product"
+    echo -n "System version:       "
+    cat /sys/class/dmi/id/product_version
 
-echo -n "AC adapter present:   "
-print_hal_capability "ac_adapter"
+    echo -n "System product:       "
+    cat /sys/class/dmi/id/product_name
 
-echo -n "Battery present:      "
-print_hal_capability "battery"
+elif type lshal >/dev/null; then
+    echo -n "HAL version:          "
+    lshal -V | cut -f3 -d" "
 
-echo -n "Laptop panel present: "
-print_hal_capability "laptop_panel"
+    echo -n "System manufacturer:  "
+    print_hal_key "smbios.system.manufacturer"
+    echo -n "System version:       "
+    print_hal_key "smbios.system.version"
+    echo -n "System product:       "
+    print_hal_key "smbios.system.product"
 
-echo -n "CPU scaling present:  "
-print_hal_capability "cpufreq_control"
+    echo -n "AC adapter present:   "
+    print_hal_capability "ac_adapter"
 
-echo "Battery Information:"
-lshal | grep "battery\."
+    echo -n "Battery present:      "
+    print_hal_capability "battery"
+
+    echo -n "Laptop panel present: "
+    print_hal_capability "laptop_panel"
+
+    echo -n "CPU scaling present:  "
+    print_hal_capability "cpufreq_control"
+
+    echo "Battery Information:"
+    lshal | grep "battery\."
+
+    echo "HAL Process Information:"
+    if [ "$OS" = "SunOS" ]; then
+	    ptree -a `pgrep hald`
+    else
+	    ps aux --forest | grep hald | grep -v grep
+    fi
+fi
 
 OS=`uname -s`
 
@@ -80,11 +99,4 @@ if [ "$OS" = "SunOS" ]; then
 	ptree -a `pgrep power`
 else
 	ps aux --forest | grep gnome-power | grep -v grep
-fi
-
-echo "HAL Process Information:"
-if [ "$OS" = "SunOS" ]; then
-        ptree -a `pgrep hald`
-else
-	ps aux --forest | grep hald | grep -v grep
 fi
