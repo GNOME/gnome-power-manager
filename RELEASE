@@ -1,9 +1,9 @@
 Follow http://developer.gnome.org/dotplan/for_maintainers.html
 
-git shortlog GNOME_POWER_MANAGER_3_0_0.. | grep -i -v trivial | uniq | grep -v Merge > NEWS.new
+git shortlog GNOME_POWER_MANAGER_3_0_2.. | grep -i -v trivial | uniq | grep -v Merge > NEWS.new
 
 --------------------------------------------------------------------------------
-Version 3.0.2
+Version 3.0.3
 ~~~~~~~~~~~~~
 Released: 2011-xx-xx
 
@@ -16,8 +16,8 @@ Released: 2011-xx-xx
 
 Run "make distcheck", correct any problems encountered
 
-git commit -a -m "GNOME Power Manager 3.0.2"
-git tag -s GNOME_POWER_MANAGER_3_0_2 -m "==== Version 3.0.2 ===="
+git commit -a -m "GNOME Power Manager 3.0.3"
+git tag -s GNOME_POWER_MANAGER_3_0_3 -m "==== Version 3.0.3 ===="
 <wait>
 git push --tags
 git push
@@ -28,7 +28,7 @@ scp gnome-power-manager-*.tar.gz  rhughes@master.gnome.org:
 - Install the module on master.gnome.org
 
 ssh rhughes@master.gnome.org
-install-module gnome-power-manager-*.tar.gz
+ftpadmin install gnome-power-manager-*.tar.gz
 
 - Do a post-release version bump by updating configure.in
 
@@ -37,7 +37,7 @@ git push
 
 - Update jhbuild modulesets
 
-- Notify gnome-announce-list@gnome.org, gnome-doc-list@gnome.org, gnome-i18n@gnome.org
+- Notify gnome-announce-list@gnome.org
 
 GNOME Power Manager is a session daemon that makes it easy to manage the
 power on your laptop or desktop system.
