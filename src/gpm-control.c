@@ -38,7 +38,6 @@
 
 #include <glib/gi18n.h>
 #include <gnome-keyring.h>
-#include <gconf/gconf-client.h>
 #include <libupower-glib/upower.h>
 
 #include "egg-console-kit.h"
@@ -51,8 +50,8 @@
 
 struct GpmControlPrivate
 {
-	GConfClient		*conf;
 	GSettings		*settings;
+	GSettings		*settings_ss;
 	UpClient		*client;
 };
 
@@ -118,7 +117,7 @@ gpm_control_get_lock_policy (GpmControl *control, const gchar *policy)
 	   See bug #331164 for all the juicy details. :-) */
 	use_ss_setting = g_settings_get_boolean (control->priv->settings, GPM_SETTINGS_LOCK_USE_SCREENSAVER);
 	if (use_ss_setting) {
-		do_lock = gconf_client_get_bool (control->priv->conf, GS_CONF_PREF_LOCK_ENABLED, NULL);
+		do_lock = g_settings_get_boolean (control->priv->settings_ss, GS_SETTINGS_PREF_LOCK_ENABLED);
 		g_debug ("Using ScreenSaver settings (%i)", do_lock);
 	} else {
 		do_lock = g_settings_get_boolean (control->priv->settings, policy);
@@ -256,8 +255,8 @@ gpm_control_finalize (GObject *object)
 	g_return_if_fail (GPM_IS_CONTROL (object));
 	control = GPM_CONTROL (object);
 
-	g_object_unref (control->priv->conf);
 	g_object_unref (control->priv->settings);
+	g_object_unref (control->priv->settings_ss);
 	g_object_unref (control->priv->client);
 
 	g_return_if_fail (control->priv != NULL);
@@ -306,7 +305,7 @@ gpm_control_init (GpmControl *control)
 
 	control->priv->client = up_client_new ();
 	control->priv->settings = g_settings_new (GPM_SETTINGS_SCHEMA);
-	control->priv->conf = gconf_client_get_default ();
+	control->priv->settings_ss = g_settings_new (GS_SETTINGS_SCHEMA);
 }
 
 /**

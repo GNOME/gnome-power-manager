@@ -129,8 +129,8 @@ G_BEGIN_DECLS
 #define GPM_SETTINGS_INFO_LAST_DEVICE			"info-last-device"
 
 /* gnome-screensaver */
-#define GS_CONF_DIR					"/apps/gnome-screensaver"
-#define GS_CONF_PREF_LOCK_ENABLED			GS_CONF_DIR "/lock_enabled"
+#define GS_SETTINGS_SCHEMA				"org.gnome.desktop.screensaver"
+#define GS_SETTINGS_PREF_LOCK_ENABLED			"lock-enabled"
 
 typedef enum {
 	GPM_ICON_POLICY_PRESENT,

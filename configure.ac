@@ -107,7 +107,6 @@ PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk3 >= 0.10)
 
 PKG_CHECK_MODULES(GNOME, [
  gtk+-3.0 >= 2.91.0
- gconf-2.0 >= 2.31.1
  gnome-keyring-1 >= 0.6.0
  cairo >= 1.0.0])
 
