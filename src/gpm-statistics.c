@@ -27,7 +27,6 @@
 #include <glib/gi18n.h>
 
 #include <gtk/gtk.h>
-#include <gconf/gconf-client.h>
 #include <libupower-glib/upower.h>
 
 #include "gpm-array-float.h"

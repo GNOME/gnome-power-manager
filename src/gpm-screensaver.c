@@ -25,7 +25,6 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
-#include <gconf/gconf-client.h>
 
 #include "gpm-screensaver.h"
 #include "gpm-common.h"
@@ -41,7 +40,7 @@ static void     gpm_screensaver_finalize   (GObject		*object);
 struct GpmScreensaverPrivate
 {
 	GDBusProxy		*proxy;
-	GConfClient		*conf;
+	GSettings		*settings;
 };
 
 enum {
@@ -63,7 +62,7 @@ gpm_screensaver_lock_enabled (GpmScreensaver *screensaver)
 {
 	gboolean enabled;
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
-	enabled = gconf_client_get_bool (screensaver->priv->conf, GS_CONF_PREF_LOCK_ENABLED, NULL);
+	enabled = g_settings_get_boolean (screensaver->priv->settings, GS_SETTINGS_PREF_LOCK_ENABLED);
 	return enabled;
 }
 
@@ -296,7 +295,7 @@ gpm_screensaver_init (GpmScreensaver *screensaver)
 		g_warning ("failed to setup screensaver proxy: %s", error->message);
 		g_error_free (error);
 	}
-	screensaver->priv->conf = gconf_client_get_default ();
+	screensaver->priv->settings = g_settings_new (GS_SETTINGS_SCHEMA) ;
 }
 
 /**
@@ -313,7 +312,7 @@ gpm_screensaver_finalize (GObject *object)
 	screensaver = GPM_SCREENSAVER (object);
 	screensaver->priv = GPM_SCREENSAVER_GET_PRIVATE (screensaver);
 
-	g_object_unref (screensaver->priv->conf);
+	g_object_unref (screensaver->priv->settings);
 	g_object_unref (screensaver->priv->proxy);
 
 	G_OBJECT_CLASS (gpm_screensaver_parent_class)->finalize (object);
