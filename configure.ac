@@ -1,9 +1,9 @@
 AC_PREREQ(2.63)
 
-AC_INIT([gnome-power-manager],[2.91.92])
+AC_INIT([gnome-power-manager],[3.1.2])
 AC_CONFIG_SRCDIR(src)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
-AM_INIT_AUTOMAKE([1.9 tar-ustar dist-bzip2 foreign])
+AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-xz tar-ustar])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 

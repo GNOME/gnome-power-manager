@@ -1,3 +1,44 @@
+Version 3.1.2
+~~~~~~~~~~~~~
+Released: 2011-06-13
+
+* Translations
+ - Added Afrikaans translation (Friedel Wolff)
+ - Added UG translation (Abduxukur Abdurixit)
+ - Updated Bengali translation (Jamil Ahmed)
+ - Updated Brazilian Portuguese translation (Djavan Fagundes)
+ - Updated Bulgarian translation (Alexander Shopov, Ivaylo Valkov)
+ - Updated Catalan translation (Joan Duran, Jordi Serratosa)
+ - Updated Catalan (Valencian) translation (Carles Ferrando)
+ - Updated Danish translation (Ask H. Larsen)
+ - Updated Dutch translation (Wouter Bolsterlee)
+ - Updated Esperanto translation (Kristjan SCHMIDT)
+ - Updated French translation (Claude Paroz)
+ - Updated German translation (Wolfgang Stöggl)
+ - Updated Greek translation (George Stefanakis)
+ - Updated Italian translation (Milo Casagrande)
+ - Updated Japanese translation (Takayoshi OKANO, Takayuki KUSANO)
+ - Updated Lithuanian translation (Gintautas Miliauskas)
+ - Updated Norwegian bokmål translation (Kjartan Maraas)
+ - Updated Serbian translation (Милош Поповић)
+ - Updated Simplified Chinese translation (Edison Zhao)
+ - Updated Tamil translation (Dr.T.Vasudevan)
+ - Updated Traditional Chinese translation (Chao-Hsiung Liao)
+ - Updated Turkish translation (Muhammet Kara)
+ - Updated Ukranian (Daniel Korostil)
+ - Updated Vietnamese translation (Nguyễn Thái Ngọc Duy)
+ - Updated zh_CN translation (Edison Zhao, YunQiang Su, Funda Wang)
+
+* Bugfix:
+ - Don't crash if there is no ConsoleKit session. Fixes rh#699020 (Richard Hughes)
+ - gnome-power-bugreport.sh: Use sysfs instead of hal if available (Martin Pitt)
+ - If we loose the DBus name, exit (Richard Hughes)
+ - Manually update the idle status property (Matthias Clasen)
+ - Query gnome-screensaver settings with GSettings (Gary Ching-Pang Lin)
+ - Remove GpmTrayIcon (Richard Hughes)
+ - Revert "Remove the 'interactive' option for power actions" (Cosimo Cecchi)
+ - Use /org/gnome as starting path for schemas (Richard Hughes)
+
 Version 2.91.92
 ~~~~~~~~~~~~~~~
 Released: 2011-03-21
