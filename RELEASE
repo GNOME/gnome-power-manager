@@ -1,6 +1,6 @@
 Follow http://developer.gnome.org/dotplan/for_maintainers.html
 
-git shortlog GNOME_POWER_MANAGER_2_91_90.. | grep -i -v trivial | uniq | grep -v Merge > NEWS.new
+git shortlog GNOME_POWER_MANAGER_3_1_2.. | grep -i -v trivial | uniq | grep -v Merge > NEWS.new
 
 --------------------------------------------------------------------------------
 Version 3.1.2
@@ -16,26 +16,24 @@ Released: 2011-xx-xx
 
 Run "make distcheck", correct any problems encountered
 
-git commit -a -m "GNOME Power Manager 3.1.2"
-git tag -s GNOME_POWER_MANAGER_3_1_2 -m "==== Version 3.1.2 ===="
+git commit -a -m "GNOME Power Manager 3.1.3"
+git tag -s GNOME_POWER_MANAGER_3_1_3 -m "==== Version 3.1.3 ===="
 <wait>
 git push --tags
 git push
 
 • Copy the resulting tarball to master.gnome.org (scp)
-scp gnome-power-manager-*.tar.gz  rhughes@master.gnome.org:
+scp gnome-power-manager-*.tar.xz  rhughes@master.gnome.org:
 
 - Install the module on master.gnome.org
 
 ssh rhughes@master.gnome.org
-install-module gnome-power-manager-*.tar.gz
+install-module gnome-power-manager-*.tar.xz
 
 - Do a post-release version bump by updating configure.in
 
 git commit -a -m "trivial: Post release version bump"
 git push
-
-- Update jhbuild modulesets
 
 - Notify gnome-announce-list@gnome.org, gnome-doc-list@gnome.org, gnome-i18n@gnome.org
 
