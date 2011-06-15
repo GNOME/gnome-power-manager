@@ -1,13 +1,11 @@
 themedir = $(datadir)/icons/hicolor
-size = scalable
+size = 256x256
 context = apps
 
 iconsdir = $(themedir)/$(size)/$(context)
 
 icons_DATA = 			  	\
-	gnome-brightness-applet.svg	\
-	gnome-inhibit-applet.svg	\
-	gnome-power-statistics.svg
+	gnome-power-manager.png
 
 noinst_DATA = 
 

@@ -269,6 +269,8 @@ data/icons/scalable/Makefile
 data/icons/scalable/actions/Makefile
 data/icons/scalable/apps/Makefile
 data/icons/scalable/status/Makefile
+data/icons/256x256/Makefile
+data/icons/256x256/apps/Makefile
 ])
 AC_OUTPUT
 
