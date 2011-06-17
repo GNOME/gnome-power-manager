@@ -1185,7 +1185,12 @@ manager_critical_action_do (GpmManager *manager)
 	if (manager->priv->critical_alert_timeout_id)
 		gpm_manager_play_loop_stop (manager);
 
+	/* if power is restored before we reach here, abort */
+	if (!manager->priv->on_battery)
+		goto out;
+
 	gpm_manager_perform_policy (manager, GSD_SETTINGS_ACTION_CRITICAL_BATT, "Battery is critically low.");
+out:
 	return FALSE;
 }
 
