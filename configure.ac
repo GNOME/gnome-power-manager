@@ -26,15 +26,17 @@ dnl ---------------------------------------------------------------------------
 dnl - Use strict options (default enabled for devs, disabled in releases)
 dnl ---------------------------------------------------------------------------
 dnl if .git directory is present, considering we are working in the repository
-if test -d ".git"; then
+if test -d "$(srcdir)/.git"; then
 	default_strict=yes
 else
 	default_strict=no
 fi
 
-AC_ARG_ENABLE(strict, AS_HELP_STRING([--enable-strict],
-		[Enable strict compilation options]), enable_strict=$enableval,
-		enable_strict=$default_strict)
+AC_ARG_ENABLE([strict],
+              [AS_HELP_STRING([--enable-strict],
+                              [Enable strict compilation options])],
+              [enable_strict=$enableval],
+              [enable_strict=$default_strict])
 if test x$enable_strict != xno; then
 	CPPFLAGS="$CPPFLAGS -DG_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_SINGLE_INCLUDES"
 	CPPFLAGS="$CPPFLAGS -DG_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED"
