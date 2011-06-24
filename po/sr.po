@@ -1,20 +1,20 @@
-#
 # Милош Поповић <gpopac@gmail.com>, 2011.
-#
+# Мирослав Николић <miroslavnikolic@rocketmail.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-03-25 15:06+0000\n"
-"PO-Revision-Date: 2011-03-22 15:14+0100\n"
-"Last-Translator: Милош Поповић <gpopac@gmail.com>\n"
+"POT-Creation-Date: 2011-06-08 16:03+0000\n"
+"PO-Revision-Date: 2011-06-13 22:17+0200\n"
+"Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <gnom@prevod.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : n%"
-"10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\\n\n"
+"Language: Serbian (sr)\n"
+"Plural-Forms: nplurals=4;    plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 :    n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: ../data/gnome-power-manager.desktop.in.in.h:1
 msgid "Power Manager"
@@ -207,10 +207,8 @@ msgstr ""
 "вредности су између 0 и 100"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:35
-#, fuzzy
-#| msgid "Percent to reduce keyboard backlight by when on battery power."
 msgid "Percent to reduce keyboard backlight by when idle."
-msgstr "Проценат смањења осветљености тастатуре при напајању из батерије."
+msgstr "Проценат смањивања позадинског осветљење тастатуре приликом мировања."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:36
 msgid "Percent to reduce keyboard backlight by when on battery power."
@@ -249,7 +247,7 @@ msgstr ""
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:44
 msgid "The ID of the last device selected"
-msgstr ""
+msgstr "ИБ последњег изабраног уређаја"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:45
 msgid "The URI to show to the user on sleep failure"
@@ -292,16 +290,20 @@ msgid ""
 "The identifier of the last device which is used to return focus to the "
 "correct device."
 msgstr ""
+"Идентификатор последњег уређаја који је коришћен за враћање фокуса на "
+"одговарајући уређај."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:53
 msgid "The index of the page number to show by default"
-msgstr ""
+msgstr "Индекс броја странице за приказ по основи"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:54
 msgid ""
 "The index of the page number to show by default which is used to return "
 "focus to the correct page."
 msgstr ""
+"Индекс броја странице који бива приказан по основи који је коришћен за "
+"враћање фокуса на одговарајућу страницу."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:55
 msgid ""
@@ -355,30 +357,27 @@ msgstr ""
 "време за правило) искључен."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:63
-#, fuzzy, no-c-format
-#| msgid ""
-#| "Percent brightness to set keyboard backlight at when on AC power. Legal "
-#| "values are between 0 and 100."
+#, no-c-format
 msgid ""
 "The percentage to reduce the keyboard backlight by when idle. For example, "
 "if set to '60', the backlight will be cut by 40% when idle. Legal values are "
 "between 0 and 100."
 msgstr ""
-"Осветљеност тастатуре када се рачунар напаја из електричне мреже. Могуће "
-"вредности су између 0 и 100"
+"Проценат на који ће бити смањено позадинско осветљење тастатуре приликом "
+"мировања. На пример, ако је постављено на 60, позадинско осветљење ће бити "
+"смањено за 40% када је у стању мировања. Важеће вредности су од 0 до 100."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:65
-#, fuzzy, no-c-format
-#| msgid ""
-#| "Percent brightness to set keyboard backlight at when on AC power. Legal "
-#| "values are between 0 and 100."
+#, no-c-format
 msgid ""
 "The percentage to reduce the keyboard backlight by when on battery power. "
 "For example, if set to '60', the backlight will be cut by 40% on battery "
 "power. Legal values are between 0 and 100."
 msgstr ""
-"Осветљеност тастатуре када се рачунар напаја из електричне мреже. Могуће "
-"вредности су између 0 и 100"
+"Проценат на који ће бити смањено позадинско осветљење тастатуре приликом "
+"напајања из батерије. На пример, ако је постављено на 60, позадинско "
+"осветљење ће бити смањено за 40% када се напаја из батерије. Важеће "
+"вредности су од 0 до 100."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:66
 msgid ""
@@ -536,8 +535,8 @@ msgstr "Посматрање потрошње електричне енерги�
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1087
-#: ../src/gpm-statistics.c:1541
+#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1086
+#: ../src/gpm-statistics.c:1540
 msgid "Power Statistics"
 msgstr "Дијаграм потрошње електричне енергије"
 
@@ -553,7 +552,7 @@ msgstr "0"
 msgid "Data length:"
 msgstr "Дужина података:"
 
-#: ../data/gpm-statistics.ui.h:3 ../src/gpm-statistics.c:206
+#: ../data/gpm-statistics.ui.h:3 ../src/gpm-statistics.c:205
 msgid "Details"
 msgstr "Детаљи"
 
@@ -586,7 +585,7 @@ msgstr "Нема података за приказ."
 msgid "Use smoothed line"
 msgstr "Користи углађену линију"
 
-#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:192
+#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:191
 msgid "Wakeups"
 msgstr "Буђења"
 
@@ -1249,95 +1248,95 @@ msgstr ""
 "угашен."
 
 #. TRANSLATORS: the rate of discharge for the device
-#: ../src/gpm-statistics.c:76 ../src/gpm-statistics.c:464
+#: ../src/gpm-statistics.c:75 ../src/gpm-statistics.c:463
 msgid "Rate"
 msgstr "Стопа"
 
-#: ../src/gpm-statistics.c:77
+#: ../src/gpm-statistics.c:76
 msgid "Charge"
 msgstr "Напуњено"
 
-#: ../src/gpm-statistics.c:78 ../src/gpm-statistics.c:478
+#: ../src/gpm-statistics.c:77 ../src/gpm-statistics.c:477
 msgid "Time to full"
 msgstr "Време до пуњења"
 
-#: ../src/gpm-statistics.c:79 ../src/gpm-statistics.c:483
+#: ../src/gpm-statistics.c:78 ../src/gpm-statistics.c:482
 msgid "Time to empty"
 msgstr "Време до пражњења"
 
-#: ../src/gpm-statistics.c:86
+#: ../src/gpm-statistics.c:85
 msgid "10 minutes"
 msgstr "10 минута"
 
-#: ../src/gpm-statistics.c:87
+#: ../src/gpm-statistics.c:86
 msgid "2 hours"
 msgstr "2 сата"
 
-#: ../src/gpm-statistics.c:88
+#: ../src/gpm-statistics.c:87
 msgid "6 hours"
 msgstr "6 сата"
 
-#: ../src/gpm-statistics.c:89
+#: ../src/gpm-statistics.c:88
 msgid "1 day"
 msgstr "1 дан"
 
-#: ../src/gpm-statistics.c:90
+#: ../src/gpm-statistics.c:89
 msgid "1 week"
 msgstr "1 недеља"
 
 #. TRANSLATORS: what we've observed about the device
-#: ../src/gpm-statistics.c:99
+#: ../src/gpm-statistics.c:98
 msgid "Charge profile"
 msgstr "Профил пуњења"
 
-#: ../src/gpm-statistics.c:100
+#: ../src/gpm-statistics.c:99
 msgid "Discharge profile"
 msgstr "Профил пражњења"
 
 #. TRANSLATORS: how accurately we can predict the time remaining of the battery
-#: ../src/gpm-statistics.c:102
+#: ../src/gpm-statistics.c:101
 msgid "Charge accuracy"
 msgstr "Прецизности пуњења"
 
-#: ../src/gpm-statistics.c:103
+#: ../src/gpm-statistics.c:102
 msgid "Discharge accuracy"
 msgstr "Прецизности пражњења"
 
-#: ../src/gpm-statistics.c:130
+#: ../src/gpm-statistics.c:129
 msgid "Attribute"
 msgstr "Особина"
 
-#: ../src/gpm-statistics.c:137
+#: ../src/gpm-statistics.c:136
 msgid "Value"
 msgstr "Вреднсот"
 
-#: ../src/gpm-statistics.c:154
+#: ../src/gpm-statistics.c:153
 msgid "Image"
 msgstr "Слика"
 
-#: ../src/gpm-statistics.c:160
+#: ../src/gpm-statistics.c:159
 msgid "Description"
 msgstr "Опис"
 
-#: ../src/gpm-statistics.c:179 ../src/gpm-statistics.c:403
+#: ../src/gpm-statistics.c:178 ../src/gpm-statistics.c:402
 msgid "Type"
 msgstr "Врста"
 
-#: ../src/gpm-statistics.c:185
+#: ../src/gpm-statistics.c:184
 msgid "ID"
 msgstr "ИБ"
 
-#: ../src/gpm-statistics.c:199
+#: ../src/gpm-statistics.c:198
 msgid "Command"
 msgstr "Наредба"
 
 #. TRANSLATORS: this is when the stats time is not known
-#: ../src/gpm-statistics.c:284
+#: ../src/gpm-statistics.c:283
 msgid "Unknown"
 msgstr "Непознато"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:288
+#: ../src/gpm-statistics.c:287
 #, c-format
 msgid "%.0f second"
 msgid_plural "%.0f seconds"
@@ -1347,7 +1346,7 @@ msgstr[2] "%.0f секунди"
 msgstr[3] "%.0f секунда"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:293
+#: ../src/gpm-statistics.c:292
 #, c-format
 msgid "%.1f minute"
 msgid_plural "%.1f minutes"
@@ -1357,7 +1356,7 @@ msgstr[2] "%.1f минута"
 msgstr[3] "%.1f минут"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:298
+#: ../src/gpm-statistics.c:297
 #, c-format
 msgid "%.1f hour"
 msgid_plural "%.1f hours"
@@ -1367,7 +1366,7 @@ msgstr[2] "%.1f сати"
 msgstr[3] "%.1f сат"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:302
+#: ../src/gpm-statistics.c:301
 #, c-format
 msgid "%.1f day"
 msgid_plural "%.1f days"
@@ -1376,39 +1375,39 @@ msgstr[1] "%.1f дана"
 msgstr[2] "%.1f дана"
 msgstr[3] "%.1f дан"
 
-#: ../src/gpm-statistics.c:311
+#: ../src/gpm-statistics.c:310
 msgid "Yes"
 msgstr "Да"
 
-#: ../src/gpm-statistics.c:311
+#: ../src/gpm-statistics.c:310
 msgid "No"
 msgstr "Не"
 
 #. TRANSLATORS: the device ID of the current device, e.g. "battery0"
-#: ../src/gpm-statistics.c:400
+#: ../src/gpm-statistics.c:399
 msgid "Device"
 msgstr "Уређај"
 
-#: ../src/gpm-statistics.c:405
+#: ../src/gpm-statistics.c:404
 msgid "Vendor"
 msgstr "Произвођач"
 
-#: ../src/gpm-statistics.c:407
+#: ../src/gpm-statistics.c:406
 msgid "Model"
 msgstr "Модел"
 
-#: ../src/gpm-statistics.c:409
+#: ../src/gpm-statistics.c:408
 msgid "Serial number"
 msgstr "Серијски број"
 
 #. TRANSLATORS: a boolean attribute that means if the device is supplying the
 #. * main power for the computer. For instance, an AC adapter or laptop battery
 #. * would be TRUE,  but a mobile phone or mouse taking power is FALSE
-#: ../src/gpm-statistics.c:414
+#: ../src/gpm-statistics.c:413
 msgid "Supply"
 msgstr "Залихе"
 
-#: ../src/gpm-statistics.c:417
+#: ../src/gpm-statistics.c:416
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
@@ -1419,251 +1418,251 @@ msgstr[3] "%d секунда"
 
 #. TRANSLATORS: when the device was last updated with new data. It's
 #. * usually a few seconds when a device is discharging or charging.
-#: ../src/gpm-statistics.c:421
+#: ../src/gpm-statistics.c:420
 msgid "Refreshed"
 msgstr "Освежено"
 
 #. TRANSLATORS: Present is whether the device is currently attached
 #. * to the computer, as some devices (e.g. laptop batteries) can
 #. * be removed, but still observed as devices on the system
-#: ../src/gpm-statistics.c:431
+#: ../src/gpm-statistics.c:430
 msgid "Present"
 msgstr "Присутно"
 
 #. TRANSLATORS: If the device can be recharged, e.g. lithium
 #. * batteries rather than alkaline ones
-#: ../src/gpm-statistics.c:438
+#: ../src/gpm-statistics.c:437
 msgid "Rechargeable"
 msgstr "Пуњиво"
 
 #. TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged"
-#: ../src/gpm-statistics.c:444
+#: ../src/gpm-statistics.c:443
 msgid "State"
 msgstr "Стање"
 
-#: ../src/gpm-statistics.c:448
+#: ../src/gpm-statistics.c:447
 msgid "Energy"
 msgstr "Енергија"
 
-#: ../src/gpm-statistics.c:451
+#: ../src/gpm-statistics.c:450
 msgid "Energy when empty"
 msgstr "Енергија када је празно"
 
-#: ../src/gpm-statistics.c:454
+#: ../src/gpm-statistics.c:453
 msgid "Energy when full"
 msgstr "Енергија када је пуно"
 
-#: ../src/gpm-statistics.c:457
+#: ../src/gpm-statistics.c:456
 msgid "Energy (design)"
 msgstr "Енергија (фабрички)"
 
-#: ../src/gpm-statistics.c:471
+#: ../src/gpm-statistics.c:470
 msgid "Voltage"
 msgstr "Напон"
 
 #. TRANSLATORS: the amount of charge the cell contains
-#: ../src/gpm-statistics.c:493
+#: ../src/gpm-statistics.c:492
 msgid "Percentage"
 msgstr "Проценат"
 
 #. TRANSLATORS: the capacity of the device, which is basically a measure
 #. * of how full it can get, relative to the design capacity
-#: ../src/gpm-statistics.c:500
+#: ../src/gpm-statistics.c:499
 msgid "Capacity"
 msgstr "Капацитет"
 
 #. TRANSLATORS: the type of battery, e.g. lithium or nikel metal hydroxide
-#: ../src/gpm-statistics.c:505
+#: ../src/gpm-statistics.c:504
 msgid "Technology"
 msgstr "Технологија"
 
 #. TRANSLATORS: this is when the device is plugged in, typically
 #. * only shown for the ac adaptor device
-#: ../src/gpm-statistics.c:510
+#: ../src/gpm-statistics.c:509
 msgid "Online"
 msgstr "У мрежи"
 
 #. TRANSLATORS: the command line was not provided
-#: ../src/gpm-statistics.c:821
+#: ../src/gpm-statistics.c:820
 msgid "No data"
 msgstr "Нема података"
 
 #. TRANSLATORS: kernel module, usually a device driver
-#: ../src/gpm-statistics.c:828 ../src/gpm-statistics.c:833
+#: ../src/gpm-statistics.c:827 ../src/gpm-statistics.c:832
 msgid "Kernel module"
 msgstr "Модул из кернела"
 
 #. TRANSLATORS: kernel housekeeping
-#: ../src/gpm-statistics.c:838
+#: ../src/gpm-statistics.c:837
 msgid "Kernel core"
 msgstr "Језгро кернела"
 
 #. TRANSLATORS: interrupt between processors
-#: ../src/gpm-statistics.c:843
+#: ../src/gpm-statistics.c:842
 msgid "Interprocessor interrupt"
 msgstr "Међупроцесорско ометање"
 
 #. TRANSLATORS: unknown interrupt
-#: ../src/gpm-statistics.c:848
+#: ../src/gpm-statistics.c:847
 msgid "Interrupt"
 msgstr "Ометање"
 
 #. TRANSLATORS: the keyboard and mouse device event
-#: ../src/gpm-statistics.c:895
+#: ../src/gpm-statistics.c:894
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "PS/2 тастатура/миш/тачпед"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
-#: ../src/gpm-statistics.c:898
+#: ../src/gpm-statistics.c:897
 msgid "ACPI"
 msgstr "ACPI"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
-#: ../src/gpm-statistics.c:901
+#: ../src/gpm-statistics.c:900
 msgid "Serial ATA"
 msgstr "Серијски АТА"
 
 #. TRANSLATORS: this is the old-style ATA interface
-#: ../src/gpm-statistics.c:904
+#: ../src/gpm-statistics.c:903
 msgid "ATA host controller"
 msgstr "АТА"
 
 #. TRANSLATORS: 802.11 wireless adaptor
-#: ../src/gpm-statistics.c:907
+#: ../src/gpm-statistics.c:906
 msgid "Intel wireless adaptor"
 msgstr "Интелов бежични адаптер"
 
 #. TRANSLATORS: a timer is something that fires periodically.
 #. * The parameter is a process name, e.g. "firefox-bin".
 #. * This is shown when the timer wakes up.
-#: ../src/gpm-statistics.c:914 ../src/gpm-statistics.c:919
-#: ../src/gpm-statistics.c:924 ../src/gpm-statistics.c:929
-#: ../src/gpm-statistics.c:934
+#: ../src/gpm-statistics.c:913 ../src/gpm-statistics.c:918
+#: ../src/gpm-statistics.c:923 ../src/gpm-statistics.c:928
+#: ../src/gpm-statistics.c:933
 #, c-format
 msgid "Timer %s"
 msgstr "Тајмер %s"
 
 #. TRANSLATORS: the parameter is the name of task that's woken up from sleeping.
 #. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:938
+#: ../src/gpm-statistics.c:937
 #, c-format
 msgid "Sleep %s"
 msgstr "Пробуђен %s"
 
 #. TRANSLATORS: this is the name of a new realtime task.
-#: ../src/gpm-statistics.c:941
+#: ../src/gpm-statistics.c:940
 #, c-format
 msgid "New task %s"
 msgstr "Нови задатак %s"
 
 #. TRANSLATORS: this is the name of a task that's woken to check state.
 #. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:945
+#: ../src/gpm-statistics.c:944
 #, c-format
 msgid "Wait %s"
 msgstr "Чека %s"
 
 #. TRANSLATORS: this is the name of a work queue.
 #. * A work queue is a list of work that has to be done.
-#: ../src/gpm-statistics.c:949 ../src/gpm-statistics.c:953
+#: ../src/gpm-statistics.c:948 ../src/gpm-statistics.c:952
 #, c-format
 msgid "Work queue %s"
 msgstr "Заказани послови %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
-#: ../src/gpm-statistics.c:956
+#: ../src/gpm-statistics.c:955
 #, c-format
 msgid "Network route flush %s"
 msgstr "Чишћење мрежне руте %s"
 
 #. TRANSLATORS: this is the name of an activity on the USB bus
-#: ../src/gpm-statistics.c:959
+#: ../src/gpm-statistics.c:958
 #, c-format
 msgid "USB activity %s"
 msgstr "УСБ активност %s"
 
 #. TRANSLATORS: we've timed out of an aligned timer, with the name
-#: ../src/gpm-statistics.c:962
+#: ../src/gpm-statistics.c:961
 #, c-format
 msgid "Wakeup %s"
 msgstr "Буђење %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
-#: ../src/gpm-statistics.c:965
+#: ../src/gpm-statistics.c:964
 msgid "Local interrupts"
 msgstr "Локална ометања"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
-#: ../src/gpm-statistics.c:968
+#: ../src/gpm-statistics.c:967
 msgid "Rescheduling interrupts"
 msgstr "Ометања у пребацивању"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1077
+#: ../src/gpm-statistics.c:1076
 msgid "Device Information"
 msgstr "Подаци о уређају"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1079
+#: ../src/gpm-statistics.c:1078
 msgid "Device History"
 msgstr "Историјат уређаја"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1081
+#: ../src/gpm-statistics.c:1080
 msgid "Device Profile"
 msgstr "Профил уређаја"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1083
+#: ../src/gpm-statistics.c:1082
 msgid "Processor Wakeups"
 msgstr "Буђења процесора"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1279 ../src/gpm-statistics.c:1285
-#: ../src/gpm-statistics.c:1291 ../src/gpm-statistics.c:1297
+#: ../src/gpm-statistics.c:1278 ../src/gpm-statistics.c:1284
+#: ../src/gpm-statistics.c:1290 ../src/gpm-statistics.c:1296
 msgid "Time elapsed"
 msgstr "Преостало време"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1281
+#: ../src/gpm-statistics.c:1280
 msgid "Power"
 msgstr "Електрична енергија"
 
 #. TRANSLATORS: this is the Y axis on the graph for the whole battery device
 #. TRANSLATORS: this is the X axis on the graph for the whole battery device
-#: ../src/gpm-statistics.c:1287 ../src/gpm-statistics.c:1330
-#: ../src/gpm-statistics.c:1336 ../src/gpm-statistics.c:1342
-#: ../src/gpm-statistics.c:1348
+#: ../src/gpm-statistics.c:1286 ../src/gpm-statistics.c:1329
+#: ../src/gpm-statistics.c:1335 ../src/gpm-statistics.c:1341
+#: ../src/gpm-statistics.c:1347
 msgid "Cell charge"
 msgstr "Напон ћелије"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1293 ../src/gpm-statistics.c:1299
+#: ../src/gpm-statistics.c:1292 ../src/gpm-statistics.c:1298
 msgid "Predicted time"
 msgstr "Процењено време"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1332 ../src/gpm-statistics.c:1344
+#: ../src/gpm-statistics.c:1331 ../src/gpm-statistics.c:1343
 msgid "Correction factor"
 msgstr "Фактор корекције"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1338 ../src/gpm-statistics.c:1350
+#: ../src/gpm-statistics.c:1337 ../src/gpm-statistics.c:1349
 msgid "Prediction accuracy"
 msgstr "Тачност предвиђања"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-statistics.c:1529
+#: ../src/gpm-statistics.c:1528
 msgid "Show extra debugging information"
 msgstr "Прикажи додатне информације за тражење грешака"
 
 #. TRANSLATORS: show a device by default
-#: ../src/gpm-statistics.c:1532
+#: ../src/gpm-statistics.c:1531
 msgid "Select this device at startup"
 msgstr "Изабери овај уређај при покретању"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:1797
+#: ../src/gpm-statistics.c:1796
 msgid "Processor"
 msgstr "Процесор"
 
@@ -2509,325 +2508,3 @@ msgstr "Батерија рачунара је пуна"
 
 #~ msgid "The default amount of time to dim the screen after idle."
 #~ msgstr "Време неактивности пре него што замаглим екран."
-
-#~| msgid "The default configuration version."
-#~ msgid "The default configuration version"
-#~ msgstr "Подразумевано издање поставки"
-
-#~ msgid ""
-#~ "The type of sleeping that should be performed when the computer is "
-#~ "inactive. Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
-#~ msgstr ""
-#~ "Начин успављивања који се изводи када се рачунар не користи. Могуће "
-#~ "вредности су „hibernate“ (замрзни), „suspend“ (обустави) и „nothing“ (не "
-#~ "ради ништа)."
-
-#~ msgid ""
-#~ "The version of the installed version of the schema. Do not edit this "
-#~ "value, it is used so that configure changes between versions can be "
-#~ "detected."
-#~ msgstr ""
-#~ "Ова верзија инсталиране верзије шеме. Не мењајте ову вредност, она се "
-#~ "користи за откривање промена подешавања при промени верзије програма."
-
-#~ msgid ""
-#~ "This is the laptop panel screen brightness used when the session is idle. "
-#~ "Only valid when use_time_for_policy is true."
-#~ msgstr ""
-#~ "Ово је вредност за осветљење панела екрана преносног рачунара када се "
-#~ "рачунар не користи а укључен је. Ова вредност се користи једино ако је "
-#~ "use_time_for_policy (користи време за правило) укључен."
-
-#~ msgid "UPS critical low action"
-#~ msgstr "Радња када је резервно напајање критично празно"
-
-#~ msgid "UPS low power action"
-#~ msgstr "Радња када је резервно напајање скоро празно"
-
-#~| msgid ""
-#~| "Whether NetworkManager should be connected and disconnected on sleep."
-#~ msgid "Whether NetworkManager should be connected and disconnected on sleep"
-#~ msgstr "Да ли да искључим Управника мреже приликом успављивања рачунара"
-
-#~ msgid ""
-#~ "Whether NetworkManager should disconnect before suspending or hibernating "
-#~ "and connect on resume."
-#~ msgstr ""
-#~ "Да ли Отправник Мреже треба да прекине везу пре обустављања или "
-#~ "замрзавања и успостави везу након повратка."
-
-#~ msgid "Whether to hibernate, suspend or do nothing when inactive"
-#~ msgstr "Замрзни, обустави или да не ради ништа приликом неактивности"
-
-#~ msgid "Whether we should show the axis labels in the statistics window"
-#~ msgstr "Прикжи натписе уз осе у прозору за статистику"
-
-#~ msgid "Whether we should show the axis labels in the statistics window."
-#~ msgstr "Прикажи натписе уз осе у прозору за статистику."
-
-#~ msgid "Whether we should show the events in the statistics window"
-#~ msgstr "Прикажи догађаје у прозору за статистику"
-
-#~ msgid "Configure power management"
-#~ msgstr "Подесите управљање потрошњом електричне енергије"
-
-#~ msgid "Power Management"
-#~ msgstr "Управник потрошњом енергије"
-
-#~ msgid "<b>Actions</b>"
-#~ msgstr "<b>Наредбе</b>"
-
-#~ msgid "<b>Display</b>"
-#~ msgstr "<b>Екран</b>"
-
-#~ msgid "<b>Notification Area</b>"
-#~ msgstr "<b>Област за обавештења</b>"
-
-#~ msgid "Closes the program"
-#~ msgstr "Затвара програм"
-
-#~ msgid "Di_m display when idle"
-#~ msgstr "За_магли екран након неактивности"
-
-#~ msgid "General"
-#~ msgstr "Опште"
-
-#~ msgid "Make Default"
-#~ msgstr "Постави као подразумевано"
-
-#~ msgid "On AC Power"
-#~ msgstr "Напајање преко електричне мреже"
-
-#~ msgid "On Battery Power"
-#~ msgstr "Напајање преко батерије"
-
-#~ msgid "On UPS Power"
-#~ msgstr "Напајање преко резервног извора"
-
-#~ msgid "Only display an icon when a battery is p_resent"
-#~ msgstr "Једино прикажи иконицу када је _присутна батерија"
-
-#~ msgid "Only display an icon when charging or _discharging"
-#~ msgstr "Једино прикажи иконицу при пуњењу и_ли пражњењу"
-
-#~ msgid "Power Management Preferences"
-#~ msgstr "Поставке управљања потрошњом"
-
-#~ msgid "Provides help about this program"
-#~ msgstr "Приказује помоћ за овај програм"
-
-#~ msgid "Put _display to sleep when inactive for:"
-#~ msgstr "Успавај _екран (ако се не користи) након:"
-
-#~ msgid "Put computer to _sleep when inactive for:"
-#~ msgstr "Успавај _рачунар (ако се не користи) након:"
-
-#~ msgid "Set display _brightness to:"
-#~ msgstr "Постави осветљење е_крана на:"
-
-#~ msgid "Sets this policy to be used by all users"
-#~ msgstr "Поставља ове радње за све кориснике"
-
-#~ msgid "Sp_in down hard disks when possible"
-#~ msgstr "Смањи _обртаје диска уколико је могуће"
-
-#~ msgid "When UPS power is _critically low:"
-#~ msgstr "Када је резервно напајање _критично празно:"
-
-#~ msgid "When UPS power is l_ow:"
-#~ msgstr "Када је резервно напајање _скоро празно:"
-
-#~ msgid "When battery po_wer is critically low:"
-#~ msgstr "Када је батерија _критично празна:"
-
-#~ msgid "When laptop lid is cl_osed:"
-#~ msgstr "Када се _поклопац преносног рачунара затвори:"
-
-#~ msgid "When the _suspend button is pressed:"
-#~ msgstr "Када је притиснуто _дугме за обустављање:"
-
-#~ msgid "When the power _button is pressed:"
-#~ msgstr "Када је притиснуто д_угме за паљење/гашење:"
-
-#~ msgid "_Always display an icon"
-#~ msgstr "_Увек прикажи иконицу"
-
-#~ msgid "_Never display an icon"
-#~ msgstr "_Никад не приказуј иконицу"
-
-#~ msgid "_Only display an icon when battery power is low"
-#~ msgstr "Прикажи иконицу када је батерија _критично празна"
-
-#~ msgid "_Reduce backlight brightness"
-#~ msgstr "_Смањи позадинско осветљење"
-
-#~| msgid "%s discharging (%.1f%%)"
-#~ msgid "%s discharging (%.0f%%)"
-#~ msgstr "%s се празни (%.0f%%)"
-
-#~ msgid "Install problem!"
-#~ msgstr "Проблем при инсталацији!"
-
-#~ msgid ""
-#~ "The configuration defaults for GNOME Power Manager have not been "
-#~ "installed correctly.\n"
-#~ "Please contact your computer administrator."
-#~ msgstr ""
-#~ "Подразумеване поставке Гномовог управника потрошње нису исправно "
-#~ "инсталиране.\n"
-#~ "Контактирајте Вашег системског администратора."
-
-#~ msgid "GNOME Power Preferences"
-#~ msgstr "Поставке потрошње енергије"
-
-#~ msgid "Shutdown"
-#~ msgstr "Искључи"
-
-#~ msgid "Suspend"
-#~ msgstr "Обустави"
-
-#~ msgid "Hibernate"
-#~ msgstr "Замрзни"
-
-#~ msgid "Blank screen"
-#~ msgstr "Затамни екран"
-
-#~ msgid "Ask me"
-#~ msgstr "Питај ме"
-
-#~ msgid "Do nothing"
-#~ msgstr "Ништа не ради"
-
-#~ msgid "Never"
-#~ msgstr "Никад"
-
-#~ msgid "%s charging (%.1f%%)"
-#~ msgstr "%s се пуни (%.1f%%)"
-
-#~ msgid "%s discharging (%.1f%%)"
-#~ msgstr "%s се празни (%.1f%%)"
-
-#~ msgid "%s waiting to discharge (%.1f%%)"
-#~ msgstr "%s чекам да се испразни (%.1f%%)"
-
-#~ msgid "%s waiting to charge (%.1f%%)"
-#~ msgstr "%s чекам да се напуни (%.1f%%)"
-
-#~ msgid "_About"
-#~ msgstr "_О програму"
-
-#~ msgid "_Help"
-#~ msgstr "_Помоћ"
-
-#~ msgid ""
-#~ "The wireless mouse attached to this computer is very low in power (%.1f%"
-#~ "%). This device will soon stop functioning if not charged."
-#~ msgstr ""
-#~ "Бежичном мишу прикљученом на овај рачунар су критично ослабиле батерије "
-#~ "(%.1f%%). Он ће ускоро престати да ради ако му не допуните батерије."
-
-#~ msgid ""
-#~ "The wireless keyboard attached to this computer is very low in power (%.1f"
-#~ "%%). This device will soon stop functioning if not charged."
-#~ msgstr ""
-#~ "Бежичној тастатури прикљученој на овај рачунар су критично ослабиле "
-#~ "батерије (%.1f%%). Она ће ускоро престати да ради ако му не допуните "
-#~ "батерије."
-
-#~ msgid "Allow Suspend and Hibernate in the menu"
-#~ msgstr "Понуди обустављање и замрзавање у менију"
-
-#~ msgid "Hibernate enabled"
-#~ msgstr "Замрзавање је омогућено"
-
-#~ msgid "If preferences should be shown"
-#~ msgstr "Приказује поставке"
-
-#~ msgid ""
-#~ "If the Suspend and Hibernate options should be allowed in the "
-#~ "notification area drop down menu."
-#~ msgstr ""
-#~ "Прикажи ставке за обустављање и замрзавање у падајућем менију простора за "
-#~ "обавештавање."
-
-#~ msgid "If the user is authorized to hibernate the computer."
-#~ msgstr "Дај облашћења кориснику да замрзне рачунар."
-
-#~ msgid "If the user is authorized to suspend the computer."
-#~ msgstr "Дај овлашћењакориснику да обустави рад рачунара."
-
-#~ msgid "Suspend enabled"
-#~ msgstr "Обустављање је омогућено"
-
-#~ msgid "Please see %s for more information."
-#~ msgstr "Погледајте %s за више података."
-
-#~ msgid ""
-#~ "If you can see this text, your display server is broken and you should "
-#~ "notify your distributor."
-#~ msgstr ""
-#~ "Уколико видите овај текст, ваш X сервер је неисправан и потребно је да "
-#~ "обавестите добављача пакета."
-
-#~ msgid "Session idle"
-#~ msgstr "Сесија неактивности"
-
-#~ msgid "Session active"
-#~ msgstr "Сесија активности"
-
-#~ msgid "inhibited"
-#~ msgstr "онемогућено"
-
-#~ msgid "not inhibited"
-#~ msgstr "омогућено"
-
-#~ msgid "screen idle"
-#~ msgstr "неактиван екран"
-
-#~ msgid "screen awake"
-#~ msgstr "активиран екран"
-
-#~ msgid "Action disallowed"
-#~ msgstr "Недозвољена радња"
-
-#~ msgid ""
-#~ "Suspend support has been disabled. Contact your administrator for more "
-#~ "details."
-#~ msgstr ""
-#~ "Подршка за обустављање је онемогућена. За више података питајте Вашег "
-#~ "системског администратора."
-
-#~ msgid ""
-#~ "Hibernate support has been disabled. Contact your administrator for more "
-#~ "details."
-#~ msgstr ""
-#~ "Подршка за замрзавање је онемогућена. За више података питајте Вашег "
-#~ "системског администратора."
-
-#~ msgid "Sleep problem"
-#~ msgstr "Проблем при успављивању"
-
-#~ msgid "Check the help file for common problems."
-#~ msgstr "Погледајте помоћ за списак најчешћих проблема."
-
-#~ msgid "Device information"
-#~ msgstr "Информације о уређају"
-
-#~ msgid "There is no detailed information for this device"
-#~ msgstr "Нема исцрпних података о овом уређају"
-
-#~ msgid "translator-credits"
-#~ msgstr ""
-#~ "Слободан Д. Средојевић <slobo@akrep.be>\n"
-#~ "Милош Поповић <gpopac@gmail.com>\n"
-#~ "\n"
-#~ "http://prevod.org — преводи на српски језик"
-
-#~ msgid "Power _History"
-#~ msgstr "_Дијаграм потрошње"
-
-#~ msgid "_Suspend"
-#~ msgstr "_Обустави"
-
-#~ msgid "Hi_bernate"
-#~ msgstr "_Замрзни"
