@@ -102,9 +102,7 @@ gnome_power_manager_SOURCES =				\
 	gpm-manager.c					\
 	gpm-screensaver.h				\
 	gpm-screensaver.c				\
-	gpm-stock-icons.h				\
-	gpm-engine.h					\
-	gpm-engine.c
+	gpm-stock-icons.h
 
 gnome_power_manager_LDADD =				\
 	libgpmshared.a					\

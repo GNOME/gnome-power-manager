@@ -50,7 +50,6 @@
 #include "gpm-screensaver.h"
 #include "gpm-backlight.h"
 #include "gpm-stock-icons.h"
-#include "gpm-engine.h"
 #include "gpm-upower.h"
 
 static void     gpm_manager_finalize	(GObject	 *object);
@@ -72,7 +71,6 @@ struct GpmManagerPrivate
 	GpmIdle			*idle;
 	GpmControl		*control;
 	GpmScreensaver		*screensaver;
-	GpmEngine		*engine;
 	GpmBacklight		*backlight;
 	EggConsoleKit		*console;
 	guint32			 screensaver_ac_throttle_id;
@@ -877,6 +875,42 @@ gpm_manager_perhaps_recall_delay_cb (GpmManager *manager)
 	/* never repeat */
 	return FALSE;
 }
+
+/**
+ * gpm_engine_check_recall:
+ **/
+static gboolean
+gpm_engine_check_recall (GpmEngine *engine, UpDevice *device)
+{
+	UpDeviceKind kind;
+	gboolean recall_notice = FALSE;
+	gchar *recall_vendor = NULL;
+	gchar *recall_url = NULL;
+
+	/* get device properties */
+	g_object_get (device,
+		      "kind", &kind,
+		      "recall-notice", &recall_notice,
+		      "recall-vendor", &recall_vendor,
+		      "recall-url", &recall_url,
+		      NULL);
+
+	/* not battery */
+	if (kind != UP_DEVICE_KIND_BATTERY)
+		goto out;
+
+	/* no recall data */
+	if (!recall_notice)
+		goto out;
+
+	/* emit signal for manager */
+	g_debug ("** EMIT: perhaps-recall");
+out:
+	g_free (recall_vendor);
+	g_free (recall_url);
+	return recall_notice;
+}
+
 #endif
 
 /**
@@ -1023,8 +1057,6 @@ gpm_manager_init (GpmManager *manager)
 
 	gpm_manager_sync_policy_sleep (manager);
 
-	manager->priv->engine = gpm_engine_new ();
-
 	/* update ac throttle */
 	gpm_manager_update_ac_throttle (manager);
 
@@ -1063,7 +1095,6 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->settings_gsd);
 	g_object_unref (manager->priv->dpms);
 	g_object_unref (manager->priv->idle);
-	g_object_unref (manager->priv->engine);
 	g_object_unref (manager->priv->screensaver);
 	g_object_unref (manager->priv->control);
 	g_object_unref (manager->priv->button);
