@@ -44,9 +44,6 @@ typedef struct GpmButtonPrivate GpmButtonPrivate;
 #define GPM_BUTTON_LID_CLOSED		"lid-down"
 #define GPM_BUTTON_BRIGHT_UP		"brightness-up"
 #define GPM_BUTTON_BRIGHT_DOWN		"brightness-down"
-#define GPM_BUTTON_KBD_BRIGHT_UP	"kbd-illum-up"
-#define GPM_BUTTON_KBD_BRIGHT_DOWN	"kbd-illum-down"
-#define GPM_BUTTON_KBD_BRIGHT_TOGGLE	"kbd-illum-toggle"
 #define GPM_BUTTON_LOCK			"lock"
 #define GPM_BUTTON_BATTERY		"battery"
 

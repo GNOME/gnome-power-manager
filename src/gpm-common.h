@@ -56,12 +56,6 @@ G_BEGIN_DECLS
 #define GPM_SETTINGS_BRIGHTNESS_AC			"brightness-ac"
 #define GPM_SETTINGS_BRIGHTNESS_DIM_BATT		"brightness-dim-battery"
 
-/* keyboard backlight */
-#define GPM_SETTINGS_KBD_BACKLIGHT_BATT_REDUCE		"kbd-backlight-battery-reduce"
-#define GPM_SETTINGS_KBD_BRIGHTNESS_ON_AC		"kbd-brightness-on-ac"
-#define GPM_SETTINGS_KBD_BRIGHTNESS_DIM_BY_ON_BATT      "kbd-brightness-dim-by-on-battery"
-#define GPM_SETTINGS_KBD_BRIGHTNESS_DIM_BY_ON_IDLE	"kbd-brightness-dim-by-on-idle"
-
 /* buttons */
 #define GSD_SETTINGS_BUTTON_LID_AC			"lid-close-ac-action"
 #define GSD_SETTINGS_BUTTON_LID_BATT			"lid-close-battery-action"

@@ -50,7 +50,6 @@
 #include "gpm-manager.h"
 #include "gpm-screensaver.h"
 #include "gpm-backlight.h"
-#include "gpm-kbd-backlight.h"
 #include "gpm-stock-icons.h"
 #include "gpm-engine.h"
 #include "gpm-upower.h"
@@ -95,7 +94,6 @@ struct GpmManagerPrivate
 	GpmScreensaver		*screensaver;
 	GpmEngine		*engine;
 	GpmBacklight		*backlight;
-	GpmKbdBacklight		*kbd_backlight;
 	EggConsoleKit		*console;
 	guint32			 screensaver_ac_throttle_id;
 	guint32			 screensaver_dpms_throttle_id;
@@ -2186,12 +2184,6 @@ gpm_manager_bus_acquired_cb (GDBusConnection *connection,
 	if (manager->priv->backlight != NULL) {
 		gpm_backlight_register_dbus (manager->priv->backlight, connection);
 	}
-
-	if (manager->priv->kbd_backlight != NULL) {
-		gpm_kbd_backlight_register_dbus (manager->priv->kbd_backlight,
-						 connection,
-						 NULL);
-	}
 }
 
 /**
@@ -2274,9 +2266,6 @@ gpm_manager_init (GpmManager *manager)
 
 	/* try an start an interactive service */
 	manager->priv->backlight = gpm_backlight_new ();
-
-	/* try and start an interactive service */
-	manager->priv->kbd_backlight = gpm_kbd_backlight_new ();
 
 	manager->priv->idle = gpm_idle_new ();
 	g_signal_connect (manager->priv->idle, "idle-changed",
@@ -2367,7 +2356,6 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->control);
 	g_object_unref (manager->priv->button);
 	g_object_unref (manager->priv->backlight);
-	g_object_unref (manager->priv->kbd_backlight);
 	g_object_unref (manager->priv->console);
 	g_object_unref (manager->priv->client);
 

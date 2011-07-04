@@ -100,8 +100,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-control.c					\
 	gpm-button.h					\
 	gpm-button.c					\
-	gpm-kbd-backlight.h				\
-	gpm-kbd-backlight.c				\
 	gpm-main.c					\
 	gpm-manager.h					\
 	gpm-manager.c					\
