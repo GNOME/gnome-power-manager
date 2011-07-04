@@ -1255,43 +1255,6 @@ gpm_manager_engine_perhaps_recall_cb (GpmEngine *engine, UpDevice *device, gchar
 }
 
 /**
- * gpm_manager_engine_low_capacity_cb:
- */
-static void
-gpm_manager_engine_low_capacity_cb (GpmEngine *engine, UpDevice *device, GpmManager *manager)
-{
-	gchar *message = NULL;
-	const gchar *title;
-	gdouble capacity;
-
-	/* don't show when running under GDM */
-	if (g_getenv ("RUNNING_UNDER_GDM") != NULL) {
-		g_debug ("running under gdm, so no notification");
-		goto out;
-	}
-
-	/* get device properties */
-	g_object_get (device,
-		      "capacity", &capacity,
-		      NULL);
-
-	/* We should notify the user if the battery has a low capacity,
-	 * where capacity is the ratio of the last_full capacity with that of
-	 * the design capacity. (#326740) */
-
-	/* TRANSLATORS: battery is old or broken */
-	title = _("Battery may be broken");
-
-	/* TRANSLATORS: notify the user that that battery is broken as the capacity is very low */
-	message = g_strdup_printf (_("Battery has a very low capacity (%1.1f%%), "
-				     "which means that it may be old or broken."), capacity);
-	gpm_manager_notify (manager, &manager->priv->notification_general, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_SHORT,
-			    GTK_STOCK_DIALOG_INFO, NOTIFY_URGENCY_LOW);
-out:
-	g_free (message);
-}
-
-/**
  * gpm_manager_engine_fully_charged_cb:
  */
 static void
@@ -2213,8 +2176,6 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->engine = gpm_engine_new ();
 	g_signal_connect (manager->priv->engine, "perhaps-recall",
 			  G_CALLBACK (gpm_manager_engine_perhaps_recall_cb), manager);
-	g_signal_connect (manager->priv->engine, "low-capacity",
-			  G_CALLBACK (gpm_manager_engine_low_capacity_cb), manager);
 	g_signal_connect (manager->priv->engine, "fully-charged",
 			  G_CALLBACK (gpm_manager_engine_fully_charged_cb), manager);
 	g_signal_connect (manager->priv->engine, "discharging",
