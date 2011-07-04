@@ -992,10 +992,6 @@ gpm_manager_button_pressed_cb (GpmButton *button, const gchar *type, GpmManager 
 		gpm_manager_lid_button_pressed (manager, TRUE);
 	}
 
-	/* really belongs in gnome-screensaver */
-	if (g_strcmp0 (type, GPM_BUTTON_LOCK) == 0)
-		gpm_screensaver_lock (manager->priv->screensaver);
-
 	/* disable or enable the fancy screensaver, as we don't want
 	 * this starting when the lid is shut */
 	if (g_strcmp0 (type, GPM_BUTTON_LID_CLOSED) == 0)
