@@ -35,10 +35,6 @@ G_BEGIN_DECLS
 
 typedef struct GpmButtonPrivate GpmButtonPrivate;
 
-#define GPM_BUTTON_POWER		"power"
-#define GPM_BUTTON_SLEEP		"sleep"
-#define GPM_BUTTON_SUSPEND		"suspend"
-#define GPM_BUTTON_HIBERNATE		"hibernate"
 #define GPM_BUTTON_LID_DEP		"lid"		/* Remove when HAL drops input support */
 #define GPM_BUTTON_LID_OPEN		"lid-up"
 #define GPM_BUTTON_LID_CLOSED		"lid-down"

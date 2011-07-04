@@ -129,11 +129,6 @@ PKG_CHECK_MODULES(UPOWER, upower-glib >= 0.9.1)
 dnl **** Check for NOTIFY ****
 PKG_CHECK_MODULES(NOTIFY, libnotify >= 0.7.0)
 
-PKG_CHECK_EXISTS(
- [xproto >= 7.0.15],
- [AC_DEFINE(HAVE_XF86XK_SUSPEND, 1, [Define if XF86XK_Suspend is available])
-  AC_DEFINE(HAVE_XF86XK_HIBERNATE, 1, [Define if XF86XK_Hibernate is available])])
-
 dnl ---------------------------------------------------------------------------
 dnl - Make paths available for source files
 dnl ---------------------------------------------------------------------------

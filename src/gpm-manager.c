@@ -986,15 +986,7 @@ gpm_manager_button_pressed_cb (GpmButton *button, const gchar *type, GpmManager 
 		return;
 	}
 
-	if (g_strcmp0 (type, GPM_BUTTON_POWER) == 0) {
-		gpm_manager_perform_policy (manager, GSD_SETTINGS_BUTTON_POWER, "The power button has been pressed.");
-	} else if (g_strcmp0 (type, GPM_BUTTON_SLEEP) == 0) {
-		gpm_manager_perform_policy (manager, GSD_SETTINGS_BUTTON_SUSPEND, "The suspend button has been pressed.");
-	} else if (g_strcmp0 (type, GPM_BUTTON_SUSPEND) == 0) {
-		gpm_manager_perform_policy (manager, GSD_SETTINGS_BUTTON_SUSPEND, "The suspend button has been pressed.");
-	} else if (g_strcmp0 (type, GPM_BUTTON_HIBERNATE) == 0) {
-		gpm_manager_perform_policy (manager, GSD_SETTINGS_BUTTON_HIBERNATE, "The hibernate button has been pressed.");
-	} else if (g_strcmp0 (type, GPM_BUTTON_LID_OPEN) == 0) {
+	if (g_strcmp0 (type, GPM_BUTTON_LID_OPEN) == 0) {
 		gpm_manager_lid_button_pressed (manager, FALSE);
 	} else if (g_strcmp0 (type, GPM_BUTTON_LID_CLOSED) == 0) {
 		gpm_manager_lid_button_pressed (manager, TRUE);
