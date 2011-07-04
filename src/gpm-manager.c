@@ -81,10 +81,6 @@ struct GpmManagerPrivate
 	UpClient		*client;
 	gboolean		 on_battery;
 	gboolean		 just_resumed;
-	NotifyNotification	*notification_general;
-	NotifyNotification	*notification_warning_low;
-	NotifyNotification	*notification_discharging;
-	NotifyNotification	*notification_fully_charged;
 	GDBusConnection		*bus_connection;
 	guint 			 bus_owner_id;
 	guint			 bus_object_id;
@@ -247,107 +243,6 @@ gpm_manager_unblank_screen (GpmManager *manager, GError **noerror)
 	do_lock = gpm_control_get_lock_policy (manager->priv->control, GPM_SETTINGS_LOCK_ON_BLANK_SCREEN);
 	if (do_lock)
 		gpm_screensaver_poke (manager->priv->screensaver);
-	return ret;
-}
-
-/**
- * gpm_manager_notify_close:
- **/
-static gboolean
-gpm_manager_notify_close (GpmManager *manager, NotifyNotification *notification)
-{
-	gboolean ret = FALSE;
-	GError *error = NULL;
-
-	/* exists? */
-	if (notification == NULL)
-		goto out;
-
-	/* try to close */
-	ret = notify_notification_close (notification, &error);
-	if (!ret) {
-		g_warning ("failed to close notification: %s", error->message);
-		g_error_free (error);
-		goto out;
-	}
-out:
-	return ret;
-}
-
-/**
- * gpm_manager_notification_closed_cb:
- **/
-static void
-gpm_manager_notification_closed_cb (NotifyNotification *notification, NotifyNotification **notification_class)
-{
-	g_debug ("caught notification closed signal %p", notification);
-	/* the object is already unreffed in _close_signal_handler */
-	*notification_class = NULL;
-}
-
-/**
- * gpm_manager_get_icon_name:
- **/
-static const gchar *
-gpm_manager_get_icon_name (GIcon *icon)
-{
-	const gchar* const *icon_names;
-	const gchar *icon_name = NULL;
-
-	/* no icon */
-	if (icon == NULL)
-		goto out;
-
-	/* just use the first icon */
-	icon_names = g_themed_icon_get_names (G_THEMED_ICON (icon));
-	if (icon_names != NULL)
-		icon_name = icon_names[0];
-out:
-	return icon_name;
-}
-
-/**
- * gpm_manager_notify:
- **/
-static gboolean
-gpm_manager_notify (GpmManager *manager, NotifyNotification **notification_class,
-		    const gchar *title, const gchar *message,
-		    guint timeout, const gchar *icon_name, NotifyUrgency urgency)
-{
-	gboolean ret;
-	GError *error = NULL;
-	NotifyNotification *notification;
-
-	/* close any existing notification of this class */
-	gpm_manager_notify_close (manager, *notification_class);
-
-	/* create a new notification */
-	notification = notify_notification_new (title, message, icon_name);
-	notify_notification_set_timeout (notification, timeout);
-	notify_notification_set_urgency (notification, urgency);
-	g_signal_connect (notification, "closed", G_CALLBACK (gpm_manager_notification_closed_cb), notification_class);
-	g_debug ("notification %p: %s : %s", notification, title, message);
-
-	/* non-urgent notifications are transient */
-	if (urgency != NOTIFY_URGENCY_CRITICAL) {
-		notify_notification_set_hint (notification,
-					      "transient",
-					      g_variant_new_boolean (TRUE));
-	}
-
-	/* try to show */
-	ret = notify_notification_show (notification, &error);
-	if (!ret) {
-		g_warning ("failed to show notification: %s", error->message);
-		g_error_free (error);
-		g_object_unref (notification);
-		goto out;
-	}
-
-	/* save this local instance as the class instance */
-	g_object_add_weak_pointer (G_OBJECT (notification), (gpointer) &notification);
-	*notification_class = notification;
-out:
 	return ret;
 }
 
@@ -821,13 +716,6 @@ gpm_manager_client_changed_cb (UpClient *client, GpmManager *manager)
 		return;
 	}
 
-	/* close any discharging notifications */
-	if (!on_battery) {
-		g_debug ("clearing notify due ac being present");
-		gpm_manager_notify_close (manager, manager->priv->notification_warning_low);
-		gpm_manager_notify_close (manager, manager->priv->notification_discharging);
-	}
-
 	/* save in local cache */
 	manager->priv->on_battery = on_battery;
 
@@ -854,27 +742,6 @@ gpm_manager_client_changed_cb (UpClient *client, GpmManager *manager)
 		gpm_manager_perform_policy (manager, GSD_SETTINGS_BUTTON_LID_BATT,
 					    "The lid has been closed, and the ac adapter removed.");
 	}
-}
-
-/**
- * manager_critical_action_do:
- * @manager: This class instance
- *
- * This is the stub function when we have waited a few seconds for the user to
- * see the message, explaining what we are about to do.
- *
- * Return value: FALSE, as we don't want to repeat this action on resume.
- **/
-static gboolean
-manager_critical_action_do (GpmManager *manager)
-{
-	/* if power is restored before we reach here, abort */
-	if (!manager->priv->on_battery)
-		goto out;
-
-	gpm_manager_perform_policy (manager, GSD_SETTINGS_ACTION_CRITICAL_BATT, "Battery is critically low.");
-out:
-	return FALSE;
 }
 
 /**
@@ -933,6 +800,7 @@ gpm_manager_screensaver_auth_request_cb (GpmScreensaver *screensaver, gboolean a
 }
 #endif
 
+#if 0
 /**
  * gpm_manager_perhaps_recall_response_cb:
  */
@@ -1009,591 +877,7 @@ gpm_manager_perhaps_recall_delay_cb (GpmManager *manager)
 	/* never repeat */
 	return FALSE;
 }
-
-/**
- * gpm_manager_engine_perhaps_recall_cb:
- */
-static void
-gpm_manager_engine_perhaps_recall_cb (GpmEngine *engine, UpDevice *device, gchar *oem_vendor, gchar *website, GpmManager *manager)
-{
-	gboolean ret;
-	guint timer_id;
-
-	/* don't show when running under GDM */
-	if (g_getenv ("RUNNING_UNDER_GDM") != NULL) {
-		g_debug ("running under gdm, so no notification");
-		return;
-	}
-
-	/* already shown, and dismissed */
-	ret = g_settings_get_boolean (manager->priv->settings, GPM_SETTINGS_NOTIFY_PERHAPS_RECALL);
-	if (!ret) {
-		g_debug ("GConf prevents notification: %s", GPM_SETTINGS_NOTIFY_PERHAPS_RECALL);
-		return;
-	}
-
-	g_object_set_data_full (G_OBJECT (manager), "recall-oem-vendor", (gpointer) g_strdup (oem_vendor), (GDestroyNotify) g_free);
-	g_object_set_data_full (G_OBJECT (manager), "recall-oem-website", (gpointer) g_strdup (website), (GDestroyNotify) g_free);
-
-	/* delay by a few seconds so the panel can load */
-	timer_id = g_timeout_add_seconds (GPM_MANAGER_RECALL_DELAY,
-					  (GSourceFunc) gpm_manager_perhaps_recall_delay_cb, manager);
-	g_source_set_name_by_id (timer_id, "[GpmManager] perhaps-recall");
-}
-
-/**
- * gpm_manager_engine_fully_charged_cb:
- */
-static void
-gpm_manager_engine_fully_charged_cb (GpmEngine *engine, UpDevice *device, GpmManager *manager)
-{
-	UpDeviceKind kind;
-	gchar *native_path = NULL;
-	gboolean ret;
-	guint plural = 1;
-	const gchar *title;
-
-	/* only action this if specified in the setings */
-	ret = g_settings_get_boolean (manager->priv->settings, GPM_SETTINGS_NOTIFY_FULLY_CHARGED);
-	if (!ret) {
-		g_debug ("no notification");
-		goto out;
-	}
-
-	/* don't show when running under GDM */
-	if (g_getenv ("RUNNING_UNDER_GDM") != NULL) {
-		g_debug ("running under gdm, so no notification");
-		goto out;
-	}
-
-	/* get device properties */
-	g_object_get (device,
-		      "kind", &kind,
-		      "native-path", &native_path,
-		      NULL);
-
-	if (kind == UP_DEVICE_KIND_BATTERY) {
-		/* is this a dummy composite device, which is plural? */
-		if (g_str_has_prefix (native_path, "dummy"))
-			plural = 2;
-
-		/* hide the discharging notification */
-		gpm_manager_notify_close (manager, manager->priv->notification_warning_low);
-		gpm_manager_notify_close (manager, manager->priv->notification_discharging);
-
-		/* TRANSLATORS: show the charged notification */
-		title = ngettext ("Battery Charged", "Batteries Charged", plural);
-		gpm_manager_notify (manager, &manager->priv->notification_fully_charged,
-				    title, NULL, GPM_MANAGER_NOTIFY_TIMEOUT_SHORT,
-				    GTK_STOCK_DIALOG_INFO, NOTIFY_URGENCY_LOW);
-	}
-out:
-	g_free (native_path);
-}
-
-/**
- * gpm_manager_engine_discharging_cb:
- */
-static void
-gpm_manager_engine_discharging_cb (GpmEngine *engine, UpDevice *device, GpmManager *manager)
-{
-	UpDeviceKind kind;
-	gboolean ret;
-	const gchar *title;
-	const gchar *message;
-	gdouble percentage;
-	gint64 time_to_empty;
-	gchar *remaining_text = NULL;
-	GIcon *icon = NULL;
-	const gchar *device_desc;
-
-	/* only action this if specified in the settings */
-	ret = g_settings_get_boolean (manager->priv->settings, GPM_SETTINGS_NOTIFY_DISCHARGING);
-	if (!ret) {
-		g_debug ("no notification");
-		goto out;
-	}
-
-	/* get device properties */
-	g_object_get (device,
-		      "kind", &kind,
-		      "percentage", &percentage,
-		      "time-to-empty", &time_to_empty,
-		      NULL);
-
-	/* only show text if there is a valid time */
-	if (time_to_empty > 0)
-		remaining_text = gpm_get_timestring (time_to_empty);
-	device_desc = gpm_device_to_localised_string (device);
-
-	if (kind == UP_DEVICE_KIND_BATTERY) {
-		/* TRANSLATORS: laptop battery is now discharging */
-		title = _("Battery Discharging");
-
-		if (remaining_text != NULL) {
-			/* TRANSLATORS: tell the user how much time they have got */
-			message = g_strdup_printf (_("%s of battery power remaining (%.0f%%)"), remaining_text, percentage);
-		} else {
-			message = g_strdup_printf ("%s (%.0f%%)", device_desc, percentage);
-		}
-	} else if (kind == UP_DEVICE_KIND_UPS) {
-		/* TRANSLATORS: UPS is now discharging */
-		title = _("UPS Discharging");
-
-		if (remaining_text != NULL) {
-			/* TRANSLATORS: tell the user how much time they have got */
-			message = g_strdup_printf (_("%s of UPS backup power remaining (%.0f%%)"), remaining_text, percentage);
-		} else {
-			message = g_strdup (gpm_device_to_localised_string (device));
-			message = g_strdup_printf ("%s (%.0f%%)", device_desc, percentage);
-		}
-	} else {
-		/* nothing else of interest */
-		goto out;
-	}
-
-	icon = gpm_upower_get_device_icon (device, TRUE);
-	/* show the notification */
-	gpm_manager_notify (manager, &manager->priv->notification_discharging, title, message, GPM_MANAGER_NOTIFY_TIMEOUT_LONG,
-			    gpm_manager_get_icon_name (icon), NOTIFY_URGENCY_NORMAL);
-out:
-	if (icon != NULL)
-		g_object_unref (icon);
-	g_free (remaining_text);
-	return;
-}
-
-/**
- * gpm_manager_engine_just_laptop_battery:
- */
-static gboolean
-gpm_manager_engine_just_laptop_battery (GpmManager *manager)
-{
-	UpDevice *device;
-	UpDeviceKind kind;
-	GPtrArray *array;
-	gboolean ret = TRUE;
-	guint i;
-
-	/* find if there are any other device types that mean we have to
-	 * be more specific in our wording */
-	array = gpm_engine_get_devices (manager->priv->engine);
-	for (i=0; i<array->len; i++) {
-		device = g_ptr_array_index (array, i);
-		g_object_get (device, "kind", &kind, NULL);
-		if (kind != UP_DEVICE_KIND_BATTERY) {
-			ret = FALSE;
-			break;
-		}
-	}
-	g_ptr_array_unref (array);
-	return ret;
-}
-
-/**
- * gpm_manager_engine_charge_low_cb:
- */
-static void
-gpm_manager_engine_charge_low_cb (GpmEngine *engine, UpDevice *device, GpmManager *manager)
-{
-	const gchar *title = NULL;
-	gchar *message = NULL;
-	gchar *remaining_text;
-	GIcon *icon = NULL;
-	UpDeviceKind kind;
-	gdouble percentage;
-	gint64 time_to_empty;
-	gboolean ret;
-
-	/* get device properties */
-	g_object_get (device,
-		      "kind", &kind,
-		      "percentage", &percentage,
-		      "time-to-empty", &time_to_empty,
-		      NULL);
-
-	/* do we do the notification */
-	if (kind == UP_DEVICE_KIND_BATTERY ||
-	    kind == UP_DEVICE_KIND_UPS) {
-		ret = g_settings_get_boolean (manager->priv->settings,
-					      GPM_SETTINGS_NOTIFY_LOW_POWER_SYSTEM);
-	} else {
-		ret = g_settings_get_boolean (manager->priv->settings,
-					      GPM_SETTINGS_NOTIFY_LOW_POWER_DEVICE);
-	}
-	if (!ret) {
-		g_debug ("ignoring notication for type %s", up_device_kind_to_string (kind));
-		goto out;
-	}
-
-	/* check to see if the batteries have not noticed we are on AC */
-	if (kind == UP_DEVICE_KIND_BATTERY) {
-		if (!manager->priv->on_battery) {
-			g_warning ("ignoring critically low message as we are not on battery power");
-			goto out;
-		}
-	}
-
-	if (kind == UP_DEVICE_KIND_BATTERY) {
-
-		/* if the user has no other batteries, drop the "Laptop" wording */
-		ret = gpm_manager_engine_just_laptop_battery (manager);
-		if (ret) {
-			/* TRANSLATORS: laptop battery low, and we only have one battery */
-			title = _("Battery low");
-		} else {
-			/* TRANSLATORS: laptop battery low, and we have more than one kind of battery */
-			title = _("Laptop battery low");
-		}
-
-		remaining_text = gpm_get_timestring (time_to_empty);
-
-		/* TRANSLATORS: tell the user how much time they have got */
-		message = g_strdup_printf (_("Approximately <b>%s</b> remaining (%.0f%%)"), remaining_text, percentage);
-
-	} else if (kind == UP_DEVICE_KIND_UPS) {
-		/* TRANSLATORS: UPS is starting to get a little low */
-		title = _("UPS low");
-		remaining_text = gpm_get_timestring (time_to_empty);
-
-		/* TRANSLATORS: tell the user how much time they have got */
-		message = g_strdup_printf (_("Approximately <b>%s</b> of remaining UPS backup power (%.0f%%)"),
-					   remaining_text, percentage);
-	} else if (kind == UP_DEVICE_KIND_MOUSE) {
-		/* TRANSLATORS: mouse is getting a little low */
-		title = _("Mouse battery low");
-
-		/* TRANSLATORS: tell user more details */
-		message = g_strdup_printf (_("Wireless mouse is low in power (%.0f%%)"), percentage);
-
-	} else if (kind == UP_DEVICE_KIND_KEYBOARD) {
-		/* TRANSLATORS: keyboard is getting a little low */
-		title = _("Keyboard battery low");
-
-		/* TRANSLATORS: tell user more details */
-		message = g_strdup_printf (_("Wireless keyboard is low in power (%.0f%%)"), percentage);
-
-	} else if (kind == UP_DEVICE_KIND_PDA) {
-		/* TRANSLATORS: PDA is getting a little low */
-		title = _("PDA battery low");
-
-		/* TRANSLATORS: tell user more details */
-		message = g_strdup_printf (_("PDA is low in power (%.0f%%)"), percentage);
-
-	} else if (kind == UP_DEVICE_KIND_PHONE) {
-		/* TRANSLATORS: cell phone (mobile) is getting a little low */
-		title = _("Cell phone battery low");
-
-		/* TRANSLATORS: tell user more details */
-		message = g_strdup_printf (_("Cell phone is low in power (%.0f%%)"), percentage);
-
-#if UP_CHECK_VERSION(0,9,5)
-	} else if (kind == UP_DEVICE_KIND_MEDIA_PLAYER) {
-		/* TRANSLATORS: media player, e.g. mp3 is getting a little low */
-		title = _("Media player battery low");
-
-		/* TRANSLATORS: tell user more details */
-		message = g_strdup_printf (_("Media player is low in power (%.0f%%)"), percentage);
-
-	} else if (kind == UP_DEVICE_KIND_TABLET) {
-		/* TRANSLATORS: graphics tablet, e.g. wacom is getting a little low */
-		title = _("Tablet battery low");
-
-		/* TRANSLATORS: tell user more details */
-		message = g_strdup_printf (_("Tablet is low in power (%.0f%%)"), percentage);
-
-	} else if (kind == UP_DEVICE_KIND_COMPUTER) {
-		/* TRANSLATORS: computer, e.g. ipad is getting a little low */
-		title = _("Attached computer battery low");
-
-		/* TRANSLATORS: tell user more details */
-		message = g_strdup_printf (_("Attached computer is low in power (%.0f%%)"), percentage);
 #endif
-	}
-
-	/* get correct icon */
-	icon = gpm_upower_get_device_icon (device, TRUE);
-	gpm_manager_notify (manager, &manager->priv->notification_warning_low, title, message,
-			    GPM_MANAGER_NOTIFY_TIMEOUT_LONG, gpm_manager_get_icon_name (icon), NOTIFY_URGENCY_NORMAL);
-out:
-	if (icon != NULL)
-		g_object_unref (icon);
-	g_free (message);
-}
-
-/**
- * gpm_manager_engine_charge_critical_cb:
- */
-static void
-gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmManager *manager)
-{
-	const gchar *title = NULL;
-	gchar *message = NULL;
-	GIcon *icon = NULL;
-	UpDeviceKind kind;
-	gdouble percentage;
-	gint64 time_to_empty;
-	GpmActionPolicy policy;
-	gboolean ret;
-
-	/* get device properties */
-	g_object_get (device,
-		      "kind", &kind,
-		      "percentage", &percentage,
-		      "time-to-empty", &time_to_empty,
-		      NULL);
-
-	/* check to see if the batteries have not noticed we are on AC */
-	if (kind == UP_DEVICE_KIND_BATTERY) {
-		if (!manager->priv->on_battery) {
-			g_warning ("ignoring critically low message as we are not on battery power");
-			goto out;
-		}
-	}
-
-	/* do we do the notification */
-	if (kind == UP_DEVICE_KIND_BATTERY ||
-	    kind == UP_DEVICE_KIND_UPS) {
-		/* this is not configurable */
-		ret = TRUE;
-	} else {
-		ret = g_settings_get_boolean (manager->priv->settings,
-					      GPM_SETTINGS_NOTIFY_LOW_POWER_DEVICE);
-	}
-	if (!ret) {
-		g_debug ("ignoring notication for type %s", up_device_kind_to_string (kind));
-		goto out;
-	}
-
-	if (kind == UP_DEVICE_KIND_BATTERY) {
-
-		/* if the user has no other batteries, drop the "Laptop" wording */
-		ret = gpm_manager_engine_just_laptop_battery (manager);
-		if (ret) {
-			/* TRANSLATORS: laptop battery critically low, and only have one kind of battery */
-			title = _("Battery critically low");
-		} else {
-			/* TRANSLATORS: laptop battery critically low, and we have more than one type of battery */
-			title = _("Laptop battery critically low");
-		}
-
-		/* we have to do different warnings depending on the policy */
-		policy = g_settings_get_enum (manager->priv->settings_gsd, GSD_SETTINGS_ACTION_CRITICAL_BATT);
-
-		/* use different text for different actions */
-		if (policy == GPM_ACTION_POLICY_NOTHING) {
-			/* TRANSLATORS: tell the use to insert the plug, as we're not going to do anything */
-			message = g_strdup (_("Plug in your AC adapter to avoid losing data."));
-
-		} else if (policy == GPM_ACTION_POLICY_SUSPEND) {
-			/* TRANSLATORS: give the user a ultimatum */
-			message = g_strdup_printf (_("Computer will suspend very soon unless it is plugged in."));
-
-		} else if (policy == GPM_ACTION_POLICY_HIBERNATE) {
-			/* TRANSLATORS: give the user a ultimatum */
-			message = g_strdup_printf (_("Computer will hibernate very soon unless it is plugged in."));
-
-		} else if (policy == GPM_ACTION_POLICY_SHUTDOWN) {
-			/* TRANSLATORS: give the user a ultimatum */
-			message = g_strdup_printf (_("Computer will shutdown very soon unless it is plugged in."));
-		}
-
-	} else if (kind == UP_DEVICE_KIND_UPS) {
-		gchar *remaining_text;
-
-		/* TRANSLATORS: the UPS is very low */
-		title = _("UPS critically low");
-		remaining_text = gpm_get_timestring (time_to_empty);
-
-		/* TRANSLATORS: give the user a ultimatum */
-		message = g_strdup_printf (_("Approximately <b>%s</b> of remaining UPS power (%.0f%%). "
-					     "Restore AC power to your computer to avoid losing data."),
-					   remaining_text, percentage);
-		g_free (remaining_text);
-	} else if (kind == UP_DEVICE_KIND_MOUSE) {
-		/* TRANSLATORS: the mouse battery is very low */
-		title = _("Mouse battery low");
-
-		/* TRANSLATORS: the device is just going to stop working */
-		message = g_strdup_printf (_("Wireless mouse is very low in power (%.0f%%). "
-					     "This device will soon stop functioning if not charged."),
-					   percentage);
-	} else if (kind == UP_DEVICE_KIND_KEYBOARD) {
-		/* TRANSLATORS: the keyboard battery is very low */
-		title = _("Keyboard battery low");
-
-		/* TRANSLATORS: the device is just going to stop working */
-		message = g_strdup_printf (_("Wireless keyboard is very low in power (%.0f%%). "
-					     "This device will soon stop functioning if not charged."),
-					   percentage);
-	} else if (kind == UP_DEVICE_KIND_PDA) {
-
-		/* TRANSLATORS: the PDA battery is very low */
-		title = _("PDA battery low");
-
-		/* TRANSLATORS: the device is just going to stop working */
-		message = g_strdup_printf (_("PDA is very low in power (%.0f%%). "
-					     "This device will soon stop functioning if not charged."),
-					   percentage);
-
-	} else if (kind == UP_DEVICE_KIND_PHONE) {
-
-		/* TRANSLATORS: the cell battery is very low */
-		title = _("Cell phone battery low");
-
-		/* TRANSLATORS: the device is just going to stop working */
-		message = g_strdup_printf (_("Cell phone is very low in power (%.0f%%). "
-					     "This device will soon stop functioning if not charged."),
-					   percentage);
-
-#if UP_CHECK_VERSION(0,9,5)
-	} else if (kind == UP_DEVICE_KIND_MEDIA_PLAYER) {
-
-		/* TRANSLATORS: the cell battery is very low */
-		title = _("Cell phone battery low");
-
-		/* TRANSLATORS: the device is just going to stop working */
-		message = g_strdup_printf (_("Media player is very low in power (%.0f%%). "
-					     "This device will soon stop functioning if not charged."),
-					   percentage);
-	} else if (kind == UP_DEVICE_KIND_TABLET) {
-
-		/* TRANSLATORS: the cell battery is very low */
-		title = _("Tablet battery low");
-
-		/* TRANSLATORS: the device is just going to stop working */
-		message = g_strdup_printf (_("Tablet is very low in power (%.0f%%). "
-					     "This device will soon stop functioning if not charged."),
-					   percentage);
-	} else if (kind == UP_DEVICE_KIND_COMPUTER) {
-
-		/* TRANSLATORS: the cell battery is very low */
-		title = _("Attached computer battery low");
-
-		/* TRANSLATORS: the device is just going to stop working */
-		message = g_strdup_printf (_("Attached computer is very low in power (%.0f%%). "
-					     "The device will soon shutdown if not charged."),
-					   percentage);
-#endif
-	}
-
-	/* get correct icon */
-	icon = gpm_upower_get_device_icon (device, TRUE);
-	gpm_manager_notify (manager, &manager->priv->notification_warning_low, title, message,
-			    GPM_MANAGER_NOTIFY_TIMEOUT_NEVER, gpm_manager_get_icon_name (icon), NOTIFY_URGENCY_CRITICAL);
-out:
-	if (icon != NULL)
-		g_object_unref (icon);
-	g_free (message);
-}
-
-/**
- * gpm_manager_engine_charge_action_cb:
- */
-static void
-gpm_manager_engine_charge_action_cb (GpmEngine *engine, UpDevice *device, GpmManager *manager)
-{
-	const gchar *title = NULL;
-	gchar *message = NULL;
-	GIcon *icon = NULL;
-	UpDeviceKind kind;
-	GpmActionPolicy policy;
-	guint timer_id;
-
-	/* get device properties */
-	g_object_get (device,
-		      "kind", &kind,
-		      NULL);
-
-	/* check to see if the batteries have not noticed we are on AC */
-	if (kind == UP_DEVICE_KIND_BATTERY) {
-		if (!manager->priv->on_battery) {
-			g_warning ("ignoring critically low message as we are not on battery power");
-			goto out;
-		}
-	}
-
-	if (kind == UP_DEVICE_KIND_BATTERY) {
-
-		/* TRANSLATORS: laptop battery is really, really, low */
-		title = _("Laptop battery critically low");
-
-		/* we have to do different warnings depending on the policy */
-		policy = g_settings_get_enum (manager->priv->settings_gsd, GSD_SETTINGS_ACTION_CRITICAL_BATT);
-
-		/* use different text for different actions */
-		if (policy == GPM_ACTION_POLICY_NOTHING) {
-			/* TRANSLATORS: computer will shutdown without saving data */
-			message = g_strdup (_("The battery is below the critical level and "
-					      "this computer will <b>power-off</b> when the "
-					      "battery becomes completely empty."));
-
-		} else if (policy == GPM_ACTION_POLICY_SUSPEND) {
-			/* TRANSLATORS: computer will suspend */
-			message = g_strdup (_("The battery is below the critical level and "
-					      "this computer is about to suspend.<br>"
-					      "<b>NOTE:</b> A small amount of power is required "
-					      "to keep your computer in a suspended state."));
-
-		} else if (policy == GPM_ACTION_POLICY_HIBERNATE) {
-			/* TRANSLATORS: computer will hibernate */
-			message = g_strdup (_("The battery is below the critical level and "
-					      "this computer is about to hibernate."));
-
-		} else if (policy == GPM_ACTION_POLICY_SHUTDOWN) {
-			/* TRANSLATORS: computer will just shutdown */
-			message = g_strdup (_("The battery is below the critical level and "
-					      "this computer is about to shutdown."));
-		}
-
-		/* wait 20 seconds for user-panic */
-		timer_id = g_timeout_add_seconds (20, (GSourceFunc) manager_critical_action_do, manager);
-		g_source_set_name_by_id (timer_id, "[GpmManager] battery critical-action");
-
-	} else if (kind == UP_DEVICE_KIND_UPS) {
-		/* TRANSLATORS: UPS is really, really, low */
-		title = _("UPS critically low");
-
-		/* we have to do different warnings depending on the policy */
-		policy = g_settings_get_enum (manager->priv->settings_gsd, GSD_SETTINGS_ACTION_CRITICAL_BATT);
-
-		/* use different text for different actions */
-		if (policy == GPM_ACTION_POLICY_NOTHING) {
-			/* TRANSLATORS: computer will shutdown without saving data */
-			message = g_strdup (_("UPS is below the critical level and "
-					      "this computer will <b>power-off</b> when the "
-					      "UPS becomes completely empty."));
-
-		} else if (policy == GPM_ACTION_POLICY_HIBERNATE) {
-			/* TRANSLATORS: computer will hibernate */
-			message = g_strdup (_("UPS is below the critical level and "
-					      "this computer is about to hibernate."));
-
-		} else if (policy == GPM_ACTION_POLICY_SHUTDOWN) {
-			/* TRANSLATORS: computer will just shutdown */
-			message = g_strdup (_("UPS is below the critical level and "
-					      "this computer is about to shutdown."));
-		}
-
-		/* wait 20 seconds for user-panic */
-		timer_id = g_timeout_add_seconds (20, (GSourceFunc) manager_critical_action_do, manager);
-		g_source_set_name_by_id (timer_id, "[GpmManager] ups critical-action");
-	}
-
-	/* not all types have actions */
-	if (title == NULL)
-		return;
-
-	/* get correct icon */
-	icon = gpm_upower_get_device_icon (device, TRUE);
-	gpm_manager_notify (manager, &manager->priv->notification_warning_low,
-			    title, message, GPM_MANAGER_NOTIFY_TIMEOUT_NEVER,
-			    gpm_manager_get_icon_name (icon), NOTIFY_URGENCY_CRITICAL);
-out:
-	if (icon != NULL)
-		g_object_unref (icon);
-	g_free (message);
-}
 
 /**
  * gpm_manager_dpms_mode_changed_cb:
@@ -1626,15 +910,12 @@ static gboolean
 gpm_manager_reset_just_resumed_cb (gpointer user_data)
 {
 	GpmManager *manager = GPM_MANAGER (user_data);
-
-	if (manager->priv->notification_general != NULL)
-		gpm_manager_notify_close (manager, manager->priv->notification_general);
+#if 0
 	if (manager->priv->notification_warning_low != NULL)
 		gpm_manager_notify_close (manager, manager->priv->notification_warning_low);
 	if (manager->priv->notification_discharging != NULL)
 		gpm_manager_notify_close (manager, manager->priv->notification_discharging);
-	if (manager->priv->notification_fully_charged != NULL)
-		gpm_manager_notify_close (manager, manager->priv->notification_fully_charged);
+#endif
 
 	manager->priv->just_resumed = FALSE;
 	return FALSE;
@@ -1663,20 +944,6 @@ gpm_manager_bus_acquired_cb (GDBusConnection *connection,
 
 	if (manager->priv->backlight != NULL) {
 		gpm_backlight_register_dbus (manager->priv->backlight, connection);
-	}
-}
-
-/**
- * gpm_manager_engine_devices_changed_cb:
- **/
-static void
-gpm_manager_engine_devices_changed_cb (GpmEngine *engine, GpmManager *manager)
-{
-	/* emit for the shell */
-	if (manager->priv->bus_connection != NULL) {
-		g_dbus_connection_emit_signal (manager->priv->bus_connection,
-					       NULL, GPM_DBUS_PATH, GPM_DBUS_INTERFACE,
-					       "Changed", NULL, NULL);
 	}
 }
 
@@ -1712,10 +979,6 @@ gpm_manager_init (GpmManager *manager)
 	/* don't apply policy when not active, so listen to ConsoleKit */
 	manager->priv->console = egg_console_kit_new ();
 
-	manager->priv->notification_general = NULL;
-	manager->priv->notification_warning_low = NULL;
-	manager->priv->notification_discharging = NULL;
-	manager->priv->notification_fully_charged = NULL;
 	manager->priv->settings = g_settings_new (GPM_SETTINGS_SCHEMA);
 	g_signal_connect (manager->priv->settings, "changed",
 			  G_CALLBACK (gpm_manager_settings_changed_cb), manager);
@@ -1761,20 +1024,6 @@ gpm_manager_init (GpmManager *manager)
 	gpm_manager_sync_policy_sleep (manager);
 
 	manager->priv->engine = gpm_engine_new ();
-	g_signal_connect (manager->priv->engine, "perhaps-recall",
-			  G_CALLBACK (gpm_manager_engine_perhaps_recall_cb), manager);
-	g_signal_connect (manager->priv->engine, "fully-charged",
-			  G_CALLBACK (gpm_manager_engine_fully_charged_cb), manager);
-	g_signal_connect (manager->priv->engine, "discharging",
-			  G_CALLBACK (gpm_manager_engine_discharging_cb), manager);
-	g_signal_connect (manager->priv->engine, "charge-low",
-			  G_CALLBACK (gpm_manager_engine_charge_low_cb), manager);
-	g_signal_connect (manager->priv->engine, "charge-critical",
-			  G_CALLBACK (gpm_manager_engine_charge_critical_cb), manager);
-	g_signal_connect (manager->priv->engine, "charge-action",
-			  G_CALLBACK (gpm_manager_engine_charge_action_cb), manager);
-	g_signal_connect (manager->priv->engine, "devices-changed",
-			  G_CALLBACK (gpm_manager_engine_devices_changed_cb), manager);
 
 	/* update ac throttle */
 	gpm_manager_update_ac_throttle (manager);
@@ -1809,16 +1058,6 @@ gpm_manager_finalize (GObject *object)
 	manager = GPM_MANAGER (object);
 
 	g_return_if_fail (manager->priv != NULL);
-
-	/* close any notifications (also unrefs them) */
-	if (manager->priv->notification_general != NULL)
-		gpm_manager_notify_close (manager, manager->priv->notification_general);
-	if (manager->priv->notification_warning_low != NULL)
-		gpm_manager_notify_close (manager, manager->priv->notification_warning_low);
-	if (manager->priv->notification_discharging != NULL)
-		gpm_manager_notify_close (manager, manager->priv->notification_discharging);
-	if (manager->priv->notification_fully_charged != NULL)
-		gpm_manager_notify_close (manager, manager->priv->notification_fully_charged);
 
 	g_object_unref (manager->priv->settings);
 	g_object_unref (manager->priv->settings_gsd);
