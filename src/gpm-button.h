@@ -40,7 +40,6 @@ typedef struct GpmButtonPrivate GpmButtonPrivate;
 #define GPM_BUTTON_LID_CLOSED		"lid-down"
 #define GPM_BUTTON_BRIGHT_UP		"brightness-up"
 #define GPM_BUTTON_BRIGHT_DOWN		"brightness-down"
-#define GPM_BUTTON_BATTERY		"battery"
 
 typedef struct
 {
