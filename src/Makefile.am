@@ -85,8 +85,6 @@ gnome_power_statistics_CFLAGS =				\
 gnome_power_manager_SOURCES =				\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
-	gpm-phone.h					\
-	gpm-phone.c					\
 	gpm-backlight.h					\
 	gpm-backlight.c					\
 	gpm-idle.h					\
