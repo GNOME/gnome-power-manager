@@ -79,9 +79,6 @@ struct GpmManagerPrivate
 	UpClient		*client;
 	gboolean		 on_battery;
 	gboolean		 just_resumed;
-	GDBusConnection		*bus_connection;
-	guint 			 bus_owner_id;
-	guint			 bus_object_id;
 };
 
 typedef enum {
@@ -968,32 +965,6 @@ gpm_manager_control_resume_cb (GpmControl *control, GpmControlAction action, Gpm
 }
 
 /**
- * gpm_manager_bus_acquired_cb:
- **/
-static void
-gpm_manager_bus_acquired_cb (GDBusConnection *connection,
-			    const gchar *name, gpointer user_data)
-{
-	GpmManager *manager = GPM_MANAGER (user_data);
-
-	if (manager->priv->backlight != NULL) {
-		gpm_backlight_register_dbus (manager->priv->backlight, connection);
-	}
-}
-
-/**
- * gpm_manager_name_lost_cb:
- **/
-static void
-gpm_manager_name_lost_cb (GDBusConnection *connection,
-			  const gchar *name,
-			  gpointer user_data)
-{
-	g_warning ("name lost %s", name);
-	exit (1);
-}
-
-/**
  * gpm_manager_init:
  * @manager: This class instance
  **/
@@ -1059,18 +1030,6 @@ gpm_manager_init (GpmManager *manager)
 
 	/* update ac throttle */
 	gpm_manager_update_ac_throttle (manager);
-
-	/* finally, register on the bus, exporting the objects */
-	manager->priv->bus_object_id = -1;
-	manager->priv->bus_owner_id =
-		g_bus_own_name (G_BUS_TYPE_SESSION,
-				GPM_DBUS_SERVICE,
-				G_BUS_NAME_OWNER_FLAGS_NONE,
-				gpm_manager_bus_acquired_cb,
-				NULL,
-				gpm_manager_name_lost_cb,
-				g_object_ref (manager),
-				g_object_unref);
 }
 
 #if 0
@@ -1204,10 +1163,6 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->backlight);
 	g_object_unref (manager->priv->console);
 	g_object_unref (manager->priv->client);
-
-	g_dbus_connection_unregister_object (manager->priv->bus_connection, manager->priv->bus_object_id);
-	g_object_unref (manager->priv->bus_connection);
-	g_bus_unown_name (manager->priv->bus_owner_id);
 
 	G_OBJECT_CLASS (gpm_manager_parent_class)->finalize (object);
 }

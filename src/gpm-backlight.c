@@ -50,22 +50,6 @@
 #include "gpm-stock-icons.h"
 #include "egg-console-kit.h"
 
-static const gchar *backlight_introspection = ""
-"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-"<node name=\"/\">"
-  "<interface name=\"org.gnome.PowerManager.Backlight\">"
-    "<method name=\"GetBrightness\">"
-      "<arg type=\"u\" name=\"percentage_brightness\" direction=\"out\"/>"
-    "</method>"
-    "<method name=\"SetBrightness\">"
-      "<arg type=\"u\" name=\"percentage_brightness\" direction=\"in\"/>"
-    "</method>"
-    "<signal name=\"BrightnessChanged\">"
-      "<arg type=\"u\" name=\"percentage_brightness\" direction=\"out\"/>"
-    "</signal>"
-  "</interface>"
-"</node>";
-
 #define GPM_BACKLIGHT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_BACKLIGHT, GpmBacklightPrivate))
 
 struct GpmBacklightPrivate
@@ -83,7 +67,6 @@ struct GpmBacklightPrivate
 	GTimer			*idle_timer;
 	guint			 idle_dim_timeout;
 	guint			 master_percentage;
-	GDBusConnection		*bus_connection;
 	guint			 bus_object_id;
 };
 
@@ -142,16 +125,6 @@ gpm_backlight_brightness_changed (GpmBacklight *backlight, guint percentage)
 {
 	/* save the new percentage */
 	backlight->priv->master_percentage = percentage;
-
-	/* we emit a signal for the brightness applet */
-	g_debug ("emitting brightness-changed : %i", percentage);
-	g_dbus_connection_emit_signal (backlight->priv->bus_connection,
-			NULL,
-			GPM_DBUS_PATH_BACKLIGHT,
-			GPM_DBUS_INTERFACE_BACKLIGHT,
-			"BrightnessChanged",
-			g_variant_new ("(u)", percentage),
-			NULL);
 }
 
 /**
@@ -507,100 +480,6 @@ gpm_backlight_control_resume_cb (GpmControl *control, GpmControlAction action, G
 }
 
 /**
- * gpm_backlight_dbus_method_call:
- **/
-static void
-gpm_backlight_dbus_method_call (GDBusConnection *connection,
-				const gchar *sender, const gchar *object_path,
-				const gchar *interface_name, const gchar *method_name,
-				GVariant *parameters, GDBusMethodInvocation *invocation,
-				gpointer user_data)
-{
-	GError *error = NULL;
-	guint value;
-	gboolean ret;
-	GpmBacklight *backlight = GPM_BACKLIGHT (user_data);
-
-	if (g_strcmp0 (method_name, "GetBrightness") == 0) {
-		ret = gpm_backlight_get_brightness (backlight, &value, &error);
-		if (!ret) {
-			g_dbus_method_invocation_return_gerror (invocation, error);
-			g_error_free (error);
-		} else {
-			g_dbus_method_invocation_return_value (invocation, g_variant_new ("(u)", value));
-		}
-		return;
-	}
-	if (g_strcmp0 (method_name, "SetBrightness") == 0) {
-		g_variant_get (parameters, "(u)", &value);
-		ret = gpm_backlight_set_brightness (backlight, value, &error);
-		if (!ret) {
-			g_dbus_method_invocation_return_gerror (invocation, error);
-			g_error_free (error);
-		} else {
-			g_dbus_method_invocation_return_value (invocation, NULL);
-		}
-		return;
-	}
-	g_assert_not_reached ();
-}
-
-/**
- * gpm_backlight_dbus_property_get:
- **/
-static GVariant *
-gpm_backlight_dbus_property_get (GDBusConnection *connection,
-				 const gchar *sender, const gchar *object_path,
-				 const gchar *interface_name, const gchar *property_name,
-				 GError **error, gpointer user_data)
-{
-	/* do nothing, no properties defined */
-	return NULL;
-}
-
-/**
- * gpm_backlight_dbus_property_set:
- **/
-static gboolean
-gpm_backlight_dbus_property_set (GDBusConnection *connection,
-				 const gchar *sender, const gchar *object_path,
-				 const gchar *interface_name, const gchar *property_name,
-				 GVariant *value,
-				 GError**invocation, gpointer user_data)
-{
-	/* do nothing, no properties defined */
-	return FALSE;
-}
-
-/**
- * gpm_backlight_register_dbus:
- **/
-void
-gpm_backlight_register_dbus (GpmBacklight *backlight, GDBusConnection *connection)
-{
-	GDBusNodeInfo *node_info;
-	GDBusInterfaceInfo *interface_info;
-	GDBusInterfaceVTable interface_vtable = {
-			gpm_backlight_dbus_method_call,
-			gpm_backlight_dbus_property_get,
-			gpm_backlight_dbus_property_set
-	};
-
-	node_info = g_dbus_node_info_new_for_xml (backlight_introspection, NULL);
-	interface_info = g_dbus_node_info_lookup_interface (node_info, GPM_DBUS_INTERFACE_BACKLIGHT);
-
-	backlight->priv->bus_connection = g_object_ref (connection);
-	backlight->priv->bus_object_id =
-		g_dbus_connection_register_object (connection,
-						   GPM_DBUS_PATH_BACKLIGHT,
-						   interface_info,
-						   &interface_vtable,
-						   backlight,
-						   NULL, NULL);
-	g_dbus_node_info_unref (node_info);
-}
-
-/**
  * gpm_backlight_finalize:
  **/
 static void
@@ -610,12 +489,6 @@ gpm_backlight_finalize (GObject *object)
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GPM_IS_BACKLIGHT (object));
 	backlight = GPM_BACKLIGHT (object);
-
-	if (backlight->priv->bus_connection != NULL) {
-		g_dbus_connection_unregister_object (backlight->priv->bus_connection,
-						     backlight->priv->bus_object_id);
-		g_object_unref (backlight->priv->bus_connection);
-	}
 
 	g_timer_destroy (backlight->priv->idle_timer);
 
