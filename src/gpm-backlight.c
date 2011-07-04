@@ -45,7 +45,6 @@
 #include "gpm-brightness.h"
 #include "gpm-control.h"
 #include "gpm-common.h"
-#include "gpm-osd-dialog.h"
 #include "gpm-dpms.h"
 #include "gpm-idle.h"
 #include "gpm-marshal.h"
@@ -77,7 +76,6 @@ struct GpmBacklightPrivate
 	GpmButton		*button;
 	GSettings		*settings;
 	GSettings		*settings_gsd;
-	GtkWidget		*popup;
 	GpmControl		*control;
 	GpmDpms			*dpms;
 	GpmIdle			*idle;
@@ -285,14 +283,6 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	if (old_value == value) {
 		g_debug ("values are the same, no action");
 		return FALSE;
-	}
-
-	/* only show dialog if interactive */
-	if (interactive) {
-		gpm_osd_dialog_init (&backlight->priv->popup, "display-brightness-symbolic");
-		gsd_media_keys_window_set_volume_level (GSD_MEDIA_KEYS_WINDOW (backlight->priv->popup),
-							round (brightness));
-		gpm_osd_dialog_show (backlight->priv->popup);
 	}
 
 	ret = gpm_brightness_set (backlight->priv->brightness, value, &hw_changed);
@@ -643,7 +633,6 @@ gpm_backlight_finalize (GObject *object)
 	}
 
 	g_timer_destroy (backlight->priv->idle_timer);
-	gtk_widget_destroy (backlight->priv->popup);
 
 	g_object_unref (backlight->priv->dpms);
 	g_object_unref (backlight->priv->control);
@@ -723,9 +712,6 @@ gpm_backlight_init (GpmBacklight *backlight)
 	backlight->priv->system_is_idle = FALSE;
 	backlight->priv->idle_dim_timeout = g_settings_get_int (backlight->priv->settings_gsd, GSD_SETTINGS_IDLE_DIM_TIME);
 	gpm_idle_set_timeout_dim (backlight->priv->idle, backlight->priv->idle_dim_timeout);
-
-	/* use a visual widget */
-	gpm_osd_dialog_init (&backlight->priv->popup, "display-brightness-symbolic");
 
 	/* DPMS mode poll class */
 	backlight->priv->dpms = gpm_dpms_new ();

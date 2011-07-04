@@ -89,8 +89,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-dpms.c					\
 	gpm-phone.h					\
 	gpm-phone.c					\
-	gpm-osd-dialog.h				\
-	gpm-osd-dialog.c				\
 	gpm-backlight.h					\
 	gpm-backlight.c					\
 	gpm-idle.h					\
@@ -105,10 +103,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-screensaver.h				\
 	gpm-screensaver.c				\
 	gpm-stock-icons.h				\
-	gsd-media-keys-window.h				\
-	gsd-media-keys-window.c				\
-	gsd-osd-window.h				\
-	gsd-osd-window.c				\
 	gpm-engine.h					\
 	gpm-engine.c
 
