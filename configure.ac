@@ -129,13 +129,6 @@ PKG_CHECK_MODULES(UPOWER, upower-glib >= 0.9.1)
 dnl **** Check for NOTIFY ****
 PKG_CHECK_MODULES(NOTIFY, libnotify >= 0.7.0)
 
-dnl ---------------------------------------------------------------------------
-dnl - Check XF86XK_Keys
-dnl ---------------------------------------------------------------------------
-PKG_CHECK_EXISTS(
- [xproto >= 7.0.14],
- [AC_DEFINE(HAVE_XF86XK_BATTERY, 1, [Define if XF86XK_Battery is available])])
-
 PKG_CHECK_EXISTS(
  [xproto >= 7.0.15],
  [AC_DEFINE(HAVE_XF86XK_SUSPEND, 1, [Define if XF86XK_Suspend is available])

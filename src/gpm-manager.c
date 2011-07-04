@@ -978,7 +978,6 @@ gpm_manager_update_lid_throttle (GpmManager *manager, gboolean lid_is_closed)
 static void
 gpm_manager_button_pressed_cb (GpmButton *button, const gchar *type, GpmManager *manager)
 {
-	gchar *message;
 	g_debug ("Button press event type=%s", type);
 
 	/* ConsoleKit says we are not on active console */
@@ -999,15 +998,6 @@ gpm_manager_button_pressed_cb (GpmButton *button, const gchar *type, GpmManager 
 		gpm_manager_lid_button_pressed (manager, FALSE);
 	} else if (g_strcmp0 (type, GPM_BUTTON_LID_CLOSED) == 0) {
 		gpm_manager_lid_button_pressed (manager, TRUE);
-	} else if (g_strcmp0 (type, GPM_BUTTON_BATTERY) == 0) {
-		message = gpm_engine_get_summary (manager->priv->engine);
-		gpm_manager_notify (manager, &manager->priv->notification_general,
-				    _("Power Information"),
-				    message,
-				    GPM_MANAGER_NOTIFY_TIMEOUT_LONG,
-				    GTK_STOCK_DIALOG_INFO,
-				    NOTIFY_URGENCY_NORMAL);
-		g_free (message);
 	}
 
 	/* really belongs in gnome-screensaver */
