@@ -364,47 +364,9 @@ gpm_backlight_button_pressed_cb (GpmButton *button, const gchar *type, GpmBackli
 {
 	gboolean ret;
 	GError *error = NULL;
-	guint percentage;
-	gboolean hw_changed;
 	g_debug ("Button press event type=%s", type);
 
-	if (g_strcmp0 (type, GPM_BUTTON_BRIGHT_UP) == 0) {
-		/* go up one step */
-		ret = gpm_brightness_up (backlight->priv->brightness, &hw_changed);
-
-		/* show the new value */
-		if (ret) {
-			gpm_brightness_get (backlight->priv->brightness, &percentage);
-			gpm_osd_dialog_init (&backlight->priv->popup, "display-brightness-symbolic");
-			gsd_media_keys_window_set_volume_level (GSD_MEDIA_KEYS_WINDOW (backlight->priv->popup),
-								percentage);
-			gpm_osd_dialog_show (backlight->priv->popup);
-			/* save the new percentage */
-			backlight->priv->master_percentage = percentage;
-		}
-		/* we emit a signal for the brightness applet */
-		if (ret && hw_changed)
-			gpm_backlight_brightness_changed (backlight, percentage);
-
-	} else if (g_strcmp0 (type, GPM_BUTTON_BRIGHT_DOWN) == 0) {
-		/* go up down step */
-		ret = gpm_brightness_down (backlight->priv->brightness, &hw_changed);
-
-		/* show the new value */
-		if (ret) {
-			gpm_brightness_get (backlight->priv->brightness, &percentage);
-			gpm_osd_dialog_init (&backlight->priv->popup, "display-brightness-symbolic");
-			gsd_media_keys_window_set_volume_level (GSD_MEDIA_KEYS_WINDOW (backlight->priv->popup),
-								percentage);
-			gpm_osd_dialog_show (backlight->priv->popup);
-			/* save the new percentage */
-			backlight->priv->master_percentage = percentage;
-		}
-		/* we emit a signal for the brightness applet */
-		if (ret && hw_changed)
-			gpm_backlight_brightness_changed (backlight, percentage);
-
-	} else if (g_strcmp0 (type, GPM_BUTTON_LID_OPEN) == 0) {
+	if (g_strcmp0 (type, GPM_BUTTON_LID_OPEN) == 0) {
 		/* make sure we undim when we lift the lid */
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 

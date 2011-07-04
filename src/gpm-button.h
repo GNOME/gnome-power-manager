@@ -38,8 +38,6 @@ typedef struct GpmButtonPrivate GpmButtonPrivate;
 #define GPM_BUTTON_LID_DEP		"lid"		/* Remove when HAL drops input support */
 #define GPM_BUTTON_LID_OPEN		"lid-up"
 #define GPM_BUTTON_LID_CLOSED		"lid-down"
-#define GPM_BUTTON_BRIGHT_UP		"brightness-up"
-#define GPM_BUTTON_BRIGHT_DOWN		"brightness-down"
 
 typedef struct
 {
