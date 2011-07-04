@@ -48,8 +48,6 @@ libgpmshared_a_SOURCES =				\
 	egg-console-kit.c				\
 	gpm-common.h					\
 	gpm-common.c					\
-	gpm-brightness.h				\
-	gpm-brightness.c				\
 	gpm-marshal.h					\
 	gpm-marshal.c					\
 	gpm-upower.c					\

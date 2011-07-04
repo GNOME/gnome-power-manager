@@ -1073,6 +1073,109 @@ gpm_manager_init (GpmManager *manager)
 				g_object_unref);
 }
 
+#if 0
+/**
+ * gpm_brightness_helper_strtoint:
+ * @text: The text the convert
+ * @value: The return numeric return value
+ *
+ * Converts a string into a signed integer value in a safe way.
+ *
+ * Return value: %TRUE if the string was converted correctly
+ **/
+static gboolean
+gpm_brightness_helper_strtoint (const gchar *text, gint *value)
+{
+	gchar *endptr = NULL;
+	gint64 value_raw;
+
+	/* invalid */
+	if (text == NULL)
+		return FALSE;
+
+	/* parse */
+	value_raw = g_ascii_strtoll (text, &endptr, 10);
+
+	/* parsing error */
+	if (endptr == text)
+		return FALSE;
+
+	/* out of range */
+	if (value_raw > G_MAXINT || value_raw < G_MININT)
+		return FALSE;
+
+	/* cast back down to value */
+	*value = (gint) value_raw;
+	return TRUE;
+}
+
+/**
+ * gpm_brightness_helper_get_value:
+ **/
+static gint
+gpm_brightness_helper_get_value (const gchar *argument)
+{
+	gboolean ret;
+	GError *error = NULL;
+	gchar *stdout_data = NULL;
+	gint exit_status = 0;
+	gint value = -1;
+	gchar *command = NULL;
+
+	/* get the data */
+	command = g_strdup_printf (SBINDIR "/gnome-power-backlight-helper --%s", argument);
+	ret = g_spawn_command_line_sync (command,
+					 &stdout_data, NULL, &exit_status, &error);
+	if (!ret) {
+		g_error ("failed to get value: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+	g_debug ("executing %s retval: %i", command, exit_status);
+
+	/* parse for a number */
+	ret = gpm_brightness_helper_strtoint (stdout_data, &value);
+	if (!ret)
+		goto out;
+out:
+	g_free (command);
+	g_free (stdout_data);
+	return value;
+}
+
+/**
+ * gpm_brightness_helper_set_value:
+ **/
+static gboolean
+gpm_brightness_helper_set_value (const gchar *argument, gint value)
+{
+	gboolean ret;
+	GError *error = NULL;
+	gint exit_status = 0;
+	gchar *command = NULL;
+
+	/* get the data */
+	command = g_strdup_printf ("pkexec " SBINDIR "/gnome-power-backlight-helper --%s %i", argument, value);
+	ret = g_spawn_command_line_sync (command, NULL, NULL, &exit_status, &error);
+	if (!ret) {
+		g_error ("failed to get value: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+	g_debug ("executing %s retval: %i", command, exit_status);
+out:
+	g_free (command);
+	return ret;
+}
+
+{
+	if (brightness->priv->extension_levels < 0)
+		brightness->priv->extension_levels = gpm_brightness_helper_get_value ("get-max-brightness");
+	ret = gpm_brightness_helper_set_value ("set-brightness", brightness->priv->extension_current);
+	brightness->priv->extension_current = gpm_brightness_helper_get_value ("get-brightness");
+}
+#endif
+
 /**
  * gpm_manager_finalize:
  * @object: The object to finalize

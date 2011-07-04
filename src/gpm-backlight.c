@@ -42,7 +42,6 @@
 
 #include "gpm-button.h"
 #include "gpm-backlight.h"
-#include "gpm-brightness.h"
 #include "gpm-control.h"
 #include "gpm-common.h"
 #include "gpm-dpms.h"
@@ -72,7 +71,6 @@ static const gchar *backlight_introspection = ""
 struct GpmBacklightPrivate
 {
 	UpClient		*client;
-	GpmBrightness		*brightness;
 	GpmButton		*button;
 	GSettings		*settings;
 	GSettings		*settings_gsd;
@@ -125,7 +123,7 @@ gpm_backlight_get_brightness (GpmBacklight *backlight, guint *brightness, GError
 	}
 
 	/* gets the current brightness */
-	ret = gpm_brightness_get (backlight->priv->brightness, &level);
+	ret = FALSE;
 	if (ret) {
 		*brightness = level;
 	} else {
@@ -180,7 +178,7 @@ gpm_backlight_set_brightness (GpmBacklight *backlight, guint percentage, GError 
 	backlight->priv->master_percentage = percentage;
 
 	/* sets the current policy brightness */
-	ret = gpm_brightness_set (backlight->priv->brightness, percentage, &hw_changed);
+	ret = FALSE;
 	if (!ret) {
 		g_set_error_literal (error, gpm_backlight_error_quark (),
 				      GPM_BACKLIGHT_ERROR_GENERAL,
@@ -220,7 +218,6 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	gboolean battery_reduce;
 	gboolean hw_changed;
 	guint value;
-	guint old_value;
 
 	if (backlight->priv->can_dim == FALSE) {
 		g_warning ("no dimming hardware");
@@ -279,13 +276,10 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	value = (guint) ((brightness * 100.0f) + 0.5);
 
 	/* only do stuff if the brightness is different */
-	gpm_brightness_get (backlight->priv->brightness, &old_value);
-	if (old_value == value) {
-		g_debug ("values are the same, no action");
-		return FALSE;
-	}
+	//old_value = 0;
 
-	ret = gpm_brightness_set (backlight->priv->brightness, value, &hw_changed);
+	ret = FALSE;
+	//set value
 	/* we emit a signal for the brightness applet */
 	if (ret && hw_changed)
 		gpm_backlight_brightness_changed (backlight, value);
@@ -492,15 +486,6 @@ gpm_backlight_idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *ba
 }
 
 /**
- * gpm_backlight_brightness_changed_cb:
- **/
-static void
-gpm_backlight_brightness_changed_cb (GpmBrightness *brightness, guint percentage, GpmBacklight *backlight)
-{
-	gpm_backlight_brightness_changed (backlight, percentage);
-}
-
-/**
  * gpm_backlight_control_resume_cb:
  * @control: The control class instance
  * @power: This power class instance
@@ -641,7 +626,6 @@ gpm_backlight_finalize (GObject *object)
 	g_object_unref (backlight->priv->client);
 	g_object_unref (backlight->priv->button);
 	g_object_unref (backlight->priv->idle);
-	g_object_unref (backlight->priv->brightness);
 	g_object_unref (backlight->priv->consolekit);
 
 	g_return_if_fail (backlight->priv != NULL);
@@ -675,18 +659,10 @@ gpm_backlight_init (GpmBacklight *backlight)
 	/* record our idle time */
 	backlight->priv->idle_timer = g_timer_new ();
 
-	/* watch for manual brightness changes (for the popup widget) */
-	backlight->priv->brightness = gpm_brightness_new ();
-	g_signal_connect (backlight->priv->brightness, "brightness-changed",
-			  G_CALLBACK (gpm_backlight_brightness_changed_cb), backlight);
-
 	/* we use up_client for the ac-adapter-changed signal */
 	backlight->priv->client = up_client_new ();
 	g_signal_connect (backlight->priv->client, "changed",
 			  G_CALLBACK (gpm_backlight_client_changed_cb), backlight);
-
-	/* gets caps */
-	backlight->priv->can_dim = gpm_brightness_has_hw (backlight->priv->brightness);
 
 	/* watch for dim value changes */
 	backlight->priv->settings = g_settings_new (GPM_SETTINGS_SCHEMA);
