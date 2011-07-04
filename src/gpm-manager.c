@@ -36,7 +36,6 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <canberra-gtk.h>
 #include <libupower-glib/upower.h>
 #include <libnotify/notify.h>
 
@@ -79,8 +78,6 @@ struct GpmManagerPrivate
 	guint32			 screensaver_ac_throttle_id;
 	guint32			 screensaver_dpms_throttle_id;
 	guint32			 screensaver_lid_throttle_id;
-	guint32                  critical_alert_timeout_id;
-	ca_proplist             *critical_alert_loop_props;
 	UpClient		*client;
 	gboolean		 on_battery;
 	gboolean		 just_resumed;
@@ -141,179 +138,6 @@ gpm_manager_error_get_type (void)
 		etype = g_enum_register_static ("GpmManagerError", values);
 	}
 	return etype;
-}
-
-/**
- * gpm_manager_play_loop_timeout_cb:
- **/
-static gboolean
-gpm_manager_play_loop_timeout_cb (GpmManager *manager)
-{
-	ca_context *context;
-	context = ca_gtk_context_get_for_screen (gdk_screen_get_default ());
-	ca_context_play_full (context, 0,
-			      manager->priv->critical_alert_loop_props,
-			      NULL,
-			      NULL);
-	return TRUE;
-}
-
-/**
- * gpm_manager_play_loop_stop:
- **/
-static gboolean
-gpm_manager_play_loop_stop (GpmManager *manager)
-{
-	if (manager->priv->critical_alert_timeout_id == 0) {
-		g_warning ("no sound loop present to stop");
-		return FALSE;
-	}
-
-	g_source_remove (manager->priv->critical_alert_timeout_id);
-	ca_proplist_destroy (manager->priv->critical_alert_loop_props);
-
-	manager->priv->critical_alert_loop_props = NULL;
-	manager->priv->critical_alert_timeout_id = 0;
-
-	return TRUE;
-}
-
-/**
- * gpm_manager_play_loop_start:
- **/
-static gboolean
-gpm_manager_play_loop_start (GpmManager *manager, GpmManagerSound action, gboolean force, guint timeout)
-{
-	const gchar *id = NULL;
-	const gchar *desc = NULL;
-	gboolean ret;
-	gint retval;
-	ca_context *context;
-
-	ret = g_settings_get_boolean (manager->priv->settings, GPM_SETTINGS_ENABLE_SOUND);
-	if (!ret && !force) {
-		g_debug ("ignoring sound due to policy");
-		return FALSE;
-	}
-
-	if (timeout == 0) {
-		g_warning ("received invalid timeout");
-		return FALSE;
-	}
-
-	/* if a sound loop is already running, stop the existing loop */
-	if (manager->priv->critical_alert_timeout_id != 0) {
-		g_warning ("was instructed to play a sound loop with one already playing");
-		gpm_manager_play_loop_stop (manager);
-	}
-
-	if (action == GPM_MANAGER_SOUND_BATTERY_LOW) {
-		id = "battery-low";
-		/* TRANSLATORS: this is the sound description */
-		desc = _("Battery is very low");
-	}
-
-	/* no match */
-	if (id == NULL) {
-		g_warning ("no sound match for %i", action);
-		return FALSE;
-	}
-
-	ca_proplist_create (&(manager->priv->critical_alert_loop_props));
-	ca_proplist_sets (manager->priv->critical_alert_loop_props,
-			  CA_PROP_EVENT_ID, id);
-	ca_proplist_sets (manager->priv->critical_alert_loop_props,
-			  CA_PROP_EVENT_DESCRIPTION, desc);
-
-	manager->priv->critical_alert_timeout_id = g_timeout_add_seconds (timeout,
-									  (GSourceFunc) gpm_manager_play_loop_timeout_cb,
-									  manager);
-	g_source_set_name_by_id (manager->priv->critical_alert_timeout_id, "[GpmManager] play-loop");
-
-	/* play the sound, using sounds from the naming spec */
-	context = ca_gtk_context_get_for_screen (gdk_screen_get_default ());
-	retval = ca_context_play (context, 0,
-				  CA_PROP_EVENT_ID, id,
-				  CA_PROP_EVENT_DESCRIPTION, desc, NULL);
-	if (retval < 0)
-		g_warning ("failed to play %s: %s", id, ca_strerror (retval));
-	return TRUE;
-}
-
-/**
- * gpm_manager_play:
- **/
-static gboolean
-gpm_manager_play (GpmManager *manager, GpmManagerSound action, gboolean force)
-{
-	const gchar *id = NULL;
-	const gchar *desc = NULL;
-	gboolean ret;
-	gint retval;
-	ca_context *context;
-
-	ret = g_settings_get_boolean (manager->priv->settings, GPM_SETTINGS_ENABLE_SOUND);
-	if (!ret && !force) {
-		g_debug ("ignoring sound due to policy");
-		return FALSE;
-	}
-
-	if (action == GPM_MANAGER_SOUND_POWER_PLUG) {
-		id = "power-plug";
-		/* TRANSLATORS: this is the sound description */
-		desc = _("Power plugged in");
-	} else if (action == GPM_MANAGER_SOUND_POWER_UNPLUG) {
-		id = "power-unplug";
-		/* TRANSLATORS: this is the sound description */
-		desc = _("Power unplugged");
-	} else if (action == GPM_MANAGER_SOUND_LID_OPEN) {
-		id = "lid-open";
-		/* TRANSLATORS: this is the sound description */
-		desc = _("Lid has opened");
-	} else if (action == GPM_MANAGER_SOUND_LID_CLOSE) {
-		id = "lid-close";
-		/* TRANSLATORS: this is the sound description */
-		desc = _("Lid has closed");
-	} else if (action == GPM_MANAGER_SOUND_BATTERY_CAUTION) {
-		id = "battery-caution";
-		/* TRANSLATORS: this is the sound description */
-		desc = _("Battery is low");
-	} else if (action == GPM_MANAGER_SOUND_BATTERY_LOW) {
-		id = "battery-low";
-		/* TRANSLATORS: this is the sound description */
-		desc = _("Battery is very low");
-	} else if (action == GPM_MANAGER_SOUND_BATTERY_FULL) {
-		id = "battery-full";
-		/* TRANSLATORS: this is the sound description */
-		desc = _("Battery is full");
-	} else if (action == GPM_MANAGER_SOUND_SUSPEND_START) {
-		id = "suspend-start";
-		/* TRANSLATORS: this is the sound description */
-		desc = _("Suspend started");
-	} else if (action == GPM_MANAGER_SOUND_SUSPEND_RESUME) {
-		id = "suspend-resume";
-		/* TRANSLATORS: this is the sound description */
-		desc = _("Resumed");
-	} else if (action == GPM_MANAGER_SOUND_SUSPEND_ERROR) {
-		id = "suspend-error";
-		/* TRANSLATORS: this is the sound description */
-		desc = _("Suspend failed");
-	}
-
-	/* no match */
-	if (id == NULL) {
-		g_warning ("no match");
-		return FALSE;
-	}
-
-	/* play the sound, using sounds from the naming spec */
-	context = ca_gtk_context_get_for_screen (gdk_screen_get_default ());
-	retval = ca_context_play (context, 0,
-				  CA_PROP_EVENT_ID, id,
-				  CA_PROP_EVENT_DESCRIPTION, desc, NULL);
-	if (retval < 0)
-		g_warning ("failed to play %s: %s", id, ca_strerror (retval));
-	return TRUE;
 }
 
 /**
@@ -571,9 +395,6 @@ gpm_manager_sleep_failure (GpmManager *manager, gboolean is_suspend, const gchar
 
 	/* only show this if specified in settings */
 	show_sleep_failed = g_settings_get_boolean (manager->priv->settings, GPM_SETTINGS_NOTIFY_SLEEP_FAILED);
-
-	g_debug ("sleep failed");
-	gpm_manager_play (manager, GPM_MANAGER_SOUND_SUSPEND_ERROR, TRUE);
 
 	/* only emit if in GConf */
 	if (!show_sleep_failed)
@@ -1007,12 +828,6 @@ gpm_manager_client_changed_cb (UpClient *client, GpmManager *manager)
 		gpm_manager_notify_close (manager, manager->priv->notification_discharging);
 	}
 
-	/* if we are playing a critical charge sound loop, stop it */
-	if (!on_battery && manager->priv->critical_alert_timeout_id) {
-		g_debug ("stopping alert loop due to ac being present");
-		gpm_manager_play_loop_stop (manager);
-	}
-
 	/* save in local cache */
 	manager->priv->on_battery = on_battery;
 
@@ -1031,11 +846,6 @@ gpm_manager_client_changed_cb (UpClient *client, GpmManager *manager)
 	/* simulate user input, but only when the lid is open */
 	if (!lid_is_closed)
 		gpm_screensaver_poke (manager->priv->screensaver);
-
-	if (!on_battery)
-		gpm_manager_play (manager, GPM_MANAGER_SOUND_POWER_PLUG, FALSE);
-	else
-		gpm_manager_play (manager, GPM_MANAGER_SOUND_POWER_UNPLUG, FALSE);
 
 	/* We keep track of the lid state so we can do the
 	 * lid close on battery action if the ac adapter is removed when the laptop
@@ -1058,10 +868,6 @@ gpm_manager_client_changed_cb (UpClient *client, GpmManager *manager)
 static gboolean
 manager_critical_action_do (GpmManager *manager)
 {
-	/* stop playing the alert as it's too late to do anything now */
-	if (manager->priv->critical_alert_timeout_id)
-		gpm_manager_play_loop_stop (manager);
-
 	/* if power is restored before we reach here, abort */
 	if (!manager->priv->on_battery)
 		goto out;
@@ -1509,7 +1315,6 @@ gpm_manager_engine_charge_low_cb (GpmEngine *engine, UpDevice *device, GpmManage
 	icon = gpm_upower_get_device_icon (device, TRUE);
 	gpm_manager_notify (manager, &manager->priv->notification_warning_low, title, message,
 			    GPM_MANAGER_NOTIFY_TIMEOUT_LONG, gpm_manager_get_icon_name (icon), NOTIFY_URGENCY_NORMAL);
-	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_CAUTION, TRUE);
 out:
 	if (icon != NULL)
 		g_object_unref (icon);
@@ -1676,21 +1481,6 @@ gpm_manager_engine_charge_critical_cb (GpmEngine *engine, UpDevice *device, GpmM
 	icon = gpm_upower_get_device_icon (device, TRUE);
 	gpm_manager_notify (manager, &manager->priv->notification_warning_low, title, message,
 			    GPM_MANAGER_NOTIFY_TIMEOUT_NEVER, gpm_manager_get_icon_name (icon), NOTIFY_URGENCY_CRITICAL);
-
-	switch (kind) {
-
-	case UP_DEVICE_KIND_BATTERY:
-	case UP_DEVICE_KIND_UPS:
-		g_debug ("critical charge level reached, starting sound loop");
-		gpm_manager_play_loop_start (manager,
-					     GPM_MANAGER_SOUND_BATTERY_LOW,
-					     TRUE,
-					     GPM_MANAGER_CRITICAL_ALERT_TIMEOUT);
-		break;
-
-	default:
-		gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
-	}
 out:
 	if (icon != NULL)
 		g_object_unref (icon);
@@ -1799,7 +1589,6 @@ gpm_manager_engine_charge_action_cb (GpmEngine *engine, UpDevice *device, GpmMan
 	gpm_manager_notify (manager, &manager->priv->notification_warning_low,
 			    title, message, GPM_MANAGER_NOTIFY_TIMEOUT_NEVER,
 			    gpm_manager_get_icon_name (icon), NOTIFY_URGENCY_CRITICAL);
-	gpm_manager_play (manager, GPM_MANAGER_SOUND_BATTERY_LOW, TRUE);
 out:
 	if (icon != NULL)
 		g_object_unref (icon);
@@ -1917,9 +1706,6 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->screensaver_dpms_throttle_id = 0;
 	manager->priv->screensaver_lid_throttle_id = 0;
 
-	manager->priv->critical_alert_timeout_id = 0;
-	manager->priv->critical_alert_loop_props = NULL;
-
 	/* init to not just_resumed */
 	manager->priv->just_resumed = FALSE;
 
@@ -2033,8 +1819,6 @@ gpm_manager_finalize (GObject *object)
 		gpm_manager_notify_close (manager, manager->priv->notification_discharging);
 	if (manager->priv->notification_fully_charged != NULL)
 		gpm_manager_notify_close (manager, manager->priv->notification_fully_charged);
-	if (manager->priv->critical_alert_timeout_id != 0)
-		g_source_remove (manager->priv->critical_alert_timeout_id);
 
 	g_object_unref (manager->priv->settings);
 	g_object_unref (manager->priv->settings_gsd);

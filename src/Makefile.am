@@ -9,7 +9,6 @@ INCLUDES =						\
 	$(GNOME_CFLAGS)					\
 	$(X11_CFLAGS)					\
 	$(NOTIFY_CFLAGS)				\
-	$(CANBERRA_CFLAGS)				\
 	$(GSTREAMER_CFLAGS)				\
 	$(UPOWER_CFLAGS)				\
 	-DBINDIR=\"$(bindir)\"			 	\
@@ -120,7 +119,6 @@ gnome_power_manager_LDADD =				\
 	$(GSTREAMER_LIBS)				\
 	$(GNOME_LIBS)					\
 	$(X11_LIBS)					\
-	$(CANBERRA_LIBS)				\
 	$(NOTIFY_LIBS)					\
 	$(GPM_EXTRA_LIBS)				\
 	$(UPOWER_LIBS)					\

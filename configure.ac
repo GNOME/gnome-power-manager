@@ -105,8 +105,6 @@ dnl - Check library dependencies
 dnl ---------------------------------------------------------------------------
 PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.13.0 gobject-2.0 gio-2.0 >= 2.25.9)
 
-PKG_CHECK_MODULES(CANBERRA, libcanberra-gtk3 >= 0.10)
-
 PKG_CHECK_MODULES(GNOME, [
  gtk+-3.0 >= 2.91.0
  gnome-keyring-1 >= 0.6.0
