@@ -1,9 +1,6 @@
 ## We require new-style dependency handling.
 AUTOMAKE_OPTIONS = 1.7
 
-EXTRA_DIST =						\
-	gpm-marshal.list
-
 INCLUDES =						\
 	$(GLIB_CFLAGS)					\
 	$(GNOME_CFLAGS)					\
@@ -48,8 +45,6 @@ libgpmshared_a_SOURCES =				\
 	egg-console-kit.c				\
 	gpm-common.h					\
 	gpm-common.c					\
-	gpm-marshal.h					\
-	gpm-marshal.c					\
 	gpm-upower.c					\
 	gpm-upower.h
 
@@ -146,20 +141,8 @@ gnome_power_self_test_LDADD =				\
 
 gnome_power_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS) $(WARNINGFLAGS)
 
-BUILT_SOURCES = 					\
-	gpm-marshal.c					\
-	gpm-marshal.h
-
-gpm-marshal.c: gpm-marshal.list
-	echo "#include \"gpm-marshal.h\"" > $@ && \
-	@GLIB_GENMARSHAL@ $< --prefix=gpm_marshal --body >> $@
-
-gpm-marshal.h: gpm-marshal.list
-	@GLIB_GENMARSHAL@ $< --prefix=gpm_marshal --header > $@
-
 clean-local:
 	rm -f *~
-	rm -f gpm-marshal.c gpm-marshal.h
 
 CLEANFILES = $(BUILT_SOURCES)
 

@@ -46,7 +46,6 @@
 #include "gpm-common.h"
 #include "gpm-dpms.h"
 #include "gpm-idle.h"
-#include "gpm-marshal.h"
 #include "gpm-stock-icons.h"
 #include "egg-console-kit.h"
 
