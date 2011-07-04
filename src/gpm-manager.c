@@ -54,7 +54,6 @@
 #include "gpm-stock-icons.h"
 #include "gpm-engine.h"
 #include "gpm-upower.h"
-#include "gpm-disks.h"
 
 static const gchar *power_manager_introspection = ""
 "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
@@ -90,7 +89,6 @@ struct GpmManagerPrivate
 	GpmButton		*button;
 	GSettings		*settings;
 	GSettings		*settings_gsd;
-	GpmDisks		*disks;
 	GpmDpms			*dpms;
 	GpmIdle			*idle;
 	GpmControl		*control;
@@ -1078,34 +1076,11 @@ gpm_manager_button_pressed_cb (GpmButton *button, const gchar *type, GpmManager 
 }
 
 /**
- * gpm_manager_get_spindown_timeout:
- **/
-static gint
-gpm_manager_get_spindown_timeout (GpmManager *manager)
-{
-	gboolean enabled;
-	gint timeout;
-
-	/* get policy */
-	if (!manager->priv->on_battery) {
-		enabled = g_settings_get_boolean (manager->priv->settings, GPM_SETTINGS_SPINDOWN_ENABLE_AC);
-		timeout = g_settings_get_int (manager->priv->settings, GPM_SETTINGS_SPINDOWN_TIMEOUT_AC);
-	} else {
-		enabled = g_settings_get_boolean (manager->priv->settings, GPM_SETTINGS_SPINDOWN_ENABLE_BATT);
-		timeout = g_settings_get_int (manager->priv->settings, GPM_SETTINGS_SPINDOWN_TIMEOUT_BATT);
-	}
-	if (!enabled)
-		timeout = 0;
-	return timeout;
-}
-
-/**
  * gpm_manager_client_changed_cb:
  **/
 static void
 gpm_manager_client_changed_cb (UpClient *client, GpmManager *manager)
 {
-	gint timeout;
 	gboolean on_battery;
 	gboolean lid_is_closed;
 
@@ -1142,10 +1117,6 @@ gpm_manager_client_changed_cb (UpClient *client, GpmManager *manager)
 	}
 
 	g_debug ("on_battery: %d", on_battery);
-
-	/* set disk spindown threshold */
-	timeout = gpm_manager_get_spindown_timeout (manager);
-	gpm_disks_set_spindown_timeout (manager->priv->disks, timeout);
 
 	gpm_manager_sync_policy_sleep (manager);
 
@@ -2256,8 +2227,6 @@ gpm_manager_name_lost_cb (GDBusConnection *connection,
 static void
 gpm_manager_init (GpmManager *manager)
 {
-	gint timeout;
-
 	manager->priv = GPM_MANAGER_GET_PRIVATE (manager);
 
 	/* init to unthrottled */
@@ -2278,7 +2247,6 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->notification_warning_low = NULL;
 	manager->priv->notification_discharging = NULL;
 	manager->priv->notification_fully_charged = NULL;
-	manager->priv->disks = gpm_disks_new ();
 	manager->priv->settings = g_settings_new (GPM_SETTINGS_SCHEMA);
 	g_signal_connect (manager->priv->settings, "changed",
 			  G_CALLBACK (gpm_manager_settings_changed_cb), manager);
@@ -2344,10 +2312,6 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect (manager->priv->engine, "devices-changed",
 			  G_CALLBACK (gpm_manager_engine_devices_changed_cb), manager);
 
-	/* set disk spindown threshold */
-	timeout = gpm_manager_get_spindown_timeout (manager);
-	gpm_disks_set_spindown_timeout (manager->priv->disks, timeout);
-
 	/* update ac throttle */
 	gpm_manager_update_ac_throttle (manager);
 
@@ -2396,7 +2360,6 @@ gpm_manager_finalize (GObject *object)
 
 	g_object_unref (manager->priv->settings);
 	g_object_unref (manager->priv->settings_gsd);
-	g_object_unref (manager->priv->disks);
 	g_object_unref (manager->priv->dpms);
 	g_object_unref (manager->priv->idle);
 	g_object_unref (manager->priv->engine);

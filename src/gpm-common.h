@@ -80,12 +80,6 @@ G_BEGIN_DECLS
 #define GPM_SETTINGS_LOCK_KEYRING_SUSPEND		"lock-keyring-suspend"
 #define GPM_SETTINGS_LOCK_KEYRING_HIBERNATE		"lock-keyring-hibernate"
 
-/* disks */
-#define GPM_SETTINGS_SPINDOWN_ENABLE_AC			"spindown-enable-ac"
-#define GPM_SETTINGS_SPINDOWN_ENABLE_BATT		"spindown-enable-battery"
-#define GPM_SETTINGS_SPINDOWN_TIMEOUT_AC		"spindown-timeout-ac"
-#define GPM_SETTINGS_SPINDOWN_TIMEOUT_BATT		"spindown-timeout-battery"
-
 /* notify */
 #define GPM_SETTINGS_NOTIFY_PERHAPS_RECALL		"notify-perhaps-recall"
 #define GPM_SETTINGS_NOTIFY_LOW_CAPACITY		"notify-low-capacity"
