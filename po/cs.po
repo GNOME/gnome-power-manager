@@ -63,7 +63,7 @@ msgid ""
 "If a notification message should be displayed when the battery is fully "
 "charged."
 msgstr ""
-"Zda by se měla zobrazit zpráva s upozorněním, když je baterie plně dobita."
+"Zda by se měla zobrazit zpráva s upozorněním, když je baterie plně nabita."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:6
 msgid ""
@@ -207,7 +207,7 @@ msgstr "Upozornit při odpojení napájecího adaptéru"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:32
 msgid "Notify when fully charged"
-msgstr "Upozornit při plném dobití"
+msgstr "Upozornit při plném nabití"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:33
 msgid ""
@@ -744,7 +744,7 @@ msgstr "%2is"
 #: ../src/gpm-graph-widget.c:457
 #, c-format
 msgid "%i%%"
-msgstr "%i%%"
+msgstr "%i %%"
 
 #. Translators: This is %.1f Watts
 #: ../src/gpm-graph-widget.c:460
@@ -787,7 +787,7 @@ msgstr "Napájení bylo připojeno"
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:291
 msgid "Power unplugged"
-msgstr "Napájení odpojeno"
+msgstr "Napájení bylo odpojeno"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:295
@@ -807,7 +807,7 @@ msgstr "Nízký stav baterie"
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:311
 msgid "Battery is full"
-msgstr "Baterie je nabitá"
+msgstr "Baterie je plně nabitá"
 
 #. TRANSLATORS: this is the sound description
 #: ../src/gpm-manager.c:315
@@ -922,9 +922,9 @@ msgstr ""
 #: ../src/gpm-manager.c:1434
 msgid "Battery Charged"
 msgid_plural "Batteries Charged"
-msgstr[0] "Baterie dobita"
-msgstr[1] "Baterie dobity"
-msgstr[2] "Baterie dobity"
+msgstr[0] "Baterie nabita"
+msgstr[1] "Baterie nabity"
+msgstr[2] "Baterie nabity"
 
 #. TRANSLATORS: laptop battery is now discharging
 #: ../src/gpm-manager.c:1480
@@ -1106,7 +1106,7 @@ msgid ""
 "Approximately <b>%s</b> of remaining UPS power (%.0f%%). Restore AC power to "
 "your computer to avoid losing data."
 msgstr ""
-"Zbývá vám přibližně <b>%s</b> výkonu záložního zdroje (%.0f%%). Obnovte "
+"Zbývá přibližně <b>%s</b> napájení ze záložního zdroje (%.0f %%). Obnovte "
 "napájení z elektrické sítě, abyste předešli ztrátě dat."
 
 #. TRANSLATORS: the device is just going to stop working
@@ -1116,7 +1116,7 @@ msgid ""
 "Wireless mouse is very low in power (%.0f%%). This device will soon stop "
 "functioning if not charged."
 msgstr ""
-"Bezdrátová myš je téměř vybitá (%.0f%%). Jestliže ji nenabijete, přestane "
+"Bezdrátová myš je téměř vybitá (%.0f %%). Jestliže ji nenabijete, přestane "
 "brzy pracovat."
 
 #. TRANSLATORS: the device is just going to stop working
@@ -1126,7 +1126,7 @@ msgid ""
 "Wireless keyboard is very low in power (%.0f%%). This device will soon stop "
 "functioning if not charged."
 msgstr ""
-"Bezdrátová klávesnice je téměř vybitá (%.0f%%). Jestliže ji nenabijete, "
+"Bezdrátová klávesnice je téměř vybitá (%.0f %%). Jestliže ji nenabijete, "
 "přestane brzy pracovat."
 
 #. TRANSLATORS: the device is just going to stop working
@@ -1136,7 +1136,7 @@ msgid ""
 "PDA is very low in power (%.0f%%). This device will soon stop functioning if "
 "not charged."
 msgstr ""
-"PDA je téměř vybité (%.0f%%). Jestliže jej nenabijete, přestane brzy "
+"PDA je téměř vybité (%.0f %%). Jestliže jej nenabijete, přestane brzy "
 "pracovat."
 
 #. TRANSLATORS: the device is just going to stop working
@@ -1146,7 +1146,7 @@ msgid ""
 "Cell phone is very low in power (%.0f%%). This device will soon stop "
 "functioning if not charged."
 msgstr ""
-"Mobilní telefon je téměř vybitý (%.0f%%). Jestliže jej nenabijete, přestane "
+"Mobilní telefon je téměř vybitý (%.0f %%). Jestliže jej nenabijete, přestane "
 "brzy pracovat."
 
 #. TRANSLATORS: the device is just going to stop working
@@ -1156,7 +1156,7 @@ msgid ""
 "Media player is very low in power (%.0f%%). This device will soon stop "
 "functioning if not charged."
 msgstr ""
-"Připojený počítač je téměř vybitý (%.0f%%). Jestliže jej nenabijete, "
+"Připojený počítač je téměř vybitý (%.0f %%). Jestliže jej nenabijete, "
 "přestane brzy pracovat."
 
 #. TRANSLATORS: the device is just going to stop working
@@ -1185,7 +1185,7 @@ msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
 msgstr ""
-"Baterie je pod kritickou úrovní; jakmile se baterie zcela vyprázdní, bude "
+"Úroveň nabití baterie je pod kritickou úrovní a po jejím úplném vybití bude "
 "<b>přerušeno napájení</b> počítače."
 
 #. TRANSLATORS: computer will suspend
@@ -1195,23 +1195,23 @@ msgid ""
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
 "computer in a suspended state."
 msgstr ""
-"Baterie je pod kritickou úrovní a počítač bude uspán do paměti.<br><b>POZOR:"
-"</b> K udržení počítače v uspaném stavu je třeba stálý přísun malého "
-"množství energie."
+"Úroveň nabití baterie je pod kritickou úrovní a počítač bude vbrzku uspán "
+"do paměti.<br><b>UPOZORNĚNÍ:</b> I k udržení počítač uspaného v paměti je "
+"zapotřebí stálý přísun malého množství energie."
 
 #. TRANSLATORS: computer will hibernate
 #: ../src/gpm-manager.c:1905
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
-msgstr "Baterie je pod kritickou úrovní a počítač bude uspán na disk."
+msgstr "Baterie je pod kritickou úrovní a počítač bude vbrzku uspán na disk."
 
 #. TRANSLATORS: computer will just shutdown
 #: ../src/gpm-manager.c:1910
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
-msgstr "Baterie je pod kritickou úrovní a počítač bude vypnut."
+msgstr "Baterie je pod kritickou úrovní a počítač bude vbrzku vypnut."
 
 #. TRANSLATORS: computer will shutdown without saving data
 #: ../src/gpm-manager.c:1928
@@ -1227,14 +1227,14 @@ msgstr ""
 msgid ""
 "UPS is below the critical level and this computer is about to hibernate."
 msgstr ""
-"Záložní zdroj je pod kritickou úrovní nabití a tento počítač bude brzy uspán "
-"na disk."
+"Úroveň nabití záložního zdroje je pod kritickou úrovní a počítač bude "
+"vbrzku uspán na disk."
 
 #. TRANSLATORS: computer will just shutdown
 #: ../src/gpm-manager.c:1939
 msgid "UPS is below the critical level and this computer is about to shutdown."
 msgstr ""
-"Záložní zdroj je pod kritickou úrovní nabití a tento počítač bude brzy "
+"Úroveň nabití záložního zdroje je pod kritickou úrovní a počítač bude vbrzku "
 "vypnut."
 
 #. TRANSLATORS: the rate of discharge for the device
@@ -1248,7 +1248,7 @@ msgstr "Nabíjení"
 
 #: ../src/gpm-statistics.c:78 ../src/gpm-statistics.c:478
 msgid "Time to full"
-msgstr "Čas do nabití"
+msgstr "Čas do plného nabití"
 
 #: ../src/gpm-statistics.c:79 ../src/gpm-statistics.c:483
 msgid "Time to empty"
@@ -1664,7 +1664,7 @@ msgstr "umožňuje notebooku %s provozu"
 #: ../src/gpm-upower.c:280
 #, c-format
 msgid "%s %s remaining"
-msgstr "do vybití %s zbývá %s"
+msgstr "zbývá %2$s, než se %1$s vybije"
 
 #. TRANSLATORS: device is charging, and we have a time to full and a percentage
 #. * The first parameter is the device type, e.g. "Laptop battery" and
@@ -1675,7 +1675,7 @@ msgstr "do vybití %s zbývá %s"
 #: ../src/gpm-upower.c:301 ../src/gpm-upower.c:318
 #, c-format
 msgid "%s %s until charged"
-msgstr "do plného nabití %s zbývá %s"
+msgstr "zbývá %2$s, než se %1$s plně nabije"
 
 #. TRANSLATORS: the device is charging, and we have a time to full and empty.
 #. * The parameter is a time string, e.g. "7 hours 6 minutes"
@@ -1720,12 +1720,12 @@ msgstr "Vybíjí se"
 #. TRANSLATORS: percentage
 #: ../src/gpm-upower.c:420
 msgid "Percentage charge:"
-msgstr "Procento nabití:"
+msgstr "Úroveň nabití:"
 
 #. TRANSLATORS: manufacturer
 #: ../src/gpm-upower.c:424
 msgid "Vendor:"
-msgstr "Dodavatel:"
+msgstr "Výrobce:"
 
 #. TRANSLATORS: how the battery is made, e.g. Lithium Ion
 #: ../src/gpm-upower.c:429
@@ -1763,11 +1763,11 @@ msgstr "Dobrá"
 
 #: ../src/gpm-upower.c:459
 msgid "Fair"
-msgstr "Slušná"
+msgstr "Ucházející"
 
 #: ../src/gpm-upower.c:461
 msgid "Poor"
-msgstr "Špatná"
+msgstr "Ubohá"
 
 #: ../src/gpm-upower.c:465
 msgid "Capacity:"
@@ -1779,7 +1779,7 @@ msgstr "Aktuální nabití:"
 
 #: ../src/gpm-upower.c:477
 msgid "Last full charge:"
-msgstr "Poslední plné dobití:"
+msgstr "Poslední plné nabití:"
 
 #: ../src/gpm-upower.c:483 ../src/gpm-upower.c:501
 msgid "Design charge:"
@@ -1817,9 +1817,9 @@ msgstr[2] "Záložní zdroje"
 #: ../src/gpm-upower.c:535 ../src/gpm-upower.c:794
 msgid "Monitor"
 msgid_plural "Monitors"
-msgstr[0] "Monitor"
-msgstr[1] "Monitory"
-msgstr[2] "Monitory"
+msgstr[0] "Monitorovací zařízení"
+msgstr[1] "Monitorovací zařízení"
+msgstr[2] "Monitorovací zařízení"
 
 #. TRANSLATORS: wireless mice with internal batteries
 #: ../src/gpm-upower.c:539 ../src/gpm-upower.c:818
@@ -1880,32 +1880,32 @@ msgstr[2] "Počítače"
 #. TRANSLATORS: battery technology
 #: ../src/gpm-upower.c:634
 msgid "Lithium Ion"
-msgstr "Li-Ion"
+msgstr "Lithium-iontová"
 
 #. TRANSLATORS: battery technology
 #: ../src/gpm-upower.c:638
 msgid "Lithium Polymer"
-msgstr "Li-Pol"
+msgstr "Lithium-polymerová"
 
 #. TRANSLATORS: battery technology
 #: ../src/gpm-upower.c:642
 msgid "Lithium Iron Phosphate"
-msgstr "LFP"
+msgstr "Lithium-železo fosfátová"
 
 #. TRANSLATORS: battery technology
 #: ../src/gpm-upower.c:646
 msgid "Lead acid"
-msgstr "Olověný"
+msgstr "Olověná"
 
 #. TRANSLATORS: battery technology
 #: ../src/gpm-upower.c:650
 msgid "Nickel Cadmium"
-msgstr "Ni-Cd"
+msgstr "Nikl-kadmiová"
 
 #. TRANSLATORS: battery technology
 #: ../src/gpm-upower.c:654
 msgid "Nickel metal hydride"
-msgstr "NiMH"
+msgstr "Nikl-metal hidridová"
 
 #. TRANSLATORS: battery technology
 #: ../src/gpm-upower.c:658
@@ -1915,7 +1915,7 @@ msgstr "Neznámá technologie"
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:686
 msgid "Empty"
-msgstr "Vybito"
+msgstr "Vybitá"
 
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:694
@@ -1935,7 +1935,7 @@ msgstr "Baterie notebooku není přítomna"
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:739
 msgid "Laptop battery is charging"
-msgstr "Baterie notebooku se nabíjí"
+msgstr "Baterie notebooku se dobíjí"
 
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:743
@@ -1950,12 +1950,12 @@ msgstr "Baterie notebooku je vybitá"
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:751
 msgid "Laptop battery is charged"
-msgstr "Baterie notebooku je dobitá"
+msgstr "Baterie notebooku je nabitá"
 
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:755
 msgid "Laptop battery is waiting to charge"
-msgstr "Baterie notebooku čeká na dobití"
+msgstr "Baterie notebooku čeká na nabití"
 
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:759
@@ -1965,7 +1965,7 @@ msgstr "Baterie notebooku čeká na vybití"
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:771
 msgid "UPS is charging"
-msgstr "Záložní zdroj se nabíjí"
+msgstr "Záložní zdroj se dobíjí"
 
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:775
@@ -1980,7 +1980,7 @@ msgstr "Záložní zdroj je vybitý"
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:783
 msgid "UPS is charged"
-msgstr "Záložní zdroj je dobitý"
+msgstr "Záložní zdroj je nabitý"
 
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:802
@@ -2000,7 +2000,7 @@ msgstr "Myš je vybitá"
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:814
 msgid "Mouse is charged"
-msgstr "Myš je dobitá"
+msgstr "Myš je nabitá"
 
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:826
@@ -2020,7 +2020,7 @@ msgstr "Klávesnice je vybitá"
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:838
 msgid "Keyboard is charged"
-msgstr "Klávesnice je dobitá"
+msgstr "Klávesnice je nabitá"
 
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:850
@@ -2040,7 +2040,7 @@ msgstr "PDA je vybité"
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:862
 msgid "PDA is charged"
-msgstr "PDA je dobité"
+msgstr "PDA je nabité"
 
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:874
@@ -2060,7 +2060,7 @@ msgstr "Mobilní telefon je vybitý"
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:886
 msgid "Cell phone is charged"
-msgstr "Mobilní telefon je dobitý"
+msgstr "Mobilní telefon je nabitý"
 
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:899
@@ -2080,7 +2080,7 @@ msgstr "Přenosný přehrávač je vybitý"
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:911
 msgid "Media player is charged"
-msgstr "Přenosný přehrávač je dobitý"
+msgstr "Přenosný přehrávač je nabitý"
 
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:923
@@ -2100,7 +2100,7 @@ msgstr "Tablet je vybitý"
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:935
 msgid "Tablet is charged"
-msgstr "Tablet je dobitý"
+msgstr "Tablet je nabitý"
 
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:947
@@ -2120,4 +2120,4 @@ msgstr "Počítač je vybitý"
 #. TRANSLATORS: battery state
 #: ../src/gpm-upower.c:959
 msgid "Computer is charged"
-msgstr "Počítač je dobitý"
+msgstr "Počítač je nabitý"
