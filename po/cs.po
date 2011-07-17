@@ -155,7 +155,7 @@ msgstr ""
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:20
 msgid "If we should show the recalled battery warning for a broken battery"
-msgstr "Zda by se mělo zobrazovat varování o výměně baterie, která je vadná"
+msgstr "Zda by měly být zobrazovány výzvy k výměně vadných baterií"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:21
 msgid ""
@@ -163,7 +163,7 @@ msgid ""
 "this to false only if you know your battery is okay."
 msgstr ""
 "Zda by se mělo zobrazovat varování o nutnosti výměny vadné baterie. Vypněte "
-"jen v případě, že opravdu víte, že vaše baterie je v pořádku."
+"jen v případě, že jste si jistí, že vaše baterie je v pořádku."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:22
 msgid "Keyboard backlight brightness when on AC power."
@@ -229,15 +229,15 @@ msgstr ""
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:36
 msgid "Percentage action is taken"
-msgstr "Zbývající procenta při provedení akce"
+msgstr "Zbývající procenta pro provedení akce"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:37
 msgid "Percentage considered critical"
-msgstr "Zbývající procenta při kritickém stavu"
+msgstr "Zbývající procenta pro kritický stav"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:38
 msgid "Percentage considered low"
-msgstr "Zbývající procenta při nízkém stavu"
+msgstr "Zbývající procenta pro nízký stav"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:39
 msgid "Reduce the backlight brightness when on battery power"
@@ -344,7 +344,7 @@ msgid ""
 "The percentage of the battery when it is considered critical. Only valid "
 "when use-time-for-policy is false."
 msgstr ""
-"Stav nabití baterie v procentech, který je považován za kritický. Platný je "
+"Úroveň nabití baterie v procentech, který je považována za kritickou. Platná je "
 "jen v případě, kdy je klíč use-time-for-policy nastaven na vypnuto."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:59
@@ -352,7 +352,7 @@ msgid ""
 "The percentage of the battery when it is considered low. Only valid when use-"
 "time-for-policy is false."
 msgstr ""
-"Stav nabití baterie v procentech, který je považován za nízký. Platný je jen "
+"Úroveň nabití baterie v procentech, který je považována za nízkou. Platná je jen "
 "v případě, kdy je klíč use-time-for-policy nastaven na vypnuto."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:60
@@ -360,8 +360,8 @@ msgid ""
 "The percentage of the battery when the critical action is performed. Only "
 "valid when use-time-for-policy is false."
 msgstr ""
-"Stav nabití baterie v procentech, při kterém je provedena kritická akce. "
-"Platný je jen v případě, kdy je klíč use-time-for-policy nastaven na vypnuto."
+"Úroveň nabití baterie v procentech, při které je provedena krizová akce. "
+"Platná je jen v případě, kdy je klíč use-time-for-policy nastaven na vypnuto."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:62
 #, no-c-format
@@ -390,15 +390,15 @@ msgid ""
 "The time remaining in seconds of the battery when critical action is taken. "
 "Only valid when use-time-for-policy is true."
 msgstr ""
-"Zbývající čas v sekundách, při kterém je provedena kritická akce. Platný je "
-"jen v případě, kdy je klíč use-time-for-policy nastaven na zapnuto."
+"Zbývající čas baterie v sekundách, při kterém je provedena krizová akce. "
+"Platný je jen v případě, kdy je klíč use-time-for-policy nastaven na zapnuto."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:66
 msgid ""
 "The time remaining in seconds of the battery when it is considered critical. "
 "Only valid when use-time-for-policy is true."
 msgstr ""
-"Zbývající čas v sekundách, při kterém je považován stav nabití baterie za "
+"Zbývající čas baterie v sekundách, který je považován za "
 "kritický. Platný je jen v případě, kdy je klíč use-time-for-policy nastaven "
 "na zapnuto."
 
@@ -407,21 +407,21 @@ msgid ""
 "The time remaining in seconds of the battery when it is considered low. Only "
 "valid when use-time-for-policy is true."
 msgstr ""
-"Zbývající čas v sekundách, při kterém je považován stav nabití baterie za "
+"Zbývající čas baterie v sekundách, který je považován za "
 "nízký. Platný je jen v případě, kdy je klíč use-time-for-policy nastaven na "
 "zapnuto."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:68
 msgid "The time remaining when action is taken"
-msgstr "Zbývající čas při provedení akce"
+msgstr "Zbývající čas pro provedení akce"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:69
 msgid "The time remaining when critical"
-msgstr "Zbývající čas při kritickém stavu"
+msgstr "Zbývající čas pro kritický stav"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:70
 msgid "The time remaining when low"
-msgstr "Zbývající čas při nízkém stavu"
+msgstr "Zbývající čas pro nízký stav"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:71
 msgid "Use gnome-screensaver lock setting"
@@ -490,7 +490,7 @@ msgstr ""
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:80
 msgid "Whether to use time-based notifications"
-msgstr "Zda použit upozornění vycházející z časových údajů"
+msgstr "Zda používat oznamování vycházející z časových údajů"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:81
 msgid "Whether we should show the history data points"
