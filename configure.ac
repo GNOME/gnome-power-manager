@@ -26,7 +26,7 @@ dnl ---------------------------------------------------------------------------
 dnl - Use strict options (default enabled for devs, disabled in releases)
 dnl ---------------------------------------------------------------------------
 dnl if .git directory is present, considering we are working in the repository
-if test -d "$(srcdir)/.git"; then
+if test -d "${srcdir}/.git"; then
 	default_strict=yes
 else
 	default_strict=no
@@ -285,6 +285,7 @@ echo "
         datadir:                   ${datadir}
         compiler:                  ${CC}
         cflags:                    ${CFLAGS}
+        cppflags:                  ${CPPFLAGS}
         Self test support:         ${have_tests}
         Docbook support:           ${enable_docbook_docs}
         documentation dir:         $DOCDIR
