@@ -44,7 +44,6 @@
 #include "gpm-common.h"
 #include "gpm-idle.h"
 #include "gpm-manager.h"
-#include "gpm-screensaver.h"
 #include "gpm-backlight.h"
 #include "gpm-stock-icons.h"
 #include "gpm-upower.h"
@@ -64,11 +63,8 @@ struct GpmManagerPrivate
 	GSettings		*settings;
 	GSettings		*settings_gsd;
 	GpmIdle			*idle;
-	GpmScreensaver		*screensaver;
 	GpmBacklight		*backlight;
 	EggConsoleKit		*console;
-	guint32			 screensaver_ac_throttle_id;
-	guint32			 screensaver_lid_throttle_id;
 	UpClient		*client;
 	gboolean		 on_battery;
 	gboolean		 just_resumed;
@@ -389,20 +385,6 @@ gpm_manager_idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmManager *manage
 static void
 gpm_manager_update_ac_throttle (GpmManager *manager)
 {
-	/* Throttle the manager when we are not on AC power so we don't
-	   waste the battery */
-	if (!manager->priv->on_battery) {
-		if (manager->priv->screensaver_ac_throttle_id != 0) {
-			gpm_screensaver_remove_throttle (manager->priv->screensaver, manager->priv->screensaver_ac_throttle_id);
-			manager->priv->screensaver_ac_throttle_id = 0;
-		}
-	} else {
-		/* if throttle already exists then remove */
-		if (manager->priv->screensaver_ac_throttle_id != 0)
-			gpm_screensaver_remove_throttle (manager->priv->screensaver, manager->priv->screensaver_ac_throttle_id);
-		/* TRANSLATORS: this is the gnome-screensaver throttle */
-		manager->priv->screensaver_ac_throttle_id = gpm_screensaver_add_throttle (manager->priv->screensaver, _("On battery power"));
-	}
 }
 
 /**
@@ -438,10 +420,6 @@ gpm_manager_client_changed_cb (UpClient *client, GpmManager *manager)
 	gpm_manager_sync_policy_sleep (manager);
 
 	gpm_manager_update_ac_throttle (manager);
-
-	/* simulate user input, but only when the lid is open */
-	if (!lid_is_closed)
-		gpm_screensaver_poke (manager->priv->screensaver);
 
 	/* We keep track of the lid state so we can do the
 	 * lid close on battery action if the ac adapter is removed when the laptop
@@ -605,10 +583,6 @@ gpm_manager_init (GpmManager *manager)
 {
 	manager->priv = GPM_MANAGER_GET_PRIVATE (manager);
 
-	/* init to unthrottled */
-	manager->priv->screensaver_ac_throttle_id = 0;
-	manager->priv->screensaver_lid_throttle_id = 0;
-
 	/* init to not just_resumed */
 	manager->priv->just_resumed = FALSE;
 
@@ -632,9 +606,6 @@ gpm_manager_init (GpmManager *manager)
 	g_object_get (manager->priv->client,
 		      "on-battery", &manager->priv->on_battery,
 		      NULL);
-
-	/* try and start an interactive service */
-	manager->priv->screensaver = gpm_screensaver_new ();
 
 	/* try an start an interactive service */
 	manager->priv->backlight = gpm_backlight_new ();
@@ -773,7 +744,6 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->settings);
 	g_object_unref (manager->priv->settings_gsd);
 	g_object_unref (manager->priv->idle);
-	g_object_unref (manager->priv->screensaver);
 	g_object_unref (manager->priv->backlight);
 	g_object_unref (manager->priv->console);
 	g_object_unref (manager->priv->client);

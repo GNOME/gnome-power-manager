@@ -26,7 +26,6 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
-#include "gpm-screensaver.h"
 #include "gpm-idle.h"
 #include "gpm-common.h"
 #include "gpm-idletime.h"
@@ -188,27 +187,6 @@ gpm_test_idle_func (void)
 
 	g_object_unref (idle);
 //	g_object_unref (dpms);
-}
-
-static void
-gpm_test_screensaver_func (void)
-{
-	GpmScreensaver *screensaver;
-//	guint value;
-	gboolean ret;
-
-	screensaver = gpm_screensaver_new ();
-	g_assert (screensaver != NULL);
-
-	/* lock */
-	ret = gpm_screensaver_lock (screensaver);
-	g_assert (ret);
-
-	/* poke */
-	ret = gpm_screensaver_poke (screensaver);
-	g_assert (ret);
-
-	g_object_unref (screensaver);
 }
 
 static void
@@ -727,7 +705,6 @@ main (int argc, char **argv)
 	g_test_add_func ("/power/array_float", gpm_test_array_float_func);
 	g_test_add_func ("/power/idle", gpm_test_idle_func);
 	g_test_add_func ("/power/idletime", gpm_test_idletime_func);
-	g_test_add_func ("/power/screensaver", gpm_test_screensaver_func);
 
 	return g_test_run ();
 }

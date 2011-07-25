@@ -85,8 +85,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-main.c					\
 	gpm-manager.h					\
 	gpm-manager.c					\
-	gpm-screensaver.h				\
-	gpm-screensaver.c				\
 	gpm-stock-icons.h
 
 gnome_power_manager_LDADD =				\
@@ -109,8 +107,6 @@ gnome_power_self_test_SOURCES =				\
 	gpm-idle.c					\
 	gpm-common.h					\
 	gpm-common.c					\
-	gpm-screensaver.h				\
-	gpm-screensaver.c				\
 	gpm-idletime.h					\
 	gpm-idletime.c					\
 	gpm-array-float.h				\
