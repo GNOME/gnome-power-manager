@@ -27,7 +27,6 @@
 #include <gtk/gtk.h>
 
 #include "gpm-screensaver.h"
-#include "gpm-dpms.h"
 #include "gpm-idle.h"
 #include "gpm-common.h"
 #include "gpm-idletime.h"
@@ -100,54 +99,6 @@ _g_test_loop_quit (void)
 
 /**********************************************************************/
 
-static void
-gpm_test_dpms_func (void)
-{
-	GpmDpms *dpms;
-	gboolean ret;
-	GError *error = NULL;
-
-	dpms = gpm_dpms_new ();
-	g_assert (dpms != NULL);
-
-	/* set on */
-	ret = gpm_dpms_set_mode (dpms, GPM_DPMS_MODE_ON, &error);
-	g_assert_no_error (error);
-	g_assert (ret);
-
-	g_usleep (2*1000*1000);
-
-	/* set STANDBY */
-	ret = gpm_dpms_set_mode (dpms, GPM_DPMS_MODE_STANDBY, &error);
-	g_assert_no_error (error);
-	g_assert (ret);
-
-	g_usleep (2*1000*1000);
-
-	/* set SUSPEND */
-	ret = gpm_dpms_set_mode (dpms, GPM_DPMS_MODE_SUSPEND, &error);
-	g_assert_no_error (error);
-	g_assert (ret);
-
-	g_usleep (2*1000*1000);
-
-	/* set OFF */
-	ret = gpm_dpms_set_mode (dpms, GPM_DPMS_MODE_OFF, &error);
-	g_assert_no_error (error);
-	g_assert (ret);
-
-	g_usleep (2*1000*1000);
-
-	/* set on */
-	ret = gpm_dpms_set_mode (dpms, GPM_DPMS_MODE_ON, &error);
-	g_assert_no_error (error);
-	g_assert (ret);
-
-	g_usleep (2*1000*1000);
-
-	g_object_unref (dpms);
-}
-
 static GpmIdleMode _mode = 0;
 
 static void
@@ -162,8 +113,8 @@ static void
 gpm_test_idle_func (void)
 {
 	GpmIdle *idle;
-	gboolean ret;
-	GpmDpms *dpms;
+//	gboolean ret;
+//	GpmDpms *dpms;
 
 	idle = gpm_idle_new ();
 	g_assert (idle != NULL);
@@ -222,9 +173,9 @@ gpm_test_idle_func (void)
 	g_assert_cmpint (gpm_idle_get_mode (idle), ==, GPM_IDLE_MODE_BLANK);
 
 	/* set dpms off */
-	dpms = gpm_dpms_new ();
-	ret = gpm_dpms_set_mode (dpms, GPM_DPMS_MODE_OFF, NULL);
-	g_assert (ret);
+//	dpms = gpm_dpms_new ();
+//	ret = gpm_dpms_set_mode (dpms, GPM_DPMS_MODE_OFF, NULL);
+//	g_assert (ret);
 
 	/* wait for normal event to be suppressed */
 //	g_timeout_add (2000, (GSourceFunc) gpm_test_idle_func_delay_cb, NULL);
@@ -233,10 +184,10 @@ gpm_test_idle_func (void)
 	/* check current mode */
 	g_assert_cmpint (gpm_idle_get_mode (idle), ==, GPM_IDLE_MODE_BLANK);
 
-	gpm_dpms_set_mode (dpms, GPM_DPMS_MODE_ON, NULL);
+//	gpm_dpms_set_mode (dpms, GPM_DPMS_MODE_ON, NULL);
 
 	g_object_unref (idle);
-	g_object_unref (dpms);
+//	g_object_unref (dpms);
 }
 
 static void
@@ -769,9 +720,6 @@ main (int argc, char **argv)
 	g_type_init ();
 	g_test_init (&argc, &argv, NULL);
 
-	/* needed for DPMS checks */
-	gtk_init (&argc, &argv);
-
 	/* tests go here */
 	g_test_add_func ("/power/precision", gpm_test_precision_func);
 	g_test_add_func ("/power/discrete", gpm_test_discrete_func);
@@ -779,7 +727,6 @@ main (int argc, char **argv)
 	g_test_add_func ("/power/array_float", gpm_test_array_float_func);
 	g_test_add_func ("/power/idle", gpm_test_idle_func);
 	g_test_add_func ("/power/idletime", gpm_test_idletime_func);
-	g_test_add_func ("/power/dpms", gpm_test_dpms_func);
 	g_test_add_func ("/power/screensaver", gpm_test_screensaver_func);
 
 	return g_test_run ();

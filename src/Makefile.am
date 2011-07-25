@@ -78,8 +78,6 @@ gnome_power_statistics_CFLAGS =				\
 	$(WARNINGFLAGS)
 
 gnome_power_manager_SOURCES =				\
-	gpm-dpms.h					\
-	gpm-dpms.c					\
 	gpm-backlight.h					\
 	gpm-backlight.c					\
 	gpm-idle.h					\
@@ -111,8 +109,6 @@ gnome_power_manager_CFLAGS =				\
 	$(WARNINGFLAGS)
 
 gnome_power_self_test_SOURCES =				\
-	gpm-dpms.h					\
-	gpm-dpms.c					\
 	gpm-idle.h					\
 	gpm-idle.c					\
 	gpm-common.h					\

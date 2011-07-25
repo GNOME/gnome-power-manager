@@ -44,7 +44,6 @@
 #include "gpm-button.h"
 #include "gpm-control.h"
 #include "gpm-common.h"
-#include "gpm-dpms.h"
 #include "gpm-idle.h"
 #include "gpm-manager.h"
 #include "gpm-screensaver.h"
@@ -67,14 +66,12 @@ struct GpmManagerPrivate
 	GpmButton		*button;
 	GSettings		*settings;
 	GSettings		*settings_gsd;
-	GpmDpms			*dpms;
 	GpmIdle			*idle;
 	GpmControl		*control;
 	GpmScreensaver		*screensaver;
 	GpmBacklight		*backlight;
 	EggConsoleKit		*console;
 	guint32			 screensaver_ac_throttle_id;
-	guint32			 screensaver_dpms_throttle_id;
 	guint32			 screensaver_lid_throttle_id;
 	UpClient		*client;
 	gboolean		 on_battery;
@@ -196,7 +193,6 @@ gpm_manager_blank_screen (GpmManager *manager, GError **noerror)
 {
 	gboolean do_lock;
 	gboolean ret = TRUE;
-	GError *error = NULL;
 
 	do_lock = gpm_control_get_lock_policy (manager->priv->control,
 					       GPM_SETTINGS_LOCK_ON_BLANK_SCREEN);
@@ -204,40 +200,6 @@ gpm_manager_blank_screen (GpmManager *manager, GError **noerror)
 		if (!gpm_screensaver_lock (manager->priv->screensaver))
 			g_debug ("Could not lock screen via gnome-screensaver");
 	}
-	gpm_dpms_set_mode (manager->priv->dpms, GPM_DPMS_MODE_OFF, &error);
-	if (error) {
-		g_debug ("Unable to set DPMS mode: %s", error->message);
-		g_error_free (error);
-		ret = FALSE;
-	}
-	return ret;
-}
-
-/**
- * gpm_manager_unblank_screen:
- * @manager: This class instance
- *
- * Unblank the screen after we have opened the lid of the laptop
- *
- * Return value: Success.
- **/
-static gboolean
-gpm_manager_unblank_screen (GpmManager *manager, GError **noerror)
-{
-	gboolean do_lock;
-	gboolean ret = TRUE;
-	GError *error = NULL;
-
-	gpm_dpms_set_mode (manager->priv->dpms, GPM_DPMS_MODE_ON, &error);
-	if (error) {
-		g_debug ("Unable to set DPMS mode: %s", error->message);
-		g_error_free (error);
-		ret = FALSE;
-	}
-
-	do_lock = gpm_control_get_lock_policy (manager->priv->control, GPM_SETTINGS_LOCK_ON_BLANK_SCREEN);
-	if (do_lock)
-		gpm_screensaver_poke (manager->priv->screensaver);
 	return ret;
 }
 
@@ -594,33 +556,6 @@ gpm_manager_idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmManager *manage
 static void
 gpm_manager_lid_button_pressed (GpmManager *manager, gboolean pressed)
 {
-	/* we turn the lid dpms back on unconditionally */
-	if (pressed == FALSE) {
-		gpm_manager_unblank_screen (manager, NULL);
-		return;
-	}
-}
-
-static void
-gpm_manager_update_dpms_throttle (GpmManager *manager)
-{
-	GpmDpmsMode mode;
-	gpm_dpms_get_mode (manager->priv->dpms, &mode, NULL);
-
-	/* Throttle the manager when DPMS is active since we can't see it anyway */
-	if (mode == GPM_DPMS_MODE_ON) {
-		if (manager->priv->screensaver_dpms_throttle_id != 0) {
-			gpm_screensaver_remove_throttle (manager->priv->screensaver, manager->priv->screensaver_dpms_throttle_id);
-			manager->priv->screensaver_dpms_throttle_id = 0;
-		}
-	} else {
-		/* if throttle already exists then remove */
-		if (manager->priv->screensaver_dpms_throttle_id != 0) {
-			gpm_screensaver_remove_throttle (manager->priv->screensaver, manager->priv->screensaver_dpms_throttle_id);
-		}
-		/* TRANSLATORS: this is the gnome-screensaver throttle */
-		manager->priv->screensaver_dpms_throttle_id = gpm_screensaver_add_throttle (manager->priv->screensaver, _("Display DPMS activated"));
-	}
 }
 
 static void
@@ -770,33 +705,6 @@ gpm_manager_settings_changed_cb (GSettings *settings, const gchar *key, GpmManag
 
 #if 0
 /**
- * gpm_manager_screensaver_auth_request_cb:
- * @manager: This manager class instance
- * @auth: If we are trying to authenticate
- *
- * Called when the user is trying or has authenticated
- **/
-static void
-gpm_manager_screensaver_auth_request_cb (GpmScreensaver *screensaver, gboolean auth_begin, GpmManager *manager)
-{
-	GError *error = NULL;
-
-	if (auth_begin) {
-		/* We turn on the monitor unconditionally, as we may be using
-		 * a smartcard to authenticate and DPMS might still be on.
-		 * See #350291 for more details */
-		gpm_dpms_set_mode (manager->priv->dpms, GPM_DPMS_MODE_ON, &error);
-		if (error != NULL) {
-			g_warning ("Failed to turn on DPMS: %s", error->message);
-			g_error_free (error);
-			error = NULL;
-		}
-	}
-}
-#endif
-
-#if 0
-/**
  * gpm_manager_perhaps_recall_response_cb:
  */
 static void
@@ -911,30 +819,6 @@ out:
 #endif
 
 /**
- * gpm_manager_dpms_mode_changed_cb:
- * @mode: The DPMS mode, e.g. GPM_DPMS_MODE_OFF
- * @info: This class instance
- *
- * Log when the DPMS mode is changed.
- **/
-static void
-gpm_manager_dpms_mode_changed_cb (GpmDpms *dpms, GpmDpmsMode mode, GpmManager *manager)
-{
-	g_debug ("DPMS mode changed: %d", mode);
-
-	if (mode == GPM_DPMS_MODE_ON)
-		g_debug ("dpms on");
-	else if (mode == GPM_DPMS_MODE_STANDBY)
-		g_debug ("dpms standby");
-	else if (mode == GPM_DPMS_MODE_SUSPEND)
-		g_debug ("suspend");
-	else if (mode == GPM_DPMS_MODE_OFF)
-		g_debug ("dpms off");
-
-	gpm_manager_update_dpms_throttle (manager);
-}
-
-/**
  * gpm_manager_reset_just_resumed_cb:
  **/
 static gboolean
@@ -975,7 +859,6 @@ gpm_manager_init (GpmManager *manager)
 
 	/* init to unthrottled */
 	manager->priv->screensaver_ac_throttle_id = 0;
-	manager->priv->screensaver_dpms_throttle_id = 0;
 	manager->priv->screensaver_lid_throttle_id = 0;
 
 	/* init to not just_resumed */
@@ -1015,10 +898,6 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->idle = gpm_idle_new ();
 	g_signal_connect (manager->priv->idle, "idle-changed",
 			  G_CALLBACK (gpm_manager_idle_changed_cb), manager);
-
-	manager->priv->dpms = gpm_dpms_new ();
-	g_signal_connect (manager->priv->dpms, "mode-changed",
-			  G_CALLBACK (gpm_manager_dpms_mode_changed_cb), manager);
 
 	/* use the control object */
 	g_debug ("creating new control instance");
@@ -1155,7 +1034,6 @@ gpm_manager_finalize (GObject *object)
 
 	g_object_unref (manager->priv->settings);
 	g_object_unref (manager->priv->settings_gsd);
-	g_object_unref (manager->priv->dpms);
 	g_object_unref (manager->priv->idle);
 	g_object_unref (manager->priv->screensaver);
 	g_object_unref (manager->priv->control);

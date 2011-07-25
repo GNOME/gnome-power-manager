@@ -44,7 +44,6 @@
 #include "gpm-backlight.h"
 #include "gpm-control.h"
 #include "gpm-common.h"
-#include "gpm-dpms.h"
 #include "gpm-idle.h"
 #include "gpm-stock-icons.h"
 #include "egg-console-kit.h"
@@ -58,7 +57,6 @@ struct GpmBacklightPrivate
 	GSettings		*settings;
 	GSettings		*settings_gsd;
 	GpmControl		*control;
-	GpmDpms			*dpms;
 	GpmIdle			*idle;
 	EggConsoleKit		*consolekit;
 	gboolean		 can_dim;
@@ -318,20 +316,11 @@ gpm_backlight_client_changed_cb (UpClient *client, GpmBacklight *backlight)
 static void
 gpm_backlight_button_pressed_cb (GpmButton *button, const gchar *type, GpmBacklight *backlight)
 {
-	gboolean ret;
-	GError *error = NULL;
 	g_debug ("Button press event type=%s", type);
 
 	if (g_strcmp0 (type, GPM_BUTTON_LID_OPEN) == 0) {
 		/* make sure we undim when we lift the lid */
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
-
-		/* ensure backlight is on */
-		ret = gpm_dpms_set_mode (backlight->priv->dpms, GPM_DPMS_MODE_ON, &error);
-		if (!ret) {
-			g_warning ("failed to turn on DPMS: %s", error->message);
-			g_error_free (error);
-		}
 	}
 }
 
@@ -422,59 +411,17 @@ gpm_backlight_idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *ba
 		gpm_backlight_notify_system_idle_changed (backlight, FALSE);
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 
-		/* ensure backlight is on */
-		ret = gpm_dpms_set_mode (backlight->priv->dpms, GPM_DPMS_MODE_ON, &error);
-		if (!ret) {
-			g_warning ("failed to turn on DPMS: %s", error->message);
-			g_error_free (error);
-		}
-
 	} else if (mode == GPM_IDLE_MODE_DIM) {
 
 		/* sync lcd brightness */
 		gpm_backlight_notify_system_idle_changed (backlight, TRUE);
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 
-		/* ensure backlight is on */
-		ret = gpm_dpms_set_mode (backlight->priv->dpms, GPM_DPMS_MODE_ON, &error);
-		if (!ret) {
-			g_warning ("failed to turn on DPMS: %s", error->message);
-			g_error_free (error);
-		}
-
 	} else if (mode == GPM_IDLE_MODE_BLANK) {
 
 		/* sync lcd brightness */
 		gpm_backlight_notify_system_idle_changed (backlight, TRUE);
 		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
-
-		/* turn backlight off */
-		ret = gpm_dpms_set_mode (backlight->priv->dpms, GPM_DPMS_MODE_OFF, &error);
-		if (!ret) {
-			g_warning ("failed to change DPMS: %s", error->message);
-			g_error_free (error);
-		}
-	}
-}
-
-/**
- * gpm_backlight_control_resume_cb:
- * @control: The control class instance
- * @power: This power class instance
- *
- * We have to update the caches on resume
- **/
-static void
-gpm_backlight_control_resume_cb (GpmControl *control, GpmControlAction action, GpmBacklight *backlight)
-{
-	gboolean ret;
-	GError *error = NULL;
-
-	/* ensure backlight is on */
-	ret = gpm_dpms_set_mode (backlight->priv->dpms, GPM_DPMS_MODE_ON, &error);
-	if (!ret) {
-		g_warning ("failed to turn on DPMS: %s", error->message);
-		g_error_free (error);
 	}
 }
 
@@ -491,7 +438,6 @@ gpm_backlight_finalize (GObject *object)
 
 	g_timer_destroy (backlight->priv->idle_timer);
 
-	g_object_unref (backlight->priv->dpms);
 	g_object_unref (backlight->priv->control);
 	g_object_unref (backlight->priv->settings);
 	g_object_unref (backlight->priv->settings_gsd);
@@ -560,14 +506,6 @@ gpm_backlight_init (GpmBacklight *backlight)
 	backlight->priv->system_is_idle = FALSE;
 	backlight->priv->idle_dim_timeout = g_settings_get_int (backlight->priv->settings_gsd, GSD_SETTINGS_IDLE_DIM_TIME);
 	gpm_idle_set_timeout_dim (backlight->priv->idle, backlight->priv->idle_dim_timeout);
-
-	/* DPMS mode poll class */
-	backlight->priv->dpms = gpm_dpms_new ();
-
-	/* we refresh DPMS on resume */
-	backlight->priv->control = gpm_control_new ();
-	g_signal_connect (backlight->priv->control, "resume",
-			  G_CALLBACK (gpm_backlight_control_resume_cb), backlight);
 
 	/* Don't do dimming on inactive console */
 	backlight->priv->consolekit = egg_console_kit_new ();
