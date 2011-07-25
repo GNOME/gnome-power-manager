@@ -1,9 +1,9 @@
 Follow http://developer.gnome.org/dotplan/for_maintainers.html
 
-git shortlog GNOME_POWER_MANAGER_3_1_2.. | grep -i -v trivial | uniq | grep -v Merge > NEWS.new
+git shortlog GNOME_POWER_MANAGER_3_1_3.. | grep -i -v trivial | uniq | grep -v Merge > NEWS.new
 
 --------------------------------------------------------------------------------
-Version 3.1.2
+Version 3.1.4
 ~~~~~~~~~~~~~
 Released: 2011-xx-xx
 
@@ -16,8 +16,8 @@ Released: 2011-xx-xx
 
 Run "make distcheck", correct any problems encountered
 
-git commit -a -m "GNOME Power Manager 3.1.3"
-git tag -s GNOME_POWER_MANAGER_3_1_3 -m "==== Version 3.1.3 ===="
+git commit -a -m "GNOME Power Manager 3.1.4"
+git tag -s GNOME_POWER_MANAGER_3_1_4 -m "==== Version 3.1.4 ===="
 <wait>
 git push --tags
 git push
@@ -28,7 +28,7 @@ scp gnome-power-manager-*.tar.xz  rhughes@master.gnome.org:
 - Install the module on master.gnome.org
 
 ssh rhughes@master.gnome.org
-install-module gnome-power-manager-*.tar.xz
+ftpadmin install gnome-power-manager-*.tar.xz
 
 - Do a post-release version bump by updating configure.in
 
