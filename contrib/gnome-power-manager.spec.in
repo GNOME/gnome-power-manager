@@ -6,7 +6,7 @@ Version: #VERSION#
 Release: 1.#BUILD#%{?alphatag}%{?dist}
 License: GPLv2+ and GFDL
 Group: Applications/System
-Source: http://download.gnome.org/sources/gnome-power-manager/2.91/gnome-power-manager-%{version}-%{?alphatag}.tar.gz
+Source: http://download.gnome.org/sources/gnome-power-manager/2.91/gnome-power-manager-%{version}.tar.xz
 URL: http://projects.gnome.org/gnome-power-manager/
 
 BuildRequires: gnome-panel-devel >= 2.31.2
@@ -17,7 +17,7 @@ BuildRequires: gettext
 BuildRequires: libtool
 BuildRequires: cairo-devel
 BuildRequires: libcanberra-devel
-BuildRequires: libnotify-devel >= 0.5.0
+BuildRequires: libnotify-devel >= 0.7.0
 BuildRequires: upower-devel >= 0.9.0
 BuildRequires: intltool
 BuildRequires: glib2-devel >= 2.25.9
@@ -25,6 +25,9 @@ BuildRequires: GConf2-devel >= 2.31.1
 BuildRequires: gtk3-devel >= 2.91.3
 BuildRequires: dbus-glib-devel
 BuildRequires: libwnck-devel
+BuildRequires: docbook-utils
+BuildRequires: gnome-keyring-devel
+
 Requires: gnome-icon-theme
 
 # obsolete sub-package
@@ -41,19 +44,12 @@ displaying icons and handling user callbacks in an interactive GNOME session.
 %build
 %configure --disable-scrollkeeper \
 	--disable-schemas-install \
-    --with-gtk=3.0 \
+	--with-gtk=3.0 \
 	--disable-applets
 make
 
 %install
 make install DESTDIR=$RPM_BUILD_ROOT
-
-rm $RPM_BUILD_ROOT%{_libdir}/control-center-1/panels/libpower.a
-rm $RPM_BUILD_ROOT%{_libdir}/control-center-1/panels/libpower.la
-
-desktop-file-install --vendor gnome --delete-original                   \
-  --dir $RPM_BUILD_ROOT%{_sysconfdir}/xdg/autostart                     \
-  $RPM_BUILD_ROOT%{_sysconfdir}/xdg/autostart/gnome-power-manager.desktop
 
 %find_lang %name --with-gnome
 
@@ -87,18 +83,14 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/icons/hicolor/*/apps/gnome-inhibit-applet.*
 %{_datadir}/icons/hicolor/*/apps/gnome-power-manager.*
 %{_datadir}/icons/hicolor/*/apps/gnome-power-statistics.*
+%{_datadir}/icons/gnome/*/status/keyboard-brightness-symbolic.svg
 %{_datadir}/omf/gnome-power-manager
 %{_datadir}/polkit-1/actions/org.gnome.power.policy
 %dir %{_datadir}/gnome-power-manager
-#%{_datadir}/gnome-2.0/ui/*.xml
-#%{_libdir}/bonobo/servers/*.server
-#%{_libexecdir}/*
 %{_datadir}/glib-2.0/schemas/*.gschema.xml
 %{_datadir}/GConf/gsettings/*.gschema.migrate
 %{_mandir}/man1/*.1.gz
 %{_sbindir}/*
-%{_sysconfdir}/xdg/autostart/*.desktop
-%{_libdir}/control-center-1/panels/libpower.so
 
 %changelog
 * #LONGDATE# Richard Hughes <richard@hughsie.com> #VERSION#-0.#BUILD##ALPHATAG#
