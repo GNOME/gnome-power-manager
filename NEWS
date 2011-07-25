@@ -1,3 +1,45 @@
+Version 3.1.3
+~~~~~~~~~~~~~
+Released: 2011-07-25
+
+* Translations
+ - Updated Belarusian translation (Ihar Hrachyshka)
+ - Updated Czech translation (Marek Černocký)
+ - Updated Dutch translation (Hannie Dumoleyn)
+ - Updated Norwegian bokmål translation (Kjartan Maraas)
+ - Updated Serbian translation (Мирослав Николић)
+
+* New Features:
+ - Do not handle the action on lid close, it's moved to g-s-d (Richard Hughes)
+ - Do not handle the brightness keys, it's all now done in g-s-d (Richard Hughes)
+ - Do not handle the lock key, it's now done in g-s-d (Richard Hughes)
+ - Do not handle the 'power' button key, it's moved to g-s-d (Richard Hughes)
+ - Do not handle the power hot-keys, it's now done in g-s-d (Richard Hughes)
+ - Remove all the low power notifications, they have moved to g-s-d (Richard Hughes)
+ - Remove all the OSD code as it's moved to g-s-d (Richard Hughes)
+ - Remove gnome-phone-manager integration, it's moved to g-s-d (Richard Hughes)
+ - Remove the backlight DBus interface used by g-c-c, it's moved to g-s-d (Richard Hughes)
+ - Remove the critical event sounds, they've all moved to g-s-d (Richard Hughes)
+ - Remove the DPMS integration, it's moved to g-s-d (Richard Hughes)
+ - Remove the g-p-mr executable, 99% of functionality has been moved to g-s-d (Richard Hughes)
+ - Remove the hardware button integration, it's moved to g-s-d (Richard Hughes)
+ - Remove the help files, now neither g-p-mr or g-p-p exist (Richard Hughes)
+ - Remove the interface that gnome-shell uses, it's moved to g-s-d (Richard Hughes)
+ - Remove the keyboard backlight key handling, it's moved to g-s-d (Richard Hughes)
+ - Remove the manual marshalling, it's no longer used (Richard Hughes)
+ - Remove the notification for battery low capacity, the feature was rejected in g-s-d (Richard Hughes)
+ - Remove the PkControl abstraction, it's moved to g-s-d (Richard Hughes)
+ - Remove the power engine, it's moved to g-s-d (Richard Hughes)
+ - Remove the screensaver integration, it's moved to g-s-d (Richard Hughes)
+ - Remove the udisks integration, it was rejected from the g-s-d merge (Richard Hughes)
+ - Remove the xrandr brightness settings code, it's now in g-s-d (Richard Hughes)
+
+* Bugfix:
+ - Add Unity to OnlyShowIn (Michael Terry)
+ - Don't complete critical action if power is resumed (David Sommerseth)
+ - Support VPATH builds and use recommended quoting (Javier Jardón)
+ - Update app launcher icon. bug #645536 (Jakub Steiner)
+
 Version 3.1.2
 ~~~~~~~~~~~~~
 Released: 2011-06-13
