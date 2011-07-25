@@ -28,7 +28,6 @@
 
 #include "gpm-screensaver.h"
 #include "gpm-dpms.h"
-#include "gpm-phone.h"
 #include "gpm-idle.h"
 #include "gpm-common.h"
 #include "gpm-idletime.h"
@@ -240,70 +239,6 @@ gpm_test_idle_func (void)
 	g_object_unref (dpms);
 }
 
-static gboolean _test_got_refresh = FALSE;
-
-static void
-gpm_test_phone_device_refresh_cb (GpmPhone *phone, guint idx, gpointer *data)
-{
-	g_debug ("idx refresh = %i", idx);
-	if (idx == 0 && GPOINTER_TO_UINT (data) == 44)
-		_test_got_refresh = TRUE;
-}
-
-static void
-gpm_test_phone_func (void)
-{
-	GpmPhone *phone;
-	guint value;
-	gboolean ret;
-
-	/* make sure we get a non null phone */
-	phone = gpm_phone_new ();
-	g_assert (phone != NULL);
-
-	/* connect signals */
-	g_signal_connect (phone, "device-refresh",
-			  G_CALLBACK (gpm_test_phone_device_refresh_cb), GUINT_TO_POINTER(44));
-
-	/* coldplug the data */
-	ret = gpm_phone_coldplug (phone);
-	g_assert (ret);
-
-	_g_test_loop_run_with_timeout (500);
-
-	/* got refresh */
-	g_assert (_test_got_refresh);
-
-	/* check the connected phones */
-	value = gpm_phone_get_num_batteries (phone);
-	g_assert_cmpint (value, ==, 1);
-
-	/* check the present value */
-	ret = gpm_phone_get_present (phone, 0);
-	g_assert (ret);
-
-	/* check the percentage */
-	value = gpm_phone_get_percentage (phone, 0);
-	g_assert_cmpint (value, !=, 0);
-
-	/* check the ac value */
-	ret = gpm_phone_get_on_ac (phone, 0);
-	g_assert (ret);
-//out:
-	g_object_unref (phone);
-}
-
-#if 0
-static void
-gpm_test_screensaver_func_auth_request_cb (GpmScreensaver *screensaver, gboolean auth, gpointer user_data)
-{
-	g_debug ("auth request = %i", auth);
-	test_got_request = auth;
-
-	_g_test_loop_quit ();
-}
-#endif
-
 static void
 gpm_test_screensaver_func (void)
 {
@@ -314,11 +249,6 @@ gpm_test_screensaver_func (void)
 	screensaver = gpm_screensaver_new ();
 	g_assert (screensaver != NULL);
 
-#if 0
-	/* connect signals */
-	g_signal_connect (screensaver, "auth-request",
-			  G_CALLBACK (gpm_test_screensaver_func_auth_request_cb), NULL);
-#endif
 	/* lock */
 	ret = gpm_screensaver_lock (screensaver);
 	g_assert (ret);
@@ -850,8 +780,6 @@ main (int argc, char **argv)
 	g_test_add_func ("/power/idle", gpm_test_idle_func);
 	g_test_add_func ("/power/idletime", gpm_test_idletime_func);
 	g_test_add_func ("/power/dpms", gpm_test_dpms_func);
-	g_test_add_func ("/power/phone", gpm_test_phone_func);
-//	g_test_add_func ("/power/graph-widget", gpm_graph_widget_test);
 	g_test_add_func ("/power/screensaver", gpm_test_screensaver_func);
 
 	return g_test_run ();

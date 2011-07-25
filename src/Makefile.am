@@ -117,8 +117,6 @@ gnome_power_self_test_SOURCES =				\
 	gpm-idle.c					\
 	gpm-common.h					\
 	gpm-common.c					\
-	gpm-phone.h					\
-	gpm-phone.c					\
 	gpm-screensaver.h				\
 	gpm-screensaver.c				\
 	gpm-idletime.h					\
