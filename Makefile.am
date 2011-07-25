@@ -7,8 +7,7 @@ SUBDIRS = 						\
 	docs						\
 	man						\
 	data						\
-	policy						\
-	tools
+	policy
 
 EXTRA_DIST =						\
 	HACKING						\

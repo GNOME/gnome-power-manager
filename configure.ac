@@ -226,7 +226,6 @@ src/Makefile
 docs/Makefile
 man/Makefile
 po/Makefile.in
-tools/Makefile
 policy/Makefile
 data/Makefile
 data/gnome-power-statistics.desktop.in
