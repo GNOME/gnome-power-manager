@@ -84,8 +84,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-idle.c					\
 	gpm-control.h					\
 	gpm-control.c					\
-	gpm-button.h					\
-	gpm-button.c					\
 	gpm-main.c					\
 	gpm-manager.h					\
 	gpm-manager.c					\

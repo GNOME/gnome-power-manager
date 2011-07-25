@@ -40,7 +40,6 @@
 #include <glib/gi18n.h>
 #include <libupower-glib/upower.h>
 
-#include "gpm-button.h"
 #include "gpm-backlight.h"
 #include "gpm-control.h"
 #include "gpm-common.h"
@@ -53,7 +52,6 @@
 struct GpmBacklightPrivate
 {
 	UpClient		*client;
-	GpmButton		*button;
 	GSettings		*settings;
 	GSettings		*settings_gsd;
 	GpmControl		*control;
@@ -307,24 +305,6 @@ gpm_backlight_client_changed_cb (UpClient *client, GpmBacklight *backlight)
 }
 
 /**
- * gpm_backlight_button_pressed_cb:
- * @power: The power class instance
- * @type: The button type, e.g. "power"
- * @state: The state, where TRUE is depressed or closed
- * @brightness: This class instance
- **/
-static void
-gpm_backlight_button_pressed_cb (GpmButton *button, const gchar *type, GpmBacklight *backlight)
-{
-	g_debug ("Button press event type=%s", type);
-
-	if (g_strcmp0 (type, GPM_BUTTON_LID_OPEN) == 0) {
-		/* make sure we undim when we lift the lid */
-		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
-	}
-}
-
-/**
  * gpm_backlight_notify_system_idle_changed:
  **/
 static gboolean
@@ -391,10 +371,6 @@ gpm_backlight_idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmBacklight *ba
 	gboolean is_active;
 	GError *error = NULL;
 
-	/* don't dim or undim the screen when the lid is closed */
-	if (gpm_button_is_lid_closed (backlight->priv->button))
-		return;
-
 	/* don't dim or undim the screen unless we are on the active console */
 	ret = egg_console_kit_is_active (backlight->priv->consolekit, &is_active, &error);
 	if (!ret) {
@@ -442,7 +418,6 @@ gpm_backlight_finalize (GObject *object)
 	g_object_unref (backlight->priv->settings);
 	g_object_unref (backlight->priv->settings_gsd);
 	g_object_unref (backlight->priv->client);
-	g_object_unref (backlight->priv->button);
 	g_object_unref (backlight->priv->idle);
 	g_object_unref (backlight->priv->consolekit);
 
@@ -491,11 +466,6 @@ gpm_backlight_init (GpmBacklight *backlight)
 	/* set the main brightness, this is designed to be updated if the user changes the
 	 * brightness so we can undim to the 'correct' value */
 	backlight->priv->master_percentage = g_settings_get_double (backlight->priv->settings, GPM_SETTINGS_BRIGHTNESS_AC) * 100.0f;
-
-	/* watch for brightness up and down buttons and also check lid state */
-	backlight->priv->button = gpm_button_new ();
-	g_signal_connect (backlight->priv->button, "button-pressed",
-			  G_CALLBACK (gpm_backlight_button_pressed_cb), backlight);
 
 	/* watch for idle mode changes */
 	backlight->priv->idle = gpm_idle_new ();

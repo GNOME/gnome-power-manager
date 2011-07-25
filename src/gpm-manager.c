@@ -41,7 +41,6 @@
 
 #include "egg-console-kit.h"
 
-#include "gpm-button.h"
 #include "gpm-control.h"
 #include "gpm-common.h"
 #include "gpm-idle.h"
@@ -63,7 +62,6 @@ static void     gpm_manager_finalize	(GObject	 *object);
 
 struct GpmManagerPrivate
 {
-	GpmButton		*button;
 	GSettings		*settings;
 	GSettings		*settings_gsd;
 	GpmIdle			*idle;
@@ -312,7 +310,6 @@ gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 		gpm_manager_sleep_failure (manager, TRUE, error->message);
 		g_error_free (error);
 	}
-	gpm_button_reset_time (manager->priv->button);
 	return TRUE;
 }
 
@@ -335,7 +332,6 @@ gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 		gpm_manager_sleep_failure (manager, TRUE, error->message);
 		g_error_free (error);
 	}
-	gpm_button_reset_time (manager->priv->button);
 	return TRUE;
 }
 
@@ -527,35 +523,12 @@ gpm_manager_idle_changed_cb (GpmIdle *idle, GpmIdleMode mode, GpmManager *manage
 		g_debug ("ignoring as not on active console");
 		return;
 	}
-
-	/* Ignore back-to-NORMAL events when the lid is closed, as the DPMS is
-	 * already off, and we don't want to re-enable the screen when the user
-	 * moves the mouse on systems that do not support hardware blanking. */
-	if (gpm_button_is_lid_closed (manager->priv->button) &&
-	    mode == GPM_IDLE_MODE_NORMAL) {
-		g_debug ("lid is closed, so we are ignoring ->NORMAL state changes");
-		return;
-	}
-
 	if (mode == GPM_IDLE_MODE_SLEEP) {
 		g_debug ("Idle state changed: SLEEP");
 		if (gpm_manager_is_inhibit_valid (manager, FALSE, "timeout action") == FALSE)
 			return;
 		gpm_manager_idle_do_sleep (manager);
 	}
-}
-
-/**
- * gpm_manager_lid_button_pressed:
- * @manager: This class instance
- * @state: TRUE for closed
- *
- * Does actions when the lid is closed, depending on if we are on AC or
- * battery power.
- **/
-static void
-gpm_manager_lid_button_pressed (GpmManager *manager, gboolean pressed)
-{
 }
 
 static void
@@ -575,56 +548,6 @@ gpm_manager_update_ac_throttle (GpmManager *manager)
 		/* TRANSLATORS: this is the gnome-screensaver throttle */
 		manager->priv->screensaver_ac_throttle_id = gpm_screensaver_add_throttle (manager->priv->screensaver, _("On battery power"));
 	}
-}
-
-static void
-gpm_manager_update_lid_throttle (GpmManager *manager, gboolean lid_is_closed)
-{
-	/* Throttle the screensaver when the lid is close since we can't see it anyway
-	   and it may overheat the laptop */
-	if (lid_is_closed == FALSE) {
-		if (manager->priv->screensaver_lid_throttle_id != 0) {
-			gpm_screensaver_remove_throttle (manager->priv->screensaver, manager->priv->screensaver_lid_throttle_id);
-			manager->priv->screensaver_lid_throttle_id = 0;
-		}
-	} else {
-		/* if throttle already exists then remove */
-		if (manager->priv->screensaver_lid_throttle_id != 0)
-			gpm_screensaver_remove_throttle (manager->priv->screensaver, manager->priv->screensaver_lid_throttle_id);
-		manager->priv->screensaver_lid_throttle_id = gpm_screensaver_add_throttle (manager->priv->screensaver, _("Laptop lid is closed"));
-	}
-}
-
-/**
- * gpm_manager_button_pressed_cb:
- * @power: The power class instance
- * @type: The button type, e.g. "power"
- * @state: The state, where TRUE is depressed or closed
- * @manager: This class instance
- **/
-static void
-gpm_manager_button_pressed_cb (GpmButton *button, const gchar *type, GpmManager *manager)
-{
-	g_debug ("Button press event type=%s", type);
-
-	/* ConsoleKit says we are not on active console */
-	if (!gpm_manager_is_active (manager)) {
-		g_debug ("ignoring as not on active console");
-		return;
-	}
-
-	if (g_strcmp0 (type, GPM_BUTTON_LID_OPEN) == 0) {
-		gpm_manager_lid_button_pressed (manager, FALSE);
-	} else if (g_strcmp0 (type, GPM_BUTTON_LID_CLOSED) == 0) {
-		gpm_manager_lid_button_pressed (manager, TRUE);
-	}
-
-	/* disable or enable the fancy screensaver, as we don't want
-	 * this starting when the lid is shut */
-	if (g_strcmp0 (type, GPM_BUTTON_LID_CLOSED) == 0)
-		gpm_manager_update_lid_throttle (manager, TRUE);
-	else if (g_strcmp0 (type, GPM_BUTTON_LID_OPEN) == 0)
-		gpm_manager_update_lid_throttle (manager, FALSE);
 }
 
 /**
@@ -885,10 +808,6 @@ gpm_manager_init (GpmManager *manager)
 		      "on-battery", &manager->priv->on_battery,
 		      NULL);
 
-	manager->priv->button = gpm_button_new ();
-	g_signal_connect (manager->priv->button, "button-pressed",
-			  G_CALLBACK (gpm_manager_button_pressed_cb), manager);
-
 	/* try and start an interactive service */
 	manager->priv->screensaver = gpm_screensaver_new ();
 
@@ -1037,7 +956,6 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->idle);
 	g_object_unref (manager->priv->screensaver);
 	g_object_unref (manager->priv->control);
-	g_object_unref (manager->priv->button);
 	g_object_unref (manager->priv->backlight);
 	g_object_unref (manager->priv->console);
 	g_object_unref (manager->priv->client);
