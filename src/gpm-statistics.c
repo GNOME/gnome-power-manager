@@ -31,7 +31,6 @@
 
 #include "gpm-array-float.h"
 #include "gpm-common.h"
-#include "gpm-stock-icons.h"
 #include "gpm-upower.h"
 #include "gpm-graph-widget.h"
 #include "gpm-debug.h"
@@ -1613,7 +1612,7 @@ gpm_stats_startup_cb (GApplication *application,
 	gtk_window_set_application (window, GTK_APPLICATION (application));
 	gtk_window_set_default_size (window, 800, 500);
 	gtk_window_set_application (window, GTK_APPLICATION (application));
-	gtk_window_set_default_icon_name (GPM_STOCK_APP_ICON);
+	gtk_window_set_default_icon_name ("gnome-power-manager");
 
 	/* Get the main window quit */
 	g_signal_connect (window, "delete-event",

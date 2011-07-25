@@ -23,7 +23,6 @@ INCLUDES =						\
 	-I$(top_srcdir)
 
 bin_PROGRAMS =						\
-	gnome-power-manager				\
 	gnome-power-statistics
 
 sbin_PROGRAMS =						\
@@ -75,31 +74,6 @@ gnome_power_statistics_LDADD =				\
 	-lm
 
 gnome_power_statistics_CFLAGS =				\
-	$(WARNINGFLAGS)
-
-gnome_power_manager_SOURCES =				\
-	gpm-backlight.h					\
-	gpm-backlight.c					\
-	gpm-idle.h					\
-	gpm-idle.c					\
-	gpm-main.c					\
-	gpm-manager.h					\
-	gpm-manager.c					\
-	gpm-stock-icons.h
-
-gnome_power_manager_LDADD =				\
-	libgpmshared.a					\
-	$(GLIB_LIBS)					\
-	$(X11_LIBS)					\
-	$(GSTREAMER_LIBS)				\
-	$(GNOME_LIBS)					\
-	$(X11_LIBS)					\
-	$(NOTIFY_LIBS)					\
-	$(GPM_EXTRA_LIBS)				\
-	$(UPOWER_LIBS)					\
-	-lm
-
-gnome_power_manager_CFLAGS =				\
 	$(WARNINGFLAGS)
 
 gnome_power_self_test_SOURCES =				\
