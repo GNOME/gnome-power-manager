@@ -7,7 +7,6 @@ SUBDIRS = 						\
 	docs						\
 	man						\
 	data						\
-	help						\
 	policy						\
 	tools
 

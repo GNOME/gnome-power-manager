@@ -225,7 +225,6 @@ Makefile
 src/Makefile
 docs/Makefile
 man/Makefile
-help/Makefile
 po/Makefile.in
 tools/Makefile
 policy/Makefile
