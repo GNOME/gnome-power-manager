@@ -41,7 +41,6 @@
 #include <libupower-glib/upower.h>
 
 #include "gpm-backlight.h"
-#include "gpm-control.h"
 #include "gpm-common.h"
 #include "gpm-idle.h"
 #include "gpm-stock-icons.h"
@@ -54,7 +53,6 @@ struct GpmBacklightPrivate
 	UpClient		*client;
 	GSettings		*settings;
 	GSettings		*settings_gsd;
-	GpmControl		*control;
 	GpmIdle			*idle;
 	EggConsoleKit		*consolekit;
 	gboolean		 can_dim;
@@ -414,7 +412,6 @@ gpm_backlight_finalize (GObject *object)
 
 	g_timer_destroy (backlight->priv->idle_timer);
 
-	g_object_unref (backlight->priv->control);
 	g_object_unref (backlight->priv->settings);
 	g_object_unref (backlight->priv->settings_gsd);
 	g_object_unref (backlight->priv->client);

@@ -41,7 +41,6 @@
 
 #include "egg-console-kit.h"
 
-#include "gpm-control.h"
 #include "gpm-common.h"
 #include "gpm-idle.h"
 #include "gpm-manager.h"
@@ -65,7 +64,6 @@ struct GpmManagerPrivate
 	GSettings		*settings;
 	GSettings		*settings_gsd;
 	GpmIdle			*idle;
-	GpmControl		*control;
 	GpmScreensaver		*screensaver;
 	GpmBacklight		*backlight;
 	EggConsoleKit		*console;
@@ -189,106 +187,7 @@ gpm_manager_sync_policy_sleep (GpmManager *manager)
 static gboolean
 gpm_manager_blank_screen (GpmManager *manager, GError **noerror)
 {
-	gboolean do_lock;
-	gboolean ret = TRUE;
-
-	do_lock = gpm_control_get_lock_policy (manager->priv->control,
-					       GPM_SETTINGS_LOCK_ON_BLANK_SCREEN);
-	if (do_lock) {
-		if (!gpm_screensaver_lock (manager->priv->screensaver))
-			g_debug ("Could not lock screen via gnome-screensaver");
-	}
-	return ret;
-}
-
-/**
- * gpm_manager_sleep_failure_response_cb:
- **/
-static void
-gpm_manager_sleep_failure_response_cb (GtkDialog *dialog, gint response_id, GpmManager *manager)
-{
-	GdkScreen *screen;
-	GtkWidget *dialog_error;
-	GError *error = NULL;
-	gboolean ret;
-	gchar *uri = NULL;
-
-	/* user clicked the help button */
-	if (response_id == GTK_RESPONSE_HELP) {
-		uri = g_settings_get_string (manager->priv->settings, GPM_SETTINGS_NOTIFY_SLEEP_FAILED_URI);
-		screen = gdk_screen_get_default();
-		ret = gtk_show_uri (screen, uri, gtk_get_current_event_time (), &error);
-		if (!ret) {
-			dialog_error = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-							       "Failed to show uri %s", error->message);
-			gtk_dialog_run (GTK_DIALOG (dialog_error));
-			g_error_free (error);
-		}
-	}
-
-	gtk_widget_destroy (GTK_WIDGET (dialog));
-	g_free (uri);
-}
-
-/**
- * gpm_manager_sleep_failure:
- **/
-static void
-gpm_manager_sleep_failure (GpmManager *manager, gboolean is_suspend, const gchar *detail)
-{
-	gboolean show_sleep_failed;
-	GString *string = NULL;
-	const gchar *title;
-	gchar *uri = NULL;
-	const gchar *icon;
-	GtkWidget *dialog;
-
-	/* only show this if specified in settings */
-	show_sleep_failed = g_settings_get_boolean (manager->priv->settings, GPM_SETTINGS_NOTIFY_SLEEP_FAILED);
-
-	/* only emit if in GConf */
-	if (!show_sleep_failed)
-		goto out;
-
-	/* TRANSLATORS: window title: there was a problem putting the machine to sleep */
-	string = g_string_new ("");
-	if (is_suspend) {
-		/* TRANSLATORS: message text */
-		g_string_append (string, _("Computer failed to suspend."));
-		/* TRANSLATORS: title text */
-		title = _("Failed to suspend");
-		icon = GPM_STOCK_SUSPEND;
-	} else {
-		/* TRANSLATORS: message text */
-		g_string_append (string, _("Computer failed to hibernate."));
-		/* TRANSLATORS: title text */
-		title = _("Failed to hibernate");
-		icon = GPM_STOCK_HIBERNATE;
-	}
-
-	/* TRANSLATORS: message text */
-	g_string_append_printf (string, "\n\n%s %s", _("Failure was reported as:"), detail);
-
-	/* show modal dialog */
-	dialog = gtk_message_dialog_new_with_markup (NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
-						     GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE,
-						     "<span size='larger'><b>%s</b></span>", title);
-	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog), "%s", string->str);
-	gtk_window_set_icon_name (GTK_WINDOW(dialog), icon);
-
-	/* show a button? */
-	uri = g_settings_get_string (manager->priv->settings, GPM_SETTINGS_NOTIFY_SLEEP_FAILED_URI);
-	if (uri != NULL && uri[0] != '\0') {
-		/* TRANSLATORS: button text, visit the suspend help website */
-		gtk_dialog_add_button (GTK_DIALOG (dialog), _("Visit help page"), GTK_RESPONSE_HELP);
-	}
-
-	/* wait async for close */
-	gtk_widget_show (dialog);
-	g_signal_connect (dialog, "response", G_CALLBACK (gpm_manager_sleep_failure_response_cb), manager);
-out:
-	g_free (uri);
-	g_string_free (string, TRUE);
+	return FALSE;
 }
 
 /**
@@ -297,19 +196,10 @@ out:
 static gboolean
 gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 {
-	gboolean ret;
-	GError *error = NULL;
-
 	/* check to see if we are inhibited */
 	if (gpm_manager_is_inhibit_valid (manager, FALSE, "suspend") == FALSE)
 		return FALSE;
 
-	g_debug ("suspending, reason: %s", reason);
-	ret = gpm_control_suspend (manager->priv->control, &error);
-	if (!ret) {
-		gpm_manager_sleep_failure (manager, TRUE, error->message);
-		g_error_free (error);
-	}
 	return TRUE;
 }
 
@@ -319,19 +209,9 @@ gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
 static gboolean
 gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
 {
-	gboolean ret;
-	GError *error = NULL;
-
 	/* check to see if we are inhibited */
 	if (gpm_manager_is_inhibit_valid (manager, FALSE, "hibernate") == FALSE)
 		return FALSE;
-
-	g_debug ("hibernating, reason: %s", reason);
-	ret = gpm_control_hibernate (manager->priv->control, &error);
-	if (!ret) {
-		gpm_manager_sleep_failure (manager, TRUE, error->message);
-		g_error_free (error);
-	}
 	return TRUE;
 }
 
@@ -421,7 +301,6 @@ gpm_manager_perform_policy (GpmManager  *manager, const gchar *policy_key, const
 
 	} else if (policy == GPM_ACTION_POLICY_SHUTDOWN) {
 		g_debug ("shutting down, reason: %s", reason);
-		gpm_control_shutdown (manager->priv->control, NULL);
 
 	} else if (policy == GPM_ACTION_POLICY_INTERACTIVE) {
 		g_debug ("logout, reason: %s", reason);
@@ -443,8 +322,6 @@ gpm_manager_perform_policy (GpmManager  *manager, const gchar *policy_key, const
 static void
 gpm_manager_idle_do_sleep (GpmManager *manager)
 {
-	gboolean ret;
-	GError *error = NULL;
 	GpmActionPolicy policy;
 
 	if (!manager->priv->on_battery)
@@ -457,31 +334,9 @@ gpm_manager_idle_do_sleep (GpmManager *manager)
 
 	} else if (policy == GPM_ACTION_POLICY_SUSPEND) {
 		g_debug ("suspending, reason: System idle");
-		ret = gpm_control_suspend (manager->priv->control, &error);
-		if (!ret) {
-			g_warning ("cannot suspend (error: %s), so trying hibernate", error->message);
-			g_error_free (error);
-			error = NULL;
-			ret = gpm_control_hibernate (manager->priv->control, &error);
-			if (!ret) {
-				g_warning ("cannot suspend or hibernate: %s", error->message);
-				g_error_free (error);
-			}
-		}
 
 	} else if (policy == GPM_ACTION_POLICY_HIBERNATE) {
 		g_debug ("hibernating, reason: System idle");
-		ret = gpm_control_hibernate (manager->priv->control, &error);
-		if (!ret) {
-			g_warning ("cannot hibernate (error: %s), so trying suspend", error->message);
-			g_error_free (error);
-			error = NULL;
-			ret = gpm_control_suspend (manager->priv->control, &error);
-			if (!ret) {
-				g_warning ("cannot suspend or hibernate: %s", error->message);
-				g_error_free (error);
-			}
-		}
 	}
 }
 
@@ -742,36 +597,6 @@ out:
 #endif
 
 /**
- * gpm_manager_reset_just_resumed_cb:
- **/
-static gboolean
-gpm_manager_reset_just_resumed_cb (gpointer user_data)
-{
-	GpmManager *manager = GPM_MANAGER (user_data);
-#if 0
-	if (manager->priv->notification_warning_low != NULL)
-		gpm_manager_notify_close (manager, manager->priv->notification_warning_low);
-	if (manager->priv->notification_discharging != NULL)
-		gpm_manager_notify_close (manager, manager->priv->notification_discharging);
-#endif
-
-	manager->priv->just_resumed = FALSE;
-	return FALSE;
-}
-
-/**
- * gpm_manager_control_resume_cb:
- **/
-static void
-gpm_manager_control_resume_cb (GpmControl *control, GpmControlAction action, GpmManager *manager)
-{
-	guint timer_id;
-	manager->priv->just_resumed = TRUE;
-	timer_id = g_timeout_add_seconds (1, gpm_manager_reset_just_resumed_cb, manager);
-	g_source_set_name_by_id (timer_id, "[GpmManager] just-resumed");
-}
-
-/**
  * gpm_manager_init:
  * @manager: This class instance
  **/
@@ -817,12 +642,6 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->idle = gpm_idle_new ();
 	g_signal_connect (manager->priv->idle, "idle-changed",
 			  G_CALLBACK (gpm_manager_idle_changed_cb), manager);
-
-	/* use the control object */
-	g_debug ("creating new control instance");
-	manager->priv->control = gpm_control_new ();
-	g_signal_connect (manager->priv->control, "resume",
-			  G_CALLBACK (gpm_manager_control_resume_cb), manager);
 
 	gpm_manager_sync_policy_sleep (manager);
 
@@ -955,7 +774,6 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->settings_gsd);
 	g_object_unref (manager->priv->idle);
 	g_object_unref (manager->priv->screensaver);
-	g_object_unref (manager->priv->control);
 	g_object_unref (manager->priv->backlight);
 	g_object_unref (manager->priv->console);
 	g_object_unref (manager->priv->client);
