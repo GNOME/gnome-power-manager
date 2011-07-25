@@ -223,7 +223,6 @@ dnl ---------------------------------------------------------------------------
 AC_CONFIG_FILES([
 Makefile
 src/Makefile
-docs/Makefile
 man/Makefile
 po/Makefile.in
 policy/Makefile

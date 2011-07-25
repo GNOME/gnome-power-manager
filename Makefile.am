@@ -4,7 +4,6 @@ ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = 						\
 	src						\
 	po						\
-	docs						\
 	man						\
 	data						\
 	policy
