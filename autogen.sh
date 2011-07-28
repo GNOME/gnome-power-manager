@@ -9,7 +9,7 @@ PKG_NAME=gnome-power-manager
 (test -f $srcdir/configure.ac \
   && test -f $srcdir/autogen.sh \
   && test -d $srcdir/src \
-  && test -f $srcdir/src/gpm-main.c) || {
+  && test -f $srcdir/src/gpm-manager.c) || {
     echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"
     echo " top-level $PKG_NAME directory"
     exit 1
