@@ -25,10 +25,6 @@ INCLUDES =						\
 bin_PROGRAMS =						\
 	gnome-power-statistics
 
-sbin_PROGRAMS =						\
-	gnome-power-backlight-helper	\
-	$(NULL)
-
 check_PROGRAMS =					\
 	gnome-power-self-test
 
@@ -46,17 +42,6 @@ libgpmshared_a_SOURCES =				\
 	gpm-common.c					\
 	gpm-upower.c					\
 	gpm-upower.h
-
-gnome_power_backlight_helper_SOURCES =			\
-	gpm-backlight-helper.c
-
-gnome_power_backlight_helper_LDADD =			\
-	libgpmshared.a					\
-	$(GLIB_LIBS)					\
-	-lm
-
-gnome_power_backlight_helper_CFLAGS =			\
-	$(WARNINGFLAGS)
 
 gnome_power_statistics_SOURCES =			\
 	gpm-statistics.c				\

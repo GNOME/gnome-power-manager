@@ -5,8 +5,7 @@ SUBDIRS = 						\
 	src						\
 	po						\
 	man						\
-	data						\
-	policy
+	data
 
 EXTRA_DIST =						\
 	HACKING						\
