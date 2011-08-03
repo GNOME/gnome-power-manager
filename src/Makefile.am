@@ -34,8 +34,6 @@ libgpmshared_a_SOURCES =				\
 	gpm-debug.c					\
 	gpm-array-float.c				\
 	gpm-array-float.h				\
-	gpm-idletime.h					\
-	gpm-idletime.c					\
 	egg-console-kit.h				\
 	egg-console-kit.c				\
 	gpm-common.h					\
@@ -62,12 +60,8 @@ gnome_power_statistics_CFLAGS =				\
 	$(WARNINGFLAGS)
 
 gnome_power_self_test_SOURCES =				\
-	gpm-idle.h					\
-	gpm-idle.c					\
 	gpm-common.h					\
 	gpm-common.c					\
-	gpm-idletime.h					\
-	gpm-idletime.c					\
 	gpm-array-float.h				\
 	gpm-array-float.c				\
 	gpm-self-test.c
