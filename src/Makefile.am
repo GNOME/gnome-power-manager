@@ -28,8 +28,7 @@ bin_PROGRAMS =						\
 check_PROGRAMS =					\
 	gnome-power-self-test
 
-noinst_LIBRARIES = libgpmshared.a
-libgpmshared_a_SOURCES =				\
+gnome_power_statistics_SOURCES =			\
 	gpm-debug.h					\
 	gpm-debug.c					\
 	gpm-array-float.c				\
@@ -39,9 +38,7 @@ libgpmshared_a_SOURCES =				\
 	gpm-common.h					\
 	gpm-common.c					\
 	gpm-upower.c					\
-	gpm-upower.h
-
-gnome_power_statistics_SOURCES =			\
+	gpm-upower.h					\
 	gpm-statistics.c				\
 	gpm-point-obj.c					\
 	gpm-point-obj.h					\
@@ -49,7 +46,6 @@ gnome_power_statistics_SOURCES =			\
 	gpm-graph-widget.c
 
 gnome_power_statistics_LDADD =				\
-	libgpmshared.a					\
 	$(GLIB_LIBS)					\
 	$(X11_LIBS)					\
 	$(UPOWER_LIBS)					\
@@ -67,7 +63,6 @@ gnome_power_self_test_SOURCES =				\
 	gpm-self-test.c
 
 gnome_power_self_test_LDADD =				\
-	libgpmshared.a					\
 	$(GLIB_LIBS)					\
 	$(X11_LIBS)					\
 	$(GNOME_LIBS)					\

@@ -14,9 +14,7 @@ gsettings_schemas_in_files = org.gnome.power-manager.gschema.xml.in
 gsettings_SCHEMAS = $(gsettings_schemas_in_files:.gschema.xml.in=.gschema.xml)
 
 pkgdata_DATA =						\
-	gpm-statistics.ui				\
-	gpm-feedback-widget.ui				\
-	acme.ui
+	gpm-statistics.ui
 
 EXTRA_DIST =						\
 	$(gsettings_SCHEMAS)				\
