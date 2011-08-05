@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2008 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2008-2011 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -22,18 +22,24 @@
 #include "config.h"
 
 #include <locale.h>
-
 #include <glib.h>
 #include <glib/gi18n.h>
-
 #include <gtk/gtk.h>
 #include <libupower-glib/upower.h>
 
 #include "gpm-array-float.h"
-#include "gpm-common.h"
-#include "gpm-upower.h"
 #include "gpm-graph-widget.h"
-#include "gpm-debug.h"
+
+#define GPM_SETTINGS_SCHEMA				"org.gnome.power-manager"
+#define GPM_SETTINGS_INFO_HISTORY_TIME			"info-history-time"
+#define GPM_SETTINGS_INFO_HISTORY_TYPE			"info-history-type"
+#define GPM_SETTINGS_INFO_HISTORY_GRAPH_SMOOTH		"info-history-graph-smooth"
+#define GPM_SETTINGS_INFO_HISTORY_GRAPH_POINTS		"info-history-graph-points"
+#define GPM_SETTINGS_INFO_STATS_TYPE			"info-stats-type"
+#define GPM_SETTINGS_INFO_STATS_GRAPH_SMOOTH		"info-stats-graph-smooth"
+#define GPM_SETTINGS_INFO_STATS_GRAPH_POINTS		"info-stats-graph-points"
+#define GPM_SETTINGS_INFO_PAGE_NUMBER			"info-page-number"
+#define GPM_SETTINGS_INFO_LAST_DEVICE			"info-last-device"
 
 static GtkBuilder *builder = NULL;
 static GtkListStore *list_store_info = NULL;
@@ -105,13 +111,312 @@ enum {
 #define GPM_STATS_DISCHARGE_DATA_VALUE		"discharge-data"
 #define GPM_STATS_DISCHARGE_ACCURACY_VALUE	"discharge-accuracy"
 
+#define GPM_UP_TIME_PRECISION			5*60 /* seconds */
+#define GPM_UP_TEXT_MIN_TIME			120 /* seconds */
+
 /**
- * gpm_stats_button_help_cb:
+ * gpm_stats_get_device_icon_index:
+ * @device: The UpDevice
+ *
+ * Return value: The character string for the filename suffix.
  **/
-static void
-gpm_stats_button_help_cb (GtkWidget *widget, gpointer user_data)
+static const gchar *
+gpm_stats_get_device_icon_index (UpDevice *device)
 {
-	gpm_help_display ("statistics");
+	gdouble percentage;
+	/* get device properties */
+	g_object_get (device, "percentage", &percentage, NULL);
+	if (percentage < 10)
+		return "000";
+	else if (percentage < 30)
+		return "020";
+	else if (percentage < 50)
+		return "040";
+	else if (percentage < 70)
+		return "060";
+	else if (percentage < 90)
+		return "080";
+	return "100";
+}
+
+/**
+ * gpm_stats_get_device_icon_suffix:
+ * @device: The UpDevice
+ *
+ * Return value: The character string for the filename suffix.
+ **/
+static const gchar *
+gpm_stats_get_device_icon_suffix (UpDevice *device)
+{
+	gdouble percentage;
+	/* get device properties */
+	g_object_get (device, "percentage", &percentage, NULL);
+	if (percentage < 10)
+		return "caution";
+	else if (percentage < 30)
+		return "low";
+	else if (percentage < 60)
+		return "good";
+	return "full";
+}
+
+/**
+ * gpm_stats_get_device_icon:
+ *
+ * Return value: The device icon, use g_object_unref() when done.
+ **/
+static GIcon *
+gpm_stats_get_device_icon (UpDevice *device, gboolean use_symbolic)
+{
+	GString *filename;
+	gchar **iconnames;
+	const gchar *kind_str;
+	const gchar *suffix_str;
+	const gchar *index_str;
+	UpDeviceKind kind;
+	UpDeviceState state;
+	gboolean is_present;
+	gdouble percentage;
+	GIcon *icon = NULL;
+
+	g_return_val_if_fail (device != NULL, NULL);
+
+	/* get device properties */
+	g_object_get (device,
+		      "kind", &kind,
+		      "state", &state,
+		      "percentage", &percentage,
+		      "is-present", &is_present,
+		      NULL);
+
+	/* get correct icon prefix */
+	filename = g_string_new (NULL);
+
+	/* get the icon from some simple rules */
+	if (kind == UP_DEVICE_KIND_LINE_POWER) {
+		if (use_symbolic)
+			g_string_append (filename, "ac-adapter-symbolic;");
+		g_string_append (filename, "ac-adapter;");
+
+	} else if (kind == UP_DEVICE_KIND_MONITOR) {
+		if (use_symbolic)
+			g_string_append (filename, "gpm-monitor-symbolic;");
+		g_string_append (filename, "gpm-monitor;");
+
+	} else {
+
+		kind_str = up_device_kind_to_string (kind);
+		if (!is_present) {
+			if (use_symbolic)
+				g_string_append (filename, "battery-missing-symbolic;");
+			g_string_append_printf (filename, "gpm-%s-missing;", kind_str);
+			g_string_append_printf (filename, "gpm-%s-000;", kind_str);
+			g_string_append (filename, "battery-missing;");
+
+		} else {
+			switch (state) {
+			case UP_DEVICE_STATE_EMPTY:
+				if (use_symbolic)
+					g_string_append (filename, "battery-empty-symbolic;");
+				g_string_append_printf (filename, "gpm-%s-empty;", kind_str);
+				g_string_append_printf (filename, "gpm-%s-000;", kind_str);
+				g_string_append (filename, "battery-empty;");
+				break;
+			case UP_DEVICE_STATE_FULLY_CHARGED:
+				if (use_symbolic) {
+					g_string_append (filename, "battery-full-charged-symbolic;");
+					g_string_append (filename, "battery-full-charging-symbolic;");
+				}
+				g_string_append_printf (filename, "gpm-%s-full;", kind_str);
+				g_string_append_printf (filename, "gpm-%s-100;", kind_str);
+				g_string_append (filename, "battery-full-charged;");
+				g_string_append (filename, "battery-full-charging;");
+				break;
+			case UP_DEVICE_STATE_CHARGING:
+			case UP_DEVICE_STATE_PENDING_CHARGE:
+				suffix_str = gpm_stats_get_device_icon_suffix (device);
+				index_str = gpm_stats_get_device_icon_index (device);
+				if (use_symbolic)
+					g_string_append_printf (filename, "battery-%s-charging-symbolic;", suffix_str);
+				g_string_append_printf (filename, "gpm-%s-%s-charging;", kind_str, index_str);
+				g_string_append_printf (filename, "battery-%s-charging;", suffix_str);
+				break;
+			case UP_DEVICE_STATE_DISCHARGING:
+			case UP_DEVICE_STATE_PENDING_DISCHARGE:
+				suffix_str = gpm_stats_get_device_icon_suffix (device);
+				index_str = gpm_stats_get_device_icon_index (device);
+				if (use_symbolic)
+					g_string_append_printf (filename, "battery-%s-symbolic;", suffix_str);
+				g_string_append_printf (filename, "gpm-%s-%s;", kind_str, index_str);
+				g_string_append_printf (filename, "battery-%s;", suffix_str);
+				break;
+			default:
+				if (use_symbolic)
+					g_string_append (filename, "battery-missing-symbolic;");
+				g_string_append (filename, "gpm-battery-missing;");
+				g_string_append (filename, "battery-missing;");
+			}
+		}
+	}
+
+	/* nothing matched */
+	if (filename->len == 0) {
+		g_warning ("nothing matched, falling back to default icon");
+		g_string_append (filename, "dialog-warning;");
+	}
+
+	g_debug ("got filename: %s", filename->str);
+
+	iconnames = g_strsplit (filename->str, ";", -1);
+	icon = g_themed_icon_new_from_names (iconnames, -1);
+
+	g_strfreev (iconnames);
+	g_string_free (filename, TRUE);
+	return icon;
+}
+
+/**
+ * gpm_device_kind_to_localised_string:
+ **/
+static const gchar *
+gpm_device_kind_to_localised_string (UpDeviceKind kind, guint number)
+{
+	const gchar *text = NULL;
+	switch (kind) {
+	case UP_DEVICE_KIND_LINE_POWER:
+		/* TRANSLATORS: system power cord */
+		text = ngettext ("AC adapter", "AC adapters", number);
+		break;
+	case UP_DEVICE_KIND_BATTERY:
+		/* TRANSLATORS: laptop primary battery */
+		text = ngettext ("Laptop battery", "Laptop batteries", number);
+		break;
+	case UP_DEVICE_KIND_UPS:
+		/* TRANSLATORS: battery-backed AC power source */
+		text = ngettext ("UPS", "UPSs", number);
+		break;
+	case UP_DEVICE_KIND_MONITOR:
+		/* TRANSLATORS: a monitor is a device to measure voltage and current */
+		text = ngettext ("Monitor", "Monitors", number);
+		break;
+	case UP_DEVICE_KIND_MOUSE:
+		/* TRANSLATORS: wireless mice with internal batteries */
+		text = ngettext ("Mouse", "Mice", number);
+		break;
+	case UP_DEVICE_KIND_KEYBOARD:
+		/* TRANSLATORS: wireless keyboard with internal battery */
+		text = ngettext ("Keyboard", "Keyboards", number);
+		break;
+	case UP_DEVICE_KIND_PDA:
+		/* TRANSLATORS: portable device */
+		text = ngettext ("PDA", "PDAs", number);
+		break;
+	case UP_DEVICE_KIND_PHONE:
+		/* TRANSLATORS: cell phone (mobile...) */
+		text = ngettext ("Cell phone", "Cell phones", number);
+		break;
+#if UP_CHECK_VERSION(0,9,5)
+	case UP_DEVICE_KIND_MEDIA_PLAYER:
+		/* TRANSLATORS: media player, mp3 etc */
+		text = ngettext ("Media player", "Media players", number);
+		break;
+	case UP_DEVICE_KIND_TABLET:
+		/* TRANSLATORS: tablet device */
+		text = ngettext ("Tablet", "Tablets", number);
+		break;
+	case UP_DEVICE_KIND_COMPUTER:
+		/* TRANSLATORS: tablet device */
+		text = ngettext ("Computer", "Computers", number);
+		break;
+#endif
+	default:
+		g_warning ("enum unrecognised: %i", kind);
+		text = up_device_kind_to_string (kind);
+	}
+	return text;
+}
+
+/**
+ * gpm_device_technology_to_localised_string:
+ **/
+static const gchar *
+gpm_device_technology_to_localised_string (UpDeviceTechnology technology_enum)
+{
+	const gchar *technology = NULL;
+	switch (technology_enum) {
+	case UP_DEVICE_TECHNOLOGY_LITHIUM_ION:
+		/* TRANSLATORS: battery technology */
+		technology = _("Lithium Ion");
+		break;
+	case UP_DEVICE_TECHNOLOGY_LITHIUM_POLYMER:
+		/* TRANSLATORS: battery technology */
+		technology = _("Lithium Polymer");
+		break;
+	case UP_DEVICE_TECHNOLOGY_LITHIUM_IRON_PHOSPHATE:
+		/* TRANSLATORS: battery technology */
+		technology = _("Lithium Iron Phosphate");
+		break;
+	case UP_DEVICE_TECHNOLOGY_LEAD_ACID:
+		/* TRANSLATORS: battery technology */
+		technology = _("Lead acid");
+		break;
+	case UP_DEVICE_TECHNOLOGY_NICKEL_CADMIUM:
+		/* TRANSLATORS: battery technology */
+		technology = _("Nickel Cadmium");
+		break;
+	case UP_DEVICE_TECHNOLOGY_NICKEL_METAL_HYDRIDE:
+		/* TRANSLATORS: battery technology */
+		technology = _("Nickel metal hydride");
+		break;
+	case UP_DEVICE_TECHNOLOGY_UNKNOWN:
+		/* TRANSLATORS: battery technology */
+		technology = _("Unknown technology");
+		break;
+	default:
+		g_assert_not_reached ();
+		break;
+	}
+	return technology;
+}
+
+/**
+ * gpm_device_state_to_localised_string:
+ **/
+static const gchar *
+gpm_device_state_to_localised_string (UpDeviceState state)
+{
+	const gchar *state_string = NULL;
+
+	switch (state) {
+	case UP_DEVICE_STATE_CHARGING:
+		/* TRANSLATORS: battery state */
+		state_string = _("Charging");
+		break;
+	case UP_DEVICE_STATE_DISCHARGING:
+		/* TRANSLATORS: battery state */
+		state_string = _("Discharging");
+		break;
+	case UP_DEVICE_STATE_EMPTY:
+		/* TRANSLATORS: battery state */
+		state_string = _("Empty");
+		break;
+	case UP_DEVICE_STATE_FULLY_CHARGED:
+		/* TRANSLATORS: battery state */
+		state_string = _("Charged");
+		break;
+	case UP_DEVICE_STATE_PENDING_CHARGE:
+		/* TRANSLATORS: battery state */
+		state_string = _("Waiting to charge");
+		break;
+	case UP_DEVICE_STATE_PENDING_DISCHARGE:
+		/* TRANSLATORS: battery state */
+		state_string = _("Waiting to discharge");
+		break;
+	default:
+		g_assert_not_reached ();
+		break;
+	}
+	return state_string;
 }
 
 /**
@@ -539,6 +844,22 @@ gpm_stats_set_graph_data (GtkWidget *widget, GPtrArray *data, gboolean use_smoot
 
 	/* show */
 	gtk_widget_show (widget);
+}
+
+/**
+ * gpm_color_from_rgb:
+ * @red: The red value
+ * @green: The green value
+ * @blue: The blue value
+ **/
+static guint32
+gpm_color_from_rgb (guint8 red, guint8 green, guint8 blue)
+{
+	guint32 color = 0;
+	color += (guint32) red * 0x10000;
+	color += (guint32) green * 0x100;
+	color += (guint32) blue;
+	return color;
 }
 
 /**
@@ -1184,7 +1505,7 @@ gpm_stats_add_device (UpDevice *device)
 
 	id = up_device_get_object_path (device);
 	text = gpm_device_kind_to_localised_string (kind, 1);
-	icon = gpm_upower_get_device_icon (device, FALSE);
+	icon = gpm_stats_get_device_icon (device, FALSE);
 
 	gtk_list_store_append (list_store_devices, &iter);
 	gtk_list_store_set (list_store_devices, &iter,
@@ -1538,7 +1859,6 @@ gpm_stats_commandline_cb (GApplication *application,
 	/* TRANSLATORS: the program name */
 	g_option_context_set_summary (context, _("Power Statistics"));
 	g_option_context_add_main_entries (context, options, NULL);
-	g_option_context_add_group (context, gpm_debug_get_option_group ());
 	ret = g_option_context_parse (context, &argc, &argv, NULL);
 	if (!ret)
 		goto out;
@@ -1623,10 +1943,6 @@ gpm_stats_startup_cb (GApplication *application,
 			  G_CALLBACK (gpm_stats_button_close_cb), application);
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "button_close"));
 	gtk_widget_grab_default (widget);
-
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "button_help"));
-	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_stats_button_help_cb), NULL);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_smooth_history"));
 	checked = g_settings_get_boolean (settings, GPM_SETTINGS_INFO_HISTORY_GRAPH_SMOOTH);

@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2006-2007 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2006-2011 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -24,8 +24,8 @@
 #include <pango/pangocairo.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
+#include <math.h>
 
-#include "gpm-common.h"
 #include "gpm-point-obj.h"
 #include "gpm-graph-widget.h"
 
@@ -585,6 +585,20 @@ gpm_graph_widget_draw_labels (GpmGraphWidget *graph, cairo_t *cr)
 }
 
 /**
+ * gpm_color_to_rgb:
+ * @red: The red value
+ * @green: The green value
+ * @blue: The blue value
+ **/
+static void
+gpm_color_to_rgb (guint32 color, guint8 *red, guint8 *green, guint8 *blue)
+{
+	*red = (color & 0xff0000) / 0x10000;
+	*green = (color & 0x00ff00) / 0x100;
+	*blue = color & 0x0000ff;
+}
+
+/**
  * gpm_graph_widget_get_y_label_max_width:
  * @graph: This class instance
  * @cr: Cairo drawing context
@@ -612,6 +626,60 @@ gpm_graph_widget_get_y_label_max_width (GpmGraphWidget *graph, cairo_t *cr)
 		g_free (text);
 	}
 	return biggest;
+}
+
+/**
+ * gpm_round_up:
+ * @value: The input value
+ * @smallest: The smallest increment allowed
+ *
+ * 101, 10	110
+ * 95,  10	100
+ * 0,   10	0
+ * 112, 10	120
+ * 100, 10	100
+ **/
+static gint
+gpm_round_up (gfloat value, gint smallest)
+{
+	gfloat division;
+	if (fabs (value) < 0.01)
+		return 0;
+	if (smallest == 0) {
+		g_warning ("divisor zero");
+		return 0;
+	}
+	division = (gfloat) value / (gfloat) smallest;
+	division = ceilf (division);
+	division *= smallest;
+	return (gint) division;
+}
+
+/**
+ * gpm_round_down:
+ * @value: The input value
+ * @smallest: The smallest increment allowed
+ *
+ * 101, 10	100
+ * 95,  10	90
+ * 0,   10	0
+ * 112, 10	110
+ * 100, 10	100
+ **/
+static gint
+gpm_round_down (gfloat value, gint smallest)
+{
+	gfloat division;
+	if (fabs (value) < 0.01)
+		return 0;
+	if (smallest == 0) {
+		g_warning ("divisor zero");
+		return 0;
+	}
+	division = (gfloat) value / (gfloat) smallest;
+	division = floorf (division);
+	division *= smallest;
+	return (gint) division;
 }
 
 /**
@@ -687,8 +755,8 @@ gpm_graph_widget_autorange_x (GpmGraphWidget *graph)
 			rounding_x = 10 * 60;
 	}
 
-	graph->priv->start_x = gpm_precision_round_down (smallest_x, rounding_x);
-	graph->priv->stop_x = gpm_precision_round_up (biggest_x, rounding_x);
+	graph->priv->start_x = gpm_round_down (smallest_x, rounding_x);
+	graph->priv->stop_x = gpm_round_up (biggest_x, rounding_x);
 
 	g_debug ("Processed(1) range is %i<x<%i",
 		   graph->priv->start_x, graph->priv->stop_x);
@@ -781,8 +849,8 @@ gpm_graph_widget_autorange_y (GpmGraphWidget *graph)
 			rounding_y = 10 * 60;
 	}
 
-	graph->priv->start_y = gpm_precision_round_down (smallest_y, rounding_y);
-	graph->priv->stop_y = gpm_precision_round_up (biggest_y, rounding_y);
+	graph->priv->start_y = gpm_round_down (smallest_y, rounding_y);
+	graph->priv->stop_y = gpm_round_up (biggest_y, rounding_y);
 
 	/* a factor graph always is centered around zero */
 	if (graph->priv->type_y == GPM_GRAPH_WIDGET_TYPE_FACTOR) {

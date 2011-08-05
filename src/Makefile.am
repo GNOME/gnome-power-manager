@@ -29,14 +29,8 @@ check_PROGRAMS =					\
 	gnome-power-self-test
 
 gnome_power_statistics_SOURCES =			\
-	gpm-debug.h					\
-	gpm-debug.c					\
 	gpm-array-float.c				\
 	gpm-array-float.h				\
-	gpm-common.h					\
-	gpm-common.c					\
-	gpm-upower.c					\
-	gpm-upower.h					\
 	gpm-statistics.c				\
 	gpm-point-obj.c					\
 	gpm-point-obj.h					\
@@ -54,8 +48,6 @@ gnome_power_statistics_CFLAGS =				\
 	$(WARNINGFLAGS)
 
 gnome_power_self_test_SOURCES =				\
-	gpm-common.h					\
-	gpm-common.c					\
 	gpm-array-float.h				\
 	gpm-array-float.c				\
 	gpm-self-test.c
