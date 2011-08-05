@@ -5,7 +5,6 @@ context = apps
 iconsdir = $(themedir)/$(size)/$(context)
 
 icons_DATA = 			  	\
-	gnome-power-manager.png		\
 	gnome-power-statistics.png
 
 noinst_DATA = 
