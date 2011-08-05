@@ -33,8 +33,6 @@ gnome_power_statistics_SOURCES =			\
 	gpm-debug.c					\
 	gpm-array-float.c				\
 	gpm-array-float.h				\
-	egg-console-kit.h				\
-	egg-console-kit.c				\
 	gpm-common.h					\
 	gpm-common.c					\
 	gpm-upower.c					\
