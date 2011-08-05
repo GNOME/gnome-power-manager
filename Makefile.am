@@ -22,6 +22,21 @@ DISTCLEANFILES =					\
 	intltool-update					\
 	gnome-power-manager-*.tar.gz
 
+MAINTAINERCLEANFILES =					\
+	aclocal.m4					\
+	compile						\
+	config.guess					\
+	config.h.in					\
+	config.sub					\
+	depcomp						\
+	gnome-doc-utils.make				\
+	install-sh					\
+	ltmain.sh					\
+	missing						\
+	mkinstalldirs					\
+	omf.make					\
+	xmldocs.make
+
 distclean-local:
 	if test $(srdcir) = .; then :; else \
 		rm -f ChangeLog; \
@@ -42,3 +57,5 @@ ChangeLog:
 	fi
 
 .PHONY: ChangeLog
+
+-include $(top_srcdir)/git.mk

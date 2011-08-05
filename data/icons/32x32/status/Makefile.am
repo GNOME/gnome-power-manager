@@ -4,7 +4,6 @@ context = status
 
 iconsdir = $(themedir)/$(size)/$(context)
 
-
 icons_DATA = 			        \
 	gpm-keyboard-000.png		\
 	gpm-keyboard-020.png		\
@@ -54,3 +53,4 @@ EXTRA_DIST =		\
 	$(icons_DATA)	\
 	$(noinst_DATA)
 
+-include $(top_srcdir)/git.mk

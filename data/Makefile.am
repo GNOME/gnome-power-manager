@@ -25,3 +25,5 @@ clean-local :
 DISTCLEANFILES =					\
 	gnome-power-statistics.desktop			\
 	org.gnome.power-manager.gschema.xml
+
+-include $(top_srcdir)/git.mk

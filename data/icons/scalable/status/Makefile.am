@@ -49,3 +49,4 @@ EXTRA_DIST =		\
 	$(symicons_DATA)	\
 	$(noinst_DATA)
 
+-include $(top_srcdir)/git.mk

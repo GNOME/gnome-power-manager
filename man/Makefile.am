@@ -11,7 +11,6 @@ gnome-power-statistics.1: gnome-power-statistics.sgml
 	docbook2man $? &> /dev/null
 endif
 
-clean-local :
-	rm -f *~
-	rm -f *.1
-	rm -f manpage.*
+CLEANFILES = *.1 manpage.*
+
+-include $(top_srcdir)/git.mk
