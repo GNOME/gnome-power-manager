@@ -1,21 +1,5 @@
 <!doctype refentry PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
 
-<!-- Process this file with docbook-to-man to generate an nroff manual
-     page: `docbook-to-man manpage.sgml > manpage.1'.  You may view
-     the manual page with: `docbook-to-man manpage.sgml | nroff -man |
-     less'.  A typical entry in a Makefile or Makefile.am is:
-
-manpage.1: manpage.sgml
-	docbook-to-man $< > $@
-
-    
-	The docbook-to-man binary is found in the docbook-to-man package.
-	Please remember that if you create the nroff version in one of the
-	debian/rules file targets (such as build), you will need to include
-	docbook-to-man in your Build-Depends control field.
-
-  -->
-
   <!-- Fill in your name for FIRSTNAME and SURNAME. -->
   <!ENTITY dhfirstname "<firstname>FIRSTNAME</firstname>">
   <!ENTITY dhsurname   "<surname>SURNAME</surname>">
@@ -43,7 +27,7 @@ manpage.1: manpage.sgml
       <surname>Hughes</surname>
     </author>
     <copyright>
-      <year>2005</year>
+      <year>2005-2011</year>
       <holder>Richard Hughes</holder>
     </copyright>
     &dhdate;
@@ -55,7 +39,6 @@ manpage.1: manpage.sgml
   </refmeta>
   <refnamediv>
     <refname>&dhpackage;</refname>
-
     <refpurpose>gnome power statistics gui</refpurpose>
   </refnamediv>
   <refsynopsisdiv>
@@ -103,15 +86,11 @@ manpage.1: manpage.sgml
   </refsect1>
   <refsect1>
     <title>SEE ALSO</title>
-
-    <para>gnome-power-manager (1), gnome-power-preferences (1). </para>
-
-    <para>The programs are documented fully on
+    <para>The programs are also documented on
       http://gnome.org/projects/gnome-power-manager/ .</para>
   </refsect1>
   <refsect1>
     <title>AUTHOR</title>
-
     <para>This manual page was written by Simon Zheng <email>simon.zheng@sun.com</email>.
     </para>
 

@@ -8,7 +8,6 @@ SUBDIRS = 						\
 	data
 
 EXTRA_DIST =						\
-	HACKING						\
 	MAINTAINERS					\
 	intltool-extract.in				\
 	intltool-merge.in				\
@@ -17,22 +16,11 @@ EXTRA_DIST =						\
 	xmldocs.make					\
 	gnome-doc-utils.make
 
-clean-local :
-	rm -f *~
-
-snapshot:
-	$(MAKE) dist distdir=$(PACKAGE)-$(VERSION)-`date +"%Y%m%d"`
-
 DISTCLEANFILES =					\
 	intltool-extract				\
 	intltool-merge					\
 	intltool-update					\
 	gnome-power-manager-*.tar.gz
-
-DISTCHECK_CONFIGURE_FLAGS = 				\
-	--disable-schemas-install			\
-	--disable-scrollkeeper				\
-	--disable-tests
 
 distclean-local:
 	if test $(srdcir) = .; then :; else \

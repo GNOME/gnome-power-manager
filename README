@@ -1,33 +1,10 @@
 			      GNOME Power Manager
-			   A Power Manager for GNOME
-
-GNOME Power Manager is a GNOME session daemon that acts as a policy agent on top of
-UPower, which requires fairly new versions of the kernel and udev.
-GNOME Power Manager listens for system events and responds with user-configurable actions.
+			Power Management Stuff for GNOME
 
 GNOME Power Manager comes in three main parts:
 
-	- gnome-power-manager:	    the manager daemon itself
-	- gnome-power-preferences:  the control panel program, for configuration
-	- gnome-power-statistics:   the statistics graphing program
-
-To build, GNOME Power Manager requires
-
-	- Glib (2.13.0 or later)
-	- Gtk2+ (2.11.0 or later)
-	- GNOME Keyring (0.6.0 or later)
-	- DBus (0.70 or later)
-	- libnotify (0.4.3 or later)
-	- libwnck (2.10.0 or later)
-	- Cairo (1.0.0 or later)
-	- Unique (0.9.4 or later)
-	- libpanel (2.0.0 or later)
-	- xrandr (1.2.0 or later)
-	- Canberra (0.10 or later)
-	- UPower (0.9.1 or later)
-	- HAL (0.5.8 or later)
-
-To work properly, gnome-power-manager requires udevd, upowerd and
-udisks-daemon to be running.
+	- gnome-settings-daemon plugin: the manager daemon itself
+	- gnome-control-center panel:   the control panel program, for configuration
+	- gnome-power-statistics:       the statistics graphing program
 
 For more information, please see http://www.gnome.org/projects/gnome-power-manager/
