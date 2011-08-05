@@ -5,8 +5,6 @@ context = apps
 iconsdir = $(themedir)/$(size)/$(context)
 
 icons_DATA = 			  	\
-	gnome-brightness-applet.png	\
-	gnome-inhibit-applet.png	\
 	gnome-power-manager.png		\
 	gnome-power-statistics.png
 
