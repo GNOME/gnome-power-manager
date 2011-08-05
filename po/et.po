@@ -12,9 +12,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gnome Power Manager MASTER\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"power-manager&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-03-14 11:34+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-08-05 10:10+0100\n"
 "PO-Revision-Date: 2011-03-15 02:26+0300\n"
 "Last-Translator: Mattias Põldaru <mahfiaz@gmail.com>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
@@ -24,1047 +23,434 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Power Manager"
-msgstr "Vooluhaldur"
-
-msgid "Power management daemon"
-msgstr "Vooluhaldusdeemon"
-
-msgid "Allow backlight brightness adjustment"
-msgstr "Taustavalgustuse heleduse kohandamise lubamine"
-
-msgid "Display options for the notification icon."
-msgstr "Teateikooni kuvamise valikud."
-
-msgid ""
-"If a notification message should be displayed after suspend or hibernate "
-"failed."
-msgstr "Kas pärast nurjunud uinaku või talveune katset peaks kuvama teate."
-
-msgid ""
-"If a notification message should be displayed when battery in a device "
-"attached to the computer is getting low."
-msgstr "Kas arvutiga ühendatud seadme aku tühjenemisel peaks kuvama teate."
-
-msgid ""
-"If a notification message should be displayed when the battery is fully "
-"charged."
-msgstr "Kas aku täislaadimisel peaks kuvama teate."
-
-msgid ""
-"If a notification message should be displayed when the system battery or UPS "
-"is getting low."
-msgstr "Kas süsteemi aku või UPS-i tühjenemisel peaks kuvama teate."
-
-msgid "If preferences and statistics items should be shown in the context menu"
-msgstr "Kas kontekstimenüüs peaks kuvama eelistuste ja statistika kirjeid"
-
-msgid "If sounds should be used"
-msgstr "Kas tuleks kasutada helimärguandeid"
-
-msgid ""
-"If sounds should be used when the power is critically low, or inhibit "
-"requests have stopped the policy action."
-msgstr ""
-"Kas aku madala täituvuse või tõkestuste sekkumise korral tuleks heliga märku "
-"anda."
-
-msgid ""
-"If the keyboard backlight brightness should be reduced when the computer is "
-"on battery power"
-msgstr ""
-"Kas klaviatuuri taustavalgustust tuleks vähendada, kui arvuti on akutoitel"
-
-msgid "If the low-power mode should be enabled when on AC"
-msgstr "Kas madala voolutarbe režiim tuleks lubada võrguvoolu toitel"
-
-msgid "If the low-power mode should be enabled when on battery"
-msgstr "Kas madala voolutarbe režiim tuleks lubada akutoitel"
-
-msgid ""
-"If the screen brightness should be changed when switching between AC and "
-"battery power."
-msgstr "Kas ekraani heledust tuleks muuta võrguvoolu ja akutoite vahetumisel."
-
-msgid ""
-"If the screen should be reduced in brightness when the computer is on "
-"battery power."
-msgstr "Kas ekraani heledust tuleks vähendada, kui arvuti on akutoitel."
-
-msgid "If the system low-power mode should be enabled when on AC power."
-msgstr ""
-"Kas süsteemi madala voolutarbe režiim tuleks lubada, kui võrguvoolu toitel."
-
-msgid ""
-"If the system low-power mode should be enabled when on laptop battery power."
-msgstr ""
-"Kas süsteemi madala voolutarbe režiim tuleks lubada, kui sülearvuti on "
-"akutoitel."
-
-msgid "If the user should be notified when the AC adapter is disconnected."
-msgstr "Kas kasutajale tuleks märku anda, kui vooluadapter eemaldatakse."
-
-msgid ""
-"If time based notifications should be used. If set to false, then the "
-"percentage change is used instead, which may fix a broken ACPI BIOS."
-msgstr ""
-"Kas tuleks kasutada ajal baseeruvaid teateid. Kui pole märgitud, kasutatakse "
-"protsentide järgi teateid, see võib aidata vigase ACPI BIOS-i korral."
-
-msgid "If we should show the low capacity warning for a broken battery"
-msgstr "Kas rikkis aku korral peaks näitama madala täituvuse hoiatust"
-
-msgid "If we should show the low capacity warning for a broken battery."
-msgstr "Kas rikkis aku korral peaks näitama madala täituvuse hoiatust."
-
-msgid "If we should show the recalled battery warning for a broken battery"
-msgstr "Kas rikkis aku tagasikutsumise teadet peaks kuvama"
-
-msgid ""
-"If we should show the recalled battery warning for a broken battery. Set "
-"this to false only if you know your battery is okay."
-msgstr ""
-"Kas rikkis aku tagasikutsumise teadet peaks kuvama. Jäta märkimata ainult "
-"siis, kui kindlasti tead, et see aku on korras."
-
-msgid "Keyboard backlight brightness when on AC power."
-msgstr "Klaviatuuri taustavalguse heledus võrguvoolu toitel."
-
-msgid "LCD brightness when on AC"
-msgstr "LCD heledus võrgutoitel"
-
-msgid "LCD dimming amount when on battery"
-msgstr "LCD tumendamise määr, kui akutoitel"
-
-msgid "Lock GNOME keyring on sleep"
-msgstr "GNOME võtmerõngas lukustatakse uinumisel"
-
-msgid "Lock screen on hibernate"
-msgstr "Talveunne jäämisel ekraan lukustatakse"
-
-msgid "Lock screen on suspend"
-msgstr "Uinumisel ekraani lukustamine"
-
-msgid "Lock screen when blanked"
-msgstr "Ekraani tühjendamisel selle lukustamine"
-
-msgid "Notify on a low power"
-msgstr "Aku madalast täituvusest teatamine"
-
-msgid "Notify on a sleep failure"
-msgstr "Uinaku nurjumisest teatamine"
-
-msgid "Notify when AC adapter is disconnected"
-msgstr "Vooluvõrgust lahtiühendamisest teatamine"
-
-msgid "Notify when fully charged"
-msgstr "Aku täitumisest antakse märku"
-
-msgid ""
-"Percent brightness to set keyboard backlight at when on AC power. Legal "
-"values are between 0 and 100."
-msgstr ""
-"Klaviatuuri taustavalguse heledus protsentides, kui vooluvõrgu toitel. "
-"Sobivad väärtused on 0 ja 100 vahel."
-
-msgid "Percent to reduce keyboard backlight by when idle."
-msgstr ""
-"Mitme protsendi võrra vähendada klaviatuuri taustavalgustust, kui jõude."
-
-msgid "Percent to reduce keyboard backlight by when on battery power."
-msgstr ""
-"Mitme protsendi võrra vähendada klaviatuuri taustavalgustust, kui akutoitel."
-
-msgid "Percentage action is taken"
-msgstr "Laetuse protsent, mille puhul tuleb tegutseda"
-
-msgid "Percentage considered critical"
-msgstr "Laetuse protsent, mis on kriitiline"
-
-msgid "Percentage considered low"
-msgstr "Laetuse protsent, mis on madal"
-
-msgid "Reduce the backlight brightness when on battery power"
-msgstr "Taustavalgustuse heleduse vähendamine, kui akutoitel"
-
-msgid "Reduce the keyboard backlight when on battery power"
-msgstr "Klaviatuuri taustavalguse heleduse vähendamine, kui akutoitel"
-
-msgid "Seconds of inactivity to spin down when on AC"
-msgstr ""
-"Mitme sekundilise jõudeoleku järel vähendatakse kõvaketta pöördeid, kui "
-"võrguvoolu toitel"
-
-msgid "Seconds of inactivity to spin down when on battery"
-msgstr ""
-"Mitme sekundilise jõudeoleku järel vähendatakse kõvaketta pöördeid, kui "
-"akutoitel"
-
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:1
 msgid "The ID of the last device selected"
 msgstr "Viimase valitud seadme ID"
 
-msgid "The URI to show to the user on sleep failure"
-msgstr "URI, mida kuvatakse kasutajale uinaku nurjumisel"
-
-msgid ""
-"The amount to dim the brightness of the display when on battery power. "
-"Possible values are between 0 and 100."
-msgstr ""
-"Mis määral tumendada kuva taustavalgust, kui akutoitel. Võimalikud väärtused "
-"on 0 ja 100 vahel."
-
-msgid ""
-"The brightness of the display when on AC power. Possible values are between "
-"0.0 and 1.0."
-msgstr ""
-"Kuva heledus, kui võrgutoitel. Võimalikud väärtused on 0.0 ja 1.0 vahel."
-
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:2
 msgid "The default graph type to show for history"
 msgstr "Vaikimisi ajaloograafiku liik"
 
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:3
 msgid "The default graph type to show for stats"
 msgstr "Vaikimisi statistikagraafiku liik"
 
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:4
 msgid "The default graph type to show in the history window."
 msgstr "Vaikimisi graafiku liik, mida kasutatakse ajalooaknas."
 
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:5
 msgid "The default graph type to show in the stats window."
 msgstr "Vaikimisi graafiku liik, mida kasutatakse statistikaaknas."
 
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:6
 msgid ""
 "The identifier of the last device which is used to return focus to the "
 "correct device."
 msgstr ""
 "Viimase seadme identifikaator, mida kasutatakse õige seadme fokuseerimiseks."
 
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:7
 msgid "The index of the page number to show by default"
 msgstr "Vaikimisi näidatava lehe indeks"
 
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:8
 msgid ""
 "The index of the page number to show by default which is used to return "
 "focus to the correct page."
 msgstr ""
 "Vaikimisi näidatava lehe indeksit kasutatakse, et fokuseerida õige leht."
 
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:9
 msgid ""
 "The maximum duration of time displayed on the x-axis of the history graph."
 msgstr "Suurim ajavahemik, mida kuvatakse ajaloo graafiku x-teljel."
 
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:10
 msgid "The maximum time displayed for history"
 msgstr "Pikim kuvatav ajalugu"
 
-msgid ""
-"The number of seconds of inactivity to spin down the disks when on AC power."
-msgstr ""
-"Mitme sekundilise jõudeoleku järel vähendatakse kõvaketta pöördeid, kui "
-"võrguvoolu toitel."
-
-msgid ""
-"The number of seconds of inactivity to spin down the disks when on battery "
-"power."
-msgstr ""
-"Mitme sekundilise jõudeoleku järel vähendatakse kõvaketta pöördeid, kui "
-"akutoitel."
-
-msgid ""
-"The percentage of the battery when it is considered critical. Only valid "
-"when use-time-for-policy is false."
-msgstr ""
-"Aku täituvuse protsent, mida peetakse kriitiliseks. Kehtib ainult siis, kui "
-"use-time-for-policy pole märgitud."
-
-msgid ""
-"The percentage of the battery when it is considered low. Only valid when use-"
-"time-for-policy is false."
-msgstr ""
-"Aku täituvuse protsent, mida peetakse madalaks. Kehtib ainult siis, kui use-"
-"time-for-policy pole märgitud."
-
-msgid ""
-"The percentage of the battery when the critical action is performed. Only "
-"valid when use-time-for-policy is false."
-msgstr ""
-"Aku täituvuse protsent, mille juures käivitatakse kriitilise täituvuse "
-"tegevus. Kehtib ainult siis, kui use-time-for-policy pole märgitud."
-
-#, no-c-format
-msgid ""
-"The percentage to reduce the keyboard backlight by when idle. For example, "
-"if set to '60', the backlight will be cut by 40% when idle. Legal values are "
-"between 0 and 100."
-msgstr ""
-"Mitmele protsendile vähendatakse klaviatuuri taustavalgus, kui jõude. "
-"Näiteks, kui väärtus on '60', vähendatakse jõudeoleku korral taustavalgust "
-"40% võrra. Sobivad väärtused on 0 ja 100 vahel."
-
-#, no-c-format
-msgid ""
-"The percentage to reduce the keyboard backlight by when on battery power. "
-"For example, if set to '60', the backlight will be cut by 40% on battery "
-"power. Legal values are between 0 and 100."
-msgstr ""
-"Mitmele protsendile vähendatakse klaviatuuri taustavalgus, kui akutoitel. "
-"Näiteks, kui väärtus on '60', vähendatakse jõudeoleku korral taustavalgust "
-"40% võrra. Sobivad väärtused on 0 ja 100 vahel."
-
-msgid ""
-"The time remaining in seconds of the battery when critical action is taken. "
-"Only valid when use-time-for-policy is true."
-msgstr ""
-"Mitu sekundit aku tugiaega on veel jäänud, kui täidetakse kriitilise taseme "
-"tegevus. Kehtib ainult kui use-time-for-policy on märgitud."
-
-msgid ""
-"The time remaining in seconds of the battery when it is considered critical. "
-"Only valid when use-time-for-policy is true."
-msgstr ""
-"Mitu sekundit aku tugiaega on veel jäänud, kui see loetakse kriitiliseks. "
-"Kehtib ainult kui use-time-for-policy on märgitud."
-
-msgid ""
-"The time remaining in seconds of the battery when it is considered low. Only "
-"valid when use-time-for-policy is true."
-msgstr ""
-"Mitu sekundit aku tugiaega on veel jäänud, kui täituvus loetakse madalaks. "
-"Kehtib ainult kui use-time-for-policy on märgitud."
-
-msgid "The time remaining when action is taken"
-msgstr "Aega jäänud, kui tuleb tegutseda"
-
-msgid "The time remaining when critical"
-msgstr "Aega jäänud, kui kriitiline"
-
-msgid "The time remaining when low"
-msgstr "Aega jäänud, kui madal"
-
-msgid "Use gnome-screensaver lock setting"
-msgstr "Kasutatakse gnome-screensaver'i lukustamise sätet"
-
-msgid ""
-"When sleep fails we can show the user a button to help fix the situation. "
-"Leave this blank if the button should not be shown."
-msgstr ""
-"Kui uinumine nurjub, võime kuvada kasutajale nuppu, et aidata olukorda "
-"lahendada. Jäta tühjaks, et nuppu ei näidataks."
-
-msgid "When to show the notification icon"
-msgstr "Millal teateikooni näidatakse"
-
-msgid ""
-"Whether the GNOME keyring is locked before the computer enters hibernate. "
-"This means the keyring will have to be unlocked on resume."
-msgstr ""
-"Kas GNOME võtmerõngas lukustatakse enne, kui arvuti läheb talveunne. See "
-"tähendab, et arvuti tuleb ärkamisel lukust lahti võtta."
-
-msgid ""
-"Whether the GNOME keyring is locked before the computer enters suspend. This "
-"means the keyring will have to be unlocked on resume."
-msgstr ""
-"Kas GNOME võtmerõngas lukustatakse enne, kui arvuti alustab uinakut. See "
-"tähendab, et arvuti tuleb ärkamisel lukust lahti võtta."
-
-msgid ""
-"Whether the screen is locked when the computer wakes up from a hibernate. "
-"Only used if lock-use-screensaver is false."
-msgstr ""
-"Kas ekraan lukustatakse pärast arvuti ärkamist talveunest. Kasutatakse "
-"ainult siis, kui lock-use-screensaver pole märgitud."
-
-msgid ""
-"Whether the screen is locked when the computer wakes up from a suspend. Only "
-"used if lock-use-screensaver is false."
-msgstr ""
-"Kas ekraan lukustatakse pärast arvuti ärkamist uinakust. Kasutatakse ainult "
-"siis, kui lock-use-screensaver pole märgitud."
-
-msgid ""
-"Whether the screen is locked when the screen is turned off. Only used if "
-"lock-use-screensaver is false."
-msgstr ""
-"Kas ekraan lukustatakse ekraani väljalülitamisel. Kasutatakse ainult siis, "
-"kui lock-use-screensaver pole märgitud."
-
-msgid ""
-"Whether to use the screen lock setting of gnome-screensaver to decide if the "
-"screen is locked after a hibernate, suspend or blank screen."
-msgstr ""
-"Kas kasutada gnome-screensaver'i ekraani lukustamise sätet otsustamaks, kas "
-"ekraan on pärast talveund, uinakut või ekraani tühjendamist lukus."
-
-msgid "Whether to use time-based notifications"
-msgstr "Kas kasutatakse ajal põhinevaid teateid"
-
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:11
 msgid "Whether we should show the history data points"
 msgstr "Kas peaks kuvama ajaloo andmepunkte"
 
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:12
 msgid ""
 "Whether we should show the history data points in the statistics window."
 msgstr "Kas statistikaaknas peaks kuvama ajaloo andmepunkte."
 
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:13
 msgid "Whether we should show the stats data points"
 msgstr "Kas peaks kuvama statistika andmepunkte"
 
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:14
 msgid "Whether we should show the stats data points in the statistics window."
 msgstr "Kas statistikaaknas peaks kuvama statistika andmepunkte."
 
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:15
 msgid "Whether we should smooth the history data"
 msgstr "Kas ajaloo andmeid peaks siluma"
 
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:16
 msgid "Whether we should smooth the history data in the graph."
 msgstr "Kas ajaloo andmete graafikut peaks siluma."
 
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:17
 msgid "Whether we should smooth the stats data"
 msgstr "Kas statistikaandmeid peaks siluma"
 
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:18
 msgid "Whether we should smooth the stats data in the graph."
 msgstr "Kas statistikaandmete graafikut peaks siluma."
 
+#: ../data/gnome-power-statistics.desktop.in.in.h:1
 msgid "Observe power management"
 msgstr "Vooluhalduse vaatlemine"
 
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
+#: ../data/gnome-power-statistics.desktop.in.in.h:2
+#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1406
+#: ../src/gpm-statistics.c:1860
 msgid "Power Statistics"
 msgstr "Voolustatistika"
 
-msgid "Brightness"
-msgstr "Heledus"
-
+#: ../data/gpm-statistics.ui.h:1
 msgid "0"
 msgstr "0"
 
+#: ../data/gpm-statistics.ui.h:2
 msgid "Data length:"
 msgstr "Andmete pikkus:"
 
+#: ../data/gpm-statistics.ui.h:3 ../src/gpm-statistics.c:509
 msgid "Details"
 msgstr "Üksikasjad"
 
+#: ../data/gpm-statistics.ui.h:4
 msgid "Graph type:"
 msgstr "Graafiku liik:"
 
+#: ../data/gpm-statistics.ui.h:5
 msgid "History"
 msgstr "Ajalugu"
 
+#: ../data/gpm-statistics.ui.h:7
 msgid "Processor wakeups per second:"
 msgstr "Protsessori ärkamisi sekundis:"
 
+#: ../data/gpm-statistics.ui.h:8
 msgid "Show data points"
 msgstr "Andmepunktid"
 
+#: ../data/gpm-statistics.ui.h:9
 msgid "Statistics"
 msgstr "Statistika"
 
+#: ../data/gpm-statistics.ui.h:10
 msgid "There is no data to display."
 msgstr "Pole andmeid, mida kuvada."
 
+#: ../data/gpm-statistics.ui.h:11
 msgid "Use smoothed line"
 msgstr "Sile joon"
 
+#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:495
 msgid "Wakeups"
 msgstr "Ärkamised"
 
-#. command line argument
-msgid "Set the current brightness"
-msgstr "Määra praegune heledustase"
-
-#. command line argument
-msgid "Get the current brightness"
-msgstr "Hangi praegune heledustase"
-
-#. command line argument
-msgid "Get the number of brightness levels supported"
-msgstr "Hangi toetatud heledustasemete arv"
-
-#. TRANSLATORS: tool that is used when copying profiles system-wide
-msgid "GNOME Power Manager Backlight Helper"
-msgstr "GNOME vooluhalduri taustavalguse abiline"
-
-#. TRANSLATORS: user did not specify valid options
-msgid "No valid option was specified"
-msgstr "Ühtegi sobivat valikut ei määratud"
-
-#. TRANSLATORS: no backlights found
-msgid "No backlights were found on your system"
-msgstr "Sinu arvutist ei leitud taustavalgustust"
-
-#. TRANSLATORS: failed to access backlight file
-msgid "Could not get the value of the backlight"
-msgstr "Taustavalgustuse taset ei suudetud hankida"
-
-#. TRANSLATORS: failed to access backlight file
-msgid "Could not get the maximum value of the backlight"
-msgstr "Taustavalgustuse maksimaalset astet ei suudetud hankida"
-
-#. TRANSLATORS: only able to install profiles as root
-msgid "This program can only be used by the root user"
-msgstr "Programmi saab kasutada ainult juurkasutajana"
-
-#. TRANSLATORS: the program must never be directly run
-msgid "This program must only be run through pkexec"
-msgstr "See programm tuleb käivitada pkexec-i kaudu"
-
-#. TRANSLATORS: failed to access backlight file
-msgid "Could not set the value of the backlight"
-msgstr "Taustavalgustuse taset pole võimalik määrata"
-
-msgid "Unknown time"
-msgstr "teadmata aeg"
-
-#, c-format
-msgid "%i minute"
-msgid_plural "%i minutes"
-msgstr[0] "%i minut"
-msgstr[1] "%i minutit"
-
-#, c-format
-msgid "%i hour"
-msgid_plural "%i hours"
-msgstr[0] "%i tund"
-msgstr[1] "%i tundi"
-
-#. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
-#. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#, c-format
-msgid "%i %s %i %s"
-msgstr "%i %s ja %i %s"
-
-msgid "hour"
-msgid_plural "hours"
-msgstr[0] "tund"
-msgstr[1] "tundi"
-
-msgid "minute"
-msgid_plural "minutes"
-msgstr[0] "minut"
-msgstr[1] "minutit"
-
-#. TRANSLATORS: turn on all debugging
-msgid "Show debugging information for all files"
-msgstr "Silumisteabe näitamine kõikide failide kohta"
-
-msgid "Debugging Options"
-msgstr "Silumisvalikud"
-
-msgid "Show debugging options"
-msgstr "Silumisvalikute näitamine"
-
 #. Translators: This is %i days
+#: ../src/gpm-graph-widget.c:430
 #, c-format
 msgid "%id"
 msgstr "%ip"
 
 #. Translators: This is %i days %02i hours
+#: ../src/gpm-graph-widget.c:433
 #, c-format
 msgid "%id%02ih"
 msgstr "%ip%ih"
 
 #. Translators: This is %i hours
+#: ../src/gpm-graph-widget.c:438
 #, c-format
 msgid "%ih"
 msgstr "%ih"
 
 #. Translators: This is %i hours %02i minutes
+#: ../src/gpm-graph-widget.c:441
 #, c-format
 msgid "%ih%02im"
 msgstr "%it%02im"
 
 #. Translators: This is %2i minutes
+#: ../src/gpm-graph-widget.c:446
 #, c-format
 msgid "%2im"
 msgstr "%2im"
 
 #. Translators: This is %2i minutes %02i seconds
+#: ../src/gpm-graph-widget.c:449
 #, c-format
 msgid "%2im%02i"
 msgstr "%2im%02is"
 
 #. Translators: This is %2i seconds
+#: ../src/gpm-graph-widget.c:453
 #, c-format
 msgid "%2is"
 msgstr "%2is"
 
 #. Translators: This is %i Percentage
+#: ../src/gpm-graph-widget.c:457
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. Translators: This is %.1f Watts
+#: ../src/gpm-graph-widget.c:460
 #, c-format
 msgid "%.1fW"
 msgstr "%.1fW"
 
 #. Translators: This is %.1f Volts
+#: ../src/gpm-graph-widget.c:465
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fV"
 
-msgid "Show version of installed program and exit"
-msgstr "Paigaldatud programmi versiooni näitamine ja töö lõpetamine"
-
-msgid "Exit after a small delay (for debugging)"
-msgstr "Lõpetamine pärast väikest viivitust (silumiseks)"
-
-msgid "Exit after the manager has loaded (for debugging)"
-msgstr "Lõpetamine pärast halduri laadimist (silumiseks)"
-
-msgid "GNOME Power Manager"
-msgstr "GNOME vooluhaldur"
-
-#. TRANSLATORS: this is the sound description
-msgid "Battery is very low"
-msgstr "Aku täituvus on kriitilisel tasemel"
-
-#. TRANSLATORS: this is the sound description
-msgid "Power plugged in"
-msgstr "Vooluvõrku ühendamine"
-
-#. TRANSLATORS: this is the sound description
-msgid "Power unplugged"
-msgstr "Vooluvõrgust lahutamine"
-
-#. TRANSLATORS: this is the sound description
-msgid "Lid has opened"
-msgstr "Kaane avamine"
-
-#. TRANSLATORS: this is the sound description
-msgid "Lid has closed"
-msgstr "Kaane sulgemine"
-
-#. TRANSLATORS: this is the sound description
-msgid "Battery is low"
-msgstr "Aku on tühjenemas"
-
-#. TRANSLATORS: this is the sound description
-msgid "Battery is full"
-msgstr "Aku on täis"
-
-#. TRANSLATORS: this is the sound description
-msgid "Suspend started"
-msgstr "Uinaku alustamine"
-
-#. TRANSLATORS: this is the sound description
-msgid "Resumed"
-msgstr "Naasemine"
-
-#. TRANSLATORS: this is the sound description
-msgid "Suspend failed"
-msgstr "Uinaku nurjumine"
-
-#. TRANSLATORS: message text
-msgid "Computer failed to suspend."
-msgstr "Arvutil pole võimalik uinuda."
-
-#. TRANSLATORS: title text
-msgid "Failed to suspend"
-msgstr "Tõrge uinumisel"
-
-#. TRANSLATORS: message text
-msgid "Computer failed to hibernate."
-msgstr "Arvutil pole võimalik talveunne jääda."
-
-#. TRANSLATORS: title text
-msgid "Failed to hibernate"
-msgstr "Tõrge talveunne jäämisel"
-
-#. TRANSLATORS: message text
-msgid "Failure was reported as:"
-msgstr "Tõrke kohta tuli järgmine raport:"
-
-#. TRANSLATORS: button text, visit the suspend help website
-msgid "Visit help page"
-msgstr "Külasta kodulehte"
-
-#. TRANSLATORS: this is the gnome-screensaver throttle
-msgid "Display DPMS activated"
-msgstr "Kuva DPMS-vooluhaldus on aktiveeritud"
-
-#. TRANSLATORS: this is the gnome-screensaver throttle
-msgid "On battery power"
-msgstr "Akutoitel"
-
-msgid "Laptop lid is closed"
-msgstr "Sülearvuti kaas on suletud"
-
-msgid "Power Information"
-msgstr "Vooluga seotud sündmuste andmed"
-
-#. TRANSLATORS: the battery may be recalled by it's vendor
-msgid "Battery may be recalled"
-msgstr "Aku võib olla ümbervahetamiseks tagasi kutsutud"
-
-#, c-format
-msgid ""
-"A battery in your computer may have been recalled by %s and you may be at "
-"risk.\n"
-"\n"
-"For more information visit the battery recall website."
-msgstr ""
-"Sinu arvutis olev aku võib olla ohtlik ning %s palub selle tagastamist.\n"
-"\n"
-"Täpsemat infot leiab aku tagasikutse veebilehelt."
-
-#. TRANSLATORS: button text, visit the manufacturers recall website
-msgid "Visit recall website"
-msgstr "Külasta aku tagasikutse veebilehte"
-
-#. TRANSLATORS: button text, do not show this bubble again
-msgid "Do not show me this again"
-msgstr "Seda rohkem ei näidata"
-
-#. We should notify the user if the battery has a low capacity,
-#. * where capacity is the ratio of the last_full capacity with that of
-#. * the design capacity. (#326740)
-#. TRANSLATORS: battery is old or broken
-msgid "Battery may be broken"
-msgstr "Aku võib katki olla"
-
-#. TRANSLATORS: notify the user that that battery is broken as the capacity is very low
-#, c-format
-msgid ""
-"Battery has a very low capacity (%1.1f%%), which means that it may be old or "
-"broken."
-msgstr ""
-"Arvuti aku mahtuvus on väga väike (%1.1f%%) ja see tähendab, et aku võib "
-"olla kas vana või vigane."
-
-#. TRANSLATORS: show the charged notification
-msgid "Battery Charged"
-msgid_plural "Batteries Charged"
-msgstr[0] "Aku on täis laetud"
-msgstr[1] "Akud on täis laetud"
-
-#. TRANSLATORS: laptop battery is now discharging
-msgid "Battery Discharging"
-msgstr "Aku tühjenemine"
-
-#. TRANSLATORS: tell the user how much time they have got
-#, c-format
-msgid "%s of battery power remaining (%.0f%%)"
-msgstr "Aku suudab toita veel %s (%.0f%%)"
-
-#. TRANSLATORS: UPS is now discharging
-msgid "UPS Discharging"
-msgstr "UPS-i tühjenemine"
-
-#. TRANSLATORS: tell the user how much time they have got
-#, c-format
-msgid "%s of UPS backup power remaining (%.0f%%)"
-msgstr "UPS suudab toita veel %s (%.0f%%)"
-
-#. TRANSLATORS: laptop battery low, and we only have one battery
-msgid "Battery low"
-msgstr "Aku on tühjenemas"
-
-#. TRANSLATORS: laptop battery low, and we have more than one kind of battery
-msgid "Laptop battery low"
-msgstr "Sülearvuti aku on peaaegu tühi"
-
-#. TRANSLATORS: tell the user how much time they have got
-#, c-format
-msgid "Approximately <b>%s</b> remaining (%.0f%%)"
-msgstr "Ligikaudu <b>%s</b> jäänud (%.0f%%)"
-
-#. TRANSLATORS: UPS is starting to get a little low
-msgid "UPS low"
-msgstr "UPS-i aku on peaaegu tühi"
-
-#. TRANSLATORS: tell the user how much time they have got
-#, c-format
-msgid "Approximately <b>%s</b> of remaining UPS backup power (%.0f%%)"
-msgstr "UPS suudab arvutit toita veel ligikaudu <b>%s</b> (%.0f%%)"
-
-#. TRANSLATORS: mouse is getting a little low
-#. TRANSLATORS: the mouse battery is very low
-msgid "Mouse battery low"
-msgstr "Hiire patarei on peaaegu tühi"
-
-#. TRANSLATORS: tell user more details
-#, c-format
-msgid "Wireless mouse is low in power (%.0f%%)"
-msgstr "Juhtmeta hiire aku on peaaegu tühi (%.0f%%)"
-
-#. TRANSLATORS: keyboard is getting a little low
-#. TRANSLATORS: the keyboard battery is very low
-msgid "Keyboard battery low"
-msgstr "Klaviatuuri patarei on peaaegu tühi"
-
-#. TRANSLATORS: tell user more details
-#, c-format
-msgid "Wireless keyboard is low in power (%.0f%%)"
-msgstr "Juhtmeta klaviatuuri aku on peaaegu tühi (%.0f%%)"
-
-#. TRANSLATORS: PDA is getting a little low
-#. TRANSLATORS: the PDA battery is very low
-msgid "PDA battery low"
-msgstr "PDA patarei (või aku) on peaaegu tühi"
-
-#. TRANSLATORS: tell user more details
-#, c-format
-msgid "PDA is low in power (%.0f%%)"
-msgstr "Pihuarvuti aku on peaaegu tühi (%.0f%%)"
-
-#. TRANSLATORS: cell phone (mobile) is getting a little low
-#. TRANSLATORS: the cell battery is very low
-msgid "Cell phone battery low"
-msgstr "Mobiiltelefoni aku on kriitiliselt tühi"
-
-#. TRANSLATORS: tell user more details
-#, c-format
-msgid "Cell phone is low in power (%.0f%%)"
-msgstr "Mobiiltelefoni aku on peaaegu tühi (%.0f%%)"
-
-#. TRANSLATORS: media player, e.g. mp3 is getting a little low
-msgid "Media player battery low"
-msgstr "Meediaesitaja aku on tühi"
-
-#. TRANSLATORS: tell user more details
-#, c-format
-msgid "Media player is low in power (%.0f%%)"
-msgstr "Meediaesitaja aku on tühi (%.0f%%)"
-
-#. TRANSLATORS: graphics tablet, e.g. wacom is getting a little low
-#. TRANSLATORS: the cell battery is very low
-msgid "Tablet battery low"
-msgstr "Graafikalaua aku on tühi"
-
-#. TRANSLATORS: tell user more details
-#, c-format
-msgid "Tablet is low in power (%.0f%%)"
-msgstr "Graafikalaua aku on tühi (%.0f%%)"
-
-#. TRANSLATORS: computer, e.g. ipad is getting a little low
-#. TRANSLATORS: the cell battery is very low
-msgid "Attached computer battery low"
-msgstr "Ühendatud arvuti aku on peaaegu tühi"
-
-#. TRANSLATORS: tell user more details
-#, c-format
-msgid "Attached computer is low in power (%.0f%%)"
-msgstr "Ühendatud arvuti aku on peaaegu tühi (%.0f%%)"
-
-#. TRANSLATORS: laptop battery critically low, and only have one kind of battery
-msgid "Battery critically low"
-msgstr "Aku on kriitiliselt tühi"
-
-#. TRANSLATORS: laptop battery critically low, and we have more than one type of battery
-#. TRANSLATORS: laptop battery is really, really, low
-msgid "Laptop battery critically low"
-msgstr "Sülearvuti aku on kriitiliselt tühi"
-
-#. TRANSLATORS: tell the use to insert the plug, as we're not going to do anything
-msgid "Plug in your AC adapter to avoid losing data."
-msgstr "Andmete kaotsimineku vältimiseks ühenda arvuti vooluvõrku."
-
-#. TRANSLATORS: give the user a ultimatum
-#, c-format
-msgid "Computer will suspend very soon unless it is plugged in."
-msgstr "Kui arvutit vooluvõrku ei ühendata, siis uinub ta peagi."
-
-#. TRANSLATORS: give the user a ultimatum
-#, c-format
-msgid "Computer will hibernate very soon unless it is plugged in."
-msgstr "Kui arvutit vooluvõrku ei ühendata, siis jääb ta peagi talveunne."
-
-#. TRANSLATORS: give the user a ultimatum
-#, c-format
-msgid "Computer will shutdown very soon unless it is plugged in."
-msgstr ""
-"Kui arvutit vooluvõrku ei ühendata, siis lülitab ta ennast peagi välja."
-
-#. TRANSLATORS: the UPS is very low
-#. TRANSLATORS: UPS is really, really, low
-msgid "UPS critically low"
-msgstr "UPS on kriitiliselt tühi"
-
-#. TRANSLATORS: give the user a ultimatum
-#, c-format
-msgid ""
-"Approximately <b>%s</b> of remaining UPS power (%.0f%%). Restore AC power to "
-"your computer to avoid losing data."
-msgstr ""
-"UPS suudab arvutit toita veel ligikaudu <b>%s</b> (%.0f%%). Andmete "
-"kaotsimineku vältimiseks taasta võrgutoide."
-
-#. TRANSLATORS: the device is just going to stop working
-#, c-format
-msgid ""
-"Wireless mouse is very low in power (%.0f%%). This device will soon stop "
-"functioning if not charged."
-msgstr ""
-"Juhtmeta hiire aku on peaaegu tühi (%.0f%%). Seade lülitub varsti välja, kui "
-"seda ei laeta."
-
-#. TRANSLATORS: the device is just going to stop working
-#, c-format
-msgid ""
-"Wireless keyboard is very low in power (%.0f%%). This device will soon stop "
-"functioning if not charged."
-msgstr ""
-"Juhtmeta klaviatuuri aku on peaaegu tühi (%.0f%%). Seade lülitub varsti "
-"välja, kui seda ei laeta."
-
-#. TRANSLATORS: the device is just going to stop working
-#, c-format
-msgid ""
-"PDA is very low in power (%.0f%%). This device will soon stop functioning if "
-"not charged."
-msgstr ""
-"PDA aku on peaaegu tühi (%.0f%%). Seade lülitub varsti välja, kui seda ei "
-"laeta."
-
-#. TRANSLATORS: the device is just going to stop working
-#, c-format
-msgid ""
-"Cell phone is very low in power (%.0f%%). This device will soon stop "
-"functioning if not charged."
-msgstr ""
-"Mobiiltelefoni aku on peaaegu tühi (%.0f%%). Seade lülitub varsti välja, kui "
-"seda ei laeta."
-
-#. TRANSLATORS: the device is just going to stop working
-#, c-format
-msgid ""
-"Media player is very low in power (%.0f%%). This device will soon stop "
-"functioning if not charged."
-msgstr ""
-"Meediaesitaja aku on peaaegu tühi (%.0f%%). Seade lülitub varsti välja, kui "
-"seda ei laeta."
-
-#. TRANSLATORS: the device is just going to stop working
-#, c-format
-msgid ""
-"Tablet is very low in power (%.0f%%). This device will soon stop functioning "
-"if not charged."
-msgstr ""
-"Graafikalaua aku on peaaegu tühi (%.0f%%). Seade lülitub varsti välja, kui "
-"seda ei laeta."
-
-#. TRANSLATORS: the device is just going to stop working
-#, c-format
-msgid ""
-"Attached computer is very low in power (%.0f%%). The device will soon "
-"shutdown if not charged."
-msgstr ""
-"Ühendatud arvuti aku on peaaegu tühi (%.0f%%). Seade lülitub varsti välja, "
-"kui seda ei laeta."
-
-#. TRANSLATORS: computer will shutdown without saving data
-msgid ""
-"The battery is below the critical level and this computer will <b>power-off</"
-"b> when the battery becomes completely empty."
-msgstr ""
-"Aku täituvus on alla kriitilise piiri, see arvuti <b>lülitub välja</b> kui "
-"aku päris tühjaks saab."
-
-#. TRANSLATORS: computer will suspend
-msgid ""
-"The battery is below the critical level and this computer is about to "
-"suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
-"computer in a suspended state."
-msgstr ""
-"Aku täituvus on alla kriitilise piiri ning see arvuti uinub. <br/><b>Märkus:"
-"</b> ka uinaku ajal tarvitab arvuti natukene voolu."
-
-#. TRANSLATORS: computer will hibernate
-msgid ""
-"The battery is below the critical level and this computer is about to "
-"hibernate."
-msgstr "Aku täituvus on alla kriitilise piiri ning see arvuti läheb talveunne."
-
-#. TRANSLATORS: computer will just shutdown
-msgid ""
-"The battery is below the critical level and this computer is about to "
-"shutdown."
-msgstr "Aku täituvus on alla kriitilise piiri ja seetõttu arvuti seisatakse."
-
-#. TRANSLATORS: computer will shutdown without saving data
-msgid ""
-"UPS is below the critical level and this computer will <b>power-off</b> when "
-"the UPS becomes completely empty."
-msgstr ""
-"UPS-i täituvus on alla kriitilise piiri, UPS-i täielikul tühjenemisel "
-"<b>lülitub arvuti välja</b>."
-
-#. TRANSLATORS: computer will hibernate
-msgid ""
-"UPS is below the critical level and this computer is about to hibernate."
-msgstr ""
-"UPS-i täituvus on alla kriitilise piiri ja seetõttu läheb arvuti talveunne."
-
-#. TRANSLATORS: computer will just shutdown
-msgid "UPS is below the critical level and this computer is about to shutdown."
-msgstr ""
-"UPS-i täituvus on alla kriitilise piiri ja seetõttu arvuti lülitatakse välja."
-
 #. TRANSLATORS: the rate of discharge for the device
+#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:767
 msgid "Rate"
 msgstr "Kiirus"
 
+#: ../src/gpm-statistics.c:81
 msgid "Charge"
 msgstr "Laadimine"
 
+#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:781
 msgid "Time to full"
 msgstr "Aega täitumiseni"
 
+#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:786
 msgid "Time to empty"
 msgstr "Aega tühjenemiseni"
 
+#: ../src/gpm-statistics.c:90
 msgid "10 minutes"
 msgstr "10 minutit"
 
+#: ../src/gpm-statistics.c:91
 msgid "2 hours"
 msgstr "2 tundi"
 
+#: ../src/gpm-statistics.c:92
 msgid "6 hours"
 msgstr "6 tundi"
 
+#: ../src/gpm-statistics.c:93
 msgid "1 day"
 msgstr "1 päev"
 
+#: ../src/gpm-statistics.c:94
 msgid "1 week"
 msgstr "1 nädal"
 
 #. TRANSLATORS: what we've observed about the device
+#: ../src/gpm-statistics.c:103
 msgid "Charge profile"
 msgstr "Laadimise profiil"
 
+#: ../src/gpm-statistics.c:104
 msgid "Discharge profile"
 msgstr "Tühjenemise profiil"
 
 #. TRANSLATORS: how accurately we can predict the time remaining of the battery
+#: ../src/gpm-statistics.c:106
 msgid "Charge accuracy"
 msgstr "Laadimisaja täpsus"
 
+#: ../src/gpm-statistics.c:107
 msgid "Discharge accuracy"
 msgstr "Tühjenemisaja täpsus"
 
+#. TRANSLATORS: system power cord
+#: ../src/gpm-statistics.c:288
+msgid "AC adapter"
+msgid_plural "AC adapters"
+msgstr[0] "Vooluadapter"
+msgstr[1] "Vooluadapterid"
+
+#. TRANSLATORS: laptop primary battery
+#: ../src/gpm-statistics.c:292
+msgid "Laptop battery"
+msgid_plural "Laptop batteries"
+msgstr[0] "Sülearvuti aku"
+msgstr[1] "Sülearvuti akud"
+
+#. TRANSLATORS: battery-backed AC power source
+#: ../src/gpm-statistics.c:296
+msgid "UPS"
+msgid_plural "UPSs"
+msgstr[0] "UPS"
+msgstr[1] "UPS-id"
+
+#. TRANSLATORS: a monitor is a device to measure voltage and current
+#: ../src/gpm-statistics.c:300
+msgid "Monitor"
+msgid_plural "Monitors"
+msgstr[0] "Monitor"
+msgstr[1] "Monitorid"
+
+#. TRANSLATORS: wireless mice with internal batteries
+#: ../src/gpm-statistics.c:304
+msgid "Mouse"
+msgid_plural "Mice"
+msgstr[0] "Hiir"
+msgstr[1] "Hiired"
+
+#. TRANSLATORS: wireless keyboard with internal battery
+#: ../src/gpm-statistics.c:308
+msgid "Keyboard"
+msgid_plural "Keyboards"
+msgstr[0] "Klaviatuur"
+msgstr[1] "Klaviatuurid"
+
+#. TRANSLATORS: portable device
+#: ../src/gpm-statistics.c:312
+msgid "PDA"
+msgid_plural "PDAs"
+msgstr[0] "PDA"
+msgstr[1] "PDA-d"
+
+#. TRANSLATORS: cell phone (mobile...)
+#: ../src/gpm-statistics.c:316
+msgid "Cell phone"
+msgid_plural "Cell phones"
+msgstr[0] "Mobiiltelefon"
+msgstr[1] "Mobiiltelefonid"
+
+#. TRANSLATORS: media player, mp3 etc
+#: ../src/gpm-statistics.c:321
+msgid "Media player"
+msgid_plural "Media players"
+msgstr[0] "Meediaesitaja"
+msgstr[1] "Meediaesitajad"
+
+#. TRANSLATORS: tablet device
+#: ../src/gpm-statistics.c:325
+msgid "Tablet"
+msgid_plural "Tablets"
+msgstr[0] "Graafikalaud"
+msgstr[1] "Graafikalauad"
+
+#. TRANSLATORS: tablet device
+#: ../src/gpm-statistics.c:329
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Arvuti"
+msgstr[1] "Arvutid"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:349
+msgid "Lithium Ion"
+msgstr "Liitium-ioon"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:353
+msgid "Lithium Polymer"
+msgstr "Liitiumpolümeer"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:357
+msgid "Lithium Iron Phosphate"
+msgstr "Liitium-raudfosfaat (LiFePO4)"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:361
+msgid "Lead acid"
+msgstr "Pliiaku"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:365
+msgid "Nickel Cadmium"
+msgstr "Nikkel-kaadmium (Ni-Cd)"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:369
+msgid "Nickel metal hydride"
+msgstr "Nikkel-metallhüdriid (NiMH)"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:373
+msgid "Unknown technology"
+msgstr "Tundmatu tehnoloogia"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:393
+msgid "Charging"
+msgstr "Laadimine"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:397
+msgid "Discharging"
+msgstr "Tühjenemine"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:401
+msgid "Empty"
+msgstr "Tühi"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:405
+msgid "Charged"
+msgstr "Laetud"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:409
+msgid "Waiting to charge"
+msgstr "Laadimise ootel"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:413
+msgid "Waiting to discharge"
+msgstr "Tühjenemise ootel"
+
+#: ../src/gpm-statistics.c:433
 msgid "Attribute"
 msgstr "Nimetus"
 
+#: ../src/gpm-statistics.c:440
 msgid "Value"
 msgstr "Väärtus"
 
+#: ../src/gpm-statistics.c:457
 msgid "Image"
 msgstr "Pilt"
 
+#: ../src/gpm-statistics.c:463
 msgid "Description"
 msgstr "Kirjeldus"
 
+#: ../src/gpm-statistics.c:482 ../src/gpm-statistics.c:706
 msgid "Type"
 msgstr "Liik"
 
+#: ../src/gpm-statistics.c:488
 msgid "ID"
 msgstr "ID"
 
+#: ../src/gpm-statistics.c:502
 msgid "Command"
 msgstr "Käsk"
 
 #. TRANSLATORS: this is when the stats time is not known
+#: ../src/gpm-statistics.c:587
 msgid "Unknown"
 msgstr "Teadmata"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
+#: ../src/gpm-statistics.c:591
 #, c-format
 msgid "%.0f second"
 msgid_plural "%.0f seconds"
@@ -1072,6 +458,7 @@ msgstr[0] "%.0f sekund"
 msgstr[1] "%.0f sekundit"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
+#: ../src/gpm-statistics.c:596
 #, c-format
 msgid "%.1f minute"
 msgid_plural "%.1f minutes"
@@ -1079,6 +466,7 @@ msgstr[0] "%.1f minut"
 msgstr[1] "%.1f minutit"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
+#: ../src/gpm-statistics.c:601
 #, c-format
 msgid "%.1f hour"
 msgid_plural "%.1f hours"
@@ -1086,37 +474,46 @@ msgstr[0] "%.1f tund"
 msgstr[1] "%.1f tundi"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
+#: ../src/gpm-statistics.c:605
 #, c-format
 msgid "%.1f day"
 msgid_plural "%.1f days"
 msgstr[0] "%.1f päev"
 msgstr[1] "%.1f päeva"
 
+#: ../src/gpm-statistics.c:614
 msgid "Yes"
 msgstr "Jah"
 
+#: ../src/gpm-statistics.c:614
 msgid "No"
 msgstr "Ei"
 
 #. TRANSLATORS: the device ID of the current device, e.g. "battery0"
+#: ../src/gpm-statistics.c:703
 msgid "Device"
 msgstr "Seade"
 
+#: ../src/gpm-statistics.c:708
 msgid "Vendor"
 msgstr "Tootja"
 
+#: ../src/gpm-statistics.c:710
 msgid "Model"
 msgstr "Mudel"
 
+#: ../src/gpm-statistics.c:712
 msgid "Serial number"
 msgstr "Seerianumber"
 
 #. TRANSLATORS: a boolean attribute that means if the device is supplying the
 #. * main power for the computer. For instance, an AC adapter or laptop battery
 #. * would be TRUE,  but a mobile phone or mouse taking power is FALSE
+#: ../src/gpm-statistics.c:717
 msgid "Supply"
 msgstr "Toide"
 
+#: ../src/gpm-statistics.c:720
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
@@ -1126,673 +523,250 @@ msgstr[1] "%d sekundit"
 # Nimetus: "Andmete vanus" Väärtus: "102 sekundit"
 #. TRANSLATORS: when the device was last updated with new data. It's
 #. * usually a few seconds when a device is discharging or charging.
+#: ../src/gpm-statistics.c:724
 msgid "Refreshed"
 msgstr "Andmete vanus"
 
 #. TRANSLATORS: Present is whether the device is currently attached
 #. * to the computer, as some devices (e.g. laptop batteries) can
 #. * be removed, but still observed as devices on the system
+#: ../src/gpm-statistics.c:734
 msgid "Present"
 msgstr "Olemas"
 
 #. TRANSLATORS: If the device can be recharged, e.g. lithium
 #. * batteries rather than alkaline ones
+#: ../src/gpm-statistics.c:741
 msgid "Rechargeable"
 msgstr "Laaditav"
 
 #. TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged"
+#: ../src/gpm-statistics.c:747
 msgid "State"
 msgstr "Olek"
 
+#: ../src/gpm-statistics.c:751
 msgid "Energy"
 msgstr "Täituvus"
 
+#: ../src/gpm-statistics.c:754
 msgid "Energy when empty"
 msgstr "Tühitäituvus"
 
+#: ../src/gpm-statistics.c:757
 msgid "Energy when full"
 msgstr "Täistäituvus"
 
+#: ../src/gpm-statistics.c:760
 msgid "Energy (design)"
 msgstr "Tehasetäituvus"
 
+#: ../src/gpm-statistics.c:774
 msgid "Voltage"
 msgstr "Pinge"
 
 #. TRANSLATORS: the amount of charge the cell contains
+#: ../src/gpm-statistics.c:796
 msgid "Percentage"
 msgstr "Protsent"
 
 #. TRANSLATORS: the capacity of the device, which is basically a measure
 #. * of how full it can get, relative to the design capacity
+#: ../src/gpm-statistics.c:803
 msgid "Capacity"
 msgstr "Mahtuvus"
 
 #. TRANSLATORS: the type of battery, e.g. lithium or nikel metal hydroxide
+#: ../src/gpm-statistics.c:808
 msgid "Technology"
 msgstr "Tehnoloogia"
 
 #. TRANSLATORS: this is when the device is plugged in, typically
 #. * only shown for the ac adaptor device
+#: ../src/gpm-statistics.c:813
 msgid "Online"
 msgstr "Ühendatud"
 
 #. TRANSLATORS: the command line was not provided
+#: ../src/gpm-statistics.c:1140
 msgid "No data"
 msgstr "Andmed puuduvad"
 
 #. TRANSLATORS: kernel module, usually a device driver
+#: ../src/gpm-statistics.c:1147 ../src/gpm-statistics.c:1152
 msgid "Kernel module"
 msgstr "Kerneli moodul"
 
 #. TRANSLATORS: kernel housekeeping
+#: ../src/gpm-statistics.c:1157
 msgid "Kernel core"
 msgstr "Kerneli tuum"
 
 #. TRANSLATORS: interrupt between processors
+#: ../src/gpm-statistics.c:1162
 msgid "Interprocessor interrupt"
 msgstr "Protsessoritevaheline katkestus"
 
 #. TRANSLATORS: unknown interrupt
+#: ../src/gpm-statistics.c:1167
 msgid "Interrupt"
 msgstr "Katkestus"
 
 #. TRANSLATORS: the keyboard and mouse device event
+#: ../src/gpm-statistics.c:1214
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "PS/2 klaviatuur/hiir/puuteplaat"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
+#: ../src/gpm-statistics.c:1217
 msgid "ACPI"
 msgstr "ACPI"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
+#: ../src/gpm-statistics.c:1220
 msgid "Serial ATA"
 msgstr "Serial ATA"
 
 #. TRANSLATORS: this is the old-style ATA interface
+#: ../src/gpm-statistics.c:1223
 msgid "ATA host controller"
 msgstr "ATA kontroller"
 
 #. TRANSLATORS: 802.11 wireless adaptor
+#: ../src/gpm-statistics.c:1226
 msgid "Intel wireless adaptor"
 msgstr "Intel'i wifiadapter"
 
 #. TRANSLATORS: a timer is something that fires periodically.
 #. * The parameter is a process name, e.g. "firefox-bin".
 #. * This is shown when the timer wakes up.
+#: ../src/gpm-statistics.c:1233 ../src/gpm-statistics.c:1238
+#: ../src/gpm-statistics.c:1243 ../src/gpm-statistics.c:1248
+#: ../src/gpm-statistics.c:1253
 #, c-format
 msgid "Timer %s"
 msgstr "Taimer %s"
 
 #. TRANSLATORS: the parameter is the name of task that's woken up from sleeping.
 #. * This is shown when the task wakes up.
+#: ../src/gpm-statistics.c:1257
 #, c-format
 msgid "Sleep %s"
 msgstr "Uinak %s"
 
 #. TRANSLATORS: this is the name of a new realtime task.
+#: ../src/gpm-statistics.c:1260
 #, c-format
 msgid "New task %s"
 msgstr "Uus ülesanne %s"
 
 #. TRANSLATORS: this is the name of a task that's woken to check state.
 #. * This is shown when the task wakes up.
+#: ../src/gpm-statistics.c:1264
 #, c-format
 msgid "Wait %s"
 msgstr "Ootamine %s"
 
 #. TRANSLATORS: this is the name of a work queue.
 #. * A work queue is a list of work that has to be done.
+#: ../src/gpm-statistics.c:1268 ../src/gpm-statistics.c:1272
 #, c-format
 msgid "Work queue %s"
 msgstr "Töö ootejärjekord %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
+#: ../src/gpm-statistics.c:1275
 #, c-format
 msgid "Network route flush %s"
 msgstr "Võrgupuhvri tühjendamine %s"
 
 #. TRANSLATORS: this is the name of an activity on the USB bus
+#: ../src/gpm-statistics.c:1278
 #, c-format
 msgid "USB activity %s"
 msgstr "USB aktiivsus %s"
 
 #. TRANSLATORS: we've timed out of an aligned timer, with the name
+#: ../src/gpm-statistics.c:1281
 #, c-format
 msgid "Wakeup %s"
 msgstr "Äratus %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
+#: ../src/gpm-statistics.c:1284
 msgid "Local interrupts"
 msgstr "Kohalikud katkestused"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
+#: ../src/gpm-statistics.c:1287
 msgid "Rescheduling interrupts"
 msgstr "Ümberjaotuse katkestus"
 
 #. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:1396
 msgid "Device Information"
 msgstr "Seadme andmed"
 
 #. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:1398
 msgid "Device History"
 msgstr "Seadme ajalugu"
 
 #. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:1400
 msgid "Device Profile"
 msgstr "Seadme profiil"
 
 #. TRANSLATORS: shown on the titlebar
+#: ../src/gpm-statistics.c:1402
 msgid "Processor Wakeups"
 msgstr "Protsessori ärkamised"
 
 #. TRANSLATORS: this is the X axis on the graph
+#: ../src/gpm-statistics.c:1598 ../src/gpm-statistics.c:1604
+#: ../src/gpm-statistics.c:1610 ../src/gpm-statistics.c:1616
 msgid "Time elapsed"
 msgstr "Kulunud aeg"
 
 #. TRANSLATORS: this is the Y axis on the graph
+#: ../src/gpm-statistics.c:1600
 msgid "Power"
 msgstr "Toide"
 
 #. TRANSLATORS: this is the Y axis on the graph for the whole battery device
 #. TRANSLATORS: this is the X axis on the graph for the whole battery device
+#: ../src/gpm-statistics.c:1606 ../src/gpm-statistics.c:1649
+#: ../src/gpm-statistics.c:1655 ../src/gpm-statistics.c:1661
+#: ../src/gpm-statistics.c:1667
 msgid "Cell charge"
 msgstr "Aku laetus"
 
 #. TRANSLATORS: this is the Y axis on the graph
+#: ../src/gpm-statistics.c:1612 ../src/gpm-statistics.c:1618
 msgid "Predicted time"
 msgstr "Ennustatav aeg"
 
 #. TRANSLATORS: this is the Y axis on the graph
+#: ../src/gpm-statistics.c:1651 ../src/gpm-statistics.c:1663
 msgid "Correction factor"
 msgstr "Parandustegur"
 
 #. TRANSLATORS: this is the Y axis on the graph
+#: ../src/gpm-statistics.c:1657 ../src/gpm-statistics.c:1669
 msgid "Prediction accuracy"
 msgstr "Ennustuse täpsus"
 
 #. TRANSLATORS: show verbose debugging
+#: ../src/gpm-statistics.c:1848
 msgid "Show extra debugging information"
 msgstr "Silumisteabe näitamine"
 
 #. TRANSLATORS: show a device by default
+#: ../src/gpm-statistics.c:1851
 msgid "Select this device at startup"
 msgstr "Vali see seade käivitumisel"
 
 #. TRANSLATORS: the icon for the CPU
+#: ../src/gpm-statistics.c:2111
 msgid "Processor"
 msgstr "Protsessor"
-
-#. TRANSLATORS: % is a timestring, e.g. "6 hours 10 minutes"
-#, c-format
-msgid "%s remaining"
-msgstr "%s jäänud"
-
-#. preferences
-msgid "_Preferences"
-msgstr "_Eelistused"
-
-#. TRANSLATORS: The laptop battery is charged, and we know a time.
-#. * The parameter is the time, e.g. 7 hours 6 minutes
-#, c-format
-msgid "provides %s laptop runtime"
-msgstr "see tagab sülearvuti tööajaks %s"
-
-#. TRANSLATORS: the device is discharging, and we have a time remaining
-#. * The first parameter is the device type, e.g. "Laptop battery" and
-#. * the second is the time, e.g. 7 hours 6 minutes
-#, c-format
-msgid "%s %s remaining"
-msgstr "%s %s jäänud"
-
-#. TRANSLATORS: device is charging, and we have a time to full and a percentage
-#. * The first parameter is the device type, e.g. "Laptop battery" and
-#. * the second is the time, e.g. "7 hours 6 minutes"
-#. TRANSLATORS: device is charging, and we have a time to full and a percentage.
-#. * The first parameter is the device type, e.g. "Laptop battery" and
-#. * the second is the time, e.g. "7 hours 6 minutes"
-#, c-format
-msgid "%s %s until charged"
-msgstr "%s %s täitumiseni"
-
-#. TRANSLATORS: the device is charging, and we have a time to full and empty.
-#. * The parameter is a time string, e.g. "7 hours 6 minutes"
-#, c-format
-msgid "provides %s battery runtime"
-msgstr "aku suudab nüüd toita %s"
-
-#. TRANSLATORS: the type of data, e.g. Laptop battery
-msgid "Product:"
-msgstr "Toode:"
-
-#. TRANSLATORS: device is missing
-#. TRANSLATORS: device is charged
-#. TRANSLATORS: device is charging
-#. TRANSLATORS: device is discharging
-msgid "Status:"
-msgstr "Olek:"
-
-msgid "Missing"
-msgstr "Puudub"
-
-#. TRANSLATORS: battery state
-msgid "Charged"
-msgstr "Laetud"
-
-#. TRANSLATORS: battery state
-msgid "Charging"
-msgstr "Laadimine"
-
-#. TRANSLATORS: battery state
-msgid "Discharging"
-msgstr "Tühjenemine"
-
-#. TRANSLATORS: percentage
-msgid "Percentage charge:"
-msgstr "Laetuse protsent:"
-
-#. TRANSLATORS: manufacturer
-msgid "Vendor:"
-msgstr "Tootja:"
-
-#. TRANSLATORS: how the battery is made, e.g. Lithium Ion
-msgid "Technology:"
-msgstr "Tehnoloogia:"
-
-#. TRANSLATORS: serial number of the battery
-msgid "Serial number:"
-msgstr "Seerianumber:"
-
-#. TRANSLATORS: model number of the battery
-msgid "Model:"
-msgstr "Mudel:"
-
-#. TRANSLATORS: time to fully charged
-msgid "Charge time:"
-msgstr "Laadimise profiil:"
-
-#. TRANSLATORS: time to empty
-msgid "Discharge time:"
-msgstr "Tühjenemise profiil:"
-
-#. TRANSLATORS: Excellent, Good, Fair and Poor are all related to battery Capacity
-msgid "Excellent"
-msgstr "Suurepärane"
-
-msgid "Good"
-msgstr "Hea"
-
-msgid "Fair"
-msgstr "Normaalne"
-
-msgid "Poor"
-msgstr "Halb"
-
-msgid "Capacity:"
-msgstr "Mahtuvus:"
-
-msgid "Current charge:"
-msgstr "Aku laetus:"
-
-msgid "Last full charge:"
-msgstr "Viimane täislaadimine:"
-
-msgid "Design charge:"
-msgstr "Tehasetäituvus:"
-
-msgid "Charge rate:"
-msgstr "Laadimise kiirus:"
-
-#. TRANSLATORS: system power cord
-msgid "AC adapter"
-msgid_plural "AC adapters"
-msgstr[0] "Vooluadapter"
-msgstr[1] "Vooluadapterid"
-
-#. TRANSLATORS: laptop primary battery
-msgid "Laptop battery"
-msgid_plural "Laptop batteries"
-msgstr[0] "Sülearvuti aku"
-msgstr[1] "Sülearvuti akud"
-
-#. TRANSLATORS: battery-backed AC power source
-msgid "UPS"
-msgid_plural "UPSs"
-msgstr[0] "UPS"
-msgstr[1] "UPS-id"
-
-#. TRANSLATORS: a monitor is a device to measure voltage and current
-msgid "Monitor"
-msgid_plural "Monitors"
-msgstr[0] "Monitor"
-msgstr[1] "Monitorid"
-
-#. TRANSLATORS: wireless mice with internal batteries
-msgid "Mouse"
-msgid_plural "Mice"
-msgstr[0] "Hiir"
-msgstr[1] "Hiired"
-
-#. TRANSLATORS: wireless keyboard with internal battery
-msgid "Keyboard"
-msgid_plural "Keyboards"
-msgstr[0] "Klaviatuur"
-msgstr[1] "Klaviatuurid"
-
-#. TRANSLATORS: portable device
-msgid "PDA"
-msgid_plural "PDAs"
-msgstr[0] "PDA"
-msgstr[1] "PDA-d"
-
-#. TRANSLATORS: cell phone (mobile...)
-msgid "Cell phone"
-msgid_plural "Cell phones"
-msgstr[0] "Mobiiltelefon"
-msgstr[1] "Mobiiltelefonid"
-
-#. TRANSLATORS: media player, mp3 etc
-msgid "Media player"
-msgid_plural "Media players"
-msgstr[0] "Meediaesitaja"
-msgstr[1] "Meediaesitajad"
-
-#. TRANSLATORS: tablet device
-msgid "Tablet"
-msgid_plural "Tablets"
-msgstr[0] "Graafikalaud"
-msgstr[1] "Graafikalauad"
-
-#. TRANSLATORS: tablet device
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Arvuti"
-msgstr[1] "Arvutid"
-
-#. TRANSLATORS: battery technology
-msgid "Lithium Ion"
-msgstr "Liitium-ioon"
-
-#. TRANSLATORS: battery technology
-msgid "Lithium Polymer"
-msgstr "Liitiumpolümeer"
-
-#. TRANSLATORS: battery technology
-msgid "Lithium Iron Phosphate"
-msgstr "Liitium-raudfosfaat (LiFePO4)"
-
-#. TRANSLATORS: battery technology
-msgid "Lead acid"
-msgstr "Pliiaku"
-
-#. TRANSLATORS: battery technology
-msgid "Nickel Cadmium"
-msgstr "Nikkel-kaadmium (Ni-Cd)"
-
-#. TRANSLATORS: battery technology
-msgid "Nickel metal hydride"
-msgstr "Nikkel-metallhüdriid (NiMH)"
-
-#. TRANSLATORS: battery technology
-msgid "Unknown technology"
-msgstr "Tundmatu tehnoloogia"
-
-#. TRANSLATORS: battery state
-msgid "Empty"
-msgstr "Tühi"
-
-#. TRANSLATORS: battery state
-msgid "Waiting to charge"
-msgstr "Laadimise ootel"
-
-#. TRANSLATORS: battery state
-msgid "Waiting to discharge"
-msgstr "Tühjenemise ootel"
-
-#. TRANSLATORS: device not present
-msgid "Laptop battery not present"
-msgstr "Sülearvuti aku pole ühendatud"
-
-#. TRANSLATORS: battery state
-msgid "Laptop battery is charging"
-msgstr "Sülearvuti aku laeb"
-
-#. TRANSLATORS: battery state
-msgid "Laptop battery is discharging"
-msgstr "Sülearvuti aku tühjeneb"
-
-#. TRANSLATORS: battery state
-msgid "Laptop battery is empty"
-msgstr "Sülearvuti aku on tühi"
-
-#. TRANSLATORS: battery state
-msgid "Laptop battery is charged"
-msgstr "Sülearvuti aku on täis laetud"
-
-#. TRANSLATORS: battery state
-msgid "Laptop battery is waiting to charge"
-msgstr "Sülearvuti aku ootab laadimist"
-
-#. TRANSLATORS: battery state
-msgid "Laptop battery is waiting to discharge"
-msgstr "Sülearvuti aku on tühjenemise ootel"
-
-#. TRANSLATORS: battery state
-msgid "UPS is charging"
-msgstr "UPS laeb"
-
-#. TRANSLATORS: battery state
-msgid "UPS is discharging"
-msgstr "UPS tühjeneb"
-
-#. TRANSLATORS: battery state
-msgid "UPS is empty"
-msgstr "UPS on tühi"
-
-#. TRANSLATORS: battery state
-msgid "UPS is charged"
-msgstr "UPS on täis laetud"
-
-#. TRANSLATORS: battery state
-msgid "Mouse is charging"
-msgstr "Hiir laeb"
-
-#. TRANSLATORS: battery state
-msgid "Mouse is discharging"
-msgstr "Hiir tühjeneb"
-
-#. TRANSLATORS: battery state
-msgid "Mouse is empty"
-msgstr "Hiir on tühi"
-
-#. TRANSLATORS: battery state
-msgid "Mouse is charged"
-msgstr "Hiir on täis laetud"
-
-#. TRANSLATORS: battery state
-msgid "Keyboard is charging"
-msgstr "Klaviatuur laeb"
-
-#. TRANSLATORS: battery state
-msgid "Keyboard is discharging"
-msgstr "Klaviatuur tühjeneb"
-
-#. TRANSLATORS: battery state
-msgid "Keyboard is empty"
-msgstr "Klaviatuur on tühi"
-
-#. TRANSLATORS: battery state
-msgid "Keyboard is charged"
-msgstr "Klaviatuur on täis laetud"
-
-#. TRANSLATORS: battery state
-msgid "PDA is charging"
-msgstr "PDA laeb"
-
-#. TRANSLATORS: battery state
-msgid "PDA is discharging"
-msgstr "PDA tühjeneb"
-
-#. TRANSLATORS: battery state
-msgid "PDA is empty"
-msgstr "PDA on tühi"
-
-#. TRANSLATORS: battery state
-msgid "PDA is charged"
-msgstr "PDA on täis laetud"
-
-#. TRANSLATORS: battery state
-msgid "Cell phone is charging"
-msgstr "Mobiiltelefon laeb"
-
-#. TRANSLATORS: battery state
-msgid "Cell phone is discharging"
-msgstr "Mobiiltelefon tühjeneb"
-
-#. TRANSLATORS: battery state
-msgid "Cell phone is empty"
-msgstr "Mobiiltelefon on tühi"
-
-#. TRANSLATORS: battery state
-msgid "Cell phone is charged"
-msgstr "Mobiiltelefon on täis laetud"
-
-#. TRANSLATORS: battery state
-msgid "Media player is charging"
-msgstr "Meediaesitaja laeb"
-
-#. TRANSLATORS: battery state
-msgid "Media player is discharging"
-msgstr "Meediaesitaja tühjeneb"
-
-#. TRANSLATORS: battery state
-msgid "Media player is empty"
-msgstr "Meediaesitaja on tühi"
-
-#. TRANSLATORS: battery state
-msgid "Media player is charged"
-msgstr "Meediaesitaja on täis laetud"
-
-#. TRANSLATORS: battery state
-msgid "Tablet is charging"
-msgstr "Graafikalaud laeb"
-
-#. TRANSLATORS: battery state
-msgid "Tablet is discharging"
-msgstr "Graafikalaud tühjeneb"
-
-#. TRANSLATORS: battery state
-msgid "Tablet is empty"
-msgstr "Graafikalaud on tühi"
-
-#. TRANSLATORS: battery state
-msgid "Tablet is charged"
-msgstr "Graafikalaud on täis laetud"
-
-#. TRANSLATORS: battery state
-msgid "Computer is charging"
-msgstr "Arvuti laeb"
-
-#. TRANSLATORS: battery state
-msgid "Computer is discharging"
-msgstr "Arvuti tühjeneb"
-
-#. TRANSLATORS: battery state
-msgid "Computer is empty"
-msgstr "Arvuti on tühi"
-
-#. TRANSLATORS: battery state
-msgid "Computer is charged"
-msgstr "Arvuti on täis laetud"
-
-#~ msgid "Configure power management"
-#~ msgstr "Vooluhalduse seadistamine"
-
-#~ msgid "Power Management"
-#~ msgstr "Vooluhaldus"
-
-#~ msgid "Di_m display when idle"
-#~ msgstr "_Jõudeolekus kuva tuhmistatakse"
-
-#~ msgid "General"
-#~ msgstr "Üldine"
-
-#~ msgid "Make Default"
-#~ msgstr "Määra vaikimisi"
-
-#~ msgid "On AC Power"
-#~ msgstr "Võrgutoitel"
-
-#~ msgid "On Battery Power"
-#~ msgstr "Akutoitel"
-
-#~ msgid "On UPS Power"
-#~ msgstr "UPS-itoitel"
-
-#~ msgid "Power Management Preferences"
-#~ msgstr "Vooluhalduse eelistused"
-
-#~ msgid "Provides help about this program"
-#~ msgstr "Selle programmi kohta abiteabe tagamine"
-
-#~ msgid "Put _display to sleep when inactive for:"
-#~ msgstr "_Kuva viiakse puhkerežiimi, kui ollakse tegevuseta:"
-
-#~ msgid "Put computer to _sleep when inactive for:"
-#~ msgstr "A_rvuti viiakse puhkerežiimi, kui ollakse tegevuseta:"
-
-#~ msgid "Sets this policy to be used by all users"
-#~ msgstr "Määra see reegel kõigile kasutajatele"
-
-#~ msgid "Sp_in down hard disks when possible"
-#~ msgstr "Võimaluse korral vähendatakse _kõvaketta pöördeid"
-
-#~ msgid "When UPS power is _critically low:"
-#~ msgstr "Kui UPS-itoide on k_riitiliselt madal:"
-
-#~ msgid "When UPS power is l_ow:"
-#~ msgstr "Kui UPS-itoide on _madal:"
-
-#~ msgid "When battery po_wer is critically low:"
-#~ msgstr "Kr_iitiliselt madala akutäituvuse korral:"
-
-#~ msgid "When laptop lid is cl_osed:"
-#~ msgstr "Sülearvuti kaane _sulgemise korral:"
-
-#~ msgid "When the _suspend button is pressed:"
-#~ msgstr "_Uinutamise nupu vajutamisel:"
-
-#~ msgid "When the power _button is pressed:"
-#~ msgstr "_Sisselülitamise nupu vajutamisel:"
-
-#~ msgid "Shutdown"
-#~ msgstr "Lülitatakse arvuti välja"
-
-#~ msgid "Suspend"
-#~ msgstr "Alustatakse uinakut"
-
-#~ msgid "Hibernate"
-#~ msgstr "Alustatakse talveund"
-
-#~ msgid "Blank screen"
-#~ msgstr "Tühjendatakse ekraan"
-
-#~ msgid "Ask me"
-#~ msgstr "Küsitakse kasutajalt"
-
-#~ msgid "Do nothing"
-#~ msgstr "Ei tehta midagi"
-
-#~ msgid "Never"
-#~ msgstr "Mitte kunagi"
-
-#~ msgid "Install problem!"
-#~ msgstr "Paigaldusprobleem!"
-
-#~ msgid ""
-#~ "The configuration defaults for GNOME Power Manager have not been "
-#~ "installed correctly.\n"
-#~ "Please contact your computer administrator."
-#~ msgstr ""
-#~ "GNOME vooluhalduri sätete vaikeväärtused pole korralikult paigaldatud.\n"
-#~ "Palun võta ühendust oma arvuti haldajaga."

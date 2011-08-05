@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-29 06:43+0300\n"
+"POT-Creation-Date: 2011-08-05 10:10+0100\n"
 "PO-Revision-Date: 2011-03-28 18:11+0300\n"
 "Last-Translator: Alexander Shopov <ash@kambanaria.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -19,276 +19,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: ../data/gnome-power-manager.desktop.in.in.h:1
-msgid "Power Manager"
-msgstr "Управление на захранването"
-
-#: ../data/gnome-power-manager.desktop.in.in.h:2
-msgid "Power management daemon"
-msgstr "Демон за управление на захранването"
-
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:1
-msgid "Allow backlight brightness adjustment"
-msgstr "Разрешаване на промяна на яркостта на подсветката"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:2
-msgid "Display options for the notification icon."
-msgstr "Показване на настройките на иконата за уведомяване."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:3
-msgid ""
-"If a notification message should be displayed after suspend or hibernate "
-"failed."
-msgstr "Да се уведомява ли при неуспешно (дълбоко) приспиване."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:4
-msgid ""
-"If a notification message should be displayed when battery in a device "
-"attached to the computer is getting low."
-msgstr ""
-"Да се уведомява ли, когато батерия на устройство към компютъра достигне "
-"ниско ниво."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:5
-msgid ""
-"If a notification message should be displayed when the battery is fully "
-"charged."
-msgstr "Да се уведомява ли, когато батерията е напълно заредена."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:6
-msgid ""
-"If a notification message should be displayed when the system battery or UPS "
-"is getting low."
-msgstr ""
-"Да се уведомява ли, когато батерията на компютъра или непрекъсваемото "
-"токозахранване достигне ниско ниво."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:7
-msgid "If preferences and statistics items should be shown in the context menu"
-msgstr "Да се показват ли настройките и статистиката в контекстното меню."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:8
-msgid "If sounds should be used"
-msgstr "Да се ползват ли звуци"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:9
-msgid ""
-"If sounds should be used when the power is critically low, or inhibit "
-"requests have stopped the policy action."
-msgstr ""
-"Да се ползват ли звуци, когато нивото на батерия достигне критично ниско "
-"ниво или спиращи заявки са предотвратили действието по политиката."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:10
-msgid ""
-"If the keyboard backlight brightness should be reduced when the computer is "
-"on battery power"
-msgstr ""
-"Да се намали ли подсветката на клавиатурата, когато компютърът се захранва "
-"от батерии"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:11
-msgid "If the low-power mode should be enabled when on AC"
-msgstr ""
-"Да се ползва ли нискоенергоемък режим при захранване от електрическата мрежа"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:12
-msgid "If the low-power mode should be enabled when on battery"
-msgstr "Да се ползва ли нискоенергоемък режим при захранване от батерии"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:13
-msgid ""
-"If the screen brightness should be changed when switching between AC and "
-"battery power."
-msgstr ""
-"Да се сменя ли яркостта на екрана при преминаване между захранване от "
-"батерии и електрическата мрежа."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:14
-msgid ""
-"If the screen should be reduced in brightness when the computer is on "
-"battery power."
-msgstr "Да се намалява ли яркостта на екрана при захранване от батерии."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:15
-msgid "If the system low-power mode should be enabled when on AC power."
-msgstr ""
-"Да се ползва ли нискоенергоемък режим при захранване от електрическата мрежа."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:16
-msgid ""
-"If the system low-power mode should be enabled when on laptop battery power."
-msgstr "Да се ползва ли нискоенергоемък режим при захранване от батерии."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:17
-msgid "If the user should be notified when the AC adapter is disconnected."
-msgstr ""
-"Да се предупреждава ли потребителят при прекъсване на захранването от "
-"електрическата мрежа."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:18
-msgid ""
-"If time based notifications should be used. If set to false, then the "
-"percentage change is used instead, which may fix a broken ACPI BIOS."
-msgstr ""
-"Да се базира ли уведомяването на оставащо време. Когато е лъжа, се ползва "
-"процентът на заряда, което може да помогне, ако подсистемата ACPI на BIOS не "
-"функционира правилно."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:19
-msgid "If we should show the low capacity warning for a broken battery"
-msgstr "Да се уведомява ли за ниския капацитет при увредена батерия."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:20
-msgid "If we should show the low capacity warning for a broken battery."
-msgstr "Да се уведомява ли за ниския капацитет при увредена батерия."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:21
-msgid "If we should show the recalled battery warning for a broken battery"
-msgstr ""
-"Да се уведомява ли при увредена батерия, че тя може да е обявена за връщане"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:22
-msgid ""
-"If we should show the recalled battery warning for a broken battery. Set "
-"this to false only if you know your battery is okay."
-msgstr ""
-"Да се уведомява ли при увредена батерия, че тя може да е обявена за връщане. "
-"Задайте да е лъжа, ако сте сигурни, че батерията е здрава."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:23
-msgid "Keyboard backlight brightness when on AC power."
-msgstr "Подсветка на клавиатурата при захранване от електрическата мрежа."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:24
-msgid "LCD brightness when on AC"
-msgstr "Яркост на екрана при захранване от електрическата мрежа"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:25
-msgid "LCD dimming amount when on battery"
-msgstr "Затъмняване на екрана при захранване от батерии"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:26
-msgid "Lock GNOME keyring on sleep"
-msgstr "Заключване на ключодържателя на GNOME при приспиване"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:27
-msgid "Lock screen on hibernate"
-msgstr "Заключване на екрана при дълбоко приспиване"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:28
-msgid "Lock screen on suspend"
-msgstr "Заключване на екрана при приспиване"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:29
-msgid "Lock screen when blanked"
-msgstr "Заключване на екрана при изключване на монитора"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:30
-msgid "Notify on a low power"
-msgstr "Уведомяване при нисък заряд"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:31
-msgid "Notify on a sleep failure"
-msgstr "Уведомяване при неуспешно приспиване"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:32
-msgid "Notify when AC adapter is disconnected"
-msgstr "Уведомяване при изключване на захранването от електрическата мрежа"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:33
-msgid "Notify when fully charged"
-msgstr "Уведомяване при пълно зареждане"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:34
-msgid ""
-"Percent brightness to set keyboard backlight at when on AC power. Legal "
-"values are between 0 and 100."
-msgstr ""
-"На колко процента да зададе яркостта на екрана при захранване от "
-"електрическата мрежа. Възможните стойности са между 0 и 100 включително."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:35
-msgid "Percent to reduce keyboard backlight by when idle."
-msgstr "Процент за намаляване на подсветката на клавиатурата при бездействие."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:36
-msgid "Percent to reduce keyboard backlight by when on battery power."
-msgstr ""
-"Процент за намалена подсветка на клавиатурата при захранване от батерии."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:37
-msgid "Percentage action is taken"
-msgstr "Процент заряд за предприемане на действие"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:38
-msgid "Percentage considered critical"
-msgstr "Процент заряд считан за критично нисък"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:39
-msgid "Percentage considered low"
-msgstr "Процент заряд считан за нисък"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:40
-msgid "Reduce the backlight brightness when on battery power"
-msgstr "Намаляване на яркостта на екрана при захранване от батерии"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:41
-msgid "Reduce the keyboard backlight when on battery power"
-msgstr "Намаляване на подсветката на клавиатурата при захранване от батерии"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:42
-msgid "Seconds of inactivity to spin down when on AC"
-msgstr ""
-"Бездействие в секунди за изключване на дисковете при захранване от "
-"електрическата мрежа"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:43
-msgid "Seconds of inactivity to spin down when on battery"
-msgstr ""
-"Бездействие в секунди за изключване на дисковете при захранване от батерии"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:44
 msgid "The ID of the last device selected"
 msgstr "Идентификатор на последно избраното устройство"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:45
-msgid "The URI to show to the user on sleep failure"
-msgstr "Адрес, който да се покаже при неуспешно приспиване"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:46
-msgid ""
-"The amount to dim the brightness of the display when on battery power. "
-"Possible values are between 0 and 100."
-msgstr ""
-"До колко процента да се намали яркостта на екрана при захранване от батерии. "
-"Възможните стойности са между 0 и 100 включително."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:47
-msgid ""
-"The brightness of the display when on AC power. Possible values are between "
-"0.0 and 1.0."
-msgstr ""
-"Яркост на екрана при захранване от батерии. Възможните стойности са между "
-"0.0 и 1.0 включително."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:48
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:2
 msgid "The default graph type to show for history"
 msgstr "Стандартният вид графика за историята"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:49
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:3
 msgid "The default graph type to show for stats"
 msgstr "Стандартният вид графика за статистиката"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:50
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:4
 msgid "The default graph type to show in the history window."
 msgstr "Стандартният вид графика за прозореца с историята."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:51
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:5
 msgid "The default graph type to show in the stats window."
 msgstr "Стандартният вид графика за прозореца със статистиката."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:52
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:6
 msgid ""
 "The identifier of the last device which is used to return focus to the "
 "correct device."
@@ -296,11 +47,11 @@ msgstr ""
 "Идентификаторът на последното устройство, използва се за връщането на фокуса "
 "на правилното устройство."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:53
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:7
 msgid "The index of the page number to show by default"
 msgstr "Номерът на страницата, която стандартно да се показва"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:54
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:8
 msgid ""
 "The index of the page number to show by default which is used to return "
 "focus to the correct page."
@@ -308,215 +59,47 @@ msgstr ""
 "Номерът на страницата, която стандартно да се показва. Използва се за "
 "връщането на фокуса на правилната страница."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:55
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:9
 msgid ""
 "The maximum duration of time displayed on the x-axis of the history graph."
 msgstr ""
 "Максималният период, който се показва по хоризонталата на графиката с "
 "историята."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:56
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:10
 msgid "The maximum time displayed for history"
 msgstr "Максималният период показван в историята"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:57
-msgid ""
-"The number of seconds of inactivity to spin down the disks when on AC power."
-msgstr ""
-"Секунди бездействие преди дисковете да се изключат при захранване от "
-"електрическата мрежа."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:58
-msgid ""
-"The number of seconds of inactivity to spin down the disks when on battery "
-"power."
-msgstr ""
-"Секунди бездействие преди дисковете да се изключат при захранване от батерии."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:59
-msgid ""
-"The percentage of the battery when it is considered critical. Only valid "
-"when use-time-for-policy is false."
-msgstr ""
-"Процент заряд на батерията, който се счита за критично нисък. Използва се, "
-"само когато ключът „use-time-for-policy“ e лъжа."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:60
-msgid ""
-"The percentage of the battery when it is considered low. Only valid when use-"
-"time-for-policy is false."
-msgstr ""
-"Процент заряд на батерията, който се счита за нисък. Използва се, само "
-"когато ключът „use-time-for-policy“ e лъжа."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:61
-msgid ""
-"The percentage of the battery when the critical action is performed. Only "
-"valid when use-time-for-policy is false."
-msgstr ""
-"Процент заряд на батерията за критично ниско ниво, при който се предприема "
-"действие. Използва се, само когато ключът „use-time-for-policy“ e лъжа."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:63
-#, no-c-format
-msgid ""
-"The percentage to reduce the keyboard backlight by when idle. For example, "
-"if set to '60', the backlight will be cut by 40% when idle. Legal values are "
-"between 0 and 100."
-msgstr ""
-"Процент, до който да се намали яркостта на екрана при бездействие. Ако е "
-"„60“, яркостта ще се намали с 40%. Възможните стойности са между 0 и 100 "
-"включително."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:65
-#, no-c-format
-msgid ""
-"The percentage to reduce the keyboard backlight by when on battery power. "
-"For example, if set to '60', the backlight will be cut by 40% on battery "
-"power. Legal values are between 0 and 100."
-msgstr ""
-"Процент, до който да се намали подсветката на клавиатурата при захранване от "
-"батерии. Ако е „60“, яркостта ще се намали с 40%. Възможните стойности са "
-"между 0 и 100 включително."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:66
-msgid ""
-"The time remaining in seconds of the battery when critical action is taken. "
-"Only valid when use-time-for-policy is true."
-msgstr ""
-"Оставащо време за работа на батерии в секунди, което се счита за критично "
-"ниско ниво, при което се предприема действие. Използва се, само когато "
-"ключът „use-time-for-policy“ e истина."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:67
-msgid ""
-"The time remaining in seconds of the battery when it is considered critical. "
-"Only valid when use-time-for-policy is true."
-msgstr ""
-"Оставащо време за работа на батерии в секунди, което се счита за критично "
-"ниско ниво. Използва се, само когато ключът „use-time-for-policy“ e истина."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:68
-msgid ""
-"The time remaining in seconds of the battery when it is considered low. Only "
-"valid when use-time-for-policy is true."
-msgstr ""
-"Оставащо време за работа на батерии в секунди, което се счита за ниско ниво. "
-"Използва се, само когато ключът „use-time-for-policy“ e истина."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:69
-msgid "The time remaining when action is taken"
-msgstr "Оставащо време за предприемане на действие"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:70
-msgid "The time remaining when critical"
-msgstr "Оставащо време за критично ниско ниво"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:71
-msgid "The time remaining when low"
-msgstr "Оставащо време за критично ниво"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:72
-msgid "Use gnome-screensaver lock setting"
-msgstr ""
-"Използване на настройките за заключване на екрана от предпазителя на екрана "
-"на GNOME"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:73
-msgid ""
-"When sleep fails we can show the user a button to help fix the situation. "
-"Leave this blank if the button should not be shown."
-msgstr ""
-"При проблем с приспиването може да се покаже помощен бутон за корекция на "
-"ситуацията. Ако този ключ е празен, такъв бутон не се показва на потребителя."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:74
-msgid "When to show the notification icon"
-msgstr "Кога да се показва иконата за уведомяване"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:75
-msgid ""
-"Whether the GNOME keyring is locked before the computer enters hibernate. "
-"This means the keyring will have to be unlocked on resume."
-msgstr ""
-"Да се заключва ли ключодържателят на GNOME при дълбокото приспиване на "
-"компютъра. Това означава, че ключодържателят ще трябва наново да бъде "
-"отключван."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:76
-msgid ""
-"Whether the GNOME keyring is locked before the computer enters suspend. This "
-"means the keyring will have to be unlocked on resume."
-msgstr ""
-"Да се заключва ли ключодържателят на GNOME при приспиването на компютъра. "
-"Това означава, че ключодържателят ще трябва наново да бъде отключван."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:77
-msgid ""
-"Whether the screen is locked when the computer wakes up from a hibernate. "
-"Only used if lock-use-screensaver is false."
-msgstr ""
-"Да се заключва ли екранът при събуждане след дълбоко приспиване. Използва "
-"се, само когато ключът „lock-use-screensaver“ e лъжа."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:78
-msgid ""
-"Whether the screen is locked when the computer wakes up from a suspend. Only "
-"used if lock-use-screensaver is false."
-msgstr ""
-"Да се заключва ли екранът при събуждане след приспиване. Използва се, само "
-"когато ключът „lock-use-screensaver“ e лъжа."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:79
-msgid ""
-"Whether the screen is locked when the screen is turned off. Only used if "
-"lock-use-screensaver is false."
-msgstr ""
-"Да се заключва ли екранът при изключването му. Използва се, само когато "
-"ключът „lock-use-screensaver“ e лъжа."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:80
-msgid ""
-"Whether to use the screen lock setting of gnome-screensaver to decide if the "
-"screen is locked after a hibernate, suspend or blank screen."
-msgstr ""
-"Да се използват ли настройките за заключване на екрана от предпазителя на "
-"екрана на GNOME при приспиване, дълбоко приспиване или изключване на екрана."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:81
-msgid "Whether to use time-based notifications"
-msgstr "Да зависят ли известията от оставащото време"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:82
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:11
 msgid "Whether we should show the history data points"
 msgstr "Да се показват ли историческите данни"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:83
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:12
 msgid ""
 "Whether we should show the history data points in the statistics window."
 msgstr "Прозорецът със статистиката да показва ли историческите данни."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:84
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:13
 msgid "Whether we should show the stats data points"
 msgstr "Да се показват ли статистическите данни"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:85
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:14
 msgid "Whether we should show the stats data points in the statistics window."
 msgstr "Прозорецът със статистиката да показва ли статистическите данни."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:86
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:15
 msgid "Whether we should smooth the history data"
 msgstr "Заглаждане на историческите данни"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:87
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:16
 msgid "Whether we should smooth the history data in the graph."
 msgstr "Графиката с историческите данни да ползва ли заглаждане."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:88
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:17
 msgid "Whether we should smooth the stats data"
 msgstr "Заглаждане на статистическите данни"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:89
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:18
 msgid "Whether we should smooth the stats data in the graph."
 msgstr "Графиката със статистическите данни да ползва ли заглаждане."
 
@@ -527,14 +110,10 @@ msgstr "Спазване на управлението на захранване
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1087
-#: ../src/gpm-statistics.c:1541
+#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1406
+#: ../src/gpm-statistics.c:1860
 msgid "Power Statistics"
 msgstr "Статистика на захранването"
-
-#: ../data/gpm-feedback-widget.ui.h:1
-msgid "Brightness"
-msgstr "Яркост"
 
 #: ../data/gpm-statistics.ui.h:1
 msgid "0"
@@ -544,7 +123,7 @@ msgstr "0"
 msgid "Data length:"
 msgstr "Период с данни:"
 
-#: ../data/gpm-statistics.ui.h:3 ../src/gpm-statistics.c:206
+#: ../data/gpm-statistics.ui.h:3 ../src/gpm-statistics.c:509
 msgid "Details"
 msgstr "Подробности"
 
@@ -576,116 +155,9 @@ msgstr "Няма данни за показване."
 msgid "Use smoothed line"
 msgstr "Използване на загладена линия"
 
-#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:192
+#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:495
 msgid "Wakeups"
 msgstr "Събуждания"
-
-#. command line argument
-#: ../src/gpm-backlight-helper.c:161
-msgid "Set the current brightness"
-msgstr "Промяна на яркостта на екрана"
-
-#. command line argument
-#: ../src/gpm-backlight-helper.c:164
-msgid "Get the current brightness"
-msgstr "Получаване на яркостта на екрана"
-
-#. command line argument
-#: ../src/gpm-backlight-helper.c:167
-msgid "Get the number of brightness levels supported"
-msgstr "Получаване на броя на възможните нива на яркост"
-
-#. TRANSLATORS: tool that is used when copying profiles system-wide
-#: ../src/gpm-backlight-helper.c:182
-msgid "GNOME Power Manager Backlight Helper"
-msgstr "Помощник за подсветката към управлението на захранването на GNOME"
-
-#. TRANSLATORS: user did not specify valid options
-#: ../src/gpm-backlight-helper.c:190
-msgid "No valid option was specified"
-msgstr "Не е указана правилна настройка"
-
-#. TRANSLATORS: no backlights found
-#: ../src/gpm-backlight-helper.c:199
-msgid "No backlights were found on your system"
-msgstr "В системата не са открити устройства с подсветка"
-
-#. TRANSLATORS: failed to access backlight file
-#: ../src/gpm-backlight-helper.c:210
-msgid "Could not get the value of the backlight"
-msgstr "Неуспех при получаване на степента на яркост"
-
-#. TRANSLATORS: failed to access backlight file
-#: ../src/gpm-backlight-helper.c:228
-msgid "Could not get the maximum value of the backlight"
-msgstr "Неуспех при получаване на максималната стойност за яркостта"
-
-#. TRANSLATORS: only able to install profiles as root
-#: ../src/gpm-backlight-helper.c:245
-msgid "This program can only be used by the root user"
-msgstr "Тази програма може да се използва само от системния администратор"
-
-#. TRANSLATORS: the program must never be directly run
-#: ../src/gpm-backlight-helper.c:254
-msgid "This program must only be run through pkexec"
-msgstr "Тази програма трябва да се изпълнява само чрез pkexec"
-
-#. TRANSLATORS: failed to access backlight file
-#: ../src/gpm-backlight-helper.c:265
-msgid "Could not set the value of the backlight"
-msgstr "Неуспешна промяна на яркостта"
-
-#: ../src/gpm-common.c:55
-msgid "Unknown time"
-msgstr "Неизвестно време"
-
-#: ../src/gpm-common.c:60
-#, c-format
-msgid "%i minute"
-msgid_plural "%i minutes"
-msgstr[0] "%i минута"
-msgstr[1] "%i минути"
-
-#: ../src/gpm-common.c:71
-#, c-format
-msgid "%i hour"
-msgid_plural "%i hours"
-msgstr[0] "%i час"
-msgstr[1] "%i часа"
-
-#. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
-#. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:77
-#, c-format
-msgid "%i %s %i %s"
-msgstr "%i %s и %i %s"
-
-#: ../src/gpm-common.c:78
-msgid "hour"
-msgid_plural "hours"
-msgstr[0] "час"
-msgstr[1] "часа"
-
-#: ../src/gpm-common.c:79
-msgid "minute"
-msgid_plural "minutes"
-msgstr[0] "минута"
-msgstr[1] "минути"
-
-#. TRANSLATORS: turn on all debugging
-#: ../src/gpm-debug.c:131
-msgid "Show debugging information for all files"
-msgstr ""
-"Извеждане на информация за изчистване \n"
-"                                    грешки във всички файлове"
-
-#: ../src/gpm-debug.c:189
-msgid "Debugging Options"
-msgstr "Опции за изчистване на грешки"
-
-#: ../src/gpm-debug.c:189
-msgid "Show debugging options"
-msgstr "Извеждане на опциите за изчистване на грешки"
 
 #. Translators: This is %i days
 #: ../src/gpm-graph-widget.c:430
@@ -747,590 +219,238 @@ msgstr "%.1f W"
 msgid "%.1fV"
 msgstr "%.1f V"
 
-#: ../src/gpm-main.c:221
-msgid "Show version of installed program and exit"
-msgstr ""
-"Показване на версията на инсталираната\n"
-"                                    програма и спиране на програмата"
-
-#: ../src/gpm-main.c:223
-msgid "Exit after a small delay (for debugging)"
-msgstr ""
-"Изход след малко забавяне (за изчистване на\n"
-"                                    грешки)"
-
-#: ../src/gpm-main.c:225
-msgid "Exit after the manager has loaded (for debugging)"
-msgstr ""
-"Изход след зареждане на управлението (за\n"
-"                                    изчистване на грешки)"
-
-#: ../src/gpm-main.c:238 ../src/gpm-main.c:243
-msgid "GNOME Power Manager"
-msgstr "Управление на захранването на GNOME"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:239 ../src/gpm-manager.c:310
-msgid "Battery is very low"
-msgstr "Критично ниско ниво на батерията"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:290
-msgid "Power plugged in"
-msgstr "Включване на електрическото захранване"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:294
-msgid "Power unplugged"
-msgstr "Изключване на електрическото захранване"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:298
-msgid "Lid has opened"
-msgstr "Отваряне на екрана"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:302
-msgid "Lid has closed"
-msgstr "Затваряне на екрана"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:306
-msgid "Battery is low"
-msgstr "Ниско ниво на батерията"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:314
-msgid "Battery is full"
-msgstr "Батерията е заредена"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:318
-msgid "Suspend started"
-msgstr "Начало на приспиване"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:322
-msgid "Resumed"
-msgstr "Събуждане"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:326
-msgid "Suspend failed"
-msgstr "Неуспешно приспиване"
-
-#. TRANSLATORS: message text
-#: ../src/gpm-manager.c:612
-msgid "Computer failed to suspend."
-msgstr "Неуспех при приспиване на компютъра."
-
-#. TRANSLATORS: title text
-#: ../src/gpm-manager.c:614
-msgid "Failed to suspend"
-msgstr "Неуспешно приспиване"
-
-#. TRANSLATORS: message text
-#: ../src/gpm-manager.c:618
-msgid "Computer failed to hibernate."
-msgstr "Неуспех при дълбоко приспиване на компютъра."
-
-#. TRANSLATORS: title text
-#: ../src/gpm-manager.c:620
-msgid "Failed to hibernate"
-msgstr "Неуспешно дълбоко приспиване"
-
-#. TRANSLATORS: message text
-#: ../src/gpm-manager.c:625
-msgid "Failure was reported as:"
-msgstr "Докладваната грешка е:"
-
-#. TRANSLATORS: button text, visit the suspend help website
-#: ../src/gpm-manager.c:638
-msgid "Visit help page"
-msgstr "Погледнете страницата с помощта"
-
-#. TRANSLATORS: this is the gnome-screensaver throttle
-#: ../src/gpm-manager.c:988
-msgid "Display DPMS activated"
-msgstr "Управлението на захранването на екрана е включено"
-
-#. TRANSLATORS: this is the gnome-screensaver throttle
-#: ../src/gpm-manager.c:1007
-msgid "On battery power"
-msgstr "От батерии"
-
-#: ../src/gpm-manager.c:1025
-msgid "Laptop lid is closed"
-msgstr "Екранът е затворен"
-
-#: ../src/gpm-manager.c:1063
-msgid "Power Information"
-msgstr "Информация за заряда"
-
-#. TRANSLATORS: the battery may be recalled by it's vendor
-#: ../src/gpm-manager.c:1301
-msgid "Battery may be recalled"
-msgstr "Батериите ви може да са обявени за връщане"
-
-#: ../src/gpm-manager.c:1302
-#, c-format
-msgid ""
-"A battery in your computer may have been recalled by %s and you may be at "
-"risk.\n"
-"\n"
-"For more information visit the battery recall website."
-msgstr ""
-"Батерия на компютъра може да е обявена за връщане от %s, възможно е да сте "
-"изложени на риск.\n"
-"\n"
-"За повече информация посетете сайта за връщане на батерии."
-
-#. TRANSLATORS: button text, visit the manufacturers recall website
-#: ../src/gpm-manager.c:1312
-msgid "Visit recall website"
-msgstr "Посещаване на сайта за връщане на батерии"
-
-#. TRANSLATORS: button text, do not show this bubble again
-#: ../src/gpm-manager.c:1315
-msgid "Do not show me this again"
-msgstr "Това да не се показва отново"
-
-#. We should notify the user if the battery has a low capacity,
-#. * where capacity is the ratio of the last_full capacity with that of
-#. * the design capacity. (#326740)
-#. TRANSLATORS: battery is old or broken
-#: ../src/gpm-manager.c:1403
-msgid "Battery may be broken"
-msgstr "Батериите ви може да са повредени"
-
-#. TRANSLATORS: notify the user that that battery is broken as the capacity is very low
-#: ../src/gpm-manager.c:1406
-#, c-format
-msgid ""
-"Battery has a very low capacity (%1.1f%%), which means that it may be old or "
-"broken."
-msgstr ""
-"Батерията има много нисък капацитет (%1.1f %%), което означава, че може да е "
-"остаряла или повредена."
-
-#. TRANSLATORS: show the charged notification
-#: ../src/gpm-manager.c:1455
-msgid "Battery Charged"
-msgid_plural "Batteries Charged"
-msgstr[0] "Батерията е напълно заредена"
-msgstr[1] "Батериите са напълно заредени"
-
-#. TRANSLATORS: laptop battery is now discharging
-#: ../src/gpm-manager.c:1501
-msgid "Battery Discharging"
-msgstr "Батериите се разреждат"
-
-#. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1505
-#, c-format
-msgid "%s of battery power remaining (%.0f%%)"
-msgstr "Остават %s работа от батерии (%.0f %%)"
-
-#. TRANSLATORS: UPS is now discharging
-#: ../src/gpm-manager.c:1511
-msgid "UPS Discharging"
-msgstr "Разреждане на непрекъсваемото токозахранване"
-
-#. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1515
-#, c-format
-msgid "%s of UPS backup power remaining (%.0f%%)"
-msgstr "Остават %s работа от непрекъсваемо токозахранване (%.0f %%)"
-
-#. TRANSLATORS: laptop battery low, and we only have one battery
-#: ../src/gpm-manager.c:1613
-msgid "Battery low"
-msgstr "Ниско ниво на батерията"
-
-#. TRANSLATORS: laptop battery low, and we have more than one kind of battery
-#: ../src/gpm-manager.c:1616
-msgid "Laptop battery low"
-msgstr "Ниско ниво на батерията на преносим компютър"
-
-#. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1622
-#, c-format
-msgid "Approximately <b>%s</b> remaining (%.0f%%)"
-msgstr "Остава приблизително <b>%s</b> (%.0f %%)"
-
-#. TRANSLATORS: UPS is starting to get a little low
-#: ../src/gpm-manager.c:1626
-msgid "UPS low"
-msgstr "Ниско ниво на непрекъсваемото токозахранване"
-
-#. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1630
-#, c-format
-msgid "Approximately <b>%s</b> of remaining UPS backup power (%.0f%%)"
-msgstr ""
-"Остава приблизително <b>%s</b> живот на непрекъсваемото токозахранване (%.0f "
-"%%)"
-
-#. TRANSLATORS: mouse is getting a little low
-#. TRANSLATORS: the mouse battery is very low
-#: ../src/gpm-manager.c:1634 ../src/gpm-manager.c:1786
-msgid "Mouse battery low"
-msgstr "Ниско ниво на батерията на мишката"
-
-#. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1637
-#, c-format
-msgid "Wireless mouse is low in power (%.0f%%)"
-msgstr "Зарядът на безжичната мишка е нисък (%.0f %%)"
-
-#. TRANSLATORS: keyboard is getting a little low
-#. TRANSLATORS: the keyboard battery is very low
-#: ../src/gpm-manager.c:1641 ../src/gpm-manager.c:1794
-msgid "Keyboard battery low"
-msgstr "Ниско ниво на батерията на клавиатурата"
-
-#. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1644
-#, c-format
-msgid "Wireless keyboard is low in power (%.0f%%)"
-msgstr "Зарядът на безжичната клавиатура е нисък (%.0f %%)"
-
-#. TRANSLATORS: PDA is getting a little low
-#. TRANSLATORS: the PDA battery is very low
-#: ../src/gpm-manager.c:1648 ../src/gpm-manager.c:1803
-msgid "PDA battery low"
-msgstr "Ниско ниво на батерията на цифровия помощник"
-
-#. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1651
-#, c-format
-msgid "PDA is low in power (%.0f%%)"
-msgstr "Зарядът на цифровия помощник е нисък (%.0f %%)"
-
-#. TRANSLATORS: cell phone (mobile) is getting a little low
-#. TRANSLATORS: the cell battery is very low
-#: ../src/gpm-manager.c:1655 ../src/gpm-manager.c:1813
-#: ../src/gpm-manager.c:1824
-msgid "Cell phone battery low"
-msgstr "Ниско ниво на батерията на мобилния телефон"
-
-#. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1658
-#, c-format
-msgid "Cell phone is low in power (%.0f%%)"
-msgstr "Зарядът на мобилния телефон е нисък (%.0f %%)"
-
-#. TRANSLATORS: media player, e.g. mp3 is getting a little low
-#: ../src/gpm-manager.c:1663
-msgid "Media player battery low"
-msgstr "Ниско ниво на батерията на музикалното устройство"
-
-#. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1666
-#, c-format
-msgid "Media player is low in power (%.0f%%)"
-msgstr "Зарядът на музикалното устройство е нисък (%.0f %%)"
-
-#. TRANSLATORS: graphics tablet, e.g. wacom is getting a little low
-#. TRANSLATORS: the cell battery is very low
-#: ../src/gpm-manager.c:1670 ../src/gpm-manager.c:1833
-msgid "Tablet battery low"
-msgstr "Ниско ниво на батерията на таблета"
-
-#. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1673
-#, c-format
-msgid "Tablet is low in power (%.0f%%)"
-msgstr "Зарядът на таблета е нисък (%.0f %%)"
-
-#. TRANSLATORS: computer, e.g. ipad is getting a little low
-#. TRANSLATORS: the cell battery is very low
-#: ../src/gpm-manager.c:1677 ../src/gpm-manager.c:1842
-msgid "Attached computer battery low"
-msgstr "Ниско ниво на батерията на свързания компютър"
-
-#. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1680
-#, c-format
-msgid "Attached computer is low in power (%.0f%%)"
-msgstr "Зарядът на свързания компютър е нисък (%.0f %%)"
-
-#. TRANSLATORS: laptop battery critically low, and only have one kind of battery
-#: ../src/gpm-manager.c:1745
-msgid "Battery critically low"
-msgstr "Критично ниско ниво на батерията"
-
-#. TRANSLATORS: laptop battery critically low, and we have more than one type of battery
-#. TRANSLATORS: laptop battery is really, really, low
-#: ../src/gpm-manager.c:1748 ../src/gpm-manager.c:1905
-msgid "Laptop battery critically low"
-msgstr "Критично ниско ниво на батерията на компютъра"
-
-#. TRANSLATORS: tell the use to insert the plug, as we're not going to do anything
-#: ../src/gpm-manager.c:1757
-msgid "Plug in your AC adapter to avoid losing data."
-msgstr "Включете адаптера за електрическата мрежа, за да не загубите данни."
-
-#. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1761
-#, c-format
-msgid "Computer will suspend very soon unless it is plugged in."
-msgstr ""
-"Съвсем скоро този компютър ще бъде приспан, ако не го включите в "
-"електрическата мрежа."
-
-#. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1765
-#, c-format
-msgid "Computer will hibernate very soon unless it is plugged in."
-msgstr ""
-"Съвсем скоро този компютър ще бъде дълбоко приспан, ако не го включите в "
-"електрическата мрежа."
-
-#. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1769
-#, c-format
-msgid "Computer will shutdown very soon unless it is plugged in."
-msgstr ""
-"Съвсем скоро този компютър ще бъде изключен, ако не го включите в "
-"електрическата мрежа."
-
-#. TRANSLATORS: the UPS is very low
-#. TRANSLATORS: UPS is really, really, low
-#: ../src/gpm-manager.c:1776 ../src/gpm-manager.c:1941
-msgid "UPS critically low"
-msgstr "Критично ниско ниво на непрекъсваемото токозахранване"
-
-#. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1780
-#, c-format
-msgid ""
-"Approximately <b>%s</b> of remaining UPS power (%.0f%%). Restore AC power to "
-"your computer to avoid losing data."
-msgstr ""
-"Остава приблизително <b>%s</b> живот на непрекъсваемото токозахранване (%.0f "
-"%%). Включете компютъра към електрическата мрежа, за да избегнете загуба на "
-"данни."
-
-#. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1789
-#, c-format
-msgid ""
-"Wireless mouse is very low in power (%.0f%%). This device will soon stop "
-"functioning if not charged."
-msgstr ""
-"Безжичната мишка е с много нисък заряд (%.0f %%). Ако не я презаредите, ще "
-"се изключи."
-
-#. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1797
-#, c-format
-msgid ""
-"Wireless keyboard is very low in power (%.0f%%). This device will soon stop "
-"functioning if not charged."
-msgstr ""
-"Безжичната клавиатура е с много нисък заряд (%.0f %%). Ако не я презаредите, "
-"ще се изключи."
-
-#. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1806
-#, c-format
-msgid ""
-"PDA is very low in power (%.0f%%). This device will soon stop functioning if "
-"not charged."
-msgstr ""
-"Цифровият помощник е с много нисък заряд (%.0f %%). Ако не го презаредите, "
-"ще се изключи."
-
-#. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1816
-#, c-format
-msgid ""
-"Cell phone is very low in power (%.0f%%). This device will soon stop "
-"functioning if not charged."
-msgstr ""
-"Мобилният телефон е с много нисък заряд (%.0f %%). Ако не го презаредите, ще "
-"се изключи."
-
-#. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1827
-#, c-format
-msgid ""
-"Media player is very low in power (%.0f%%). This device will soon stop "
-"functioning if not charged."
-msgstr ""
-"Музикалното устройство е с много нисък заряд (%.0f %%). Ако не го "
-"презаредите, ще се изключи."
-
-#. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1836
-#, c-format
-msgid ""
-"Tablet is very low in power (%.0f%%). This device will soon stop functioning "
-"if not charged."
-msgstr ""
-"Таблетът е с много нисък заряд (%.0f %%). Ако не го презаредите, ще се "
-"изключи."
-
-#. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1845
-#, c-format
-msgid ""
-"Attached computer is very low in power (%.0f%%). The device will soon "
-"shutdown if not charged."
-msgstr ""
-"Свързаният компютър е с много нисък заряд (%.0f %%). Ако не го презаредите, "
-"ще се изключи."
-
-#. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1913
-msgid ""
-"The battery is below the critical level and this computer will <b>power-off</"
-"b> when the battery becomes completely empty."
-msgstr ""
-"Батерията е под критично ниското ниво. Този компютър ще бъде <b>изгасен</b>, "
-"когато батерията напълно се изчерпи."
-
-#. TRANSLATORS: computer will suspend
-#: ../src/gpm-manager.c:1919
-msgid ""
-"The battery is below the critical level and this computer is about to "
-"suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
-"computer in a suspended state."
-msgstr ""
-"Батерията е под критично ниското ниво. Този компютър ще бъде приспан. "
-"<br><b>БЕЛЕЖКА:</b> За поддържането на компютъра в това състояние е "
-"необходим малък заряд на батерията."
-
-#. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1926
-msgid ""
-"The battery is below the critical level and this computer is about to "
-"hibernate."
-msgstr ""
-"Батерията е под критично ниското ниво. Този компютър ще бъде дълбоко приспан."
-
-#. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1931
-msgid ""
-"The battery is below the critical level and this computer is about to "
-"shutdown."
-msgstr "Батерията е под критично ниското ниво. Този компютър ще бъде изключен."
-
-#. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1949
-msgid ""
-"UPS is below the critical level and this computer will <b>power-off</b> when "
-"the UPS becomes completely empty."
-msgstr ""
-"Непрекъсваемото токозахранване е под критично ниското ниво. Този компютър ще "
-"бъде <b>изгасен</b>, когато непрекъсваемото токозахранване се разреди."
-
-#. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1955
-msgid ""
-"UPS is below the critical level and this computer is about to hibernate."
-msgstr ""
-"Непрекъсваемото токозахранване е под критично ниското ниво. Този компютър ще "
-"бъде дълбоко приспан."
-
-#. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1960
-msgid "UPS is below the critical level and this computer is about to shutdown."
-msgstr ""
-"Непрекъсваемото токозахранване е под критично ниското ниво. Този компютър ще "
-"бъде изключен."
-
 #. TRANSLATORS: the rate of discharge for the device
-#: ../src/gpm-statistics.c:76 ../src/gpm-statistics.c:464
+#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:767
 msgid "Rate"
 msgstr "Скорост"
 
-#: ../src/gpm-statistics.c:77
+#: ../src/gpm-statistics.c:81
 msgid "Charge"
 msgstr "Заряд"
 
-#: ../src/gpm-statistics.c:78 ../src/gpm-statistics.c:478
+#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:781
 msgid "Time to full"
 msgstr "Време за зареждане"
 
-#: ../src/gpm-statistics.c:79 ../src/gpm-statistics.c:483
+#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:786
 msgid "Time to empty"
 msgstr "Време за разреждане"
 
-#: ../src/gpm-statistics.c:86
+#: ../src/gpm-statistics.c:90
 msgid "10 minutes"
 msgstr "10 минути"
 
-#: ../src/gpm-statistics.c:87
+#: ../src/gpm-statistics.c:91
 msgid "2 hours"
 msgstr "2 часа"
 
-#: ../src/gpm-statistics.c:88
+#: ../src/gpm-statistics.c:92
 msgid "6 hours"
 msgstr "6 часа"
 
-#: ../src/gpm-statistics.c:89
+#: ../src/gpm-statistics.c:93
 msgid "1 day"
 msgstr "1 ден"
 
-#: ../src/gpm-statistics.c:90
+#: ../src/gpm-statistics.c:94
 msgid "1 week"
 msgstr "1 седмица"
 
 #. TRANSLATORS: what we've observed about the device
-#: ../src/gpm-statistics.c:99
+#: ../src/gpm-statistics.c:103
 msgid "Charge profile"
 msgstr "Профил на зареждането"
 
-#: ../src/gpm-statistics.c:100
+#: ../src/gpm-statistics.c:104
 msgid "Discharge profile"
 msgstr "Профил на разреждането"
 
 #. TRANSLATORS: how accurately we can predict the time remaining of the battery
-#: ../src/gpm-statistics.c:102
+#: ../src/gpm-statistics.c:106
 msgid "Charge accuracy"
 msgstr "Точност спрямо зареждането"
 
-#: ../src/gpm-statistics.c:103
+#: ../src/gpm-statistics.c:107
 msgid "Discharge accuracy"
 msgstr "Точност спрямо разреждането"
 
-#: ../src/gpm-statistics.c:130
+#. TRANSLATORS: system power cord
+#: ../src/gpm-statistics.c:288
+msgid "AC adapter"
+msgid_plural "AC adapters"
+msgstr[0] "Адаптер за ел. мрежа"
+msgstr[1] "Адаптери за ел. мрежа"
+
+#. TRANSLATORS: laptop primary battery
+#: ../src/gpm-statistics.c:292
+msgid "Laptop battery"
+msgid_plural "Laptop batteries"
+msgstr[0] "Батерия на преносим компютър"
+msgstr[1] "Батерии на преносим компютър"
+
+#. TRANSLATORS: battery-backed AC power source
+#: ../src/gpm-statistics.c:296
+msgid "UPS"
+msgid_plural "UPSs"
+msgstr[0] "Непрекъсваемо токозахранване"
+msgstr[1] "Непрекъсваеми токозахранвания"
+
+#. TRANSLATORS: a monitor is a device to measure voltage and current
+#: ../src/gpm-statistics.c:300
+msgid "Monitor"
+msgid_plural "Monitors"
+msgstr[0] "Монитор"
+msgstr[1] "Монитори"
+
+#. TRANSLATORS: wireless mice with internal batteries
+#: ../src/gpm-statistics.c:304
+msgid "Mouse"
+msgid_plural "Mice"
+msgstr[0] "Мишка"
+msgstr[1] "Мишки"
+
+#. TRANSLATORS: wireless keyboard with internal battery
+#: ../src/gpm-statistics.c:308
+msgid "Keyboard"
+msgid_plural "Keyboards"
+msgstr[0] "Клавиатура"
+msgstr[1] "Клавиатури"
+
+#. TRANSLATORS: portable device
+#: ../src/gpm-statistics.c:312
+msgid "PDA"
+msgid_plural "PDAs"
+msgstr[0] "Цифров помощник"
+msgstr[1] "Цифрови помощници"
+
+#. TRANSLATORS: cell phone (mobile...)
+#: ../src/gpm-statistics.c:316
+msgid "Cell phone"
+msgid_plural "Cell phones"
+msgstr[0] "Мобилен телефон"
+msgstr[1] "Мобилни телефони"
+
+#. TRANSLATORS: media player, mp3 etc
+#: ../src/gpm-statistics.c:321
+msgid "Media player"
+msgid_plural "Media players"
+msgstr[0] "Музикално устройство"
+msgstr[1] "Музикални устройства"
+
+#. TRANSLATORS: tablet device
+#: ../src/gpm-statistics.c:325
+msgid "Tablet"
+msgid_plural "Tablets"
+msgstr[0] "Таблет"
+msgstr[1] "Таблети"
+
+#. TRANSLATORS: tablet device
+#: ../src/gpm-statistics.c:329
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Компютър"
+msgstr[1] "Компютри"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:349
+msgid "Lithium Ion"
+msgstr "Литиево-йонна"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:353
+msgid "Lithium Polymer"
+msgstr "Литиево-полимерна"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:357
+msgid "Lithium Iron Phosphate"
+msgstr "Литиево-желязно-фосфатна"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:361
+msgid "Lead acid"
+msgstr "Оловна"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:365
+msgid "Nickel Cadmium"
+msgstr "Никелово-кадмиева"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:369
+msgid "Nickel metal hydride"
+msgstr "Никелово-метално-хидридна"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:373
+msgid "Unknown technology"
+msgstr "Неизвестна технология"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:393
+msgid "Charging"
+msgstr "Зареждане"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:397
+msgid "Discharging"
+msgstr "Разреждане"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:401
+msgid "Empty"
+msgstr "Празна"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:405
+msgid "Charged"
+msgstr "Заредени"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:409
+msgid "Waiting to charge"
+msgstr "Изчаква зареждане"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:413
+msgid "Waiting to discharge"
+msgstr "Изчаква разреждане"
+
+#: ../src/gpm-statistics.c:433
 msgid "Attribute"
 msgstr "Атрибут"
 
-#: ../src/gpm-statistics.c:137
+#: ../src/gpm-statistics.c:440
 msgid "Value"
 msgstr "Стойност"
 
-#: ../src/gpm-statistics.c:154
+#: ../src/gpm-statistics.c:457
 msgid "Image"
 msgstr "Изображение"
 
-#: ../src/gpm-statistics.c:160
+#: ../src/gpm-statistics.c:463
 msgid "Description"
 msgstr "Описание"
 
-#: ../src/gpm-statistics.c:179 ../src/gpm-statistics.c:403
+#: ../src/gpm-statistics.c:482 ../src/gpm-statistics.c:706
 msgid "Type"
 msgstr "Вид"
 
-#: ../src/gpm-statistics.c:185
+#: ../src/gpm-statistics.c:488
 msgid "ID"
 msgstr "Идентификатор"
 
-#: ../src/gpm-statistics.c:199
+#: ../src/gpm-statistics.c:502
 msgid "Command"
 msgstr "Команда"
 
 #. TRANSLATORS: this is when the stats time is not known
-#: ../src/gpm-statistics.c:284
+#: ../src/gpm-statistics.c:587
 msgid "Unknown"
 msgstr "Неизвестно"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:288
+#: ../src/gpm-statistics.c:591
 #, c-format
 msgid "%.0f second"
 msgid_plural "%.0f seconds"
@@ -1338,7 +458,7 @@ msgstr[0] "%.0f секунда"
 msgstr[1] "%.0f секунди"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:293
+#: ../src/gpm-statistics.c:596
 #, c-format
 msgid "%.1f minute"
 msgid_plural "%.1f minutes"
@@ -1346,7 +466,7 @@ msgstr[0] "%.1f минута"
 msgstr[1] "%.1f минути"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:298
+#: ../src/gpm-statistics.c:601
 #, c-format
 msgid "%.1f hour"
 msgid_plural "%.1f hours"
@@ -1354,46 +474,46 @@ msgstr[0] "%.1f час"
 msgstr[1] "%.1f часа"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:302
+#: ../src/gpm-statistics.c:605
 #, c-format
 msgid "%.1f day"
 msgid_plural "%.1f days"
 msgstr[0] "%.1f ден"
 msgstr[1] "%.1f дена"
 
-#: ../src/gpm-statistics.c:311
+#: ../src/gpm-statistics.c:614
 msgid "Yes"
 msgstr "Да"
 
-#: ../src/gpm-statistics.c:311
+#: ../src/gpm-statistics.c:614
 msgid "No"
 msgstr "Не"
 
 #. TRANSLATORS: the device ID of the current device, e.g. "battery0"
-#: ../src/gpm-statistics.c:400
+#: ../src/gpm-statistics.c:703
 msgid "Device"
 msgstr "Устройство"
 
-#: ../src/gpm-statistics.c:405
+#: ../src/gpm-statistics.c:708
 msgid "Vendor"
 msgstr "Производител"
 
-#: ../src/gpm-statistics.c:407
+#: ../src/gpm-statistics.c:710
 msgid "Model"
 msgstr "Модел"
 
-#: ../src/gpm-statistics.c:409
+#: ../src/gpm-statistics.c:712
 msgid "Serial number"
 msgstr "Сериен номер"
 
 #. TRANSLATORS: a boolean attribute that means if the device is supplying the
 #. * main power for the computer. For instance, an AC adapter or laptop battery
 #. * would be TRUE,  but a mobile phone or mouse taking power is FALSE
-#: ../src/gpm-statistics.c:414
+#: ../src/gpm-statistics.c:717
 msgid "Supply"
 msgstr "Предлагане"
 
-#: ../src/gpm-statistics.c:417
+#: ../src/gpm-statistics.c:720
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
@@ -1402,723 +522,252 @@ msgstr[1] "%d секунди"
 
 #. TRANSLATORS: when the device was last updated with new data. It's
 #. * usually a few seconds when a device is discharging or charging.
-#: ../src/gpm-statistics.c:421
+#: ../src/gpm-statistics.c:724
 msgid "Refreshed"
 msgstr "Опреснена"
 
 #. TRANSLATORS: Present is whether the device is currently attached
 #. * to the computer, as some devices (e.g. laptop batteries) can
 #. * be removed, but still observed as devices on the system
-#: ../src/gpm-statistics.c:431
+#: ../src/gpm-statistics.c:734
 msgid "Present"
 msgstr "Налична"
 
 #. TRANSLATORS: If the device can be recharged, e.g. lithium
 #. * batteries rather than alkaline ones
-#: ../src/gpm-statistics.c:438
+#: ../src/gpm-statistics.c:741
 msgid "Rechargeable"
 msgstr "Презареждаща"
 
 #. TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged"
-#: ../src/gpm-statistics.c:444
+#: ../src/gpm-statistics.c:747
 msgid "State"
 msgstr "Състояние"
 
-#: ../src/gpm-statistics.c:448
+#: ../src/gpm-statistics.c:751
 msgid "Energy"
 msgstr "Енергия"
 
-#: ../src/gpm-statistics.c:451
+#: ../src/gpm-statistics.c:754
 msgid "Energy when empty"
 msgstr "Енергия след разреждане"
 
-#: ../src/gpm-statistics.c:454
+#: ../src/gpm-statistics.c:757
 msgid "Energy when full"
 msgstr "Енергия след зареждане"
 
-#: ../src/gpm-statistics.c:457
+#: ../src/gpm-statistics.c:760
 msgid "Energy (design)"
 msgstr "Енергия (проектна)"
 
-#: ../src/gpm-statistics.c:471
+#: ../src/gpm-statistics.c:774
 msgid "Voltage"
 msgstr "Напрежение"
 
 #. TRANSLATORS: the amount of charge the cell contains
-#: ../src/gpm-statistics.c:493
+#: ../src/gpm-statistics.c:796
 msgid "Percentage"
 msgstr "Процент"
 
 #. TRANSLATORS: the capacity of the device, which is basically a measure
 #. * of how full it can get, relative to the design capacity
-#: ../src/gpm-statistics.c:500
+#: ../src/gpm-statistics.c:803
 msgid "Capacity"
 msgstr "Капацитет"
 
 #. TRANSLATORS: the type of battery, e.g. lithium or nikel metal hydroxide
-#: ../src/gpm-statistics.c:505
+#: ../src/gpm-statistics.c:808
 msgid "Technology"
 msgstr "Технология"
 
 #. TRANSLATORS: this is when the device is plugged in, typically
 #. * only shown for the ac adaptor device
-#: ../src/gpm-statistics.c:510
+#: ../src/gpm-statistics.c:813
 msgid "Online"
 msgstr "На линия"
 
 #. TRANSLATORS: the command line was not provided
-#: ../src/gpm-statistics.c:821
+#: ../src/gpm-statistics.c:1140
 msgid "No data"
 msgstr "Липсват данни"
 
 #. TRANSLATORS: kernel module, usually a device driver
-#: ../src/gpm-statistics.c:828 ../src/gpm-statistics.c:833
+#: ../src/gpm-statistics.c:1147 ../src/gpm-statistics.c:1152
 msgid "Kernel module"
 msgstr "Модул на ядрото"
 
 #. TRANSLATORS: kernel housekeeping
-#: ../src/gpm-statistics.c:838
+#: ../src/gpm-statistics.c:1157
 msgid "Kernel core"
 msgstr "Самото ядро"
 
 #. TRANSLATORS: interrupt between processors
-#: ../src/gpm-statistics.c:843
+#: ../src/gpm-statistics.c:1162
 msgid "Interprocessor interrupt"
 msgstr "Междупроцесорно прекъсване"
 
 #. TRANSLATORS: unknown interrupt
-#: ../src/gpm-statistics.c:848
+#: ../src/gpm-statistics.c:1167
 msgid "Interrupt"
 msgstr "Прекъсване"
 
 #. TRANSLATORS: the keyboard and mouse device event
-#: ../src/gpm-statistics.c:895
+#: ../src/gpm-statistics.c:1214
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "Клавиатура, мишка, сензорен панел за PS/2"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
-#: ../src/gpm-statistics.c:898
+#: ../src/gpm-statistics.c:1217
 msgid "ACPI"
 msgstr "ACPI"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
-#: ../src/gpm-statistics.c:901
+#: ../src/gpm-statistics.c:1220
 msgid "Serial ATA"
 msgstr "Сериен ATA"
 
 #. TRANSLATORS: this is the old-style ATA interface
-#: ../src/gpm-statistics.c:904
+#: ../src/gpm-statistics.c:1223
 msgid "ATA host controller"
 msgstr "Контролер за паралелен ATA"
 
 #. TRANSLATORS: 802.11 wireless adaptor
-#: ../src/gpm-statistics.c:907
+#: ../src/gpm-statistics.c:1226
 msgid "Intel wireless adaptor"
 msgstr "Безжичен адаптер на Intel"
 
 #. TRANSLATORS: a timer is something that fires periodically.
 #. * The parameter is a process name, e.g. "firefox-bin".
 #. * This is shown when the timer wakes up.
-#: ../src/gpm-statistics.c:914 ../src/gpm-statistics.c:919
-#: ../src/gpm-statistics.c:924 ../src/gpm-statistics.c:929
-#: ../src/gpm-statistics.c:934
+#: ../src/gpm-statistics.c:1233 ../src/gpm-statistics.c:1238
+#: ../src/gpm-statistics.c:1243 ../src/gpm-statistics.c:1248
+#: ../src/gpm-statistics.c:1253
 #, c-format
 msgid "Timer %s"
 msgstr "Таймер %s"
 
 #. TRANSLATORS: the parameter is the name of task that's woken up from sleeping.
 #. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:938
+#: ../src/gpm-statistics.c:1257
 #, c-format
 msgid "Sleep %s"
 msgstr "Спяща задача %s"
 
 #. TRANSLATORS: this is the name of a new realtime task.
-#: ../src/gpm-statistics.c:941
+#: ../src/gpm-statistics.c:1260
 #, c-format
 msgid "New task %s"
 msgstr "Нова задача %s"
 
 #. TRANSLATORS: this is the name of a task that's woken to check state.
 #. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:945
+#: ../src/gpm-statistics.c:1264
 #, c-format
 msgid "Wait %s"
 msgstr "Изчакваща задача %s"
 
 #. TRANSLATORS: this is the name of a work queue.
 #. * A work queue is a list of work that has to be done.
-#: ../src/gpm-statistics.c:949 ../src/gpm-statistics.c:953
+#: ../src/gpm-statistics.c:1268 ../src/gpm-statistics.c:1272
 #, c-format
 msgid "Work queue %s"
 msgstr "Работна опашка %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
-#: ../src/gpm-statistics.c:956
+#: ../src/gpm-statistics.c:1275
 #, c-format
 msgid "Network route flush %s"
 msgstr "Изчистване на мрежовите пакети %s"
 
 #. TRANSLATORS: this is the name of an activity on the USB bus
-#: ../src/gpm-statistics.c:959
+#: ../src/gpm-statistics.c:1278
 #, c-format
 msgid "USB activity %s"
 msgstr "Активност по USB от %s"
 
 #. TRANSLATORS: we've timed out of an aligned timer, with the name
-#: ../src/gpm-statistics.c:962
+#: ../src/gpm-statistics.c:1281
 #, c-format
 msgid "Wakeup %s"
 msgstr "Събудена задача %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
-#: ../src/gpm-statistics.c:965
+#: ../src/gpm-statistics.c:1284
 msgid "Local interrupts"
 msgstr "Логически прекъсвания"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
-#: ../src/gpm-statistics.c:968
+#: ../src/gpm-statistics.c:1287
 msgid "Rescheduling interrupts"
 msgstr "Прекъсвания за изместване"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1077
+#: ../src/gpm-statistics.c:1396
 msgid "Device Information"
 msgstr "Информация за устройството"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1079
+#: ../src/gpm-statistics.c:1398
 msgid "Device History"
 msgstr "История на устройството"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1081
+#: ../src/gpm-statistics.c:1400
 msgid "Device Profile"
 msgstr "Профил на устройството"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1083
+#: ../src/gpm-statistics.c:1402
 msgid "Processor Wakeups"
 msgstr "Събуждания на процесора"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1279 ../src/gpm-statistics.c:1285
-#: ../src/gpm-statistics.c:1291 ../src/gpm-statistics.c:1297
+#: ../src/gpm-statistics.c:1598 ../src/gpm-statistics.c:1604
+#: ../src/gpm-statistics.c:1610 ../src/gpm-statistics.c:1616
 msgid "Time elapsed"
 msgstr "Изминало време"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1281
+#: ../src/gpm-statistics.c:1600
 msgid "Power"
 msgstr "Заряд"
 
 #. TRANSLATORS: this is the Y axis on the graph for the whole battery device
 #. TRANSLATORS: this is the X axis on the graph for the whole battery device
-#: ../src/gpm-statistics.c:1287 ../src/gpm-statistics.c:1330
-#: ../src/gpm-statistics.c:1336 ../src/gpm-statistics.c:1342
-#: ../src/gpm-statistics.c:1348
+#: ../src/gpm-statistics.c:1606 ../src/gpm-statistics.c:1649
+#: ../src/gpm-statistics.c:1655 ../src/gpm-statistics.c:1661
+#: ../src/gpm-statistics.c:1667
 msgid "Cell charge"
 msgstr "Заряд на клетката"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1293 ../src/gpm-statistics.c:1299
+#: ../src/gpm-statistics.c:1612 ../src/gpm-statistics.c:1618
 msgid "Predicted time"
 msgstr "Прогнозирано време"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1332 ../src/gpm-statistics.c:1344
+#: ../src/gpm-statistics.c:1651 ../src/gpm-statistics.c:1663
 msgid "Correction factor"
 msgstr "Фактор за корекция"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1338 ../src/gpm-statistics.c:1350
+#: ../src/gpm-statistics.c:1657 ../src/gpm-statistics.c:1669
 msgid "Prediction accuracy"
 msgstr "Точност на прогнозата"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-statistics.c:1529
+#: ../src/gpm-statistics.c:1848
 msgid "Show extra debugging information"
 msgstr ""
 "Допълнителна информация за изчистване на\n"
 "                                    грешки"
 
 #. TRANSLATORS: show a device by default
-#: ../src/gpm-statistics.c:1532
+#: ../src/gpm-statistics.c:1851
 msgid "Select this device at startup"
 msgstr "Избиране на това устройство при стартиране"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:1797
+#: ../src/gpm-statistics.c:2111
 msgid "Processor"
 msgstr "Процесор"
-
-#. TRANSLATORS: % is a timestring, e.g. "6 hours 10 minutes"
-#: ../src/gpm-tray-icon.c:283
-#, c-format
-msgid "%s remaining"
-msgstr "остават %s"
-
-#. preferences
-#: ../src/gpm-tray-icon.c:339
-msgid "_Preferences"
-msgstr "_Настройки"
-
-#. TRANSLATORS: The laptop battery is charged, and we know a time.
-#. * The parameter is the time, e.g. 7 hours 6 minutes
-#: ../src/gpm-upower.c:269
-#, c-format
-msgid "provides %s laptop runtime"
-msgstr "осигурява %s работа на компютъра"
-
-#. TRANSLATORS: the device is discharging, and we have a time remaining
-#. * The first parameter is the device type, e.g. "Laptop battery" and
-#. * the second is the time, e.g. 7 hours 6 minutes
-#: ../src/gpm-upower.c:280
-#, c-format
-msgid "%s %s remaining"
-msgstr "%s: остават %s"
-
-#. TRANSLATORS: device is charging, and we have a time to full and a percentage
-#. * The first parameter is the device type, e.g. "Laptop battery" and
-#. * the second is the time, e.g. "7 hours 6 minutes"
-#. TRANSLATORS: device is charging, and we have a time to full and a percentage.
-#. * The first parameter is the device type, e.g. "Laptop battery" and
-#. * the second is the time, e.g. "7 hours 6 minutes"
-#: ../src/gpm-upower.c:301 ../src/gpm-upower.c:318
-#, c-format
-msgid "%s %s until charged"
-msgstr "%s: %s до зареждане"
-
-#. TRANSLATORS: the device is charging, and we have a time to full and empty.
-#. * The parameter is a time string, e.g. "7 hours 6 minutes"
-#: ../src/gpm-upower.c:308
-#, c-format
-msgid "provides %s battery runtime"
-msgstr "осигурява %s работа на батерии"
-
-#. TRANSLATORS: the type of data, e.g. Laptop battery
-#: ../src/gpm-upower.c:402
-msgid "Product:"
-msgstr "Продукт:"
-
-#. TRANSLATORS: device is missing
-#. TRANSLATORS: device is charged
-#. TRANSLATORS: device is charging
-#. TRANSLATORS: device is discharging
-#: ../src/gpm-upower.c:406 ../src/gpm-upower.c:409 ../src/gpm-upower.c:412
-#: ../src/gpm-upower.c:415
-msgid "Status:"
-msgstr "Състояние:"
-
-#: ../src/gpm-upower.c:406
-msgid "Missing"
-msgstr "Липсва"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:409 ../src/gpm-upower.c:690
-msgid "Charged"
-msgstr "Заредени"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:412 ../src/gpm-upower.c:678
-msgid "Charging"
-msgstr "Зареждане"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:415 ../src/gpm-upower.c:682
-msgid "Discharging"
-msgstr "Разреждане"
-
-#. TRANSLATORS: percentage
-#: ../src/gpm-upower.c:420
-msgid "Percentage charge:"
-msgstr "Процент заряд:"
-
-#. TRANSLATORS: manufacturer
-#: ../src/gpm-upower.c:424
-msgid "Vendor:"
-msgstr "Производител:"
-
-#. TRANSLATORS: how the battery is made, e.g. Lithium Ion
-#: ../src/gpm-upower.c:429
-msgid "Technology:"
-msgstr "Технология:"
-
-#. TRANSLATORS: serial number of the battery
-#: ../src/gpm-upower.c:433
-msgid "Serial number:"
-msgstr "Сериен номер:"
-
-#. TRANSLATORS: model number of the battery
-#: ../src/gpm-upower.c:437
-msgid "Model:"
-msgstr "Модел:"
-
-#. TRANSLATORS: time to fully charged
-#: ../src/gpm-upower.c:442
-msgid "Charge time:"
-msgstr "Време за зареждане:"
-
-#. TRANSLATORS: time to empty
-#: ../src/gpm-upower.c:448
-msgid "Discharge time:"
-msgstr "Време за разреждане:"
-
-#. TRANSLATORS: Excellent, Good, Fair and Poor are all related to battery Capacity
-#: ../src/gpm-upower.c:455
-msgid "Excellent"
-msgstr "Отлично"
-
-#: ../src/gpm-upower.c:457
-msgid "Good"
-msgstr "Чудесно"
-
-#: ../src/gpm-upower.c:459
-msgid "Fair"
-msgstr "Приемливо"
-
-#: ../src/gpm-upower.c:461
-msgid "Poor"
-msgstr "Лошо"
-
-#: ../src/gpm-upower.c:465
-msgid "Capacity:"
-msgstr "Капацитет:"
-
-#: ../src/gpm-upower.c:471 ../src/gpm-upower.c:496
-msgid "Current charge:"
-msgstr "Текущ заряд:"
-
-#: ../src/gpm-upower.c:477
-msgid "Last full charge:"
-msgstr "Последно пълно зареждане:"
-
-#: ../src/gpm-upower.c:483 ../src/gpm-upower.c:501
-msgid "Design charge:"
-msgstr "Проектен заряд:"
-
-#: ../src/gpm-upower.c:488
-msgid "Charge rate:"
-msgstr "Скорост на зареждане:"
-
-#. TRANSLATORS: system power cord
-#: ../src/gpm-upower.c:523 ../src/gpm-upower.c:727
-msgid "AC adapter"
-msgid_plural "AC adapters"
-msgstr[0] "Адаптер за ел. мрежа"
-msgstr[1] "Адаптери за ел. мрежа"
-
-#. TRANSLATORS: laptop primary battery
-#: ../src/gpm-upower.c:527 ../src/gpm-upower.c:763
-msgid "Laptop battery"
-msgid_plural "Laptop batteries"
-msgstr[0] "Батерия на преносим компютър"
-msgstr[1] "Батерии на преносим компютър"
-
-#. TRANSLATORS: battery-backed AC power source
-#: ../src/gpm-upower.c:531 ../src/gpm-upower.c:787
-msgid "UPS"
-msgid_plural "UPSs"
-msgstr[0] "Непрекъсваемо токозахранване"
-msgstr[1] "Непрекъсваеми токозахранвания"
-
-#. TRANSLATORS: a monitor is a device to measure voltage and current
-#: ../src/gpm-upower.c:535 ../src/gpm-upower.c:794
-msgid "Monitor"
-msgid_plural "Monitors"
-msgstr[0] "Монитор"
-msgstr[1] "Монитори"
-
-#. TRANSLATORS: wireless mice with internal batteries
-#: ../src/gpm-upower.c:539 ../src/gpm-upower.c:818
-msgid "Mouse"
-msgid_plural "Mice"
-msgstr[0] "Мишка"
-msgstr[1] "Мишки"
-
-#. TRANSLATORS: wireless keyboard with internal battery
-#: ../src/gpm-upower.c:543 ../src/gpm-upower.c:842
-msgid "Keyboard"
-msgid_plural "Keyboards"
-msgstr[0] "Клавиатура"
-msgstr[1] "Клавиатури"
-
-#. TRANSLATORS: portable device
-#: ../src/gpm-upower.c:547 ../src/gpm-upower.c:866
-msgid "PDA"
-msgid_plural "PDAs"
-msgstr[0] "Цифров помощник"
-msgstr[1] "Цифрови помощници"
-
-#. TRANSLATORS: cell phone (mobile...)
-#: ../src/gpm-upower.c:551 ../src/gpm-upower.c:890
-msgid "Cell phone"
-msgid_plural "Cell phones"
-msgstr[0] "Мобилен телефон"
-msgstr[1] "Мобилни телефони"
-
-#. TRANSLATORS: media player, mp3 etc
-#: ../src/gpm-upower.c:556 ../src/gpm-upower.c:915
-msgid "Media player"
-msgid_plural "Media players"
-msgstr[0] "Музикално устройство"
-msgstr[1] "Музикални устройства"
-
-#. TRANSLATORS: tablet device
-#: ../src/gpm-upower.c:560 ../src/gpm-upower.c:939
-msgid "Tablet"
-msgid_plural "Tablets"
-msgstr[0] "Таблет"
-msgstr[1] "Таблети"
-
-#. TRANSLATORS: tablet device
-#: ../src/gpm-upower.c:564 ../src/gpm-upower.c:963
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Компютър"
-msgstr[1] "Компютри"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:634
-msgid "Lithium Ion"
-msgstr "Литиево-йонна"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:638
-msgid "Lithium Polymer"
-msgstr "Литиево-полимерна"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:642
-msgid "Lithium Iron Phosphate"
-msgstr "Литиево-желязно-фосфатна"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:646
-msgid "Lead acid"
-msgstr "Оловна"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:650
-msgid "Nickel Cadmium"
-msgstr "Никелово-кадмиева"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:654
-msgid "Nickel metal hydride"
-msgstr "Никелово-метално-хидридна"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:658
-msgid "Unknown technology"
-msgstr "Неизвестна технология"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:686
-msgid "Empty"
-msgstr "Празна"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:694
-msgid "Waiting to charge"
-msgstr "Изчаква зареждане"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:698
-msgid "Waiting to discharge"
-msgstr "Изчаква разреждане"
-
-#. TRANSLATORS: device not present
-#: ../src/gpm-upower.c:735
-msgid "Laptop battery not present"
-msgstr "В преносимия компютър липсва батерия"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:739
-msgid "Laptop battery is charging"
-msgstr "Батерията на преносимия компютър се зарежда"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:743
-msgid "Laptop battery is discharging"
-msgstr "Батерията на преносимия компютър се разрежда"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:747
-msgid "Laptop battery is empty"
-msgstr "Батерията на преносимия компютър е разредена"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:751
-msgid "Laptop battery is charged"
-msgstr "Батерията на преносимия компютър е заредена"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:755
-msgid "Laptop battery is waiting to charge"
-msgstr "Батерията на преносимия компютър изчаква да се зареди"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:759
-msgid "Laptop battery is waiting to discharge"
-msgstr "Батерията на преносимия компютър изчаква да се разреди"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:771
-msgid "UPS is charging"
-msgstr "Непрекъсваемото токозахранване се зарежда"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:775
-msgid "UPS is discharging"
-msgstr "Непрекъсваемото токозахранване се разрежда"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:779
-msgid "UPS is empty"
-msgstr "Непрекъсваемото токозахранване е разредено"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:783
-msgid "UPS is charged"
-msgstr "Непрекъсваемото токозахранване е заредено"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:802
-msgid "Mouse is charging"
-msgstr "Мишката се зарежда"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:806
-msgid "Mouse is discharging"
-msgstr "Мишката се разрежда"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:810
-msgid "Mouse is empty"
-msgstr "Мишката е разредена"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:814
-msgid "Mouse is charged"
-msgstr "Мишката е заредена"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:826
-msgid "Keyboard is charging"
-msgstr "Клавиатурата се зарежда"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:830
-msgid "Keyboard is discharging"
-msgstr "Клавиатурата се разрежда"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:834
-msgid "Keyboard is empty"
-msgstr "Клавиатурата е разредена"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:838
-msgid "Keyboard is charged"
-msgstr "Клавиатурата е заредена"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:850
-msgid "PDA is charging"
-msgstr "Цифровият помощник се зарежда"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:854
-msgid "PDA is discharging"
-msgstr "Цифровият помощник се разрежда"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:858
-msgid "PDA is empty"
-msgstr "Цифровият помощник е разреден"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:862
-msgid "PDA is charged"
-msgstr "Цифровият помощник е зареден"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:874
-msgid "Cell phone is charging"
-msgstr "Мобилният телефон се зарежда"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:878
-msgid "Cell phone is discharging"
-msgstr "Мобилният телефон се зарежда"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:882
-msgid "Cell phone is empty"
-msgstr "Мобилният телефон е разреден"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:886
-msgid "Cell phone is charged"
-msgstr "Мобилният телефон е зареден"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:899
-msgid "Media player is charging"
-msgstr "Музикалното устройство се зарежда"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:903
-msgid "Media player is discharging"
-msgstr "Музикалното устройство се разрежда"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:907
-msgid "Media player is empty"
-msgstr "Музикалното устройство е разредено"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:911
-msgid "Media player is charged"
-msgstr "Музикалното устройство е заредено"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:923
-msgid "Tablet is charging"
-msgstr "Таблетът се зарежда"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:927
-msgid "Tablet is discharging"
-msgstr "Таблетът се разрежда"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:931
-msgid "Tablet is empty"
-msgstr "Таблетът е разреден"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:935
-msgid "Tablet is charged"
-msgstr "Таблетът е зареден"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:947
-msgid "Computer is charging"
-msgstr "Компютърът се зарежда"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:951
-msgid "Computer is discharging"
-msgstr "Компютърът се разрежда"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:955
-msgid "Computer is empty"
-msgstr "Компютърът е разреден"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:959
-msgid "Computer is charged"
-msgstr "Компютърът е зареден"

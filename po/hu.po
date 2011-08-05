@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-13 01:22+0100\n"
+"POT-Creation-Date: 2011-08-05 10:10+0100\n"
 "PO-Revision-Date: 2011-03-13 01:20+0100\n"
 "Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
 "Language-Team: Hungarian <gnome at fsf dot hu>\n"
@@ -20,289 +20,27 @@ msgstr ""
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
-#: ../data/gnome-power-manager.desktop.in.in.h:1
-msgid "Power Manager"
-msgstr "Energiakezelő"
-
-#: ../data/gnome-power-manager.desktop.in.in.h:2
-msgid "Power management daemon"
-msgstr "Energiagazdálkodási démon"
-
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:1
-msgid "Allow backlight brightness adjustment"
-msgstr "Lehetővé teszi a háttérvilágítás fényerejének szabályozását"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:2
-msgid "Display options for the notification icon."
-msgstr "Beállítások megjelenítése az értesítési ikonhoz."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:3
-msgid ""
-"If a notification message should be displayed after suspend or hibernate "
-"failed."
-msgstr ""
-"Megjelenjen-e értesítő üzenet, ha a felfüggesztés vagy hibernálás meghiúsul."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:4
-msgid ""
-"If a notification message should be displayed when battery in a device "
-"attached to the computer is getting low."
-msgstr ""
-"Megjelenjen-e értesítő üzenet, ha a számítógéphez csatlakoztatott egyik "
-"eszköz akkumulátora lemerülőben van."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:5
-msgid ""
-"If a notification message should be displayed when the battery is fully "
-"charged."
-msgstr ""
-"Megjelenjen-e értesítő üzenet, ha az akkumulátor teljesen feltöltődött."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:6
-msgid ""
-"If a notification message should be displayed when the system battery or UPS "
-"is getting low."
-msgstr ""
-"Megjelenjen-e értesítő üzenet, ha a rendszer akkumulátora vagy UPS-e "
-"lemerülőben van."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:7
-msgid "If preferences and statistics items should be shown in the context menu"
-msgstr "A beállítások és statisztikaelemek megjelenjenek-e a helyi menüben"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:8
-msgid "If sounds should be used"
-msgstr "Használandók-e hangok"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:9
-msgid ""
-"If sounds should be used when the power is critically low, or inhibit "
-"requests have stopped the policy action."
-msgstr ""
-"Használandók-e hangok, ha az energiaszint alacsony, vagy korlátozási kérések "
-"leállították az irányelvműveletet."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:10
-msgid ""
-"If the keyboard backlight brightness should be reduced when the computer is "
-"on battery power"
-msgstr ""
-"Akkumulátoros tápellátás esetén csökkenjen-e a billentyűzet "
-"háttérvilágításának fényereje"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:11
-msgid "If the low-power mode should be enabled when on AC"
-msgstr ""
-"Az alacsony energiafelvételű állapot bekapcsolandó-e hálózati tápellátás "
-"esetén"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:12
-msgid "If the low-power mode should be enabled when on battery"
-msgstr ""
-"Az alacsony energiafelvételű állapot bekapcsolandó-e akkumulátoros "
-"tápellátás esetén"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:13
-msgid ""
-"If the screen brightness should be changed when switching between AC and "
-"battery power."
-msgstr ""
-"A képernyő fényereje módosítandó-e a hálózati feszültség és akkumulátoros "
-"ellátás közti váltáskor."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:14
-msgid ""
-"If the screen should be reduced in brightness when the computer is on "
-"battery power."
-msgstr "Akkumulátoros tápellátás esetén csökkenjen-e a képernyő fényereje."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:15
-msgid "If the system low-power mode should be enabled when on AC power."
-msgstr ""
-"A rendszer alacsony energiafelvételű állapota bekapcsolandó-e hálózati "
-"tápellátás esetén."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:16
-msgid ""
-"If the system low-power mode should be enabled when on laptop battery power."
-msgstr ""
-"A rendszer alacsony energiafelvételű állapota bekapcsolandó-e akkumulátoros "
-"tápellátás esetén."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:17
-msgid "If the user should be notified when the AC adapter is disconnected."
-msgstr "Kapjon-e értesítést a felhasználó a hálózati csatlakozó kihúzásakor."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:18
-msgid ""
-"If time based notifications should be used. If set to false, then the "
-"percentage change is used instead, which may fix a broken ACPI BIOS."
-msgstr ""
-"Használandók-e az idő alapú értesítések. Hamis értékre állítva a százalékos "
-"változás kerül alkalmazásra, ez hibás ACPI BIOS esetén megoldhatja a "
-"problémát."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:19
-msgid "If we should show the low capacity warning for a broken battery"
-msgstr ""
-"Megjelenjen-e a gyenge kapacitás figyelmeztetés hibás akkumulátor esetén"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:20
-msgid "If we should show the low capacity warning for a broken battery."
-msgstr ""
-"Megjelenjen-e a gyenge kapacitás figyelmeztetés hibás akkumulátor esetén."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:21
-msgid "If we should show the recalled battery warning for a broken battery"
-msgstr ""
-"Megjelenjen-e a visszahívott akkumulátor figyelmeztetés hibás akkumulátor "
-"esetén"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:22
-msgid ""
-"If we should show the recalled battery warning for a broken battery. Set "
-"this to false only if you know your battery is okay."
-msgstr ""
-"Megjelenjen-e a visszahívott akkumulátor figyelmeztetés hibás akkumulátor "
-"esetén? Csak akkor állítsa hamisra, ha tudja, hogy az akkumulátora hibátlan."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:23
-msgid "Keyboard backlight brightness when on AC power."
-msgstr ""
-"A billentyűzet háttérvilágításának fényereje hálózati tápellátás esetén."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:24
-msgid "LCD brightness when on AC"
-msgstr "LCD fényereje hálózati tápellátás esetén"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:25
-msgid "LCD dimming amount when on battery"
-msgstr "LCD sötétítése akkumulátoros tápellátás esetén"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:26
-msgid "Lock GNOME keyring on sleep"
-msgstr "A GNOME kulcstartó zárolása energiatakarékos módba váltáskor"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:27
-msgid "Lock screen on hibernate"
-msgstr "Képernyő zárolása hibernáláskor"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:28
-msgid "Lock screen on suspend"
-msgstr "Képernyő zárolása felfüggesztéskor"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:29
-msgid "Lock screen when blanked"
-msgstr "Képernyő zárolása elsötétítéskor"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:30
-msgid "Notify on a low power"
-msgstr "Értesítés alacsony energiaszint esetén"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:31
-msgid "Notify on a sleep failure"
-msgstr "Értesítés az energiatakarékos mód hibája esetén"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:32
-msgid "Notify when AC adapter is disconnected"
-msgstr "Értesítés a hálózati csatlakozó eltávolításakor"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:33
-msgid "Notify when fully charged"
-msgstr "Értesítés az akkumulátor teljes feltöltésekor"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:34
-msgid ""
-"Percent brightness to set keyboard backlight at when on AC power. Legal "
-"values are between 0 and 100."
-msgstr ""
-"A billentyűzet háttérvilágításának fényereje százalékban hálózati tápellátás "
-"esetén. A lehetséges értékek 0 és 100 között vannak."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:35
-msgid "Percent to reduce keyboard backlight by when idle."
-msgstr ""
-"A billentyűzet-háttérvilágítás fényerejének csökkentése ennyi százalékkal "
-"üresjáratban."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:36
-msgid "Percent to reduce keyboard backlight by when on battery power."
-msgstr ""
-"A billentyűzet-háttérvilágítás fényerejének csökkentése ennyi százalékkal "
-"akkumulátoros tápellátás esetén"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:37
-msgid "Percentage action is taken"
-msgstr "Százalékos arány művelet végrehajtásához"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:38
-msgid "Percentage considered critical"
-msgstr "Kritikusként kezelt százalékos arány"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:39
-msgid "Percentage considered low"
-msgstr "Alacsonyként kezelt százalékos arány"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:40
-msgid "Reduce the backlight brightness when on battery power"
-msgstr ""
-"A háttérvilágítás fényerejének csökkentése akkumulátoros tápellátás esetén"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:41
-msgid "Reduce the keyboard backlight when on battery power"
-msgstr ""
-"A billentyűzet-háttérvilágítás fényerejének csökkentése akkumulátoros "
-"tápellátás esetén"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:42
-msgid "Seconds of inactivity to spin down when on AC"
-msgstr "A lemez leállítása hálózati ellátáson ennyi másodperc tétlenség után"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:43
-msgid "Seconds of inactivity to spin down when on battery"
-msgstr "A lemez leállítása akkumulátoron ennyi másodperc tétlenség után"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:44
 msgid "The ID of the last device selected"
 msgstr "Az utoljára kiválasztott eszköz azonosítója"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:45
-msgid "The URI to show to the user on sleep failure"
-msgstr "Az energiatakarékos mód hibája után megjelenítendő URI"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:46
-msgid ""
-"The amount to dim the brightness of the display when on battery power. "
-"Possible values are between 0 and 100."
-msgstr ""
-"A képernyő fényerejének csökkentése ennyivel akkumulátoros tápellátás "
-"esetén. A lehetséges értékek 0 és 100 között vannak."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:47
-msgid ""
-"The brightness of the display when on AC power. Possible values are between "
-"0.0 and 1.0."
-msgstr ""
-"A képernyő fényereje hálózati tápellátás esetén. A lehetséges értékek 0.0 és "
-"1.0 között vannak."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:48
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:2
 msgid "The default graph type to show for history"
 msgstr "Az előzményekhez megjelenítendő alapértelmezett grafikontípus"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:49
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:3
 msgid "The default graph type to show for stats"
 msgstr "A statisztikákhoz megjelenítendő alapértelmezett grafikontípus"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:50
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:4
 msgid "The default graph type to show in the history window."
 msgstr "Az előzményablakban megjelenítendő alapértelmezett grafikontípus."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:51
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:5
 msgid "The default graph type to show in the stats window."
 msgstr "A statisztikaablakban megjelenítendő alapértelmezett grafikontípus."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:52
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:6
 msgid ""
 "The identifier of the last device which is used to return focus to the "
 "correct device."
@@ -310,11 +48,11 @@ msgstr ""
 "Az utolsó eszköz azonosítója, amely a fókusz megfelelő eszköznek való "
 "visszaadására használatos."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:53
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:7
 msgid "The index of the page number to show by default"
 msgstr "Az alapértelmezésben megjelenítendő oldalszám indexe"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:54
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:8
 msgid ""
 "The index of the page number to show by default which is used to return "
 "focus to the correct page."
@@ -322,213 +60,45 @@ msgstr ""
 "Az alapértelmezésben megjelenítendő oldalszám indexe, amely a fókusz "
 "megfelelő oldalra való visszaadására használatos."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:55
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:9
 msgid ""
 "The maximum duration of time displayed on the x-axis of the history graph."
 msgstr "Az előzménygrafikon X tengelyén megjelenítendő maximális időtartam."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:56
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:10
 msgid "The maximum time displayed for history"
 msgstr "Az előzményekhez megjelenítendő maximális időtartam"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:57
-msgid ""
-"The number of seconds of inactivity to spin down the disks when on AC power."
-msgstr ""
-"A lemezek leállítása ennyi másodpercnyi tétlenség után hálózati tápellátás "
-"esetén"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:58
-msgid ""
-"The number of seconds of inactivity to spin down the disks when on battery "
-"power."
-msgstr ""
-"A lemezek leállítása ennyi másodpercnyi tétlenség után akkumulátoros "
-"tápellátás esetén"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:59
-msgid ""
-"The percentage of the battery when it is considered critical. Only valid "
-"when use-time-for-policy is false."
-msgstr ""
-"Az akkumulátor kritikusnak tekintett százalékos töltöttsége. Csak a use-time-"
-"for-policy kulcs hamis értéke esetén érvényes."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:60
-msgid ""
-"The percentage of the battery when it is considered low. Only valid when use-"
-"time-for-policy is false."
-msgstr ""
-"Az akkumulátor alacsonynak tekintett százalékos töltöttsége. Csak a use-time-"
-"for-policy kulcs hamis értéke esetén érvényes."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:61
-msgid ""
-"The percentage of the battery when the critical action is performed. Only "
-"valid when use-time-for-policy is false."
-msgstr ""
-"Az akkumulátor százalékos töltöttsége, amikor a kritikus művelet "
-"végrehajtandó. Csak a use-time-for-policy kulcs hamis értéke esetén érvényes."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:63
-#, no-c-format
-msgid ""
-"The percentage to reduce the keyboard backlight by when idle. For example, "
-"if set to '60', the backlight will be cut by 40% when idle. Legal values are "
-"between 0 and 100."
-msgstr ""
-"A billentyűzet háttérvilágításának csökkentése üresjáratban ennyi "
-"százalékra. Ha például 60-ra állítja, a háttérvilágítás üresjáratban 40%-kal "
-"csökken. Az érvényes értékek 0 és 100 között vannak."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:65
-#, no-c-format
-msgid ""
-"The percentage to reduce the keyboard backlight by when on battery power. "
-"For example, if set to '60', the backlight will be cut by 40% on battery "
-"power. Legal values are between 0 and 100."
-msgstr ""
-"A billentyűzet háttérvilágításának csökkentése üresjáratban ennyi "
-"százalékra. Ha például 60-ra állítja, a háttérvilágítás üresjáratban 40%-kal "
-"csökken. Az érvényes értékek 0 és 100 között vannak."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:66
-msgid ""
-"The time remaining in seconds of the battery when critical action is taken. "
-"Only valid when use-time-for-policy is true."
-msgstr ""
-"Az akkumulátor töltöttségéből hátralévő idő másodpercben, amikor a kritikus "
-"művelet végrehajtandó. Csak a use-time-for-policy kulcs igaz értéke esetén "
-"érvényes."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:67
-msgid ""
-"The time remaining in seconds of the battery when it is considered critical. "
-"Only valid when use-time-for-policy is true."
-msgstr ""
-"Az akkumulátor töltöttségéből hátralévő idő másodpercben annak kritikusként "
-"kezeléséhez. Csak a use-time-for-policy kulcs igaz értéke esetén érvényes."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:68
-msgid ""
-"The time remaining in seconds of the battery when it is considered low. Only "
-"valid when use-time-for-policy is true."
-msgstr ""
-"Az akkumulátor töltöttségéből hátralévő idő másodpercben annak alacsonyként "
-"kezeléséhez. Csak a use-time-for-policy kulcs igaz értéke esetén érvényes."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:69
-msgid "The time remaining when action is taken"
-msgstr "A hátralévő idő, amikor művelet kerül végrehajtásra"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:70
-msgid "The time remaining when critical"
-msgstr "A hátralévő idő annak kritikusként kezeléséhez"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:71
-msgid "The time remaining when low"
-msgstr "A hátralévő idő annak alacsonyként kezeléséhez"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:72
-msgid "Use gnome-screensaver lock setting"
-msgstr "A gnome-screensaver zárolási beállításainak használata"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:73
-msgid ""
-"When sleep fails we can show the user a button to help fix the situation. "
-"Leave this blank if the button should not be shown."
-msgstr ""
-"Ha az energiatakarékos mód hibázik, megjeleníthető egy gomb a helyzet "
-"javítása érdekében. Hagyja üresen, ha ne jelenjen meg gomb."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:74
-msgid "When to show the notification icon"
-msgstr "Mikor jelenjen meg az értesítési ikon"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:75
-msgid ""
-"Whether the GNOME keyring is locked before the computer enters hibernate. "
-"This means the keyring will have to be unlocked on resume."
-msgstr ""
-"A GNOME kulcstartó zárolásra kerüljön-e a számítógép hibernálása előtt. Ez "
-"azt jelenti, hogy folytatáskor fel kell oldania a kulcstartó zárolását."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:76
-msgid ""
-"Whether the GNOME keyring is locked before the computer enters suspend. This "
-"means the keyring will have to be unlocked on resume."
-msgstr ""
-"A GNOME kulcstartó zárolásra kerüljön-e a számítógép felfüggesztése előtt. "
-"Ez azt jelenti, hogy folytatáskor fel kell oldania a kulcstartó zárolását."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:77
-msgid ""
-"Whether the screen is locked when the computer wakes up from a hibernate. "
-"Only used if lock-use-screensaver is false."
-msgstr ""
-"Le legyen-e zárva a képernyő, amikor a számítógép felébred a hibernálásból. "
-"Ez csak akkor használható, ha a lock-use-screensaver értéke hamis."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:78
-msgid ""
-"Whether the screen is locked when the computer wakes up from a suspend. Only "
-"used if lock-use-screensaver is false."
-msgstr ""
-"Le legyen-e zárva a képernyő, amikor a számítógép felébred a "
-"felfüggesztésből. Ez csak akkor használható, ha a lock-use-screensaver "
-"értéke hamis."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:79
-msgid ""
-"Whether the screen is locked when the screen is turned off. Only used if "
-"lock-use-screensaver is false."
-msgstr ""
-"Le legyen-e zárva a képernyő a kikapcsolásakor. Ez csak akkor használható, "
-"ha a lock-use-screensaver értéke hamis."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:80
-msgid ""
-"Whether to use the screen lock setting of gnome-screensaver to decide if the "
-"screen is locked after a hibernate, suspend or blank screen."
-msgstr ""
-"A gnome-screensaver képernyő-zárolási értékei felhasználásra kerüljenek-e a "
-"képernyő lezárásához hibernálás, felfüggesztés vagy a képernyő elsötétítése "
-"után."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:81
-msgid "Whether to use time-based notifications"
-msgstr "Legyenek-e idő alapú értesítések"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:82
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:11
 msgid "Whether we should show the history data points"
 msgstr "Megjelenjenek-e az előzmények adatpontjai"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:83
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:12
 msgid ""
 "Whether we should show the history data points in the statistics window."
 msgstr "Megjelenjenek-e az előzmények adatpontjai a statisztikaablakban?"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:84
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:13
 msgid "Whether we should show the stats data points"
 msgstr "Megjelenjenek-e a statisztika adatpontjai"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:85
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:14
 msgid "Whether we should show the stats data points in the statistics window."
 msgstr "Megjelenjenek-e a statisztika adatpontjai a statisztikaablakban?"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:86
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:15
 msgid "Whether we should smooth the history data"
 msgstr "Az előzményadatok simításra kerüljenek-e"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:87
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:16
 msgid "Whether we should smooth the history data in the graph."
 msgstr "Az előzményadatok simításra kerüljenek-e a grafikonon?"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:88
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:17
 msgid "Whether we should smooth the stats data"
 msgstr "A statisztikaadatok simításra kerüljenek-e"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:89
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:18
 msgid "Whether we should smooth the stats data in the graph."
 msgstr "A statisztikaadatok simításra kerüljenek-e a grafikonon?"
 
@@ -539,14 +109,10 @@ msgstr "Energiagazdálkodás megfigyelése"
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1087
-#: ../src/gpm-statistics.c:1541
+#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1406
+#: ../src/gpm-statistics.c:1860
 msgid "Power Statistics"
 msgstr "Energiastatisztika"
-
-#: ../data/gpm-feedback-widget.ui.h:1
-msgid "Brightness"
-msgstr "Fényerő"
 
 #: ../data/gpm-statistics.ui.h:1
 msgid "0"
@@ -556,7 +122,7 @@ msgstr "0"
 msgid "Data length:"
 msgstr "Adathossz:"
 
-#: ../data/gpm-statistics.ui.h:3 ../src/gpm-statistics.c:206
+#: ../data/gpm-statistics.ui.h:3 ../src/gpm-statistics.c:509
 msgid "Details"
 msgstr "Részletek"
 
@@ -588,114 +154,9 @@ msgstr "Nincsenek megjeleníthető adatok"
 msgid "Use smoothed line"
 msgstr "Simított vonal használata"
 
-#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:192
+#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:495
 msgid "Wakeups"
 msgstr "Ébredések"
-
-#. command line argument
-#: ../src/gpm-backlight-helper.c:161
-msgid "Set the current brightness"
-msgstr "A jelenlegi fényerő beállítása"
-
-#. command line argument
-#: ../src/gpm-backlight-helper.c:164
-msgid "Get the current brightness"
-msgstr "A jelenlegi fényerő lekérése"
-
-#. command line argument
-#: ../src/gpm-backlight-helper.c:167
-msgid "Get the number of brightness levels supported"
-msgstr "A támogatott fényerőszintek számának lekérése"
-
-#. TRANSLATORS: tool that is used when copying profiles system-wide
-#: ../src/gpm-backlight-helper.c:182
-msgid "GNOME Power Manager Backlight Helper"
-msgstr "GNOME Energiakezelő háttérvilágítás-segéd"
-
-#. TRANSLATORS: user did not specify valid options
-#: ../src/gpm-backlight-helper.c:190
-msgid "No valid option was specified"
-msgstr "Nem lett érvényes kapcsoló megadva"
-
-#. TRANSLATORS: no backlights found
-#: ../src/gpm-backlight-helper.c:199
-msgid "No backlights were found on your system"
-msgstr "Nem található háttérvilágítás a rendszeren"
-
-#. TRANSLATORS: failed to access backlight file
-#: ../src/gpm-backlight-helper.c:210
-msgid "Could not get the value of the backlight"
-msgstr "Nem kérhető le a háttérvilágítás értéke"
-
-#. TRANSLATORS: failed to access backlight file
-#: ../src/gpm-backlight-helper.c:228
-msgid "Could not get the maximum value of the backlight"
-msgstr "Nem kérhető le a háttérvilágítás maximális értéke"
-
-#. TRANSLATORS: only able to install profiles as root
-#: ../src/gpm-backlight-helper.c:245
-msgid "This program can only be used by the root user"
-msgstr "Ezt a programot csak a root felhasználó használhatja"
-
-#. TRANSLATORS: the program must never be directly run
-#: ../src/gpm-backlight-helper.c:254
-msgid "This program must only be run through pkexec"
-msgstr "Ezt a programot pkexecen keresztül szabad csak futtatni"
-
-#. TRANSLATORS: failed to access backlight file
-#: ../src/gpm-backlight-helper.c:265
-msgid "Could not set the value of the backlight"
-msgstr "Nem állítható be a háttérvilágítás értéke"
-
-#: ../src/gpm-common.c:55
-msgid "Unknown time"
-msgstr "Ismeretlen idő"
-
-#: ../src/gpm-common.c:60
-#, c-format
-msgid "%i minute"
-msgid_plural "%i minutes"
-msgstr[0] "%i perc"
-msgstr[1] "%i perc"
-
-#: ../src/gpm-common.c:71
-#, c-format
-msgid "%i hour"
-msgid_plural "%i hours"
-msgstr[0] "%i óra"
-msgstr[1] "%i óra"
-
-#. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
-#. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:77
-#, c-format
-msgid "%i %s %i %s"
-msgstr "%i %s, %i %s"
-
-#: ../src/gpm-common.c:78
-msgid "hour"
-msgid_plural "hours"
-msgstr[0] "óra"
-msgstr[1] "óra"
-
-#: ../src/gpm-common.c:79
-msgid "minute"
-msgid_plural "minutes"
-msgstr[0] "perc"
-msgstr[1] "perc"
-
-#. TRANSLATORS: turn on all debugging
-#: ../src/gpm-debug.c:131
-msgid "Show debugging information for all files"
-msgstr "Hibakeresési információk megjelenítése az összes fájlhoz"
-
-#: ../src/gpm-debug.c:189
-msgid "Debugging Options"
-msgstr "Hibakeresési lehetőségek"
-
-#: ../src/gpm-debug.c:189
-msgid "Show debugging options"
-msgstr "Hibakeresési lehetőségek megjelenítése"
 
 #. Translators: This is %i days
 #: ../src/gpm-graph-widget.c:430
@@ -757,586 +218,241 @@ msgstr "%.1fW"
 msgid "%.1fV"
 msgstr "%.1fV"
 
-#: ../src/gpm-main.c:221
-msgid "Show version of installed program and exit"
-msgstr "A telepített program verziószámának megjelenítése és kilépés"
-
-#: ../src/gpm-main.c:223
-msgid "Exit after a small delay (for debugging)"
-msgstr "Kilépés rövid késleltetés után (hibakereséshez)"
-
-#: ../src/gpm-main.c:225
-msgid "Exit after the manager has loaded (for debugging)"
-msgstr "Kilépés a felügyelő betöltése után (hibakereséshez)"
-
-#: ../src/gpm-main.c:238 ../src/gpm-main.c:243
-msgid "GNOME Power Manager"
-msgstr "GNOME Energiakezelő"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:239 ../src/gpm-manager.c:310
-msgid "Battery is very low"
-msgstr "Az akkumulátor nagyon gyenge"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:290
-msgid "Power plugged in"
-msgstr "Áramellátás bekapcsolva"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:294
-msgid "Power unplugged"
-msgstr "Áramellátás kikapcsolva"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:298
-msgid "Lid has opened"
-msgstr "Fedél kinyitva"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:302
-msgid "Lid has closed"
-msgstr "Fedél lezárva"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:306
-msgid "Battery is low"
-msgstr "Az akkumulátor gyenge"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:314
-msgid "Battery is full"
-msgstr "Az akkumulátor feltöltve"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:318
-msgid "Suspend started"
-msgstr "Felfüggesztés megkezdve"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:322
-msgid "Resumed"
-msgstr "Folytatás"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:326
-msgid "Suspend failed"
-msgstr "Felfüggesztés meghiúsult"
-
-#. TRANSLATORS: message text
-#: ../src/gpm-manager.c:612
-msgid "Computer failed to suspend."
-msgstr "A számítógép nem volt képes a felfüggesztés végrehajtására."
-
-#. TRANSLATORS: title text
-#: ../src/gpm-manager.c:614
-msgid "Failed to suspend"
-msgstr "A felfüggesztés meghiúsult"
-
-#. TRANSLATORS: message text
-#: ../src/gpm-manager.c:618
-msgid "Computer failed to hibernate."
-msgstr "A számítógép nem volt képes a hibernálás végrehajtására."
-
-#. TRANSLATORS: title text
-#: ../src/gpm-manager.c:620
-msgid "Failed to hibernate"
-msgstr "A hibernálás meghiúsult"
-
-#. TRANSLATORS: message text
-#: ../src/gpm-manager.c:625
-msgid "Failure was reported as:"
-msgstr "A jelentett hiba:"
-
-#. TRANSLATORS: button text, visit the suspend help website
-#: ../src/gpm-manager.c:638
-msgid "Visit help page"
-msgstr "Súgóoldal felkeresése"
-
-#. TRANSLATORS: this is the gnome-screensaver throttle
-#: ../src/gpm-manager.c:988
-msgid "Display DPMS activated"
-msgstr "Képernyő DPMS aktiválva"
-
-#. TRANSLATORS: this is the gnome-screensaver throttle
-#: ../src/gpm-manager.c:1007
-msgid "On battery power"
-msgstr "Akkumulátoron"
-
-#: ../src/gpm-manager.c:1025
-msgid "Laptop lid is closed"
-msgstr "Noteszgép fedele lezárva"
-
-#: ../src/gpm-manager.c:1063
-msgid "Power Information"
-msgstr "Tápellátási információ"
-
-#. TRANSLATORS: the battery may be recalled by it's vendor
-#: ../src/gpm-manager.c:1301
-msgid "Battery may be recalled"
-msgstr "Az akkumulátort visszahívhatták"
-
-#: ../src/gpm-manager.c:1302
-#, c-format
-msgid ""
-"A battery in your computer may have been recalled by %s and you may be at "
-"risk.\n"
-"\n"
-"For more information visit the battery recall website."
-msgstr ""
-"Lehetséges, hogy a számítógép akkumulátorát visszahívta a gyártó (%s). Ez "
-"kockázatos lehet.\n"
-"\n"
-"További információkért lásd az akkumulátor-visszahívási webhelyet."
-
-#. TRANSLATORS: button text, visit the manufacturers recall website
-#: ../src/gpm-manager.c:1312
-msgid "Visit recall website"
-msgstr "Visszahívási webhely felkeresése"
-
-#. TRANSLATORS: button text, do not show this bubble again
-#: ../src/gpm-manager.c:1315
-msgid "Do not show me this again"
-msgstr "Ne mutassa ezt többször"
-
-#. We should notify the user if the battery has a low capacity,
-#. * where capacity is the ratio of the last_full capacity with that of
-#. * the design capacity. (#326740)
-#. TRANSLATORS: battery is old or broken
-#: ../src/gpm-manager.c:1403
-msgid "Battery may be broken"
-msgstr "Az akkumulátor hibás lehet"
-
-#. TRANSLATORS: notify the user that that battery is broken as the capacity is very low
-#: ../src/gpm-manager.c:1406
-#, c-format
-msgid ""
-"Battery has a very low capacity (%1.1f%%), which means that it may be old or "
-"broken."
-msgstr ""
-"Az akkumulátor kapacitása nagyon gyenge (%1.1f%%), ez azt jelentheti, hogy "
-"régi vagy hibás."
-
-#. TRANSLATORS: show the charged notification
-#: ../src/gpm-manager.c:1455
-msgid "Battery Charged"
-msgid_plural "Batteries Charged"
-msgstr[0] "Az akkumulátor feltöltve"
-msgstr[1] "Az akkumulátorok feltöltve"
-
-# fixme
-#. TRANSLATORS: laptop battery is now discharging
-#: ../src/gpm-manager.c:1501
-msgid "Battery Discharging"
-msgstr "Az akkumulátor kisül"
-
-#. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1505
-#, c-format
-msgid "%s of battery power remaining (%.0f%%)"
-msgstr "%s akkumulátorkapacitás van hátra (%.0f%%)"
-
-# fixme
-#. TRANSLATORS: UPS is now discharging
-#: ../src/gpm-manager.c:1511
-msgid "UPS Discharging"
-msgstr "A szünetmentes táp kisül"
-
-#. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1515
-#, c-format
-msgid "%s of UPS backup power remaining (%.0f%%)"
-msgstr "%s szünetmentes tápellátás van hátra (%.0f%%)"
-
-#. TRANSLATORS: laptop battery low, and we only have one battery
-#: ../src/gpm-manager.c:1613
-msgid "Battery low"
-msgstr "Az akkumulátor gyenge"
-
-#. TRANSLATORS: laptop battery low, and we have more than one kind of battery
-#: ../src/gpm-manager.c:1616
-msgid "Laptop battery low"
-msgstr "A noteszgép akkumulátora gyenge"
-
-#. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1622
-#, c-format
-msgid "Approximately <b>%s</b> remaining (%.0f%%)"
-msgstr "Megközelítőleg <b>%s</b> van hátra (%.0lf%%)"
-
-#. TRANSLATORS: UPS is starting to get a little low
-#: ../src/gpm-manager.c:1626
-msgid "UPS low"
-msgstr "A szünetmentes táp gyenge"
-
-#. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1630
-#, c-format
-msgid "Approximately <b>%s</b> of remaining UPS backup power (%.0f%%)"
-msgstr ""
-"A szünetmentes táp áthidalási idejéből még megközelítőleg <b>%s</b> van "
-"hátra (%.0f%%)"
-
-#. TRANSLATORS: mouse is getting a little low
-#. TRANSLATORS: the mouse battery is very low
-#: ../src/gpm-manager.c:1634 ../src/gpm-manager.c:1786
-msgid "Mouse battery low"
-msgstr "Az egér akkumulátora gyenge"
-
-#. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1637
-#, c-format
-msgid "Wireless mouse is low in power (%.0f%%)"
-msgstr "A vezeték nélküli egér akkumulátora gyenge (%.0f%%)"
-
-#. TRANSLATORS: keyboard is getting a little low
-#. TRANSLATORS: the keyboard battery is very low
-#: ../src/gpm-manager.c:1641 ../src/gpm-manager.c:1794
-msgid "Keyboard battery low"
-msgstr "A billentyűzet akkumulátora gyenge"
-
-#. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1644
-#, c-format
-msgid "Wireless keyboard is low in power (%.0f%%)"
-msgstr "A vezeték nélküli billentyűzet akkumulátora gyenge (%.0f%%)"
-
-#. TRANSLATORS: PDA is getting a little low
-#. TRANSLATORS: the PDA battery is very low
-#: ../src/gpm-manager.c:1648 ../src/gpm-manager.c:1803
-msgid "PDA battery low"
-msgstr "A PDA akkumulátora gyenge"
-
-#. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1651
-#, c-format
-msgid "PDA is low in power (%.0f%%)"
-msgstr "A PDA akkumulátora gyenge (%.0f%%)"
-
-#. TRANSLATORS: cell phone (mobile) is getting a little low
-#. TRANSLATORS: the cell battery is very low
-#: ../src/gpm-manager.c:1655 ../src/gpm-manager.c:1813
-#: ../src/gpm-manager.c:1824
-msgid "Cell phone battery low"
-msgstr "A mobiltelefon akkumulátora gyenge"
-
-#. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1658
-#, c-format
-msgid "Cell phone is low in power (%.0f%%)"
-msgstr "A mobiltelefon akkumulátora gyenge (%.0f%%)"
-
-#. TRANSLATORS: media player, e.g. mp3 is getting a little low
-#: ../src/gpm-manager.c:1663
-msgid "Media player battery low"
-msgstr "A médialejátszó akkumulátora gyenge"
-
-#. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1666
-#, c-format
-msgid "Media player is low in power (%.0f%%)"
-msgstr "A médialejátszó akkumulátora gyenge (%.0f%%)"
-
-#. TRANSLATORS: graphics tablet, e.g. wacom is getting a little low
-#. TRANSLATORS: the cell battery is very low
-#: ../src/gpm-manager.c:1670 ../src/gpm-manager.c:1833
-msgid "Tablet battery low"
-msgstr "A táblagép akkumulátora gyenge"
-
-#. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1673
-#, c-format
-msgid "Tablet is low in power (%.0f%%)"
-msgstr "A táblagép akkumulátora gyenge (%.0f%%)"
-
-#. TRANSLATORS: computer, e.g. ipad is getting a little low
-#. TRANSLATORS: the cell battery is very low
-#: ../src/gpm-manager.c:1677 ../src/gpm-manager.c:1842
-msgid "Attached computer battery low"
-msgstr "A csatlakozó számítógép akkumulátora gyenge"
-
-#. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1680
-#, c-format
-msgid "Attached computer is low in power (%.0f%%)"
-msgstr "A csatlakozó számítógép akkumulátora gyenge (%.0f%%)"
-
-#. TRANSLATORS: laptop battery critically low, and only have one kind of battery
-#: ../src/gpm-manager.c:1745
-msgid "Battery critically low"
-msgstr "Az akkumulátor kritikusan gyenge"
-
-#. TRANSLATORS: laptop battery critically low, and we have more than one type of battery
-#. TRANSLATORS: laptop battery is really, really, low
-#: ../src/gpm-manager.c:1748 ../src/gpm-manager.c:1905
-msgid "Laptop battery critically low"
-msgstr "A noteszgép akkumulátora kritikusan gyenge"
-
-#. TRANSLATORS: tell the use to insert the plug, as we're not going to do anything
-#: ../src/gpm-manager.c:1757
-msgid "Plug in your AC adapter to avoid losing data."
-msgstr ""
-"Az adatvesztés elkerülése érdekében csatlakoztassa a hálózati csatlakozót."
-
-#. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1761
-#, c-format
-msgid "Computer will suspend very soon unless it is plugged in."
-msgstr "A számítógép hamarosan fel lesz függesztve, ha nem csatlakoztatja."
-
-#. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1765
-#, c-format
-msgid "Computer will hibernate very soon unless it is plugged in."
-msgstr "A számítógép hamarosan hibernálva lesz, ha nem csatlakoztatja."
-
-#. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1769
-#, c-format
-msgid "Computer will shutdown very soon unless it is plugged in."
-msgstr "A számítógép hamarosan leáll, ha nem csatlakoztatja."
-
-#. TRANSLATORS: the UPS is very low
-#. TRANSLATORS: UPS is really, really, low
-#: ../src/gpm-manager.c:1776 ../src/gpm-manager.c:1941
-msgid "UPS critically low"
-msgstr "A szünetmentes táp kritikusan gyenge"
-
-#. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1780
-#, c-format
-msgid ""
-"Approximately <b>%s</b> of remaining UPS power (%.0f%%). Restore AC power to "
-"your computer to avoid losing data."
-msgstr ""
-"A szünetmentes táp áthidalási idejéből még megközelítőleg <b>%s</b> van "
-"hátra (%.0f%%). Az adatvesztés elkerülése érdekében állítsa vissza a "
-"hálózati tápellátást."
-
-#. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1789
-#, c-format
-msgid ""
-"Wireless mouse is very low in power (%.0f%%). This device will soon stop "
-"functioning if not charged."
-msgstr ""
-"A vezeték nélküli egér akkumulátora nagyon gyenge (%.0f%%). Ha nem tölti "
-"fel, az eszköz le fog állni."
-
-#. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1797
-#, c-format
-msgid ""
-"Wireless keyboard is very low in power (%.0f%%). This device will soon stop "
-"functioning if not charged."
-msgstr ""
-"A vezeték nélküli billentyűzet akkumulátora nagyon gyenge (%.0f%%). Ha nem "
-"tölti fel, az eszköz le fog állni."
-
-#. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1806
-#, c-format
-msgid ""
-"PDA is very low in power (%.0f%%). This device will soon stop functioning if "
-"not charged."
-msgstr ""
-"A PDA akkumulátora nagyon gyenge (%.0f%%). Ha nem tölti fel, az eszköz le "
-"fog állni."
-
-#. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1816
-#, c-format
-msgid ""
-"Cell phone is very low in power (%.0f%%). This device will soon stop "
-"functioning if not charged."
-msgstr ""
-"A mobiltelefon akkumulátora nagyon gyenge (%.0f%%). Ha nem tölti fel, az "
-"eszköz le fog állni."
-
-#. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1827
-#, c-format
-msgid ""
-"Media player is very low in power (%.0f%%). This device will soon stop "
-"functioning if not charged."
-msgstr ""
-"A médialejátszó akkumulátora nagyon gyenge (%.0f%%). Ha nem tölti fel, az "
-"eszköz le fog állni."
-
-#. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1836
-#, c-format
-msgid ""
-"Tablet is very low in power (%.0f%%). This device will soon stop functioning "
-"if not charged."
-msgstr ""
-"A táblagép akkumulátora nagyon gyenge (%.0f%%). Ha nem tölti fel, az eszköz "
-"le fog állni."
-
-#. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1845
-#, c-format
-msgid ""
-"Attached computer is very low in power (%.0f%%). The device will soon "
-"shutdown if not charged."
-msgstr ""
-"A csatlakozó számítógép akkumulátora nagyon gyenge (%.0f%%). Ha nem tölti "
-"fel, az eszköz le fog állni."
-
-#. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1913
-msgid ""
-"The battery is below the critical level and this computer will <b>power-off</"
-"b> when the battery becomes completely empty."
-msgstr ""
-"Az akkumulátor a kritikus szint alatt van, és ez a számítógép <b>ki fog "
-"kapcsolni</b>, amint az akkumulátor teljesen lemerül."
-
-#. TRANSLATORS: computer will suspend
-#: ../src/gpm-manager.c:1919
-msgid ""
-"The battery is below the critical level and this computer is about to "
-"suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
-"computer in a suspended state."
-msgstr ""
-"Az akkumulátor kapacitása a kritikus szint alá esett, és a gép "
-"felfüggesztésre készül.<br><b>Megjegyzés:</b> Minimális mértékben a "
-"számítógép felfüggesztett állapotban is fogyaszt áramot."
-
-#. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1926
-msgid ""
-"The battery is below the critical level and this computer is about to "
-"hibernate."
-msgstr ""
-"Az akkumulátor kapacitása a kritikus szint alá esett, és a gép hibernálásra "
-"készül."
-
-#. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1931
-msgid ""
-"The battery is below the critical level and this computer is about to "
-"shutdown."
-msgstr ""
-"Az akkumulátor kapacitása a kritikus szint alá esett, és a gép leállni "
-"készül."
-
-#. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1949
-msgid ""
-"UPS is below the critical level and this computer will <b>power-off</b> when "
-"the UPS becomes completely empty."
-msgstr ""
-"A szünetmentes táp kapacitása a kritikus szint alá esett, és teljes "
-"lemerülésekor a számítógép <b>ki fog kapcsolni</b>."
-
-#. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1955
-msgid ""
-"UPS is below the critical level and this computer is about to hibernate."
-msgstr ""
-"A szünetmentes táp kapacitása a kritikus szint alá esett, és a gép "
-"hibernálásra készül."
-
-#. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1960
-msgid "UPS is below the critical level and this computer is about to shutdown."
-msgstr ""
-"A szünetmentes táp kapacitása a kritikus szint alá esett, és a gép leállni "
-"készül."
-
 #. TRANSLATORS: the rate of discharge for the device
-#: ../src/gpm-statistics.c:76 ../src/gpm-statistics.c:464
+#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:767
 msgid "Rate"
 msgstr "Sebesség"
 
-#: ../src/gpm-statistics.c:77
+#: ../src/gpm-statistics.c:81
 msgid "Charge"
 msgstr "Töltés"
 
-#: ../src/gpm-statistics.c:78 ../src/gpm-statistics.c:478
+#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:781
 msgid "Time to full"
 msgstr "Idő a feltöltésig"
 
-#: ../src/gpm-statistics.c:79 ../src/gpm-statistics.c:483
+#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:786
 msgid "Time to empty"
 msgstr "Idő a lemerülésig"
 
-#: ../src/gpm-statistics.c:86
+#: ../src/gpm-statistics.c:90
 msgid "10 minutes"
 msgstr "10 perc"
 
-#: ../src/gpm-statistics.c:87
+#: ../src/gpm-statistics.c:91
 msgid "2 hours"
 msgstr "2 óra"
 
-#: ../src/gpm-statistics.c:88
+#: ../src/gpm-statistics.c:92
 msgid "6 hours"
 msgstr "6 óra"
 
-#: ../src/gpm-statistics.c:89
+#: ../src/gpm-statistics.c:93
 msgid "1 day"
 msgstr "1 nap"
 
-#: ../src/gpm-statistics.c:90
+#: ../src/gpm-statistics.c:94
 msgid "1 week"
 msgstr "1 hét"
 
 #. TRANSLATORS: what we've observed about the device
-#: ../src/gpm-statistics.c:99
+#: ../src/gpm-statistics.c:103
 msgid "Charge profile"
 msgstr "Töltés profilja"
 
 # fixme
-#: ../src/gpm-statistics.c:100
+#: ../src/gpm-statistics.c:104
 msgid "Discharge profile"
 msgstr "Kisülés profilja"
 
 #. TRANSLATORS: how accurately we can predict the time remaining of the battery
-#: ../src/gpm-statistics.c:102
+#: ../src/gpm-statistics.c:106
 msgid "Charge accuracy"
 msgstr "Töltés pontossága"
 
 # fixme
-#: ../src/gpm-statistics.c:103
+#: ../src/gpm-statistics.c:107
 msgid "Discharge accuracy"
 msgstr "Kisülés pontossága"
 
-#: ../src/gpm-statistics.c:130
+#. TRANSLATORS: system power cord
+#: ../src/gpm-statistics.c:288
+msgid "AC adapter"
+msgid_plural "AC adapters"
+msgstr[0] "Hálózati csatlakozó"
+msgstr[1] "Hálózati csatlakozók"
+
+#. TRANSLATORS: laptop primary battery
+#: ../src/gpm-statistics.c:292
+msgid "Laptop battery"
+msgid_plural "Laptop batteries"
+msgstr[0] "Noteszgép-akkumulátor"
+msgstr[1] "Noteszgép-akkumulátorok"
+
+#. TRANSLATORS: battery-backed AC power source
+#: ../src/gpm-statistics.c:296
+msgid "UPS"
+msgid_plural "UPSs"
+msgstr[0] "Szünetmentes táp"
+msgstr[1] "Szünetmentes táp"
+
+#. TRANSLATORS: a monitor is a device to measure voltage and current
+#: ../src/gpm-statistics.c:300
+msgid "Monitor"
+msgid_plural "Monitors"
+msgstr[0] "Monitor"
+msgstr[1] "Monitorok"
+
+#. TRANSLATORS: wireless mice with internal batteries
+#: ../src/gpm-statistics.c:304
+msgid "Mouse"
+msgid_plural "Mice"
+msgstr[0] "Egér"
+msgstr[1] "Egér"
+
+#. TRANSLATORS: wireless keyboard with internal battery
+#: ../src/gpm-statistics.c:308
+msgid "Keyboard"
+msgid_plural "Keyboards"
+msgstr[0] "Billentyűzet"
+msgstr[1] "Billentyűzet"
+
+#. TRANSLATORS: portable device
+#: ../src/gpm-statistics.c:312
+msgid "PDA"
+msgid_plural "PDAs"
+msgstr[0] "PDA"
+msgstr[1] "PDA-k"
+
+#. TRANSLATORS: cell phone (mobile...)
+#: ../src/gpm-statistics.c:316
+msgid "Cell phone"
+msgid_plural "Cell phones"
+msgstr[0] "Mobiltelefon"
+msgstr[1] "Mobiltelefonok"
+
+#. TRANSLATORS: media player, mp3 etc
+#: ../src/gpm-statistics.c:321
+msgid "Media player"
+msgid_plural "Media players"
+msgstr[0] "Médialejátszó"
+msgstr[1] "Médialejátszó"
+
+#. TRANSLATORS: tablet device
+#: ../src/gpm-statistics.c:325
+msgid "Tablet"
+msgid_plural "Tablets"
+msgstr[0] "Táblagép"
+msgstr[1] "Táblagép"
+
+#. TRANSLATORS: tablet device
+#: ../src/gpm-statistics.c:329
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Számítógép"
+msgstr[1] "Számítógép"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:349
+msgid "Lithium Ion"
+msgstr "Lítiumion"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:353
+msgid "Lithium Polymer"
+msgstr "Lítiumpolimer"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:357
+msgid "Lithium Iron Phosphate"
+msgstr "Lítium-vasfoszfát"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:361
+msgid "Lead acid"
+msgstr "Ólmos-savas"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:365
+msgid "Nickel Cadmium"
+msgstr "Nikkel-kadmium"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:369
+msgid "Nickel metal hydride"
+msgstr "Nikkel-fém hidrid"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:373
+msgid "Unknown technology"
+msgstr "Ismeretlen technológia"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:393
+msgid "Charging"
+msgstr "Töltés"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:397
+msgid "Discharging"
+msgstr "Kisülés"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:401
+msgid "Empty"
+msgstr "Lemerült"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:405
+msgid "Charged"
+msgstr "Feltöltve"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:409
+msgid "Waiting to charge"
+msgstr "Várakozás töltésre"
+
+# fixme
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:413
+msgid "Waiting to discharge"
+msgstr "Várakozás kisülésre"
+
+#: ../src/gpm-statistics.c:433
 msgid "Attribute"
 msgstr "Attribútum"
 
-#: ../src/gpm-statistics.c:137
+#: ../src/gpm-statistics.c:440
 msgid "Value"
 msgstr "Érték"
 
-#: ../src/gpm-statistics.c:154
+#: ../src/gpm-statistics.c:457
 msgid "Image"
 msgstr "Kép"
 
-#: ../src/gpm-statistics.c:160
+#: ../src/gpm-statistics.c:463
 msgid "Description"
 msgstr "Leírás"
 
-#: ../src/gpm-statistics.c:179 ../src/gpm-statistics.c:403
+#: ../src/gpm-statistics.c:482 ../src/gpm-statistics.c:706
 msgid "Type"
 msgstr "Típus"
 
-#: ../src/gpm-statistics.c:185
+#: ../src/gpm-statistics.c:488
 msgid "ID"
 msgstr "Azonosító"
 
-#: ../src/gpm-statistics.c:199
+#: ../src/gpm-statistics.c:502
 msgid "Command"
 msgstr "Parancs"
 
 #. TRANSLATORS: this is when the stats time is not known
-#: ../src/gpm-statistics.c:284
+#: ../src/gpm-statistics.c:587
 msgid "Unknown"
 msgstr "Ismeretlen"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:288
+#: ../src/gpm-statistics.c:591
 #, c-format
 msgid "%.0f second"
 msgid_plural "%.0f seconds"
@@ -1344,7 +460,7 @@ msgstr[0] "%.0f másodperc"
 msgstr[1] "%.0f másodperc"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:293
+#: ../src/gpm-statistics.c:596
 #, c-format
 msgid "%.1f minute"
 msgid_plural "%.1f minutes"
@@ -1352,7 +468,7 @@ msgstr[0] "%.1f perc"
 msgstr[1] "%.1f perc"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:298
+#: ../src/gpm-statistics.c:601
 #, c-format
 msgid "%.1f hour"
 msgid_plural "%.1f hours"
@@ -1360,46 +476,46 @@ msgstr[0] "%.1f óra"
 msgstr[1] "%.1f óra"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:302
+#: ../src/gpm-statistics.c:605
 #, c-format
 msgid "%.1f day"
 msgid_plural "%.1f days"
 msgstr[0] "%.1f nap"
 msgstr[1] "%.1f nap"
 
-#: ../src/gpm-statistics.c:311
+#: ../src/gpm-statistics.c:614
 msgid "Yes"
 msgstr "Igen"
 
-#: ../src/gpm-statistics.c:311
+#: ../src/gpm-statistics.c:614
 msgid "No"
 msgstr "Nem"
 
 #. TRANSLATORS: the device ID of the current device, e.g. "battery0"
-#: ../src/gpm-statistics.c:400
+#: ../src/gpm-statistics.c:703
 msgid "Device"
 msgstr "Eszköz"
 
-#: ../src/gpm-statistics.c:405
+#: ../src/gpm-statistics.c:708
 msgid "Vendor"
 msgstr "Gyártó"
 
-#: ../src/gpm-statistics.c:407
+#: ../src/gpm-statistics.c:710
 msgid "Model"
 msgstr "Modell"
 
-#: ../src/gpm-statistics.c:409
+#: ../src/gpm-statistics.c:712
 msgid "Serial number"
 msgstr "Sorozatszám"
 
 #. TRANSLATORS: a boolean attribute that means if the device is supplying the
 #. * main power for the computer. For instance, an AC adapter or laptop battery
 #. * would be TRUE,  but a mobile phone or mouse taking power is FALSE
-#: ../src/gpm-statistics.c:414
+#: ../src/gpm-statistics.c:717
 msgid "Supply"
 msgstr "Ellátás"
 
-#: ../src/gpm-statistics.c:417
+#: ../src/gpm-statistics.c:720
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
@@ -1408,736 +524,251 @@ msgstr[1] "%d másodperc"
 
 #. TRANSLATORS: when the device was last updated with new data. It's
 #. * usually a few seconds when a device is discharging or charging.
-#: ../src/gpm-statistics.c:421
+#: ../src/gpm-statistics.c:724
 msgid "Refreshed"
 msgstr "Frissítve"
 
 #. TRANSLATORS: Present is whether the device is currently attached
 #. * to the computer, as some devices (e.g. laptop batteries) can
 #. * be removed, but still observed as devices on the system
-#: ../src/gpm-statistics.c:431
+#: ../src/gpm-statistics.c:734
 msgid "Present"
 msgstr "Jelen van"
 
 #. TRANSLATORS: If the device can be recharged, e.g. lithium
 #. * batteries rather than alkaline ones
-#: ../src/gpm-statistics.c:438
+#: ../src/gpm-statistics.c:741
 msgid "Rechargeable"
 msgstr "Újratölthető"
 
 #. TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged"
-#: ../src/gpm-statistics.c:444
+#: ../src/gpm-statistics.c:747
 msgid "State"
 msgstr "Állapot"
 
-#: ../src/gpm-statistics.c:448
+#: ../src/gpm-statistics.c:751
 msgid "Energy"
 msgstr "Energia"
 
-#: ../src/gpm-statistics.c:451
+#: ../src/gpm-statistics.c:754
 msgid "Energy when empty"
 msgstr "Energia lemerülve"
 
-#: ../src/gpm-statistics.c:454
+#: ../src/gpm-statistics.c:757
 msgid "Energy when full"
 msgstr "Energia feltöltve"
 
-#: ../src/gpm-statistics.c:457
+#: ../src/gpm-statistics.c:760
 msgid "Energy (design)"
 msgstr "Energia (tervezett)"
 
-#: ../src/gpm-statistics.c:471
+#: ../src/gpm-statistics.c:774
 msgid "Voltage"
 msgstr "Feszültség"
 
 #. TRANSLATORS: the amount of charge the cell contains
-#: ../src/gpm-statistics.c:493
+#: ../src/gpm-statistics.c:796
 msgid "Percentage"
 msgstr "Százalék"
 
 #. TRANSLATORS: the capacity of the device, which is basically a measure
 #. * of how full it can get, relative to the design capacity
-#: ../src/gpm-statistics.c:500
+#: ../src/gpm-statistics.c:803
 msgid "Capacity"
 msgstr "Kapacitás"
 
 #. TRANSLATORS: the type of battery, e.g. lithium or nikel metal hydroxide
-#: ../src/gpm-statistics.c:505
+#: ../src/gpm-statistics.c:808
 msgid "Technology"
 msgstr "Technológia"
 
 #. TRANSLATORS: this is when the device is plugged in, typically
 #. * only shown for the ac adaptor device
-#: ../src/gpm-statistics.c:510
+#: ../src/gpm-statistics.c:813
 msgid "Online"
 msgstr "Online"
 
 #. TRANSLATORS: the command line was not provided
-#: ../src/gpm-statistics.c:821
+#: ../src/gpm-statistics.c:1140
 msgid "No data"
 msgstr "Nincs adat"
 
 #. TRANSLATORS: kernel module, usually a device driver
-#: ../src/gpm-statistics.c:828 ../src/gpm-statistics.c:833
+#: ../src/gpm-statistics.c:1147 ../src/gpm-statistics.c:1152
 msgid "Kernel module"
 msgstr "Rendszermagmodul"
 
 #. TRANSLATORS: kernel housekeeping
-#: ../src/gpm-statistics.c:838
+#: ../src/gpm-statistics.c:1157
 msgid "Kernel core"
 msgstr "Rendszermag"
 
 #. TRANSLATORS: interrupt between processors
-#: ../src/gpm-statistics.c:843
+#: ../src/gpm-statistics.c:1162
 msgid "Interprocessor interrupt"
 msgstr "Processzorközi megszakítás"
 
 #. TRANSLATORS: unknown interrupt
-#: ../src/gpm-statistics.c:848
+#: ../src/gpm-statistics.c:1167
 msgid "Interrupt"
 msgstr "Megszakítás"
 
 #. TRANSLATORS: the keyboard and mouse device event
-#: ../src/gpm-statistics.c:895
+#: ../src/gpm-statistics.c:1214
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "PS/2 billentyűzet/egér/érintőtábla"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
-#: ../src/gpm-statistics.c:898
+#: ../src/gpm-statistics.c:1217
 msgid "ACPI"
 msgstr "ACPI"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
-#: ../src/gpm-statistics.c:901
+#: ../src/gpm-statistics.c:1220
 msgid "Serial ATA"
 msgstr "Soros ATA"
 
 #. TRANSLATORS: this is the old-style ATA interface
-#: ../src/gpm-statistics.c:904
+#: ../src/gpm-statistics.c:1223
 msgid "ATA host controller"
 msgstr "ATA gépvezérlő"
 
 #. TRANSLATORS: 802.11 wireless adaptor
-#: ../src/gpm-statistics.c:907
+#: ../src/gpm-statistics.c:1226
 msgid "Intel wireless adaptor"
 msgstr "Intel vezeték nélküli csatoló"
 
 #. TRANSLATORS: a timer is something that fires periodically.
 #. * The parameter is a process name, e.g. "firefox-bin".
 #. * This is shown when the timer wakes up.
-#: ../src/gpm-statistics.c:914 ../src/gpm-statistics.c:919
-#: ../src/gpm-statistics.c:924 ../src/gpm-statistics.c:929
-#: ../src/gpm-statistics.c:934
+#: ../src/gpm-statistics.c:1233 ../src/gpm-statistics.c:1238
+#: ../src/gpm-statistics.c:1243 ../src/gpm-statistics.c:1248
+#: ../src/gpm-statistics.c:1253
 #, c-format
 msgid "Timer %s"
 msgstr "Időzítő: %s"
 
 #. TRANSLATORS: the parameter is the name of task that's woken up from sleeping.
 #. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:938
+#: ../src/gpm-statistics.c:1257
 #, c-format
 msgid "Sleep %s"
 msgstr "Alvó: %s"
 
 #. TRANSLATORS: this is the name of a new realtime task.
-#: ../src/gpm-statistics.c:941
+#: ../src/gpm-statistics.c:1260
 #, c-format
 msgid "New task %s"
 msgstr "Új feladat: %s"
 
 #. TRANSLATORS: this is the name of a task that's woken to check state.
 #. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:945
+#: ../src/gpm-statistics.c:1264
 #, c-format
 msgid "Wait %s"
 msgstr "Várakozik: %s"
 
 #. TRANSLATORS: this is the name of a work queue.
 #. * A work queue is a list of work that has to be done.
-#: ../src/gpm-statistics.c:949 ../src/gpm-statistics.c:953
+#: ../src/gpm-statistics.c:1268 ../src/gpm-statistics.c:1272
 #, c-format
 msgid "Work queue %s"
 msgstr "Munkasor: %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
-#: ../src/gpm-statistics.c:956
+#: ../src/gpm-statistics.c:1275
 #, c-format
 msgid "Network route flush %s"
 msgstr "Hálózati útválasztás ürítése: %s"
 
 #. TRANSLATORS: this is the name of an activity on the USB bus
-#: ../src/gpm-statistics.c:959
+#: ../src/gpm-statistics.c:1278
 #, c-format
 msgid "USB activity %s"
 msgstr "USB tevékenység: %s"
 
 #. TRANSLATORS: we've timed out of an aligned timer, with the name
-#: ../src/gpm-statistics.c:962
+#: ../src/gpm-statistics.c:1281
 #, c-format
 msgid "Wakeup %s"
 msgstr "Ébredések: %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
-#: ../src/gpm-statistics.c:965
+#: ../src/gpm-statistics.c:1284
 msgid "Local interrupts"
 msgstr "Helyi megszakítások"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
-#: ../src/gpm-statistics.c:968
+#: ../src/gpm-statistics.c:1287
 msgid "Rescheduling interrupts"
 msgstr "Átütemezett megszakítások"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1077
+#: ../src/gpm-statistics.c:1396
 msgid "Device Information"
 msgstr "Eszközinformációk"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1079
+#: ../src/gpm-statistics.c:1398
 msgid "Device History"
 msgstr "Eszköz előzményei"
 
 # fixme
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1081
+#: ../src/gpm-statistics.c:1400
 msgid "Device Profile"
 msgstr "Eszköz profilja"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1083
+#: ../src/gpm-statistics.c:1402
 msgid "Processor Wakeups"
 msgstr "Processzorébredések"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1279 ../src/gpm-statistics.c:1285
-#: ../src/gpm-statistics.c:1291 ../src/gpm-statistics.c:1297
+#: ../src/gpm-statistics.c:1598 ../src/gpm-statistics.c:1604
+#: ../src/gpm-statistics.c:1610 ../src/gpm-statistics.c:1616
 msgid "Time elapsed"
 msgstr "Eltelt idő"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1281
+#: ../src/gpm-statistics.c:1600
 msgid "Power"
 msgstr "Energia"
 
 #. TRANSLATORS: this is the Y axis on the graph for the whole battery device
 #. TRANSLATORS: this is the X axis on the graph for the whole battery device
-#: ../src/gpm-statistics.c:1287 ../src/gpm-statistics.c:1330
-#: ../src/gpm-statistics.c:1336 ../src/gpm-statistics.c:1342
-#: ../src/gpm-statistics.c:1348
+#: ../src/gpm-statistics.c:1606 ../src/gpm-statistics.c:1649
+#: ../src/gpm-statistics.c:1655 ../src/gpm-statistics.c:1661
+#: ../src/gpm-statistics.c:1667
 msgid "Cell charge"
 msgstr "Cellatöltés"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1293 ../src/gpm-statistics.c:1299
+#: ../src/gpm-statistics.c:1612 ../src/gpm-statistics.c:1618
 msgid "Predicted time"
 msgstr "Előrejelzett idő"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1332 ../src/gpm-statistics.c:1344
+#: ../src/gpm-statistics.c:1651 ../src/gpm-statistics.c:1663
 msgid "Correction factor"
 msgstr "Javítási tényező"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1338 ../src/gpm-statistics.c:1350
+#: ../src/gpm-statistics.c:1657 ../src/gpm-statistics.c:1669
 msgid "Prediction accuracy"
 msgstr "Előrejelzés pontossága"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-statistics.c:1529
+#: ../src/gpm-statistics.c:1848
 msgid "Show extra debugging information"
 msgstr "Extra hibakeresési információk megjelenítése"
 
 #. TRANSLATORS: show a device by default
-#: ../src/gpm-statistics.c:1532
+#: ../src/gpm-statistics.c:1851
 msgid "Select this device at startup"
 msgstr "Ezen eszköz kiválasztása indításkor"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:1797
+#: ../src/gpm-statistics.c:2111
 msgid "Processor"
 msgstr "Processzor"
-
-#. TRANSLATORS: % is a timestring, e.g. "6 hours 10 minutes"
-#: ../src/gpm-tray-icon.c:283
-#, c-format
-msgid "%s remaining"
-msgstr "%s van hátra"
-
-#. preferences
-#: ../src/gpm-tray-icon.c:339
-msgid "_Preferences"
-msgstr "_Beállítások"
-
-#. TRANSLATORS: The laptop battery is charged, and we know a time.
-#. * The parameter is the time, e.g. 7 hours 6 minutes
-#: ../src/gpm-upower.c:269
-#, c-format
-msgid "provides %s laptop runtime"
-msgstr "a noteszgép várható működési ideje: %s"
-
-#. TRANSLATORS: the device is discharging, and we have a time remaining
-#. * The first parameter is the device type, e.g. "Laptop battery" and
-#. * the second is the time, e.g. 7 hours 6 minutes
-#: ../src/gpm-upower.c:280
-#, c-format
-msgid "%s %s remaining"
-msgstr "%s: %s van hátra"
-
-#. TRANSLATORS: device is charging, and we have a time to full and a percentage
-#. * The first parameter is the device type, e.g. "Laptop battery" and
-#. * the second is the time, e.g. "7 hours 6 minutes"
-#. TRANSLATORS: device is charging, and we have a time to full and a percentage.
-#. * The first parameter is the device type, e.g. "Laptop battery" and
-#. * the second is the time, e.g. "7 hours 6 minutes"
-#: ../src/gpm-upower.c:301 ../src/gpm-upower.c:318
-#, c-format
-msgid "%s %s until charged"
-msgstr "%s: %s a feltöltésig"
-
-#. TRANSLATORS: the device is charging, and we have a time to full and empty.
-#. * The parameter is a time string, e.g. "7 hours 6 minutes"
-#: ../src/gpm-upower.c:308
-#, c-format
-msgid "provides %s battery runtime"
-msgstr "várható működési idő akkumulátorról: %s"
-
-#. TRANSLATORS: the type of data, e.g. Laptop battery
-#: ../src/gpm-upower.c:402
-msgid "Product:"
-msgstr "Termék:"
-
-#. TRANSLATORS: device is missing
-#. TRANSLATORS: device is charged
-#. TRANSLATORS: device is charging
-#. TRANSLATORS: device is discharging
-#: ../src/gpm-upower.c:406 ../src/gpm-upower.c:409 ../src/gpm-upower.c:412
-#: ../src/gpm-upower.c:415
-msgid "Status:"
-msgstr "Állapot:"
-
-#: ../src/gpm-upower.c:406
-msgid "Missing"
-msgstr "Hiányzik"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:409 ../src/gpm-upower.c:690
-msgid "Charged"
-msgstr "Feltöltve"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:412 ../src/gpm-upower.c:678
-msgid "Charging"
-msgstr "Töltés"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:415 ../src/gpm-upower.c:682
-msgid "Discharging"
-msgstr "Kisülés"
-
-#. TRANSLATORS: percentage
-#: ../src/gpm-upower.c:420
-msgid "Percentage charge:"
-msgstr "Százalékos töltöttség:"
-
-#. TRANSLATORS: manufacturer
-#: ../src/gpm-upower.c:424
-msgid "Vendor:"
-msgstr "Szállító:"
-
-#. TRANSLATORS: how the battery is made, e.g. Lithium Ion
-#: ../src/gpm-upower.c:429
-msgid "Technology:"
-msgstr "Technológia:"
-
-#. TRANSLATORS: serial number of the battery
-#: ../src/gpm-upower.c:433
-msgid "Serial number:"
-msgstr "Sorozatszám:"
-
-#. TRANSLATORS: model number of the battery
-#: ../src/gpm-upower.c:437
-msgid "Model:"
-msgstr "Típus:"
-
-#. TRANSLATORS: time to fully charged
-#: ../src/gpm-upower.c:442
-msgid "Charge time:"
-msgstr "Töltési idő:"
-
-# fixme
-#. TRANSLATORS: time to empty
-#: ../src/gpm-upower.c:448
-msgid "Discharge time:"
-msgstr "Kisülési idő:"
-
-#. TRANSLATORS: Excellent, Good, Fair and Poor are all related to battery Capacity
-#: ../src/gpm-upower.c:455
-msgid "Excellent"
-msgstr "Kitűnő"
-
-#: ../src/gpm-upower.c:457
-msgid "Good"
-msgstr "Jó"
-
-#: ../src/gpm-upower.c:459
-msgid "Fair"
-msgstr "Elfogadható"
-
-#: ../src/gpm-upower.c:461
-msgid "Poor"
-msgstr "Rossz"
-
-#: ../src/gpm-upower.c:465
-msgid "Capacity:"
-msgstr "Kapacitás:"
-
-#: ../src/gpm-upower.c:471 ../src/gpm-upower.c:496
-msgid "Current charge:"
-msgstr "Jelenlegi töltés:"
-
-#: ../src/gpm-upower.c:477
-msgid "Last full charge:"
-msgstr "Utolsó teljes töltés:"
-
-#: ../src/gpm-upower.c:483 ../src/gpm-upower.c:501
-msgid "Design charge:"
-msgstr "Tervezett töltés:"
-
-#: ../src/gpm-upower.c:488
-msgid "Charge rate:"
-msgstr "Töltés sebessége:"
-
-#. TRANSLATORS: system power cord
-#: ../src/gpm-upower.c:523 ../src/gpm-upower.c:727
-msgid "AC adapter"
-msgid_plural "AC adapters"
-msgstr[0] "Hálózati csatlakozó"
-msgstr[1] "Hálózati csatlakozók"
-
-#. TRANSLATORS: laptop primary battery
-#: ../src/gpm-upower.c:527 ../src/gpm-upower.c:763
-msgid "Laptop battery"
-msgid_plural "Laptop batteries"
-msgstr[0] "Noteszgép-akkumulátor"
-msgstr[1] "Noteszgép-akkumulátorok"
-
-#. TRANSLATORS: battery-backed AC power source
-#: ../src/gpm-upower.c:531 ../src/gpm-upower.c:787
-msgid "UPS"
-msgid_plural "UPSs"
-msgstr[0] "Szünetmentes táp"
-msgstr[1] "Szünetmentes táp"
-
-#. TRANSLATORS: a monitor is a device to measure voltage and current
-#: ../src/gpm-upower.c:535 ../src/gpm-upower.c:794
-msgid "Monitor"
-msgid_plural "Monitors"
-msgstr[0] "Monitor"
-msgstr[1] "Monitorok"
-
-#. TRANSLATORS: wireless mice with internal batteries
-#: ../src/gpm-upower.c:539 ../src/gpm-upower.c:818
-msgid "Mouse"
-msgid_plural "Mice"
-msgstr[0] "Egér"
-msgstr[1] "Egér"
-
-#. TRANSLATORS: wireless keyboard with internal battery
-#: ../src/gpm-upower.c:543 ../src/gpm-upower.c:842
-msgid "Keyboard"
-msgid_plural "Keyboards"
-msgstr[0] "Billentyűzet"
-msgstr[1] "Billentyűzet"
-
-#. TRANSLATORS: portable device
-#: ../src/gpm-upower.c:547 ../src/gpm-upower.c:866
-msgid "PDA"
-msgid_plural "PDAs"
-msgstr[0] "PDA"
-msgstr[1] "PDA-k"
-
-#. TRANSLATORS: cell phone (mobile...)
-#: ../src/gpm-upower.c:551 ../src/gpm-upower.c:890
-msgid "Cell phone"
-msgid_plural "Cell phones"
-msgstr[0] "Mobiltelefon"
-msgstr[1] "Mobiltelefonok"
-
-#. TRANSLATORS: media player, mp3 etc
-#: ../src/gpm-upower.c:556 ../src/gpm-upower.c:915
-msgid "Media player"
-msgid_plural "Media players"
-msgstr[0] "Médialejátszó"
-msgstr[1] "Médialejátszó"
-
-#. TRANSLATORS: tablet device
-#: ../src/gpm-upower.c:560 ../src/gpm-upower.c:939
-msgid "Tablet"
-msgid_plural "Tablets"
-msgstr[0] "Táblagép"
-msgstr[1] "Táblagép"
-
-#. TRANSLATORS: tablet device
-#: ../src/gpm-upower.c:564 ../src/gpm-upower.c:963
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Számítógép"
-msgstr[1] "Számítógép"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:634
-msgid "Lithium Ion"
-msgstr "Lítiumion"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:638
-msgid "Lithium Polymer"
-msgstr "Lítiumpolimer"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:642
-msgid "Lithium Iron Phosphate"
-msgstr "Lítium-vasfoszfát"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:646
-msgid "Lead acid"
-msgstr "Ólmos-savas"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:650
-msgid "Nickel Cadmium"
-msgstr "Nikkel-kadmium"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:654
-msgid "Nickel metal hydride"
-msgstr "Nikkel-fém hidrid"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:658
-msgid "Unknown technology"
-msgstr "Ismeretlen technológia"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:686
-msgid "Empty"
-msgstr "Lemerült"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:694
-msgid "Waiting to charge"
-msgstr "Várakozás töltésre"
-
-# fixme
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:698
-msgid "Waiting to discharge"
-msgstr "Várakozás kisülésre"
-
-#. TRANSLATORS: device not present
-#: ../src/gpm-upower.c:735
-msgid "Laptop battery not present"
-msgstr "A noteszgép akkumulátora nincs jelen"
-
-# fixme
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:739
-msgid "Laptop battery is charging"
-msgstr "A noteszgép akkumulátora töltődik"
-
-# fixme
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:743
-msgid "Laptop battery is discharging"
-msgstr "A noteszgép akkumulátora kisül"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:747
-msgid "Laptop battery is empty"
-msgstr "A noteszgép akkumulátora lemerült"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:751
-msgid "Laptop battery is charged"
-msgstr "A noteszgép akkumulátora feltöltve"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:755
-msgid "Laptop battery is waiting to charge"
-msgstr "A noteszgép akkumulátora feltöltésre vár"
-
-# fixme
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:759
-msgid "Laptop battery is waiting to discharge"
-msgstr "A noteszgép akkumulátora kisülésre vár"
-
-# fixme
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:771
-msgid "UPS is charging"
-msgstr "A szünetmentes táp töltődik"
-
-# fixme
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:775
-msgid "UPS is discharging"
-msgstr "A szünetmentes táp kisül"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:779
-msgid "UPS is empty"
-msgstr "A szünetmentes táp lemerült"
-
-# fixme
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:783
-msgid "UPS is charged"
-msgstr "A szünetmentes táp feltöltve"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:802
-msgid "Mouse is charging"
-msgstr "Az egér töltődik"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:806
-msgid "Mouse is discharging"
-msgstr "Az egér kisül"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:810
-msgid "Mouse is empty"
-msgstr "Az egér lemerült"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:814
-msgid "Mouse is charged"
-msgstr "Az egér feltöltve"
-
-# fixme
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:826
-msgid "Keyboard is charging"
-msgstr "A billentyűzet töltődik"
-
-# fixme
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:830
-msgid "Keyboard is discharging"
-msgstr "A billentyűzet kisül"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:834
-msgid "Keyboard is empty"
-msgstr "A billentyűzet lemerült"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:838
-msgid "Keyboard is charged"
-msgstr "A billentyűzet feltöltve"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:850
-msgid "PDA is charging"
-msgstr "A PDA töltődik"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:854
-msgid "PDA is discharging"
-msgstr "A PDA kisül"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:858
-msgid "PDA is empty"
-msgstr "A PDA lemerült"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:862
-msgid "PDA is charged"
-msgstr "A PDA feltöltve"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:874
-msgid "Cell phone is charging"
-msgstr "A mobiltelefon töltődik"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:878
-msgid "Cell phone is discharging"
-msgstr "A mobiltelefon kisül"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:882
-msgid "Cell phone is empty"
-msgstr "A mobiltelefon lemerült"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:886
-msgid "Cell phone is charged"
-msgstr "A mobiltelefon feltöltve"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:899
-msgid "Media player is charging"
-msgstr "A médialejátszó töltődik"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:903
-msgid "Media player is discharging"
-msgstr "A médialejátszó kisül"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:907
-msgid "Media player is empty"
-msgstr "A médialejátszó lemerült"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:911
-msgid "Media player is charged"
-msgstr "A médialejátszó feltöltve"
-
-# fixme
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:923
-msgid "Tablet is charging"
-msgstr "A táblagép töltődik"
-
-# fixme
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:927
-msgid "Tablet is discharging"
-msgstr "A táblagép kisül"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:931
-msgid "Tablet is empty"
-msgstr "A táblagép lemerült"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:935
-msgid "Tablet is charged"
-msgstr "A táblagép feltöltve"
-
-# fixme
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:947
-msgid "Computer is charging"
-msgstr "A számítógép töltődik"
-
-# fixme
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:951
-msgid "Computer is discharging"
-msgstr "A számítógép kisül"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:955
-msgid "Computer is empty"
-msgstr "A számítógép lemerült"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:959
-msgid "Computer is charged"
-msgstr "A számítógép feltöltve"

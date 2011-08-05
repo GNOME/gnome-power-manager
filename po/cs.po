@@ -14,288 +14,38 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"power-manager&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-05-29 16:34+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-08-05 10:10+0100\n"
 "PO-Revision-Date: 2011-03-20 09:24+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: cs\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: ../data/gnome-power-manager.desktop.in.in.h:1
-msgid "Power Manager"
-msgstr "Správce napájení"
-
-#: ../data/gnome-power-manager.desktop.in.in.h:2
-msgid "Power management daemon"
-msgstr "Démon správy napájení"
-
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:1
-msgid "Allow backlight brightness adjustment"
-msgstr "Povolit nastavení jasu podsvícení"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:2
-msgid "Display options for the notification icon."
-msgstr "Zobrazovat volby pro oznamovací ikonu."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:3
-msgid ""
-"If a notification message should be displayed after suspend or hibernate "
-"failed."
-msgstr ""
-"Zda by se měla zobrazit zpráva s upozorněním po selhání uspání do paměti "
-"nebo na disk."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:4
-msgid ""
-"If a notification message should be displayed when battery in a device "
-"attached to the computer is getting low."
-msgstr ""
-"Zda by se měla zobrazit zpráva s upozorněním, když má baterie v zařízení, "
-"které je připojené k počítači, nízký stav nabití."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:5
-msgid ""
-"If a notification message should be displayed when the battery is fully "
-"charged."
-msgstr ""
-"Zda by se měla zobrazit zpráva s upozorněním, když je baterie plně nabita."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:6
-msgid ""
-"If a notification message should be displayed when the system battery or UPS "
-"is getting low."
-msgstr ""
-"Zda by se měla zobrazit zpráva s upozorněním, když má systémová baterie nebo "
-"záložní zdroj nízký stav nabití."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:7
-msgid "If sounds should be used"
-msgstr "Zda by se měl používat zvuk"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:8
-msgid ""
-"If sounds should be used when the power is critically low, or inhibit "
-"requests have stopped the policy action."
-msgstr ""
-"Zda by se mělo používat zvukové upozornění, když napájení dosáhne kriticky "
-"nízké úrovně nebo potlačení požadavku zastaví akci definovanou v zásadách."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:9
-msgid ""
-"If the keyboard backlight brightness should be reduced when the computer is "
-"on battery power"
-msgstr ""
-"Zda by se měl snížit jas podsvětlení klávesnice, když je počítač napájen z "
-"baterie."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:10
-msgid "If the low-power mode should be enabled when on AC"
-msgstr "Zda by měl být zapnut režim nízké spotřeby při napájení ze sítě"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:11
-msgid "If the low-power mode should be enabled when on battery"
-msgstr "Zda by měl být zapnut režim nízké spotřeby při napájení z baterie"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:12
-msgid ""
-"If the screen brightness should be changed when switching between AC and "
-"battery power."
-msgstr ""
-"Zda by se měl změnit jas obrazovky, když dojde k přepnutí mezi napájením z "
-"elektrické sítě a z baterie."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:13
-msgid ""
-"If the screen should be reduced in brightness when the computer is on "
-"battery power."
-msgstr "Zda by obrazovka měla snížit jas, kdy je počítač napájen z baterie."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:14
-msgid "If the system low-power mode should be enabled when on AC power."
-msgstr ""
-"Zda by měl být zapnut systémový režim nízké spotřeby při napájení z "
-"elektrické sítě."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:15
-msgid ""
-"If the system low-power mode should be enabled when on laptop battery power."
-msgstr ""
-"Zda by měl být zapnut systémový režim nízké spotřeby při napájení notebooku "
-"z baterie."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:16
-msgid "If the user should be notified when the AC adapter is disconnected."
-msgstr ""
-"Zda by měl být uživatel upozorněn, když dojde k odpojení napájecího adaptéru "
-"z elektrické sítě."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:17
-msgid ""
-"If time based notifications should be used. If set to false, then the "
-"percentage change is used instead, which may fix a broken ACPI BIOS."
-msgstr ""
-"Zda by se mělo použít upozorňování vycházející z časových údajů. Pokud je "
-"vypnuto, bude se místo toho vycházet z procentních údajů, což může vyřešit "
-"problémy s chybným ACPI BIOS."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:18
-msgid "If we should show the low capacity warning for a broken battery"
-msgstr ""
-"Zda by se mělo zobrazovat varování o nízké kapacitě baterie, která je vadná"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:19
-msgid "If we should show the low capacity warning for a broken battery."
-msgstr ""
-"Zda by se mělo zobrazovat varování o nízké kapacitě baterie, která je vadná."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:20
-msgid "If we should show the recalled battery warning for a broken battery"
-msgstr "Zda by měla být zobrazována varování o stahování vadných baterií"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:21
-msgid ""
-"If we should show the recalled battery warning for a broken battery. Set "
-"this to false only if you know your battery is okay."
-msgstr ""
-"Zda by se mělo zobrazovat varování o stahování vadných baterií z trhu. "
-"Vypněte jen v případě, že jste si jistí, že je vaše baterie v pořádku."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:22
-msgid "Keyboard backlight brightness when on AC power."
-msgstr "Jas podsvětlení klávesnice při síťovém napájení"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:23
-msgid "LCD brightness when on AC"
-msgstr "Jas LCD při síťovém napájení"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:24
-msgid "LCD dimming amount when on battery"
-msgstr "Úroveň ztlumení LCD při napájení z baterie"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:25
-msgid "Lock GNOME keyring on sleep"
-msgstr "Zamknout klíčenku GNOME při uspání"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:26
-msgid "Lock screen on hibernate"
-msgstr "Zamknout obrazovku při uspání na disk"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:27
-msgid "Lock screen on suspend"
-msgstr "Zamknout obrazovku při uspání do paměti"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:28
-msgid "Lock screen when blanked"
-msgstr "Zamknout obrazovku při zčernání"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:29
-msgid "Notify on a low power"
-msgstr "Upozornit při nízkém napájení"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:30
-msgid "Notify on a sleep failure"
-msgstr "Upozornit při selhání uspání"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:31
-msgid "Notify when AC adapter is disconnected"
-msgstr "Upozornit při odpojení napájecího adaptéru"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:32
-msgid "Notify when fully charged"
-msgstr "Upozornit při plném nabití"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:33
-msgid ""
-"Percent brightness to set keyboard backlight at when on AC power. Legal "
-"values are between 0 and 100."
-msgstr ""
-"Procentuální jas, který se má nastavit u podsvícení klávesnice, když je "
-"napájení z elektrické sítě. Povoleny jsou hodnoty v rozmezí 0 až 100."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:34
-msgid "Percent to reduce keyboard backlight by when idle."
-msgstr "Procenta snížení podsvícení klávesnice při nečinnosti"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:35
-msgid "Percent to reduce keyboard backlight by when on battery power."
-msgstr ""
-"O kolik procent se má snížit podsvícení klávesnice, když je napájení z "
-"baterie."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:36
-msgid "Percentage action is taken"
-msgstr "Zbývající procenta pro provedení akce"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:37
-msgid "Percentage considered critical"
-msgstr "Zbývající procenta pro kritický stav"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:38
-msgid "Percentage considered low"
-msgstr "Zbývající procenta pro nízký stav"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:39
-msgid "Reduce the backlight brightness when on battery power"
-msgstr "Snížit jas podsvícení při napájení z baterie"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:40
-msgid "Reduce the keyboard backlight when on battery power"
-msgstr "Snížit podsvícení klávesnice při napájení z baterie"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:41
-msgid "Seconds of inactivity to spin down when on AC"
-msgstr "Sekund neaktivity pro uspání disku při napájení ze sítě"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:42
-msgid "Seconds of inactivity to spin down when on battery"
-msgstr "Sekund neaktivity pro uspání disku při napájení z baterie"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:43
 msgid "The ID of the last device selected"
 msgstr "ID posledního vybraného zařízení"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:44
-msgid "The URI to show to the user on sleep failure"
-msgstr "Adresa URI zobrazená uživateli při selhání uspání"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:45
-msgid ""
-"The amount to dim the brightness of the display when on battery power. "
-"Possible values are between 0 and 100."
-msgstr ""
-"Úroveň ztlumení jasu displeje, když je napájení z baterie. Možné hodnoty "
-"jsou v rozmezí 0 až 100."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:46
-msgid ""
-"The brightness of the display when on AC power. Possible values are between "
-"0.0 and 1.0."
-msgstr ""
-"Jas displeje, když je připojeno síťové napájení. Povolené hodnoty jsou v "
-"rozmezí 0,0 až 1,0."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:47
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:2
 msgid "The default graph type to show for history"
 msgstr "Výchozí typ grafu pro zobrazení historie"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:48
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:3
 msgid "The default graph type to show for stats"
 msgstr "Výchozí typ grafu pro zobrazení statistiky"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:49
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:4
 msgid "The default graph type to show in the history window."
 msgstr "Výchozí typ grafu, který se má zobrazit v okně historie."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:50
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:5
 msgid "The default graph type to show in the stats window."
 msgstr "Výchozí typ grafu, který se má zobrazit v okně statistiky."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:51
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:6
 msgid ""
 "The identifier of the last device which is used to return focus to the "
 "correct device."
@@ -303,11 +53,11 @@ msgstr ""
 "Identifikátor naposledy připojeného zařízení, který se použije k návratu "
 "zaměření na správné zařízení."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:52
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:7
 msgid "The index of the page number to show by default"
 msgstr "Index čísla stránky pro zobrazení jako výchozí"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:53
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:8
 msgid ""
 "The index of the page number to show by default which is used to return "
 "focus to the correct page."
@@ -315,217 +65,49 @@ msgstr ""
 "Index čísla stránky, která ze má zobrazit jako výchozí, což se použije k "
 "návratu zaměření na správnou stránku."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:54
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:9
 msgid ""
 "The maximum duration of time displayed on the x-axis of the history graph."
 msgstr "Maximální časový úsek zobrazený na ose x v grafu s historií."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:55
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:10
 msgid "The maximum time displayed for history"
 msgstr "Maximální doba zobrazená v historii"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:56
-msgid ""
-"The number of seconds of inactivity to spin down the disks when on AC power."
-msgstr ""
-"Počet sekund neaktivity při napájení z elektrické sítě, po kterém se vypne "
-"otáčení disků."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:57
-msgid ""
-"The number of seconds of inactivity to spin down the disks when on battery "
-"power."
-msgstr ""
-"Počet sekund neaktivity při napájení z baterie, po kterém se vypne otáčení "
-"disků."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:58
-msgid ""
-"The percentage of the battery when it is considered critical. Only valid "
-"when use-time-for-policy is false."
-msgstr ""
-"Úroveň nabití baterie v procentech, která je považována za kritickou. Platná je "
-"jen v případě, kdy je klíč use-time-for-policy nastaven na vypnuto."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:59
-msgid ""
-"The percentage of the battery when it is considered low. Only valid when use-"
-"time-for-policy is false."
-msgstr ""
-"Úroveň nabití baterie v procentech, která je považována za nízkou. Platná je jen "
-"v případě, kdy je klíč use-time-for-policy nastaven na vypnuto."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:60
-msgid ""
-"The percentage of the battery when the critical action is performed. Only "
-"valid when use-time-for-policy is false."
-msgstr ""
-"Úroveň nabití baterie v procentech, při které je provedena krizová akce. "
-"Platná je jen v případě, kdy je klíč use-time-for-policy nastaven na vypnuto."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:62
-#, no-c-format
-msgid ""
-"The percentage to reduce the keyboard backlight by when idle. For example, "
-"if set to '60', the backlight will be cut by 40% when idle. Legal values are "
-"between 0 and 100."
-msgstr ""
-"O kolik procent se má snížit podsvícení klávesnice při neaktivitě. Pokud "
-"například nastavíte „60“, bude podsvícení při neaktivitě sníženo na 40 %. "
-"Povolené hodnoty jsou v rozmění 0 až 100."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:64
-#, no-c-format
-msgid ""
-"The percentage to reduce the keyboard backlight by when on battery power. "
-"For example, if set to '60', the backlight will be cut by 40% on battery "
-"power. Legal values are between 0 and 100."
-msgstr ""
-"O kolik procent se má snížit podsvícení klávesnice, když je napájení z "
-"baterie. Pokud například nastavíte „60“, bude podsvícení při napájení z "
-"baterie sníženo na 40 %. Povolené hodnoty jsou v rozmění 0 až 100."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:65
-msgid ""
-"The time remaining in seconds of the battery when critical action is taken. "
-"Only valid when use-time-for-policy is true."
-msgstr ""
-"Zbývající čas baterie v sekundách, při kterém je provedena krizová akce. "
-"Platný je jen v případě, kdy je klíč use-time-for-policy nastaven na zapnuto."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:66
-msgid ""
-"The time remaining in seconds of the battery when it is considered critical. "
-"Only valid when use-time-for-policy is true."
-msgstr ""
-"Zbývající čas baterie v sekundách, který je považován za "
-"kritický. Platný je jen v případě, kdy je klíč use-time-for-policy nastaven "
-"na zapnuto."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:67
-msgid ""
-"The time remaining in seconds of the battery when it is considered low. Only "
-"valid when use-time-for-policy is true."
-msgstr ""
-"Zbývající čas baterie v sekundách, který je považován za "
-"nízký. Platný je jen v případě, kdy je klíč use-time-for-policy nastaven na "
-"zapnuto."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:68
-msgid "The time remaining when action is taken"
-msgstr "Zbývající čas pro provedení akce"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:69
-msgid "The time remaining when critical"
-msgstr "Zbývající čas pro kritický stav"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:70
-msgid "The time remaining when low"
-msgstr "Zbývající čas pro nízký stav"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:71
-msgid "Use gnome-screensaver lock setting"
-msgstr "Používat nastavení zamykání podle šetřiče gnome-screensaver"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:72
-msgid ""
-"When sleep fails we can show the user a button to help fix the situation. "
-"Leave this blank if the button should not be shown."
-msgstr ""
-"Když selže uspání, je možné uživateli zobrazit tlačítko, které mu pomůže "
-"situaci napravit. Pokud se tlačítko zobrazovat nemá, ponechte prázdné."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:73
-msgid "When to show the notification icon"
-msgstr "Zda zobrazovat oznamovací ikonu"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:74
-msgid ""
-"Whether the GNOME keyring is locked before the computer enters hibernate. "
-"This means the keyring will have to be unlocked on resume."
-msgstr ""
-"Zda má být při přechodu do stavu uspání na disk uzamčena klíčenka GNOME. "
-"Tzn. že se při probuzení bude muset klíčenka odemknout."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:75
-msgid ""
-"Whether the GNOME keyring is locked before the computer enters suspend. This "
-"means the keyring will have to be unlocked on resume."
-msgstr ""
-"Zda má být při přechodu do stavu uspání do paměti uzamčena klíčenka GNOME. "
-"Tzn. že se při probuzení bude muset klíčenka odemknout."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:76
-msgid ""
-"Whether the screen is locked when the computer wakes up from a hibernate. "
-"Only used if lock-use-screensaver is false."
-msgstr ""
-"Zda má být při probuzení po uspání na disk uzamčena obrazovka. Použije se, "
-"jen pokud selže lock-use-screensaver."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:77
-msgid ""
-"Whether the screen is locked when the computer wakes up from a suspend. Only "
-"used if lock-use-screensaver is false."
-msgstr ""
-"Zda má být při probuzení po uspání do paměti uzamčena obrazovka. Použije se, "
-"jen pokud selže lock-use-screensaver."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:78
-msgid ""
-"Whether the screen is locked when the screen is turned off. Only used if "
-"lock-use-screensaver is false."
-msgstr ""
-"Zda má být obrazovka uzamčena, když se vypne. Použije se, jen pokud selže "
-"lock-use-screensaver."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:79
-msgid ""
-"Whether to use the screen lock setting of gnome-screensaver to decide if the "
-"screen is locked after a hibernate, suspend or blank screen."
-msgstr ""
-"Zda použít nastavení podle šetřiče gnome-screensaver při rozhodování o tom, "
-"jestli se má obrazovka uzamknout při uspání na disk, uspání do paměti nebo "
-"zčernání obrazovky."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:80
-msgid "Whether to use time-based notifications"
-msgstr "Zda používat oznamování vycházející z časových údajů"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:81
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:11
 msgid "Whether we should show the history data points"
 msgstr "Zda by se měly v datech historie zobrazovat body"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:82
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:12
 msgid ""
 "Whether we should show the history data points in the statistics window."
 msgstr ""
 "Zda by se měly v okně statistiky zobrazovat body v místech odpovídajících "
 "datům historie."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:83
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:13
 msgid "Whether we should show the stats data points"
 msgstr "Zda by se měly v datech statistiky zobrazovat body"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:84
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:14
 msgid "Whether we should show the stats data points in the statistics window."
 msgstr ""
 "Zda by se měly v okně statistiky zobrazovat body v místech odpovídajících "
 "datům statistiky."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:85
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:15
 msgid "Whether we should smooth the history data"
 msgstr "Zda by se měla vyhlazovat křivka v historie"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:86
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:16
 msgid "Whether we should smooth the history data in the graph."
 msgstr "Zda by se měla vyhlazovat křivka v grafu s údaji o historii."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:87
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:17
 msgid "Whether we should smooth the stats data"
 msgstr "Zda by se měla vyhlazovat statistická křivka"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:88
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:18
 msgid "Whether we should smooth the stats data in the graph."
 msgstr "Zda by se měla vyhlazovat křivka v grafu se statistickými údaji."
 
@@ -536,14 +118,10 @@ msgstr "Sledovat správu napájení"
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1087
-#: ../src/gpm-statistics.c:1541
+#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1406
+#: ../src/gpm-statistics.c:1860
 msgid "Power Statistics"
 msgstr "Statistika napájení"
-
-#: ../data/gpm-feedback-widget.ui.h:1
-msgid "Brightness"
-msgstr "Jas"
 
 #: ../data/gpm-statistics.ui.h:1
 msgid "0"
@@ -553,7 +131,7 @@ msgstr "0"
 msgid "Data length:"
 msgstr "Délka dat:"
 
-#: ../data/gpm-statistics.ui.h:3 ../src/gpm-statistics.c:206
+#: ../data/gpm-statistics.ui.h:3 ../src/gpm-statistics.c:509
 msgid "Details"
 msgstr "Podrobnosti"
 
@@ -585,118 +163,9 @@ msgstr "K zobrazení nejsou žádná data."
 msgid "Use smoothed line"
 msgstr "Použít vyhlazenou křivku"
 
-#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:192
+#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:495
 msgid "Wakeups"
 msgstr "Probuzení"
-
-#. command line argument
-#: ../src/gpm-backlight-helper.c:161
-msgid "Set the current brightness"
-msgstr "Nastavit stávající jas"
-
-#. command line argument
-#: ../src/gpm-backlight-helper.c:164
-msgid "Get the current brightness"
-msgstr "Získat stávající jas"
-
-#. command line argument
-#: ../src/gpm-backlight-helper.c:167
-msgid "Get the number of brightness levels supported"
-msgstr "Získat počet podporovaných úrovní jasu"
-
-#. TRANSLATORS: tool that is used when copying profiles system-wide
-#: ../src/gpm-backlight-helper.c:182
-msgid "GNOME Power Manager Backlight Helper"
-msgstr "Pomoc s podsvícením ve Správci napájení GNOME"
-
-#. TRANSLATORS: user did not specify valid options
-#: ../src/gpm-backlight-helper.c:190
-msgid "No valid option was specified"
-msgstr "Nebyla specifikována žádná platná volba"
-
-#. TRANSLATORS: no backlights found
-#: ../src/gpm-backlight-helper.c:199
-msgid "No backlights were found on your system"
-msgstr "Ve vašem systému nebylo nalezeno žádné podsvícení"
-
-#. TRANSLATORS: failed to access backlight file
-#: ../src/gpm-backlight-helper.c:210
-msgid "Could not get the value of the backlight"
-msgstr "Nebylo možné získat hodnotu úrovně podsvícení"
-
-#. TRANSLATORS: failed to access backlight file
-#: ../src/gpm-backlight-helper.c:228
-msgid "Could not get the maximum value of the backlight"
-msgstr "Nebylo možné získat maximální hodnotu úrovně podsvícení"
-
-#. TRANSLATORS: only able to install profiles as root
-#: ../src/gpm-backlight-helper.c:245
-msgid "This program can only be used by the root user"
-msgstr "Tento program může používat pouze uživatel root"
-
-#. TRANSLATORS: the program must never be directly run
-#: ../src/gpm-backlight-helper.c:254
-msgid "This program must only be run through pkexec"
-msgstr "Tento program může být spuštěn jedině přes pkexec"
-
-#. TRANSLATORS: failed to access backlight file
-#: ../src/gpm-backlight-helper.c:265
-msgid "Could not set the value of the backlight"
-msgstr "Nebylo možné nastavit hodnotu úrovně podsvícení"
-
-#: ../src/gpm-common.c:55
-msgid "Unknown time"
-msgstr "Neznámý čas"
-
-#: ../src/gpm-common.c:60
-#, c-format
-msgid "%i minute"
-msgid_plural "%i minutes"
-msgstr[0] "%i minuta"
-msgstr[1] "%i minuty"
-msgstr[2] "%i minut"
-
-#: ../src/gpm-common.c:71
-#, c-format
-msgid "%i hour"
-msgid_plural "%i hours"
-msgstr[0] "%i hodina"
-msgstr[1] "%i hodiny"
-msgstr[2] "%i hodin"
-
-#. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
-#. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:77
-#, c-format
-msgid "%i %s %i %s"
-msgstr "%i %s %i %s"
-
-#: ../src/gpm-common.c:78
-msgid "hour"
-msgid_plural "hours"
-msgstr[0] "hodina"
-msgstr[1] "hodiny"
-msgstr[2] "hodin"
-
-#: ../src/gpm-common.c:79
-msgid "minute"
-msgid_plural "minutes"
-msgstr[0] "minuta"
-msgstr[1] "minuty"
-msgstr[2] "minut"
-
-#. TRANSLATORS: turn on all debugging
-#: ../src/gpm-debug.c:131
-msgid "Show debugging information for all files"
-msgstr "Zobrazit ladicí informace pro všechny soubory"
-
-#: ../src/gpm-debug.c:189
-msgid "Debugging Options"
-msgstr "Volby ladění"
-
-#: ../src/gpm-debug.c:189
-msgid "Show debugging options"
-msgstr "Zobrazit volby ladění"
 
 #. Translators: This is %i days
 #: ../src/gpm-graph-widget.c:430
@@ -758,575 +227,249 @@ msgstr "%.1f W"
 msgid "%.1fV"
 msgstr "%.1f V"
 
-#: ../src/gpm-main.c:221
-msgid "Show version of installed program and exit"
-msgstr "Zobrazit verzi nainstalovaného programu a skončit"
-
-#: ../src/gpm-main.c:223
-msgid "Exit after a small delay (for debugging)"
-msgstr "Ukončit po malé prodlevě (pro účely ladění programu)"
-
-#: ../src/gpm-main.c:225
-msgid "Exit after the manager has loaded (for debugging)"
-msgstr "Ukončit poté, co se načte správce (pro účely ladění programu)"
-
-#: ../src/gpm-main.c:238 ../src/gpm-main.c:243
-msgid "GNOME Power Manager"
-msgstr "Správce napájení GNOME"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:236 ../src/gpm-manager.c:307
-msgid "Battery is very low"
-msgstr "Kriticky nízký stav baterie"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:287
-msgid "Power plugged in"
-msgstr "Napájení bylo připojeno"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:291
-msgid "Power unplugged"
-msgstr "Napájení bylo odpojeno"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:295
-msgid "Lid has opened"
-msgstr "Víko bylo otevřeno"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:299
-msgid "Lid has closed"
-msgstr "Víko bylo zavřeno"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:303
-msgid "Battery is low"
-msgstr "Nízký stav baterie"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:311
-msgid "Battery is full"
-msgstr "Baterie je plně nabitá"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:315
-msgid "Suspend started"
-msgstr "Započato uspávání"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:319
-msgid "Resumed"
-msgstr "Obnovený"
-
-#. TRANSLATORS: this is the sound description
-#: ../src/gpm-manager.c:323
-msgid "Suspend failed"
-msgstr "Uspání selhalo"
-
-#. TRANSLATORS: message text
-#: ../src/gpm-manager.c:609
-msgid "Computer failed to suspend."
-msgstr "Selhalo uspání počítače do paměti."
-
-#. TRANSLATORS: title text
-#: ../src/gpm-manager.c:611
-msgid "Failed to suspend"
-msgstr "Selhalo uspání do paměti"
-
-#. TRANSLATORS: message text
-#: ../src/gpm-manager.c:615
-msgid "Computer failed to hibernate."
-msgstr "Selhalo uspání počítač na disk."
-
-#. TRANSLATORS: title text
-#: ../src/gpm-manager.c:617
-msgid "Failed to hibernate"
-msgstr "Selhalo uspání na disk"
-
-#. TRANSLATORS: message text
-#: ../src/gpm-manager.c:622
-msgid "Failure was reported as:"
-msgstr "Selhání bylo nahlášeno jako:"
-
-#. TRANSLATORS: button text, visit the suspend help website
-#: ../src/gpm-manager.c:635
-msgid "Visit help page"
-msgstr "Navštívit stránku nápovědy"
-
-#. TRANSLATORS: this is the gnome-screensaver throttle
-#: ../src/gpm-manager.c:985
-msgid "Display DPMS activated"
-msgstr "Správa napájení displeje aktivní"
-
-#. TRANSLATORS: this is the gnome-screensaver throttle
-#: ../src/gpm-manager.c:1004
-msgid "On battery power"
-msgstr "Při napájení z baterie"
-
-#: ../src/gpm-manager.c:1022
-msgid "Laptop lid is closed"
-msgstr "Víko notebooku zavřeno"
-
-#: ../src/gpm-manager.c:1060
-msgid "Power Information"
-msgstr "Informace o napájení"
-
-#. TRANSLATORS: the battery may be recalled by it's vendor
-#: ../src/gpm-manager.c:1298
-msgid "Battery may be recalled"
-msgstr "Baterie může být stahována z trhu"
-
-#: ../src/gpm-manager.c:1299
-#, c-format
-msgid ""
-"A battery in your computer may have been recalled by %s and you may be at "
-"risk.\n"
-"\n"
-"For more information visit the battery recall website."
-msgstr ""
-"Baterie ve vašem počítači může být firmou %s stahována a vy můžete být "
-"vystaveni nebezpečí.\n"
-"\n"
-"Více informací získáte na webových stránkách o stahování baterií z trhu."
-
-#. TRANSLATORS: button text, visit the manufacturers recall website
-#: ../src/gpm-manager.c:1309
-msgid "Visit recall website"
-msgstr "Navštívit web stahování baterií z trhu"
-
-#. TRANSLATORS: button text, do not show this bubble again
-#: ../src/gpm-manager.c:1312
-msgid "Do not show me this again"
-msgstr "Znovu nezobrazovat"
-
-#. We should notify the user if the battery has a low capacity,
-#. * where capacity is the ratio of the last_full capacity with that of
-#. * the design capacity. (#326740)
-#. TRANSLATORS: battery is old or broken
-#: ../src/gpm-manager.c:1382
-msgid "Battery may be broken"
-msgstr "Baterie může být poškozena"
-
-#. TRANSLATORS: notify the user that that battery is broken as the capacity is very low
-#: ../src/gpm-manager.c:1385
-#, c-format
-msgid ""
-"Battery has a very low capacity (%1.1f%%), which means that it may be old or "
-"broken."
-msgstr ""
-"Baterie má velmi malou kapacitu (%1.1f %%), což znamená, že může být stará "
-"nebo poškozená."
-
-#. TRANSLATORS: show the charged notification
-#: ../src/gpm-manager.c:1434
-msgid "Battery Charged"
-msgid_plural "Batteries Charged"
-msgstr[0] "Baterie nabita"
-msgstr[1] "Baterie nabity"
-msgstr[2] "Baterie nabity"
-
-#. TRANSLATORS: laptop battery is now discharging
-#: ../src/gpm-manager.c:1480
-msgid "Battery Discharging"
-msgstr "Baterie se vybíjí"
-
-#. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1484
-#, c-format
-msgid "%s of battery power remaining (%.0f%%)"
-msgstr "Zbývá %s provozu na baterie (%.0f %%)"
-
-#. TRANSLATORS: UPS is now discharging
-#: ../src/gpm-manager.c:1490
-msgid "UPS Discharging"
-msgstr "Záložní zdroj se vybíjí"
-
-#. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1494
-#, c-format
-msgid "%s of UPS backup power remaining (%.0f%%)"
-msgstr "Zbývá %s provozu na záložní zdroj (%.0f %%)"
-
-#. TRANSLATORS: laptop battery low, and we only have one battery
-#: ../src/gpm-manager.c:1592
-msgid "Battery low"
-msgstr "Nízký stav baterie"
-
-#. TRANSLATORS: laptop battery low, and we have more than one kind of battery
-#: ../src/gpm-manager.c:1595
-msgid "Laptop battery low"
-msgstr "Baterie notebooku je téměř vybitá"
-
-#. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1601
-#, c-format
-msgid "Approximately <b>%s</b> remaining (%.0f%%)"
-msgstr "Zbývá přibližně <b>%s</b> (%.0f %%)"
-
-#. TRANSLATORS: UPS is starting to get a little low
-#: ../src/gpm-manager.c:1605
-msgid "UPS low"
-msgstr "Záložní zdroj je téměř vybitý"
-
-#. TRANSLATORS: tell the user how much time they have got
-#: ../src/gpm-manager.c:1609
-#, c-format
-msgid "Approximately <b>%s</b> of remaining UPS backup power (%.0f%%)"
-msgstr "Zbývá vám přibližně <b>%s</b> výkonu záložního zdroje (%.0f %%)"
-
-#. TRANSLATORS: mouse is getting a little low
-#. TRANSLATORS: the mouse battery is very low
-#: ../src/gpm-manager.c:1613 ../src/gpm-manager.c:1765
-msgid "Mouse battery low"
-msgstr "Baterie v myši je téměř vybitá"
-
-#. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1616
-#, c-format
-msgid "Wireless mouse is low in power (%.0f%%)"
-msgstr "Bezdrátová myš je téměř vybitá (%.0f %%)"
-
-#. TRANSLATORS: keyboard is getting a little low
-#. TRANSLATORS: the keyboard battery is very low
-#: ../src/gpm-manager.c:1620 ../src/gpm-manager.c:1773
-msgid "Keyboard battery low"
-msgstr "Baterie v klávesnici je téměř vybitá"
-
-#. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1623
-#, c-format
-msgid "Wireless keyboard is low in power (%.0f%%)"
-msgstr "Bezdrátová klávesnice je téměř vybitá (%.0f %%)"
-
-#. TRANSLATORS: PDA is getting a little low
-#. TRANSLATORS: the PDA battery is very low
-#: ../src/gpm-manager.c:1627 ../src/gpm-manager.c:1782
-msgid "PDA battery low"
-msgstr "Baterie v PDA je téměř vybitá"
-
-#. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1630
-#, c-format
-msgid "PDA is low in power (%.0f%%)"
-msgstr "PDA je téměř vybité (%.0f %%)"
-
-#. TRANSLATORS: cell phone (mobile) is getting a little low
-#. TRANSLATORS: the cell battery is very low
-#: ../src/gpm-manager.c:1634 ../src/gpm-manager.c:1792
-#: ../src/gpm-manager.c:1803
-msgid "Cell phone battery low"
-msgstr "Baterie mobilního telefonu je téměř vybitá"
-
-#. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1637
-#, c-format
-msgid "Cell phone is low in power (%.0f%%)"
-msgstr "Mobilní telefon je téměř vybitý (%.0f %%)"
-
-#. TRANSLATORS: media player, e.g. mp3 is getting a little low
-#: ../src/gpm-manager.c:1642
-msgid "Media player battery low"
-msgstr "Baterie přenosného přehrávače je téměř vybitá"
-
-#. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1645
-#, c-format
-msgid "Media player is low in power (%.0f%%)"
-msgstr "Přenosný přehrávač je téměř vybitý (%.0f %%)"
-
-#. TRANSLATORS: graphics tablet, e.g. wacom is getting a little low
-#. TRANSLATORS: the cell battery is very low
-#: ../src/gpm-manager.c:1649 ../src/gpm-manager.c:1812
-msgid "Tablet battery low"
-msgstr "Baterie tabletu je téměř vybitá"
-
-#. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1652
-#, c-format
-msgid "Tablet is low in power (%.0f%%)"
-msgstr "Tablet je téměř vybitý (%.0f %%)"
-
-#. TRANSLATORS: computer, e.g. ipad is getting a little low
-#. TRANSLATORS: the cell battery is very low
-#: ../src/gpm-manager.c:1656 ../src/gpm-manager.c:1821
-msgid "Attached computer battery low"
-msgstr "Baterie připojeného počítače je téměř vybitá"
-
-#. TRANSLATORS: tell user more details
-#: ../src/gpm-manager.c:1659
-#, c-format
-msgid "Attached computer is low in power (%.0f%%)"
-msgstr "Připojený počítač je téměř vybitý (%.0f %%)"
-
-#. TRANSLATORS: laptop battery critically low, and only have one kind of battery
-#: ../src/gpm-manager.c:1724
-msgid "Battery critically low"
-msgstr "Kriticky nízký stav baterie"
-
-#. TRANSLATORS: laptop battery critically low, and we have more than one type of battery
-#. TRANSLATORS: laptop battery is really, really, low
-#: ../src/gpm-manager.c:1727 ../src/gpm-manager.c:1884
-msgid "Laptop battery critically low"
-msgstr "Kriticky nízký stav baterie notebooku"
-
-#. TRANSLATORS: tell the use to insert the plug, as we're not going to do anything
-#: ../src/gpm-manager.c:1736
-msgid "Plug in your AC adapter to avoid losing data."
-msgstr "Připojte svůj napájecí adaptér, abyste předešli ztrátě dat."
-
-#. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1740
-#, c-format
-msgid "Computer will suspend very soon unless it is plugged in."
-msgstr "Pokud počítač velmi brzy nepřipojíte k napájení, bude uspán do paměti."
-
-#. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1744
-#, c-format
-msgid "Computer will hibernate very soon unless it is plugged in."
-msgstr "Pokud počítač velmi brzy nepřipojíte k napájení, bude brzy uspán na disk."
-
-#. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1748
-#, c-format
-msgid "Computer will shutdown very soon unless it is plugged in."
-msgstr "Pokud počítač velmi brzy nepřipojíte k napájení, bude vypnut."
-
-#. TRANSLATORS: the UPS is very low
-#. TRANSLATORS: UPS is really, really, low
-#: ../src/gpm-manager.c:1755 ../src/gpm-manager.c:1920
-msgid "UPS critically low"
-msgstr "Kriticky nízký stav záložního zdroje"
-
-#. TRANSLATORS: give the user a ultimatum
-#: ../src/gpm-manager.c:1759
-#, c-format
-msgid ""
-"Approximately <b>%s</b> of remaining UPS power (%.0f%%). Restore AC power to "
-"your computer to avoid losing data."
-msgstr ""
-"Zbývá přibližně <b>%s</b> napájení ze záložního zdroje (%.0f %%). Obnovte "
-"napájení z elektrické sítě, abyste předešli ztrátě dat."
-
-#. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1768
-#, c-format
-msgid ""
-"Wireless mouse is very low in power (%.0f%%). This device will soon stop "
-"functioning if not charged."
-msgstr ""
-"Bezdrátová myš je téměř vybitá (%.0f %%). Jestliže ji nenabijete, přestane "
-"brzy pracovat."
-
-#. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1776
-#, c-format
-msgid ""
-"Wireless keyboard is very low in power (%.0f%%). This device will soon stop "
-"functioning if not charged."
-msgstr ""
-"Bezdrátová klávesnice je téměř vybitá (%.0f %%). Jestliže ji nenabijete, "
-"přestane brzy pracovat."
-
-#. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1785
-#, c-format
-msgid ""
-"PDA is very low in power (%.0f%%). This device will soon stop functioning if "
-"not charged."
-msgstr ""
-"PDA je téměř vybité (%.0f %%). Jestliže jej nenabijete, přestane brzy "
-"pracovat."
-
-#. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1795
-#, c-format
-msgid ""
-"Cell phone is very low in power (%.0f%%). This device will soon stop "
-"functioning if not charged."
-msgstr ""
-"Mobilní telefon je téměř vybitý (%.0f %%). Jestliže jej nenabijete, přestane "
-"brzy pracovat."
-
-#. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1806
-#, c-format
-msgid ""
-"Media player is very low in power (%.0f%%). This device will soon stop "
-"functioning if not charged."
-msgstr ""
-"Připojený počítač je téměř vybitý (%.0f %%). Jestliže jej nenabijete, "
-"přestane brzy pracovat."
-
-#. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1815
-#, c-format
-msgid ""
-"Tablet is very low in power (%.0f%%). This device will soon stop functioning "
-"if not charged."
-msgstr ""
-"Tablet je téměř vybitý (%.0f%%). Jestliže jej nenabijete, přestane brzy "
-"pracovat."
-
-#. TRANSLATORS: the device is just going to stop working
-#: ../src/gpm-manager.c:1824
-#, c-format
-msgid ""
-"Attached computer is very low in power (%.0f%%). The device will soon "
-"shutdown if not charged."
-msgstr ""
-"Připojený počítač je téměř vybitý (%.0f%%). Jestliže jej nenabijete, "
-"přestane brzy pracovat."
-
-#. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1892
-msgid ""
-"The battery is below the critical level and this computer will <b>power-off</"
-"b> when the battery becomes completely empty."
-msgstr ""
-"Úroveň nabití baterie je pod kritickou úrovní a po jejím úplném vybití bude "
-"<b>přerušeno napájení</b> počítače."
-
-#. TRANSLATORS: computer will suspend
-#: ../src/gpm-manager.c:1898
-msgid ""
-"The battery is below the critical level and this computer is about to "
-"suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
-"computer in a suspended state."
-msgstr ""
-"Úroveň nabití baterie je pod kritickou úrovní a počítač bude vbrzku uspán "
-"do paměti.<br><b>UPOZORNĚNÍ:</b> I k udržení počítač uspaného v paměti je "
-"zapotřebí stálý přísun malého množství energie."
-
-#. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1905
-msgid ""
-"The battery is below the critical level and this computer is about to "
-"hibernate."
-msgstr "Baterie je pod kritickou úrovní a počítač bude vbrzku uspán na disk."
-
-#. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1910
-msgid ""
-"The battery is below the critical level and this computer is about to "
-"shutdown."
-msgstr "Baterie je pod kritickou úrovní a počítač bude vbrzku vypnut."
-
-#. TRANSLATORS: computer will shutdown without saving data
-#: ../src/gpm-manager.c:1928
-msgid ""
-"UPS is below the critical level and this computer will <b>power-off</b> when "
-"the UPS becomes completely empty."
-msgstr ""
-"Záložní zdroj je pod kritickou úrovní. Jakmile se záložní zdroj zcela "
-"vybije, bude <b>přerušeno napájení</b> počítače."
-
-#. TRANSLATORS: computer will hibernate
-#: ../src/gpm-manager.c:1934
-msgid ""
-"UPS is below the critical level and this computer is about to hibernate."
-msgstr ""
-"Úroveň nabití záložního zdroje je pod kritickou úrovní a počítač bude "
-"vbrzku uspán na disk."
-
-#. TRANSLATORS: computer will just shutdown
-#: ../src/gpm-manager.c:1939
-msgid "UPS is below the critical level and this computer is about to shutdown."
-msgstr ""
-"Úroveň nabití záložního zdroje je pod kritickou úrovní a počítač bude vbrzku "
-"vypnut."
-
 #. TRANSLATORS: the rate of discharge for the device
-#: ../src/gpm-statistics.c:76 ../src/gpm-statistics.c:464
+#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:767
 msgid "Rate"
 msgstr "Stupeň"
 
-#: ../src/gpm-statistics.c:77
+#: ../src/gpm-statistics.c:81
 msgid "Charge"
 msgstr "Nabíjení"
 
-#: ../src/gpm-statistics.c:78 ../src/gpm-statistics.c:478
+#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:781
 msgid "Time to full"
 msgstr "Čas do plného nabití"
 
-#: ../src/gpm-statistics.c:79 ../src/gpm-statistics.c:483
+#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:786
 msgid "Time to empty"
 msgstr "Čas do vybití"
 
-#: ../src/gpm-statistics.c:86
+#: ../src/gpm-statistics.c:90
 msgid "10 minutes"
 msgstr "10 minut"
 
-#: ../src/gpm-statistics.c:87
+#: ../src/gpm-statistics.c:91
 msgid "2 hours"
 msgstr "2 hodiny"
 
-#: ../src/gpm-statistics.c:88
+#: ../src/gpm-statistics.c:92
 msgid "6 hours"
 msgstr "6 hodin"
 
-#: ../src/gpm-statistics.c:89
+#: ../src/gpm-statistics.c:93
 msgid "1 day"
 msgstr "1 den"
 
-#: ../src/gpm-statistics.c:90
+#: ../src/gpm-statistics.c:94
 msgid "1 week"
 msgstr "1 týden"
 
 #. TRANSLATORS: what we've observed about the device
-#: ../src/gpm-statistics.c:99
+#: ../src/gpm-statistics.c:103
 msgid "Charge profile"
 msgstr "Profil nabíjení"
 
-#: ../src/gpm-statistics.c:100
+#: ../src/gpm-statistics.c:104
 msgid "Discharge profile"
 msgstr "Profil vybíjení"
 
 #. TRANSLATORS: how accurately we can predict the time remaining of the battery
-#: ../src/gpm-statistics.c:102
+#: ../src/gpm-statistics.c:106
 msgid "Charge accuracy"
 msgstr "Přesnost nabíjení"
 
-#: ../src/gpm-statistics.c:103
+#: ../src/gpm-statistics.c:107
 msgid "Discharge accuracy"
 msgstr "Přesnost vybíjení"
 
-#: ../src/gpm-statistics.c:130
+#. TRANSLATORS: system power cord
+#: ../src/gpm-statistics.c:288
+msgid "AC adapter"
+msgid_plural "AC adapters"
+msgstr[0] "Síťový adaptér"
+msgstr[1] "Síťové adaptéry"
+msgstr[2] "Síťové adaptéry"
+
+#. TRANSLATORS: laptop primary battery
+#: ../src/gpm-statistics.c:292
+msgid "Laptop battery"
+msgid_plural "Laptop batteries"
+msgstr[0] "Baterie notebooku"
+msgstr[1] "Baterie notebooku"
+msgstr[2] "Baterie notebooku"
+
+#. TRANSLATORS: battery-backed AC power source
+#: ../src/gpm-statistics.c:296
+msgid "UPS"
+msgid_plural "UPSs"
+msgstr[0] "Záložní zdroj"
+msgstr[1] "Záložní zdroje"
+msgstr[2] "Záložní zdroje"
+
+#. TRANSLATORS: a monitor is a device to measure voltage and current
+#: ../src/gpm-statistics.c:300
+msgid "Monitor"
+msgid_plural "Monitors"
+msgstr[0] "Monitorovací zařízení"
+msgstr[1] "Monitorovací zařízení"
+msgstr[2] "Monitorovací zařízení"
+
+#. TRANSLATORS: wireless mice with internal batteries
+#: ../src/gpm-statistics.c:304
+msgid "Mouse"
+msgid_plural "Mice"
+msgstr[0] "Myš"
+msgstr[1] "Myši"
+msgstr[2] "Myši"
+
+#. TRANSLATORS: wireless keyboard with internal battery
+#: ../src/gpm-statistics.c:308
+msgid "Keyboard"
+msgid_plural "Keyboards"
+msgstr[0] "Klávesnice"
+msgstr[1] "Klávesnice"
+msgstr[2] "Klávesnice"
+
+#. TRANSLATORS: portable device
+#: ../src/gpm-statistics.c:312
+msgid "PDA"
+msgid_plural "PDAs"
+msgstr[0] "PDA"
+msgstr[1] "PDA"
+msgstr[2] "PDA"
+
+#. TRANSLATORS: cell phone (mobile...)
+#: ../src/gpm-statistics.c:316
+msgid "Cell phone"
+msgid_plural "Cell phones"
+msgstr[0] "Mobilní telefon"
+msgstr[1] "Mobilní telefony"
+msgstr[2] "Mobilní telefony"
+
+#. TRANSLATORS: media player, mp3 etc
+#: ../src/gpm-statistics.c:321
+msgid "Media player"
+msgid_plural "Media players"
+msgstr[0] "Přenosný přehrávač"
+msgstr[1] "Přenosné přehrávače"
+msgstr[2] "Přenosné přehrávače"
+
+#. TRANSLATORS: tablet device
+#: ../src/gpm-statistics.c:325
+msgid "Tablet"
+msgid_plural "Tablets"
+msgstr[0] "Tablet"
+msgstr[1] "Tablety"
+msgstr[2] "Tablety"
+
+#. TRANSLATORS: tablet device
+#: ../src/gpm-statistics.c:329
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Počítač"
+msgstr[1] "Počítače"
+msgstr[2] "Počítače"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:349
+msgid "Lithium Ion"
+msgstr "Lithium-iontová"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:353
+msgid "Lithium Polymer"
+msgstr "Lithium-polymerová"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:357
+msgid "Lithium Iron Phosphate"
+msgstr "Lithium-železo fosfátová"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:361
+msgid "Lead acid"
+msgstr "Olověná"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:365
+msgid "Nickel Cadmium"
+msgstr "Nikl-kadmiová"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:369
+msgid "Nickel metal hydride"
+msgstr "Nikl-metal hidridová"
+
+#. TRANSLATORS: battery technology
+#: ../src/gpm-statistics.c:373
+msgid "Unknown technology"
+msgstr "Neznámá technologie"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:393
+msgid "Charging"
+msgstr "Nabíjí se"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:397
+msgid "Discharging"
+msgstr "Vybíjí se"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:401
+msgid "Empty"
+msgstr "Vybitá"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:405
+msgid "Charged"
+msgstr "Plně nabito"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:409
+msgid "Waiting to charge"
+msgstr "Čeká se na nabití"
+
+#. TRANSLATORS: battery state
+#: ../src/gpm-statistics.c:413
+msgid "Waiting to discharge"
+msgstr "Čeká se na vybití"
+
+#: ../src/gpm-statistics.c:433
 msgid "Attribute"
 msgstr "Atribut"
 
-#: ../src/gpm-statistics.c:137
+#: ../src/gpm-statistics.c:440
 msgid "Value"
 msgstr "Hodnota"
 
-#: ../src/gpm-statistics.c:154
+#: ../src/gpm-statistics.c:457
 msgid "Image"
 msgstr "Obrázek"
 
-#: ../src/gpm-statistics.c:160
+#: ../src/gpm-statistics.c:463
 msgid "Description"
 msgstr "Popis"
 
-#: ../src/gpm-statistics.c:179 ../src/gpm-statistics.c:403
+#: ../src/gpm-statistics.c:482 ../src/gpm-statistics.c:706
 msgid "Type"
 msgstr "Typ"
 
-#: ../src/gpm-statistics.c:185
+#: ../src/gpm-statistics.c:488
 msgid "ID"
 msgstr "ID"
 
-#: ../src/gpm-statistics.c:199
+#: ../src/gpm-statistics.c:502
 msgid "Command"
 msgstr "Příkaz"
 
 #. TRANSLATORS: this is when the stats time is not known
-#: ../src/gpm-statistics.c:284
+#: ../src/gpm-statistics.c:587
 msgid "Unknown"
 msgstr "Neznámo"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:288
+#: ../src/gpm-statistics.c:591
 #, c-format
 msgid "%.0f second"
 msgid_plural "%.0f seconds"
@@ -1335,7 +478,7 @@ msgstr[1] "%.0f sekundy"
 msgstr[2] "%.0f sekund"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:293
+#: ../src/gpm-statistics.c:596
 #, c-format
 msgid "%.1f minute"
 msgid_plural "%.1f minutes"
@@ -1344,7 +487,7 @@ msgstr[1] "%.1f minuty"
 msgstr[2] "%.1f minut"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:298
+#: ../src/gpm-statistics.c:601
 #, c-format
 msgid "%.1f hour"
 msgid_plural "%.1f hours"
@@ -1353,7 +496,7 @@ msgstr[1] "%.1f hodiny"
 msgstr[2] "%.1f hodin"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:302
+#: ../src/gpm-statistics.c:605
 #, c-format
 msgid "%.1f day"
 msgid_plural "%.1f days"
@@ -1361,39 +504,39 @@ msgstr[0] "%.1f den"
 msgstr[1] "%.1f dny"
 msgstr[2] "%.1f dní"
 
-#: ../src/gpm-statistics.c:311
+#: ../src/gpm-statistics.c:614
 msgid "Yes"
 msgstr "Ano"
 
-#: ../src/gpm-statistics.c:311
+#: ../src/gpm-statistics.c:614
 msgid "No"
 msgstr "Ne"
 
 #. TRANSLATORS: the device ID of the current device, e.g. "battery0"
-#: ../src/gpm-statistics.c:400
+#: ../src/gpm-statistics.c:703
 msgid "Device"
 msgstr "Zařízení"
 
-#: ../src/gpm-statistics.c:405
+#: ../src/gpm-statistics.c:708
 msgid "Vendor"
 msgstr "Dodavatel"
 
-#: ../src/gpm-statistics.c:407
+#: ../src/gpm-statistics.c:710
 msgid "Model"
 msgstr "Model"
 
-#: ../src/gpm-statistics.c:409
+#: ../src/gpm-statistics.c:712
 msgid "Serial number"
 msgstr "Sériové číslo"
 
 #. TRANSLATORS: a boolean attribute that means if the device is supplying the
 #. * main power for the computer. For instance, an AC adapter or laptop battery
 #. * would be TRUE,  but a mobile phone or mouse taking power is FALSE
-#: ../src/gpm-statistics.c:414
+#: ../src/gpm-statistics.c:717
 msgid "Supply"
 msgstr "Napájení"
 
-#: ../src/gpm-statistics.c:417
+#: ../src/gpm-statistics.c:720
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
@@ -1403,721 +546,250 @@ msgstr[2] "%d sekund"
 
 #. TRANSLATORS: when the device was last updated with new data. It's
 #. * usually a few seconds when a device is discharging or charging.
-#: ../src/gpm-statistics.c:421
+#: ../src/gpm-statistics.c:724
 msgid "Refreshed"
 msgstr "Obnoveno"
 
 #. TRANSLATORS: Present is whether the device is currently attached
 #. * to the computer, as some devices (e.g. laptop batteries) can
 #. * be removed, but still observed as devices on the system
-#: ../src/gpm-statistics.c:431
+#: ../src/gpm-statistics.c:734
 msgid "Present"
 msgstr "Současný"
 
 #. TRANSLATORS: If the device can be recharged, e.g. lithium
 #. * batteries rather than alkaline ones
-#: ../src/gpm-statistics.c:438
+#: ../src/gpm-statistics.c:741
 msgid "Rechargeable"
 msgstr "Dobíjitelný"
 
 #. TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged"
-#: ../src/gpm-statistics.c:444
+#: ../src/gpm-statistics.c:747
 msgid "State"
 msgstr "Stav"
 
-#: ../src/gpm-statistics.c:448
+#: ../src/gpm-statistics.c:751
 msgid "Energy"
 msgstr "Energie"
 
-#: ../src/gpm-statistics.c:451
+#: ../src/gpm-statistics.c:754
 msgid "Energy when empty"
 msgstr "Energie při úplném vybití"
 
-#: ../src/gpm-statistics.c:454
+#: ../src/gpm-statistics.c:757
 msgid "Energy when full"
 msgstr "Energie při plném nabití"
 
-#: ../src/gpm-statistics.c:457
+#: ../src/gpm-statistics.c:760
 msgid "Energy (design)"
 msgstr "Energie (výrobní)"
 
-#: ../src/gpm-statistics.c:471
+#: ../src/gpm-statistics.c:774
 msgid "Voltage"
 msgstr "Napětí"
 
 #. TRANSLATORS: the amount of charge the cell contains
-#: ../src/gpm-statistics.c:493
+#: ../src/gpm-statistics.c:796
 msgid "Percentage"
 msgstr "Procento"
 
 #. TRANSLATORS: the capacity of the device, which is basically a measure
 #. * of how full it can get, relative to the design capacity
-#: ../src/gpm-statistics.c:500
+#: ../src/gpm-statistics.c:803
 msgid "Capacity"
 msgstr "Kapacita"
 
 #. TRANSLATORS: the type of battery, e.g. lithium or nikel metal hydroxide
-#: ../src/gpm-statistics.c:505
+#: ../src/gpm-statistics.c:808
 msgid "Technology"
 msgstr "Technologie"
 
 #. TRANSLATORS: this is when the device is plugged in, typically
 #. * only shown for the ac adaptor device
-#: ../src/gpm-statistics.c:510
+#: ../src/gpm-statistics.c:813
 msgid "Online"
 msgstr "Připojeno"
 
 #. TRANSLATORS: the command line was not provided
-#: ../src/gpm-statistics.c:821
+#: ../src/gpm-statistics.c:1140
 msgid "No data"
 msgstr "Žádná data"
 
 #. TRANSLATORS: kernel module, usually a device driver
-#: ../src/gpm-statistics.c:828 ../src/gpm-statistics.c:833
+#: ../src/gpm-statistics.c:1147 ../src/gpm-statistics.c:1152
 msgid "Kernel module"
 msgstr "Modul jádra"
 
 #. TRANSLATORS: kernel housekeeping
-#: ../src/gpm-statistics.c:838
+#: ../src/gpm-statistics.c:1157
 msgid "Kernel core"
 msgstr "Jádro"
 
 #. TRANSLATORS: interrupt between processors
-#: ../src/gpm-statistics.c:843
+#: ../src/gpm-statistics.c:1162
 msgid "Interprocessor interrupt"
 msgstr "Přerušení mezi procesy"
 
 #. TRANSLATORS: unknown interrupt
-#: ../src/gpm-statistics.c:848
+#: ../src/gpm-statistics.c:1167
 msgid "Interrupt"
 msgstr "Přerušení"
 
 #. TRANSLATORS: the keyboard and mouse device event
-#: ../src/gpm-statistics.c:895
+#: ../src/gpm-statistics.c:1214
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "Klávesnice/myš/touchpad na PS/2"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
-#: ../src/gpm-statistics.c:898
+#: ../src/gpm-statistics.c:1217
 msgid "ACPI"
 msgstr "ACPI"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
-#: ../src/gpm-statistics.c:901
+#: ../src/gpm-statistics.c:1220
 msgid "Serial ATA"
 msgstr "Serial ATA"
 
 #. TRANSLATORS: this is the old-style ATA interface
-#: ../src/gpm-statistics.c:904
+#: ../src/gpm-statistics.c:1223
 msgid "ATA host controller"
 msgstr "hostitelský řadič ATA"
 
 #. TRANSLATORS: 802.11 wireless adaptor
-#: ../src/gpm-statistics.c:907
+#: ../src/gpm-statistics.c:1226
 msgid "Intel wireless adaptor"
 msgstr "Bezdrátový adaptér Intel"
 
 #. TRANSLATORS: a timer is something that fires periodically.
 #. * The parameter is a process name, e.g. "firefox-bin".
 #. * This is shown when the timer wakes up.
-#: ../src/gpm-statistics.c:914 ../src/gpm-statistics.c:919
-#: ../src/gpm-statistics.c:924 ../src/gpm-statistics.c:929
-#: ../src/gpm-statistics.c:934
+#: ../src/gpm-statistics.c:1233 ../src/gpm-statistics.c:1238
+#: ../src/gpm-statistics.c:1243 ../src/gpm-statistics.c:1248
+#: ../src/gpm-statistics.c:1253
 #, c-format
 msgid "Timer %s"
 msgstr "Časovač %s"
 
 #. TRANSLATORS: the parameter is the name of task that's woken up from sleeping.
 #. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:938
+#: ../src/gpm-statistics.c:1257
 #, c-format
 msgid "Sleep %s"
 msgstr "Uspat %s"
 
 #. TRANSLATORS: this is the name of a new realtime task.
-#: ../src/gpm-statistics.c:941
+#: ../src/gpm-statistics.c:1260
 #, c-format
 msgid "New task %s"
 msgstr "Nová úloha %s"
 
 #. TRANSLATORS: this is the name of a task that's woken to check state.
 #. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:945
+#: ../src/gpm-statistics.c:1264
 #, c-format
 msgid "Wait %s"
 msgstr "Čekat %s"
 
 #. TRANSLATORS: this is the name of a work queue.
 #. * A work queue is a list of work that has to be done.
-#: ../src/gpm-statistics.c:949 ../src/gpm-statistics.c:953
+#: ../src/gpm-statistics.c:1268 ../src/gpm-statistics.c:1272
 #, c-format
 msgid "Work queue %s"
 msgstr "Seznam prací %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
-#: ../src/gpm-statistics.c:956
+#: ../src/gpm-statistics.c:1275
 #, c-format
 msgid "Network route flush %s"
 msgstr "Vyprázdnění směrovacích tabulek %s"
 
 #. TRANSLATORS: this is the name of an activity on the USB bus
-#: ../src/gpm-statistics.c:959
+#: ../src/gpm-statistics.c:1278
 #, c-format
 msgid "USB activity %s"
 msgstr "Aktivita USB %s"
 
 #. TRANSLATORS: we've timed out of an aligned timer, with the name
-#: ../src/gpm-statistics.c:962
+#: ../src/gpm-statistics.c:1281
 #, c-format
 msgid "Wakeup %s"
 msgstr "Probudit %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
-#: ../src/gpm-statistics.c:965
+#: ../src/gpm-statistics.c:1284
 msgid "Local interrupts"
 msgstr "Místní přerušení"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
-#: ../src/gpm-statistics.c:968
+#: ../src/gpm-statistics.c:1287
 msgid "Rescheduling interrupts"
 msgstr "Naplánovaná přerušení"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1077
+#: ../src/gpm-statistics.c:1396
 msgid "Device Information"
 msgstr "Informace o zařízení"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1079
+#: ../src/gpm-statistics.c:1398
 msgid "Device History"
 msgstr "Historie zařízení"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1081
+#: ../src/gpm-statistics.c:1400
 msgid "Device Profile"
 msgstr "Profil zařízení"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1083
+#: ../src/gpm-statistics.c:1402
 msgid "Processor Wakeups"
 msgstr "Probuzení procesoru"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1279 ../src/gpm-statistics.c:1285
-#: ../src/gpm-statistics.c:1291 ../src/gpm-statistics.c:1297
+#: ../src/gpm-statistics.c:1598 ../src/gpm-statistics.c:1604
+#: ../src/gpm-statistics.c:1610 ../src/gpm-statistics.c:1616
 msgid "Time elapsed"
 msgstr "Uplynulý čas"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1281
+#: ../src/gpm-statistics.c:1600
 msgid "Power"
 msgstr "Spotřeba"
 
 #. TRANSLATORS: this is the Y axis on the graph for the whole battery device
 #. TRANSLATORS: this is the X axis on the graph for the whole battery device
-#: ../src/gpm-statistics.c:1287 ../src/gpm-statistics.c:1330
-#: ../src/gpm-statistics.c:1336 ../src/gpm-statistics.c:1342
-#: ../src/gpm-statistics.c:1348
+#: ../src/gpm-statistics.c:1606 ../src/gpm-statistics.c:1649
+#: ../src/gpm-statistics.c:1655 ../src/gpm-statistics.c:1661
+#: ../src/gpm-statistics.c:1667
 msgid "Cell charge"
 msgstr "Nabití baterie"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1293 ../src/gpm-statistics.c:1299
+#: ../src/gpm-statistics.c:1612 ../src/gpm-statistics.c:1618
 msgid "Predicted time"
 msgstr "Odhadovaný čas"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1332 ../src/gpm-statistics.c:1344
+#: ../src/gpm-statistics.c:1651 ../src/gpm-statistics.c:1663
 msgid "Correction factor"
 msgstr "Korekční faktor"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1338 ../src/gpm-statistics.c:1350
+#: ../src/gpm-statistics.c:1657 ../src/gpm-statistics.c:1669
 msgid "Prediction accuracy"
 msgstr "Odhadovaná přesnost"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-statistics.c:1529
+#: ../src/gpm-statistics.c:1848
 msgid "Show extra debugging information"
 msgstr "Zobrazit dodatečné ladicí informace"
 
 #. TRANSLATORS: show a device by default
-#: ../src/gpm-statistics.c:1532
+#: ../src/gpm-statistics.c:1851
 msgid "Select this device at startup"
 msgstr "Vybrat toto zařízení při spuštění"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:1797
+#: ../src/gpm-statistics.c:2111
 msgid "Processor"
 msgstr "Procesor"
-
-#. TRANSLATORS: The laptop battery is charged, and we know a time.
-#. * The parameter is the time, e.g. 7 hours 6 minutes
-#: ../src/gpm-upower.c:269
-#, c-format
-msgid "provides %s laptop runtime"
-msgstr "umožňuje notebooku %s provozu"
-
-#. TRANSLATORS: the device is discharging, and we have a time remaining
-#. * The first parameter is the device type, e.g. "Laptop battery" and
-#. * the second is the time, e.g. 7 hours 6 minutes
-#: ../src/gpm-upower.c:280
-#, c-format
-msgid "%s %s remaining"
-msgstr "zbývá %2$s, než se %1$s vybije"
-
-#. TRANSLATORS: device is charging, and we have a time to full and a percentage
-#. * The first parameter is the device type, e.g. "Laptop battery" and
-#. * the second is the time, e.g. "7 hours 6 minutes"
-#. TRANSLATORS: device is charging, and we have a time to full and a percentage.
-#. * The first parameter is the device type, e.g. "Laptop battery" and
-#. * the second is the time, e.g. "7 hours 6 minutes"
-#: ../src/gpm-upower.c:301 ../src/gpm-upower.c:318
-#, c-format
-msgid "%s %s until charged"
-msgstr "zbývá %2$s, než se %1$s plně nabije"
-
-#. TRANSLATORS: the device is charging, and we have a time to full and empty.
-#. * The parameter is a time string, e.g. "7 hours 6 minutes"
-#: ../src/gpm-upower.c:308
-#, c-format
-msgid "provides %s battery runtime"
-msgstr "umožňuje %s běhu na baterii"
-
-#. TRANSLATORS: the type of data, e.g. Laptop battery
-#: ../src/gpm-upower.c:402
-msgid "Product:"
-msgstr "Produkt:"
-
-#. TRANSLATORS: device is missing
-#. TRANSLATORS: device is charged
-#. TRANSLATORS: device is charging
-#. TRANSLATORS: device is discharging
-#: ../src/gpm-upower.c:406 ../src/gpm-upower.c:409 ../src/gpm-upower.c:412
-#: ../src/gpm-upower.c:415
-msgid "Status:"
-msgstr "Stav:"
-
-#: ../src/gpm-upower.c:406
-msgid "Missing"
-msgstr "Chybí"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:409 ../src/gpm-upower.c:690
-msgid "Charged"
-msgstr "Plně nabito"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:412 ../src/gpm-upower.c:678
-msgid "Charging"
-msgstr "Nabíjí se"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:415 ../src/gpm-upower.c:682
-msgid "Discharging"
-msgstr "Vybíjí se"
-
-#. TRANSLATORS: percentage
-#: ../src/gpm-upower.c:420
-msgid "Percentage charge:"
-msgstr "Úroveň nabití:"
-
-#. TRANSLATORS: manufacturer
-#: ../src/gpm-upower.c:424
-msgid "Vendor:"
-msgstr "Výrobce:"
-
-#. TRANSLATORS: how the battery is made, e.g. Lithium Ion
-#: ../src/gpm-upower.c:429
-msgid "Technology:"
-msgstr "Technologie:"
-
-#. TRANSLATORS: serial number of the battery
-#: ../src/gpm-upower.c:433
-msgid "Serial number:"
-msgstr "Sériové číslo:"
-
-#. TRANSLATORS: model number of the battery
-#: ../src/gpm-upower.c:437
-msgid "Model:"
-msgstr "Model:"
-
-#. TRANSLATORS: time to fully charged
-#: ../src/gpm-upower.c:442
-msgid "Charge time:"
-msgstr "Doba nabíjení:"
-
-#. TRANSLATORS: time to empty
-#: ../src/gpm-upower.c:448
-msgid "Discharge time:"
-msgstr "Doba vybíjení:"
-
-#. TRANSLATORS: Excellent, Good, Fair and Poor are all related to battery Capacity
-#: ../src/gpm-upower.c:455
-msgid "Excellent"
-msgstr "Vynikající"
-
-#: ../src/gpm-upower.c:457
-msgid "Good"
-msgstr "Dobrá"
-
-#: ../src/gpm-upower.c:459
-msgid "Fair"
-msgstr "Ucházející"
-
-#: ../src/gpm-upower.c:461
-msgid "Poor"
-msgstr "Ubohá"
-
-#: ../src/gpm-upower.c:465
-msgid "Capacity:"
-msgstr "Kapacita:"
-
-#: ../src/gpm-upower.c:471 ../src/gpm-upower.c:496
-msgid "Current charge:"
-msgstr "Aktuální nabití:"
-
-#: ../src/gpm-upower.c:477
-msgid "Last full charge:"
-msgstr "Poslední plné nabití:"
-
-#: ../src/gpm-upower.c:483 ../src/gpm-upower.c:501
-msgid "Design charge:"
-msgstr "Původní kapacita:"
-
-#: ../src/gpm-upower.c:488
-msgid "Charge rate:"
-msgstr "Stupeň nabití:"
-
-#. TRANSLATORS: system power cord
-#: ../src/gpm-upower.c:523 ../src/gpm-upower.c:727
-msgid "AC adapter"
-msgid_plural "AC adapters"
-msgstr[0] "Síťový adaptér"
-msgstr[1] "Síťové adaptéry"
-msgstr[2] "Síťové adaptéry"
-
-#. TRANSLATORS: laptop primary battery
-#: ../src/gpm-upower.c:527 ../src/gpm-upower.c:763
-msgid "Laptop battery"
-msgid_plural "Laptop batteries"
-msgstr[0] "Baterie notebooku"
-msgstr[1] "Baterie notebooku"
-msgstr[2] "Baterie notebooku"
-
-#. TRANSLATORS: battery-backed AC power source
-#: ../src/gpm-upower.c:531 ../src/gpm-upower.c:787
-msgid "UPS"
-msgid_plural "UPSs"
-msgstr[0] "Záložní zdroj"
-msgstr[1] "Záložní zdroje"
-msgstr[2] "Záložní zdroje"
-
-#. TRANSLATORS: a monitor is a device to measure voltage and current
-#: ../src/gpm-upower.c:535 ../src/gpm-upower.c:794
-msgid "Monitor"
-msgid_plural "Monitors"
-msgstr[0] "Monitorovací zařízení"
-msgstr[1] "Monitorovací zařízení"
-msgstr[2] "Monitorovací zařízení"
-
-#. TRANSLATORS: wireless mice with internal batteries
-#: ../src/gpm-upower.c:539 ../src/gpm-upower.c:818
-msgid "Mouse"
-msgid_plural "Mice"
-msgstr[0] "Myš"
-msgstr[1] "Myši"
-msgstr[2] "Myši"
-
-#. TRANSLATORS: wireless keyboard with internal battery
-#: ../src/gpm-upower.c:543 ../src/gpm-upower.c:842
-msgid "Keyboard"
-msgid_plural "Keyboards"
-msgstr[0] "Klávesnice"
-msgstr[1] "Klávesnice"
-msgstr[2] "Klávesnice"
-
-#. TRANSLATORS: portable device
-#: ../src/gpm-upower.c:547 ../src/gpm-upower.c:866
-msgid "PDA"
-msgid_plural "PDAs"
-msgstr[0] "PDA"
-msgstr[1] "PDA"
-msgstr[2] "PDA"
-
-#. TRANSLATORS: cell phone (mobile...)
-#: ../src/gpm-upower.c:551 ../src/gpm-upower.c:890
-msgid "Cell phone"
-msgid_plural "Cell phones"
-msgstr[0] "Mobilní telefon"
-msgstr[1] "Mobilní telefony"
-msgstr[2] "Mobilní telefony"
-
-#. TRANSLATORS: media player, mp3 etc
-#: ../src/gpm-upower.c:556 ../src/gpm-upower.c:915
-msgid "Media player"
-msgid_plural "Media players"
-msgstr[0] "Přenosný přehrávač"
-msgstr[1] "Přenosné přehrávače"
-msgstr[2] "Přenosné přehrávače"
-
-#. TRANSLATORS: tablet device
-#: ../src/gpm-upower.c:560 ../src/gpm-upower.c:939
-msgid "Tablet"
-msgid_plural "Tablets"
-msgstr[0] "Tablet"
-msgstr[1] "Tablety"
-msgstr[2] "Tablety"
-
-#. TRANSLATORS: tablet device
-#: ../src/gpm-upower.c:564 ../src/gpm-upower.c:963
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Počítač"
-msgstr[1] "Počítače"
-msgstr[2] "Počítače"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:634
-msgid "Lithium Ion"
-msgstr "Lithium-iontová"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:638
-msgid "Lithium Polymer"
-msgstr "Lithium-polymerová"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:642
-msgid "Lithium Iron Phosphate"
-msgstr "Lithium-železo fosfátová"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:646
-msgid "Lead acid"
-msgstr "Olověná"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:650
-msgid "Nickel Cadmium"
-msgstr "Nikl-kadmiová"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:654
-msgid "Nickel metal hydride"
-msgstr "Nikl-metal hidridová"
-
-#. TRANSLATORS: battery technology
-#: ../src/gpm-upower.c:658
-msgid "Unknown technology"
-msgstr "Neznámá technologie"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:686
-msgid "Empty"
-msgstr "Vybitá"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:694
-msgid "Waiting to charge"
-msgstr "Čeká se na nabití"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:698
-msgid "Waiting to discharge"
-msgstr "Čeká se na vybití"
-
-#. TRANSLATORS: device not present
-#: ../src/gpm-upower.c:735
-msgid "Laptop battery not present"
-msgstr "Baterie notebooku není přítomna"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:739
-msgid "Laptop battery is charging"
-msgstr "Baterie notebooku se dobíjí"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:743
-msgid "Laptop battery is discharging"
-msgstr "Baterie notebooku se vybíjí"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:747
-msgid "Laptop battery is empty"
-msgstr "Baterie notebooku je vybitá"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:751
-msgid "Laptop battery is charged"
-msgstr "Baterie notebooku je nabitá"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:755
-msgid "Laptop battery is waiting to charge"
-msgstr "Baterie notebooku čeká na nabití"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:759
-msgid "Laptop battery is waiting to discharge"
-msgstr "Baterie notebooku čeká na vybití"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:771
-msgid "UPS is charging"
-msgstr "Záložní zdroj se dobíjí"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:775
-msgid "UPS is discharging"
-msgstr "Záložní zdroj se vybíjí"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:779
-msgid "UPS is empty"
-msgstr "Záložní zdroj je vybitý"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:783
-msgid "UPS is charged"
-msgstr "Záložní zdroj je nabitý"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:802
-msgid "Mouse is charging"
-msgstr "Myš se nabíjí"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:806
-msgid "Mouse is discharging"
-msgstr "Myš se vybíjí"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:810
-msgid "Mouse is empty"
-msgstr "Myš je vybitá"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:814
-msgid "Mouse is charged"
-msgstr "Myš je nabitá"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:826
-msgid "Keyboard is charging"
-msgstr "Klávesnice se nabíjí"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:830
-msgid "Keyboard is discharging"
-msgstr "Klávesnice se vybíjí"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:834
-msgid "Keyboard is empty"
-msgstr "Klávesnice je vybitá"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:838
-msgid "Keyboard is charged"
-msgstr "Klávesnice je nabitá"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:850
-msgid "PDA is charging"
-msgstr "PDA se nabíjí"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:854
-msgid "PDA is discharging"
-msgstr "PDA se vybíjí"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:858
-msgid "PDA is empty"
-msgstr "PDA je vybité"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:862
-msgid "PDA is charged"
-msgstr "PDA je nabité"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:874
-msgid "Cell phone is charging"
-msgstr "Mobilní telefon se nabíjí"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:878
-msgid "Cell phone is discharging"
-msgstr "Mobilní telefon se vybíjí"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:882
-msgid "Cell phone is empty"
-msgstr "Mobilní telefon je vybitý"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:886
-msgid "Cell phone is charged"
-msgstr "Mobilní telefon je nabitý"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:899
-msgid "Media player is charging"
-msgstr "Přenosný přehrávač se nabíjí"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:903
-msgid "Media player is discharging"
-msgstr "Přenosný přehrávač se vybíjí"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:907
-msgid "Media player is empty"
-msgstr "Přenosný přehrávač je vybitý"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:911
-msgid "Media player is charged"
-msgstr "Přenosný přehrávač je nabitý"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:923
-msgid "Tablet is charging"
-msgstr "Tablet se nabíjí"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:927
-msgid "Tablet is discharging"
-msgstr "Tablet se vybíjí"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:931
-msgid "Tablet is empty"
-msgstr "Tablet je vybitý"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:935
-msgid "Tablet is charged"
-msgstr "Tablet je nabitý"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:947
-msgid "Computer is charging"
-msgstr "Počítač se nabíjí"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:951
-msgid "Computer is discharging"
-msgstr "Počítač se vybíjí"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:955
-msgid "Computer is empty"
-msgstr "Počítač je vybitý"
-
-#. TRANSLATORS: battery state
-#: ../src/gpm-upower.c:959
-msgid "Computer is charged"
-msgstr "Počítač je nabitý"
