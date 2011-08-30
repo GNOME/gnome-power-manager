@@ -1,3 +1,26 @@
+Version 3.1.90
+~~~~~~~~~~~~~~
+Released: 2011-08-30
+
+* Translations
+ - Updated Norwegian bokmål translation (Kjartan Maraas)
+ - Updated Thai translation (Theppitak Karoonboonyanan)
+
+* New Features:
+ - Autogenerate the .gitignore files using git.mk (Richard Hughes)
+ - Remove gnome-power-backlight-helper as it's been moved to g-s-d (Richard Hughes)
+ - Remove the applet icons (Richard Hughes)
+ - Remove the GConf migration script, there is nothing to migrate (Richard Hughes)
+ - Remove the gnome-power-manager application icon, it's no longer used (Richard Hughes)
+ - Remove the idle functionality as it's been moved to g-s-d (Richard Hughes)
+ - Remove the suspend and hibernate icons, nothing uses them (Richard Hughes)
+
+* Bugfix:
+ - autogen.sh: don't check for a non-existent file (Owen W. Taylor)
+ - Fix a warning when opening gnome-power-statistics (Richard Hughes)
+ - Fix float formatting in French translation (Claude Paroz)
+ - Refresh the po files, and remove unused translations (Richard Hughes)
+
 Version 3.1.3
 ~~~~~~~~~~~~~
 Released: 2011-07-25
