@@ -39,14 +39,10 @@ icons_DATA = 			        \
 	gpm-ups-100-charging.svg	\
 	gpm-ups-missing.svg
 
-symiconsdir = $(datadir)/icons/gnome/scalable/status/
-symicons_DATA = keyboard-brightness-symbolic.svg
-
 noinst_DATA = 
 
 EXTRA_DIST =		\
 	$(icons_DATA)	\
-	$(symicons_DATA)	\
 	$(noinst_DATA)
 
 -include $(top_srcdir)/git.mk
