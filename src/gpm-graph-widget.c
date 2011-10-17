@@ -300,7 +300,6 @@ gpm_graph_widget_class_init (GpmGraphWidgetClass *class)
 static void
 gpm_graph_widget_init (GpmGraphWidget *graph)
 {
-	PangoFontMap *fontmap;
 	PangoContext *context;
 	PangoFontDescription *desc;
 
@@ -318,8 +317,7 @@ gpm_graph_widget_init (GpmGraphWidget *graph)
 	graph->priv->type_y = GPM_GRAPH_WIDGET_TYPE_PERCENTAGE;
 
 	/* do pango stuff */
-	fontmap = pango_cairo_font_map_get_default ();
-	context = pango_cairo_font_map_create_context (PANGO_CAIRO_FONT_MAP (fontmap));
+	context = gtk_widget_get_pango_context (GTK_WIDGET (graph));
 	pango_context_set_base_gravity (context, PANGO_GRAVITY_AUTO);
 
 	graph->priv->layout = pango_layout_new (context);
@@ -349,7 +347,6 @@ gpm_graph_widget_data_clear (GpmGraphWidget *graph)
 static void
 gpm_graph_widget_finalize (GObject *object)
 {
-	PangoContext *context;
 	GpmGraphWidget *graph = (GpmGraphWidget*) object;
 
 	/* clear key and data */
@@ -360,9 +357,8 @@ gpm_graph_widget_finalize (GObject *object)
 	g_ptr_array_unref (graph->priv->data_list);
 	g_ptr_array_unref (graph->priv->plot_list);
 
-	context = pango_layout_get_context (graph->priv->layout);
 	g_object_unref (graph->priv->layout);
-	g_object_unref (context);
+
 	G_OBJECT_CLASS (gpm_graph_widget_parent_class)->finalize (object);
 }
 
