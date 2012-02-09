@@ -1908,7 +1908,9 @@ gpm_stats_startup_cb (GApplication *application,
 
 	/* get UI */
 	builder = gtk_builder_new ();
-	retval = gtk_builder_add_from_file (builder, GPM_DATA "/gpm-statistics.ui", &error);
+	retval = gtk_builder_add_from_resource (builder,
+						"/org/gnome/power-manager/gpm-statistics.ui",
+						&error);
 	if (retval == 0) {
 		g_warning ("failed to load ui: %s", error->message);
 		g_error_free (error);

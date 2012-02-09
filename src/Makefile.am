@@ -32,6 +32,8 @@ gnome_power_statistics_SOURCES =			\
 	gpm-array-float.c				\
 	gpm-array-float.h				\
 	gpm-statistics.c				\
+	gpm-resources.c					\
+	gpm-resources.h					\
 	gpm-point-obj.c					\
 	gpm-point-obj.h					\
 	gpm-graph-widget.h				\
@@ -64,6 +66,19 @@ gnome_power_self_test_LDADD =				\
 	-lm
 
 gnome_power_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS) $(WARNINGFLAGS)
+
+gpm-resources.c: gnome-power-manager.gresource.xml ../data/gpm-statistics.ui
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-source --c-name gpm $(srcdir)/gnome-power-manager.gresource.xml
+gpm-resources.h: gnome-power-manager.gresource.xml
+	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-header --c-name gpm $(srcdir)/gnome-power-manager.gresource.xml
+
+BUILT_SOURCES =						\
+	gpm-resources.c					\
+	gpm-resources.h					\
+	$(NULL)
+
+EXTRA_DIST =						\
+	gnome-power-manager.gresource.xml
 
 clean-local:
 	rm -f *~
