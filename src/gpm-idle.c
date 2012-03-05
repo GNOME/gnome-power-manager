@@ -54,7 +54,6 @@
 
 struct GpmIdlePrivate
 {
-	GtkStatusIcon	*status_icon;
 	EggIdletime	*idletime;
 	GpmLoad		*load;
 	GpmSession	*session;
@@ -96,37 +95,13 @@ gpm_idle_mode_to_text (GpmIdleMode mode)
 }
 
 /**
- * gpm_idle_mode_to_icon_name:
- **/
-static const gchar *
-gpm_idle_mode_to_icon_name (GpmIdleMode mode)
-{
-	if (mode == GPM_IDLE_MODE_BLANK)
-		return "view-fullscreen";
-	if (mode == GPM_IDLE_MODE_SLEEP)
-		return "system-log-out";
-	return NULL;
-}
-
-/**
  * gpm_idle_set_mode:
  * @mode: The new mode, e.g. GPM_IDLE_MODE_SLEEP
  **/
 static void
 gpm_idle_set_mode (GpmIdle *idle, GpmIdleMode mode)
 {
-	const gchar *icon_name;
-
 	g_return_if_fail (GPM_IS_IDLE (idle));
-
-	/* debug */
-	icon_name = gpm_idle_mode_to_icon_name (mode);
-	if (icon_name != NULL) {
-		gtk_status_icon_set_from_icon_name (idle->priv->status_icon, icon_name);
-		gtk_status_icon_set_visible (idle->priv->status_icon, TRUE);
-	} else {
-		gtk_status_icon_set_visible (idle->priv->status_icon, FALSE);
-	}
 
 	if (mode != idle->priv->mode) {
 		idle->priv->mode = mode;
@@ -204,33 +179,10 @@ gpm_idle_evaluate (GpmIdle *idle)
 {
 	gboolean is_idle;
 	gboolean is_inhibited;
-	gchar *tooltip;
-	gchar *what_to_do;
-	gchar *nag_message;
 
 	is_idle = gpm_session_get_idle (idle->priv->session);
 	is_inhibited = gpm_session_get_inhibited (idle->priv->session);
 	egg_debug ("session_idle=%i, session_inhibited=%i, x_idle=%i", is_idle, is_inhibited, idle->priv->x_idle);
-
-	/* TRANSLATORS: this is what the user should read for more information about the blanking problem (%s is a URL) */
-	what_to_do = g_strdup_printf (_("Please see %s for more information."),
-				      "http://blogs.gnome.org/hughsie/2009/08/17/gnome-power-manager-and-blanking-removal-of-bodges/");
-
-	/* TRANSLATORS: this is telling the user that thier X server is broken, and needs to be fixed */
-	nag_message = g_strdup_printf ("%s\n%s", _("If you can see this text, your display server is broken and you should notify your distributor."),
-				       what_to_do);
-
-	/* debug */
-	tooltip = g_strdup_printf ("%s, %s, %s.\n%s",
-				   /* TRANSLATORS: this is for debugging, if the session is idle */
-				   is_idle ? _("Session idle") : _("Session active"),
-				   /* TRANSLATORS: has something inhibited the session */
-				   is_inhibited ? _("inhibited") : _("not inhibited"),
-				   /* TRANSLATORS: is the screen idle or awake */
-				   idle->priv->x_idle ? _("screen idle") : _("screen awake"),
-				   nag_message);
-	gtk_status_icon_set_tooltip_text (idle->priv->status_icon, tooltip);
-	g_free (tooltip);
 
 	/* check we are really idle */
 	if (!idle->priv->x_idle) {
@@ -285,8 +237,6 @@ gpm_idle_evaluate (GpmIdle *idle)
 		}
 	}
 out:
-	g_free (nag_message);
-	g_free (what_to_do);
 	return;
 }
 
@@ -418,9 +368,6 @@ gpm_idle_finalize (GObject *object)
 	if (idle->priv->timeout_sleep_id != 0)
 		g_source_remove (idle->priv->timeout_sleep_id);
 
-	/* for debugging */
-	g_object_unref (idle->priv->status_icon);
-
 	g_object_unref (idle->priv->load);
 	g_object_unref (idle->priv->session);
 
@@ -478,9 +425,6 @@ gpm_idle_init (GpmIdle *idle)
 	idle->priv->idletime = egg_idletime_new ();
 	g_signal_connect (idle->priv->idletime, "reset", G_CALLBACK (gpm_idle_idletime_reset_cb), idle);
 	g_signal_connect (idle->priv->idletime, "alarm-expired", G_CALLBACK (gpm_idle_idletime_alarm_expired_cb), idle);
-
-	/* only used for debugging */
-	idle->priv->status_icon = gtk_status_icon_new ();
 
 	gpm_idle_evaluate (idle);
 }
