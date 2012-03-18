@@ -6,7 +6,7 @@ Version: #VERSION#
 Release: 1.#BUILD#%{?alphatag}%{?dist}
 License: GPLv2+ and GFDL
 Group: Applications/System
-Source: http://download.gnome.org/sources/gnome-power-manager/2.91/gnome-power-manager-%{version}.tar.xz
+Source: http://download.gnome.org/sources/gnome-power-manager/3.2/gnome-power-manager-%{version}.tar.xz
 URL: http://projects.gnome.org/gnome-power-manager/
 
 BuildRequires: gnome-doc-utils >= 0.3.2
@@ -66,7 +66,6 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/glib-2.0/schemas/*.gschema.xml
 %{_datadir}/gnome-power-manager/icons/hicolor/*/*/*.*
 %{_datadir}/icons/hicolor/*/apps/gnome-power-statistics.*
-%{_datadir}/icons/gnome/*/status/keyboard-brightness-symbolic.svg
 %dir %{_datadir}/gnome-power-manager
 %{_datadir}/glib-2.0/schemas/*.gschema.xml
 %{_mandir}/man1/*.1.gz
