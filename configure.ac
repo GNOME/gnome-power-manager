@@ -1,6 +1,6 @@
 AC_PREREQ(2.63)
 
-AC_INIT([gnome-power-manager],[3.5.1])
+AC_INIT([gnome-power-manager],[3.5.90])
 AC_CONFIG_SRCDIR(src)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-xz tar-ustar])
@@ -20,27 +20,6 @@ IT_PROG_INTLTOOL([0.35.0])
 GNOME_COMPILE_WARNINGS
 
 AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal)
-
-dnl ---------------------------------------------------------------------------
-dnl - Use strict options (default enabled for devs, disabled in releases)
-dnl ---------------------------------------------------------------------------
-dnl if .git directory is present, considering we are working in the repository
-if test -d "${srcdir}/.git"; then
-	default_strict=yes
-else
-	default_strict=no
-fi
-
-AC_ARG_ENABLE([strict],
-              [AS_HELP_STRING([--enable-strict],
-                              [Enable strict compilation options])],
-              [enable_strict=$enableval],
-              [enable_strict=$default_strict])
-if test x$enable_strict != xno; then
-	if test "$GCC" = "yes"; then
-		WARNINGFLAGS="$WARNINGFLAGS -Werror"
-	fi
-fi
 
 if test "$GCC" = "yes"; then
 	WARNINGFLAGS="$WARNINGFLAGS -Wall"
