@@ -1818,7 +1818,7 @@ static gboolean
 gpm_stats_delete_event_cb (GtkWidget *widget, GdkEvent *event, GtkApplication *application)
 {
 	g_application_release (G_APPLICATION (application));
-	return FALSE;
+	return TRUE;
 }
 
 /**
