@@ -3,8 +3,8 @@ Follow http://developer.gnome.org/dotplan/for_maintainers.html
 git shortlog GNOME_POWER_MANAGER_3_5_90.. | grep -i -v trivial | uniq | grep -v Merge > NEWS.new
 
 --------------------------------------------------------------------------------
-Version 3.5.91
-~~~~~~~~~~~~~~
+Version 3.6.0
+~~~~~~~~~~~~~
 Released: 2012-xx-xx
 
 * Translations
@@ -16,8 +16,8 @@ Released: 2012-xx-xx
 
 Run "make distcheck", correct any problems encountered
 
-git commit -a -m "GNOME Power Manager 3.5.91"
-git tag -s GNOME_POWER_MANAGER_3_5_91 -m "==== Version 3.5.91 ===="
+git commit -a -m "GNOME Power Manager 3.6.0"
+git tag -s GNOME_POWER_MANAGER_3_6_0 -m "==== Version 3.6.0 ===="
 <wait>
 git push --tags
 git push
