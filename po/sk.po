@@ -1,17 +1,19 @@
 # Slovak translation for gnome-power-manager.
-# Copyright (C) 2005, 2007, 2009, 2010 Free Software Foundation, Inc.
+# Copyright (C) 2005, 2007, 2009, 2010, 2012 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnome-power-manager package.
 # Marcel Telka <marcel@telka.sk>, 2005.
 # Peter Tuharsky <tuharsky@misbb.sk>, 2007.
 # Pavol Šimo <palo.simo@gmail.com>, 2009, 2010.
+# Dušan Kazik <prescott66@gmail.com>, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-05 10:10+0100\n"
-"PO-Revision-Date: 2010-08-29 15:56+0200\n"
-"Last-Translator: Pavol Šimo <palo.simo@gmail.com>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"power-manager&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2012-10-03 15:59+0000\n"
+"PO-Revision-Date: 2012-10-10 17:17+0200\n"
+"Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
@@ -20,237 +22,246 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 1 : (n>=2 && n<=4) ? 2 : 0;\n"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:1
-msgid "The ID of the last device selected"
-msgstr ""
+msgid "Whether we should show the history data points"
+msgstr "Určuje, či sa majú zobrazovať body údajov histórie"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:2
-#, fuzzy
-msgid "The default graph type to show for history"
-msgstr "Predvolený typ grafu, ktorý sa ukáže v štatistickom okne"
+msgid ""
+"Whether we should show the history data points in the statistics window."
+msgstr ""
+"Určuje, či sa majú zobrazovať body údajov histórie v štatistickom okne."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:3
-#, fuzzy
-msgid "The default graph type to show for stats"
-msgstr "Predvolený typ grafu, ktorý sa ukáže v štatistickom okne"
+msgid "Whether we should smooth the history data"
+msgstr "Určuje, či sa majú vyhladzovať údaje histórie"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:4
-#, fuzzy
-msgid "The default graph type to show in the history window."
-msgstr "Predvolený typ grafu, ktorý sa ukáže v štatistickom okne."
+msgid "Whether we should smooth the history data in the graph."
+msgstr "Určuje, či sa majú vyhladzovať údaje histórie v grafe."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:5
+msgid "The default graph type to show for history"
+msgstr "Predvolený typ grafu zobrazovanej histórie"
+
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:6
+msgid "The default graph type to show in the history window."
+msgstr "Predvolený typ grafu, ktorý sa ukáže v okne histórie."
+
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:7
+msgid "The maximum time displayed for history"
+msgstr "Maximálny čas zobrazovanej histórie"
+
+# PM: súhlasim s Majom
+# MČ: Toto slovné spojenie mi evokuje, že sa tá os x zobrazí len na určitý čas. Je to tak?
+# MČ: Ak je na nej zobrazený časový údaj, tak by malo byť skôr: „Maximálny rozsah časových údajov zobrazených na osi x grafu histórie.“
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:8
 #, fuzzy
+msgid ""
+"The maximum duration of time displayed on the x-axis of the history graph."
+msgstr "Maximálne trvanie zobrazovanej osi x grafu histórie."
+
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:9
+msgid "Whether we should show the stats data points"
+msgstr "Určuje, či sa majú zobrazovať body údajov štatistiky"
+
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:10
+msgid "Whether we should show the stats data points in the statistics window."
+msgstr ""
+"Určuje, či sa majú zobrazovať body údajov štatistiky v štatistickom okne."
+
+# PM: to znie ako keby tie udaje boli v koncentráku vyhladzované, 
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:11
+#, fuzzy
+msgid "Whether we should smooth the stats data"
+msgstr "Určuje, či sa majú vyhladzovať údaje štatistiky"
+
+# PM: to znie ako keby tie udaje boli v koncentráku vyhladzované, vyhladzuje sa zrejme krivka grafu
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:12
+#, fuzzy
+msgid "Whether we should smooth the stats data in the graph."
+msgstr "Určuje, či sa majú vyhladzovať údaje štatistiky v grafe."
+
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:13
+msgid "The default graph type to show for stats"
+msgstr "Predvolený typ grafu zobrazovanej štatistiky"
+
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:14
 msgid "The default graph type to show in the stats window."
 msgstr "Predvolený typ grafu, ktorý sa ukáže v štatistickom okne."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:6
-msgid ""
-"The identifier of the last device which is used to return focus to the "
-"correct device."
-msgstr ""
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:7
+# PM: treba preveriť ako je to preložené v iných moduloch, tuším glade sa tým zaoberá, či to náhodou nie su karty
+# MČ: Skôr by som použil: „prednastavenej stránky“
+# MČ podľa zdrojového súboru ide o index záložky „widgetu“ „GtkNotebook“: http://developer.gnome.org/gtk3/stable/GtkNotebook.html 
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:15
+#, fuzzy
 msgid "The index of the page number to show by default"
-msgstr ""
+msgstr "Index štandardne zobrazenej stránky"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:8
+# PM: treba preveriť ako je to preložené v iných moduloch, tuším glade sa tým zaoberá, či to náhodou nie su karty
+# PK: co to robi? nepouziva sa nahodou ten index tej stranky?
+# MČ: používa a ide skôr o prednastavenú stránku, ale presnejšie ide o naposledy použitú pri minulom použití programu (aspoň tak som pochopil zdrojový kód)
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:16
+#, fuzzy
 msgid ""
 "The index of the page number to show by default which is used to return "
 "focus to the correct page."
 msgstr ""
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:9
-#, fuzzy
-msgid ""
-"The maximum duration of time displayed on the x-axis of the history graph."
-msgstr "Maximálny rozsah času zobrazeného na osi x tohto grafu."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:10
-#, fuzzy
-msgid "The maximum time displayed for history"
-msgstr "Maximálny čas zobrazený v grafe"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:11
-#, fuzzy
-msgid "Whether we should show the history data points"
-msgstr "Určuje, či sa má vyhladzovať krivka grafu"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:12
-#, fuzzy
-msgid ""
-"Whether we should show the history data points in the statistics window."
-msgstr "Určuje, či sa majú v štatistickom okne zobrazovať udalosti."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:13
-#, fuzzy
-msgid "Whether we should show the stats data points"
-msgstr "Určuje, či sa má vyhladzovať krivka grafu"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:14
-#, fuzzy
-msgid "Whether we should show the stats data points in the statistics window."
-msgstr "Určuje, či sa majú v štatistickom okne zobrazovať udalosti."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:15
-#, fuzzy
-msgid "Whether we should smooth the history data"
-msgstr "Určuje, či sa má vyhladzovať krivka grafu"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:16
-#, fuzzy
-msgid "Whether we should smooth the history data in the graph."
-msgstr "Určuje, či sa má vyhladzovať krivka grafu."
+"Index štandardne zobrazenej stránky, ktorý je použitý na spätný návrat k "
+"správnej stránke."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:17
-#, fuzzy
-msgid "Whether we should smooth the stats data"
-msgstr "Určuje, či sa má vyhladzovať krivka grafu"
+msgid "The ID of the last device selected"
+msgstr "Identifikátor naposledy vybraného zariadenia"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:18
-#, fuzzy
-msgid "Whether we should smooth the stats data in the graph."
-msgstr "Určuje, či sa má vyhladzovať krivka grafu."
-
-#: ../data/gnome-power-statistics.desktop.in.in.h:1
-msgid "Observe power management"
-msgstr "Pozorovať správu napájania"
+msgid ""
+"The identifier of the last device which is used to return focus to the "
+"correct device."
+msgstr ""
+"Identifikátor naposledy vybraného zariadenia, ktoré je použité na spätný "
+"návrat k správnemu zariadeniu."
 
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
-#: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1406
-#: ../src/gpm-statistics.c:1860
+#: ../data/gnome-power-statistics.desktop.in.in.h:1
+#: ../data/gpm-statistics.ui.h:1 ../src/gpm-statistics.c:1410
+#: ../src/gpm-statistics.c:1864
 msgid "Power Statistics"
 msgstr "Štatistika napájania"
 
-#: ../data/gpm-statistics.ui.h:1
-msgid "0"
-msgstr "0"
+#: ../data/gnome-power-statistics.desktop.in.in.h:2
+msgid "Observe power management"
+msgstr "Pozorovať správu napájania"
 
-#: ../data/gpm-statistics.ui.h:2
-msgid "Data length:"
-msgstr "Dĺžka údajov:"
-
-#: ../data/gpm-statistics.ui.h:3 ../src/gpm-statistics.c:509
+#: ../data/gpm-statistics.ui.h:2 ../src/gpm-statistics.c:513
 msgid "Details"
 msgstr "Podrobnosti"
 
-#: ../data/gpm-statistics.ui.h:4
+#: ../data/gpm-statistics.ui.h:3
 msgid "Graph type:"
 msgstr "Typ grafu:"
 
+#: ../data/gpm-statistics.ui.h:4
+msgid "Data length:"
+msgstr "Dĺžka údajov:"
+
 #: ../data/gpm-statistics.ui.h:5
-msgid "History"
-msgstr "História"
+msgid "There is no data to display."
+msgstr "Na zobrazenie nie sú žiadne údaje."
+
+#: ../data/gpm-statistics.ui.h:6
+msgid "Use smoothed line"
+msgstr "Použiť vyhladenú čiaru"
 
 #: ../data/gpm-statistics.ui.h:7
-msgid "Processor wakeups per second:"
-msgstr "Prebudení procesora za sekundu:"
+msgid "Show data points"
+msgstr "Zobraziť body údajov"
 
 #: ../data/gpm-statistics.ui.h:8
-msgid "Show data points"
-msgstr "Zobraziť dátové body"
+msgid "History"
+msgstr "História"
 
 #: ../data/gpm-statistics.ui.h:9
 msgid "Statistics"
 msgstr "Štatistika"
 
 #: ../data/gpm-statistics.ui.h:10
-msgid "There is no data to display."
-msgstr "Na zobrazenie nie sú žiadne údaje."
+msgid "Processor wakeups per second:"
+msgstr "Počet prebudení procesora za sekundu:"
 
 #: ../data/gpm-statistics.ui.h:11
-msgid "Use smoothed line"
-msgstr "Použiť vyhladenú čiaru"
+msgid "0"
+msgstr "0"
 
-#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:495
+#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:499
 msgid "Wakeups"
 msgstr "Prebudenia"
 
 # je to popis pri osiach grafu - je tam veľmi málo miesta, preto je to zhustené
 #. Translators: This is %i days
-#: ../src/gpm-graph-widget.c:430
+#: ../src/gpm-graph-widget.c:426
 #, c-format
 msgid "%id"
 msgstr "%id"
 
 # je to popis pri osiach grafu - je tam veľmi málo miesta, preto je to zhustené
 #. Translators: This is %i days %02i hours
-#: ../src/gpm-graph-widget.c:433
+#: ../src/gpm-graph-widget.c:429
 #, c-format
 msgid "%id%02ih"
 msgstr "%id%02ih"
 
 # je to popis pri osiach grafu - je tam veľmi málo miesta, preto je to zhustené
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:438
+#: ../src/gpm-graph-widget.c:434
 #, c-format
 msgid "%ih"
 msgstr "%ih"
 
 # je to popis pri osiach grafu - je tam veľmi málo miesta, preto je to zhustené
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:441
+#: ../src/gpm-graph-widget.c:437
 #, c-format
 msgid "%ih%02im"
 msgstr "%ih%02im"
 
 # je to popis pri osiach grafu - je tam veľmi málo miesta, preto je to zhustené
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:446
+#: ../src/gpm-graph-widget.c:442
 #, c-format
 msgid "%2im"
 msgstr "%2im"
 
 # je to popis pri osiach grafu - je tam veľmi málo miesta, preto je to zhustené
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:449
+#: ../src/gpm-graph-widget.c:445
 #, c-format
 msgid "%2im%02i"
 msgstr "%2im%02i"
 
 # je to popis pri osiach grafu - je tam veľmi málo miesta, preto je to zhustené
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:453
+#: ../src/gpm-graph-widget.c:449
 #, c-format
 msgid "%2is"
 msgstr "%2is"
 
 # je to popis pri osiach grafu - je tam veľmi málo miesta, preto je to zhustené
 #. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:457
+#: ../src/gpm-graph-widget.c:453
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 # je to popis pri osiach grafu - je tam veľmi málo miesta, preto je to zhustené
 #. Translators: This is %.1f Watts
-#: ../src/gpm-graph-widget.c:460
+#: ../src/gpm-graph-widget.c:456
 #, c-format
 msgid "%.1fW"
 msgstr "%.1fW"
 
 # je to popis pri osiach grafu - je tam veľmi málo miesta, preto je to zhustené
 #. Translators: This is %.1f Volts
-#: ../src/gpm-graph-widget.c:465
+#: ../src/gpm-graph-widget.c:461
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fV"
 
+# DK: ide o vyjadrenie kolko Wattov sa odbera/spotrebuva z baterie(odpojena nabijacka) alebo kolko Wattov spotrebuva bateria pri nabijani.
 #. TRANSLATORS: the rate of discharge for the device
-#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:767
+#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:771
 msgid "Rate"
-msgstr "Tempo"
+msgstr "Spotreba"
 
 #: ../src/gpm-statistics.c:81
 msgid "Charge"
 msgstr "Nabitie"
 
-#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:781
+#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:785
 msgid "Time to full"
 msgstr "Čas do nabitia"
 
-#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:786
+#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:790
 msgid "Time to empty"
 msgstr "Čas do vybitia"
 
@@ -292,6 +303,7 @@ msgstr "Presnosť nabíjania"
 msgid "Discharge accuracy"
 msgstr "Presnosť vybíjania"
 
+# DK: mne Poedit pisal napriklad pocet 5, za to som dal "Elektrických zásuviek"
 #. TRANSLATORS: system power cord
 #: ../src/gpm-statistics.c:288
 msgid "AC adapter"
@@ -326,12 +338,11 @@ msgstr[2] "Merače"
 
 #. TRANSLATORS: wireless mice with internal batteries
 #: ../src/gpm-statistics.c:304
-#, fuzzy
 msgid "Mouse"
 msgid_plural "Mice"
-msgstr[0] "Model"
-msgstr[1] "Model"
-msgstr[2] "Model"
+msgstr[0] "Myši"
+msgstr[1] "Myš"
+msgstr[2] "Myši"
 
 #. TRANSLATORS: wireless keyboard with internal battery
 #: ../src/gpm-statistics.c:308
@@ -361,25 +372,25 @@ msgstr[2] "Mobilné telefóny"
 #: ../src/gpm-statistics.c:321
 msgid "Media player"
 msgid_plural "Media players"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Multimediálne prehrávače"
+msgstr[1] "Multimediálny prehrávač"
+msgstr[2] "Multimediálne prehrávače"
 
 #. TRANSLATORS: tablet device
 #: ../src/gpm-statistics.c:325
 msgid "Tablet"
 msgid_plural "Tablets"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Tablety"
+msgstr[1] "Tablet"
+msgstr[2] "Tablety"
 
 #. TRANSLATORS: tablet device
 #: ../src/gpm-statistics.c:329
 msgid "Computer"
 msgid_plural "Computers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Počítače"
+msgstr[1] "Počítač"
+msgstr[2] "Počítače"
 
 #. TRANSLATORS: battery technology
 #: ../src/gpm-statistics.c:349
@@ -429,61 +440,60 @@ msgstr "Vybíja sa"
 #. TRANSLATORS: battery state
 #: ../src/gpm-statistics.c:401
 msgid "Empty"
-msgstr ""
+msgstr "Vybitá"
 
 #. TRANSLATORS: battery state
 #: ../src/gpm-statistics.c:405
 msgid "Charged"
-msgstr "Nabité"
+msgstr "Nabitá"
 
 #. TRANSLATORS: battery state
 #: ../src/gpm-statistics.c:409
-#, fuzzy
 msgid "Waiting to charge"
-msgstr "%s: čaká na nabíjanie (%.1f %%)"
+msgstr "Čaká sa na nabitie"
 
 #. TRANSLATORS: battery state
 #: ../src/gpm-statistics.c:413
-#, fuzzy
 msgid "Waiting to discharge"
-msgstr "%s: čaká na vybíjanie (%.1f %%)"
+msgstr "Čaká sa na vybitie"
 
-#: ../src/gpm-statistics.c:433
+#. TRANSLATORS: battery state
+#. TRANSLATORS: this is when the stats time is not known
+#: ../src/gpm-statistics.c:417 ../src/gpm-statistics.c:591
+msgid "Unknown"
+msgstr "Neznámy"
+
+#: ../src/gpm-statistics.c:437
 msgid "Attribute"
 msgstr "Atribút"
 
-#: ../src/gpm-statistics.c:440
+#: ../src/gpm-statistics.c:444
 msgid "Value"
 msgstr "Hodnota"
 
-#: ../src/gpm-statistics.c:457
+#: ../src/gpm-statistics.c:461
 msgid "Image"
 msgstr "Obrázok"
 
-#: ../src/gpm-statistics.c:463
+#: ../src/gpm-statistics.c:467
 msgid "Description"
 msgstr "Popis"
 
-#: ../src/gpm-statistics.c:482 ../src/gpm-statistics.c:706
+#: ../src/gpm-statistics.c:486 ../src/gpm-statistics.c:710
 msgid "Type"
 msgstr "Typ"
 
 # je to nadpis stĺpca tabuľky - Identifikátor by tam bolo príliš dlhé
-#: ../src/gpm-statistics.c:488
+#: ../src/gpm-statistics.c:492
 msgid "ID"
 msgstr "ID"
 
-#: ../src/gpm-statistics.c:502
+#: ../src/gpm-statistics.c:506
 msgid "Command"
 msgstr "Príkaz"
 
-#. TRANSLATORS: this is when the stats time is not known
-#: ../src/gpm-statistics.c:587
-msgid "Unknown"
-msgstr "Neznáme"
-
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:591
+#: ../src/gpm-statistics.c:595
 #, c-format
 msgid "%.0f second"
 msgid_plural "%.0f seconds"
@@ -492,7 +502,7 @@ msgstr[1] "%.0f sekunda"
 msgstr[2] "%.0f sekundy"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:596
+#: ../src/gpm-statistics.c:600
 #, c-format
 msgid "%.1f minute"
 msgid_plural "%.1f minutes"
@@ -501,7 +511,7 @@ msgstr[1] "%.1f minúta"
 msgstr[2] "%.1f minúty"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:601
+#: ../src/gpm-statistics.c:605
 #, c-format
 msgid "%.1f hour"
 msgid_plural "%.1f hours"
@@ -510,7 +520,7 @@ msgstr[1] "%.1f hodina"
 msgstr[2] "%.1f hodiny"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:605
+#: ../src/gpm-statistics.c:609
 #, c-format
 msgid "%.1f day"
 msgid_plural "%.1f days"
@@ -518,39 +528,39 @@ msgstr[0] "%.1f dní"
 msgstr[1] "%.1f deň"
 msgstr[2] "%.1f dni"
 
-#: ../src/gpm-statistics.c:614
+#: ../src/gpm-statistics.c:618
 msgid "Yes"
 msgstr "Áno"
 
-#: ../src/gpm-statistics.c:614
+#: ../src/gpm-statistics.c:618
 msgid "No"
 msgstr "Nie"
 
 #. TRANSLATORS: the device ID of the current device, e.g. "battery0"
-#: ../src/gpm-statistics.c:703
+#: ../src/gpm-statistics.c:707
 msgid "Device"
 msgstr "Zariadenie"
 
-#: ../src/gpm-statistics.c:708
+#: ../src/gpm-statistics.c:712
 msgid "Vendor"
 msgstr "Dodávateľ"
 
-#: ../src/gpm-statistics.c:710
+#: ../src/gpm-statistics.c:714
 msgid "Model"
 msgstr "Model"
 
-#: ../src/gpm-statistics.c:712
+#: ../src/gpm-statistics.c:716
 msgid "Serial number"
 msgstr "Sériové číslo"
 
 #. TRANSLATORS: a boolean attribute that means if the device is supplying the
 #. * main power for the computer. For instance, an AC adapter or laptop battery
 #. * would be TRUE,  but a mobile phone or mouse taking power is FALSE
-#: ../src/gpm-statistics.c:717
+#: ../src/gpm-statistics.c:721
 msgid "Supply"
 msgstr "Dodávka"
 
-#: ../src/gpm-statistics.c:720
+#: ../src/gpm-statistics.c:724
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
@@ -561,7 +571,7 @@ msgstr[2] "%d sekundy"
 # súčasť pohľadu "Informácie o zariadení"
 #. TRANSLATORS: when the device was last updated with new data. It's
 #. * usually a few seconds when a device is discharging or charging.
-#: ../src/gpm-statistics.c:724
+#: ../src/gpm-statistics.c:728
 msgid "Refreshed"
 msgstr "Obnovené"
 
@@ -569,247 +579,249 @@ msgstr "Obnovené"
 #. TRANSLATORS: Present is whether the device is currently attached
 #. * to the computer, as some devices (e.g. laptop batteries) can
 #. * be removed, but still observed as devices on the system
-#: ../src/gpm-statistics.c:734
+#: ../src/gpm-statistics.c:738
 msgid "Present"
 msgstr "Prítomné"
 
 # súčasť pohľadu "Informácie o zariadení"
 #. TRANSLATORS: If the device can be recharged, e.g. lithium
 #. * batteries rather than alkaline ones
-#: ../src/gpm-statistics.c:741
+#: ../src/gpm-statistics.c:745
 msgid "Rechargeable"
-msgstr "Nabíjacie"
+msgstr "Nabíjateľné"
 
 #. TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged"
-#: ../src/gpm-statistics.c:747
+#: ../src/gpm-statistics.c:751
 msgid "State"
 msgstr "Stav"
 
-#: ../src/gpm-statistics.c:751
+#: ../src/gpm-statistics.c:755
 msgid "Energy"
 msgstr "Energia"
 
-#: ../src/gpm-statistics.c:754
+#: ../src/gpm-statistics.c:758
 msgid "Energy when empty"
 msgstr "Energia vo vybitom stave"
 
-#: ../src/gpm-statistics.c:757
+#: ../src/gpm-statistics.c:761
 msgid "Energy when full"
 msgstr "Energia v nabitom stave"
 
-#: ../src/gpm-statistics.c:760
+#: ../src/gpm-statistics.c:764
 msgid "Energy (design)"
 msgstr "Energia (konštrukčná)"
 
-#: ../src/gpm-statistics.c:774
+#: ../src/gpm-statistics.c:778
 msgid "Voltage"
 msgstr "Napätie"
 
 #. TRANSLATORS: the amount of charge the cell contains
-#: ../src/gpm-statistics.c:796
+#: ../src/gpm-statistics.c:800
 msgid "Percentage"
 msgstr "Percento"
 
+# DK: ide o percentualne oznacenie, na aku relativnu kapacitu sa vie bateria nabit. Je to nieco ako zdravie baterie.
 #. TRANSLATORS: the capacity of the device, which is basically a measure
 #. * of how full it can get, relative to the design capacity
-#: ../src/gpm-statistics.c:803
+#: ../src/gpm-statistics.c:807
 msgid "Capacity"
 msgstr "Kapacita"
 
 #. TRANSLATORS: the type of battery, e.g. lithium or nikel metal hydroxide
-#: ../src/gpm-statistics.c:808
+#: ../src/gpm-statistics.c:812
 msgid "Technology"
 msgstr "Technológia"
 
 # súčasť pohľadu "Informácie o zariadení"
 #. TRANSLATORS: this is when the device is plugged in, typically
 #. * only shown for the ac adaptor device
-#: ../src/gpm-statistics.c:813
+#: ../src/gpm-statistics.c:817
 msgid "Online"
-msgstr "Zapojené"
+msgstr "Zapojené do el. siete"
 
 #. TRANSLATORS: the command line was not provided
-#: ../src/gpm-statistics.c:1140
+#: ../src/gpm-statistics.c:1144
 msgid "No data"
 msgstr "Žiadne údaje"
 
 #. TRANSLATORS: kernel module, usually a device driver
-#: ../src/gpm-statistics.c:1147 ../src/gpm-statistics.c:1152
+#: ../src/gpm-statistics.c:1151 ../src/gpm-statistics.c:1156
 msgid "Kernel module"
 msgstr "Modul jadra"
 
 # ide o zobrazovanie informácií o procese - či je to modul jadra (predch. reťazec), alebo je to zakompilované priamo v jadre (konkrétne to je proces "swapper")
 #. TRANSLATORS: kernel housekeeping
-#: ../src/gpm-statistics.c:1157
+#: ../src/gpm-statistics.c:1161
 msgid "Kernel core"
 msgstr "Vlastné jadro"
 
 #. TRANSLATORS: interrupt between processors
-#: ../src/gpm-statistics.c:1162
+#: ../src/gpm-statistics.c:1166
 msgid "Interprocessor interrupt"
 msgstr "Medziprocesorové prerušenie"
 
 #. TRANSLATORS: unknown interrupt
-#: ../src/gpm-statistics.c:1167
+#: ../src/gpm-statistics.c:1171
 msgid "Interrupt"
 msgstr "Prerušenie"
 
 #. TRANSLATORS: the keyboard and mouse device event
-#: ../src/gpm-statistics.c:1214
+#: ../src/gpm-statistics.c:1218
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "PS/2 klávesnica/myš/touchpad"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
-#: ../src/gpm-statistics.c:1217
+#: ../src/gpm-statistics.c:1221
 msgid "ACPI"
 msgstr "ACPI"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
-#: ../src/gpm-statistics.c:1220
+#: ../src/gpm-statistics.c:1224
 msgid "Serial ATA"
 msgstr "Serial ATA"
 
 #. TRANSLATORS: this is the old-style ATA interface
-#: ../src/gpm-statistics.c:1223
+#: ../src/gpm-statistics.c:1227
 msgid "ATA host controller"
 msgstr "Radič diskov ATA"
 
 #. TRANSLATORS: 802.11 wireless adaptor
-#: ../src/gpm-statistics.c:1226
+#: ../src/gpm-statistics.c:1230
 msgid "Intel wireless adaptor"
 msgstr "Bezdrôtový adaptér Intel"
 
 #. TRANSLATORS: a timer is something that fires periodically.
 #. * The parameter is a process name, e.g. "firefox-bin".
 #. * This is shown when the timer wakes up.
-#: ../src/gpm-statistics.c:1233 ../src/gpm-statistics.c:1238
-#: ../src/gpm-statistics.c:1243 ../src/gpm-statistics.c:1248
-#: ../src/gpm-statistics.c:1253
+#: ../src/gpm-statistics.c:1237 ../src/gpm-statistics.c:1242
+#: ../src/gpm-statistics.c:1247 ../src/gpm-statistics.c:1252
+#: ../src/gpm-statistics.c:1257
 #, c-format
 msgid "Timer %s"
 msgstr "Časovač %s"
 
 #. TRANSLATORS: the parameter is the name of task that's woken up from sleeping.
 #. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:1257
+#: ../src/gpm-statistics.c:1261
 #, c-format
 msgid "Sleep %s"
-msgstr "Spí %s"
+msgstr "Spánok %s"
 
 #. TRANSLATORS: this is the name of a new realtime task.
-#: ../src/gpm-statistics.c:1260
+#: ../src/gpm-statistics.c:1264
 #, c-format
 msgid "New task %s"
 msgstr "Nová úloha %s"
 
 #. TRANSLATORS: this is the name of a task that's woken to check state.
 #. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:1264
+#: ../src/gpm-statistics.c:1268
 #, c-format
 msgid "Wait %s"
 msgstr "Čaká %s"
 
 #. TRANSLATORS: this is the name of a work queue.
 #. * A work queue is a list of work that has to be done.
-#: ../src/gpm-statistics.c:1268 ../src/gpm-statistics.c:1272
+#: ../src/gpm-statistics.c:1272 ../src/gpm-statistics.c:1276
 #, c-format
 msgid "Work queue %s"
 msgstr "Zoznam úloh %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
-#: ../src/gpm-statistics.c:1275
+#: ../src/gpm-statistics.c:1279
 #, c-format
 msgid "Network route flush %s"
 msgstr "Vyčistenie smerovaní siete %s"
 
 #. TRANSLATORS: this is the name of an activity on the USB bus
-#: ../src/gpm-statistics.c:1278
+#: ../src/gpm-statistics.c:1282
 #, c-format
 msgid "USB activity %s"
 msgstr "USB aktivita %s"
 
 #. TRANSLATORS: we've timed out of an aligned timer, with the name
-#: ../src/gpm-statistics.c:1281
+#: ../src/gpm-statistics.c:1285
 #, c-format
 msgid "Wakeup %s"
 msgstr "Zobudené %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
-#: ../src/gpm-statistics.c:1284
+#: ../src/gpm-statistics.c:1288
 msgid "Local interrupts"
 msgstr "Lokálne prerušenia"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
-#: ../src/gpm-statistics.c:1287
+#: ../src/gpm-statistics.c:1291
 msgid "Rescheduling interrupts"
 msgstr "Prerušenia preplánovania"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1396
+#: ../src/gpm-statistics.c:1400
 msgid "Device Information"
 msgstr "Informácie o zariadení"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1398
+#: ../src/gpm-statistics.c:1402
 msgid "Device History"
 msgstr "História zariadenia"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1400
+#: ../src/gpm-statistics.c:1404
 msgid "Device Profile"
 msgstr "Profil zariadenia"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1402
+#: ../src/gpm-statistics.c:1406
 msgid "Processor Wakeups"
 msgstr "Prebudenia procesora"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1598 ../src/gpm-statistics.c:1604
-#: ../src/gpm-statistics.c:1610 ../src/gpm-statistics.c:1616
+#: ../src/gpm-statistics.c:1602 ../src/gpm-statistics.c:1608
+#: ../src/gpm-statistics.c:1614 ../src/gpm-statistics.c:1620
 msgid "Time elapsed"
 msgstr "Uplynulý čas"
 
+# DK: ide vyjadrenie odoberanych wattov.ci uz pri nabijani baterie alebo vybijani - zobrazovane pri grafe(os Y)
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1600
+#: ../src/gpm-statistics.c:1604
 msgid "Power"
-msgstr "Energia"
+msgstr "Odber"
 
 # hodnota je v percentách
 #. TRANSLATORS: this is the Y axis on the graph for the whole battery device
 #. TRANSLATORS: this is the X axis on the graph for the whole battery device
-#: ../src/gpm-statistics.c:1606 ../src/gpm-statistics.c:1649
-#: ../src/gpm-statistics.c:1655 ../src/gpm-statistics.c:1661
-#: ../src/gpm-statistics.c:1667
+#: ../src/gpm-statistics.c:1610 ../src/gpm-statistics.c:1653
+#: ../src/gpm-statistics.c:1659 ../src/gpm-statistics.c:1665
+#: ../src/gpm-statistics.c:1671
 msgid "Cell charge"
 msgstr "Nabitie článku"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1612 ../src/gpm-statistics.c:1618
+#: ../src/gpm-statistics.c:1616 ../src/gpm-statistics.c:1622
 msgid "Predicted time"
 msgstr "Odhadovaný čas"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1651 ../src/gpm-statistics.c:1663
+#: ../src/gpm-statistics.c:1655 ../src/gpm-statistics.c:1667
 msgid "Correction factor"
 msgstr "Opravný faktor"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1657 ../src/gpm-statistics.c:1669
+#: ../src/gpm-statistics.c:1661 ../src/gpm-statistics.c:1673
 msgid "Prediction accuracy"
 msgstr "Presnosť odhadu"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-statistics.c:1848
+#: ../src/gpm-statistics.c:1852
 msgid "Show extra debugging information"
 msgstr "Zobraziť prídavné ladiace informácie"
 
 #. TRANSLATORS: show a device by default
-#: ../src/gpm-statistics.c:1851
+#: ../src/gpm-statistics.c:1855
 msgid "Select this device at startup"
 msgstr "Zvoliť toto zariadenie pri štarte"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:2111
+#: ../src/gpm-statistics.c:2117
 msgid "Processor"
 msgstr "Procesor"
