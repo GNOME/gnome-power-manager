@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-10-03 15:59+0000\n"
-"PO-Revision-Date: 2012-10-10 17:17+0200\n"
+"POT-Creation-Date: 2012-10-13 20:07+0000\n"
+"PO-Revision-Date: 2012-10-14 23:01+0200\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "Language: sk\n"
@@ -20,6 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 1 : (n>=2 && n<=4) ? 2 : 0;\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:1
 msgid "Whether we should show the history data points"
@@ -54,11 +55,11 @@ msgstr "Maximálny čas zobrazovanej histórie"
 # PM: súhlasim s Majom
 # MČ: Toto slovné spojenie mi evokuje, že sa tá os x zobrazí len na určitý čas. Je to tak?
 # MČ: Ak je na nej zobrazený časový údaj, tak by malo byť skôr: „Maximálny rozsah časových údajov zobrazených na osi x grafu histórie.“
+# DK: pouzivam tvoj preklad
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:8
-#, fuzzy
 msgid ""
 "The maximum duration of time displayed on the x-axis of the history graph."
-msgstr "Maximálne trvanie zobrazovanej osi x grafu histórie."
+msgstr "Maximálny rozsah časových údajov zobrazených na osi x grafu histórie."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:9
 msgid "Whether we should show the stats data points"
@@ -69,17 +70,18 @@ msgid "Whether we should show the stats data points in the statistics window."
 msgstr ""
 "Určuje, či sa majú zobrazovať body údajov štatistiky v štatistickom okne."
 
-# PM: to znie ako keby tie udaje boli v koncentráku vyhladzované, 
+# PM: to znie ako keby tie udaje boli v koncentráku vyhladzované,
+# DK: este stale?
+# MČ: skôr asi „vyhladené“, ale tento slovosled je lepší
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:11
-#, fuzzy
 msgid "Whether we should smooth the stats data"
-msgstr "Určuje, či sa majú vyhladzovať údaje štatistiky"
+msgstr "Určuje, či majú byť údaje štatistiky hladšie"
 
 # PM: to znie ako keby tie udaje boli v koncentráku vyhladzované, vyhladzuje sa zrejme krivka grafu
+# MČ: skôr asi „vyhladené“, ale tento slovosled je lepší
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:12
-#, fuzzy
 msgid "Whether we should smooth the stats data in the graph."
-msgstr "Určuje, či sa majú vyhladzovať údaje štatistiky v grafe."
+msgstr "Určuje, či má byť krivka grafu údajov štatistiky hladšia."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:13
 msgid "The default graph type to show for stats"
@@ -91,11 +93,11 @@ msgstr "Predvolený typ grafu, ktorý sa ukáže v štatistickom okne."
 
 # PM: treba preveriť ako je to preložené v iných moduloch, tuším glade sa tým zaoberá, či to náhodou nie su karty
 # MČ: Skôr by som použil: „prednastavenej stránky“
-# MČ podľa zdrojového súboru ide o index záložky „widgetu“ „GtkNotebook“: http://developer.gnome.org/gtk3/stable/GtkNotebook.html 
+# MČ podľa zdrojového súboru ide o index záložky „widgetu“ „GtkNotebook“: http://developer.gnome.org/gtk3/stable/GtkNotebook.html
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:15
 #, fuzzy
 msgid "The index of the page number to show by default"
-msgstr "Index štandardne zobrazenej stránky"
+msgstr "Číslo obvykle zobrazenej stránky"
 
 # PM: treba preveriť ako je to preložené v iných moduloch, tuším glade sa tým zaoberá, či to náhodou nie su karty
 # PK: co to robi? nepouziva sa nahodou ten index tej stranky?
@@ -106,8 +108,8 @@ msgid ""
 "The index of the page number to show by default which is used to return "
 "focus to the correct page."
 msgstr ""
-"Index štandardne zobrazenej stránky, ktorý je použitý na spätný návrat k "
-"správnej stránke."
+"Číslo obvykle zobrazenej stránky, ktorá je použitá ako predvolená stránka po "
+"návrate."
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:17
 msgid "The ID of the last device selected"
@@ -118,7 +120,7 @@ msgid ""
 "The identifier of the last device which is used to return focus to the "
 "correct device."
 msgstr ""
-"Identifikátor naposledy vybraného zariadenia, ktoré je použité na spätný "
+"Identifikátor naposledy vybraného zariadenia, ktorý je použitý na spätný "
 "návrat k správnemu zariadeniu."
 
 #. TRANSLATORS: shown on the titlebar
