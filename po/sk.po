@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-10-03 15:41+0000\n"
-"PO-Revision-Date: 2012-10-16 12:20+0100\n"
+"POT-Creation-Date: 2013-01-06 16:33+0000\n"
+"PO-Revision-Date: 2013-01-02 15:41+0100\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "Language: sk\n"
@@ -83,6 +83,7 @@ msgid "The default graph type to show in the stats window."
 msgstr "Predvolený typ grafu, ktorý sa ukáže v štatistickom okne."
 
 # PM: toto sa mi nevidí prečo je tu ešte ten index, jediné čo mi napadlo je že index nemusí zodpovedať zobrazovanému číslu stránky
+# DK: a co by to teda malo byt? ja neviem
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:15
 #, fuzzy
 msgid "The index of the page number to show by default"
@@ -116,6 +117,10 @@ msgstr "Štatistika napájania"
 #: ../data/gnome-power-statistics.desktop.in.in.h:2
 msgid "Observe power management"
 msgstr "Pozoruje správu napájania"
+
+#: ../data/gnome-power-statistics.desktop.in.in.h:3
+msgid "battery;consumption;charge;"
+msgstr ""
 
 # tab GtkLabel label
 #: ../data/gpm-statistics.ui.h:2 ../src/gpm-statistics.c:513
@@ -157,12 +162,10 @@ msgstr "História"
 msgid "Statistics"
 msgstr "Štatistika"
 
-# PM: Počet prebudení by sa sem nezmestilo?
 # GtkLabel label
 #: ../data/gpm-statistics.ui.h:10
-#, fuzzy
 msgid "Processor wakeups per second:"
-msgstr "Prebudení procesora za sekundu:"
+msgstr "Počet prebudení procesora za sekundu:"
 
 # PM: čo to je? každopádne si to zaslúži komentár - vyžiadaj si ho od vývojárov
 # GtkLabel label
@@ -318,15 +321,13 @@ msgstr[0] "Batérie prenosného počítača"
 msgstr[1] "Batéria prenosného počítača"
 msgstr[2] "Batérie prenosného počítača"
 
-# PM: Som za preklad "Záložný zdroj (UPS)"
 #. TRANSLATORS: battery-backed AC power source
 #: ../src/gpm-statistics.c:296
-#, fuzzy
 msgid "UPS"
 msgid_plural "UPSs"
-msgstr[0] "UPS"
-msgstr[1] "UPS"
-msgstr[2] "UPS"
+msgstr[0] "Záložné zdroje (UPS)"
+msgstr[1] "Záložný zdroj (UPS)"
+msgstr[2] "Záložné zdroje (UPS)"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
 #: ../src/gpm-statistics.c:300
@@ -352,15 +353,13 @@ msgstr[0] "Klávesnice"
 msgstr[1] "Klávesnica"
 msgstr[2] "Klávesnice"
 
-# PM: so za preklad Zariadenie PDA
 #. TRANSLATORS: portable device
 #: ../src/gpm-statistics.c:312
-#, fuzzy
 msgid "PDA"
 msgid_plural "PDAs"
-msgstr[0] "PDA"
-msgstr[1] "PDA"
-msgstr[2] "PDA"
+msgstr[0] "Zariadenia PDA"
+msgstr[1] "Zariadenie PDA"
+msgstr[2] "Zariadenia PDA"
 
 #. TRANSLATORS: cell phone (mobile...)
 #: ../src/gpm-statistics.c:316
@@ -691,38 +690,35 @@ msgstr "Radič diskov ATA"
 msgid "Intel wireless adaptor"
 msgstr "Bezdrôtový adaptér Intel"
 
-# PM: nebude lepšie časovač procesu %S
 #. TRANSLATORS: a timer is something that fires periodically.
 #. * The parameter is a process name, e.g. "firefox-bin".
 #. * This is shown when the timer wakes up.
 #: ../src/gpm-statistics.c:1237 ../src/gpm-statistics.c:1242
 #: ../src/gpm-statistics.c:1247 ../src/gpm-statistics.c:1252
 #: ../src/gpm-statistics.c:1257
-#, fuzzy, c-format
+#, c-format
 msgid "Timer %s"
-msgstr "Časovač %s"
+msgstr "Časovač procesu %s"
 
-# PM: podľa popisu sa mi to nezdá dobre
-# PM: nebude lepšie Úloha/Proces %s spí
 #. TRANSLATORS: the parameter is the name of task that's woken up from sleeping.
 #. * This is shown when the task wakes up.
 #: ../src/gpm-statistics.c:1261
-#, fuzzy, c-format
+#, c-format
 msgid "Sleep %s"
-msgstr "Spí %s"
+msgstr "Proces %s spí"
 
 #. TRANSLATORS: this is the name of a new realtime task.
 #: ../src/gpm-statistics.c:1264
 #, c-format
 msgid "New task %s"
-msgstr "Nová úloha %s"
+msgstr "Nový proces %s"
 
 #. TRANSLATORS: this is the name of a task that's woken to check state.
 #. * This is shown when the task wakes up.
 #: ../src/gpm-statistics.c:1268
-#, fuzzy, c-format
+#, c-format
 msgid "Wait %s"
-msgstr "Čaká %s"
+msgstr "Proces %s čaká"
 
 #. TRANSLATORS: this is the name of a work queue.
 #. * A work queue is a list of work that has to be done.
@@ -745,9 +741,9 @@ msgstr "Aktivita USB %s"
 
 #. TRANSLATORS: we've timed out of an aligned timer, with the name
 #: ../src/gpm-statistics.c:1285
-#, fuzzy, c-format
+#, c-format
 msgid "Wakeup %s"
-msgstr "Zobudené %s"
+msgstr "Proces %s je prebudený"
 
 #. TRANSLATORS: interupts on the system required for basic operation
 #: ../src/gpm-statistics.c:1288
