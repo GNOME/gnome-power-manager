@@ -1,7 +1,7 @@
 ## We require new-style dependency handling.
 AUTOMAKE_OPTIONS = 1.7
 
-INCLUDES =						\
+AM_CPPFLAGS =						\
 	$(GLIB_CFLAGS)					\
 	$(GNOME_CFLAGS)					\
 	$(X11_CFLAGS)					\
