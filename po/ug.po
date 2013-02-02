@@ -1,22 +1,20 @@
 # Uyghur translation for gnome-power-manager.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Gheyret Kenji<gheyret@yahoo.com>,2010.
-# Sahran <sahran.ug@gmail.com>, 2010.
-# Zeper <zeper@msn.com>, 2010.
+# Gheyret Kenji <gheyret@gmail.com>, YEAR.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-power-manager&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-03-20 07:38+0000\n"
-"PO-Revision-Date: 2013-02-02 12:37+0900\n"
+"POT-Creation-Date: 2013-02-02 03:56+0000\n"
+"PO-Revision-Date: 2013-02-02 18:52+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:1
@@ -100,8 +98,8 @@ msgstr "بۇ بەلگىنىڭ ئاخىرقى ئۈسكۈنىسى فوكۇسنى �
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:1
-#: ../data/gpm-statistics.ui.h:1 ../src/gpm-statistics.c:1406
-#: ../src/gpm-statistics.c:1860
+#: ../data/gpm-statistics.ui.h:1 ../src/gpm-statistics.c:1410
+#: ../src/gpm-statistics.c:1864
 msgid "Power Statistics"
 msgstr "توك مەنبە ستاتىستىكىسى"
 
@@ -109,7 +107,11 @@ msgstr "توك مەنبە ستاتىستىكىسى"
 msgid "Observe power management"
 msgstr "توك مەنبە باشقۇرۇشنى كۆزىتىش پروگراممىسى"
 
-#: ../data/gpm-statistics.ui.h:2 ../src/gpm-statistics.c:509
+#: ../data/gnome-power-statistics.desktop.in.in.h:3
+msgid "battery;consumption;charge;"
+msgstr "battery؛consumption؛charge؛توكدان؛توكلاش؛زەرەتلەش؛"
+
+#: ../data/gpm-statistics.ui.h:2 ../src/gpm-statistics.c:513
 msgid "Details"
 msgstr "تەپسىلاتلار"
 
@@ -149,7 +151,7 @@ msgstr "بىر تەرەپ قىلغۇچنىڭ سېكۇنتىغا ئويغىنىش
 msgid "0"
 msgstr "0"
 
-#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:495
+#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:499
 msgid "Wakeups"
 msgstr "ئويغان"
 
@@ -214,7 +216,7 @@ msgid "%.1fV"
 msgstr "%.1fV"
 
 #. TRANSLATORS: the rate of discharge for the device
-#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:767
+#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:771
 msgid "Rate"
 msgstr "نىسبىتى"
 
@@ -222,11 +224,11 @@ msgstr "نىسبىتى"
 msgid "Charge"
 msgstr "توكلا"
 
-#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:781
+#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:785
 msgid "Time to full"
 msgstr "توشۇش ۋاقتى"
 
-#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:786
+#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:790
 msgid "Time to empty"
 msgstr "بوشىتىش ۋاقتى"
 
@@ -399,100 +401,101 @@ msgstr "توكلاشنى كۈتۈۋاتىدۇ"
 msgid "Waiting to discharge"
 msgstr "توكسىزلاشنى كۈتۈۋاتىدۇ"
 
-#: ../src/gpm-statistics.c:433
-msgid "Attribute"
-msgstr "خاسلىق"
-
-#: ../src/gpm-statistics.c:440
-msgid "Value"
-msgstr "قىممەت"
-
-#: ../src/gpm-statistics.c:457
-msgid "Image"
-msgstr "سۈرەت"
-
-#: ../src/gpm-statistics.c:463
-msgid "Description"
-msgstr "چۈشەندۈرۈش"
-
-#: ../src/gpm-statistics.c:482 ../src/gpm-statistics.c:706
-msgid "Type"
-msgstr "تىپى"
-
-#: ../src/gpm-statistics.c:488
-msgid "ID"
-msgstr "كىملىكى(ID)"
-
-#: ../src/gpm-statistics.c:502
-msgid "Command"
-msgstr "بۇيرۇق"
-
+#. TRANSLATORS: battery state
 #. TRANSLATORS: this is when the stats time is not known
-#: ../src/gpm-statistics.c:587
+#: ../src/gpm-statistics.c:417 ../src/gpm-statistics.c:591
 msgid "Unknown"
 msgstr "نامەلۇم"
 
+#: ../src/gpm-statistics.c:437
+msgid "Attribute"
+msgstr "خاسلىق"
+
+#: ../src/gpm-statistics.c:444
+msgid "Value"
+msgstr "قىممەت"
+
+#: ../src/gpm-statistics.c:461
+msgid "Image"
+msgstr "سۈرەت"
+
+#: ../src/gpm-statistics.c:467
+msgid "Description"
+msgstr "چۈشەندۈرۈش"
+
+#: ../src/gpm-statistics.c:486 ../src/gpm-statistics.c:710
+msgid "Type"
+msgstr "تىپى"
+
+#: ../src/gpm-statistics.c:492
+msgid "ID"
+msgstr "كىملىكى(ID)"
+
+#: ../src/gpm-statistics.c:506
+msgid "Command"
+msgstr "بۇيرۇق"
+
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:591
+#: ../src/gpm-statistics.c:595
 #, c-format
 msgid "%.0f second"
 msgid_plural "%.0f seconds"
 msgstr[0] "%.0f سېكۇنت"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:596
+#: ../src/gpm-statistics.c:600
 #, c-format
 msgid "%.1f minute"
 msgid_plural "%.1f minutes"
 msgstr[0] "%.1f مىنۇت"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:601
+#: ../src/gpm-statistics.c:605
 #, c-format
 msgid "%.1f hour"
 msgid_plural "%.1f hours"
 msgstr[0] "%.1f سائەت"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:605
+#: ../src/gpm-statistics.c:609
 #, c-format
 msgid "%.1f day"
 msgid_plural "%.1f days"
 msgstr[0] "%.1f كۈن"
 
-#: ../src/gpm-statistics.c:614
+#: ../src/gpm-statistics.c:618
 msgid "Yes"
 msgstr "ھەئە"
 
-#: ../src/gpm-statistics.c:614
+#: ../src/gpm-statistics.c:618
 msgid "No"
 msgstr "ياق"
 
 #. TRANSLATORS: the device ID of the current device, e.g. "battery0"
-#: ../src/gpm-statistics.c:703
+#: ../src/gpm-statistics.c:707
 msgid "Device"
 msgstr "ئۈسكۈنە"
 
-#: ../src/gpm-statistics.c:708
+#: ../src/gpm-statistics.c:712
 msgid "Vendor"
 msgstr "تارقاتقۇچى"
 
-#: ../src/gpm-statistics.c:710
+#: ../src/gpm-statistics.c:714
 msgid "Model"
 msgstr "ئەندىزە"
 
-#: ../src/gpm-statistics.c:712
+#: ../src/gpm-statistics.c:716
 msgid "Serial number"
 msgstr "تەرتىپ نومۇرى"
 
 #. TRANSLATORS: a boolean attribute that means if the device is supplying the
 #. * main power for the computer. For instance, an AC adapter or laptop battery
 #. * would be TRUE,  but a mobile phone or mouse taking power is FALSE
-#: ../src/gpm-statistics.c:717
+#: ../src/gpm-statistics.c:721
 msgid "Supply"
 msgstr "تەمىنلىگۈچى"
 
-#: ../src/gpm-statistics.c:720
+#: ../src/gpm-statistics.c:724
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
@@ -500,250 +503,250 @@ msgstr[0] "%d سېكۇنت"
 
 #. TRANSLATORS: when the device was last updated with new data. It's
 #. * usually a few seconds when a device is discharging or charging.
-#: ../src/gpm-statistics.c:724
+#: ../src/gpm-statistics.c:728
 msgid "Refreshed"
 msgstr "يېڭىلانغان"
 
 #. TRANSLATORS: Present is whether the device is currently attached
 #. * to the computer, as some devices (e.g. laptop batteries) can
 #. * be removed, but still observed as devices on the system
-#: ../src/gpm-statistics.c:734
+#: ../src/gpm-statistics.c:738
 msgid "Present"
 msgstr "ھازىر"
 
 #. TRANSLATORS: If the device can be recharged, e.g. lithium
 #. * batteries rather than alkaline ones
-#: ../src/gpm-statistics.c:741
+#: ../src/gpm-statistics.c:745
 msgid "Rechargeable"
 msgstr "توكلاشچان"
 
 #. TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged"
-#: ../src/gpm-statistics.c:747
+#: ../src/gpm-statistics.c:751
 msgid "State"
 msgstr "ھالەت"
 
-#: ../src/gpm-statistics.c:751
+#: ../src/gpm-statistics.c:755
 msgid "Energy"
 msgstr "قۇۋۋىتى"
 
-#: ../src/gpm-statistics.c:754
+#: ../src/gpm-statistics.c:758
 msgid "Energy when empty"
 msgstr "بوش قۇۋۋەت"
 
-#: ../src/gpm-statistics.c:757
+#: ../src/gpm-statistics.c:761
 msgid "Energy when full"
 msgstr "تولۇق قۇۋۋەت"
 
-#: ../src/gpm-statistics.c:760
+#: ../src/gpm-statistics.c:764
 msgid "Energy (design)"
 msgstr "قۇۋۋەت(لايىھە)"
 
-#: ../src/gpm-statistics.c:774
+#: ../src/gpm-statistics.c:778
 msgid "Voltage"
 msgstr "توك بېسىمى"
 
 #. TRANSLATORS: the amount of charge the cell contains
-#: ../src/gpm-statistics.c:796
+#: ../src/gpm-statistics.c:800
 msgid "Percentage"
 msgstr "پىرسەنت"
 
 #. TRANSLATORS: the capacity of the device, which is basically a measure
 #. * of how full it can get, relative to the design capacity
-#: ../src/gpm-statistics.c:803
+#: ../src/gpm-statistics.c:807
 msgid "Capacity"
 msgstr "سىغىمى"
 
 #. TRANSLATORS: the type of battery, e.g. lithium or nikel metal hydroxide
-#: ../src/gpm-statistics.c:808
+#: ../src/gpm-statistics.c:812
 msgid "Technology"
 msgstr "تېخنىكا"
 
 #. TRANSLATORS: this is when the device is plugged in, typically
 #. * only shown for the ac adaptor device
-#: ../src/gpm-statistics.c:813
+#: ../src/gpm-statistics.c:817
 msgid "Online"
 msgstr "توردا"
 
 #. TRANSLATORS: the command line was not provided
-#: ../src/gpm-statistics.c:1140
+#: ../src/gpm-statistics.c:1144
 msgid "No data"
 msgstr "سانلىق-مەلۇمات يوق"
 
 #. TRANSLATORS: kernel module, usually a device driver
-#: ../src/gpm-statistics.c:1147 ../src/gpm-statistics.c:1152
+#: ../src/gpm-statistics.c:1151 ../src/gpm-statistics.c:1156
 msgid "Kernel module"
 msgstr "يادرو مودېلى"
 
 #. TRANSLATORS: kernel housekeeping
-#: ../src/gpm-statistics.c:1157
+#: ../src/gpm-statistics.c:1161
 msgid "Kernel core"
 msgstr "يادرو مەركىزى"
 
 #. TRANSLATORS: interrupt between processors
-#: ../src/gpm-statistics.c:1162
+#: ../src/gpm-statistics.c:1166
 msgid "Interprocessor interrupt"
 msgstr "بىر تەرەپ قىلغۇچ ئارىسىدىكى ئۈزۈلۈش"
 
 #. TRANSLATORS: unknown interrupt
-#: ../src/gpm-statistics.c:1167
+#: ../src/gpm-statistics.c:1171
 msgid "Interrupt"
 msgstr "ئۈزۈلۈش"
 
 #. TRANSLATORS: the keyboard and mouse device event
-#: ../src/gpm-statistics.c:1214
+#: ../src/gpm-statistics.c:1218
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "PS/2 ھەرپتاختا/چاشقىنەك/سېزىمچان تاختا"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
-#: ../src/gpm-statistics.c:1217
+#: ../src/gpm-statistics.c:1221
 msgid "ACPI"
 msgstr "ACPI"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
-#: ../src/gpm-statistics.c:1220
+#: ../src/gpm-statistics.c:1224
 msgid "Serial ATA"
 msgstr "ئارقىمۇ-ئارقا ATA"
 
 #. TRANSLATORS: this is the old-style ATA interface
-#: ../src/gpm-statistics.c:1223
+#: ../src/gpm-statistics.c:1227
 msgid "ATA host controller"
 msgstr "ATA host كونتروللىغۇچ"
 
 #. TRANSLATORS: 802.11 wireless adaptor
-#: ../src/gpm-statistics.c:1226
+#: ../src/gpm-statistics.c:1230
 msgid "Intel wireless adaptor"
 msgstr "Intel سىمسىز تور كارتىسى"
 
 #. TRANSLATORS: a timer is something that fires periodically.
 #. * The parameter is a process name, e.g. "firefox-bin".
 #. * This is shown when the timer wakes up.
-#: ../src/gpm-statistics.c:1233 ../src/gpm-statistics.c:1238
-#: ../src/gpm-statistics.c:1243 ../src/gpm-statistics.c:1248
-#: ../src/gpm-statistics.c:1253
+#: ../src/gpm-statistics.c:1237 ../src/gpm-statistics.c:1242
+#: ../src/gpm-statistics.c:1247 ../src/gpm-statistics.c:1252
+#: ../src/gpm-statistics.c:1257
 #, c-format
 msgid "Timer %s"
 msgstr "ۋاقىت بەلگىلىگۈچ %s"
 
 #. TRANSLATORS: the parameter is the name of task that's woken up from sleeping.
 #. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:1257
+#: ../src/gpm-statistics.c:1261
 #, c-format
 msgid "Sleep %s"
 msgstr "ئۇيقۇ %s"
 
 #. TRANSLATORS: this is the name of a new realtime task.
-#: ../src/gpm-statistics.c:1260
+#: ../src/gpm-statistics.c:1264
 #, c-format
 msgid "New task %s"
 msgstr "يېڭى ۋەزىپە %s"
 
 #. TRANSLATORS: this is the name of a task that's woken to check state.
 #. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:1264
+#: ../src/gpm-statistics.c:1268
 #, c-format
 msgid "Wait %s"
 msgstr "كۈت %s"
 
 #. TRANSLATORS: this is the name of a work queue.
 #. * A work queue is a list of work that has to be done.
-#: ../src/gpm-statistics.c:1268 ../src/gpm-statistics.c:1272
+#: ../src/gpm-statistics.c:1272 ../src/gpm-statistics.c:1276
 #, c-format
 msgid "Work queue %s"
 msgstr "خىزمەتلەر %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
-#: ../src/gpm-statistics.c:1275
+#: ../src/gpm-statistics.c:1279
 #, c-format
 msgid "Network route flush %s"
 msgstr "%s نىڭ يول تاللىشىنى تازىلا"
 
 #. TRANSLATORS: this is the name of an activity on the USB bus
-#: ../src/gpm-statistics.c:1278
+#: ../src/gpm-statistics.c:1282
 #, c-format
 msgid "USB activity %s"
 msgstr "USB پائالىيىتى %s"
 
 #. TRANSLATORS: we've timed out of an aligned timer, with the name
-#: ../src/gpm-statistics.c:1281
+#: ../src/gpm-statistics.c:1285
 #, c-format
 msgid "Wakeup %s"
 msgstr "ئويغان %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
-#: ../src/gpm-statistics.c:1284
+#: ../src/gpm-statistics.c:1288
 msgid "Local interrupts"
 msgstr "يەرلىك ئۈزۈلۈش"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
-#: ../src/gpm-statistics.c:1287
+#: ../src/gpm-statistics.c:1291
 msgid "Rescheduling interrupts"
 msgstr "ئۈزۈلۈشنى قايتا پىلانلاش"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1396
+#: ../src/gpm-statistics.c:1400
 msgid "Device Information"
 msgstr "ئۈسكۈنە ئۇچۇرى"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1398
+#: ../src/gpm-statistics.c:1402
 msgid "Device History"
 msgstr "ئۈسكۈنە تارىخى"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1400
+#: ../src/gpm-statistics.c:1404
 msgid "Device Profile"
 msgstr "ئۈسكۈنە سەپلىمىسى"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1402
+#: ../src/gpm-statistics.c:1406
 msgid "Processor Wakeups"
 msgstr "بىر تەرەپ قىلغۇچنى ئويغات"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1598 ../src/gpm-statistics.c:1604
-#: ../src/gpm-statistics.c:1610 ../src/gpm-statistics.c:1616
+#: ../src/gpm-statistics.c:1602 ../src/gpm-statistics.c:1608
+#: ../src/gpm-statistics.c:1614 ../src/gpm-statistics.c:1620
 msgid "Time elapsed"
 msgstr "كەتكەن ۋاقىت"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1600
+#: ../src/gpm-statistics.c:1604
 msgid "Power"
 msgstr "توك مەنبە"
 
 #. TRANSLATORS: this is the Y axis on the graph for the whole battery device
 #. TRANSLATORS: this is the X axis on the graph for the whole battery device
-#: ../src/gpm-statistics.c:1606 ../src/gpm-statistics.c:1649
-#: ../src/gpm-statistics.c:1655 ../src/gpm-statistics.c:1661
-#: ../src/gpm-statistics.c:1667
+#: ../src/gpm-statistics.c:1610 ../src/gpm-statistics.c:1653
+#: ../src/gpm-statistics.c:1659 ../src/gpm-statistics.c:1665
+#: ../src/gpm-statistics.c:1671
 msgid "Cell charge"
 msgstr "توكدان توكى"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1612 ../src/gpm-statistics.c:1618
+#: ../src/gpm-statistics.c:1616 ../src/gpm-statistics.c:1622
 msgid "Predicted time"
 msgstr "مۆلچەرلەنگەن ۋاقىت"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1651 ../src/gpm-statistics.c:1663
+#: ../src/gpm-statistics.c:1655 ../src/gpm-statistics.c:1667
 msgid "Correction factor"
 msgstr "توغرىلانغان كۆپەيتكۈچى"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1657 ../src/gpm-statistics.c:1669
+#: ../src/gpm-statistics.c:1661 ../src/gpm-statistics.c:1673
 msgid "Prediction accuracy"
 msgstr "مۆلچەرلەنگەن توغرىلىقى"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-statistics.c:1848
+#: ../src/gpm-statistics.c:1852
 msgid "Show extra debugging information"
 msgstr "زىيادە سازلاش ئۇچۇرىنى كۆرسەت"
 
 #. TRANSLATORS: show a device by default
-#: ../src/gpm-statistics.c:1851
+#: ../src/gpm-statistics.c:1855
 msgid "Select this device at startup"
 msgstr "قوزغالغاندا بۇ ئۈسكۈنىنى تاللا"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:2113
+#: ../src/gpm-statistics.c:2117
 msgid "Processor"
 msgstr "بىر تەرەپ قىلغۇچ"
