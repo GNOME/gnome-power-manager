@@ -1,3 +1,20 @@
+Version 3.7.5
+~~~~~~~~~~~~~
+Released: 2013-02-05
+
+* Translations
+ - Added Khmer translation (Khoem Sokhem)
+ - Updated Estonian translation (Mattias Põldaru)
+ - Updated kn translation (Shankar Prasad)
+ - Updated Odia Translation with FUEL implementation (ManojKumar Giri)
+ - Updated slovak translation (Dušan Kazik)
+ - Updated Uyghur translation (Gheyret Kenji)
+ - Updated Vietnamese translation (Ngô Trung)
+
+* Bugfix:
+ - Added keywords to .desktop file (Daniel Mustieles)
+ - Don't use the deprecated INCLUDES in Makefile.am (Richard Hughes)
+
 Version 3.6.0
 ~~~~~~~~~~~~~
 Released: 2012-09-25
@@ -2764,10 +2781,10 @@ Released January 17, 2006
 - Lots of new translations: Greek (Nikos Charonitakis), Gujarati (Ankit Patel),
   Vietnamese (Clytie Siddall), Catalan (Josep Puigdemont i Casamajó),
   Thai (Theppitak Karoonboonyanan), Serbian (Slobodan D. Sredojevic).
-- Lots of updated translations: Galician (Ignacio Casal Quinteiro), 
-  Hungarian (Gabor Kelemen), Bulgarian (Alexander Shopov), 
-  Norwegian (Kjartan Maraas), Spanish (Francisco Javier F. Serrador), 
-  Simplified Chinese (Funda Wang), Lithuanian (Žygimantas Beručka), 
+- Lots of updated translations: Galician (Ignacio Casal Quinteiro),
+  Hungarian (Gabor Kelemen), Bulgarian (Alexander Shopov),
+  Norwegian (Kjartan Maraas), Spanish (Francisco Javier F. Serrador),
+  Simplified Chinese (Funda Wang), Lithuanian (Žygimantas Beručka),
   Italian (Daniele Medri), French (Guillaume Savary), Finnish (Ilkka Tuohela).
 - We now try to save the GNOME application state before the critically-low
   action is taken (default shutdown).
@@ -2775,7 +2792,7 @@ Released January 17, 2006
 - Fix a bug where the preferences program was crashing on missing gconf schema.
 - Fixed lots of other smaller bugs such as (#322773), (#323135), (RH#174196),
   (#322547), (RH#172963), (RH#176656).
-- Lots of source file re-organisation, also a large refactoring. Thanks to 
+- Lots of source file re-organisation, also a large refactoring. Thanks to
   William Jon McCann for the large amount of code cleanup done.
 - Fix problem where preferences window is redrawn and then resized (#323562)
 - Don't crash if gnome-panel is restarted, but display the icon again (#324446)
@@ -2909,8 +2926,8 @@ Released October 01, 2005
 - GNOME Power Manager now notifies you your battery is low *and* how much time
   you have remaining. This fixes a regression from 0.2.2.
 - Working with GNOME Screensaver, we now work out the idle time so we can
-  suspend or hibernate in a period of keyboard and mouse in-activity. 
-  The load value is also computed, so we can avoid sleeping when CPU 
+  suspend or hibernate in a period of keyboard and mouse in-activity.
+  The load value is also computed, so we can avoid sleeping when CPU
   intensive programs are left running, e.g. kernel compiles or simulations.
 
 =============
@@ -2927,7 +2944,7 @@ Released September 21, 2005
 - Lots more code cleanups, and more modularization.
 - 100% GLIB DBUS support - this is faster than libhal, but has not been tested
   much, and is disabled for now. Use ./configure --enable-glibhal to test.
-- DBUS services now works, so we init g-p-m with just a query to 
+- DBUS services now works, so we init g-p-m with just a query to
   org.gnome.GnomePowerManager. This makes it easy to make sure g-p-m has been
   started, or to start g-p-m when we start Power Preferences.
 - Now we control GNOME Screensaver so that we don't use screensavers on battery
@@ -2948,12 +2965,12 @@ Released September 07, 2005
   and tell the user what they have to do, to fix the problem.
 - New Polish translation by Michał Kastelik
 - Switch to using org.gnome.GnomePowerManager rather than net.sf.GnomePower
-- Add the new DBUS api calls isOnBattery(), isOnUps(), and isOnAC() and 
+- Add the new DBUS api calls isOnBattery(), isOnUps(), and isOnAC() and
   remove isRunningOnMains().
-- LCD slider brightness now adjusts the correct immediate state while on 
+- LCD slider brightness now adjusts the correct immediate state while on
   battery power and AC.
 - Fix from wrobell to fix compilation on PLD Linux.
-- Made docbook2man optional. If this program is missing, the man files will 
+- Made docbook2man optional. If this program is missing, the man files will
   not be built.	Suggested by Eugenia Loli-Queru to fix Arch Linux compilation.
 - Add lots more answered questions on the FAQ page.
 
@@ -2981,18 +2998,18 @@ Version 0.2.0
 Released August 31, 2005
 
 - This new release brings lots of new features and updated translations.
-- The preferences program now supports LCD brightness, and works with 
+- The preferences program now supports LCD brightness, and works with
   gnome-screensaver to set the DPMS timeout for monitors.
 - The website has been updated with a new design with lots more content.
-- *WARNING* this program depends on new DBUS and HAL libraries to install, 
-  due to the recent changes in HAL. See the new FAQ page 
+- *WARNING* this program depends on new DBUS and HAL libraries to install,
+  due to the recent changes in HAL. See the new FAQ page
   (http://gnome-power.sourceforge.net/faq.php) for more details.
 - Working with HAL 0.5.4, lots of problems have been solved.
-- This includes the need for a external DBUS daemon - now we use HAL to 
+- This includes the need for a external DBUS daemon - now we use HAL to
   launch scripts.
-- Many more batteries are supported, as well as support for most of the 
+- Many more batteries are supported, as well as support for most of the
   broken ACPI BIOSes.
-- This release has had little testing (and a *lot* has changed internally 
+- This release has had little testing (and a *lot* has changed internally
   since 0.1.0), so expect a few bugs, and teething problems.
 - The wait between 0.1.0 and 0.2.0 has been required for the newest HAL to be
   released. Expect more frequent releases in the future.
@@ -3004,9 +3021,9 @@ Version 0.1.0
 Released July 12, 2005
 
 - Massive changes!
-- A new DBUS system daemon, pmscripts that you can edit for suspend2 or 
+- A new DBUS system daemon, pmscripts that you can edit for suspend2 or
   swsup hibernation.
-- Lots of new features including a full client API for shutdown/logoff 
+- Lots of new features including a full client API for shutdown/logoff
   notification to applications.
 
 =============
@@ -3032,7 +3049,7 @@ Version 0.0.3
 
 Released April 17, 2005
 
-- Lots of bugfixes, new features, new preferences program - supporting 
+- Lots of bugfixes, new features, new preferences program - supporting
   wireless mice and keyboards, pda's and the usual laptop batteries...
 
 =============
