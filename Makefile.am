@@ -13,8 +13,7 @@ EXTRA_DIST =						\
 	intltool-merge.in				\
 	intltool-update.in				\
 	omf.make					\
-	xmldocs.make					\
-	gnome-doc-utils.make
+	xmldocs.make
 
 DISTCLEANFILES =					\
 	intltool-extract				\
@@ -29,7 +28,6 @@ MAINTAINERCLEANFILES =					\
 	config.h.in					\
 	config.sub					\
 	depcomp						\
-	gnome-doc-utils.make				\
 	install-sh					\
 	ltmain.sh					\
 	missing						\
@@ -45,7 +43,7 @@ distclean-local:
 ChangeLog:
 	@echo Creating $@
 	@if test -d "$(srcdir)/.git"; then \
-	  (GIT_DIR=$(top_srcdir)/.git ./missing --run git log gnome-2-26.. --stat -M -C --name-status  --date=short --no-color) | fmt --split-only > $@.tmp \
+	  (GIT_DIR=$(top_srcdir)/.git ./missing --run git log gnome-3-6.. --stat -M -C --name-status  --date=short --no-color) | fmt --split-only > $@.tmp \
 	  && mv -f $@.tmp $@ \
 	  || ($(RM) $@.tmp; \
 	      echo Failed to generate ChangeLog, your ChangeLog may be outdated >&2; \
