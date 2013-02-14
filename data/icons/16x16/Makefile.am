@@ -1,3 +1,3 @@
-SUBDIRS = apps status
+SUBDIRS = apps
 
 -include $(top_srcdir)/git.mk

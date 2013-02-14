@@ -115,31 +115,6 @@ enum {
 #define GPM_UP_TEXT_MIN_TIME			120 /* seconds */
 
 /**
- * gpm_stats_get_device_icon_index:
- * @device: The UpDevice
- *
- * Return value: The character string for the filename suffix.
- **/
-static const gchar *
-gpm_stats_get_device_icon_index (UpDevice *device)
-{
-	gdouble percentage;
-	/* get device properties */
-	g_object_get (device, "percentage", &percentage, NULL);
-	if (percentage < 10)
-		return "000";
-	else if (percentage < 30)
-		return "020";
-	else if (percentage < 50)
-		return "040";
-	else if (percentage < 70)
-		return "060";
-	else if (percentage < 90)
-		return "080";
-	return "100";
-}
-
-/**
  * gpm_stats_get_device_icon_suffix:
  * @device: The UpDevice
  *
@@ -170,9 +145,7 @@ gpm_stats_get_device_icon (UpDevice *device, gboolean use_symbolic)
 {
 	GString *filename;
 	gchar **iconnames;
-	const gchar *kind_str;
 	const gchar *suffix_str;
-	const gchar *index_str;
 	UpDeviceKind kind;
 	UpDeviceState state;
 	gboolean is_present;
@@ -200,17 +173,13 @@ gpm_stats_get_device_icon (UpDevice *device, gboolean use_symbolic)
 
 	} else if (kind == UP_DEVICE_KIND_MONITOR) {
 		if (use_symbolic)
-			g_string_append (filename, "gpm-monitor-symbolic;");
-		g_string_append (filename, "gpm-monitor;");
+			g_string_append (filename, "ac-adapter-symbolic;");
+		g_string_append (filename, "ac-adapter;");
 
 	} else {
-
-		kind_str = up_device_kind_to_string (kind);
 		if (!is_present) {
 			if (use_symbolic)
 				g_string_append (filename, "battery-missing-symbolic;");
-			g_string_append_printf (filename, "gpm-%s-missing;", kind_str);
-			g_string_append_printf (filename, "gpm-%s-000;", kind_str);
 			g_string_append (filename, "battery-missing;");
 
 		} else {
@@ -218,8 +187,6 @@ gpm_stats_get_device_icon (UpDevice *device, gboolean use_symbolic)
 			case UP_DEVICE_STATE_EMPTY:
 				if (use_symbolic)
 					g_string_append (filename, "battery-empty-symbolic;");
-				g_string_append_printf (filename, "gpm-%s-empty;", kind_str);
-				g_string_append_printf (filename, "gpm-%s-000;", kind_str);
 				g_string_append (filename, "battery-empty;");
 				break;
 			case UP_DEVICE_STATE_FULLY_CHARGED:
@@ -227,33 +194,26 @@ gpm_stats_get_device_icon (UpDevice *device, gboolean use_symbolic)
 					g_string_append (filename, "battery-full-charged-symbolic;");
 					g_string_append (filename, "battery-full-charging-symbolic;");
 				}
-				g_string_append_printf (filename, "gpm-%s-full;", kind_str);
-				g_string_append_printf (filename, "gpm-%s-100;", kind_str);
 				g_string_append (filename, "battery-full-charged;");
 				g_string_append (filename, "battery-full-charging;");
 				break;
 			case UP_DEVICE_STATE_CHARGING:
 			case UP_DEVICE_STATE_PENDING_CHARGE:
 				suffix_str = gpm_stats_get_device_icon_suffix (device);
-				index_str = gpm_stats_get_device_icon_index (device);
 				if (use_symbolic)
 					g_string_append_printf (filename, "battery-%s-charging-symbolic;", suffix_str);
-				g_string_append_printf (filename, "gpm-%s-%s-charging;", kind_str, index_str);
 				g_string_append_printf (filename, "battery-%s-charging;", suffix_str);
 				break;
 			case UP_DEVICE_STATE_DISCHARGING:
 			case UP_DEVICE_STATE_PENDING_DISCHARGE:
 				suffix_str = gpm_stats_get_device_icon_suffix (device);
-				index_str = gpm_stats_get_device_icon_index (device);
 				if (use_symbolic)
 					g_string_append_printf (filename, "battery-%s-symbolic;", suffix_str);
-				g_string_append_printf (filename, "gpm-%s-%s;", kind_str, index_str);
 				g_string_append_printf (filename, "battery-%s;", suffix_str);
 				break;
 			default:
 				if (use_symbolic)
 					g_string_append (filename, "battery-missing-symbolic;");
-				g_string_append (filename, "gpm-battery-missing;");
 				g_string_append (filename, "battery-missing;");
 			}
 		}
