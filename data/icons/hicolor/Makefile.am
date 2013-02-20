@@ -5,11 +5,13 @@ icon32dir=$(datadir)/icons/hicolor/32x32/apps
 icon48dir=$(datadir)/icons/hicolor/48x48/apps
 iconscalabledir=$(datadir)/icons/hicolor/scalable/apps
 
-icon16_DATA = 16x16/gnome-sudoku.png
-icon22_DATA = 22x22/gnome-sudoku.png
-icon24_DATA = 24x24/gnome-sudoku.png
-icon32_DATA = 32x32/gnome-sudoku.png
-icon48_DATA = 48x48/gnome-sudoku.png
-iconscalable_DATA = scalable/gnome-sudoku.svg
+icon16_DATA = 16x16/gnome-power-statistics.png
+icon22_DATA = 22x22/gnome-power-statistics.png
+icon24_DATA = 24x24/gnome-power-statistics.png
+icon32_DATA = 32x32/gnome-power-statistics.png
+icon48_DATA = 48x48/gnome-power-statistics.png
+iconscalable_DATA = scalable/gnome-power-statistics.svg
 
 EXTRA_DIST = $(icon16_DATA) $(icon22_DATA) $(icon24_DATA) $(icon32_DATA) $(icon48_DATA) $(iconscalable_DATA)
+
+-include $(top_srcdir)/git.mk
