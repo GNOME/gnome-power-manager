@@ -5,22 +5,22 @@
 # Amitakhya Phukan <amitakhya@svn.gnome.org>, 2008.
 # Amitakhya Phukan <aphukan@redhat.com>, 2008.
 # Amitakhya Phukan <aphukan@fedoraproject.org>, 2009.
-# Nilamdyuti Goswami <ngoswami@redhat.com>, 2011.
+# Nilamdyuti Goswami <ngoswami@redhat.com>, 2011, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-03-26 14:16+0000\n"
-"PO-Revision-Date: 2011-08-18 16:37+0530\n"
+"POT-Creation-Date: 2013-03-26 12:29+0000\n"
+"PO-Revision-Date: 2013-03-26 21:14+0530\n"
 "Last-Translator: Nilamdyuti Goswami <ngoswami@redhat.com>\n"
-"Language-Team: as_IN <kde-i18n-doc@kde.org>\n"
+"Language-Team: Assamese <kde-i18n-doc@kde.org>\n"
+"Language: as\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: as\n"
 "Plural-Forms: nplurals=2; plural=(n!=1)\n"
-"X-Generator: Lokalize 1.0\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:1
 msgid "Whether we should show the history data points"
@@ -89,7 +89,8 @@ msgid ""
 "The index of the page number to show by default which is used to return "
 "focus to the correct page."
 msgstr ""
-"অবিকল্পিতভাৱে দেখাব লগিয়া পৃষ্ঠা নম্বৰৰ সুচী যাক বৰ্তমান পৃষ্ঠালে মনোযোগ ঘুৰাই দিয়াৰ "
+"অবিকল্পিতভাৱে দেখাব লগিয়া পৃষ্ঠা নম্বৰৰ সুচী যাক বৰ্তমান পৃষ্ঠালে মনোযোগ "
+"ঘুৰাই দিয়াৰ "
 "কাৰণে ব্যৱহাৰ কৰা হয়।"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:17
@@ -106,8 +107,8 @@ msgstr ""
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:1
-#: ../data/gpm-statistics.ui.h:1 ../src/gpm-statistics.c:1406
-#: ../src/gpm-statistics.c:1860
+#: ../data/gpm-statistics.ui.h:1 ../src/gpm-statistics.c:1370
+#: ../src/gpm-statistics.c:1824
 msgid "Power Statistics"
 msgstr "শক্তি পৰিসংখ্যা"
 
@@ -115,8 +116,12 @@ msgstr "শক্তি পৰিসংখ্যা"
 msgid "Observe power management"
 msgstr "শক্তি ব্যৱস্থাপনা নিৰীক্ষণ"
 
+#: ../data/gnome-power-statistics.desktop.in.in.h:3
+msgid "battery;consumption;charge;"
+msgstr "বেটাৰি;ব্যৱহাৰ;চাৰ্জ"
+
 #
-#: ../data/gpm-statistics.ui.h:2 ../src/gpm-statistics.c:509
+#: ../data/gpm-statistics.ui.h:2 ../src/gpm-statistics.c:473
 msgid "Details"
 msgstr "বিৱৰণসমূহ"
 
@@ -159,7 +164,7 @@ msgstr "প্ৰতি ছেকেণ্ডত প্ৰছেচৰ ৱেই
 msgid "0"
 msgstr "0"
 
-#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:495
+#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:459
 msgid "Wakeups"
 msgstr "ৱেইকৱাপসমূহ"
 
@@ -225,7 +230,7 @@ msgstr "%.1fV"
 
 #
 #. TRANSLATORS: the rate of discharge for the device
-#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:767
+#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:731
 msgid "Rate"
 msgstr "হাৰ"
 
@@ -234,11 +239,11 @@ msgstr "হাৰ"
 msgid "Charge"
 msgstr "চাৰ্জ"
 
-#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:781
+#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:745
 msgid "Time to full"
 msgstr "সম্পূৰ্ণ হবলে সময়"
 
-#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:786
+#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:750
 msgid "Time to empty"
 msgstr "ৰিক্ত কৰিবলৈ সময়"
 
@@ -290,7 +295,7 @@ msgstr "ডিচ্চাৰ্জ সঠিকতা"
 
 #
 #. TRANSLATORS: system power cord
-#: ../src/gpm-statistics.c:288
+#: ../src/gpm-statistics.c:248
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "AC এডাপ্টাৰ"
@@ -298,7 +303,7 @@ msgstr[1] "AC এডাপ্টাৰসমূহ"
 
 #
 #. TRANSLATORS: laptop primary battery
-#: ../src/gpm-statistics.c:292
+#: ../src/gpm-statistics.c:252
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "লেপটপ বেটাৰি"
@@ -306,28 +311,28 @@ msgstr[1] "লেপটপ বেটাৰিসমূহ"
 
 #
 #. TRANSLATORS: battery-backed AC power source
-#: ../src/gpm-statistics.c:296
+#: ../src/gpm-statistics.c:256
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "UPS"
 msgstr[1] "UPS"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
-#: ../src/gpm-statistics.c:300
+#: ../src/gpm-statistics.c:260
 msgid "Monitor"
 msgid_plural "Monitors"
 msgstr[0] "মনিটৰ"
 msgstr[1] "মনিটৰসমূহ"
 
 #. TRANSLATORS: wireless mice with internal batteries
-#: ../src/gpm-statistics.c:304
+#: ../src/gpm-statistics.c:264
 msgid "Mouse"
 msgid_plural "Mice"
 msgstr[0] "মাউছ"
 msgstr[1] "মাউছসমূহ"
 
 #. TRANSLATORS: wireless keyboard with internal battery
-#: ../src/gpm-statistics.c:308
+#: ../src/gpm-statistics.c:268
 msgid "Keyboard"
 msgid_plural "Keyboards"
 msgstr[0] "কিবৰ্ড"
@@ -335,7 +340,7 @@ msgstr[1] "কিবৰ্ডসমূহ"
 
 #
 #. TRANSLATORS: portable device
-#: ../src/gpm-statistics.c:312
+#: ../src/gpm-statistics.c:272
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "PDA"
@@ -343,28 +348,28 @@ msgstr[1] "PDA"
 
 #
 #. TRANSLATORS: cell phone (mobile...)
-#: ../src/gpm-statistics.c:316
+#: ../src/gpm-statistics.c:276
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "চেল ফোন"
 msgstr[1] "চেল ফোনসমূহ"
 
 #. TRANSLATORS: media player, mp3 etc
-#: ../src/gpm-statistics.c:321
+#: ../src/gpm-statistics.c:281
 msgid "Media player"
 msgid_plural "Media players"
 msgstr[0] "মিডিয়া প্লেয়াৰ"
 msgstr[1] "মিডিয়া প্লেয়াৰসমূহ"
 
 #. TRANSLATORS: tablet device
-#: ../src/gpm-statistics.c:325
+#: ../src/gpm-statistics.c:285
 msgid "Tablet"
 msgid_plural "Tablets"
 msgstr[0] "টেবলেট"
 msgstr[1] "টেবলেটসমূহ"
 
 #. TRANSLATORS: tablet device
-#: ../src/gpm-statistics.c:329
+#: ../src/gpm-statistics.c:289
 msgid "Computer"
 msgid_plural "Computers"
 msgstr[0] "কমপিউটাৰ"
@@ -372,116 +377,117 @@ msgstr[1] "কমপিউটাৰসমূহ"
 
 #
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:349
+#: ../src/gpm-statistics.c:309
 msgid "Lithium Ion"
 msgstr "লিথিয়াম আয়ন"
 
 #
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:353
+#: ../src/gpm-statistics.c:313
 msgid "Lithium Polymer"
 msgstr "লিথিয়াম পলিমাৰ"
 
 #
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:357
+#: ../src/gpm-statistics.c:317
 msgid "Lithium Iron Phosphate"
 msgstr "লিথিয়াম আইৰন ফস্ফেইট"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:361
+#: ../src/gpm-statistics.c:321
 msgid "Lead acid"
 msgstr "লেড এচিড"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:365
+#: ../src/gpm-statistics.c:325
 msgid "Nickel Cadmium"
 msgstr "নিকেল কেডমিয়াম"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:369
+#: ../src/gpm-statistics.c:329
 msgid "Nickel metal hydride"
 msgstr "নিকেল মেটেল হাইড্ৰাইড"
 
 #
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:373
+#: ../src/gpm-statistics.c:333
 msgid "Unknown technology"
 msgstr "অজ্ঞাত প্ৰযুক্তি"
 
 #
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:393
+#: ../src/gpm-statistics.c:353
 msgid "Charging"
 msgstr "চাৰ্জ কৰা হৈ আছে"
 
 #
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:397
+#: ../src/gpm-statistics.c:357
 msgid "Discharging"
 msgstr "ডিচ্চাৰ্জ কৰা হৈ আছে"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:401
+#: ../src/gpm-statistics.c:361
 msgid "Empty"
 msgstr "খালি"
 
 #
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:405
+#: ../src/gpm-statistics.c:365
 msgid "Charged"
 msgstr "চাৰ্জ কৰা আছে"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:409
+#: ../src/gpm-statistics.c:369
 msgid "Waiting to charge"
 msgstr "চাৰ্জ হবলে অপেক্ষা কৰি আছে"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:413
+#: ../src/gpm-statistics.c:373
 msgid "Waiting to discharge"
 msgstr "ডিচ্চাৰ্জ হবলে অপেক্ষা কৰি আছে"
 
-#: ../src/gpm-statistics.c:433
+#. TRANSLATORS: battery state
+#. TRANSLATORS: this is when the stats time is not known
+#: ../src/gpm-statistics.c:377 ../src/gpm-statistics.c:551
+msgid "Unknown"
+msgstr "অজ্ঞাত"
+
+#: ../src/gpm-statistics.c:397
 msgid "Attribute"
 msgstr "বৈশিষ্ট"
 
 #
-#: ../src/gpm-statistics.c:440
+#: ../src/gpm-statistics.c:404
 msgid "Value"
 msgstr "মান"
 
 #
-#: ../src/gpm-statistics.c:457
+#: ../src/gpm-statistics.c:421
 msgid "Image"
 msgstr "ছবি"
 
 #
-#: ../src/gpm-statistics.c:463
+#: ../src/gpm-statistics.c:427
 msgid "Description"
 msgstr "বিৱৰণ"
 
 #
-#: ../src/gpm-statistics.c:482 ../src/gpm-statistics.c:706
+#: ../src/gpm-statistics.c:446 ../src/gpm-statistics.c:670
 msgid "Type"
 msgstr "ধৰণ"
 
-#: ../src/gpm-statistics.c:488
+#: ../src/gpm-statistics.c:452
 msgid "ID"
 msgstr "ID"
 
 #
-#: ../src/gpm-statistics.c:502
+#: ../src/gpm-statistics.c:466
 msgid "Command"
 msgstr "কমান্ড"
 
-#. TRANSLATORS: this is when the stats time is not known
-#: ../src/gpm-statistics.c:587
-msgid "Unknown"
-msgstr "অজ্ঞাত"
-
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:591
+#: ../src/gpm-statistics.c:555
 #, c-format
 msgid "%.0f second"
 msgid_plural "%.0f seconds"
@@ -489,7 +495,7 @@ msgstr[0] "%.0f ছেকেণ্ড"
 msgstr[1] "%.0f ছেকেণ্ড"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:596
+#: ../src/gpm-statistics.c:560
 #, c-format
 msgid "%.1f minute"
 msgid_plural "%.1f minutes"
@@ -497,7 +503,7 @@ msgstr[0] "%.1f মিনিট"
 msgstr[1] "%.1f মিনিট"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:601
+#: ../src/gpm-statistics.c:565
 #, c-format
 msgid "%.1f hour"
 msgid_plural "%.1f hours"
@@ -505,7 +511,7 @@ msgstr[0] "%.1f ঘন্টা"
 msgstr[1] "%.1f ঘন্টা"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:605
+#: ../src/gpm-statistics.c:569
 #, c-format
 msgid "%.1f day"
 msgid_plural "%.1f days"
@@ -513,43 +519,43 @@ msgstr[0] "%.1f দিন"
 msgstr[1] "%.1f দিন"
 
 #
-#: ../src/gpm-statistics.c:614
+#: ../src/gpm-statistics.c:578
 msgid "Yes"
 msgstr "হয়"
 
 #
-#: ../src/gpm-statistics.c:614
+#: ../src/gpm-statistics.c:578
 msgid "No"
 msgstr "নহয়"
 
 #
 #. TRANSLATORS: the device ID of the current device, e.g. "battery0"
-#: ../src/gpm-statistics.c:703
+#: ../src/gpm-statistics.c:667
 msgid "Device"
 msgstr "ডিভাইচ"
 
-#: ../src/gpm-statistics.c:708
+#: ../src/gpm-statistics.c:672
 msgid "Vendor"
 msgstr "বিক্ৰেতা"
 
 #
-#: ../src/gpm-statistics.c:710
+#: ../src/gpm-statistics.c:674
 msgid "Model"
 msgstr "আৰ্হি"
 
 #
-#: ../src/gpm-statistics.c:712
+#: ../src/gpm-statistics.c:676
 msgid "Serial number"
 msgstr "ক্ৰমিক নম্বৰ"
 
 #. TRANSLATORS: a boolean attribute that means if the device is supplying the
 #. * main power for the computer. For instance, an AC adapter or laptop battery
 #. * would be TRUE,  but a mobile phone or mouse taking power is FALSE
-#: ../src/gpm-statistics.c:717
+#: ../src/gpm-statistics.c:681
 msgid "Supply"
 msgstr "যোগান"
 
-#: ../src/gpm-statistics.c:720
+#: ../src/gpm-statistics.c:684
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
@@ -558,7 +564,7 @@ msgstr[1] "%d ছেকেণ্ড"
 
 #. TRANSLATORS: when the device was last updated with new data. It's
 #. * usually a few seconds when a device is discharging or charging.
-#: ../src/gpm-statistics.c:724
+#: ../src/gpm-statistics.c:688
 msgid "Refreshed"
 msgstr "সতেজ কৰা হল"
 
@@ -566,252 +572,253 @@ msgstr "সতেজ কৰা হল"
 #. TRANSLATORS: Present is whether the device is currently attached
 #. * to the computer, as some devices (e.g. laptop batteries) can
 #. * be removed, but still observed as devices on the system
-#: ../src/gpm-statistics.c:734
+#: ../src/gpm-statistics.c:698
 msgid "Present"
 msgstr "বৰ্তমান"
 
 #. TRANSLATORS: If the device can be recharged, e.g. lithium
 #. * batteries rather than alkaline ones
-#: ../src/gpm-statistics.c:741
+#: ../src/gpm-statistics.c:705
 msgid "Rechargeable"
 msgstr "পুনৰ চাৰ্জ কৰিব পৰা"
 
 #
 #. TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged"
-#: ../src/gpm-statistics.c:747
+#: ../src/gpm-statistics.c:711
 msgid "State"
 msgstr "অৱস্থা"
 
-#: ../src/gpm-statistics.c:751
+#: ../src/gpm-statistics.c:715
 msgid "Energy"
 msgstr "শক্তি"
 
-#: ../src/gpm-statistics.c:754
+#: ../src/gpm-statistics.c:718
 msgid "Energy when empty"
 msgstr "ৰিক্ত অৱস্থাত শক্তি"
 
-#: ../src/gpm-statistics.c:757
+#: ../src/gpm-statistics.c:721
 msgid "Energy when full"
 msgstr "সম্পূৰ্ণ অৱস্থাত শক্তি"
 
-#: ../src/gpm-statistics.c:760
+#: ../src/gpm-statistics.c:724
 msgid "Energy (design)"
 msgstr "শক্তি (ৰূপাঙ্কণ)"
 
-#: ../src/gpm-statistics.c:774
+#: ../src/gpm-statistics.c:738
 msgid "Voltage"
 msgstr "ভোলটেইজ"
 
 #. TRANSLATORS: the amount of charge the cell contains
-#: ../src/gpm-statistics.c:796
+#: ../src/gpm-statistics.c:760
 msgid "Percentage"
 msgstr "শতাংশ"
 
 #
 #. TRANSLATORS: the capacity of the device, which is basically a measure
 #. * of how full it can get, relative to the design capacity
-#: ../src/gpm-statistics.c:803
+#: ../src/gpm-statistics.c:767
 msgid "Capacity"
 msgstr "ক্ষমতা:"
 
 #
 #. TRANSLATORS: the type of battery, e.g. lithium or nikel metal hydroxide
-#: ../src/gpm-statistics.c:808
+#: ../src/gpm-statistics.c:772
 msgid "Technology"
 msgstr "প্ৰযুক্তি"
 
 #. TRANSLATORS: this is when the device is plugged in, typically
 #. * only shown for the ac adaptor device
-#: ../src/gpm-statistics.c:813
+#: ../src/gpm-statistics.c:777
 msgid "Online"
 msgstr "অনলাইন"
 
 #. TRANSLATORS: the command line was not provided
-#: ../src/gpm-statistics.c:1140
+#: ../src/gpm-statistics.c:1104
 msgid "No data"
 msgstr "কোনো তথ্য নাই"
 
 #. TRANSLATORS: kernel module, usually a device driver
-#: ../src/gpm-statistics.c:1147 ../src/gpm-statistics.c:1152
+#: ../src/gpm-statistics.c:1111 ../src/gpm-statistics.c:1116
 msgid "Kernel module"
 msgstr "কাৰনেল মডিউল"
 
 #. TRANSLATORS: kernel housekeeping
-#: ../src/gpm-statistics.c:1157
+#: ../src/gpm-statistics.c:1121
 msgid "Kernel core"
 msgstr "কাৰনেল কেন্দ্ৰ"
 
 #. TRANSLATORS: interrupt between processors
-#: ../src/gpm-statistics.c:1162
+#: ../src/gpm-statistics.c:1126
 msgid "Interprocessor interrupt"
 msgstr "আন্তঃপ্ৰছেচৰ বাধা"
 
 #
 #. TRANSLATORS: unknown interrupt
-#: ../src/gpm-statistics.c:1167
+#: ../src/gpm-statistics.c:1131
 msgid "Interrupt"
 msgstr "বাধা"
 
 #. TRANSLATORS: the keyboard and mouse device event
-#: ../src/gpm-statistics.c:1214
+#: ../src/gpm-statistics.c:1178
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "PS/2 কিবৰ্ড/মাউছ/টাচপেড"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
-#: ../src/gpm-statistics.c:1217
+#: ../src/gpm-statistics.c:1181
 msgid "ACPI"
 msgstr "ACPI"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
-#: ../src/gpm-statistics.c:1220
+#: ../src/gpm-statistics.c:1184
 msgid "Serial ATA"
 msgstr "ক্ৰমিক ATA"
 
 #. TRANSLATORS: this is the old-style ATA interface
-#: ../src/gpm-statistics.c:1223
+#: ../src/gpm-statistics.c:1187
 msgid "ATA host controller"
 msgstr "ATA হস্ট নিয়ন্ত্ৰক"
 
 #. TRANSLATORS: 802.11 wireless adaptor
-#: ../src/gpm-statistics.c:1226
+#: ../src/gpm-statistics.c:1190
 msgid "Intel wireless adaptor"
 msgstr "Intel বেতাঁৰ এডাপ্টাৰ"
 
 #. TRANSLATORS: a timer is something that fires periodically.
 #. * The parameter is a process name, e.g. "firefox-bin".
 #. * This is shown when the timer wakes up.
-#: ../src/gpm-statistics.c:1233 ../src/gpm-statistics.c:1238
-#: ../src/gpm-statistics.c:1243 ../src/gpm-statistics.c:1248
-#: ../src/gpm-statistics.c:1253
+#: ../src/gpm-statistics.c:1197 ../src/gpm-statistics.c:1202
+#: ../src/gpm-statistics.c:1207 ../src/gpm-statistics.c:1212
+#: ../src/gpm-statistics.c:1217
 #, c-format
 msgid "Timer %s"
 msgstr "টাইমাৰ %s"
 
 #. TRANSLATORS: the parameter is the name of task that's woken up from sleeping.
 #. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:1257
+#: ../src/gpm-statistics.c:1221
 #, c-format
 msgid "Sleep %s"
 msgstr "নিদ্ৰা %s"
 
 #. TRANSLATORS: this is the name of a new realtime task.
-#: ../src/gpm-statistics.c:1260
+#: ../src/gpm-statistics.c:1224
 #, c-format
 msgid "New task %s"
 msgstr "নতুন কাৰ্য্য %s"
 
 #. TRANSLATORS: this is the name of a task that's woken to check state.
 #. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:1264
+#: ../src/gpm-statistics.c:1228
 #, c-format
 msgid "Wait %s"
 msgstr "অপেক্ষা কৰক %s"
 
 #. TRANSLATORS: this is the name of a work queue.
 #. * A work queue is a list of work that has to be done.
-#: ../src/gpm-statistics.c:1268 ../src/gpm-statistics.c:1272
+#: ../src/gpm-statistics.c:1232 ../src/gpm-statistics.c:1236
 #, c-format
 msgid "Work queue %s"
 msgstr "কামৰ শাৰী %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
-#: ../src/gpm-statistics.c:1275
+#: ../src/gpm-statistics.c:1239
 #, c-format
 msgid "Network route flush %s"
 msgstr "নেটৱাৰ্ক ৰুট ফ্লাশ্ব %s"
 
 #. TRANSLATORS: this is the name of an activity on the USB bus
-#: ../src/gpm-statistics.c:1278
+#: ../src/gpm-statistics.c:1242
 #, c-format
 msgid "USB activity %s"
 msgstr "USB কাৰ্য্য %s"
 
 #. TRANSLATORS: we've timed out of an aligned timer, with the name
-#: ../src/gpm-statistics.c:1281
+#: ../src/gpm-statistics.c:1245
 #, c-format
 msgid "Wakeup %s"
 msgstr "ৱেইকৱাপ %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
-#: ../src/gpm-statistics.c:1284
+#: ../src/gpm-statistics.c:1248
 msgid "Local interrupts"
 msgstr "স্থানীয় বাধাসমূহ"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
-#: ../src/gpm-statistics.c:1287
+#: ../src/gpm-statistics.c:1251
 msgid "Rescheduling interrupts"
 msgstr "পুনৰ সূচক বাধাসমূহ"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1396
+#: ../src/gpm-statistics.c:1360
 msgid "Device Information"
 msgstr "ডিভাইচ তথ্য"
 
 #
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1398
+#: ../src/gpm-statistics.c:1362
 msgid "Device History"
 msgstr "ডিভাইচ ইতিহাস"
 
 #
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1400
+#: ../src/gpm-statistics.c:1364
 msgid "Device Profile"
 msgstr "ডিভাইচ আলেখ্য"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1402
+#: ../src/gpm-statistics.c:1366
 msgid "Processor Wakeups"
 msgstr "প্ৰছেচৰৰ ৱেইকৱাপসমূহ"
 
 #
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1598 ../src/gpm-statistics.c:1604
-#: ../src/gpm-statistics.c:1610 ../src/gpm-statistics.c:1616
+#: ../src/gpm-statistics.c:1562 ../src/gpm-statistics.c:1568
+#: ../src/gpm-statistics.c:1574 ../src/gpm-statistics.c:1580
 msgid "Time elapsed"
 msgstr "পাৰ হোৱা সময়"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1600
+#: ../src/gpm-statistics.c:1564
 msgid "Power"
 msgstr "শক্তি"
 
 #
 #. TRANSLATORS: this is the Y axis on the graph for the whole battery device
 #. TRANSLATORS: this is the X axis on the graph for the whole battery device
-#: ../src/gpm-statistics.c:1606 ../src/gpm-statistics.c:1649
-#: ../src/gpm-statistics.c:1655 ../src/gpm-statistics.c:1661
-#: ../src/gpm-statistics.c:1667
+#: ../src/gpm-statistics.c:1570 ../src/gpm-statistics.c:1613
+#: ../src/gpm-statistics.c:1619 ../src/gpm-statistics.c:1625
+#: ../src/gpm-statistics.c:1631
 msgid "Cell charge"
 msgstr "চেল চাৰ্জ"
 
 #
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1612 ../src/gpm-statistics.c:1618
+#: ../src/gpm-statistics.c:1576 ../src/gpm-statistics.c:1582
 msgid "Predicted time"
 msgstr "প্ৰাককলিত সময়"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1651 ../src/gpm-statistics.c:1663
+#: ../src/gpm-statistics.c:1615 ../src/gpm-statistics.c:1627
 msgid "Correction factor"
 msgstr "যথাৰ্থতাৰ কাৰক"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1657 ../src/gpm-statistics.c:1669
+#: ../src/gpm-statistics.c:1621 ../src/gpm-statistics.c:1633
 msgid "Prediction accuracy"
 msgstr "প্ৰককলনৰ যথাৰ্থতা"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-statistics.c:1848
+#: ../src/gpm-statistics.c:1812
 msgid "Show extra debugging information"
 msgstr "অতিৰিক্ত ডিবাগ তথ্য প্ৰদৰ্শন কৰক"
 
 #. TRANSLATORS: show a device by default
-#: ../src/gpm-statistics.c:1851
+#: ../src/gpm-statistics.c:1815
 msgid "Select this device at startup"
 msgstr "আৰম্ভণিত এই ডিভাইচ বাছক"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:2113
+#: ../src/gpm-statistics.c:2077
 msgid "Processor"
 msgstr "প্ৰচেছৰ"
+
