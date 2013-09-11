@@ -6,7 +6,7 @@ desktop_in_files = gnome-power-statistics.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 appdatadir = $(datadir)/appdata
-appdata_files = gnome-power-statistics.appdata.xml
+appdata_DATA = gnome-power-statistics.appdata.xml
 
 @GSETTINGS_RULES@
 @INTLTOOL_XML_NOMERGE_RULE@
