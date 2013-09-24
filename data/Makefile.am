@@ -5,8 +5,10 @@ desktopdir = $(datadir)/applications
 desktop_in_files = gnome-power-statistics.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
+@INTLTOOL_XML_NOMERGE_RULE@
 appdatadir = $(datadir)/appdata
-dist_appdata_DATA = gnome-power-statistics.appdata.xml
+dist_appdata_DATA = $(appdata_in_files:.xml.in=.xml)
+appdata_in_files = gnome-power-statistics.appdata.xml.in
 
 @GSETTINGS_RULES@
 @INTLTOOL_XML_NOMERGE_RULE@
@@ -18,6 +20,7 @@ UI_FILES =						\
 
 EXTRA_DIST =						\
 	$(gsettings_SCHEMAS)				\
+	$(appdata_in_files)				\
 	$(desktop_in_files)				\
 	$(gsettings_schemas_in_files)			\
 	$(UI_FILES)
