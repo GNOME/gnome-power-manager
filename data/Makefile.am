@@ -11,9 +11,7 @@ dist_appdata_DATA = $(appdata_in_files:.xml.in=.xml)
 appdata_in_files = gnome-power-statistics.appdata.xml.in
 
 @GSETTINGS_RULES@
-@INTLTOOL_XML_NOMERGE_RULE@
-gsettings_schemas_in_files = org.gnome.power-manager.gschema.xml.in
-gsettings_SCHEMAS = $(gsettings_schemas_in_files:.gschema.xml.in=.gschema.xml)
+gsettings_SCHEMAS = org.gnome.power-manager.gschema.xml
 
 UI_FILES =						\
 	gpm-statistics.ui
@@ -22,7 +20,6 @@ EXTRA_DIST =						\
 	$(gsettings_SCHEMAS)				\
 	$(appdata_in_files)				\
 	$(desktop_in_files)				\
-	$(gsettings_schemas_in_files)			\
 	$(UI_FILES)
 
 clean-local :
