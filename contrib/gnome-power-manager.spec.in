@@ -62,6 +62,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %defattr(-,root,root)
 %doc AUTHORS COPYING README
 %{_bindir}/*
+%{_datadir}/appdata/*.appdata.xml
 %{_datadir}/applications/*.desktop
 %{_datadir}/glib-2.0/schemas/*.gschema.xml
 %{_datadir}/icons/hicolor/*/apps/gnome-power-statistics.*
