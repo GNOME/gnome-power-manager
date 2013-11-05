@@ -8,13 +8,9 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 @GSETTINGS_RULES@
 gsettings_SCHEMAS = org.gnome.power-manager.gschema.xml
 
-UI_FILES =						\
-	gpm-statistics.ui
-
 EXTRA_DIST =						\
 	$(gsettings_SCHEMAS)				\
-	$(desktop_in_files)				\
-	$(UI_FILES)
+	$(desktop_in_files)
 
 clean-local :
 	rm -f *~

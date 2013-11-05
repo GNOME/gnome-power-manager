@@ -67,9 +67,9 @@ gnome_power_self_test_LDADD =				\
 
 gnome_power_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS) $(WARNINGFLAGS)
 
-gpm-resources.c: gnome-power-manager.gresource.xml ../data/gpm-statistics.ui
+gpm-resources.c: gnome-power-manager.gresource.xml gpm-statistics.ui
 	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-source --c-name gpm $(srcdir)/gnome-power-manager.gresource.xml
-gpm-resources.h: gnome-power-manager.gresource.xml
+gpm-resources.h: gnome-power-manager.gresource.xml gpm-statistics.ui
 	glib-compile-resources --target=$@ --sourcedir=$(top_srcdir)/data --generate-header --c-name gpm $(srcdir)/gnome-power-manager.gresource.xml
 
 BUILT_SOURCES =						\
@@ -78,7 +78,8 @@ BUILT_SOURCES =						\
 	$(NULL)
 
 EXTRA_DIST =						\
-	gnome-power-manager.gresource.xml
+	gnome-power-manager.gresource.xml		\
+	gpm-statistics.ui
 
 clean-local:
 	rm -f *~
