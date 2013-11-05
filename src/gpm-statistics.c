@@ -54,6 +54,8 @@ static gfloat sigma_smoothing = 0.0f;
 static UpWakeups *wakeups = NULL;
 static GtkWidget *graph_history = NULL;
 static GtkWidget *graph_statistics = NULL;
+static UpClient *client = NULL;
+static GPtrArray *devices = NULL;
 
 enum {
 	GPM_INFO_COLUMN_TEXT,
@@ -1451,6 +1453,21 @@ gpm_stats_devices_treeview_clicked_cb (GtkTreeSelection *selection, gpointer use
 }
 
 /**
+ * gpm_stats_device_changed_cb:
+ **/
+static void
+gpm_stats_device_changed_cb (UpDevice *device, GParamSpec *pspec, gpointer user_data)
+{
+	const gchar *object_path;
+	object_path = up_device_get_object_path (device);
+	if (object_path == NULL || current_device == NULL)
+		return;
+	g_debug ("changed:   %s", object_path);
+	if (g_strcmp0 (current_device, object_path) == 0)
+		gpm_stats_update_info_data (device);
+}
+
+/**
  * gpm_stats_add_device:
  **/
 static void
@@ -1466,6 +1483,9 @@ gpm_stats_add_device (UpDevice *device)
 	g_object_get (device,
 		      "kind", &kind,
 		      NULL);
+	g_ptr_array_add (devices, g_object_ref (device));
+	g_signal_connect (device, "notify",
+			  G_CALLBACK (gpm_stats_device_changed_cb), NULL);
 
 	id = up_device_get_object_path (device);
 	text = gpm_device_kind_to_localised_string (kind, 1);
@@ -1483,7 +1503,7 @@ gpm_stats_add_device (UpDevice *device)
  * gpm_stats_data_changed_cb:
  **/
 static void
-gpm_stats_data_changed_cb (UpClient *client, gpointer user_data)
+gpm_stats_data_changed_cb (UpClient *_client, gpointer user_data)
 {
 	if (g_strcmp0 (current_device, "wakeups") == 0)
 		gpm_stats_update_wakeups_data ();
@@ -1493,7 +1513,7 @@ gpm_stats_data_changed_cb (UpClient *client, gpointer user_data)
  * gpm_stats_device_added_cb:
  **/
 static void
-gpm_stats_device_added_cb (UpClient *client, UpDevice *device, gpointer user_data)
+gpm_stats_device_added_cb (UpClient *_client, UpDevice *device, gpointer user_data)
 {
 	const gchar *object_path;
 	object_path = up_device_get_object_path (device);
@@ -1502,32 +1522,25 @@ gpm_stats_device_added_cb (UpClient *client, UpDevice *device, gpointer user_dat
 }
 
 /**
- * gpm_stats_device_changed_cb:
- **/
-static void
-gpm_stats_device_changed_cb (UpClient *client, UpDevice *device, gpointer user_data)
-{
-	const gchar *object_path;
-	object_path = up_device_get_object_path (device);
-	if (object_path == NULL || current_device == NULL)
-		return;
-	g_debug ("changed:   %s", object_path);
-	if (g_strcmp0 (current_device, object_path) == 0)
-		gpm_stats_update_info_data (device);
-}
-
-/**
  * gpm_stats_device_removed_cb:
  **/
 static void
-gpm_stats_device_removed_cb (UpClient *client, UpDevice *device, gpointer user_data)
+gpm_stats_device_removed_cb (UpClient *_client, const gchar *object_path, gpointer user_data)
 {
-	const gchar *object_path;
 	GtkTreeIter iter;
-	gchar *id = NULL;
+	UpDevice *device_tmp;
 	gboolean ret;
+	gchar *id = NULL;
+	guint i;
 
-	object_path = up_device_get_object_path (device);
+	for (i = 0; i < devices->len; i++) {
+		device_tmp = g_ptr_array_index (devices, i);
+		if (g_strcmp0 (up_device_get_object_path (device_tmp), object_path) == 0) {
+			g_ptr_array_remove_index_fast (devices, i);
+			break;
+		}
+	}
+
 	g_debug ("removed:   %s", object_path);
 	if (g_strcmp0 (current_device, object_path) == 0) {
 		gtk_list_store_clear (list_store_info);
@@ -1860,8 +1873,7 @@ gpm_stats_startup_cb (GApplication *application,
 	GtkWindow *window;
 	GtkTreeSelection *selection;
 	gboolean ret;
-	UpClient *client;
-	GPtrArray *devices;
+	GPtrArray *devices_tmp;
 	UpDevice *device;
 	UpDeviceKind kind;
 	guint i, j;
@@ -1869,6 +1881,9 @@ gpm_stats_startup_cb (GApplication *application,
 	gboolean checked;
 	guint retval;
 	GError *error = NULL;
+
+	/* a store of UpDevices */
+	devices = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
 
 	/* get UI */
 	builder = gtk_builder_new ();
@@ -2039,18 +2054,14 @@ gpm_stats_startup_cb (GApplication *application,
 
 	/* coldplug */
 	client = up_client_new ();
-	ret = up_client_enumerate_devices_sync (client, NULL, NULL);
-	if (!ret)
-		goto out;
-	devices = up_client_get_devices (client);
+	devices_tmp = up_client_get_devices (client);
 	g_signal_connect (client, "device-added", G_CALLBACK (gpm_stats_device_added_cb), NULL);
 	g_signal_connect (client, "device-removed", G_CALLBACK (gpm_stats_device_removed_cb), NULL);
-	g_signal_connect (client, "device-changed", G_CALLBACK (gpm_stats_device_changed_cb), NULL);
 
 	/* add devices in visually pleasing order */
 	for (j=0; j<UP_DEVICE_KIND_LAST; j++) {
-		for (i=0; i < devices->len; i++) {
-			device = g_ptr_array_index (devices, i);
+		for (i=0; i < devices_tmp->len; i++) {
+			device = g_ptr_array_index (devices_tmp, i);
 			g_object_get (device, "kind", &kind, NULL);
 			if (kind == j)
 				gpm_stats_add_device (device);
@@ -2079,8 +2090,6 @@ gpm_stats_startup_cb (GApplication *application,
 		g_object_unref (icon);
 	}
 
-	g_ptr_array_unref (devices);
-
 	/* set axis */
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "combobox_history_type"));
 	gpm_stats_history_type_combo_changed_cb (widget, NULL);
@@ -2089,8 +2098,7 @@ gpm_stats_startup_cb (GApplication *application,
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_stats"));
 	gtk_widget_show (widget);
-out:
-	g_object_unref (client);
+	g_ptr_array_unref (devices_tmp);
 }
 
 /**
@@ -2128,6 +2136,10 @@ main (int argc, char *argv[])
 	/* run */
 	status = g_application_run (G_APPLICATION (application), argc, argv);
 
+	if (client != NULL)
+		g_object_unref (client);
+	if (devices != NULL)
+		g_ptr_array_unref (devices);
 	g_object_unref (settings);
 	g_object_unref (application);
 	return status;
