@@ -13,14 +13,16 @@
 # YunQiang Su <wzssyqa@gmail.com>, 2011.
 # Lele Long <schemacs@gmail.com>, 2011.
 # Edison Zhao <edison0354@gmail.com>, 2011.
+# YunQiang Su <wzssyqa@gmail.com>, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager master\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-05 10:10+0100\n"
-"PO-Revision-Date: 2011-03-30 21:10+0800\n"
-"Last-Translator: Lele Long <schemacs@gmail.com>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"power-manager&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2014-03-10 08:19+0000\n"
+"PO-Revision-Date: 2014-01-25 11:05+0800\n"
+"Last-Translator: YunQiang Su <wzssyqa@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -29,201 +31,205 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:1
-msgid "The ID of the last device selected"
-msgstr "上次选中设备的 ID"
+msgid "Whether we should show the history data points"
+msgstr "是否显示历史数据点"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:2
+msgid ""
+"Whether we should show the history data points in the statistics window."
+msgstr "是否在统计窗口中显示历史数据点。"
+
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:3
+msgid "Whether we should smooth the history data"
+msgstr "是否平滑地调整历史数据"
+
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:4
+msgid "Whether we should smooth the history data in the graph."
+msgstr "是否在图表中平滑地显示历史数据。"
+
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:5
 msgid "The default graph type to show for history"
 msgstr "在历史中显示的默认图表类型"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:3
-msgid "The default graph type to show for stats"
-msgstr "在统计中显示的默认图表类型"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:4
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:6
 msgid "The default graph type to show in the history window."
 msgstr "在历史窗口中显示的默认图表类型。"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:5
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:7
+msgid "The maximum time displayed for history"
+msgstr "历史图表显示的时间上限"
+
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:8
+msgid ""
+"The maximum duration of time displayed on the x-axis of the history graph."
+msgstr "历史图表 x 轴显示的最长时间长度。"
+
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:9
+msgid "Whether we should show the stats data points"
+msgstr "是否显示统计数据点"
+
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:10
+msgid "Whether we should show the stats data points in the statistics window."
+msgstr "是否在统计窗口中显示统计数据点。"
+
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:11
+msgid "Whether we should smooth the stats data"
+msgstr "是否平滑地调整统计数据"
+
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:12
+msgid "Whether we should smooth the stats data in the graph."
+msgstr "是否在图表中平滑地显示统计数据。"
+
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:13
+msgid "The default graph type to show for stats"
+msgstr "在统计中显示的默认图表类型"
+
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:14
 msgid "The default graph type to show in the stats window."
 msgstr "在统计窗口中显示的默认图表类型。"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:6
-msgid ""
-"The identifier of the last device which is used to return focus to the "
-"correct device."
-msgstr "上一设备的标识符，用来将焦点返回到正确的设备。"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:7
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:15
 msgid "The index of the page number to show by default"
 msgstr "默认显示的页面号索引值"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:8
+#: ../data/org.gnome.power-manager.gschema.xml.in.h:16
 msgid ""
 "The index of the page number to show by default which is used to return "
 "focus to the correct page."
 msgstr "默认显示的页面号索引值，用来将焦点返回到正确页面。"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:9
-msgid ""
-"The maximum duration of time displayed on the x-axis of the history graph."
-msgstr "历史图表 x 轴显示的最长时间长度。"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:10
-msgid "The maximum time displayed for history"
-msgstr "历史图表显示的时间上限"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:11
-msgid "Whether we should show the history data points"
-msgstr "是否显示历史数据点"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:12
-msgid ""
-"Whether we should show the history data points in the statistics window."
-msgstr "是否在统计窗口中显示历史数据点。"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:13
-msgid "Whether we should show the stats data points"
-msgstr "是否显示统计数据点"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:14
-msgid "Whether we should show the stats data points in the statistics window."
-msgstr "是否在统计窗口中显示统计数据点。"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:15
-msgid "Whether we should smooth the history data"
-msgstr "是否平滑地调整历史数据"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:16
-msgid "Whether we should smooth the history data in the graph."
-msgstr "是否在图表中平滑地显示历史数据。"
-
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:17
-msgid "Whether we should smooth the stats data"
-msgstr "是否平滑地调整统计数据"
+msgid "The ID of the last device selected"
+msgstr "上次选中设备的 ID"
 
 #: ../data/org.gnome.power-manager.gschema.xml.in.h:18
-msgid "Whether we should smooth the stats data in the graph."
-msgstr "是否在图表中平滑地显示统计数据。"
-
-#: ../data/gnome-power-statistics.desktop.in.in.h:1
-msgid "Observe power management"
-msgstr "监控电源管理"
+msgid ""
+"The identifier of the last device which is used to return focus to the "
+"correct device."
+msgstr "上一设备的标识符，用来将焦点返回到正确的设备。"
 
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
-#: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1406
-#: ../src/gpm-statistics.c:1860
+#: ../data/gnome-power-statistics.desktop.in.in.h:1
+#: ../data/gpm-statistics.ui.h:1 ../src/gpm-statistics.c:1370
+#: ../src/gpm-statistics.c:1824
 msgid "Power Statistics"
 msgstr "电源统计"
 
-#: ../data/gpm-statistics.ui.h:1
-msgid "0"
-msgstr "0"
+#: ../data/gnome-power-statistics.desktop.in.in.h:2
+msgid "Observe power management"
+msgstr "监控电源管理"
 
-#: ../data/gpm-statistics.ui.h:2
-msgid "Data length:"
-msgstr "时间跨度："
+#: ../data/gnome-power-statistics.desktop.in.in.h:3
+msgid "battery;consumption;charge;"
+msgstr "battery;consumption;charge;电池;电量;耗电;消耗;充电;"
 
-#: ../data/gpm-statistics.ui.h:3 ../src/gpm-statistics.c:509
+#: ../data/gpm-statistics.ui.h:2 ../src/gpm-statistics.c:473
 msgid "Details"
 msgstr "详细"
 
-#: ../data/gpm-statistics.ui.h:4
+#: ../data/gpm-statistics.ui.h:3
 msgid "Graph type:"
 msgstr "图表类型："
 
+#: ../data/gpm-statistics.ui.h:4
+msgid "Data length:"
+msgstr "时间跨度："
+
 #: ../data/gpm-statistics.ui.h:5
-msgid "History"
-msgstr "历史"
+msgid "There is no data to display."
+msgstr "没有要显示的数据。"
+
+#: ../data/gpm-statistics.ui.h:6
+msgid "Use smoothed line"
+msgstr "使用平滑曲线"
 
 #: ../data/gpm-statistics.ui.h:7
-msgid "Processor wakeups per second:"
-msgstr "每秒处理器唤醒次数："
-
-#: ../data/gpm-statistics.ui.h:8
 msgid "Show data points"
 msgstr "显示数据点"
+
+#: ../data/gpm-statistics.ui.h:8
+msgid "History"
+msgstr "历史"
 
 #: ../data/gpm-statistics.ui.h:9
 msgid "Statistics"
 msgstr "统计"
 
 #: ../data/gpm-statistics.ui.h:10
-msgid "There is no data to display."
-msgstr "没有要显示的数据。"
+msgid "Processor wakeups per second:"
+msgstr "每秒处理器唤醒次数："
 
 #: ../data/gpm-statistics.ui.h:11
-msgid "Use smoothed line"
-msgstr "使用平滑曲线"
+msgid "0"
+msgstr "0"
 
-#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:495
+#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:459
 msgid "Wakeups"
 msgstr "唤醒"
 
 #. Translators: This is %i days
-#: ../src/gpm-graph-widget.c:430
+#: ../src/gpm-graph-widget.c:426
 #, c-format
 msgid "%id"
 msgstr "%id"
 
 #. Translators: This is %i days %02i hours
-#: ../src/gpm-graph-widget.c:433
+#: ../src/gpm-graph-widget.c:429
 #, c-format
 msgid "%id%02ih"
 msgstr "%id%02ih"
 
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:438
+#: ../src/gpm-graph-widget.c:434
 #, c-format
 msgid "%ih"
 msgstr "%ih"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:441
+#: ../src/gpm-graph-widget.c:437
 #, c-format
 msgid "%ih%02im"
 msgstr "%ih%02im"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:446
+#: ../src/gpm-graph-widget.c:442
 #, c-format
 msgid "%2im"
 msgstr "%2im"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:449
+#: ../src/gpm-graph-widget.c:445
 #, c-format
 msgid "%2im%02i"
 msgstr "%2im%02i"
 
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:453
+#: ../src/gpm-graph-widget.c:449
 #, c-format
 msgid "%2is"
 msgstr "%2is"
 
 #. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:457
+#: ../src/gpm-graph-widget.c:453
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. Translators: This is %.1f Watts
-#: ../src/gpm-graph-widget.c:460
+#: ../src/gpm-graph-widget.c:456
 #, c-format
 msgid "%.1fW"
 msgstr "%.1fW"
 
 #. Translators: This is %.1f Volts
-#: ../src/gpm-graph-widget.c:465
+#: ../src/gpm-graph-widget.c:461
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fV"
 
 #. TRANSLATORS: the rate of discharge for the device
-#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:767
+#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:731
 msgid "Rate"
 msgstr "功率"
 
@@ -231,11 +237,11 @@ msgstr "功率"
 msgid "Charge"
 msgstr "电量"
 
-#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:781
+#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:745
 msgid "Time to full"
 msgstr "充满时间"
 
-#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:786
+#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:750
 msgid "Time to empty"
 msgstr "放完时间"
 
@@ -278,230 +284,231 @@ msgid "Discharge accuracy"
 msgstr "放电时间准确度"
 
 #. TRANSLATORS: system power cord
-#: ../src/gpm-statistics.c:288
+#: ../src/gpm-statistics.c:248
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "交流电源适配器"
 
 #. TRANSLATORS: laptop primary battery
-#: ../src/gpm-statistics.c:292
+#: ../src/gpm-statistics.c:252
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "笔记本电池"
 
 #. TRANSLATORS: battery-backed AC power source
-#: ../src/gpm-statistics.c:296
+#: ../src/gpm-statistics.c:256
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "UPS"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
-#: ../src/gpm-statistics.c:300
+#: ../src/gpm-statistics.c:260
 msgid "Monitor"
 msgid_plural "Monitors"
 msgstr[0] "显示器"
 
 #. TRANSLATORS: wireless mice with internal batteries
-#: ../src/gpm-statistics.c:304
+#: ../src/gpm-statistics.c:264
 msgid "Mouse"
 msgid_plural "Mice"
 msgstr[0] "鼠标"
 
 #. TRANSLATORS: wireless keyboard with internal battery
-#: ../src/gpm-statistics.c:308
+#: ../src/gpm-statistics.c:268
 msgid "Keyboard"
 msgid_plural "Keyboards"
 msgstr[0] "键盘"
 
 #. TRANSLATORS: portable device
-#: ../src/gpm-statistics.c:312
+#: ../src/gpm-statistics.c:272
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "PDA"
 
 #. TRANSLATORS: cell phone (mobile...)
-#: ../src/gpm-statistics.c:316
+#: ../src/gpm-statistics.c:276
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "手机"
 
 #. TRANSLATORS: media player, mp3 etc
-#: ../src/gpm-statistics.c:321
+#: ../src/gpm-statistics.c:281
 msgid "Media player"
 msgid_plural "Media players"
 msgstr[0] "媒体播放器"
 
 #. TRANSLATORS: tablet device
-#: ../src/gpm-statistics.c:325
+#: ../src/gpm-statistics.c:285
 msgid "Tablet"
 msgid_plural "Tablets"
 msgstr[0] "数位板"
 
 #. TRANSLATORS: tablet device
-#: ../src/gpm-statistics.c:329
+#: ../src/gpm-statistics.c:289
 msgid "Computer"
 msgid_plural "Computers"
 msgstr[0] "计算机"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:349
+#: ../src/gpm-statistics.c:309
 msgid "Lithium Ion"
 msgstr "锂离子"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:353
+#: ../src/gpm-statistics.c:313
 msgid "Lithium Polymer"
 msgstr "锂聚合物"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:357
+#: ../src/gpm-statistics.c:317
 msgid "Lithium Iron Phosphate"
 msgstr "磷酸铁锂"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:361
+#: ../src/gpm-statistics.c:321
 msgid "Lead acid"
 msgstr "铅酸"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:365
+#: ../src/gpm-statistics.c:325
 msgid "Nickel Cadmium"
 msgstr "镍镉"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:369
+#: ../src/gpm-statistics.c:329
 msgid "Nickel metal hydride"
 msgstr "镍氢"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:373
+#: ../src/gpm-statistics.c:333
 msgid "Unknown technology"
 msgstr "未知技术"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:393
+#: ../src/gpm-statistics.c:353
 msgid "Charging"
 msgstr "正充电"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:397
+#: ../src/gpm-statistics.c:357
 msgid "Discharging"
 msgstr "正放电"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:401
+#: ../src/gpm-statistics.c:361
 msgid "Empty"
 msgstr "空"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:405
+#: ../src/gpm-statistics.c:365
 msgid "Charged"
 msgstr "已充满"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:409
+#: ../src/gpm-statistics.c:369
 msgid "Waiting to charge"
 msgstr "待充电"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:413
+#: ../src/gpm-statistics.c:373
 msgid "Waiting to discharge"
 msgstr "待放电"
 
-#: ../src/gpm-statistics.c:433
-msgid "Attribute"
-msgstr "属性"
-
-#: ../src/gpm-statistics.c:440
-msgid "Value"
-msgstr "值"
-
-#: ../src/gpm-statistics.c:457
-msgid "Image"
-msgstr "图片"
-
-#: ../src/gpm-statistics.c:463
-msgid "Description"
-msgstr "描述"
-
-#: ../src/gpm-statistics.c:482 ../src/gpm-statistics.c:706
-msgid "Type"
-msgstr "类型"
-
-#: ../src/gpm-statistics.c:488
-msgid "ID"
-msgstr "ID"
-
-#: ../src/gpm-statistics.c:502
-msgid "Command"
-msgstr "命令"
-
+#. TRANSLATORS: battery state
 #. TRANSLATORS: this is when the stats time is not known
-#: ../src/gpm-statistics.c:587
+#: ../src/gpm-statistics.c:377 ../src/gpm-statistics.c:551
 msgid "Unknown"
 msgstr "未知时间"
 
+#: ../src/gpm-statistics.c:397
+msgid "Attribute"
+msgstr "属性"
+
+#: ../src/gpm-statistics.c:404
+msgid "Value"
+msgstr "值"
+
+#: ../src/gpm-statistics.c:421
+msgid "Image"
+msgstr "图片"
+
+#: ../src/gpm-statistics.c:427
+msgid "Description"
+msgstr "描述"
+
+#: ../src/gpm-statistics.c:446 ../src/gpm-statistics.c:670
+msgid "Type"
+msgstr "类型"
+
+#: ../src/gpm-statistics.c:452
+msgid "ID"
+msgstr "ID"
+
+#: ../src/gpm-statistics.c:466
+msgid "Command"
+msgstr "命令"
+
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:591
+#: ../src/gpm-statistics.c:555
 #, c-format
 msgid "%.0f second"
 msgid_plural "%.0f seconds"
 msgstr[0] "%.0f 秒"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:596
+#: ../src/gpm-statistics.c:560
 #, c-format
 msgid "%.1f minute"
 msgid_plural "%.1f minutes"
 msgstr[0] "%.1f 分"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:601
+#: ../src/gpm-statistics.c:565
 #, c-format
 msgid "%.1f hour"
 msgid_plural "%.1f hours"
 msgstr[0] "%.1f 小时"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:605
+#: ../src/gpm-statistics.c:569
 #, c-format
 msgid "%.1f day"
 msgid_plural "%.1f days"
 msgstr[0] "%.1f 天"
 
-#: ../src/gpm-statistics.c:614
+#: ../src/gpm-statistics.c:578
 msgid "Yes"
 msgstr "是"
 
-#: ../src/gpm-statistics.c:614
+#: ../src/gpm-statistics.c:578
 msgid "No"
 msgstr "不"
 
 #. TRANSLATORS: the device ID of the current device, e.g. "battery0"
-#: ../src/gpm-statistics.c:703
+#: ../src/gpm-statistics.c:667
 msgid "Device"
 msgstr "设备"
 
-#: ../src/gpm-statistics.c:708
+#: ../src/gpm-statistics.c:672
 msgid "Vendor"
 msgstr "发行商"
 
-#: ../src/gpm-statistics.c:710
+#: ../src/gpm-statistics.c:674
 msgid "Model"
 msgstr "型号"
 
-#: ../src/gpm-statistics.c:712
+#: ../src/gpm-statistics.c:676
 msgid "Serial number"
 msgstr "序列号"
 
 #. TRANSLATORS: a boolean attribute that means if the device is supplying the
 #. * main power for the computer. For instance, an AC adapter or laptop battery
 #. * would be TRUE,  but a mobile phone or mouse taking power is FALSE
-#: ../src/gpm-statistics.c:717
+#: ../src/gpm-statistics.c:681
 msgid "Supply"
 msgstr "供应"
 
-#: ../src/gpm-statistics.c:720
+#: ../src/gpm-statistics.c:684
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
@@ -509,250 +516,263 @@ msgstr[0] "%d 秒"
 
 #. TRANSLATORS: when the device was last updated with new data. It's
 #. * usually a few seconds when a device is discharging or charging.
-#: ../src/gpm-statistics.c:724
+#: ../src/gpm-statistics.c:688
 msgid "Refreshed"
 msgstr "已刷新"
 
 #. TRANSLATORS: Present is whether the device is currently attached
 #. * to the computer, as some devices (e.g. laptop batteries) can
 #. * be removed, but still observed as devices on the system
-#: ../src/gpm-statistics.c:734
+#: ../src/gpm-statistics.c:698
 msgid "Present"
 msgstr "当前电池"
 
 #. TRANSLATORS: If the device can be recharged, e.g. lithium
 #. * batteries rather than alkaline ones
-#: ../src/gpm-statistics.c:741
+#: ../src/gpm-statistics.c:705
 msgid "Rechargeable"
 msgstr "可充电"
 
 #. TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged"
-#: ../src/gpm-statistics.c:747
+#: ../src/gpm-statistics.c:711
 msgid "State"
 msgstr "状态"
 
-#: ../src/gpm-statistics.c:751
+#: ../src/gpm-statistics.c:715
 msgid "Energy"
 msgstr "能量"
 
-#: ../src/gpm-statistics.c:754
+#: ../src/gpm-statistics.c:718
 msgid "Energy when empty"
 msgstr "空时能量"
 
-#: ../src/gpm-statistics.c:757
+#: ../src/gpm-statistics.c:721
 msgid "Energy when full"
 msgstr "满时能量"
 
-#: ../src/gpm-statistics.c:760
+#: ../src/gpm-statistics.c:724
 msgid "Energy (design)"
 msgstr "能量 (设计)"
 
-#: ../src/gpm-statistics.c:774
+#: ../src/gpm-statistics.c:738
 msgid "Voltage"
 msgstr "电压"
 
 #. TRANSLATORS: the amount of charge the cell contains
-#: ../src/gpm-statistics.c:796
+#: ../src/gpm-statistics.c:760
 msgid "Percentage"
 msgstr "百分比"
 
 #. TRANSLATORS: the capacity of the device, which is basically a measure
 #. * of how full it can get, relative to the design capacity
-#: ../src/gpm-statistics.c:803
+#: ../src/gpm-statistics.c:767
 msgid "Capacity"
 msgstr "容量"
 
 #. TRANSLATORS: the type of battery, e.g. lithium or nikel metal hydroxide
-#: ../src/gpm-statistics.c:808
+#: ../src/gpm-statistics.c:772
 msgid "Technology"
 msgstr "技术"
 
 #. TRANSLATORS: this is when the device is plugged in, typically
 #. * only shown for the ac adaptor device
-#: ../src/gpm-statistics.c:813
+#: ../src/gpm-statistics.c:777
 msgid "Online"
 msgstr "在线"
 
 #. TRANSLATORS: the command line was not provided
-#: ../src/gpm-statistics.c:1140
+#: ../src/gpm-statistics.c:1104
 msgid "No data"
 msgstr "无数据"
 
 #. TRANSLATORS: kernel module, usually a device driver
-#: ../src/gpm-statistics.c:1147 ../src/gpm-statistics.c:1152
+#: ../src/gpm-statistics.c:1111 ../src/gpm-statistics.c:1116
 msgid "Kernel module"
 msgstr "内核模块"
 
 #. TRANSLATORS: kernel housekeeping
-#: ../src/gpm-statistics.c:1157
+#: ../src/gpm-statistics.c:1121
 msgid "Kernel core"
 msgstr "内核核心"
 
 #. TRANSLATORS: interrupt between processors
-#: ../src/gpm-statistics.c:1162
+#: ../src/gpm-statistics.c:1126
 msgid "Interprocessor interrupt"
 msgstr "处理器间中断"
 
 #. TRANSLATORS: unknown interrupt
-#: ../src/gpm-statistics.c:1167
+#: ../src/gpm-statistics.c:1131
 msgid "Interrupt"
 msgstr "中断"
 
 #. TRANSLATORS: the keyboard and mouse device event
-#: ../src/gpm-statistics.c:1214
+#: ../src/gpm-statistics.c:1178
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "PS/2 键盘/鼠标/触摸板"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
-#: ../src/gpm-statistics.c:1217
+#: ../src/gpm-statistics.c:1181
 msgid "ACPI"
 msgstr "ACPI(高级配置及电源接口)"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
-#: ../src/gpm-statistics.c:1220
+#: ../src/gpm-statistics.c:1184
 msgid "Serial ATA"
 msgstr "串行 ATA(SATA)"
 
 #. TRANSLATORS: this is the old-style ATA interface
-#: ../src/gpm-statistics.c:1223
+#: ../src/gpm-statistics.c:1187
 msgid "ATA host controller"
 msgstr "ATA 主控制器"
 
 #. TRANSLATORS: 802.11 wireless adaptor
-#: ../src/gpm-statistics.c:1226
+#: ../src/gpm-statistics.c:1190
 msgid "Intel wireless adaptor"
 msgstr "Intel 无线适配器(无线网卡)"
 
 #. TRANSLATORS: a timer is something that fires periodically.
 #. * The parameter is a process name, e.g. "firefox-bin".
 #. * This is shown when the timer wakes up.
-#: ../src/gpm-statistics.c:1233 ../src/gpm-statistics.c:1238
-#: ../src/gpm-statistics.c:1243 ../src/gpm-statistics.c:1248
-#: ../src/gpm-statistics.c:1253
+#: ../src/gpm-statistics.c:1197 ../src/gpm-statistics.c:1202
+#: ../src/gpm-statistics.c:1207 ../src/gpm-statistics.c:1212
+#: ../src/gpm-statistics.c:1217
 #, c-format
 msgid "Timer %s"
 msgstr "定时器 %s"
 
 #. TRANSLATORS: the parameter is the name of task that's woken up from sleeping.
 #. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:1257
+#: ../src/gpm-statistics.c:1221
 #, c-format
 msgid "Sleep %s"
 msgstr "睡眠 %s"
 
 #. TRANSLATORS: this is the name of a new realtime task.
-#: ../src/gpm-statistics.c:1260
+#: ../src/gpm-statistics.c:1224
 #, c-format
 msgid "New task %s"
 msgstr "新任务 %s"
 
 #. TRANSLATORS: this is the name of a task that's woken to check state.
 #. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:1264
+#: ../src/gpm-statistics.c:1228
 #, c-format
 msgid "Wait %s"
 msgstr "等待 %s"
 
 #. TRANSLATORS: this is the name of a work queue.
 #. * A work queue is a list of work that has to be done.
-#: ../src/gpm-statistics.c:1268 ../src/gpm-statistics.c:1272
+#: ../src/gpm-statistics.c:1232 ../src/gpm-statistics.c:1236
 #, c-format
 msgid "Work queue %s"
 msgstr "工作队列 %s"
 
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
-#: ../src/gpm-statistics.c:1275
+#: ../src/gpm-statistics.c:1239
 #, c-format
 msgid "Network route flush %s"
 msgstr "网络路由清出 %s"
 
 #. TRANSLATORS: this is the name of an activity on the USB bus
-#: ../src/gpm-statistics.c:1278
+#: ../src/gpm-statistics.c:1242
 #, c-format
 msgid "USB activity %s"
 msgstr "USB 活动 %s"
 
 #. TRANSLATORS: we've timed out of an aligned timer, with the name
-#: ../src/gpm-statistics.c:1281
+#: ../src/gpm-statistics.c:1245
 #, c-format
 msgid "Wakeup %s"
 msgstr "唤醒 %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
-#: ../src/gpm-statistics.c:1284
+#: ../src/gpm-statistics.c:1248
 msgid "Local interrupts"
 msgstr "本地中断"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
-#: ../src/gpm-statistics.c:1287
+#: ../src/gpm-statistics.c:1251
 msgid "Rescheduling interrupts"
 msgstr "重调度中断"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1396
+#: ../src/gpm-statistics.c:1360
 msgid "Device Information"
 msgstr "设备信息"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1398
+#: ../src/gpm-statistics.c:1362
 msgid "Device History"
 msgstr "设备历史"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1400
+#: ../src/gpm-statistics.c:1364
 msgid "Device Profile"
 msgstr "设备配置"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1402
+#: ../src/gpm-statistics.c:1366
 msgid "Processor Wakeups"
 msgstr "处理器唤醒"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1598 ../src/gpm-statistics.c:1604
-#: ../src/gpm-statistics.c:1610 ../src/gpm-statistics.c:1616
+#: ../src/gpm-statistics.c:1562 ../src/gpm-statistics.c:1568
+#: ../src/gpm-statistics.c:1574 ../src/gpm-statistics.c:1580
 msgid "Time elapsed"
 msgstr "已过去时间"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1600
+#: ../src/gpm-statistics.c:1564
 msgid "Power"
 msgstr "电量"
 
 #. TRANSLATORS: this is the Y axis on the graph for the whole battery device
 #. TRANSLATORS: this is the X axis on the graph for the whole battery device
-#: ../src/gpm-statistics.c:1606 ../src/gpm-statistics.c:1649
-#: ../src/gpm-statistics.c:1655 ../src/gpm-statistics.c:1661
-#: ../src/gpm-statistics.c:1667
+#: ../src/gpm-statistics.c:1570 ../src/gpm-statistics.c:1613
+#: ../src/gpm-statistics.c:1619 ../src/gpm-statistics.c:1625
+#: ../src/gpm-statistics.c:1631
 msgid "Cell charge"
 msgstr "电池电量"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1612 ../src/gpm-statistics.c:1618
+#: ../src/gpm-statistics.c:1576 ../src/gpm-statistics.c:1582
 msgid "Predicted time"
 msgstr "预计时间"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1651 ../src/gpm-statistics.c:1663
+#: ../src/gpm-statistics.c:1615 ../src/gpm-statistics.c:1627
 msgid "Correction factor"
 msgstr "修正因数"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1657 ../src/gpm-statistics.c:1669
+#: ../src/gpm-statistics.c:1621 ../src/gpm-statistics.c:1633
 msgid "Prediction accuracy"
 msgstr "预测准确度"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-statistics.c:1848
+#: ../src/gpm-statistics.c:1812
 msgid "Show extra debugging information"
 msgstr "显示额外的调试信息"
 
 #. TRANSLATORS: show a device by default
-#: ../src/gpm-statistics.c:1851
+#: ../src/gpm-statistics.c:1815
 msgid "Select this device at startup"
 msgstr "在启动时选择这个设备"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:2111
+#: ../src/gpm-statistics.c:2077
 msgid "Processor"
 msgstr "处理器"
+
+#~ msgid ""
+#~ "Power Statistics can show historical and current battery information and "
+#~ "programs waking up that use power."
+#~ msgstr "电量统计可以显示历史和当前电池状态以及唤醒并耗电的程序。"
+
+#~ msgid ""
+#~ "You probably only need to install this application if you are having "
+#~ "problems with your laptop battery, or are trying to work out what "
+#~ "programs are using significant amounts of power."
+#~ msgstr ""
+#~ "一般只有在笔记本电池有问题或者需要调查哪些软件使用了大量电能的时候才需要安"
+#~ "装此软件。"
