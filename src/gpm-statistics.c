@@ -1785,25 +1785,6 @@ out:
 }
 
 /**
- * gpm_stats_delete_event_cb:
- **/
-static gboolean
-gpm_stats_delete_event_cb (GtkWidget *widget, GdkEvent *event, GtkApplication *application)
-{
-	g_application_release (G_APPLICATION (application));
-	return TRUE;
-}
-
-/**
- * gpm_stats_button_close_cb:
- **/
-static void
-gpm_stats_button_close_cb (GtkWidget *widget, GtkApplication *application)
-{
-	g_application_release (G_APPLICATION (application));
-}
-
-/**
  * gpm_stats_commandline_cb:
  **/
 static int
@@ -1914,16 +1895,6 @@ gpm_stats_startup_cb (GApplication *application,
 	gtk_window_set_default_size (window, 800, 500);
 	gtk_window_set_application (window, GTK_APPLICATION (application));
 	gtk_window_set_default_icon_name ("gnome-power-manager");
-
-	/* Get the main window quit */
-	g_signal_connect (window, "delete-event",
-			  G_CALLBACK (gpm_stats_delete_event_cb), application);
-
-        widget = GTK_WIDGET (gtk_builder_get_object (builder, "button_close"));
-	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_stats_button_close_cb), application);
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "button_close"));
-	gtk_widget_grab_default (widget);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_smooth_history"));
 	checked = g_settings_get_boolean (settings, GPM_SETTINGS_INFO_HISTORY_GRAPH_SMOOTH);
