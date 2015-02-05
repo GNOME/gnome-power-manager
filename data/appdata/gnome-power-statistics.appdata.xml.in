@@ -3,6 +3,8 @@
 <application>
   <id type="desktop">gnome-power-statistics.desktop</id>
   <licence>CC0</licence>
+  <_name>GNOME Power Statistics</_name>
+  <_summary>Observe power management</_summary>
   <description>
     <_p>
       Power Statistics can show historical and current battery information and
@@ -18,6 +20,17 @@
     <screenshot type="default">https://git.gnome.org/browse/gnome-power-manager/plain/data/appdata/gpm-stats-history.png</screenshot>
     <screenshot>https://git.gnome.org/browse/gnome-power-manager/plain/data/appdata/gpm-stats-wakeups.png</screenshot>
   </screenshots>
+  <!--
+   Validate with `appstream-util validate *.appdata.xml`
+   Use `date -d "2010-10-02" "+%s"` to get the timestamp.
+  -->
+  <releases>
+    <release version="3.15.90" timestamp="1390089600">
+      <description>
+        <p>This release updates the header style to match other GNOME applications.</p>
+      </description>
+    </release>
+  </releases>
   <url type="homepage">http://www.gnome.org/projects/gnome-power-manager/</url>
   <updatecontact>richard_at_hughsie.com</updatecontact>
 </application>

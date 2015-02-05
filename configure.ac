@@ -76,6 +76,7 @@ PKG_CHECK_MODULES(GNOME, [
  cairo >= 1.0.0])
 
 PKG_CHECK_MODULES(UPOWER, upower-glib >= 0.9.1)
+AC_PATH_PROG(APPSTREAM_UTIL, [appstream-util], [unfound])
 
 dnl ---------------------------------------------------------------------------
 dnl - Build self tests
