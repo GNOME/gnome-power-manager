@@ -3,7 +3,7 @@ Follow http://developer.gnome.org/dotplan/for_maintainers.html
 git shortlog GNOME_POWER_MANAGER_3_14_1.. | grep -i -v trivial | uniq | grep -v Merge > NEWS.new
 
 --------------------------------------------------------------------------------
-Version 3.14.2
+Version 3.15.5
 ~~~~~~~~~~~~~~
 Released: 2014-xx-xx
 
@@ -16,8 +16,8 @@ Released: 2014-xx-xx
 
 Run "make distcheck", correct any problems encountered
 
-git commit -a -m "GNOME Power Manager 3.14.2"
-git tag -s GNOME_POWER_MANAGER_3_14_2 -m "==== Version 3.14.2 ===="
+git commit -a -m "GNOME Power Manager 3.15.5"
+git tag -s GNOME_POWER_MANAGER_3_15_5 -m "==== Version 3.15.5 ===="
 <wait>
 git push --tags
 git push
