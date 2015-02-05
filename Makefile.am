@@ -11,15 +11,14 @@ EXTRA_DIST =						\
 	MAINTAINERS					\
 	intltool-extract.in				\
 	intltool-merge.in				\
-	intltool-update.in				\
-	omf.make					\
-	xmldocs.make
+	intltool-update.in
 
 DISTCLEANFILES =					\
 	intltool-extract				\
 	intltool-merge					\
 	intltool-update					\
-	gnome-power-manager-*.tar.gz
+	test-driver					\
+	gnome-power-manager-*.tar.*
 
 MAINTAINERCLEANFILES =					\
 	aclocal.m4					\
@@ -33,9 +32,7 @@ MAINTAINERCLEANFILES =					\
 	missing						\
 	mkinstalldirs					\
 	ChangeLog					\
-	NEWS						\
-	omf.make					\
-	xmldocs.make
+	NEWS
 
 distclean-local:
 	if test $(srdcir) = .; then :; else \
