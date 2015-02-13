@@ -1,23 +1,12 @@
 Follow http://developer.gnome.org/dotplan/for_maintainers.html
 
-git shortlog GNOME_POWER_MANAGER_3_14_1.. | grep -i -v trivial | uniq | grep -v Merge > NEWS.new
-
---------------------------------------------------------------------------------
-Version 3.15.5
-~~~~~~~~~~~~~~
-Released: 2014-xx-xx
-
-* Translations
-
-* New Features:
-
-* Bugfix:
---------------------------------------------------------------------------------
+git log --format="%s" GNOME_POWER_MANAGER_3_14_1.. | grep -i -v trivial | grep -v Merge | uniq
+Add any user visible changes into data/appdata/gnome-power-statistics.appdata.xml.in
 
 Run "make distcheck", correct any problems encountered
 
-git commit -a -m "GNOME Power Manager 3.15.5"
-git tag -s GNOME_POWER_MANAGER_3_15_5 -m "==== Version 3.15.5 ===="
+git commit -a -m "GNOME Power Manager 3.15.90"
+git tag -s GNOME_POWER_MANAGER_3_15_90 -m "==== Version 3.15.90 ===="
 <wait>
 git push --tags
 git push
