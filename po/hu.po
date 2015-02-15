@@ -5,15 +5,15 @@
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2005, 2006, 2007, 2008, 2009, 2010, 2011.
 # Szabolcs Varga <shirokuma at shirokuma dot hu>, 2006.
 # Kováts Dóra <dorcssa at gmail dot com>, 2008.
-# Balázs Úr <urbalazs at gmail dot com>, 2013, 2014.
+# Balázs Úr <urbalazs at gmail dot com>, 2013, 2014, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-02-28 20:17+0000\n"
-"PO-Revision-Date: 2014-02-28 21:32+0100\n"
-"Last-Translator: Balázs Úr <urbalazs at gmail dot com>\n"
+"POT-Creation-Date: 2015-02-15 08:24+0000\n"
+"PO-Revision-Date: 2015-02-15 15:00+0100\n"
+"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <gnome at fsf dot hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -105,6 +105,16 @@ msgstr ""
 "visszaadására használatos."
 
 #: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:1
+#| msgid "Power Statistics"
+msgid "GNOME Power Statistics"
+msgstr "GNOME energiastatisztika"
+
+#: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:2
+#: ../data/gnome-power-statistics.desktop.in.in.h:2
+msgid "Observe power management"
+msgstr "Energiagazdálkodás megfigyelése"
+
+#: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:3
 msgid ""
 "Power Statistics can show historical and current battery information and "
 "programs waking up that use power."
@@ -113,7 +123,7 @@ msgstr ""
 "akkumulátor információkat, valamint az ébredő programokat, amelyek energiát "
 "használnak."
 
-#: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:2
+#: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:4
 msgid ""
 "You probably only need to install this application if you are having "
 "problems with your laptop battery, or are trying to work out what programs "
@@ -127,13 +137,9 @@ msgstr ""
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:1
 #: ../src/gpm-statistics.ui.h:1 ../src/gpm-statistics.c:1372
-#: ../src/gpm-statistics.c:1837
+#: ../src/gpm-statistics.c:1818
 msgid "Power Statistics"
 msgstr "Energiastatisztika"
-
-#: ../data/gnome-power-statistics.desktop.in.in.h:2
-msgid "Observe power management"
-msgstr "Energiagazdálkodás megfigyelése"
 
 #: ../data/gnome-power-statistics.desktop.in.in.h:3
 msgid "battery;consumption;charge;"
@@ -785,17 +791,17 @@ msgid "Prediction accuracy"
 msgstr "Előrejelzés pontossága"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-statistics.c:1825
+#: ../src/gpm-statistics.c:1806
 msgid "Show extra debugging information"
 msgstr "Extra hibakeresési információk megjelenítése"
 
 #. TRANSLATORS: show a device by default
-#: ../src/gpm-statistics.c:1828
+#: ../src/gpm-statistics.c:1809
 msgid "Select this device at startup"
 msgstr "Ezen eszköz kiválasztása indításkor"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:2088
+#: ../src/gpm-statistics.c:2059
 msgid "Processor"
 msgstr "Processzor"
 
