@@ -1,12 +1,12 @@
 Follow http://developer.gnome.org/dotplan/for_maintainers.html
 
-git log --format="%s" GNOME_POWER_MANAGER_3_15_92.. | grep -i -v trivial | grep -v Merge | uniq
+git log --format="%s" GNOME_POWER_MANAGER_3_16_0.. | grep -i -v trivial | grep -v Merge | uniq
 Add any user visible changes into data/appdata/gnome-power-statistics.appdata.xml.in
 
 Run "make distcheck", correct any problems encountered
 
-git commit -a -m "GNOME Power Manager 3.16.0"
-git tag -s GNOME_POWER_MANAGER_3_16_0 -m "==== Version 3.16.0 ===="
+git commit -a -m "GNOME Power Manager 3.16.1"
+git tag -s GNOME_POWER_MANAGER_3_16_1 -m "==== Version 3.16.1 ===="
 <wait>
 git push --tags
 git push
@@ -19,7 +19,7 @@ scp gnome-power-manager-*.tar.xz  rhughes@master.gnome.org:
 ssh rhughes@master.gnome.org
 ftpadmin install gnome-power-manager-*.tar.xz
 
-- Do a post-release version bump by updating configure.in
+- Do a post-release version bump by updating configure.ac
 
 git commit -a -m "trivial: Post release version bump"
 git push
