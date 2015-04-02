@@ -4,6 +4,7 @@
 # Copyright (C) 2005-2009, 2010 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnome-power-manager package.
 #
+#
 # Leonid Kanter <leon@asplinux.ru>, 2006, 2010.
 # Nickolay V. Shmyrev <nshmyrev@yandex.ru>, 2007.
 # Yuri Kozlov <kozlov.y@gmail.com>, 2008.
@@ -11,44 +12,44 @@
 # Yuri Kozlov <yuray@komyakino.ru>, 2010.
 # Alexander Saprykin <xelfium@gmail.com>, 2010.
 # Stas Solovey <whats_up@tut.by>, 2014, 2015.
-#
+# Julia Dronova <juliette.tux@gmail.com>, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-02-06 08:26+0000\n"
-"PO-Revision-Date: 2015-02-06 14:51+0300\n"
-"Last-Translator: Stas Solovey <whats_up@tut.by>\n"
-"Language-Team: Русский <gnome-cyr@gnome.org>\n"
+"POT-Creation-Date: 2015-04-02 19:42+0000\n"
+"PO-Revision-Date: 2015-04-03 01:11+0300\n"
+"Last-Translator: Julia Dronova <juliette.tux@gmail.com>\n"
+"Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
-"X-Generator: Gtranslator 2.91.6\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:1
 msgid "Whether we should show the history data points"
-msgstr "Показывать ли точками исторические данные"
+msgstr "Показывать историю точками на графике"
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:2
 msgid ""
 "Whether we should show the history data points in the statistics window."
-msgstr "Показывать ли точками исторические данные в окне статистики."
+msgstr "Показывать историю точками на графике в окне статистики."
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:3
 msgid "Whether we should smooth the history data"
-msgstr "Сглаживать ли исторические данные на графике"
+msgstr "Выравнивать представление данных истории на графике"
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:4
 msgid "Whether we should smooth the history data in the graph."
-msgstr "Сглаживать ли исторические данные на графике."
+msgstr "Выравнивать представление данных истории на графике."
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:5
 msgid "The default graph type to show for history"
-msgstr "Тип графика по умолчанию для истории"
+msgstr "Тип графика по умолчанию для показа истории"
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:6
 msgid "The default graph type to show in the history window."
@@ -56,28 +57,28 @@ msgstr "Тип графика по умолчанию в окне истории
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:7
 msgid "The maximum time displayed for history"
-msgstr "Максимальное время, показанное для истории"
+msgstr "Максимальный показываемый отрезок времени для истории"
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:8
 msgid ""
 "The maximum duration of time displayed on the x-axis of the history graph."
-msgstr "Максимальное время, отложенное по оси X графика истории."
+msgstr "Максимальный отрезок времени для графика показываемой истории по оси X"
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:9
 msgid "Whether we should show the stats data points"
-msgstr "Показывать ли точками статистические данные"
+msgstr "Показывать точки статистических данных"
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:10
 msgid "Whether we should show the stats data points in the statistics window."
-msgstr "Показывать ли точками статистические данные в окне статистики."
+msgstr "Показывать точки статистических данных в окне статистики."
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:11
 msgid "Whether we should smooth the stats data"
-msgstr "Сглаживать ли статистические данные на графике"
+msgstr "Выравнивать статистические данные на графике"
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:12
 msgid "Whether we should smooth the stats data in the graph."
-msgstr "Сглаживать ли статистические данные на графике."
+msgstr "Выравнивать статистические данные на графике"
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:13
 msgid "The default graph type to show for stats"
@@ -96,8 +97,8 @@ msgid ""
 "The index of the page number to show by default which is used to return "
 "focus to the correct page."
 msgstr ""
-"Индекс номера страница по умолчанию, который используется для возвращения "
-"фокуса коррктной странице."
+"Индекс номера страницы по умолчанию, используемый для возвращения "
+"фокуса корректной странице."
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:17
 msgid "The ID of the last device selected"
@@ -108,11 +109,10 @@ msgid ""
 "The identifier of the last device which is used to return focus to the "
 "correct device."
 msgstr ""
-"Идентификатор последнего устройства, которое используется для возвращение "
+"Идентификатор последнего устройства, используемый для возвращения "
 "фокуса корректному устройству."
 
 #: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:1
-#| msgid "Power Statistics"
 msgid "GNOME Power Statistics"
 msgstr "Статистика энергопотребления GNOME"
 
@@ -150,7 +150,7 @@ msgstr "Статистика энергопотребления"
 
 #: ../data/gnome-power-statistics.desktop.in.in.h:3
 msgid "battery;consumption;charge;"
-msgstr "батарея;разрядка;зарядка;"
+msgstr "аккумулятор;потребление;зарядка"
 
 #: ../src/gpm-statistics.ui.h:2 ../src/gpm-statistics.c:475
 msgid "Details"
@@ -162,19 +162,19 @@ msgstr "Тип графика:"
 
 #: ../src/gpm-statistics.ui.h:4
 msgid "Data length:"
-msgstr "Продолжительность:"
+msgstr "Интервал:"
 
 #: ../src/gpm-statistics.ui.h:5
 msgid "There is no data to display."
-msgstr "Нет сведений для отображения."
+msgstr "Нет данных для отображения."
 
 #: ../src/gpm-statistics.ui.h:6
 msgid "Use smoothed line"
-msgstr "Использовать сглаживание"
+msgstr "Выравнивать линии"
 
 #: ../src/gpm-statistics.ui.h:7
 msgid "Show data points"
-msgstr "Показывать отсчёты"
+msgstr "Показывать точки данных"
 
 #: ../src/gpm-statistics.ui.h:8
 msgid "History"
@@ -259,7 +259,7 @@ msgstr "%.1fВ"
 #. TRANSLATORS: the rate of discharge for the device
 #: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:733
 msgid "Rate"
-msgstr "Скорость"
+msgstr "Скорость разрядки"
 
 #: ../src/gpm-statistics.c:83
 msgid "Charge"
@@ -564,7 +564,7 @@ msgstr "Серийный номер"
 #. * would be TRUE,  but a mobile phone or mouse taking power is FALSE
 #: ../src/gpm-statistics.c:683
 msgid "Supply"
-msgstr "Поставщик энергии"
+msgstr "Устройство питания"
 
 #: ../src/gpm-statistics.c:686
 #, c-format
@@ -578,7 +578,7 @@ msgstr[2] "%d секунд"
 #. * usually a few seconds when a device is discharging or charging.
 #: ../src/gpm-statistics.c:690
 msgid "Refreshed"
-msgstr "Обновлено"
+msgstr "Обновление данных"
 
 #. TRANSLATORS: Present is whether the device is currently attached
 #. * to the computer, as some devices (e.g. laptop batteries) can
@@ -591,7 +591,7 @@ msgstr "Присутствует"
 #. * batteries rather than alkaline ones
 #: ../src/gpm-statistics.c:707
 msgid "Rechargeable"
-msgstr "Перезаряжаемо"
+msgstr "С возможностью перезарядки"
 
 #. TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged"
 #: ../src/gpm-statistics.c:713
@@ -604,11 +604,11 @@ msgstr "Энергия"
 
 #: ../src/gpm-statistics.c:720
 msgid "Energy when empty"
-msgstr "Энергия при опустошении"
+msgstr "Энергия при нулевой зарядке"
 
 #: ../src/gpm-statistics.c:723
 msgid "Energy when full"
-msgstr "Энергия при заполнении"
+msgstr "Энергия при полной зарядке"
 
 #: ../src/gpm-statistics.c:726
 msgid "Energy (design)"
@@ -621,7 +621,7 @@ msgstr "Напряжение"
 #. TRANSLATORS: the amount of charge the cell contains
 #: ../src/gpm-statistics.c:762
 msgid "Percentage"
-msgstr "Процент"
+msgstr "Текущий процент заряда"
 
 #. TRANSLATORS: the capacity of the device, which is basically a measure
 #. * of how full it can get, relative to the design capacity
@@ -668,7 +668,7 @@ msgstr "Прерывание"
 #. TRANSLATORS: the keyboard and mouse device event
 #: ../src/gpm-statistics.c:1180
 msgid "PS/2 keyboard/mouse/touchpad"
-msgstr "Клавиатура/Мышь/Сенсорная панель"
+msgstr "PS/2 клавиатура/Мышь/Сенсорная панель"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
 #: ../src/gpm-statistics.c:1183
@@ -698,14 +698,14 @@ msgstr "Беспроводной адаптер Intel"
 #: ../src/gpm-statistics.c:1219
 #, c-format
 msgid "Timer %s"
-msgstr "Периодическая активность %s"
+msgstr "Активный таймер %s"
 
 #. TRANSLATORS: the parameter is the name of task that's woken up from sleeping.
 #. * This is shown when the task wakes up.
 #: ../src/gpm-statistics.c:1223
 #, c-format
 msgid "Sleep %s"
-msgstr "Пробуждение %s"
+msgstr "Бездействие %s"
 
 #. TRANSLATORS: this is the name of a new realtime task.
 #: ../src/gpm-statistics.c:1226
@@ -743,17 +743,17 @@ msgstr "Активность USB %s"
 #: ../src/gpm-statistics.c:1247
 #, c-format
 msgid "Wakeup %s"
-msgstr "Пробуждение периодического задания %s"
+msgstr "Пробуждение %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
 #: ../src/gpm-statistics.c:1250
 msgid "Local interrupts"
-msgstr "Прерывания"
+msgstr "Локальные прерывания"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
 #: ../src/gpm-statistics.c:1253
 msgid "Rescheduling interrupts"
-msgstr "Перепланировка задач"
+msgstr "Перепланировка прерываний"
 
 #. TRANSLATORS: shown on the titlebar
 #: ../src/gpm-statistics.c:1362
@@ -779,7 +779,7 @@ msgstr "Пробуждения процессора"
 #: ../src/gpm-statistics.c:1575 ../src/gpm-statistics.c:1581
 #: ../src/gpm-statistics.c:1587 ../src/gpm-statistics.c:1593
 msgid "Time elapsed"
-msgstr "Среднее время до окончания"
+msgstr "Затраченное время"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #: ../src/gpm-statistics.c:1577
@@ -792,7 +792,7 @@ msgstr "Электропитание"
 #: ../src/gpm-statistics.c:1632 ../src/gpm-statistics.c:1638
 #: ../src/gpm-statistics.c:1644
 msgid "Cell charge"
-msgstr "Заряд ячейки"
+msgstr "Заряд аккумулятора"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #: ../src/gpm-statistics.c:1589 ../src/gpm-statistics.c:1595
@@ -802,17 +802,17 @@ msgstr "Ожидаемое время"
 #. TRANSLATORS: this is the Y axis on the graph
 #: ../src/gpm-statistics.c:1628 ../src/gpm-statistics.c:1640
 msgid "Correction factor"
-msgstr "Коррекция"
+msgstr "Поправочный коэффициент"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #: ../src/gpm-statistics.c:1634 ../src/gpm-statistics.c:1646
 msgid "Prediction accuracy"
-msgstr "Точность предсказания"
+msgstr "Точность прогноза"
 
 #. TRANSLATORS: show verbose debugging
 #: ../src/gpm-statistics.c:1806
 msgid "Show extra debugging information"
-msgstr "Показывать отладочную информацию"
+msgstr "Показывать дополнительную отладочную информацию"
 
 #. TRANSLATORS: show a device by default
 #: ../src/gpm-statistics.c:1809
@@ -823,3 +823,4 @@ msgstr "Выбрать это устройство при запуске"
 #: ../src/gpm-statistics.c:2059
 msgid "Processor"
 msgstr "Процессор"
+
