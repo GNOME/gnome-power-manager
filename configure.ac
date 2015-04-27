@@ -119,7 +119,6 @@ data/gnome-power-statistics.desktop.in
 data/appdata/Makefile
 data/icons/Makefile
 data/icons/hicolor/Makefile
-data/icons/HighContrast/Makefile
 ])
 AC_OUTPUT
 
