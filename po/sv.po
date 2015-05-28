@@ -1,22 +1,24 @@
 # Swedish messages for gnome-power-manager.
-# Copyright (C) 2005-2011 Free Software Foundation, Inc.
+# Copyright © 2005-2015 Free Software Foundation, Inc.
 # Christian Rose <menthos@menthos.com>, 2005.
 # Daniel Nylander <po@danielnylander.se>, 2006, 2007, 2008, 2009, 2010, 2011.
+# Anders Jonsson <anders.jonsson@norsjovallen.se>, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-10-06 19:29+0000\n"
-"PO-Revision-Date: 2011-03-20 19:40+0100\n"
-"Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
+"POT-Creation-Date: 2015-05-07 07:38+0000\n"
+"PO-Revision-Date: 2015-05-08 13:05+0100\n"
+"Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.6\n"
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:1
 msgid "Whether we should show the history data points"
@@ -101,34 +103,44 @@ msgstr ""
 "korrekt enhet."
 
 #: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:1
+msgid "GNOME Power Statistics"
+msgstr "GNOME Strömstatistik"
+
+# Gissning
+#: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:2
+#: ../data/gnome-power-statistics.desktop.in.in.h:2
+msgid "Observe power management"
+msgstr "Övervaka strömhantering"
+
+#: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:3
 msgid ""
 "Power Statistics can show historical and current battery information and "
 "programs waking up that use power."
 msgstr ""
+"Strömstatistik kan visa historisk och aktuell batteriinformation samt "
+"vaknande program som använder ström."
 
-#: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:2
+#: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:4
 msgid ""
 "You probably only need to install this application if you are having "
 "problems with your laptop battery, or are trying to work out what programs "
 "are using significant amounts of power."
 msgstr ""
+"Du behöver troligen bara installera detta program om du har problem med "
+"batteriet på din bärbara dator, eller om du försöker räkna ut vilka program "
+"som använder stora mängder ström."
 
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:1
 #: ../src/gpm-statistics.ui.h:1 ../src/gpm-statistics.c:1372
-#: ../src/gpm-statistics.c:1837
+#: ../src/gpm-statistics.c:1818
 msgid "Power Statistics"
 msgstr "Strömstatistik"
 
-# Gissning
-#: ../data/gnome-power-statistics.desktop.in.in.h:2
-msgid "Observe power management"
-msgstr "Övervaka strömhantering"
-
 #: ../data/gnome-power-statistics.desktop.in.in.h:3
 msgid "battery;consumption;charge;"
-msgstr ""
+msgstr "batteri;förbrukning;laddning;"
 
 #: ../src/gpm-statistics.ui.h:2 ../src/gpm-statistics.c:475
 msgid "Details"
@@ -773,16 +785,16 @@ msgid "Prediction accuracy"
 msgstr "Noggrannhet för beräkning"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-statistics.c:1825
+#: ../src/gpm-statistics.c:1806
 msgid "Show extra debugging information"
 msgstr "Visa extra felsökningsinformation"
 
 #. TRANSLATORS: show a device by default
-#: ../src/gpm-statistics.c:1828
+#: ../src/gpm-statistics.c:1809
 msgid "Select this device at startup"
 msgstr "Välj denna enhet vid uppstart"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:2088
+#: ../src/gpm-statistics.c:2059
 msgid "Processor"
 msgstr "Processor"
