@@ -302,7 +302,6 @@ gpm_test_array_float_func (void)
 int
 main (int argc, char **argv)
 {
-	g_type_init ();
 	g_test_init (&argc, &argv, NULL);
 
 	/* tests go here */
