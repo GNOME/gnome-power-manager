@@ -27,18 +27,10 @@
 
 G_BEGIN_DECLS
 
-#define GPM_TYPE_GRAPH_WIDGET		(gpm_graph_widget_get_type ())
-#define GPM_GRAPH_WIDGET(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GPM_TYPE_GRAPH_WIDGET, GpmGraphWidget))
-#define GPM_GRAPH_WIDGET_CLASS(obj)	(G_TYPE_CHECK_CLASS_CAST ((obj), GPM_GRAPH_WIDGET, GpmGraphWidgetClass))
-#define GPM_IS_GRAPH_WIDGET(obj)	(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GPM_TYPE_GRAPH_WIDGET))
-#define GPM_IS_GRAPH_WIDGET_CLASS(obj)	(G_TYPE_CHECK_CLASS_TYPE ((obj), EFF_TYPE_GRAPH_WIDGET))
-#define GPM_GRAPH_WIDGET_GET_CLASS	(G_TYPE_INSTANCE_GET_CLASS ((obj), GPM_TYPE_GRAPH_WIDGET, GpmGraphWidgetClass))
+#define GPM_TYPE_GRAPH_WIDGET (gpm_graph_widget_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GpmGraphWidget, gpm_graph_widget, GPM, GRAPH_WIDGET, GtkDrawingArea)
 
 #define GPM_GRAPH_WIDGET_LEGEND_SPACING		17
-
-typedef struct GpmGraphWidget		GpmGraphWidget;
-typedef struct GpmGraphWidgetClass	GpmGraphWidgetClass;
-typedef struct GpmGraphWidgetPrivate	GpmGraphWidgetPrivate;
 
 typedef enum {
 	GPM_GRAPH_WIDGET_TYPE_INVALID,
@@ -62,13 +54,7 @@ typedef struct {
 	gchar			*desc;
 } GpmGraphWidgetKeyData;
 
-struct GpmGraphWidget
-{
-	GtkDrawingArea		 parent;
-	GpmGraphWidgetPrivate	*priv;
-};
-
-struct GpmGraphWidgetClass
+struct _GpmGraphWidgetClass
 {
 	GtkDrawingAreaClass parent_class;
 };

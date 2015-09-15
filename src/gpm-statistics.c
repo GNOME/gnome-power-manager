@@ -145,14 +145,14 @@ gpm_stats_get_device_icon_suffix (UpDevice *device)
 static GIcon *
 gpm_stats_get_device_icon (UpDevice *device, gboolean use_symbolic)
 {
-	GString *filename;
-	gchar **iconnames;
 	const gchar *suffix_str;
 	UpDeviceKind kind;
 	UpDeviceState state;
 	gboolean is_present;
 	gdouble percentage;
 	GIcon *icon = NULL;
+	g_auto(GStrv) iconnames;
+	g_autoptr(GString) filename;
 
 	g_return_val_if_fail (device != NULL, NULL);
 
@@ -231,9 +231,6 @@ gpm_stats_get_device_icon (UpDevice *device, gboolean use_symbolic)
 
 	iconnames = g_strsplit (filename->str, ";", -1);
 	icon = g_themed_icon_new_from_names (iconnames, -1);
-
-	g_strfreev (iconnames);
-	g_string_free (filename, TRUE);
 	return icon;
 }
 
@@ -508,7 +505,7 @@ gpm_stats_update_smooth_data (GPtrArray *list)
 
 	/* convert the y data to a GpmArrayFloat array */
 	raw = gpm_array_float_new (list->len);
-	for (i=0; i<list->len; i++) {
+	for (i = 0; i < list->len; i++) {
 		point = (GpmPointObj *) g_ptr_array_index (list, i);
 		gpm_array_float_set (raw, i, point->y);
 	}
@@ -522,7 +519,7 @@ gpm_stats_update_smooth_data (GPtrArray *list)
 
 	/* add the smoothed data back into a new array */
 	new = g_ptr_array_new_with_free_func ((GDestroyNotify) gpm_point_obj_free);
-	for (i=0; i<list->len; i++) {
+	for (i = 0; i < list->len; i++) {
 		point = (GpmPointObj *) g_ptr_array_index (list, i);
 		point_new = g_new0 (GpmPointObj, 1);
 		point_new->color = point->color;
@@ -626,10 +623,10 @@ gpm_stats_update_info_page_details (UpDevice *device)
 	guint64 update_time;
 	gint64 time_to_full;
 	gint64 time_to_empty;
-	gchar *vendor = NULL;
-	gchar *serial = NULL;
-	gchar *model = NULL;
-	gchar *device_path = NULL;
+	g_autofree gchar *device_path = NULL;
+	g_autofree gchar *model = NULL;
+	g_autofree gchar *serial = NULL;
+	g_autofree gchar *vendor = NULL;
 
 	gtk_list_store_clear (list_store_info);
 
@@ -667,7 +664,6 @@ gpm_stats_update_info_page_details (UpDevice *device)
 	device_path = gpm_stats_get_printable_device_path (device);
 	/* TRANSLATORS: the device ID of the current device, e.g. "battery0" */
 	gpm_stats_add_info_data (_("Device"), device_path);
-	g_free (device_path);
 
 	gpm_stats_add_info_data (_("Type"), gpm_device_kind_to_localised_string (kind, 1));
 	if (vendor != NULL && vendor[0] != '\0')
@@ -778,10 +774,6 @@ gpm_stats_update_info_page_details (UpDevice *device)
 		 * only shown for the ac adaptor device */
 		gpm_stats_add_info_data (_("Online"), gpm_stats_bool_to_string (online));
 	}
-
-	g_free (vendor);
-	g_free (serial);
-	g_free (model);
 }
 
 /**
@@ -893,7 +885,7 @@ gpm_stats_update_info_page_history (UpDevice *device)
 	g_get_current_time (&timeval);
 	offset = timeval.tv_sec;
 
-	for (i=0; i<array->len; i++) {
+	for (i = 0; i < array->len; i++) {
 		item = (UpHistoryItem *) g_ptr_array_index (array, i);
 
 		/* abandon this point */
@@ -999,7 +991,7 @@ gpm_stats_update_info_page_stats (UpDevice *device)
 	gtk_widget_hide (widget);
 	gtk_widget_show (graph_statistics);
 
-	for (i=0; i<array->len; i++) {
+	for (i = 0; i < array->len; i++) {
 		item = (UpStatsItem *) g_ptr_array_index (array, i);
 		point = gpm_point_obj_new ();
 		point->x = i;
@@ -1096,7 +1088,7 @@ static gchar *
 gpm_stats_format_cmdline (UpWakeupItem *item)
 {
 	gchar *found;
-	gchar *temp = NULL;
+	g_autofree gchar *temp = NULL;
 	gchar *cmdline;
 	const gchar *temp_ptr;
 
@@ -1156,7 +1148,6 @@ out:
 		cmdline = g_markup_escape_text (temp_ptr, -1);
 	else
 		cmdline = g_markup_printf_escaped ("<i>%s</i>", temp_ptr);
-	g_free (temp);
 
 	/* return */
 	return cmdline;
@@ -1263,11 +1254,11 @@ static void
 gpm_stats_add_wakeups_item (UpWakeupItem *item)
 {
 	const gchar *icon;
-	gchar *value;
-	gchar *id;
-	gchar *details;
-	gchar *cmdline;
 	GtkTreeIter iter;
+	g_autofree gchar *cmdline = NULL;
+	g_autofree gchar *details = NULL;
+	g_autofree gchar *id = NULL;
+	g_autofree gchar *value = NULL;
 
 	if (up_wakeup_item_get_is_userspace (item)) {
 		icon = "application-x-executable";
@@ -1294,10 +1285,6 @@ gpm_stats_add_wakeups_item (UpWakeupItem *item)
 			    GPM_WAKEUPS_COLUMN_CMDLINE, cmdline,
 			    GPM_WAKEUPS_COLUMN_DETAILS, details,
 			    GPM_WAKEUPS_COLUMN_ICON, icon, -1);
-	g_free (cmdline);
-	g_free (details);
-	g_free (value);
-	g_free (id);
 }
 
 /**
@@ -1310,7 +1297,6 @@ gpm_stats_update_wakeups_data (void)
 	GtkWidget *page_widget;
 	guint total;
 	UpWakeupItem *item;
-	gchar *text;
 	guint i;
 	GError *error = NULL;
 	GPtrArray *array;
@@ -1333,9 +1319,8 @@ gpm_stats_update_wakeups_data (void)
 	total = up_wakeups_get_total_sync (wakeups, NULL, &error);
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "label_total_wakeups"));
 	if (error == NULL) {
+		g_autofree gchar *text = NULL;
 		text = g_strdup_printf ("%i", total);
-		gtk_label_set_label (GTK_LABEL(widget), text);
-		g_free (text);
 	} else {
 		gtk_label_set_label (GTK_LABEL(widget), error->message);
 		g_error_free (error);
@@ -1346,7 +1331,7 @@ gpm_stats_update_wakeups_data (void)
 	array = up_wakeups_get_data_sync (wakeups, NULL, NULL);
 	if (array == NULL)
 		return;
-	for (i=0; i<array->len; i++) {
+	for (i = 0; i < array->len; i++) {
 		item = g_ptr_array_index (array, i);
 		gpm_stats_add_wakeups_item (item);
 	}
@@ -1356,7 +1341,7 @@ gpm_stats_update_wakeups_data (void)
 static void
 gpm_stats_set_title (GtkWindow *window, gint page_num)
 {
-	gchar *title;
+	g_autofree gchar *title = NULL;
 	const gchar * const page_titles[] = {
 		/* TRANSLATORS: shown on the titlebar */
 		N_("Device Information"),
@@ -1371,7 +1356,6 @@ gpm_stats_set_title (GtkWindow *window, gint page_num)
 	/* TRANSLATORS: shown on the titlebar */
 	title = g_strdup_printf ("%s - %s", _("Power Statistics"), _(page_titles[page_num]));
 	gtk_window_set_title (window, title);
-	g_free (title);
 }
 
 /**
@@ -1476,8 +1460,8 @@ gpm_stats_add_device (UpDevice *device)
 	const gchar *id;
 	GtkTreeIter iter;
 	const gchar *text;
-	GIcon *icon;
 	UpDeviceKind kind;
+	g_autoptr(GIcon) icon;
 
 	/* get device properties */
 	g_object_get (device,
@@ -1496,7 +1480,6 @@ gpm_stats_add_device (UpDevice *device)
 			    GPM_DEVICES_COLUMN_ID, id,
 			    GPM_DEVICES_COLUMN_TEXT, text,
 			    GPM_DEVICES_COLUMN_ICON, icon, -1);
-	g_object_unref (icon);
 }
 
 /**
@@ -1530,7 +1513,6 @@ gpm_stats_device_removed_cb (UpClient *_client, const gchar *object_path, gpoint
 	GtkTreeIter iter;
 	UpDevice *device_tmp;
 	gboolean ret;
-	gchar *id = NULL;
 	guint i;
 
 	for (i = 0; i < devices->len; i++) {
@@ -1549,12 +1531,12 @@ gpm_stats_device_removed_cb (UpClient *_client, const gchar *object_path, gpoint
 	/* search the list and remove the object path entry */
 	ret = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (list_store_devices), &iter);
 	while (ret) {
+		g_autofree gchar *id = NULL;
 		gtk_tree_model_get (GTK_TREE_MODEL (list_store_devices), &iter, GPM_DEVICES_COLUMN_ID, &id, -1);
 		if (g_strcmp0 (id, object_path) == 0) {
 			gtk_list_store_remove (list_store_devices, &iter);
 			break;
 		}
-		g_free (id);
 		ret = gtk_tree_model_iter_next (GTK_TREE_MODEL (list_store_devices), &iter);
 	};
 }
@@ -1565,7 +1547,7 @@ gpm_stats_device_removed_cb (UpClient *_client, const gchar *object_path, gpoint
 static void
 gpm_stats_history_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 {
-	gchar *value;
+	g_autofree gchar *value = NULL;
 	const gchar *axis_x = NULL;
 	const gchar *axis_y = NULL;
 	value = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (widget));
@@ -1604,7 +1586,6 @@ gpm_stats_history_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 	gtk_label_set_label (GTK_LABEL(widget), axis_y);
 
 	gpm_stats_button_update_ui ();
-	g_free (value);
 
 	/* save to gconf */
 	g_settings_set_string (settings, GPM_SETTINGS_INFO_HISTORY_TYPE, history_type);
@@ -1616,7 +1597,7 @@ gpm_stats_history_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 static void
 gpm_stats_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 {
-	gchar *value;
+	g_autofree gchar *value = NULL;
 	const gchar *axis_x = NULL;
 	const gchar *axis_y = NULL;
 	value = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (widget));
@@ -1655,7 +1636,6 @@ gpm_stats_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 	gtk_label_set_label (GTK_LABEL(widget), axis_y);
 
 	gpm_stats_button_update_ui ();
-	g_free (value);
 
 	/* save to gconf */
 	g_settings_set_string (settings, GPM_SETTINGS_INFO_STATS_TYPE, stats_type);
@@ -1667,7 +1647,7 @@ gpm_stats_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 static void
 gpm_stats_range_combo_changed (GtkWidget *widget, gpointer data)
 {
-	gchar *value;
+	g_autofree gchar *value = NULL;
 	value = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (widget));
 	if (g_strcmp0 (value, GPM_HISTORY_MINUTE_TEXT) == 0)
 		history_time = GPM_HISTORY_MINUTE_VALUE;
@@ -1686,7 +1666,6 @@ gpm_stats_range_combo_changed (GtkWidget *widget, gpointer data)
 	g_settings_set_int (settings, GPM_SETTINGS_INFO_HISTORY_TIME, history_time);
 
 	gpm_stats_button_update_ui ();
-	g_free (value);
 }
 
 /**
@@ -1749,8 +1728,6 @@ gpm_stats_highlight_device (const gchar *object_path)
 {
 	gboolean ret;
 	gboolean found = FALSE;
-	gchar *id = NULL;
-	gchar *path_str;
 	guint i;
 	GtkTreeIter iter;
 	GtkTreePath *path;
@@ -1764,20 +1741,20 @@ gpm_stats_highlight_device (const gchar *object_path)
 
 	/* we have to reuse the treeview data as it may be sorted */
 	ret = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (list_store_devices), &iter);
-	for (i=0; ret && !found; i++) {
+	for (i = 0; ret && !found; i++) {
+		g_autofree gchar *id = NULL;
 		gtk_tree_model_get (GTK_TREE_MODEL (list_store_devices), &iter,
 				    GPM_DEVICES_COLUMN_ID, &id,
 				    -1);
 		if (g_strcmp0 (id, object_path) == 0) {
+			g_autofree gchar *path_str = NULL;
 			path_str = g_strdup_printf ("%i", i);
 			path = gtk_tree_path_new_from_string (path_str);
 			widget = GTK_WIDGET (gtk_builder_get_object (builder, "treeview_devices"));
 			gtk_tree_view_set_cursor_on_cell (GTK_TREE_VIEW (widget), path, NULL, NULL, FALSE);
-			g_free (path_str);
 			gtk_tree_path_free (path);
 			found = TRUE;
 		}
-		g_free (id);
 		ret = gtk_tree_model_iter_next (GTK_TREE_MODEL (list_store_devices), &iter);
 	}
 out:
@@ -1794,11 +1771,11 @@ gpm_stats_commandline_cb (GApplication *application,
 {
 	gboolean ret;
 	gboolean verbose = FALSE;
-	gchar **argv;
-	gchar *last_device =  NULL;
 	gint argc;
-	GOptionContext *context;
 	GtkWindow *window;
+	g_auto(GStrv) argv;
+	g_autofree gchar *last_device =  NULL;
+	g_autoptr(GOptionContext) context;
 
 	const GOptionEntry options[] = {
 		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
@@ -1817,9 +1794,8 @@ gpm_stats_commandline_cb (GApplication *application,
 	/* TRANSLATORS: the program name */
 	g_option_context_set_summary (context, _("Power Statistics"));
 	g_option_context_add_main_entries (context, options, NULL);
-	ret = g_option_context_parse (context, &argc, &argv, NULL);
-	if (!ret)
-		goto out;
+	if (!g_option_context_parse (context, &argc, &argv, NULL))
+		return FALSE;
 
 	/* get from GSettings if we never specified on the command line */
 	if (last_device == NULL)
@@ -1828,18 +1804,16 @@ gpm_stats_commandline_cb (GApplication *application,
 	/* set the correct focus on the last device */
 	if (last_device != NULL) {
 		ret = gpm_stats_highlight_device (last_device);
-		if (!ret)
+		if (!ret) {
 			g_warning ("failed to select");
-		g_free (last_device);
+			return FALSE;
+		}
 	}
 
 	/* make sure the window is raised */
 	window = GTK_WINDOW (gtk_builder_get_object (builder, "dialog_stats"));
 	gtk_window_present (window);
-out:
-	g_strfreev (argv);
-	g_option_context_free (context);
-	return ret;
+	return TRUE;
 }
 
 /**
@@ -2050,7 +2024,7 @@ gpm_stats_startup_cb (GApplication *application,
 	ret = up_wakeups_get_has_capability (wakeups);
 	if (ret) {
 		GtkTreeIter iter;
-		GIcon *icon;
+		g_autoptr(GIcon) icon;
 		icon = g_themed_icon_new ("computer");
 		gtk_list_store_append (list_store_devices, &iter);
 		gtk_list_store_set (list_store_devices, &iter,
@@ -2058,7 +2032,6 @@ gpm_stats_startup_cb (GApplication *application,
 				    /* TRANSLATORS: the icon for the CPU */
 				    GPM_DEVICES_COLUMN_TEXT, _("Processor"),
 				    GPM_DEVICES_COLUMN_ICON, icon, -1);
-		g_object_unref (icon);
 	}
 
 	/* set axis */
@@ -2078,7 +2051,7 @@ gpm_stats_startup_cb (GApplication *application,
 int
 main (int argc, char *argv[])
 {
-	GtkApplication *application;
+	g_autoptr(GtkApplication) application;
 	int status = 0;
 
 	setlocale (LC_ALL, "");
@@ -2112,6 +2085,5 @@ main (int argc, char *argv[])
 	if (devices != NULL)
 		g_ptr_array_unref (devices);
 	g_object_unref (settings);
-	g_object_unref (application);
 	return status;
 }

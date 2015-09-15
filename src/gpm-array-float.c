@@ -61,7 +61,7 @@ gpm_array_float_new (guint length)
 	array->len = length;
 
 	/* clear to 0.0 */
-	for (i=0; i<length; i++)
+	for (i = 0; i < length; i++)
 		g_array_index (array, gfloat, i) = 0.0;
 	return array;
 }
@@ -118,7 +118,7 @@ gpm_array_float_get_average (GpmArrayFloat *array)
 	gfloat average = 0;
 
 	length = array->len;
-	for (i=0; i<length; i++)
+	for (i = 0; i < length; i++)
 		average += g_array_index (array, gfloat, i);
 	return average / (gfloat) length;
 }
@@ -147,7 +147,7 @@ gpm_array_float_compute_gaussian (guint length, gfloat sigma)
 
 	/* array positions 0..length, has to be an odd number */
 	half_length = (length / 2) + 1;
-	for (i=0; i<half_length; i++) {
+	for (i = 0; i < half_length; i++) {
 		division = half_length - (i + 1);
 		g_debug ("half_length=%i, div=%f, sigma=%f", half_length, division, sigma);
 		g_array_index (array, gfloat, i) = gpm_array_float_guassian_value (division, sigma);
@@ -185,7 +185,7 @@ gpm_array_float_sum (GpmArrayFloat *array)
 	gfloat total = 0;
 
 	length = array->len;
-	for (i=0; i<length; i++)
+	for (i = 0; i < length; i++)
 		total += g_array_index (array, gfloat, i);
 	return total;
 }
@@ -205,7 +205,7 @@ gpm_array_float_print (GpmArrayFloat *array)
 
 	length = array->len;
 	/* debug out */
-	for (i=0; i<length; i++)
+	for (i = 0; i < length; i++)
 		g_debug ("[%i]\tval=%f", i, g_array_index (array, gfloat, i));
 	return TRUE;
 }

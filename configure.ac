@@ -1,6 +1,6 @@
 AC_PREREQ(2.63)
 
-AC_INIT([gnome-power-manager],[3.17.91])
+AC_INIT([gnome-power-manager],[3.17.92])
 AC_CONFIG_SRCDIR(src)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-xz tar-ustar foreign])
@@ -68,7 +68,7 @@ GLIB_GSETTINGS
 dnl ---------------------------------------------------------------------------
 dnl - Check library dependencies
 dnl ---------------------------------------------------------------------------
-PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.36.0 gobject-2.0 gio-2.0 >= 2.25.9)
+PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.45.8 gobject-2.0 gio-2.0 >= 2.25.9)
 
 PKG_CHECK_MODULES(GNOME, [
  gtk+-3.0 >= 3.3.8
