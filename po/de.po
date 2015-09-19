@@ -14,22 +14,23 @@
 # Mario Blättermann <mario.blaettermann@gmail.com>, 2009, 2013.
 # Wolfgang Stöggl <c72578@yahoo.de>, 2009, 2010, 2014.
 # Christian Kirbach <Christian.Kirbach@googlemail.com>, 2009, 2010, 2011.
+# Bernd Homuth <dev@hmt.im>, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-09-24 07:22+0000\n"
-"PO-Revision-Date: 2014-09-24 15:50+0100\n"
-"Last-Translator: Wolfgang Stoeggl <c72578@yahoo.de>\n"
+"POT-Creation-Date: 2015-09-19 08:03+0000\n"
+"PO-Revision-Date: 2015-09-19 19:54+0200\n"
+"Last-Translator: Bernd Homuth <dev@hmt.im>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.9\n"
+"X-Generator: Gtranslator 2.91.6\n"
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:1
 msgid "Whether we should show the history data points"
@@ -122,6 +123,16 @@ msgstr ""
 "korrekte Gerät verwendet wird."
 
 #: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:1
+#| msgid "Power Statistics"
+msgid "GNOME Power Statistics"
+msgstr "GNOME-Energiestatistiken"
+
+#: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:2
+#: ../data/gnome-power-statistics.desktop.in.in.h:2
+msgid "Observe power management"
+msgstr "Energiesparfunktionen überwachen"
+
+#: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:3
 msgid ""
 "Power Statistics can show historical and current battery information and "
 "programs waking up that use power."
@@ -129,7 +140,7 @@ msgstr ""
 "Energiestatistiken können Verlaufsdaten und aktuelle Akkuinformationen "
 "anzeigen sowie Programme, die Energie benötigen und den Rechner aufwecken."
 
-#: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:2
+#: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:4
 msgid ""
 "You probably only need to install this application if you are having "
 "problems with your laptop battery, or are trying to work out what programs "
@@ -143,13 +154,9 @@ msgstr ""
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:1
 #: ../src/gpm-statistics.ui.h:1 ../src/gpm-statistics.c:1372
-#: ../src/gpm-statistics.c:1837
+#: ../src/gpm-statistics.c:1818
 msgid "Power Statistics"
 msgstr "Energiestatistiken"
-
-#: ../data/gnome-power-statistics.desktop.in.in.h:2
-msgid "Observe power management"
-msgstr "Energiesparfunktionen überwachen"
 
 #: ../data/gnome-power-statistics.desktop.in.in.h:3
 msgid "battery;consumption;charge;"
@@ -800,16 +807,16 @@ msgid "Prediction accuracy"
 msgstr "Vorhersagegenauigkeit"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-statistics.c:1825
+#: ../src/gpm-statistics.c:1806
 msgid "Show extra debugging information"
 msgstr "Zusätzliche Informationen zur Fehlererkennung anzeigen"
 
 #. TRANSLATORS: show a device by default
-#: ../src/gpm-statistics.c:1828
+#: ../src/gpm-statistics.c:1809
 msgid "Select this device at startup"
 msgstr "Dieses Gerät wird beim Start gewählt"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:2088
+#: ../src/gpm-statistics.c:2059
 msgid "Processor"
 msgstr "Prozessor"
