@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2013 Richard Hughes <richard@hughsie.com> -->
-<application>
-  <id type="desktop">gnome-power-statistics.desktop</id>
-  <licence>CC0</licence>
+<component type="desktop">
+  <id>gnome-power-statistics.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+ and GFDL-1.3</project_license>
   <_name>GNOME Power Statistics</_name>
   <_summary>Observe power management</_summary>
   <description>
@@ -17,20 +18,32 @@
     </_p>
   </description>
   <screenshots>
-    <screenshot type="default">https://git.gnome.org/browse/gnome-power-manager/plain/data/appdata/gpm-stats-history.png</screenshot>
-    <screenshot>https://git.gnome.org/browse/gnome-power-manager/plain/data/appdata/gpm-stats-wakeups.png</screenshot>
+    <screenshot type="default">
+      <image>https://git.gnome.org/browse/gnome-power-manager/plain/data/appdata/gpm-stats-history.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://git.gnome.org/browse/gnome-power-manager/plain/data/appdata/gpm-stats-wakeups.png</image>
+    </screenshot>
   </screenshots>
+
   <!--
    Validate with `appstream-util validate *.appdata.xml`
-   Use `date -d "2010-10-02" "+%s"` to get the timestamp.
   -->
   <releases>
-    <release version="3.18.0" timestamp="1442827658">
+    <release date="2016-02-15" version="3.19.90">
+      <description>
+        <p>
+          This unstable release fixes some software center metadata and
+          updates three translations.
+        </p>
+      </description>
+    </release>
+    <release timestamp="1442827658" version="3.18.0">
       <description>
         <p>This is the first stable release for GNOME 3.18</p>
       </description>
     </release>
-    <release version="3.17.90" timestamp="1439988801">
+    <release timestamp="1439988801" version="3.17.90">
       <description>
         <p>
           This unstable release provides a symbolic variant of the app icon and
@@ -38,22 +51,22 @@
         </p>
       </description>
     </release>
-    <release version="3.16.0" timestamp="1427103917">
+    <release timestamp="1427103917" version="3.16.0">
       <description>
         <p>This stable release marks the release of GNOME 3.16!</p>
       </description>
     </release>
-    <release version="3.15.92" timestamp="1426498834">
+    <release timestamp="1426498834" version="3.15.92">
       <description>
         <p>This release only updates translations.</p>
       </description>
     </release>
-    <release version="3.15.91" timestamp="1425299116">
+    <release timestamp="1425299116" version="3.15.91">
       <description>
         <p>This release only updates translations.</p>
       </description>
     </release>
-    <release version="3.15.90" timestamp="1390089600">
+    <release timestamp="1390089600" version="3.15.90">
       <description>
         <p>This release updates the header style to match other GNOME applications.</p>
       </description>
@@ -65,7 +78,9 @@
     <kudo>ModernToolkit</kudo>
   </kudos>
   <url type="homepage">http://www.gnome.org/projects/gnome-power-manager/</url>
-  <updatecontact>richard_at_hughsie.com</updatecontact>
+  <url type="bugtracker">https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-power-manager</url>
+  <url type="donation">http://www.gnome.org/friends/</url>
+  <update_contact>richard_at_hughsie.com</update_contact>
   <project_group>GNOME</project_group>
   <translation type="gettext">gnome-power-manager</translation>
-</application>
+</component>
