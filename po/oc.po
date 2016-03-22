@@ -2,23 +2,25 @@
 # Occitan translation of gnome-power-manager.
 # Copyright (C) 2005-2007 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnome-power-manager package.
-#
 # Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>, 2006-2008.
+# Cédric Valmary (totenoc.eu) <cvalmary@yahoo.fr>, 2016.
 msgid ""
 msgstr ""
 "Project-Id-Version: oc\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-30 11:38+0000\n"
-"PO-Revision-Date: 2013-07-06 14:20+0000\n"
-"Last-Translator: Cédric VALMARY (Tot en òc) <cvalmary@yahoo.fr>\n"
-"Language-Team: Occitan <ubuntu-l10n-oci@lists.ubuntu.com>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"power-manager&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2015-05-20 19:47+0000\n"
+"PO-Revision-Date: 2016-03-22 18:37+0200\n"
+"Last-Translator: Cédric Valmary (totenoc.eu) <cvalmary@yahoo.fr>\n"
+"Language-Team: Tot En Òc\n"
+"Language: oc\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Virtaal 0.7.1\n"
 "X-Launchpad-Export-Date: 2015-05-20 15:20+0000\n"
-"X-Generator: Launchpad (build 17508)\n"
-"Language: oc\n"
+"X-Project-Style: gnome\n"
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:1
 msgid "Whether we should show the history data points"
@@ -62,15 +64,14 @@ msgid "Whether we should show the stats data points"
 msgstr "Indica se los punts de las estatisticas an d'èsser afichats"
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:10
-msgid ""
-"Whether we should show the stats data points in the statistics window."
+msgid "Whether we should show the stats data points in the statistics window."
 msgstr ""
 "Indica se los punts de las estatisticas an d'èsser afichats dins la fenèstra "
 "de las estatisticas."
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:11
 msgid "Whether we should smooth the stats data"
-msgstr "Indica se las donadas de las estatisticas an d'èsser lissadasa"
+msgstr "Indica se las donadas de las estatisticas an d'èsser lissadas"
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:12
 msgid "Whether we should smooth the stats data in the graph."
@@ -111,12 +112,22 @@ msgstr ""
 "al bon periferic."
 
 #: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:1
+#| msgid "Power Statistics"
+msgid "GNOME Power Statistics"
+msgstr "Estatisticas de l'alimentacion GNOME"
+
+#: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:2
+#: ../data/gnome-power-statistics.desktop.in.in.h:2
+msgid "Observe power management"
+msgstr "Susvellha la gestion d'energia"
+
+#: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:3
 msgid ""
 "Power Statistics can show historical and current battery information and "
 "programs waking up that use power."
 msgstr ""
 
-#: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:2
+#: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:4
 msgid ""
 "You probably only need to install this application if you are having "
 "problems with your laptop battery, or are trying to work out what programs "
@@ -127,13 +138,9 @@ msgstr ""
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:1
 #: ../src/gpm-statistics.ui.h:1 ../src/gpm-statistics.c:1372
-#: ../src/gpm-statistics.c:1872
+#: ../src/gpm-statistics.c:1818
 msgid "Power Statistics"
 msgstr "Estatisticas de l'alimentacion"
-
-#: ../data/gnome-power-statistics.desktop.in.in.h:2
-msgid "Observe power management"
-msgstr "Susvellha la gestion d'energia"
 
 #: ../data/gnome-power-statistics.desktop.in.in.h:3
 msgid "battery;consumption;charge;"
@@ -145,11 +152,11 @@ msgstr "Detalhs"
 
 #: ../src/gpm-statistics.ui.h:3
 msgid "Graph type:"
-msgstr "Tipe de grafic :"
+msgstr "Tipe de grafic :"
 
 #: ../src/gpm-statistics.ui.h:4
 msgid "Data length:"
-msgstr "Longor de las donadas :"
+msgstr "Longor de las donadas :"
 
 #: ../src/gpm-statistics.ui.h:5
 msgid "There is no data to display."
@@ -173,7 +180,7 @@ msgstr "Estatisticas"
 
 #: ../src/gpm-statistics.ui.h:10
 msgid "Processor wakeups per second:"
-msgstr "Nombre de revelhs del processor per segonda :"
+msgstr "Nombre de revelhs del processor per segonda :"
 
 #: ../src/gpm-statistics.ui.h:11
 msgid "0"
@@ -187,13 +194,13 @@ msgstr "Revelhs"
 #: ../src/gpm-graph-widget.c:426
 #, c-format
 msgid "%id"
-msgstr "%i j"
+msgstr "%i j"
 
 #. Translators: This is %i days %02i hours
 #: ../src/gpm-graph-widget.c:429
 #, c-format
 msgid "%id%02ih"
-msgstr "%i j %02i h"
+msgstr "%i j %02i h"
 
 #. Translators: This is %i hours
 #: ../src/gpm-graph-widget.c:434
@@ -205,7 +212,7 @@ msgstr "%i o"
 #: ../src/gpm-graph-widget.c:437
 #, c-format
 msgid "%ih%02im"
-msgstr "%i h %02i m"
+msgstr "%i h %02i m"
 
 #. Translators: This is %2i minutes
 #: ../src/gpm-graph-widget.c:442
@@ -229,7 +236,7 @@ msgstr "%2is"
 #: ../src/gpm-graph-widget.c:453
 #, c-format
 msgid "%i%%"
-msgstr "%i %%"
+msgstr "%i %%"
 
 #. Translators: This is %.1f Watts
 #: ../src/gpm-graph-widget.c:456
@@ -262,11 +269,11 @@ msgstr "Durada de la descarga"
 
 #: ../src/gpm-statistics.c:92
 msgid "10 minutes"
-msgstr "10 minutas"
+msgstr "10 minutas"
 
 #: ../src/gpm-statistics.c:93
 msgid "2 hours"
-msgstr "2 oras"
+msgstr "2 oras"
 
 #: ../src/gpm-statistics.c:94
 msgid "6 hours"
@@ -274,7 +281,7 @@ msgstr "6 oras"
 
 #: ../src/gpm-statistics.c:95
 msgid "1 day"
-msgstr "1 jorn"
+msgstr "1 jorn"
 
 #: ../src/gpm-statistics.c:96
 msgid "1 week"
@@ -542,8 +549,8 @@ msgstr "Alimentacion"
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
-msgstr[0] "%d segonda"
-msgstr[1] "%d segondas"
+msgstr[0] "%d segonda"
+msgstr[1] "%d segondas"
 
 #. TRANSLATORS: when the device was last updated with new data. It's
 #. * usually a few seconds when a device is discharging or charging.
@@ -714,7 +721,7 @@ msgstr "Activitat USB %s"
 #: ../src/gpm-statistics.c:1247
 #, c-format
 msgid "Wakeup %s"
-msgstr "Despèrtament de %s"
+msgstr "Despertament de %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
 #: ../src/gpm-statistics.c:1250
@@ -744,7 +751,7 @@ msgstr "Perfil del periferic"
 #. TRANSLATORS: shown on the titlebar
 #: ../src/gpm-statistics.c:1368
 msgid "Processor Wakeups"
-msgstr "Despèrtaments del processor"
+msgstr "Despertaments del processor"
 
 #. TRANSLATORS: this is the X axis on the graph
 #: ../src/gpm-statistics.c:1575 ../src/gpm-statistics.c:1581
@@ -781,16 +788,16 @@ msgid "Prediction accuracy"
 msgstr "Precision de la prediccion"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-statistics.c:1860
+#: ../src/gpm-statistics.c:1806
 msgid "Show extra debugging information"
 msgstr "Aficha las informacions de desbugatge"
 
 #. TRANSLATORS: show a device by default
-#: ../src/gpm-statistics.c:1863
+#: ../src/gpm-statistics.c:1809
 msgid "Select this device at startup"
 msgstr "Seleccionar aqueste periferic a l'aviada"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:2127
+#: ../src/gpm-statistics.c:2059
 msgid "Processor"
 msgstr "Processor"
