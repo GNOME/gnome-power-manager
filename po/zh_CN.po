@@ -20,8 +20,8 @@ msgstr ""
 "Project-Id-Version: gnome-power-manager master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-01-22 20:06+0000\n"
-"PO-Revision-Date: 2014-01-25 11:05+0800\n"
+"POT-Creation-Date: 2016-04-08 21:18+0000\n"
+"PO-Revision-Date: 2016-04-09 13:12+0800\n"
 "Last-Translator: YunQiang Su <wzssyqa@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -29,6 +29,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:1
 msgid "Whether we should show the history data points"
@@ -109,12 +110,21 @@ msgid ""
 msgstr "上一设备的标识符，用来将焦点返回到正确的设备。"
 
 #: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:1
+msgid "GNOME Power Statistics"
+msgstr "GNOME 电源统计"
+
+#: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:2
+#: ../data/gnome-power-statistics.desktop.in.in.h:2
+msgid "Observe power management"
+msgstr "监控电源管理"
+
+#: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:3
 msgid ""
 "Power Statistics can show historical and current battery information and "
 "programs waking up that use power."
 msgstr "电量统计可以显示历史和当前电池状态以及唤醒并耗电的程序。"
 
-#: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:2
+#: ../data/appdata/gnome-power-statistics.appdata.xml.in.h:4
 msgid ""
 "You probably only need to install this application if you are having "
 "problems with your laptop battery, or are trying to work out what programs "
@@ -127,13 +137,9 @@ msgstr ""
 #. TRANSLATORS: the program name
 #: ../data/gnome-power-statistics.desktop.in.in.h:1
 #: ../src/gpm-statistics.ui.h:1 ../src/gpm-statistics.c:1372
-#: ../src/gpm-statistics.c:1837
+#: ../src/gpm-statistics.c:1818
 msgid "Power Statistics"
 msgstr "电源统计"
-
-#: ../data/gnome-power-statistics.desktop.in.in.h:2
-msgid "Observe power management"
-msgstr "监控电源管理"
 
 #: ../data/gnome-power-statistics.desktop.in.in.h:3
 msgid "battery;consumption;charge;"
@@ -765,16 +771,16 @@ msgid "Prediction accuracy"
 msgstr "预测准确度"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-statistics.c:1825
+#: ../src/gpm-statistics.c:1806
 msgid "Show extra debugging information"
 msgstr "显示额外的调试信息"
 
 #. TRANSLATORS: show a device by default
-#: ../src/gpm-statistics.c:1828
+#: ../src/gpm-statistics.c:1809
 msgid "Select this device at startup"
 msgstr "在启动时选择这个设备"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:2088
+#: ../src/gpm-statistics.c:2059
 msgid "Processor"
 msgstr "处理器"
