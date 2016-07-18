@@ -1,7 +1,7 @@
 Follow http://developer.gnome.org/dotplan/for_maintainers.html
 
 git log --format="%s" GNOME_POWER_MANAGER_3_20_1.. | grep -i -v trivial | grep -v Merge | uniq
-Add any user visible changes into data/appdata/gnome-power-statistics.appdata.xml.in
+Add any user visible changes into data/appdata/org.gnome.PowerStats.appdata.xml.in
 
 Run "make distcheck", correct any problems encountered
 

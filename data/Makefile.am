@@ -2,7 +2,7 @@ SUBDIRS = appdata icons
 
 @INTLTOOL_DESKTOP_RULE@
 desktopdir = $(datadir)/applications
-desktop_in_files = gnome-power-statistics.desktop.in
+desktop_in_files = org.gnome.PowerStats.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 @GSETTINGS_RULES@
@@ -16,7 +16,7 @@ clean-local :
 	rm -f *~
 
 DISTCLEANFILES =					\
-	gnome-power-statistics.desktop			\
+	org.gnome.PowerStats.desktop			\
 	org.gnome.power-manager.gschema.xml
 
 -include $(top_srcdir)/git.mk

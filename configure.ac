@@ -1,6 +1,6 @@
 AC_PREREQ(2.63)
 
-AC_INIT([gnome-power-manager],[3.21.1])
+AC_INIT([gnome-power-manager],[3.21.4])
 AC_CONFIG_SRCDIR(src)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-xz tar-ustar foreign])
@@ -115,7 +115,7 @@ src/Makefile
 man/Makefile
 po/Makefile.in
 data/Makefile
-data/gnome-power-statistics.desktop.in
+data/org.gnome.PowerStats.desktop.in
 data/appdata/Makefile
 data/icons/Makefile
 data/icons/hicolor/Makefile
