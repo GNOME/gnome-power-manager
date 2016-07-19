@@ -6,7 +6,7 @@ Version: #VERSION#
 Release: 1.#BUILD#%{?alphatag}%{?dist}
 License: GPLv2+ and GFDL
 Group: Applications/System
-Source: http://download.gnome.org/sources/gnome-power-manager/3.11/gnome-power-manager-%{version}.tar.xz
+Source: http://download.gnome.org/sources/gnome-power-manager/3.21/gnome-power-manager-%{version}.tar.xz
 URL: http://projects.gnome.org/gnome-power-manager/
 
 BuildRequires: desktop-file-utils
@@ -18,8 +18,6 @@ BuildRequires: intltool
 BuildRequires: glib2-devel >= 2.25.9
 BuildRequires: gtk3-devel >= 2.91.3
 BuildRequires: docbook-utils
-
-Requires: gnome-icon-theme
 
 # obsolete sub-package
 Obsoletes: gnome-power-manager-extra <= 2.30.1
@@ -37,36 +35,35 @@ displaying icons and handling user callbacks in an interactive GNOME session.
 make
 
 %install
-make install DESTDIR=$RPM_BUILD_ROOT
+%make_install
 
 %find_lang %name --with-gnome
 
 %post
-touch --no-create %{_datadir}/icons/hicolor
-if [ -x /usr/bin/gtk-update-icon-cache ]; then
-    gtk-update-icon-cache -q %{_datadir}/icons/hicolor &> /dev/null || :
-fi
-update-desktop-database %{_datadir}/applications &> /dev/null || :
-glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
+touch --no-create %{_datadir}/icons/hicolor &> /dev/null || :
 
 %postun
-touch --no-create %{_datadir}/icons/hicolor
-if [ -x /usr/bin/gtk-update-icon-cache ]; then
-    gtk-update-icon-cache -q %{_datadir}/icons/hicolor &> /dev/null || :
+update-desktop-database %{_datadir}/applications &> /dev/null || :
+if [ $1 -eq 0 ]; then
+  touch --no-create %{_datadir}/icons/hicolor &> /dev/null || :
+  gtk-update-icon-cache %{_datadir}/icons/hicolor &> /dev/null || :
+  glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 fi
+
+%posttrans
+gtk-update-icon-cache %{_datadir}/icons/hicolor &> /dev/null || :
 update-desktop-database %{_datadir}/applications &> /dev/null || :
 glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 %files -f %{name}.lang
-%defattr(-,root,root)
-%doc AUTHORS COPYING README
+%license COPYING
+%doc AUTHORS README
 %{_bindir}/*
 %{_datadir}/appdata/*.appdata.xml
 %{_datadir}/applications/*.desktop
 %{_datadir}/glib-2.0/schemas/*.gschema.xml
 %{_datadir}/icons/hicolor/*/apps/org.gnome.PowerStats.*
-%{_datadir}/icons/HighContrast/*/apps/org.gnome.PowerStats.*
-%{_datadir}/glib-2.0/schemas/*.gschema.xml
+%{_datadir}/icons/hicolor/symbolic/apps/org.gnome.PowerStats-symbolic.svg
 %{_mandir}/man1/*.1.gz
 
 %changelog
