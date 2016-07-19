@@ -151,8 +151,8 @@ gpm_stats_get_device_icon (UpDevice *device, gboolean use_symbolic)
 	gboolean is_present;
 	gdouble percentage;
 	GIcon *icon = NULL;
-	g_auto(GStrv) iconnames;
-	g_autoptr(GString) filename;
+	g_auto(GStrv) iconnames = NULL;
+	g_autoptr(GString) filename = NULL;
 
 	g_return_val_if_fail (device != NULL, NULL);
 
@@ -1461,7 +1461,7 @@ gpm_stats_add_device (UpDevice *device)
 	GtkTreeIter iter;
 	const gchar *text;
 	UpDeviceKind kind;
-	g_autoptr(GIcon) icon;
+	g_autoptr(GIcon) icon = NULL;
 
 	/* get device properties */
 	g_object_get (device,
@@ -1775,7 +1775,7 @@ gpm_stats_commandline_cb (GApplication *application,
 	GtkWindow *window;
 	g_auto(GStrv) argv;
 	g_autofree gchar *last_device =  NULL;
-	g_autoptr(GOptionContext) context;
+	g_autoptr(GOptionContext) context = NULL;
 
 	const GOptionEntry options[] = {
 		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
@@ -2024,7 +2024,7 @@ gpm_stats_startup_cb (GApplication *application,
 	ret = up_wakeups_get_has_capability (wakeups);
 	if (ret) {
 		GtkTreeIter iter;
-		g_autoptr(GIcon) icon;
+		g_autoptr(GIcon) icon = NULL;
 		icon = g_themed_icon_new ("computer");
 		gtk_list_store_append (list_store_devices, &iter);
 		gtk_list_store_set (list_store_devices, &iter,
@@ -2051,7 +2051,7 @@ gpm_stats_startup_cb (GApplication *application,
 int
 main (int argc, char *argv[])
 {
-	g_autoptr(GtkApplication) application;
+	g_autoptr(GtkApplication) application = NULL;
 	int status = 0;
 
 	setlocale (LC_ALL, "");
