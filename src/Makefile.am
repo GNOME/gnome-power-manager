@@ -47,7 +47,7 @@ gnome_power_statistics_LDADD =				\
 	-lm
 
 gnome_power_statistics_CFLAGS =				\
-	$(WARNINGFLAGS)
+	$(WARN_CFLAGS)
 
 gnome_power_self_test_SOURCES =				\
 	gpm-array-float.h				\
@@ -64,6 +64,9 @@ gnome_power_self_test_LDADD =				\
 	$(NOTIFY_LIBS)					\
 	$(GPM_EXTRA_LIBS)				\
 	-lm
+
+gnome_power_self_test_CFLAGS =				\
+	$(WARN_CFLAGS)
 
 gnome_power_self_test_CFLAGS = -DEGG_TEST $(AM_CFLAGS) $(WARNINGFLAGS)
 

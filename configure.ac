@@ -21,33 +21,52 @@ GNOME_COMPILE_WARNINGS
 
 AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal)
 
-if test "$GCC" = "yes"; then
-	WARNINGFLAGS="$WARNINGFLAGS -Wall"
-	WARNINGFLAGS="$WARNINGFLAGS -Wcast-align -Wno-uninitialized"
-	WARNINGFLAGS="$WARNINGFLAGS -Wmissing-declarations"
-	WARNINGFLAGS="$WARNINGFLAGS -Wpointer-arith"
-	WARNINGFLAGS="$WARNINGFLAGS -Wcast-align"
-	WARNINGFLAGS="$WARNINGFLAGS -Wwrite-strings"
-	WARNINGFLAGS="$WARNINGFLAGS -Winit-self"
-	WARNINGFLAGS="$WARNINGFLAGS -Wreturn-type"
-	WARNINGFLAGS="$WARNINGFLAGS -Wformat-nonliteral"
-	WARNINGFLAGS="$WARNINGFLAGS -Wformat-security"
-	WARNINGFLAGS="$WARNINGFLAGS -Wmissing-include-dirs"
-	WARNINGFLAGS="$WARNINGFLAGS -Wmissing-format-attribute"
-	WARNINGFLAGS="$WARNINGFLAGS -Wclobbered"
-	WARNINGFLAGS="$WARNINGFLAGS -Wempty-body"
-	WARNINGFLAGS="$WARNINGFLAGS -Wignored-qualifiers"
-	WARNINGFLAGS="$WARNINGFLAGS -Wtype-limits"
-	WARNINGFLAGS="$WARNINGFLAGS -Wdeclaration-after-statement"
-	WARNINGFLAGS="$WARNINGFLAGS -Wshadow"
-	WARNINGFLAGS="$WARNINGFLAGS -Winline"
-	WARNINGFLAGS="$WARNINGFLAGS -Wmissing-parameter-type"
-	WARNINGFLAGS="$WARNINGFLAGS -Woverride-init"
-	WARNINGFLAGS="$WARNINGFLAGS -Wno-strict-aliasing"
-else
-	WARNINGFLAGS=""
-fi
-AC_SUBST(WARNINGFLAGS)
+WARN_CFLAGS_EXTRA="
+	-Waggregate-return
+	-Warray-bounds
+	-Wcast-align
+	-Wclobbered
+	-Wdeclaration-after-statement
+	-Wempty-body
+	-Wextra
+	-Wformat=2
+	-Wformat-nonliteral
+	-Wformat-security
+	-Wformat-signedness
+	-Wignored-qualifiers
+	-Wimplicit-function-declaration
+	-Winit-self
+	-Winline
+	-Wmissing-declarations
+	-Wmissing-format-attribute
+	-Wmissing-include-dirs
+	-Wmissing-noreturn
+	-Wmissing-parameter-type
+	-Wmissing-prototypes
+	-Wnested-externs
+	-Wno-discarded-qualifiers
+	-Wno-missing-field-initializers
+	-Wno-strict-aliasing
+	-Wno-suggest-attribute=format
+	-Wno-unused-parameter
+	-Wold-style-definition
+	-Woverride-init
+	-Wpacked
+	-Wpointer-arith
+	-Wredundant-decls
+	-Wreturn-type
+	-Wshadow
+	-Wsign-compare
+	-Wstrict-aliasing
+	-Wstrict-prototypes
+	-Wswitch-default
+	-Wtype-limits
+	-Wundef
+	-Wuninitialized
+	-Wunused-but-set-variable
+	-Wwrite-strings"
+AX_APPEND_COMPILE_FLAGS([$WARN_CFLAGS_EXTRA], [WARN_CFLAGS])
+AC_SUBST(WARN_CFLAGS)
 
 dnl ---------------------------------------------------------------------------
 dnl - Debugging switches (uncomment this if you want to use gdb)

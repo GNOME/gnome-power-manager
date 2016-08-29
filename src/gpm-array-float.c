@@ -75,7 +75,7 @@ gfloat
 gpm_array_float_get (GpmArrayFloat *array, guint i)
 {
 	if (i >= array->len)
-		g_error ("above index! (%i)", i);
+		g_error ("above index! (%u)", i);
 	return g_array_index (array, gfloat, i);
 }
 
@@ -149,7 +149,7 @@ gpm_array_float_compute_gaussian (guint length, gfloat sigma)
 	half_length = (length / 2) + 1;
 	for (i = 0; i < half_length; i++) {
 		division = half_length - (i + 1);
-		g_debug ("half_length=%i, div=%f, sigma=%f", half_length, division, sigma);
+		g_debug ("half_length=%u, div=%f, sigma=%f", half_length, division, sigma);
 		g_array_index (array, gfloat, i) = gpm_array_float_guassian_value (division, sigma);
 	}
 
@@ -206,7 +206,7 @@ gpm_array_float_print (GpmArrayFloat *array)
 	length = array->len;
 	/* debug out */
 	for (i = 0; i < length; i++)
-		g_debug ("[%i]\tval=%f", i, g_array_index (array, gfloat, i));
+		g_debug ("[%u]\tval=%f", i, g_array_index (array, gfloat, i));
 	return TRUE;
 }
 

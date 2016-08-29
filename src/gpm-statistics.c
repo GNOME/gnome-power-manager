@@ -289,7 +289,7 @@ gpm_device_kind_to_localised_string (UpDeviceKind kind, guint number)
 		break;
 #endif
 	default:
-		g_warning ("enum unrecognised: %i", kind);
+		g_warning ("enum unrecognised: %u", kind);
 		text = up_device_kind_to_string (kind);
 	}
 	return text;
@@ -600,9 +600,6 @@ gpm_stats_get_printable_device_path (UpDevice *device)
 static void
 gpm_stats_update_info_page_details (UpDevice *device)
 {
-	struct tm *time_tm;
-	time_t t;
-	gchar time_buf[256];
 	gchar *text;
 	guint refreshed;
 	UpDeviceKind kind;
@@ -655,11 +652,6 @@ gpm_stats_update_info_page_details (UpDevice *device)
 		      "model", &model,
 		      NULL);
 
-	/* get a human readable time */
-	t = (time_t) update_time;
-	time_tm = localtime (&t);
-	strftime (time_buf, sizeof time_buf, "%c", time_tm);
-
 	/* remove prefix */
 	device_path = gpm_stats_get_printable_device_path (device);
 	/* TRANSLATORS: the device ID of the current device, e.g. "battery0" */
@@ -679,7 +671,7 @@ gpm_stats_update_info_page_details (UpDevice *device)
 	gpm_stats_add_info_data (_("Supply"), gpm_stats_bool_to_string (power_supply));
 
 	refreshed = (int) (time (NULL) - update_time);
-	text = g_strdup_printf (ngettext ("%d second", "%d seconds", refreshed), refreshed);
+	text = g_strdup_printf (ngettext ("%u second", "%u seconds", refreshed), refreshed);
 
 	/* TRANSLATORS: when the device was last updated with new data. It's
 	* usually a few seconds when a device is discharging or charging. */
@@ -1262,11 +1254,11 @@ gpm_stats_add_wakeups_item (UpWakeupItem *item)
 
 	if (up_wakeup_item_get_is_userspace (item)) {
 		icon = "application-x-executable";
-		id = g_strdup_printf ("%i", up_wakeup_item_get_id (item));
+		id = g_strdup_printf ("%u", up_wakeup_item_get_id (item));
 	} else {
 		icon = "applications-system";
 		if (up_wakeup_item_get_id (item) < 0xff0)
-			id = g_strdup_printf ("IRQ%i", up_wakeup_item_get_id (item));
+			id = g_strdup_printf ("IRQ%u", up_wakeup_item_get_id (item));
 		else
 			id = g_strdup ("IRQx");
 	}
@@ -1320,7 +1312,7 @@ gpm_stats_update_wakeups_data (void)
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "label_total_wakeups"));
 	if (error == NULL) {
 		g_autofree gchar *text = NULL;
-		text = g_strdup_printf ("%i", total);
+		text = g_strdup_printf ("%u", total);
 	} else {
 		gtk_label_set_label (GTK_LABEL(widget), error->message);
 		g_error_free (error);
@@ -1748,7 +1740,7 @@ gpm_stats_highlight_device (const gchar *object_path)
 				    -1);
 		if (g_strcmp0 (id, object_path) == 0) {
 			g_autofree gchar *path_str = NULL;
-			path_str = g_strdup_printf ("%i", i);
+			path_str = g_strdup_printf ("%u", i);
 			path = gtk_tree_path_new_from_string (path_str);
 			widget = GTK_WIDGET (gtk_builder_get_object (builder, "treeview_devices"));
 			gtk_tree_view_set_cursor_on_cell (GTK_TREE_VIEW (widget), path, NULL, NULL, FALSE);

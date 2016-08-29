@@ -59,7 +59,6 @@ struct _GpmGraphWidgetClass
 	GtkDrawingAreaClass parent_class;
 };
 
-GType		 gpm_graph_widget_get_type		(void);
 GtkWidget	*gpm_graph_widget_new			(void);
 
 gboolean	 gpm_graph_widget_data_clear		(GpmGraphWidget		*graph);
