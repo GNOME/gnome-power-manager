@@ -28,7 +28,7 @@
 #include <libupower-glib/upower.h>
 
 #include "gpm-array-float.h"
-#include "gpm-graph-widget.h"
+#include "egg-graph-widget.h"
 
 #define GPM_SETTINGS_SCHEMA				"org.gnome.power-manager"
 #define GPM_SETTINGS_INFO_HISTORY_TIME			"info-history-time"
@@ -495,8 +495,8 @@ static GPtrArray *
 gpm_stats_update_smooth_data (GPtrArray *list)
 {
 	guint i;
-	GpmPointObj *point;
-	GpmPointObj *point_new;
+	EggGraphPoint *point;
+	EggGraphPoint *point_new;
 	GPtrArray *new;
 	GpmArrayFloat *raw;
 	GpmArrayFloat *convolved;
@@ -506,7 +506,7 @@ gpm_stats_update_smooth_data (GPtrArray *list)
 	/* convert the y data to a GpmArrayFloat array */
 	raw = gpm_array_float_new (list->len);
 	for (i = 0; i < list->len; i++) {
-		point = (GpmPointObj *) g_ptr_array_index (list, i);
+		point = (EggGraphPoint *) g_ptr_array_index (list, i);
 		gpm_array_float_set (raw, i, point->y);
 	}
 
@@ -518,10 +518,10 @@ gpm_stats_update_smooth_data (GPtrArray *list)
 	convolved = gpm_array_float_convolve (outliers, gaussian);
 
 	/* add the smoothed data back into a new array */
-	new = g_ptr_array_new_with_free_func ((GDestroyNotify) gpm_point_obj_free);
+	new = g_ptr_array_new_with_free_func ((GDestroyNotify) egg_graph_point_free);
 	for (i = 0; i < list->len; i++) {
-		point = (GpmPointObj *) g_ptr_array_index (list, i);
-		point_new = g_new0 (GpmPointObj, 1);
+		point = (EggGraphPoint *) g_ptr_array_index (list, i);
+		point_new = g_new0 (EggGraphPoint, 1);
 		point_new->color = point->color;
 		point_new->x = point->x;
 		point_new->y = gpm_array_float_get (convolved, i);
@@ -776,19 +776,19 @@ gpm_stats_set_graph_data (GtkWidget *widget, GPtrArray *data, gboolean use_smoot
 {
 	GPtrArray *smoothed;
 
-	gpm_graph_widget_data_clear (GPM_GRAPH_WIDGET (widget));
+	egg_graph_widget_data_clear (EGG_GRAPH_WIDGET (widget));
 
 	/* add correct data */
 	if (!use_smoothed) {
 		if (use_points)
-			gpm_graph_widget_data_assign (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_PLOT_BOTH, data);
+			egg_graph_widget_data_add (EGG_GRAPH_WIDGET (widget), EGG_GRAPH_WIDGET_PLOT_BOTH, data);
 		else
-			gpm_graph_widget_data_assign (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_PLOT_LINE, data);
+			egg_graph_widget_data_add (EGG_GRAPH_WIDGET (widget), EGG_GRAPH_WIDGET_PLOT_LINE, data);
 	} else {
 		smoothed = gpm_stats_update_smooth_data (data);
 		if (use_points)
-			gpm_graph_widget_data_assign (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_PLOT_POINTS, data);
-		gpm_graph_widget_data_assign (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_PLOT_LINE, smoothed);
+			egg_graph_widget_data_add (EGG_GRAPH_WIDGET (widget), EGG_GRAPH_WIDGET_PLOT_POINTS, data);
+		egg_graph_widget_data_add (EGG_GRAPH_WIDGET (widget), EGG_GRAPH_WIDGET_PLOT_LINE, smoothed);
 		g_ptr_array_unref (smoothed);
 	}
 
@@ -824,39 +824,39 @@ gpm_stats_update_info_page_history (UpDevice *device)
 	GtkWidget *widget;
 	gboolean checked;
 	gboolean points;
-	GpmPointObj *point;
+	EggGraphPoint *point;
 	GPtrArray *new;
 	gint32 offset = 0;
 	GTimeVal timeval;
 
-	new = g_ptr_array_new_with_free_func ((GDestroyNotify) gpm_point_obj_free);
+	new = g_ptr_array_new_with_free_func ((GDestroyNotify) egg_graph_point_free);
 	if (g_strcmp0 (history_type, GPM_HISTORY_CHARGE_VALUE) == 0) {
 		g_object_set (graph_history,
-			      "type-x", GPM_GRAPH_WIDGET_TYPE_TIME,
-			      "type-y", GPM_GRAPH_WIDGET_TYPE_PERCENTAGE,
+			      "type-x", EGG_GRAPH_WIDGET_KIND_TIME,
+			      "type-y", EGG_GRAPH_WIDGET_KIND_PERCENTAGE,
 			      "autorange-x", FALSE,
-			      "start-x", -history_time,
-			      "stop-x", 0,
+			      "start-x", -(gdouble) history_time,
+			      "stop-x", (gdouble) 0.f,
 			      "autorange-y", FALSE,
-			      "start-y", 0,
-			      "stop-y", 100,
+			      "start-y", (gdouble) 0.f,
+			      "stop-y", (gdouble) 100.f,
 			      NULL);
 	} else if (g_strcmp0 (history_type, GPM_HISTORY_RATE_VALUE) == 0) {
 		g_object_set (graph_history,
-			      "type-x", GPM_GRAPH_WIDGET_TYPE_TIME,
-			      "type-y", GPM_GRAPH_WIDGET_TYPE_POWER,
+			      "type-x", EGG_GRAPH_WIDGET_KIND_TIME,
+			      "type-y", EGG_GRAPH_WIDGET_KIND_POWER,
 			      "autorange-x", FALSE,
-			      "start-x", -history_time,
-			      "stop-x", 0,
+			      "start-x", -(gdouble) history_time,
+			      "stop-x", (gdouble) 0.f,
 			      "autorange-y", TRUE,
 			      NULL);
 	} else {
 		g_object_set (graph_history,
-			      "type-x", GPM_GRAPH_WIDGET_TYPE_TIME,
-			      "type-y", GPM_GRAPH_WIDGET_TYPE_TIME,
+			      "type-x", EGG_GRAPH_WIDGET_KIND_TIME,
+			      "type-y", EGG_GRAPH_WIDGET_KIND_TIME,
 			      "autorange-x", FALSE,
-			      "start-x", -history_time,
-			      "stop-x", 0,
+			      "start-x", -(gdouble) history_time,
+			      "stop-x", (gdouble) 0.f,
 			      "autorange-y", TRUE,
 			      NULL);
 	}
@@ -884,7 +884,7 @@ gpm_stats_update_info_page_history (UpDevice *device)
 		if (up_history_item_get_state (item) == UP_DEVICE_STATE_UNKNOWN)
 			continue;
 
-		point = gpm_point_obj_new ();
+		point = egg_graph_point_new ();
 		point->x = (gint32) up_history_item_get_time (item) - offset;
 		point->y = up_history_item_get_value (item);
 		if (up_history_item_get_state (item) == UP_DEVICE_STATE_CHARGING)
@@ -932,12 +932,12 @@ gpm_stats_update_info_page_stats (UpDevice *device)
 	GtkWidget *widget;
 	gboolean checked;
 	gboolean points;
-	GpmPointObj *point;
+	EggGraphPoint *point;
 	GPtrArray *new;
 	gboolean use_data = FALSE;
 	const gchar *type = NULL;
 
-	new = g_ptr_array_new_with_free_func ((GDestroyNotify) gpm_point_obj_free);
+	new = g_ptr_array_new_with_free_func ((GDestroyNotify) egg_graph_point_free);
 	if (g_strcmp0 (stats_type, GPM_STATS_CHARGE_DATA_VALUE) == 0) {
 		type = "charging";
 		use_data = TRUE;
@@ -956,15 +956,15 @@ gpm_stats_update_info_page_stats (UpDevice *device)
 
 	if (use_data) {
 		g_object_set (graph_statistics,
-			      "type-x", GPM_GRAPH_WIDGET_TYPE_PERCENTAGE,
-			      "type-y", GPM_GRAPH_WIDGET_TYPE_FACTOR,
+			      "type-x", EGG_GRAPH_WIDGET_KIND_PERCENTAGE,
+			      "type-y", EGG_GRAPH_WIDGET_KIND_FACTOR,
 			      "autorange-x", TRUE,
 			      "autorange-y", TRUE,
 			      NULL);
 	} else {
 		g_object_set (graph_statistics,
-			      "type-x", GPM_GRAPH_WIDGET_TYPE_PERCENTAGE,
-			      "type-y", GPM_GRAPH_WIDGET_TYPE_PERCENTAGE,
+			      "type-x", EGG_GRAPH_WIDGET_KIND_PERCENTAGE,
+			      "type-y", EGG_GRAPH_WIDGET_KIND_PERCENTAGE,
 			      "autorange-x", TRUE,
 			      "autorange-y", TRUE,
 			      NULL);
@@ -985,7 +985,7 @@ gpm_stats_update_info_page_stats (UpDevice *device)
 
 	for (i = 0; i < array->len; i++) {
 		item = (UpStatsItem *) g_ptr_array_index (array, i);
-		point = gpm_point_obj_new ();
+		point = egg_graph_point_new ();
 		point->x = i;
 		if (use_data)
 			point->y = up_stats_item_get_value (item);
@@ -1844,14 +1844,14 @@ gpm_stats_startup_cb (GApplication *application,
 
 	/* add history graph */
 	box = GTK_BOX (gtk_builder_get_object (builder, "hbox_history"));
-	graph_history = gpm_graph_widget_new ();
+	graph_history = egg_graph_widget_new ();
 	gtk_box_pack_start (box, graph_history, TRUE, TRUE, 0);
 	gtk_widget_set_size_request (graph_history, 400, 250);
 	gtk_widget_show (graph_history);
 
 	/* add statistics graph */
 	box = GTK_BOX (gtk_builder_get_object (builder, "hbox_statistics"));
-	graph_statistics = gpm_graph_widget_new ();
+	graph_statistics = egg_graph_widget_new ();
 	gtk_box_pack_start (box, graph_statistics, TRUE, TRUE, 0);
 	gtk_widget_set_size_request (graph_statistics, 400, 250);
 	gtk_widget_show (graph_statistics);

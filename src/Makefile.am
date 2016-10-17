@@ -34,10 +34,10 @@ gnome_power_statistics_SOURCES =			\
 	gpm-statistics.c				\
 	gpm-resources.c					\
 	gpm-resources.h					\
-	gpm-point-obj.c					\
-	gpm-point-obj.h					\
-	gpm-graph-widget.h				\
-	gpm-graph-widget.c
+	egg-graph-point.c					\
+	egg-graph-point.h					\
+	egg-graph-widget.h				\
+	egg-graph-widget.c
 
 gnome_power_statistics_LDADD =				\
 	$(GLIB_LIBS)					\
