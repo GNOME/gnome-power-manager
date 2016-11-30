@@ -1913,7 +1913,7 @@ main (int argc, char *argv[])
 
 	setlocale (LC_ALL, "");
 
-	bindtextdomain (GETTEXT_PACKAGE, GNOMELOCALEDIR);
+	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
 
@@ -1932,7 +1932,9 @@ main (int argc, char *argv[])
 
 	/* add application specific icons to search path */
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
-                                           GPM_DATA G_DIR_SEPARATOR_S "icons");
+                                           DATADIR G_DIR_SEPARATOR_S
+                                           "gnome-power-manager" G_DIR_SEPARATOR_S
+                                           "icons");
 
 	/* run */
 	status = g_application_run (G_APPLICATION (application), argc, argv);

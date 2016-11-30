@@ -14,10 +14,10 @@ BuildRequires: gettext
 BuildRequires: libtool
 BuildRequires: cairo-devel
 BuildRequires: upower-devel >= 0.9.0
-BuildRequires: intltool
 BuildRequires: glib2-devel >= 2.25.9
 BuildRequires: gtk3-devel >= 2.91.3
 BuildRequires: docbook-utils
+BuildRequires: meson
 
 # obsolete sub-package
 Obsoletes: gnome-power-manager-extra <= 2.30.1
@@ -31,11 +31,11 @@ displaying icons and handling user callbacks in an interactive GNOME session.
 %setup -q
 
 %build
-%configure
-make
+%meson
+%meson_build
 
 %install
-%make_install
+%meson_install
 
 %find_lang %name --with-gnome
 
