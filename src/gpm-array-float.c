@@ -66,11 +66,6 @@ gpm_array_float_new (guint length)
 	return array;
 }
 
-/**
- * gpm_array_float_get:
- *
- * @array: input array
- **/
 gfloat
 gpm_array_float_get (GpmArrayFloat *array, guint i)
 {
@@ -79,11 +74,6 @@ gpm_array_float_get (GpmArrayFloat *array, guint i)
 	return g_array_index (array, gfloat, i);
 }
 
-/**
- * gpm_array_float_set:
- *
- * @array: input array
- **/
 void
 gpm_array_float_set (GpmArrayFloat *array, guint i, gfloat value)
 {
@@ -277,9 +267,6 @@ gpm_array_float_compute_integral (GpmArrayFloat *array, guint x1, guint x2)
 	return value;
 }
 
-/**
- * powfi:
- **/
 static gfloat
 powfi (gfloat base, guint n)
 {

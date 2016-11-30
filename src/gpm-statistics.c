@@ -137,11 +137,6 @@ gpm_stats_get_device_icon_suffix (UpDevice *device)
 	return "full";
 }
 
-/**
- * gpm_stats_get_device_icon:
- *
- * Return value: The device icon, use g_object_unref() when done.
- **/
 static GIcon *
 gpm_stats_get_device_icon (UpDevice *device, gboolean use_symbolic)
 {
@@ -234,9 +229,6 @@ gpm_stats_get_device_icon (UpDevice *device, gboolean use_symbolic)
 	return icon;
 }
 
-/**
- * gpm_device_kind_to_localised_string:
- **/
 static const gchar *
 gpm_device_kind_to_localised_string (UpDeviceKind kind, guint number)
 {
@@ -295,9 +287,6 @@ gpm_device_kind_to_localised_string (UpDeviceKind kind, guint number)
 	return text;
 }
 
-/**
- * gpm_device_technology_to_localised_string:
- **/
 static const gchar *
 gpm_device_technology_to_localised_string (UpDeviceTechnology technology_enum)
 {
@@ -338,9 +327,6 @@ gpm_device_technology_to_localised_string (UpDeviceTechnology technology_enum)
 	return technology;
 }
 
-/**
- * gpm_device_state_to_localised_string:
- **/
 static const gchar *
 gpm_device_state_to_localised_string (UpDeviceState state)
 {
@@ -382,9 +368,6 @@ gpm_device_state_to_localised_string (UpDeviceState state)
 	return state_string;
 }
 
-/**
- * gpm_stats_add_info_columns:
- **/
 static void
 gpm_stats_add_info_columns (GtkTreeView *treeview)
 {
@@ -405,9 +388,6 @@ gpm_stats_add_info_columns (GtkTreeView *treeview)
 	gtk_tree_view_append_column (treeview, column);
 }
 
-/**
- * gpm_stats_add_devices_columns:
- **/
 static void
 gpm_stats_add_devices_columns (GtkTreeView *treeview)
 {
@@ -430,9 +410,6 @@ gpm_stats_add_devices_columns (GtkTreeView *treeview)
 	gtk_tree_view_column_set_expand (column, TRUE);
 }
 
-/**
- * gpm_stats_add_wakeups_columns:
- **/
 static void
 gpm_stats_add_wakeups_columns (GtkTreeView *treeview)
 {
@@ -475,9 +452,6 @@ gpm_stats_add_wakeups_columns (GtkTreeView *treeview)
 	gtk_tree_view_column_set_expand (column, TRUE);
 }
 
-/**
- * gpm_stats_add_info_data:
- **/
 static void
 gpm_stats_add_info_data (const gchar *attr, const gchar *text)
 {
@@ -488,9 +462,6 @@ gpm_stats_add_info_data (const gchar *attr, const gchar *text)
 			    GPM_INFO_COLUMN_VALUE, text, -1);
 }
 
-/**
- * gpm_stats_update_smooth_data:
- **/
 static GPtrArray *
 gpm_stats_update_smooth_data (GPtrArray *list)
 {
@@ -537,9 +508,6 @@ gpm_stats_update_smooth_data (GPtrArray *list)
 	return new;
 }
 
-/**
- * gpm_stats_time_to_string:
- **/
 static gchar *
 gpm_stats_time_to_string (gint seconds)
 {
@@ -568,18 +536,12 @@ gpm_stats_time_to_string (gint seconds)
 	return g_strdup_printf (ngettext ("%.1f day", "%.1f days", value), value);
 }
 
-/**
- * gpm_stats_bool_to_string:
- **/
 static const gchar *
 gpm_stats_bool_to_string (gboolean ret)
 {
 	return ret ? _("Yes") : _("No");
 }
 
-/**
- * gpm_stats_get_printable_device_path:
- **/
 static gchar *
 gpm_stats_get_printable_device_path (UpDevice *device)
 {
@@ -594,9 +556,6 @@ gpm_stats_get_printable_device_path (UpDevice *device)
 	return device_path;
 }
 
-/**
- * gpm_stats_update_info_page_details:
- **/
 static void
 gpm_stats_update_info_page_details (UpDevice *device)
 {
@@ -768,9 +727,6 @@ gpm_stats_update_info_page_details (UpDevice *device)
 	}
 }
 
-/**
- * gpm_stats_set_graph_data:
- **/
 static void
 gpm_stats_set_graph_data (GtkWidget *widget, GPtrArray *data, gboolean use_smoothed, gboolean use_points)
 {
@@ -796,12 +752,6 @@ gpm_stats_set_graph_data (GtkWidget *widget, GPtrArray *data, gboolean use_smoot
 	gtk_widget_show (widget);
 }
 
-/**
- * gpm_color_from_rgb:
- * @red: The red value
- * @green: The green value
- * @blue: The blue value
- **/
 static guint32
 gpm_color_from_rgb (guint8 red, guint8 green, guint8 blue)
 {
@@ -812,9 +762,6 @@ gpm_color_from_rgb (guint8 red, guint8 green, guint8 blue)
 	return color;
 }
 
-/**
- * gpm_stats_update_info_page_history:
- **/
 static void
 gpm_stats_update_info_page_history (UpDevice *device)
 {
@@ -920,9 +867,6 @@ out:
 	return;
 }
 
-/**
- * gpm_stats_update_info_page_stats:
- **/
 static void
 gpm_stats_update_info_page_stats (UpDevice *device)
 {
@@ -1011,9 +955,6 @@ out:
 	return;
 }
 
-/**
- * gpm_stats_update_info_data_page:
- **/
 static void
 gpm_stats_update_info_data_page (UpDevice *device, gint page)
 {
@@ -1025,9 +966,6 @@ gpm_stats_update_info_data_page (UpDevice *device, gint page)
 		gpm_stats_update_info_page_stats (device);
 }
 
-/**
- * gpm_stats_update_info_data:
- **/
 static void
 gpm_stats_update_info_data (UpDevice *device)
 {
@@ -1073,9 +1011,6 @@ gpm_stats_update_info_data (UpDevice *device)
 	return;
 }
 
-/**
- * gpm_stats_format_cmdline:
- **/
 static gchar *
 gpm_stats_format_cmdline (UpWakeupItem *item)
 {
@@ -1145,9 +1080,6 @@ out:
 	return cmdline;
 }
 
-/**
- * gpm_stats_format_details:
- **/
 static gchar *
 gpm_stats_format_details (UpWakeupItem *item)
 {
@@ -1239,9 +1171,6 @@ gpm_stats_format_details (UpWakeupItem *item)
 
 	return details;
 }
-/**
- * gpm_stats_add_wakeups_item:
- **/
 static void
 gpm_stats_add_wakeups_item (UpWakeupItem *item)
 {
@@ -1279,9 +1208,6 @@ gpm_stats_add_wakeups_item (UpWakeupItem *item)
 			    GPM_WAKEUPS_COLUMN_ICON, icon, -1);
 }
 
-/**
- * gpm_stats_update_wakeups_data:
- **/
 static void
 gpm_stats_update_wakeups_data (void)
 {
@@ -1350,9 +1276,6 @@ gpm_stats_set_title (GtkWindow *window, gint page_num)
 	gtk_window_set_title (window, title);
 }
 
-/**
- * gpm_stats_notebook_changed_cb:
- **/
 static void
 gpm_stats_notebook_changed_cb (GtkNotebook *notebook, gpointer page, gint page_num, gpointer user_data)
 {
@@ -1379,9 +1302,6 @@ gpm_stats_notebook_changed_cb (GtkNotebook *notebook, gpointer page, gint page_n
 	g_object_unref (device);
 }
 
-/**
- * gpm_stats_button_update_ui:
- **/
 static void
 gpm_stats_button_update_ui (void)
 {
@@ -1392,9 +1312,6 @@ gpm_stats_button_update_ui (void)
 	g_object_unref (device);
 }
 
-/**
- * gpm_stats_devices_treeview_clicked_cb:
- **/
 static void
 gpm_stats_devices_treeview_clicked_cb (GtkTreeSelection *selection, gpointer user_data)
 {
@@ -1428,9 +1345,6 @@ gpm_stats_devices_treeview_clicked_cb (GtkTreeSelection *selection, gpointer use
 	}
 }
 
-/**
- * gpm_stats_device_changed_cb:
- **/
 static void
 gpm_stats_device_changed_cb (UpDevice *device, GParamSpec *pspec, gpointer user_data)
 {
@@ -1443,9 +1357,6 @@ gpm_stats_device_changed_cb (UpDevice *device, GParamSpec *pspec, gpointer user_
 		gpm_stats_update_info_data (device);
 }
 
-/**
- * gpm_stats_add_device:
- **/
 static void
 gpm_stats_add_device (UpDevice *device)
 {
@@ -1474,9 +1385,6 @@ gpm_stats_add_device (UpDevice *device)
 			    GPM_DEVICES_COLUMN_ICON, icon, -1);
 }
 
-/**
- * gpm_stats_data_changed_cb:
- **/
 static void
 gpm_stats_data_changed_cb (UpClient *_client, gpointer user_data)
 {
@@ -1484,9 +1392,6 @@ gpm_stats_data_changed_cb (UpClient *_client, gpointer user_data)
 		gpm_stats_update_wakeups_data ();
 }
 
-/**
- * gpm_stats_device_added_cb:
- **/
 static void
 gpm_stats_device_added_cb (UpClient *_client, UpDevice *device, gpointer user_data)
 {
@@ -1496,9 +1401,6 @@ gpm_stats_device_added_cb (UpClient *_client, UpDevice *device, gpointer user_da
 	gpm_stats_add_device (device);
 }
 
-/**
- * gpm_stats_device_removed_cb:
- **/
 static void
 gpm_stats_device_removed_cb (UpClient *_client, const gchar *object_path, gpointer user_data)
 {
@@ -1533,9 +1435,6 @@ gpm_stats_device_removed_cb (UpClient *_client, const gchar *object_path, gpoint
 	};
 }
 
-/**
- * gpm_stats_history_type_combo_changed_cb:
- **/
 static void
 gpm_stats_history_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 {
@@ -1583,9 +1482,6 @@ gpm_stats_history_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 	g_settings_set_string (settings, GPM_SETTINGS_INFO_HISTORY_TYPE, history_type);
 }
 
-/**
- * gpm_stats_type_combo_changed_cb:
- **/
 static void
 gpm_stats_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 {
@@ -1633,9 +1529,6 @@ gpm_stats_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 	g_settings_set_string (settings, GPM_SETTINGS_INFO_STATS_TYPE, stats_type);
 }
 
-/**
- * gpm_stats_range_combo_changed:
- **/
 static void
 gpm_stats_range_combo_changed (GtkWidget *widget, gpointer data)
 {
@@ -1660,10 +1553,6 @@ gpm_stats_range_combo_changed (GtkWidget *widget, gpointer data)
 	gpm_stats_button_update_ui ();
 }
 
-/**
- * gpm_stats_smooth_checkbox_history_cb:
- * @widget: The GtkWidget object
- **/
 static void
 gpm_stats_smooth_checkbox_history_cb (GtkWidget *widget, gpointer data)
 {
@@ -1673,10 +1562,6 @@ gpm_stats_smooth_checkbox_history_cb (GtkWidget *widget, gpointer data)
 	gpm_stats_button_update_ui ();
 }
 
-/**
- * gpm_stats_smooth_checkbox_stats_cb:
- * @widget: The GtkWidget object
- **/
 static void
 gpm_stats_smooth_checkbox_stats_cb (GtkWidget *widget, gpointer data)
 {
@@ -1686,10 +1571,6 @@ gpm_stats_smooth_checkbox_stats_cb (GtkWidget *widget, gpointer data)
 	gpm_stats_button_update_ui ();
 }
 
-/**
- * gpm_stats_points_checkbox_history_cb:
- * @widget: The GtkWidget object
- **/
 static void
 gpm_stats_points_checkbox_history_cb (GtkWidget *widget, gpointer data)
 {
@@ -1699,10 +1580,6 @@ gpm_stats_points_checkbox_history_cb (GtkWidget *widget, gpointer data)
 	gpm_stats_button_update_ui ();
 }
 
-/**
- * gpm_stats_points_checkbox_stats_cb:
- * @widget: The GtkWidget object
- **/
 static void
 gpm_stats_points_checkbox_stats_cb (GtkWidget *widget, gpointer data)
 {
@@ -1712,9 +1589,6 @@ gpm_stats_points_checkbox_stats_cb (GtkWidget *widget, gpointer data)
 	gpm_stats_button_update_ui ();
 }
 
-/**
- * gpm_stats_highlight_device:
- **/
 static gboolean
 gpm_stats_highlight_device (const gchar *object_path)
 {
@@ -1753,9 +1627,6 @@ out:
 	return found;
 }
 
-/**
- * gpm_stats_commandline_cb:
- **/
 static int
 gpm_stats_commandline_cb (GApplication *application,
 			  GApplicationCommandLine *cmdline,
@@ -1808,9 +1679,6 @@ gpm_stats_commandline_cb (GApplication *application,
 	return TRUE;
 }
 
-/**
- * gpm_stats_startup_cb:
- **/
 static void
 gpm_stats_startup_cb (GApplication *application,
 		      gpointer user_data)
@@ -2037,9 +1905,6 @@ gpm_stats_startup_cb (GApplication *application,
 	g_ptr_array_unref (devices_tmp);
 }
 
-/**
- * main:
- **/
 int
 main (int argc, char *argv[])
 {
