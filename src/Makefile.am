@@ -10,13 +10,12 @@ AM_CPPFLAGS =						\
 	$(UPOWER_CFLAGS)				\
 	-DBINDIR=\"$(bindir)\"			 	\
 	-DSBINDIR=\"$(sbindir)\"			\
-	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
+	-DLOCALEDIR=\""$(datadir)/locale"\"	\
 	-DDATADIR=\"$(datadir)\"			\
 	-DPREFIX=\""$(prefix)"\" 			\
 	-DSYSCONFDIR=\""$(sysconfdir)"\" 		\
 	-DLIBDIR=\""$(libdir)"\" 			\
 	-DVERSION="\"$(VERSION)\"" 			\
-	-DGPM_DATA=\"$(pkgdatadir)\"			\
 	-DGTKBUILDERDIR=\"$(pkgdatadir)\"		\
 	-DUP_DISABLE_DEPRECATED				\
 	-DG_LOG_DOMAIN=\"PowerManager\"			\
