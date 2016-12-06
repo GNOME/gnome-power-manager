@@ -1,6 +1,8 @@
 SUBDIRS = appdata icons
 
-@INTLTOOL_DESKTOP_RULE@
+%.desktop: %.desktop.in
+	$(AM_V_GEN) msgfmt --desktop -d $(top_srcdir)/po --template $< -o $@
+
 desktopdir = $(datadir)/applications
 desktop_in_files = org.gnome.PowerStats.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)

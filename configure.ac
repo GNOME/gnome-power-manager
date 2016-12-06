@@ -15,7 +15,6 @@ AM_PROG_CC_C_O
 
 AC_PROG_INSTALL
 LT_INIT
-IT_PROG_INTLTOOL([0.50.0])
 
 GNOME_COMPILE_WARNINGS
 
@@ -77,11 +76,11 @@ CPPFLAGS="$CPPFLAGS -fexceptions"
 dnl ---------------------------------------------------------------------------
 dnl - gettext stuff
 dnl ---------------------------------------------------------------------------
+AM_GNU_GETTEXT([external])
+AM_GNU_GETTEXT_VERSION([0.19.7])
 GETTEXT_PACKAGE=AC_PACKAGE_NAME
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE(GETTEXT_PACKAGE, "AC_PACKAGE_NAME", [foo])
-
-AM_GLIB_GNU_GETTEXT
 GLIB_GSETTINGS
 
 dnl ---------------------------------------------------------------------------

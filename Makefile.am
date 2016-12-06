@@ -8,22 +8,18 @@ SUBDIRS = 						\
 	data
 
 EXTRA_DIST =						\
-	MAINTAINERS					\
-	intltool-extract.in				\
-	intltool-merge.in				\
-	intltool-update.in
+	MAINTAINERS
 
 DISTCLEANFILES =					\
-	intltool-extract				\
-	intltool-merge					\
-	intltool-update					\
 	test-driver					\
 	gnome-power-manager-*.tar.*
 
 MAINTAINERCLEANFILES =					\
+	ABOUT-NLS					\
 	aclocal.m4					\
 	compile						\
 	config.guess					\
+	config.rpath					\
 	config.h.in					\
 	config.sub					\
 	depcomp						\
