@@ -1,7 +1,3 @@
-# Copyright (C) 2016 Richard Hughes <richard@hughsie.com>
-#
-# Licensed under the GNU General Public License Version 2 or later
-
 install_data('16x16/org.gnome.PowerStats.png',
              install_dir : 'share/icons/hicolor/16x16/apps')
 install_data('22x22/org.gnome.PowerStats.png',

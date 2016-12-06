@@ -1,7 +1,3 @@
-# Copyright (C) 2016 Richard Hughes <richard@hughsie.com>
-#
-# Licensed under the GNU General Public License Version 2 or later
-
 docbook2man = find_program('docbook2man', required : false)
 if docbook2man.found()
   custom_target('gnome-power-statistics-man',

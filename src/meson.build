@@ -1,7 +1,3 @@
-# Copyright (C) 2016 Richard Hughes <richard@hughsie.com>
-#
-# Licensed under the GNU General Public License Version 2 or later
-
 cargs = ['-DG_LOG_DOMAIN="Gpm"']
 
 gnome_power_statistics_resources = gnome.compile_resources(

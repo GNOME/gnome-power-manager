@@ -1,8 +1,4 @@
 #!/bin/sh
-# Copyright (C) 2016 Richard Hughes <richard@hughsie.com>
-#
-# Licensed under the GNU General Public License Version 2 or later
-
 if [ -z $MESON_INSTALL_PREFIX ]; then
     echo 'This is meant to be ran from Meson only!'
     exit 1

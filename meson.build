@@ -1,7 +1,3 @@
-# Copyright (C) 2016 Richard Hughes <richard@hughsie.com>
-#
-# Licensed under the GNU General Public License Version 2 or later
-
 project('gnome-power-manager', 'c',
   version : '3.23.3',
   default_options : ['warning_level=1'],

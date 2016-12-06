@@ -1,7 +1,3 @@
-# Copyright (C) 2016 Richard Hughes <richard@hughsie.com>
-#
-# Licensed under the GNU General Public License Version 2 or later
-
 i18n.merge_file(
   input: 'org.gnome.PowerStats.appdata.xml.in',
   output: 'org.gnome.PowerStats.appdata.xml',
