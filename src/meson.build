@@ -12,12 +12,9 @@ executable(
   gnome_power_statistics_resources,
   sources : [
     'gpm-array-float.c',
-    'gpm-array-float.h',
     'gpm-statistics.c',
     'egg-graph-point.c',
-    'egg-graph-point.h',
     'egg-graph-widget.c',
-    'egg-graph-widget.h',
   ],
   include_directories : [
     include_directories('..'),
@@ -39,7 +36,6 @@ if get_option('enable-tests')
     'gnome-power-self-test',
     sources : [
       'gpm-array-float.c',
-      'gpm-array-float.h',
       'gpm-self-test.c'
     ],
     include_directories : [
