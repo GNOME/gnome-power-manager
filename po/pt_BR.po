@@ -9,22 +9,50 @@
 # Enrico Nicoletto <liverig@gmail.com>, 2009, 2013, 2016.
 # Djavan Fagundes <djavan@comum.org>, 2009, 2011.
 # André gondim <In Memoriam>, 2010.
-#
+# Rafael Fontenelle <rafaelff@gnome.org>, 2016.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "power-manager&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-08-29 08:38+0000\n"
-"PO-Revision-Date: 2016-09-14 21:20-0300\n"
-"Last-Translator: Enrico Nicoletto <liverig@gmail.com>\n"
+"POT-Creation-Date: 2016-12-09 06:45+0000\n"
+"PO-Revision-Date: 2016-12-12 01:58-0200\n"
+"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Virtaal 1.0.0-beta1\n"
+"X-Project-Style: gnome\n"
+
+#: ../data/appdata/org.gnome.PowerStats.appdata.xml.in.h:1
+msgid "GNOME Power Statistics"
+msgstr "Estatísticas de energia do GNOME"
+
+#: ../data/appdata/org.gnome.PowerStats.appdata.xml.in.h:2
+#: ../data/org.gnome.PowerStats.desktop.in.in.h:2
+msgid "Observe power management"
+msgstr "Observe o gerenciamento de energia"
+
+#: ../data/appdata/org.gnome.PowerStats.appdata.xml.in.h:3
+msgid ""
+"Power Statistics can show historical and current battery information and "
+"programs waking up that use power."
+msgstr ""
+"As estatísticas de energia podem mostrar informações e o histórico da "
+"bateria atual, além de programas que usam energia para serem ativados."
+
+#: ../data/appdata/org.gnome.PowerStats.appdata.xml.in.h:4
+msgid ""
+"You probably only need to install this application if you are having "
+"problems with your laptop battery, or are trying to work out what programs "
+"are using significant amounts of power."
+msgstr ""
+"Você somente precisa instalar este aplicativo se você estiver enfrentando "
+"problemas com a bateria de seu computador portátil ou esteja tentando "
+"averiguar quais programas estão usando porções significativas de energia."
 
 #: ../data/org.gnome.power-manager.gschema.xml.h:1
 msgid "Whether we should show the history data points"
@@ -110,37 +138,10 @@ msgstr ""
 "O identificador do último dispositivo que foi usado para retornar o foco "
 "para o dispositivo correto."
 
-#: ../data/appdata/org.gnome.PowerStats.appdata.xml.in.h:1
-msgid "GNOME Power Statistics"
-msgstr "Estatísticas de energia do GNOME"
-
-#: ../data/appdata/org.gnome.PowerStats.appdata.xml.in.h:2
-#: ../data/org.gnome.PowerStats.desktop.in.in.h:2
-msgid "Observe power management"
-msgstr "Observe o gerenciamento de energia"
-
-#: ../data/appdata/org.gnome.PowerStats.appdata.xml.in.h:3
-msgid ""
-"Power Statistics can show historical and current battery information and "
-"programs waking up that use power."
-msgstr ""
-"As estatísticas de energia podem mostrar informações e o histórico da "
-"bateria atual, além de programas que usam energia para serem ativados."
-
-#: ../data/appdata/org.gnome.PowerStats.appdata.xml.in.h:4
-msgid ""
-"You probably only need to install this application if you are having "
-"problems with your laptop battery, or are trying to work out what programs "
-"are using significant amounts of power."
-msgstr ""
-"Você somente precisa instalar este aplicativo se você estiver enfrentando "
-"problemas com a bateria de seu computador portátil ou esteja tentando "
-"averiguar quais programas estão usando porções significativas de energia."
-
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
-#: ../data/org.gnome.PowerStats.desktop.in.in.h:1 ../src/gpm-statistics.ui.h:1
-#: ../src/gpm-statistics.c:1349 ../src/gpm-statistics.c:1787
+#: ../data/org.gnome.PowerStats.desktop.in.in.h:1 ../src/gpm-statistics.c:1349
+#: ../src/gpm-statistics.c:1787 ../src/gpm-statistics.ui.h:1
 msgid "Power Statistics"
 msgstr "Estatísticas de energia"
 
@@ -148,109 +149,79 @@ msgstr "Estatísticas de energia"
 msgid "battery;consumption;charge;"
 msgstr "bateria;consumo;carga;"
 
-#: ../src/gpm-statistics.ui.h:2 ../src/gpm-statistics.c:472
-msgid "Details"
-msgstr "Detalhes"
-
-#: ../src/gpm-statistics.ui.h:3
-msgid "Graph type:"
-msgstr "Tipo de gráfico:"
-
-#: ../src/gpm-statistics.ui.h:4
-msgid "Data length:"
-msgstr "Comprimento de dados:"
-
-#: ../src/gpm-statistics.ui.h:5
-msgid "There is no data to display."
-msgstr "Não há dados para exibir."
-
-#: ../src/gpm-statistics.ui.h:6
-msgid "Use smoothed line"
-msgstr "Usar linha suavizada"
-
-#: ../src/gpm-statistics.ui.h:7
-msgid "Show data points"
-msgstr "Mostrar pontos de dados"
-
-#: ../src/gpm-statistics.ui.h:8
-msgid "History"
-msgstr "Histórico"
-
-#: ../src/gpm-statistics.ui.h:9
-msgid "Statistics"
-msgstr "Estatísticas"
-
-#: ../src/gpm-statistics.ui.h:10
-msgid "Processor wakeups per second:"
-msgstr "Recuperações do processador por segundo:"
-
-#: ../src/gpm-statistics.ui.h:11
-msgid "0"
-msgstr "0"
-
-#: ../src/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:458
-msgid "Wakeups"
-msgstr "Recuperações"
-
 #. Translators: This is %i days
-#: ../src/gpm-graph-widget.c:432
+#: ../src/egg-graph-widget.c:393
 #, c-format
 msgid "%id"
 msgstr "%id"
 
 #. Translators: This is %i days %02i hours
-#: ../src/gpm-graph-widget.c:435
+#: ../src/egg-graph-widget.c:396
 #, c-format
 msgid "%id%02ih"
 msgstr "%id%02ih"
 
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:440
+#: ../src/egg-graph-widget.c:401
 #, c-format
 msgid "%ih"
 msgstr "%ih"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:443
+#: ../src/egg-graph-widget.c:404
 #, c-format
 msgid "%ih%02im"
 msgstr "%ih%02im"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:448
+#: ../src/egg-graph-widget.c:409
 #, c-format
 msgid "%2im"
 msgstr "%2imin"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:451
+#: ../src/egg-graph-widget.c:412
 #, c-format
 msgid "%2im%02i"
 msgstr "%2imin %02is"
 
+#. TRANSLATORS: This is ms
+#: ../src/egg-graph-widget.c:416
+#, c-format
+msgid "%.0fms"
+msgstr "%.0fms"
+
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:455
+#: ../src/egg-graph-widget.c:419
 #, c-format
 msgid "%2is"
 msgstr "%2is"
 
-#. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:459
+#. TRANSLATORS: This is %i Percentage
+#: ../src/egg-graph-widget.c:423
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
-#. Translators: This is %.1f Watts
-#: ../src/gpm-graph-widget.c:462
+#. TRANSLATORS: This is %.1f Watts
+#: ../src/egg-graph-widget.c:426
 #, c-format
 msgid "%.1fW"
 msgstr "%.1fW"
 
-#. Translators: This is %.1f Volts
-#: ../src/gpm-graph-widget.c:467
+#. TRANSLATORS: This is %.1f Volts
+#: ../src/egg-graph-widget.c:431
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fV"
+
+#. TRANSLATORS: This is %.1f nanometers
+#: ../src/egg-graph-widget.c:434
+#, c-format
+#| msgid "%.0f second"
+#| msgid_plural "%.0f seconds"
+msgid "%.0f nm"
+msgstr "%.0f nm"
 
 #. TRANSLATORS: the rate of discharge for the device
 #: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:721
@@ -375,7 +346,7 @@ msgstr[1] "Reprodutores de mídia"
 msgid "Tablet"
 msgid_plural "Tablets"
 msgstr[0] "Tablet"
-msgstr[1] "Tables"
+msgstr[1] "Tablets"
 
 #. TRANSLATORS: tablet device
 #: ../src/gpm-statistics.c:288
@@ -479,9 +450,17 @@ msgstr "Tipo"
 msgid "ID"
 msgstr "ID"
 
+#: ../src/gpm-statistics.c:458 ../src/gpm-statistics.ui.h:12
+msgid "Wakeups"
+msgstr "Recuperações"
+
 #: ../src/gpm-statistics.c:465
 msgid "Command"
 msgstr "Comando"
+
+#: ../src/gpm-statistics.c:472 ../src/gpm-statistics.ui.h:2
+msgid "Details"
+msgstr "Detalhes"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
 #: ../src/gpm-statistics.c:554
@@ -804,3 +783,39 @@ msgstr "Selecionar este dispositivo ao iniciar"
 #: ../src/gpm-statistics.c:2025
 msgid "Processor"
 msgstr "Processador"
+
+#: ../src/gpm-statistics.ui.h:3
+msgid "Graph type:"
+msgstr "Tipo de gráfico:"
+
+#: ../src/gpm-statistics.ui.h:4
+msgid "Data length:"
+msgstr "Comprimento de dados:"
+
+#: ../src/gpm-statistics.ui.h:5
+msgid "There is no data to display."
+msgstr "Não há dados para exibir."
+
+#: ../src/gpm-statistics.ui.h:6
+msgid "Use smoothed line"
+msgstr "Usar linha suavizada"
+
+#: ../src/gpm-statistics.ui.h:7
+msgid "Show data points"
+msgstr "Mostrar pontos de dados"
+
+#: ../src/gpm-statistics.ui.h:8
+msgid "History"
+msgstr "Histórico"
+
+#: ../src/gpm-statistics.ui.h:9
+msgid "Statistics"
+msgstr "Estatísticas"
+
+#: ../src/gpm-statistics.ui.h:10
+msgid "Processor wakeups per second:"
+msgstr "Recuperações do processador por segundo:"
+
+#: ../src/gpm-statistics.ui.h:11
+msgid "0"
+msgstr "0"
