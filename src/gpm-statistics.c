@@ -1923,7 +1923,7 @@ main (int argc, char *argv[])
 	settings = g_settings_new (GPM_SETTINGS_SCHEMA);
 
 	/* are we already activated? */
-	application = gtk_application_new ("org.gnome.PowerManager.Statistics",
+	application = gtk_application_new ("org.gnome.PowerStats",
 					   G_APPLICATION_HANDLES_COMMAND_LINE);
 	g_signal_connect (application, "startup",
 			  G_CALLBACK (gpm_stats_startup_cb), NULL);
