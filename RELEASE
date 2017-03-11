@@ -1,12 +1,12 @@
 Follow http://developer.gnome.org/dotplan/for_maintainers.html
 
-git log --format="%s" GNOME_POWER_MANAGER_3_23_90.. | grep -i -v trivial | grep -v Merge | uniq
+git log --format="%s" GNOME_POWER_MANAGER_3_23_92.. | grep -i -v trivial | grep -v Merge | uniq
 Add any user visible changes into data/appdata/org.gnome.PowerStats.appdata.xml.in
 
 Run "make distcheck", correct any problems encountered
 
-git commit -a -m "GNOME Power Manager 3.23.92"
-git tag -s GNOME_POWER_MANAGER_3_23_92 -m "==== Version 3.23.92 ===="
+git commit -a -m "GNOME Power Manager 3.24.0"
+git tag -s GNOME_POWER_MANAGER_3_24_0 -m "==== Version 3.24.0 ===="
 <wait>
 git push --tags
 git push
