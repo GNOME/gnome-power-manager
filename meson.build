@@ -97,7 +97,6 @@ configure_file(
   output : 'config.h',
   configuration : conf
 )
-top_build_incdir = include_directories(meson.current_build_dir())
 
 subdir('src')
 subdir('man')
