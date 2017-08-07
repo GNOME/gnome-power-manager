@@ -1,5 +1,5 @@
 project('gnome-power-manager', 'c',
-  version : '3.23.3',
+  version : '3.25.90',
   default_options : ['warning_level=1'],
   meson_version : '>=0.37.0'
 )
@@ -102,33 +102,6 @@ subdir('src')
 subdir('man')
 subdir('po')
 subdir('data')
-
-archiver = find_program('git', required : false)
-if archiver.found()
-  run_target('dist',
-    # git config tar.tar.xz.command "xz -c"
-    command: [
-      'git', 'archive',
-      '--prefix=' + meson.project_name() + '-' + meson.project_version() + '/',
-      'HEAD',
-      '--format=tar.xz',
-      '--output',
-      meson.project_name() + '-' + meson.project_version() + '.tar.xz'
-    ]
-  )
-else
-  message('git not found, you will not be able to run `ninja dist`')
-endif
-
-appstream_util = find_program('appstream-util', required : false)
-if appstream_util.found()
-  custom_target('NEWS',
-    output : 'NEWS',
-    input : 'data/appdata/org.gnome.PowerStats.appdata.xml.in',
-    command : [appstream_util, 'appdata-to-news', '@INPUT@'],
-    capture : true
-  )
-endif
 
 # FIXME: remove when https://github.com/mesonbuild/meson/issues/837 fixed
 meson.add_install_script('meson_post_install.sh')
