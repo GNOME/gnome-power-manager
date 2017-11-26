@@ -58,12 +58,12 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %license COPYING
 %doc AUTHORS README
 %{_bindir}/*
-%{_datadir}/appdata/*.appdata.xml
 %{_datadir}/applications/*.desktop
 %{_datadir}/glib-2.0/schemas/*.gschema.xml
 %{_datadir}/icons/hicolor/*/apps/org.gnome.PowerStats.*
 %{_datadir}/icons/hicolor/symbolic/apps/org.gnome.PowerStats-symbolic.svg
 %{_mandir}/man1/*.1.gz
+%{_datadir}/metainfo/*.appdata.xml
 
 %changelog
 * #LONGDATE# Richard Hughes <richard@hughsie.com> #VERSION#-0.#BUILD##ALPHATAG#
