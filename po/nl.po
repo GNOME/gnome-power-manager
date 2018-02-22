@@ -16,54 +16,120 @@
 # Rinse de Vries <rinsedevries@kde.nl>, 2007.
 # Reinout van Schouwen <reinouts@gnome.org>, 2008, 2009.
 # Wouter Bolsterlee <wbolster@gnome.org>, 2006–2011.
+# Nathan Follens <nthn@unseen.is>, 2017.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-05 10:10+0100\n"
-"PO-Revision-Date: 2011-06-24 22:39+0200\n"
-"Last-Translator: Wouter Bolsterlee <wbolster@gnome.org>\n"
+"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"power-manager&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2017-06-27 22:21+0000\n"
+"PO-Revision-Date: 2017-09-12 13:15+0200\n"
+"Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
-"Language: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Poedit 2.0.3\n"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:1
-msgid "The ID of the last device selected"
-msgstr "De ID van het laatst geselecteerde apparaat."
+# vrij vertaald (Wouter Bolsterlee&Rinse de Vries)
+#: data/appdata/org.gnome.PowerStats.appdata.xml.in:7
+msgid "GNOME Power Statistics"
+msgstr "Gnome Spanningsstatistieken"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:2
+#: data/appdata/org.gnome.PowerStats.appdata.xml.in:8
+#: data/org.gnome.PowerStats.desktop.in.in:4
+msgid "Observe power management"
+msgstr "Energiebeheer observeren"
+
+#: data/appdata/org.gnome.PowerStats.appdata.xml.in:10
+msgid ""
+"Power Statistics can show historical and current battery information and "
+"programs waking up that use power."
+msgstr ""
+"Spanningsstatistieken kan historische en huidige batterij-informatie "
+"weergeven, evenals programma’s die deze energie verbruiken."
+
+#: data/appdata/org.gnome.PowerStats.appdata.xml.in:14
+msgid ""
+"You probably only need to install this application if you are having "
+"problems with your laptop battery, or are trying to work out what programs "
+"are using significant amounts of power."
+msgstr ""
+"U hoeft deze toepassing waarschijnlijk enkel te installeren als u problemen "
+"ondervindt met de batterij van uw laptop, of probeert na te gaan welke "
+"programma’s grote hoeveelheden energie verbruiken."
+
+#: data/org.gnome.power-manager.gschema.xml:5
+msgid "Whether we should show the history data points"
+msgstr "Geeft aan of de gebeurtenissen zullen worden getoond"
+
+#: data/org.gnome.power-manager.gschema.xml:6
+msgid ""
+"Whether we should show the history data points in the statistics window."
+msgstr ""
+"Geeft aan of de gebeurtenissen zullen worden getoond in het "
+"statistiekenvenster."
+
+#: data/org.gnome.power-manager.gschema.xml:10
+msgid "Whether we should smooth the history data"
+msgstr "Geeft aan of de grafiek zal worden gladgestreken"
+
+#: data/org.gnome.power-manager.gschema.xml:11
+msgid "Whether we should smooth the history data in the graph."
+msgstr "Geeft aan of de grafiek zal worden gladgestreken."
+
+#: data/org.gnome.power-manager.gschema.xml:15
 msgid "The default graph type to show for history"
 msgstr "Standaard grafiektype voor geschiedenis"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:3
-msgid "The default graph type to show for stats"
-msgstr "Standaard grafiektype voor statistieken"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:4
+#: data/org.gnome.power-manager.gschema.xml:16
 msgid "The default graph type to show in the history window."
 msgstr "Standaard grafiektype voor het geschiedenisvenster."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:5
+#: data/org.gnome.power-manager.gschema.xml:20
+msgid "The maximum time displayed for history"
+msgstr "De maximale tijd die in de grafiek wordt getoond"
+
+#: data/org.gnome.power-manager.gschema.xml:21
+msgid ""
+"The maximum duration of time displayed on the x-axis of the history graph."
+msgstr ""
+"De maximale tijdspanne die op de x-as van de geschiedenisgrafiek wordt "
+"getoond."
+
+#: data/org.gnome.power-manager.gschema.xml:25
+msgid "Whether we should show the stats data points"
+msgstr "Geeft aan of de gebeurtenissen zullen worden getoond"
+
+#: data/org.gnome.power-manager.gschema.xml:26
+msgid "Whether we should show the stats data points in the statistics window."
+msgstr ""
+"Geeft aan of de gebeurtenissen zullen worden getoond in het "
+"statistiekenvenster."
+
+#: data/org.gnome.power-manager.gschema.xml:30
+msgid "Whether we should smooth the stats data"
+msgstr "Geeft aan of de grafiek zal worden gladgestreken"
+
+#: data/org.gnome.power-manager.gschema.xml:31
+msgid "Whether we should smooth the stats data in the graph."
+msgstr "Geeft aan of de grafiek zal worden gladgestreken."
+
+#: data/org.gnome.power-manager.gschema.xml:35
+msgid "The default graph type to show for stats"
+msgstr "Standaard grafiektype voor statistieken"
+
+#: data/org.gnome.power-manager.gschema.xml:36
 msgid "The default graph type to show in the stats window."
 msgstr "Standaard grafiektype voor het statistiekenvenster."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:6
-msgid ""
-"The identifier of the last device which is used to return focus to the "
-"correct device."
-msgstr ""
-"De identifier van het meest recente apparaat, gebruikt voor het focussen van "
-"het juiste apparaat."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:7
+#: data/org.gnome.power-manager.gschema.xml:40
 msgid "The index of the page number to show by default"
-msgstr "De index van het paginanummer dat standaard getoond wordt."
+msgstr "De index van het paginanummer dat standaard getoond wordt"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:8
+#: data/org.gnome.power-manager.gschema.xml:41
 msgid ""
 "The index of the page number to show by default which is used to return "
 "focus to the correct page."
@@ -71,288 +137,222 @@ msgstr ""
 "De index van het paginanummer dat standaard getoond wordt; gebruikt voor het "
 "focussen van de juiste pagina."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:9
+#: data/org.gnome.power-manager.gschema.xml:45
+msgid "The ID of the last device selected"
+msgstr "De ID van het laatst geselecteerde apparaat"
+
+#: data/org.gnome.power-manager.gschema.xml:46
 msgid ""
-"The maximum duration of time displayed on the x-axis of the history graph."
+"The identifier of the last device which is used to return focus to the "
+"correct device."
 msgstr ""
-"De maximale tijdspanne die op de x-as van de geschiedenisgrafiek wordt "
-"getoond."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:10
-msgid "The maximum time displayed for history"
-msgstr "De maximale tijd die in de grafiek wordt getoond"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:11
-msgid "Whether we should show the history data points"
-msgstr "Geeft aan of de gebeurtenissen zullen worden getoond"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:12
-msgid ""
-"Whether we should show the history data points in the statistics window."
-msgstr ""
-"Geeft aan of de gebeurtenissen zullen worden getoond in het "
-"statistiekenvenster."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:13
-msgid "Whether we should show the stats data points"
-msgstr "Geeft aan of de gebeurtenissen zullen worden getoond"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:14
-msgid "Whether we should show the stats data points in the statistics window."
-msgstr ""
-"Geeft aan of de gebeurtenissen zullen worden getoond in het "
-"statistiekenvenster."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:15
-msgid "Whether we should smooth the history data"
-msgstr "Geeft aan of de grafiek zal worden gladgestreken"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:16
-msgid "Whether we should smooth the history data in the graph."
-msgstr "Geeft aan of de grafiek zal worden gladgestreken."
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:17
-msgid "Whether we should smooth the stats data"
-msgstr "Geeft aan of de grafiek zal worden gladgestreken"
-
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:18
-msgid "Whether we should smooth the stats data in the graph."
-msgstr "Geeft aan of de grafiek zal worden gladgestreken."
-
-#: ../data/gnome-power-statistics.desktop.in.in.h:1
-msgid "Observe power management"
-msgstr "Energiebeheer observeren"
+"De identifier van het meest recente apparaat, gebruikt voor het focussen van "
+"het juiste apparaat."
 
 # vrij vertaald (Wouter Bolsterlee&Rinse de Vries)
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
-#: ../data/gnome-power-statistics.desktop.in.in.h:2
-#: ../data/gpm-statistics.ui.h:6 ../src/gpm-statistics.c:1406
-#: ../src/gpm-statistics.c:1860
+#: data/org.gnome.PowerStats.desktop.in.in:3 src/gpm-statistics.c:1275
+#: src/gpm-statistics.c:1658 src/gpm-statistics.ui:8
 msgid "Power Statistics"
 msgstr "Spanningsstatistieken"
 
-#: ../data/gpm-statistics.ui.h:1
-msgid "0"
-msgstr "0"
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.PowerStats.desktop.in.in:6
+msgid "battery;consumption;charge;"
+msgstr "battery;consumption;charge;batterij;verbruik;spanning;lading;"
 
-#: ../data/gpm-statistics.ui.h:2
-msgid "Data length:"
-msgstr "Data-lengte:"
-
-#: ../data/gpm-statistics.ui.h:3 ../src/gpm-statistics.c:509
-msgid "Details"
-msgstr "Details"
-
-#: ../data/gpm-statistics.ui.h:4
-msgid "Graph type:"
-msgstr "Type grafiek:"
-
-# vrij vertaald (Wouter Bolsterlee)
-# andere vertaling: Gebruik (cpu-gebruik, netwerk-gebruik geheugengebruik)Tino
-#: ../data/gpm-statistics.ui.h:5
-msgid "History"
-msgstr "Geschiedenis"
-
-#: ../data/gpm-statistics.ui.h:7
-msgid "Processor wakeups per second:"
-msgstr "Aantal processor-wake-ups per seconde:"
-
-#: ../data/gpm-statistics.ui.h:8
-msgid "Show data points"
-msgstr "Datapunten tonen"
-
-# vrij vertaald (Wouter Bolsterlee&Rinse de Vries)
-#: ../data/gpm-statistics.ui.h:9
-msgid "Statistics"
-msgstr "Statistieken"
-
-#: ../data/gpm-statistics.ui.h:10
-msgid "There is no data to display."
-msgstr "Er zijn geen gegevens om te tonen."
-
-#: ../data/gpm-statistics.ui.h:11
-msgid "Use smoothed line"
-msgstr "Afgeronde lijn tonen"
-
-#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:495
-msgid "Wakeups"
-msgstr "Wake-ups"
+#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
+#: data/org.gnome.PowerStats.desktop.in.in:8
+msgid "org.gnome.PowerStats"
+msgstr "org.gnome.PowerStats"
 
 #. Translators: This is %i days
-#: ../src/gpm-graph-widget.c:430
+#: src/egg-graph-widget.c:393
 #, c-format
 msgid "%id"
 msgstr "%id"
 
 #. Translators: This is %i days %02i hours
-#: ../src/gpm-graph-widget.c:433
+#: src/egg-graph-widget.c:396
 #, c-format
 msgid "%id%02ih"
 msgstr "%id%02ih"
 
 # de laptop blijft nog 5 uur werken (ipv 5 uren)
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:438
+#: src/egg-graph-widget.c:401
 #, c-format
 msgid "%ih"
 msgstr "%iu"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:441
+#: src/egg-graph-widget.c:404
 #, c-format
 msgid "%ih%02im"
 msgstr "%ih%02im"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:446
+#: src/egg-graph-widget.c:409
 #, c-format
 msgid "%2im"
 msgstr "%2im"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:449
+#: src/egg-graph-widget.c:412
 #, c-format
 msgid "%2im%02i"
 msgstr "%2im%02i"
 
+#. TRANSLATORS: This is ms
+#: src/egg-graph-widget.c:416
+#, c-format
+msgid "%.0fms"
+msgstr "%.0f ms"
+
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:453
+#: src/egg-graph-widget.c:419
 #, c-format
 msgid "%2is"
 msgstr "%2is"
 
-#. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:457
+#. TRANSLATORS: This is %i Percentage
+#: src/egg-graph-widget.c:423
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
-#. Translators: This is %.1f Watts
-#: ../src/gpm-graph-widget.c:460
+#. TRANSLATORS: This is %.1f Watts
+#: src/egg-graph-widget.c:426
 #, c-format
 msgid "%.1fW"
 msgstr "%.1fW"
 
-#. Translators: This is %.1f Volts
-#: ../src/gpm-graph-widget.c:465
+#. TRANSLATORS: This is %.1f Volts
+#: src/egg-graph-widget.c:431
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fV"
 
+#. TRANSLATORS: This is %.1f nanometers
+#: src/egg-graph-widget.c:434
+#, c-format
+msgid "%.0f nm"
+msgstr "%.0f nm"
+
 #. TRANSLATORS: the rate of discharge for the device
-#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:767
+#: src/gpm-statistics.c:82 src/gpm-statistics.c:680
 msgid "Rate"
 msgstr "Ontlaadsnelheid"
 
-#: ../src/gpm-statistics.c:81
+#: src/gpm-statistics.c:83
 msgid "Charge"
 msgstr "Lading"
 
-#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:781
+#: src/gpm-statistics.c:84 src/gpm-statistics.c:694
 msgid "Time to full"
 msgstr "Tijd tot vol"
 
-#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:786
+#: src/gpm-statistics.c:85 src/gpm-statistics.c:699
 msgid "Time to empty"
 msgstr "Tijd tot leeg"
 
-#: ../src/gpm-statistics.c:90
+#: src/gpm-statistics.c:92
 msgid "10 minutes"
 msgstr "10 minuten"
 
-#: ../src/gpm-statistics.c:91
+#: src/gpm-statistics.c:93
 msgid "2 hours"
 msgstr "2 uur"
 
-#: ../src/gpm-statistics.c:92
+#: src/gpm-statistics.c:94
 msgid "6 hours"
 msgstr "6 uur"
 
-#: ../src/gpm-statistics.c:93
+#: src/gpm-statistics.c:95
 msgid "1 day"
 msgstr "1 dag"
 
-#: ../src/gpm-statistics.c:94
+#: src/gpm-statistics.c:96
 msgid "1 week"
 msgstr "1 week"
 
 #. TRANSLATORS: what we've observed about the device
-#: ../src/gpm-statistics.c:103
+#: src/gpm-statistics.c:105
 msgid "Charge profile"
 msgstr "Ladingsprofiel"
 
-#: ../src/gpm-statistics.c:104
+#: src/gpm-statistics.c:106
 msgid "Discharge profile"
 msgstr "Ontladingsprofiel"
 
 #. TRANSLATORS: how accurately we can predict the time remaining of the battery
-#: ../src/gpm-statistics.c:106
+#: src/gpm-statistics.c:108
 msgid "Charge accuracy"
 msgstr "Accuraatheid lading"
 
-#: ../src/gpm-statistics.c:107
+#: src/gpm-statistics.c:109
 msgid "Discharge accuracy"
 msgstr "Accuraatheid ontlading"
 
 #. TRANSLATORS: system power cord
-#: ../src/gpm-statistics.c:288
+#: src/gpm-statistics.c:239
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "Netstroomadapter"
 msgstr[1] "Netstroomadapters"
 
 #. TRANSLATORS: laptop primary battery
-#: ../src/gpm-statistics.c:292
+#: src/gpm-statistics.c:243
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "Laptop-accu"
 msgstr[1] "Laptop-accu's"
 
 #. TRANSLATORS: battery-backed AC power source
-#: ../src/gpm-statistics.c:296
+#: src/gpm-statistics.c:247
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "UPS"
 msgstr[1] "UPSen"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
-#: ../src/gpm-statistics.c:300
+#: src/gpm-statistics.c:251
 msgid "Monitor"
 msgid_plural "Monitors"
 msgstr[0] "Monitor"
 msgstr[1] "Monitors"
 
 #. TRANSLATORS: wireless mice with internal batteries
-#: ../src/gpm-statistics.c:304
+#: src/gpm-statistics.c:255
 msgid "Mouse"
 msgid_plural "Mice"
 msgstr[0] "Muis"
 msgstr[1] "Muizen"
 
 #. TRANSLATORS: wireless keyboard with internal battery
-#: ../src/gpm-statistics.c:308
+#: src/gpm-statistics.c:259
 msgid "Keyboard"
 msgid_plural "Keyboards"
 msgstr[0] "Toetsenbord"
 msgstr[1] "Toetsenborden"
 
 #. TRANSLATORS: portable device
-#: ../src/gpm-statistics.c:312
+#: src/gpm-statistics.c:263
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "PDA"
 msgstr[1] "PDA's"
 
 #. TRANSLATORS: cell phone (mobile...)
-#: ../src/gpm-statistics.c:316
+#: src/gpm-statistics.c:267
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "Mobiele telefoon"
 msgstr[1] "Mobiele telefoons"
 
 #. TRANSLATORS: media player, mp3 etc
-#: ../src/gpm-statistics.c:321
+#: src/gpm-statistics.c:272
 msgid "Media player"
 msgid_plural "Media players"
 msgstr[0] "Mediaspeler"
@@ -360,119 +360,128 @@ msgstr[1] "Mediaspelers"
 
 # Onvertaald (Wouter Bolsterlee)
 #. TRANSLATORS: tablet device
-#: ../src/gpm-statistics.c:325
+#: src/gpm-statistics.c:276
 msgid "Tablet"
 msgid_plural "Tablets"
 msgstr[0] "Tablet"
 msgstr[1] "Tablets"
 
 #. TRANSLATORS: tablet device
-#: ../src/gpm-statistics.c:329
+#: src/gpm-statistics.c:280
 msgid "Computer"
 msgid_plural "Computers"
 msgstr[0] "Computer"
 msgstr[1] "Computers"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:349
+#: src/gpm-statistics.c:297
 msgid "Lithium Ion"
 msgstr "Lithium-ion"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:353
+#: src/gpm-statistics.c:301
 msgid "Lithium Polymer"
 msgstr "Lithium-polymeer"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:357
+#: src/gpm-statistics.c:305
 msgid "Lithium Iron Phosphate"
 msgstr "Lithium-ijzerfosfaat"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:361
+#: src/gpm-statistics.c:309
 msgid "Lead acid"
 msgstr "Loodzuur"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:365
+#: src/gpm-statistics.c:313
 msgid "Nickel Cadmium"
 msgstr "Nikkel-cadmium"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:369
+#: src/gpm-statistics.c:317
 msgid "Nickel metal hydride"
 msgstr "Nickel-metaal-hydride"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:373
+#: src/gpm-statistics.c:321
 msgid "Unknown technology"
 msgstr "Onbekende technologie"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:393
+#: src/gpm-statistics.c:338
 msgid "Charging"
-msgstr "Opladen…"
+msgstr "Opladen"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:397
+#: src/gpm-statistics.c:342
 msgid "Discharging"
 msgstr "Ontladen"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:401
+#: src/gpm-statistics.c:346
 msgid "Empty"
 msgstr "Leeg"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:405
+#: src/gpm-statistics.c:350
 msgid "Charged"
 msgstr "Opgeladen"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:409
+#: src/gpm-statistics.c:354
 msgid "Waiting to charge"
 msgstr "Wachten op opladen"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:413
+#: src/gpm-statistics.c:358
 msgid "Waiting to discharge"
 msgstr "Wacht op ontladen"
 
-#: ../src/gpm-statistics.c:433
-msgid "Attribute"
-msgstr "Attribuut"
-
-#: ../src/gpm-statistics.c:440
-msgid "Value"
-msgstr "Waarde"
-
-#: ../src/gpm-statistics.c:457
-msgid "Image"
-msgstr "Afbeelding"
-
-#: ../src/gpm-statistics.c:463
-msgid "Description"
-msgstr "Omschrijving"
-
-#: ../src/gpm-statistics.c:482 ../src/gpm-statistics.c:706
-msgid "Type"
-msgstr "Type"
-
-#: ../src/gpm-statistics.c:488
-msgid "ID"
-msgstr "ID"
-
-#: ../src/gpm-statistics.c:502
-msgid "Command"
-msgstr "Opdracht"
-
+#. TRANSLATORS: battery state
 #. TRANSLATORS: this is when the stats time is not known
-#: ../src/gpm-statistics.c:587
+#: src/gpm-statistics.c:362 src/gpm-statistics.c:518
 msgid "Unknown"
 msgstr "Onbekend"
 
+#: src/gpm-statistics.c:379
+msgid "Attribute"
+msgstr "Attribuut"
+
+#: src/gpm-statistics.c:386
+msgid "Value"
+msgstr "Waarde"
+
+#: src/gpm-statistics.c:400
+msgid "Image"
+msgstr "Afbeelding"
+
+#: src/gpm-statistics.c:406
+msgid "Description"
+msgstr "Omschrijving"
+
+#: src/gpm-statistics.c:422 src/gpm-statistics.c:619
+msgid "Type"
+msgstr "Type"
+
+#: src/gpm-statistics.c:428
+msgid "ID"
+msgstr "ID"
+
+#: src/gpm-statistics.c:435 src/gpm-statistics.ui:516
+msgid "Wakeups"
+msgstr "Wake-ups"
+
+#: src/gpm-statistics.c:442
+msgid "Command"
+msgstr "Opdracht"
+
+#: src/gpm-statistics.c:449 src/gpm-statistics.ui:66
+msgid "Details"
+msgstr "Details"
+
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:591
+#: src/gpm-statistics.c:522
 #, c-format
 msgid "%.0f second"
 msgid_plural "%.0f seconds"
@@ -480,7 +489,7 @@ msgstr[0] "%.0f seconde"
 msgstr[1] "%.0f seconden"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:596
+#: src/gpm-statistics.c:527
 #, c-format
 msgid "%.1f minute"
 msgid_plural "%.1f minutes"
@@ -489,7 +498,7 @@ msgstr[1] "%.1f minuten"
 
 # de laptop blijft nog 5 uur werken (ipv 5 uren)
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:601
+#: src/gpm-statistics.c:532
 #, c-format
 msgid "%.1f hour"
 msgid_plural "%.1f hours"
@@ -497,35 +506,35 @@ msgstr[0] "%.1f uur"
 msgstr[1] "%.1f uur"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:605
+#: src/gpm-statistics.c:536
 #, c-format
 msgid "%.1f day"
 msgid_plural "%.1f days"
 msgstr[0] "%.1f dag"
 msgstr[1] "%.1f dagen"
 
-#: ../src/gpm-statistics.c:614
+#: src/gpm-statistics.c:542
 msgid "Yes"
 msgstr "Ja"
 
-#: ../src/gpm-statistics.c:614
+#: src/gpm-statistics.c:542
 msgid "No"
 msgstr "Nee"
 
 #. TRANSLATORS: the device ID of the current device, e.g. "battery0"
-#: ../src/gpm-statistics.c:703
+#: src/gpm-statistics.c:617
 msgid "Device"
 msgstr "Apparaat"
 
-#: ../src/gpm-statistics.c:708
+#: src/gpm-statistics.c:621
 msgid "Vendor"
 msgstr "Verkoper"
 
-#: ../src/gpm-statistics.c:710
+#: src/gpm-statistics.c:623
 msgid "Model"
 msgstr "Model"
 
-#: ../src/gpm-statistics.c:712
+#: src/gpm-statistics.c:625
 msgid "Serial number"
 msgstr "Serienummer"
 
@@ -533,130 +542,130 @@ msgstr "Serienummer"
 #. TRANSLATORS: a boolean attribute that means if the device is supplying the
 #. * main power for the computer. For instance, an AC adapter or laptop battery
 #. * would be TRUE,  but a mobile phone or mouse taking power is FALSE
-#: ../src/gpm-statistics.c:717
+#: src/gpm-statistics.c:630
 msgid "Supply"
 msgstr "Supply"
 
-#: ../src/gpm-statistics.c:720
+#: src/gpm-statistics.c:633
 #, c-format
-msgid "%d second"
-msgid_plural "%d seconds"
-msgstr[0] "%d seconde"
-msgstr[1] "%d seconden"
+msgid "%u second"
+msgid_plural "%u seconds"
+msgstr[0] "%u seconde"
+msgstr[1] "%u seconden"
 
 #. TRANSLATORS: when the device was last updated with new data. It's
 #. * usually a few seconds when a device is discharging or charging.
-#: ../src/gpm-statistics.c:724
+#: src/gpm-statistics.c:637
 msgid "Refreshed"
 msgstr "Bijgewerkt"
 
 #. TRANSLATORS: Present is whether the device is currently attached
 #. * to the computer, as some devices (e.g. laptop batteries) can
 #. * be removed, but still observed as devices on the system
-#: ../src/gpm-statistics.c:734
+#: src/gpm-statistics.c:647
 msgid "Present"
 msgstr "Aanwezig"
 
 #. TRANSLATORS: If the device can be recharged, e.g. lithium
 #. * batteries rather than alkaline ones
-#: ../src/gpm-statistics.c:741
+#: src/gpm-statistics.c:654
 msgid "Rechargeable"
 msgstr "Oplaadbaar"
 
 #. TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged"
-#: ../src/gpm-statistics.c:747
+#: src/gpm-statistics.c:660
 msgid "State"
 msgstr "Status"
 
-#: ../src/gpm-statistics.c:751
+#: src/gpm-statistics.c:664
 msgid "Energy"
 msgstr "Energie"
 
-#: ../src/gpm-statistics.c:754
+#: src/gpm-statistics.c:667
 msgid "Energy when empty"
 msgstr "Energie wanneer leeg"
 
-#: ../src/gpm-statistics.c:757
+#: src/gpm-statistics.c:670
 msgid "Energy when full"
 msgstr "Energie wanneer vol"
 
-#: ../src/gpm-statistics.c:760
+#: src/gpm-statistics.c:673
 msgid "Energy (design)"
 msgstr "Energie (fabrieksontwerp)"
 
-#: ../src/gpm-statistics.c:774
+#: src/gpm-statistics.c:687
 msgid "Voltage"
 msgstr "Voltage"
 
 #. TRANSLATORS: the amount of charge the cell contains
-#: ../src/gpm-statistics.c:796
+#: src/gpm-statistics.c:709
 msgid "Percentage"
 msgstr "Percentage"
 
 #. TRANSLATORS: the capacity of the device, which is basically a measure
 #. * of how full it can get, relative to the design capacity
-#: ../src/gpm-statistics.c:803
+#: src/gpm-statistics.c:716
 msgid "Capacity"
 msgstr "Capaciteit"
 
 #. TRANSLATORS: the type of battery, e.g. lithium or nikel metal hydroxide
-#: ../src/gpm-statistics.c:808
+#: src/gpm-statistics.c:721
 msgid "Technology"
 msgstr "Technologie"
 
 #. TRANSLATORS: this is when the device is plugged in, typically
 #. * only shown for the ac adaptor device
-#: ../src/gpm-statistics.c:813
+#: src/gpm-statistics.c:726
 msgid "Online"
 msgstr "Online"
 
 #. TRANSLATORS: the command line was not provided
-#: ../src/gpm-statistics.c:1140
+#: src/gpm-statistics.c:1025
 msgid "No data"
 msgstr "Geen gegevens"
 
 #. TRANSLATORS: kernel module, usually a device driver
-#: ../src/gpm-statistics.c:1147 ../src/gpm-statistics.c:1152
+#: src/gpm-statistics.c:1032 src/gpm-statistics.c:1037
 msgid "Kernel module"
 msgstr "Kernel-module"
 
 #. TRANSLATORS: kernel housekeeping
-#: ../src/gpm-statistics.c:1157
+#: src/gpm-statistics.c:1042
 msgid "Kernel core"
 msgstr "Kernel-core"
 
 #. TRANSLATORS: interrupt between processors
-#: ../src/gpm-statistics.c:1162
+#: src/gpm-statistics.c:1047
 msgid "Interprocessor interrupt"
 msgstr "Interprocessor-interrupt"
 
 #. TRANSLATORS: unknown interrupt
-#: ../src/gpm-statistics.c:1167
+#: src/gpm-statistics.c:1052
 msgid "Interrupt"
 msgstr "Interrupt"
 
 #. TRANSLATORS: the keyboard and mouse device event
-#: ../src/gpm-statistics.c:1214
+#: src/gpm-statistics.c:1095
 msgid "PS/2 keyboard/mouse/touchpad"
 msgstr "PS/2-toetsenbord/muis/touchpad"
 
 #. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
-#: ../src/gpm-statistics.c:1217
+#: src/gpm-statistics.c:1098
 msgid "ACPI"
 msgstr "ACPI"
 
 #. TRANSLATORS: serial ATA is a new style of hard disk interface
-#: ../src/gpm-statistics.c:1220
+#: src/gpm-statistics.c:1101
 msgid "Serial ATA"
 msgstr "Seriële ATA"
 
 #. TRANSLATORS: this is the old-style ATA interface
-#: ../src/gpm-statistics.c:1223
+#: src/gpm-statistics.c:1104
 msgid "ATA host controller"
 msgstr "ATA-host-controller"
 
 #. TRANSLATORS: 802.11 wireless adaptor
-#: ../src/gpm-statistics.c:1226
+#: src/gpm-statistics.c:1107
 msgid "Intel wireless adaptor"
 msgstr "Draadloze adapter (Intel)"
 
@@ -664,9 +673,9 @@ msgstr "Draadloze adapter (Intel)"
 #. TRANSLATORS: a timer is something that fires periodically.
 #. * The parameter is a process name, e.g. "firefox-bin".
 #. * This is shown when the timer wakes up.
-#: ../src/gpm-statistics.c:1233 ../src/gpm-statistics.c:1238
-#: ../src/gpm-statistics.c:1243 ../src/gpm-statistics.c:1248
-#: ../src/gpm-statistics.c:1253
+#: src/gpm-statistics.c:1114 src/gpm-statistics.c:1119
+#: src/gpm-statistics.c:1124 src/gpm-statistics.c:1129
+#: src/gpm-statistics.c:1134
 #, c-format
 msgid "Timer %s"
 msgstr "%s-timer"
@@ -674,14 +683,14 @@ msgstr "%s-timer"
 # Is dit correct? (Wouter Bolsterlee)
 #. TRANSLATORS: the parameter is the name of task that's woken up from sleeping.
 #. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:1257
+#: src/gpm-statistics.c:1138
 #, c-format
 msgid "Sleep %s"
 msgstr "%s-Slaapstand"
 
 # Is dit correct? (Wouter Bolsterlee)
 #. TRANSLATORS: this is the name of a new realtime task.
-#: ../src/gpm-statistics.c:1260
+#: src/gpm-statistics.c:1141
 #, c-format
 msgid "New task %s"
 msgstr "Nieuwe taak %s"
@@ -689,7 +698,7 @@ msgstr "Nieuwe taak %s"
 # Is dit correct? (Wouter Bolsterlee)
 #. TRANSLATORS: this is the name of a task that's woken to check state.
 #. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:1264
+#: src/gpm-statistics.c:1145
 #, c-format
 msgid "Wait %s"
 msgstr "Wacht %s"
@@ -697,107 +706,146 @@ msgstr "Wacht %s"
 # Is dit correct? (Wouter Bolsterlee)
 #. TRANSLATORS: this is the name of a work queue.
 #. * A work queue is a list of work that has to be done.
-#: ../src/gpm-statistics.c:1268 ../src/gpm-statistics.c:1272
+#: src/gpm-statistics.c:1149 src/gpm-statistics.c:1153
 #, c-format
 msgid "Work queue %s"
 msgstr "Wachtrij %s"
 
 # Is dit correct? (Wouter Bolsterlee)
 #. TRANSLATORS: this is when the networking subsystem clears out old entries
-#: ../src/gpm-statistics.c:1275
+#: src/gpm-statistics.c:1156
 #, c-format
 msgid "Network route flush %s"
 msgstr "Netwerkroute-flush %s"
 
 #. TRANSLATORS: this is the name of an activity on the USB bus
-#: ../src/gpm-statistics.c:1278
+#: src/gpm-statistics.c:1159
 #, c-format
 msgid "USB activity %s"
 msgstr "USB-activiteit %s"
 
 # Is dit correct? (Wouter Bolsterlee)
 #. TRANSLATORS: we've timed out of an aligned timer, with the name
-#: ../src/gpm-statistics.c:1281
+#: src/gpm-statistics.c:1162
 #, c-format
 msgid "Wakeup %s"
 msgstr "Wake-up %s"
 
 #. TRANSLATORS: interupts on the system required for basic operation
-#: ../src/gpm-statistics.c:1284
+#: src/gpm-statistics.c:1165
 msgid "Local interrupts"
 msgstr "Lokale interrupts"
 
 #. TRANSLATORS: interrupts when a task gets moved from one core to another
-#: ../src/gpm-statistics.c:1287
+#: src/gpm-statistics.c:1168
 msgid "Rescheduling interrupts"
 msgstr "Rescheduling-interrupts"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1396
+#: src/gpm-statistics.c:1265
 msgid "Device Information"
 msgstr "Apparaatinformatie"
 
 # vrij vertaald (Wouter Bolsterlee)
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1398
+#: src/gpm-statistics.c:1267
 msgid "Device History"
 msgstr "Apparaathistorie"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1400
+#: src/gpm-statistics.c:1269
 msgid "Device Profile"
 msgstr "Apparaatprofiel"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1402
+#: src/gpm-statistics.c:1271
 msgid "Processor Wakeups"
 msgstr "Processor-wake-ups"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1598 ../src/gpm-statistics.c:1604
-#: ../src/gpm-statistics.c:1610 ../src/gpm-statistics.c:1616
+#: src/gpm-statistics.c:1448 src/gpm-statistics.c:1454
+#: src/gpm-statistics.c:1460 src/gpm-statistics.c:1466
 msgid "Time elapsed"
 msgstr "Verstreken tijd"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1600
+#: src/gpm-statistics.c:1450
 msgid "Power"
 msgstr "Energie"
 
 #. TRANSLATORS: this is the Y axis on the graph for the whole battery device
 #. TRANSLATORS: this is the X axis on the graph for the whole battery device
-#: ../src/gpm-statistics.c:1606 ../src/gpm-statistics.c:1649
-#: ../src/gpm-statistics.c:1655 ../src/gpm-statistics.c:1661
-#: ../src/gpm-statistics.c:1667
+#: src/gpm-statistics.c:1456 src/gpm-statistics.c:1495
+#: src/gpm-statistics.c:1501 src/gpm-statistics.c:1507
+#: src/gpm-statistics.c:1513
 msgid "Cell charge"
 msgstr "Cel-lading"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1612 ../src/gpm-statistics.c:1618
+#: src/gpm-statistics.c:1462 src/gpm-statistics.c:1468
 msgid "Predicted time"
 msgstr "Voorspelde tijd"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1651 ../src/gpm-statistics.c:1663
+#: src/gpm-statistics.c:1497 src/gpm-statistics.c:1509
 msgid "Correction factor"
 msgstr "Correctiefactor"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1657 ../src/gpm-statistics.c:1669
+#: src/gpm-statistics.c:1503 src/gpm-statistics.c:1515
 msgid "Prediction accuracy"
 msgstr "Nauwkeurigheid voorspelling"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-statistics.c:1848
+#: src/gpm-statistics.c:1646
 msgid "Show extra debugging information"
 msgstr "Extra debuginformatie tonen"
 
 #. TRANSLATORS: show a device by default
-#: ../src/gpm-statistics.c:1851
+#: src/gpm-statistics.c:1649
 msgid "Select this device at startup"
 msgstr "Dit apparaat bij opstarten tonen"
 
 #. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:2111
+#: src/gpm-statistics.c:1893
 msgid "Processor"
 msgstr "Processor"
+
+#: src/gpm-statistics.ui:92 src/gpm-statistics.ui:296
+msgid "Graph type:"
+msgstr "Type grafiek:"
+
+#: src/gpm-statistics.ui:127
+msgid "Data length:"
+msgstr "Data-lengte:"
+
+#: src/gpm-statistics.ui:186 src/gpm-statistics.ui:348
+msgid "There is no data to display."
+msgstr "Er zijn geen gegevens om te tonen."
+
+#: src/gpm-statistics.ui:228 src/gpm-statistics.ui:391
+msgid "Use smoothed line"
+msgstr "Afgeronde lijn tonen"
+
+#: src/gpm-statistics.ui:244 src/gpm-statistics.ui:407
+msgid "Show data points"
+msgstr "Datapunten tonen"
+
+# vrij vertaald (Wouter Bolsterlee)
+# andere vertaling: Gebruik (cpu-gebruik, netwerk-gebruik geheugengebruik)Tino
+#: src/gpm-statistics.ui:274
+msgid "History"
+msgstr "Geschiedenis"
+
+# vrij vertaald (Wouter Bolsterlee&Rinse de Vries)
+#: src/gpm-statistics.ui:437
+msgid "Statistics"
+msgstr "Statistieken"
+
+#: src/gpm-statistics.ui:459
+msgid "Processor wakeups per second:"
+msgstr "Aantal processor-wake-ups per seconde:"
+
+#: src/gpm-statistics.ui:471
+msgid "0"
+msgstr "0"
