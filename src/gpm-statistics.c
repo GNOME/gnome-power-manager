@@ -44,14 +44,12 @@
 static GtkBuilder *builder = NULL;
 static GtkListStore *list_store_info = NULL;
 static GtkListStore *list_store_devices = NULL;
-static GtkListStore *list_store_wakeups = NULL;
 gchar *current_device = NULL;
 static const gchar *history_type;
 static const gchar *stats_type;
 static guint history_time;
 static GSettings *settings;
 static gfloat sigma_smoothing = 0.0f;
-static UpWakeups *wakeups = NULL;
 static GtkWidget *graph_history = NULL;
 static GtkWidget *graph_statistics = NULL;
 static UpClient *client = NULL;
@@ -68,15 +66,6 @@ enum {
 	GPM_DEVICES_COLUMN_TEXT,
 	GPM_DEVICES_COLUMN_ID,
 	GPM_DEVICES_COLUMN_LAST
-};
-
-enum {
-	GPM_WAKEUPS_COLUMN_ICON,
-	GPM_WAKEUPS_COLUMN_ID,
-	GPM_WAKEUPS_COLUMN_VALUE,
-	GPM_WAKEUPS_COLUMN_CMDLINE,
-	GPM_WAKEUPS_COLUMN_DETAILS,
-	GPM_WAKEUPS_COLUMN_LAST
 };
 
 #define GPM_HISTORY_RATE_TEXT			_("Rate")
@@ -406,48 +395,6 @@ gpm_stats_add_devices_columns (GtkTreeView *treeview)
 	column = gtk_tree_view_column_new_with_attributes (_("Description"), renderer,
 							   "markup", GPM_DEVICES_COLUMN_TEXT, NULL);
 	gtk_tree_view_column_set_sort_column_id (column, GPM_INFO_COLUMN_TEXT);
-	gtk_tree_view_append_column (treeview, column);
-	gtk_tree_view_column_set_expand (column, TRUE);
-}
-
-static void
-gpm_stats_add_wakeups_columns (GtkTreeView *treeview)
-{
-	GtkCellRenderer *renderer;
-	GtkTreeViewColumn *column;
-
-	/* image */
-	renderer = gtk_cell_renderer_pixbuf_new ();
-	g_object_set (renderer, "stock-size", GTK_ICON_SIZE_BUTTON, NULL);
-	column = gtk_tree_view_column_new_with_attributes (_("Type"), renderer,
-							   "icon-name", GPM_WAKEUPS_COLUMN_ICON, NULL);
-	gtk_tree_view_append_column (treeview, column);
-
-	/* column for id */
-	renderer = gtk_cell_renderer_text_new ();
-	column = gtk_tree_view_column_new_with_attributes (_("ID"), renderer,
-							   "markup", GPM_WAKEUPS_COLUMN_ID, NULL);
-	gtk_tree_view_append_column (treeview, column);
-	gtk_tree_view_column_set_expand (column, TRUE);
-
-	/* column for value */
-	renderer = gtk_cell_renderer_text_new ();
-	column = gtk_tree_view_column_new_with_attributes (_("Wakeups"), renderer,
-							   "markup", GPM_WAKEUPS_COLUMN_VALUE, NULL);
-	gtk_tree_view_append_column (treeview, column);
-	gtk_tree_view_column_set_expand (column, TRUE);
-
-	/* column for cmdline */
-	renderer = gtk_cell_renderer_text_new ();
-	column = gtk_tree_view_column_new_with_attributes (_("Command"), renderer,
-							   "markup", GPM_WAKEUPS_COLUMN_CMDLINE, NULL);
-	gtk_tree_view_append_column (treeview, column);
-	gtk_tree_view_column_set_expand (column, TRUE);
-
-	/* column for details */
-	renderer = gtk_cell_renderer_text_new ();
-	column = gtk_tree_view_column_new_with_attributes (_("Details"), renderer,
-							   "markup", GPM_WAKEUPS_COLUMN_DETAILS, NULL);
 	gtk_tree_view_append_column (treeview, column);
 	gtk_tree_view_column_set_expand (column, TRUE);
 }
@@ -1001,259 +948,10 @@ gpm_stats_update_info_data (UpDevice *device)
 	else
 		gtk_widget_hide (page_widget);
 
-	/* hide wakeups page */
-	page_widget = gtk_notebook_get_nth_page (notebook, 3);
-	gtk_widget_hide (page_widget);
-
 	page = gtk_notebook_get_current_page (notebook);
 	gpm_stats_update_info_data_page (device, page);
 
 	return;
-}
-
-static gchar *
-gpm_stats_format_cmdline (UpWakeupItem *item)
-{
-	gchar *found;
-	g_autofree gchar *temp = NULL;
-	gchar *cmdline;
-	const gchar *temp_ptr;
-
-	/* nothing */
-	if (up_wakeup_item_get_cmdline (item) == NULL) {
-		/* TRANSLATORS: the command line was not provided */
-		temp_ptr = _("No data");
-		goto out;
-	}
-
-	/* common kernel cmd names */
-	if (g_strcmp0 (up_wakeup_item_get_cmdline (item), "insmod") == 0) {
-		/* TRANSLATORS: kernel module, usually a device driver */
-		temp_ptr = _("Kernel module");
-		goto out;
-	}
-	if (g_strcmp0 (up_wakeup_item_get_cmdline (item), "modprobe") == 0) {
-		/* TRANSLATORS: kernel module, usually a device driver */
-		temp_ptr = _("Kernel module");
-		goto out;
-	}
-	if (g_strcmp0 (up_wakeup_item_get_cmdline (item), "swapper") == 0) {
-		/* TRANSLATORS: kernel housekeeping */
-		temp_ptr = _("Kernel core");
-		goto out;
-	}
-	if (g_strcmp0 (up_wakeup_item_get_cmdline (item), "kernel-ipi") == 0) {
-		/* TRANSLATORS: interrupt between processors */
-		temp_ptr = _("Interprocessor interrupt");
-		goto out;
-	}
-	if (g_strcmp0 (up_wakeup_item_get_cmdline (item), "interrupt") == 0) {
-		/* TRANSLATORS: unknown interrupt */
-		temp_ptr = _("Interrupt");
-		goto out;
-	}
-
-	/* truncate at first space or ':' */
-	temp = g_strdup (up_wakeup_item_get_cmdline (item));
-	found = strstr (temp, ":");
-	if (found != NULL)
-		*found = '\0';
-	found = strstr (temp, " ");
-	if (found != NULL)
-		*found = '\0';
-
-	/* remove path */
-	found = g_strrstr (temp, "/");
-	if (found != NULL && strncmp (temp, "event", 5) != 0)
-		temp_ptr = found + 1;
-	else
-		temp_ptr = temp;
-
-out:
-	/* format command line */
-	if (up_wakeup_item_get_is_userspace (item))
-		cmdline = g_markup_escape_text (temp_ptr, -1);
-	else
-		cmdline = g_markup_printf_escaped ("<i>%s</i>", temp_ptr);
-
-	/* return */
-	return cmdline;
-}
-
-static gchar *
-gpm_stats_format_details (UpWakeupItem *item)
-{
-	gchar *details;
-	const gchar *data;
-
-	/* get this once to avoid a load of derefs */
-	data = up_wakeup_item_get_details (item);
-
-	/* replace common driver names */
-	if (g_strcmp0 (data, "i8042") == 0) {
-		/* TRANSLATORS: the keyboard and mouse device event */
-		details = g_strdup (_("PS/2 keyboard/mouse/touchpad"));
-	} else if (g_strcmp0 (data, "acpi") == 0) {
-		/* TRANSLATORS: ACPI, the Intel power standard on laptops and desktops */
-		details = g_strdup (_("ACPI"));
-	} else if (g_strcmp0 (data, "ata_piix") == 0) {
-		/* TRANSLATORS: serial ATA is a new style of hard disk interface */
-		details = g_strdup (_("Serial ATA"));
-	} else if (g_strcmp0 (data, "libata") == 0) {
-		/* TRANSLATORS: this is the old-style ATA interface */
-		details = g_strdup (_("ATA host controller"));
-	} else if (g_strcmp0 (data, "iwl3945") == 0 || g_strcmp0 (data, "iwlagn") == 0) {
-		/* TRANSLATORS: 802.11 wireless adaptor */
-		details = g_strdup (_("Intel wireless adaptor"));
-
-	/* try to make the wakeup type nicer */
-	} else if (g_str_has_prefix (data, "__mod_timer")) {
-		/* TRANSLATORS: a timer is something that fires periodically.
-		 * The parameter is a process name, e.g. "firefox-bin".
-		 * This is shown when the timer wakes up. */
-		details = g_strdup_printf (_("Timer %s"), data+12);
-	} else if (g_str_has_prefix (data, "mod_timer")) {
-		/* TRANSLATORS: a timer is something that fires periodically.
-		 * The parameter is a process name, e.g. "firefox-bin".
-		 * This is shown when the timer wakes up. */
-		details = g_strdup_printf (_("Timer %s"), data+10);
-	} else if (g_str_has_prefix (data, "hrtimer_start_expires")) {
-		/* TRANSLATORS: a timer is something that fires periodically.
-		 * The parameter is a process name, e.g. "firefox-bin".
-		 * This is shown when the timer wakes up. */
-		details = g_strdup_printf (_("Timer %s"), data+22);
-	} else if (g_str_has_prefix (data, "hrtimer_start")) {
-		/* TRANSLATORS: a timer is something that fires periodically.
-		 * The parameter is a process name, e.g. "firefox-bin".
-		 * This is shown when the timer wakes up. */
-		details = g_strdup_printf (_("Timer %s"), data+14);
-	} else if (g_str_has_prefix (data, "do_setitimer")) {
-		/* TRANSLATORS: a timer is something that fires periodically.
-		 * The parameter is a process name, e.g. "firefox-bin".
-		 * This is shown when the timer wakes up. */
-		details = g_strdup_printf (_("Timer %s"), data+10);
-	} else if (g_str_has_prefix (data, "do_nanosleep")) {
-		/* TRANSLATORS: the parameter is the name of task that's woken up from sleeping.
-		 * This is shown when the task wakes up. */
-		details = g_strdup_printf (_("Sleep %s"), data+13);
-	} else if (g_str_has_prefix (data, "enqueue_task_rt")) {
-		/* TRANSLATORS: this is the name of a new realtime task. */
-		details = g_strdup_printf (_("New task %s"), data+16);
-	} else if (g_str_has_prefix (data, "futex_wait")) {
-		/* TRANSLATORS: this is the name of a task that's woken to check state.
-		 * This is shown when the task wakes up. */
-		details = g_strdup_printf (_("Wait %s"), data+11);
-	} else if (g_str_has_prefix (data, "queue_delayed_work_on")) {
-		/* TRANSLATORS: this is the name of a work queue.
-		 * A work queue is a list of work that has to be done. */
-		details = g_strdup_printf (_("Work queue %s"), data+22);
-	} else if (g_str_has_prefix (data, "queue_delayed_work")) {
-		/* TRANSLATORS: this is the name of a work queue.
-		 * A work queue is a list of work that has to be done. */
-		details = g_strdup_printf (_("Work queue %s"), data+19);
-	} else if (g_str_has_prefix (data, "dst_run_gc")) {
-		/* TRANSLATORS: this is when the networking subsystem clears out old entries */
-		details = g_strdup_printf (_("Network route flush %s"), data+11);
-	} else if (g_str_has_prefix (data, "usb_hcd_poll_rh_status")) {
-		/* TRANSLATORS: this is the name of an activity on the USB bus */
-		details = g_strdup_printf (_("USB activity %s"), data+23);
-	} else if (g_str_has_prefix (data, "schedule_hrtimeout_range")) {
-		/* TRANSLATORS: we've timed out of an aligned timer, with the name */
-		details = g_strdup_printf (_("Wakeup %s"), data+25);
-	} else if (g_str_has_prefix (data, "Local timer interrupts")) {
-		/* TRANSLATORS: interupts on the system required for basic operation */
-		details = g_strdup (_("Local interrupts"));
-	} else if (g_str_has_prefix (data, "Rescheduling interrupts")) {
-		/* TRANSLATORS: interrupts when a task gets moved from one core to another */
-		details = g_strdup (_("Rescheduling interrupts"));
-	} else
-		details = g_markup_escape_text (data, -1);
-
-	return details;
-}
-static void
-gpm_stats_add_wakeups_item (UpWakeupItem *item)
-{
-	const gchar *icon;
-	GtkTreeIter iter;
-	g_autofree gchar *cmdline = NULL;
-	g_autofree gchar *details = NULL;
-	g_autofree gchar *id = NULL;
-	g_autofree gchar *value = NULL;
-
-	if (up_wakeup_item_get_is_userspace (item)) {
-		icon = "application-x-executable";
-		id = g_strdup_printf ("%u", up_wakeup_item_get_id (item));
-	} else {
-		icon = "applications-system";
-		if (up_wakeup_item_get_id (item) < 0xff0)
-			id = g_strdup_printf ("IRQ%u", up_wakeup_item_get_id (item));
-		else
-			id = g_strdup ("IRQx");
-	}
-
-	/* formate value to one decimal place */
-	value = g_strdup_printf ("%.1f", up_wakeup_item_get_value (item));
-
-	/* get formatted lines */
-	cmdline = gpm_stats_format_cmdline (item);
-	details = gpm_stats_format_details (item);
-
-	gtk_list_store_append (list_store_wakeups, &iter);
-	gtk_list_store_set (list_store_wakeups, &iter,
-			    GPM_WAKEUPS_COLUMN_ID, id,
-			    GPM_WAKEUPS_COLUMN_VALUE, value,
-			    GPM_WAKEUPS_COLUMN_CMDLINE, cmdline,
-			    GPM_WAKEUPS_COLUMN_DETAILS, details,
-			    GPM_WAKEUPS_COLUMN_ICON, icon, -1);
-}
-
-static void
-gpm_stats_update_wakeups_data (void)
-{
-	GtkWidget *widget;
-	GtkWidget *page_widget;
-	guint total;
-	UpWakeupItem *item;
-	guint i;
-	GError *error = NULL;
-	GPtrArray *array;
-
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "notebook1"));
-
-	/* hide other pages */
-	page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK(widget), 0);
-	gtk_widget_hide (page_widget);
-	page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK(widget), 1);
-	gtk_widget_hide (page_widget);
-	page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK(widget), 2);
-	gtk_widget_hide (page_widget);
-
-	/* show wakeups page */
-	page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK(widget), 3);
-	gtk_widget_show (page_widget);
-
-	/* show total */
-	total = up_wakeups_get_total_sync (wakeups, NULL, &error);
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "label_total_wakeups"));
-	if (error == NULL) {
-		g_autofree gchar *text = NULL;
-		text = g_strdup_printf ("%u", total);
-	} else {
-		gtk_label_set_label (GTK_LABEL(widget), error->message);
-		g_error_free (error);
-	}
-
-	/* get data */
-	gtk_list_store_clear (list_store_wakeups);
-	array = up_wakeups_get_data_sync (wakeups, NULL, NULL);
-	if (array == NULL)
-		return;
-	for (i = 0; i < array->len; i++) {
-		item = g_ptr_array_index (array, i);
-		gpm_stats_add_wakeups_item (item);
-	}
-	g_ptr_array_unref (array);
 }
 
 static void
@@ -1267,8 +965,6 @@ gpm_stats_set_title (GtkWindow *window, gint page_num)
 		N_("Device History"),
 		/* TRANSLATORS: shown on the titlebar */
 		N_("Device Profile"),
-		/* TRANSLATORS: shown on the titlebar */
-		N_("Processor Wakeups")
 	};
 
 	/* TRANSLATORS: shown on the titlebar */
@@ -1290,9 +986,6 @@ gpm_stats_notebook_changed_cb (GtkNotebook *notebook, gpointer page, gint page_n
 	g_settings_set_int (settings, GPM_SETTINGS_INFO_PAGE_NUMBER, page_num);
 
 	if (current_device == NULL)
-		return;
-
-	if (g_strcmp0 (current_device, "wakeups") == 0)
 		return;
 
 	device = up_device_new ();
@@ -1331,9 +1024,7 @@ gpm_stats_devices_treeview_clicked_cb (GtkTreeSelection *selection, gpointer use
 		g_debug ("selected row is: %s", current_device);
 
 		/* is special device */
-		if (g_strcmp0 (current_device, "wakeups") == 0) {
-			gpm_stats_update_wakeups_data ();
-		} else {
+		if (1) {
 			device = up_device_new ();
 			up_device_set_object_path_sync (device, current_device, NULL, NULL);
 			gpm_stats_update_info_data (device);
@@ -1383,13 +1074,6 @@ gpm_stats_add_device (UpDevice *device)
 			    GPM_DEVICES_COLUMN_ID, id,
 			    GPM_DEVICES_COLUMN_TEXT, text,
 			    GPM_DEVICES_COLUMN_ICON, icon, -1);
-}
-
-static void
-gpm_stats_data_changed_cb (UpClient *_client, gpointer user_data)
-{
-	if (g_strcmp0 (current_device, "wakeups") == 0)
-		gpm_stats_update_wakeups_data ();
 }
 
 static void
@@ -1599,12 +1283,6 @@ gpm_stats_highlight_device (const gchar *object_path)
 	GtkTreePath *path;
 	GtkWidget *widget;
 
-	/* check valid */
-	if (!g_str_has_prefix (object_path, "/") &&
-	    g_strcmp0 (object_path, "wakeups") != 0) {
-		goto out;
-	}
-
 	/* we have to reuse the treeview data as it may be sorted */
 	ret = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (list_store_devices), &iter);
 	for (i = 0; ret && !found; i++) {
@@ -1623,7 +1301,6 @@ gpm_stats_highlight_device (const gchar *object_path)
 		}
 		ret = gtk_tree_model_iter_next (GTK_TREE_MODEL (list_store_devices), &iter);
 	}
-out:
 	return found;
 }
 
@@ -1687,7 +1364,6 @@ gpm_stats_startup_cb (GApplication *application,
 	GtkWidget *widget;
 	GtkWindow *window;
 	GtkTreeSelection *selection;
-	gboolean ret;
 	GPtrArray *devices_tmp;
 	UpDevice *device;
 	UpDeviceKind kind;
@@ -1764,8 +1440,6 @@ gpm_stats_startup_cb (GApplication *application,
 	list_store_info = gtk_list_store_new (GPM_INFO_COLUMN_LAST, G_TYPE_STRING, G_TYPE_STRING);
 	list_store_devices = gtk_list_store_new (GPM_DEVICES_COLUMN_LAST, G_TYPE_ICON,
 						 G_TYPE_STRING, G_TYPE_STRING);
-	list_store_wakeups = gtk_list_store_new (GPM_WAKEUPS_COLUMN_LAST, G_TYPE_STRING,
-						 G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 
 	/* create transaction_id tree view */
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "treeview_info"));
@@ -1786,15 +1460,6 @@ gpm_stats_startup_cb (GApplication *application,
 
 	/* add columns to the tree view */
 	gpm_stats_add_devices_columns (GTK_TREE_VIEW (widget));
-	gtk_tree_view_columns_autosize (GTK_TREE_VIEW (widget)); /* show */
-
-	/* create wakeups tree view */
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "treeview_wakeups"));
-	gtk_tree_view_set_model (GTK_TREE_VIEW (widget),
-				 GTK_TREE_MODEL (list_store_wakeups));
-
-	/* add columns to the tree view */
-	gpm_stats_add_wakeups_columns (GTK_TREE_VIEW (widget));
 	gtk_tree_view_columns_autosize (GTK_TREE_VIEW (widget)); /* show */
 
 	history_type = g_settings_get_string (settings, GPM_SETTINGS_INFO_HISTORY_TYPE);
@@ -1854,9 +1519,6 @@ gpm_stats_startup_cb (GApplication *application,
 	g_signal_connect (G_OBJECT (widget), "changed",
 			  G_CALLBACK (gpm_stats_range_combo_changed), NULL);
 
-	wakeups = up_wakeups_new ();
-	g_signal_connect (wakeups, "data-changed", G_CALLBACK (gpm_stats_data_changed_cb), NULL);
-
 	/* coldplug */
 	client = up_client_new ();
 	devices_tmp = up_client_get_devices (client);
@@ -1878,20 +1540,6 @@ gpm_stats_startup_cb (GApplication *application,
 		device = g_ptr_array_index (devices, 0);
 		gpm_stats_update_info_data (device);
 		current_device = g_strdup (up_device_get_object_path (device));
-	}
-
-	/* has capability to measure wakeups */
-	ret = up_wakeups_get_has_capability (wakeups);
-	if (ret) {
-		GtkTreeIter iter;
-		g_autoptr(GIcon) icon = NULL;
-		icon = g_themed_icon_new ("computer");
-		gtk_list_store_append (list_store_devices, &iter);
-		gtk_list_store_set (list_store_devices, &iter,
-				    GPM_DEVICES_COLUMN_ID, "wakeups",
-				    /* TRANSLATORS: the icon for the CPU */
-				    GPM_DEVICES_COLUMN_TEXT, _("Processor"),
-				    GPM_DEVICES_COLUMN_ICON, icon, -1);
 	}
 
 	/* set axis */
