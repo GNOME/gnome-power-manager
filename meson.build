@@ -1,7 +1,7 @@
 project('gnome-power-manager', 'c',
   version : '3.30.0',
   default_options : ['warning_level=1'],
-  meson_version : '>=0.37.0'
+  meson_version : '>=0.46.0'
 )
 
 conf = configuration_data()
@@ -62,20 +62,15 @@ endforeach
 
 # enable full RELRO where possible
 # FIXME: until https://github.com/mesonbuild/meson/issues/1140 is fixed
-global_link_args = []
 test_link_args = [
   '-Wl,-z,relro',
   '-Wl,-z,now',
 ]
 foreach arg: test_link_args
-  if cc.has_argument(arg)
-    global_link_args += arg
+  if cc.has_link_argument(arg)
+    add_project_link_arguments(arg, language : 'c')
   endif
 endforeach
-add_global_link_arguments(
-  global_link_args,
-  language: 'c'
-)
 
 gtk = dependency('gtk+-3.0', version : '>= 3.3.8')
 gdk = dependency('gdk-3.0', version : '>= 2.91.7')
