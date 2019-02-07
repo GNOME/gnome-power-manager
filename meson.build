@@ -80,7 +80,7 @@ add_global_link_arguments(
 gtk = dependency('gtk+-3.0', version : '>= 3.3.8')
 gdk = dependency('gdk-3.0', version : '>= 2.91.7')
 cairo = dependency('cairo', version : '>= 1.0.0')
-upower = dependency('upower-glib', version : '>= 0.9.1')
+upower = dependency('upower-glib', version : '>= 0.99.8')
 libm = cc.find_library('libm', required: false)
 
 gnome = import('gnome')

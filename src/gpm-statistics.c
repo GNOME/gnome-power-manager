@@ -1521,7 +1521,7 @@ gpm_stats_startup_cb (GApplication *application,
 
 	/* coldplug */
 	client = up_client_new ();
-	devices_tmp = up_client_get_devices (client);
+	devices_tmp = up_client_get_devices2 (client);
 	g_signal_connect (client, "device-added", G_CALLBACK (gpm_stats_device_added_cb), NULL);
 	g_signal_connect (client, "device-removed", G_CALLBACK (gpm_stats_device_removed_cb), NULL);
 
