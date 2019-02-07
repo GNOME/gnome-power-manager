@@ -801,7 +801,7 @@ egg_graph_widget_autorange_y (EggGraphWidget *graph)
 	 * positive parts */
 	if (priv->start_y < 0.f && priv->stop_y > 0.f &&
 	    priv->type_y == EGG_GRAPH_WIDGET_KIND_FACTOR) {
-		if (abs (priv->stop_y) > abs (priv->start_y))
+		if (fabs (priv->stop_y) > fabs (priv->start_y))
 			priv->start_y = -priv->stop_y;
 		else
 			priv->stop_y = -priv->start_y;
