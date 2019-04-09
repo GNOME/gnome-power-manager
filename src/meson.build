@@ -28,7 +28,7 @@ executable(
   ],
   c_args : cargs,
   install : true,
-  install_dir : 'bin'
+  install_dir : get_option('bindir')
 )
 
 if get_option('enable-tests')
