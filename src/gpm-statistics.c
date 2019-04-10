@@ -48,6 +48,7 @@ gchar *current_device = NULL;
 static const gchar *history_type;
 static const gchar *stats_type;
 static guint history_time;
+static guint divs_x;
 static GSettings *settings;
 static gfloat sigma_smoothing = 0.0f;
 static GtkWidget *graph_history = NULL;
@@ -78,17 +79,23 @@ enum {
 #define GPM_HISTORY_TIME_FULL_VALUE		"time-full"
 #define GPM_HISTORY_TIME_EMPTY_VALUE		"time-empty"
 
-#define GPM_HISTORY_MINUTE_TEXT			_("10 minutes")
-#define GPM_HISTORY_HOUR_TEXT			_("2 hours")
-#define GPM_HISTORY_HOURS_TEXT			_("6 hours")
+#define GPM_HISTORY_MINUTE_TEXT			_("30 minutes")
+#define GPM_HISTORY_HOUR_TEXT			_("3 hours")
+#define GPM_HISTORY_HOURS_TEXT			_("8 hours")
 #define GPM_HISTORY_DAY_TEXT			_("1 day")
 #define GPM_HISTORY_WEEK_TEXT			_("1 week")
 
-#define GPM_HISTORY_MINUTE_VALUE		10*60
-#define GPM_HISTORY_HOUR_VALUE			2*60*60
-#define GPM_HISTORY_HOURS_VALUE			6*60*60
+#define GPM_HISTORY_MINUTE_VALUE		30*60
+#define GPM_HISTORY_HOUR_VALUE			3*60*60
+#define GPM_HISTORY_HOURS_VALUE			8*60*60
 #define GPM_HISTORY_DAY_VALUE			24*60*60
 #define GPM_HISTORY_WEEK_VALUE			7*24*60*60
+
+#define GPM_HISTORY_MINUTE_DIVS			6  /* 5 min tick */
+#define GPM_HISTORY_HOUR_DIVS			6  /* 30 min tick */
+#define GPM_HISTORY_HOURS_DIVS			8  /* 1 hr tick */
+#define GPM_HISTORY_DAY_DIVS			12 /* 2 hr tick */
+#define GPM_HISTORY_WEEK_DIVS			7  /* 1 day tick */
 
 /* TRANSLATORS: what we've observed about the device */
 #define GPM_STATS_CHARGE_DATA_TEXT		_("Charge profile")
@@ -729,6 +736,7 @@ gpm_stats_update_info_page_history (UpDevice *device)
 			      "type-x", EGG_GRAPH_WIDGET_KIND_TIME,
 			      "type-y", EGG_GRAPH_WIDGET_KIND_PERCENTAGE,
 			      "autorange-x", FALSE,
+			      "divs-x", (guint) divs_x,
 			      "start-x", -(gdouble) history_time,
 			      "stop-x", (gdouble) 0.f,
 			      "autorange-y", FALSE,
@@ -740,6 +748,7 @@ gpm_stats_update_info_page_history (UpDevice *device)
 			      "type-x", EGG_GRAPH_WIDGET_KIND_TIME,
 			      "type-y", EGG_GRAPH_WIDGET_KIND_POWER,
 			      "autorange-x", FALSE,
+			      "divs-x", (guint) divs_x,
 			      "start-x", -(gdouble) history_time,
 			      "stop-x", (gdouble) 0.f,
 			      "autorange-y", TRUE,
@@ -749,6 +758,7 @@ gpm_stats_update_info_page_history (UpDevice *device)
 			      "type-x", EGG_GRAPH_WIDGET_KIND_TIME,
 			      "type-y", EGG_GRAPH_WIDGET_KIND_TIME,
 			      "autorange-x", FALSE,
+			      "divs-x", (guint) divs_x,
 			      "start-x", -(gdouble) history_time,
 			      "stop-x", (gdouble) 0.f,
 			      "autorange-y", TRUE,
@@ -849,6 +859,7 @@ gpm_stats_update_info_page_stats (UpDevice *device)
 		g_object_set (graph_statistics,
 			      "type-x", EGG_GRAPH_WIDGET_KIND_PERCENTAGE,
 			      "type-y", EGG_GRAPH_WIDGET_KIND_FACTOR,
+			      "divs-x", 10,
 			      "autorange-x", TRUE,
 			      "autorange-y", TRUE,
 			      NULL);
@@ -856,6 +867,7 @@ gpm_stats_update_info_page_stats (UpDevice *device)
 		g_object_set (graph_statistics,
 			      "type-x", EGG_GRAPH_WIDGET_KIND_PERCENTAGE,
 			      "type-y", EGG_GRAPH_WIDGET_KIND_PERCENTAGE,
+			      "divs-x", 10,
 			      "autorange-x", TRUE,
 			      "autorange-y", TRUE,
 			      NULL);
@@ -1218,17 +1230,22 @@ gpm_stats_range_combo_changed (GtkWidget *widget, gpointer data)
 {
 	g_autofree gchar *value = NULL;
 	value = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (widget));
-	if (g_strcmp0 (value, GPM_HISTORY_MINUTE_TEXT) == 0)
+	if (g_strcmp0 (value, GPM_HISTORY_MINUTE_TEXT) == 0) {
 		history_time = GPM_HISTORY_MINUTE_VALUE;
-	else if (g_strcmp0 (value, GPM_HISTORY_HOUR_TEXT) == 0)
+		divs_x = GPM_HISTORY_MINUTE_DIVS;
+	} else if (g_strcmp0 (value, GPM_HISTORY_HOUR_TEXT) == 0) {
 		history_time = GPM_HISTORY_HOUR_VALUE;
-	else if (g_strcmp0 (value, GPM_HISTORY_HOURS_TEXT) == 0)
+		divs_x = GPM_HISTORY_HOUR_DIVS;
+	} else if (g_strcmp0 (value, GPM_HISTORY_HOURS_TEXT) == 0) {
 		history_time = GPM_HISTORY_HOURS_VALUE;
-	else if (g_strcmp0 (value, GPM_HISTORY_DAY_TEXT) == 0)
+		divs_x = GPM_HISTORY_HOURS_DIVS;
+	} else if (g_strcmp0 (value, GPM_HISTORY_DAY_TEXT) == 0) {
 		history_time = GPM_HISTORY_DAY_VALUE;
-	else if (g_strcmp0 (value, GPM_HISTORY_WEEK_TEXT) == 0)
+		divs_x = GPM_HISTORY_DAY_DIVS;
+	} else if (g_strcmp0 (value, GPM_HISTORY_WEEK_TEXT) == 0) {
 		history_time = GPM_HISTORY_WEEK_VALUE;
-	else
+		divs_x = GPM_HISTORY_WEEK_DIVS;
+	} else
 		g_assert (FALSE);
 
 	/* save to gconf */
@@ -1466,8 +1483,6 @@ gpm_stats_startup_cb (GApplication *application,
 	history_time = g_settings_get_int (settings, GPM_SETTINGS_INFO_HISTORY_TIME);
 	if (history_type == NULL)
 		history_type = GPM_HISTORY_CHARGE_VALUE;
-	if (history_time == 0)
-		history_time = GPM_HISTORY_HOUR_VALUE;
 
 	stats_type = g_settings_get_string (settings, GPM_SETTINGS_INFO_STATS_TYPE);
 	if (stats_type == NULL)
@@ -1496,8 +1511,6 @@ gpm_stats_startup_cb (GApplication *application,
 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 1);
 	else if (g_strcmp0 (stats_type, GPM_STATS_CHARGE_DATA_VALUE) == 0)
 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 2);
-	else if (g_strcmp0 (stats_type, GPM_STATS_CHARGE_DATA_VALUE) == 0)
-		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
 	else
 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 3);
 	g_signal_connect (G_OBJECT (widget), "changed",
@@ -1509,13 +1522,24 @@ gpm_stats_startup_cb (GApplication *application,
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_HISTORY_HOURS_TEXT);
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_HISTORY_DAY_TEXT);
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), GPM_HISTORY_WEEK_TEXT);
-	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 1);
-	if (history_time == GPM_HISTORY_MINUTE_VALUE)
+
+	if (history_time == GPM_HISTORY_MINUTE_VALUE) {
 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-	else if (history_time == GPM_HISTORY_HOUR_VALUE)
+		divs_x = GPM_HISTORY_MINUTE_DIVS;
+	} else if (history_time == GPM_HISTORY_HOUR_VALUE) {
 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 1);
-	else
+		divs_x = GPM_HISTORY_HOUR_DIVS;
+	} else if (history_time == GPM_HISTORY_DAY_VALUE) {
+		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 3); 
+		divs_x = GPM_HISTORY_DAY_DIVS;
+	} else if (history_time == GPM_HISTORY_WEEK_VALUE) {
+		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 4);
+		divs_x = GPM_HISTORY_WEEK_DIVS;
+	} else { /* default */
 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 2);
+		history_time = GPM_HISTORY_HOURS_VALUE;
+		divs_x = GPM_HISTORY_HOURS_DIVS;
+	}
 	g_signal_connect (G_OBJECT (widget), "changed",
 			  G_CALLBACK (gpm_stats_range_combo_changed), NULL);
 

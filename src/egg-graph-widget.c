@@ -47,8 +47,10 @@ typedef struct {
 	gint			 box_width;
 	gint			 box_height;
 
-	gdouble			 unit_x; /* 10th width of graph */
-	gdouble			 unit_y; /* 10th width of graph */
+	guint			 divs_x; /* number of divisions */
+
+	gdouble			 unit_x; /* box pixels per x unit */
+	gdouble			 unit_y; /* box pixels per y unit */
 
 	EggGraphWidgetKind	 type_x;
 	EggGraphWidgetKind	 type_y;
@@ -76,6 +78,7 @@ enum
 	PROP_TYPE_Y,
 	PROP_AUTORANGE_X,
 	PROP_AUTORANGE_Y,
+	PROP_DIVS_X,
 	PROP_START_X,
 	PROP_START_Y,
 	PROP_STOP_X,
@@ -156,6 +159,9 @@ up_graph_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec
 	case PROP_AUTORANGE_Y:
 		g_value_set_boolean (value, priv->autorange_y);
 		break;
+	case PROP_DIVS_X:
+		g_value_set_uint (value, priv->divs_x);
+		break;
 	case PROP_START_X:
 		g_value_set_double (value, priv->start_x);
 		break;
@@ -198,6 +204,9 @@ up_graph_set_property (GObject *object, guint prop_id, const GValue *value, GPar
 		break;
 	case PROP_AUTORANGE_Y:
 		priv->autorange_y = g_value_get_boolean (value);
+		break;
+	case PROP_DIVS_X:
+		priv->divs_x = g_value_get_uint (value);
 		break;
 	case PROP_START_X:
 		priv->start_x = g_value_get_double (value);
@@ -268,6 +277,11 @@ egg_graph_widget_class_init (EggGraphWidgetClass *class)
 							       TRUE,
 							       G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
+					 PROP_DIVS_X,
+					 g_param_spec_uint ("divs-x", NULL, NULL,
+							   4, 16, 4,
+							   G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
 					 PROP_START_X,
 					 g_param_spec_double ("start-x", NULL, NULL,
 							   -G_MAXDOUBLE, G_MAXDOUBLE, 0.f,
@@ -300,6 +314,7 @@ egg_graph_widget_init (EggGraphWidget *graph)
 	priv->start_y = 0;
 	priv->stop_x = 60;
 	priv->stop_y = 100;
+	priv->divs_x = 4;
 	priv->use_grid = TRUE;
 	priv->use_legend = FALSE;
 	priv->legend_list = g_ptr_array_new_with_free_func ((GDestroyNotify) egg_graph_widget_key_legend_data_free);
@@ -445,7 +460,7 @@ egg_graph_widget_draw_grid (EggGraphWidget *graph, cairo_t *cr)
 	guint i;
 	gdouble b;
 	gdouble dotted[] = {1., 2.};
-	gdouble divwidth  = (gdouble)priv->box_width / 10.0f;
+	gdouble divwidth  = (gdouble)priv->box_width / (gdouble)priv->divs_x;
 	gdouble divheight = (gdouble)priv->box_height / 10.0f;
 
 	cairo_save (cr);
@@ -455,7 +470,7 @@ egg_graph_widget_draw_grid (EggGraphWidget *graph, cairo_t *cr)
 
 	/* do vertical lines */
 	cairo_set_source_rgb (cr, 0.1, 0.1, 0.1);
-	for (i = 1; i < 10; i++) {
+	for (i = 1; i < priv->divs_x; i++) {
 		b = priv->box_x + ((gdouble) i * divwidth);
 		cairo_move_to (cr, (gint)b + 0.5f, priv->box_y);
 		cairo_line_to (cr, (gint)b + 0.5f, priv->box_y + priv->box_height);
@@ -480,7 +495,7 @@ egg_graph_widget_draw_labels (EggGraphWidget *graph, cairo_t *cr)
 	guint i;
 	gdouble b;
 	gdouble value;
-	gdouble divwidth  = (gdouble)priv->box_width / 10.0f;
+	gdouble divwidth  = (gdouble)priv->box_width / (gdouble)priv->divs_x;
 	gdouble divheight = (gdouble)priv->box_height / 10.0f;
 	gdouble length_x = priv->stop_x - priv->start_x;
 	gdouble length_y = priv->stop_y - priv->start_y;
@@ -492,10 +507,10 @@ egg_graph_widget_draw_labels (EggGraphWidget *graph, cairo_t *cr)
 
 	/* do x text */
 	cairo_set_source_rgb (cr, 0.2f, 0.2f, 0.2f);
-	for (i = 0; i < 11; i++) {
+	for (i = 0; i < priv->divs_x + 1; i++) {
 		g_autofree gchar *text = NULL;
 		b = priv->box_x + ((gdouble) i * divwidth);
-		value = ((length_x / 10.0f) * (gdouble) i) + (gdouble) priv->start_x;
+		value = ((length_x / (gdouble)priv->divs_x) * (gdouble) i) + (gdouble) priv->start_x;
 		text = egg_graph_widget_get_axis_label (priv->type_x, value);
 
 		pango_layout_set_text (priv->layout, text, -1);
@@ -503,7 +518,7 @@ egg_graph_widget_draw_labels (EggGraphWidget *graph, cairo_t *cr)
 		/* have data points 0 and 10 bounded, but 1..9 centered */
 		if (i == 0)
 			offsetx = 2.0;
-		else if (i == 10)
+		else if (i == priv->divs_x)
 			offsetx = ink_rect.width;
 		else
 			offsetx = (ink_rect.width / 2.0f);
