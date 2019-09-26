@@ -506,7 +506,6 @@ egg_graph_widget_draw_labels (EggGraphWidget *graph, cairo_t *cr)
 	cairo_save (cr);
 
 	/* do x text */
-	cairo_set_source_rgb (cr, 0.2f, 0.2f, 0.2f);
 	for (i = 0; i < priv->divs_x + 1; i++) {
 		g_autofree gchar *text = NULL;
 		b = priv->box_x + ((gdouble) i * divwidth);
