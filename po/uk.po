@@ -1,89 +1,121 @@
 # Ukrainian translation of gnome-power-manager
 # Copyright (C) 2005 Free Software Foundation, Inc.
-# Maxim Dziumanenko <dziumanenko@gmail.com>, 2005-2010
+# Maxim Dziumanenko <dziumanenko@gmail.com>, 2005-2010.
 # wanderlust <wanderlust@ukr.net>, 2009.
 # Korostil Daniel <ted.korostiled@gmail.com>, 2011.
 # Daniel Korostil <ted.korostiled@gmail.com>, 2013.
+# Yuri Chornoivan <yurchor@ukr.net>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-26 19:01+0200\n"
-"PO-Revision-Date: 2013-03-26 19:01+0300\n"
-"Last-Translator: Daniel Korostil <ted.korostiled@gmail.com>\n"
-"Language-Team: linux.org.ua\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-power-manager/issue"
+"s\n"
+"POT-Creation-Date: 2019-09-26 11:47+0000\n"
+"PO-Revision-Date: 2020-03-26 09:18+0200\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Virtaal 0.7.1\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<"
+"=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 20.03.70\n"
 "X-Project-Style: gnome\n"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:1
+#: data/appdata/org.gnome.PowerStats.appdata.xml.in:7
+#| msgid "Power Statistics"
+msgid "GNOME Power Statistics"
+msgstr "Статистика живлення GNOME"
+
+#: data/appdata/org.gnome.PowerStats.appdata.xml.in:8
+#: data/org.gnome.PowerStats.desktop.in.in:4
+msgid "Observe power management"
+msgstr "Стеження за керування живленням"
+
+#: data/appdata/org.gnome.PowerStats.appdata.xml.in:10
+msgid ""
+"Power Statistics can show historical and current battery information and "
+"programs waking up that use power."
+msgstr ""
+"Статистика живлення може показувати дані з журналу та поточні дані щодо"
+" споживання заряду акумулятора та програм, виконання яких споживає найбільше"
+" електроенергії."
+
+#: data/appdata/org.gnome.PowerStats.appdata.xml.in:14
+msgid ""
+"You probably only need to install this application if you are having "
+"problems with your laptop battery, or are trying to work out what programs "
+"are using significant amounts of power."
+msgstr ""
+"Ймовірно, потреба у встановленні цієї програми виникатиме у вас, лише якщо у"
+" вас виникатимуть проблеми із акумулятором вашого ноутбука, або якщо ви"
+" намагатиметеся встановити програму, робота якої призводить до швидкого"
+" вичерпання заряду акумулятора."
+
+#: data/org.gnome.power-manager.gschema.xml:5
 msgid "Whether we should show the history data points"
 msgstr "Чи слід показувати точки даних історії"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:2
+#: data/org.gnome.power-manager.gschema.xml:6
 msgid ""
 "Whether we should show the history data points in the statistics window."
 msgstr "Чи слід показувати точки даних історії у вікні статистики."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:3
+#: data/org.gnome.power-manager.gschema.xml:10
 msgid "Whether we should smooth the history data"
 msgstr "Чи слід згладжувати дані історії"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:4
+#: data/org.gnome.power-manager.gschema.xml:11
 msgid "Whether we should smooth the history data in the graph."
 msgstr "Чи слід згладжувати дані історії в графіку."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:5
+#: data/org.gnome.power-manager.gschema.xml:15
 msgid "The default graph type to show for history"
 msgstr "Типовий тип графіку для показу для історії"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:6
+#: data/org.gnome.power-manager.gschema.xml:16
 msgid "The default graph type to show in the history window."
 msgstr "Типовий тип графіку для показу у вікні історії."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:7
+#: data/org.gnome.power-manager.gschema.xml:20
 msgid "The maximum time displayed for history"
 msgstr "Максимальний час, що показано для історії"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:8
+#: data/org.gnome.power-manager.gschema.xml:21
 msgid ""
 "The maximum duration of time displayed on the x-axis of the history graph."
 msgstr "Максимальна тривалість, що показано у вісі X історичного графа."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:9
+#: data/org.gnome.power-manager.gschema.xml:25
 msgid "Whether we should show the stats data points"
 msgstr "Чи слід показувати точки даних статистики"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:10
+#: data/org.gnome.power-manager.gschema.xml:26
 msgid "Whether we should show the stats data points in the statistics window."
 msgstr "Чи слід показувати точки даних статистики у вікні статистики."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:11
+#: data/org.gnome.power-manager.gschema.xml:30
 msgid "Whether we should smooth the stats data"
 msgstr "Чи слід згладжувати дані статистики"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:12
+#: data/org.gnome.power-manager.gschema.xml:31
 msgid "Whether we should smooth the stats data in the graph."
 msgstr "Чи слід згладжувати дані статистики в графіку."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:13
+#: data/org.gnome.power-manager.gschema.xml:35
 msgid "The default graph type to show for stats"
 msgstr "Типовий тип графіку для показу для статистики"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:14
+#: data/org.gnome.power-manager.gschema.xml:36
 msgid "The default graph type to show in the stats window."
 msgstr "Типовий тип графіку для показу у вікні статистики."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:15
+#: data/org.gnome.power-manager.gschema.xml:40
 msgid "The index of the page number to show by default"
 msgstr "Індекс номера сторінки для типового показу"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:16
+#: data/org.gnome.power-manager.gschema.xml:41
 msgid ""
 "The index of the page number to show by default which is used to return "
 "focus to the correct page."
@@ -91,11 +123,11 @@ msgstr ""
 "Індекс номера сторінки для типового показу, який використовувався до "
 "повернення на правильну сторінку."
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:17
+#: data/org.gnome.power-manager.gschema.xml:45
 msgid "The ID of the last device selected"
 msgstr "Ідентифікатор останнього вибраного пристрою"
 
-#: ../data/org.gnome.power-manager.gschema.xml.in.h:18
+#: data/org.gnome.power-manager.gschema.xml:46
 msgid ""
 "The identifier of the last device which is used to return focus to the "
 "correct device."
@@ -105,181 +137,155 @@ msgstr ""
 
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
-#: ../data/gnome-power-statistics.desktop.in.in.h:1
-#: ../data/gpm-statistics.ui.h:1 ../src/gpm-statistics.c:1370
-#: ../src/gpm-statistics.c:1824
+#: data/org.gnome.PowerStats.desktop.in.in:3 src/gpm-statistics.c:983
+#: src/gpm-statistics.c:1352 src/gpm-statistics.ui:8
 msgid "Power Statistics"
 msgstr "Статистика живлення"
 
-#: ../data/gnome-power-statistics.desktop.in.in.h:2
-msgid "Observe power management"
-msgstr "Стеження за керування живленням"
-
-#: ../data/gnome-power-statistics.desktop.in.in.h:3
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.PowerStats.desktop.in.in:6
 msgid "battery;consumption;charge;"
 msgstr "Батарея;акумулятор;заряд;"
 
-#: ../data/gpm-statistics.ui.h:2 ../src/gpm-statistics.c:473
-msgid "Details"
-msgstr "Подробиці"
-
-#: ../data/gpm-statistics.ui.h:3
-msgid "Graph type:"
-msgstr "Тип графіку:"
-
-#: ../data/gpm-statistics.ui.h:4
-msgid "Data length:"
-msgstr "Тривалість:"
-
-#: ../data/gpm-statistics.ui.h:5
-msgid "There is no data to display."
-msgstr "Відсутні дані."
-
-#: ../data/gpm-statistics.ui.h:6
-msgid "Use smoothed line"
-msgstr "Використовувати згладжування"
-
-#: ../data/gpm-statistics.ui.h:7
-msgid "Show data points"
-msgstr "Показувати відлік"
-
-#: ../data/gpm-statistics.ui.h:8
-msgid "History"
-msgstr "Історія"
-
-#: ../data/gpm-statistics.ui.h:9
-msgid "Statistics"
-msgstr "Статистика"
-
-#: ../data/gpm-statistics.ui.h:10
-msgid "Processor wakeups per second:"
-msgstr "Пробуджень процесора за секунду:"
-
-#: ../data/gpm-statistics.ui.h:11
-msgid "0"
-msgstr "0"
-
-#: ../data/gpm-statistics.ui.h:12 ../src/gpm-statistics.c:459
-msgid "Wakeups"
-msgstr "Пробудження"
-
 #. Translators: This is %i days
-#: ../src/gpm-graph-widget.c:426
+#: src/egg-graph-widget.c:408
 #, c-format
 msgid "%id"
 msgstr "%iд"
 
 #. Translators: This is %i days %02i hours
-#: ../src/gpm-graph-widget.c:429
+#: src/egg-graph-widget.c:411
 #, c-format
 msgid "%id%02ih"
 msgstr "%iд%02iг"
 
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:434
+#: src/egg-graph-widget.c:416
 #, c-format
 msgid "%ih"
 msgstr "%iг"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:437
+#: src/egg-graph-widget.c:419
 #, c-format
 msgid "%ih%02im"
 msgstr "%iг%02iхв"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:442
+#: src/egg-graph-widget.c:424
 #, c-format
 msgid "%2im"
 msgstr "%2iхв"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:445
+#: src/egg-graph-widget.c:427
 #, c-format
 msgid "%2im%02i"
 msgstr "%2iхв%02i"
 
+#. TRANSLATORS: This is ms
+#: src/egg-graph-widget.c:431
+#, c-format
+msgid "%.0fms"
+msgstr "%.0fмс"
+
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:449
+#: src/egg-graph-widget.c:434
 #, c-format
 msgid "%2is"
 msgstr "%2iс"
 
-#. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:453
+#. TRANSLATORS: This is %i Percentage
+#: src/egg-graph-widget.c:438
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
-#. Translators: This is %.1f Watts
-#: ../src/gpm-graph-widget.c:456
+#. TRANSLATORS: This is %.1f Watts
+#: src/egg-graph-widget.c:441
 #, c-format
 msgid "%.1fW"
 msgstr "%.1fВт"
 
-#. Translators: This is %.1f Volts
-#: ../src/gpm-graph-widget.c:461
+#. TRANSLATORS: This is %.1f Volts
+#: src/egg-graph-widget.c:446
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fВ"
 
+#. TRANSLATORS: This is %.1f nanometers
+#: src/egg-graph-widget.c:449
+#, c-format
+#| msgid "%.0f second"
+#| msgid_plural "%.0f seconds"
+msgid "%.0f nm"
+msgstr "%.0f нм"
+
 #. TRANSLATORS: the rate of discharge for the device
-#: ../src/gpm-statistics.c:80 ../src/gpm-statistics.c:731
+#: src/gpm-statistics.c:72 src/gpm-statistics.c:634
 msgid "Rate"
 msgstr "Швидкість"
 
-#: ../src/gpm-statistics.c:81
+#: src/gpm-statistics.c:73
 msgid "Charge"
 msgstr "Заряджання"
 
-#: ../src/gpm-statistics.c:82 ../src/gpm-statistics.c:745
+#: src/gpm-statistics.c:74 src/gpm-statistics.c:648
 msgid "Time to full"
 msgstr "Час до повного заряду"
 
-#: ../src/gpm-statistics.c:83 ../src/gpm-statistics.c:750
+#: src/gpm-statistics.c:75 src/gpm-statistics.c:653
 msgid "Time to empty"
 msgstr "Час до повного розряду"
 
-#: ../src/gpm-statistics.c:90
-msgid "10 minutes"
-msgstr "10 хвилин"
+#: src/gpm-statistics.c:82
+#| msgid "10 minutes"
+msgid "30 minutes"
+msgstr "30 хвилин"
 
-#: ../src/gpm-statistics.c:91
-msgid "2 hours"
-msgstr "2 години"
+#: src/gpm-statistics.c:83
+#| msgid "2 hours"
+msgid "3 hours"
+msgstr "3 години"
 
-#: ../src/gpm-statistics.c:92
-msgid "6 hours"
-msgstr "6 годин"
+#: src/gpm-statistics.c:84
+#| msgid "2 hours"
+msgid "8 hours"
+msgstr "8 годин"
 
-#: ../src/gpm-statistics.c:93
+#: src/gpm-statistics.c:85
 msgid "1 day"
 msgstr "1 день"
 
-#: ../src/gpm-statistics.c:94
+#: src/gpm-statistics.c:86
 msgid "1 week"
 msgstr "1 тиждень "
 
+#. 5 min tick
+#. 30 min tick
+#. 1 hr tick
+#. 2 hr tick
+#. 1 day tick
 #. TRANSLATORS: what we've observed about the device
-#: ../src/gpm-statistics.c:103
+#: src/gpm-statistics.c:101
 msgid "Charge profile"
 msgstr "Профіль часу заряду"
 
-#: ../src/gpm-statistics.c:104
+#: src/gpm-statistics.c:102
 msgid "Discharge profile"
 msgstr "Профіль часу розряду"
 
 #. TRANSLATORS: how accurately we can predict the time remaining of the battery
-#: ../src/gpm-statistics.c:106
+#: src/gpm-statistics.c:104
 msgid "Charge accuracy"
 msgstr "Профіль точності визначення часу заряду"
 
-#: ../src/gpm-statistics.c:107
+#: src/gpm-statistics.c:105
 msgid "Discharge accuracy"
 msgstr "Профіль точності визначення часу розряду"
 
 #. TRANSLATORS: system power cord
-#: ../src/gpm-statistics.c:248
+#: src/gpm-statistics.c:235
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "Мережний адаптер"
@@ -287,7 +293,7 @@ msgstr[1] "Мережні адаптери"
 msgstr[2] "Мережних адаптерів"
 
 #. TRANSLATORS: laptop primary battery
-#: ../src/gpm-statistics.c:252
+#: src/gpm-statistics.c:239
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "Батарея портативного комп'ютера"
@@ -295,7 +301,7 @@ msgstr[1] "Батареї портативного комп'ютера"
 msgstr[2] "Батарей портативного комп'ютера"
 
 #. TRANSLATORS: battery-backed AC power source
-#: ../src/gpm-statistics.c:256
+#: src/gpm-statistics.c:243
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "Блок безперебійного живлення"
@@ -303,7 +309,7 @@ msgstr[1] "Блоки безперебійного живлення"
 msgstr[2] "Блоків безперебійного живлення"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
-#: ../src/gpm-statistics.c:260
+#: src/gpm-statistics.c:247
 msgid "Monitor"
 msgid_plural "Monitors"
 msgstr[0] "Монітор"
@@ -311,7 +317,7 @@ msgstr[1] "Монітори"
 msgstr[2] "Моніторів"
 
 #. TRANSLATORS: wireless mice with internal batteries
-#: ../src/gpm-statistics.c:264
+#: src/gpm-statistics.c:251
 msgid "Mouse"
 msgid_plural "Mice"
 msgstr[0] "Миша"
@@ -319,7 +325,7 @@ msgstr[1] "Миші"
 msgstr[2] "Миш"
 
 #. TRANSLATORS: wireless keyboard with internal battery
-#: ../src/gpm-statistics.c:268
+#: src/gpm-statistics.c:255
 msgid "Keyboard"
 msgid_plural "Keyboards"
 msgstr[0] "Клавіатура"
@@ -327,7 +333,7 @@ msgstr[1] "Клавіатури"
 msgstr[2] "Клавіатур"
 
 #. TRANSLATORS: portable device
-#: ../src/gpm-statistics.c:272
+#: src/gpm-statistics.c:259
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "КПК"
@@ -335,7 +341,7 @@ msgstr[1] "КПК"
 msgstr[2] "КПК"
 
 #. TRANSLATORS: cell phone (mobile...)
-#: ../src/gpm-statistics.c:276
+#: src/gpm-statistics.c:263
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "Мобільний телефон"
@@ -343,7 +349,7 @@ msgstr[1] "Мобільних телефони"
 msgstr[2] "Мобільний телефонів"
 
 #. TRANSLATORS: media player, mp3 etc
-#: ../src/gpm-statistics.c:281
+#: src/gpm-statistics.c:268
 msgid "Media player"
 msgid_plural "Media players"
 msgstr[0] "Програвач"
@@ -351,7 +357,7 @@ msgstr[1] "Програвачі"
 msgstr[2] "Програвачів"
 
 #. TRANSLATORS: tablet device
-#: ../src/gpm-statistics.c:285
+#: src/gpm-statistics.c:272
 msgid "Tablet"
 msgid_plural "Tablets"
 msgstr[0] "Планшет"
@@ -359,7 +365,7 @@ msgstr[1] "планшети"
 msgstr[2] "Планшетів"
 
 #. TRANSLATORS: tablet device
-#: ../src/gpm-statistics.c:289
+#: src/gpm-statistics.c:276
 msgid "Computer"
 msgid_plural "Computers"
 msgstr[0] "Комп'ютер"
@@ -367,106 +373,94 @@ msgstr[1] "Комп'ютери"
 msgstr[2] "Комп'ютерів"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:309
+#: src/gpm-statistics.c:293
 msgid "Lithium Ion"
 msgstr "Літій-іонний"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:313
+#: src/gpm-statistics.c:297
 msgid "Lithium Polymer"
 msgstr "Літій-полімерний"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:317
+#: src/gpm-statistics.c:301
 msgid "Lithium Iron Phosphate"
 msgstr "Літій-фосфатний"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:321
+#: src/gpm-statistics.c:305
 msgid "Lead acid"
 msgstr "Свинцево-кислотний"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:325
+#: src/gpm-statistics.c:309
 msgid "Nickel Cadmium"
 msgstr "Нікель-кадмієвий"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:329
+#: src/gpm-statistics.c:313
 msgid "Nickel metal hydride"
 msgstr "Нікель-метал-гідридний"
 
 #. TRANSLATORS: battery technology
-#: ../src/gpm-statistics.c:333
+#: src/gpm-statistics.c:317
 msgid "Unknown technology"
 msgstr "Невідома технологія"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:353
+#: src/gpm-statistics.c:334
 msgid "Charging"
 msgstr "Заряджається"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:357
+#: src/gpm-statistics.c:338
 msgid "Discharging"
 msgstr "Розряджається"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:361
+#: src/gpm-statistics.c:342
 msgid "Empty"
 msgstr "Розряджено"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:365
+#: src/gpm-statistics.c:346
 msgid "Charged"
 msgstr "Заряджено"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:369
+#: src/gpm-statistics.c:350
 msgid "Waiting to charge"
 msgstr "Очікування зарядки"
 
 #. TRANSLATORS: battery state
-#: ../src/gpm-statistics.c:373
+#: src/gpm-statistics.c:354
 msgid "Waiting to discharge"
 msgstr "Очікування розрядки"
 
 #. TRANSLATORS: battery state
 #. TRANSLATORS: this is when the stats time is not known
-#: ../src/gpm-statistics.c:377 ../src/gpm-statistics.c:551
+#: src/gpm-statistics.c:358 src/gpm-statistics.c:472
 msgid "Unknown"
 msgstr "Невідомо"
 
-#: ../src/gpm-statistics.c:397
+#: src/gpm-statistics.c:375
 msgid "Attribute"
 msgstr "Атрибут"
 
-#: ../src/gpm-statistics.c:404
+#: src/gpm-statistics.c:382
 msgid "Value"
 msgstr "Значення"
 
-#: ../src/gpm-statistics.c:421
+#: src/gpm-statistics.c:396
 msgid "Image"
 msgstr "Значок"
 
-#: ../src/gpm-statistics.c:427
+#: src/gpm-statistics.c:402
 msgid "Description"
 msgstr "Опис"
 
-#: ../src/gpm-statistics.c:446 ../src/gpm-statistics.c:670
-msgid "Type"
-msgstr "Тип"
-
-#: ../src/gpm-statistics.c:452
-msgid "ID"
-msgstr "Ідентифікатор"
-
-#: ../src/gpm-statistics.c:466
-msgid "Command"
-msgstr "Команда"
-
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:555
+#: src/gpm-statistics.c:476
 #, c-format
 msgid "%.0f second"
 msgid_plural "%.0f seconds"
@@ -475,7 +469,7 @@ msgstr[1] "%.0f секунди"
 msgstr[2] "%.0f секунд"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:560
+#: src/gpm-statistics.c:481
 #, c-format
 msgid "%.1f minute"
 msgid_plural "%.1f minutes"
@@ -484,7 +478,7 @@ msgstr[1] "%.1f хвилини"
 msgstr[2] "%.1f хвилин"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:565
+#: src/gpm-statistics.c:486
 #, c-format
 msgid "%.1f hour"
 msgid_plural "%.1f hours"
@@ -493,7 +487,7 @@ msgstr[1] "%.1f години"
 msgstr[2] "%.1f годин"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: ../src/gpm-statistics.c:569
+#: src/gpm-statistics.c:490
 #, c-format
 msgid "%.1f day"
 msgid_plural "%.1f days"
@@ -501,292 +495,205 @@ msgstr[0] "%.1f день"
 msgstr[1] "%.1f день"
 msgstr[2] "%.1f день"
 
-#: ../src/gpm-statistics.c:578
+#: src/gpm-statistics.c:496
 msgid "Yes"
 msgstr "Так"
 
-#: ../src/gpm-statistics.c:578
+#: src/gpm-statistics.c:496
 msgid "No"
 msgstr "Ні"
 
 #. TRANSLATORS: the device ID of the current device, e.g. "battery0"
-#: ../src/gpm-statistics.c:667
+#: src/gpm-statistics.c:571
 msgid "Device"
 msgstr "Пристрій"
 
-#: ../src/gpm-statistics.c:672
+#: src/gpm-statistics.c:573
+msgid "Type"
+msgstr "Тип"
+
+#: src/gpm-statistics.c:575
 msgid "Vendor"
 msgstr "Виробник"
 
-#: ../src/gpm-statistics.c:674
+#: src/gpm-statistics.c:577
 msgid "Model"
 msgstr "Модель"
 
-#: ../src/gpm-statistics.c:676
+#: src/gpm-statistics.c:579
 msgid "Serial number"
 msgstr "Серійний номер"
 
 #. TRANSLATORS: a boolean attribute that means if the device is supplying the
 #. * main power for the computer. For instance, an AC adapter or laptop battery
 #. * would be TRUE,  but a mobile phone or mouse taking power is FALSE
-#: ../src/gpm-statistics.c:681
+#: src/gpm-statistics.c:584
 msgid "Supply"
 msgstr "Постачальник енергії"
 
-#: ../src/gpm-statistics.c:684
+#: src/gpm-statistics.c:587
 #, c-format
-msgid "%d second"
-msgid_plural "%d seconds"
-msgstr[0] "%d секунда"
-msgstr[1] "%d секунди"
-msgstr[2] "%d секунд"
+#| msgid "%d second"
+#| msgid_plural "%d seconds"
+msgid "%u second"
+msgid_plural "%u seconds"
+msgstr[0] "%u секунда"
+msgstr[1] "%u секунди"
+msgstr[2] "%u секунд"
 
 #. TRANSLATORS: when the device was last updated with new data. It's
 #. * usually a few seconds when a device is discharging or charging.
-#: ../src/gpm-statistics.c:688
+#: src/gpm-statistics.c:591
 msgid "Refreshed"
 msgstr "Оновлено"
 
 #. TRANSLATORS: Present is whether the device is currently attached
 #. * to the computer, as some devices (e.g. laptop batteries) can
 #. * be removed, but still observed as devices on the system
-#: ../src/gpm-statistics.c:698
+#: src/gpm-statistics.c:601
 msgid "Present"
 msgstr "Присутній"
 
 #. TRANSLATORS: If the device can be recharged, e.g. lithium
 #. * batteries rather than alkaline ones
-#: ../src/gpm-statistics.c:705
+#: src/gpm-statistics.c:608
 msgid "Rechargeable"
 msgstr "Перезаряджуваний"
 
 #. TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged"
-#: ../src/gpm-statistics.c:711
+#: src/gpm-statistics.c:614
 msgid "State"
 msgstr "Стан"
 
-#: ../src/gpm-statistics.c:715
+#: src/gpm-statistics.c:618
 msgid "Energy"
 msgstr "Енергія"
 
-#: ../src/gpm-statistics.c:718
+#: src/gpm-statistics.c:621
 msgid "Energy when empty"
 msgstr "Енергія при спустошенні"
 
-#: ../src/gpm-statistics.c:721
+#: src/gpm-statistics.c:624
 msgid "Energy when full"
 msgstr "Енергія при заповненні"
 
-#: ../src/gpm-statistics.c:724
+#: src/gpm-statistics.c:627
 msgid "Energy (design)"
 msgstr "Енергія (початкова)"
 
-#: ../src/gpm-statistics.c:738
+#: src/gpm-statistics.c:641
 msgid "Voltage"
 msgstr "Вольтаж"
 
 #. TRANSLATORS: the amount of charge the cell contains
-#: ../src/gpm-statistics.c:760
+#: src/gpm-statistics.c:663
 msgid "Percentage"
 msgstr "Відсоток"
 
 #. TRANSLATORS: the capacity of the device, which is basically a measure
 #. * of how full it can get, relative to the design capacity
-#: ../src/gpm-statistics.c:767
+#: src/gpm-statistics.c:670
 msgid "Capacity"
 msgstr "Ємкість:"
 
 #. TRANSLATORS: the type of battery, e.g. lithium or nikel metal hydroxide
-#: ../src/gpm-statistics.c:772
+#: src/gpm-statistics.c:675
 msgid "Technology"
 msgstr "Технологія"
 
 #. TRANSLATORS: this is when the device is plugged in, typically
 #. * only shown for the ac adaptor device
-#: ../src/gpm-statistics.c:777
+#: src/gpm-statistics.c:680
 msgid "Online"
 msgstr "Підключено"
 
-#. TRANSLATORS: the command line was not provided
-#: ../src/gpm-statistics.c:1104
-msgid "No data"
-msgstr "Дані відсутні"
-
-#. TRANSLATORS: kernel module, usually a device driver
-#: ../src/gpm-statistics.c:1111 ../src/gpm-statistics.c:1116
-msgid "Kernel module"
-msgstr "Модуль ядра"
-
-#. TRANSLATORS: kernel housekeeping
-#: ../src/gpm-statistics.c:1121
-msgid "Kernel core"
-msgstr "Ядро"
-
-#. TRANSLATORS: interrupt between processors
-#: ../src/gpm-statistics.c:1126
-msgid "Interprocessor interrupt"
-msgstr "Міжпроцесорне переривання"
-
-#. TRANSLATORS: unknown interrupt
-#: ../src/gpm-statistics.c:1131
-msgid "Interrupt"
-msgstr "Переривання"
-
-#. TRANSLATORS: the keyboard and mouse device event
-#: ../src/gpm-statistics.c:1178
-msgid "PS/2 keyboard/mouse/touchpad"
-msgstr "Клавіатура/Миша/Сенсорна панель"
-
-#. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
-#: ../src/gpm-statistics.c:1181
-msgid "ACPI"
-msgstr "ACPI"
-
-#. TRANSLATORS: serial ATA is a new style of hard disk interface
-#: ../src/gpm-statistics.c:1184
-msgid "Serial ATA"
-msgstr "Serial ATA"
-
-#. TRANSLATORS: this is the old-style ATA interface
-#: ../src/gpm-statistics.c:1187
-msgid "ATA host controller"
-msgstr "Контролер ATA"
-
-#. TRANSLATORS: 802.11 wireless adaptor
-#: ../src/gpm-statistics.c:1190
-msgid "Intel wireless adaptor"
-msgstr "Бездротовий адаптер Intel"
-
-#. TRANSLATORS: a timer is something that fires periodically.
-#. * The parameter is a process name, e.g. "firefox-bin".
-#. * This is shown when the timer wakes up.
-#: ../src/gpm-statistics.c:1197 ../src/gpm-statistics.c:1202
-#: ../src/gpm-statistics.c:1207 ../src/gpm-statistics.c:1212
-#: ../src/gpm-statistics.c:1217
-#, c-format
-msgid "Timer %s"
-msgstr "Періодична активність %s"
-
-#. TRANSLATORS: the parameter is the name of task that's woken up from sleeping.
-#. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:1221
-#, c-format
-msgid "Sleep %s"
-msgstr "Пробудження %s"
-
-#. TRANSLATORS: this is the name of a new realtime task.
-#: ../src/gpm-statistics.c:1224
-#, c-format
-msgid "New task %s"
-msgstr "Нова задача %s"
-
-#. TRANSLATORS: this is the name of a task that's woken to check state.
-#. * This is shown when the task wakes up.
-#: ../src/gpm-statistics.c:1228
-#, c-format
-msgid "Wait %s"
-msgstr "Очікування %s"
-
-#. TRANSLATORS: this is the name of a work queue.
-#. * A work queue is a list of work that has to be done.
-#: ../src/gpm-statistics.c:1232 ../src/gpm-statistics.c:1236
-#, c-format
-msgid "Work queue %s"
-msgstr "Черга завдань %s"
-
-#. TRANSLATORS: this is when the networking subsystem clears out old entries
-#: ../src/gpm-statistics.c:1239
-#, c-format
-msgid "Network route flush %s"
-msgstr "Очищення мережних маршрутів %s"
-
-#. TRANSLATORS: this is the name of an activity on the USB bus
-#: ../src/gpm-statistics.c:1242
-#, c-format
-msgid "USB activity %s"
-msgstr "Активність USB %s"
-
-#. TRANSLATORS: we've timed out of an aligned timer, with the name
-#: ../src/gpm-statistics.c:1245
-#, c-format
-msgid "Wakeup %s"
-msgstr "Пробудження періодичного завдання %s"
-
-#. TRANSLATORS: interupts on the system required for basic operation
-#: ../src/gpm-statistics.c:1248
-msgid "Local interrupts"
-msgstr "Переривання"
-
-#. TRANSLATORS: interrupts when a task gets moved from one core to another
-#: ../src/gpm-statistics.c:1251
-msgid "Rescheduling interrupts"
-msgstr "Перепланування задач"
-
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1360
+#: src/gpm-statistics.c:975
 msgid "Device Information"
 msgstr "Відомості про пристрій"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1362
+#: src/gpm-statistics.c:977
 msgid "Device History"
 msgstr "Історія пристрою"
 
 #. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1364
+#: src/gpm-statistics.c:979
 msgid "Device Profile"
 msgstr "Профіль пристрою"
 
-#. TRANSLATORS: shown on the titlebar
-#: ../src/gpm-statistics.c:1366
-msgid "Processor Wakeups"
-msgstr "Пробудження процесора"
-
 #. TRANSLATORS: this is the X axis on the graph
-#: ../src/gpm-statistics.c:1562 ../src/gpm-statistics.c:1568
-#: ../src/gpm-statistics.c:1574 ../src/gpm-statistics.c:1580
+#: src/gpm-statistics.c:1144 src/gpm-statistics.c:1150
+#: src/gpm-statistics.c:1156 src/gpm-statistics.c:1162
 msgid "Time elapsed"
 msgstr "Середній час до закінчення"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1564
+#: src/gpm-statistics.c:1146
 msgid "Power"
 msgstr "Живлення"
 
 #. TRANSLATORS: this is the Y axis on the graph for the whole battery device
 #. TRANSLATORS: this is the X axis on the graph for the whole battery device
-#: ../src/gpm-statistics.c:1570 ../src/gpm-statistics.c:1613
-#: ../src/gpm-statistics.c:1619 ../src/gpm-statistics.c:1625
-#: ../src/gpm-statistics.c:1631
+#: src/gpm-statistics.c:1152 src/gpm-statistics.c:1191
+#: src/gpm-statistics.c:1197 src/gpm-statistics.c:1203
+#: src/gpm-statistics.c:1209
 msgid "Cell charge"
 msgstr "Заряд комірки"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1576 ../src/gpm-statistics.c:1582
+#: src/gpm-statistics.c:1158 src/gpm-statistics.c:1164
 msgid "Predicted time"
 msgstr "Приблизний час"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1615 ../src/gpm-statistics.c:1627
+#: src/gpm-statistics.c:1193 src/gpm-statistics.c:1205
 msgid "Correction factor"
 msgstr "Корекція"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: ../src/gpm-statistics.c:1621 ../src/gpm-statistics.c:1633
+#: src/gpm-statistics.c:1199 src/gpm-statistics.c:1211
 msgid "Prediction accuracy"
 msgstr "Точність передрікання"
 
 #. TRANSLATORS: show verbose debugging
-#: ../src/gpm-statistics.c:1812
+#: src/gpm-statistics.c:1340
 msgid "Show extra debugging information"
 msgstr "Показати додаткову налагоджувальну інформацію"
 
 #. TRANSLATORS: show a device by default
-#: ../src/gpm-statistics.c:1815
+#: src/gpm-statistics.c:1343
 msgid "Select this device at startup"
 msgstr "Виділяти цей пристрій після запуску"
 
-#. TRANSLATORS: the icon for the CPU
-#: ../src/gpm-statistics.c:2077
-msgid "Processor"
-msgstr "Процесор"
+#: src/gpm-statistics.ui:66
+msgid "Details"
+msgstr "Подробиці"
+
+#: src/gpm-statistics.ui:92 src/gpm-statistics.ui:296
+msgid "Graph type:"
+msgstr "Тип графіку:"
+
+#: src/gpm-statistics.ui:127
+msgid "Data length:"
+msgstr "Тривалість:"
+
+#: src/gpm-statistics.ui:186 src/gpm-statistics.ui:348
+msgid "There is no data to display."
+msgstr "Відсутні дані."
+
+#: src/gpm-statistics.ui:228 src/gpm-statistics.ui:391
+msgid "Use smoothed line"
+msgstr "Використовувати згладжування"
+
+#: src/gpm-statistics.ui:244 src/gpm-statistics.ui:407
+msgid "Show data points"
+msgstr "Показувати відлік"
+
+#: src/gpm-statistics.ui:274
+msgid "History"
+msgstr "Історія"
+
+#: src/gpm-statistics.ui:437
+msgid "Statistics"
+msgstr "Статистика"
