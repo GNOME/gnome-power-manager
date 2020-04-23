@@ -40,6 +40,7 @@
 #define GPM_SETTINGS_INFO_STATS_GRAPH_POINTS		"info-stats-graph-points"
 #define GPM_SETTINGS_INFO_PAGE_NUMBER			"info-page-number"
 #define GPM_SETTINGS_INFO_LAST_DEVICE			"info-last-device"
+#define GPM_SETTINGS_INFO_COLORS		"info-graph-colors"
 
 static GtkBuilder *builder = NULL;
 static GtkListStore *list_store_info = NULL;
@@ -111,6 +112,10 @@ enum {
 
 #define GPM_UP_TIME_PRECISION			5*60 /* seconds */
 #define GPM_UP_TEXT_MIN_TIME			120 /* seconds */
+
+#define GPM_STATS_COLOR_DARK		"dark"
+#define GPM_STATS_COLOR_LIGHT		"light"
+#define GPM_STATS_COLOR_AUTO		"auto"
 
 /**
  * gpm_stats_get_device_icon_suffix:
@@ -716,6 +721,30 @@ gpm_color_from_rgb (guint8 red, guint8 green, guint8 blue)
 	return color;
 }
 
+static gboolean
+gpm_stats_dark_mode (GtkWidget *widget)
+{
+	g_autofree gchar *colors_preference;
+	GtkStyleContext *style_context;
+	GdkRGBA color;
+
+	colors_preference = g_settings_get_string (settings, GPM_SETTINGS_INFO_COLORS);
+	if (colors_preference == NULL)
+		colors_preference = GPM_STATS_COLOR_AUTO;
+	else if ((g_strcmp0 (colors_preference, GPM_STATS_COLOR_LIGHT) == 0))
+		return FALSE;
+	else if ((g_strcmp0 (colors_preference, GPM_STATS_COLOR_DARK) == 0))
+		return TRUE;
+
+	style_context = gtk_widget_get_style_context (widget);
+	gtk_style_context_get_color (style_context, GTK_STATE_FLAG_PRELIGHT, &color);
+
+	if (color.red + color.blue + color.green > 1.5f)
+		return TRUE;
+
+	return FALSE;
+}
+
 static void
 gpm_stats_update_info_page_history (UpDevice *device)
 {
@@ -774,6 +803,10 @@ gpm_stats_update_info_page_history (UpDevice *device)
 		goto out;
 	}
 
+	g_object_set (graph_history,
+			  "dark-mode", gpm_stats_dark_mode(widget),
+			  NULL);
+
 	/* hide no data and show graph */
 	gtk_widget_hide (widget);
 	gtk_widget_show (graph_history);
@@ -793,6 +826,8 @@ gpm_stats_update_info_page_history (UpDevice *device)
 		point->y = up_history_item_get_value (item);
 		if (up_history_item_get_state (item) == UP_DEVICE_STATE_CHARGING)
 			point->color = gpm_color_from_rgb (255, 0, 0);
+		else if (up_history_item_get_state (item) == UP_DEVICE_STATE_DISCHARGING && gpm_stats_dark_mode (widget))
+			point->color = gpm_color_from_rgb (0, 130, 255);
 		else if (up_history_item_get_state (item) == UP_DEVICE_STATE_DISCHARGING)
 			point->color = gpm_color_from_rgb (0, 0, 255);
 		else if (up_history_item_get_state (item) == UP_DEVICE_STATE_PENDING_CHARGE)
@@ -881,6 +916,10 @@ gpm_stats_update_info_page_stats (UpDevice *device)
 		gtk_widget_show (widget);
 		goto out;
 	}
+
+	g_object_set (graph_statistics,
+			  "dark-mode", gpm_stats_dark_mode (widget),
+			  NULL);
 
 	/* hide no data and show graph */
 	gtk_widget_hide (widget);
