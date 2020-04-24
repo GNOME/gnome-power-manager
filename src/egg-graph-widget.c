@@ -363,8 +363,8 @@ egg_graph_widget_set_colors (EggGraphWidget *graph) {
 	priv->legend_text_color = gpm_color_from_rgb_dark (priv->dark_colors, 0, 0, 0);
 	priv->legend_line_color = gpm_color_from_rgb_dark (priv->dark_colors, 25, 25, 25);
 	priv->dot_stroke_color = gpm_color_from_rgb_dark (priv->dark_colors, 0, 0, 0);
-        /* background is set to transparent if dark_colors is set */
-        priv->background_color = gpm_color_from_rgb_dark (priv->dark_colors, 255, 255, 255);
+	/* background is set to transparent if dark_colors is set */
+	priv->background_color = gpm_color_from_rgb_dark (priv->dark_colors, 255, 255, 255);
 	priv->background_stroke_color = gpm_color_from_rgb_dark (priv->dark_colors, 25, 25, 25);
 	priv->outline_color = gpm_color_from_rgb_dark (priv->dark_colors, 155, 155, 155);
 
@@ -1081,10 +1081,10 @@ egg_graph_widget_draw_bounding_box (EggGraphWidget *graph, cairo_t *cr, gint x, 
 	/* background */
 	cairo_rectangle (cr, x, y, width, height);
 	
-        if (priv->dark_colors)
-            cairo_set_source_rgba (cr, 0, 0, 0, 0);
-        else 
-            egg_graph_widget_set_color (cr, priv->background_color);
+	if (priv->dark_colors)
+		cairo_set_source_rgba (cr, 0, 0, 0, 0);
+	else 
+		egg_graph_widget_set_color (cr, priv->background_color);
 	
 	cairo_fill (cr);
 	/* solid outline box */
