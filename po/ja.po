@@ -1,11 +1,12 @@
 # ja.po for gnome-power-manager.
-# Copyright (C) 2005-2011 Richard Hughes <richard @ hughsie.com>
+# Copyright (C) 2005-2011, 2019 Richard Hughes <richard @ hughsie.com>
 # This file is distributed under the same license as the gnome-power-manager package.
 # Satoru SATOH <ss @ gnome.gr.jp>, 2005-2006.
 # Takeshi AIHANA <takeshi.aihana@gmail.com>, 2006-2009.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2010.
 # Takayoshi OKANO <kano@na.rim.or.jp>, 2011.
 # Hideki Yamane <henrich@debian.org>, 2011.
+# sicklylife <translation@sicklylife.jp>, 2019.
 #
 msgid ""
 msgstr ""
@@ -13,8 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-power-manager/"
 "issues\n"
 "POT-Creation-Date: 2020-03-30 18:16+0000\n"
-"PO-Revision-Date: 2011-12-25 05:30+0900\n"
-"Last-Translator: Hideki Yamane <henrich@debian.org>\n"
+"PO-Revision-Date: 2019-09-28 18:36+0900\n"
+"Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -23,10 +24,8 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: data/appdata/org.gnome.PowerStats.appdata.xml.in:7
-#, fuzzy
-#| msgid "Power Statistics"
 msgid "GNOME Power Statistics"
-msgstr "電源使用率の統計"
+msgstr "GNOME の電源使用率統計"
 
 # 用語の参考 URL: http://developer.apple.com/jp/technotes/tn1086.html
 # 用語の統一性を考慮するなら Legacy な "battstat" (gnome-applet/po/ja.po) も参照のこと。
@@ -208,11 +207,9 @@ msgstr "%.1fV"
 
 #. TRANSLATORS: This is %.1f nanometers
 #: src/egg-graph-widget.c:434
-#, fuzzy, c-format
-#| msgid "%.0f second"
-#| msgid_plural "%.0f seconds"
+#, c-format
 msgid "%.0f nm"
-msgstr "%.0f 秒"
+msgstr ""
 
 #. TRANSLATORS: the rate of discharge for the device
 #: src/gpm-statistics.c:71 src/gpm-statistics.c:627
@@ -487,12 +484,10 @@ msgid "Supply"
 msgstr "供給元"
 
 #: src/gpm-statistics.c:580
-#, fuzzy, c-format
-#| msgid "%d second"
-#| msgid_plural "%d seconds"
+#, c-format
 msgid "%u second"
 msgid_plural "%u seconds"
-msgstr[0] "%d 秒"
+msgstr[0] "%u 秒"
 
 #. TRANSLATORS: when the device was last updated with new data. It's
 #. * usually a few seconds when a device is discharging or charging.
