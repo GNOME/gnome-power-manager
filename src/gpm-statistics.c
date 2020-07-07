@@ -1003,7 +1003,6 @@ gpm_stats_notebook_changed_cb (GtkNotebook *notebook, gpointer page, gint page_n
 	device = up_device_new ();
 	up_device_set_object_path_sync (device, current_device, NULL, NULL);
 	gpm_stats_update_info_data_page (device, page_num);
-	gpm_stats_update_info_data (device);
 	g_object_unref (device);
 }
 
