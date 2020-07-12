@@ -61,6 +61,9 @@ void		 egg_graph_widget_set_use_legend	(EggGraphWidget		*graph,
 							 gboolean		 use_legend);
 gboolean	 egg_graph_widget_get_use_legend	(EggGraphWidget		*graph);
 
+void         egg_graph_widget_set_dark_colors (EggGraphWidget *graph,
+                             gboolean        dark_colours);
+
 gchar		*egg_graph_widget_export_to_svg		(EggGraphWidget		*graph,
 							 guint			 width,
 							 guint			 height);
