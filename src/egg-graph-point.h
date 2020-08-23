@@ -29,7 +29,7 @@ typedef struct
 {
 	gdouble		 x;
 	gdouble		 y;
-	guint32		 color;
+	guint64		 color;
 } EggGraphPoint;
 
 EggGraphPoint	*egg_graph_point_new		(void);

@@ -47,6 +47,15 @@ typedef struct {
 	gint			 box_width;
 	gint			 box_height;
 
+	guint64			 text_color;
+	guint64			 line_color;
+	guint64			 legend_line_color;
+	guint64			 legend_text_color;
+	guint64			 dot_stroke_color;
+	guint64			 background_color;
+	guint64			 background_stroke_color;
+	guint64			 outline_color;
+
 	guint			 divs_x; /* number of divisions */
 
 	gdouble			 unit_x; /* box pixels per x unit */
@@ -83,6 +92,14 @@ enum
 	PROP_START_Y,
 	PROP_STOP_X,
 	PROP_STOP_Y,
+	PROP_TEXT_COLOR,
+	PROP_LINE_COLOR,
+	PROP_LEGEND_LINE_COLOR,
+	PROP_LEGEND_TEXT_COLOR,
+	PROP_DOT_STROKE_COLOR,
+	PROP_BACKGROUND_COLOR,
+	PROP_BACKGROUND_STROKE_COLOR,
+	PROP_OUTLINE_COLOR,
 	PROP_LAST
 };
 
@@ -136,7 +153,7 @@ egg_graph_widget_get_use_legend (EggGraphWidget *graph)
 }
 
 static void
-up_graph_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec)
+egg_graph_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec)
 {
 	EggGraphWidget *graph = EGG_GRAPH_WIDGET (object);
 	EggGraphWidgetPrivate *priv = GET_PRIVATE (graph);
@@ -174,6 +191,30 @@ up_graph_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec
 	case PROP_STOP_Y:
 		g_value_set_double (value, priv->stop_y);
 		break;
+	case PROP_TEXT_COLOR:
+		g_value_set_uint64 (value, priv->text_color);
+		break;
+	case PROP_LINE_COLOR:
+		g_value_set_uint64 (value, priv->line_color);
+		break;
+	case PROP_LEGEND_LINE_COLOR:
+		g_value_set_uint64 (value, priv->legend_line_color);
+		break;
+	case PROP_LEGEND_TEXT_COLOR:
+		g_value_set_uint64 (value, priv->legend_text_color);
+		break;
+	case PROP_DOT_STROKE_COLOR:
+		g_value_set_uint64 (value, priv->dot_stroke_color);
+		break;
+	case PROP_BACKGROUND_COLOR:
+		g_value_set_uint64 (value, priv->background_color);
+		break;
+	case PROP_BACKGROUND_STROKE_COLOR:
+		g_value_set_uint64 (value, priv->background_stroke_color);
+		break;
+	case PROP_OUTLINE_COLOR:
+		g_value_set_uint64 (value, priv->outline_color);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -181,7 +222,7 @@ up_graph_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec
 }
 
 static void
-up_graph_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec)
+egg_graph_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec)
 {
 	EggGraphWidget *graph = EGG_GRAPH_WIDGET (object);
 	EggGraphWidgetPrivate *priv = GET_PRIVATE (graph);
@@ -220,6 +261,30 @@ up_graph_set_property (GObject *object, guint prop_id, const GValue *value, GPar
 	case PROP_STOP_Y:
 		priv->stop_y = g_value_get_double (value);
 		break;
+	case PROP_TEXT_COLOR:
+		priv->text_color = g_value_get_uint64 (value);
+		break;
+	case PROP_LINE_COLOR:
+		priv->line_color = g_value_get_uint64 (value);
+		break;
+	case PROP_LEGEND_LINE_COLOR:
+		priv->legend_line_color = g_value_get_uint64 (value);
+		break;
+	case PROP_LEGEND_TEXT_COLOR:
+		priv->legend_text_color = g_value_get_uint64 (value);
+		break;
+	case PROP_DOT_STROKE_COLOR:
+		priv->dot_stroke_color = g_value_get_uint64 (value);
+		break;
+	case PROP_BACKGROUND_COLOR:
+		priv->background_color = g_value_get_uint64 (value);
+		break;
+	case PROP_BACKGROUND_STROKE_COLOR:
+		priv->background_stroke_color = g_value_get_uint64 (value);
+		break;
+	case PROP_OUTLINE_COLOR:
+		priv->outline_color = g_value_get_uint64 (value);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -237,8 +302,8 @@ egg_graph_widget_class_init (EggGraphWidgetClass *class)
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 
 	widget_class->draw = egg_graph_widget_draw;
-	object_class->get_property = up_graph_get_property;
-	object_class->set_property = up_graph_set_property;
+	object_class->get_property = egg_graph_get_property;
+	object_class->set_property = egg_graph_set_property;
 	object_class->finalize = egg_graph_widget_finalize;
 
 	/* properties */
@@ -279,28 +344,68 @@ egg_graph_widget_class_init (EggGraphWidgetClass *class)
 	g_object_class_install_property (object_class,
 					 PROP_DIVS_X,
 					 g_param_spec_uint ("divs-x", NULL, NULL,
-							   4, 16, 4,
-							   G_PARAM_READWRITE));
+							    4, 16, 4,
+							    G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
 					 PROP_START_X,
 					 g_param_spec_double ("start-x", NULL, NULL,
-							   -G_MAXDOUBLE, G_MAXDOUBLE, 0.f,
-							   G_PARAM_READWRITE));
+							      -G_MAXDOUBLE, G_MAXDOUBLE, 0.f,
+							      G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
 					 PROP_START_Y,
 					 g_param_spec_double ("start-y", NULL, NULL,
-							   -G_MAXDOUBLE, G_MAXDOUBLE, 0.f,
-							   G_PARAM_READWRITE));
+							      -G_MAXDOUBLE, G_MAXDOUBLE, 0.f,
+							      G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
 					 PROP_STOP_X,
 					 g_param_spec_double ("stop-x", NULL, NULL,
-							   -G_MAXDOUBLE, G_MAXDOUBLE, 60.f,
-							   G_PARAM_READWRITE));
+							      -G_MAXDOUBLE, G_MAXDOUBLE, 60.f,
+							      G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
 					 PROP_STOP_Y,
 					 g_param_spec_double ("stop-y", NULL, NULL,
-							   -G_MAXDOUBLE, G_MAXDOUBLE, 100.f,
-							   G_PARAM_READWRITE));
+							      -G_MAXDOUBLE, G_MAXDOUBLE, 100.f,
+							      G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_TEXT_COLOR,
+					 g_param_spec_uint64 ("text-color", NULL, NULL,
+							      0, G_MAXINT64, 0,
+							      G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_LINE_COLOR,
+					 g_param_spec_uint64 ("line-color", NULL, NULL,
+							      0, G_MAXINT64, 0,
+							      G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_LEGEND_LINE_COLOR,
+					 g_param_spec_uint64 ("legend-line-color", NULL, NULL,
+							      0, G_MAXINT64, 0,
+							      G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_LEGEND_TEXT_COLOR,
+					 g_param_spec_uint64 ("legend-text-color", NULL, NULL,
+							      0, G_MAXINT64, 0,
+							      G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_DOT_STROKE_COLOR,
+					 g_param_spec_uint64 ("dot-stroke-color", NULL, NULL,
+							      0, G_MAXINT64, 0,
+							      G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_BACKGROUND_COLOR,
+					 g_param_spec_uint64 ("background-color", NULL, NULL,
+							      0, G_MAXINT64, 0,
+							      G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_BACKGROUND_STROKE_COLOR,
+					 g_param_spec_uint64 ("background-stroke-color", NULL, NULL,
+							      0, G_MAXINT64, 0,
+							      G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_OUTLINE_COLOR,
+					 g_param_spec_uint64 ("outline-color", NULL, NULL,
+							      0, G_MAXINT64, 0,
+							      G_PARAM_READWRITE));
 }
 
 static void
@@ -454,6 +559,23 @@ egg_graph_widget_get_axis_label (EggGraphWidgetKind axis, gdouble value)
 }
 
 static void
+egg_color_to_rgb (guint64 color, guint8 *red, guint8 *green, guint8 *blue, guint8 *alpha)
+{
+	*red =   (color & 0xff000000) / 0x1000000;
+	*green = (color & 0x00ff0000) / 0x10000;
+	*blue =  (color & 0x0000ff00) / 0x100;
+	*alpha =  color & 0x000000ff;
+}
+
+static void
+egg_graph_widget_set_color (cairo_t *cr, guint64 color)
+{
+	guint8 r, g, b, a;
+	egg_color_to_rgb (color, &r, &g, &b, &a);
+	cairo_set_source_rgba (cr, ((gdouble) r)/255.0f, ((gdouble) g)/255.0f, ((gdouble) b)/255.0f, ((gdouble) a)/255.0f);
+}
+
+static void
 egg_graph_widget_draw_grid (EggGraphWidget *graph, cairo_t *cr)
 {
 	EggGraphWidgetPrivate *priv = GET_PRIVATE (graph);
@@ -469,7 +591,7 @@ egg_graph_widget_draw_grid (EggGraphWidget *graph, cairo_t *cr)
 	cairo_set_dash (cr, dotted, 2, 0.0);
 
 	/* do vertical lines */
-	cairo_set_source_rgb (cr, 0.1, 0.1, 0.1);
+	egg_graph_widget_set_color (cr, priv->line_color);
 	for (i = 1; i < priv->divs_x; i++) {
 		b = priv->box_x + ((gdouble) i * divwidth);
 		cairo_move_to (cr, (gint)b + 0.5f, priv->box_y);
@@ -506,7 +628,7 @@ egg_graph_widget_draw_labels (EggGraphWidget *graph, cairo_t *cr)
 	cairo_save (cr);
 
 	/* do x text */
-	cairo_set_source_rgb (cr, 0.2f, 0.2f, 0.2f);
+	egg_graph_widget_set_color (cr, priv->text_color);
 	for (i = 0; i < priv->divs_x + 1; i++) {
 		g_autofree gchar *text = NULL;
 		b = priv->box_x + ((gdouble) i * divwidth);
@@ -553,14 +675,6 @@ egg_graph_widget_draw_labels (EggGraphWidget *graph, cairo_t *cr)
 	}
 
 	cairo_restore (cr);
-}
-
-static void
-egg_color_to_rgb (guint32 color, guint8 *red, guint8 *green, guint8 *blue)
-{
-	*red = (color & 0xff0000) / 0x10000;
-	*green = (color & 0x00ff00) / 0x100;
-	*blue = color & 0x0000ff;
 }
 
 static guint
@@ -839,14 +953,6 @@ egg_graph_widget_autorange_y (EggGraphWidget *graph)
 		   priv->start_y, priv->stop_y);
 }
 
-static void
-egg_graph_widget_set_color (cairo_t *cr, guint32 color)
-{
-	guint8 r, g, b;
-	egg_color_to_rgb (color, &r, &g, &b);
-	cairo_set_source_rgb (cr, ((gdouble) r)/256.0f, ((gdouble) g)/256.0f, ((gdouble) b)/256.0f);
-}
-
 /**
  * egg_graph_widget_draw_legend_line:
  * @cr: Cairo drawing context
@@ -857,8 +963,9 @@ egg_graph_widget_set_color (cairo_t *cr, guint32 color)
  * Draw the legend line on the graph of a specified color
  **/
 static void
-egg_graph_widget_draw_legend_line (cairo_t *cr, gdouble x, gdouble y, guint32 color)
+egg_graph_widget_draw_legend_line (EggGraphWidget *graph, cairo_t *cr, gdouble x, gdouble y, guint32 color)
 {
+	EggGraphWidgetPrivate *priv = GET_PRIVATE (graph);
 	gdouble width = 10;
 	gdouble height = 6;
 	/* background */
@@ -867,7 +974,7 @@ egg_graph_widget_draw_legend_line (cairo_t *cr, gdouble x, gdouble y, guint32 co
 	cairo_fill (cr);
 	/* solid outline box */
 	cairo_rectangle (cr, (int) (x - (width/2)) + 0.5, (int) (y - (height/2)) + 0.5, width, height);
-	cairo_set_source_rgb (cr, 0.1, 0.1, 0.1);
+	egg_graph_widget_set_color (cr, priv->legend_line_color);
 	cairo_set_line_width (cr, 1);
 	cairo_stroke (cr);
 }
@@ -891,8 +998,9 @@ egg_graph_widget_get_pos_on_graph (EggGraphWidget *graph,
 }
 
 static void
-egg_graph_widget_draw_dot (cairo_t *cr, gdouble x, gdouble y, guint32 color)
+egg_graph_widget_draw_dot (EggGraphWidget *graph, cairo_t *cr, gdouble x, gdouble y, guint32 color)
 {
+	EggGraphWidgetPrivate *priv = GET_PRIVATE (graph);
 	gdouble width;
 	/* box */
 	width = 4.0;
@@ -900,7 +1008,8 @@ egg_graph_widget_draw_dot (cairo_t *cr, gdouble x, gdouble y, guint32 color)
 	egg_graph_widget_set_color (cr, color);
 	cairo_fill (cr);
 	cairo_rectangle (cr, (gint)x + 0.5f - (width/2), (gint)y + 0.5f - (width/2), width, width);
-	cairo_set_source_rgb (cr, 0, 0, 0);
+
+	egg_graph_widget_set_color (cr, priv->dot_stroke_color);
 	cairo_set_line_width (cr, 0.5);
 	cairo_stroke (cr);
 }
@@ -939,11 +1048,11 @@ egg_graph_widget_draw_line (EggGraphWidget *graph, cairo_t *cr)
 
 		/* plot points */
 		if (plot == EGG_GRAPH_WIDGET_PLOT_POINTS || plot == EGG_GRAPH_WIDGET_PLOT_BOTH) {
-			egg_graph_widget_draw_dot (cr, x, y, point->color);
+			egg_graph_widget_draw_dot (graph, cr, x, y, point->color);
 			for (i = 1; i < data->len; i++) {
 				point = (EggGraphPoint *) g_ptr_array_index (data, i);
 				egg_graph_widget_get_pos_on_graph (graph, point->x, point->y, &x, &y);
-				egg_graph_widget_draw_dot (cr, x, y, point->color);
+				egg_graph_widget_draw_dot (graph, cr, x, y, point->color);
 			}
 		}
 
@@ -1003,15 +1112,18 @@ egg_graph_widget_draw_line (EggGraphWidget *graph, cairo_t *cr)
  * @height: The item height
  **/
 static void
-egg_graph_widget_draw_bounding_box (cairo_t *cr, gint x, gint y, gint width, gint height)
+egg_graph_widget_draw_bounding_box (EggGraphWidget *graph, cairo_t *cr, gint x, gint y, gint width, gint height)
 {
+	EggGraphWidgetPrivate *priv = GET_PRIVATE (graph);
 	/* background */
 	cairo_rectangle (cr, x, y, width, height);
-	cairo_set_source_rgb (cr, 1, 1, 1);
+
+	egg_graph_widget_set_color (cr, priv->background_color);
+
 	cairo_fill (cr);
 	/* solid outline box */
 	cairo_rectangle (cr, x + 0.5f, y + 0.5f, width - 1, height - 1);
-	cairo_set_source_rgb (cr, 0.1, 0.1, 0.1);
+	egg_graph_widget_set_color (cr, priv->background_stroke_color);
 	cairo_set_line_width (cr, 1);
 	cairo_stroke (cr);
 }
@@ -1033,15 +1145,16 @@ egg_graph_widget_draw_legend (EggGraphWidget *graph, cairo_t *cr,
 	guint i;
 	EggGraphWidgetLegendData *legend_data;
 
-	egg_graph_widget_draw_bounding_box (cr, x, y, width, height);
+	egg_graph_widget_draw_bounding_box (graph, cr, x, y, width, height);
 	y_count = y + 10;
 
 	/* add the line colors to the legend */
 	for (i = 0; i < priv->legend_list->len; i++) {
 		legend_data = g_ptr_array_index (priv->legend_list, i);
-		egg_graph_widget_draw_legend_line (cr, x + 8, y_count, legend_data->color);
+		egg_graph_widget_draw_legend_line (graph, cr, x + 8, y_count, legend_data->color);
 		cairo_move_to (cr, x + 8 + 10, y_count - 6);
-		cairo_set_source_rgb (cr, 0, 0, 0);
+		egg_graph_widget_set_color (cr, priv->legend_text_color);
+		//cairo_set_source_rgb (cr, 0, 0, 0);
 		pango_layout_set_text (priv->layout, legend_data->desc, -1);
 		pango_cairo_show_layout (cr, priv->layout);
 		y_count = y_count + EGG_GRAPH_WIDGET_LEGEND_SPACING;
@@ -1132,15 +1245,15 @@ egg_graph_widget_draw (GtkWidget *widget, cairo_t *cr)
 	}
 
 	/* graph background */
-	egg_graph_widget_draw_bounding_box (cr, priv->box_x, priv->box_y,
-				     priv->box_width, priv->box_height);
+	egg_graph_widget_draw_bounding_box (graph, cr, priv->box_x, priv->box_y,
+					    priv->box_width, priv->box_height);
 	if (priv->use_grid)
 		egg_graph_widget_draw_grid (graph, cr);
 
 	/* solid outline box */
 	cairo_rectangle (cr, priv->box_x + 0.5f, priv->box_y + 0.5f,
 			 priv->box_width - 1, priv->box_height - 1);
-	cairo_set_source_rgb (cr, 0.6f, 0.6f, 0.6f);
+	egg_graph_widget_set_color (cr, priv->outline_color);
 	cairo_set_line_width (cr, 1);
 	cairo_stroke (cr);
 

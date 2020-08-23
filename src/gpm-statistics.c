@@ -40,6 +40,7 @@
 #define GPM_SETTINGS_INFO_STATS_GRAPH_POINTS		"info-stats-graph-points"
 #define GPM_SETTINGS_INFO_PAGE_NUMBER			"info-page-number"
 #define GPM_SETTINGS_INFO_LAST_DEVICE			"info-last-device"
+#define GPM_SETTINGS_INFO_COLORS			"info-graph-colors"
 
 static GtkBuilder *builder = NULL;
 static GtkListStore *list_store_info = NULL;
@@ -111,6 +112,10 @@ enum {
 
 #define GPM_UP_TIME_PRECISION			5*60 /* seconds */
 #define GPM_UP_TEXT_MIN_TIME			120 /* seconds */
+
+#define GPM_STATS_COLOR_DARK		"dark"
+#define GPM_STATS_COLOR_LIGHT		"light"
+#define GPM_STATS_COLOR_AUTO		"auto"
 
 /**
  * gpm_stats_get_device_icon_suffix:
@@ -707,13 +712,47 @@ gpm_stats_set_graph_data (GtkWidget *widget, GPtrArray *data, gboolean use_smoot
 }
 
 static guint32
-gpm_color_from_rgb (guint8 red, guint8 green, guint8 blue)
+gpm_color_from_rgba (guint8 red, guint8 green, guint8 blue, guint8 alpha)
 {
 	guint32 color = 0;
-	color += (guint32) red * 0x10000;
-	color += (guint32) green * 0x100;
-	color += (guint32) blue;
+	color += (guint32) red   * 0x1000000;
+	color += (guint32) green * 0x0010000;
+	color += (guint32) blue  * 0x0000100;
+	color += (guint32) alpha;
 	return color;
+}
+
+static guint32
+gpm_color_from_rgb (guint8 red, guint8 green, guint8 blue)
+{
+	return gpm_color_from_rgba (red, green, blue, 255);
+}
+
+static gboolean
+gpm_stats_is_dark_mode (GtkWidget *widget)
+{
+	g_autofree gchar *colors_preference;
+	GtkStyleContext *style_context;
+	GdkRGBA color;
+
+	colors_preference = g_settings_get_string (settings, GPM_SETTINGS_INFO_COLORS);
+	if (colors_preference == NULL)
+		colors_preference = GPM_STATS_COLOR_AUTO;
+
+	if ((g_strcmp0 (colors_preference, GPM_STATS_COLOR_AUTO) == 0))
+	{
+		style_context = gtk_widget_get_style_context (widget);
+		gtk_style_context_get_color (style_context, GTK_STATE_FLAG_PRELIGHT, &color);
+
+		if (color.red + color.blue + color.green > 1.5f)
+			return TRUE;
+	}
+	else if ((g_strcmp0 (colors_preference, GPM_STATS_COLOR_LIGHT) == 0))
+		return FALSE;
+	else if ((g_strcmp0 (colors_preference, GPM_STATS_COLOR_DARK) == 0))
+		return TRUE;
+
+	return FALSE;
 }
 
 static void
@@ -738,10 +777,10 @@ gpm_stats_update_info_page_history (UpDevice *device)
 			      "autorange-x", FALSE,
 			      "divs-x", (guint) divs_x,
 			      "start-x", -(gdouble) history_time,
-			      "stop-x", (gdouble) 0.f,
-			      "autorange-y", FALSE,
 			      "start-y", (gdouble) 0.f,
+			      "stop-x", (gdouble) 0.f,
 			      "stop-y", (gdouble) 100.f,
+			      "autorange-y", FALSE,
 			      NULL);
 	} else if (g_strcmp0 (history_type, GPM_HISTORY_RATE_VALUE) == 0) {
 		g_object_set (graph_history,
@@ -791,19 +830,37 @@ gpm_stats_update_info_page_history (UpDevice *device)
 		point = egg_graph_point_new ();
 		point->x = (gint32) up_history_item_get_time (item) - offset;
 		point->y = up_history_item_get_value (item);
-		if (up_history_item_get_state (item) == UP_DEVICE_STATE_CHARGING)
-			point->color = gpm_color_from_rgb (255, 0, 0);
-		else if (up_history_item_get_state (item) == UP_DEVICE_STATE_DISCHARGING)
-			point->color = gpm_color_from_rgb (0, 0, 255);
-		else if (up_history_item_get_state (item) == UP_DEVICE_STATE_PENDING_CHARGE)
-			point->color = gpm_color_from_rgb (200, 0, 0);
-		else if (up_history_item_get_state (item) == UP_DEVICE_STATE_PENDING_DISCHARGE)
-			point->color = gpm_color_from_rgb (0, 0, 200);
-		else {
-			if (g_strcmp0 (history_type, GPM_HISTORY_RATE_VALUE) == 0)
-				point->color = gpm_color_from_rgb (255, 255, 255);
-			else
-				point->color = gpm_color_from_rgb (0, 255, 0);
+		if (gpm_stats_is_dark_mode (widget))
+		{
+			if (up_history_item_get_state (item) == UP_DEVICE_STATE_CHARGING)
+				point->color = gpm_color_from_rgb (255,0,0);
+			else if (up_history_item_get_state (item) == UP_DEVICE_STATE_DISCHARGING)
+				point->color = gpm_color_from_rgb (0, 0, 255);
+			else if (up_history_item_get_state (item) == UP_DEVICE_STATE_PENDING_CHARGE)
+				point->color = gpm_color_from_rgb (200, 0, 0);
+			else if (up_history_item_get_state (item) == UP_DEVICE_STATE_PENDING_DISCHARGE)
+				point->color = gpm_color_from_rgb (0, 0, 200);
+			else {
+				if (g_strcmp0 (history_type, GPM_HISTORY_RATE_VALUE) == 0)
+					point->color = gpm_color_from_rgb (255, 255, 255);
+				else
+					point->color = gpm_color_from_rgb (0, 255, 0);
+			}
+		} else {
+			if (up_history_item_get_state (item) == UP_DEVICE_STATE_CHARGING)
+				point->color = gpm_color_from_rgb (255, 0, 0);
+			else if (up_history_item_get_state (item) == UP_DEVICE_STATE_DISCHARGING)
+				point->color = gpm_color_from_rgb (0, 130, 255);
+			else if (up_history_item_get_state (item) == UP_DEVICE_STATE_PENDING_CHARGE)
+				point->color = gpm_color_from_rgb (200, 0, 0);
+			else if (up_history_item_get_state (item) == UP_DEVICE_STATE_PENDING_DISCHARGE)
+				point->color = gpm_color_from_rgb (0, 0, 200);
+			else {
+				if (g_strcmp0 (history_type, GPM_HISTORY_RATE_VALUE) == 0)
+					point->color = gpm_color_from_rgb (255, 255, 255);
+				else
+					point->color = gpm_color_from_rgb (0, 255, 0);
+			}
 		}
 		g_ptr_array_add (new, point);
 	}
@@ -1405,6 +1462,31 @@ gpm_stats_startup_cb (GApplication *application,
 	/* add history graph */
 	box = GTK_BOX (gtk_builder_get_object (builder, "hbox_history"));
 	graph_history = egg_graph_widget_new ();
+
+	if (gpm_stats_is_dark_mode (graph_history)) {
+		g_object_set (graph_history,
+			      "text-color",              gpm_color_from_rgb (205, 205, 205),
+			      "line-color",              gpm_color_from_rgb (230, 230, 230),
+			      "legend-line-color",       gpm_color_from_rgb (230, 230, 230),
+			      "legend-text-color",       gpm_color_from_rgb (255, 255, 255),
+			      "dot-stroke-color",        gpm_color_from_rgb (255, 255, 255),
+			      "background-color",        gpm_color_from_rgba (0, 0, 0, 0),
+			      "background-stroke-color", gpm_color_from_rgb (230, 230, 230),
+			      "outline-color",           gpm_color_from_rgb (100, 100, 100),
+			      NULL);
+	} else {
+		g_object_set (graph_history,
+			      "text-color",              gpm_color_from_rgb (50, 50, 50),
+			      "line-color",              gpm_color_from_rgb (25, 25, 25),
+			      "legend-line-color",       gpm_color_from_rgb (25, 25, 25),
+			      "legend-text-color",       gpm_color_from_rgb (0, 0, 0),
+			      "dot-stroke-color",        gpm_color_from_rgb (0, 0, 0),
+			      "background-color",        gpm_color_from_rgb (255, 255, 255),
+			      "background-stroke-color", gpm_color_from_rgb (25, 25, 25),
+			      "outline-color",           gpm_color_from_rgb (155, 155, 155),
+			      NULL);
+	}
+
 	gtk_box_pack_start (box, graph_history, TRUE, TRUE, 0);
 	gtk_widget_set_size_request (graph_history, 400, 250);
 	gtk_widget_show (graph_history);
@@ -1412,6 +1494,31 @@ gpm_stats_startup_cb (GApplication *application,
 	/* add statistics graph */
 	box = GTK_BOX (gtk_builder_get_object (builder, "hbox_statistics"));
 	graph_statistics = egg_graph_widget_new ();
+
+	if (gpm_stats_is_dark_mode (graph_statistics)) {
+		g_object_set (graph_statistics,
+			      "text-color",              gpm_color_from_rgb (205, 205, 205),
+			      "line-color",              gpm_color_from_rgb (230, 230, 230),
+			      "legend-line-color",       gpm_color_from_rgb (230, 230, 230),
+			      "legend-text-color",       gpm_color_from_rgb (255, 255, 255),
+			      "dot-stroke-color",        gpm_color_from_rgb (255, 255, 255),
+			      "background-color",        gpm_color_from_rgba (0, 0, 0, 0),
+			      "background-stroke-color", gpm_color_from_rgb (230, 230, 230),
+			      "outline-color",           gpm_color_from_rgb (100, 100, 100),
+			      NULL);
+	} else {
+		g_object_set (graph_statistics,
+			      "text-color",              gpm_color_from_rgb (50, 50, 50),
+			      "line-color",              gpm_color_from_rgb (25, 25, 25),
+			      "legend-line-color",       gpm_color_from_rgb (0, 0, 0),
+			      "legend-text-color",       gpm_color_from_rgb (25, 25, 25),
+			      "dot-stroke-color",        gpm_color_from_rgb (0, 0, 0),
+			      "background-color",        gpm_color_from_rgb (255, 255, 255),
+			      "background-stroke-color", gpm_color_from_rgb (25, 25, 25),
+			      "outline-color",           gpm_color_from_rgb (155, 155, 155),
+			      NULL);
+	}
+
 	gtk_box_pack_start (box, graph_statistics, TRUE, TRUE, 0);
 	gtk_widget_set_size_request (graph_statistics, 400, 250);
 	gtk_widget_show (graph_statistics);
