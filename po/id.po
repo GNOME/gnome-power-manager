@@ -3,16 +3,16 @@
 # This file is distributed under the same license as the gnome-power-manager package.
 #
 # Andy Apdhani <imtheface@gmail.com>, 2006.
-# Andika Triwidada <andika@gmail.com>, 2010, 2011, 2013.
+# Andika Triwidada <andika@gmail.com>, 2010, 2011, 2013, 2021.
 # Dirgita <dirgitadevina@yahoo.co.id>, 2010, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-power-manager/"
 "issues\n"
-"POT-Creation-Date: 2019-04-20 15:56+0000\n"
-"PO-Revision-Date: 2019-04-24 18:46+0700\n"
-"Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
+"POT-Creation-Date: 2021-05-13 15:33+0000\n"
+"PO-Revision-Date: 2021-08-08 21:08+0700\n"
+"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: GNOME Indonesian Translation Team <gnome@i15n.org>\n"
 "Language: id_ID\n"
 "MIME-Version: 1.0\n"
@@ -35,8 +35,8 @@ msgid ""
 "Power Statistics can show historical and current battery information and "
 "programs waking up that use power."
 msgstr ""
-"Statistik Daya dapat menunjukkan informasi baterai historis dan kini serta "
-"program yang bangun yang memakai daya."
+"Statistik Daya dapat menunjukkan informasi baterai historis dan saat ini, "
+"serta program yang bangun yang memakai daya."
 
 #: data/appdata/org.gnome.PowerStats.appdata.xml.in:14
 msgid ""
@@ -67,7 +67,7 @@ msgstr "Apakah kami mesti menghaluskan data riwayat di grafik."
 
 #: data/org.gnome.power-manager.gschema.xml:15
 msgid "The default graph type to show for history"
-msgstr "Jenis grafik utama untuk menampilkan riwayat"
+msgstr "Jenis grafik baku untuk menampilkan riwayat"
 
 #: data/org.gnome.power-manager.gschema.xml:16
 msgid "The default graph type to show in the history window."
@@ -134,8 +134,8 @@ msgstr ""
 
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
-#: data/org.gnome.PowerStats.desktop.in.in:3 src/gpm-statistics.c:983
-#: src/gpm-statistics.c:1352 src/gpm-statistics.ui:8
+#: data/org.gnome.PowerStats.desktop.in.in:3 src/gpm-statistics.c:982
+#: src/gpm-statistics.c:1350 src/gpm-statistics.ui:8
 msgid "Power Statistics"
 msgstr "Statistik Daya"
 
@@ -391,12 +391,12 @@ msgstr "Teknologi tak dikenal"
 #. TRANSLATORS: battery state
 #: src/gpm-statistics.c:334
 msgid "Charging"
-msgstr "Dicas"
+msgstr "Mengisi"
 
 #. TRANSLATORS: battery state
 #: src/gpm-statistics.c:338
 msgid "Discharging"
-msgstr "Tidak Dicas"
+msgstr "Mengosongkan"
 
 #. TRANSLATORS: battery state
 #: src/gpm-statistics.c:342
@@ -406,17 +406,17 @@ msgstr "Kosong"
 #. TRANSLATORS: battery state
 #: src/gpm-statistics.c:346
 msgid "Charged"
-msgstr "Telah Dicas"
+msgstr "Terisi"
 
 #. TRANSLATORS: battery state
 #: src/gpm-statistics.c:350
 msgid "Waiting to charge"
-msgstr "Menunggu dicas"
+msgstr "Menunggu mengisi"
 
 #. TRANSLATORS: battery state
 #: src/gpm-statistics.c:354
 msgid "Waiting to discharge"
-msgstr "Menunggu tidak dicas"
+msgstr "Menunggu mengosongkan"
 
 #. TRANSLATORS: battery state
 #. TRANSLATORS: this is when the stats time is not known
@@ -582,61 +582,61 @@ msgid "Online"
 msgstr "Daring"
 
 #. TRANSLATORS: shown on the titlebar
-#: src/gpm-statistics.c:975
+#: src/gpm-statistics.c:974
 msgid "Device Information"
 msgstr "Informasi Perangkat"
 
 #. TRANSLATORS: shown on the titlebar
-#: src/gpm-statistics.c:977
+#: src/gpm-statistics.c:976
 msgid "Device History"
 msgstr "Riwayat Perangkat"
 
 #. TRANSLATORS: shown on the titlebar
-#: src/gpm-statistics.c:979
+#: src/gpm-statistics.c:978
 msgid "Device Profile"
 msgstr "Profil Perangkat"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: src/gpm-statistics.c:1144 src/gpm-statistics.c:1150
-#: src/gpm-statistics.c:1156 src/gpm-statistics.c:1162
+#: src/gpm-statistics.c:1142 src/gpm-statistics.c:1148
+#: src/gpm-statistics.c:1154 src/gpm-statistics.c:1160
 msgid "Time elapsed"
 msgstr "Waktu berjalan"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1146
+#: src/gpm-statistics.c:1144
 msgid "Power"
 msgstr "Daya"
 
 #. TRANSLATORS: this is the Y axis on the graph for the whole battery device
 #. TRANSLATORS: this is the X axis on the graph for the whole battery device
-#: src/gpm-statistics.c:1152 src/gpm-statistics.c:1191
-#: src/gpm-statistics.c:1197 src/gpm-statistics.c:1203
-#: src/gpm-statistics.c:1209
+#: src/gpm-statistics.c:1150 src/gpm-statistics.c:1189
+#: src/gpm-statistics.c:1195 src/gpm-statistics.c:1201
+#: src/gpm-statistics.c:1207
 msgid "Cell charge"
 msgstr "Muatan sel"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1158 src/gpm-statistics.c:1164
+#: src/gpm-statistics.c:1156 src/gpm-statistics.c:1162
 msgid "Predicted time"
 msgstr "Ramalan waktu"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1193 src/gpm-statistics.c:1205
+#: src/gpm-statistics.c:1191 src/gpm-statistics.c:1203
 msgid "Correction factor"
 msgstr "Faktor koreksi"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1199 src/gpm-statistics.c:1211
+#: src/gpm-statistics.c:1197 src/gpm-statistics.c:1209
 msgid "Prediction accuracy"
 msgstr "Akurasi prediksi"
 
 #. TRANSLATORS: show verbose debugging
-#: src/gpm-statistics.c:1340
+#: src/gpm-statistics.c:1338
 msgid "Show extra debugging information"
 msgstr "Menampilkan informasi ekstra"
 
 #. TRANSLATORS: show a device by default
-#: src/gpm-statistics.c:1343
+#: src/gpm-statistics.c:1341
 msgid "Select this device at startup"
 msgstr "Pilih perangkat ini saat mulai"
 
@@ -671,90 +671,3 @@ msgstr "Riwayat"
 #: src/gpm-statistics.ui:437
 msgid "Statistics"
 msgstr "Statistik"
-
-#~ msgid "org.gnome.PowerStats"
-#~ msgstr "org.gnome.PowerStats"
-
-#~ msgid "6 hours"
-#~ msgstr "6 jam"
-
-#~ msgid "ID"
-#~ msgstr "ID"
-
-#~ msgid "Wakeups"
-#~ msgstr "Bangun"
-
-#~ msgid "Command"
-#~ msgstr "Perintah"
-
-#~ msgid "No data"
-#~ msgstr "Tidak ada data"
-
-#~ msgid "Kernel module"
-#~ msgstr "Modul kernel"
-
-#~ msgid "Kernel core"
-#~ msgstr "Inti kernel"
-
-#~ msgid "Interprocessor interrupt"
-#~ msgstr "Interupsi antar prosesor"
-
-#~ msgid "Interrupt"
-#~ msgstr "Interupsi"
-
-#~ msgid "PS/2 keyboard/mouse/touchpad"
-#~ msgstr "Papan tik PS/2/tetikus/touchpad"
-
-#~ msgid "ACPI"
-#~ msgstr "ACPI"
-
-#~ msgid "Serial ATA"
-#~ msgstr "ATA Serial"
-
-#~ msgid "ATA host controller"
-#~ msgstr "Kontroler host ATA"
-
-#~ msgid "Intel wireless adaptor"
-#~ msgstr "Adaptor nirkabel Intel"
-
-#~ msgid "Timer %s"
-#~ msgstr "Pewaktu %s"
-
-#~ msgid "Sleep %s"
-#~ msgstr "Tidur %s"
-
-#~ msgid "New task %s"
-#~ msgstr "Tugas baru %s"
-
-#~ msgid "Wait %s"
-#~ msgstr "Tunggu %s"
-
-#~ msgid "Work queue %s"
-#~ msgstr "Antrian kerja %s"
-
-#~ msgid "Network route flush %s"
-#~ msgstr "Membilas rute jaringan %s"
-
-#~ msgid "USB activity %s"
-#~ msgstr "Aktivitas USB %s"
-
-#~ msgid "Wakeup %s"
-#~ msgstr "Bangun %s"
-
-#~ msgid "Local interrupts"
-#~ msgstr "Interupsi lokal"
-
-#~ msgid "Rescheduling interrupts"
-#~ msgstr "Penjadwalan ulang interupsi"
-
-#~ msgid "Processor Wakeups"
-#~ msgstr "Prosesor Bangun"
-
-#~ msgid "Processor"
-#~ msgstr "Prosesor"
-
-#~ msgid "Processor wakeups per second:"
-#~ msgstr "Prosesor bangun per detik:"
-
-#~ msgid "0"
-#~ msgstr "0"
