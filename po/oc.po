@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: oc\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-power-manager/"
 "issues\n"
-"POT-Creation-Date: 2020-06-10 12:33+0000\n"
-"PO-Revision-Date: 2021-05-13 17:31+0200\n"
+"POT-Creation-Date: 2021-05-13 15:33+0000\n"
+"PO-Revision-Date: 2021-08-18 19:45+0200\n"
 "Last-Translator: Quentin PAGÈS\n"
 "Language-Team: Tot En Òc\n"
 "Language: oc\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 3.0\n"
 "X-Launchpad-Export-Date: 2015-05-20 15:20+0000\n"
 "X-Project-Style: gnome\n"
 
@@ -141,8 +141,8 @@ msgstr ""
 
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
-#: data/org.gnome.PowerStats.desktop.in.in:3 src/gpm-statistics.c:971
-#: src/gpm-statistics.c:1335 src/gpm-statistics.ui:8
+#: data/org.gnome.PowerStats.desktop.in.in:3 src/gpm-statistics.c:982
+#: src/gpm-statistics.c:1350 src/gpm-statistics.ui:8
 msgid "Power Statistics"
 msgstr "Estatisticas de l'alimentacion"
 
@@ -152,298 +152,303 @@ msgid "battery;consumption;charge;"
 msgstr "batariá;consum;carga;"
 
 #. Translators: This is %i days
-#: src/egg-graph-widget.c:393
+#: src/egg-graph-widget.c:408
 #, c-format
 msgid "%id"
 msgstr "%i j"
 
 #. Translators: This is %i days %02i hours
-#: src/egg-graph-widget.c:396
+#: src/egg-graph-widget.c:411
 #, c-format
 msgid "%id%02ih"
 msgstr "%i j %02i h"
 
 #. Translators: This is %i hours
-#: src/egg-graph-widget.c:401
+#: src/egg-graph-widget.c:416
 #, c-format
 msgid "%ih"
 msgstr "%i o"
 
 #. Translators: This is %i hours %02i minutes
-#: src/egg-graph-widget.c:404
+#: src/egg-graph-widget.c:419
 #, c-format
 msgid "%ih%02im"
 msgstr "%i h %02i m"
 
 #. Translators: This is %2i minutes
-#: src/egg-graph-widget.c:409
+#: src/egg-graph-widget.c:424
 #, c-format
 msgid "%2im"
 msgstr "%2i m"
 
 #. Translators: This is %2i minutes %02i seconds
-#: src/egg-graph-widget.c:412
+#: src/egg-graph-widget.c:427
 #, c-format
 msgid "%2im%02i"
 msgstr "%2i m %02i"
 
 #. TRANSLATORS: This is ms
-#: src/egg-graph-widget.c:416
+#: src/egg-graph-widget.c:431
 #, c-format
 msgid "%.0fms"
 msgstr "%.0fms"
 
 #. Translators: This is %2i seconds
-#: src/egg-graph-widget.c:419
+#: src/egg-graph-widget.c:434
 #, c-format
 msgid "%2is"
 msgstr "%2is"
 
 #. TRANSLATORS: This is %i Percentage
-#: src/egg-graph-widget.c:423
+#: src/egg-graph-widget.c:438
 #, c-format
 msgid "%i%%"
 msgstr "%i %%"
 
 #. TRANSLATORS: This is %.1f Watts
-#: src/egg-graph-widget.c:426
+#: src/egg-graph-widget.c:441
 #, c-format
 msgid "%.1fW"
 msgstr "%.1f W"
 
 #. TRANSLATORS: This is %.1f Volts
-#: src/egg-graph-widget.c:431
+#: src/egg-graph-widget.c:446
 #, c-format
 msgid "%.1fV"
 msgstr "%.1f V"
 
 #. TRANSLATORS: This is %.1f nanometers
-#: src/egg-graph-widget.c:434
+#: src/egg-graph-widget.c:449
 #, c-format
 msgid "%.0f nm"
 msgstr "%.0f nm"
 
 #. TRANSLATORS: the rate of discharge for the device
-#: src/gpm-statistics.c:71 src/gpm-statistics.c:627
+#: src/gpm-statistics.c:72 src/gpm-statistics.c:634
 msgid "Rate"
 msgstr "Taus"
 
-#: src/gpm-statistics.c:72
+#: src/gpm-statistics.c:73
 msgid "Charge"
 msgstr "Carga"
 
-#: src/gpm-statistics.c:73 src/gpm-statistics.c:641
+#: src/gpm-statistics.c:74 src/gpm-statistics.c:648
 msgid "Time to full"
 msgstr "Durada de la carga"
 
-#: src/gpm-statistics.c:74 src/gpm-statistics.c:646
+#: src/gpm-statistics.c:75 src/gpm-statistics.c:653
 msgid "Time to empty"
 msgstr "Durada de la descarga"
 
-#: src/gpm-statistics.c:81
-msgid "10 minutes"
-msgstr "10 minutas"
-
 #: src/gpm-statistics.c:82
-msgid "2 hours"
-msgstr "2 oras"
+msgid "30 minutes"
+msgstr "30 minutas"
 
 #: src/gpm-statistics.c:83
-msgid "6 hours"
-msgstr "6 oras"
+msgid "3 hours"
+msgstr "3 oras"
 
 #: src/gpm-statistics.c:84
+msgid "8 hours"
+msgstr "8 oras"
+
+#: src/gpm-statistics.c:85
 msgid "1 day"
 msgstr "1 jorn"
 
-#: src/gpm-statistics.c:85
+#: src/gpm-statistics.c:86
 msgid "1 week"
 msgstr "1 setmana"
 
+#. 5 min tick
+#. 30 min tick
+#. 1 hr tick
+#. 2 hr tick
+#. 1 day tick
 #. TRANSLATORS: what we've observed about the device
-#: src/gpm-statistics.c:94
+#: src/gpm-statistics.c:101
 msgid "Charge profile"
 msgstr "Perfil de carga"
 
-#: src/gpm-statistics.c:95
+#: src/gpm-statistics.c:102
 msgid "Discharge profile"
 msgstr "Perfil de descarga"
 
 #. TRANSLATORS: how accurately we can predict the time remaining of the battery
-#: src/gpm-statistics.c:97
+#: src/gpm-statistics.c:104
 msgid "Charge accuracy"
 msgstr "Precision de la carga"
 
-#: src/gpm-statistics.c:98
+#: src/gpm-statistics.c:105
 msgid "Discharge accuracy"
 msgstr "Precision de la descarga"
 
 #. TRANSLATORS: system power cord
-#: src/gpm-statistics.c:228
+#: src/gpm-statistics.c:235
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "Adaptador sector"
 msgstr[1] "Adaptadors sector"
 
 #. TRANSLATORS: laptop primary battery
-#: src/gpm-statistics.c:232
+#: src/gpm-statistics.c:239
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "Batariá de l'ordenador"
 msgstr[1] "Batariás de l'ordenador"
 
 #. TRANSLATORS: battery-backed AC power source
-#: src/gpm-statistics.c:236
+#: src/gpm-statistics.c:243
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "Ondulador"
 msgstr[1] "Onduladors"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
-#: src/gpm-statistics.c:240
+#: src/gpm-statistics.c:247
 msgid "Monitor"
 msgid_plural "Monitors"
 msgstr[0] "Ecran"
 msgstr[1] "Ecrans"
 
 #. TRANSLATORS: wireless mice with internal batteries
-#: src/gpm-statistics.c:244
+#: src/gpm-statistics.c:251
 msgid "Mouse"
 msgid_plural "Mice"
 msgstr[0] "Mirga"
 msgstr[1] "Mirgas"
 
 #. TRANSLATORS: wireless keyboard with internal battery
-#: src/gpm-statistics.c:248
+#: src/gpm-statistics.c:255
 msgid "Keyboard"
 msgid_plural "Keyboards"
 msgstr[0] "Clavièr"
 msgstr[1] "Clavièrs"
 
 #. TRANSLATORS: portable device
-#: src/gpm-statistics.c:252
+#: src/gpm-statistics.c:259
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "Assistent personal"
 msgstr[1] "Assistents personals"
 
 #. TRANSLATORS: cell phone (mobile...)
-#: src/gpm-statistics.c:256
+#: src/gpm-statistics.c:263
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "Telefonet"
 msgstr[1] "Telefonets"
 
 #. TRANSLATORS: media player, mp3 etc
-#: src/gpm-statistics.c:261
+#: src/gpm-statistics.c:268
 msgid "Media player"
 msgid_plural "Media players"
 msgstr[0] "Lector multimèdia"
 msgstr[1] "Lectors multimèdia"
 
 #. TRANSLATORS: tablet device
-#: src/gpm-statistics.c:265
+#: src/gpm-statistics.c:272
 msgid "Tablet"
 msgid_plural "Tablets"
 msgstr[0] "Tableta"
 msgstr[1] "Tabletas"
 
 #. TRANSLATORS: tablet device
-#: src/gpm-statistics.c:269
+#: src/gpm-statistics.c:276
 msgid "Computer"
 msgid_plural "Computers"
 msgstr[0] "Ordenador"
 msgstr[1] "Ordenadors"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:286
+#: src/gpm-statistics.c:293
 msgid "Lithium Ion"
 msgstr "Liti-ion"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:290
+#: src/gpm-statistics.c:297
 msgid "Lithium Polymer"
 msgstr "Liti polimèr"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:294
+#: src/gpm-statistics.c:301
 msgid "Lithium Iron Phosphate"
 msgstr "Liti fosfat de fèrre"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:298
+#: src/gpm-statistics.c:305
 msgid "Lead acid"
 msgstr "Batariá al plomb"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:302
+#: src/gpm-statistics.c:309
 msgid "Nickel Cadmium"
 msgstr "Niquèl Cadmi"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:306
+#: src/gpm-statistics.c:313
 msgid "Nickel metal hydride"
 msgstr "Niquèl metal idrur"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:310
+#: src/gpm-statistics.c:317
 msgid "Unknown technology"
 msgstr "Tecnologia desconeguda"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:327
+#: src/gpm-statistics.c:334
 msgid "Charging"
-msgstr "en carga"
+msgstr "En carga"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:331
+#: src/gpm-statistics.c:338
 msgid "Discharging"
-msgstr "en descarga"
+msgstr "En descarga"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:335
+#: src/gpm-statistics.c:342
 msgid "Empty"
 msgstr "Void"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:339
+#: src/gpm-statistics.c:346
 msgid "Charged"
 msgstr "Cargat"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:343
+#: src/gpm-statistics.c:350
 msgid "Waiting to charge"
 msgstr "En espèra de carga"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:347
+#: src/gpm-statistics.c:354
 msgid "Waiting to discharge"
 msgstr "En espèra de descarga"
 
 #. TRANSLATORS: battery state
 #. TRANSLATORS: this is when the stats time is not known
-#: src/gpm-statistics.c:351 src/gpm-statistics.c:465
+#: src/gpm-statistics.c:358 src/gpm-statistics.c:472
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: src/gpm-statistics.c:368
+#: src/gpm-statistics.c:375
 msgid "Attribute"
 msgstr "Atribut"
 
-#: src/gpm-statistics.c:375
+#: src/gpm-statistics.c:382
 msgid "Value"
 msgstr "Valor"
 
-#: src/gpm-statistics.c:389
+#: src/gpm-statistics.c:396
 msgid "Image"
 msgstr "Imatge"
 
-#: src/gpm-statistics.c:395
+#: src/gpm-statistics.c:402
 msgid "Description"
 msgstr "Descripcion"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: src/gpm-statistics.c:469
+#: src/gpm-statistics.c:476
 #, c-format
 msgid "%.0f second"
 msgid_plural "%.0f seconds"
@@ -451,7 +456,7 @@ msgstr[0] "%.0f segonda"
 msgstr[1] "%.0f segondas"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: src/gpm-statistics.c:474
+#: src/gpm-statistics.c:481
 #, c-format
 msgid "%.1f minute"
 msgid_plural "%.1f minutes"
@@ -459,7 +464,7 @@ msgstr[0] "%.1f minuta"
 msgstr[1] "%.1f minutas"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: src/gpm-statistics.c:479
+#: src/gpm-statistics.c:486
 #, c-format
 msgid "%.1f hour"
 msgid_plural "%.1f hours"
@@ -467,50 +472,50 @@ msgstr[0] "%.1f ora"
 msgstr[1] "%.1f oras"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: src/gpm-statistics.c:483
+#: src/gpm-statistics.c:490
 #, c-format
 msgid "%.1f day"
 msgid_plural "%.1f days"
 msgstr[0] "%.1f jorn"
 msgstr[1] "%.1f jorns"
 
-#: src/gpm-statistics.c:489
+#: src/gpm-statistics.c:496
 msgid "Yes"
 msgstr "Òc"
 
-#: src/gpm-statistics.c:489
+#: src/gpm-statistics.c:496
 msgid "No"
 msgstr "Non"
 
 #. TRANSLATORS: the device ID of the current device, e.g. "battery0"
-#: src/gpm-statistics.c:564
+#: src/gpm-statistics.c:571
 msgid "Device"
 msgstr "Periferic"
 
-#: src/gpm-statistics.c:566
+#: src/gpm-statistics.c:573
 msgid "Type"
 msgstr "Tipe"
 
-#: src/gpm-statistics.c:568
+#: src/gpm-statistics.c:575
 msgid "Vendor"
 msgstr "Vendeire"
 
-#: src/gpm-statistics.c:570
+#: src/gpm-statistics.c:577
 msgid "Model"
 msgstr "Modèl"
 
-#: src/gpm-statistics.c:572
+#: src/gpm-statistics.c:579
 msgid "Serial number"
 msgstr "Numèro de seria"
 
 #. TRANSLATORS: a boolean attribute that means if the device is supplying the
 #. * main power for the computer. For instance, an AC adapter or laptop battery
 #. * would be TRUE,  but a mobile phone or mouse taking power is FALSE
-#: src/gpm-statistics.c:577
+#: src/gpm-statistics.c:584
 msgid "Supply"
 msgstr "Alimentacion"
 
-#: src/gpm-statistics.c:580
+#: src/gpm-statistics.c:587
 #, c-format
 msgid "%u second"
 msgid_plural "%u seconds"
@@ -519,126 +524,126 @@ msgstr[1] "%u segondas"
 
 #. TRANSLATORS: when the device was last updated with new data. It's
 #. * usually a few seconds when a device is discharging or charging.
-#: src/gpm-statistics.c:584
+#: src/gpm-statistics.c:591
 msgid "Refreshed"
 msgstr "Actualizat"
 
 #. TRANSLATORS: Present is whether the device is currently attached
 #. * to the computer, as some devices (e.g. laptop batteries) can
 #. * be removed, but still observed as devices on the system
-#: src/gpm-statistics.c:594
+#: src/gpm-statistics.c:601
 msgid "Present"
 msgstr "Present(a)"
 
 #. TRANSLATORS: If the device can be recharged, e.g. lithium
 #. * batteries rather than alkaline ones
-#: src/gpm-statistics.c:601
+#: src/gpm-statistics.c:608
 msgid "Rechargeable"
 msgstr "Recargable"
 
 #. TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged"
-#: src/gpm-statistics.c:607
+#: src/gpm-statistics.c:614
 msgid "State"
 msgstr "Estat"
 
-#: src/gpm-statistics.c:611
+#: src/gpm-statistics.c:618
 msgid "Energy"
 msgstr "Energia"
 
-#: src/gpm-statistics.c:614
+#: src/gpm-statistics.c:621
 msgid "Energy when empty"
 msgstr "Energia a void"
 
-#: src/gpm-statistics.c:617
+#: src/gpm-statistics.c:624
 msgid "Energy when full"
 msgstr "Energia a plena carga"
 
-#: src/gpm-statistics.c:620
+#: src/gpm-statistics.c:627
 msgid "Energy (design)"
 msgstr "Energia (teorica)"
 
-#: src/gpm-statistics.c:634
+#: src/gpm-statistics.c:641
 msgid "Voltage"
 msgstr "Tension"
 
 #. TRANSLATORS: the amount of charge the cell contains
-#: src/gpm-statistics.c:656
+#: src/gpm-statistics.c:663
 msgid "Percentage"
 msgstr "Percentatge"
 
 #. TRANSLATORS: the capacity of the device, which is basically a measure
 #. * of how full it can get, relative to the design capacity
-#: src/gpm-statistics.c:663
+#: src/gpm-statistics.c:670
 msgid "Capacity"
 msgstr "Capacitat"
 
 #. TRANSLATORS: the type of battery, e.g. lithium or nikel metal hydroxide
-#: src/gpm-statistics.c:668
+#: src/gpm-statistics.c:675
 msgid "Technology"
 msgstr "Tecnologia"
 
 #. TRANSLATORS: this is when the device is plugged in, typically
 #. * only shown for the ac adaptor device
-#: src/gpm-statistics.c:673
+#: src/gpm-statistics.c:680
 msgid "Online"
 msgstr "En linha"
 
 #. TRANSLATORS: shown on the titlebar
-#: src/gpm-statistics.c:963
+#: src/gpm-statistics.c:974
 msgid "Device Information"
 msgstr "Informacions sul periferic"
 
 #. TRANSLATORS: shown on the titlebar
-#: src/gpm-statistics.c:965
+#: src/gpm-statistics.c:976
 msgid "Device History"
 msgstr "Istoric del periferic"
 
 #. TRANSLATORS: shown on the titlebar
-#: src/gpm-statistics.c:967
+#: src/gpm-statistics.c:978
 msgid "Device Profile"
 msgstr "Perfil del periferic"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: src/gpm-statistics.c:1132 src/gpm-statistics.c:1138
-#: src/gpm-statistics.c:1144 src/gpm-statistics.c:1150
+#: src/gpm-statistics.c:1142 src/gpm-statistics.c:1148
+#: src/gpm-statistics.c:1154 src/gpm-statistics.c:1160
 msgid "Time elapsed"
 msgstr "Temps"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1134
+#: src/gpm-statistics.c:1144
 msgid "Power"
 msgstr "Poténcia"
 
 #. TRANSLATORS: this is the Y axis on the graph for the whole battery device
 #. TRANSLATORS: this is the X axis on the graph for the whole battery device
-#: src/gpm-statistics.c:1140 src/gpm-statistics.c:1179
-#: src/gpm-statistics.c:1185 src/gpm-statistics.c:1191
-#: src/gpm-statistics.c:1197
+#: src/gpm-statistics.c:1150 src/gpm-statistics.c:1189
+#: src/gpm-statistics.c:1195 src/gpm-statistics.c:1201
+#: src/gpm-statistics.c:1207
 msgid "Cell charge"
 msgstr "Carga de la batariá"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1146 src/gpm-statistics.c:1152
+#: src/gpm-statistics.c:1156 src/gpm-statistics.c:1162
 msgid "Predicted time"
 msgstr "Durada prevista"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1181 src/gpm-statistics.c:1193
+#: src/gpm-statistics.c:1191 src/gpm-statistics.c:1203
 msgid "Correction factor"
 msgstr "Factor de correccion"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1187 src/gpm-statistics.c:1199
+#: src/gpm-statistics.c:1197 src/gpm-statistics.c:1209
 msgid "Prediction accuracy"
 msgstr "Precision de la prediccion"
 
 #. TRANSLATORS: show verbose debugging
-#: src/gpm-statistics.c:1323
+#: src/gpm-statistics.c:1338
 msgid "Show extra debugging information"
 msgstr "Aficha las informacions de desbugatge"
 
 #. TRANSLATORS: show a device by default
-#: src/gpm-statistics.c:1326
+#: src/gpm-statistics.c:1341
 msgid "Select this device at startup"
 msgstr "Seleccionar aqueste periferic a l'aviada"
 
@@ -673,6 +678,9 @@ msgstr "Istoric"
 #: src/gpm-statistics.ui:437
 msgid "Statistics"
 msgstr "Estatisticas"
+
+#~ msgid "6 hours"
+#~ msgstr "6 oras"
 
 #~ msgid "Processor wakeups per second:"
 #~ msgstr "Nombre de revelhs del processor per segonda :"
