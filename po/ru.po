@@ -15,11 +15,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
-"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"power-manager&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-02-23 15:33+0000\n"
-"PO-Revision-Date: 2017-03-30 13:06+0300\n"
-"Last-Translator: Stas Solovey <whats_up@tut.by>\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-power-manager/"
+"issues\n"
+"POT-Creation-Date: 2022-02-13 05:18+0000\n"
+"PO-Revision-Date: 2022-02-15 00:31+1000\n"
+"Last-Translator: Ser82-png <sw@atrus.ru>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.3\n"
 
 #: data/appdata/org.gnome.PowerStats.appdata.xml.in:7
 msgid "GNOME Power Statistics"
@@ -59,24 +59,24 @@ msgstr ""
 
 #: data/org.gnome.power-manager.gschema.xml:5
 msgid "Whether we should show the history data points"
-msgstr "Показывать ли точками исторические данные"
+msgstr "Показывать ли точками данные истории"
 
 #: data/org.gnome.power-manager.gschema.xml:6
 msgid ""
 "Whether we should show the history data points in the statistics window."
-msgstr "Показывать ли точками исторические данные в окне статистики."
+msgstr "Показывать ли точками данные истории в окне статистики."
 
 #: data/org.gnome.power-manager.gschema.xml:10
 msgid "Whether we should smooth the history data"
-msgstr "Сглаживать ли исторические данные на графике"
+msgstr "Сглаживать ли данные истории на графике"
 
 #: data/org.gnome.power-manager.gschema.xml:11
 msgid "Whether we should smooth the history data in the graph."
-msgstr "Сглаживать ли исторические данные на графике."
+msgstr "Сглаживать ли данные истории на графике."
 
 #: data/org.gnome.power-manager.gschema.xml:15
 msgid "The default graph type to show for history"
-msgstr "Тип графика по умолчанию для истории"
+msgstr "Тип графика истории по умолчанию"
 
 #: data/org.gnome.power-manager.gschema.xml:16
 msgid "The default graph type to show in the history window."
@@ -125,7 +125,7 @@ msgid ""
 "focus to the correct page."
 msgstr ""
 "Индекс номера страница по умолчанию, который используется для возвращения "
-"фокуса коррктной странице."
+"фокуса корректной странице."
 
 #: data/org.gnome.power-manager.gschema.xml:45
 msgid "The ID of the last device selected"
@@ -141,150 +141,150 @@ msgstr ""
 
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
-#: data/org.gnome.PowerStats.desktop.in.in:3 src/gpm-statistics.c:1275
-#: src/gpm-statistics.c:1658 src/gpm-statistics.ui:8
+#: data/org.gnome.PowerStats.desktop.in.in:3 src/gpm-statistics.c:982
+#: src/gpm-statistics.c:1350 src/gpm-statistics.ui:8
 msgid "Power Statistics"
 msgstr "Статистика энергопотребления"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.PowerStats.desktop.in.in:6
 msgid "battery;consumption;charge;"
-msgstr "батарея;разрядка;зарядка;"
-
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-#: data/org.gnome.PowerStats.desktop.in.in:8
-msgid "org.gnome.PowerStats"
-msgstr "org.gnome.PowerStats"
+msgstr "battery;consumption;charge;батарея;разрядка;зарядка;"
 
 #. Translators: This is %i days
-#: src/egg-graph-widget.c:393
+#: src/egg-graph-widget.c:408
 #, c-format
 msgid "%id"
 msgstr "%iд"
 
 #. Translators: This is %i days %02i hours
-#: src/egg-graph-widget.c:396
+#: src/egg-graph-widget.c:411
 #, c-format
 msgid "%id%02ih"
 msgstr "%iд%02iч"
 
 #. Translators: This is %i hours
-#: src/egg-graph-widget.c:401
+#: src/egg-graph-widget.c:416
 #, c-format
 msgid "%ih"
 msgstr "%iч"
 
 #. Translators: This is %i hours %02i minutes
-#: src/egg-graph-widget.c:404
+#: src/egg-graph-widget.c:419
 #, c-format
 msgid "%ih%02im"
 msgstr "%iч%02iм"
 
 #. Translators: This is %2i minutes
-#: src/egg-graph-widget.c:409
+#: src/egg-graph-widget.c:424
 #, c-format
 msgid "%2im"
 msgstr "%2iм"
 
 #. Translators: This is %2i minutes %02i seconds
-#: src/egg-graph-widget.c:412
+#: src/egg-graph-widget.c:427
 #, c-format
 msgid "%2im%02i"
 msgstr "%2iм%02i"
 
 #. TRANSLATORS: This is ms
-#: src/egg-graph-widget.c:416
+#: src/egg-graph-widget.c:431
 #, c-format
 msgid "%.0fms"
 msgstr "%.0fмс"
 
 #. Translators: This is %2i seconds
-#: src/egg-graph-widget.c:419
+#: src/egg-graph-widget.c:434
 #, c-format
 msgid "%2is"
 msgstr "%2iс"
 
 #. TRANSLATORS: This is %i Percentage
-#: src/egg-graph-widget.c:423
+#: src/egg-graph-widget.c:438
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. TRANSLATORS: This is %.1f Watts
-#: src/egg-graph-widget.c:426
+#: src/egg-graph-widget.c:441
 #, c-format
 msgid "%.1fW"
 msgstr "%.1fВт"
 
 #. TRANSLATORS: This is %.1f Volts
-#: src/egg-graph-widget.c:431
+#: src/egg-graph-widget.c:446
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fВ"
 
 #. TRANSLATORS: This is %.1f nanometers
-#: src/egg-graph-widget.c:434
+#: src/egg-graph-widget.c:449
 #, c-format
 msgid "%.0f nm"
 msgstr "%.0f нм"
 
 #. TRANSLATORS: the rate of discharge for the device
-#: src/gpm-statistics.c:82 src/gpm-statistics.c:680
+#: src/gpm-statistics.c:72 src/gpm-statistics.c:634
 msgid "Rate"
 msgstr "Скорость"
 
-#: src/gpm-statistics.c:83
+#: src/gpm-statistics.c:73
 msgid "Charge"
 msgstr "Зарядка"
 
-#: src/gpm-statistics.c:84 src/gpm-statistics.c:694
+#: src/gpm-statistics.c:74 src/gpm-statistics.c:648
 msgid "Time to full"
 msgstr "Время до полной зарядки"
 
-#: src/gpm-statistics.c:85 src/gpm-statistics.c:699
+#: src/gpm-statistics.c:75 src/gpm-statistics.c:653
 msgid "Time to empty"
 msgstr "Время до полной разрядки"
 
-#: src/gpm-statistics.c:92
-msgid "10 minutes"
-msgstr "10 минут"
+#: src/gpm-statistics.c:82
+msgid "30 minutes"
+msgstr "30 минут"
 
-#: src/gpm-statistics.c:93
-msgid "2 hours"
-msgstr "2 часа"
+#: src/gpm-statistics.c:83
+msgid "3 hours"
+msgstr "3 часа"
 
-#: src/gpm-statistics.c:94
-msgid "6 hours"
-msgstr "6 часов"
+#: src/gpm-statistics.c:84
+msgid "8 hours"
+msgstr "8 часов"
 
-#: src/gpm-statistics.c:95
+#: src/gpm-statistics.c:85
 msgid "1 day"
 msgstr "1 день"
 
-#: src/gpm-statistics.c:96
+#: src/gpm-statistics.c:86
 msgid "1 week"
 msgstr "1 неделя"
 
+#. 5 min tick
+#. 30 min tick
+#. 1 hr tick
+#. 2 hr tick
+#. 1 day tick
 #. TRANSLATORS: what we've observed about the device
-#: src/gpm-statistics.c:105
+#: src/gpm-statistics.c:101
 msgid "Charge profile"
 msgstr "Профиль времени зарядки"
 
-#: src/gpm-statistics.c:106
+#: src/gpm-statistics.c:102
 msgid "Discharge profile"
 msgstr "Профиль времени разрядки"
 
 #. TRANSLATORS: how accurately we can predict the time remaining of the battery
-#: src/gpm-statistics.c:108
+#: src/gpm-statistics.c:104
 msgid "Charge accuracy"
 msgstr "Профиль точности определения времени зарядки"
 
-#: src/gpm-statistics.c:109
+#: src/gpm-statistics.c:105
 msgid "Discharge accuracy"
 msgstr "Профиль точности определения времени разрядки"
 
 #. TRANSLATORS: system power cord
-#: src/gpm-statistics.c:239
+#: src/gpm-statistics.c:235
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "Сетевой адаптер"
@@ -292,7 +292,7 @@ msgstr[1] "Сетевых адаптера"
 msgstr[2] "Сетевых адаптеров"
 
 #. TRANSLATORS: laptop primary battery
-#: src/gpm-statistics.c:243
+#: src/gpm-statistics.c:239
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "Батарея ноутбука"
@@ -300,7 +300,7 @@ msgstr[1] "Батареи ноутбука"
 msgstr[2] "Батарей ноутбука"
 
 #. TRANSLATORS: battery-backed AC power source
-#: src/gpm-statistics.c:247
+#: src/gpm-statistics.c:243
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "Блок бесперебойного питания"
@@ -308,7 +308,7 @@ msgstr[1] "Блока бесперебойного питания"
 msgstr[2] "Блоков бесперебойного питания"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
-#: src/gpm-statistics.c:251
+#: src/gpm-statistics.c:247
 msgid "Monitor"
 msgid_plural "Monitors"
 msgstr[0] "Монитор"
@@ -316,7 +316,7 @@ msgstr[1] "Монитора"
 msgstr[2] "Мониторов"
 
 #. TRANSLATORS: wireless mice with internal batteries
-#: src/gpm-statistics.c:255
+#: src/gpm-statistics.c:251
 msgid "Mouse"
 msgid_plural "Mice"
 msgstr[0] "Мышь"
@@ -324,7 +324,7 @@ msgstr[1] "Мыши"
 msgstr[2] "Мыши"
 
 #. TRANSLATORS: wireless keyboard with internal battery
-#: src/gpm-statistics.c:259
+#: src/gpm-statistics.c:255
 msgid "Keyboard"
 msgid_plural "Keyboards"
 msgstr[0] "Клавиатура"
@@ -332,7 +332,7 @@ msgstr[1] "Клавиатуры"
 msgstr[2] "Клавиатуры"
 
 #. TRANSLATORS: portable device
-#: src/gpm-statistics.c:263
+#: src/gpm-statistics.c:259
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "КПК"
@@ -340,7 +340,7 @@ msgstr[1] "КПК"
 msgstr[2] "КПК"
 
 #. TRANSLATORS: cell phone (mobile...)
-#: src/gpm-statistics.c:267
+#: src/gpm-statistics.c:263
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "Мобильный телефон"
@@ -348,7 +348,7 @@ msgstr[1] "Мобильных телефона"
 msgstr[2] "Мобильный телефонов"
 
 #. TRANSLATORS: media player, mp3 etc
-#: src/gpm-statistics.c:272
+#: src/gpm-statistics.c:268
 msgid "Media player"
 msgid_plural "Media players"
 msgstr[0] "Медиаплеер"
@@ -356,7 +356,7 @@ msgstr[1] "Медиаплеера"
 msgstr[2] "Медиаплееров"
 
 #. TRANSLATORS: tablet device
-#: src/gpm-statistics.c:276
+#: src/gpm-statistics.c:272
 msgid "Tablet"
 msgid_plural "Tablets"
 msgstr[0] "Планшет"
@@ -364,7 +364,7 @@ msgstr[1] "Планшета"
 msgstr[2] "Планшетов"
 
 #. TRANSLATORS: tablet device
-#: src/gpm-statistics.c:280
+#: src/gpm-statistics.c:276
 msgid "Computer"
 msgid_plural "Computers"
 msgstr[0] "Компьютер"
@@ -372,114 +372,94 @@ msgstr[1] "Компьютера"
 msgstr[2] "Компьютеров"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:297
+#: src/gpm-statistics.c:293
 msgid "Lithium Ion"
 msgstr "Литий-ионная"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:301
+#: src/gpm-statistics.c:297
 msgid "Lithium Polymer"
 msgstr "Литий-полимерная"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:305
+#: src/gpm-statistics.c:301
 msgid "Lithium Iron Phosphate"
 msgstr "Литий-фосфатная"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:309
+#: src/gpm-statistics.c:305
 msgid "Lead acid"
 msgstr "Свинцово-кислотная"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:313
+#: src/gpm-statistics.c:309
 msgid "Nickel Cadmium"
 msgstr "Никель-кадмиевая"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:317
+#: src/gpm-statistics.c:313
 msgid "Nickel metal hydride"
 msgstr "Никелевая металгидридная"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:321
+#: src/gpm-statistics.c:317
 msgid "Unknown technology"
 msgstr "Неизвестная технология"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:338
+#: src/gpm-statistics.c:334
 msgid "Charging"
 msgstr "Заряжается"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:342
+#: src/gpm-statistics.c:338
 msgid "Discharging"
 msgstr "Разряжается"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:346
+#: src/gpm-statistics.c:342
 msgid "Empty"
 msgstr "Разряжена"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:350
+#: src/gpm-statistics.c:346
 msgid "Charged"
 msgstr "Заряжена"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:354
+#: src/gpm-statistics.c:350
 msgid "Waiting to charge"
 msgstr "Ожидает зарядки"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:358
+#: src/gpm-statistics.c:354
 msgid "Waiting to discharge"
 msgstr "Ожидает разрядки"
 
 #. TRANSLATORS: battery state
 #. TRANSLATORS: this is when the stats time is not known
-#: src/gpm-statistics.c:362 src/gpm-statistics.c:518
+#: src/gpm-statistics.c:358 src/gpm-statistics.c:472
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: src/gpm-statistics.c:379
+#: src/gpm-statistics.c:375
 msgid "Attribute"
 msgstr "Атрибут"
 
-#: src/gpm-statistics.c:386
+#: src/gpm-statistics.c:382
 msgid "Value"
 msgstr "Значение"
 
-#: src/gpm-statistics.c:400
+#: src/gpm-statistics.c:396
 msgid "Image"
 msgstr "Значок"
 
-#: src/gpm-statistics.c:406
+#: src/gpm-statistics.c:402
 msgid "Description"
 msgstr "Описание"
 
-#: src/gpm-statistics.c:422 src/gpm-statistics.c:619
-msgid "Type"
-msgstr "Тип"
-
-#: src/gpm-statistics.c:428
-msgid "ID"
-msgstr "Идентификатор"
-
-#: src/gpm-statistics.c:435 src/gpm-statistics.ui:516
-msgid "Wakeups"
-msgstr "Пробуждения"
-
-#: src/gpm-statistics.c:442
-msgid "Command"
-msgstr "Команда"
-
-#: src/gpm-statistics.c:449 src/gpm-statistics.ui:66
-msgid "Details"
-msgstr "Подробности"
-
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: src/gpm-statistics.c:522
+#: src/gpm-statistics.c:476
 #, c-format
 msgid "%.0f second"
 msgid_plural "%.0f seconds"
@@ -488,7 +468,7 @@ msgstr[1] "%.0f секунды"
 msgstr[2] "%.0f секунд"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: src/gpm-statistics.c:527
+#: src/gpm-statistics.c:481
 #, c-format
 msgid "%.1f minute"
 msgid_plural "%.1f minutes"
@@ -497,7 +477,7 @@ msgstr[1] "%.1f минуты"
 msgstr[2] "%.1f минут"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: src/gpm-statistics.c:532
+#: src/gpm-statistics.c:486
 #, c-format
 msgid "%.1f hour"
 msgid_plural "%.1f hours"
@@ -506,7 +486,7 @@ msgstr[1] "%.1f часа"
 msgstr[2] "%.1f часов"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: src/gpm-statistics.c:536
+#: src/gpm-statistics.c:490
 #, c-format
 msgid "%.1f day"
 msgid_plural "%.1f days"
@@ -514,39 +494,43 @@ msgstr[0] "%.1f день"
 msgstr[1] "%.1f дня"
 msgstr[2] "%.1f дней"
 
-#: src/gpm-statistics.c:542
+#: src/gpm-statistics.c:496
 msgid "Yes"
 msgstr "Да"
 
-#: src/gpm-statistics.c:542
+#: src/gpm-statistics.c:496
 msgid "No"
 msgstr "Нет"
 
 #. TRANSLATORS: the device ID of the current device, e.g. "battery0"
-#: src/gpm-statistics.c:617
+#: src/gpm-statistics.c:571
 msgid "Device"
 msgstr "Устройство"
 
-#: src/gpm-statistics.c:621
+#: src/gpm-statistics.c:573
+msgid "Type"
+msgstr "Тип"
+
+#: src/gpm-statistics.c:575
 msgid "Vendor"
 msgstr "Производитель"
 
-#: src/gpm-statistics.c:623
+#: src/gpm-statistics.c:577
 msgid "Model"
 msgstr "Модель"
 
-#: src/gpm-statistics.c:625
+#: src/gpm-statistics.c:579
 msgid "Serial number"
 msgstr "Серийный номер"
 
 #. TRANSLATORS: a boolean attribute that means if the device is supplying the
 #. * main power for the computer. For instance, an AC adapter or laptop battery
 #. * would be TRUE,  but a mobile phone or mouse taking power is FALSE
-#: src/gpm-statistics.c:630
+#: src/gpm-statistics.c:584
 msgid "Supply"
 msgstr "Поставщик энергии"
 
-#: src/gpm-statistics.c:633
+#: src/gpm-statistics.c:587
 #, c-format
 msgid "%u second"
 msgid_plural "%u seconds"
@@ -556,253 +540,132 @@ msgstr[2] "%u секунд"
 
 #. TRANSLATORS: when the device was last updated with new data. It's
 #. * usually a few seconds when a device is discharging or charging.
-#: src/gpm-statistics.c:637
+#: src/gpm-statistics.c:591
 msgid "Refreshed"
 msgstr "Обновлено"
 
 #. TRANSLATORS: Present is whether the device is currently attached
 #. * to the computer, as some devices (e.g. laptop batteries) can
 #. * be removed, but still observed as devices on the system
-#: src/gpm-statistics.c:647
+#: src/gpm-statistics.c:601
 msgid "Present"
 msgstr "Присутствует"
 
 #. TRANSLATORS: If the device can be recharged, e.g. lithium
 #. * batteries rather than alkaline ones
-#: src/gpm-statistics.c:654
+#: src/gpm-statistics.c:608
 msgid "Rechargeable"
 msgstr "Перезаряжаемо"
 
 #. TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged"
-#: src/gpm-statistics.c:660
+#: src/gpm-statistics.c:614
 msgid "State"
 msgstr "Состояние"
 
-#: src/gpm-statistics.c:664
+#: src/gpm-statistics.c:618
 msgid "Energy"
 msgstr "Энергия"
 
-#: src/gpm-statistics.c:667
+#: src/gpm-statistics.c:621
 msgid "Energy when empty"
 msgstr "Энергия при опустошении"
 
-#: src/gpm-statistics.c:670
+#: src/gpm-statistics.c:624
 msgid "Energy when full"
 msgstr "Энергия при заполнении"
 
-#: src/gpm-statistics.c:673
+#: src/gpm-statistics.c:627
 msgid "Energy (design)"
 msgstr "Энергия (исходная)"
 
-#: src/gpm-statistics.c:687
+#: src/gpm-statistics.c:641
 msgid "Voltage"
 msgstr "Напряжение"
 
 #. TRANSLATORS: the amount of charge the cell contains
-#: src/gpm-statistics.c:709
+#: src/gpm-statistics.c:663
 msgid "Percentage"
 msgstr "Процент"
 
 #. TRANSLATORS: the capacity of the device, which is basically a measure
 #. * of how full it can get, relative to the design capacity
-#: src/gpm-statistics.c:716
+#: src/gpm-statistics.c:670
 msgid "Capacity"
 msgstr "Ёмкость"
 
 #. TRANSLATORS: the type of battery, e.g. lithium or nikel metal hydroxide
-#: src/gpm-statistics.c:721
+#: src/gpm-statistics.c:675
 msgid "Technology"
 msgstr "Технология"
 
 #. TRANSLATORS: this is when the device is plugged in, typically
 #. * only shown for the ac adaptor device
-#: src/gpm-statistics.c:726
+#: src/gpm-statistics.c:680
 msgid "Online"
 msgstr "Подключено"
 
-#. TRANSLATORS: the command line was not provided
-#: src/gpm-statistics.c:1025
-msgid "No data"
-msgstr "Нет данных"
-
-#. TRANSLATORS: kernel module, usually a device driver
-#: src/gpm-statistics.c:1032 src/gpm-statistics.c:1037
-msgid "Kernel module"
-msgstr "Модуль ядра"
-
-#. TRANSLATORS: kernel housekeeping
-#: src/gpm-statistics.c:1042
-msgid "Kernel core"
-msgstr "Ядро"
-
-#. TRANSLATORS: interrupt between processors
-#: src/gpm-statistics.c:1047
-msgid "Interprocessor interrupt"
-msgstr "Межпроцессорное прерывание"
-
-#. TRANSLATORS: unknown interrupt
-#: src/gpm-statistics.c:1052
-msgid "Interrupt"
-msgstr "Прерывание"
-
-#. TRANSLATORS: the keyboard and mouse device event
-#: src/gpm-statistics.c:1095
-msgid "PS/2 keyboard/mouse/touchpad"
-msgstr "Клавиатура/Мышь/Сенсорная панель"
-
-#. TRANSLATORS: ACPI, the Intel power standard on laptops and desktops
-#: src/gpm-statistics.c:1098
-msgid "ACPI"
-msgstr "ACPI"
-
-#. TRANSLATORS: serial ATA is a new style of hard disk interface
-#: src/gpm-statistics.c:1101
-msgid "Serial ATA"
-msgstr "Serial ATA"
-
-#. TRANSLATORS: this is the old-style ATA interface
-#: src/gpm-statistics.c:1104
-msgid "ATA host controller"
-msgstr "Контроллер ATA"
-
-#. TRANSLATORS: 802.11 wireless adaptor
-#: src/gpm-statistics.c:1107
-msgid "Intel wireless adaptor"
-msgstr "Беспроводной адаптер Intel"
-
-#. TRANSLATORS: a timer is something that fires periodically.
-#. * The parameter is a process name, e.g. "firefox-bin".
-#. * This is shown when the timer wakes up.
-#: src/gpm-statistics.c:1114 src/gpm-statistics.c:1119
-#: src/gpm-statistics.c:1124 src/gpm-statistics.c:1129
-#: src/gpm-statistics.c:1134
-#, c-format
-msgid "Timer %s"
-msgstr "Периодическая активность %s"
-
-#. TRANSLATORS: the parameter is the name of task that's woken up from sleeping.
-#. * This is shown when the task wakes up.
-#: src/gpm-statistics.c:1138
-#, c-format
-msgid "Sleep %s"
-msgstr "Пробуждение %s"
-
-#. TRANSLATORS: this is the name of a new realtime task.
-#: src/gpm-statistics.c:1141
-#, c-format
-msgid "New task %s"
-msgstr "Новая задача %s"
-
-#. TRANSLATORS: this is the name of a task that's woken to check state.
-#. * This is shown when the task wakes up.
-#: src/gpm-statistics.c:1145
-#, c-format
-msgid "Wait %s"
-msgstr "Ожидание %s"
-
-#. TRANSLATORS: this is the name of a work queue.
-#. * A work queue is a list of work that has to be done.
-#: src/gpm-statistics.c:1149 src/gpm-statistics.c:1153
-#, c-format
-msgid "Work queue %s"
-msgstr "Очередь заданий %s"
-
-#. TRANSLATORS: this is when the networking subsystem clears out old entries
-#: src/gpm-statistics.c:1156
-#, c-format
-msgid "Network route flush %s"
-msgstr "Очистка сетевых маршрутов %s"
-
-#. TRANSLATORS: this is the name of an activity on the USB bus
-#: src/gpm-statistics.c:1159
-#, c-format
-msgid "USB activity %s"
-msgstr "Активность USB %s"
-
-#. TRANSLATORS: we've timed out of an aligned timer, with the name
-#: src/gpm-statistics.c:1162
-#, c-format
-msgid "Wakeup %s"
-msgstr "Пробуждение периодического задания %s"
-
-#. TRANSLATORS: interupts on the system required for basic operation
-#: src/gpm-statistics.c:1165
-msgid "Local interrupts"
-msgstr "Прерывания"
-
-#. TRANSLATORS: interrupts when a task gets moved from one core to another
-#: src/gpm-statistics.c:1168
-msgid "Rescheduling interrupts"
-msgstr "Перепланировка задач"
-
 #. TRANSLATORS: shown on the titlebar
-#: src/gpm-statistics.c:1265
+#: src/gpm-statistics.c:974
 msgid "Device Information"
 msgstr "Сведения об устройстве"
 
 #. TRANSLATORS: shown on the titlebar
-#: src/gpm-statistics.c:1267
+#: src/gpm-statistics.c:976
 msgid "Device History"
 msgstr "История устройства"
 
 #. TRANSLATORS: shown on the titlebar
-#: src/gpm-statistics.c:1269
+#: src/gpm-statistics.c:978
 msgid "Device Profile"
 msgstr "Профиль устройства"
 
-#. TRANSLATORS: shown on the titlebar
-#: src/gpm-statistics.c:1271
-msgid "Processor Wakeups"
-msgstr "Пробуждения процессора"
-
 #. TRANSLATORS: this is the X axis on the graph
-#: src/gpm-statistics.c:1448 src/gpm-statistics.c:1454
-#: src/gpm-statistics.c:1460 src/gpm-statistics.c:1466
+#: src/gpm-statistics.c:1142 src/gpm-statistics.c:1148
+#: src/gpm-statistics.c:1154 src/gpm-statistics.c:1160
 msgid "Time elapsed"
 msgstr "Среднее время до окончания"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1450
+#: src/gpm-statistics.c:1144
 msgid "Power"
 msgstr "Электропитание"
 
 #. TRANSLATORS: this is the Y axis on the graph for the whole battery device
 #. TRANSLATORS: this is the X axis on the graph for the whole battery device
-#: src/gpm-statistics.c:1456 src/gpm-statistics.c:1495
-#: src/gpm-statistics.c:1501 src/gpm-statistics.c:1507
-#: src/gpm-statistics.c:1513
+#: src/gpm-statistics.c:1150 src/gpm-statistics.c:1189
+#: src/gpm-statistics.c:1195 src/gpm-statistics.c:1201
+#: src/gpm-statistics.c:1207
 msgid "Cell charge"
 msgstr "Заряд ячейки"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1462 src/gpm-statistics.c:1468
+#: src/gpm-statistics.c:1156 src/gpm-statistics.c:1162
 msgid "Predicted time"
 msgstr "Ожидаемое время"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1497 src/gpm-statistics.c:1509
+#: src/gpm-statistics.c:1191 src/gpm-statistics.c:1203
 msgid "Correction factor"
 msgstr "Коррекция"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1503 src/gpm-statistics.c:1515
+#: src/gpm-statistics.c:1197 src/gpm-statistics.c:1209
 msgid "Prediction accuracy"
 msgstr "Точность предсказания"
 
 #. TRANSLATORS: show verbose debugging
-#: src/gpm-statistics.c:1646
+#: src/gpm-statistics.c:1338
 msgid "Show extra debugging information"
 msgstr "Показывать отладочную информацию"
 
 #. TRANSLATORS: show a device by default
-#: src/gpm-statistics.c:1649
+#: src/gpm-statistics.c:1341
 msgid "Select this device at startup"
 msgstr "Выбрать это устройство при запуске"
 
-#. TRANSLATORS: the icon for the CPU
-#: src/gpm-statistics.c:1893
-msgid "Processor"
-msgstr "Процессор"
+#: src/gpm-statistics.ui:66
+msgid "Details"
+msgstr "Подробности"
 
 #: src/gpm-statistics.ui:92 src/gpm-statistics.ui:296
 msgid "Graph type:"
@@ -832,10 +695,89 @@ msgstr "История"
 msgid "Statistics"
 msgstr "Статистика"
 
-#: src/gpm-statistics.ui:459
-msgid "Processor wakeups per second:"
-msgstr "Пробуждений процессора в секунду:"
+#~ msgid "org.gnome.PowerStats"
+#~ msgstr "org.gnome.PowerStats"
 
-#: src/gpm-statistics.ui:471
-msgid "0"
-msgstr "0"
+#~ msgid "6 hours"
+#~ msgstr "6 часов"
+
+#~ msgid "ID"
+#~ msgstr "Идентификатор"
+
+#~ msgid "Wakeups"
+#~ msgstr "Пробуждения"
+
+#~ msgid "Command"
+#~ msgstr "Команда"
+
+#~ msgid "No data"
+#~ msgstr "Нет данных"
+
+#~ msgid "Kernel module"
+#~ msgstr "Модуль ядра"
+
+#~ msgid "Kernel core"
+#~ msgstr "Ядро"
+
+#~ msgid "Interprocessor interrupt"
+#~ msgstr "Межпроцессорное прерывание"
+
+#~ msgid "Interrupt"
+#~ msgstr "Прерывание"
+
+#~ msgid "PS/2 keyboard/mouse/touchpad"
+#~ msgstr "Клавиатура/Мышь/Сенсорная панель"
+
+#~ msgid "ACPI"
+#~ msgstr "ACPI"
+
+#~ msgid "Serial ATA"
+#~ msgstr "Serial ATA"
+
+#~ msgid "ATA host controller"
+#~ msgstr "Контроллер ATA"
+
+#~ msgid "Intel wireless adaptor"
+#~ msgstr "Беспроводной адаптер Intel"
+
+#~ msgid "Timer %s"
+#~ msgstr "Периодическая активность %s"
+
+#~ msgid "Sleep %s"
+#~ msgstr "Пробуждение %s"
+
+#~ msgid "New task %s"
+#~ msgstr "Новая задача %s"
+
+#~ msgid "Wait %s"
+#~ msgstr "Ожидание %s"
+
+#~ msgid "Work queue %s"
+#~ msgstr "Очередь заданий %s"
+
+#~ msgid "Network route flush %s"
+#~ msgstr "Очистка сетевых маршрутов %s"
+
+#~ msgid "USB activity %s"
+#~ msgstr "Активность USB %s"
+
+#~ msgid "Wakeup %s"
+#~ msgstr "Пробуждение периодического задания %s"
+
+#~ msgid "Local interrupts"
+#~ msgstr "Прерывания"
+
+#~ msgid "Rescheduling interrupts"
+#~ msgstr "Перепланировка задач"
+
+#~ msgid "Processor Wakeups"
+#~ msgstr "Пробуждения процессора"
+
+#~ msgid "Processor"
+#~ msgstr "Процессор"
+
+#~ msgid "Processor wakeups per second:"
+#~ msgstr "Пробуждений процессора в секунду:"
+
+#~ msgid "0"
+#~ msgstr "0"
