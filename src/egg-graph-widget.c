@@ -502,11 +502,15 @@ egg_graph_widget_draw_labels (EggGraphWidget *graph, cairo_t *cr)
 	PangoRectangle ink_rect, logical_rect;
 	gdouble offsetx = 0;
 	gdouble offsety = 0;
+	GtkStyleContext *style_context = gtk_widget_get_style_context (GTK_WIDGET (graph));
+	GdkRGBA text_color;
+
+	gtk_style_context_get_color(style_context, GTK_STATE_FLAG_NORMAL, &text_color);
 
 	cairo_save (cr);
 
 	/* do x text */
-	cairo_set_source_rgb (cr, 0.2f, 0.2f, 0.2f);
+	cairo_set_source_rgb (cr, text_color.red, text_color.green, text_color.blue);
 	for (i = 0; i < priv->divs_x + 1; i++) {
 		g_autofree gchar *text = NULL;
 		b = priv->box_x + ((gdouble) i * divwidth);
