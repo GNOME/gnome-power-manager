@@ -13,11 +13,11 @@ You can get these packages from your favourite GNOME FTP mirror or at http://dow
 
 ## Availability
 
-The bleeding-edge version of this package is always available from the GNOME GIT repository (https://gitlab.gnome.org/GNOME/gnome-power-manager). Released versions are available at http://download.gnome.org/sources/gnome-power-manager.
+The bleeding-edge version of this package is always available from the [GNOME GIT repository](https://gitlab.gnome.org/GNOME/gnome-power-manager). Released versions are available at http://download.gnome.org/sources/gnome-power-manager.
 
 ## Building from source
 
-This program uses the meson build system and can be built using GNOME Builder (https://wiki.gnome.org/Apps/Builder).
+This program uses the meson build system and can be built using [GNOME Builder](https://wiki.gnome.org/Apps/Builder).
 
 ## Reporting bugs
 
