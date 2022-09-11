@@ -6,14 +6,8 @@ install_data('org.gnome.power-manager.gschema.xml',
   install_dir : 'share/glib-2.0/schemas'
 )
 
-# replace @VERSION@
-versionedfile = configure_file(
-  input : 'org.gnome.PowerStats.desktop.in.in',
-  output : 'org.gnome.PowerStats.desktop.in',
-  configuration : conf
-)
 i18n.merge_file(
-  input: versionedfile,
+  input: 'org.gnome.PowerStats.desktop.in',
   output: 'org.gnome.PowerStats.desktop',
   type: 'desktop',
   po_dir: join_paths(meson.source_root(), 'po'),
