@@ -1,33 +1,34 @@
 %define alphatag #ALPHATAG#
 
-Summary: GNOME power management service
-Name: gnome-power-manager
-Version: #VERSION#
-Release: 1.#BUILD#%{?alphatag}%{?dist}
-License: GPLv2+ and GFDL
-Group: Applications/System
-Source: http://download.gnome.org/sources/gnome-power-manager/3.21/gnome-power-manager-%{version}.tar.xz
-URL: http://projects.gnome.org/gnome-power-manager/
+Name:           gnome-power-manager
+Version:        #VERSION#
+Release:        1.#BUILD#%{?alphatag}%{?dist}
+Summary:        GNOME power management service
 
-BuildRequires: desktop-file-utils
-BuildRequires: gettext
-BuildRequires: cairo-devel
-BuildRequires: upower-devel >= 0.9.0
-BuildRequires: glib2-devel >= 2.25.9
-BuildRequires: gtk3-devel >= 2.91.3
-BuildRequires: docbook-utils
-BuildRequires: meson
+License:        GPLv2+ and GFDL
+URL:            https://projects.gnome.org/gnome-power-manager/
+Source0:        https://download.gnome.org/sources/gnome-power-manager/3.32/%{name}-%{version}.tar.xz
 
-# obsolete sub-package
-Obsoletes: gnome-power-manager-extra <= 2.30.1
-Provides: gnome-power-manager-extra
+BuildRequires:  gcc
+BuildRequires:  gettext
+BuildRequires:  meson
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(gobject-2.0)
+BuildRequires:  pkgconfig(gio-2.0)
+BuildRequires:  pkgconfig(gtk+-3.0)
+BuildRequires:  pkgconfig(gdk-3.0)
+BuildRequires:  pkgconfig(cairo)
+BuildRequires:  pkgconfig(upower-glib)
+BuildRequires:  docbook-utils
+BuildRequires:  desktop-file-utils
+BuildRequires:  libappstream-glib
 
 %description
 GNOME Power Manager uses the information and facilities provided by UPower
 displaying icons and handling user callbacks in an interactive GNOME session.
 
 %prep
-%setup -q
+%autosetup
 
 %build
 %meson
@@ -35,35 +36,21 @@ displaying icons and handling user callbacks in an interactive GNOME session.
 
 %install
 %meson_install
+%find_lang %{name} --with-gnome
 
-%find_lang %name --with-gnome
-
-%post
-touch --no-create %{_datadir}/icons/hicolor &> /dev/null || :
-
-%postun
-update-desktop-database %{_datadir}/applications &> /dev/null || :
-if [ $1 -eq 0 ]; then
-  touch --no-create %{_datadir}/icons/hicolor &> /dev/null || :
-  gtk-update-icon-cache %{_datadir}/icons/hicolor &> /dev/null || :
-  glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
-fi
-
-%posttrans
-gtk-update-icon-cache %{_datadir}/icons/hicolor &> /dev/null || :
-update-desktop-database %{_datadir}/applications &> /dev/null || :
-glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
+%check
+desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.PowerStats.desktop
+appstream-util --nonet validate-relax %{buildroot}%{_datadir}/metainfo/org.gnome.PowerStats.appdata.xml
 
 %files -f %{name}.lang
 %license COPYING
-%doc AUTHORS README
-%{_bindir}/*
-%{_datadir}/applications/*.desktop
-%{_datadir}/glib-2.0/schemas/*.gschema.xml
-%{_datadir}/icons/hicolor/*/apps/org.gnome.PowerStats.*
-%{_datadir}/icons/hicolor/symbolic/apps/org.gnome.PowerStats-symbolic.svg
-%{_mandir}/man1/*.1.gz
-%{_datadir}/metainfo/*.appdata.xml
+%doc AUTHORS README.md
+%{_bindir}/gnome-power-statistics
+%{_datadir}/applications/org.gnome.PowerStats.desktop
+%{_datadir}/glib-2.0/schemas/org.gnome.power-manager.gschema.xml
+%{_datadir}/icons/hicolor/*/apps/org.gnome.PowerStats*.*
+%{_datadir}/metainfo/org.gnome.PowerStats.appdata.xml
+%{_mandir}/man1/gnome-power-statistics.1*
 
 %changelog
 * #LONGDATE# Richard Hughes <richard@hughsie.com> #VERSION#-0.#BUILD##ALPHATAG#
