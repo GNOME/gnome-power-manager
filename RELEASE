@@ -1,10 +1,10 @@
-git log --format="%s" GNOME_POWER_MANAGER_3_30_0.. | grep -i -v trivial | grep -v Merge | uniq
+git log --format="%s" GNOME_POWER_MANAGER_43_0.. | grep -i -v trivial | grep -v Merge | uniq
 Add any user visible changes into ../data/appdata/org.gnome.PowerStats.appdata.xml.in
 
 Run "ninja dist", correct any problems encountered
 
-git commit -a -m "GNOME Power Manager 43.0"
-git tag -s GNOME_POWER_MANAGER_43_0 -m "==== Version 43.0 ===="
+git commit -a -m "GNOME Power Manager 43.1"
+git tag -s GNOME_POWER_MANAGER_43_1 -m "==== Version 43.1 ===="
 <wait>
 git push --tags
 git push
