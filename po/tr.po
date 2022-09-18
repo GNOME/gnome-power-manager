@@ -1,5 +1,5 @@
 # Turkish translation of Gnome Power Manager.
-# Copyright (C) 2007-2019 Gnome Power Manager'S COPYRIGHT HOLDER
+# Copyright (C) 2007-2022 Gnome Power Manager's COPYRIGHT HOLDER
 # This file is distributed under the same license as the Gnome Power Manager package.
 #
 # Volkan Güney <guneyvolkan@gmail.com>, 2007.
@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-power-manager/"
 "issues\n"
-"POT-Creation-Date: 2019-04-20 15:56+0000\n"
+"POT-Creation-Date: 2022-09-16 09:44+0000\n"
 "PO-Revision-Date: 2019-09-05 12:14+0300\n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
@@ -25,14 +25,26 @@ msgstr ""
 "X-DamnedLies-Scope: partial\n"
 "X-Generator: Poedit 2.0.6\n"
 
+#. TRANSLATORS: shown on the titlebar
+#. TRANSLATORS: the program name
+#: data/org.gnome.PowerStats.desktop.in:3 src/gpm-statistics.c:982
+#: src/gpm-statistics.c:1350 src/gpm-statistics.ui:8
+msgid "Power Statistics"
+msgstr "Güç İstatistikleri"
+
+#: data/org.gnome.PowerStats.desktop.in:4
+#: data/appdata/org.gnome.PowerStats.appdata.xml.in:8
+msgid "Observe power management"
+msgstr "Güç yönetimini gözlemle"
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.PowerStats.desktop.in:6
+msgid "battery;consumption;charge;"
+msgstr "pil;tüketim;şarj;"
+
 #: data/appdata/org.gnome.PowerStats.appdata.xml.in:7
 msgid "GNOME Power Statistics"
 msgstr "GNOME Güç İstatistikleri"
-
-#: data/appdata/org.gnome.PowerStats.appdata.xml.in:8
-#: data/org.gnome.PowerStats.desktop.in.in:4
-msgid "Observe power management"
-msgstr "Güç yönetimini gözlemle"
 
 #: data/appdata/org.gnome.PowerStats.appdata.xml.in:10
 msgid ""
@@ -136,18 +148,6 @@ msgid ""
 "correct device."
 msgstr ""
 "Odağı doğru cihaza geri döndürmek için kullanılan son aygıtın tanımlayıcısı."
-
-#. TRANSLATORS: shown on the titlebar
-#. TRANSLATORS: the program name
-#: data/org.gnome.PowerStats.desktop.in.in:3 src/gpm-statistics.c:983
-#: src/gpm-statistics.c:1352 src/gpm-statistics.ui:8
-msgid "Power Statistics"
-msgstr "Güç İstatistikleri"
-
-#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/org.gnome.PowerStats.desktop.in.in:6
-msgid "battery;consumption;charge;"
-msgstr "pil;tüketim;şarj;"
 
 #. Translators: This is %i days
 #: src/egg-graph-widget.c:408
@@ -571,61 +571,61 @@ msgid "Online"
 msgstr "Çevrimiçi"
 
 #. TRANSLATORS: shown on the titlebar
-#: src/gpm-statistics.c:975
+#: src/gpm-statistics.c:974
 msgid "Device Information"
 msgstr "Aygıt Bilgisi"
 
 #. TRANSLATORS: shown on the titlebar
-#: src/gpm-statistics.c:977
+#: src/gpm-statistics.c:976
 msgid "Device History"
 msgstr "Aygıt Geçmişi"
 
 #. TRANSLATORS: shown on the titlebar
-#: src/gpm-statistics.c:979
+#: src/gpm-statistics.c:978
 msgid "Device Profile"
 msgstr "Aygıt Profili"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: src/gpm-statistics.c:1144 src/gpm-statistics.c:1150
-#: src/gpm-statistics.c:1156 src/gpm-statistics.c:1162
+#: src/gpm-statistics.c:1142 src/gpm-statistics.c:1148
+#: src/gpm-statistics.c:1154 src/gpm-statistics.c:1160
 msgid "Time elapsed"
 msgstr "Geçen süre"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1146
+#: src/gpm-statistics.c:1144
 msgid "Power"
 msgstr "Güç"
 
 #. TRANSLATORS: this is the Y axis on the graph for the whole battery device
 #. TRANSLATORS: this is the X axis on the graph for the whole battery device
-#: src/gpm-statistics.c:1152 src/gpm-statistics.c:1191
-#: src/gpm-statistics.c:1197 src/gpm-statistics.c:1203
-#: src/gpm-statistics.c:1209
+#: src/gpm-statistics.c:1150 src/gpm-statistics.c:1189
+#: src/gpm-statistics.c:1195 src/gpm-statistics.c:1201
+#: src/gpm-statistics.c:1207
 msgid "Cell charge"
 msgstr "Hücre doluluğu"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1158 src/gpm-statistics.c:1164
+#: src/gpm-statistics.c:1156 src/gpm-statistics.c:1162
 msgid "Predicted time"
 msgstr "Tahmini süre"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1193 src/gpm-statistics.c:1205
+#: src/gpm-statistics.c:1191 src/gpm-statistics.c:1203
 msgid "Correction factor"
 msgstr "Düzeltme çarpanı"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1199 src/gpm-statistics.c:1211
+#: src/gpm-statistics.c:1197 src/gpm-statistics.c:1209
 msgid "Prediction accuracy"
 msgstr "Tahmin doğruluğu"
 
 #. TRANSLATORS: show verbose debugging
-#: src/gpm-statistics.c:1340
+#: src/gpm-statistics.c:1338
 msgid "Show extra debugging information"
 msgstr "Ek hata ayıklama bilgisi göster"
 
 #. TRANSLATORS: show a device by default
-#: src/gpm-statistics.c:1343
+#: src/gpm-statistics.c:1341
 msgid "Select this device at startup"
 msgstr "Bu aygıtı açılışta seç"
 
@@ -660,90 +660,3 @@ msgstr "Geçmiş"
 #: src/gpm-statistics.ui:437
 msgid "Statistics"
 msgstr "İstatistikler"
-
-#~ msgid "org.gnome.PowerStats"
-#~ msgstr "org.gnome.PowerStats"
-
-#~ msgid "6 hours"
-#~ msgstr "6 saat"
-
-#~ msgid "ID"
-#~ msgstr "ID"
-
-#~ msgid "Wakeups"
-#~ msgstr "Uyanmalar"
-
-#~ msgid "Command"
-#~ msgstr "Komut"
-
-#~ msgid "No data"
-#~ msgstr "Veri yok"
-
-#~ msgid "Kernel module"
-#~ msgstr "Çekirdek modülü"
-
-#~ msgid "Kernel core"
-#~ msgstr "Ana çekirdek"
-
-#~ msgid "Interprocessor interrupt"
-#~ msgstr "İşlemciler arası kesme"
-
-#~ msgid "Interrupt"
-#~ msgstr "Kesme"
-
-#~ msgid "PS/2 keyboard/mouse/touchpad"
-#~ msgstr "PS/2 klavye/fare/touchpad"
-
-#~ msgid "ACPI"
-#~ msgstr "ACPI"
-
-#~ msgid "Serial ATA"
-#~ msgstr "Seri ATA"
-
-#~ msgid "ATA host controller"
-#~ msgstr "ATA host denetleyici"
-
-#~ msgid "Intel wireless adaptor"
-#~ msgstr "Intel kablosuz bağdaştırıcı"
-
-#~ msgid "Timer %s"
-#~ msgstr "Zamanlayıcı %s"
-
-#~ msgid "Sleep %s"
-#~ msgstr "Uyku %s"
-
-#~ msgid "New task %s"
-#~ msgstr "Yeni görev %s"
-
-#~ msgid "Wait %s"
-#~ msgstr "Bekleme %s"
-
-#~ msgid "Work queue %s"
-#~ msgstr "İş kuyruğu %s"
-
-#~ msgid "Network route flush %s"
-#~ msgstr "Ağ yönlenme temizliği %s"
-
-#~ msgid "USB activity %s"
-#~ msgstr "USB etkinliği %s"
-
-#~ msgid "Wakeup %s"
-#~ msgstr "%s uyanması"
-
-#~ msgid "Local interrupts"
-#~ msgstr "Yerel kesmeler"
-
-#~ msgid "Rescheduling interrupts"
-#~ msgstr "Kesmeler tekrar planlanıyor"
-
-#~ msgid "Processor Wakeups"
-#~ msgstr "İşlemci Uyanmaları"
-
-#~ msgid "Processor"
-#~ msgstr "İşlemci"
-
-#~ msgid "Processor wakeups per second:"
-#~ msgstr "Saniye başına işlemci uyanması:"
-
-#~ msgid "0"
-#~ msgstr "0"
