@@ -7,15 +7,16 @@
 # Ozan Çağlayan <ozancag@gmail.com>, 2013.
 # Muhammet Kara <muhammetk@gmail.com>, 2011, 2014, 2016.
 # Sabri Ünal <libreajans@gmail.com>, 2019.
+# Emin Tufan Çetin <etcetin@gmail.com>, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-power-manager/"
 "issues\n"
-"POT-Creation-Date: 2022-09-16 09:44+0000\n"
-"PO-Revision-Date: 2019-09-05 12:14+0300\n"
-"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
+"POT-Creation-Date: 2022-09-18 09:19+0000\n"
+"PO-Revision-Date: 2022-09-22 23:48+0300\n"
+"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -40,7 +41,7 @@ msgstr "Güç yönetimini gözlemle"
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.PowerStats.desktop.in:6
 msgid "battery;consumption;charge;"
-msgstr "pil;tüketim;şarj;"
+msgstr "pil;batarya;tüketim;harcama;şarj;"
 
 #: data/appdata/org.gnome.PowerStats.appdata.xml.in:7
 msgid "GNOME Power Statistics"
@@ -51,8 +52,8 @@ msgid ""
 "Power Statistics can show historical and current battery information and "
 "programs waking up that use power."
 msgstr ""
-"Güç İstatistikleri, geçmiş ve mevcut pil bilgilerini ve uyandığında güç "
-"harcayan programları gösterebilir."
+"Güç İstatistikleri geçmiş ve şimdiki pil bilgilerini, uyandığında güç "
+"tüketen programları gösterebilir."
 
 #: data/appdata/org.gnome.PowerStats.appdata.xml.in:14
 msgid ""
@@ -60,9 +61,9 @@ msgid ""
 "problems with your laptop battery, or are trying to work out what programs "
 "are using significant amounts of power."
 msgstr ""
-"Muhtemelen, bu uygulamayı sadece eğer dizüstü pilinizle sorun yaşıyorsanız "
-"ya da hangi programların önemli miktarda enerji harcadığını belirlemek "
-"istiyorsanız kurmanız gerekir."
+"Bu uygulamayı yalnızca dizüstü pilinizle sorun yaşıyorsanız ya da "
+"hangi programların önemli düzeyde enerji tükettiğini belirlemek "
+"istiyorsanız kurmanız gerekebilir."
 
 #: data/org.gnome.power-manager.gschema.xml:5
 msgid "Whether we should show the history data points"
@@ -140,20 +141,20 @@ msgstr ""
 
 #: data/org.gnome.power-manager.gschema.xml:45
 msgid "The ID of the last device selected"
-msgstr "Son seçilen aygıtın kimliği (ID)"
+msgstr "Son seçilen aygıtın kimliği"
 
 #: data/org.gnome.power-manager.gschema.xml:46
 msgid ""
 "The identifier of the last device which is used to return focus to the "
 "correct device."
 msgstr ""
-"Odağı doğru cihaza geri döndürmek için kullanılan son aygıtın tanımlayıcısı."
+"Odağı doğru aygıta geri döndürmek için kullanılan son aygıtın tanımlayıcısı."
 
 #. Translators: This is %i days
 #: src/egg-graph-widget.c:408
 #, c-format
 msgid "%id"
-msgstr "%id"
+msgstr "%ig"
 
 #. Translators: This is %i days %02i hours
 #: src/egg-graph-widget.c:411
@@ -195,7 +196,7 @@ msgstr "%.0fms"
 #: src/egg-graph-widget.c:434
 #, c-format
 msgid "%2is"
-msgstr "%2is"
+msgstr "%2isn"
 
 #. TRANSLATORS: This is %i Percentage
 #: src/egg-graph-widget.c:438
@@ -285,7 +286,7 @@ msgstr "Boşalma doğruluğu"
 #: src/gpm-statistics.c:235
 msgid "AC adapter"
 msgid_plural "AC adapters"
-msgstr[0] "AC adaptörü"
+msgstr[0] "AC bağdaştırıcı"
 
 #. TRANSLATORS: laptop primary battery
 #: src/gpm-statistics.c:239
@@ -297,7 +298,7 @@ msgstr[0] "Dizüstü pili"
 #: src/gpm-statistics.c:243
 msgid "UPS"
 msgid_plural "UPSs"
-msgstr[0] "Güç Kaynağı (UPS)"
+msgstr[0] "Kesintisiz güç kaynağı"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
 #: src/gpm-statistics.c:247
@@ -333,7 +334,7 @@ msgstr[0] "Cep telefonu"
 #: src/gpm-statistics.c:268
 msgid "Media player"
 msgid_plural "Media players"
-msgstr[0] "Ortam oynatıcısı"
+msgstr[0] "Ortam oynatıcı"
 
 #. TRANSLATORS: tablet device
 #: src/gpm-statistics.c:272
@@ -400,7 +401,7 @@ msgstr "Boş"
 #. TRANSLATORS: battery state
 #: src/gpm-statistics.c:346
 msgid "Charged"
-msgstr "Doldu"
+msgstr "Dolu"
 
 #. TRANSLATORS: battery state
 #: src/gpm-statistics.c:350
@@ -508,20 +509,20 @@ msgstr[0] "%u saniye"
 #. * usually a few seconds when a device is discharging or charging.
 #: src/gpm-statistics.c:591
 msgid "Refreshed"
-msgstr "Tazelendi"
+msgstr "Yenilenme"
 
 #. TRANSLATORS: Present is whether the device is currently attached
 #. * to the computer, as some devices (e.g. laptop batteries) can
 #. * be removed, but still observed as devices on the system
 #: src/gpm-statistics.c:601
 msgid "Present"
-msgstr "Mevcut"
+msgstr "Var"
 
 #. TRANSLATORS: If the device can be recharged, e.g. lithium
 #. * batteries rather than alkaline ones
 #: src/gpm-statistics.c:608
 msgid "Rechargeable"
-msgstr "Şarj edilebilir"
+msgstr "Yeniden şarj edilebilir"
 
 #. TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged"
 #: src/gpm-statistics.c:614
@@ -568,7 +569,7 @@ msgstr "Teknoloji"
 #. * only shown for the ac adaptor device
 #: src/gpm-statistics.c:680
 msgid "Online"
-msgstr "Çevrimiçi"
+msgstr "Devrede"
 
 #. TRANSLATORS: shown on the titlebar
 #: src/gpm-statistics.c:974
@@ -607,7 +608,7 @@ msgstr "Hücre doluluğu"
 #. TRANSLATORS: this is the Y axis on the graph
 #: src/gpm-statistics.c:1156 src/gpm-statistics.c:1162
 msgid "Predicted time"
-msgstr "Tahmini süre"
+msgstr "Öngörülen süre"
 
 #. TRANSLATORS: this is the Y axis on the graph
 #: src/gpm-statistics.c:1191 src/gpm-statistics.c:1203
@@ -617,7 +618,7 @@ msgstr "Düzeltme çarpanı"
 #. TRANSLATORS: this is the Y axis on the graph
 #: src/gpm-statistics.c:1197 src/gpm-statistics.c:1209
 msgid "Prediction accuracy"
-msgstr "Tahmin doğruluğu"
+msgstr "Öngörü doğruluğu"
 
 #. TRANSLATORS: show verbose debugging
 #: src/gpm-statistics.c:1338
