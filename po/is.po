@@ -3,14 +3,14 @@
 # Copyright (C) 2008 Free Software Foundation, Inc.
 #
 # Anna Jonna Ármannsdóttir <annajonna@gmail.com>, 2008.
-# Sveinn í Felli <sv1@fellsnet.is>, 2022.
+# Sveinn í Felli <sv1@fellsnet.is>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: gimp.trunk.is\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-power-manager/issue"
 "s\n"
-"POT-Creation-Date: 2022-07-29 05:12+0000\n"
-"PO-Revision-Date: 2022-09-06 12:02+0000\n"
+"POT-Creation-Date: 2022-09-16 09:44+0000\n"
+"PO-Revision-Date: 2023-03-11 09:43+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
 "Language: is\n"
@@ -20,14 +20,26 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 21.12.3\n"
 
-#: data/appdata/org.gnome.PowerStats.appdata.xml.in:7
-msgid "GNOME Power Statistics"
-msgstr "Orkutölfræði GNOME"
+#. TRANSLATORS: shown on the titlebar
+#. TRANSLATORS: the program name
+#: data/org.gnome.PowerStats.desktop.in:3 src/gpm-statistics.c:982
+#: src/gpm-statistics.c:1350 src/gpm-statistics.ui:8
+msgid "Power Statistics"
+msgstr "Tölfræði orkunotkunar"
 
+#: data/org.gnome.PowerStats.desktop.in:4
 #: data/appdata/org.gnome.PowerStats.appdata.xml.in:8
-#: data/org.gnome.PowerStats.desktop.in.in:4
 msgid "Observe power management"
 msgstr "Fylgjast með orkustýringu"
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.PowerStats.desktop.in:6
+msgid "battery;consumption;charge;"
+msgstr "hleðsla,notkun,rafhlaða;"
+
+#: data/appdata/org.gnome.PowerStats.appdata.xml.in:7
+msgid "GNOME Power Statistics"
+msgstr "Tölfræði orkunotkunar í GNOME"
 
 #: data/appdata/org.gnome.PowerStats.appdata.xml.in:10
 msgid ""
@@ -61,7 +73,7 @@ msgstr ""
 
 #: data/org.gnome.power-manager.gschema.xml:15
 msgid "The default graph type to show for history"
-msgstr ""
+msgstr "Sjálfgefna grafið sem á að birta fyrir feril"
 
 #: data/org.gnome.power-manager.gschema.xml:16
 msgid "The default graph type to show in the history window."
@@ -120,311 +132,307 @@ msgid ""
 "correct device."
 msgstr ""
 
-#. TRANSLATORS: shown on the titlebar
-#. TRANSLATORS: the program name
-#: data/org.gnome.PowerStats.desktop.in.in:3 src/gpm-statistics.c:971
-#: src/gpm-statistics.c:1335 src/gpm-statistics.ui:8
-msgid "Power Statistics"
-msgstr "Orku-tölfræði"
-
-#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/org.gnome.PowerStats.desktop.in.in:6
-msgid "battery;consumption;charge;"
-msgstr "hleðsla,notkun,rafhlaða;"
-
 #. Translators: This is %i days
-#: src/egg-graph-widget.c:393
+#: src/egg-graph-widget.c:408
 #, c-format
 msgid "%id"
 msgstr "%id"
 
 #. Translators: This is %i days %02i hours
-#: src/egg-graph-widget.c:396
+#: src/egg-graph-widget.c:411
 #, c-format
 msgid "%id%02ih"
 msgstr "%id%02ih"
 
 #. Translators: This is %i hours
-#: src/egg-graph-widget.c:401
+#: src/egg-graph-widget.c:416
 #, c-format
 msgid "%ih"
 msgstr "%ih"
 
 #. Translators: This is %i hours %02i minutes
-#: src/egg-graph-widget.c:404
+#: src/egg-graph-widget.c:419
 #, c-format
 msgid "%ih%02im"
 msgstr "%ih%02im"
 
 #. Translators: This is %2i minutes
-#: src/egg-graph-widget.c:409
+#: src/egg-graph-widget.c:424
 #, c-format
 msgid "%2im"
 msgstr "%2im"
 
 #. Translators: This is %2i minutes %02i seconds
-#: src/egg-graph-widget.c:412
+#: src/egg-graph-widget.c:427
 #, c-format
 msgid "%2im%02i"
 msgstr "%2im%02i"
 
 #. TRANSLATORS: This is ms
-#: src/egg-graph-widget.c:416
+#: src/egg-graph-widget.c:431
 #, c-format
 msgid "%.0fms"
 msgstr "%.0fms"
 
 #. Translators: This is %2i seconds
-#: src/egg-graph-widget.c:419
+#: src/egg-graph-widget.c:434
 #, c-format
 msgid "%2is"
 msgstr "%2is"
 
 #. TRANSLATORS: This is %i Percentage
-#: src/egg-graph-widget.c:423
+#: src/egg-graph-widget.c:438
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. TRANSLATORS: This is %.1f Watts
-#: src/egg-graph-widget.c:426
+#: src/egg-graph-widget.c:441
 #, c-format
 msgid "%.1fW"
 msgstr "%.1fW"
 
 #. TRANSLATORS: This is %.1f Volts
-#: src/egg-graph-widget.c:431
+#: src/egg-graph-widget.c:446
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fV"
 
 #. TRANSLATORS: This is %.1f nanometers
-#: src/egg-graph-widget.c:434
+#: src/egg-graph-widget.c:449
 #, c-format
 msgid "%.0f nm"
 msgstr "%.0f nm"
 
 #. TRANSLATORS: the rate of discharge for the device
-#: src/gpm-statistics.c:71 src/gpm-statistics.c:627
+#: src/gpm-statistics.c:72 src/gpm-statistics.c:634
 msgid "Rate"
 msgstr "Hlutfall"
 
-#: src/gpm-statistics.c:72
+#: src/gpm-statistics.c:73
 msgid "Charge"
 msgstr "Hleðsla"
 
-#: src/gpm-statistics.c:73 src/gpm-statistics.c:641
+#: src/gpm-statistics.c:74 src/gpm-statistics.c:648
 msgid "Time to full"
 msgstr "Tími þar til full"
 
-#: src/gpm-statistics.c:74 src/gpm-statistics.c:646
+#: src/gpm-statistics.c:75 src/gpm-statistics.c:653
 msgid "Time to empty"
 msgstr "Tími þar til tóm"
 
-#: src/gpm-statistics.c:81
-msgid "10 minutes"
-msgstr "10 mínútur"
-
 #: src/gpm-statistics.c:82
-msgid "2 hours"
-msgstr "2 klukkustundir"
+#| msgid "10 minutes"
+msgid "30 minutes"
+msgstr "30 mínútur"
 
 #: src/gpm-statistics.c:83
-msgid "6 hours"
-msgstr "6 klukkustundir"
+#| msgid "2 hours"
+msgid "3 hours"
+msgstr "3 klukkustundir"
 
 #: src/gpm-statistics.c:84
+#| msgid "2 hours"
+msgid "8 hours"
+msgstr "8 klukkustundir"
+
+#: src/gpm-statistics.c:85
 msgid "1 day"
 msgstr "1 dagur"
 
-#: src/gpm-statistics.c:85
+#: src/gpm-statistics.c:86
 msgid "1 week"
 msgstr "1 vika"
 
+#. 5 min tick
+#. 30 min tick
+#. 1 hr tick
+#. 2 hr tick
+#. 1 day tick
 #. TRANSLATORS: what we've observed about the device
-#: src/gpm-statistics.c:94
+#: src/gpm-statistics.c:101
 msgid "Charge profile"
 msgstr "Hleðslusnið"
 
-#: src/gpm-statistics.c:95
+#: src/gpm-statistics.c:102
 msgid "Discharge profile"
 msgstr "Afhleðslusnið"
 
 #. TRANSLATORS: how accurately we can predict the time remaining of the battery
-#: src/gpm-statistics.c:97
+#: src/gpm-statistics.c:104
 msgid "Charge accuracy"
 msgstr "Nákvæmni hleðslu"
 
-#: src/gpm-statistics.c:98
+#: src/gpm-statistics.c:105
 msgid "Discharge accuracy"
 msgstr "Nákvæmni afhleðslu"
 
 #. TRANSLATORS: system power cord
-#: src/gpm-statistics.c:228
+#: src/gpm-statistics.c:235
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "AC-straumbreytir"
 msgstr[1] "AC-straumbreytar"
 
 #. TRANSLATORS: laptop primary battery
-#: src/gpm-statistics.c:232
+#: src/gpm-statistics.c:239
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "Fartölvurafhlaða"
 msgstr[1] "Fartölvurafhlaða"
 
 #. TRANSLATORS: battery-backed AC power source
-#: src/gpm-statistics.c:236
+#: src/gpm-statistics.c:243
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "UPS-varaaflgjafi"
 msgstr[1] "UPS-varaaflgjafar"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
-#: src/gpm-statistics.c:240
+#: src/gpm-statistics.c:247
 msgid "Monitor"
 msgid_plural "Monitors"
 msgstr[0] "Skjár"
 msgstr[1] "Skjáir"
 
 #. TRANSLATORS: wireless mice with internal batteries
-#: src/gpm-statistics.c:244
+#: src/gpm-statistics.c:251
 msgid "Mouse"
 msgid_plural "Mice"
 msgstr[0] "Mús"
 msgstr[1] "Mýs"
 
 #. TRANSLATORS: wireless keyboard with internal battery
-#: src/gpm-statistics.c:248
+#: src/gpm-statistics.c:255
 msgid "Keyboard"
 msgid_plural "Keyboards"
 msgstr[0] "Lyklaborð"
 msgstr[1] "Lyklaborð"
 
 #. TRANSLATORS: portable device
-#: src/gpm-statistics.c:252
+#: src/gpm-statistics.c:259
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "PDA-lófatölva"
 msgstr[1] "PDA-lófatölvur"
 
 #. TRANSLATORS: cell phone (mobile...)
-#: src/gpm-statistics.c:256
+#: src/gpm-statistics.c:263
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "Farsími"
 msgstr[1] "Farsímar"
 
 #. TRANSLATORS: media player, mp3 etc
-#: src/gpm-statistics.c:261
+#: src/gpm-statistics.c:268
 msgid "Media player"
 msgid_plural "Media players"
 msgstr[0] "Margmiðlunarspilari"
 msgstr[1] "Margmiðlunarspilarar"
 
 #. TRANSLATORS: tablet device
-#: src/gpm-statistics.c:265
+#: src/gpm-statistics.c:272
 msgid "Tablet"
 msgid_plural "Tablets"
 msgstr[0] "Spjaldtölva"
 msgstr[1] "Spjaldtölvur"
 
 #. TRANSLATORS: tablet device
-#: src/gpm-statistics.c:269
+#: src/gpm-statistics.c:276
 msgid "Computer"
 msgid_plural "Computers"
 msgstr[0] "Tölva"
 msgstr[1] "Tölvur"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:286
+#: src/gpm-statistics.c:293
 msgid "Lithium Ion"
 msgstr "Liþíum-jóna"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:290
+#: src/gpm-statistics.c:297
 msgid "Lithium Polymer"
 msgstr "Liþíum-pólýmer"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:294
+#: src/gpm-statistics.c:301
 msgid "Lithium Iron Phosphate"
 msgstr "Liþíum-járnfosfat"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:298
+#: src/gpm-statistics.c:305
 msgid "Lead acid"
 msgstr "Blýsýra"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:302
+#: src/gpm-statistics.c:309
 msgid "Nickel Cadmium"
 msgstr "Nikkel-kadmíum"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:306
+#: src/gpm-statistics.c:313
 msgid "Nickel metal hydride"
 msgstr "Nikkel-málmhýdríð"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:310
+#: src/gpm-statistics.c:317
 msgid "Unknown technology"
 msgstr "Óþekkt tækni"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:327
+#: src/gpm-statistics.c:334
 msgid "Charging"
 msgstr "Í hleðslu"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:331
+#: src/gpm-statistics.c:338
 msgid "Discharging"
 msgstr "Afhleðst"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:335
+#: src/gpm-statistics.c:342
 msgid "Empty"
 msgstr "Tómt"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:339
+#: src/gpm-statistics.c:346
 msgid "Charged"
 msgstr "Hlaðin"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:343
+#: src/gpm-statistics.c:350
 msgid "Waiting to charge"
 msgstr "Bíður eftir hleðslu"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:347
+#: src/gpm-statistics.c:354
 msgid "Waiting to discharge"
 msgstr "Bíður eftir afhleðslu"
 
 #. TRANSLATORS: battery state
 #. TRANSLATORS: this is when the stats time is not known
-#: src/gpm-statistics.c:351 src/gpm-statistics.c:465
+#: src/gpm-statistics.c:358 src/gpm-statistics.c:472
 msgid "Unknown"
 msgstr "Óþekkt"
 
-#: src/gpm-statistics.c:368
+#: src/gpm-statistics.c:375
 msgid "Attribute"
 msgstr "Eigindi"
 
-#: src/gpm-statistics.c:375
+#: src/gpm-statistics.c:382
 msgid "Value"
 msgstr "Gildi"
 
-#: src/gpm-statistics.c:389
+#: src/gpm-statistics.c:396
 msgid "Image"
 msgstr "Mynd"
 
-#: src/gpm-statistics.c:395
+#: src/gpm-statistics.c:402
 msgid "Description"
 msgstr "Lýsing"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: src/gpm-statistics.c:469
+#: src/gpm-statistics.c:476
 #, c-format
 msgid "%.0f second"
 msgid_plural "%.0f seconds"
@@ -432,7 +440,7 @@ msgstr[0] "%.0f sekúnda"
 msgstr[1] "%.0f sekúndur"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: src/gpm-statistics.c:474
+#: src/gpm-statistics.c:481
 #, c-format
 msgid "%.1f minute"
 msgid_plural "%.1f minutes"
@@ -440,7 +448,7 @@ msgstr[0] "%.1f mínúta"
 msgstr[1] "%.1f mínútur"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: src/gpm-statistics.c:479
+#: src/gpm-statistics.c:486
 #, c-format
 msgid "%.1f hour"
 msgid_plural "%.1f hours"
@@ -448,50 +456,50 @@ msgstr[0] "%.1f klukkustund"
 msgstr[1] "%.1f klukkustundir"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: src/gpm-statistics.c:483
+#: src/gpm-statistics.c:490
 #, c-format
 msgid "%.1f day"
 msgid_plural "%.1f days"
 msgstr[0] "%.1f dagur"
 msgstr[1] "%.1f dagar"
 
-#: src/gpm-statistics.c:489
+#: src/gpm-statistics.c:496
 msgid "Yes"
 msgstr "Já"
 
-#: src/gpm-statistics.c:489
+#: src/gpm-statistics.c:496
 msgid "No"
 msgstr "Nei"
 
 #. TRANSLATORS: the device ID of the current device, e.g. "battery0"
-#: src/gpm-statistics.c:564
+#: src/gpm-statistics.c:571
 msgid "Device"
 msgstr "Tæki"
 
-#: src/gpm-statistics.c:566
+#: src/gpm-statistics.c:573
 msgid "Type"
 msgstr "Tegund"
 
-#: src/gpm-statistics.c:568
+#: src/gpm-statistics.c:575
 msgid "Vendor"
 msgstr "Framleiðandi"
 
-#: src/gpm-statistics.c:570
+#: src/gpm-statistics.c:577
 msgid "Model"
 msgstr "Gerð"
 
-#: src/gpm-statistics.c:572
+#: src/gpm-statistics.c:579
 msgid "Serial number"
 msgstr "Raðnúmer"
 
 #. TRANSLATORS: a boolean attribute that means if the device is supplying the
 #. * main power for the computer. For instance, an AC adapter or laptop battery
 #. * would be TRUE,  but a mobile phone or mouse taking power is FALSE
-#: src/gpm-statistics.c:577
+#: src/gpm-statistics.c:584
 msgid "Supply"
 msgstr "Áfyllingar"
 
-#: src/gpm-statistics.c:580
+#: src/gpm-statistics.c:587
 #, c-format
 msgid "%u second"
 msgid_plural "%u seconds"
@@ -500,126 +508,126 @@ msgstr[1] "%u sekúndur"
 
 #. TRANSLATORS: when the device was last updated with new data. It's
 #. * usually a few seconds when a device is discharging or charging.
-#: src/gpm-statistics.c:584
+#: src/gpm-statistics.c:591
 msgid "Refreshed"
 msgstr "Endurlesið"
 
 #. TRANSLATORS: Present is whether the device is currently attached
 #. * to the computer, as some devices (e.g. laptop batteries) can
 #. * be removed, but still observed as devices on the system
-#: src/gpm-statistics.c:594
+#: src/gpm-statistics.c:601
 msgid "Present"
 msgstr "Fyrir hendi"
 
 #. TRANSLATORS: If the device can be recharged, e.g. lithium
 #. * batteries rather than alkaline ones
-#: src/gpm-statistics.c:601
+#: src/gpm-statistics.c:608
 msgid "Rechargeable"
 msgstr "Endurhlaðanlegt"
 
 #. TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged"
-#: src/gpm-statistics.c:607
+#: src/gpm-statistics.c:614
 msgid "State"
 msgstr "Staða"
 
-#: src/gpm-statistics.c:611
+#: src/gpm-statistics.c:618
 msgid "Energy"
 msgstr "Orka"
 
-#: src/gpm-statistics.c:614
+#: src/gpm-statistics.c:621
 msgid "Energy when empty"
 msgstr "Orka þegar tóm"
 
-#: src/gpm-statistics.c:617
+#: src/gpm-statistics.c:624
 msgid "Energy when full"
 msgstr "Orka þegar fullt"
 
-#: src/gpm-statistics.c:620
+#: src/gpm-statistics.c:627
 msgid "Energy (design)"
 msgstr "Orka (hönnuð)"
 
-#: src/gpm-statistics.c:634
+#: src/gpm-statistics.c:641
 msgid "Voltage"
 msgstr "Spenna"
 
 #. TRANSLATORS: the amount of charge the cell contains
-#: src/gpm-statistics.c:656
+#: src/gpm-statistics.c:663
 msgid "Percentage"
 msgstr "Prósentuhlutfall"
 
 #. TRANSLATORS: the capacity of the device, which is basically a measure
 #. * of how full it can get, relative to the design capacity
-#: src/gpm-statistics.c:663
+#: src/gpm-statistics.c:670
 msgid "Capacity"
 msgstr "Rýmd"
 
 #. TRANSLATORS: the type of battery, e.g. lithium or nikel metal hydroxide
-#: src/gpm-statistics.c:668
+#: src/gpm-statistics.c:675
 msgid "Technology"
 msgstr "Tækni"
 
 #. TRANSLATORS: this is when the device is plugged in, typically
 #. * only shown for the ac adaptor device
-#: src/gpm-statistics.c:673
+#: src/gpm-statistics.c:680
 msgid "Online"
 msgstr "Tengt"
 
 #. TRANSLATORS: shown on the titlebar
-#: src/gpm-statistics.c:963
+#: src/gpm-statistics.c:974
 msgid "Device Information"
 msgstr "Upplýsingar tækis"
 
 #. TRANSLATORS: shown on the titlebar
-#: src/gpm-statistics.c:965
+#: src/gpm-statistics.c:976
 msgid "Device History"
 msgstr "Ferill tækis"
 
 #. TRANSLATORS: shown on the titlebar
-#: src/gpm-statistics.c:967
+#: src/gpm-statistics.c:978
 msgid "Device Profile"
 msgstr "Snið tækis"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: src/gpm-statistics.c:1132 src/gpm-statistics.c:1138
-#: src/gpm-statistics.c:1144 src/gpm-statistics.c:1150
+#: src/gpm-statistics.c:1142 src/gpm-statistics.c:1148
+#: src/gpm-statistics.c:1154 src/gpm-statistics.c:1160
 msgid "Time elapsed"
 msgstr "Liðinn tími"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1134
+#: src/gpm-statistics.c:1144
 msgid "Power"
 msgstr "Afl"
 
 #. TRANSLATORS: this is the Y axis on the graph for the whole battery device
 #. TRANSLATORS: this is the X axis on the graph for the whole battery device
-#: src/gpm-statistics.c:1140 src/gpm-statistics.c:1179
-#: src/gpm-statistics.c:1185 src/gpm-statistics.c:1191
-#: src/gpm-statistics.c:1197
+#: src/gpm-statistics.c:1150 src/gpm-statistics.c:1189
+#: src/gpm-statistics.c:1195 src/gpm-statistics.c:1201
+#: src/gpm-statistics.c:1207
 msgid "Cell charge"
 msgstr "Hleðsla sellu"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1146 src/gpm-statistics.c:1152
+#: src/gpm-statistics.c:1156 src/gpm-statistics.c:1162
 msgid "Predicted time"
 msgstr "Áætlaður tími"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1181 src/gpm-statistics.c:1193
+#: src/gpm-statistics.c:1191 src/gpm-statistics.c:1203
 msgid "Correction factor"
 msgstr "Leiðréttingarstuðull"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1187 src/gpm-statistics.c:1199
+#: src/gpm-statistics.c:1197 src/gpm-statistics.c:1209
 msgid "Prediction accuracy"
 msgstr "Nákvæmni áætlunar"
 
 #. TRANSLATORS: show verbose debugging
-#: src/gpm-statistics.c:1323
+#: src/gpm-statistics.c:1338
 msgid "Show extra debugging information"
 msgstr "Sýna auknar villuleitarupplýsingar"
 
 #. TRANSLATORS: show a device by default
-#: src/gpm-statistics.c:1326
+#: src/gpm-statistics.c:1341
 msgid "Select this device at startup"
 msgstr "Velja þetta tæki í ræsingu"
 
@@ -654,6 +662,9 @@ msgstr "Ferill"
 #: src/gpm-statistics.ui:437
 msgid "Statistics"
 msgstr "Tölfræði"
+
+#~ msgid "6 hours"
+#~ msgstr "6 klukkustundir"
 
 #, fuzzy, c-format
 #~ msgid "Timer %s"
