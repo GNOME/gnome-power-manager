@@ -28,6 +28,7 @@
 #include <libupower-glib/upower.h>
 
 #include "gpm-array-float.h"
+#include "gpm-rotated-widget.h"
 #include "egg-graph-widget.h"
 
 #define GPM_SETTINGS_SCHEMA				"org.gnome.power-manager"
@@ -392,7 +393,7 @@ gpm_stats_add_devices_columns (GtkTreeView *treeview)
 
 	/* image */
 	renderer = gtk_cell_renderer_pixbuf_new ();
-	g_object_set (renderer, "stock-size", GTK_ICON_SIZE_DND, NULL);
+	g_object_set (renderer, "icon-size", GTK_ICON_SIZE_LARGE, NULL);
 	column = gtk_tree_view_column_new_with_attributes (_("Image"), renderer,
 							   "gicon", GPM_DEVICES_COLUMN_ICON, NULL);
 	gtk_tree_view_append_column (treeview, column);
@@ -810,9 +811,9 @@ gpm_stats_update_info_page_history (UpDevice *device)
 	/* render */
 	sigma_smoothing = 2.0;
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_smooth_history"));
-	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+	checked = gtk_check_button_get_active (GTK_CHECK_BUTTON (widget));
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_points_history"));
-	points = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+	points = gtk_check_button_get_active (GTK_CHECK_BUTTON (widget));
 
 	/* present data to graph */
 	gpm_stats_set_graph_data (graph_history, new, checked, points);
@@ -900,9 +901,9 @@ gpm_stats_update_info_page_stats (UpDevice *device)
 	/* render */
 	sigma_smoothing = 1.1;
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_smooth_stats"));
-	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+	checked = gtk_check_button_get_active (GTK_CHECK_BUTTON (widget));
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_points_stats"));
-	points = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+	points = gtk_check_button_get_active (GTK_CHECK_BUTTON (widget));
 
 	/* present data to graph */
 	gpm_stats_set_graph_data (graph_statistics, new, checked, points);
@@ -1256,7 +1257,7 @@ static void
 gpm_stats_smooth_checkbox_history_cb (GtkWidget *widget, gpointer data)
 {
 	gboolean checked;
-	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+	checked = gtk_check_button_get_active (GTK_CHECK_BUTTON (widget));
 	g_settings_set_boolean (settings, GPM_SETTINGS_INFO_HISTORY_GRAPH_SMOOTH, checked);
 	gpm_stats_button_update_ui ();
 }
@@ -1265,7 +1266,7 @@ static void
 gpm_stats_smooth_checkbox_stats_cb (GtkWidget *widget, gpointer data)
 {
 	gboolean checked;
-	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+	checked = gtk_check_button_get_active (GTK_CHECK_BUTTON (widget));
 	g_settings_set_boolean (settings, GPM_SETTINGS_INFO_STATS_GRAPH_SMOOTH, checked);
 	gpm_stats_button_update_ui ();
 }
@@ -1274,7 +1275,7 @@ static void
 gpm_stats_points_checkbox_history_cb (GtkWidget *widget, gpointer data)
 {
 	gboolean checked;
-	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+	checked = gtk_check_button_get_active (GTK_CHECK_BUTTON (widget));
 	g_settings_set_boolean (settings, GPM_SETTINGS_INFO_HISTORY_GRAPH_POINTS, checked);
 	gpm_stats_button_update_ui ();
 }
@@ -1283,7 +1284,7 @@ static void
 gpm_stats_points_checkbox_stats_cb (GtkWidget *widget, gpointer data)
 {
 	gboolean checked;
-	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+	checked = gtk_check_button_get_active (GTK_CHECK_BUTTON (widget));
 	g_settings_set_boolean (settings, GPM_SETTINGS_INFO_STATS_GRAPH_POINTS, checked);
 	gpm_stats_button_update_ui ();
 }
@@ -1391,6 +1392,9 @@ gpm_stats_startup_cb (GApplication *application,
 	/* a store of UpDevices */
 	devices = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
 
+	/* Ensure types */
+	g_type_ensure (GPM_TYPE_ROTATED_WIDGET);
+
 	/* get UI */
 	builder = gtk_builder_new ();
 	retval = gtk_builder_add_from_resource (builder,
@@ -1404,14 +1408,14 @@ gpm_stats_startup_cb (GApplication *application,
 	/* add history graph */
 	box = GTK_BOX (gtk_builder_get_object (builder, "hbox_history"));
 	graph_history = egg_graph_widget_new ();
-	gtk_box_pack_start (box, graph_history, TRUE, TRUE, 0);
+	gtk_box_append (box, graph_history);
 	gtk_widget_set_size_request (graph_history, 400, 250);
 	gtk_widget_show (graph_history);
 
 	/* add statistics graph */
 	box = GTK_BOX (gtk_builder_get_object (builder, "hbox_statistics"));
 	graph_statistics = egg_graph_widget_new ();
-	gtk_box_pack_start (box, graph_statistics, TRUE, TRUE, 0);
+	gtk_box_append (box, graph_statistics);
 	gtk_widget_set_size_request (graph_statistics, 400, 250);
 	gtk_widget_show (graph_statistics);
 
@@ -1423,26 +1427,26 @@ gpm_stats_startup_cb (GApplication *application,
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_smooth_history"));
 	checked = g_settings_get_boolean (settings, GPM_SETTINGS_INFO_HISTORY_GRAPH_SMOOTH);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
-	g_signal_connect (widget, "clicked",
+	gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), checked);
+	g_signal_connect (widget, "toggled",
 			  G_CALLBACK (gpm_stats_smooth_checkbox_history_cb), NULL);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_smooth_stats"));
 	checked = g_settings_get_boolean (settings, GPM_SETTINGS_INFO_STATS_GRAPH_SMOOTH);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
-	g_signal_connect (widget, "clicked",
+	gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), checked);
+	g_signal_connect (widget, "toggled",
 			  G_CALLBACK (gpm_stats_smooth_checkbox_stats_cb), NULL);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_points_history"));
 	checked = g_settings_get_boolean (settings, GPM_SETTINGS_INFO_HISTORY_GRAPH_POINTS);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
-	g_signal_connect (widget, "clicked",
+	gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), checked);
+	g_signal_connect (widget, "toggled",
 			  G_CALLBACK (gpm_stats_points_checkbox_history_cb), NULL);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_points_stats"));
 	checked = g_settings_get_boolean (settings, GPM_SETTINGS_INFO_STATS_GRAPH_POINTS);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
-	g_signal_connect (widget, "clicked",
+	gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), checked);
+	g_signal_connect (widget, "toggled",
 			  G_CALLBACK (gpm_stats_points_checkbox_stats_cb), NULL);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "notebook1"));
@@ -1587,7 +1591,7 @@ main (int argc, char *argv[])
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
 
-	gtk_init (&argc, &argv);
+	gtk_init ();
 
 	/* get data from gconf */
 	settings = g_settings_new (GPM_SETTINGS_SCHEMA);
@@ -1601,10 +1605,10 @@ main (int argc, char *argv[])
 			  G_CALLBACK (gpm_stats_commandline_cb), NULL);
 
 	/* add application specific icons to search path */
-	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
-                                           DATADIR G_DIR_SEPARATOR_S
-                                           "gnome-power-manager" G_DIR_SEPARATOR_S
-                                           "icons");
+	gtk_icon_theme_add_search_path (gtk_icon_theme_get_for_display (gdk_display_get_default ()),
+					DATADIR G_DIR_SEPARATOR_S
+					"gnome-power-manager" G_DIR_SEPARATOR_S
+					"icons");
 
 	/* run */
 	status = g_application_run (G_APPLICATION (application), argc, argv);

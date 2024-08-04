@@ -12,6 +12,7 @@ executable(
   gnome_power_statistics_resources,
   sources : [
     'gpm-array-float.c',
+    'gpm-rotated-widget.c',
     'gpm-statistics.c',
     'egg-graph-point.c',
     'egg-graph-widget.c',
@@ -21,7 +22,6 @@ executable(
   ],
   dependencies : [
     cairo,
-    gdk,
     gtk,
     libm,
     upower
@@ -43,7 +43,6 @@ if get_option('enable-tests')
     ],
     dependencies : [
       cairo,
-      gdk,
       gtk,
       libm,
       upower

@@ -21,6 +21,7 @@
 
 #include "config.h"
 #include <gtk/gtk.h>
+#include <graphene-1.0/graphene.h>
 #include <pango/pangocairo.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
@@ -67,6 +68,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (EggGraphWidget, egg_graph_widget, GTK_TYPE_DRAWING_A
 #define GET_PRIVATE(o) (egg_graph_widget_get_instance_private (o))
 
 static gboolean egg_graph_widget_draw (GtkWidget *widget, cairo_t *cr);
+static void	egg_graph_widget_snapshot (GtkWidget* widget, GtkSnapshot* snapshot);
 static void	egg_graph_widget_finalize (GObject *object);
 
 enum
@@ -226,8 +228,7 @@ up_graph_set_property (GObject *object, guint prop_id, const GValue *value, GPar
 	}
 
 	/* refresh widget */
-	gtk_widget_hide (GTK_WIDGET (graph));
-	gtk_widget_show (GTK_WIDGET (graph));
+	gtk_widget_queue_draw (GTK_WIDGET (graph));
 }
 
 static void
@@ -236,7 +237,7 @@ egg_graph_widget_class_init (EggGraphWidgetClass *class)
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 
-	widget_class->draw = egg_graph_widget_draw;
+	widget_class->snapshot = egg_graph_widget_snapshot;
 	object_class->get_property = up_graph_get_property;
 	object_class->set_property = up_graph_set_property;
 	object_class->finalize = egg_graph_widget_finalize;
@@ -322,6 +323,9 @@ egg_graph_widget_init (EggGraphWidget *graph)
 	priv->plot_list = g_ptr_array_new ();
 	priv->type_x = EGG_GRAPH_WIDGET_KIND_TIME;
 	priv->type_y = EGG_GRAPH_WIDGET_KIND_PERCENTAGE;
+
+	gtk_widget_set_hexpand (GTK_WIDGET (graph), TRUE);
+	gtk_widget_set_vexpand (GTK_WIDGET (graph), TRUE);
 
 	/* do pango stuff */
 	context = gtk_widget_get_pango_context (GTK_WIDGET (graph));
@@ -505,7 +509,7 @@ egg_graph_widget_draw_labels (EggGraphWidget *graph, cairo_t *cr)
 	GtkStyleContext *style_context = gtk_widget_get_style_context (GTK_WIDGET (graph));
 	GdkRGBA text_color;
 
-	gtk_style_context_get_color(style_context, GTK_STATE_FLAG_NORMAL, &text_color);
+	gtk_style_context_get_color(style_context, &text_color);
 
 	cairo_save (cr);
 
@@ -1162,6 +1166,22 @@ egg_graph_widget_draw (GtkWidget *widget, cairo_t *cr)
 
 	cairo_restore (cr);
 	return FALSE;
+}
+
+static void
+egg_graph_widget_snapshot (GtkWidget* widget, GtkSnapshot* snapshot)
+{
+	GtkAllocation allocation;
+	graphene_rect_t rect;
+	cairo_t *ctx;
+
+	gtk_widget_get_allocation (widget, &allocation);
+	rect = GRAPHENE_RECT_INIT (0, 0, allocation.width, allocation.height);
+	ctx = gtk_snapshot_append_cairo (snapshot, &rect);
+
+	egg_graph_widget_draw (GTK_WIDGET (widget), ctx);
+
+	cairo_destroy (ctx);
 }
 
 static cairo_status_t
