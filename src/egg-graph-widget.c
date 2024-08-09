@@ -323,6 +323,9 @@ egg_graph_widget_init (EggGraphWidget *graph)
 	priv->type_x = EGG_GRAPH_WIDGET_KIND_TIME;
 	priv->type_y = EGG_GRAPH_WIDGET_KIND_PERCENTAGE;
 
+	gtk_widget_set_hexpand (GTK_WIDGET (graph), TRUE);
+	gtk_widget_set_vexpand (GTK_WIDGET (graph), TRUE);
+
 	/* do pango stuff */
 	context = gtk_widget_get_pango_context (GTK_WIDGET (graph));
 	pango_context_set_base_gravity (context, PANGO_GRAVITY_AUTO);

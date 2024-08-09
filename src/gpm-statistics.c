@@ -1404,14 +1404,14 @@ gpm_stats_startup_cb (GApplication *application,
 	/* add history graph */
 	box = GTK_BOX (gtk_builder_get_object (builder, "hbox_history"));
 	graph_history = egg_graph_widget_new ();
-	gtk_box_pack_start (box, graph_history, TRUE, TRUE, 0);
+	gtk_box_append (box, graph_history);
 	gtk_widget_set_size_request (graph_history, 400, 250);
 	gtk_widget_show (graph_history);
 
 	/* add statistics graph */
 	box = GTK_BOX (gtk_builder_get_object (builder, "hbox_statistics"));
 	graph_statistics = egg_graph_widget_new ();
-	gtk_box_pack_start (box, graph_statistics, TRUE, TRUE, 0);
+	gtk_box_append (box, graph_statistics);
 	gtk_widget_set_size_request (graph_statistics, 400, 250);
 	gtk_widget_show (graph_statistics);
 
