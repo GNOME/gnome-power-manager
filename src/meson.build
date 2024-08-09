@@ -21,7 +21,6 @@ executable(
   ],
   dependencies : [
     cairo,
-    gdk,
     gtk,
     libm,
     upower
@@ -43,7 +42,6 @@ if get_option('enable-tests')
     ],
     dependencies : [
       cairo,
-      gdk,
       gtk,
       libm,
       upower
