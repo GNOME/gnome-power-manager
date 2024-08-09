@@ -1587,7 +1587,7 @@ main (int argc, char *argv[])
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
 
-	gtk_init (&argc, &argv);
+	gtk_init ();
 
 	/* get data from gconf */
 	settings = g_settings_new (GPM_SETTINGS_SCHEMA);
