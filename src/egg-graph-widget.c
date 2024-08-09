@@ -228,8 +228,7 @@ up_graph_set_property (GObject *object, guint prop_id, const GValue *value, GPar
 	}
 
 	/* refresh widget */
-	gtk_widget_hide (GTK_WIDGET (graph));
-	gtk_widget_show (GTK_WIDGET (graph));
+	gtk_widget_queue_draw (GTK_WIDGET (graph));
 }
 
 static void
