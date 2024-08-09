@@ -508,7 +508,7 @@ egg_graph_widget_draw_labels (EggGraphWidget *graph, cairo_t *cr)
 	GtkStyleContext *style_context = gtk_widget_get_style_context (GTK_WIDGET (graph));
 	GdkRGBA text_color;
 
-	gtk_style_context_get_color(style_context, GTK_STATE_FLAG_NORMAL, &text_color);
+	gtk_style_context_get_color(style_context, &text_color);
 
 	cairo_save (cr);
 
