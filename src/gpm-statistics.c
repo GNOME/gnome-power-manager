@@ -1601,10 +1601,10 @@ main (int argc, char *argv[])
 			  G_CALLBACK (gpm_stats_commandline_cb), NULL);
 
 	/* add application specific icons to search path */
-	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
-                                           DATADIR G_DIR_SEPARATOR_S
-                                           "gnome-power-manager" G_DIR_SEPARATOR_S
-                                           "icons");
+	gtk_icon_theme_add_search_path (gtk_icon_theme_get_for_display (gdk_display_get_default ()),
+					DATADIR G_DIR_SEPARATOR_S
+					"gnome-power-manager" G_DIR_SEPARATOR_S
+					"icons");
 
 	/* run */
 	status = g_application_run (G_APPLICATION (application), argc, argv);
