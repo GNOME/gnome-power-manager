@@ -28,6 +28,7 @@
 #include <libupower-glib/upower.h>
 
 #include "gpm-array-float.h"
+#include "gpm-rotated-widget.h"
 #include "egg-graph-widget.h"
 
 #define GPM_SETTINGS_SCHEMA				"org.gnome.power-manager"
@@ -1390,6 +1391,9 @@ gpm_stats_startup_cb (GApplication *application,
 
 	/* a store of UpDevices */
 	devices = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
+
+	/* Ensure types */
+	g_type_ensure (GPM_TYPE_ROTATED_WIDGET);
 
 	/* get UI */
 	builder = gtk_builder_new ();

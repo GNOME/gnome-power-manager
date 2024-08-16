@@ -125,8 +125,14 @@
                             <property name="can_focus">False</property>
                             <property name="spacing">6</property>
                             <child>
-                              <object class="GtkLabel" id="label_axis_history_y">
-                                <property name="label">y-axis</property>
+                              <object class="GpmRotatedWidget">
+                                <property name="vexpand">True</property>
+                                <child>
+                                  <object class="GtkLabel" id="label_axis_history_y">
+                                    <property name="label">y-axis</property>
+                                    <property name="valign">start</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                             <child>
@@ -222,10 +228,14 @@
                             <property name="can_focus">False</property>
                             <property name="spacing">6</property>
                             <child>
-                              <object class="GtkLabel" id="label_axis_stats_y">
-                                <property name="hexpand">True</property>
+                              <object class="GpmRotatedWidget">
                                 <property name="vexpand">True</property>
-                                <property name="label">y-axis</property>
+                                <child>
+                                  <object class="GtkLabel" id="label_axis_stats_y">
+                                    <property name="valign">start</property>
+                                    <property name="label">y-axis</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                             <child>
