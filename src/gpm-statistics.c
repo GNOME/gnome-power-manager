@@ -1423,7 +1423,7 @@ gpm_stats_startup_cb (GApplication *application,
 	gtk_window_set_application (window, GTK_APPLICATION (application));
 	gtk_window_set_default_size (window, 800, 500);
 	gtk_window_set_application (window, GTK_APPLICATION (application));
-	gtk_window_set_default_icon_name ("gnome-power-manager");
+	gtk_window_set_default_icon_name ("org.gnome.PowerStats");
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "checkbutton_smooth_history"));
 	checked = g_settings_get_boolean (settings, GPM_SETTINGS_INFO_HISTORY_GRAPH_SMOOTH);
