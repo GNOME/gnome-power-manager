@@ -1,5 +1,5 @@
 project('gnome-power-manager', 'c',
-  version : '50.0',
+  version : '51.alpha',
   default_options : ['warning_level=1'],
   meson_version : '>=0.46.0'
 )
