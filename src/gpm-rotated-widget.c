@@ -27,14 +27,14 @@ allocate (GtkWidget           *widget,
 	GskTransform *transform;
 	bool rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 	float angle = rtl ? 90.0 : 270.0;
-	graphene_point_t translation = GRAPHENE_POINT_INIT (round (rtl ?
-								   height / 2.0 - width :
-								   -height / 2.0),
-							    (rtl ? -width : 0));
+	int xd = rtl ? width : 0;
+	int yd = rtl ? 0 : height;
 
-	transform = gsk_transform_translate (gsk_transform_rotate (NULL, angle), &translation);
+	transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (xd, yd));
+	transform = gsk_transform_rotate (transform, angle);
 
-	gtk_widget_allocate (child, width, height, baseline, transform);
+	/* Swap height and width */
+	gtk_widget_allocate (child, height, width, baseline, transform);
 }
 
 static void
