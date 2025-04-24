@@ -14,3 +14,13 @@ i18n.merge_file(
   install: true,
   install_dir: join_paths(get_option('datadir'), 'applications')
 )
+
+service_conf = configuration_data()
+service_conf.set('bindir', join_paths(get_option('prefix'), get_option('bindir')))
+configure_file(
+  input: 'org.gnome.PowerStats.service.in',
+  output: 'org.gnome.PowerStats.service',
+  configuration: service_conf,
+  install: true,
+  install_dir: join_paths(get_option('datadir'), 'dbus-1', 'services')
+)
