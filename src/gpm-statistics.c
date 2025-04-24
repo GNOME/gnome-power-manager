@@ -1326,36 +1326,19 @@ gpm_stats_commandline_cb (GApplication *application,
 			  gpointer user_data)
 {
 	gboolean ret;
-	gboolean verbose = FALSE;
-	gint argc;
-	GtkWindow *window;
-	g_auto(GStrv) argv;
-	g_autofree gchar *last_device =  NULL;
-	g_autoptr(GOptionContext) context = NULL;
+	GVariantDict *options;
+	g_autofree gchar *last_device = NULL;
 
-	const GOptionEntry options[] = {
-		{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
-		  /* TRANSLATORS: show verbose debugging */
-		  N_("Show extra debugging information"), NULL },
-		{ "device", '\0', 0, G_OPTION_ARG_STRING, &last_device,
-		  /* TRANSLATORS: show a device by default */
-		  N_("Select this device at startup"), NULL },
-		{ NULL}
-	};
-
-	/* get arguments */
-	argv = g_application_command_line_get_arguments (cmdline, &argc);
-
-	context = g_option_context_new (NULL);
-	/* TRANSLATORS: the program name */
-	g_option_context_set_summary (context, _("Power Statistics"));
-	g_option_context_add_main_entries (context, options, NULL);
-	if (!g_option_context_parse (context, &argc, &argv, NULL))
-		return FALSE;
+	/* read command line options */
+	options = g_application_command_line_get_options_dict (cmdline);
+	g_variant_dict_lookup (options, "device", "s", &last_device);
 
 	/* get from GSettings if we never specified on the command line */
 	if (last_device == NULL)
 		last_device = g_settings_get_string (settings, GPM_SETTINGS_INFO_LAST_DEVICE);
+
+	/* make sure the window is raised */
+	g_application_activate (application);
 
 	/* set the correct focus on the last device */
 	if (last_device != NULL) {
@@ -1366,15 +1349,12 @@ gpm_stats_commandline_cb (GApplication *application,
 		}
 	}
 
-	/* make sure the window is raised */
-	window = GTK_WINDOW (gtk_builder_get_object (builder, "dialog_stats"));
-	gtk_window_present (window);
 	return TRUE;
 }
 
 static void
-gpm_stats_startup_cb (GApplication *application,
-		      gpointer user_data)
+gpm_stats_activate_cb (GApplication *application,
+		       gpointer user_data)
 {
 	GtkBox *box;
 	GtkWidget *widget;
@@ -1388,6 +1368,13 @@ gpm_stats_startup_cb (GApplication *application,
 	gboolean checked;
 	guint retval;
 	GError *error = NULL;
+
+	window = gtk_application_get_active_window (GTK_APPLICATION (application));
+
+	if (window != NULL) {
+		gtk_window_present (window);
+		return;
+	}
 
 	/* a store of UpDevices */
 	devices = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
@@ -1585,6 +1572,13 @@ main (int argc, char *argv[])
 	g_autoptr(GtkApplication) application = NULL;
 	int status = 0;
 
+	const GOptionEntry options[] = {
+		{ "device", '\0', 0, G_OPTION_ARG_STRING, NULL,
+		  /* TRANSLATORS: show a device by default */
+		  N_("Select this device at startup"), NULL },
+		{ NULL}
+	};
+
 	setlocale (LC_ALL, "");
 
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
@@ -1599,10 +1593,15 @@ main (int argc, char *argv[])
 	/* are we already activated? */
 	application = gtk_application_new ("org.gnome.PowerStats",
 					   G_APPLICATION_HANDLES_COMMAND_LINE);
-	g_signal_connect (application, "startup",
-			  G_CALLBACK (gpm_stats_startup_cb), NULL);
+	g_signal_connect (application, "activate",
+			  G_CALLBACK (gpm_stats_activate_cb), NULL);
 	g_signal_connect (application, "command-line",
 			  G_CALLBACK (gpm_stats_commandline_cb), NULL);
+
+	g_application_add_main_option_entries (G_APPLICATION (application), options);
+	g_application_set_option_context_summary (G_APPLICATION (application),
+	                                          /* TRANSLATORS: the program name */
+	                                          _("Power Statistics"));
 
 	/* add application specific icons to search path */
 	gtk_icon_theme_add_search_path (gtk_icon_theme_get_for_display (gdk_display_get_default ()),
