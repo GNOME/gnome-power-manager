@@ -7,7 +7,7 @@ To list changes since last tag, e.g. `48.0` or `43.rc`:
 git log --format="%s" 48.0.. | grep -i -v trivial | grep -v Merge | uniq
 ```
 
-Add any user visible changes into `../data/appdata/org.gnome.PowerStats.appdata.xml.in`
+Add any user visible changes into `../data/appdata/org.gnome.PowerStats.metainfo.xml.in`
 
 Run `meson dist`, and correct any problems encountered.
 

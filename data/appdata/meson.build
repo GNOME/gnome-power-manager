@@ -1,6 +1,6 @@
 i18n.merge_file(
-  input: 'org.gnome.PowerStats.appdata.xml.in',
-  output: 'org.gnome.PowerStats.appdata.xml',
+  input: 'org.gnome.PowerStats.metainfo.xml.in',
+  output: 'org.gnome.PowerStats.metainfo.xml',
   type: 'xml',
   po_dir: join_paths(meson.source_root(), 'po'),
   install: true,
