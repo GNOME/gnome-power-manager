@@ -40,7 +40,7 @@ displaying icons and handling user callbacks in an interactive GNOME session.
 
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.PowerStats.desktop
-appstream-util --nonet validate-relax %{buildroot}%{_datadir}/metainfo/org.gnome.PowerStats.appdata.xml
+appstream-util --nonet validate-relax %{buildroot}%{_datadir}/metainfo/org.gnome.PowerStats.metainfo.xml
 
 %files -f %{name}.lang
 %license COPYING
@@ -49,7 +49,7 @@ appstream-util --nonet validate-relax %{buildroot}%{_datadir}/metainfo/org.gnome
 %{_datadir}/applications/org.gnome.PowerStats.desktop
 %{_datadir}/glib-2.0/schemas/org.gnome.power-manager.gschema.xml
 %{_datadir}/icons/hicolor/*/apps/org.gnome.PowerStats*.*
-%{_datadir}/metainfo/org.gnome.PowerStats.appdata.xml
+%{_datadir}/metainfo/org.gnome.PowerStats.metainfo.xml
 %{_mandir}/man1/gnome-power-statistics.1*
 
 %changelog
