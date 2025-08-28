@@ -1,5 +1,5 @@
 # ja.po for gnome-power-manager.
-# Copyright (C) 2005-2019 Richard Hughes <richard @ hughsie.com>
+# Copyright (C) 2005-2019, 2025 Richard Hughes <richard @ hughsie.com>
 # This file is distributed under the same license as the gnome-power-manager package.
 # Satoru SATOH <ss @ gnome.gr.jp>, 2005-2006.
 # Takeshi AIHANA <takeshi.aihana@gmail.com>, 2006-2009.
@@ -7,45 +7,65 @@
 # Takayoshi OKANO <kano@na.rim.or.jp>, 2011.
 # Hideki Yamane <henrich@debian.org>, 2011.
 # sicklylife <translation@sicklylife.jp>, 2019.
+# Makoto Sakaguchi <ycco34vx@gmail.com>, 2025.
+# 小山田 純 <oyamadajun@outlook.jp>, 2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-power-manager/"
-"issues\n"
-"POT-Creation-Date: 2019-09-26 11:47+0000\n"
-"PO-Revision-Date: 2019-09-28 18:36+0900\n"
-"Last-Translator: sicklylife <translation@sicklylife.jp>\n"
+"issues/\n"
+"POT-Creation-Date: 2025-08-10 18:34+0000\n"
+"PO-Revision-Date: 2025-07-15 07:18+0900\n"
+"Last-Translator: Makoto Sakaguchi <ycco34vx@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.6\n"
 
-#: data/appdata/org.gnome.PowerStats.appdata.xml.in:7
-msgid "GNOME Power Statistics"
-msgstr "GNOME の電源使用率統計"
+#. TRANSLATORS: shown on the titlebar
+#. TRANSLATORS: the program name
+#: data/org.gnome.PowerStats.desktop.in:2 src/gpm-statistics.c:983
+#: src/gpm-statistics.c:1604 src/gpm-statistics.ui:5
+msgid "Power Statistics"
+msgstr "電源使用率の統計"
 
 # 用語の参考 URL: http://developer.apple.com/jp/technotes/tn1086.html
 # 用語の統一性を考慮するなら Legacy な "battstat" (gnome-applet/po/ja.po) も参照のこと。
-#: data/appdata/org.gnome.PowerStats.appdata.xml.in:8
-#: data/org.gnome.PowerStats.desktop.in.in:4
+#: data/org.gnome.PowerStats.desktop.in:3
+#: data/appdata/org.gnome.PowerStats.metainfo.xml.in:8
 msgid "Observe power management"
 msgstr "電源管理を監視します"
 
-#: data/appdata/org.gnome.PowerStats.appdata.xml.in:10
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.PowerStats.desktop.in:5
+msgid "battery;consumption;charge;"
+msgstr "battery;consumption;charge;バッテリー;消費;使用;チャージ;充電;"
+
+#: data/appdata/org.gnome.PowerStats.metainfo.xml.in:7
+msgid "GNOME Power Statistics"
+msgstr "GNOME の電源使用率統計"
+
+#: data/appdata/org.gnome.PowerStats.metainfo.xml.in:10
 msgid ""
 "Power Statistics can show historical and current battery information and "
 "programs waking up that use power."
 msgstr ""
+"電源使用率の統計は、過去と現在のバッテリー情報および電力を使用してウェイク"
+"アップするプログラムを表示できます。"
 
-#: data/appdata/org.gnome.PowerStats.appdata.xml.in:14
+#: data/appdata/org.gnome.PowerStats.metainfo.xml.in:14
 msgid ""
 "You probably only need to install this application if you are having "
 "problems with your laptop battery, or are trying to work out what programs "
 "are using significant amounts of power."
 msgstr ""
+"このアプリケーションは、ノートパソコンのバッテリーに問題がある場合や、大量の"
+"電力を使用しているプログラムを特定しようとしている場合にのみインストールする"
+"必要があります。"
 
 #: data/org.gnome.power-manager.gschema.xml:5
 msgid "Whether we should show the history data points"
@@ -79,7 +99,7 @@ msgstr "履歴に表示する最大経過時間"
 #: data/org.gnome.power-manager.gschema.xml:21
 msgid ""
 "The maximum duration of time displayed on the x-axis of the history graph."
-msgstr "グラフのX軸上に表示する経過時間の最大値を指定します。"
+msgstr "グラフの X軸上に表示する経過時間の最大値を指定します。"
 
 #: data/org.gnome.power-manager.gschema.xml:25
 msgid "Whether we should show the stats data points"
@@ -127,124 +147,112 @@ msgid ""
 "correct device."
 msgstr "最後に参照したデバイスにフォーカスを戻すのに使われる識別子です。"
 
-#. TRANSLATORS: shown on the titlebar
-#. TRANSLATORS: the program name
-#: data/org.gnome.PowerStats.desktop.in.in:3 src/gpm-statistics.c:983
-#: src/gpm-statistics.c:1352 src/gpm-statistics.ui:8
-msgid "Power Statistics"
-msgstr "電源使用率の統計"
-
-#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-#: data/org.gnome.PowerStats.desktop.in.in:6
-msgid "battery;consumption;charge;"
-msgstr "battery;consumption;charge;バッテリー;消費;使用;チャージ;充電;"
-
 #. Translators: This is %i days
-#: src/egg-graph-widget.c:408
+#: src/egg-graph-widget.c:412
 #, c-format
 msgid "%id"
 msgstr "%i日間"
 
 #. Translators: This is %i days %02i hours
-#: src/egg-graph-widget.c:411
+#: src/egg-graph-widget.c:415
 #, c-format
 msgid "%id%02ih"
 msgstr "%i日と%02i時間"
 
 #. Translators: This is %i hours
-#: src/egg-graph-widget.c:416
+#: src/egg-graph-widget.c:420
 #, c-format
 msgid "%ih"
 msgstr "%i時間"
 
 #. Translators: This is %i hours %02i minutes
-#: src/egg-graph-widget.c:419
+#: src/egg-graph-widget.c:423
 #, c-format
 msgid "%ih%02im"
 msgstr "%i時間%02i分"
 
 #. Translators: This is %2i minutes
-#: src/egg-graph-widget.c:424
+#: src/egg-graph-widget.c:428
 #, c-format
 msgid "%2im"
 msgstr "%2i分"
 
 #. Translators: This is %2i minutes %02i seconds
-#: src/egg-graph-widget.c:427
+#: src/egg-graph-widget.c:431
 #, c-format
 msgid "%2im%02i"
 msgstr "%2i分%02i秒"
 
 #. TRANSLATORS: This is ms
-#: src/egg-graph-widget.c:431
+#: src/egg-graph-widget.c:435
 #, c-format
 msgid "%.0fms"
 msgstr "%.0fミリ秒"
 
 #. Translators: This is %2i seconds
-#: src/egg-graph-widget.c:434
+#: src/egg-graph-widget.c:438
 #, c-format
 msgid "%2is"
 msgstr "%2i秒"
 
 #. TRANSLATORS: This is %i Percentage
-#: src/egg-graph-widget.c:438
+#: src/egg-graph-widget.c:442
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. TRANSLATORS: This is %.1f Watts
-#: src/egg-graph-widget.c:441
+#: src/egg-graph-widget.c:445
 #, c-format
 msgid "%.1fW"
 msgstr "%.1fW"
 
 #. TRANSLATORS: This is %.1f Volts
-#: src/egg-graph-widget.c:446
+#: src/egg-graph-widget.c:450
 #, c-format
 msgid "%.1fV"
 msgstr "%.1fV"
 
 #. TRANSLATORS: This is %.1f nanometers
-#: src/egg-graph-widget.c:449
+#: src/egg-graph-widget.c:453
 #, c-format
 msgid "%.0f nm"
-msgstr ""
+msgstr "%.0f nm"
 
 #. TRANSLATORS: the rate of discharge for the device
-#: src/gpm-statistics.c:72 src/gpm-statistics.c:634
+#: src/gpm-statistics.c:73 src/gpm-statistics.c:635
 msgid "Rate"
 msgstr "率"
 
-#: src/gpm-statistics.c:73
+#: src/gpm-statistics.c:74
 msgid "Charge"
 msgstr "充電"
 
-#: src/gpm-statistics.c:74 src/gpm-statistics.c:648
+#: src/gpm-statistics.c:75 src/gpm-statistics.c:649
 msgid "Time to full"
 msgstr "充電完了までの時間"
 
-#: src/gpm-statistics.c:75 src/gpm-statistics.c:653
+#: src/gpm-statistics.c:76 src/gpm-statistics.c:654
 msgid "Time to empty"
 msgstr "空になるまでの時間"
 
-#: src/gpm-statistics.c:82
+#: src/gpm-statistics.c:83
 msgid "30 minutes"
 msgstr "30 分間"
 
-#: src/gpm-statistics.c:83
+#: src/gpm-statistics.c:84
 msgid "3 hours"
 msgstr "3 時間"
 
-#: src/gpm-statistics.c:84
+#: src/gpm-statistics.c:85
 msgid "8 hours"
 msgstr "8 時間"
 
-#: src/gpm-statistics.c:85
+#: src/gpm-statistics.c:86
 msgid "1 day"
 msgstr "1 日"
 
-#: src/gpm-statistics.c:86
+#: src/gpm-statistics.c:87
 msgid "1 week"
 msgstr "1 週間"
 
@@ -254,241 +262,241 @@ msgstr "1 週間"
 #. 2 hr tick
 #. 1 day tick
 #. TRANSLATORS: what we've observed about the device
-#: src/gpm-statistics.c:101
+#: src/gpm-statistics.c:102
 msgid "Charge profile"
 msgstr "充電時間のプロファイル"
 
-#: src/gpm-statistics.c:102
+#: src/gpm-statistics.c:103
 msgid "Discharge profile"
 msgstr "放電時間のプロファイル"
 
 #. TRANSLATORS: how accurately we can predict the time remaining of the battery
-#: src/gpm-statistics.c:104
+#: src/gpm-statistics.c:105
 msgid "Charge accuracy"
 msgstr "充電時間の精度"
 
-#: src/gpm-statistics.c:105
+#: src/gpm-statistics.c:106
 msgid "Discharge accuracy"
 msgstr "放電時間の精度"
 
 #. TRANSLATORS: system power cord
-#: src/gpm-statistics.c:235
+#: src/gpm-statistics.c:236
 msgid "AC adapter"
 msgid_plural "AC adapters"
 msgstr[0] "AC アダプター"
 
 #. TRANSLATORS: laptop primary battery
-#: src/gpm-statistics.c:239
+#: src/gpm-statistics.c:240
 msgid "Laptop battery"
 msgid_plural "Laptop batteries"
 msgstr[0] "ノート PC のバッテリー"
 
 #. TRANSLATORS: battery-backed AC power source
-#: src/gpm-statistics.c:243
+#: src/gpm-statistics.c:244
 msgid "UPS"
 msgid_plural "UPSs"
 msgstr[0] "UPS"
 
 #. TRANSLATORS: a monitor is a device to measure voltage and current
-#: src/gpm-statistics.c:247
+#: src/gpm-statistics.c:248
 msgid "Monitor"
 msgid_plural "Monitors"
 msgstr[0] "モニター"
 
 #. TRANSLATORS: wireless mice with internal batteries
-#: src/gpm-statistics.c:251
+#: src/gpm-statistics.c:252
 msgid "Mouse"
 msgid_plural "Mice"
 msgstr[0] "マウス"
 
 #. TRANSLATORS: wireless keyboard with internal battery
-#: src/gpm-statistics.c:255
+#: src/gpm-statistics.c:256
 msgid "Keyboard"
 msgid_plural "Keyboards"
 msgstr[0] "キーボード"
 
 #. TRANSLATORS: portable device
-#: src/gpm-statistics.c:259
+#: src/gpm-statistics.c:260
 msgid "PDA"
 msgid_plural "PDAs"
 msgstr[0] "PDA"
 
 #. TRANSLATORS: cell phone (mobile...)
-#: src/gpm-statistics.c:263
+#: src/gpm-statistics.c:264
 msgid "Cell phone"
 msgid_plural "Cell phones"
 msgstr[0] "携帯電話"
 
 #. TRANSLATORS: media player, mp3 etc
-#: src/gpm-statistics.c:268
+#: src/gpm-statistics.c:269
 msgid "Media player"
 msgid_plural "Media players"
 msgstr[0] "メディアプレイヤー"
 
 #. TRANSLATORS: tablet device
-#: src/gpm-statistics.c:272
+#: src/gpm-statistics.c:273
 msgid "Tablet"
 msgid_plural "Tablets"
 msgstr[0] "タブレット"
 
 #. TRANSLATORS: tablet device
-#: src/gpm-statistics.c:276
+#: src/gpm-statistics.c:277
 msgid "Computer"
 msgid_plural "Computers"
 msgstr[0] "コンピューター"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:293
+#: src/gpm-statistics.c:294
 msgid "Lithium Ion"
 msgstr "リチウムイオン"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:297
+#: src/gpm-statistics.c:298
 msgid "Lithium Polymer"
 msgstr "リチウムポリマー"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:301
+#: src/gpm-statistics.c:302
 msgid "Lithium Iron Phosphate"
 msgstr "リン酸鉄リチウム"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:305
+#: src/gpm-statistics.c:306
 msgid "Lead acid"
 msgstr "鉛蓄電池"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:309
+#: src/gpm-statistics.c:310
 msgid "Nickel Cadmium"
 msgstr "ニッケルカドミウム"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:313
+#: src/gpm-statistics.c:314
 msgid "Nickel metal hydride"
 msgstr "ニッケル水素電池"
 
 #. TRANSLATORS: battery technology
-#: src/gpm-statistics.c:317
+#: src/gpm-statistics.c:318
 msgid "Unknown technology"
 msgstr "不明"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:334
+#: src/gpm-statistics.c:335
 msgid "Charging"
 msgstr "充電中"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:338
+#: src/gpm-statistics.c:339
 msgid "Discharging"
 msgstr "放電中"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:342
+#: src/gpm-statistics.c:343
 msgid "Empty"
 msgstr "空"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:346
+#: src/gpm-statistics.c:347
 msgid "Charged"
 msgstr "充電完了"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:350
+#: src/gpm-statistics.c:351
 msgid "Waiting to charge"
 msgstr "充電待ち"
 
 #. TRANSLATORS: battery state
-#: src/gpm-statistics.c:354
+#: src/gpm-statistics.c:355
 msgid "Waiting to discharge"
 msgstr "放電待ち"
 
 #. TRANSLATORS: battery state
 #. TRANSLATORS: this is when the stats time is not known
-#: src/gpm-statistics.c:358 src/gpm-statistics.c:472
+#: src/gpm-statistics.c:359 src/gpm-statistics.c:473
 msgid "Unknown"
 msgstr "不明"
 
-#: src/gpm-statistics.c:375
+#: src/gpm-statistics.c:376
 msgid "Attribute"
 msgstr "属性"
 
-#: src/gpm-statistics.c:382
+#: src/gpm-statistics.c:383
 msgid "Value"
 msgstr "値"
 
-#: src/gpm-statistics.c:396
+#: src/gpm-statistics.c:397
 msgid "Image"
 msgstr "画像"
 
-#: src/gpm-statistics.c:402
+#: src/gpm-statistics.c:403
 msgid "Description"
 msgstr "説明"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: src/gpm-statistics.c:476
+#: src/gpm-statistics.c:477
 #, c-format
 msgid "%.0f second"
 msgid_plural "%.0f seconds"
 msgstr[0] "%.0f 秒"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: src/gpm-statistics.c:481
+#: src/gpm-statistics.c:482
 #, c-format
 msgid "%.1f minute"
 msgid_plural "%.1f minutes"
 msgstr[0] "%.1f 分"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: src/gpm-statistics.c:486
+#: src/gpm-statistics.c:487
 #, c-format
 msgid "%.1f hour"
 msgid_plural "%.1f hours"
 msgstr[0] "%.1f 時間"
 
 #. TRANSLATORS: this is a time value, usually to show on a graph
-#: src/gpm-statistics.c:490
+#: src/gpm-statistics.c:491
 #, c-format
 msgid "%.1f day"
 msgid_plural "%.1f days"
 msgstr[0] "%.1f 日"
 
-#: src/gpm-statistics.c:496
+#: src/gpm-statistics.c:497
 msgid "Yes"
 msgstr "はい"
 
-#: src/gpm-statistics.c:496
+#: src/gpm-statistics.c:497
 msgid "No"
 msgstr "いいえ"
 
 #. TRANSLATORS: the device ID of the current device, e.g. "battery0"
-#: src/gpm-statistics.c:571
+#: src/gpm-statistics.c:572
 msgid "Device"
 msgstr "デバイス"
 
-#: src/gpm-statistics.c:573
+#: src/gpm-statistics.c:574
 msgid "Type"
 msgstr "種類"
 
-#: src/gpm-statistics.c:575
+#: src/gpm-statistics.c:576
 msgid "Vendor"
 msgstr "製造元"
 
-#: src/gpm-statistics.c:577
+#: src/gpm-statistics.c:578
 msgid "Model"
 msgstr "型式"
 
-#: src/gpm-statistics.c:579
+#: src/gpm-statistics.c:580
 msgid "Serial number"
 msgstr "シリアル番号"
 
 #. TRANSLATORS: a boolean attribute that means if the device is supplying the
 #. * main power for the computer. For instance, an AC adapter or laptop battery
 #. * would be TRUE,  but a mobile phone or mouse taking power is FALSE
-#: src/gpm-statistics.c:584
+#: src/gpm-statistics.c:585
 msgid "Supply"
 msgstr "供給元"
 
-#: src/gpm-statistics.c:587
+#: src/gpm-statistics.c:588
 #, c-format
 msgid "%u second"
 msgid_plural "%u seconds"
@@ -496,67 +504,67 @@ msgstr[0] "%u 秒"
 
 #. TRANSLATORS: when the device was last updated with new data. It's
 #. * usually a few seconds when a device is discharging or charging.
-#: src/gpm-statistics.c:591
+#: src/gpm-statistics.c:592
 msgid "Refreshed"
 msgstr "リフレッシュ済"
 
 #. TRANSLATORS: Present is whether the device is currently attached
 #. * to the computer, as some devices (e.g. laptop batteries) can
 #. * be removed, but still observed as devices on the system
-#: src/gpm-statistics.c:601
+#: src/gpm-statistics.c:602
 msgid "Present"
 msgstr "現在"
 
 #. TRANSLATORS: If the device can be recharged, e.g. lithium
 #. * batteries rather than alkaline ones
-#: src/gpm-statistics.c:608
+#: src/gpm-statistics.c:609
 msgid "Rechargeable"
 msgstr "再充電可能"
 
 #. TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged"
-#: src/gpm-statistics.c:614
+#: src/gpm-statistics.c:615
 msgid "State"
 msgstr "状態"
 
-#: src/gpm-statistics.c:618
+#: src/gpm-statistics.c:619
 msgid "Energy"
 msgstr "エネルギー"
 
-#: src/gpm-statistics.c:621
+#: src/gpm-statistics.c:622
 msgid "Energy when empty"
 msgstr "空の時のエネルギー"
 
-#: src/gpm-statistics.c:624
+#: src/gpm-statistics.c:625
 msgid "Energy when full"
 msgstr "完全充電時のエネルギー"
 
-#: src/gpm-statistics.c:627
+#: src/gpm-statistics.c:628
 msgid "Energy (design)"
 msgstr "エネルギー (設計段階)"
 
-#: src/gpm-statistics.c:641
+#: src/gpm-statistics.c:642
 msgid "Voltage"
 msgstr "電圧"
 
 #. TRANSLATORS: the amount of charge the cell contains
-#: src/gpm-statistics.c:663
+#: src/gpm-statistics.c:664
 msgid "Percentage"
-msgstr "充電/放電率"
+msgstr "残量"
 
 #. TRANSLATORS: the capacity of the device, which is basically a measure
 #. * of how full it can get, relative to the design capacity
-#: src/gpm-statistics.c:670
+#: src/gpm-statistics.c:671
 msgid "Capacity"
 msgstr "容量"
 
 #. TRANSLATORS: the type of battery, e.g. lithium or nikel metal hydroxide
-#: src/gpm-statistics.c:675
+#: src/gpm-statistics.c:676
 msgid "Technology"
 msgstr "使用技術"
 
 #. TRANSLATORS: this is when the device is plugged in, typically
 #. * only shown for the ac adaptor device
-#: src/gpm-statistics.c:680
+#: src/gpm-statistics.c:681
 msgid "Online"
 msgstr "オンライン"
 
@@ -576,80 +584,78 @@ msgid "Device Profile"
 msgstr "デバイスのプロファイル"
 
 #. TRANSLATORS: this is the X axis on the graph
-#: src/gpm-statistics.c:1144 src/gpm-statistics.c:1150
-#: src/gpm-statistics.c:1156 src/gpm-statistics.c:1162
+#: src/gpm-statistics.c:1143 src/gpm-statistics.c:1149
+#: src/gpm-statistics.c:1155 src/gpm-statistics.c:1161
 msgid "Time elapsed"
 msgstr "経過時間"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1146
+#: src/gpm-statistics.c:1145
 msgid "Power"
 msgstr "電力"
 
 #. TRANSLATORS: this is the Y axis on the graph for the whole battery device
 #. TRANSLATORS: this is the X axis on the graph for the whole battery device
-#: src/gpm-statistics.c:1152 src/gpm-statistics.c:1191
-#: src/gpm-statistics.c:1197 src/gpm-statistics.c:1203
-#: src/gpm-statistics.c:1209
+#: src/gpm-statistics.c:1151 src/gpm-statistics.c:1190
+#: src/gpm-statistics.c:1196 src/gpm-statistics.c:1202
+#: src/gpm-statistics.c:1208
 msgid "Cell charge"
 msgstr "セルの充電"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1158 src/gpm-statistics.c:1164
+#: src/gpm-statistics.c:1157 src/gpm-statistics.c:1163
 msgid "Predicted time"
 msgstr "予定時間"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1193 src/gpm-statistics.c:1205
+#: src/gpm-statistics.c:1192 src/gpm-statistics.c:1204
 msgid "Correction factor"
 msgstr "修正の要因"
 
 #. TRANSLATORS: this is the Y axis on the graph
-#: src/gpm-statistics.c:1199 src/gpm-statistics.c:1211
+#: src/gpm-statistics.c:1198 src/gpm-statistics.c:1210
 msgid "Prediction accuracy"
 msgstr "予測精度"
 
-#. TRANSLATORS: show verbose debugging
-#: src/gpm-statistics.c:1340
-msgid "Show extra debugging information"
-msgstr "デバッグ情報を表示する"
-
 #. TRANSLATORS: show a device by default
-#: src/gpm-statistics.c:1343
+#: src/gpm-statistics.c:1578
 msgid "Select this device at startup"
 msgstr "起動時にこのデバイスを選択"
 
-#: src/gpm-statistics.ui:66
+#: src/gpm-statistics.ui:58
 msgid "Details"
 msgstr "詳細"
 
-#: src/gpm-statistics.ui:92 src/gpm-statistics.ui:296
+#: src/gpm-statistics.ui:86 src/gpm-statistics.ui:204
 msgid "Graph type:"
 msgstr "グラフの種類:"
 
-#: src/gpm-statistics.ui:127
+#: src/gpm-statistics.ui:103
 msgid "Data length:"
 msgstr "データのサイズ:"
 
-#: src/gpm-statistics.ui:186 src/gpm-statistics.ui:348
+#: src/gpm-statistics.ui:142 src/gpm-statistics.ui:245
 msgid "There is no data to display."
 msgstr "表示するデータがありません。"
 
-#: src/gpm-statistics.ui:228 src/gpm-statistics.ui:391
+#: src/gpm-statistics.ui:164 src/gpm-statistics.ui:267
 msgid "Use smoothed line"
 msgstr "線を滑らかにする"
 
-#: src/gpm-statistics.ui:244 src/gpm-statistics.ui:407
+#: src/gpm-statistics.ui:171 src/gpm-statistics.ui:274
 msgid "Show data points"
 msgstr "データのポイントを表示する"
 
-#: src/gpm-statistics.ui:274
+#: src/gpm-statistics.ui:181
 msgid "History"
 msgstr "履歴"
 
-#: src/gpm-statistics.ui:437
+#: src/gpm-statistics.ui:284
 msgid "Statistics"
 msgstr "統計"
+
+#~ msgid "Show extra debugging information"
+#~ msgstr "デバッグ情報を表示する"
 
 #~ msgid "6 hours"
 #~ msgstr "6 時間"
