@@ -1,0 +1,653 @@
+# Kazakh translation for gnome-power-manager.
+# Copyright (C) 2026 gnome-power-manager's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-power-manager package.
+# Baurzhan Muftakhidinov <baurthefirst@gmail.com>,  2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-power-manager master\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-power-manager/"
+"issues/\n"
+"POT-Creation-Date: 2025-07-14 13:08+0000\n"
+"PO-Revision-Date: 2026-01-26 19:43+0500\n"
+"Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
+"Language-Team: Kazakh <Kazakh>\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.8\n"
+
+#. TRANSLATORS: shown on the titlebar
+#. TRANSLATORS: the program name
+#: data/org.gnome.PowerStats.desktop.in:2 src/gpm-statistics.c:983
+#: src/gpm-statistics.c:1604 src/gpm-statistics.ui:5
+msgid "Power Statistics"
+msgstr "Қуат статистикасы"
+
+#: data/org.gnome.PowerStats.desktop.in:3
+#: data/appdata/org.gnome.PowerStats.metainfo.xml.in:8
+msgid "Observe power management"
+msgstr "Қуатты басқаруды бақылау"
+
+#. Translators: Search terms to find this application. Do NOT translate or
+#. localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.PowerStats.desktop.in:5
+msgid "battery;consumption;charge;"
+msgstr "батарея;тұтыну;заряд;"
+
+#: data/appdata/org.gnome.PowerStats.metainfo.xml.in:7
+msgid "GNOME Power Statistics"
+msgstr "Gnome қуат статистикасы"
+
+#: data/appdata/org.gnome.PowerStats.metainfo.xml.in:10
+msgid ""
+"Power Statistics can show historical and current battery information and "
+"programs waking up that use power."
+msgstr ""
+"Қуат статистикасы батарея туралы тарихи және ағымдағы ақпаратты, сондай-ақ "
+"қуатты тұтынатын бағдарламаларды көрсете алады."
+
+#: data/appdata/org.gnome.PowerStats.metainfo.xml.in:14
+msgid ""
+"You probably only need to install this application if you are having "
+"problems with your laptop battery, or are trying to work out what programs "
+"are using significant amounts of power."
+msgstr ""
+"Бұл бағдарламалық қамтаны ноутбук батареясында қиындықтар туындағанда "
+"немесе қай бағдарламалар көп қуат тұтынатынын анықтағыңыз келгенде ғана "
+"орнату қажет болуы мүмкін."
+
+#: data/org.gnome.power-manager.gschema.xml:5
+msgid "Whether we should show the history data points"
+msgstr "Тарих деректерінің нүктелерін көрсету керек пе"
+
+#: data/org.gnome.power-manager.gschema.xml:6
+msgid ""
+"Whether we should show the history data points in the statistics window."
+msgstr ""
+"Статистика терезесінде тарих деректерінің нүктелерін көрсету керек пе."
+
+#: data/org.gnome.power-manager.gschema.xml:10
+msgid "Whether we should smooth the history data"
+msgstr "Тарих деректерін тегістеу керек пе"
+
+#: data/org.gnome.power-manager.gschema.xml:11
+msgid "Whether we should smooth the history data in the graph."
+msgstr "Графиктегі тарих деректерін тегістеу керек пе."
+
+#: data/org.gnome.power-manager.gschema.xml:15
+msgid "The default graph type to show for history"
+msgstr "Тарих үшін көрсетілетін графиктің әдепкі түрі"
+
+#: data/org.gnome.power-manager.gschema.xml:16
+msgid "The default graph type to show in the history window."
+msgstr "Тарих терезесінде көрсетілетін графиктің әдепкі түрі."
+
+#: data/org.gnome.power-manager.gschema.xml:20
+msgid "The maximum time displayed for history"
+msgstr "Тарих үшін көрсетілетін максималды уақыт"
+
+#: data/org.gnome.power-manager.gschema.xml:21
+msgid ""
+"The maximum duration of time displayed on the x-axis of the history graph."
+msgstr "Тарих графигінің x-осінде көрсетілетін уақыттың максималды ұзақтығы."
+
+#: data/org.gnome.power-manager.gschema.xml:25
+msgid "Whether we should show the stats data points"
+msgstr "Статистика деректерінің нүктелерін көрсету керек пе"
+
+#: data/org.gnome.power-manager.gschema.xml:26
+msgid "Whether we should show the stats data points in the statistics window."
+msgstr ""
+"Статистика терезесінде статистика деректерінің нүктелерін көрсету керек пе."
+
+#: data/org.gnome.power-manager.gschema.xml:30
+msgid "Whether we should smooth the stats data"
+msgstr "Статистика деректерін тегістеу керек пе"
+
+#: data/org.gnome.power-manager.gschema.xml:31
+msgid "Whether we should smooth the stats data in the graph."
+msgstr "Графиктегі статистика деректерін тегістеу керек пе."
+
+#: data/org.gnome.power-manager.gschema.xml:35
+msgid "The default graph type to show for stats"
+msgstr "Статистика үшін көрсетілетін графиктің әдепкі түрі"
+
+#: data/org.gnome.power-manager.gschema.xml:36
+msgid "The default graph type to show in the stats window."
+msgstr "Статистика терезесінде көрсетілетін графиктің әдепкі түрі."
+
+#: data/org.gnome.power-manager.gschema.xml:40
+msgid "The index of the page number to show by default"
+msgstr "Әдепкі бойынша көрсетілетін бет нөмірінің нұсқағышы"
+
+#: data/org.gnome.power-manager.gschema.xml:41
+msgid ""
+"The index of the page number to show by default which is used to return "
+"focus to the correct page."
+msgstr ""
+"Фокусты дұрыс бетке қайтару үшін қолданылатын, әдепкі бойынша көрсетілетін "
+"бет нөмірінің нұсқағышы."
+
+#: data/org.gnome.power-manager.gschema.xml:45
+msgid "The ID of the last device selected"
+msgstr "Соңғы таңдалған құрылғының ID-і"
+
+#: data/org.gnome.power-manager.gschema.xml:46
+msgid ""
+"The identifier of the last device which is used to return focus to the "
+"correct device."
+msgstr ""
+"Фокусты дұрыс құрылғыға қайтару үшін қолданылатын соңғы құрылғының "
+"идентификаторы."
+
+#. Translators: This is %i days
+#: src/egg-graph-widget.c:412
+#, c-format
+msgid "%id"
+msgstr "%iд"
+
+#. Translators: This is %i days %02i hours
+#: src/egg-graph-widget.c:415
+#, c-format
+msgid "%id%02ih"
+msgstr "%iк%02iсағ"
+
+#. Translators: This is %i hours
+#: src/egg-graph-widget.c:420
+#, c-format
+msgid "%ih"
+msgstr "%iсағ"
+
+#. Translators: This is %i hours %02i minutes
+#: src/egg-graph-widget.c:423
+#, c-format
+msgid "%ih%02im"
+msgstr "%iсағ%02iмин"
+
+#. Translators: This is %2i minutes
+#: src/egg-graph-widget.c:428
+#, c-format
+msgid "%2im"
+msgstr "%2iмин"
+
+#. Translators: This is %2i minutes %02i seconds
+#: src/egg-graph-widget.c:431
+#, c-format
+msgid "%2im%02i"
+msgstr "%2iмин%02iсек"
+
+#. TRANSLATORS: This is ms
+#: src/egg-graph-widget.c:435
+#, c-format
+msgid "%.0fms"
+msgstr "%.0fмс"
+
+#. Translators: This is %2i seconds
+#: src/egg-graph-widget.c:438
+#, c-format
+msgid "%2is"
+msgstr "%2iс"
+
+#. TRANSLATORS: This is %i Percentage
+#: src/egg-graph-widget.c:442
+#, c-format
+msgid "%i%%"
+msgstr "%i%%"
+
+#. TRANSLATORS: This is %.1f Watts
+#: src/egg-graph-widget.c:445
+#, c-format
+msgid "%.1fW"
+msgstr "%.1fВт"
+
+#. TRANSLATORS: This is %.1f Volts
+#: src/egg-graph-widget.c:450
+#, c-format
+msgid "%.1fV"
+msgstr "%.1fВ"
+
+#. TRANSLATORS: This is %.1f nanometers
+#: src/egg-graph-widget.c:453
+#, c-format
+msgid "%.0f nm"
+msgstr "%.0f нм"
+
+#. TRANSLATORS: the rate of discharge for the device
+#: src/gpm-statistics.c:73 src/gpm-statistics.c:635
+msgid "Rate"
+msgstr "Қарқын"
+
+#: src/gpm-statistics.c:74
+msgid "Charge"
+msgstr "Заряд"
+
+#: src/gpm-statistics.c:75 src/gpm-statistics.c:649
+msgid "Time to full"
+msgstr "Толық зарядталғанға дейінгі уақыт"
+
+#: src/gpm-statistics.c:76 src/gpm-statistics.c:654
+msgid "Time to empty"
+msgstr "Заряды таусылғанға дейінгі уақыт"
+
+#: src/gpm-statistics.c:83
+msgid "30 minutes"
+msgstr "30 минут"
+
+#: src/gpm-statistics.c:84
+msgid "3 hours"
+msgstr "3 сағат"
+
+#: src/gpm-statistics.c:85
+msgid "8 hours"
+msgstr "8 сағат"
+
+#: src/gpm-statistics.c:86
+msgid "1 day"
+msgstr "1 күн"
+
+#: src/gpm-statistics.c:87
+msgid "1 week"
+msgstr "1 апта"
+
+#. 5 min tick
+#. 30 min tick
+#. 1 hr tick
+#. 2 hr tick
+#. 1 day tick
+#. TRANSLATORS: what we've observed about the device
+#: src/gpm-statistics.c:102
+msgid "Charge profile"
+msgstr "Зарядтау профилі"
+
+#: src/gpm-statistics.c:103
+msgid "Discharge profile"
+msgstr "Зарядсыздану профилі"
+
+#. TRANSLATORS: how accurately we can predict the time remaining of the
+#. battery
+#: src/gpm-statistics.c:105
+msgid "Charge accuracy"
+msgstr "Зарядтау дәлдігі"
+
+#: src/gpm-statistics.c:106
+msgid "Discharge accuracy"
+msgstr "Зарядсыздану дәлдігі"
+
+#. TRANSLATORS: system power cord
+#: src/gpm-statistics.c:236
+msgid "AC adapter"
+msgid_plural "AC adapters"
+msgstr[0] "Ауыспалы ток адаптер(лер)і"
+
+#. TRANSLATORS: laptop primary battery
+#: src/gpm-statistics.c:240
+msgid "Laptop battery"
+msgid_plural "Laptop batteries"
+msgstr[0] "Ноутбук батарея(лар)"
+
+#. TRANSLATORS: battery-backed AC power source
+#: src/gpm-statistics.c:244
+msgid "UPS"
+msgid_plural "UPSs"
+msgstr[0] "Үзіліссіз қуат көз(дер)і"
+
+#. TRANSLATORS: a monitor is a device to measure voltage and current
+#: src/gpm-statistics.c:248
+msgid "Monitor"
+msgid_plural "Monitors"
+msgstr[0] "Монитор(лар)"
+
+#. TRANSLATORS: wireless mice with internal batteries
+#: src/gpm-statistics.c:252
+msgid "Mouse"
+msgid_plural "Mice"
+msgstr[0] "Тышқан(дар)"
+
+#. TRANSLATORS: wireless keyboard with internal battery
+#: src/gpm-statistics.c:256
+msgid "Keyboard"
+msgid_plural "Keyboards"
+msgstr[0] "Пернетақта(лар)"
+
+#. TRANSLATORS: portable device
+#: src/gpm-statistics.c:260
+msgid "PDA"
+msgid_plural "PDAs"
+msgstr[0] "Жеке қалта компьютері"
+
+#. TRANSLATORS: cell phone (mobile...)
+#: src/gpm-statistics.c:264
+msgid "Cell phone"
+msgid_plural "Cell phones"
+msgstr[0] "Ұялы телефон(дар)"
+
+#. TRANSLATORS: media player, mp3 etc
+#: src/gpm-statistics.c:269
+msgid "Media player"
+msgid_plural "Media players"
+msgstr[0] "Медиа ойнатқыш(тар)"
+
+#. TRANSLATORS: tablet device
+#: src/gpm-statistics.c:273
+msgid "Tablet"
+msgid_plural "Tablets"
+msgstr[0] "Планшет(тер)"
+
+#. TRANSLATORS: tablet device
+#: src/gpm-statistics.c:277
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Компьютер(лер)"
+
+#. TRANSLATORS: battery technology
+#: src/gpm-statistics.c:294
+msgid "Lithium Ion"
+msgstr "Литий-ионды"
+
+#. TRANSLATORS: battery technology
+#: src/gpm-statistics.c:298
+msgid "Lithium Polymer"
+msgstr "Литий-полимерлі"
+
+#. TRANSLATORS: battery technology
+#: src/gpm-statistics.c:302
+msgid "Lithium Iron Phosphate"
+msgstr "Литий-темір-фосфатты"
+
+#. TRANSLATORS: battery technology
+#: src/gpm-statistics.c:306
+msgid "Lead acid"
+msgstr "Қорғасын-қышқылды"
+
+#. TRANSLATORS: battery technology
+#: src/gpm-statistics.c:310
+msgid "Nickel Cadmium"
+msgstr "Никель-кадмийлі"
+
+#. TRANSLATORS: battery technology
+#: src/gpm-statistics.c:314
+msgid "Nickel metal hydride"
+msgstr "Никель-металл-гидридті"
+
+#. TRANSLATORS: battery technology
+#: src/gpm-statistics.c:318
+msgid "Unknown technology"
+msgstr "Белгісіз технология"
+
+#. TRANSLATORS: battery state
+#: src/gpm-statistics.c:335
+msgid "Charging"
+msgstr "Зарядталуда"
+
+#. TRANSLATORS: battery state
+#: src/gpm-statistics.c:339
+msgid "Discharging"
+msgstr "Заряды таусылуда"
+
+#. TRANSLATORS: battery state
+#: src/gpm-statistics.c:343
+msgid "Empty"
+msgstr "Бос"
+
+#. TRANSLATORS: battery state
+#: src/gpm-statistics.c:347
+msgid "Charged"
+msgstr "Зарядталған"
+
+#. TRANSLATORS: battery state
+#: src/gpm-statistics.c:351
+msgid "Waiting to charge"
+msgstr "Зарядталуды күтуде"
+
+#. TRANSLATORS: battery state
+#: src/gpm-statistics.c:355
+msgid "Waiting to discharge"
+msgstr "Зарядсыздануды күтуде"
+
+#. TRANSLATORS: battery state
+#. TRANSLATORS: this is when the stats time is not known
+#: src/gpm-statistics.c:359 src/gpm-statistics.c:473
+msgid "Unknown"
+msgstr "Белгісіз"
+
+#: src/gpm-statistics.c:376
+msgid "Attribute"
+msgstr "Атрибут"
+
+#: src/gpm-statistics.c:383
+msgid "Value"
+msgstr "Мән"
+
+#: src/gpm-statistics.c:397
+msgid "Image"
+msgstr "Сурет"
+
+#: src/gpm-statistics.c:403
+msgid "Description"
+msgstr "Сипаттамасы"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#: src/gpm-statistics.c:477
+#, c-format
+msgid "%.0f second"
+msgid_plural "%.0f seconds"
+msgstr[0] "%.0f секунд"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#: src/gpm-statistics.c:482
+#, c-format
+msgid "%.1f minute"
+msgid_plural "%.1f minutes"
+msgstr[0] "%.1f минут"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#: src/gpm-statistics.c:487
+#, c-format
+msgid "%.1f hour"
+msgid_plural "%.1f hours"
+msgstr[0] "%.1f сағат"
+
+#. TRANSLATORS: this is a time value, usually to show on a graph
+#: src/gpm-statistics.c:491
+#, c-format
+msgid "%.1f day"
+msgid_plural "%.1f days"
+msgstr[0] "%.1f күн"
+
+#: src/gpm-statistics.c:497
+msgid "Yes"
+msgstr "Иә"
+
+#: src/gpm-statistics.c:497
+msgid "No"
+msgstr "Жоқ"
+
+#. TRANSLATORS: the device ID of the current device, e.g. "battery0"
+#: src/gpm-statistics.c:572
+msgid "Device"
+msgstr "Құрылғы"
+
+#: src/gpm-statistics.c:574
+msgid "Type"
+msgstr "Түрі"
+
+#: src/gpm-statistics.c:576
+msgid "Vendor"
+msgstr "Өндіруші"
+
+#: src/gpm-statistics.c:578
+msgid "Model"
+msgstr "Модель"
+
+#: src/gpm-statistics.c:580
+msgid "Serial number"
+msgstr "Сериялық нөмір"
+
+#. TRANSLATORS: a boolean attribute that means if the device is supplying the
+#. * main power for the computer. For instance, an AC adapter or laptop
+#. battery
+#. * would be TRUE,  but a mobile phone or mouse taking power is FALSE
+#: src/gpm-statistics.c:585
+msgid "Supply"
+msgstr "Қуат көзі"
+
+#: src/gpm-statistics.c:588
+#, c-format
+msgid "%u second"
+msgid_plural "%u seconds"
+msgstr[0] "%u секунд"
+
+#. TRANSLATORS: when the device was last updated with new data. It's
+#. * usually a few seconds when a device is discharging or charging.
+#: src/gpm-statistics.c:592
+msgid "Refreshed"
+msgstr "Жаңартылған"
+
+#. TRANSLATORS: Present is whether the device is currently attached
+#. * to the computer, as some devices (e.g. laptop batteries) can
+#. * be removed, but still observed as devices on the system
+#: src/gpm-statistics.c:602
+msgid "Present"
+msgstr "Бар"
+
+#. TRANSLATORS: If the device can be recharged, e.g. lithium
+#. * batteries rather than alkaline ones
+#: src/gpm-statistics.c:609
+msgid "Rechargeable"
+msgstr "Қайта зарядталатын"
+
+#. TRANSLATORS: The state of the device, e.g. "Changing" or "Fully charged"
+#: src/gpm-statistics.c:615
+msgid "State"
+msgstr "Күйі"
+
+#: src/gpm-statistics.c:619
+msgid "Energy"
+msgstr "Энергия"
+
+#: src/gpm-statistics.c:622
+msgid "Energy when empty"
+msgstr "Заряды жоқ кездегі энергия"
+
+#: src/gpm-statistics.c:625
+msgid "Energy when full"
+msgstr "Толық зарядталғандағы энергия"
+
+#: src/gpm-statistics.c:628
+msgid "Energy (design)"
+msgstr "Энергия (жобалық)"
+
+#: src/gpm-statistics.c:642
+msgid "Voltage"
+msgstr "Кернеу"
+
+#. TRANSLATORS: the amount of charge the cell contains
+#: src/gpm-statistics.c:664
+msgid "Percentage"
+msgstr "Пайыз"
+
+#. TRANSLATORS: the capacity of the device, which is basically a measure
+#. * of how full it can get, relative to the design capacity
+#: src/gpm-statistics.c:671
+msgid "Capacity"
+msgstr "Сыйымдылық"
+
+#. TRANSLATORS: the type of battery, e.g. lithium or nikel metal hydroxide
+#: src/gpm-statistics.c:676
+msgid "Technology"
+msgstr "Технология"
+
+#. TRANSLATORS: this is when the device is plugged in, typically
+#. * only shown for the ac adaptor device
+#: src/gpm-statistics.c:681
+msgid "Online"
+msgstr "Желіде"
+
+#. TRANSLATORS: shown on the titlebar
+#: src/gpm-statistics.c:975
+msgid "Device Information"
+msgstr "Құрылғы ақпараты"
+
+#. TRANSLATORS: shown on the titlebar
+#: src/gpm-statistics.c:977
+msgid "Device History"
+msgstr "Құрылғы тарихы"
+
+#. TRANSLATORS: shown on the titlebar
+#: src/gpm-statistics.c:979
+msgid "Device Profile"
+msgstr "Құрылғы профилі"
+
+#. TRANSLATORS: this is the X axis on the graph
+#: src/gpm-statistics.c:1143 src/gpm-statistics.c:1149
+#: src/gpm-statistics.c:1155 src/gpm-statistics.c:1161
+msgid "Time elapsed"
+msgstr "Өткен уақыт"
+
+#. TRANSLATORS: this is the Y axis on the graph
+#: src/gpm-statistics.c:1145
+msgid "Power"
+msgstr "Қуат"
+
+#. TRANSLATORS: this is the Y axis on the graph for the whole battery device
+#. TRANSLATORS: this is the X axis on the graph for the whole battery device
+#: src/gpm-statistics.c:1151 src/gpm-statistics.c:1190
+#: src/gpm-statistics.c:1196 src/gpm-statistics.c:1202
+#: src/gpm-statistics.c:1208
+msgid "Cell charge"
+msgstr "Ұяшық заряды"
+
+#. TRANSLATORS: this is the Y axis on the graph
+#: src/gpm-statistics.c:1157 src/gpm-statistics.c:1163
+msgid "Predicted time"
+msgstr "Болжалды уақыт"
+
+#. TRANSLATORS: this is the Y axis on the graph
+#: src/gpm-statistics.c:1192 src/gpm-statistics.c:1204
+msgid "Correction factor"
+msgstr "Түзету коэффициенті"
+
+#. TRANSLATORS: this is the Y axis on the graph
+#: src/gpm-statistics.c:1198 src/gpm-statistics.c:1210
+msgid "Prediction accuracy"
+msgstr "Болжам дәлдігі"
+
+#. TRANSLATORS: show a device by default
+#: src/gpm-statistics.c:1578
+msgid "Select this device at startup"
+msgstr "Іске қосылғанда осы құрылғыны таңдау"
+
+#: src/gpm-statistics.ui:58
+msgid "Details"
+msgstr "Мәліметтер"
+
+#: src/gpm-statistics.ui:86 src/gpm-statistics.ui:204
+msgid "Graph type:"
+msgstr "График түрі:"
+
+#: src/gpm-statistics.ui:103
+msgid "Data length:"
+msgstr "Деректер ұзындығы:"
+
+#: src/gpm-statistics.ui:142 src/gpm-statistics.ui:245
+msgid "There is no data to display."
+msgstr "Көрсетілетін деректер жоқ."
+
+#: src/gpm-statistics.ui:164 src/gpm-statistics.ui:267
+msgid "Use smoothed line"
+msgstr "Тегістелген сызықты пайдалану"
+
+#: src/gpm-statistics.ui:171 src/gpm-statistics.ui:274
+msgid "Show data points"
+msgstr "Деректер нүктелерін көрсету"
+
+#: src/gpm-statistics.ui:181
+msgid "History"
+msgstr "Тарих"
+
+#: src/gpm-statistics.ui:284
+msgid "Statistics"
+msgstr "Статистика"
