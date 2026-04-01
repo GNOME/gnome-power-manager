@@ -12,6 +12,8 @@ executable(
   gnome_power_statistics_resources,
   sources : [
     'gpm-array-float.c',
+    'gpm-info-item.c',
+    'gpm-device-item.c',
     'gpm-rotated-widget.c',
     'gpm-statistics.c',
     'egg-graph-point.c',

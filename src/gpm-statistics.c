@@ -30,6 +30,8 @@
 #include "gpm-array-float.h"
 #include "gpm-rotated-widget.h"
 #include "egg-graph-widget.h"
+#include "gpm-info-item.h"
+#include "gpm-device-item.h"
 
 #define GPM_SETTINGS_SCHEMA				"org.gnome.power-manager"
 #define GPM_SETTINGS_INFO_HISTORY_TIME			"info-history-time"
@@ -43,8 +45,8 @@
 #define GPM_SETTINGS_INFO_LAST_DEVICE			"info-last-device"
 
 static GtkBuilder *builder = NULL;
-static GtkListStore *list_store_info = NULL;
-static GtkListStore *list_store_devices = NULL;
+static GListStore *list_store_info = NULL;
+static GListStore *list_store_devices = NULL;
 gchar *current_device = NULL;
 static const gchar *history_type;
 static const gchar *stats_type;
@@ -56,19 +58,6 @@ static GtkWidget *graph_history = NULL;
 static GtkWidget *graph_statistics = NULL;
 static UpClient *client = NULL;
 static GPtrArray *devices = NULL;
-
-enum {
-	GPM_INFO_COLUMN_TEXT,
-	GPM_INFO_COLUMN_VALUE,
-	GPM_INFO_COLUMN_LAST
-};
-
-enum {
-	GPM_DEVICES_COLUMN_ICON,
-	GPM_DEVICES_COLUMN_TEXT,
-	GPM_DEVICES_COLUMN_ID,
-	GPM_DEVICES_COLUMN_LAST
-};
 
 #define GPM_HISTORY_RATE_TEXT			_("Rate")
 #define GPM_HISTORY_CHARGE_TEXT			_("Charge")
@@ -366,55 +355,11 @@ gpm_device_state_to_localised_string (UpDeviceState state)
 }
 
 static void
-gpm_stats_add_info_columns (GtkTreeView *treeview)
-{
-	GtkCellRenderer *renderer;
-	GtkTreeViewColumn *column;
-
-	/* image */
-	renderer = gtk_cell_renderer_text_new ();
-	column = gtk_tree_view_column_new_with_attributes (_("Attribute"), renderer,
-							   "markup", GPM_INFO_COLUMN_TEXT, NULL);
-	gtk_tree_view_column_set_sort_column_id (column, GPM_INFO_COLUMN_TEXT);
-	gtk_tree_view_append_column (treeview, column);
-
-	/* column for text */
-	renderer = gtk_cell_renderer_text_new ();
-	column = gtk_tree_view_column_new_with_attributes (_("Value"), renderer,
-							   "markup", GPM_INFO_COLUMN_VALUE, NULL);
-	gtk_tree_view_append_column (treeview, column);
-}
-
-static void
-gpm_stats_add_devices_columns (GtkTreeView *treeview)
-{
-	GtkCellRenderer *renderer;
-	GtkTreeViewColumn *column;
-
-	/* image */
-	renderer = gtk_cell_renderer_pixbuf_new ();
-	g_object_set (renderer, "icon-size", GTK_ICON_SIZE_LARGE, NULL);
-	column = gtk_tree_view_column_new_with_attributes (_("Image"), renderer,
-							   "gicon", GPM_DEVICES_COLUMN_ICON, NULL);
-	gtk_tree_view_append_column (treeview, column);
-
-	/* column for text */
-	renderer = gtk_cell_renderer_text_new ();
-	column = gtk_tree_view_column_new_with_attributes (_("Description"), renderer,
-							   "markup", GPM_DEVICES_COLUMN_TEXT, NULL);
-	gtk_tree_view_column_set_sort_column_id (column, GPM_INFO_COLUMN_TEXT);
-	gtk_tree_view_append_column (treeview, column);
-	gtk_tree_view_column_set_expand (column, TRUE);
-}
-
-static void
 gpm_stats_add_info_data (const gchar *attr, const gchar *text)
 {
-	GtkTreeIter iter;
-	gtk_list_store_append (list_store_info, &iter);
-	gtk_list_store_set (list_store_info, &iter,
-			    GPM_INFO_COLUMN_TEXT, attr,
-			    GPM_INFO_COLUMN_VALUE, text, -1);
+	g_autoptr (GpmInfoItem) item = gpm_info_item_new (attr, text);
+
+	g_list_store_append (list_store_info, item);
 }
 
 static GPtrArray *
@@ -539,7 +484,7 @@ gpm_stats_update_info_page_details (UpDevice *device)
 	g_autofree gchar *serial = NULL;
 	g_autofree gchar *vendor = NULL;
 
-	gtk_list_store_clear (list_store_info);
+	g_list_store_remove_all (list_store_info);
 
 	/* get device properties */
 	g_object_get (device,
@@ -1017,16 +962,15 @@ gpm_stats_button_update_ui (void)
 }
 
 static void
-gpm_stats_devices_treeview_clicked_cb (GtkTreeSelection *selection, gpointer user_data)
+gpm_stats_devices_listview_clicked_cb (GtkSelectionModel *selection,
+        guint position,
+        guint n_items,
+        gpointer user_data)
 {
-	GtkTreeModel *model;
-	GtkTreeIter iter;
-	UpDevice *device;
+	GpmDeviceItem *item = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (selection));
 
-	/* This will only work in single or browse selection mode! */
-	if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
-		g_free (current_device);
-		gtk_tree_model_get (model, &iter, GPM_DEVICES_COLUMN_ID, &current_device, -1);
+	if (item != NULL) {
+		g_set_str (&current_device, gpm_device_item_get_id (item));
 
 		/* save device in gconf */
 		g_settings_set_string (settings, GPM_SETTINGS_INFO_LAST_DEVICE, current_device);
@@ -1036,12 +980,12 @@ gpm_stats_devices_treeview_clicked_cb (GtkTreeSelection *selection, gpointer use
 
 		/* is special device */
 		if (1) {
-			device = up_device_new ();
+			UpDevice *device = up_device_new ();
+
 			up_device_set_object_path_sync (device, current_device, NULL, NULL);
 			gpm_stats_update_info_data (device);
 			g_object_unref (device);
 		}
-
 	} else {
 		g_debug ("no row selected");
 	}
@@ -1063,10 +1007,10 @@ static void
 gpm_stats_add_device (UpDevice *device)
 {
 	const gchar *id;
-	GtkTreeIter iter;
 	const gchar *text;
 	UpDeviceKind kind;
-	g_autoptr(GIcon) icon = NULL;
+	g_autoptr (GIcon) icon = NULL;
+	g_autoptr (GpmDeviceItem) item = NULL;
 
 	/* get device properties */
 	g_object_get (device,
@@ -1080,11 +1024,8 @@ gpm_stats_add_device (UpDevice *device)
 	text = gpm_device_kind_to_localised_string (kind, 1);
 	icon = gpm_stats_get_device_icon (device, FALSE);
 
-	gtk_list_store_append (list_store_devices, &iter);
-	gtk_list_store_set (list_store_devices, &iter,
-			    GPM_DEVICES_COLUMN_ID, id,
-			    GPM_DEVICES_COLUMN_TEXT, text,
-			    GPM_DEVICES_COLUMN_ICON, icon, -1);
+	item = GPM_DEVICE_ITEM (gpm_device_item_new (icon, text, id));
+	g_list_store_append (list_store_devices, item);
 }
 
 static void
@@ -1099,10 +1040,8 @@ gpm_stats_device_added_cb (UpClient *_client, UpDevice *device, gpointer user_da
 static void
 gpm_stats_device_removed_cb (UpClient *_client, const gchar *object_path, gpointer user_data)
 {
-	GtkTreeIter iter;
 	UpDevice *device_tmp;
-	gboolean ret;
-	guint i;
+	guint i, n_items = g_list_model_get_n_items (G_LIST_MODEL (list_store_devices));
 
 	for (i = 0; i < devices->len; i++) {
 		device_tmp = g_ptr_array_index (devices, i);
@@ -1114,20 +1053,19 @@ gpm_stats_device_removed_cb (UpClient *_client, const gchar *object_path, gpoint
 
 	g_debug ("removed:   %s", object_path);
 	if (g_strcmp0 (current_device, object_path) == 0) {
-		gtk_list_store_clear (list_store_info);
+		g_list_store_remove_all (list_store_info);
 	}
 
 	/* search the list and remove the object path entry */
-	ret = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (list_store_devices), &iter);
-	while (ret) {
-		g_autofree gchar *id = NULL;
-		gtk_tree_model_get (GTK_TREE_MODEL (list_store_devices), &iter, GPM_DEVICES_COLUMN_ID, &id, -1);
+	for (guint j = 0; j < n_items; j++) {
+		g_autoptr (GpmDeviceItem) item = g_list_model_get_item (G_LIST_MODEL (list_store_devices), j);
+		const gchar *id = gpm_device_item_get_id (item);
+
 		if (g_strcmp0 (id, object_path) == 0) {
-			gtk_list_store_remove (list_store_devices, &iter);
+			g_list_store_remove (list_store_devices, j);
 			break;
 		}
-		ret = gtk_tree_model_iter_next (GTK_TREE_MODEL (list_store_devices), &iter);
-	};
+	}
 }
 
 static void
@@ -1148,7 +1086,7 @@ gpm_stats_history_type_combo_changed_cb (GtkWidget *widget, gpointer data)
 		/* TRANSLATORS: this is the X axis on the graph */
 		axis_x = _("Time elapsed");
 		/* TRANSLATORS: this is the Y axis on the graph for the whole battery device */
-		axis_y = _("Cell charge");
+		axis_y = _ ("Cell charge");
 	} else if (g_strcmp0 (value, GPM_HISTORY_TIME_FULL_TEXT) == 0) {
 		history_type = GPM_HISTORY_TIME_FULL_VALUE;
 		/* TRANSLATORS: this is the X axis on the graph */
@@ -1292,30 +1230,23 @@ gpm_stats_points_checkbox_stats_cb (GtkWidget *widget, gpointer data)
 static gboolean
 gpm_stats_highlight_device (const gchar *object_path)
 {
-	gboolean ret;
+	GListModel *list_model_devices = G_LIST_MODEL (list_store_devices);
+	guint i, n_items = g_list_model_get_n_items (list_model_devices);
 	gboolean found = FALSE;
-	guint i;
-	GtkTreeIter iter;
-	GtkTreePath *path;
-	GtkWidget *widget;
 
-	/* we have to reuse the treeview data as it may be sorted */
-	ret = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (list_store_devices), &iter);
-	for (i = 0; ret && !found; i++) {
-		g_autofree gchar *id = NULL;
-		gtk_tree_model_get (GTK_TREE_MODEL (list_store_devices), &iter,
-				    GPM_DEVICES_COLUMN_ID, &id,
-				    -1);
+	for (i = 0; i < n_items && !found; i++) {
+		g_autoptr (GpmDeviceItem) item = g_list_model_get_item (list_model_devices, i);
+		const gchar *id = gpm_device_item_get_id (item);
+
 		if (g_strcmp0 (id, object_path) == 0) {
-			g_autofree gchar *path_str = NULL;
-			path_str = g_strdup_printf ("%u", i);
-			path = gtk_tree_path_new_from_string (path_str);
-			widget = GTK_WIDGET (gtk_builder_get_object (builder, "treeview_devices"));
-			gtk_tree_view_set_cursor_on_cell (GTK_TREE_VIEW (widget), path, NULL, NULL, FALSE);
-			gtk_tree_path_free (path);
+			GtkWidget *list_view
+			        = GTK_WIDGET (gtk_builder_get_object (builder, "list_view_devices"));
+			GtkSelectionModel *selection
+			        = gtk_list_view_get_model (GTK_LIST_VIEW (list_view));
+
+			gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (selection), i);
 			found = TRUE;
 		}
-		ret = gtk_tree_model_iter_next (GTK_TREE_MODEL (list_store_devices), &iter);
 	}
 	return found;
 }
@@ -1353,19 +1284,92 @@ gpm_stats_commandline_cb (GApplication *application,
 }
 
 static void
+gpm_stats_info_factory_setup (GtkSignalListItemFactory *factory,
+        GtkListItem *list_item,
+        gpointer user_data)
+{
+	GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+	GtkWidget *label_attr = gtk_label_new ("");
+	GtkWidget *label_value = gtk_label_new ("");
+
+	gtk_widget_set_halign (label_attr, GTK_ALIGN_START);
+	gtk_widget_set_hexpand (label_attr, TRUE);
+	gtk_label_set_xalign (GTK_LABEL (label_attr), 0.0);
+
+	gtk_widget_set_halign (label_value, GTK_ALIGN_END);
+	gtk_label_set_xalign (GTK_LABEL (label_value), 1.0);
+
+	gtk_box_append (GTK_BOX (box), label_attr);
+	gtk_box_append (GTK_BOX (box), label_value);
+
+	gtk_list_item_set_child (list_item, box);
+}
+
+static void
+gpm_stats_info_factory_bind (GtkSignalListItemFactory *factory,
+        GtkListItem *list_item,
+        gpointer user_data)
+{
+	GtkWidget *box = gtk_list_item_get_child (list_item);
+	GtkWidget *label_attr = gtk_widget_get_first_child (box);
+	GtkWidget *label_value = gtk_widget_get_next_sibling (label_attr);
+	GpmInfoItem *item = gtk_list_item_get_item (list_item);
+
+	gtk_label_set_text (GTK_LABEL (label_attr), gpm_info_item_get_attribute (item));
+	gtk_label_set_text (GTK_LABEL (label_value), gpm_info_item_get_value (item));
+}
+
+static void
+gpm_stats_devices_factory_setup (GtkSignalListItemFactory *factory,
+        GtkListItem *list_item,
+        gpointer user_data)
+{
+	GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+	GtkWidget *image = gtk_image_new ();
+	GtkWidget *label = gtk_label_new ("");
+
+	gtk_image_set_pixel_size (GTK_IMAGE (image), 32);
+
+	gtk_widget_set_halign (label, GTK_ALIGN_START);
+	gtk_widget_set_hexpand (label, TRUE);
+	gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+
+	gtk_box_append (GTK_BOX (box), image);
+	gtk_box_append (GTK_BOX (box), label);
+
+	gtk_list_item_set_child (list_item, box);
+}
+
+static void
+gpm_stats_devices_factory_bind (GtkSignalListItemFactory *factory,
+        GtkListItem *list_item,
+        gpointer user_data)
+{
+	GtkWidget *box = gtk_list_item_get_child (list_item);
+	GtkWidget *image = gtk_widget_get_first_child (box);
+	GtkWidget *label = gtk_widget_get_next_sibling (image);
+	GpmDeviceItem *item = gtk_list_item_get_item (list_item);
+
+	gtk_image_set_from_gicon (GTK_IMAGE (image), gpm_device_item_get_icon (item));
+	gtk_label_set_text (GTK_LABEL (label), gpm_device_item_get_text (item));
+}
+
+static void
 gpm_stats_activate_cb (GApplication *application,
 		       gpointer user_data)
 {
 	GtkBox *box;
 	GtkWidget *widget;
 	GtkWindow *window;
-	GtkTreeSelection *selection;
+	GtkNoSelection *no_selection;
+	GtkSingleSelection *single_selection;
 	GPtrArray *devices_tmp;
 	UpDevice *device;
 	UpDeviceKind kind;
 	guint i, j;
 	gint page;
 	gboolean checked;
+	GtkListItemFactory *info_factory, *devices_factory;
 	guint retval;
 	GError *error = NULL;
 
@@ -1443,30 +1447,30 @@ gpm_stats_activate_cb (GApplication *application,
 			  G_CALLBACK (gpm_stats_notebook_changed_cb), NULL);
 
 	/* create list stores */
-	list_store_info = gtk_list_store_new (GPM_INFO_COLUMN_LAST, G_TYPE_STRING, G_TYPE_STRING);
-	list_store_devices = gtk_list_store_new (GPM_DEVICES_COLUMN_LAST, G_TYPE_ICON,
-						 G_TYPE_STRING, G_TYPE_STRING);
+	list_store_info = g_list_store_new (GPM_INFO_ITEM_TYPE);
+	list_store_devices = g_list_store_new (GPM_TYPE_DEVICE_ITEM);
 
-	/* create transaction_id tree view */
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "treeview_info"));
-	gtk_tree_view_set_model (GTK_TREE_VIEW (widget),
-				 GTK_TREE_MODEL (list_store_info));
+	/* create info list view */
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "list_view_info"));
+	info_factory = gtk_signal_list_item_factory_new ();
+	g_signal_connect (info_factory, "setup", G_CALLBACK (gpm_stats_info_factory_setup), NULL);
+	g_signal_connect (info_factory, "bind", G_CALLBACK (gpm_stats_info_factory_bind), NULL);
+	no_selection = gtk_no_selection_new (G_LIST_MODEL (g_object_ref (list_store_info)));
+	gtk_list_view_set_model (GTK_LIST_VIEW (widget), GTK_SELECTION_MODEL (no_selection));
+	gtk_list_view_set_factory (GTK_LIST_VIEW (widget), info_factory);
 
-	/* add columns to the tree view */
-	gpm_stats_add_info_columns (GTK_TREE_VIEW (widget));
-	gtk_tree_view_columns_autosize (GTK_TREE_VIEW (widget)); /* show */
-
-	/* create transaction_id tree view */
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "treeview_devices"));
-	gtk_tree_view_set_model (GTK_TREE_VIEW (widget),
-				 GTK_TREE_MODEL (list_store_devices));
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (widget));
-	g_signal_connect (selection, "changed",
-			  G_CALLBACK (gpm_stats_devices_treeview_clicked_cb), NULL);
-
-	/* add columns to the tree view */
-	gpm_stats_add_devices_columns (GTK_TREE_VIEW (widget));
-	gtk_tree_view_columns_autosize (GTK_TREE_VIEW (widget)); /* show */
+	/* create devices list view */
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "list_view_devices"));
+	devices_factory = gtk_signal_list_item_factory_new ();
+	g_signal_connect (devices_factory, "setup",
+	        G_CALLBACK (gpm_stats_devices_factory_setup), NULL);
+	g_signal_connect (devices_factory, "bind",
+	        G_CALLBACK (gpm_stats_devices_factory_bind), NULL);
+	single_selection = gtk_single_selection_new (G_LIST_MODEL (g_object_ref (list_store_devices)));
+	g_signal_connect (single_selection, "selection-changed",
+	        G_CALLBACK (gpm_stats_devices_listview_clicked_cb), NULL);
+	gtk_list_view_set_model (GTK_LIST_VIEW (widget), GTK_SELECTION_MODEL (single_selection));
+	gtk_list_view_set_factory (GTK_LIST_VIEW (widget), devices_factory);
 
 	history_type = g_settings_get_string (settings, GPM_SETTINGS_INFO_HISTORY_TYPE);
 	history_time = g_settings_get_int (settings, GPM_SETTINGS_INFO_HISTORY_TIME);
@@ -1519,7 +1523,7 @@ gpm_stats_activate_cb (GApplication *application,
 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 1);
 		divs_x = GPM_HISTORY_HOUR_DIVS;
 	} else if (history_time == GPM_HISTORY_DAY_VALUE) {
-		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 3); 
+		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 3);
 		divs_x = GPM_HISTORY_DAY_DIVS;
 	} else if (history_time == GPM_HISTORY_WEEK_VALUE) {
 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 4);

@@ -72,7 +72,7 @@ foreach arg: test_link_args
   endif
 endforeach
 
-gtk = dependency('gtk4', version: '>= 4.0.0')
+gtk = dependency('gtk4', version: '>= 4.12.0')
 cairo = dependency('cairo', version : '>= 1.0.0')
 upower = dependency('upower-glib', version : '>= 0.99.8')
 libm = cc.find_library('libm', required: false)
