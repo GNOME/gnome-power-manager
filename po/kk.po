@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gnome-power-manager master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-power-manager/"
 "issues/\n"
-"POT-Creation-Date: 2025-07-14 13:08+0000\n"
-"PO-Revision-Date: 2026-01-26 19:43+0500\n"
+"POT-Creation-Date: 2026-03-14 23:32+0000\n"
+"PO-Revision-Date: 2026-08-22 08:47+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <Kazakh>\n"
 "Language: kk\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 #. TRANSLATORS: shown on the titlebar
 #. TRANSLATORS: the program name
@@ -31,8 +31,7 @@ msgstr "Қуат статистикасы"
 msgid "Observe power management"
 msgstr "Қуатты басқаруды бақылау"
 
-#. Translators: Search terms to find this application. Do NOT translate or
-#. localize the semicolons! The list MUST also end with a semicolon!
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.PowerStats.desktop.in:5
 msgid "battery;consumption;charge;"
 msgstr "батарея;тұтыну;заряд;"
@@ -55,9 +54,15 @@ msgid ""
 "problems with your laptop battery, or are trying to work out what programs "
 "are using significant amounts of power."
 msgstr ""
-"Бұл бағдарламалық қамтаны ноутбук батареясында қиындықтар туындағанда "
-"немесе қай бағдарламалар көп қуат тұтынатынын анықтағыңыз келгенде ғана "
-"орнату қажет болуы мүмкін."
+"Бұл бағдарламалық қамтаны ноутбук батареясында қиындықтар туындағанда немесе "
+"қай бағдарламалар көп қуат тұтынатынын анықтағыңыз келгенде ғана орнату "
+"қажет болуы мүмкін."
+
+#. developer_name tag deprecated with Appstream 1.0
+#: data/appdata/org.gnome.PowerStats.metainfo.xml.in:206
+#: data/appdata/org.gnome.PowerStats.metainfo.xml.in:208
+msgid "Richard Hughes"
+msgstr "Richard Hughes"
 
 #: data/org.gnome.power-manager.gschema.xml:5
 msgid "Whether we should show the history data points"
@@ -66,8 +71,7 @@ msgstr "Тарих деректерінің нүктелерін көрсету 
 #: data/org.gnome.power-manager.gschema.xml:6
 msgid ""
 "Whether we should show the history data points in the statistics window."
-msgstr ""
-"Статистика терезесінде тарих деректерінің нүктелерін көрсету керек пе."
+msgstr "Статистика терезесінде тарих деректерінің нүктелерін көрсету керек пе."
 
 #: data/org.gnome.power-manager.gschema.xml:10
 msgid "Whether we should smooth the history data"
@@ -266,8 +270,7 @@ msgstr "Зарядтау профилі"
 msgid "Discharge profile"
 msgstr "Зарядсыздану профилі"
 
-#. TRANSLATORS: how accurately we can predict the time remaining of the
-#. battery
+#. TRANSLATORS: how accurately we can predict the time remaining of the battery
 #: src/gpm-statistics.c:105
 msgid "Charge accuracy"
 msgstr "Зарядтау дәлдігі"
@@ -487,8 +490,7 @@ msgid "Serial number"
 msgstr "Сериялық нөмір"
 
 #. TRANSLATORS: a boolean attribute that means if the device is supplying the
-#. * main power for the computer. For instance, an AC adapter or laptop
-#. battery
+#. * main power for the computer. For instance, an AC adapter or laptop battery
 #. * would be TRUE,  but a mobile phone or mouse taking power is FALSE
 #: src/gpm-statistics.c:585
 msgid "Supply"
@@ -624,7 +626,7 @@ msgstr "Іске қосылғанда осы құрылғыны таңдау"
 msgid "Details"
 msgstr "Мәліметтер"
 
-#: src/gpm-statistics.ui:86 src/gpm-statistics.ui:204
+#: src/gpm-statistics.ui:86 src/gpm-statistics.ui:203
 msgid "Graph type:"
 msgstr "График түрі:"
 
@@ -632,22 +634,22 @@ msgstr "График түрі:"
 msgid "Data length:"
 msgstr "Деректер ұзындығы:"
 
-#: src/gpm-statistics.ui:142 src/gpm-statistics.ui:245
+#: src/gpm-statistics.ui:141 src/gpm-statistics.ui:243
 msgid "There is no data to display."
 msgstr "Көрсетілетін деректер жоқ."
 
-#: src/gpm-statistics.ui:164 src/gpm-statistics.ui:267
+#: src/gpm-statistics.ui:163 src/gpm-statistics.ui:265
 msgid "Use smoothed line"
 msgstr "Тегістелген сызықты пайдалану"
 
-#: src/gpm-statistics.ui:171 src/gpm-statistics.ui:274
+#: src/gpm-statistics.ui:170 src/gpm-statistics.ui:272
 msgid "Show data points"
 msgstr "Деректер нүктелерін көрсету"
 
-#: src/gpm-statistics.ui:181
+#: src/gpm-statistics.ui:180
 msgid "History"
 msgstr "Тарих"
 
-#: src/gpm-statistics.ui:284
+#: src/gpm-statistics.ui:282
 msgid "Statistics"
 msgstr "Статистика"
